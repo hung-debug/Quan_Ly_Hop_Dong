@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+</head>
+<body>
+
+    <input type="checkbox" id="sidebar-toggle">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="/main/dashboard"><img src="assets/img/logo_eContract_21.svg" alt="Logo" class="img-responsive" width="165" height="auto" /></a>
+            <label for="sidebar-toggle" class="ti-menu-alt"></label>
+        </div>
+
+        <div class="sidebar-menu">
+            <ul>
+                <li>
+                    <a href="/main/dashboard" style="display: flex;">
+                        <div style="width: 25px; text-align: center;"><img src="assets/img/home.svg" width="17"/></div>
+                        <span>Trang chủ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/main/app-contract" style="display: flex;">
+                        <div style="width: 25px; text-align: center;"><img src="assets/img/contract.svg" width="16"/></div>
+                        <span>Hợp đồng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/main/dashboard" style="display: flex;">
+                        <div style="width: 25px; text-align: center;"><img src="assets/img/template.svg" width="16"/></div>
+                        <span>Mẫu hợp đồng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/main/dashboard" style="display: flex;">
+                        <div style="width: 25px; text-align: center;"><img src="assets/img/user.svg" width="17" height="auto" /></div>
+                        <span>Người dùng</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/main/dashboard" style="display: flex;">
+                        <div style="width: 25px; text-align: center;"><img src="assets/img/user_group.svg" width="22" height="auto" /></div>
+                        <span>Tổ chức</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/main/dashboard" style="display: flex;">
+                        <div style="width: 25px; text-align: center;"><img src="assets/img/role-play.svg" width="20" height="auto" /></div>
+                        <span>Vai trò</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/main/dashboard" style="display: flex;">
+                        <div style="width: 25px; text-align: center;"><img src="assets/img/flow.svg" width="22" height="auto" /></div>
+                        <span>Luồng ký</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/main/dashboard" style="display: flex;">
+                        <div style="width: 25px; text-align: center;"><img src="assets/img/notification.svg" width="17" height="auto" /></div>
+                        <span>Thông báo</span>
+                    </a>
+                </li>
+                <li>
+                  <a href="/main/dashboard" style="display: flex;">
+                      <div style="width: 25px; text-align: center;"><img src="assets/img/user_admin.svg" width="17" height="auto" /></div>
+                      <span>Tài khoản</span>
+                  </a>
+              </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+      <header>
+          <div class="search-wrapper">
+              <span class="ti-search"></span>
+              <input type="search" placeholder="Search">
+          </div>
+
+          <div>
+            <div class="row">
+            <div class="col">
+              <div ngbDropdown class="d-inline-block">
+                <div class="social-icons" ngbDropdownToggle>
+                    <div></div>
+                </div>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1" style="margin-top: 12px; border-color: #368ee0;">
+                  <button ngbDropdownItem style="padding: 10px;">Tài khoản</button>
+                  <button ngbDropdownItem style="padding: 10px;" routerLink="/login" (click)="logout()">Đăng xuất</button>
+                </div>
+              </div>
+
+            </div>
+            </div>
+          </div>
+
+
+      </header>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+
+</body>
+</html>

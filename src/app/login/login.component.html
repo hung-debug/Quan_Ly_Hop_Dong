@@ -1,0 +1,36 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <!-- <img src="../../assets/img/digital_sign.svg" width="100%" height="auto" /> -->
+      <div class="bg-login"></div>
+    </div>
+    <div class="col-md-6">
+       <div style="padding-top: 30px;">
+        <div>
+          <div style="text-align: center;"><img src="../../assets/img/logo_eContract_21.svg" width="200" /></div>
+          <form class="form-signin" [formGroup]="loginForm">
+
+            <div class="form-group" style="text-align: center;">
+              <input id="inputUsername" formControlName="username" type="text" class="form-control inputLogin" placeholder="Tên đăng nhập">
+            </div>
+
+            <div class="form-group" style="text-align: center;">
+              <input id="password" formControlName="password" type="text" class="form-control inputLogin" placeholder="Mật khẩu">
+              <i class="bi bi-eye-slash" id="togglePassword" style="margin-left: -30px; cursor: pointer;"></i>
+            </div>
+
+            <p class="alert alert-danger" role="alert" *ngIf="error">
+              <strong>Tên đăng nhập hoặc mật khẩu không đúng</strong>
+            </p>
+
+            <div class="form-group" style="text-align: center;">
+              <button class="btn btn-lg btn-block text-uppercase" style="background-color: #106DB6; color: white;" (click)="loginUser()">Đăng nhập</button>
+            </div>
+          </form>
+          <div class="bg-footer-login"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
