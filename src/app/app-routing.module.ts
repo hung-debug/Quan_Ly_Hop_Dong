@@ -1,3 +1,5 @@
+import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
+import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
 import { AddContractComponent } from './main/contract/add-contract/add-contract.component';
 import { ContractComponent } from './main/contract/contract.component';
 import { DashboardComponent } from './main/dashboard/dashboard.component';
@@ -14,6 +16,14 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
   },
   {
     path: 'main',
@@ -33,11 +43,11 @@ const routes: Routes = [
         component: UserGroupComponent,
       },
       {
-        path: 'app-contract',
+        path: 'contract',
         component: ContractComponent,
       },
       {
-        path: 'app-add-contract',
+        path: 'add-contract',
         component: AddContractComponent,
       },
     ],

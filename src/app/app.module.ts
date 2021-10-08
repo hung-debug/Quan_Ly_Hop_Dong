@@ -18,6 +18,8 @@ import { UnitComponent } from './main/unit/unit.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { DashboardComponent } from './main/dashboard/dashboard.component';
 import { AddContractComponent } from './main/contract/add-contract/add-contract.component';
+import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { AddContractComponent } from './main/contract/add-contract/add-contract.
     UnitComponent,
     PageNotFoundComponent,
     DashboardComponent,
-    AddContractComponent
+    AddContractComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
