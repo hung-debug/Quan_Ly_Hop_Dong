@@ -91,7 +91,7 @@
                 </div>
                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1" style="margin-top: 12px; border-color: #368ee0;">
                   <button ngbDropdownItem style="padding: 10px;">Tài khoản</button>
-                  <button ngbDropdownItem style="padding: 10px;" routerLink="/login" (click)="logout()">Đổi mật khẩu</button>
+                  <button ngbDropdownItem style="padding: 10px;" (click)="open(mymodal)">Đổi mật khẩu</button>
                   <button ngbDropdownItem style="padding: 10px;" routerLink="/login" (click)="logout()">Đăng xuất</button>
                 </div>
               </div>
@@ -109,3 +109,108 @@
 
 </body>
 </html>
+
+<!-- Popup reset password -->
+<ng-template #mymodal let-modal >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12" style="padding: 30px;">
+        <div class="modal-header">
+          <h5>ĐỔI MẬT KHẨU</h5>
+          <button type="button" class="close" (click)="modal.dismiss('Cross click')" style="border: none;background: none;">
+            <span style="font-size: 25px;">×</span>
+          </button>
+        </div>
+
+        <form [formGroup]="resetPasswordForm" class="mx-auto">
+          <div class="form-group" style="padding-top: 30px;">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" style="padding: 10px;">
+                  <i class="fa fa-unlock-alt" aria-hidden="true" style="color: #106DB6;"></i>
+                </span>
+              </div>
+              <input
+                [type]="fieldTextTypeOld ? 'text' : 'password'"
+                class="form-control"
+                formControlName="passwordOld"
+                placeholder="Mật khẩu cũ"
+              />
+              <div class="input-group-append">
+                <span class="input-group-text" style="padding: 10px;">
+                  <i
+                    class="fa"
+                    [ngClass]="{
+                      'fa-eye-slash': !fieldTextTypeOld,
+                      'fa-eye': fieldTextTypeOld
+                    }"
+                    (click)="toggleFieldTextTypeOld()"
+                  ></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="padding-top: 30px;">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" style="padding: 10px;">
+                  <i class="fa fa-unlock-alt" aria-hidden="true" style="color: #106DB6;"></i>
+                </span>
+              </div>
+              <input
+                [type]="fieldTextTypeNew ? 'text' : 'password'"
+                class="form-control"
+                formControlName="passwordNew"
+                placeholder="Mật khẩu mới"
+              />
+              <div class="input-group-append">
+                <span class="input-group-text" style="padding: 10px;">
+                  <i
+                    class="fa"
+                    [ngClass]="{
+                      'fa-eye-slash': !fieldTextTypeNew,
+                      'fa-eye': fieldTextTypeNew
+                    }"
+                    (click)="toggleFieldTextTypeNew()"
+                  ></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="padding-top: 30px;">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" style="padding: 10px;">
+                  <i class="fa fa-unlock-alt" aria-hidden="true" style="color: #106DB6;"></i>
+                </span>
+              </div>
+              <input
+                [type]="repeatFieldTextTypeNew ? 'text' : 'password'"
+                class="form-control"
+                formControlName="confirmPasswordNew"
+                placeholder="Xác nhận lại mật khẩu mới"
+              />
+              <div class="input-group-append">
+                <span class="input-group-text" style="padding: 10px;">
+                  <i
+                    class="fa"
+                    [ngClass]="{
+                      'fa-eye-slash': !repeatFieldTextTypeNew,
+                      'fa-eye': repeatFieldTextTypeNew
+                    }"
+                    (click)="toggleRepeatFieldTextTypeNew()"
+                  ></i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group" style="text-align: center; padding-top: 30px;">
+            <button class="btn btn-lg btn-block" style="background-color: #106DB6; color: white;">Gửi yêu cầu</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>

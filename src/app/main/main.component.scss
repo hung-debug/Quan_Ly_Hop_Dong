@@ -238,9 +238,9 @@ th, td {
     color: var(--color-dark);
 }
 
-td {
-    // font-size: .8rem;
-}
+// td {
+//     ont-size: .8rem;
+// }
 
 tbody tr:nth-child(even) {
     background: #f9fafc;
@@ -450,4 +450,13 @@ tbody tr:nth-child(even) {
 
 .dropdown-toggle::after {
   display:none;
+}
+
+.form-control {
+  padding: .375rem .75rem;
+}
+
+.btn-lg {
+  padding: .2rem 1rem;
+  font-size: 1rem;
 }
