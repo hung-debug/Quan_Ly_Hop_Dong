@@ -11,6 +11,7 @@ import { AuthenticationService } from '../service/authentication.service';
 export class LoginComponent implements OnInit {
 
   error: Boolean = false;
+  fieldTextType: boolean = false;
 
   constructor(
     private authService: AuthenticationService,
@@ -36,6 +37,10 @@ export class LoginComponent implements OnInit {
       }
     },
     );
+  }
+
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
   }
 
   ngOnInit(): void {

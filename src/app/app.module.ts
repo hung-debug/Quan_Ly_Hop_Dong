@@ -41,7 +41,7 @@ import { AddContractComponent } from './main/contract/add-contract/add-contract.
     ReactiveFormsModule,
     FormsModule,
     NgbModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

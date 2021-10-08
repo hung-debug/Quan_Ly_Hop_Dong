@@ -20,7 +20,8 @@ input.form-control.rounded {
 }
 
 .form-signin {
-  width: 100%;
+  width: 70%;
+  margin: 0 auto;
 }
 
 .form-signin .btn {
@@ -118,7 +119,10 @@ body {
   background-size: cover;
 }
 .form-group{
-  margin: 20px;
+  margin: 30px;
+}
+.col-md-6 {
+  padding: 0px;
 }
 
 .inputLogin {
