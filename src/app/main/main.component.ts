@@ -70,4 +70,9 @@ export class MainComponent implements OnInit {
     localStorage.removeItem('currentUser');
     this.router.navigate(['/login']);
   }
+
+  //click reset password
+  sendResetPassword() {
+    this.router.navigate(['/login']);
+  }
 }
