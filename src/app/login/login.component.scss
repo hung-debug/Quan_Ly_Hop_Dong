@@ -150,3 +150,36 @@ body {
   background-image: url(../../assets/img/foot_login.svg);
   background-size: cover;
 }
+
+.input-group {
+    height: 40px;
+}
+
+.input-group-text{
+  padding: 12px;
+}
+
+.btn-block {
+  background-color: #106DB6;
+  color: white;
+  height: 40px;
+  font-size: 14px;
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.bg {
+  /* The image used */
+  background-image: url("../../assets/img/digital_sign.svg");
+
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
   })
 
   loginUser() {
-    this.authService.loginAuthencation(this.loginForm.value.tax_code, this.loginForm.value.username, this.loginForm.value.password).subscribe((data) => {
+    this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password).subscribe((data) => {
 
       if (this.authService.isLoggedInSuccess() == true) {
         this.error  = false;
