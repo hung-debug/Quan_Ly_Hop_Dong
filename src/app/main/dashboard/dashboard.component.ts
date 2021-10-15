@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { single } from '../../data/data';
 @Component({
   selector: 'app-dashboard',
@@ -6,6 +6,7 @@ import { single } from '../../data/data';
   styleUrls: ['./dashboard.component.scss', '../main.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  @Output() title = 'TRANG CHỦ';
   single: any[] = [];
   view: number[] = [700, 250];
 

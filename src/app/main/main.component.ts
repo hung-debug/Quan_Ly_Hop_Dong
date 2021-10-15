@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SidebarService } from './sidebar/sidebar.service';
 
 @Component({
   selector: 'app-main',
@@ -9,13 +10,17 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
+  @Input() title = '';
   closeResult:string= '';
   resetPasswordForm:any = FormGroup;
   fieldTextTypeOld: boolean = false;
   fieldTextTypeNew: boolean = false;
   repeatFieldTextTypeNew: boolean = false;
 
-  constructor(private router: Router, private modalService: NgbModal, private fb: FormBuilder) {}
+  constructor(private router: Router,
+              private modalService: NgbModal,
+              private fb: FormBuilder,
+              public sidebarservice: SidebarService) {}
 
   //open popup reset password
   open(content:any) {
@@ -74,5 +79,20 @@ export class MainComponent implements OnInit {
   //click reset password
   sendResetPassword() {
     this.router.navigate(['/login']);
+  }
+
+  //side bar menu
+  toggleSidebar() {
+    this.sidebarservice.setSidebarState(!this.sidebarservice.getSidebarState());
+  }
+  toggleBackgroundImage() {
+    this.sidebarservice.hasBackgroundImage = !this.sidebarservice.hasBackgroundImage;
+  }
+  getSideBarState() {
+    return this.sidebarservice.getSidebarState();
+  }
+
+  hideSidebar() {
+    this.sidebarservice.setSidebarState(true);
   }
 }

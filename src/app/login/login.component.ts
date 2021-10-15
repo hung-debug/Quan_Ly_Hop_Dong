@@ -26,16 +26,16 @@ export class LoginComponent implements OnInit {
 
   loginUser() {
     this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password).subscribe((data) => {
-
       if (this.authService.isLoggedInSuccess() == true) {
         this.error  = false;
-        console.log("True");
         this.router.navigate(['/main/dashboard']);
       } else {
         this.error  = true;
-        console.log("Incorrect");
       }
     },
+    error => {
+        this.error = true;
+    }
     );
   }
 
