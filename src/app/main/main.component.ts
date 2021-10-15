@@ -10,7 +10,7 @@ import { SidebarService } from './sidebar/sidebar.service';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-  @Input() title = '';
+  title:string = '';
   closeResult:string= '';
   resetPasswordForm:any = FormGroup;
   fieldTextTypeOld: boolean = false;

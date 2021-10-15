@@ -9,22 +9,26 @@ export class SidebarService {
   menus = [
     {
       title: 'Trang chủ',
-      icon: 'fa fa-shopping-cart',
+      icon: '	fa fa-home',
       active: false,
       type: 'simple',
       href: '/main/dashboard'
     },
     {
       title: 'Hợp đồng đã tạo',
-      icon: 'fa fa-shopping-cart',
+      icon: 'fa fa-file-pdf-o',
       active: false,
       type: 'dropdown',
       badge: {
         text: '6',
         class: 'badge-danger'
       },
-      href: '/main/contract',
+      href: '#',
       submenus: [
+        {
+          title: 'Danh sách',
+          href: '/main/contract'
+        },
         {
           title: 'Tạo mới',
           href: '/main/add-contract'
@@ -53,15 +57,19 @@ export class SidebarService {
     },
     {
       title: 'Hợp đồng đã nhận',
-      icon: 'fa fa-shopping-cart',
+      icon: 'fa fa-file-pdf-o',
       active: false,
       type: 'dropdown',
       badge: {
         text: '160',
         class: 'badge-danger'
       },
-      href: '/main/contract',
+      href: '#',
       submenus: [
+        {
+          title: 'Danh sách',
+          href: '/main/contract'
+        },
         {
           title: 'Bản nháp',
           href: '/main/add-contract'
@@ -93,28 +101,28 @@ export class SidebarService {
     },
     {
       title: 'Người dùng',
-      icon: 'fa fa-shopping-cart',
+      icon: 'fa fa-user',
       active: false,
       type: 'simple',
       href: '/main/add-contract'
     },
     {
       title: 'Tổ chức',
-      icon: 'fa fa-shopping-cart',
+      icon: '	fa fa-institution',
       active: false,
       type: 'simple',
       href: '/main/add-contract'
     },
     {
       title: 'Vai trò',
-      icon: 'fa fa-shopping-cart',
+      icon: 'fa fa-puzzle-piece',
       active: false,
       type: 'simple',
       href: '/main/add-contract'
     },
     {
       title: 'Loại hợp đồng',
-      icon: 'fa fa-shopping-cart',
+      icon: '	fa fa-clone',
       active: false,
       type: 'simple',
       href: '/main/add-contract'
