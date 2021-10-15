@@ -1,0 +1,72 @@
+<div>
+  <div class="row">
+    <div class="col-md-6">
+      <!-- <img src="../../assets/img/digital_sign.svg" width="100%" height="auto" /> -->
+      <div class="bg-login"></div>
+    </div>
+    <div class="col-md-6">
+       <div>
+        <div>
+          <div style="text-align: center;padding: 5%;"><img src="../../assets/img/logo_eContract_21.svg" width="70%" /></div>
+          <form class="form-signin" [formGroup]="loginForm">
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-user" aria-hidden="true" style="color: #106DB6;"></i>
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  id="username"
+                  class="form-control"
+                  placeholder="Tên đăng nhập"
+                  formControlName="username"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="fa fa-unlock-alt" aria-hidden="true" style="color: #106DB6;"></i>
+                  </span>
+                </div>
+                <input [type]="fieldTextType ? 'text' : 'password'"
+                  class="form-control" placeholder="Mật khẩu" formControlName="password"
+                />
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i class="fa"
+                      [ngClass]="{
+                        'fa-eye-slash': !fieldTextType,
+                        'fa-eye': fieldTextType
+                      }"
+                      (click)="toggleFieldTextType()"
+                      style="color: #106DB6;"
+                    ></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" style="text-align: right;">
+              <a href="/forgot-password" style="text-decoration: underline; color: -webkit-link; cursor: pointer;">Quên mật khẩu?</a>
+            </div>
+
+            <p class="alert alert-danger" role="alert" *ngIf="error">
+              <strong>Tên đăng nhập hoặc mật khẩu không đúng</strong>
+            </p>
+
+            <div class="form-group" style="text-align: center;">
+              <button class="btn btn-lg btn-block" (click)="loginUser()">ĐĂNG NHẬP</button>
+            </div>
+          </form>
+          <div class="bg-footer-login"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
