@@ -94,7 +94,7 @@ export class SidebarService {
     },
     {
       title: 'Mẫu hợp đồng',
-      icon: 'fa fa-shopping-cart',
+      icon: 'fa fa-book',
       active: false,
       type: 'simple',
       href: '/main/add-contract'
