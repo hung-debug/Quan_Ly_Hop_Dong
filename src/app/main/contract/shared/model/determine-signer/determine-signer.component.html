@@ -1,0 +1,19 @@
+      <!-- form step 2 -->
+       <form [formGroup]="addressDetails" id="msform">
+          <fieldset>
+              <input type="text" formControlName="city"  placeholder="City"/>
+              <div *ngIf="address_step && addressDetails.controls.city.errors">
+                  <div *ngIf="address.city.errors?.required">City is required</div>
+              </div>
+              <textarea rows="5" cols="5" formControlName="address"  placeholder="address"></textarea>
+              <div *ngIf="address_step && addressDetails.controls.address.errors">
+                  <div *ngIf="address.address.errors?.required">Address is required</div>
+              </div>
+              <input type="text" formControlName="pincode"  placeholder="Pincode"/>
+              <div *ngIf="address_step && addressDetails.controls.pincode.errors">
+                  <div *ngIf="address.pincode.errors?.required">Pincode is required</div>
+              </div>
+<!--              <input (click)="previous()" type="button" name="previous" class="previous action-button-previous" value="Quay lại"/>-->
+<!--              <input  (click)="next()" type="button" name="next" class="next action-button" value="Tiếp theo"/>-->
+          </fieldset>
+      </form>

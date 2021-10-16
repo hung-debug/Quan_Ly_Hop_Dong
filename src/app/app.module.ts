@@ -27,6 +27,12 @@ import { AddContractComponent } from './main/contract/add-contract/add-contract.
 import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { SidebarComponent } from './main/sidebar/sidebar.component';
+// @ts-ignore
+// import { SampleContractComponent } from './main/contract/shared/model/sample-contract/sample-contract.component';
+// import { InforContractComponent } from './main/contract/shared/model/infor-contract/infor-contract.component';
+// import { DetermineSignerComponent } from './main/contract/shared/model/determine-signer/determine-signer.component';
+// import { ConfirmInforContractComponent } from './main/contract/shared/model/confirm-infor-contract/confirm-infor-contract.component';
+import {ContractModule} from "./main/contract/contract.module";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -46,7 +52,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AddContractComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    SidebarComponent
+    SidebarComponent,
+    // SampleContractComponent,
+    // InforContractComponent,
+    // DetermineSignerComponent,
+    // ConfirmInforContractComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +70,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FontAwesomeModule,
     BsDropdownModule.forRoot(),
     PerfectScrollbarModule,
-    MatBadgeModule
+    MatBadgeModule,
+    ContractModule
   ],
   providers: [ {
     provide: PERFECT_SCROLLBAR_CONFIG,
