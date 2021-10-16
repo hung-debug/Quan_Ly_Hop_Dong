@@ -1,5 +1,6 @@
 import { Component, OnInit, Output } from '@angular/core';
 import { single } from '../../data/data';
+// import {LegendPosition} from "@swimlane/ngx-charts/lib/common/types/legend.model";
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -8,22 +9,28 @@ import { single } from '../../data/data';
 export class DashboardComponent implements OnInit {
   @Output() title = 'TRANG CHỦ';
   single: any[] = [];
-  view: number[] = [700, 250];
+  view: [number, number] = [700, 250];
 
   // options
   gradient: boolean = true;
   showLegend: boolean = true;
   showLabels: boolean = false;
   isDoughnut: boolean = true;
-  legendPosition: string = 'right';
+  legendPosition: any;
   legendTitle: string = 'Danh mục';
   arcWidth: number = 0.4;
 
-  colorScheme = {
-    domain: ['#2da133', '#FF710B', '#407EF9', '#F3E13F', '#ED1C24'],
-  };
+  // colorScheme = {
+  //   domain: ['#2da133', '#FF710B', '#407EF9', '#F3E13F', '#ED1C24'],
+  // };
+
+  colorScheme: any;
 
   constructor() {
+    this.legendPosition = "right";
+    this.colorScheme = {
+      domain: ['#2da133', '#FF710B', '#407EF9', '#F3E13F', '#ED1C24']
+    }
    Object.assign(this, { single });
   }
 

@@ -1,0 +1,21 @@
+<div class="col-md-12 col-md-offset-3">
+  <!-- step by step -->
+  <div class="activity-card" style="padding: 10px;text-align: center;">
+    <ul id="progressbar">
+      <li [ngClass]="step>=1 ? 'active ' : 'inactive'"><span
+        [ngClass]="{'current_active' : step==1}">Thông tin tài liệu</span></li>
+      <li [ngClass]="step>=2 ? 'active' : 'inactive'"><span
+        [ngClass]="{'current_active' : step==2}">Xác định người ký</span></li>
+      <li [ngClass]="step>=3 ? 'active' : 'inactive'"><span
+        [ngClass]="{'current_active' : step==3}">Thiết kế tài liệu</span></li>
+      <li [ngClass]="step==4 ? 'active' : 'inactive'"><span [ngClass]="{'current_active' : step==4}">Xác nhận và hoàn tất</span>
+      </li>
+    </ul>
+  </div>
+
+  <button *ngIf="step == 'infor-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
+  <button *ngIf="step == 'determine-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
+  <button *ngIf="step == 'sample-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
+  <button *ngIf="step == 'confirm-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
+
+</div>

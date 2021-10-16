@@ -28,7 +28,9 @@
     "@swimlane/ngx-charts": "^19.0.1",
     "angular-material-badge": "^1.2.91",
     "bootstrap": "^5.1.2",
+    "interactjs": "^1.10.11",
     "ngx-bootstrap": "^7.1.0",
+    "pdfjs-dist": "^2.10.377",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

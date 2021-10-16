@@ -27,7 +27,7 @@ const routes: Routes = [
   },
   {
     path: 'main',
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
     component: MainComponent,
     children: [
       {
@@ -50,6 +50,10 @@ const routes: Routes = [
         path: 'add-contract',
         component: AddContractComponent,
       },
+      // {
+      //   path: 'step-3-contract',
+      //   component: createContractComponent
+      // }
     ],
   },
   {

@@ -1,0 +1,20 @@
+<!-- form step 1 -->
+<form [formGroup]="personalDetails" id="msform">
+  <!-- fieldsets -->
+  <fieldset >
+    <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': personal_step && personal.name.errors }"
+           placeholder="Full Name"/>
+    <div *ngIf="personal_step && personalDetails.controls.name.errors">
+      <div *ngIf="personal.name.errors?.required">Tên hợp đồng</div>
+    </div>
+    <input type="text" formControlName="email" name="email" placeholder="Email"/>
+    <div *ngIf="personal_step && personalDetails.controls.email.errors">
+      <div *ngIf="personal.email.errors?.required">Số hợp đồng</div>
+    </div>
+    <input type="text" formControlName="phone" name="phone" placeholder="Phone"/>
+    <div *ngIf="personal_step && personalDetails.controls.phone.errors">
+      <div *ngIf="personal.phone.errors?.required">Phone is required</div>
+    </div>
+<!--    <input (click)="next()" type="button" name="next" class="next action-button" value="Tiếp theo"/>-->
+  </fieldset>
+</form>
