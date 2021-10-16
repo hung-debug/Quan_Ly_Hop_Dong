@@ -9,8 +9,8 @@ export class SidebarService {
   menus = [
     {
       title: 'Trang chủ',
-      icon: '	fa fa-home',
-      active: false,
+      icon: 'fa fa-dashboard',
+      active: true,
       type: 'simple',
       href: '/main/dashboard'
     },
@@ -27,30 +27,37 @@ export class SidebarService {
       submenus: [
         {
           title: 'Danh sách',
+          active: false,
           href: '/main/contract'
         },
         {
           title: 'Tạo mới',
+          active: false,
           href: '/main/add-contract'
         },
         {
           title: 'Bản nháp',
+          active: false,
           href: '/main/add-contract'
         },
         {
           title: 'Đang xử lý',
+          active: false,
           href: '/main/add-contract'
         },
         {
           title: 'Quá hạn',
+          active: false,
           href: '/main/add-contract'
         },
         {
           title: 'Từ chối',
+          active: false,
           href: '/main/add-contract'
         },
         {
           title: 'Hoàn thành',
+          active: false,
           href: '/main/add-contract'
         }
       ]
@@ -68,26 +75,32 @@ export class SidebarService {
       submenus: [
         {
           title: 'Danh sách',
+          active: false,
           href: '/main/contract'
         },
         {
           title: 'Bản nháp',
+          active: false,
           href: '/main/add-contract'
         },
         {
           title: 'Đang xử lý',
+          active: false,
           href: '/main/add-contract'
         },
         {
           title: 'Quá hạn',
+          active: false,
           href: '/main/add-contract'
         },
         {
           title: 'Từ chối',
+          active: false,
           href: '/main/add-contract'
         },
         {
           title: 'Hoàn thành',
+          active: false,
           href: '/main/add-contract'
         }
       ]
@@ -108,7 +121,7 @@ export class SidebarService {
     },
     {
       title: 'Tổ chức',
-      icon: '	fa fa-institution',
+      icon: 'fa fa-institution',
       active: false,
       type: 'simple',
       href: '/main/add-contract'
@@ -122,7 +135,7 @@ export class SidebarService {
     },
     {
       title: 'Loại hợp đồng',
-      icon: '	fa fa-clone',
+      icon: 'fa fa-clone',
       active: false,
       type: 'simple',
       href: '/main/add-contract'
@@ -144,6 +157,16 @@ export class SidebarService {
 
   getMenuList() {
     return this.menus;
+  }
+
+  getSubMenuList(menuParent:any) {
+    this.menus.forEach((element:any) => {
+      if (element === menuParent) {
+        console.log(element);
+        console.log(element.submenus);
+        return element.submenus;
+      }
+    });
   }
 
   get hasBackgroundImage() {

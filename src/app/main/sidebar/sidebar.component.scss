@@ -165,6 +165,7 @@
           text-decoration: none;
           position: relative;
           padding: 8px 30px 8px 20px;
+          cursor: pointer;
 
           i {
             margin-right: 10px;
@@ -458,12 +459,14 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
   }
 
   .sidebar-menu ul li:hover>a,
+  .sidebar-menu .active>a,
   .sidebar-menu .sidebar-dropdown.active>a,
   .sidebar-profile .user-info,
   .sidebar-header>a:hover,
   .sidebar-footer>div>a:hover i,
   #close-sidebar:hover {
-    color: $hover-color;
+    color: $hover-color !important;
+    background-color: #bbd2ff;
   }
 
   ul li:hover a i,

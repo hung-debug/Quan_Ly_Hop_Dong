@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { SidebarService } from './sidebar.service';
+import { Router } from '@angular/router';
 // import { MenusService } from './menus.service';
 
 @Component({
@@ -17,7 +18,11 @@ import { SidebarService } from './sidebar.service';
 })
 export class SidebarComponent implements OnInit {
   menus:any = [];
-  constructor(public sidebarservice: SidebarService) {
+  subMenus:any = [];
+  constructor(
+    public sidebarservice: SidebarService,
+    private router: Router
+    ) {
     this.menus = sidebarservice.getMenuList();
    }
 
@@ -28,6 +33,7 @@ export class SidebarComponent implements OnInit {
     return this.sidebarservice.getSidebarState();
   }
 
+  // set active dropdown
   toggle(currentMenu:any) {
     if (currentMenu.type === 'dropdown') {
       this.menus.forEach((element:any) => {
@@ -40,8 +46,43 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  getState(currentMenu:any) {
+  //set active link
+  clickLink(currentMenu:any){
+    this.menus.forEach((element:any) => {
+      if (element === currentMenu) {
+        currentMenu.active = !currentMenu.active;
+      } else {
+        element.active = false;
+      }
+    });
+    this.router.navigate(['/' + currentMenu.href]);
+  }
 
+  //set active link child
+  clickLinkSub(currentMenu:any, currentSubMenu:any){
+    //find parent
+    this.menus.forEach((element:any) => {
+      if (element === currentMenu) {
+        this.subMenus = element.submenus;
+        //set active child
+        this.subMenus.forEach((elementSub:any) => {
+          if (elementSub === currentSubMenu) {
+            currentSubMenu.active = !currentSubMenu.active;
+          } else {
+            elementSub.active = false;
+          }
+        });
+      }
+    });
+
+    //set parent active
+    currentMenu.active = true;
+    this.getState(currentMenu);
+    this.router.navigate(['/' + currentSubMenu.href]);
+  }
+
+  //set state dropdown
+  getState(currentMenu:any) {
     if (currentMenu.active) {
       return 'down';
     } else {
