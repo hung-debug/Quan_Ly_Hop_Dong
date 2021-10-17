@@ -30,7 +30,7 @@ export class AddContractComponent implements OnInit {
   education_step = false;
   confirm_step = false;
   // step = 1;
-  step = "infor-contract";
+  step = variable.stepSampleContract.step3;
   constructor(private formBuilder: FormBuilder) { }
   ngOnInit() {
     this.personalDetails = this.formBuilder.group({

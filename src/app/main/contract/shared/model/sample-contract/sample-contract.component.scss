@@ -1,0 +1,179 @@
+.sample-contract {
+  height: calc(100vh - 221px);
+
+  &__file {
+    background-color: #f3f7f9;
+    .sig-img-daky{
+      position: absolute;
+      top: -11px;
+      right: -8px;
+      cursor: pointer;
+    }
+
+  }
+
+  .viewer-pdf {
+    height: calc(100vh - 154px);
+    overflow-x: auto;
+    text-align: center;
+    background-color: rgba(239, 239, 239, 1);
+    padding-top: 10px;
+  }
+
+  #pdf-viewer-step-3.view{
+    padding-top: 15px;
+    overflow-y: auto;
+    height: calc(100vh - 122px);
+    overflow-x: hidden;
+  }
+
+  .viewer-pdf.isDrag{
+    height: calc(100vh - 170px);
+    overflow-x: auto;
+    text-align: center;
+    background-color: rgba(239, 239, 239, 1);
+    //margin-left: 26%;
+    padding-top: 10px;
+    &.view{
+      height: calc(100vh - 122px) !important;
+      margin-left: 33%;
+      padding-top: 10px;
+      .show-list-name{
+        pointer-events: none;
+      }
+    }
+  }
+
+  &__information {
+    &--drag {
+      .content-drag {
+        cursor: pointer
+      ;
+        width: 100%;
+        height: 30px;
+        background-color: #EBF8FF;
+        border-radius: 5px;
+        border: 1px solid #106DB6;
+        color: #106DB6;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center
+      }
+    }
+
+    &--user-sign {
+      display: flex;
+      flex-direction: column;
+      .select-text {
+        position: relative;
+        font-family: inherit;
+        background-color: transparent;
+        width: 350px;
+        padding: 10px 10px 10px 0;
+        font-size: 18px;
+        border-radius: 0;
+        border: none;
+        border-bottom: 1px solid rgba(0,0,0, 0.12);
+      }
+    }
+
+    .flex-column {
+      .location {
+        display: flex;
+        justify-content: space-around
+      }
+      .location-drag {
+        span {
+          padding-right: 20px;
+        }
+        input {
+          outline: none;
+          width: 50px;
+          height: 30px;
+          border-radius: 5px;
+          border: 1px solid #106DB6;
+        }
+      }
+    }
+  }
+
+  .label {
+    font-size: 15px;
+    color: #106DB6;
+    font-style: normal;
+    font-weight: normal;
+  }
+
+  .label-require {
+    font-size: 13px;
+    font-style: normal;
+    font-weight: normal;
+    color: #F48465;
+  }
+}
+
+// test
+
+.employer-ck-da-keo{
+  border: 1px solid #92bff5;
+  color: #fe7744;
+  border-radius: 2px;
+}
+
+.staff-ck-da-keo {
+  border: 1px solid #92bff5;
+  color: #2680eb;
+  border-radius: 2px;
+}
+
+.employer-ck .signature-sample, .employer-ck .signature-sample-drag{
+  border: 1px solid #92bff5;
+  background-color: rgba(255, 233, 178, 1);
+  color: #fe7744;
+  border-radius: 2px;
+}
+.employer-ck-da-keo{
+  border: 1px solid #92bff5;
+  color: #fe7744;
+  border-radius: 2px;
+}
+
+.staff-ck .signature-sample, .staff-ck .signature-sample-drag{
+  border: 1px solid #92bff5;
+  background-color: rgba(189, 217, 249, 1);
+  color: #2680eb;
+  border-radius: 2px;
+}
+.staff-ck-da-keo {
+  border: 1px solid #92bff5;
+  color: #2680eb;
+  border-radius: 2px;
+}
+
+.resize-drag, .resize-drag-default {
+  //position: absolute; // thuoc tinh absolute de giu nguyen vi tri khi keo sang pdf
+  z-index: 9;
+  //width: 250px;
+  //height: 32px;
+  font-size: 12px;
+  border-radius: 3px;
+  font-family: sans-serif;
+  outline: none;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  color: rgba(27, 51, 91, 1);
+
+  /* This makes things *much* easier */
+  box-sizing: border-box;
+  //padding: 10px;
+}
+
+.drag-image{
+  //position: absolute;
+  //right: -22px;
+  //top: 5px;
+  padding-left: 7px;
+}

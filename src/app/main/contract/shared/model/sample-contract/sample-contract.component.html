@@ -1,1 +1,82 @@
-<p>sample-contract works!</p>
+<div class="sample-contract row">
+<!--  information contract-->
+  <div class="col-md-3 sample-contract__information" style="background-color: white">
+    <div class="sample-contract__information--drag">
+      <label style="padding-bottom: 10px" class="label">CÁC THÀNH PHẦN (<span style="color: red">KÉO THẢ</span>)</label>
+      <div style="display: flex; justify-content: space-around; margin-bottom: 15px">
+        <div class="resize-drag content-drag" style="margin-right: 5px">Số tài liệu</div>
+        <div class="resize-drag content-drag" style="margin-left: 5px">Text</div>
+      </div>
+
+      <div style="display: flex; justify-content: space-around">
+        <div class="resize-drag content-drag" style="height: 102px; flex-direction: column; margin-right: 5px">
+          <img src="assets/img/img_drag.svg" alt="mobifoneContract">
+          <span>Chữ ký ảnh</span>
+        </div>
+        <div class="resize-drag content-drag" style="height: 102px; flex-direction: column; margin-left: 5px">
+          <img src="assets/img/img_sign_number.svg" alt="mobifoneContract">
+          <span>Chữ ký số</span>
+        </div>
+      </div>
+
+
+    </div>
+    <hr>
+    <div class="sample-contract__information--user-sign">
+      <label class="label">THUỘC TÍNH</label>
+      <label class="label-require">Người ký: *</label>
+<!--      <select name="select-user-sign" class="select-text">-->
+<!--        <option value="1">Option 1</option>-->
+<!--        <option value="2">Option 2</option>-->
+<!--        <option value="3">Option 3</option>-->
+<!--      </select>-->
+    </div>
+    <hr>
+    <div class="flex-column">
+      <label class="label-require">Vị trí: *</label>
+      <div class="location">
+        <div class="location-drag">
+          <span class="label" style="font-size: 13px">x:</span>
+          <input type="text">
+        </div>
+        <div class="location-drag">
+          <span class="label" style="font-size: 13px">y:</span>
+          <input type="text">
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="flex-column">
+      <label class="label-require">Kích thước: *</label>
+      <div class="location">
+        <div class="location-drag">
+          <span class="label" style="font-size: 13px">Chiều dài:</span>
+          <input type="text">
+        </div>
+        <div class="location-drag">
+          <span class="label" style="font-size: 13px">Chiều rộng:</span>
+          <input type="text">
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--  file content-->
+  <div class="col-md-9 sample-contract__file viewer-pdf isDrag">
+    <div id="pdf-viewer-step-3">
+<!--      <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">-->
+        <div class="resize-drag not-out-drop"
+             [id]="123456789"
+             style="z-index: -1"
+             #itemElement
+             [ngClass]="changeColorDrag(null,true)"
+             [ngStyle]="changePosition()">
+<!--          <img src="assets/img/icons/cancel-sign.svg" (click)="onCancel($event, d)" class="sig-img-daky">-->
+          <div>Đỗ Thành Dương</div>
+        </div>
+<!--      </div>-->
+
+    </div>
+
+  </div>
+</div>
