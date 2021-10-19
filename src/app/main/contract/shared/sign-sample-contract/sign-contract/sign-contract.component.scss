@@ -1,0 +1,15 @@
+.content {
+  //height: 102px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.text-sign input {
+  width: 132px;
+  border: 0px;
+  height: 26px;
+  outline: none;
+  color: #106DB6;
+}

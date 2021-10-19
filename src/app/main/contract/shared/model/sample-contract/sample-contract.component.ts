@@ -1,26 +1,28 @@
-import {Component, OnInit, Input, ChangeDetectorRef} from '@angular/core';
+import {Component, OnInit, Input, ChangeDetectorRef, ViewChild, QueryList, ElementRef, OnDestroy} from '@angular/core';
 import {variable} from "../../../../../config/variable";
 import {Helper} from "../../../../../core/Helper";
 import {environment} from "../../../../../../environments/environment";
 import * as $ from 'jquery';
 
 import interact from 'interactjs'
+import {ContractService} from "../../../../../service/contract.service";
 
 @Component({
   selector: 'app-sample-contract',
   templateUrl: './sample-contract.component.html',
   styleUrls: ['./sample-contract.component.scss']
 })
-export class SampleContractComponent implements OnInit {
+export class SampleContractComponent implements OnInit, OnDestroy {
   @Input() datas: any;
   @Input() step: any;
+  @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
   pdfSrc: any;
   thePDF = null;
   pageNumber = 1;
   canvasWidth = 0;
   arrPage: any = [];
   objDrag: any = {};
-  scale = 1;
+  scale: any;
   objPdfProperties: any = {
     pages: [],
   };
@@ -29,15 +31,6 @@ export class SampleContractComponent implements OnInit {
   numPages = 0;
   x0: any = "abc";
   y0: any = "bcd";
-  numberContractto: any;
-  dateContractto: any;
-  selectBox: any;
-  pdfAsArray: any;
-  dataVariableSoHopDong: any;
-  dataVariableNgayHopDong: any;
-  variableObj: any;
-  number_contract: any;
-  date_contract: any;
   listEmail: any = [];
   coordinates_signature: any;
   obj_toa_do = {
@@ -78,14 +71,30 @@ export class SampleContractComponent implements OnInit {
   countAttachFile = 0;
   arrExceptTaxCode: any = [];
   maxLength = null;
+  widthDrag: any;
 
   constructor(
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private contractService: ContractService
   ) {
     this.step = variable.stepSampleContract.step3
   }
 
   async ngOnInit() {
+    setTimeout(() => {
+      let width_drag_element = document.getElementById('width-element-info');
+      this.widthDrag = width_drag_element ? ((width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left) - 10) : '';
+    }, 100)
+
+    this.datas.contract_user_sign = this.contractService.objDefaultSampleContract();
+
+    // console.log(this.datas.contract_user_sign)
+    this.scale = 1;
+    this.datas.contract_user_sign.forEach((item: any) => {
+      if (item['sign_config'] && typeof (item["sign_config"]) == 'string') {
+        item['sign_config'] = JSON.parse(item['sign_config']);
+      }
+    })
 
     // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
     this.pdfSrc = environment.url_file_content;
@@ -156,21 +165,21 @@ export class SampleContractComponent implements OnInit {
     let x = (parseFloat(event.target.getAttribute('data-x')) || 0)
     let y = (parseFloat(event.target.getAttribute('data-y')) || 0)
     // translate when resizing from top or left edges
-    // this.signCurent = this.convertToSignConfig().filter(p => p.id == event.target.id)[0];
-    // if (this.signCurent) {
-    //   if (event.rect.width <= 280) {
-    //     this.signCurent.dataset_x = x;
-    //     this.signCurent.dataset_y = y;
-    //     this.objSignInfo.id = event.target.id;
-    //     this.objSignInfo.traf_x = x;
-    //     this.objSignInfo.traf_y = y;
-    //     this.signCurent.offsetWidth = event.rect.width;
-    //     this.signCurent.offsetHeight = event.rect.height;
-    //     this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.offsetWidth, this.signCurent.offsetHeight, this.objSignInfo);
-    //     let _array = Object.values(this.obj_toa_do);
-    //     this.signCurent.position = _array.join(",");
-    //   }
-    // }
+    this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == event.target.id)[0];
+    if (this.signCurent) {
+      if (event.rect.width <= 280) {
+        this.signCurent.dataset_x = x;
+        this.signCurent.dataset_y = y;
+        this.objSignInfo.id = event.target.id;
+        this.objSignInfo.traf_x = x;
+        this.objSignInfo.traf_y = y;
+        this.signCurent.offsetWidth = event.rect.width;
+        this.signCurent.offsetHeight = event.rect.height;
+        this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.offsetWidth, this.signCurent.offsetHeight, this.objSignInfo);
+        let _array = Object.values(this.obj_toa_do);
+        this.signCurent.position = _array.join(",");
+      }
+    }
   }
 
   resizableListener = (event: any) => {
@@ -196,10 +205,9 @@ export class SampleContractComponent implements OnInit {
         event.target.setAttribute('data-y', 0);
         id = event.target.id.replace("chua-keo-", "");
         // this.datas.documents.document_user_sign_clone.forEach((element, index) => {
-        this.datas.documents.document_user_sign_clone.forEach((element: any, index: any) => {
+        this.datas.contract_user_sign.forEach((element: any, index: any) => {
           if (element.id == id) {
             let _obj: any = {
-              sign_type: element.sign_type,
               sign_unit: element.sign_unit,
               name: element.name
             }
@@ -277,7 +285,7 @@ export class SampleContractComponent implements OnInit {
           this.signCurent['top'] = (event.rect.top - canvasInfo.top).toFixed();
         }
         // lay lai danh sach signer sau khi keo vao hop dong
-        this.datas.documents.document_user_sign_clone.forEach((res: any) => {
+        this.datas.contract_user_sign.forEach((res: any) => {
           if (res.sign_config.length > 0) {
             let arrSignConfigItem = res.sign_config;
             arrSignConfigItem.forEach((element:any) => {
@@ -289,8 +297,14 @@ export class SampleContractComponent implements OnInit {
                 element['dataset_x'] = this.signCurent['dataset_x'];
                 element['dataset_y'] = this.signCurent['dataset_y'];
                 if (!this.objDrag[this.signCurent['id']].count) {
-                  element['offsetWidth'] = this.datas.configs.e_document.format_signature_image.signature_width;
-                  //element['offsetHeight'] = this.datas.configs.e_document.format_signature_image.signature_height;
+                  // element['offsetWidth'] = this.datas.configs.e_document.format_signature_image.signature_width;
+                  if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
+                    element['offsetWidth'] = '135';
+                    element['offsetHeight'] = '28';
+                  } else {
+                    element['offsetWidth'] = '135';
+                    element['offsetHeight'] = '85';
+                  }
                   this.objDrag[this.signCurent['id']].count = 2;
                 } else {
                   element['offsetWidth'] = event.target.offsetWidth;
@@ -377,6 +391,12 @@ export class SampleContractComponent implements OnInit {
     //this.objSignInfo.traf_y = y;
   }
 
+  setWidth(d: any) {
+      return {
+        'width.px': (this.widthDrag / 2)
+      }
+  }
+
   async getPage() {
     // @ts-ignore
     const pdfjs = await import('pdfjs-dist/build/pdf');
@@ -416,43 +436,51 @@ export class SampleContractComponent implements OnInit {
   eventMouseover() {
     if (!this.datas.isView) {
       this.objDrag = {};
-      // this.datas.documents.document_user_sign_clone.forEach(element => {
-      //   // if (this.datas.documents.document.sign_position_type == 'DEFAULT') {
-      //   //   this.objDrag[element.id] = {
-      //   //     count: 0
-      //   //   }
-      //   // } else {
-      //   if (element.sign_config.length > 0) {
-      //     let arrSignConfigItem = element.sign_config;
-      //     arrSignConfigItem.forEach(item => {
-      //       if (item['position']) {
-      //         this.objDrag[item.id] = {
-      //           count: 2
-      //         }
-      //       }
-      //     })
-      //   }
-      //   // }
-      //
-      //
-      // });
+      this.datas.contract_user_sign.forEach((element: any) => {
+        // if (this.datas.documents.document.sign_position_type == 'DEFAULT') {
+        //   this.objDrag[element.id] = {
+        //     count: 0
+        //   }
+        // } else {
+        if (element.sign_config.length > 0) {
+          let arrSignConfigItem = element.sign_config;
+          arrSignConfigItem.forEach((item: any) => {
+            if (item['position']) {
+              this.objDrag[item.id] = {
+                count: 2
+              }
+            }
+          })
+        }
+        // }
+
+
+      });
     }
   }
 
+  ngAfterViewInit() {
+    this.setPosition();
+    this.eventMouseover();
+    // console.log(this.objDrag);
+  }
+
   setPosition() {
-    // if (this.convertToSignConfig().length > 0) {
-    //   this.convertToSignConfig().forEach(element => {
-    //     let a = document.getElementById(element.id);
-    //     if (a) {
-    //       if (element['position'])
-    //         a.style["z-index"] = '1';
-    //       // else
-    //       //   a.style.display = 'none';
-    //       a.setAttribute("data-x", element['dataset_x']);
-    //       a.setAttribute("data-y", element['dataset_y']);
-    //     }
-    //   });
-    // }
+    if (this.convertToSignConfig().length > 0) {
+      this.convertToSignConfig().forEach((element: any) => {
+        let a = document.getElementById(element.id);
+        if (a) {
+          if (element['position'])
+            { // @ts-ignore
+              a.style["z-index"] = '1';
+            }
+          // else
+          //   a.style.display = 'none';
+          a.setAttribute("data-x", element['dataset_x']);
+          a.setAttribute("data-y", element['dataset_y']);
+        }
+      });
+    }
   }
 
   removePage() {
@@ -510,7 +538,7 @@ export class SampleContractComponent implements OnInit {
           let selector = '.page-canvas.page' + page;
           $(selector).css('border', '2px solid #ADCFF7');
           // @ts-ignore
-          document.getElementById('thumbnail-canvas').scrollTop = $(selector).offset().top - 95;
+          // document.getElementById('thumbnail-canvas').scrollTop = $(selector).offset().top - 95;
         }
       });
     });
@@ -518,38 +546,39 @@ export class SampleContractComponent implements OnInit {
 
 
   changePosition(d?: any) {
-    let style: any = {"transform": 'translate(' + d['dataset_x'] + 'px, ' + d['dataset_y'] + 'px)'}
-    // if (d['offsetWidth']) {
-    //
-    //   if (d.sign_unit == 'BEN_NHAN') {
-    //     if (d.sign_type == 'OTP') {
-    //       style.width = (parseInt(d['offsetWidth'])) + "px";
-    //     } else style.width = parseInt(d['offsetWidth']) + "px";
-    //   } else {
-    //     style.width = parseInt(d['offsetWidth']) + "px";
-    //   }
-    //
-    // } else {
-    //   if (this.datas.configs.e_document.format_signature_image.signature_width) {
-    //     style.width = parseInt(this.datas.configs.e_document.format_signature_image.signature_width) + "px";
-    //   }
-    // }
-    //
-    // if (d['offsetHeight']) {
-    //   if (d.sign_unit == 'BEN_NHAN') {
-    //     if (d.sign_type == 'OTP') style.height = "";
-    //     else style.height = parseInt(d['offsetHeight']) + "px";
-    //   } else style.height = parseInt(d['offsetHeight']) + "px";
-    // } else {
-    //   if (this.datas.configs.e_document.format_signature_image.signature_height) {
-    //     if (this.datas.configs.e_document.signature_display_type == "sign1"
-    //       || this.datas.configs.e_document.signature_display_type == "sign4") {
-    //     } //else
-    //   }
-    // }
-    style.width = '180px';
-    style.height = '102px';
-    style.position = "absolute";
+    let style: any = {
+      "transform": 'translate(' + d['dataset_x'] + 'px, ' + d['dataset_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#EBF8FF'
+    }
+    if (d['offsetWidth']) {
+      style.width = parseInt(d['offsetWidth']) + "px";
+      // if (d.sign_unit == 'BEN_NHAN') {
+      //   if (d.sign_type == 'OTP') {
+      //     style.width = (parseInt(d['offsetWidth'])) + "px";
+      //   } else style.width = parseInt(d['offsetWidth']) + "px";
+      // } else {
+      //   style.width = parseInt(d['offsetWidth']) + "px";
+      // }
+
+    }
+    else {
+    }
+
+    if (d['offsetHeight']) {
+      style.height = parseInt(d['offsetHeight']) + "px";
+      // if (d.sign_unit == 'BEN_NHAN') {
+      //   if (d.sign_type == 'OTP') style.height = "";
+      //   else style.height = parseInt(d['offsetHeight']) + "px";
+      // } else style.height = parseInt(d['offsetHeight']) + "px";
+    } else {
+      // if (this.datas.configs.e_document.format_signature_image.signature_height) {
+      //   if (this.datas.configs.e_document.signature_display_type == "sign1"
+      //     || this.datas.configs.e_document.signature_display_type == "sign4") {
+      //   } //else
+      // }
+    }
+
     return style;
   }
 
@@ -557,7 +586,7 @@ export class SampleContractComponent implements OnInit {
   changeColorDrag(role: any, isDaKeo?: any) {
     if (isDaKeo) {
       // if (role == 'BEN_LAP') {
-        return 'employer-ck-da-keo';
+        return 'ck-da-keo';
       // } else {
       //   return 'staff-ck-da-keo';
       // }
@@ -571,7 +600,7 @@ export class SampleContractComponent implements OnInit {
   }
 
   onCancel(e: any, data: any) {
-    this.datas.documents.document_user_sign_clone.forEach((element: any, user_sign_index: any) => {
+    this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
       if (element.sign_config.length > 0) {
         element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
         element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
@@ -585,14 +614,31 @@ export class SampleContractComponent implements OnInit {
 
   convertToSignConfig() {
     let arrSignConfig: any = [];
-    let cloneUserSign = [...this.datas.documents.document_user_sign_clone];
+    let cloneUserSign = [...this.datas.contract_user_sign];
     cloneUserSign.forEach(element => {
-      element.sign_config.forEach((key: any) => {
-        key['sign_type'] = element['sign_type'];
-      })
+      // element.sign_config.forEach((key: any) => {
+      //   key['sign_type'] = element['sign_type'];
+      // })
       arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
     return arrSignConfig;
   }
+
+  showThumbnail() {
+    this.objSignInfo.showObjSign = false;
+  }
+
+  getIdSignChuaKeo(id: any) {
+    return "chua-keo-" + id;
+  }
+
+  ngOnDestroy() {
+    interact('.pdf-viewer-step-3').unset();
+    interact('.drop-zone').unset();
+    interact('.resize-drag').unset();
+    interact('.not-out-drop').unset();
+    interact.removeDocument(document);
+  }
+
 
 }

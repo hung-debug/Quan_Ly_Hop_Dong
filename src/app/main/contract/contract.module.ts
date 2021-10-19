@@ -6,7 +6,7 @@ import {SampleContractComponent} from "./shared/model/sample-contract/sample-con
 import {ConfirmInforContractComponent} from "./shared/model/confirm-infor-contract/confirm-infor-contract.component";
 import {DetermineSignerComponent} from "./shared/model/determine-signer/determine-signer.component";
 import {ReactiveFormsModule} from "@angular/forms";
-
+import { SignContractComponent } from './shared/sign-sample-contract/sign-contract/sign-contract.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,8 @@ import {ReactiveFormsModule} from "@angular/forms";
     InforContractComponent,
     SampleContractComponent,
     ConfirmInforContractComponent,
-    DetermineSignerComponent
+    DetermineSignerComponent,
+    SignContractComponent
   ],
   exports: [
     ContractHeaderComponent,
@@ -32,7 +33,8 @@ import {ReactiveFormsModule} from "@angular/forms";
     ContractHeaderComponent,
     InforContractComponent,
     SampleContractComponent,
-    DetermineSignerComponent
+    DetermineSignerComponent,
+    SignContractComponent
   ]
 })
 export class ContractModule { }

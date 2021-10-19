@@ -1,91 +1,36 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContractService {
 
-  constructor() { }
+  constructor() {
+  }
 
   objDefaultSampleContract() {
-    return {
-      contract_user_sign: [
-        {
-          sign_unit: 'so_tai_lieu',
-          sign_config: [
-            {
-              dataset_x: 0,
-              dataset_y: 0,
-              id: "",
-              left: 0,
-              name: "",
-              number: "",
-              offsetHeight: 30,
-              offsetWidth: 180,
-              position: "",
-              sign_unit: "so_tai_lieu",
-              top: 0
-            }
-          ]
-        },
-        {
-          sign_unit: 'text',
-          sign_config: [
-            {
-              dataset_x: 0,
-              dataset_y: 0,
-              id: "",
-              left: 0,
-              name: "",
-              number: "",
-              offsetHeight: 30,
-              offsetWidth: 180,
-              position: "",
-              sign_unit: "text",
-              top: 0
-            }
-          ]
-        },
-        {
-          sign_unit: 'chu_ky_so',
-          sign_config: [
-            {
-              dataset_x: 0,
-              dataset_y: 0,
-              id: "",
-              left: 0,
-              name: "",
-              number: "",
-              offsetHeight: 102,
-              offsetWidth: 180,
-              position: "",
-              sign_unit: "chu_ky_so",
-              top: 0
-            }
-          ]
-        },
-        {
-          sign_unit: 'chu_ky_anh',
-          sign_config: [
-            {
-              dataset_x: 0,
-              dataset_y: 0,
-              id: "",
-              left: 0,
-              name: "",
-              number: "",
-              offsetHeight: 102,
-              offsetWidth: 180,
-              position: "",
-              sign_unit: "chu_ky_so",
-              top: 0
-            }
-          ]
-        }
+    return [
+      {
+        id: '123',
+        sign_unit: 'so_tai_lieu',
+        sign_config: "[]"
+      },
+      {
+        id: '456',
+        sign_unit: 'text',
+        sign_config: "[]"
+      },
+      {
+        id: '789',
+        sign_unit: 'chu_ky_anh',
+        sign_config: "[]"
+      },
+      {
+        id: '101',
+        sign_unit: 'chu_ky_so',
+        sign_config: "[]"
+      },
+    ]
 
-
-
-      ]
-    }
   }
 }
