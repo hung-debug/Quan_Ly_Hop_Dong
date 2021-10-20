@@ -7,6 +7,7 @@ import {ConfirmInforContractComponent} from "./shared/model/confirm-infor-contra
 import {DetermineSignerComponent} from "./shared/model/determine-signer/determine-signer.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import { SignContractComponent } from './shared/sign-sample-contract/sign-contract/sign-contract.component';
+// import {NotificationService} from "../../service/notification/notification.service";
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { SignContractComponent } from './shared/sign-sample-contract/sign-contra
     SampleContractComponent,
     DetermineSignerComponent,
     SignContractComponent
-  ]
+  ],
+  providers: []
 })
 export class ContractModule { }

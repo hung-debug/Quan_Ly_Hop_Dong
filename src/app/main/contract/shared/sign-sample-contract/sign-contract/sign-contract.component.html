@@ -4,5 +4,5 @@
 </div>
 
 <div class="text-sign" *ngIf="sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu'">
-  <input id="input-text" type="text">
+  <input id="input-text" type="text" [placeholder]="sign.sign_unit == 'text' ? 'Nhập text' : 'Nhập số tài liệu'">
 </div>

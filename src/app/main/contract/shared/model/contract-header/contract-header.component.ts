@@ -12,7 +12,8 @@ export class ContractHeaderComponent implements OnInit {
   @Output('stepChange') stepChange = new EventEmitter<Array<any>>();
   @Input() datas: any;
   @Input() step: any;
-  constructor() {
+  constructor(
+  ) {
     // this.step = variable.stepSampleContract.step4
   }
 
@@ -56,11 +57,20 @@ export class ContractHeaderComponent implements OnInit {
   }
 
   validData(step: any) {
+
     switch (step) {
       case variable.stepSampleContract.step1:
         break
       case variable.stepSampleContract.step2: break
-      case variable.stepSampleContract.step3: break
+      // @ts-ignore
+      case variable.stepSampleContract.step3:
+        console.log(this.datas);
+        let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
+        if (!data_not_drag) {
+          alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')
+          return false;
+        }
+        // break;
       case variable.stepSampleContract.step4: break;
       default: return false
     }

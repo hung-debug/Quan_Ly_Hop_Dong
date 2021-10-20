@@ -1,4 +1,14 @@
-import {Component, OnInit, Input, ChangeDetectorRef, ViewChild, QueryList, ElementRef, OnDestroy} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ChangeDetectorRef,
+  ViewChild,
+  QueryList,
+  ElementRef,
+  OnDestroy,
+  AfterViewInit
+} from '@angular/core';
 import {variable} from "../../../../../config/variable";
 import {Helper} from "../../../../../core/Helper";
 import {environment} from "../../../../../../environments/environment";
@@ -12,7 +22,7 @@ import {ContractService} from "../../../../../service/contract.service";
   templateUrl: './sample-contract.component.html',
   styleUrls: ['./sample-contract.component.scss']
 })
-export class SampleContractComponent implements OnInit, OnDestroy {
+export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() datas: any;
   @Input() step: any;
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
@@ -80,26 +90,20 @@ export class SampleContractComponent implements OnInit, OnDestroy {
     this.step = variable.stepSampleContract.step3
   }
 
-  async ngOnInit() {
-    setTimeout(() => {
-      let width_drag_element = document.getElementById('width-element-info');
-      this.widthDrag = width_drag_element ? ((width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left) - 10) : '';
-    }, 100)
-
+  ngOnInit() {
     this.datas.contract_user_sign = this.contractService.objDefaultSampleContract();
 
     // console.log(this.datas.contract_user_sign)
     this.scale = 1;
-    this.datas.contract_user_sign.forEach((item: any) => {
-      if (item['sign_config'] && typeof (item["sign_config"]) == 'string') {
-        item['sign_config'] = JSON.parse(item['sign_config']);
-      }
-    })
+    // this.datas.contract_user_sign.forEach((item: any) => {
+    //   if (item['sign_config'] && typeof (item["sign_config"]) == 'string') {
+    //     item['sign_config'] = JSON.parse(item['sign_config']);
+    //   }
+    // })
 
     // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
     this.pdfSrc = environment.url_file_content;
-    // console.log(this.pdfSrc)
-    await this.getPage();
+    this.getPage();
 
     interact('.dropzone').dropzone({
       // only accept elements matching this CSS selector
@@ -288,7 +292,7 @@ export class SampleContractComponent implements OnInit, OnDestroy {
         this.datas.contract_user_sign.forEach((res: any) => {
           if (res.sign_config.length > 0) {
             let arrSignConfigItem = res.sign_config;
-            arrSignConfigItem.forEach((element:any) => {
+            arrSignConfigItem.forEach((element: any) => {
               if (element.id == this.signCurent['id']) {
 
                 let _arrPage = event.relatedTarget.id.split("-");
@@ -338,7 +342,7 @@ export class SampleContractComponent implements OnInit, OnDestroy {
     }
   }
 
-  tinhToaDoSign(idCanvas:any, signWidth:any, signHeight:any, objTranf?:any) {
+  tinhToaDoSign(idCanvas: any, signWidth: any, signHeight: any, objTranf?: any) {
     let _arrPage = idCanvas.split("-");
     let page = _arrPage[_arrPage.length - 1];
     let traf_x = objTranf ? objTranf.traf_x : this.objSignInfo.traf_x;
@@ -392,9 +396,9 @@ export class SampleContractComponent implements OnInit, OnDestroy {
   }
 
   setWidth(d: any) {
-      return {
-        'width.px': (this.widthDrag / 2)
-      }
+    return {
+      'width.px': (this.widthDrag / 2)
+    }
   }
 
   async getPage() {
@@ -460,6 +464,13 @@ export class SampleContractComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    setTimeout(() => {
+    // @ts-ignore
+    document.getElementById('input-location-x').focus();
+    let width_drag_element = document.getElementById('width-element-info');
+    this.widthDrag = width_drag_element ? ((width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left) - 15) : '';
+      console.log(this.widthDrag)
+    }, 100)
     this.setPosition();
     this.eventMouseover();
     // console.log(this.objDrag);
@@ -470,10 +481,9 @@ export class SampleContractComponent implements OnInit, OnDestroy {
       this.convertToSignConfig().forEach((element: any) => {
         let a = document.getElementById(element.id);
         if (a) {
-          if (element['position'])
-            { // @ts-ignore
-              a.style["z-index"] = '1';
-            }
+          if (element['position']) { // @ts-ignore
+            a.style["z-index"] = '1';
+          }
           // else
           //   a.style.display = 'none';
           a.setAttribute("data-x", element['dataset_x']);
@@ -561,8 +571,7 @@ export class SampleContractComponent implements OnInit, OnDestroy {
       //   style.width = parseInt(d['offsetWidth']) + "px";
       // }
 
-    }
-    else {
+    } else {
     }
 
     if (d['offsetHeight']) {
@@ -582,17 +591,27 @@ export class SampleContractComponent implements OnInit, OnDestroy {
     return style;
   }
 
+  // @ts-ignore
+  changeDisplay() {
+    if (window.innerHeight < 670) {
+        return {
+          "overflow": "auto",
+          "height": "calc(50vh - 100px)"
+        }
+    } else return {}
+  }
+
 
   changeColorDrag(role: any, isDaKeo?: any) {
     if (isDaKeo) {
       // if (role == 'BEN_LAP') {
-        return 'ck-da-keo';
+      return 'ck-da-keo';
       // } else {
       //   return 'staff-ck-da-keo';
       // }
     } else {
       // if (role == 'BEN_LAP') {
-        return 'employer-ck';
+      return 'employer-ck';
       // } else {
       //   return 'staff-ck';
       // }

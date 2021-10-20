@@ -27,6 +27,8 @@ export class Helper {
     var objectUrl = window.URL.createObjectURL(blob);
     return objectUrl;
   }
+
+
   static _attemptConvertFloat(str: any) {
     // let tem = str.replace(",", "");
     if (str) {// && str.trim()) {
