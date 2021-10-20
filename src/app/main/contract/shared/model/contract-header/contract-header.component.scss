@@ -21,19 +21,6 @@
   display: none;
 }
 
-//style input
-button {
-  //padding: 15px;
-  border: 0px;
-  border-radius: 3px;
-  margin-bottom: 10px;
-  width: 120px;
-  height: 40px;
-  box-sizing: border-box;
-  color: white;
-  background-color: #106DB6;
-  font-size: 13px;
-}
 
 #msform input:focus, #msform textarea:focus {
   -moz-box-shadow: none !important;
@@ -164,4 +151,35 @@ button {
 //style current active
 #progressbar li span.current_active {
   font-weight: 800;
+}
+
+
+//style input
+.button_previous {
+  //padding: 15px;
+  border: 0px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  width: 120px;
+  height: 40px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #acaeaf;
+  font-size: 13px;
+  float: left;
+}
+
+//style input
+.button_next {
+  //padding: 15px;
+  border: 0px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  width: 120px;
+  height: 40px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #106DB6;
+  font-size: 13px;
+  float: right;
 }

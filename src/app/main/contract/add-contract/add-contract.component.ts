@@ -29,7 +29,7 @@ export class AddContractComponent implements OnInit {
   address_step = false;
   education_step = false;
   confirm_step = false;
-  // step = 1;
+  //step = 1;
   step = "infor-contract";
   constructor(private formBuilder: FormBuilder) { }
   ngOnInit() {
@@ -58,19 +58,22 @@ export class AddContractComponent implements OnInit {
   get confirm() { return this.confirmDetails.controls; }
 
   next(){
-    // if(this.step==1){
-    //   this.personal_step = true;
-    //   if (this.personalDetails.invalid) { return  }
-    // }
-    // else if(this.step==2){
-    //   this.address_step = true;
-    //   if (this.addressDetails.invalid) { return }
-    // }
-    // else if(this.step==3){
-    //   this.education_step = true;
-    //   if (this.educationalDetails.invalid) { return }
-    // }
-    // this.step++;
+    if(this.step=='infor-contract'){
+      this.personal_step = true;
+      if (this.personalDetails.invalid) { return  }
+      this.step = 'determine-contract';
+    }
+    else if(this.step=='determine-contract'){
+      this.address_step = true;
+      if (this.addressDetails.invalid) { return }
+      this.step = 'sample-contract';
+    }
+    else if(this.step=='sample-contract'){
+      this.education_step = true;
+      if (this.educationalDetails.invalid) { return }
+      this.step = 'confirm-contract';
+    }
+    //this.step++;
 
   }
 

@@ -1,5 +1,5 @@
       <!-- form step 2 -->
-       <form [formGroup]="addressDetails" id="msform">
+       <!-- <form [formGroup]="addressDetails" id="msform">
           <fieldset>
               <input type="text" formControlName="city"  placeholder="City"/>
               <div *ngIf="address_step && addressDetails.controls.city.errors">
@@ -13,7 +13,285 @@
               <div *ngIf="address_step && addressDetails.controls.pincode.errors">
                   <div *ngIf="address.pincode.errors?.required">Pincode is required</div>
               </div>
-<!--              <input (click)="previous()" type="button" name="previous" class="previous action-button-previous" value="Quay lại"/>-->
-<!--              <input  (click)="next()" type="button" name="next" class="next action-button" value="Tiếp theo"/>-->
+              <input (click)="previous()" type="button" name="previous" class="previous action-button-previous" value="Quay lại"/>
+             <input  (click)="next()" type="button" name="next" class="next action-button" value="Tiếp theo"/>
           </fieldset>
-      </form>
+        </form>-->
+      <div class="container">
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-md-1 order">
+                <input type="number" formControlName="order" class="form-control order_input">
+            </div>
+            <div class="col-md-11 form_content">
+              <p>
+                <label class="labelOrg">TỔ CHỨC CỦA TÔI</label>
+                <input class="form-control textOrg" type="text" id="name" name="name" formControlName="name" readonly>
+              </p>
+
+              <!-- User view -->
+              <div class="add_content"  formArrayName="userViews">
+                <div class="label">Người xem xét</div>
+                <hr>
+                <div *ngFor="let userView of userViews().controls; let i=index" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-md-1 order">
+                        <input type="number" formControlName="order" class="form-control order_input">
+                    </div>
+                    <div class="col-md-10">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="label_item">Họ tên <span class="require_star">*</span></div>
+                          <input type="text" formControlName="name" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                          <div class="label_item">Email <span class="require_star">*</span></div>
+                            <input type="text" formControlName="email" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-1 remove">
+                        <i (click)="removeUserView(i)" class="fa fa-times-circle remove_icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="add_click" (click)="addUserView()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người xem xét</a></div>
+              </div>
+
+              <!-- User sign -->
+              <div class="add_content" formArrayName="userSigns">
+                <div class="label">Người ký</div>
+                <hr>
+                <div *ngFor="let userSign of userSigns().controls; let i=index" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-md-1 order">
+                      <input type="number" formControlName="order" class="form-control order_input">
+                    </div>
+                    <div class="col-md-10">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="label_item">Họ tên <span class="require_star">*</span></div>
+                          <input type="text" formControlName="name" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                          <div class="label_item">Email <span class="require_star">*</span></div>
+                            <input type="text" formControlName="email" class="form-control">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="label_item">Loại ký <span class="require_star">*</span></div>
+                          <input type="text" formControlName="signType" class="form-control">
+                        </div>
+                        <div class="col-md-1">
+                          <div class="label_item">OTP</div>
+                          <input type="checkbox" formControlName="isOtp" class="form-check-input">
+                        </div>
+                        <div class="col-md-5">
+                          <div class="label_item">Số diện thoại <span class="require_star">*</span></div>
+                          <input type="text" formControlName="phone" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-1 remove">
+                      <i (click)="removeUserSign(i)" class="fa fa-times-circle remove_icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="add_click" (click)="addUserSign()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
+              </div>
+
+              <!-- User document -->
+              <div class="add_content" formArrayName="userDocs">
+                <div class="label">Văn thư</div>
+                <hr>
+                <div *ngFor="let userDoc of userDocs().controls; let i=index" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-md-1 order">
+                      <input type="number" formControlName="order" class="form-control order_input">
+                    </div>
+                    <div class="col-md-10">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="label_item">Họ tên <span class="require_star">*</span></div>
+                          <input type="text" formControlName="name" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                          <div class="label_item">Email <span class="require_star">*</span></div>
+                          <input type="text" formControlName="email" class="form-control">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="label_item">Loại ký <span class="require_star">*</span></div>
+                          <input type="text" formControlName="signType" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-1 remove">
+                      <i (click)="removeUserDoc(i)" class="fa fa-times-circle remove_icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="add_click" (click)="addUserDoc()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm văn thư</a></div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <form [formGroup]="partners" class="partner_content">
+          <div class="row">
+            <div class="col-md-1 order">
+                <input type="number" formControlName="order" class="form-control order_input">
+            </div>
+            <div class="col-md-11 form_content">
+              <p>
+                <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
+                <input class="form-control textOrg" id="name" name="name" formControlName="name">
+              </p>
+
+              <!-- Partner lead -->
+              <div class="add_content" formArrayName="partnerLeads">
+                <div class="label">Người điều phối</div>
+                <hr>
+                <div *ngFor="let partnerLead of partnerLeads().controls; let i=index" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-md-1 order">
+                      <input type="number" formControlName="order" class="form-control order_input">
+                    </div>
+                    <div class="col-md-10">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="label_item">Họ tên</div>
+                          <input type="text" formControlName="name" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                          <div class="label_item">Email</div>
+                          <input type="text" formControlName="email" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-1 remove">
+                      <i (click)="removePartnerLead(i)" class="fa fa-times-circle remove_icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="add_click" (click)="addPartnerLead()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người điều phối</a></div>
+              </div>
+
+              <!-- Partner view -->
+              <div class="add_content" formArrayName="partnerViews">
+                <div class="label">Người xem xét</div>
+                <hr>
+                <div *ngFor="let partnerView of partnerViews().controls; let i=index" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-md-1 order">
+                      <input type="number" formControlName="order" class="form-control order_input">
+                    </div>
+                    <div class="col-md-10">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="label_item">Họ tên <span class="require_star">*</span></div>
+                          <input type="text" formControlName="name" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                          <div class="label_item">Email <span class="require_star">*</span></div>
+                          <input type="text" formControlName="email" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-1 remove">
+                      <i (click)="removePartnerView(i)" class="fa fa-times-circle remove_icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="add_click" (click)="addPartnerView()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người xem xét</a></div>
+              </div>
+
+              <!-- Partner sign -->
+              <div class="add_content" formArrayName="partnerSigns">
+                <div class="label">Người ký</div>
+                <hr>
+                <div *ngFor="let partnerSign of partnerSigns().controls; let i=index" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-md-1 order">
+                      <input type="number" formControlName="order" class="form-control order_input">
+                    </div>
+                    <div class="col-md-10">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="label_item">Họ tên <span class="require_star">*</span></div>
+                          <input type="text" formControlName="name" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                          <div class="label_item">Email <span class="require_star">*</span></div>
+                          <input type="text" formControlName="email" class="form-control">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="label_item">Loại ký <span class="require_star">*</span></div>
+                          <input type="text" formControlName="signType" class="form-control">
+                        </div>
+                        <div class="col-md-1">
+                          <div class="label_item">OTP</div>
+                          <input type="checkbox" formControlName="isOtp" class="form-check-input">
+                        </div>
+                        <div class="col-md-5">
+                          <div class="label_item">Số diện thoại <span class="require_star">*</span></div>
+                          <input type="text" formControlName="phone" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-1 remove">
+                      <i (click)="removePartnerSign(i)" class="fa fa-times-circle remove_icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="add_click" (click)="addPartnerSign()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
+              </div>
+
+              <!-- Partner document -->
+              <div class="add_content" formArrayName="partnerDocs">
+                <div class="label">Văn thư</div>
+                <hr>
+                <div *ngFor="let partnerDoc of partnerDocs().controls; let i=index" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-md-1 order">
+                      <input type="number" formControlName="order" class="form-control order_input">
+                    </div>
+                    <div class="col-md-10">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="label_item">Họ tên <span class="require_star">*</span></div>
+                          <input type="text" formControlName="name" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                          <div class="label_item">Email <span class="require_star">*</span></div>
+                          <input type="text" formControlName="email" class="form-control">
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="label_item">Loại ký <span class="require_star">*</span></div>
+                          <input type="text" formControlName="signType" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-1 remove">
+                      <i (click)="removePartnerDoc(i)" class="fa fa-times-circle remove_icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="add_click" (click)="addPartnerDoc()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm văn thư</a></div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <br/>
+        {{this.productForm.value | json}}
+        <br/>
+        {{this.partners.value | json}}
+      </div>
+

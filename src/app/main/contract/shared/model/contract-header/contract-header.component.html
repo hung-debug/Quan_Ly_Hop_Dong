@@ -12,10 +12,19 @@
       </li>
     </ul>
   </div>
-
-  <button *ngIf="step == 'infor-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
-  <button *ngIf="step == 'determine-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
-  <button *ngIf="step == 'sample-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
-  <button *ngIf="step == 'confirm-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
-
 </div>
+<div class="row">
+  <div class="col-md-12 col-md-offset-3">
+    <button *ngIf="step == 'infor-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button button_next">Tiếp theo</button>
+
+    <button *ngIf="step == 'determine-contract'" class="pull-right" (click)="previous()" type="button" name="next" class="next action-button button_previous">Quay lại</button>
+    <button *ngIf="step == 'determine-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button button_next">Tiếp theo</button>
+
+    <button *ngIf="step == 'sample-contract'" class="pull-right" (click)="previous()" type="button" name="next" class="next action-button button_previous">Quay lại</button>
+    <button *ngIf="step == 'sample-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button button_next">Tiếp theo</button>
+
+    <button *ngIf="step == 'confirm-contract'" class="pull-right" (click)="previous()" type="button" name="next" class="next action-button button_previous">Quay lại</button>
+    <button *ngIf="step == 'confirm-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button button_next">Tiếp theo</button>
+  </div>
+</div>
+

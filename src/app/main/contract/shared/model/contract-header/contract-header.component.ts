@@ -73,4 +73,26 @@ export class ContractHeaderComponent implements OnInit {
     this.stepChange.emit(step);
   }
 
+  previous(){
+    let nextStep = this.step;
+
+    switch (this.step) {
+      case variable.stepSampleContract.step2:
+        nextStep = variable.stepSampleContract.step1;
+        // this.stepChange.emit(nextStep);
+        break;
+      case variable.stepSampleContract.step3:
+        nextStep = variable.stepSampleContract.step2;
+        // this.stepChange.emit(nextStep);
+        break;
+      case variable.stepSampleContract.step4:
+        nextStep = variable.stepSampleContract.step3;
+        // this.stepChange.emit(nextStep);
+        break;
+      default:
+        break;
+    }
+    this.nextStep(nextStep);
+  }
+
 }
