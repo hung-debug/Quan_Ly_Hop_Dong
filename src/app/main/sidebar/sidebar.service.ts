@@ -19,10 +19,10 @@ export class SidebarService {
       icon: 'fa fa-file-pdf-o',
       active: false,
       type: 'dropdown',
-      badge: {
-        text: '6',
-        class: 'badge-danger'
-      },
+      // badge: {
+      //   text: '6',
+      //   class: 'badge-danger'
+      // },
       href: '#',
       submenus: [
         {
@@ -67,10 +67,10 @@ export class SidebarService {
       icon: 'fa fa-file-pdf-o',
       active: false,
       type: 'dropdown',
-      badge: {
-        text: '160',
-        class: 'badge-danger'
-      },
+      // badge: {
+      //   text: '160',
+      //   class: 'badge-danger'
+      // },
       href: '#',
       submenus: [
         {
@@ -107,7 +107,7 @@ export class SidebarService {
     },
     {
       title: 'Mẫu hợp đồng',
-      icon: 'fa fa-book',
+      icon: 'fa fa-building-o',
       active: false,
       type: 'simple',
       href: '/main/add-contract'
@@ -121,7 +121,7 @@ export class SidebarService {
     },
     {
       title: 'Tổ chức',
-      icon: 'fa fa-institution',
+      icon: 'fa fa-users',
       active: false,
       type: 'simple',
       href: '/main/add-contract'
@@ -135,7 +135,7 @@ export class SidebarService {
     },
     {
       title: 'Loại hợp đồng',
-      icon: 'fa fa-clone',
+      icon: 'fa fa-cube',
       active: false,
       type: 'simple',
       href: '/main/add-contract'

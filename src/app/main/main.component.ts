@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AppService } from '../service/app.service';
 import { SidebarService } from './sidebar/sidebar.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { SidebarService } from './sidebar/sidebar.service';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-  title:string = '';
+  title:String;
   closeResult:string= '';
   resetPasswordForm:any = FormGroup;
   fieldTextTypeOld: boolean = false;
@@ -20,7 +21,11 @@ export class MainComponent implements OnInit {
   constructor(private router: Router,
               private modalService: NgbModal,
               private fb: FormBuilder,
-              public sidebarservice: SidebarService) {}
+              private appService: AppService,
+              public sidebarservice: SidebarService,
+              private changeDetectorRef: ChangeDetectorRef) {
+                this.title = 'err';
+              }
 
   //open popup reset password
   open(content:any) {
@@ -67,7 +72,14 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //update title by component
+    this.appService.getTitle().subscribe(appTitle => this.title = appTitle);
     this.initResetPasswordForm();
+  }
+
+  //apply change title
+  ngAfterContentChecked() {
+    this.changeDetectorRef.detectChanges();
   }
 
   //click logout

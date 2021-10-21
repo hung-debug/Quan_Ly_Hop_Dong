@@ -1,4 +1,5 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
+import { AppService } from 'src/app/service/app.service';
 import { single } from '../../data/data';
 // import {LegendPosition} from "@swimlane/ngx-charts/lib/common/types/legend.model";
 @Component({
@@ -7,7 +8,6 @@ import { single } from '../../data/data';
   styleUrls: ['./dashboard.component.scss', '../main.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  @Output() title = 'TRANG CHỦ';
   single: any[] = [];
   view: [number, number] = [700, 250];
 
@@ -26,7 +26,9 @@ export class DashboardComponent implements OnInit {
 
   colorScheme: any;
 
-  constructor() {
+  constructor(
+    private appService: AppService
+  ) {
     this.legendPosition = "right";
     this.colorScheme = {
       domain: ['#2da133', '#FF710B', '#407EF9', '#F3E13F', '#ED1C24']
@@ -47,6 +49,7 @@ export class DashboardComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.appService.setTitle('TRANG CHỦ');
   }
 
 }

@@ -33,6 +33,7 @@ import { SidebarComponent } from './main/sidebar/sidebar.component';
 // import { DetermineSignerComponent } from './main/contract/shared/model/determine-signer/determine-signer.component';
 // import { ConfirmInforContractComponent } from './main/contract/shared/model/confirm-infor-contract/confirm-infor-contract.component';
 import {ContractModule} from "./main/contract/contract.module";
+import { AppService } from './service/app.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -73,10 +74,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatBadgeModule,
     ContractModule
   ],
-  providers: [ {
+  providers: [ AppService,
+    {
     provide: PERFECT_SCROLLBAR_CONFIG,
-    useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-  }],
+    useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

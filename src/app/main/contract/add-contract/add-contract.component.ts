@@ -6,6 +6,7 @@ import {DetermineSignerComponent} from "../shared/model/determine-signer/determi
 import {InforContractComponent} from "../shared/model/infor-contract/infor-contract.component";
 import {SampleContractComponent} from "../shared/model/sample-contract/sample-contract.component";
 import {variable} from "../../../config/variable";
+import { AppService } from 'src/app/service/app.service';
 
 @Component({
   selector: 'app-add-contract',
@@ -31,8 +32,12 @@ export class AddContractComponent implements OnInit {
   confirm_step = false;
   //step = 1;
   step = "infor-contract";
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+              private appService: AppService,) { }
   ngOnInit() {
+    //title
+    this.appService.setTitle('THÊM MỚI HỢP ĐỒNG');
+
     this.personalDetails = this.formBuilder.group({
         name: ['', Validators.required],
         email: ['', Validators.required],

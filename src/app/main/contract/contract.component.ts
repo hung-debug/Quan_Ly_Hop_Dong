@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { AppService } from 'src/app/service/app.service';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -8,7 +9,9 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 export class ContractComponent implements OnInit {
   closeResult:string= '';
 
-  constructor(private modalService: NgbModal) {}
+  constructor(private modalService: NgbModal,
+              private appService: AppService,
+    ) {}
 
   open(content:any) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
@@ -29,6 +32,6 @@ export class ContractComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.appService.setTitle('DANH SÁCH HỢP ĐỒNG');
   }
-
 }
