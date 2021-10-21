@@ -17,7 +17,7 @@
              <input  (click)="next()" type="button" name="next" class="next action-button" value="Tiếp theo"/>
           </fieldset>
         </form>-->
-      <div class="container">
+      <div>
         <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-md-1 order">
@@ -88,7 +88,7 @@
                           <input type="checkbox" formControlName="isOtp" class="form-check-input">
                         </div>
                         <div class="col-md-5">
-                          <div class="label_item">Số diện thoại <span class="require_star">*</span></div>
+                          <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
                           <input type="text" formControlName="phone" class="form-control">
                         </div>
                       </div>
@@ -238,7 +238,7 @@
                           <input type="checkbox" formControlName="isOtp" class="form-check-input">
                         </div>
                         <div class="col-md-5">
-                          <div class="label_item">Số diện thoại <span class="require_star">*</span></div>
+                          <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
                           <input type="text" formControlName="phone" class="form-control">
                         </div>
                       </div>

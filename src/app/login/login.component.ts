@@ -26,11 +26,13 @@ export class LoginComponent implements OnInit {
   })
 
   loginUser() {
-    if(this.loginForm.value.username == '' || this.loginForm.value.password == ''){
+    if(this.loginForm.value.username == ''){
       this.error  = true;
-      this.errorDetail = "Tên đăng nhập và mật khẩu không được để trống";
+      this.errorDetail = "Tên đăng nhập không được để trống";
+    }else if(this.loginForm.value.password == ''){
+      this.error  = true;
+      this.errorDetail = "Mật khẩu không được để trống";
     }else {
-
       if(this.loginForm.value.username == 'admin' && this.loginForm.value.password == '123'){
         localStorage.setItem('currentUser', 'admin');
         this.error  = false;
@@ -52,7 +54,6 @@ export class LoginComponent implements OnInit {
         );
       }
     }
-
   }
 
   toggleFieldTextType() {

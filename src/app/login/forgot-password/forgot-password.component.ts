@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -17,7 +18,8 @@ export class ForgotPasswordComponent implements OnInit {
   errorDetail:string = '';
   constructor(private fb: FormBuilder,
               private router: Router,
-              private modalService: NgbModal,) { }
+              private modalService: NgbModal,
+              private userService: UserService,) { }
 
   initRegForm() {
     this.forgotPasswordForm = this.fb.group({
@@ -40,11 +42,25 @@ export class ForgotPasswordComponent implements OnInit {
         this.errorDetail = 'Tên email sai định dạng!';
       }else{
         this.error = false;
-        if(this.status == 0){
+
+        this.userService.sendForgotPassword(email).subscribe((data) => {
+
+          if(data != null){
+            this.status = 1;
+          }else{
+            this.status = 0;
+          }
+          if(this.status == 0){
+            this.notification = 'Gửi email thất bại. Vui lòng kiểm tra lại thông tin và thử lại!';
+          }else{
+            this.notification = 'Chúng tôi đã gửi thông tin về địa chỉ email '+ email +'. Vui lòng truy cập email để tiếp tục!';
+          }
+        },
+        (error:any) => {
+          this.status = 0;
           this.notification = 'Gửi email thất bại. Vui lòng kiểm tra lại thông tin và thử lại!';
-        }else{
-          this.notification = 'Chúng tôi đã gửi thông tin về địa chỉ email '+ email +'. Vui lòng truy cập email để tiếp tục!';
         }
+        );
       }
     }
   }
