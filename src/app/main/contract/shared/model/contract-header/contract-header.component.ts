@@ -20,8 +20,18 @@ export class ContractHeaderComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
+  // btn quay lại
+  back(e: any, step?: any) {
+    // if (!this.datas.isView) {
+      this.nextStep(step);
+    // }
+  }
+
+  // btn tiếp theo
   next() {
     let _isValid = true;
+    // kiểm tra điều kiện valid dữ liệu các bước.
     _isValid = this.validData(this.step);
     if (_isValid) {
       let nextStep = this.step;
@@ -56,15 +66,39 @@ export class ContractHeaderComponent implements OnInit {
 
   }
 
+  // valid dữ liệu các bước
   validData(step: any) {
-
     switch (step) {
       case variable.stepSampleContract.step1:
-        break
-      case variable.stepSampleContract.step2: break
+        break;
+      // @ts-ignore
+      case variable.stepSampleContract.step2:
+        if (!this.datas.file_content) {
+          alert('Vui lòng chọn file hợp đồng!');
+          return false;
+        }
+        if (this.datas.dataDetails && this.datas.dataDetails.length > 0) {
+          let count = 0;
+          this.datas.dataDetails.forEach((element: any) => {
+            // @ts-ignore
+            element.property_name.forEach((item: any) => {
+              if (!item.value) {
+                count++;
+                // alert('Vui lòng nhập dữ liệu ' + item.name + ' của ' + element.title);
+                // return false;
+              }
+            })
+          })
+
+          if (count > 0) {
+            alert('Vui lòng nhập đủ các trường dữ liệu bắt buộc!')
+            return false;
+          }
+        }
+        break;
       // @ts-ignore
       case variable.stepSampleContract.step3:
-        console.log(this.datas);
+        // valid dữ liệu kéo thả đối tượng bước 3, cần kéo ít nhất 1 đối tượng vào hợp đồng
         let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
         if (!data_not_drag) {
           alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')
@@ -77,6 +111,7 @@ export class ContractHeaderComponent implements OnInit {
     return true;
   }
 
+  // change name step next
   nextStep(step: any) {
     // this.datas.documents.document.step = step;
     this.datas.stepLast = step;

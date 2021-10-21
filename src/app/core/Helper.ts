@@ -21,6 +21,7 @@ export class Helper {
       }
       const blob = new Blob(byteArrays, { type: contentType });
       return blob;
+
     }
     const blob = b64toBlob(pdf_file, !application ? "application/pdf" : application);
     const blobUrl = URL.createObjectURL(blob);

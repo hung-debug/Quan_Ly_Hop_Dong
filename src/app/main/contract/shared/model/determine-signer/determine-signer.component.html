@@ -1,19 +1,43 @@
-      <!-- form step 2 -->
-       <form [formGroup]="addressDetails" id="msform">
-          <fieldset>
-              <input type="text" formControlName="city"  placeholder="City"/>
-              <div *ngIf="address_step && addressDetails.controls.city.errors">
-                  <div *ngIf="address.city.errors?.required">City is required</div>
-              </div>
-              <textarea rows="5" cols="5" formControlName="address"  placeholder="address"></textarea>
-              <div *ngIf="address_step && addressDetails.controls.address.errors">
-                  <div *ngIf="address.address.errors?.required">Address is required</div>
-              </div>
-              <input type="text" formControlName="pincode"  placeholder="Pincode"/>
-              <div *ngIf="address_step && addressDetails.controls.pincode.errors">
-                  <div *ngIf="address.pincode.errors?.required">Pincode is required</div>
-              </div>
-<!--              <input (click)="previous()" type="button" name="previous" class="previous action-button-previous" value="Quay lại"/>-->
-<!--              <input  (click)="next()" type="button" name="next" class="next action-button" value="Tiếp theo"/>-->
-          </fieldset>
-      </form>
+<!-- form step 2 -->
+<div class="select-file-contract">
+  <div class="label">File hợp đồng: <span style="color: red">*</span></div>
+  <input id="file-input"
+         type="file"
+         accept=".pdf"
+         (change)="fileChanged($event)"
+         style="display: none;" />
+  <div class="select-contract" (click)="addFile()">
+    <input type="text" placeholder="Chọn file hợp đồng (PDF, DOC, DOCX)" readonly [ngModel]="this.datas.file_name">
+    <img src="assets/img/attachment.svg" alt="mobifone.contract">
+  </div>
+</div>
+
+<!--<form [formGroup]="addressDetails" id="msform">-->
+<!--  <fieldset>-->
+<!--    <input type="text" formControlName="city" placeholder="City"/>-->
+<!--    <div *ngIf="address_step && addressDetails.controls.city.errors">-->
+<!--      <div *ngIf="address.city.errors?.required">City is required</div>-->
+<!--    </div>-->
+<!--    <textarea rows="5" cols="5" formControlName="address" placeholder="address"></textarea>-->
+<!--    <div *ngIf="address_step && addressDetails.controls.address.errors">-->
+<!--      <div *ngIf="address.address.errors?.required">Address is required</div>-->
+<!--    </div>-->
+<!--    <input type="text" formControlName="pincode" placeholder="Pincode"/>-->
+<!--    <div *ngIf="address_step && addressDetails.controls.pincode.errors">-->
+<!--      <div *ngIf="address.pincode.errors?.required">Pincode is required</div>-->
+<!--    </div>-->
+<!--  </fieldset>-->
+<!--</form>-->
+
+<div class="content-information-sign" *ngFor="let d of this.datas.dataDetails" style="border-radius: 5px; border: 1px solid #ddd; margin-bottom: 22px">
+  <div style="color: #0160AE; background-color: #C7D0E9; height: 42px; display: flex;align-items: center; padding-left: 16px">{{d.title}}</div>
+  <div style="padding: 36px;">
+    <div *ngFor="let data of d.property_name" style="display: flex; flex-direction: column; margin-bottom: 15px">
+      <div>{{data.name}}: <span style="color: red">*</span></div>
+      <input type="text" style="border-radius: 5px; border: 1px solid #2174B8; height: 40px; width: 400px; outline: none" [(ngModel)]="data.value">
+    </div>
+  </div>
+
+</div>
+
+

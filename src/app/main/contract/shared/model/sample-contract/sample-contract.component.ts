@@ -91,20 +91,23 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    this.datas.contract_user_sign = this.contractService.objDefaultSampleContract();
+    // console.log(this.datas);
+    this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
 
     // console.log(this.datas.contract_user_sign)
     this.scale = 1;
-    // this.datas.contract_user_sign.forEach((item: any) => {
-    //   if (item['sign_config'] && typeof (item["sign_config"]) == 'string') {
-    //     item['sign_config'] = JSON.parse(item['sign_config']);
-    //   }
-    // })
+    this.datas.contract_user_sign.forEach((item: any) => {
+      if (item['sign_config'] && typeof (item["sign_config"]) == 'string') {
+        item['sign_config'] = JSON.parse(item['sign_config']);
+      }
+    })
 
-    // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
-    this.pdfSrc = environment.url_file_content;
+    // convert base64 file pdf to url
+    this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+    // render pdf to canvas
     this.getPage();
 
+    // event drag and drop
     interact('.dropzone').dropzone({
       // only accept elements matching this CSS selector
       //@ts-ignore

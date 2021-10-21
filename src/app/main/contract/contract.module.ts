@@ -5,7 +5,7 @@ import {InforContractComponent} from "./shared/model/infor-contract/infor-contra
 import {SampleContractComponent} from "./shared/model/sample-contract/sample-contract.component";
 import {ConfirmInforContractComponent} from "./shared/model/confirm-infor-contract/confirm-infor-contract.component";
 import {DetermineSignerComponent} from "./shared/model/determine-signer/determine-signer.component";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { SignContractComponent } from './shared/sign-sample-contract/sign-contract/sign-contract.component';
 // import {NotificationService} from "../../service/notification/notification.service";
 
@@ -27,7 +27,8 @@ import { SignContractComponent } from './shared/sign-sample-contract/sign-contra
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   entryComponents: [
     ConfirmInforContractComponent,
