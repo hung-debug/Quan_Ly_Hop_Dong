@@ -29,6 +29,7 @@
     "angular-material-badge": "^1.2.91",
     "bootstrap": "^5.1.2",
     "interactjs": "^1.10.11",
+    "ng-multiselect-dropdown": "^0.3.4",
     "ngx-bootstrap": "^7.1.0",
     "pdfjs-dist": "^2.10.377",
     "rxjs": "~6.6.0",

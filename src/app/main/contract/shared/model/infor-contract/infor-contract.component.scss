@@ -46,3 +46,9 @@ input[type="file"] {
 .require_star{
   color: red;
 }
+
+:host ::ng-deep {
+  .selected-item {
+    max-width: 100% !important;
+  }
+}

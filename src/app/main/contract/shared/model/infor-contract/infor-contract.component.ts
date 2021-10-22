@@ -33,6 +33,12 @@ export class InforContractComponent implements OnInit {
   messageAttach: string[] = [];
   fileInfosAttach?: Observable<any>;
 
+  //dropdown
+  contractTypeList: Array<any> = [];
+  contractConnectList: Array<any> = [];
+  dropdownTypeSettings: any = {};
+  dropdownConnectSettings: any = {};
+
   get personal() { return this.personalDetails.controls; }
   constructor(
     private formBuilder: FormBuilder,
@@ -62,6 +68,72 @@ export class InforContractComponent implements OnInit {
       dateDeadline: ['', Validators.required],
       comment: ['', Validators.required],
     });
+
+
+    this.contractTypeList = [
+      {
+        item_id: 1,
+        item_text: "Loại hợp đồng A",
+      },
+      {
+        item_id: 2,
+        item_text: "Loại hợp đồng B",
+      }
+    ];
+
+    this.contractConnectList = [
+      {
+        item_id: 1,
+        item_text: "Hợp đồng A",
+      },
+      {
+        item_id: 2,
+        item_text: "Hợp đồng B",
+      }
+    ];
+
+    this.dropdownTypeSettings = {
+      singleSelection: true,
+      idField: "item_id",
+      textField: "item_text",
+      selectAllText: "Chọn tất cả",
+      unSelectAllText: "Bỏ chọn tất cả",
+      allowSearchFilter: true
+    };
+
+    this.dropdownConnectSettings = {
+      singleSelection: false,
+      idField: "item_id",
+      textField: "item_text",
+      selectAllText: "Chọn tất cả",
+      unSelectAllText: "Bỏ chọn tất cả",
+      allowSearchFilter: true
+    };
+  }
+
+  //dropdown contract type
+  get getContractTypeItems() {
+    return this.contractTypeList.reduce((acc, curr) => {
+      acc[curr.item_id] = curr;
+      return acc;
+    }, {});
+  }
+
+  //dropdown contract connect
+  get getContractConnectItems() {
+    return this.contractConnectList.reduce((acc, curr) => {
+      acc[curr.item_id] = curr;
+      return acc;
+    }, {});
+  }
+
+  onItemSelect(item: any) {
+    let contractType = this.personalDetails.controls['contractType'].value;
+    let conn = '';
+    if(contractType != ''){
+      conn = ',';
+    }
+    this.personalDetails.controls['contractType'].setValue(contractType + conn + item.item_text);
   }
 
   //upload file

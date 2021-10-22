@@ -52,8 +52,26 @@
     <div class="col-md-5">
       <div class="form-group">
         <div class="label_item">Loại hợp đồng</div>
-        <div class="input-group">
-          <input type="text" id="contractType" class="form-control" formControlName="contractType"/>
+        <div class="col">
+          <ng-multiselect-dropdown
+            formControlName="contractType"
+            [placeholder]="'-- Chọn --'"
+            [settings]="dropdownTypeSettings"
+            [data]="contractTypeList">
+            <ng-template
+              #optionsTemplate
+              let-item
+              let-option="option"
+              let-id="id"
+              let-isSelected="isSelected">
+              <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                <label
+                  style="color: #333; font-weight: normal;"
+                  [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractTypeItems[id].isDisabled? 'lightgrey': ''}"
+                  >{{getContractTypeItems[id].item_text}}</label>
+              </div>
+            </ng-template>
+          </ng-multiselect-dropdown>
         </div>
       </div>
     </div>
@@ -154,8 +172,26 @@
     <div class="col-md-5">
       <div class="form-group">
         <div class="label_item">Hợp đồng liên quan</div>
-        <div class="input-group">
-          <input type="text" id="contractConnect" class="form-control" formControlName="contractConnect"/>
+        <div  class="col">
+          <ng-multiselect-dropdown
+            formControlName="contractConnect"
+            [placeholder]="'-- Chọn --'"
+            [settings]="dropdownConnectSettings"
+            [data]="contractConnectList">
+            <ng-template
+              #optionsTemplate
+              let-item
+              let-option="option"
+              let-id="id"
+              let-isSelected="isSelected">
+              <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                <label
+                  style="color: #333; font-weight: normal;"
+                  [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}"
+                  >{{getContractConnectItems[id].item_text}}</label>
+              </div>
+            </ng-template>
+          </ng-multiselect-dropdown>
         </div>
       </div>
     </div>

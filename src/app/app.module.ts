@@ -8,6 +8,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatBadgeModule} from '@angular/material/badge';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import {
+   CommonModule
+} from '@angular/common';
+
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -72,7 +77,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BsDropdownModule.forRoot(),
     PerfectScrollbarModule,
     MatBadgeModule,
-    ContractModule
+    ContractModule,
+    NgMultiSelectDropDownModule,
+    CommonModule,
   ],
   providers: [ AppService,
     {

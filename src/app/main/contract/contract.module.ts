@@ -1,6 +1,10 @@
-import { NgModule } from '@angular/core';
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
+
+
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {A11yModule} from '@angular/cdk/a11y';
 import {ClipboardModule} from '@angular/cdk/clipboard';
@@ -51,7 +55,6 @@ import {InforContractComponent} from "./shared/model/infor-contract/infor-contra
 import {SampleContractComponent} from "./shared/model/sample-contract/sample-contract.component";
 import {ConfirmInforContractComponent} from "./shared/model/confirm-infor-contract/confirm-infor-contract.component";
 import {DetermineSignerComponent} from "./shared/model/determine-signer/determine-signer.component";
-
 
 @NgModule({
   declarations: [
@@ -117,6 +120,11 @@ import {DetermineSignerComponent} from "./shared/model/determine-signer/determin
     OverlayModule,
     PortalModule,
     ScrollingModule,
+
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   entryComponents: [
     ConfirmInforContractComponent,
