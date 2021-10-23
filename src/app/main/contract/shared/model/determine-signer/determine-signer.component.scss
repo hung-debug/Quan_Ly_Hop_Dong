@@ -75,3 +75,10 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+//change css dropdown multi
+:host ::ng-deep {
+  .selected-item {
+    max-width: 100% !important;
+  }
+}

@@ -12,6 +12,11 @@ export class DetermineSignerComponent implements OnInit {
   @Input() step: any;
   address_step = false;
   addressDetails!: FormGroup;
+
+  //dropdown
+  signTypeList: Array<any> = [];
+  dropdownSignTypeSettings: any = {};
+
   get address() { return this.addressDetails.controls; }
   constructor(
     private formBuilder: FormBuilder
@@ -42,8 +47,39 @@ export class DetermineSignerComponent implements OnInit {
       address: ['', Validators.required],
       pincode: ['',Validators.required]
     });
+
+    this.signTypeList = [
+      {
+        item_id: 1,
+        item_text: "Ký ảnh",
+      },
+      {
+        item_id: 2,
+        item_text: "Ký số bằng USB token",
+      },
+      {
+        item_id: 3,
+        item_text: "Ký số khác",
+      }
+    ];
+
+    this.dropdownSignTypeSettings = {
+      singleSelection: false,
+      idField: "item_id",
+      textField: "item_text",
+      selectAllText: "Chọn tất cả",
+      unSelectAllText: "Bỏ chọn tất cả",
+      allowSearchFilter: true
+    };
   }
 
+  //dropdown contract type
+  get getSignTypeItems() {
+    return this.signTypeList.reduce((acc, curr) => {
+      acc[curr.item_id] = curr;
+      return acc;
+    }, {});
+  }
 
   name = 'Angular';
 

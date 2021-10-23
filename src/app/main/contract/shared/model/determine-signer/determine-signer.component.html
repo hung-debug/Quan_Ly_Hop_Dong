@@ -81,7 +81,27 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="label_item">Loại ký <span class="require_star">*</span></div>
-                          <input type="text" formControlName="signType" class="form-control">
+                          <div  class="col">
+                            <ng-multiselect-dropdown
+                              formControlName="signType"
+                              [placeholder]="'-- Chọn --'"
+                              [settings]="dropdownSignTypeSettings"
+                              [data]="signTypeList">
+                              <ng-template
+                                #optionsTemplate
+                                let-item
+                                let-option="option"
+                                let-id="id"
+                                let-isSelected="isSelected">
+                                <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                                  <label
+                                    style="color: #333; font-weight: normal;"
+                                    [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
+                                    >{{getSignTypeItems[id].item_text}}</label>
+                                </div>
+                              </ng-template>
+                            </ng-multiselect-dropdown>
+                          </div>
                         </div>
                         <div class="col-md-1">
                           <div class="label_item">OTP</div>
@@ -124,7 +144,27 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="label_item">Loại ký <span class="require_star">*</span></div>
-                          <input type="text" formControlName="signType" class="form-control">
+                          <div class="col">
+                            <ng-multiselect-dropdown
+                              formControlName="signType"
+                              [placeholder]="'-- Chọn --'"
+                              [settings]="dropdownSignTypeSettings"
+                              [data]="signTypeList">
+                              <ng-template
+                                #optionsTemplate
+                                let-item
+                                let-option="option"
+                                let-id="id"
+                                let-isSelected="isSelected">
+                                <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                                  <label
+                                    style="color: #333; font-weight: normal;"
+                                    [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
+                                    >{{getSignTypeItems[id].item_text}}</label>
+                                </div>
+                              </ng-template>
+                            </ng-multiselect-dropdown>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -231,7 +271,27 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="label_item">Loại ký <span class="require_star">*</span></div>
-                          <input type="text" formControlName="signType" class="form-control">
+                          <div class="col">
+                            <ng-multiselect-dropdown
+                              formControlName="signType"
+                              [placeholder]="'-- Chọn --'"
+                              [settings]="dropdownSignTypeSettings"
+                              [data]="signTypeList">
+                              <ng-template
+                                #optionsTemplate
+                                let-item
+                                let-option="option"
+                                let-id="id"
+                                let-isSelected="isSelected">
+                                <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                                  <label
+                                    style="color: #333; font-weight: normal;"
+                                    [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
+                                    >{{getSignTypeItems[id].item_text}}</label>
+                                </div>
+                              </ng-template>
+                            </ng-multiselect-dropdown>
+                          </div>
                         </div>
                         <div class="col-md-1">
                           <div class="label_item">OTP</div>
@@ -274,7 +334,27 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="label_item">Loại ký <span class="require_star">*</span></div>
-                          <input type="text" formControlName="signType" class="form-control">
+                          <div class="col">
+                            <ng-multiselect-dropdown
+                              formControlName="signType"
+                              [placeholder]="'-- Chọn --'"
+                              [settings]="dropdownSignTypeSettings"
+                              [data]="signTypeList">
+                              <ng-template
+                                #optionsTemplate
+                                let-item
+                                let-option="option"
+                                let-id="id"
+                                let-isSelected="isSelected">
+                                <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                                  <label
+                                    style="color: #333; font-weight: normal;"
+                                    [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
+                                    >{{getSignTypeItems[id].item_text}}</label>
+                                </div>
+                              </ng-template>
+                            </ng-multiselect-dropdown>
+                          </div>
                         </div>
                       </div>
                     </div>
