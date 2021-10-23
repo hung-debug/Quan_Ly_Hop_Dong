@@ -1,109 +1,134 @@
-<div class="activity-card">
-  <div>
-    <input type="text" name="search" placeholder="Nhập từ khóa tìm kiếm theo tên hợp đồng..">
-  </div>
-
-  <div id="rcorners">
-    <div class="row">
-      <div class="col-md-12" style="color: #363636; font-weight: 600;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="col-md-12" style="color: #666666; font-size: 13px;">Bên A: Công ty A</div>
+<div class="container-fluid">
+  <div class="form-group">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">
+          <i class="fa fa-search" aria-hidden="true" style="color: #106DB6;"></i>
+        </span>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="col-md-12" style="color: #666666; font-size: 13px;">Bên B: Nhà phân phối B, Nhà phân phối C</div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-3">
-        <div style="color: #666666; font-size: 13px;">Trạng thái: <span style="color: #018f25">Đang thực hiện</span></div>
-      </div>
-      <div class="col-md-5">
-        <div style="font-size: 13px;">
-          <img src="../../../assets/img/calendar_blue.svg" width="12px"/><span style="padding-left: 3px; color: #106DB6">20/10/2021</span>
-          <img src="../../../assets/img/calendar_red.svg" width="12px" style="padding-left: 50px;"/><span style="padding-left: 3px; color: #ED1C24">20/10/2021</span>
-        </div>
-      </div>
-      <div class="col-md-1" style="text-align: center;">
-        <div><img src="../../../assets/img/history_clock.svg" width="15px" /></div>
-      </div>
-      <div class="col-md-1" style="text-align: center;">
-        <div><img src="../../../assets/img/file.svg" width="15px" /></div>
-      </div>
-      <div class="col-md-1" style="text-align: center;">
-        <div><img src="../../../assets/img/file_multi.svg" width="15px" /></div>
-      </div>
-      <div class="col-md-1" style="text-align: center;">
-        <div><img src="../../../assets/img/delete.svg" width="15px" /></div>
+      <input
+        type="text"
+        id="search"
+        class="form-control"
+        placeholder="Nhập từ khóa tìm kiếm theo tên hợp đồng"
+        style="height: 35px; font-size: inherit;"
+      />
+      <div class="input-group-append">
+        <span class="input-group-text">
+          <i class="fa fa-filter"
+            style="color: #106DB6;"
+          ></i>
+        </span>
       </div>
     </div>
   </div>
 
+  <div class="row" style="color:#898989; text-align: center;padding: 12px 12px 0; font-weight: 500;">
+    <div class="col-md-6"></div>
+    <div class="col-md-2">Ngày tạo</div>
+    <div class="col-md-2">Ngày hết hạn ký</div>
+    <div class="col-md-2">Thao tác</div>
+  </div>
 
-  <div id="rcorners">
-    <div style="color: #363636; font-weight: 600; padding: 2px;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
-    <div style="color: #666666; font-size: 13px; padding: 2px;">Bên A: Công ty A</div>
-    <div style="color: #666666; font-size: 13px; padding: 2px;">Bên B: Nhà phân phối B, Nhà phân phối C</div>
-    <div style="display: flex;">
-      <div style="float: left; width: 70%;">
-        <div style="font-size: 13px; padding: 2px;">
-          <img src="../../../assets/img/calendar_blue.svg" width="12px"/><span style="padding-left: 3px; color: #106DB6">20/10/2021</span>
-          <img src="../../../assets/img/calendar_red.svg" width="12px" style="padding-left: 50px;"/><span style="padding-left: 3px; color: #ED1C24">20/10/2021</span>
+  <div class="item_contract">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-12" style="font-weight: 500;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
         </div>
-        <div style="color: #666666; font-size: 13px; padding: 2px;">Trạng thái: <span style="color: #018f25">Đang thực hiện</span></div>
+        <div class="row">
+          <div class="col-md-12" style="color: #666666;">Bên A: Công ty A</div>
+        </div>
+        <div class="row">
+          <div class="col-md-12" style="color: #666666;">Bên B: Nhà phân phối B, Nhà phân phối C</div>
+        </div>
+        <div class="row">
+          <div class="col-md-12" style="color: #666666;">Trạng thái: <span style="color: #027e21">Đang thực hiện</span></div>
+        </div>
       </div>
-      <div style="float: right;  width: 30%; display: flex;">
-        <div style="width: 110px; text-align: center;" (click)="open(mymodal)">
-          <div><img src="../../../assets/img/history_clock.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Lịch sử</div>
-        </div>
-        <div style="width: 110px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/file.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Tài liệu</div>
-        </div>
-        <div style="width: 120px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/file_multi.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Sao chép</div>
-        </div>
-        <div style="width: 110px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/delete.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Hủy bỏ</div>
+      <div class="col-md-2"  style="text-align: center; color:#106DB6">
+        <i class="fa fa-calendar"></i><span style="padding-left: 3px;">20/10/2021</span>
+      </div>
+
+      <div class="col-md-2"  style="text-align: center; color:red">
+        <i class="fa fa-calendar"></i><span style="padding-left: 3px">20/10/2021</span>
+      </div>
+
+      <div class="col-md-2">
+        <div class="row" style="text-align: center; color: #015393;">
+          <div class="col-md-3">
+            <div><i class="fa fa-clone" (click)="open(mymodal)"></i></div>
+          </div>
+          <div class="col-md-3">
+            <div><i class="fa fa-pencil-square"></i></div>
+          </div>
+          <div class="col-md-3">
+            <div><i class="fa fa-minus-square"></i></div>
+          </div>
+          <div class="col-md-3">
+            <div><i class="fa fa-calendar-o"></i></div>
+          </div>
+          <div class="col-md-3">
+            <div><i class="fa fa-calendar-plus-o"></i></div>
+          </div>
+          <div class="col-md-3">
+            <div><i class="fa fa-download"></i></div>
+          </div>
+          <div class="col-md-3">
+            <div><i class="fa fa-history"></i></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="rcorners">
-    <div style="color: #363636; font-weight: 600; padding: 2px;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
-    <div style="color: #666666; font-size: 13px; padding: 2px;">Bên A: Công ty A</div>
-    <div style="color: #666666; font-size: 13px; padding: 2px;">Bên B: Nhà phân phối B, Nhà phân phối C</div>
-    <div style="display: flex;">
-      <div style="float: left; width: 70%;">
-        <div style="font-size: 13px; padding: 2px;">
-          <img src="../../../assets/img/calendar_blue.svg" width="12px"/><span style="padding-left: 3px; color: #106DB6">20/10/2021</span>
-          <img src="../../../assets/img/calendar_red.svg" width="12px" style="padding-left: 50px;"/><span style="padding-left: 3px; color: #ED1C24">20/10/2021</span>
+  <div class="item_contract">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-12" style="font-weight: 500;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
         </div>
-        <div style="color: #666666; font-size: 13px; padding: 2px;">Trạng thái: <span style="color: #018f25">Đang thực hiện</span></div>
+        <div class="row">
+          <div class="col-md-12" style="color: #666666;">Bên A: Công ty A</div>
+        </div>
+        <div class="row">
+          <div class="col-md-12" style="color: #666666;">Bên B: Nhà phân phối B, Nhà phân phối C</div>
+        </div>
+        <div class="row">
+          <div class="col-md-12" style="color: #666666;">Trạng thái: <span style="color: #027e21">Đang thực hiện</span></div>
+        </div>
       </div>
-      <div style="float: right;  width: 30%; display: flex;">
-        <div style="width: 110px; text-align: center;" (click)="open(mymodal)">
-          <div><img src="../../../assets/img/history_clock.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Lịch sử</div>
-        </div>
-        <div style="width: 110px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/file.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Tài liệu</div>
-        </div>
-        <div style="width: 120px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/file_multi.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Sao chép</div>
-        </div>
-        <div style="width: 110px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/delete.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Hủy bỏ</div>
+      <div class="col-md-2"  style="text-align: center; color:#106DB6">
+        <i class="fa fa-calendar"></i><span style="padding-left: 3px;">20/10/2021</span>
+      </div>
+
+      <div class="col-md-2"  style="text-align: center; color:red">
+        <i class="fa fa-calendar"></i><span style="padding-left: 3px">20/10/2021</span>
+      </div>
+
+      <div class="col-md-2">
+        <div class="row" style="text-align: center; color: #015393;">
+          <div class="col-md-3">
+            <div><i class="fa fa-clone" (click)="open(mymodal)"></i></div>
+          </div>
+          <div class="col-md-3">
+            <div><i class="fa fa-pencil-square"></i></div>
+          </div>
+          <div class="col-md-3">
+            <div><i class="fa fa-minus-square"></i></div>
+          </div>
+          <div class="col-md-3">
+            <div><i class="fa fa-calendar-o"></i></div>
+          </div>
+          <div class="col-md-3">
+            <div><i class="fa fa-calendar-plus-o"></i></div>
+          </div>
+          <div class="col-md-3">
+            <div><i class="fa fa-download"></i></div>
+          </div>
+          <div class="col-md-3">
+            <div><i class="fa fa-history"></i></div>
+          </div>
         </div>
       </div>
     </div>

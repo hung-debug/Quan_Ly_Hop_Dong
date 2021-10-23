@@ -28,24 +28,6 @@ body, html {
   padding: 0px;
 }
 
-.inputLogin {
-  width: 70%;
-  box-sizing: border-box;
-  border: 1px solid #106DB6;
-  border-radius: 20px;
-  background-color: white;
-  background-image: url('../../assets/img/search.svg');
-  background-position: 10px 12px;
-  background-repeat: no-repeat;
-  padding: 8px 20px 8px 40px;
-  margin: auto;
-}
-
-.inputLogin:focus  {
-  outline: none !important;
-  border:1px solid 106DB6;
-  box-shadow: 0 0 10px #719ECE;
-}
 
 .bg-footer-login {
   background-image: url(../../assets/img/foot_login.svg);

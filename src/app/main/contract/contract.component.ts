@@ -4,7 +4,7 @@ import { AppService } from 'src/app/service/app.service';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
-  styleUrls: ['./contract.component.scss', '../main.component.scss']
+  styleUrls: ['./contract.component.scss']
 })
 export class ContractComponent implements OnInit {
   closeResult:string= '';
