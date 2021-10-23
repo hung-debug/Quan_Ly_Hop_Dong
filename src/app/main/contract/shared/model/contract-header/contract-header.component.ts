@@ -77,24 +77,24 @@ export class ContractHeaderComponent implements OnInit {
           alert('Vui lòng chọn file hợp đồng!');
           return false;
         }
-        if (this.datas.dataDetails && this.datas.dataDetails.length > 0) {
-          let count = 0;
-          this.datas.dataDetails.forEach((element: any) => {
-            // @ts-ignore
-            element.property_name.forEach((item: any) => {
-              if (!item.value) {
-                count++;
-                // alert('Vui lòng nhập dữ liệu ' + item.name + ' của ' + element.title);
-                // return false;
-              }
-            })
-          })
-
-          if (count > 0) {
-            alert('Vui lòng nhập đủ các trường dữ liệu bắt buộc!')
-            return false;
-          }
-        }
+        // if (this.datas.dataDetails && this.datas.dataDetails.length > 0) {
+        //   let count = 0;
+        //   this.datas.dataDetails.forEach((element: any) => {
+        //     // @ts-ignore
+        //     element.property_name.forEach((item: any) => {
+        //       if (!item.value) {
+        //         count++;
+        //         // alert('Vui lòng nhập dữ liệu ' + item.name + ' của ' + element.title);
+        //         // return false;
+        //       }
+        //     })
+        //   })
+        //
+        //   if (count > 0) {
+        //     alert('Vui lòng nhập đủ các trường dữ liệu bắt buộc!')
+        //     return false;
+        //   }
+        // }
         break;
       // @ts-ignore
       case variable.stepSampleContract.step3:

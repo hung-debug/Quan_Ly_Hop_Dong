@@ -198,6 +198,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   }
 
+
+  // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
     let canvasElement: HTMLElement | null;
 
@@ -345,6 +347,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  // Hàm tính tọa độ ký
   tinhToaDoSign(idCanvas: any, signWidth: any, signHeight: any, objTranf?: any) {
     let _arrPage = idCanvas.split("-");
     let page = _arrPage[_arrPage.length - 1];
@@ -382,10 +385,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     return _array.join(",");
   }
 
+  // Hàm event khi bắt đầu kéo (drag) đối tượng ký
   dragMoveListener = (event: any) => {
-    // this.objSignInfo.id = event.currentTarget.id;
+    this.objSignInfo.id = event.currentTarget.id;
     var target = event.target
-    // this.isMove = true;
+    this.isMove = true;
     // // keep the dragged position in the data-x/data-y attributes
     var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
     var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
@@ -404,6 +408,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  // view pdf qua canvas
   async getPage() {
     // @ts-ignore
     const pdfjs = await import('pdfjs-dist/build/pdf');
@@ -430,8 +435,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
         this.renderPage(page, canvas);
       }
-
-
     }).then(() => {
       setTimeout(() => {
         this.setPosition();
@@ -444,11 +447,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (!this.datas.isView) {
       this.objDrag = {};
       this.datas.contract_user_sign.forEach((element: any) => {
-        // if (this.datas.documents.document.sign_position_type == 'DEFAULT') {
-        //   this.objDrag[element.id] = {
-        //     count: 0
-        //   }
-        // } else {
         if (element.sign_config.length > 0) {
           let arrSignConfigItem = element.sign_config;
           arrSignConfigItem.forEach((item: any) => {
@@ -459,26 +457,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             }
           })
         }
-        // }
-
-
       });
     }
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
-    // @ts-ignore
-    document.getElementById('input-location-x').focus();
-    let width_drag_element = document.getElementById('width-element-info');
-    this.widthDrag = width_drag_element ? ((width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left) - 15) : '';
-      console.log(this.widthDrag)
+      // @ts-ignore
+      document.getElementById('input-location-x').focus();
+      let width_drag_element = document.getElementById('width-element-info');
+      this.widthDrag = width_drag_element ? ((width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left) - 15) : '';
     }, 100)
     this.setPosition();
     this.eventMouseover();
-    // console.log(this.objDrag);
   }
 
+  // set lại vị trí đối tượng kéo thả đã lưu trước đó
   setPosition() {
     if (this.convertToSignConfig().length > 0) {
       this.convertToSignConfig().forEach((element: any) => {
@@ -506,6 +500,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
     //This gives us the page's dimensions at full scale
     //@ts-ignore
@@ -531,7 +526,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
         $('.viewer-pdf').css('padding-right', paddingPdf + 'px');
       }
-
       this.activeScroll();
     });
   }
@@ -558,6 +552,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
 
+  // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any) {
     let style: any = {
       "transform": 'translate(' + d['dataset_x'] + 'px, ' + d['dataset_y'] + 'px)',
@@ -566,61 +561,37 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
     if (d['offsetWidth']) {
       style.width = parseInt(d['offsetWidth']) + "px";
-      // if (d.sign_unit == 'BEN_NHAN') {
-      //   if (d.sign_type == 'OTP') {
-      //     style.width = (parseInt(d['offsetWidth'])) + "px";
-      //   } else style.width = parseInt(d['offsetWidth']) + "px";
-      // } else {
-      //   style.width = parseInt(d['offsetWidth']) + "px";
-      // }
-
     } else {
     }
 
     if (d['offsetHeight']) {
       style.height = parseInt(d['offsetHeight']) + "px";
-      // if (d.sign_unit == 'BEN_NHAN') {
-      //   if (d.sign_type == 'OTP') style.height = "";
-      //   else style.height = parseInt(d['offsetHeight']) + "px";
-      // } else style.height = parseInt(d['offsetHeight']) + "px";
     } else {
-      // if (this.datas.configs.e_document.format_signature_image.signature_height) {
-      //   if (this.datas.configs.e_document.signature_display_type == "sign1"
-      //     || this.datas.configs.e_document.signature_display_type == "sign4") {
-      //   } //else
-      // }
     }
-
     return style;
   }
 
+  // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
   // @ts-ignore
   changeDisplay() {
     if (window.innerHeight < 670) {
-        return {
-          "overflow": "auto",
-          "height": "calc(50vh - 100px)"
-        }
+      return {
+        "overflow": "auto",
+        "height": "calc(50vh - 100px)"
+      }
     } else return {}
   }
 
-
+// hàm stype đối tượng boder kéo thả
   changeColorDrag(role: any, isDaKeo?: any) {
     if (isDaKeo) {
-      // if (role == 'BEN_LAP') {
       return 'ck-da-keo';
-      // } else {
-      //   return 'staff-ck-da-keo';
-      // }
     } else {
-      // if (role == 'BEN_LAP') {
       return 'employer-ck';
-      // } else {
-      //   return 'staff-ck';
-      // }
     }
   }
 
+  // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   onCancel(e: any, data: any) {
     this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
       if (element.sign_config.length > 0) {
@@ -634,13 +605,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.cdRef.detectChanges();
   }
 
+  // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datas.contract_user_sign];
     cloneUserSign.forEach(element => {
-      // element.sign_config.forEach((key: any) => {
-      //   key['sign_type'] = element['sign_type'];
-      // })
       arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
     return arrSignConfig;
@@ -650,6 +619,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.objSignInfo.showObjSign = false;
   }
 
+  // tạo id cho đối tượng chưa được kéo thả
   getIdSignChuaKeo(id: any) {
     return "chua-keo-" + id;
   }
