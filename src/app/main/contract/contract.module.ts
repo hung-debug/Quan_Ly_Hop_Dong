@@ -1,9 +1,8 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+// @ts-ignore
 import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
-
-
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {A11yModule} from '@angular/cdk/a11y';
@@ -55,7 +54,6 @@ import {InforContractComponent} from "./shared/model/infor-contract/infor-contra
 import {SampleContractComponent} from "./shared/model/sample-contract/sample-contract.component";
 import {ConfirmInforContractComponent} from "./shared/model/confirm-infor-contract/confirm-infor-contract.component";
 import {DetermineSignerComponent} from "./shared/model/determine-signer/determine-signer.component";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { SignContractComponent } from './shared/sign-sample-contract/sign-contract/sign-contract.component';
 // import {NotificationService} from "../../service/notification/notification.service";
 
@@ -79,7 +77,6 @@ import { SignContractComponent } from './shared/sign-sample-contract/sign-contra
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FormsModule
     FormsModule,
     NgbModule,
     ReactiveFormsModule,

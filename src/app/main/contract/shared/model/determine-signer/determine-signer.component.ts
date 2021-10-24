@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {variable} from "../../../../../config/variable";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Helper} from "../../../../../core/Helper";
 import {ContractService} from "../../../../../service/contract.service";
 
@@ -25,17 +25,7 @@ export class DetermineSignerComponent implements OnInit {
     private contractService: ContractService
   ) {
     this.step = variable.stepSampleContract.step2
-
     // this.datas.addressDetails = this.addressDetails;
-  }
-
-  ngOnInit(): void {
-    this.datas.dataDetails = this.contractService.objDefaultSampleContract().sign_determine;
-    // this.addressDetails = this.formBuilder.group({
-    //   city: ['', Validators.required],
-    //   address: ['', Validators.required],
-    //   pincode: ['', Validators.required]
-    // });
   }
 
   fileChanged(e: any) {
