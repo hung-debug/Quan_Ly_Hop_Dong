@@ -57,7 +57,6 @@ export class InforContractComponent implements OnInit {
       name: ['', Validators.required],
       email: ['', Validators.required],
       phone: ['',Validators.required],
-
       type: ['', Validators.required],
       contractName: ['', Validators.required],
       contractNumber: ['', Validators.required],
