@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {AddContractComponent} from "../../../add-contract/add-contract.component";
 import {variable} from "../../../../../config/variable";
 
@@ -12,8 +12,13 @@ export class ContractHeaderComponent implements OnInit {
   @Output('stepChange') stepChange = new EventEmitter<Array<any>>();
   @Input() datas: any;
   @Input() step: any;
-  constructor(
-  ) {
+  stepHeader: any = {
+    step_1: false,
+    step_2: false,
+    step_3: false
+  }
+
+  constructor() {
     // this.step = variable.stepSampleContract.step4
   }
 
@@ -24,7 +29,27 @@ export class ContractHeaderComponent implements OnInit {
   // btn quay lại
   back(e: any, step?: any) {
     // if (!this.datas.isView) {
-      this.nextStep(step);
+    this.nextStep(step);
+
+    // cancel active header theo từng step
+    switch (step) {
+      case variable.stepSampleContract.step1:
+        this.stepHeader = {
+          step_1: false,
+          step_2: false,
+          step_3: false
+        }
+        break;
+      case variable.stepSampleContract.step2:
+        this.stepHeader = {
+          step_1: true,
+          step_2: false,
+          step_3: false
+        }
+        break
+      default:
+        break
+    }
     // }
   }
 
@@ -38,14 +63,22 @@ export class ContractHeaderComponent implements OnInit {
       switch (this.step) {
         case variable.stepSampleContract.step1:
           nextStep = variable.stepSampleContract.step2;
+          this.stepHeader.step_1 = true; // active header theo từng step
           // this.stepChange.emit(this.step = nextStep);
           break;
         case variable.stepSampleContract.step2:
           nextStep = variable.stepSampleContract.step3;
+          this.stepHeader.step_2 = true; // active header theo từng step
           // this.stepChange.emit(nextStep);
           break;
         case variable.stepSampleContract.step3:
           nextStep = variable.stepSampleContract.step4;
+          this.stepHeader = { // active header theo từng step
+            step_1: true,
+            step_2: true,
+            step_3: true,
+            step_4: true
+          }
           // this.stepChange.emit(nextStep);
           break;
         default:
@@ -54,8 +87,8 @@ export class ContractHeaderComponent implements OnInit {
       this.nextStep(nextStep);
       let data = JSON.parse(JSON.stringify(this.datas));
       // if (!isGhiTam)
-        data.stepLast = nextStep;
-        this.datas.stepLast = data.stepLast;
+      data.stepLast = nextStep;
+      this.datas.stepLast = data.stepLast;
       // else {
       //   if (this.step == sEnum.stepDocument.step1 && this.datas.stepLast != this.step) {
       //     data.documents.document.step = this.datas.stepLast;
@@ -99,14 +132,17 @@ export class ContractHeaderComponent implements OnInit {
       // @ts-ignore
       case variable.stepSampleContract.step3:
         // valid dữ liệu kéo thả đối tượng bước 3, cần kéo ít nhất 1 đối tượng vào hợp đồng
+        console.log(this.datas)
         let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
         if (!data_not_drag) {
           alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')
           return false;
         }
-        // break;
-      case variable.stepSampleContract.step4: break;
-      default: return false
+      break;
+      case variable.stepSampleContract.step4:
+        break;
+      default:
+        return false
     }
     return true;
   }

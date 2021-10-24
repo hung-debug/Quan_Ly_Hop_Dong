@@ -128,7 +128,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
-      edges: {right: true, bottom: true},
+      edges: {right: true, bottom: true}, // Cho phép resize theo chiều nào.
       listeners: {
         move: this.resizableListener, onend: this.resizeSignature
       },
@@ -156,6 +156,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       inertia: true
     })
 
+    // event resize element
     interact('.resize-drag').on('dragend', this.showEventInfo).draggable({
       listeners: {
         move: this.dragMoveListener, onend: this.showEventInfo
