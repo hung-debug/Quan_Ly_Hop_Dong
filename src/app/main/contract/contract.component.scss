@@ -6,6 +6,11 @@
   line-height: 24px;
 }
 
+.item_contract:hover{
+  background-color: rgb(250, 248, 248);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 .item_contract_name {
   font-weight: 500;
 }
@@ -103,4 +108,10 @@
 .label_item{
   padding: 10px 0px 5px;
   color: #5e5e5e;
+}
+
+:host ::ng-deep {
+  .ngx-pagination {
+    padding: 0;
+  }
 }

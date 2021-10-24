@@ -22,30 +22,30 @@
     <div class="col-md-2">Thao tác</div>
   </div>
 
-  <div class="item_contract">
+  <div class="item_contract" *ngFor="let item of contracts  | paginate:{itemsPerPage: 3, currentPage:p}">
     <div class="row">
       <div class="col-md-6">
         <div class="row">
-          <div class="col-md-12 item_contract_name">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
+          <div class="col-md-12 item_contract_name">{{item.contractName}}</div>
         </div>
         <div class="row">
-          <div class="col-md-12 item_contract_infor">Bên A: Công ty A</div>
+          <div class="col-md-12 item_contract_infor">Bên A: {{item.userName}}</div>
         </div>
         <div class="row">
-          <div class="col-md-12 item_contract_infor">Bên B: Nhà phân phối B, Nhà phân phối C</div>
+          <div class="col-md-12 item_contract_infor">Bên B: {{item.partnerName}}</div>
         </div>
         <div class="row">
           <div class="col-md-12 item_contract_infor">Trạng thái:
-            <span class="status_blue">Đang thực hiện</span>
+            <span class="status_blue">{{item.status}}</span>
           </div>
         </div>
       </div>
       <div class="col-md-2 calendar_create">
-        <i class="fa fa-calendar"></i><span class="item_date">20/10/2021</span>
+        <i class="fa fa-calendar"></i><span class="item_date">{{item.createDate}}</span>
       </div>
 
       <div class="col-md-2 calendar_deadline">
-        <i class="fa fa-calendar"></i><span class="item_date">20/10/2021</span>
+        <i class="fa fa-calendar"></i><span class="item_date">{{item.deadLine}}</span>
       </div>
 
       <div class="col-md-2 item_icon">
@@ -76,76 +76,12 @@
     </div>
   </div>
 
-  <div class="item_contract">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="row">
-          <div class="col-md-12 item_contract_name">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 item_contract_infor">Bên A: Công ty A</div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 item_contract_infor">Bên B: Nhà phân phối B, Nhà phân phối C</div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 item_contract_infor">Trạng thái:
-            <span class="status_blue">Đang thực hiện</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2 calendar_create">
-        <i class="fa fa-calendar"></i><span class="item_date">20/10/2021</span>
-      </div>
-
-      <div class="col-md-2 calendar_deadline">
-        <i class="fa fa-calendar"></i><span class="item_date">20/10/2021</span>
-      </div>
-
-      <div class="col-md-2 item_icon">
-        <div class="row">
-          <div class="col-md-3">
-            <i class="fa fa-clone" (click)="open(mymodal)"></i>
-          </div>
-          <div class="col-md-3">
-            <i class="fa fa-pencil-square"></i>
-          </div>
-          <div class="col-md-3">
-            <i class="fa fa-minus-square"></i>
-          </div>
-          <div class="col-md-3">
-            <i class="fa fa-calendar-o"></i>
-          </div>
-          <div class="col-md-3">
-            <i class="fa fa-calendar-plus-o"></i>
-          </div>
-          <div class="col-md-3">
-            <i class="fa fa-download"></i>
-          </div>
-          <div class="col-md-3">
-            <i class="fa fa-history"></i>
-          </div>
-        </div>
-      </div>
+  <div class="row" style="padding-top: 10px; text-align: center;">
+    <div class="col-md-12">
+      <pagination-controls (pageChange)="p=$event"></pagination-controls>
     </div>
   </div>
 
-  <div style="text-align: center; padding-top: 20px;">
-  <div class="pagination">
-    <a href="#">&laquo;</a>
-    <a href="#">1</a>
-    <a href="#" class="active">2</a>
-    <a href="#">3</a>
-    <a href="#">4</a>
-    <a href="#">5</a>
-    <a href="#">6</a>
-    <a href="#">&raquo;</a>
-  </div>
-  </div>
-</div>
-
-<div style="position:fixed; _position:absolute; bottom:30px; right:5%">
-  <img src="../../../assets/img/add_item.svg" />
 </div>
 
 <ng-template #modal_filter let-modal >

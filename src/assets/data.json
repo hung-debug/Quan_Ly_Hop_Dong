@@ -1,0 +1,39 @@
+{
+  "items": [{
+          "id": 1,
+          "contractName": "Hợp đồng nguyên tắc mua bán vật liệu xây dựng",
+          "userName": "Công ty A",
+          "partnerName": "Nhà phân phối B, Nhà phân phối C",
+          "status": "Đang thực hiện",
+          "createDate": "20/10/2021",
+          "deadLine": "20/10/2021"
+      },
+      {
+        "id": 2,
+        "contractName": "Hợp đồng nguyên tắc mua bán vật liệu xây dựng B",
+        "userName": "Công ty B",
+        "partnerName": "Nhà phân phối AB, Nhà phân phối C",
+        "status": "Đang thực hiện B",
+        "createDate": "20/10/2022",
+        "deadLine": "20/10/2022"
+      },
+      {
+        "id": 2,
+        "contractName": "Hợp đồng nguyên tắc mua bán vật liệu xây dựng B",
+        "userName": "Công ty B",
+        "partnerName": "Nhà phân phối AB, Nhà phân phối C",
+        "status": "Đang thực hiện B",
+        "createDate": "20/10/2022",
+        "deadLine": "20/10/2022"
+      },
+      {
+        "id": 2,
+        "contractName": "Hợp đồng nguyên tắc mua bán vật liệu xây dựng B",
+        "userName": "Công ty B",
+        "partnerName": "Nhà phân phối AB, Nhà phân phối C",
+        "status": "Đang thực hiện B",
+        "createDate": "20/10/2022",
+        "deadLine": "20/10/2022"
+      }
+  ]
+}

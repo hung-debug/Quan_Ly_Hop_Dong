@@ -1,3 +1,4 @@
+import { NgxPaginationModule } from 'ngx-pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -9,9 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatBadgeModule} from '@angular/material/badge';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import {
-   CommonModule
-} from '@angular/common';
+import { CommonModule} from '@angular/common';
+
 
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
@@ -80,6 +80,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ContractModule,
     NgMultiSelectDropDownModule,
     CommonModule,
+    NgxPaginationModule,
+
   ],
   providers: [ AppService,
     {
