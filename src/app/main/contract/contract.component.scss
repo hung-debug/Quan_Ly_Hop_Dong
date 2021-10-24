@@ -1,13 +1,35 @@
-#rcorners {
+.item_contract {
   border: 1px solid #1487E1;
-  border-radius: 25px;
-  background: #FFFFFF;
-  background-position: left top;
-  background-repeat: repeat;
-  padding: 12px;
-  height: auto;
+  border-radius: 10px;
+  padding: 8px;
   margin-top: 10px;
+  line-height: 24px;
 }
+
+.item_contract:hover{
+  background-color: rgb(250, 248, 248);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.item_contract_name {
+  font-weight: 500;
+}
+
+.item_contract_infor{
+  color: #666666;
+}
+
+.status_blue{
+  color: #027e21;
+}
+
+.list_header{
+  color:#898989;
+  text-align: center;
+  padding: 12px 12px 0;
+  font-weight: 500;
+}
+
 .pagination {
   display: inline-block;
 }
@@ -30,20 +52,66 @@
 
 .pagination a:hover:not(.active) {background-color: #ddd;}
 
-input[type=text] {
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid #106DB6;
-  border-radius: 20px;
-  background-color: white;
-  background-image: url('../../../assets/img/search.svg');
-  background-position: 10px 12px;
-  background-repeat: no-repeat;
-  padding: 8px 20px 8px 40px;
+
+.input-group-text{
+  padding: 8.5px;
+}
+.input-group-text i{
+  color: #106DB6;
+}
+.input-search{
+  height: 35px;
+  font-size: inherit;
+}
+.calendar_create{
+  text-align: center;
+  color:#106DB6
+}
+.calendar_deadline{
+  text-align: center;
+  color:red
+}
+.item_date{
+  padding-left: 3px;
+}
+.item_icon{
+  text-align: center;
+  color: #015393;
+}
+//popup
+.popup_content{
+  padding: 30px;
+}
+.popup_title{
+  margin: 0;
+  font-weight: 500;
+}
+.popup_close{
+  font-size: 25px;
+  text-align: right;
+  cursor: pointer;
+}
+.btn_close {
+  width: 90px;
+  font-size: inherit;
+  background: #6c6c6d;
+  color: white;
+  border: 1px solid #808183;
+}
+.btn_submit{
+  width: 90px;
+  font-size: inherit;
+  background: #106DB6;
+  color: white;
+  border: 1px solid #87CAFF;
+}
+.label_item{
+  padding: 10px 0px 5px;
+  color: #5e5e5e;
 }
 
-input[type=text]:focus  {
-  outline: none !important;
-  border:1px solid 106DB6;
-  box-shadow: 0 0 10px #719ECE;
+:host ::ng-deep {
+  .ngx-pagination {
+    padding: 0;
+  }
 }

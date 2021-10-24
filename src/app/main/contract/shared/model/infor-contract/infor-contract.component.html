@@ -1,7 +1,7 @@
 <!-- form step 1 -->
 <form [formGroup]="personalDetails" id="msform">
   <!-- fieldsets -->
-  <fieldset >
+  <!-- <fieldset >
     <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': personal_step && personal.name.errors }"
            placeholder="Full Name"/>
     <div *ngIf="personal_step && personalDetails.controls.name.errors">
@@ -15,6 +15,213 @@
     <div *ngIf="personal_step && personalDetails.controls.phone.errors">
       <div *ngIf="personal.phone.errors?.required">Phone is required</div>
     </div>
-<!--    <input (click)="next()" type="button" name="next" class="next action-button" value="Tiếp theo"/>-->
-  </fieldset>
+   <input (click)="next()" type="button" name="next" class="next action-button" value="Tiếp theo"/>
+  </fieldset> -->
+  <div class="row">
+    <div class="radio col-md-4 label_type">
+      <label><input type="radio" name="type" checked> Hợp đồng đơn lẻ không theo mẫu</label>
+    </div>
+    <div class="radio col-md-4 label_type">
+      <label><input type="radio" name="type"> Hợp đồng đơn lẻ theo mẫu</label>
+    </div>
+    <div class="radio col-md-4 label_type">
+      <label><input type="radio" name="type"> Hợp đồng theo lô</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="label_item">Tên hợp đồng <span class="require_star">*</span></div>
+        <div class="input-group">
+          <input type="text" id="contractName" class="form-control" formControlName="contractName"/>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">Số hợp đồng</div>
+        <div class="input-group">
+          <input type="text" id="contractNumber" class="form-control" formControlName="contractNumber"/>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">Loại hợp đồng</div>
+        <div class="col">
+          <ng-multiselect-dropdown
+            formControlName="contractType"
+            [placeholder]="'-- Chọn --'"
+            [settings]="dropdownTypeSettings"
+            [data]="contractTypeList">
+            <ng-template
+              #optionsTemplate
+              let-item
+              let-option="option"
+              let-id="id"
+              let-isSelected="isSelected">
+              <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                <label
+                  style="color: #333; font-weight: normal;"
+                  [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractTypeItems[id].isDisabled? 'lightgrey': ''}"
+                  >{{getContractTypeItems[id].item_text}}</label>
+              </div>
+            </ng-template>
+          </ng-multiselect-dropdown>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">File hợp đồng <span class="require_star">*</span></div>
+            <div>
+            <label for="file-upload" class="custom-file-upload">
+                <i class="fa fa-cloud-upload"></i> File PDF, DOC, DOCX, PNG, JPG, JPGE
+            </label>
+            <input id="file-upload" type="file" multiple (change)="selectFiles($event); uploadFiles()"/>
+          </div>
+        <div *ngFor="let progressInfo of progressInfos" class="mb-2">
+          <span>{{ progressInfo.fileName }}</span>
+          <div class="progress">
+            <div class="progress-bar progress-bar-info progress-bar-striped"
+              role="progressbar"
+              attr.aria-valuenow="{{ progressInfo.value }}"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [ngStyle]="{ width: progressInfo.value + '%' }"
+            >
+              {{ progressInfo.value }}%
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="message.length" class="alert alert-secondary my-3" role="alert">
+          <ul *ngFor="let msg of message; let i = index">
+            <li>{{ msg }}</li>
+          </ul>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header">Danh sách file hợp đồng</div>
+          <ul
+            class="list-group list-group-flush"
+            *ngFor="let file of fileInfos | async"
+          >
+            <li class="list-group-item">
+              <a href="{{ file.url }}">{{ file.name }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">File đính kèm</div>
+            <div>
+            <label for="file-upload-attach" class="custom-file-upload">
+                <i class="fa fa-cloud-upload"></i> File PDF, DOC, DOCX
+            </label>
+            <input id="file-upload-attach" type="file" multiple (change)="selectFilesAttach($event); uploadFilesAttach()"/>
+          </div>
+        <div *ngFor="let progressInfoAttach of progressInfosAttach" class="mb-2">
+          <span>{{ progressInfoAttach.fileName }}</span>
+          <div class="progress">
+            <div
+              class="progress-bar progress-bar-info progress-bar-striped"
+              role="progressbar"
+              attr.aria-valuenow="{{ progressInfoAttach.value }}"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [ngStyle]="{ width: progressInfoAttach.value + '%' }"
+            >
+              {{ progressInfoAttach.value }}%
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="messageAttach.length" class="alert alert-secondary my-3" role="alert">
+          <ul *ngFor="let msgAttach of messageAttach; let i = index">
+            <li>{{ msgAttach }}</li>
+          </ul>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-header">Danh sách file đính kèm</div>
+          <ul
+            class="list-group list-group-flush"
+            *ngFor="let fileAttach of fileInfosAttach | async"
+          >
+            <li class="list-group-item">
+              <a href="{{ fileAttach.url }}">{{ fileAttach.name }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">Hợp đồng liên quan</div>
+        <div  class="col">
+          <ng-multiselect-dropdown
+            formControlName="contractConnect"
+            [placeholder]="'-- Chọn --'"
+            [settings]="dropdownConnectSettings"
+            [data]="contractConnectList">
+            <ng-template
+              #optionsTemplate
+              let-item
+              let-option="option"
+              let-id="id"
+              let-isSelected="isSelected">
+              <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                <label
+                  style="color: #333; font-weight: normal;"
+                  [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}"
+                  >{{getContractConnectItems[id].item_text}}</label>
+              </div>
+            </ng-template>
+          </ng-multiselect-dropdown>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">Ngày đến hạn ký</div>
+        <div class="input-group">
+          <mat-form-field appearance="fill">
+            <input matInput [matDatepicker]="picker2" formControlName="dateDeadline">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">Lời nhắn</div>
+        <div class="input-group">
+          <input type="text" id="comment" class="form-control" formControlName="comment"/>
+        </div>
+      </div>
+    </div>
+  </div>
 </form>
+
+<br/>
+{{this.personalDetails.value | json}}
+

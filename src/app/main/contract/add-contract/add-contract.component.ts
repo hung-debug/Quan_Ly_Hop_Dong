@@ -6,6 +6,7 @@ import {DetermineSignerComponent} from "../shared/model/determine-signer/determi
 import {InforContractComponent} from "../shared/model/infor-contract/infor-contract.component";
 import {SampleContractComponent} from "../shared/model/sample-contract/sample-contract.component";
 import {variable} from "../../../config/variable";
+import { AppService } from 'src/app/service/app.service';
 
 @Component({
   selector: 'app-add-contract',
@@ -31,46 +32,53 @@ export class AddContractComponent implements OnInit {
   confirm_step = false;
   // step = 1;
   step = variable.stepSampleContract.step1;
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+              private appService: AppService,) { }
   ngOnInit() {
-    // this.personalDetails = this.formBuilder.group({
-    //     name: ['', Validators.required],
-    //     email: ['', Validators.required],
-    //     phone: ['',Validators.required]
-    // });
-    // this.addressDetails = this.formBuilder.group({
-    //     city: ['', Validators.required],
-    //     address: ['', Validators.required],
-    //     pincode: ['',Validators.required]
-    // });
-    // this.educationalDetails = this.formBuilder.group({
-    //     highest_qualification: ['', Validators.required],
-    //     university: ['', Validators.required],
-    //     total_marks: ['',Validators.required]
-    // });
-    // this.confirmDetails = this.formBuilder.group({
-    //
-    // });
+    //title
+    this.appService.setTitle('THÊM MỚI HỢP ĐỒNG');
+
+    this.personalDetails = this.formBuilder.group({
+        name: ['', Validators.required],
+        email: ['', Validators.required],
+        phone: ['',Validators.required]
+    });
+    this.addressDetails = this.formBuilder.group({
+        city: ['', Validators.required],
+        address: ['', Validators.required],
+        pincode: ['',Validators.required]
+    });
+    this.educationalDetails = this.formBuilder.group({
+        highest_qualification: ['', Validators.required],
+        university: ['', Validators.required],
+        total_marks: ['',Validators.required]
+    });
+    this.confirmDetails = this.formBuilder.group({
+
+    });
   }
-  // get personal() { return this.personalDetails.controls; }
-  // get education() { return this.educationalDetails.controls; }
-  // get address() { return this.addressDetails.controls; }
-  // get confirm() { return this.confirmDetails.controls; }
+  get personal() { return this.personalDetails.controls; }
+  get education() { return this.educationalDetails.controls; }
+  get address() { return this.addressDetails.controls; }
+  get confirm() { return this.confirmDetails.controls; }
 
   next(){
-    // if(this.step==1){
-    //   this.personal_step = true;
-    //   if (this.personalDetails.invalid) { return  }
-    // }
-    // else if(this.step==2){
-    //   this.address_step = true;
-    //   if (this.addressDetails.invalid) { return }
-    // }
-    // else if(this.step==3){
-    //   this.education_step = true;
-    //   if (this.educationalDetails.invalid) { return }
-    // }
-    // this.step++;
+    if(this.step=='infor-contract'){
+      this.personal_step = true;
+      if (this.personalDetails.invalid) { return  }
+      this.step = 'determine-contract';
+    }
+    else if(this.step=='determine-contract'){
+      this.address_step = true;
+      if (this.addressDetails.invalid) { return }
+      this.step = 'sample-contract';
+    }
+    else if(this.step=='sample-contract'){
+      this.education_step = true;
+      if (this.educationalDetails.invalid) { return }
+      this.step = 'confirm-contract';
+    }
+    //this.step++;
 
   }
 

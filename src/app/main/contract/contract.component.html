@@ -1,173 +1,195 @@
-<div class="activity-card">
-  <div>
-    <input type="text" name="search" placeholder="Nhập từ khóa tìm kiếm theo tên hợp đồng..">
+<div class="container-fluid">
+  <div class="form-group">
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </span>
+      </div>
+      <input type="text" id="search" class="form-control input-search" placeholder="Nhập từ khóa tìm kiếm theo tên hợp đồng"/>
+      <div class="input-group-append"  (click)="open(modal_filter)" style="cursor: pointer;">
+        <span class="input-group-text">
+          <i class="fa fa-filter"></i>
+        </span>
+      </div>
+    </div>
   </div>
 
-  <div id="rcorners">
-    <div style="color: #363636; font-weight: 600; padding: 2px;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
-    <div style="color: #666666; font-size: 13px; padding: 2px;">Bên A: Công ty A</div>
-    <div style="color: #666666; font-size: 13px; padding: 2px;">Bên B: Nhà phân phối B, Nhà phân phối C</div>
-    <div style="display: flex;">
-      <div style="float: left; width: 70%;">
-        <div style="font-size: 13px; padding: 2px;">
-          <img src="../../../assets/img/calendar_blue.svg" width="12px"/><span style="padding-left: 3px; color: #106DB6">20/10/2021</span>
-          <img src="../../../assets/img/calendar_red.svg" width="12px" style="padding-left: 50px;"/><span style="padding-left: 3px; color: #ED1C24">20/10/2021</span>
+  <div class="row list_header">
+    <div class="col-md-6"></div>
+    <div class="col-md-2">Ngày tạo</div>
+    <div class="col-md-2">Ngày hết hạn ký</div>
+    <div class="col-md-2">Thao tác</div>
+  </div>
+
+  <div class="item_contract" *ngFor="let item of contracts  | paginate:{itemsPerPage: 3, currentPage:p}">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-12 item_contract_name">{{item.contractName}}</div>
         </div>
-        <div style="color: #666666; font-size: 13px; padding: 2px;">Trạng thái: <span style="color: #018f25">Đang thực hiện</span></div>
+        <div class="row">
+          <div class="col-md-12 item_contract_infor">Bên A: {{item.userName}}</div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 item_contract_infor">Bên B: {{item.partnerName}}</div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 item_contract_infor">Trạng thái:
+            <span class="status_blue">{{item.status}}</span>
+          </div>
+        </div>
       </div>
-      <div style="float: right;  width: 30%; display: flex;">
-        <div style="width: 110px; text-align: center;" (click)="open(mymodal)">
-          <div><img src="../../../assets/img/history_clock.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Lịch sử</div>
-        </div>
-        <div style="width: 110px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/file.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Tài liệu</div>
-        </div>
-        <div style="width: 120px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/file_multi.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Sao chép</div>
-        </div>
-        <div style="width: 110px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/delete.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Hủy bỏ</div>
+      <div class="col-md-2 calendar_create">
+        <i class="fa fa-calendar"></i><span class="item_date">{{item.createDate}}</span>
+      </div>
+
+      <div class="col-md-2 calendar_deadline">
+        <i class="fa fa-calendar"></i><span class="item_date">{{item.deadLine}}</span>
+      </div>
+
+      <div class="col-md-2 item_icon">
+        <div class="row">
+          <div class="col-md-3">
+            <i class="fa fa-clone" (click)="open(mymodal)"></i>
+          </div>
+          <div class="col-md-3">
+            <i class="fa fa-pencil-square"></i>
+          </div>
+          <div class="col-md-3">
+            <i class="fa fa-minus-square"></i>
+          </div>
+          <div class="col-md-3">
+            <i class="fa fa-calendar-o"></i>
+          </div>
+          <div class="col-md-3">
+            <i class="fa fa-calendar-plus-o"></i>
+          </div>
+          <div class="col-md-3">
+            <i class="fa fa-download"></i>
+          </div>
+          <div class="col-md-3">
+            <i class="fa fa-history"></i>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="rcorners">
-    <div style="color: #363636; font-weight: 600; padding: 2px;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
-    <div style="color: #666666; font-size: 13px; padding: 2px;">Bên A: Công ty A</div>
-    <div style="color: #666666; font-size: 13px; padding: 2px;">Bên B: Nhà phân phối B, Nhà phân phối C</div>
-    <div style="display: flex;">
-      <div style="float: left; width: 70%;">
-        <div style="font-size: 13px; padding: 2px;">
-          <img src="../../../assets/img/calendar_blue.svg" width="12px"/><span style="padding-left: 3px; color: #106DB6">20/10/2021</span>
-          <img src="../../../assets/img/calendar_red.svg" width="12px" style="padding-left: 50px;"/><span style="padding-left: 3px; color: #ED1C24">20/10/2021</span>
-        </div>
-        <div style="color: #666666; font-size: 13px; padding: 2px;">Trạng thái: <span style="color: #018f25">Đang thực hiện</span></div>
-      </div>
-      <div style="float: right;  width: 30%; display: flex;">
-        <div style="width: 110px; text-align: center;" (click)="open(mymodal)">
-          <div><img src="../../../assets/img/history_clock.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Lịch sử</div>
-        </div>
-        <div style="width: 110px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/file.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Tài liệu</div>
-        </div>
-        <div style="width: 120px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/file_multi.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Sao chép</div>
-        </div>
-        <div style="width: 110px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/delete.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Hủy bỏ</div>
-        </div>
-      </div>
+  <div class="row" style="padding-top: 10px; text-align: center;">
+    <div class="col-md-12">
+      <pagination-controls (pageChange)="p=$event"></pagination-controls>
     </div>
   </div>
 
-  <div id="rcorners">
-    <div style="color: #363636; font-weight: 600; padding: 2px;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
-    <div style="color: #666666; font-size: 13px; padding: 2px;">Bên A: Công ty A</div>
-    <div style="color: #666666; font-size: 13px; padding: 2px;">Bên B: Nhà phân phối B, Nhà phân phối C</div>
-    <div style="display: flex;">
-      <div style="float: left; width: 70%;">
-        <div style="font-size: 13px; padding: 2px;">
-          <img src="../../../assets/img/calendar_blue.svg" width="12px"/><span style="padding-left: 3px; color: #106DB6">20/10/2021</span>
-          <img src="../../../assets/img/calendar_red.svg" width="12px" style="padding-left: 50px;"/><span style="padding-left: 3px; color: #ED1C24">20/10/2021</span>
-        </div>
-        <div style="color: #666666; font-size: 13px; padding: 2px;">Trạng thái: <span style="color: #018f25">Đang thực hiện</span></div>
-      </div>
-      <div style="float: right;  width: 30%; display: flex;">
-        <div style="width: 110px; text-align: center;" (click)="open(mymodal)">
-          <div><img src="../../../assets/img/history_clock.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Lịch sử</div>
-        </div>
-        <div style="width: 110px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/file.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Tài liệu</div>
-        </div>
-        <div style="width: 120px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/file_multi.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Sao chép</div>
-        </div>
-        <div style="width: 110px; text-align: center; padding-left: 10px;">
-          <div><img src="../../../assets/img/delete.svg" width="15px" /></div>
-          <div style="color: #666666; font-size: 13px;">Hủy bỏ</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div style="text-align: center; padding-top: 20px;">
-  <div class="pagination">
-    <a href="#">&laquo;</a>
-    <a href="#">1</a>
-    <a href="#" class="active">2</a>
-    <a href="#">3</a>
-    <a href="#">4</a>
-    <a href="#">5</a>
-    <a href="#">6</a>
-    <a href="#">&raquo;</a>
-  </div>
-  </div>
 </div>
 
-<div style="position:fixed; _position:absolute; bottom:30px; right:5%">
-  <img src="../../../assets/img/add_item.svg" />
-</div>
+<ng-template #modal_filter let-modal >
+  <div class="popup_content">
+    <div class="row">
+      <div class="col-md-10">
+        <h4 class="popup_title">TÌM KIẾM HỢP ĐỒNG</h4>
+      </div>
+      <div class="col-md-2 popup_close">
+        <span (click)="modal.dismiss('Cross click')">×</span>
+      </div>
+    </div>
+    <hr>
+    <div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="label_item">Loại hợp đồng</div>
+          <div class="input-group">
+            <input type="text" id="contractType" class="form-control"/>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="label_item">Số hợp đồng</div>
+          <div class="input-group">
+            <input type="text" id="contractNumber" class="form-control"/>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="label_item">Từ ngày (ngày tạo)</div>
+          <div class="input-group">
+            <input type="text" id="startCreateDate" class="form-control"/>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="label_item">Đến ngày (ngày tạo)</div>
+          <div class="input-group">
+            <input type="text" id="endCreateDate" class="form-control"/>
+            <!-- <mat-form-field appearance="fill">
+            <input matInput [matDatepicker]="picker2" formControlName="dateDeadline">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="text-align: center; padding-top: 10px;">
+      <div class="col-md-12">
+        <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
+        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.close('Save click')">Tìm kiếm</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
 
 <ng-template #mymodal let-modal >
-  <div style="padding: 30px;">
-  <div class="modal-header">
-    <h5>LỊCH SỬ HỢP ĐỒNG</h5>
-    <button type="button" class="close" (click)="modal.dismiss('Cross click')" style="border: none;background: none;">
-      <span style="font-size: 25px;">×</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div style="color: #8B8B8B; padding-top: 5px;">Tên hợp đồng</div>
-    <div style="color: #000000; padding-top: 5px;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
+  <div class="popup_content">
+    <div class="row">
+      <div class="col-md-10">
+        <h4 class="popup_title">LỊCH SỬ HỢP ĐỒNG</h4>
+      </div>
+      <div class="col-md-2 popup_close">
+        <span (click)="modal.dismiss('Cross click')">×</span>
+      </div>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <div style="color: #8B8B8B; padding-top: 5px;">Tên hợp đồng</div>
+      <div style="color: #000000; padding-top: 5px;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
+      <div class="container">
+        <div class="row">
+          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
+          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
+          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
+        </div>
+        <div class="row">
+          <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
+          <div class="col-4" style="color: #000000; padding-top: 5px;">20/10/2021</div>
+          <div class="col-4" style="color: #47A920; padding-top: 5px;">Đang xử lý</div>
+        </div>
+      </div>
+    </div>
+    <div style="border-top: 1px solid #dee2e6; margin-top: 10px;"></div>
     <div class="container">
       <div class="row">
-        <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
-        <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
-        <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
+        <div class="col-12" style="color: #8B8B8B; padding-top: 10px;">Danh sách ký</div>
       </div>
       <div class="row">
         <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-        <div class="col-4" style="color: #000000; padding-top: 5px;">20/10/2021</div>
-        <div class="col-4" style="color: #47A920; padding-top: 5px;">Đang xử lý</div>
+        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
+        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
+      </div>
+      <div class="row">
+        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
+        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
+        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
+      </div>
+      <div class="row">
+        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
+        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
+        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
       </div>
     </div>
-  </div>
-  <div style="border-top: 1px solid #dee2e6; margin-top: 10px;"></div>
-  <div class="container">
-    <div class="row">
-      <div class="col-12" style="color: #8B8B8B; padding-top: 10px;">Danh sách ký</div>
-    </div>
-    <div class="row">
-      <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-      <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
-      <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
-    </div>
-    <div class="row">
-      <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-      <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
-      <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
-    </div>
-    <div class="row">
-      <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-      <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
-      <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
+    <div style="float: right; padding-top: 20px;">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')"
+      style="padding: 5px; width: 100px; background: #106DB6; color: white; border: 1px solid #87CAFF;">Ok</button>
     </div>
   </div>
-  <div style="float: right; padding-top: 20px;">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')"
-    style="padding: 5px; width: 100px; background: #106DB6; color: white; border: 1px solid #87CAFF;">Ok</button>
-  </div>
-</div>
 </ng-template>

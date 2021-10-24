@@ -90,9 +90,14 @@ header {
   background-repeat: no-repeat;
   background-image: url(../../assets/img/user_login.png);
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .dropdown-toggle::after {
   display:none;
 }
 
+h3{
+  margin: 0;
+  font-weight: 500;
+}

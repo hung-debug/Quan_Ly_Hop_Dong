@@ -1,3 +1,4 @@
+import { NgxPaginationModule } from 'ngx-pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -8,6 +9,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatBadgeModule} from '@angular/material/badge';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { CommonModule} from '@angular/common';
+
+
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -28,7 +33,7 @@ import { ForgotPasswordComponent } from './login/forgot-password/forgot-password
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { SidebarComponent } from './main/sidebar/sidebar.component';
 import {ContractModule} from "./main/contract/contract.module";
-// import {AlertDialog, ConfirmationDialog} from "./service/notification.service";
+import { AppService } from './service/app.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -63,12 +68,17 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BsDropdownModule.forRoot(),
     PerfectScrollbarModule,
     MatBadgeModule,
-    ContractModule
+    ContractModule,
+    NgMultiSelectDropDownModule,
+    CommonModule,
+    NgxPaginationModule,
+
   ],
-  providers: [ {
+  providers: [ AppService,
+    {
     provide: PERFECT_SCROLLBAR_CONFIG,
-    useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-  }],
+    useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

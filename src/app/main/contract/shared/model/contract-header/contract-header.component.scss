@@ -1,3 +1,4 @@
+
 //style form
 #msform {
   text-align: center;
@@ -124,6 +125,7 @@ button {
   left: -50%;
   top: 9px;
   z-index: 1; /*put it behind the numbers*/
+  height: 5px;
 }
 
 #progressbar li:first-child:after {
@@ -144,6 +146,7 @@ button {
   color: white;
   z-index: 1;
   position: absolute;
+  height: 5px;
 }
 
 // #progressbar li.active:before, #progressbar li.active:after {
@@ -162,6 +165,36 @@ button {
 }
 
 //style current active
-#progressbar li span.current_active {
-  font-weight: 800;
+#progressbar li div.current_active {
+  font-weight: 600;
+}
+
+//style button previous
+.button_previous {
+  //padding: 15px;
+  border: 0px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  width: 120px;
+  height: 40px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #acaeaf;
+  font-size: 13px;
+  float: left;
+}
+
+//style button next
+.button_next {
+  //padding: 15px;
+  border: 0px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  width: 120px;
+  height: 40px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #106DB6;
+  font-size: 13px;
+  float: right;
 }

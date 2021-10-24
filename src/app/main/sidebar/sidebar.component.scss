@@ -165,6 +165,7 @@
           text-decoration: none;
           position: relative;
           padding: 8px 30px 8px 20px;
+          cursor: pointer;
 
           i {
             margin-right: 10px;
@@ -192,7 +193,7 @@
 
       .sidebar-dropdown {
         >a:after {
-          font-family: "Font Awesome 5 Free";
+          font-family: 'FontAwesome';
           font-weight: 900;
           content: "\f105";
           display: inline-block;
@@ -225,7 +226,7 @@
             a {
               &:before {
                 content: "\f111";
-                font-family: "Font Awesome 5 Free";
+                font-family: 'FontAwesome';
                 font-weight: 400;
                 font-style: normal;
                 display: inline-block;
@@ -413,7 +414,7 @@
 
 
 /*------------------------------default theme---------------------------------*/
-$bg-sidebar-wrapper : #1d1d1d;
+$bg-sidebar-wrapper : rgba(183, 206, 250, 0.1);
 $border-color : #2b2b2b;
 $footer-top-border-color :#3a3a3a;
 $color:#106DB6;
@@ -424,7 +425,7 @@ $bg-scrollbar :#636363;
 
 // colors with backgound image
 $img-bg-sidebar-wrapper : rgba(183, 206, 250, 0.1);
-$img-border-color : rgba(255, 255, 255, 0.1);
+$img-border-color : #8d8b8b26;
 $img-bg-footer :rgba(43, 43, 43, 0.5);
 $img-shadow-color:rgba(0, 0, 0, 0.5);
 
@@ -458,12 +459,14 @@ $img-shadow-color:rgba(0, 0, 0, 0.5);
   }
 
   .sidebar-menu ul li:hover>a,
+  .sidebar-menu .active>a,
   .sidebar-menu .sidebar-dropdown.active>a,
   .sidebar-profile .user-info,
   .sidebar-header>a:hover,
   .sidebar-footer>div>a:hover i,
   #close-sidebar:hover {
-    color: $hover-color;
+    color: $hover-color !important;
+    background-color: #c5ebff;
   }
 
   ul li:hover a i,

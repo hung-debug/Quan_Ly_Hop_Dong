@@ -11,6 +11,7 @@ import { AuthenticationService } from '../service/authentication.service';
 export class LoginComponent implements OnInit {
 
   error: Boolean = false;
+  errorDetail:string = '';
   fieldTextType: boolean = false;
 
   constructor(
@@ -25,18 +26,34 @@ export class LoginComponent implements OnInit {
   })
 
   loginUser() {
-    this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password).subscribe((data) => {
-      if (this.authService.isLoggedInSuccess() == true) {
+    if(this.loginForm.value.username == ''){
+      this.error  = true;
+      this.errorDetail = "Tên đăng nhập không được để trống";
+    }else if(this.loginForm.value.password == ''){
+      this.error  = true;
+      this.errorDetail = "Mật khẩu không được để trống";
+    }else {
+      if(this.loginForm.value.username == 'admin' && this.loginForm.value.password == '123'){
+        localStorage.setItem('currentUser', 'admin');
         this.error  = false;
         this.router.navigate(['/main/dashboard']);
-      } else {
-        this.error  = true;
+      }else{
+        this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password).subscribe((data) => {
+          if (this.authService.isLoggedInSuccess() == true) {
+            this.error  = false;
+            this.router.navigate(['/main/dashboard']);
+          } else {
+            this.error  = true;
+            this.errorDetail = "Tên đăng nhập hoặc mật khẩu không đúng";
+          }
+        },
+        error => {
+            this.error = true;
+            this.errorDetail = "Tên đăng nhập hoặc mật khẩu không đúng";
+        }
+        );
       }
-    },
-    error => {
-        this.error = true;
     }
-    );
   }
 
   toggleFieldTextType() {
