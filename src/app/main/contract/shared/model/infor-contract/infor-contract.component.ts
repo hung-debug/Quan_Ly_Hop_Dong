@@ -45,49 +45,14 @@ export class InforContractComponent implements OnInit {
     //this.datas.inforDetails = this.inforDetails;
   }
 
-  fileChanged(e: any) {
-    const file = e.target.files[0];
-    if (file) {
-      if (e.target.files[0].size <= 5000000) {
-        const file_name = file.name;
-        const extension = file.name.split('.').pop();
-        // tslint:disable-next-line:triple-equals
-        if (extension.toLowerCase() == 'pdf') {
-          const fileReader = new FileReader();
-          fileReader.readAsDataURL(file);
-          fileReader.onload = (e) => {
-            //@ts-ignore
-            const base64result = fileReader.result.toString().split(',')[1];
-            const fileInput: any = document.getElementById('file-input');
-            fileInput.value = '';
-            this.datas.file_content = base64result;
-            this.datas.file_name = file_name;
-            // this.datas.documents['file_content_docx'] = null;
-            // this.pdfSrc = Helper._getUrlPdf(base64result);
-          };
-        } else {
-          alert('Chỉ hỗ trợ file có định dạng PDF')
-        }
-      } else {
-        alert('Yêu cầu file nhỏ hơn 5MB');
-      }
-    }
-  }
-
-  addFile() {
-    // @ts-ignore
-    document.getElementById('file-input').click();
-
-
-  }
-
   ngOnInit(): void {
+    this.datas.inforDetails = this.inforDetails;
     //upload file
     //this.fileInfos = this.uploadService.getFiles();
     //upload file attach
     //this.fileInfosAttach = this.uploadService.getFiles();
 
-    this.inforDetails = this.formBuilder.group({
+    this.datas.inforDetails = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', Validators.required],
       phone: ['',Validators.required],
@@ -144,6 +109,41 @@ export class InforContractComponent implements OnInit {
     };
   }
 
+  fileChanged(e: any) {
+    const file = e.target.files[0];
+    if (file) {
+      // giới hạn file upload lên là 5mb
+      if (e.target.files[0].size <= 5000000) {
+        const file_name = file.name;
+        const extension = file.name.split('.').pop();
+        // tslint:disable-next-line:triple-equals
+        if (extension.toLowerCase() == 'pdf') {
+          const fileReader = new FileReader();
+          fileReader.readAsDataURL(file);
+          fileReader.onload = (e) => {
+            //@ts-ignore
+            const base64result = fileReader.result.toString().split(',')[1];
+            const fileInput: any = document.getElementById('file-input');
+            fileInput.value = '';
+            this.datas.file_content = base64result;
+            this.datas.file_name = file_name;
+            // this.datas.documents['file_content_docx'] = null;
+            // this.pdfSrc = Helper._getUrlPdf(base64result);
+          };
+        } else {
+          alert('Chỉ hỗ trợ file có định dạng PDF')
+        }
+      } else {
+        alert('Yêu cầu file nhỏ hơn 5MB');
+      }
+    }
+  }
+
+  addFile() {
+    // @ts-ignore
+    document.getElementById('file-input').click();
+  }
+
   //dropdown contract type
   get getContractTypeItems() {
     return this.contractTypeList.reduce((acc, curr) => {
@@ -161,12 +161,12 @@ export class InforContractComponent implements OnInit {
   }
 
   onItemSelect(item: any) {
-    let contractType = this.inforDetails.controls['contractType'].value;
+    let contractType = this.datas.inforDetails.controls['contractType'].value;
     let conn = '';
     if(contractType != ''){
       conn = ',';
     }
-    this.inforDetails.controls['contractType'].setValue(contractType + conn + item.item_text);
+    this.datas.inforDetails.controls['contractType'].setValue(contractType + conn + item.item_text);
   }
 
   //upload file

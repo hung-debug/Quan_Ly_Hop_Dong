@@ -36,31 +36,31 @@ export class AddContractComponent implements OnInit {
               private appService: AppService,) { }
   ngOnInit() {
     //title
-    this.appService.setTitle('THÊM MỚI HỢP ĐỒNG');
-
-    this.personalDetails = this.formBuilder.group({
-        name: ['', Validators.required],
-        email: ['', Validators.required],
-        phone: ['',Validators.required]
-    });
-    this.addressDetails = this.formBuilder.group({
-        city: ['', Validators.required],
-        address: ['', Validators.required],
-        pincode: ['',Validators.required]
-    });
-    this.educationalDetails = this.formBuilder.group({
-        highest_qualification: ['', Validators.required],
-        university: ['', Validators.required],
-        total_marks: ['',Validators.required]
-    });
-    this.confirmDetails = this.formBuilder.group({
-
-    });
+    // this.appService.setTitle('THÊM MỚI HỢP ĐỒNG');
+    //
+    // this.personalDetails = this.formBuilder.group({
+    //     name: ['', Validators.required],
+    //     email: ['', Validators.required],
+    //     phone: ['',Validators.required]
+    // });
+    // this.addressDetails = this.formBuilder.group({
+    //     city: ['', Validators.required],
+    //     address: ['', Validators.required],
+    //     pincode: ['',Validators.required]
+    // });
+    // this.educationalDetails = this.formBuilder.group({
+    //     highest_qualification: ['', Validators.required],
+    //     university: ['', Validators.required],
+    //     total_marks: ['',Validators.required]
+    // });
+    // this.confirmDetails = this.formBuilder.group({
+    //
+    // });
   }
-  get personal() { return this.personalDetails.controls; }
-  get education() { return this.educationalDetails.controls; }
-  get address() { return this.addressDetails.controls; }
-  get confirm() { return this.confirmDetails.controls; }
+  // get personal() { return this.personalDetails.controls; }
+  // get education() { return this.educationalDetails.controls; }
+  // get address() { return this.addressDetails.controls; }
+  // get confirm() { return this.confirmDetails.controls; }
 
   next(){
     if(this.step=='infor-contract'){

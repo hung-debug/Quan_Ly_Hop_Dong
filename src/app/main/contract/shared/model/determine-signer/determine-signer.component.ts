@@ -14,6 +14,7 @@ export class DetermineSignerComponent implements OnInit {
   @Input() step: any;
   determine_step = false;
   determineDetails!: FormGroup;
+  userForm: FormGroup;
 
   //dropdown
   signTypeList: Array<any> = [];
@@ -29,8 +30,9 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.userForm = this.formBuilder.group({
+    this.datas.userForm = this.userForm;
+    this.datas.partners = this.partners;
+    this.datas.userForm = this.formBuilder.group({
       order: '1',
       name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
       userViews: this.formBuilder.array([]) ,
@@ -38,7 +40,7 @@ export class DetermineSignerComponent implements OnInit {
       userDocs: this.formBuilder.array([]) ,
     });
 
-    this.partners = this.formBuilder.group({
+    this.datas.partners = this.formBuilder.group({
       order: '1',
       name: '',
       partnerLeads: this.formBuilder.array([]) ,
@@ -82,11 +84,9 @@ export class DetermineSignerComponent implements OnInit {
 
   name = 'Angular';
 
-  userForm: FormGroup;
-
   //user view
   userViews() : FormArray {
-    return this.userForm.get("userViews") as FormArray
+    return this.datas.userForm.get("userViews") as FormArray
   }
   newUserView(): FormGroup {
     return this.formBuilder.group({
@@ -104,7 +104,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //user sign
   userSigns() : FormArray {
-    return this.userForm.get("userSigns") as FormArray
+    return this.datas.userForm.get("userSigns") as FormArray
   }
   newUserSign(): FormGroup {
     return this.formBuilder.group({
@@ -125,7 +125,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //user document
   userDocs() : FormArray {
-    return this.userForm.get("userDocs") as FormArray
+    return this.datas.userForm.get("userDocs") as FormArray
   }
   newUserDoc(): FormGroup {
     return this.formBuilder.group({
@@ -147,7 +147,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //user partner lead
   partnerLeads() : FormArray {
-    return this.partners.get("partnerLeads") as FormArray
+    return this.datas.partners.get("partnerLeads") as FormArray
   }
   newPartnerLead(): FormGroup {
     return this.formBuilder.group({
@@ -165,7 +165,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //partner view
   partnerViews() : FormArray {
-    return this.partners.get("partnerViews") as FormArray
+    return this.datas.partners.get("partnerViews") as FormArray
   }
   newPartnerView(): FormGroup {
     return this.formBuilder.group({
@@ -183,7 +183,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //partner sign
   partnerSigns() : FormArray {
-    return this.partners.get("partnerSigns") as FormArray
+    return this.datas.partners.get("partnerSigns") as FormArray
   }
   newPartnerSign(): FormGroup {
     return this.formBuilder.group({
@@ -204,7 +204,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //partner document
   partnerDocs() : FormArray {
-    return this.partners.get("partnerDocs") as FormArray
+    return this.datas.partners.get("partnerDocs") as FormArray
   }
   newPartnerDoc(): FormGroup {
     return this.formBuilder.group({
@@ -222,7 +222,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.userForm.value);
+    console.log(this.datas.userForm.value);
   }
 
 }

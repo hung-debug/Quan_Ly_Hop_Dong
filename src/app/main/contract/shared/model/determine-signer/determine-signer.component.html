@@ -1,7 +1,7 @@
 
 <!-- form step 2 -->
 <div>
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="this.datas.userForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="col-md-1 order">
           <input type="number" formControlName="order" class="form-control order_input">
@@ -162,7 +162,7 @@
     </div>
   </form>
 
-  <form [formGroup]="partners" class="partner_content">
+  <form [formGroup]="this.datas.partners" class="partner_content">
     <div class="row">
       <div class="col-md-1 order">
           <input type="number" formControlName="order" class="form-control order_input">
@@ -353,8 +353,8 @@
   </form>
 
   <br/>
-  {{this.userForm.value | json}}
+  {{this.datas.userForm.value | json}}
   <br/>
-  {{this.partners.value | json}}
+  {{this.datas.partners.value | json}}
 </div>
 

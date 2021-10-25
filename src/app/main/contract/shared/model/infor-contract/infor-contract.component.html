@@ -6,7 +6,7 @@
            type="file"
            accept=".pdf"
            (change)="fileChanged($event)"
-           style="display: none;" />
+           style="display: none;"/>
     <div class="select-contract" (click)="addFile()">
       <input type="text" placeholder="Chọn file hợp đồng (PDF, DOC, DOCX)" readonly [ngModel]="this.datas.file_name">
       <img src="assets/img/attachment.svg" alt="mobifone.contract">
@@ -14,18 +14,22 @@
   </div>
 </div>
 
-<div class="content-information-sign" *ngFor="let d of this.datas.dataDetails" style="border-radius: 5px; border: 1px solid #ddd; margin-bottom: 22px">
-  <div style="color: #0160AE; background-color: #C7D0E9; height: 42px; display: flex;align-items: center; padding-left: 16px">{{d.title}}</div>
-  <div style="padding: 36px;">
-    <div *ngFor="let data of d.property_name" style="display: flex; flex-direction: column; margin-bottom: 15px">
-      <div>{{data.name}}: <span style="color: red">*</span></div>
-      <input type="text" style="border-radius: 5px; border: 1px solid #2174B8; height: 40px; width: 400px; outline: none" [(ngModel)]="data.value">
-    </div>
-  </div>
+<!--<div class="content-information-sign" *ngFor="let d of this.datas.dataDetails"-->
+<!--     style="border-radius: 5px; border: 1px solid #ddd; margin-bottom: 22px">-->
+<!--  <div-->
+<!--    style="color: #0160AE; background-color: #C7D0E9; height: 42px; display: flex;align-items: center; padding-left: 16px">{{d.title}}</div>-->
+<!--  <div style="padding: 36px;">-->
+<!--    <div *ngFor="let data of d.property_name" style="display: flex; flex-direction: column; margin-bottom: 15px">-->
+<!--      <div>{{data.name}}: <span style="color: red">*</span></div>-->
+<!--      <input type="text"-->
+<!--             style="border-radius: 5px; border: 1px solid #2174B8; height: 40px; width: 400px; outline: none"-->
+<!--             [(ngModel)]="data.value">-->
+<!--    </div>-->
+<!--  </div>-->
 
-</div>
+<!--</div>-->
 
-<form [formGroup]="inforDetails" id="msform">
+<form [formGroup]="datas.inforDetails" id="msform">
   <div class="row">
     <div class="radio col-md-4 label_type">
       <label><input type="radio" name="type" checked> Hợp đồng đơn lẻ không theo mẫu</label>
@@ -76,7 +80,7 @@
                 <label
                   style="color: #333; font-weight: normal;"
                   [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractTypeItems[id].isDisabled? 'lightgrey': ''}"
-                  >{{getContractTypeItems[id].item_text}}</label>
+                >{{getContractTypeItems[id].item_text}}</label>
               </div>
             </ng-template>
           </ng-multiselect-dropdown>
@@ -96,12 +100,13 @@
     <div class="col-md-5">
       <div class="form-group">
         <div class="label_item">File đính kèm</div>
-            <div>
-            <label for="file-upload-attach" class="custom-file-upload">
-                <i class="fa fa-cloud-upload"></i> File PDF, DOC, DOCX
-            </label>
-            <input id="file-upload-attach" type="file" multiple (change)="selectFilesAttach($event); uploadFilesAttach()"/>
-          </div>
+        <div>
+          <label for="file-upload-attach" class="custom-file-upload">
+            <i class="fa fa-cloud-upload"></i> File PDF, DOC, DOCX
+          </label>
+          <input id="file-upload-attach" type="file" multiple
+                 (change)="selectFilesAttach($event); uploadFilesAttach()"/>
+        </div>
         <div *ngFor="let progressInfoAttach of progressInfosAttach" class="mb-2">
           <span>{{ progressInfoAttach.fileName }}</span>
           <div class="progress">
@@ -143,7 +148,7 @@
     <div class="col-md-5">
       <div class="form-group">
         <div class="label_item">Hợp đồng liên quan</div>
-        <div  class="col">
+        <div class="col">
           <ng-multiselect-dropdown
             formControlName="contractConnect"
             [placeholder]="'-- Chọn --'"
@@ -159,7 +164,7 @@
                 <label
                   style="color: #333; font-weight: normal;"
                   [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}"
-                  >{{getContractConnectItems[id].item_text}}</label>
+                >{{getContractConnectItems[id].item_text}}</label>
               </div>
             </ng-template>
           </ng-multiselect-dropdown>
@@ -194,5 +199,5 @@
 </form>
 
 <br/>
-{{this.inforDetails.value | json}}
+{{this.datas.inforDetails.value | json}}
 
