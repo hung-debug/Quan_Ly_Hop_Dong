@@ -41,12 +41,22 @@ export class SidebarService {
           href: '/main/contract'
         },
         {
+          title: 'Sắp hết hạn',
+          active: false,
+          href: '/main/contract'
+        },
+        {
           title: 'Quá hạn',
           active: false,
           href: '/main/contract'
         },
         {
           title: 'Từ chối',
+          active: false,
+          href: '/main/contract'
+        },
+        {
+          title: 'Hủy bỏ',
           active: false,
           href: '/main/contract'
         },

@@ -11,6 +11,10 @@ export class ContractComponent implements OnInit {
   closeResult:string= '';
   public contracts: any[] = [];
   p:number = 1;
+  page:number = 3;
+  pageStart:number = 0;
+  pageEnd:number = 0;
+  pageTotal:number = 0;
 
   constructor(private modalService: NgbModal,
               private appService: AppService,
@@ -39,10 +43,23 @@ export class ContractComponent implements OnInit {
     //set title
     this.appService.setTitle('DANH SÁCH HỢP ĐỒNG');
 
+
     //get list contract
     this.contractService.getContractList().subscribe(response => {
       this.contracts = response.items;
+      this.pageTotal = this.contracts.length;
+      this.setPage();
+      console.log(this.pageTotal);
     });
+
+  }
+
+  setPage(){
+    this.pageStart = (this.p-1)*this.page+1;
+    this.pageEnd = (this.p)*this.page;
+    if(this.pageTotal < this.pageEnd){
+      this.pageEnd = this.pageTotal;
+    }
   }
 
 }

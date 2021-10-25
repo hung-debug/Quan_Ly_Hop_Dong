@@ -1,4 +1,9 @@
 <div class="container-fluid">
+  <mdb-tabs [fill]="true">
+    <mdb-tab title="Hợp đồng của tôi"></mdb-tab>
+    <mdb-tab title="Hợp đồng của tổ chức"></mdb-tab>
+  </mdb-tabs>
+
   <div class="form-group">
     <div class="input-group">
       <div class="input-group-prepend">
@@ -22,7 +27,7 @@
     <div class="col-md-2">Thao tác</div>
   </div>
 
-  <div class="item_contract" *ngFor="let item of contracts  | paginate:{itemsPerPage: 3, currentPage:p}">
+  <div class="item_contract" *ngFor="let item of contracts  | paginate:{itemsPerPage: page, currentPage:p}">
     <div class="row">
       <div class="col-md-6">
         <div class="row">
@@ -78,8 +83,10 @@
 
   <div class="row" style="padding-top: 10px; text-align: center;">
     <div class="col-md-12">
-      <pagination-controls (pageChange)="p=$event"></pagination-controls>
+      <pagination-controls (pageChange)="p=$event; setPage()" previousLabel=""
+      nextLabel=""></pagination-controls>
     </div>
+    <div style="color: #0160AE">Số lượng: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
   </div>
 
 </div>

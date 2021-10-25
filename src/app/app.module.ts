@@ -1,4 +1,5 @@
 import { NgxPaginationModule } from 'ngx-pagination';
+import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -72,7 +73,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgMultiSelectDropDownModule,
     CommonModule,
     NgxPaginationModule,
-
+    MdbTabsModule,
   ],
   providers: [ AppService,
     {
