@@ -8,7 +8,7 @@
     transition: padding-left .3s ease;
 
     @media screen and (min-width: 768px) {
-      padding-left: 280px;
+      padding-left: 220px;
     }
 
     .overlay {
@@ -54,10 +54,10 @@
 
 header {
   position: fixed;
-  left: 260px;
+  left: 220px;
   top: 0;
   z-index: 100;
-  width: calc(100% - 260px);
+  width: calc(100% - 220px);
   background: #fff;
   height: 60px;
   padding: 0rem 1rem;
@@ -101,3 +101,4 @@ h3{
   margin: 0;
   font-weight: 500;
 }
+

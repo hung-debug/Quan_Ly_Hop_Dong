@@ -12,20 +12,20 @@ import {ContractService} from "../../../../../service/contract.service";
 export class DetermineSignerComponent implements OnInit {
   @Input() datas: any;
   @Input() step: any;
-  address_step = false;
-  addressDetails!: FormGroup;
+  determine_step = false;
+  determineDetails!: FormGroup;
 
   //dropdown
   signTypeList: Array<any> = [];
   dropdownSignTypeSettings: any = {};
 
-  get address() { return this.addressDetails.controls; }
+  get determineContract() { return this.determineDetails.controls; }
   constructor(
     private formBuilder: FormBuilder,
     private contractService: ContractService
   ) {
     this.step = variable.stepSampleContract.step2
-    // this.datas.addressDetails = this.addressDetails;
+    //this.datas.determineDetails = this.determineDetails;
   }
 
   ngOnInit(): void {

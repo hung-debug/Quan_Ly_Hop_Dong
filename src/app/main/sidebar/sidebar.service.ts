@@ -26,11 +26,6 @@ export class SidebarService {
       href: '#',
       submenus: [
         {
-          title: 'Danh sách',
-          active: false,
-          href: '/main/contract'
-        },
-        {
           title: 'Tạo mới',
           active: false,
           href: '/main/add-contract'
@@ -38,27 +33,27 @@ export class SidebarService {
         {
           title: 'Bản nháp',
           active: false,
-          href: '/main/add-contract'
+          href: '/main/contract'
         },
         {
           title: 'Đang xử lý',
           active: false,
-          href: '/main/add-contract'
+          href: '/main/contract'
         },
         {
           title: 'Quá hạn',
           active: false,
-          href: '/main/add-contract'
+          href: '/main/contract'
         },
         {
           title: 'Từ chối',
           active: false,
-          href: '/main/add-contract'
+          href: '/main/contract'
         },
         {
           title: 'Hoàn thành',
           active: false,
-          href: '/main/add-contract'
+          href: '/main/contract'
         }
       ]
     },
@@ -74,34 +69,29 @@ export class SidebarService {
       href: '#',
       submenus: [
         {
-          title: 'Danh sách',
+          title: 'Bản nháp',
           active: false,
           href: '/main/contract'
         },
         {
-          title: 'Bản nháp',
-          active: false,
-          href: '/main/add-contract'
-        },
-        {
           title: 'Đang xử lý',
           active: false,
-          href: '/main/add-contract'
+          href: '/main/contract'
         },
         {
           title: 'Quá hạn',
           active: false,
-          href: '/main/add-contract'
+          href: '/main/contract'
         },
         {
           title: 'Từ chối',
           active: false,
-          href: '/main/add-contract'
+          href: '/main/contract'
         },
         {
           title: 'Hoàn thành',
           active: false,
-          href: '/main/add-contract'
+          href: '/main/contract'
         }
       ]
     },

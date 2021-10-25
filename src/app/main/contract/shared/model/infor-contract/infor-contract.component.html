@@ -89,44 +89,7 @@
     <div class="col-md-5">
       <div class="form-group">
         <div class="label_item">File hợp đồng <span class="require_star">*</span></div>
-            <div>
-            <label for="file-upload" class="custom-file-upload">
-                <i class="fa fa-cloud-upload"></i> File PDF, DOC, DOCX, PNG, JPG, JPGE
-            </label>
-            <input id="file-upload" type="file" multiple (change)="selectFiles($event); uploadFiles()"/>
-          </div>
-        <div *ngFor="let progressInfo of progressInfos" class="mb-2">
-          <span>{{ progressInfo.fileName }}</span>
-          <div class="progress">
-            <div class="progress-bar progress-bar-info progress-bar-striped"
-              role="progressbar"
-              attr.aria-valuenow="{{ progressInfo.value }}"
-              aria-valuemin="0"
-              aria-valuemax="100"
-              [ngStyle]="{ width: progressInfo.value + '%' }"
-            >
-              {{ progressInfo.value }}%
-            </div>
-          </div>
-        </div>
 
-        <div *ngIf="message.length" class="alert alert-secondary my-3" role="alert">
-          <ul *ngFor="let msg of message; let i = index">
-            <li>{{ msg }}</li>
-          </ul>
-        </div>
-
-        <div class="card mt-3">
-          <div class="card-header">Danh sách file hợp đồng</div>
-          <ul
-            class="list-group list-group-flush"
-            *ngFor="let file of fileInfos | async"
-          >
-            <li class="list-group-item">
-              <a href="{{ file.url }}">{{ file.name }}</a>
-            </li>
-          </ul>
-        </div>
       </div>
     </div>
     <div class="col-md-2"></div>

@@ -36,12 +36,13 @@ export class InforContractComponent implements OnInit {
   dropdownTypeSettings: any = {};
   dropdownConnectSettings: any = {};
 
-  get personal() { return this.inforDetails.controls; }
+  get inforContract() { return this.inforDetails.controls; }
   constructor(
     private formBuilder: FormBuilder,
     private uploadService: FileUploadService
   ) {
     this.step = variable.stepSampleContract.step1
+    //this.datas.inforDetails = this.inforDetails;
   }
 
   fileChanged(e: any) {
@@ -179,22 +180,24 @@ export class InforContractComponent implements OnInit {
     this.progressInfos[idx] = { value: 0, fileName: file.name };
 
     if (file) {
-      this.uploadService.upload(file).subscribe(
-        (event: any) => {
-          if (event.type === HttpEventType.UploadProgress) {
-            this.progressInfos[idx].value = Math.round(100 * event.loaded / event.total);
-          } else if (event instanceof HttpResponse) {
-            const msg = 'Tải file lên thành công: ' + file.name;
-            this.message.push(msg);
-            this.fileInfos = this.uploadService.getFiles();
-          }
-        },
-        (err: any) => {
-          this.progressInfos[idx].value = 0;
-          const msg = 'Không thể tải được file: ' + file.name;
-          this.message.push(msg);
-          this.fileInfos = this.uploadService.getFiles();
-        });
+      // this.uploadService.upload(file).subscribe(
+      //   (event: any) => {
+      //     if (event.type === HttpEventType.UploadProgress) {
+      //       this.progressInfos[idx].value = Math.round(100 * event.loaded / event.total);
+      //     } else if (event instanceof HttpResponse) {
+      //       const msg = 'Tải file lên thành công: ' + file.name;
+      //       this.message.push(msg);
+      //       this.fileInfos = this.uploadService.getFiles();
+      //     }
+      //   },
+      //   (err: any) => {
+      //     this.progressInfos[idx].value = 0;
+      //     const msg = 'Không thể tải được file: ' + file.name;
+      //     this.message.push(msg);
+      //     this.fileInfos = this.uploadService.getFiles();
+      //   });
+      const msg = 'Tải file lên thành công: ' + file.name;
+      this.message.push(msg);
     }
   }
 

@@ -27,7 +27,14 @@
             <div *ngIf="menu.type === 'dropdown'" class="sidebar-submenu" [@slide]="getState(menu)">
               <ul>
                 <li *ngFor="let submenu of menu.submenus" [ngClass]="{'active':submenu.active}">
-                  <a (click)='clickLinkSub(menu, submenu)'> {{submenu.title}}
+                  <span *ngIf="submenu.title === 'Tạo mới'" (click)='clickLinkSub(menu, submenu)' class="sub_title_add">
+                    <button class="btn_add_contract">
+                      <span class="fa fa-plus icon_add"></span>TẠO MỚI
+                    </button>
+                    <span *ngIf="submenu.badge" class="badge badge-pill" [ngClass]="submenu.badge.class">{{submenu.badge.text}}</span>
+                  </span>
+                  <a *ngIf="submenu.title != 'Tạo mới'" (click)='clickLinkSub(menu, submenu)'>
+                    <span class="sub_title">{{submenu.title}}</span>
                     <span *ngIf="submenu.badge" class="badge badge-pill" [ngClass]="submenu.badge.class">{{submenu.badge.text}}</span>
                   </a>
                 </li>
