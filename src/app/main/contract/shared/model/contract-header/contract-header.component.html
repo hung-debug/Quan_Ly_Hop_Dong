@@ -1,24 +1,33 @@
 <div class="col-md-12 col-md-offset-3" style="display: flex">
   <button *ngIf="step == 'determine-contract'" (click)="back($event, 'infor-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
   <button *ngIf="step == 'sample-contract'" (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
-<!--  <button *ngIf="step == 'confirm-contract'" (click)="back($event, 'confirm-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>-->
+  <button *ngIf="step == 'confirm-contract'" (click)="back($event, 'sample-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
 
   <!-- step by step -->
   <div class="activity-card col" style="padding: 10px;text-align: center;">
     <ul id="progressbar">
-      <li [ngClass]="this.stepHeader.step_1 ? 'active ' : 'inactive'"><span
-        [ngClass]="{'current_active' : this.stepHeader.step_1}">Thông tin tài liệu</span></li>
-      <li [ngClass]="this.stepHeader.step_2 ? 'active' : 'inactive'"><span
-        [ngClass]="{'current_active' : this.stepHeader.step_2}">Xác định người ký</span></li>
-      <li [ngClass]="this.stepHeader.step_3 ? 'active' : 'inactive'"><span
-        [ngClass]="{'current_active' : this.stepHeader.step_3}">Thiết kế tài liệu</span></li>
-      <li [ngClass]="this.stepHeader.step_4 ? 'active' : 'inactive'"><span
-        [ngClass]="{'current_active' : this.stepHeader.step_4}">Xác nhận và hoàn tất</span></li>
+      <li [ngClass]="(step == 'infor-contract' || step == 'determine-contract' ||
+                      step == 'sample-contract' || step == 'confirm-contract') ? 'active ' : 'inactive'">
+        <div [ngClass]="{'current_active' : step == 'infor-contract'}">Thông tin tài liệu</div>
+      </li>
+
+      <li [ngClass]="(step == 'determine-contract' || step == 'sample-contract' ||
+                     step == 'confirm-contract') ? 'active' : 'inactive'">
+        <div [ngClass]="{'current_active' : step == 'determine-contract'}">Xác định người ký</div>
+      </li>
+
+      <li [ngClass]="(step == 'sample-contract' || step == 'confirm-contract') ? 'active' : 'inactive'">
+        <div [ngClass]="{'current_active' : step == 'sample-contract'}">Thiết kế tài liệu</div>
+      </li>
+
+      <li [ngClass]="step == 'confirm-contract' ? 'active' : 'inactive'">
+        <div [ngClass]="{'current_active' : step == 'confirm-contract'}">Xác nhận và hoàn tất</div>
+      </li>
     </ul>
   </div>
 
   <button *ngIf="step == 'infor-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
   <button *ngIf="step == 'determine-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
   <button *ngIf="step == 'sample-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
-
+  <button *ngIf="step == 'confirm-contract'" class="pull-right" (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
 </div>

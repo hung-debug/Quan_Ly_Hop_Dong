@@ -1,22 +1,31 @@
 <!-- form step 1 -->
-<form [formGroup]="personalDetails" id="msform">
-  <!-- fieldsets -->
-  <!-- <fieldset >
-    <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': personal_step && personal.name.errors }"
-           placeholder="Full Name"/>
-    <div *ngIf="personal_step && personalDetails.controls.name.errors">
-      <div *ngIf="personal.name.errors?.required">Tên hợp đồng</div>
+<div class="select-file-contract">
+  <div class="file-approve">
+    <div class="label">File hợp đồng: <span style="color: red">*</span></div>
+    <input id="file-input"
+           type="file"
+           accept=".pdf"
+           (change)="fileChanged($event)"
+           style="display: none;" />
+    <div class="select-contract" (click)="addFile()">
+      <input type="text" placeholder="Chọn file hợp đồng (PDF, DOC, DOCX)" readonly [ngModel]="this.datas.file_name">
+      <img src="assets/img/attachment.svg" alt="mobifone.contract">
     </div>
-    <input type="text" formControlName="email" name="email" placeholder="Email"/>
-    <div *ngIf="personal_step && personalDetails.controls.email.errors">
-      <div *ngIf="personal.email.errors?.required">Số hợp đồng</div>
+  </div>
+</div>
+
+<div class="content-information-sign" *ngFor="let d of this.datas.dataDetails" style="border-radius: 5px; border: 1px solid #ddd; margin-bottom: 22px">
+  <div style="color: #0160AE; background-color: #C7D0E9; height: 42px; display: flex;align-items: center; padding-left: 16px">{{d.title}}</div>
+  <div style="padding: 36px;">
+    <div *ngFor="let data of d.property_name" style="display: flex; flex-direction: column; margin-bottom: 15px">
+      <div>{{data.name}}: <span style="color: red">*</span></div>
+      <input type="text" style="border-radius: 5px; border: 1px solid #2174B8; height: 40px; width: 400px; outline: none" [(ngModel)]="data.value">
     </div>
-    <input type="text" formControlName="phone" name="phone" placeholder="Phone"/>
-    <div *ngIf="personal_step && personalDetails.controls.phone.errors">
-      <div *ngIf="personal.phone.errors?.required">Phone is required</div>
-    </div>
-   <input (click)="next()" type="button" name="next" class="next action-button" value="Tiếp theo"/>
-  </fieldset> -->
+  </div>
+
+</div>
+
+<form [formGroup]="inforDetails" id="msform">
   <div class="row">
     <div class="radio col-md-4 label_type">
       <label><input type="radio" name="type" checked> Hợp đồng đơn lẻ không theo mẫu</label>
@@ -35,7 +44,6 @@
         <div class="input-group">
           <input type="text" id="contractName" class="form-control" formControlName="contractName"/>
         </div>
-
       </div>
     </div>
   </div>
@@ -223,5 +231,5 @@
 </form>
 
 <br/>
-{{this.personalDetails.value | json}}
+{{this.inforDetails.value | json}}
 

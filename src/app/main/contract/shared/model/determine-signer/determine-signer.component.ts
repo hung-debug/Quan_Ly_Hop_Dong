@@ -28,40 +28,9 @@ export class DetermineSignerComponent implements OnInit {
     // this.datas.addressDetails = this.addressDetails;
   }
 
-  fileChanged(e: any) {
-    const file = e.target.files[0];
-    if (file) {
-      if (e.target.files[0].size <= 5000000) {
-        const file_name = file.name;
-        const extension = file.name.split('.').pop();
-        // tslint:disable-next-line:triple-equals
-        if (extension.toLowerCase() == 'pdf') {
-          const fileReader = new FileReader();
-          fileReader.readAsDataURL(file);
-          fileReader.onload = (e) => {
-            //@ts-ignore
-            const base64result = fileReader.result.toString().split(',')[1];
-            const fileInput: any = document.getElementById('file-input');
-            fileInput.value = '';
-            this.datas.file_content = base64result;
-            this.datas.file_name = file_name;
-            // this.datas.documents['file_content_docx'] = null;
-            // this.pdfSrc = Helper._getUrlPdf(base64result);
-          };
-        } else {
-          alert('Chỉ hỗ trợ file có định dạng PDF')
-        }
-      } else {
-        alert('Yêu cầu file nhỏ hơn 5MB');
-      }
-    }
-  }
+  ngOnInit(): void {
 
-  addFile() {
-    // @ts-ignore
-    document.getElementById('file-input').click();
-
-    this.productForm = this.formBuilder.group({
+    this.userForm = this.formBuilder.group({
       order: '1',
       name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
       userViews: this.formBuilder.array([]) ,
@@ -76,14 +45,6 @@ export class DetermineSignerComponent implements OnInit {
       partnerViews: this.formBuilder.array([]) ,
       partnerSigns: this.formBuilder.array([]) ,
       partnerDocs: this.formBuilder.array([]) ,
-    });
-  }
-
-  ngOnInit(): void {
-    this.addressDetails = this.formBuilder.group({
-      city: ['', Validators.required],
-      address: ['', Validators.required],
-      pincode: ['',Validators.required]
     });
 
     this.signTypeList = [
@@ -121,11 +82,11 @@ export class DetermineSignerComponent implements OnInit {
 
   name = 'Angular';
 
-  productForm: FormGroup;
+  userForm: FormGroup;
 
   //user view
   userViews() : FormArray {
-    return this.productForm.get("userViews") as FormArray
+    return this.userForm.get("userViews") as FormArray
   }
   newUserView(): FormGroup {
     return this.formBuilder.group({
@@ -143,7 +104,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //user sign
   userSigns() : FormArray {
-    return this.productForm.get("userSigns") as FormArray
+    return this.userForm.get("userSigns") as FormArray
   }
   newUserSign(): FormGroup {
     return this.formBuilder.group({
@@ -164,7 +125,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //user document
   userDocs() : FormArray {
-    return this.productForm.get("userDocs") as FormArray
+    return this.userForm.get("userDocs") as FormArray
   }
   newUserDoc(): FormGroup {
     return this.formBuilder.group({
@@ -261,7 +222,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.productForm.value);
+    console.log(this.userForm.value);
   }
 
 }

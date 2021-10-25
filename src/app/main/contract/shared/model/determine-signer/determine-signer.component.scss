@@ -13,6 +13,7 @@
   font-weight: 400;
   font-size: 14px;
   text-decoration: none;
+  cursor: pointer;
 }
 .label{
   font-weight: 500;
@@ -83,37 +84,4 @@ input[type=number] {
   }
 }
 
-.select-file-contract {
-  display: flex;
-  //flex-direction: column;
-  justify-content: space-between;
-  margin-bottom: 22px;
 
-  .file-approve {
-    .label {
-      font-size: 15px;
-      font-family: Roboto, "Helvetica Neue", sans-serif;
-    }
-
-    .select-contract {
-      position: relative;
-      width: 425px;
-      input {
-        outline: none;
-        width: 400px;
-        height: 48px;
-        border-radius: 5px;
-        border: 1px solid #87CAFF;
-        padding-left: 10px;
-        cursor: pointer;
-      }
-      img {
-        cursor: pointer;
-        position: absolute;
-        top: 15px;
-        right: 35px;
-      }
-    }
-  }
-
-}

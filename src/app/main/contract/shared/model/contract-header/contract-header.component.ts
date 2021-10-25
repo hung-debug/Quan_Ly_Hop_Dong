@@ -103,13 +103,14 @@ export class ContractHeaderComponent implements OnInit {
   validData(step: any) {
     switch (step) {
       case variable.stepSampleContract.step1:
-        break;
-      // @ts-ignore
-      case variable.stepSampleContract.step2:
         if (!this.datas.file_content) {
           alert('Vui lòng chọn file hợp đồng!');
           return false;
         }
+        break;
+      // @ts-ignore
+      case variable.stepSampleContract.step2:
+
         // if (this.datas.dataDetails && this.datas.dataDetails.length > 0) {
         //   let count = 0;
         //   this.datas.dataDetails.forEach((element: any) => {
