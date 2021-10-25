@@ -285,8 +285,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           _sign.style["z-index"] = '1';
 
           // show toa do keo tha chu ky (demo)
-          this.location_sign_x = this.signCurent['dataset_x'];
-          this.location_sign_y  = this.signCurent['dataset_y'];
+          // this.location_sign_x = this.signCurent['dataset_x'];
+          // this.location_sign_y  = this.signCurent['dataset_y'];
 
         }
         this.objSignInfo.traf_x = Math.round(this.signCurent['dataset_x']);
@@ -597,8 +597,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getSignSelect(d: any) {
-    this.location_sign_x = d.dataset_x;
-    this.location_sign_y = d.dataset_y;
+    // this.location_sign_x = d.dataset_x;
+    // this.location_sign_y = d.dataset_y;
     console.log(d);
   }
 
@@ -645,20 +645,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   changePositionSign(e: any, locationChange: any) {
     console.log(e, locationChange);
-
-    // let signElement = document.getElementById(this.objSignInfo.id);
-    // if (signElement) {
-    //   let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-    //   if (isObjSign) {
-    //     if (locationChange == 'x') {
-    //       isObjSign.dataset_x = parseInt(e.value);
-    //       signElement.setAttribute("data-x", isObjSign.dataset_x);
-    //     } else {
-    //       isObjSign.dataset_y = parseInt(e.value);
-    //       signElement.setAttribute("data-y", isObjSign.dataset_y);
-    //     }
-    //   }
-    // }
+    let signElement = document.getElementById(this.objSignInfo.id);
+    if (signElement) {
+      let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+      if (isObjSign) {
+        if (locationChange == 'x') {
+          isObjSign.dataset_x = parseInt(e.value);
+          signElement.setAttribute("data-x", isObjSign.dataset_x);
+        } else {
+          isObjSign.dataset_y = parseInt(e.value);
+          signElement.setAttribute("data-y", isObjSign.dataset_y);
+        }
+      }
+    }
   }
 
 

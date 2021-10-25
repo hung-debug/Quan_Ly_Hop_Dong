@@ -49,13 +49,11 @@
         <div class="location">
           <div class="location-drag">
             <span class="label">X:</span>
-<!--            <input type="text" (ngModelChange)="changePositionSign($event, 'x')" [ngModel]="objSignInfo.traf_x" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [readOnly]="true">-->
-            <input type="text" [ngModel]="location_sign_x" [readOnly]="true">
+            <input type="text" (ngModelChange)="changePositionSign($event, 'x')" [ngModel]="objSignInfo.traf_x" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [readOnly]="false">
           </div>
           <div class="location-drag">
             <span class="label">Y:</span>
-<!--            <input type="text" (ngModelChange)="changePositionSign($event, 'y')" [ngModel]="objSignInfo.traf_y" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [readOnly]="true">-->
-            <input type="text" [ngModel]="location_sign_y" [readOnly]="true">
+            <input type="text" (ngModelChange)="changePositionSign($event, 'y')" [ngModel]="objSignInfo.traf_y" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [readOnly]="false">
           </div>
         </div>
       </div>

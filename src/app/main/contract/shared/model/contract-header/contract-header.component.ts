@@ -103,9 +103,10 @@ export class ContractHeaderComponent implements OnInit {
   validData(step: any) {
     switch (step) {
       case variable.stepSampleContract.step1:
-        let dataInfo = JSON.parse(JSON.stringify(this.datas.inforDetails.value));
-        console.log(dataInfo);
-        this.datas.inforDetails = dataInfo;
+        // valid data step 1, defind value
+        // let dataInfo = JSON.parse(JSON.stringify(this.datas.inforDetails.value));
+        // this.datas.inforDetails = dataInfo;
+
         if (!this.datas.file_content) {
           alert('Vui lòng chọn file hợp đồng!');
           return false;
@@ -113,11 +114,13 @@ export class ContractHeaderComponent implements OnInit {
         break;
       // @ts-ignore
       case variable.stepSampleContract.step2:
-        console.log(this.datas);
-        let is_partners = JSON.parse(JSON.stringify(this.datas.partners.value));
-        let is_userForm = JSON.parse(JSON.stringify(this.datas.userForm.value));
-        this.datas.partners = is_partners;
-        this.datas.userForm = is_userForm;
+        // valid step 2 data, defind value
+        // let is_partners = JSON.parse(JSON.stringify(this.datas.partners.value));
+        // let is_userForm = JSON.parse(JSON.stringify(this.datas.userForm.value));
+        // this.datas.partners = is_partners;
+        // this.datas.userForm = is_userForm;
+
+
         // if (this.datas.dataDetails && this.datas.dataDetails.length > 0) {
         //   let count = 0;
         //   this.datas.dataDetails.forEach((element: any) => {
