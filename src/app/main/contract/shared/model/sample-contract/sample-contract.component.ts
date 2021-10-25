@@ -64,7 +64,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     traf_x: 0,
     traf_y: 0,
     x1: 0,
-    y1: 0
+    y1: 0,
+    offsetHeight: 0,
+    offsetWidth: 0
   }
   // listDelete = [];
   signCurent: any;
@@ -103,6 +105,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         item['sign_config'] = JSON.parse(item['sign_config']);
       }
     })
+
+    if (!this.signCurent) {
+      this.signCurent = {
+        offsetWidth: 0,
+        offsetHeight: 0
+      }
+
+    }
 
     // convert base64 file pdf to url
     this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
@@ -558,21 +568,49 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
-  changePosition(d?: any) {
+  changePosition(d?: any, e?: any, sizeChange?: any) {
     let style: any = {
       "transform": 'translate(' + d['dataset_x'] + 'px, ' + d['dataset_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
     }
-    if (d['offsetWidth']) {
-      style.width = parseInt(d['offsetWidth']) + "px";
+
+    if (sizeChange == "width" && e) {
+      let signElement = document.getElementById(this.objSignInfo.id);
+      if (signElement) {
+        let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+        if (isObjSign) {
+          if (sizeChange == 'width') {
+            style.width = parseInt(e) + 'px';
+          } else {
+            style.height = parseInt(e) + 'px';
+          }
+        }
+      }
     } else {
+      if (d['offsetWidth']) {
+        style.width = parseInt(d['offsetWidth']) + "px";
+      }
     }
 
-    if (d['offsetHeight']) {
-      style.height = parseInt(d['offsetHeight']) + "px";
+    if (sizeChange == "height" && e) {
+      let signElement = document.getElementById(this.objSignInfo.id);
+      if (signElement) {
+        let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+        if (isObjSign) {
+          if (sizeChange == 'width') {
+            style.width = parseInt(e) + 'px';
+          } else {
+            style.height = parseInt(e) + 'px';
+          }
+        }
+      }
     } else {
+      if (d['offsetHeight']) {
+        style.height = parseInt(d['offsetHeight']) + "px";
+      }
     }
+
     return style;
   }
 
@@ -650,14 +688,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       if (isObjSign) {
         if (locationChange == 'x') {
-          isObjSign.dataset_x = parseInt(e.value);
+          isObjSign.dataset_x = parseInt(e);
           signElement.setAttribute("data-x", isObjSign.dataset_x);
         } else {
-          isObjSign.dataset_y = parseInt(e.value);
+          isObjSign.dataset_y = parseInt(e);
           signElement.setAttribute("data-y", isObjSign.dataset_y);
         }
       }
     }
+  }
+
+  changeSizeSign(e: any, sizeChange: any) {
+
+  }
+
+  keydownHandler(e: any) {
+    console.log(e)
   }
 
 
