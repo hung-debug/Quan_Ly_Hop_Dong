@@ -63,11 +63,11 @@
         <div class="location">
           <div class="location-drag">
             <span class="label" style="font-size: 13px">Chiều dài</span>
-            <input type="number" (ngModelChange)="changePosition(null, $event, 'width')" [ngModel]="signCurent.offsetWidth" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [readOnly]="false">
+            <input type="number" (ngModelChange)="changeSizeSign($event, 'width')" [ngModel]="signCurent.offsetWidth" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [readOnly]="false">
           </div>
           <div class="location-drag">
             <span class="label" style="font-size: 13px">Chiều rộng</span>
-            <input type="number" (ngModelChange)="changePosition(null, $event, 'height')" [ngModel]="signCurent.offsetHeight" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [readOnly]="false">
+            <input type="number" (ngModelChange)="changeSizeSign($event, 'height')" [ngModel]="signCurent.offsetHeight" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [readOnly]="false">
           </div>
         </div>
       </div>

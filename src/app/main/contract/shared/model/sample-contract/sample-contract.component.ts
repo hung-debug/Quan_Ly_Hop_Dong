@@ -575,41 +575,41 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       "backgroundColor": '#EBF8FF'
     }
 
-    if (sizeChange == "width" && e) {
-      let signElement = document.getElementById(this.objSignInfo.id);
-      if (signElement) {
-        let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-        if (isObjSign) {
-          if (sizeChange == 'width') {
-            style.width = parseInt(e) + 'px';
-          } else {
-            style.height = parseInt(e) + 'px';
-          }
-        }
-      }
-    } else {
+    // if (sizeChange == "width" && e) {
+    //   let signElement = document.getElementById(this.objSignInfo.id);
+    //   if (signElement) {
+    //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+    //     if (isObjSign) {
+    //       if (sizeChange == 'width') {
+    //         style.width = parseInt(e) + 'px';
+    //       } else {
+    //         style.height = parseInt(e) + 'px';
+    //       }
+    //     }
+    //   }
+    // } else {
       if (d['offsetWidth']) {
         style.width = parseInt(d['offsetWidth']) + "px";
       }
-    }
+    // }
 
-    if (sizeChange == "height" && e) {
-      let signElement = document.getElementById(this.objSignInfo.id);
-      if (signElement) {
-        let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-        if (isObjSign) {
-          if (sizeChange == 'width') {
-            style.width = parseInt(e) + 'px';
-          } else {
-            style.height = parseInt(e) + 'px';
-          }
-        }
-      }
-    } else {
+    // if (sizeChange == "height" && e) {
+    //   let signElement = document.getElementById(this.objSignInfo.id);
+    //   if (signElement) {
+    //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+    //     if (isObjSign) {
+    //       if (sizeChange == 'width') {
+    //         style.width = parseInt(e) + 'px';
+    //       } else {
+    //         style.height = parseInt(e) + 'px';
+    //       }
+    //     }
+    //   }
+    // } else {
       if (d['offsetHeight']) {
         style.height = parseInt(d['offsetHeight']) + "px";
       }
-    }
+    // }
 
     return style;
   }
@@ -681,6 +681,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     interact.removeDocument(document);
   }
 
+  // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any) {
     console.log(e, locationChange);
     let signElement = document.getElementById(this.objSignInfo.id);
@@ -698,8 +699,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  // edit size doi tuong ky
   changeSizeSign(e: any, sizeChange: any) {
-
+    let signElement = document.getElementById(this.objSignInfo.id);
+    if (signElement) {
+      let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+      if (isObjSign) {
+        if (sizeChange == 'width') {
+          isObjSign.offsetWidth = parseInt(e);
+          signElement.setAttribute("width", isObjSign.offsetWidth);
+        } else {
+          isObjSign.offsetHeight = parseInt(e);
+          signElement.setAttribute("height", isObjSign.offsetHeight);
+        }
+      }
+    }
   }
 
   keydownHandler(e: any) {

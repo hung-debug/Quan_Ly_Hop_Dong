@@ -47,11 +47,6 @@ export class InforContractComponent implements OnInit {
 
   ngOnInit(): void {
     this.datas.inforDetails = this.inforDetails;
-    //upload file
-    //this.fileInfos = this.uploadService.getFiles();
-    //upload file attach
-    //this.fileInfosAttach = this.uploadService.getFiles();
-
     this.datas.inforDetails = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', Validators.required],
