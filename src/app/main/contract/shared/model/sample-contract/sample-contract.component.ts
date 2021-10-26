@@ -68,6 +68,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     offsetHeight: 0,
     offsetWidth: 0
   }
+  list_sign_name: any = [
+    {name: "Đỗ Thành Dương", selected: true},
+    {name: "Đỗ Thanh Dương", selected: false},
+    {name: "Phạm Văn Luân", selected: false},
+    {name: "Phạm Văn Lâm", selected: false}
+  ];
   // listDelete = [];
   signCurent: any;
   formatDate: any;
@@ -634,10 +640,32 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  // get select người ký
   getSignSelect(d: any) {
+    // console.log(this.objSignInfo, this.signCurent)
+    let signElement = document.getElementById(this.objSignInfo.id);
+    if (signElement) {
+      let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+      // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
+      if (isObjSign) {
+        this.objSignInfo.traf_x = d.dataset_x;
+        this.objSignInfo.traf_y = d.dataset_y;
+        // this.signCurent.name = d.name;
+      }
+      if (d.name) {
+        this.list_sign_name.forEach((item: any) => {
+          if (item.name == d.name) {
+            item.selected = true;
+          } else item.selected = false;
+        })
+
+      }
+      // console.log(this.list_sign_name, d.name)
+
+    }
     // this.location_sign_x = d.dataset_x;
     // this.location_sign_y = d.dataset_y;
-    console.log(d);
+    // console.log(d);
   }
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
@@ -682,42 +710,49 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   // edit location doi tuong ky
-  changePositionSign(e: any, locationChange: any) {
-    console.log(e, locationChange);
+  changePositionSign(e: any, locationChange: any, property: any) {
+    console.log(e, property);
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       if (isObjSign) {
-        if (locationChange == 'x') {
-          isObjSign.dataset_x = parseInt(e);
-          signElement.setAttribute("data-x", isObjSign.dataset_x);
+        if (property == 'location') {
+          if (locationChange == 'x') {
+            isObjSign.dataset_x = parseInt(e);
+            signElement.setAttribute("data-x", isObjSign.dataset_x);
+          } else {
+            isObjSign.dataset_y = parseInt(e);
+            signElement.setAttribute("data-y", isObjSign.dataset_y);
+          }
+        } else if (property == 'size') {
+          if (locationChange == 'width') {
+            isObjSign.offsetWidth = parseInt(e);
+            signElement.setAttribute("width", isObjSign.offsetWidth);
+          } else {
+            isObjSign.offsetHeight = parseInt(e);
+            signElement.setAttribute("height", isObjSign.offsetHeight);
+          }
         } else {
-          isObjSign.dataset_y = parseInt(e);
-          signElement.setAttribute("data-y", isObjSign.dataset_y);
+          isObjSign.name = e.target.value;
+          signElement.setAttribute("name", isObjSign.name);
         }
       }
     }
   }
 
   // edit size doi tuong ky
-  changeSizeSign(e: any, sizeChange: any) {
-    let signElement = document.getElementById(this.objSignInfo.id);
-    if (signElement) {
-      let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-      if (isObjSign) {
-        if (sizeChange == 'width') {
-          isObjSign.offsetWidth = parseInt(e);
-          signElement.setAttribute("width", isObjSign.offsetWidth);
-        } else {
-          isObjSign.offsetHeight = parseInt(e);
-          signElement.setAttribute("height", isObjSign.offsetHeight);
-        }
-      }
-    }
-  }
+  // changeSizeSign(e: any, sizeChange: any) {
+  //   let signElement = document.getElementById(this.objSignInfo.id);
+  //   if (signElement) {
+  //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+  //     if (isObjSign) {
+  //
+  //     }
+  //   }
+  // }
 
-  keydownHandler(e: any) {
-    console.log(e)
+  getValue(e: any) {
+    console.log(e.target.value)
   }
 
 
