@@ -69,10 +69,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     offsetWidth: 0
   }
   list_sign_name: any = [
-    {name: "Đỗ Thành Dương", selected: true},
-    {name: "Đỗ Thanh Dương", selected: false},
-    {name: "Phạm Văn Luân", selected: false},
-    {name: "Phạm Văn Lâm", selected: false}
+    {name: "Đỗ Thành Dương", id: "1"},
+    {name: "Đỗ Thanh Dương", id: "2"},
+    {name: "Phạm Văn Luân", id: "3"},
+    {name: "Phạm Văn Lâm", id: "4"}
   ];
   // listDelete = [];
   signCurent: any;
@@ -92,6 +92,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   widthDrag: any;
   location_sign_x: any = 0;
   location_sign_y: any = 0;
+  isEnableSelect: boolean = true;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -102,6 +103,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     // console.log(this.datas);
+
     this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
 
     // console.log(this.datas.contract_user_sign)
@@ -110,6 +112,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (item['sign_config'] && typeof (item["sign_config"]) == 'string') {
         item['sign_config'] = JSON.parse(item['sign_config']);
       }
+    })
+
+    this.list_sign_name.forEach((item: any) => {
+      item['selected'] = false;
     })
 
     if (!this.signCurent) {
@@ -294,11 +300,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           _sign.setAttribute("data-y", layerY + "px");
           this.objSignInfo.traf_x = layerX;
           this.objSignInfo.traf_y = layerY;
+          //
+          this.objSignInfo['id'] = this.signCurent['id'];
+          //
           this.tinhToaDoSign(event.relatedTarget.id, this.signCurent.offsetWidth, this.signCurent.offsetHeight, this.objSignInfo);
           this.signCurent.position = _array.join(",");
           _sign.style.display = '';
           // @ts-ignore
           _sign.style["z-index"] = '1';
+          this.isEnableSelect = false;
 
           // show toa do keo tha chu ky (demo)
           // this.location_sign_x = this.signCurent['dataset_x'];
@@ -467,6 +477,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   eventMouseover() {
     if (!this.datas.isView) {
       this.objDrag = {};
+      let count_total = 0;
       this.datas.contract_user_sign.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           let arrSignConfigItem = element.sign_config;
@@ -476,9 +487,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 count: 2
               }
             }
+            count_total++;
           })
         }
       });
+      if (count_total == 0) {
+        this.isEnableSelect = true;
+      }
     }
   }
 
@@ -642,8 +657,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
-    // console.log(this.objSignInfo, this.signCurent)
-    let signElement = document.getElementById(this.objSignInfo.id);
+    // lấy lại id của đối tượng ký khi click
+    let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
+    let signElement;
+    if (set_id) {
+      // set lại id cho đối tượng ký đã click
+      this.objSignInfo.id = set_id.id;
+      signElement = document.getElementById(this.objSignInfo.id);
+    } else
+    signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
@@ -654,19 +676,29 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
       if (d.name) {
         this.list_sign_name.forEach((item: any) => {
+          // if (item.id == d.id) {
           if (item.name == d.name) {
             item.selected = true;
           } else item.selected = false;
         })
-
       }
-      // console.log(this.list_sign_name, d.name)
-
     }
-    // this.location_sign_x = d.dataset_x;
-    // this.location_sign_y = d.dataset_y;
-    // console.log(d);
   }
+
+  // getIdSignClick() {
+  //   let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
+  //   return set_id.id;
+  //   // this.datas.contract_user_sign.forEach((element: any, index: any) => {
+  //   //   if (element.id == id) {
+  //   //     if (element.sign_config.length == 0) {
+  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
+  //   //     } else {
+  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-' + (element.sign_config.length) + '_' + element.id;
+  //   //     }
+  //   //     // element['sign_config'].push(_obj);
+  //   //   }
+  //   // })
+  // }
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   onCancel(e: any, data: any) {
@@ -733,9 +765,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             signElement.setAttribute("height", isObjSign.offsetHeight);
           }
         } else {
-          isObjSign.name = e.target.value;
-          signElement.setAttribute("name", isObjSign.name);
+          let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
+          if (data_name) {
+            isObjSign.name = data_name.name;
+            signElement.setAttribute("name", isObjSign.name);
+          }
         }
+        // console.log(this.signCurent)
+        // console.log(this.objSignInfo)
       }
     }
   }
