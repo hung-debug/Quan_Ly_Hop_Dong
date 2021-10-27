@@ -61,20 +61,29 @@ export class ContractComponent implements OnInit {
 
   }
 
+
+  iconClass = 'col-md-100-1';
   private convertStatusStr(): string{
     if(this.status == 'draft'){
+      this.iconClass = 'col-md-100-3';
       return 'BẢN NHÁP';
     }else if(this.status == 'processing'){
+      this.iconClass = 'col-md-100-3';
       return 'ĐANG XỬ LÝ';
     }else if(this.status == 'expire'){
+      this.iconClass = 'col-md-100-3';
       return 'SẮP HẾT HẠN';
     }else if(this.status == 'overdue'){
+      this.iconClass = 'col-md-100-1';
       return 'QUÁ HẠN';
     }else if(this.status == 'fail'){
+      this.iconClass = 'col-md-100-1';
       return 'TỪ CHỐI';
     }else if(this.status == 'cancel'){
+      this.iconClass = 'col-md-100-1';
       return 'ĐÃ HỦY BỎ';
     }else if(this.status == 'complete'){
+      this.iconClass = 'col-md-100-5';
       return 'ĐÃ HOÀN THÀNH';
     }else{
       return '';

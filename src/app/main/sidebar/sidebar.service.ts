@@ -79,29 +79,19 @@ export class SidebarService {
       href: '#',
       submenus: [
         {
-          title: 'Bản nháp',
+          title: 'Chờ xử lý',
           active: false,
-          href: '/main/contract'
+          href: '/main/contract/processing'
         },
         {
           title: 'Đang xử lý',
           active: false,
-          href: '/main/contract'
+          href: '/main/contract/processing'
         },
         {
-          title: 'Quá hạn',
+          title: 'Đã hoàn thành',
           active: false,
-          href: '/main/contract'
-        },
-        {
-          title: 'Từ chối',
-          active: false,
-          href: '/main/contract'
-        },
-        {
-          title: 'Hoàn thành',
-          active: false,
-          href: '/main/contract'
+          href: '/main/contract/complete'
         }
       ]
     },

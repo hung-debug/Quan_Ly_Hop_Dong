@@ -148,3 +148,33 @@
     color: #6c6c6d;
   }
 }
+
+.fa_icon{
+  font-size: 17px;
+  cursor: pointer;
+}
+.contract_footer{
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.footer_title{
+  width: 120px;
+}
+.footer_pagination{
+  text-align: center;
+}
+.footer_page_number{
+  color: #0160AE
+}
+.col-md-100-1{
+  width: 100%;
+}
+.col-md-100-3{
+  width: 33.3%;
+}
+.col-md-100-5{
+  width: 20%;
+}
+
+
