@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
 import { ContractService } from 'src/app/service/contract.service';
@@ -8,6 +9,8 @@ import { ContractService } from 'src/app/service/contract.service';
   styleUrls: ['./contract.component.scss']
 })
 export class ContractComponent implements OnInit {
+  status: string;
+  private sub: any;
   closeResult:string= '';
   public contracts: any[] = [];
   p:number = 1;
@@ -18,7 +21,8 @@ export class ContractComponent implements OnInit {
 
   constructor(private modalService: NgbModal,
               private appService: AppService,
-              private contractService: ContractService
+              private contractService: ContractService,
+              private route: ActivatedRoute,
     ) {}
 
   open(content:any) {
@@ -40,9 +44,12 @@ export class ContractComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //set title
-    this.appService.setTitle('DANH SÁCH HỢP ĐỒNG');
+    this.sub = this.route.params.subscribe(params => {
+      this.status = params['status'];
 
+      //set title
+      this.appService.setTitle('DANH SÁCH HỢP ĐỒNG ' + this.convertStatusStr());
+    });
 
     //get list contract
     this.contractService.getContractList().subscribe(response => {
@@ -52,6 +59,26 @@ export class ContractComponent implements OnInit {
       console.log(this.pageTotal);
     });
 
+  }
+
+  private convertStatusStr(): string{
+    if(this.status == 'draft'){
+      return 'BẢN NHÁP';
+    }else if(this.status == 'processing'){
+      return 'ĐANG XỬ LÝ';
+    }else if(this.status == 'expire'){
+      return 'SẮP HẾT HẠN';
+    }else if(this.status == 'overdue'){
+      return 'QUÁ HẠN';
+    }else if(this.status == 'fail'){
+      return 'TỪ CHỐI';
+    }else if(this.status == 'cancel'){
+      return 'ĐÃ HỦY BỎ';
+    }else if(this.status == 'complete'){
+      return 'ĐÃ HOÀN THÀNH';
+    }else{
+      return '';
+    }
   }
 
   setPage(){

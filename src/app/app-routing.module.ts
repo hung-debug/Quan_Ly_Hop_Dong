@@ -43,7 +43,7 @@ const routes: Routes = [
         component: UserGroupComponent,
       },
       {
-        path: 'contract',
+        path: 'contract/:status',
         component: ContractComponent,
       },
       {

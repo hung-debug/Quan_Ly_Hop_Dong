@@ -15,6 +15,11 @@ export class SidebarService {
       href: '/main/dashboard'
     },
     {
+      title: 'Tạo mới',
+      active: false,
+      href: '/main/add-contract'
+    },
+    {
       title: 'Hợp đồng đã tạo',
       icon: 'fa fa-file-pdf-o',
       active: false,
@@ -26,44 +31,39 @@ export class SidebarService {
       href: '#',
       submenus: [
         {
-          title: 'Tạo mới',
-          active: false,
-          href: '/main/add-contract'
-        },
-        {
           title: 'Bản nháp',
           active: false,
-          href: '/main/contract'
+          href: '/main/contract/draft'
         },
         {
           title: 'Đang xử lý',
           active: false,
-          href: '/main/contract'
+          href: '/main/contract/processing'
         },
         {
           title: 'Sắp hết hạn',
           active: false,
-          href: '/main/contract'
+          href: '/main/contract/expire'
         },
         {
           title: 'Quá hạn',
           active: false,
-          href: '/main/contract'
+          href: '/main/contract/overdue'
         },
         {
           title: 'Từ chối',
           active: false,
-          href: '/main/contract'
+          href: '/main/contract/fail'
         },
         {
           title: 'Hủy bỏ',
           active: false,
-          href: '/main/contract'
+          href: '/main/contract/cancel'
         },
         {
           title: 'Hoàn thành',
           active: false,
-          href: '/main/contract'
+          href: '/main/contract/complete'
         }
       ]
     },
