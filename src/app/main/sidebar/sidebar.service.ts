@@ -100,7 +100,7 @@ export class SidebarService {
       icon: 'fa fa-building-o',
       active: false,
       type: 'simple',
-      href: '/main/add-contract'
+      href: '/main/contract-template'
     },
     {
       title: 'Người dùng',

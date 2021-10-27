@@ -35,6 +35,7 @@ import { ResetPasswordComponent } from './login/reset-password/reset-password.co
 import { SidebarComponent } from './main/sidebar/sidebar.component';
 import {ContractModule} from "./main/contract/contract.module";
 import { AppService } from './service/app.service';
+import { ContractTemplateComponent } from './main/contract-template/contract-template.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -54,7 +55,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AddContractComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    SidebarComponent
+    SidebarComponent,
+    ContractTemplateComponent
   ],
   imports: [
     BrowserModule,
