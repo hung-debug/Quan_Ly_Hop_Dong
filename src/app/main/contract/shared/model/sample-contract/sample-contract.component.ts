@@ -205,8 +205,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.objSignInfo.id = event.target.id;
         this.objSignInfo.traf_x = x;
         this.objSignInfo.traf_y = y;
+        this.objSignInfo.offsetWidth = event.rect.width;
+        this.objSignInfo.offsetHeight = event.rect.height;
+
         this.signCurent.offsetWidth = event.rect.width;
         this.signCurent.offsetHeight = event.rect.height;
+        console.log(this.signCurent, this.objSignInfo)
         this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.offsetWidth, this.signCurent.offsetHeight, this.objSignInfo);
         let _array = Object.values(this.obj_toa_do);
         this.signCurent.position = _array.join(",");
@@ -272,8 +276,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         let layerY;
         //@ts-ignore
         if ("top" in canvasInfo) {
-          layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);//;//15;
+          layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
         }
+
 
         let pages = event.relatedTarget.id.split("-");
         let page = Helper._attemptConvertFloat(pages[pages.length - 1]);
@@ -315,8 +320,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           // this.location_sign_y  = this.signCurent['dataset_y'];
 
         }
-        this.objSignInfo.traf_x = Math.round(this.signCurent['dataset_x']);
+
+        this.objSignInfo.traf_y = Math.round(this.signCurent['dataset_x']);
         this.objSignInfo.traf_y = Math.round(this.signCurent['dataset_y']);
+
         this.tinhToaDoSign(event.relatedTarget.id, event.rect.width, event.rect.height, this.objSignInfo);
         this.signCurent['position'] = _array.join(",");
         this.signCurent['left'] = this.obj_toa_do.x1;
@@ -345,6 +352,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     element['offsetWidth'] = '135';
                     element['offsetHeight'] = '85';
                   }
+                  this.objSignInfo.offsetWidth = element['offsetWidth'];
+                  this.objSignInfo.offsetHeight = element['offsetHeight'];
                   this.objDrag[this.signCurent['id']].count = 2;
                 } else {
                   element['offsetWidth'] = event.target.offsetWidth;
@@ -609,9 +618,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //     }
     //   }
     // } else {
-      if (d['offsetWidth']) {
-        style.width = parseInt(d['offsetWidth']) + "px";
-      }
+    if (d['offsetWidth']) {
+      style.width = parseInt(d['offsetWidth']) + "px";
+    }
     // }
 
     // if (sizeChange == "height" && e) {
@@ -627,9 +636,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //     }
     //   }
     // } else {
-      if (d['offsetHeight']) {
-        style.height = parseInt(d['offsetHeight']) + "px";
-      }
+    if (d['offsetHeight']) {
+      style.height = parseInt(d['offsetHeight']) + "px";
+    }
     // }
 
     return style;
@@ -663,9 +672,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (set_id) {
       // set lại id cho đối tượng ký đã click
       this.objSignInfo.id = set_id.id;
+      // this.objSignInfo.offsetWidth = set_id.offsetWidth;
+      // this.objSignInfo.offsetHeight = set_id.offsetWidth;
       signElement = document.getElementById(this.objSignInfo.id);
     } else
-    signElement = document.getElementById(this.objSignInfo.id);
+      signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
@@ -673,6 +684,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.objSignInfo.traf_x = d.dataset_x;
         this.objSignInfo.traf_y = d.dataset_y;
         // this.signCurent.name = d.name;
+
+        this.objSignInfo.offsetWidth = parseInt(d.offsetWidth);
+        this.objSignInfo.offsetHeight = parseInt(d.offsetHeight);
+        // this.signCurent.offsetWidth = d.offsetWidth;
+        // this.signCurent.offsetHeight = d.offsetHeight;
+        // console.log(this.signCurent)
       }
       if (d.name) {
         this.list_sign_name.forEach((item: any) => {
@@ -702,6 +719,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   onCancel(e: any, data: any) {
+    data.dataset_x = 0;
+    data.dataset_y = 0;
+    data.number = 0;
+    data.offsetWidth = 0;
+    data.offsetHeight = 0;
+    data.position = "";
+    let signElement = document.getElementById(data.id);
+    if (signElement) {
+      this.objSignInfo.traf_x = 0;
+      this.objSignInfo.traf_y = 0;
+      this.objSignInfo.offsetHeight = 0;
+      this.objSignInfo.offsetWidth = 0;
+      // this.signCurent.offsetWidth = 0;
+      // this.signCurent.offsetHeight = 0;
+    }
     this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
       if (element.sign_config.length > 0) {
         element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
@@ -755,6 +787,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           } else {
             isObjSign.dataset_y = parseInt(e);
             signElement.setAttribute("data-y", isObjSign.dataset_y);
+          }
+        } else if (property == 'size') {
+          if (locationChange == 'width') {
+            isObjSign.offsetWidth = parseInt(e);
+            signElement.setAttribute("width", isObjSign.offsetWidth);
+          } else {
+            isObjSign.offsetHeight = parseInt(e);
+            signElement.setAttribute("height", isObjSign.offsetHeight);
           }
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];

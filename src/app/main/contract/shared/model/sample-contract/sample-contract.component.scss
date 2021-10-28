@@ -101,9 +101,13 @@
           color: #333333;
           border: 1px solid #87CAFF;
           outline: none;
+          &.form-select:disabled {
+            opacity: 0.7;
+          }
         }
 
         select:invalid { color: gray; }
+
       }
     }
 

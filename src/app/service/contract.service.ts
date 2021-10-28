@@ -105,8 +105,8 @@ export class ContractService {
       //         "left": 149,
       //         "top": "707",
       //         "number": "4",
-      //         "offsetWidth": 135,
-      //         "offsetHeight": 85
+      //         "offsetWidth": 106,
+      //         "offsetHeight": 66
       //       },
       //       {
       //         "sign_unit": "chu_ky_anh",
@@ -117,8 +117,8 @@ export class ContractService {
       //         "left": 448,
       //         "top": "21",
       //         "number": "4",
-      //         "offsetWidth": 135,
-      //         "offsetHeight": 85
+      //         "offsetWidth": 100,
+      //         "offsetHeight": 50
       //       }
       //     ]
       //   },

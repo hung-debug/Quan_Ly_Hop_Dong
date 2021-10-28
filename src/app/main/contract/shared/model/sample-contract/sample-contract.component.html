@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="sample-contract.component.scss">
 <div class="sample-contract row">
   <!--  information contract-->
   <div class="col-md-3 sample-contract__information" style="background-color: white; z-index: 10">
@@ -62,11 +63,11 @@
         <div class="location">
           <div class="location-drag">
             <div class="label">Chiều dài</div>
-            <input type="number" [readOnly]="false">
+            <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')" [ngModel]="objSignInfo.offsetWidth" [readOnly]="false">
           </div>
           <div class="location-drag">
             <div class="label">Chiều rộng</div>
-            <input type="number" [readOnly]="false">
+            <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')" [ngModel]="objSignInfo.offsetHeight" [readOnly]="false">
           </div>
         </div>
       </div>
