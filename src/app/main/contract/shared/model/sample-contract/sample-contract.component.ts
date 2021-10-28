@@ -756,14 +756,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             isObjSign.dataset_y = parseInt(e);
             signElement.setAttribute("data-y", isObjSign.dataset_y);
           }
-        } else if (property == 'size') {
-          if (locationChange == 'width') {
-            isObjSign.offsetWidth = parseInt(e);
-            signElement.setAttribute("width", isObjSign.offsetWidth);
-          } else {
-            isObjSign.offsetHeight = parseInt(e);
-            signElement.setAttribute("height", isObjSign.offsetHeight);
-          }
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
           if (data_name) {

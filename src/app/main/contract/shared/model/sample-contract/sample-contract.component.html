@@ -62,11 +62,11 @@
         <div class="location">
           <div class="location-drag">
             <div class="label">Chiều dài</div>
-            <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')" [ngModel]="signCurent.offsetWidth" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [readOnly]="false">
+            <input type="number" [readOnly]="false">
           </div>
           <div class="location-drag">
             <div class="label">Chiều rộng</div>
-            <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')" [ngModel]="signCurent.offsetHeight" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [readOnly]="false">
+            <input type="number" [readOnly]="false">
           </div>
         </div>
       </div>
