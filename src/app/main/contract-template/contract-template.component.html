@@ -4,19 +4,17 @@
     <mdb-tab title="Mẫu hợp đồng được chia sẻ"></mdb-tab>
   </mdb-tabs>
 
-  <div class="form-group">
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text">
-          <i class="fa fa-search" aria-hidden="true"></i>
-        </span>
-      </div>
-      <input type="text" id="search" class="form-control input-search" placeholder="Nhập từ khóa tìm kiếm theo tên hợp đồng"/>
-      <div class="input-group-append" style="cursor: pointer;">
-        <span class="input-group-text">
-          <i class="fa fa-filter"></i>
-        </span>
-      </div>
+  <div class="row">
+    <div class="col-md-5">
+      <div>Tên mẫu hợp đồng</div>
+      <input type="text" id="contractTemplateName" class="form-control input-search"/>
+    </div>
+    <div class="col-md-5">
+      <div>Loại mẫu hợp đồng</div>
+      <input type="text" id="contractTemplateType" class="form-control input-search"/>
+    </div>
+    <div class="col-md-2 btn_add">
+      <button type="button" class="btn btn-outline-dark btn_submit">Thêm mới</button>
     </div>
   </div>
 
@@ -44,26 +42,29 @@
         <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.createDate}}</span>
       </div>
 
-      <div class="col-md-2 calendar_deadline">
-        <span class="item_date">{{item.deadLine}}</span>
+      <div class="col-md-2 contract_code">
+        <span class="item_date">{{item.contractCode}}</span>
       </div>
 
       <div class="col-md-3 item_icon">
         <div class="row">
           <div class="col-md-100-5">
-            <i class="fa fa-clone fa_icon" ngbTooltip="Ngừng phát hành"></i>
+            <i class="fa fa_icon" [ngClass]="{
+              'fa-unlock-alt': item.status == 'Đang phát hành',
+              'fa-unlock': item.status == 'Ngừng phát hành'
+            }" [ngbTooltip]="item.status == 'Đang phát hành' ? 'Ngừng phát hành' : 'Phát hành'"></i>
           </div>
           <div class="col-md-100-5">
-            <i class="fa fa-pencil-square fa_icon" ngbTooltip="Tạo hợp đồng đơn lẻ"></i>
+            <i class="fa fa-file-o fa_icon" ngbTooltip="Tạo hợp đồng đơn lẻ"></i>
           </div>
           <div class="col-md-100-5">
-            <i class="fa fa-minus-square fa_icon" ngbTooltip="Tạo hợp đồng theo lô"></i>
+            <i class="fa fa-files-o fa_icon" ngbTooltip="Tạo hợp đồng theo lô"></i>
           </div>
           <div class="col-md-100-5">
-            <i class="fa fa-calendar-o fa_icon" ngbTooltip="Chia sẻ"></i>
+            <i class="fa fa-share-square-o fa_icon" ngbTooltip="Chia sẻ"></i>
           </div>
           <div class="col-md-100-5">
-            <i class="fa fa-calendar-o fa_icon" ngbTooltip="Xóa"></i>
+            <i class="fa fa-trash-o fa_icon icon_red" ngbTooltip="Xóa"></i>
           </div>
         </div>
       </div>

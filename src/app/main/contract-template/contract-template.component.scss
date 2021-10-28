@@ -63,13 +63,9 @@
   height: 35px;
   font-size: inherit;
 }
-.calendar_create{
+.calendar_create, .contract_code{
   text-align: center;
-  color:#106DB6
-}
-.calendar_deadline{
-  text-align: center;
-  color:red
+  color:hsl(206, 84%, 39%)
 }
 .item_date{
   padding-left: 3px;
@@ -104,6 +100,10 @@
   background: #106DB6;
   color: white;
   border: 1px solid #87CAFF;
+}
+.btn_add{
+  text-align: right;
+  align-self: flex-end;
 }
 .label_item{
   padding: 10px 0px 5px;
@@ -153,6 +153,10 @@
   font-size: 17px;
   cursor: pointer;
 }
+.icon_red{
+  color: red;
+}
+
 .contract_footer{
   padding-top: 10px;
   display: flex;

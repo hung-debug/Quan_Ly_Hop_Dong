@@ -10,6 +10,6 @@ export class ContractTemplateService {
   constructor(private http: HttpClient) { }
 
   public getContractTemplateList(): Observable<any> {
-    return this.http.get("/assets/data.json");
+    return this.http.get("/assets/data-contract-template.json");
   }
 }
