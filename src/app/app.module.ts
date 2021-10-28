@@ -36,6 +36,12 @@ import { SidebarComponent } from './main/sidebar/sidebar.component';
 import {ContractModule} from "./main/contract/contract.module";
 import { AppService } from './service/app.service';
 import { ContractTemplateComponent } from './main/contract-template/contract-template.component';
+import { AddContractTemplateComponent } from './main/contract-template/add-contract-template/add-contract-template.component';
+import { ConfirmInforContractTemplateComponent } from './main/contract-template/shared/model/confirm-infor-contract-template/confirm-infor-contract-template.component';
+import { ContractTemplateHeaderComponent } from './main/contract-template/shared/model/contract-template-header/contract-template-header.component';
+import { DetermineSignerTemplateComponent } from './main/contract-template/shared/model/determine-signer-template/determine-signer-template.component';
+import { InforContractTemplateComponent } from './main/contract-template/shared/model/infor-contract-template/infor-contract-template.component';
+import { SampleContractTemplateComponent } from './main/contract-template/shared/model/sample-contract-template/sample-contract-template.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -56,7 +62,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ForgotPasswordComponent,
     ResetPasswordComponent,
     SidebarComponent,
-    ContractTemplateComponent
+    ContractTemplateComponent,
+    AddContractTemplateComponent,
+    ConfirmInforContractTemplateComponent,
+    ContractTemplateHeaderComponent,
+    DetermineSignerTemplateComponent,
+    InforContractTemplateComponent,
+    SampleContractTemplateComponent
   ],
   imports: [
     BrowserModule,
