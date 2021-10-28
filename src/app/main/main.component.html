@@ -1,4 +1,3 @@
-
 <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
   <app-sidebar></app-sidebar>
   <main class="page-content">
@@ -7,45 +6,55 @@
           <h3>{{title}}</h3>
         </div>
         <div ngbDropdown class="d-inline-block">
-        <div class="social-icons" ngbDropdownToggle>
-            <div></div>
+          <div class="social-icons" ngbDropdownToggle>
+              <div></div>
+          </div>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
+            <button ngbDropdownItem class="drop" (click)="open(information_user_login)">
+              <i class="fa fa-user drop_icon"></i>Tài khoản
+            </button>
+            <button ngbDropdownItem class="drop" (click)="open(mymodal)">
+              <i class="fa fa-refresh drop_icon"></i>Đổi mật khẩu
+            </button>
+            <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
+              <i class="fa fa-sign-out drop_icon"></i>Đăng xuất
+            </button>
+          </div>
         </div>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1" style="margin-top: 10.5px; border-color: #368ee0;">
-          <button ngbDropdownItem style="padding: 10px; color:#106DB6"><i style="width: 20px" class="fa fa-user"></i>Tài khoản</button>
-          <button ngbDropdownItem style="padding: 10px; color:#106DB6" (click)="open(mymodal)"><i style="width: 20px" class="fa fa-unlock-alt"></i>Đổi mật khẩu</button>
-          <button ngbDropdownItem style="padding: 10px; color: #ED1C24" routerLink="/login" (click)="logout()"><i style="width: 20px" class="fa fa-sign-out"></i>Đăng xuất</button>
-        </div>
-      </div>
-
       </header>
-      <div class="container-fluid" style="margin-top: 60px;">
+
+      <div class="container-fluid content">
         <div class="row">
           <div class="form-group col-md-12">
             <router-outlet></router-outlet>
           </div>
         </div>
-        <div style="text-align: center; margin: 10px; color:#0160AE">
+        <div class="content_footer">
           @Copyright 2021 - MobiFone
         </div>
       </div>
-
   </main>
 </div>
 
 <!-- Popup reset password -->
 <ng-template #mymodal let-modal >
-  <div class="container">
+  <div class="popup_content">
     <div class="row">
-      <div class="col-md-12" style="padding: 30px;">
-        <div class="modal-header">
-          <h5>ĐỔI MẬT KHẨU</h5>
-          <button type="button" class="close" (click)="modal.dismiss('Cross click')" style="border: none;background: none;">
-            <span style="font-size: 25px;">×</span>
-          </button>
-        </div>
+      <div class="col-md-10">
+        <h4 class="popup_title">ĐỔI MẬT KHẨU</h4>
+      </div>
+      <div class="col-md-2 popup_close">
+        <span (click)="modal.dismiss('Cross click')">×</span>
+      </div>
+    </div>
 
-        <form [formGroup]="resetPasswordForm" class="mx-auto">
-          <div class="form-group" style="padding-top: 30px;">
+    <hr>
+    <div>
+      <form [formGroup]="resetPasswordForm" class="mx-auto">
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10">
+            <div class="label_item">Mật khẩu cũ</div>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" style="padding: 10px;">
@@ -56,7 +65,6 @@
                 [type]="fieldTextTypeOld ? 'text' : 'password'"
                 class="form-control"
                 formControlName="passwordOld"
-                placeholder="Mật khẩu cũ"
               />
               <div class="input-group-append">
                 <span class="input-group-text" style="padding: 10px;">
@@ -72,8 +80,13 @@
               </div>
             </div>
           </div>
+          <div class="col-md-1"></div>
+        </div>
 
-          <div class="form-group" style="padding-top: 30px;">
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10">
+            <div class="label_item">Mật khẩu mới</div>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" style="padding: 10px;">
@@ -84,7 +97,6 @@
                 [type]="fieldTextTypeNew ? 'text' : 'password'"
                 class="form-control"
                 formControlName="passwordNew"
-                placeholder="Mật khẩu mới"
               />
               <div class="input-group-append">
                 <span class="input-group-text" style="padding: 10px;">
@@ -100,8 +112,13 @@
               </div>
             </div>
           </div>
+          <div class="col-md-1"></div>
+        </div>
 
-          <div class="form-group" style="padding-top: 30px;">
+        <div class="row">
+          <div class="col-md-1"></div>
+          <div class="col-md-10">
+            <div class="label_item">Xác nhận lại mật khẩu mới</div>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text" style="padding: 10px;">
@@ -112,7 +129,6 @@
                 [type]="repeatFieldTextTypeNew ? 'text' : 'password'"
                 class="form-control"
                 formControlName="confirmPasswordNew"
-                placeholder="Xác nhận lại mật khẩu mới"
               />
               <div class="input-group-append">
                 <span class="input-group-text" style="padding: 10px;">
@@ -128,10 +144,54 @@
               </div>
             </div>
           </div>
-          <div class="form-group" style="text-align: center; padding-top: 30px;">
-            <button (click)="modal.dismiss('Cross click'); sendResetPassword()" class="btn btn-lg btn-block" style="background-color: #106DB6; color: white;">Gửi yêu cầu</button>
+          <div class="col-md-1"></div>
+        </div>
+        <div class="row" style="text-align: center; padding-top: 10px;">
+          <div class="col-md-12">
+            <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.dismiss('Cross click'); sendResetPassword()">Gửi yêu cầu</button>
           </div>
-        </form>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Popup information user login -->
+<ng-template #information_user_login let-modal >
+  <div class="popup_content">
+    <div class="row">
+      <div class="col-md-10">
+        <h4 class="popup_title">THÔNG TIN TÀI KHOẢN</h4>
+      </div>
+      <div class="col-md-2 popup_close">
+        <span (click)="modal.dismiss('Cross click')">×</span>
+      </div>
+    </div>
+    <hr>
+    <div>
+      <div class="row">
+        <div class="col-md-12 item_text">
+          <div><i class="fa fa-address-book-o fa_icon"></i><span class="label_infor">Họ tên: Admin</span></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 item_text">
+          <div><i class="fa fa-envelope-o fa_icon"></i><span class="label_infor">Email: anhnt@vhc.com.vn</span></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 item_text">
+          <div><i class="fa fa-institution fa_icon"></i><span class="label_infor">Tổ chức: Công ty cổ phần phần mềm công nghệ cao Việt Nam</span></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 item_text">
+          <div><i class="fa fa-pencil fa_icon"></i> <a href=""><span class="label_infor">Thay đổi chữ ký</span></a></div>
+        </div>
       </div>
     </div>
   </div>

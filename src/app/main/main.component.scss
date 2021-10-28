@@ -102,3 +102,77 @@ h3{
   font-weight: 500;
 }
 
+//dropdown menu
+.drop_menu{
+  margin-top: 10.5px;
+  border-color: #368ee0;
+}
+.drop{
+  padding: 10px;
+  color:#106DB6
+}
+.drop_red{
+  padding: 10px;
+  color: #ED1C24
+}
+.drop_icon{
+  width: 20px
+}
+
+//content
+.content{
+  margin-top: 60px;
+}
+.content_footer{
+  text-align: center;
+  margin: 10px;
+  color:#0160AE;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+//popup
+.popup_content{
+  padding: 30px;
+}
+.popup_title{
+  margin: 0;
+  font-weight: 500;
+}
+.popup_close{
+  font-size: 25px;
+  text-align: right;
+  cursor: pointer;
+}
+.btn_close {
+  width: 90px;
+  font-size: inherit;
+  background: #6c6c6d;
+  color: white;
+  border: 1px solid #808183;
+}
+.btn_submit{
+  width: 100px;
+  font-size: inherit;
+  background: #106DB6;
+  color: white;
+  border: 1px solid #87CAFF;
+}
+.label_item{
+  padding: 10px 0px 5px;
+  color: #5e5e5e;
+}
+.item_text{
+  padding: 10px;
+}
+
+.fa_icon{
+  font-size: 18px;
+  color: #106DB6;
+}
+.label_infor{
+  font-weight: 500;
+  padding-left: 15px;
+}
+
+
