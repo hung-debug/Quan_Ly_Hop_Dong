@@ -35,10 +35,9 @@
         </div>
         <div class="sign-unit-select">
           <label class="label-require">Người ký: *</label>
-          <select class="form-select" aria-label="Default select example">
-            <option value="3">Phạm Minh Chính</option>
-            <option value="1">Đỗ Thành Dương</option>
-            <option value="2">Phạm Văn Lâm</option>
+          <select class="form-select" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
+            <option value="" hidden>Chọn người ký</option>
+            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}">{{d.name}}</option>
           </select>
         </div>
 
@@ -48,12 +47,12 @@
         <label class="label-require">Vị trí</label>
         <div class="location">
           <div class="location-drag">
-            <span class="label">X:</span>
-            <input type="text" (ngModelChange)="changePositionSign($event, 'x')" [ngModel]="objSignInfo.traf_x" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [readOnly]="false">
+            <div class="label" style="text-align: center">X:</div>
+            <input type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')" [ngModel]="objSignInfo.traf_x" [readOnly]="false">
           </div>
           <div class="location-drag">
-            <span class="label">Y:</span>
-            <input type="text" (ngModelChange)="changePositionSign($event, 'y')" [ngModel]="objSignInfo.traf_y" oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [readOnly]="false">
+            <div class="label" style="text-align: center">Y:</div>
+            <input type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')" [ngModel]="objSignInfo.traf_y" [readOnly]="false">
           </div>
         </div>
       </div>
@@ -62,12 +61,12 @@
         <label class="label-require">Kích thước</label>
         <div class="location">
           <div class="location-drag">
-            <span class="label" style="font-size: 13px">Chiều dài</span>
-            <input type="text">
+            <div class="label">Chiều dài</div>
+            <input type="number" [readOnly]="false">
           </div>
           <div class="location-drag">
-            <span class="label" style="font-size: 13px">Chiều rộng</span>
-            <input type="text">
+            <div class="label">Chiều rộng</div>
+            <input type="number" [readOnly]="false">
           </div>
         </div>
       </div>
@@ -86,11 +85,11 @@
              (click)="getSignSelect(d)"
              [ngClass]="changeColorDrag(null,true)"
              [ngStyle]="changePosition(d)">
+          <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
           <div class="sig-img-daky" (click)="onCancel($event, d)">
             <img src="assets/img/clear.svg" alt="">
             <img src="assets/img/border-clear.svg" alt="">
           </div>
-<!--          <img src="assets/img/icons/cancel-sign.svg" (click)="onCancel($event, d)" class="sig-img-daky">-->
           <app-sign-contract [datas]="datas" [sign]="d"></app-sign-contract>
         </div>
       </div>

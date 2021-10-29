@@ -100,7 +100,10 @@
         select {
           color: #333333;
           border: 1px solid #87CAFF;
+          outline: none;
         }
+
+        select:invalid { color: gray; }
       }
     }
 
@@ -110,10 +113,19 @@
         justify-content: space-around
       }
       .location-drag {
-        span {
-          padding-right: 20px;
-          font-size: 13px;
-          color: #666666
+        //display: flex;
+        float: left;
+        align-items: center;
+        div {
+          //padding-right: 20px;
+          width: 88px;
+          //font-size: 13px;
+          color: #666666;
+
+          text-align: center;
+          float: left;
+          padding-right: 15px;
+          padding-top: 10px;
         }
         input {
           outline: none;
@@ -201,6 +213,14 @@
   /* This makes things *much* easier */
   box-sizing: border-box;
   //padding: 10px;
+
+  .name-sig-img-daky {
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    left: 6px;
+    padding: 0 4px;
+  }
 
   .sig-img-daky {
     cursor: pointer;

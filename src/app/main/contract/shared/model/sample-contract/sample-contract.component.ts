@@ -64,8 +64,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     traf_x: 0,
     traf_y: 0,
     x1: 0,
-    y1: 0
+    y1: 0,
+    offsetHeight: 0,
+    offsetWidth: 0
   }
+  list_sign_name: any = [
+    {name: "Đỗ Thành Dương", id: "1"},
+    {name: "Đỗ Thanh Dương", id: "2"},
+    {name: "Phạm Văn Luân", id: "3"},
+    {name: "Phạm Văn Lâm", id: "4"}
+  ];
   // listDelete = [];
   signCurent: any;
   formatDate: any;
@@ -84,6 +92,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   widthDrag: any;
   location_sign_x: any = 0;
   location_sign_y: any = 0;
+  isEnableSelect: boolean = true;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -94,6 +103,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     // console.log(this.datas);
+
     this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
 
     // console.log(this.datas.contract_user_sign)
@@ -103,6 +113,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         item['sign_config'] = JSON.parse(item['sign_config']);
       }
     })
+
+    this.list_sign_name.forEach((item: any) => {
+      item['selected'] = false;
+    })
+
+    if (!this.signCurent) {
+      this.signCurent = {
+        offsetWidth: 0,
+        offsetHeight: 0
+      }
+
+    }
 
     // convert base64 file pdf to url
     this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
@@ -278,11 +300,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           _sign.setAttribute("data-y", layerY + "px");
           this.objSignInfo.traf_x = layerX;
           this.objSignInfo.traf_y = layerY;
+          //
+          this.objSignInfo['id'] = this.signCurent['id'];
+          //
           this.tinhToaDoSign(event.relatedTarget.id, this.signCurent.offsetWidth, this.signCurent.offsetHeight, this.objSignInfo);
           this.signCurent.position = _array.join(",");
           _sign.style.display = '';
           // @ts-ignore
           _sign.style["z-index"] = '1';
+          this.isEnableSelect = false;
 
           // show toa do keo tha chu ky (demo)
           // this.location_sign_x = this.signCurent['dataset_x'];
@@ -451,6 +477,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   eventMouseover() {
     if (!this.datas.isView) {
       this.objDrag = {};
+      let count_total = 0;
       this.datas.contract_user_sign.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           let arrSignConfigItem = element.sign_config;
@@ -460,9 +487,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 count: 2
               }
             }
+            count_total++;
           })
         }
       });
+      if (count_total == 0) {
+        this.isEnableSelect = true;
+      }
     }
   }
 
@@ -558,21 +589,49 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
-  changePosition(d?: any) {
+  changePosition(d?: any, e?: any, sizeChange?: any) {
     let style: any = {
       "transform": 'translate(' + d['dataset_x'] + 'px, ' + d['dataset_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
     }
-    if (d['offsetWidth']) {
-      style.width = parseInt(d['offsetWidth']) + "px";
-    } else {
-    }
 
-    if (d['offsetHeight']) {
-      style.height = parseInt(d['offsetHeight']) + "px";
-    } else {
-    }
+    // if (sizeChange == "width" && e) {
+    //   let signElement = document.getElementById(this.objSignInfo.id);
+    //   if (signElement) {
+    //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+    //     if (isObjSign) {
+    //       if (sizeChange == 'width') {
+    //         style.width = parseInt(e) + 'px';
+    //       } else {
+    //         style.height = parseInt(e) + 'px';
+    //       }
+    //     }
+    //   }
+    // } else {
+      if (d['offsetWidth']) {
+        style.width = parseInt(d['offsetWidth']) + "px";
+      }
+    // }
+
+    // if (sizeChange == "height" && e) {
+    //   let signElement = document.getElementById(this.objSignInfo.id);
+    //   if (signElement) {
+    //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+    //     if (isObjSign) {
+    //       if (sizeChange == 'width') {
+    //         style.width = parseInt(e) + 'px';
+    //       } else {
+    //         style.height = parseInt(e) + 'px';
+    //       }
+    //     }
+    //   }
+    // } else {
+      if (d['offsetHeight']) {
+        style.height = parseInt(d['offsetHeight']) + "px";
+      }
+    // }
+
     return style;
   }
 
@@ -596,11 +655,50 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  // get select người ký
   getSignSelect(d: any) {
-    // this.location_sign_x = d.dataset_x;
-    // this.location_sign_y = d.dataset_y;
-    console.log(d);
+    // lấy lại id của đối tượng ký khi click
+    let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
+    let signElement;
+    if (set_id) {
+      // set lại id cho đối tượng ký đã click
+      this.objSignInfo.id = set_id.id;
+      signElement = document.getElementById(this.objSignInfo.id);
+    } else
+    signElement = document.getElementById(this.objSignInfo.id);
+    if (signElement) {
+      let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+      // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
+      if (isObjSign) {
+        this.objSignInfo.traf_x = d.dataset_x;
+        this.objSignInfo.traf_y = d.dataset_y;
+        // this.signCurent.name = d.name;
+      }
+      if (d.name) {
+        this.list_sign_name.forEach((item: any) => {
+          // if (item.id == d.id) {
+          if (item.name == d.name) {
+            item.selected = true;
+          } else item.selected = false;
+        })
+      }
+    }
   }
+
+  // getIdSignClick() {
+  //   let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
+  //   return set_id.id;
+  //   // this.datas.contract_user_sign.forEach((element: any, index: any) => {
+  //   //   if (element.id == id) {
+  //   //     if (element.sign_config.length == 0) {
+  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
+  //   //     } else {
+  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-' + (element.sign_config.length) + '_' + element.id;
+  //   //     }
+  //   //     // element['sign_config'].push(_obj);
+  //   //   }
+  //   // })
+  // }
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   onCancel(e: any, data: any) {
@@ -643,21 +741,47 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     interact.removeDocument(document);
   }
 
-  changePositionSign(e: any, locationChange: any) {
-    console.log(e, locationChange);
+  // edit location doi tuong ky
+  changePositionSign(e: any, locationChange: any, property: any) {
+    console.log(e, property);
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       if (isObjSign) {
-        if (locationChange == 'x') {
-          isObjSign.dataset_x = parseInt(e.value);
-          signElement.setAttribute("data-x", isObjSign.dataset_x);
+        if (property == 'location') {
+          if (locationChange == 'x') {
+            isObjSign.dataset_x = parseInt(e);
+            signElement.setAttribute("data-x", isObjSign.dataset_x);
+          } else {
+            isObjSign.dataset_y = parseInt(e);
+            signElement.setAttribute("data-y", isObjSign.dataset_y);
+          }
         } else {
-          isObjSign.dataset_y = parseInt(e.value);
-          signElement.setAttribute("data-y", isObjSign.dataset_y);
+          let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
+          if (data_name) {
+            isObjSign.name = data_name.name;
+            signElement.setAttribute("name", isObjSign.name);
+          }
         }
+        // console.log(this.signCurent)
+        // console.log(this.objSignInfo)
       }
     }
+  }
+
+  // edit size doi tuong ky
+  // changeSizeSign(e: any, sizeChange: any) {
+  //   let signElement = document.getElementById(this.objSignInfo.id);
+  //   if (signElement) {
+  //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+  //     if (isObjSign) {
+  //
+  //     }
+  //   }
+  // }
+
+  getValue(e: any) {
+    console.log(e.target.value)
   }
 
 
