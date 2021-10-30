@@ -1,3 +1,4 @@
+import { ContractTemplateComponent } from './main/contract-template/contract-template.component';
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
 import { AddContractComponent } from './main/contract/add-contract/add-contract.component';
@@ -43,12 +44,16 @@ const routes: Routes = [
         component: UserGroupComponent,
       },
       {
-        path: 'contract',
+        path: 'contract/:status',
         component: ContractComponent,
       },
       {
         path: 'add-contract',
         component: AddContractComponent,
+      },
+      {
+        path: 'contract-template',
+        component: ContractTemplateComponent,
       },
       // {
       //   path: 'step-3-contract',

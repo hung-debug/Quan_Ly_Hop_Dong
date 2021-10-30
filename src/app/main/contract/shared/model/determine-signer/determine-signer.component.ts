@@ -32,7 +32,7 @@ export class DetermineSignerComponent implements OnInit {
 
   ngOnInit(): void {
     this.userForm = this.formBuilder.group({
-      order: '1',
+      order: 1,
       name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
       userViews: this.formBuilder.array([]) ,
       userSigns: this.formBuilder.array([]) ,
@@ -41,13 +41,16 @@ export class DetermineSignerComponent implements OnInit {
     });
 
     this.partners = this.formBuilder.group({
-      order: '1',
+      order: 1,
+      type: 2,
       name: '',
       partnerLeads: this.formBuilder.array([]) ,
       partnerViews: this.formBuilder.array([]) ,
       partnerSigns: this.formBuilder.array([]) ,
       // partnerSigns: (this.datas.partners && this.datas.partners.partnerSigns.length > 0) ? this.formBuilder.array(this.datas.partners.partnerSigns) : this.formBuilder.array([]) ,
       partnerDocs: this.formBuilder.array([]) ,
+
+      partnerUsers: this.formBuilder.array([]) ,
     });
 
     this.signTypeList = [
@@ -58,10 +61,6 @@ export class DetermineSignerComponent implements OnInit {
       {
         item_id: 2,
         item_text: "Ký số bằng USB token",
-      },
-      {
-        item_id: 3,
-        item_text: "Ký số khác",
       }
     ];
 
@@ -91,7 +90,7 @@ export class DetermineSignerComponent implements OnInit {
   }
   newUserView(): FormGroup {
     return this.formBuilder.group({
-      order: '1',
+      order: 1,
       name: '',
       email: '',
     })
@@ -109,7 +108,7 @@ export class DetermineSignerComponent implements OnInit {
   }
   newUserSign(): FormGroup {
     return this.formBuilder.group({
-      order: '1',
+      order: 1,
       name: '',
       email: '',
       signType: '',
@@ -131,7 +130,7 @@ export class DetermineSignerComponent implements OnInit {
   }
   newUserDoc(): FormGroup {
     return this.formBuilder.group({
-      order: '1',
+      order: 1,
       name: '',
       email: '',
       signType: '',
@@ -153,7 +152,7 @@ export class DetermineSignerComponent implements OnInit {
   }
   newPartnerLead(): FormGroup {
     return this.formBuilder.group({
-      order: '1',
+      order: 1,
       name: '',
       email: '',
     })
@@ -171,7 +170,7 @@ export class DetermineSignerComponent implements OnInit {
   }
   newPartnerView(): FormGroup {
     return this.formBuilder.group({
-      order: '1',
+      order: 1,
       name: '',
       email: '',
     })
@@ -189,7 +188,7 @@ export class DetermineSignerComponent implements OnInit {
   }
   newPartnerSign(): FormGroup {
     return this.formBuilder.group({
-      order: '1',
+      order: 1,
       name: '',
       email: '',
       signType: '',
@@ -211,7 +210,7 @@ export class DetermineSignerComponent implements OnInit {
   }
   newPartnerDoc(): FormGroup {
     return this.formBuilder.group({
-      order: '1',
+      order: 1,
       name: '',
       email: '',
       signType: '',
@@ -222,6 +221,27 @@ export class DetermineSignerComponent implements OnInit {
   }
   removePartnerDoc(i:number) {
     this.partnerDocs().removeAt(i);
+  }
+
+  //partner user (ca nhan)
+  partnerUsers() : FormArray {
+    return this.partners.get("partnerUsers") as FormArray
+  }
+  newPartnerUser(): FormGroup {
+    return this.formBuilder.group({
+      order: 1,
+      name: '',
+      email: '',
+      signType: '',
+      isOtp: true,
+      phone: '',
+    })
+  }
+  addPartnerUser() {
+    this.partnerUsers().push(this.newPartnerUser());
+  }
+  removePartnerUser(i:number) {
+    this.partnerUsers().removeAt(i);
   }
 
   onSubmit() {

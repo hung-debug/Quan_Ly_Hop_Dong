@@ -18,21 +18,21 @@
               <span *ngIf="menu.badge" class="badge badge-pill" [ngClass]="menu.badge.class">{{menu.badge.text}}</span>
             </a>
             <!-- Menu click link -->
-            <a *ngIf="menu.href !== '#'" (click)='clickLink(menu)'>
+            <a *ngIf="menu.href !== '#' && menu.title != 'Tạo mới'" (click)='clickLink(menu)'>
               <i class="{{menu.icon}}" style="font-size: 16px;"></i>
               <span>{{menu.title}}</span>
               <span *ngIf="menu.badge" class="badge badge-pill" [ngClass]="menu.badge.class">{{menu.badge.text}}</span>
             </a>
+            <span *ngIf="menu.title === 'Tạo mới'" (click)='clickLink(menu)' class="sub_title_add">
+              <button class="btn_add_contract">
+                <span class="fa fa-plus icon_add"></span>TẠO MỚI HĐ
+              </button>
+            </span>
             <!-- Sub menu -->
             <div *ngIf="menu.type === 'dropdown'" class="sidebar-submenu" [@slide]="getState(menu)">
               <ul>
                 <li *ngFor="let submenu of menu.submenus" [ngClass]="{'active':submenu.active}">
-                  <span *ngIf="submenu.title === 'Tạo mới'" (click)='clickLinkSub(menu, submenu)' class="sub_title_add">
-                    <button class="btn_add_contract">
-                      <span class="fa fa-plus icon_add"></span>TẠO MỚI
-                    </button>
-                    <span *ngIf="submenu.badge" class="badge badge-pill" [ngClass]="submenu.badge.class">{{submenu.badge.text}}</span>
-                  </span>
+
                   <a *ngIf="submenu.title != 'Tạo mới'" (click)='clickLinkSub(menu, submenu)'>
                     <span class="sub_title">{{submenu.title}}</span>
                     <span *ngIf="submenu.badge" class="badge badge-pill" [ngClass]="submenu.badge.class">{{submenu.badge.text}}</span>

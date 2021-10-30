@@ -1,35 +1,5 @@
 <!-- form step 1 -->
-<div class="select-file-contract">
-  <div class="file-approve">
-    <div class="label">File hợp đồng: <span style="color: red">*</span></div>
-    <input id="file-input"
-           type="file"
-           accept=".pdf"
-           (change)="fileChanged($event)"
-           style="display: none;"/>
-    <div class="select-contract" (click)="addFile()">
-      <input type="text" placeholder="Chọn file hợp đồng (PDF, DOC, DOCX)" readonly [ngModel]="this.datas.file_name">
-      <img src="assets/img/attachment.svg" alt="mobifone.contract">
-    </div>
-  </div>
-</div>
-
-<!--<div class="content-information-sign" *ngFor="let d of this.datas.dataDetails"-->
-<!--     style="border-radius: 5px; border: 1px solid #ddd; margin-bottom: 22px">-->
-<!--  <div-->
-<!--    style="color: #0160AE; background-color: #C7D0E9; height: 42px; display: flex;align-items: center; padding-left: 16px">{{d.title}}</div>-->
-<!--  <div style="padding: 36px;">-->
-<!--    <div *ngFor="let data of d.property_name" style="display: flex; flex-direction: column; margin-bottom: 15px">-->
-<!--      <div>{{data.name}}: <span style="color: red">*</span></div>-->
-<!--      <input type="text"-->
-<!--             style="border-radius: 5px; border: 1px solid #2174B8; height: 40px; width: 400px; outline: none"-->
-<!--             [(ngModel)]="data.value">-->
-<!--    </div>-->
-<!--  </div>-->
-
-<!--</div>-->
-
-<form [formGroup]="inforDetails" id="msform">
+<div>
   <div class="row">
     <div class="radio col-md-4 label_type">
       <label><input type="radio" name="type" checked> Hợp đồng đơn lẻ không theo mẫu</label>
@@ -41,22 +11,24 @@
       <label><input type="radio" name="type"> Hợp đồng theo lô</label>
     </div>
   </div>
+
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
         <div class="label_item">Tên hợp đồng <span class="require_star">*</span></div>
         <div class="input-group">
-          <input type="text" id="contractName" class="form-control" formControlName="contractName"/>
+          <input type="text" id="contractName" [(ngModel)]="contractName" class="form-control"/>
         </div>
       </div>
     </div>
   </div>
+
   <div class="row">
     <div class="col-md-5">
       <div class="form-group">
         <div class="label_item">Số hợp đồng</div>
         <div class="input-group">
-          <input type="text" id="contractNumber" class="form-control" formControlName="contractNumber"/>
+          <input type="text" id="contractNumber" [(ngModel)]="contractNumber" class="form-control"/>
         </div>
       </div>
     </div>
@@ -65,22 +37,13 @@
       <div class="form-group">
         <div class="label_item">Loại hợp đồng</div>
         <div class="col">
-          <ng-multiselect-dropdown
-            formControlName="contractType"
-            [placeholder]="'-- Chọn --'"
-            [settings]="dropdownTypeSettings"
-            [data]="contractTypeList">
-            <ng-template
-              #optionsTemplate
-              let-item
-              let-option="option"
-              let-id="id"
-              let-isSelected="isSelected">
+          <ng-multiselect-dropdown id="contractType" [(ngModel)]="contractType" [placeholder]="'-- Chọn --'"
+            [settings]="dropdownTypeSettings" [data]="contractTypeList">
+            <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
               <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                <label
-                  style="color: #333; font-weight: normal;"
-                  [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractTypeItems[id].isDisabled? 'lightgrey': ''}"
-                >{{getContractTypeItems[id].item_text}}</label>
+                <label style="color: #333; font-weight: normal;"
+                  [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractTypeItems[id].isDisabled? 'lightgrey': ''}">{{getContractTypeItems[id].item_text}}
+                </label>
               </div>
             </ng-template>
           </ng-multiselect-dropdown>
@@ -92,15 +55,35 @@
   <div class="row">
     <div class="col-md-5">
       <div class="form-group">
-        <div class="label_item">File hợp đồng <span class="require_star">*</span></div>
-
+        <div class="select-file-contract">
+          <div class="file-approve">
+            <div class="label_item">File hợp đồng <span class="require_star">*</span></div>
+            <input id="file-input" type="file" accept=".pdf"
+                  (change)="fileChanged($event)" style="display: none;"/>
+            <div class="select-contract" (click)="addFile()">
+              <input type="text" placeholder="Chọn file hợp đồng (PDF, DOC, DOCX, PNG, JPG, JPGE)" readonly [ngModel]="this.datas.file_name">
+              <img src="assets/img/attachment.svg" alt="mobifone.contract">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5">
       <div class="form-group">
-        <div class="label_item">File đính kèm</div>
-        <div>
+        <div class="select-file-contract">
+          <div class="file-approve">
+            <div class="label_item">File đính kèm</div>
+            <input id="attachFile" type="file" accept=".pdf, .doc, .docx"
+                  (change)="fileChangedAttach($event)" style="display: none;" multiple/>
+            <div class="select-contract" (click)="addFileAttach()">
+              <input type="text" placeholder="Chọn file đính kèm (PDF, DOC, DOCX)" readonly [ngModel]="this.datas.file_name_attach">
+              <img src="assets/img/attachment.svg" alt="mobifone.contract">
+            </div>
+          </div>
+        </div>
+
+        <!-- <div>
           <label for="file-upload-attach" class="custom-file-upload">
             <i class="fa fa-cloud-upload"></i> File PDF, DOC, DOCX
           </label>
@@ -139,7 +122,7 @@
               <a href="{{ fileAttach.url }}">{{ fileAttach.name }}</a>
             </li>
           </ul>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -149,22 +132,15 @@
       <div class="form-group">
         <div class="label_item">Hợp đồng liên quan</div>
         <div class="col">
-          <ng-multiselect-dropdown
-            formControlName="contractConnect"
-            [placeholder]="'-- Chọn --'"
-            [settings]="dropdownConnectSettings"
-            [data]="contractConnectList">
-            <ng-template
-              #optionsTemplate
-              let-item
-              let-option="option"
-              let-id="id"
-              let-isSelected="isSelected">
+          <ng-multiselect-dropdown id="contractConnect" [(ngModel)]="contractConnect" [placeholder]="'-- Chọn --'"
+            [settings]="dropdownConnectSettings" [data]="contractConnectList">
+            <ng-template #optionsTemplate let-item let-option="option"
+              let-id="id" let-isSelected="isSelected">
               <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                <label
-                  style="color: #333; font-weight: normal;"
-                  [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}"
-                >{{getContractConnectItems[id].item_text}}</label>
+                <label style="color: #333; font-weight: normal;"
+                  [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                  {{getContractConnectItems[id].item_text}}
+                </label>
               </div>
             </ng-template>
           </ng-multiselect-dropdown>
@@ -176,11 +152,7 @@
       <div class="form-group">
         <div class="label_item">Ngày đến hạn ký</div>
         <div class="input-group">
-          <mat-form-field appearance="fill">
-            <input matInput [matDatepicker]="picker2" formControlName="dateDeadline">
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
-          </mat-form-field>
+          <ngx-datepicker id="dateDeadline" [(ngModel)]="dateDeadline" [options]="options" class="date-picker"></ngx-datepicker>
         </div>
       </div>
     </div>
@@ -191,15 +163,12 @@
       <div class="form-group">
         <div class="label_item">Lời nhắn</div>
         <div class="input-group">
-          <input type="text" id="comment" class="form-control" formControlName="comment"/>
+          <input type="text" id="comment" [(ngModel)]="comment" class="form-control"/>
         </div>
       </div>
     </div>
   </div>
-</form>
+</div>
 
 <button (click)="next()" type="button" name="next" class="next action-button pull-right">Tiếp theo</button>
-
-<br/>
-{{this.inforDetails.value | json}}
 

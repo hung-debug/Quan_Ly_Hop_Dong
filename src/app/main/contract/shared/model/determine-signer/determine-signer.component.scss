@@ -19,7 +19,7 @@
   font-weight: 500;
 }
 .label_item{
-  padding: 10px 0px 5px;
+  padding: 12px 0px 3px;
   color: #5e5e5e;
 }
 .order{
@@ -28,7 +28,7 @@
   align-items: center;
 }
 .order_input{
-  background: #e3e3e3;
+  background: #f9f9f9;
   width: 44px;
   text-align: center;
 }
@@ -64,7 +64,20 @@
 .textOrg{
   font-size: inherit;
 }
-
+.form-control{
+  border: 1px solid #87CAFF;
+}
+.form-control:disabled, .form-control[readonly] {
+  background-color: #f9f9f9;
+}
+hr{
+  border: 1px solid #0160AE;
+}
+.label_type{
+  text-align: center;
+  font-weight: 500;
+  padding: 10px;
+}
 //input type number
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
