@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { SidebarService } from './sidebar.service';
 import { Router } from '@angular/router';
@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
   ]
 })
 export class SidebarComponent implements OnInit {
+  @Output() evenSelectSidebar = new EventEmitter<string>();
   menus:any = [];
   subMenus:any = [];
   constructor(
@@ -47,7 +48,7 @@ export class SidebarComponent implements OnInit {
   }
 
   //set active link
-  clickLink(currentMenu:any){
+  clickLink(currentMenu:any, nameFeature?: string){
     this.menus.forEach((element:any) => {
       if (element === currentMenu) {
         currentMenu.active = !currentMenu.active;
@@ -55,6 +56,9 @@ export class SidebarComponent implements OnInit {
         element.active = false;
       }
     });
+    if (nameFeature && nameFeature == "create-contract-new") {
+      this.evenSelectSidebar.emit(nameFeature)
+    } else this.evenSelectSidebar.emit(undefined)
     this.router.navigate(['/' + currentMenu.href]);
   }
 

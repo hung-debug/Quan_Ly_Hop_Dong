@@ -96,7 +96,6 @@ input[type=number] {
     max-width: 100% !important;
   }
 }
-
 //style button
 .action-button {
   width: 100px;
@@ -120,6 +119,17 @@ input[type=number] {
   cursor: pointer;
   padding: 10px 5px;
   margin: 10px 5px;
+}
+
+.footer-determine {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .content_footer {
+    color:#0160AE;
+    font-size: 13px;
+    font-weight: 500;
+  }
 }
 
 

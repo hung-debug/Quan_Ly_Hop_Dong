@@ -29,7 +29,7 @@
   }
 
   .viewer-pdf.isDrag{
-    height: calc(100vh - 229px);
+    height: calc(100vh - 221px);
     overflow-x: auto;
     text-align: center;
     background-color: rgba(239, 239, 239, 1);
@@ -262,7 +262,7 @@
   border-radius: 5px;
   cursor: pointer;
   padding: 10px 5px;
-  margin: 10px 5px;
+  margin: 5px 5px;
 }
 
 .action-button-previous {
@@ -274,9 +274,17 @@
   border-radius: 5px;
   cursor: pointer;
   padding: 10px 5px;
-  margin: 10px 5px;
+  margin: 5px 5px;
 }
 
-.footer {
+.footer-sample-contract {
   border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .content_footer {
+    color:#0160AE;
+    font-size: 13px;
+    font-weight: 500;
+  }
 }

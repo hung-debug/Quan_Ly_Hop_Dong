@@ -1,5 +1,5 @@
 <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
-  <app-sidebar></app-sidebar>
+  <app-sidebar (evenSelectSidebar)="getName($event)"></app-sidebar>
   <main class="page-content">
       <header>
         <div class="search-wrapper">
@@ -29,7 +29,7 @@
             <router-outlet></router-outlet>
           </div>
         </div>
-        <div class="content_footer">
+        <div *ngIf="this.isShowCopyRight && this.isRouterContractNew" class="content_footer">
           @Copyright 2021 - MobiFone
         </div>
       </div>

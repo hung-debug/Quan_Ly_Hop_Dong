@@ -124,7 +124,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.userForm.userSigns.forEach((item: any) => {
         item['selected'] = false;
         item['sign_unit'] = 'organization'
-        // item.name = 'Tổ chức của tôi - ' + item.name
         this.list_sign_name.push(item)
       })
     }
@@ -133,7 +132,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.partners.partnerSigns.forEach((item: any) => {
         item['selected'] = false;
         item['sign_unit'] = 'partner'
-        // item.name = 'Đối tác - ' + item.name
+        this.list_sign_name.push(item)
+      })
+    } else if (this.datas.partners.partnerUsers && this.datas.partners.partnerUsers.length > 0) {
+      this.datas.partners.partnerUsers.forEach((item: any) => {
+        item['selected'] = false;
+        item['sign_unit'] = 'partner'
         this.list_sign_name.push(item)
       })
     }
@@ -338,10 +342,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           // show toa do keo tha chu ky (demo)
           // this.location_sign_x = this.signCurent['dataset_x'];
           // this.location_sign_y  = this.signCurent['dataset_y'];
-
         }
 
-        this.objSignInfo.traf_y = Math.round(this.signCurent['dataset_x']);
+        this.objSignInfo.traf_x = Math.round(this.signCurent['dataset_x']);
         this.objSignInfo.traf_y = Math.round(this.signCurent['dataset_y']);
 
         this.tinhToaDoSign(event.relatedTarget.id, event.rect.width, event.rect.height, this.objSignInfo);
@@ -821,6 +824,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if (data_name) {
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
+
+            isObjSign.signature_party = data_name.sign_unit;
+            signElement.setAttribute("signature_party", isObjSign.signature_party);
           }
         }
         // console.log(this.signCurent)
@@ -848,6 +854,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   next() {
     if (!this.validData()) return;
     else {
+      console.log(this.datas);
       this.step = variable.stepSampleContract.step4;
       this.datas.stepLast = this.step
       this.nextOrPreviousStep(this.step);
@@ -865,6 +872,65 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (!data_not_drag) {
       alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')
       return false;
+    } else {
+      let count = 0;
+      let arrSign_organization: { name: any; signature_party: any; }[] = [];
+      let arrSign_partner: { name: any; signature_party: any; }[] = [];
+      this.datas.contract_user_sign.forEach((element: any) => {
+        if (element.sign_config.length > 0) {
+          element.sign_config.forEach((item: any) => {
+            if (!item.name) {
+              count++;
+            } else {
+              let data_sign = {
+                name: item.name,
+                signature_party: item.signature_party
+              }
+              if (item.signature_party == "organization")
+                arrSign_organization.push(data_sign);
+              else arrSign_partner.push(data_sign);
+            }
+          })
+        }
+      })
+      if (count > 0) {
+        alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
+        return false;
+      } else {
+        let data_organization = this.list_sign_name.filter((p: any) => p.signature_party == "organization");
+        if (arrSign_organization.length < data_organization.length) {
+          alert('Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!');
+          return false;
+        } else if (arrSign_organization.length >= data_organization.length) {
+          let total_not_confilic = 0;
+          data_organization.forEach((item: any) => {
+            arrSign_organization.forEach((element: any) => {
+              if (item.name != element.name) {
+                total_not_confilic++;
+              }
+            })
+          })
+
+          if (total_not_confilic > 0) {
+            alert('Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!')
+            return false;
+          }
+        }
+
+        let data_partner = this.list_sign_name.filter((p: any) => p.signature_party == "partner");
+        if (data_partner.length > 0) {
+
+        }
+
+          // if (arrSign_organization.length < this.list_sign_name.length) {
+          //   alert('Vui lòng chọn đủ người ký trong danh sách người ký vào hợp đồng!')
+          //   return false;
+          // } else if (arrSign.length >= this.list_sign_name.length) {
+          //   arrSign.forEach((item: any) => {
+          //
+          //   })
+          // }
+      }
     }
     return true;
   }
