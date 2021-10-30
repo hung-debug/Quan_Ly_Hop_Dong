@@ -121,18 +121,13 @@
         <div class="col-md-6">
           <div class="label_item">Từ ngày (ngày tạo)</div>
           <div class="input-group">
-            <input type="text" id="startCreateDate" class="form-control"/>
+            <ngx-datepicker [(ngModel)]="startCreateDate" [options]="options" class="date-picker"></ngx-datepicker>
           </div>
         </div>
         <div class="col-md-6">
           <div class="label_item">Đến ngày (ngày tạo)</div>
           <div class="input-group">
-            <input type="text" id="endCreateDate" class="form-control"/>
-            <!-- <mat-form-field appearance="fill">
-            <input matInput [matDatepicker]="picker2" formControlName="dateDeadline">
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
-          </mat-form-field> -->
+            <ngx-datepicker [(ngModel)]="endCreateDate" [options]="options" class="date-picker"></ngx-datepicker>
           </div>
         </div>
       </div>
