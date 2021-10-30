@@ -1,18 +1,7 @@
-::ng-deep .mat-form-field {
-  width: 100%;
-
-  .mat-form-field-flex {
-    padding: 0 .75em 0 .75em !important;
-    background: white;
-    border: 1px solid #ced4da !important;
-    border-radius: .25rem;
-  }
-  .mat-form-field-underline {
-    position: absolute;
-    width: 0%;
-  }
-  .mat-form-field-wrapper {
-    padding-bottom: 0;
+::ng-deep .multiselect-dropdown {
+  .dropdown-btn {
+    border: 1px solid #87CAFF !important;
+    height: 38px;
   }
 }
 
@@ -39,8 +28,7 @@ input[type="file"] {
 
 //label item form
 .label_item{
-  padding: 10px 0px 5px;
-  color: #5e5e5e;
+  padding: 12px 0px 3px;
 }
 
 .require_star{
@@ -55,23 +43,17 @@ input[type="file"] {
 
 .select-file-contract {
   display: flex;
-  //flex-direction: column;
   justify-content: space-between;
-  margin-bottom: 22px;
-
+  width : 100%;
   .file-approve {
-    .label {
-      font-size: 15px;
-      font-family: Roboto, "Helvetica Neue", sans-serif;
-    }
-
+    width : 100%;
     .select-contract {
       position: relative;
-      width: 425px;
+      width: 100%;
       input {
         outline: none;
-        width: 400px;
-        height: 48px;
+        width: 100%;
+        height: 38px;
         border-radius: 5px;
         border: 1px solid #87CAFF;
         padding-left: 10px;
@@ -80,12 +62,16 @@ input[type="file"] {
       img {
         cursor: pointer;
         position: absolute;
-        top: 15px;
-        right: 35px;
+        top: 10px;
+        right: 25px;
       }
     }
   }
 
+}
+
+.form-control{
+  border: 1px solid #87CAFF;
 }
 
 button {
@@ -112,4 +98,27 @@ button {
   cursor: pointer;
   padding: 10px 5px;
   margin: 10px 5px;
+}
+
+
+::ng-deep .date-picker {
+  width: 100%;
+  .datepicker-container{
+    width: 100%;
+    input {
+      display: block !important;
+      width: 100% !important;
+      height: 38px !important;
+      padding: .375rem .75rem !important;
+      font-size: 1rem !important;
+      line-height: 1.5 !important;
+      color: #495057 !important;
+      background-color: #fff !important;
+      background-clip: padding-box !important;
+      border: 1px solid #87CAFF !important;
+      border-radius: .25rem !important;
+      transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+    }
+  }
+
 }

@@ -94,6 +94,9 @@ export class ContractComponent implements OnInit {
     if(this.status == 'draft'){
       this.iconClass = 'col-md-100-3';
       return 'BẢN NHÁP';
+    }else if(this.status == 'wait-processing'){
+      this.iconClass = 'col-md-100-3';
+      return 'CHỜ XỬ LÝ';
     }else if(this.status == 'processing'){
       this.iconClass = 'col-md-100-3';
       return 'ĐANG XỬ LÝ';

@@ -81,7 +81,7 @@ export class SidebarService {
         {
           title: 'Chờ xử lý',
           active: false,
-          href: '/main/contract/processing'
+          href: '/main/contract/wait-processing'
         },
         {
           title: 'Đang xử lý',

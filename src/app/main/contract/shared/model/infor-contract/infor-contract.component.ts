@@ -6,6 +6,9 @@ import { FileUploadService } from 'src/app/service/upload.service';
 import {variable} from "../../../../../config/variable";
 import { Observable } from 'rxjs';
 import {AddContractComponent} from "../../../add-contract/add-contract.component";
+import { DatepickerOptions } from 'ng2-datepicker';
+import { getYear } from 'date-fns';
+import locale from 'date-fns/locale/en-US';
 
 @Component({
   selector: 'app-infor-contract',
@@ -16,10 +19,8 @@ export class InforContractComponent implements OnInit {
   @Input() AddComponent: AddContractComponent | unknown;
   @Input() datas: any;
   @Input() step: any;
-  inforDetails!: FormGroup;
-  @Output() stepChangeInfoContract = new EventEmitter<string>();
 
-  dateDeadline = new FormControl(new Date());
+  @Output() stepChangeInfoContract = new EventEmitter<string>();
 
   //upload file
   selectedFiles?: FileList;
@@ -39,38 +40,38 @@ export class InforContractComponent implements OnInit {
   dropdownTypeSettings: any = {};
   dropdownConnectSettings: any = {};
 
-  get inforContract() { return this.inforDetails.controls; }
+  contractName:any = '';
+  contractNumber:any;
+  contractType:any;
+  attachFile:any;
+  contractConnect:any;
+  dateDeadline:any;
+  comment:any;
+
   constructor(
     private formBuilder: FormBuilder,
     private uploadService: FileUploadService
   ) {
-    this.step = variable.stepSampleContract.step1
-    //this.datas.inforDetails = this.inforDetails;
+    this.step = variable.stepSampleContract.step1;
   }
 
+  // options sample with default values
+  options: DatepickerOptions = {
+    minYear: getYear(new Date()) - 30, // minimum available and selectable year
+    maxYear: getYear(new Date()) + 30, // maximum available and selectable year
+    placeholder: '', // placeholder in case date model is null | undefined, example: 'Please pick a date'
+    format: 'dd/MM/yyyy', // date format to display in input
+    formatTitle: 'MM/yyyy',
+    formatDays: 'EEEEE',
+    firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
+    locale: locale, // date-fns locale
+    position: 'bottom',
+    inputClass: '', // custom input CSS class to be applied
+    calendarClass: 'datepicker-default', // custom datepicker calendar CSS class to be applied
+    scrollBarColor: '#dfe3e9', // in case you customize you theme, here you define scroll bar color
+    // keyboardEvents: true // enable keyboard events
+  };
   ngOnInit(): void {
-    // this.datas.inforDetails = this.inforDetails;
-    this.inforDetails = this.formBuilder.group({
-      name: ['', Validators.required],
-      email: ['', Validators.required],
-      phone: ['',Validators.required],
-      type: ['', Validators.required],
-      contractName: ['', Validators.required],
-      contractNumber: ['', Validators.required],
-      contractType: ['', Validators.required],
-      contractFile: ['', Validators.required],
-      attachFile: ['', Validators.required],
-      contractConnect: ['', Validators.required],
-      dateDeadline: ['', Validators.required],
-      comment: ['', Validators.required],
-    });
-
-    // if (this.datas.inforDetails) {
-    //   this.inforDetails.value = this.datas.inforDetails.value;
-    // }
-
-    console.log(this.inforDetails.value);
-
 
     this.contractTypeList = [
       {
@@ -148,6 +149,36 @@ export class InforContractComponent implements OnInit {
     document.getElementById('file-input').click();
   }
 
+  fileChangedAttach(e: any) {
+    console.log(e.target.files)
+    let files = e.target.files;
+    for(let i = 0; i < files.length; i++){
+
+      const file = e.target.files[i];
+      if (file) {
+        // giới hạn file upload lên là 5mb
+        if (e.target.files[0].size <= 5000000) {
+          const file_name = file.name;
+          const extension = file.name.split('.').pop();
+          this.datas.file_name_attach = file_name;
+          //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
+          this.datas.attachFile = file;
+          //this.datas.attachFile = e.target.files;
+        } else {
+          this.datas.file_name_attach = '';
+          this.datas.attachFile = '';
+          alert('Yêu cầu file nhỏ hơn 5MB');
+          break;
+        }
+      }
+    }
+  }
+
+  addFileAttach() {
+    // @ts-ignore
+    document.getElementById('attachFile').click();
+  }
+
   //dropdown contract type
   get getContractTypeItems() {
     return this.contractTypeList.reduce((acc, curr) => {
@@ -164,109 +195,22 @@ export class InforContractComponent implements OnInit {
     }, {});
   }
 
-  onItemSelect(item: any) {
-    let contractType = this.inforDetails.controls['contractType'].value;
-    let conn = '';
-    if(contractType != ''){
-      conn = ',';
-    }
-    this.inforDetails.controls['contractType'].setValue(contractType + conn + item.item_text);
-  }
-
-  //upload file
-  selectFiles(event: any): void {
-    this.message = [];
-    this.progressInfos = [];
-    this.selectedFiles = event.target.files;
-  }
-
-  upload(idx: number, file: File): void {
-    this.progressInfos[idx] = { value: 0, fileName: file.name };
-
-    if (file) {
-      // this.uploadService.upload(file).subscribe(
-      //   (event: any) => {
-      //     if (event.type === HttpEventType.UploadProgress) {
-      //       this.progressInfos[idx].value = Math.round(100 * event.loaded / event.total);
-      //     } else if (event instanceof HttpResponse) {
-      //       const msg = 'Tải file lên thành công: ' + file.name;
-      //       this.message.push(msg);
-      //       this.fileInfos = this.uploadService.getFiles();
-      //     }
-      //   },
-      //   (err: any) => {
-      //     this.progressInfos[idx].value = 0;
-      //     const msg = 'Không thể tải được file: ' + file.name;
-      //     this.message.push(msg);
-      //     this.fileInfos = this.uploadService.getFiles();
-      //   });
-      const msg = 'Tải file lên thành công: ' + file.name;
-      this.message.push(msg);
-    }
-  }
-
-  uploadFiles(): void {
-    this.message = [];
-
-    if (this.selectedFiles) {
-      for (let i = 0; i < this.selectedFiles.length; i++) {
-        this.upload(i, this.selectedFiles[i]);
-      }
-    }
-  }
-
-  //upload file attach
-  selectFilesAttach(event: any): void {
-    this.messageAttach = [];
-    this.progressInfosAttach = [];
-    this.selectedFilesAttach = event.target.files;
-  }
-
-  uploadAttach(idx: number, file: File): void {
-    this.progressInfosAttach[idx] = { value: 0, fileName: file.name };
-
-    if (file) {
-      this.uploadService.upload(file).subscribe(
-        (event: any) => {
-          if (event.type === HttpEventType.UploadProgress) {
-            this.progressInfosAttach[idx].value = Math.round(100 * event.loaded / event.total);
-          } else if (event instanceof HttpResponse) {
-            const msg = 'Tải file lên thành công: ' + file.name;
-            this.messageAttach.push(msg);
-            this.fileInfosAttach = this.uploadService.getFiles();
-          }
-        },
-        (err: any) => {
-          this.progressInfosAttach[idx].value = 0;
-          const msg = 'Không thể tải được file: ' + file.name;
-          this.messageAttach.push(msg);
-          this.fileInfosAttach = this.uploadService.getFiles();
-        });
-    }
-  }
-
-  uploadFilesAttach(): void {
-    this.messageAttach = [];
-
-    if (this.selectedFilesAttach) {
-      for (let i = 0; i < this.selectedFilesAttach.length; i++) {
-        this.uploadAttach(i, this.selectedFilesAttach[i]);
-      }
-    }
-  }
-
   //--valid data step 1
   validData() {
+    if (!this.contractName) {
+      alert('Tên hợp đồng không được để trống!');
+      return false;
+    }
     if (!this.datas.file_content) {
-      alert('Vui lòng chọn file hợp đồng!');
+      alert('File hợp đồng không được để trống!');
       return false;
     }
     // this.datas.inforDetails
-    if (this.inforDetails.invalid) {
-      console.log(this.datas);
-      // alert('Vui Lòng nhập đầy đủ thông tin')
+    // if (this.inforDetails.invalid) {
+    //   console.log(this.datas);
+    //   // alert('Vui Lòng nhập đầy đủ thông tin')
 
-    }
+    // }
     return true
   }
 
@@ -275,10 +219,19 @@ export class InforContractComponent implements OnInit {
     if (!this.validData()) return;
     else {
       // gán value step 1 vào datas
-      this.datas.infoContract = this.inforDetails.value;
+      this.datas.contractName = this.contractName;
+      this.datas.contractNumber = this.contractNumber;
+      this.datas.contractType = this.contractType;
+      this.datas.contractConnect = this.contractConnect;
+      this.datas.dateDeadline = this.dateDeadline;
+      this.datas.comment = this.comment;
+
       this.step = variable.stepSampleContract.step2;
       this.datas.stepLast = this.step
       this.nextOrPreviousStep(this.step);
+      console.log(this.dateDeadline);
+      console.log(this.datas);
+
     }
   }
 
