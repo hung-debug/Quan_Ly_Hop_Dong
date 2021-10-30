@@ -7,7 +7,7 @@ import {
   QueryList,
   ElementRef,
   OnDestroy,
-  AfterViewInit
+  AfterViewInit, Output, EventEmitter
 } from '@angular/core';
 import {variable} from "../../../../../config/variable";
 import {Helper} from "../../../../../core/Helper";
@@ -26,6 +26,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   @Input() datas: any;
   @Input() step: any;
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
+  @Output() stepChangeSampleContract = new EventEmitter<string>();
   pdfSrc: any;
   thePDF = null;
   pageNumber = 1;
@@ -820,8 +821,33 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   //   }
   // }
 
-  getValue(e: any) {
-    console.log(e.target.value)
+  back(e: any, step?: any) {
+    // if (!this.datas.isView) {
+    this.nextOrPreviousStep(step);
+  }
+
+  next() {
+    if (!this.validData()) return;
+    else {
+      this.step = variable.stepSampleContract.step4;
+      this.datas.stepLast = this.step
+      this.nextOrPreviousStep(this.step);
+    }
+  }
+
+  // forward data component
+  nextOrPreviousStep(step: string) {
+    this.datas.stepLast = step;
+    this.stepChangeSampleContract.emit(step);
+  }
+
+  validData() {
+    let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
+    if (!data_not_drag) {
+      alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')
+      return false;
+    }
+    return true;
   }
 
 

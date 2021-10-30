@@ -29,7 +29,7 @@
 
 <!--</div>-->
 
-<form [formGroup]="datas.inforDetails" id="msform">
+<form [formGroup]="inforDetails" id="msform">
   <div class="row">
     <div class="radio col-md-4 label_type">
       <label><input type="radio" name="type" checked> Hợp đồng đơn lẻ không theo mẫu</label>
@@ -198,6 +198,8 @@
   </div>
 </form>
 
+<button (click)="next()" type="button" name="next" class="next action-button pull-right">Tiếp theo</button>
+
 <br/>
-{{this.datas.inforDetails.value | json}}
+{{this.inforDetails.value | json}}
 

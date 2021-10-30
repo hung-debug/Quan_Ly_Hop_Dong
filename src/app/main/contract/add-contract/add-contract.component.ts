@@ -19,6 +19,7 @@ export class AddContractComponent implements OnInit {
   @ViewChild('sampleContract') SampleContractComponent: SampleContractComponent | unknown;
   @ViewChild('infoContract') InforContractComponent: InforContractComponent | unknown;
   @ViewChild('confirmInforContract') ConfirmInforContractComponent: ConfirmInforContractComponent | unknown;
+
   datas: any = {
     stepLast: variable.stepSampleContract.step1,
   }
@@ -104,8 +105,11 @@ export class AddContractComponent implements OnInit {
     }
   }
 
-  getStep() {
-    this.step = this.datas.stepLast;
+  getStep(e: any) {
+    // this.step = this.datas.stepLast;
+    this.step = e;
   }
+
+
 
 }

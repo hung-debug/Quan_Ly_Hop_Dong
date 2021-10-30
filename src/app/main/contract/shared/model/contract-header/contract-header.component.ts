@@ -53,7 +53,8 @@ export class ContractHeaderComponent implements OnInit {
     // }
   }
 
-  // btn tiếp theo
+  //--begin handle step and animation header active
+
   next() {
     let _isValid = true;
     // kiểm tra điều kiện valid dữ liệu các bước.
@@ -114,36 +115,10 @@ export class ContractHeaderComponent implements OnInit {
         break;
       // @ts-ignore
       case variable.stepSampleContract.step2:
-        // valid step 2 data, defind value
-        // let is_partners = JSON.parse(JSON.stringify(this.datas.partners.value));
-        // let is_userForm = JSON.parse(JSON.stringify(this.datas.userForm.value));
-        // this.datas.partners = is_partners;
-        // this.datas.userForm = is_userForm;
-
-
-        // if (this.datas.dataDetails && this.datas.dataDetails.length > 0) {
-        //   let count = 0;
-        //   this.datas.dataDetails.forEach((element: any) => {
-        //     // @ts-ignore
-        //     element.property_name.forEach((item: any) => {
-        //       if (!item.value) {
-        //         count++;
-        //         // alert('Vui lòng nhập dữ liệu ' + item.name + ' của ' + element.title);
-        //         // return false;
-        //       }
-        //     })
-        //   })
-        //
-        //   if (count > 0) {
-        //     alert('Vui lòng nhập đủ các trường dữ liệu bắt buộc!')
-        //     return false;
-        //   }
-        // }
         break;
       // @ts-ignore
       case variable.stepSampleContract.step3:
         // valid dữ liệu kéo thả đối tượng bước 3, cần kéo ít nhất 1 đối tượng vào hợp đồng
-        console.log(this.datas)
         let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
         if (!data_not_drag) {
           alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')
@@ -167,7 +142,6 @@ export class ContractHeaderComponent implements OnInit {
 
   previous(){
     let nextStep = this.step;
-
     switch (this.step) {
       case variable.stepSampleContract.step2:
         nextStep = variable.stepSampleContract.step1;
@@ -186,5 +160,7 @@ export class ContractHeaderComponent implements OnInit {
     }
     this.nextStep(nextStep);
   }
+
+  //--end
 
 }
