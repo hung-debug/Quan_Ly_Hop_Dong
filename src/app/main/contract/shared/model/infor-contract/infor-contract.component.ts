@@ -1,10 +1,11 @@
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { NgbCalendar, NgbDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FileUploadService } from 'src/app/service/upload.service';
 import {variable} from "../../../../../config/variable";
 import { Observable } from 'rxjs';
+import {AddContractComponent} from "../../../add-contract/add-contract.component";
 
 @Component({
   selector: 'app-infor-contract',
@@ -12,9 +13,11 @@ import { Observable } from 'rxjs';
   styleUrls: ['./infor-contract.component.scss']
 })
 export class InforContractComponent implements OnInit {
+  @Input() AddComponent: AddContractComponent | unknown;
   @Input() datas: any;
   @Input() step: any;
   inforDetails!: FormGroup;
+  @Output() stepChangeInfoContract = new EventEmitter<string>();
 
   dateDeadline = new FormControl(new Date());
 
@@ -46,8 +49,8 @@ export class InforContractComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.datas.inforDetails = this.inforDetails;
-    this.datas.inforDetails = this.formBuilder.group({
+    // this.datas.inforDetails = this.inforDetails;
+    this.inforDetails = this.formBuilder.group({
       name: ['', Validators.required],
       email: ['', Validators.required],
       phone: ['',Validators.required],
@@ -61,6 +64,12 @@ export class InforContractComponent implements OnInit {
       dateDeadline: ['', Validators.required],
       comment: ['', Validators.required],
     });
+
+    // if (this.datas.inforDetails) {
+    //   this.inforDetails.value = this.datas.inforDetails.value;
+    // }
+
+    console.log(this.inforDetails.value);
 
 
     this.contractTypeList = [
@@ -156,12 +165,12 @@ export class InforContractComponent implements OnInit {
   }
 
   onItemSelect(item: any) {
-    let contractType = this.datas.inforDetails.controls['contractType'].value;
+    let contractType = this.inforDetails.controls['contractType'].value;
     let conn = '';
     if(contractType != ''){
       conn = ',';
     }
-    this.datas.inforDetails.controls['contractType'].setValue(contractType + conn + item.item_text);
+    this.inforDetails.controls['contractType'].setValue(contractType + conn + item.item_text);
   }
 
   //upload file
@@ -244,6 +253,40 @@ export class InforContractComponent implements OnInit {
         this.uploadAttach(i, this.selectedFilesAttach[i]);
       }
     }
+  }
+
+  //--valid data step 1
+  validData() {
+    if (!this.datas.file_content) {
+      alert('Vui lòng chọn file hợp đồng!');
+      return false;
+    }
+    // this.datas.inforDetails
+    if (this.inforDetails.invalid) {
+      console.log(this.datas);
+      // alert('Vui Lòng nhập đầy đủ thông tin')
+
+    }
+    return true
+  }
+
+  // --next step 2
+  next() {
+    if (!this.validData()) return;
+    else {
+      // gán value step 1 vào datas
+      this.datas.infoContract = this.inforDetails.value;
+      this.step = variable.stepSampleContract.step2;
+      this.datas.stepLast = this.step
+      this.nextOrPreviousStep(this.step);
+    }
+  }
+
+  // forward data component
+  nextOrPreviousStep(step: string) {
+    // this.datas.documents.document.step = step;
+    this.datas.stepLast = step;
+    this.stepChangeInfoContract.emit(step);
   }
 
 

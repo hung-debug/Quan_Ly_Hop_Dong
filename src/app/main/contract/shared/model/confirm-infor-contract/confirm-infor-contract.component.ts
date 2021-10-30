@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { variable } from 'src/app/config/variable';
 
@@ -11,6 +11,7 @@ export class ConfirmInforContractComponent implements OnInit {
   @Input() datas: any;
   @Input() step: any;
   confirmForm!: FormGroup;
+  @Output('stepChangeConfirmInforContract') stepChangeConfirmInforContract = new EventEmitter<Array<any>>();
 
   constructor(private formBuilder: FormBuilder,) {
     this.step = variable.stepSampleContract.step4

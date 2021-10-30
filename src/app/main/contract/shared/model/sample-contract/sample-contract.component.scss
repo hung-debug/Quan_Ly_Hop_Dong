@@ -101,9 +101,13 @@
           color: #333333;
           border: 1px solid #87CAFF;
           outline: none;
+          &.form-select:disabled {
+            opacity: 0.7;
+          }
         }
 
         select:invalid { color: gray; }
+
       }
     }
 
@@ -246,4 +250,29 @@
 #element-drag-text, #element-drag {
   //display: inline-block;
   //width: ;
+}
+
+//style button
+.action-button {
+  width: 100px;
+  background: #106DB6;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
+}
+
+.action-button-previous {
+  width: 100px;
+  background: #C5C5F1;
+  font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
 }

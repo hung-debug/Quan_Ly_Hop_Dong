@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {variable} from "../../../../../config/variable";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Helper} from "../../../../../core/Helper";
@@ -12,6 +12,7 @@ import {ContractService} from "../../../../../service/contract.service";
 export class DetermineSignerComponent implements OnInit {
   @Input() datas: any;
   @Input() step: any;
+  @Output() stepChangeDetermineSigner = new EventEmitter<string>();
   determine_step = false;
   determineDetails!: FormGroup;
   userForm: FormGroup;
@@ -30,9 +31,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.datas.userForm = this.userForm;
-    this.datas.partners = this.partners;
-    this.datas.userForm = this.formBuilder.group({
+    this.userForm = this.formBuilder.group({
       order: '1',
       name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
       userViews: this.formBuilder.array([]) ,
@@ -40,7 +39,7 @@ export class DetermineSignerComponent implements OnInit {
       userDocs: this.formBuilder.array([]) ,
     });
 
-    this.datas.partners = this.formBuilder.group({
+    this.partners = this.formBuilder.group({
       order: '1',
       name: '',
       partnerLeads: this.formBuilder.array([]) ,
@@ -86,7 +85,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //user view
   userViews() : FormArray {
-    return this.datas.userForm.get("userViews") as FormArray
+    return this.userForm.get("userViews") as FormArray
   }
   newUserView(): FormGroup {
     return this.formBuilder.group({
@@ -104,7 +103,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //user sign
   userSigns() : FormArray {
-    return this.datas.userForm.get("userSigns") as FormArray
+    return this.userForm.get("userSigns") as FormArray
   }
   newUserSign(): FormGroup {
     return this.formBuilder.group({
@@ -125,7 +124,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //user document
   userDocs() : FormArray {
-    return this.datas.userForm.get("userDocs") as FormArray
+    return this.userForm.get("userDocs") as FormArray
   }
   newUserDoc(): FormGroup {
     return this.formBuilder.group({
@@ -147,7 +146,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //user partner lead
   partnerLeads() : FormArray {
-    return this.datas.partners.get("partnerLeads") as FormArray
+    return this.partners.get("partnerLeads") as FormArray
   }
   newPartnerLead(): FormGroup {
     return this.formBuilder.group({
@@ -165,7 +164,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //partner view
   partnerViews() : FormArray {
-    return this.datas.partners.get("partnerViews") as FormArray
+    return this.partners.get("partnerViews") as FormArray
   }
   newPartnerView(): FormGroup {
     return this.formBuilder.group({
@@ -183,7 +182,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //partner sign
   partnerSigns() : FormArray {
-    return this.datas.partners.get("partnerSigns") as FormArray
+    return this.partners.get("partnerSigns") as FormArray
   }
   newPartnerSign(): FormGroup {
     return this.formBuilder.group({
@@ -204,7 +203,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //partner document
   partnerDocs() : FormArray {
-    return this.datas.partners.get("partnerDocs") as FormArray
+    return this.partners.get("partnerDocs") as FormArray
   }
   newPartnerDoc(): FormGroup {
     return this.formBuilder.group({
@@ -222,7 +221,42 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.datas.userForm.value);
+    console.log(this.userForm.value);
+  }
+
+  back(e: any, step?: any) {
+    // if (!this.datas.isView) {
+    this.nextOrPreviousStep(step);
+  }
+
+  // next step event
+  next() {
+    if (!this.validData()) return;
+    else {
+      // gán value step 2 vào datas
+      this.datas.userForm = this.userForm.value;
+      this.datas.partners = this.partners.value;
+      this.step = variable.stepSampleContract.step3;
+      this.datas.stepLast = this.step
+      this.nextOrPreviousStep(this.step);
+    }
+  }
+
+  // forward data component
+  nextOrPreviousStep(step: string) {
+    this.datas.stepLast = step;
+    this.stepChangeDetermineSigner.emit(step);
+  }
+
+  // valid data step 2
+  validData() {
+    if (this.userForm.invalid) {
+      console.log('vui lòng nhập đầy đủ dữ liệu userForm')
+    }
+    if (this.partners.invalid) {
+      console.log('Vui lòng nhập đầy đủ dữ liệu partners')
+    }
+    return true;
   }
 
 }

@@ -87,3 +87,29 @@ input[type="file"] {
   }
 
 }
+
+button {
+  //padding: 15px;
+  border: 0px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  width: 120px;
+  height: 40px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #106DB6;
+  font-size: 13px;
+}
+
+//style button
+.action-button {
+  width: 100px;
+  background: #106DB6;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
+}
