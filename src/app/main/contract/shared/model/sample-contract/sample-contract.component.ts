@@ -69,12 +69,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     offsetHeight: 0,
     offsetWidth: 0
   }
-  list_sign_name: any = [
-    {name: "Đỗ Thành Dương", id: "1"},
-    {name: "Đỗ Thanh Dương", id: "2"},
-    {name: "Phạm Văn Luân", id: "3"},
-    {name: "Phạm Văn Lâm", id: "4"}
-  ];
+  // list_sign_name: any = [
+  //   {name: "Đỗ Thành Dương", id: "1"},
+  //   {name: "Đỗ Thanh Dương", id: "2"},
+  //   {name: "Phạm Văn Luân", id: "3"},
+  //   {name: "Phạm Văn Lâm", id: "4"}
+  // ];
+
+  list_sign_name: any = [];
   // listDelete = [];
   signCurent: any;
   formatDate: any;
@@ -115,9 +117,26 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
 
-    this.list_sign_name.forEach((item: any) => {
-      item['selected'] = false;
-    })
+    // this.list_sign_name.forEach((item: any) => {
+    //   item['selected'] = false;
+    // })
+    if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
+      this.datas.userForm.userSigns.forEach((item: any) => {
+        item['selected'] = false;
+        item['sign_unit'] = 'organization'
+        // item.name = 'Tổ chức của tôi - ' + item.name
+        this.list_sign_name.push(item)
+      })
+    }
+
+    if (this.datas.partners.partnerSigns && this.datas.partners.partnerSigns.length > 0) {
+      this.datas.partners.partnerSigns.forEach((item: any) => {
+        item['selected'] = false;
+        item['sign_unit'] = 'partner'
+        // item.name = 'Đối tác - ' + item.name
+        this.list_sign_name.push(item)
+      })
+    }
 
     if (!this.signCurent) {
       this.signCurent = {
@@ -850,5 +869,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     return true;
   }
 
+  getName(data: any) {
+    if (data.sign_unit == 'organization') {
+      return 'Tổ chức của tôi - ' + data.name;
+    } else if (data.sign_unit == 'partner') {
+      return 'Đối tác - ' + data.name;
+    }
+  }
 
 }

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="sample-contract.component.scss">
+<!--<link rel="stylesheet" href="sample-contract.component.scss">-->
 <div class="sample-contract row">
   <!--  information contract-->
   <div class="col-md-3 sample-contract__information" style="background-color: white; z-index: 10">
@@ -38,7 +38,7 @@
           <label class="label-require">Người ký: *</label>
           <select class="form-select" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
             <option value="" hidden>Chọn người ký</option>
-            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}">{{d.name}}</option>
+            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}">{{getName(d)}}</option>
           </select>
         </div>
 
@@ -72,14 +72,6 @@
         </div>
       </div>
     </div>
-
-    <hr>
-
-    <div>
-      <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
-      <button (click)="next()" type="button" name="next" class="next action-button pull-right">Tiếp theo</button>
-    </div>
-
   </div>
 
   <!--  file content-->
@@ -103,6 +95,10 @@
       </div>
 
     </div>
-
   </div>
+</div>
+<div class="footer">
+  <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
+  <button type="button" name="saveDocument" class="next action-button pull-right">Lưu nháp</button>
+  <button (click)="next()" type="button" name="next" class="next action-button pull-right">Tiếp theo</button>
 </div>

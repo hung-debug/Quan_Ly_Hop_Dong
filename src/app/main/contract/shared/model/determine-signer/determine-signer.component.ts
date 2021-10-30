@@ -36,6 +36,7 @@ export class DetermineSignerComponent implements OnInit {
       name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
       userViews: this.formBuilder.array([]) ,
       userSigns: this.formBuilder.array([]) ,
+      // userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
       userDocs: this.formBuilder.array([]) ,
     });
 
@@ -45,6 +46,7 @@ export class DetermineSignerComponent implements OnInit {
       partnerLeads: this.formBuilder.array([]) ,
       partnerViews: this.formBuilder.array([]) ,
       partnerSigns: this.formBuilder.array([]) ,
+      // partnerSigns: (this.datas.partners && this.datas.partners.partnerSigns.length > 0) ? this.formBuilder.array(this.datas.partners.partnerSigns) : this.formBuilder.array([]) ,
       partnerDocs: this.formBuilder.array([]) ,
     });
 
@@ -113,6 +115,7 @@ export class DetermineSignerComponent implements OnInit {
       signType: '',
       isOtp: true,
       phone: '',
+      id: ''
     })
   }
   addUserSign() {
@@ -192,6 +195,7 @@ export class DetermineSignerComponent implements OnInit {
       signType: '',
       isOtp: true,
       phone: '',
+      id: ''
     })
   }
   addPartnerSign() {
@@ -235,9 +239,20 @@ export class DetermineSignerComponent implements OnInit {
     else {
       // gán value step 2 vào datas
       this.datas.userForm = this.userForm.value;
+      if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length) {
+        this.datas.userForm.userSigns.forEach((item: any) => {
+          item['id'] = Helper._randomNumber(10);
+        })
+      }
       this.datas.partners = this.partners.value;
+      if (this.datas.partners.partnerSigns && this.datas.userForm.userSigns.length) {
+        this.datas.partners.partnerSigns.forEach((item: any) => {
+          item['id'] = Helper._randomNumber(10);
+        })
+      }
       this.step = variable.stepSampleContract.step3;
       this.datas.stepLast = this.step
+      console.log(this.datas);
       this.nextOrPreviousStep(this.step);
     }
   }

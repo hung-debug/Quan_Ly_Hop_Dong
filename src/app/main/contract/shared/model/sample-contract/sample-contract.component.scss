@@ -29,7 +29,7 @@
   }
 
   .viewer-pdf.isDrag{
-    height: calc(100vh - 170px);
+    height: calc(100vh - 229px);
     overflow-x: auto;
     text-align: center;
     background-color: rgba(239, 239, 239, 1);
@@ -275,4 +275,8 @@
   cursor: pointer;
   padding: 10px 5px;
   margin: 10px 5px;
+}
+
+.footer {
+  border-top: 1px solid #ddd;
 }
