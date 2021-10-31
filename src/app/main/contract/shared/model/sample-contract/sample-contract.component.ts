@@ -519,13 +519,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               this.objDrag[item.id] = {
                 count: 2
               }
+              count_total++;
             }
-            count_total++;
           })
         }
       });
       if (count_total == 0) {
         this.isEnableSelect = true;
+        this.isEnableText = false;
+        //@ts-ignore
+        document.getElementById('select-dropdown').value = "";
       }
     }
   }
@@ -760,6 +763,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.objSignInfo.traf_y = 0;
       this.objSignInfo.offsetHeight = 0;
       this.objSignInfo.offsetWidth = 0;
+      //@ts-ignore
+      document.getElementById('select-dropdown').value = "";
       // this.signCurent.offsetWidth = 0;
       // this.signCurent.offsetHeight = 0;
     }
@@ -934,7 +939,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
         let data_partner = this.list_sign_name.filter((p: any) => p.sign_unit == "partner");
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
-        if (arrSign_organization.length < data_partner.length) {
+        if (arrSign_partner.length < data_partner.length) {
           alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
           return false;
         }
