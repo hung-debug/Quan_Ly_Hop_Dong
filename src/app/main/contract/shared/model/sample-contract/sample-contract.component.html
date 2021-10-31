@@ -30,7 +30,7 @@
     <div class="location-change" [ngStyle]="changeDisplay()">
       <div class="sample-contract__information--user-sign">
         <label class="label">THUỘC TÍNH</label>
-        <div class="name-text">
+        <div class="name-text" *ngIf="isEnableText">
           <label class="label-require">Tên trường: *</label>
           <input type="text">
         </div>

@@ -166,7 +166,8 @@ export class ContractService {
           id: '456',
           sign_unit: 'text',
           sign_config: "[]",
-          name: ""
+          name: "",
+          text_attribute_name: ""
         },
         {
           id: '789',
