@@ -16,6 +16,7 @@ export class DetermineSignerComponent implements OnInit {
   determine_step = false;
   determineDetails!: FormGroup;
   userForm: FormGroup;
+  partnerForm : FormGroup
 
   //dropdown
   signTypeList: Array<any> = [];
@@ -39,17 +40,10 @@ export class DetermineSignerComponent implements OnInit {
       userDocs: this.formBuilder.array([]) ,
     });
 
-    this.partners = this.formBuilder.group({
-      order: 1,
-      type: 2,
-      name: '',
-      partnerLeads: this.formBuilder.array([]) ,
-      partnerViews: this.formBuilder.array([]) ,
-      partnerSigns: this.formBuilder.array([]) ,
-      partnerDocs: this.formBuilder.array([]) ,
-
-      partnerUsers: this.formBuilder.array([]) ,
+    this.partnerForm = this.formBuilder.group({
+      partnerArrs : this.formBuilder.array([this.newPartner()])
     });
+
 
     this.signTypeList = [
       {
@@ -70,6 +64,27 @@ export class DetermineSignerComponent implements OnInit {
       unSelectAllText: "Bỏ chọn tất cả",
       allowSearchFilter: true
     };
+  }
+
+
+  partnerArrs() : FormArray {
+    return this.partnerForm.get("partnerArrs") as FormArray
+  }
+  newPartner(): FormGroup {
+    return this.partners = this.formBuilder.group({
+      order: 1,
+      type: 2,
+      name: '',
+      partnerLeads: this.formBuilder.array([]) ,
+      partnerViews: this.formBuilder.array([]) ,
+      partnerSigns: this.formBuilder.array([]) ,
+      partnerDocs: this.formBuilder.array([]) ,
+
+      partnerUsers: this.formBuilder.array([]) ,
+    })
+  }
+  addPartner() {
+    this.partnerArrs().push(this.newPartner());
   }
 
   //dropdown contract type
