@@ -843,10 +843,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             signElement.setAttribute("signature_party", isObjSign.signature_party);
           }
         }
-        console.log(this.signCurent)
-        console.log(this.objSignInfo)
+        // console.log(this.signCurent)
+        // console.log(this.objSignInfo)
       }
     }
+  }
+
+  getTrafX() {
+    if (Math.round(this.objSignInfo.traf_x) <= 0) {
+      return Math.round(this.objSignInfo.traf_x)
+    } else
+    return Math.round(this.objSignInfo.traf_x) - 1;
+  }
+
+  getTrafY() {
+    return Math.round(this.objSignInfo.traf_y)
   }
 
   // edit size doi tuong ky

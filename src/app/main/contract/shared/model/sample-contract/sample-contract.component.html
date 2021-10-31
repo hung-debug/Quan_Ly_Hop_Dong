@@ -49,11 +49,11 @@
         <div class="location">
           <div class="location-drag">
             <div class="label" style="text-align: center">X:</div>
-            <input type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')" [ngModel]="this.objSignInfo.traf_x" [readOnly]="false">
+            <input type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')" [ngModel]="getTrafX()" [readOnly]="false">
           </div>
           <div class="location-drag">
             <div class="label" style="text-align: center">Y:</div>
-            <input type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')" [ngModel]="this.objSignInfo.traf_y" [readOnly]="false">
+            <input type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')" [ngModel]="getTrafY()" [readOnly]="false">
           </div>
         </div>
       </div>
