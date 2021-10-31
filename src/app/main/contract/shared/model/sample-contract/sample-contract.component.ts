@@ -677,7 +677,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (window.innerHeight < 670) {
       return {
         "overflow": "auto",
-        "height": "calc(50vh - 100px)"
+        "height": "calc(50vh - 113px)"
       }
     } else return {}
   }
@@ -730,6 +730,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             item.selected = true;
           } else item.selected = false;
         })
+      } else {
+        //@ts-ignore
+        document.getElementById('select-dropdown').value = "";
       }
     }
   }
@@ -757,6 +760,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     data.offsetWidth = 0;
     data.offsetHeight = 0;
     data.position = "";
+    if (data.sign_unit == 'text') {
+     this.isEnableText = false;
+    }
     let signElement = document.getElementById(data.id);
     if (signElement) {
       this.objSignInfo.traf_x = 0;
