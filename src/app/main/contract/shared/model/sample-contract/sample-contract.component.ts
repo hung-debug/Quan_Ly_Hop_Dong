@@ -54,9 +54,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
   isMove = false;
 
-  isObjNumber: any;
-  isObjDate: any;
-  _yearNow: any;
   objSignInfo: any = {
     id: "",
     showObjSign: false,
@@ -77,24 +74,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // ];
 
   list_sign_name: any = [];
-  // listDelete = [];
   signCurent: any;
-  formatDate: any;
-  changeValuePdf: any;
-  demoStaff: any;
-  base64Demo: any;
 
-  distanceValue = 2;
-  sortSigner: any;
-  isChecked: any;
-  id = "";
   isView: any;
   countAttachFile = 0;
-  arrExceptTaxCode: any = [];
-  maxLength = null;
   widthDrag: any;
-  location_sign_x: any = 0;
-  location_sign_y: any = 0;
+
   isEnableSelect: boolean = true;
   isEnableText: boolean = false;
 
@@ -272,7 +257,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if (element.id == id) {
             let _obj: any = {
               sign_unit: element.sign_unit,
-              name: element.name
+              name: element.name,
+              text_attribute_name: element.text_attribute_name
             }
             if (element.sign_config.length == 0) {
               _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
@@ -365,6 +351,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 // hiển thị ô nhập tên trường khi kéo thả đối tượng Text
                 if (res.sign_unit == 'text') {
                   this.isEnableText = true;
+                  setTimeout(() => {
+                    //@ts-ignore
+                    document.getElementById('text-input-element').focus();
+                  }, 10)
                 } else this.isEnableText = false;
                 element['number'] = _arrPage[_arrPage.length - 1];
                 element['position'] = this.signCurent['position'];
@@ -381,6 +371,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   }
                   this.objSignInfo.offsetWidth = element['offsetWidth'];
                   this.objSignInfo.offsetHeight = element['offsetHeight'];
+                  // this.objSignInfo.text_attribute_name = 'hello';
+                  this.list_sign_name.forEach((item: any) => {
+                    item['selected'] = false;
+                  })
+                  // document.getElementById('select-dropdown'). = 0;
+                  // @ts-ignore
+                  document.getElementById('select-dropdown').value = "";
                   this.objDrag[this.signCurent['id']].count = 2;
                 } else {
                   element['offsetWidth'] = event.target.offsetWidth;
@@ -719,6 +716,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // console.log(this.signCurent)
 
         this.isEnableText = d.sign_unit == 'text';
+        if (this.isEnableText) {
+          this.objSignInfo.text_attribute_name = d.text_attribute_name
+        }
       }
       if (d.name) {
         this.list_sign_name.forEach((item: any) => {
@@ -825,6 +825,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             isObjSign.offsetHeight = parseInt(e);
             signElement.setAttribute("height", isObjSign.offsetHeight);
           }
+        } else if (property == 'text') {
+          isObjSign.text_attribute_name = e;
+          signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
           if (data_name) {
@@ -835,8 +838,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             signElement.setAttribute("signature_party", isObjSign.signature_party);
           }
         }
-        // console.log(this.signCurent)
-        // console.log(this.objSignInfo)
+        console.log(this.signCurent)
+        console.log(this.objSignInfo)
       }
     }
   }

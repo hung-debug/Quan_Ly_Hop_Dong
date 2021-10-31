@@ -157,26 +157,25 @@ export class ContractService {
 
       contract_user_sign: [
         {
-          id: '123',
+          id: 'stl-01',
           sign_unit: 'so_tai_lieu',
           sign_config: "[]",
           name: ""
         },
         {
-          id: '456',
+          id: 'text-01',
           sign_unit: 'text',
           sign_config: "[]",
           name: "",
-          text_attribute_name: ""
         },
         {
-          id: '789',
+          id: 'cks-01',
           sign_unit: 'chu_ky_anh',
           sign_config: "[]",
           name: ""
         },
         {
-          id: '101',
+          id: 'cks-01',
           sign_unit: 'chu_ky_so',
           sign_config: "[]",
           name: ""
