@@ -35,7 +35,7 @@
           <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
         </div>
         <div class="sign-unit-select">
-          <label class="label-require">Người ký: *</label>
+          <label class="label-require">{{isEnableText || isChangeText ? "Người nhập" : "Người ký"}}: *</label>
           <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
             <option value="" hidden>Chọn người ký</option>
             <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}">{{getName(d)}}</option>

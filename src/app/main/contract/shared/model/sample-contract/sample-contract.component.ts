@@ -66,12 +66,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     offsetHeight: 0,
     offsetWidth: 0
   }
-  // list_sign_name: any = [
-  //   {name: "Đỗ Thành Dương", id: "1"},
-  //   {name: "Đỗ Thanh Dương", id: "2"},
-  //   {name: "Phạm Văn Luân", id: "3"},
-  //   {name: "Phạm Văn Lâm", id: "4"}
-  // ];
 
   list_sign_name: any = [];
   signCurent: any;
@@ -82,6 +76,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   isEnableSelect: boolean = true;
   isEnableText: boolean = false;
+  isChangeText: boolean = false;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -356,6 +351,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     document.getElementById('text-input-element').focus();
                   }, 10)
                 } else this.isEnableText = false;
+
+                if (res.sign_unit == 'so_tai_lieu') {
+                  this.isChangeText = true;
+                } else this.isChangeText = false;
                 element['number'] = _arrPage[_arrPage.length - 1];
                 element['position'] = this.signCurent['position'];
                 element['dataset_x'] = this.signCurent['dataset_x'];
@@ -719,6 +718,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // console.log(this.signCurent)
 
         this.isEnableText = d.sign_unit == 'text';
+        this.isChangeText = d.sign_unit == 'so_tai_lieu';
         if (this.isEnableText) {
           this.objSignInfo.text_attribute_name = d.text_attribute_name
         }
