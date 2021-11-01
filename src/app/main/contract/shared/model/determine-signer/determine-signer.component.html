@@ -174,10 +174,10 @@
 
               <div class="row">
                 <div class="radio col-md-6 label_type">
-                  <label><input type="radio" name="type" formControlName="type" [value]="1"> <span> Tổ chức</span></label>
+                  <label><input type="radio" formControlName="type" [value]="1" [ngModel]="partners.value.type"> <span> Tổ chức</span></label>
                 </div>
                 <div class="radio col-md-6 label_type">
-                  <label><input type="radio" name="type" formControlName="type" [value]="2"> <span> Cá nhân</span></label>
+                  <label><input type="radio" formControlName="type" [value]="2" [ngModel]="partners.value.type"> <span> Cá nhân</span></label>
                 </div>
               </div>
 
@@ -191,7 +191,7 @@
                 <div class="add_content" formArrayName="partnerLeads">
                   <div class="label">Người điều phối</div>
                   <hr>
-                  <div *ngFor="let partnerLead of partnerLeads().controls; let i=index" [formGroupName]="i">
+                  <div *ngFor="let partnerLead of partnerLeads(a).controls; let i=index" [formGroupName]="i">
                     <div class="row">
                       <div class="col-md-1 order">
                         <input type="number" formControlName="order" class="form-control order_input">
@@ -209,18 +209,18 @@
                         </div>
                       </div>
                       <div class="col-md-1 remove">
-                        <i (click)="removePartnerLead(i)" class="fa fa-times-circle remove_icon"></i>
+                        <i (click)="removePartnerLead(a, i)" class="fa fa-times-circle remove_icon"></i>
                       </div>
                     </div>
                   </div>
-                  <div class="add_click" (click)="addPartnerLead()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người điều phối</a></div>
+                  <div class="add_click" (click)="addPartnerLead(a)"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người điều phối</a></div>
                 </div>
 
                 <!-- Partner view -->
                 <div class="add_content" formArrayName="partnerViews">
                   <div class="label">Người xem xét</div>
                   <hr>
-                  <div *ngFor="let partnerView of partnerViews().controls; let i=index" [formGroupName]="i">
+                  <div *ngFor="let partnerView of partnerViews(a).controls; let i=index" [formGroupName]="i">
                     <div class="row">
                       <div class="col-md-1 order">
                         <input type="number" formControlName="order" class="form-control order_input">
@@ -238,18 +238,18 @@
                         </div>
                       </div>
                       <div class="col-md-1 remove">
-                        <i (click)="removePartnerView(i)" class="fa fa-times-circle remove_icon"></i>
+                        <i (click)="removePartnerView(a, i)" class="fa fa-times-circle remove_icon"></i>
                       </div>
                     </div>
                   </div>
-                  <div class="add_click" (click)="addPartnerView()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người xem xét</a></div>
+                  <div class="add_click" (click)="addPartnerView(a)"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người xem xét</a></div>
                 </div>
 
                 <!-- Partner sign -->
                 <div class="add_content" formArrayName="partnerSigns">
                   <div class="label">Người ký</div>
                   <hr>
-                  <div *ngFor="let partnerSign of partnerSigns().controls; let i=index" [formGroupName]="i">
+                  <div *ngFor="let partnerSign of partnerSigns(a).controls; let i=index" [formGroupName]="i">
                     <div class="row">
                       <div class="col-md-1 order">
                         <input type="number" formControlName="order" class="form-control order_input">
@@ -301,18 +301,18 @@
                         </div>
                       </div>
                       <div class="col-md-1 remove">
-                        <i (click)="removePartnerSign(i)" class="fa fa-times-circle remove_icon"></i>
+                        <i (click)="removePartnerSign(a, i)" class="fa fa-times-circle remove_icon"></i>
                       </div>
                     </div>
                   </div>
-                  <div class="add_click" (click)="addPartnerSign()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
+                  <div class="add_click" (click)="addPartnerSign(a)"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
                 </div>
 
                 <!-- Partner document -->
                 <div class="add_content" formArrayName="partnerDocs">
                   <div class="label">Văn thư</div>
                   <hr>
-                  <div *ngFor="let partnerDoc of partnerDocs().controls; let i=index" [formGroupName]="i">
+                  <div *ngFor="let partnerDoc of partnerDocs(a).controls; let i=index" [formGroupName]="i">
                     <div class="row">
                       <div class="col-md-1 order">
                         <input type="number" formControlName="order" class="form-control order_input">
@@ -356,11 +356,11 @@
                         </div>
                       </div>
                       <div class="col-md-1 remove">
-                        <i (click)="removePartnerDoc(i)" class="fa fa-times-circle remove_icon"></i>
+                        <i (click)="removePartnerDoc(a, i)" class="fa fa-times-circle remove_icon"></i>
                       </div>
                     </div>
                   </div>
-                  <div class="add_click" (click)="addPartnerDoc()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm văn thư</a></div>
+                  <div class="add_click" (click)="addPartnerDoc(a)"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm văn thư</a></div>
                 </div>
               </div>
 
@@ -374,7 +374,7 @@
                 <div class="add_content" formArrayName="partnerUsers">
                   <div class="label">Người ký</div>
                   <hr>
-                  <div *ngFor="let partnerUser of partnerUsers().controls; let i=index" [formGroupName]="i">
+                  <div *ngFor="let partnerUser of partnerUsers(a)?.controls; let i=index" [formGroupName]="i">
                     <div class="row">
                       <div class="col-md-1 order">
                         <input type="number" formControlName="order" class="form-control order_input">
@@ -426,11 +426,11 @@
                         </div>
                       </div>
                       <div class="col-md-1 remove">
-                        <i (click)="removePartnerUser(i)" class="fa fa-times-circle remove_icon"></i>
+                        <i (click)="removePartnerUser(a, i)" class="fa fa-times-circle remove_icon"></i>
                       </div>
                     </div>
                   </div>
-                  <div class="add_click" (click)="addPartnerUser()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
+                  <div class="add_click" (click)="addPartnerUser(a)"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
                 </div>
               </div>
             </div>

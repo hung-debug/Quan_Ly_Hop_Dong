@@ -73,7 +73,7 @@ export class DetermineSignerComponent implements OnInit {
   newPartner(): FormGroup {
     return this.partners = this.formBuilder.group({
       order: 1,
-      type: 2,
+      type: 1,
       name: '',
       partnerLeads: this.formBuilder.array([]) ,
       partnerViews: this.formBuilder.array([]) ,
@@ -159,8 +159,8 @@ export class DetermineSignerComponent implements OnInit {
   partners : FormGroup;
 
   //user partner lead
-  partnerLeads() : FormArray {
-    return this.partners.get("partnerLeads") as FormArray
+  partnerLeads(a:number) : FormArray {
+    return this.partnerArrs().at(a).get("partnerLeads") as FormArray
   }
   newPartnerLead(): FormGroup {
     return this.formBuilder.group({
@@ -169,16 +169,16 @@ export class DetermineSignerComponent implements OnInit {
       email: '',
     })
   }
-  addPartnerLead() {
-    this.partnerLeads().push(this.newPartnerLead());
+  addPartnerLead(a:number) {
+    this.partnerLeads(a).push(this.newPartnerLead());
   }
-  removePartnerLead(i:number) {
-    this.partnerLeads().removeAt(i);
+  removePartnerLead(a:number, i:number) {
+    this.partnerLeads(a).removeAt(i);
   }
 
   //partner view
-  partnerViews() : FormArray {
-    return this.partners.get("partnerViews") as FormArray
+  partnerViews(a:number) : FormArray {
+    return this.partnerArrs().at(a).get("partnerViews") as FormArray
   }
   newPartnerView(): FormGroup {
     return this.formBuilder.group({
@@ -187,16 +187,16 @@ export class DetermineSignerComponent implements OnInit {
       email: '',
     })
   }
-  addPartnerView() {
-    this.partnerViews().push(this.newPartnerView());
+  addPartnerView(a:number) {
+    this.partnerViews(a).push(this.newPartnerView());
   }
-  removePartnerView(i:number) {
-    this.partnerViews().removeAt(i);
+  removePartnerView(a:number, i:number) {
+    this.partnerViews(a).removeAt(i);
   }
 
   //partner sign
-  partnerSigns() : FormArray {
-    return this.partners.get("partnerSigns") as FormArray
+  partnerSigns(a:number) : FormArray {
+    return this.partnerArrs().at(a).get("partnerSigns") as FormArray
   }
   newPartnerSign(): FormGroup {
     return this.formBuilder.group({
@@ -208,16 +208,16 @@ export class DetermineSignerComponent implements OnInit {
       phone: '',
     })
   }
-  addPartnerSign() {
-    this.partnerSigns().push(this.newPartnerSign());
+  addPartnerSign(a:number) {
+    this.partnerSigns(a).push(this.newPartnerSign());
   }
-  removePartnerSign(i:number) {
-    this.partnerSigns().removeAt(i);
+  removePartnerSign(a:number, i:number) {
+    this.partnerSigns(a).removeAt(i);
   }
 
   //partner document
-  partnerDocs() : FormArray {
-    return this.partners.get("partnerDocs") as FormArray
+  partnerDocs(a:number) : FormArray {
+    return this.partnerArrs().at(a).get("partnerDocs") as FormArray
   }
   newPartnerDoc(): FormGroup {
     return this.formBuilder.group({
@@ -227,16 +227,16 @@ export class DetermineSignerComponent implements OnInit {
       signType: '',
     })
   }
-  addPartnerDoc() {
-    this.partnerDocs().push(this.newPartnerDoc());
+  addPartnerDoc(a:number) {
+    this.partnerDocs(a).push(this.newPartnerDoc());
   }
-  removePartnerDoc(i:number) {
-    this.partnerDocs().removeAt(i);
+  removePartnerDoc(a:number, i:number) {
+    this.partnerDocs(a).removeAt(i);
   }
 
   //partner user (ca nhan)
-  partnerUsers() : FormArray {
-    return this.partners.get("partnerUsers") as FormArray
+  partnerUsers(a:number) : FormArray {
+    return this.partnerArrs().at(a).get("partnerUsers") as FormArray
   }
   newPartnerUser(): FormGroup {
     return this.formBuilder.group({
@@ -248,11 +248,11 @@ export class DetermineSignerComponent implements OnInit {
       phone: '',
     })
   }
-  addPartnerUser() {
-    this.partnerUsers().push(this.newPartnerUser());
+  addPartnerUser(a:number) {
+    this.partnerUsers(a).push(this.newPartnerUser());
   }
-  removePartnerUser(i:number) {
-    this.partnerUsers().removeAt(i);
+  removePartnerUser(a:number, i:number) {
+    this.partnerUsers(a).removeAt(i);
   }
 
   onSubmit() {

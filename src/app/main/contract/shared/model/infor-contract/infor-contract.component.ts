@@ -197,14 +197,14 @@ export class InforContractComponent implements OnInit {
 
   //--valid data step 1
   validData() {
-    // if (!this.contractName) {
-    //   alert('Tên hợp đồng không được để trống!');
-    //   return false;
-    // }
-    // if (!this.datas.file_content) {
-    //   alert('File hợp đồng không được để trống!');
-    //   return false;
-    // }
+    if (!this.contractName) {
+      alert('Tên hợp đồng không được để trống!');
+      return false;
+    }
+    if (!this.datas.file_content) {
+      alert('File hợp đồng không được để trống!');
+      return false;
+    }
     // this.datas.inforDetails
     // if (this.inforDetails.invalid) {
     //   console.log(this.datas);
