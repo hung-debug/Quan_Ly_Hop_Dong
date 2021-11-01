@@ -162,274 +162,288 @@
     </div>
   </form>
 
-  <form [formGroup]="partners" class="partner_content">
-    <div class="row">
-      <div class="col-md-1 order">
-          <input type="number" formControlName="order" class="form-control order_input">
+  <form [formGroup]="partnerForm">
+    <div formArrayName='partnerArrs' *ngFor="let partners of partnerArrs().controls; let a = index;">
+      <div [formGroupName]="a">
+        <div class="partner_content" >
+          <div class="row">
+            <div class="col-md-1 order">
+                <input type="number" formControlName="order" class="form-control order_input">
+            </div>
+            <div class="col-md-11 form_content">
+
+              <div class="row">
+                <div class="radio col-md-6 label_type">
+                  <label><input type="radio" formControlName="type" [value]="1" [ngModel]="partners.value.type"> <span> Tổ chức</span></label>
+                </div>
+                <div class="radio col-md-6 label_type">
+                  <label><input type="radio" formControlName="type" [value]="2" [ngModel]="partners.value.type"> <span> Cá nhân</span></label>
+                </div>
+              </div>
+
+              <div *ngIf="partners.value.type==1">
+                <p>
+                  <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
+                  <input class="form-control textOrg" id="name" name="name" formControlName="name">
+                </p>
+
+                <!-- Partner lead -->
+                <div class="add_content" formArrayName="partnerLeads">
+                  <div class="label">Người điều phối</div>
+                  <hr>
+                  <div *ngFor="let partnerLead of partnerLeads(a).controls; let i=index" [formGroupName]="i">
+                    <div class="row">
+                      <div class="col-md-1 order">
+                        <input type="number" formControlName="order" class="form-control order_input">
+                      </div>
+                      <div class="col-md-10">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="label_item">Họ tên</div>
+                            <input type="text" formControlName="name" class="form-control">
+                          </div>
+                          <div class="col-md-6">
+                            <div class="label_item">Email</div>
+                            <input type="text" formControlName="email" class="form-control">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-1 remove">
+                        <i (click)="removePartnerLead(a, i)" class="fa fa-times-circle remove_icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="add_click" (click)="addPartnerLead(a)"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người điều phối</a></div>
+                </div>
+
+                <!-- Partner view -->
+                <div class="add_content" formArrayName="partnerViews">
+                  <div class="label">Người xem xét</div>
+                  <hr>
+                  <div *ngFor="let partnerView of partnerViews(a).controls; let i=index" [formGroupName]="i">
+                    <div class="row">
+                      <div class="col-md-1 order">
+                        <input type="number" formControlName="order" class="form-control order_input">
+                      </div>
+                      <div class="col-md-10">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="label_item">Họ tên <span class="require_star">*</span></div>
+                            <input type="text" formControlName="name" class="form-control">
+                          </div>
+                          <div class="col-md-6">
+                            <div class="label_item">Email <span class="require_star">*</span></div>
+                            <input type="text" formControlName="email" class="form-control">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-1 remove">
+                        <i (click)="removePartnerView(a, i)" class="fa fa-times-circle remove_icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="add_click" (click)="addPartnerView(a)"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người xem xét</a></div>
+                </div>
+
+                <!-- Partner sign -->
+                <div class="add_content" formArrayName="partnerSigns">
+                  <div class="label">Người ký</div>
+                  <hr>
+                  <div *ngFor="let partnerSign of partnerSigns(a).controls; let i=index" [formGroupName]="i">
+                    <div class="row">
+                      <div class="col-md-1 order">
+                        <input type="number" formControlName="order" class="form-control order_input">
+                      </div>
+                      <div class="col-md-10">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="label_item">Họ tên <span class="require_star">*</span></div>
+                            <input type="text" formControlName="name" class="form-control">
+                          </div>
+                          <div class="col-md-6">
+                            <div class="label_item">Email <span class="require_star">*</span></div>
+                            <input type="text" formControlName="email" class="form-control">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="label_item">Loại ký <span class="require_star">*</span></div>
+                            <div class="col">
+                              <ng-multiselect-dropdown
+                                formControlName="signType"
+                                [placeholder]="'-- Chọn --'"
+                                [settings]="dropdownSignTypeSettings"
+                                [data]="signTypeList">
+                                <ng-template
+                                  #optionsTemplate
+                                  let-item
+                                  let-option="option"
+                                  let-id="id"
+                                  let-isSelected="isSelected">
+                                  <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                                    <label
+                                      style="color: #333; font-weight: normal;"
+                                      [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
+                                      >{{getSignTypeItems[id].item_text}}</label>
+                                  </div>
+                                </ng-template>
+                              </ng-multiselect-dropdown>
+                            </div>
+                          </div>
+                          <div class="col-md-1">
+                            <div class="label_item">OTP</div>
+                            <input type="checkbox" formControlName="isOtp" class="form-check-input">
+                          </div>
+                          <div class="col-md-5">
+                            <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
+                            <input type="text" formControlName="phone" class="form-control">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-1 remove">
+                        <i (click)="removePartnerSign(a, i)" class="fa fa-times-circle remove_icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="add_click" (click)="addPartnerSign(a)"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
+                </div>
+
+                <!-- Partner document -->
+                <div class="add_content" formArrayName="partnerDocs">
+                  <div class="label">Văn thư</div>
+                  <hr>
+                  <div *ngFor="let partnerDoc of partnerDocs(a).controls; let i=index" [formGroupName]="i">
+                    <div class="row">
+                      <div class="col-md-1 order">
+                        <input type="number" formControlName="order" class="form-control order_input">
+                      </div>
+                      <div class="col-md-10">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="label_item">Họ tên <span class="require_star">*</span></div>
+                            <input type="text" formControlName="name" class="form-control">
+                          </div>
+                          <div class="col-md-6">
+                            <div class="label_item">Email <span class="require_star">*</span></div>
+                            <input type="text" formControlName="email" class="form-control">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="label_item">Loại ký <span class="require_star">*</span></div>
+                            <div class="col">
+                              <ng-multiselect-dropdown
+                                formControlName="signType"
+                                [placeholder]="'-- Chọn --'"
+                                [settings]="dropdownSignTypeSettings"
+                                [data]="signTypeList">
+                                <ng-template
+                                  #optionsTemplate
+                                  let-item
+                                  let-option="option"
+                                  let-id="id"
+                                  let-isSelected="isSelected">
+                                  <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                                    <label
+                                      style="color: #333; font-weight: normal;"
+                                      [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
+                                      >{{getSignTypeItems[id].item_text}}</label>
+                                  </div>
+                                </ng-template>
+                              </ng-multiselect-dropdown>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-1 remove">
+                        <i (click)="removePartnerDoc(a, i)" class="fa fa-times-circle remove_icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="add_click" (click)="addPartnerDoc(a)"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm văn thư</a></div>
+                </div>
+              </div>
+
+              <div *ngIf="partners.value.type==2">
+                <p>
+                  <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
+                  <input class="form-control textOrg" id="name" name="name" formControlName="name">
+                </p>
+
+                <!-- Partner user -->
+                <div class="add_content" formArrayName="partnerUsers">
+                  <div class="label">Người ký</div>
+                  <hr>
+                  <div *ngFor="let partnerUser of partnerUsers(a)?.controls; let i=index" [formGroupName]="i">
+                    <div class="row">
+                      <div class="col-md-1 order">
+                        <input type="number" formControlName="order" class="form-control order_input">
+                      </div>
+                      <div class="col-md-10">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="label_item">Họ tên <span class="require_star">*</span></div>
+                            <input type="text" formControlName="name" class="form-control">
+                          </div>
+                          <div class="col-md-6">
+                            <div class="label_item">Email <span class="require_star">*</span></div>
+                            <input type="text" formControlName="email" class="form-control">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="label_item">Loại ký <span class="require_star">*</span></div>
+                            <div class="col">
+                              <ng-multiselect-dropdown
+                                formControlName="signType"
+                                [placeholder]="'-- Chọn --'"
+                                [settings]="dropdownSignTypeSettings"
+                                [data]="signTypeList">
+                                <ng-template
+                                  #optionsTemplate
+                                  let-item
+                                  let-option="option"
+                                  let-id="id"
+                                  let-isSelected="isSelected">
+                                  <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                                    <label
+                                      style="color: #333; font-weight: normal;"
+                                      [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
+                                      >{{getSignTypeItems[id].item_text}}</label>
+                                  </div>
+                                </ng-template>
+                              </ng-multiselect-dropdown>
+                            </div>
+                          </div>
+                          <div class="col-md-1">
+                            <div class="label_item">OTP</div>
+                            <input type="checkbox" formControlName="isOtp" class="form-check-input">
+                          </div>
+                          <div class="col-md-5">
+                            <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
+                            <input type="text" formControlName="phone" class="form-control">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-1 remove">
+                        <i (click)="removePartnerUser(a, i)" class="fa fa-times-circle remove_icon"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="add_click" (click)="addPartnerUser(a)"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <div class="col-md-11 form_content">
 
-        <div class="row">
-          <div class="radio col-md-6 label_type">
-            <label><input type="radio" name="type" formControlName="type" [value]="1"> <span> Tổ chức</span></label>
-          </div>
-          <div class="radio col-md-6 label_type">
-            <label><input type="radio" name="type" formControlName="type" [value]="2"> <span> Cá nhân</span></label>
-          </div>
-        </div>
-
-        <div *ngIf="partners.value.type==1">
-          <p>
-            <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
-            <input class="form-control textOrg" id="name" name="name" formControlName="name">
-          </p>
-
-          <!-- Partner lead -->
-          <div class="add_content" formArrayName="partnerLeads">
-            <div class="label">Người điều phối</div>
-            <hr>
-            <div *ngFor="let partnerLead of partnerLeads().controls; let i=index" [formGroupName]="i">
-              <div class="row">
-                <div class="col-md-1 order">
-                  <input type="number" formControlName="order" class="form-control order_input">
-                </div>
-                <div class="col-md-10">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="label_item">Họ tên</div>
-                      <input type="text" formControlName="name" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                      <div class="label_item">Email</div>
-                      <input type="text" formControlName="email" class="form-control">
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-1 remove">
-                  <i (click)="removePartnerLead(i)" class="fa fa-times-circle remove_icon"></i>
-                </div>
-              </div>
-            </div>
-            <div class="add_click" (click)="addPartnerLead()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người điều phối</a></div>
-          </div>
-
-          <!-- Partner view -->
-          <div class="add_content" formArrayName="partnerViews">
-            <div class="label">Người xem xét</div>
-            <hr>
-            <div *ngFor="let partnerView of partnerViews().controls; let i=index" [formGroupName]="i">
-              <div class="row">
-                <div class="col-md-1 order">
-                  <input type="number" formControlName="order" class="form-control order_input">
-                </div>
-                <div class="col-md-10">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                      <input type="text" formControlName="name" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                      <div class="label_item">Email <span class="require_star">*</span></div>
-                      <input type="text" formControlName="email" class="form-control">
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-1 remove">
-                  <i (click)="removePartnerView(i)" class="fa fa-times-circle remove_icon"></i>
-                </div>
-              </div>
-            </div>
-            <div class="add_click" (click)="addPartnerView()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người xem xét</a></div>
-          </div>
-
-          <!-- Partner sign -->
-          <div class="add_content" formArrayName="partnerSigns">
-            <div class="label">Người ký</div>
-            <hr>
-            <div *ngFor="let partnerSign of partnerSigns().controls; let i=index" [formGroupName]="i">
-              <div class="row">
-                <div class="col-md-1 order">
-                  <input type="number" formControlName="order" class="form-control order_input">
-                </div>
-                <div class="col-md-10">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                      <input type="text" formControlName="name" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                      <div class="label_item">Email <span class="require_star">*</span></div>
-                      <input type="text" formControlName="email" class="form-control">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="label_item">Loại ký <span class="require_star">*</span></div>
-                      <div class="col">
-                        <ng-multiselect-dropdown
-                          formControlName="signType"
-                          [placeholder]="'-- Chọn --'"
-                          [settings]="dropdownSignTypeSettings"
-                          [data]="signTypeList">
-                          <ng-template
-                            #optionsTemplate
-                            let-item
-                            let-option="option"
-                            let-id="id"
-                            let-isSelected="isSelected">
-                            <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                              <label
-                                style="color: #333; font-weight: normal;"
-                                [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                                >{{getSignTypeItems[id].item_text}}</label>
-                            </div>
-                          </ng-template>
-                        </ng-multiselect-dropdown>
-                      </div>
-                    </div>
-                    <div class="col-md-1">
-                      <div class="label_item">OTP</div>
-                      <input type="checkbox" formControlName="isOtp" class="form-check-input">
-                    </div>
-                    <div class="col-md-5">
-                      <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
-                      <input type="text" formControlName="phone" class="form-control">
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-1 remove">
-                  <i (click)="removePartnerSign(i)" class="fa fa-times-circle remove_icon"></i>
-                </div>
-              </div>
-            </div>
-            <div class="add_click" (click)="addPartnerSign()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
-          </div>
-
-          <!-- Partner document -->
-          <div class="add_content" formArrayName="partnerDocs">
-            <div class="label">Văn thư</div>
-            <hr>
-            <div *ngFor="let partnerDoc of partnerDocs().controls; let i=index" [formGroupName]="i">
-              <div class="row">
-                <div class="col-md-1 order">
-                  <input type="number" formControlName="order" class="form-control order_input">
-                </div>
-                <div class="col-md-10">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                      <input type="text" formControlName="name" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                      <div class="label_item">Email <span class="require_star">*</span></div>
-                      <input type="text" formControlName="email" class="form-control">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="label_item">Loại ký <span class="require_star">*</span></div>
-                      <div class="col">
-                        <ng-multiselect-dropdown
-                          formControlName="signType"
-                          [placeholder]="'-- Chọn --'"
-                          [settings]="dropdownSignTypeSettings"
-                          [data]="signTypeList">
-                          <ng-template
-                            #optionsTemplate
-                            let-item
-                            let-option="option"
-                            let-id="id"
-                            let-isSelected="isSelected">
-                            <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                              <label
-                                style="color: #333; font-weight: normal;"
-                                [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                                >{{getSignTypeItems[id].item_text}}</label>
-                            </div>
-                          </ng-template>
-                        </ng-multiselect-dropdown>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-1 remove">
-                  <i (click)="removePartnerDoc(i)" class="fa fa-times-circle remove_icon"></i>
-                </div>
-              </div>
-            </div>
-            <div class="add_click" (click)="addPartnerDoc()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm văn thư</a></div>
-          </div>
-        </div>
-
-        <div *ngIf="partners.value.type==2">
-          <p>
-            <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
-            <input class="form-control textOrg" id="name" name="name" formControlName="name">
-          </p>
-
-          <!-- Partner user -->
-          <div class="add_content" formArrayName="partnerUsers">
-            <div class="label">Người ký</div>
-            <hr>
-            <div *ngFor="let partnerUser of partnerUsers().controls; let i=index" [formGroupName]="i">
-              <div class="row">
-                <div class="col-md-1 order">
-                  <input type="number" formControlName="order" class="form-control order_input">
-                </div>
-                <div class="col-md-10">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                      <input type="text" formControlName="name" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                      <div class="label_item">Email <span class="require_star">*</span></div>
-                      <input type="text" formControlName="email" class="form-control">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="label_item">Loại ký <span class="require_star">*</span></div>
-                      <div class="col">
-                        <ng-multiselect-dropdown
-                          formControlName="signType"
-                          [placeholder]="'-- Chọn --'"
-                          [settings]="dropdownSignTypeSettings"
-                          [data]="signTypeList">
-                          <ng-template
-                            #optionsTemplate
-                            let-item
-                            let-option="option"
-                            let-id="id"
-                            let-isSelected="isSelected">
-                            <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                              <label
-                                style="color: #333; font-weight: normal;"
-                                [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                                >{{getSignTypeItems[id].item_text}}</label>
-                            </div>
-                          </ng-template>
-                        </ng-multiselect-dropdown>
-                      </div>
-                    </div>
-                    <div class="col-md-1">
-                      <div class="label_item">OTP</div>
-                      <input type="checkbox" formControlName="isOtp" class="form-check-input">
-                    </div>
-                    <div class="col-md-5">
-                      <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
-                      <input type="text" formControlName="phone" class="form-control">
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-1 remove">
-                  <i (click)="removePartnerUser(i)" class="fa fa-times-circle remove_icon"></i>
-                </div>
-              </div>
-            </div>
-            <div class="add_click" (click)="addPartnerUser()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
-          </div>
-        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-1"></div>
+      <div class="col-md-11">
+        <div class="add_click" (click)="addPartner()"><a class="add_link"><i class="fa fa-plus-circle"></i> Thêm đối tác</a></div>
       </div>
     </div>
   </form>
@@ -437,7 +451,7 @@
   <br/>
   {{this.userForm.value | json}}
   <br/>
-  {{this.partners.value | json}}
+  {{this.partnerForm.value | json}}
 </div>
 
 <div class="footer-determine" style="display: flex; justify-content: space-between">
