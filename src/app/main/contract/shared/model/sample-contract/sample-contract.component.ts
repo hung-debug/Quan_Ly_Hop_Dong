@@ -102,25 +102,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //   item['selected'] = false;
     // })
     if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
-      this.datas.userForm.userSigns.forEach((item: any) => {
-        item['selected'] = false;
-        item['sign_unit'] = 'organization'
-        this.list_sign_name.push(item)
-      })
+      let is_user_sign = [...this.datas.userForm.userSigns];
+      this.getListSignName(is_user_sign, 'organization');
     }
 
     if (this.datas.partners.partnerSigns && this.datas.partners.partnerSigns.length > 0) {
-      this.datas.partners.partnerSigns.forEach((item: any) => {
-        item['selected'] = false;
-        item['sign_unit'] = 'partner'
-        this.list_sign_name.push(item)
-      })
+      let is_partner_sign = [...this.datas.partners.partnerSigns];
+      this.getListSignName(is_partner_sign, 'partner');
     } else if (this.datas.partners.partnerUsers && this.datas.partners.partnerUsers.length > 0) {
-      this.datas.partners.partnerUsers.forEach((item: any) => {
-        item['selected'] = false;
-        item['sign_unit'] = 'partner'
-        this.list_sign_name.push(item)
-      })
+      let is_partner_users = [...this.datas.partners.partnerUsers];
+      this.getListSignName(is_partner_users, 'partner');
     }
 
     if (!this.signCurent) {
@@ -128,7 +119,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         offsetWidth: 0,
         offsetHeight: 0
       }
-
     }
 
     // convert base64 file pdf to url
@@ -198,6 +188,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   }
 
+  getListSignName(listSignForm: any = [], type_unit: string) {
+    listSignForm.forEach((item: any) => {
+      item['selected'] = false;
+      item['sign_unit'] = type_unit;
+      item['signType'] = item.signType;
+      item['is_disable'] = false;
+      this.list_sign_name.push(item)
+    })
+  }
+
   resizeSignature = (event: any) => {
     let x = (parseFloat(event.target.getAttribute('data-x')) || 0)
     let y = (parseFloat(event.target.getAttribute('data-y')) || 0)
@@ -215,7 +215,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
         this.signCurent.offsetWidth = event.rect.width;
         this.signCurent.offsetHeight = event.rect.height;
-        console.log(this.signCurent, this.objSignInfo)
         this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.offsetWidth, this.signCurent.offsetHeight, this.objSignInfo);
         let _array = Object.values(this.obj_toa_do);
         this.signCurent.position = _array.join(",");
@@ -336,6 +335,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if ("top" in canvasInfo) {
           this.signCurent['top'] = (event.rect.top - canvasInfo.top).toFixed();
         }
+        let name_accept_signature = '';
         // lay lai danh sach signer sau khi keo vao hop dong
         this.datas.contract_user_sign.forEach((res: any) => {
           if (res.sign_config.length > 0) {
@@ -343,6 +343,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             arrSignConfigItem.forEach((element: any) => {
               if (element.id == this.signCurent['id']) {
                 let _arrPage = event.relatedTarget.id.split("-");
+                // gán hình thức kéo thả => disable element trong list sign
+                name_accept_signature = res.sign_unit;
                 // hiển thị ô nhập tên trường khi kéo thả đối tượng Text
                 if (res.sign_unit == 'text') {
                   this.isEnableText = true;
@@ -354,7 +356,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
                 if (res.sign_unit == 'so_tai_lieu') {
                   this.isChangeText = true;
-                } else this.isChangeText = false;
+                } else {this.isChangeText = false;}
+
                 element['number'] = _arrPage[_arrPage.length - 1];
                 element['position'] = this.signCurent['position'];
                 element['dataset_x'] = this.signCurent['dataset_x'];
@@ -370,7 +373,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   }
                   this.objSignInfo.offsetWidth = element['offsetWidth'];
                   this.objSignInfo.offsetHeight = element['offsetHeight'];
-                  // this.objSignInfo.text_attribute_name = 'hello';
+                  this.objSignInfo.text_attribute_name = '';
                   this.list_sign_name.forEach((item: any) => {
                     item['selected'] = false;
                   })
@@ -385,8 +388,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               }
             })
           }
-
         });
+        this.list_sign_name.forEach((element: any) => {
+          if (name_accept_signature == 'chu_ky_anh') {
+            if (!element.signType.filter((p: any) => p.item_id == 1)[0]) {
+              element.is_disable = true;
+            } else element.is_disable = false;
+          } else if (name_accept_signature == 'chu_ky_so') {
+            if (!element.signType.filter((p: any) => p.item_id == 2)[0]) {
+              element.is_disable = true;
+            } else element.is_disable = false;
+          } else element.is_disable = false;
+        })
       }
     } else {
       if (event.type == 'dragend') {
@@ -726,6 +739,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (d.name) {
         this.list_sign_name.forEach((item: any) => {
           // if (item.id == d.id) {
+          if (d.sign_unit == 'chu_ky_anh') {
+            if (!item.signType.filter((p: any) => p.item_id == 1)[0]) {
+              item.is_disable = true;
+            } else item.is_disable = false;
+          } else if (d.sign_unit == 'chu_ky_so') {
+            if (!item.signType.filter((p: any) => p.item_id == 2)[0]) {
+              item.is_disable = true;
+            } else item.is_disable = false;
+          } else item.is_disable = false;
+
           if (item.name == d.name) {
             item.selected = true;
           } else item.selected = false;
@@ -815,7 +838,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
-    console.log(e, property);
+    // console.log(e, this.objSignInfo, this.signCurent);
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
@@ -885,7 +908,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   next() {
     if (!this.validData()) return;
     else {
-      console.log(this.datas);
+      // console.log(this.datas);
       this.step = variable.stepSampleContract.step4;
       this.datas.stepLast = this.step
       this.nextOrPreviousStep(this.step);

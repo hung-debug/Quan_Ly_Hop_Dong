@@ -291,7 +291,7 @@ export class DetermineSignerComponent implements OnInit {
       }
       this.step = variable.stepSampleContract.step3;
       this.datas.stepLast = this.step
-      console.log(this.datas);
+      // console.log(this.datas);
       this.nextOrPreviousStep(this.step);
     }
   }

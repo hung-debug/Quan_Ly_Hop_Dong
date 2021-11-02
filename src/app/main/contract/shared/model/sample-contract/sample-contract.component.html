@@ -38,7 +38,7 @@
           <label class="label-require">{{isEnableText || isChangeText ? "Người nhập" : "Người ký"}}: *</label>
           <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
             <option value="" hidden>Chọn người ký</option>
-            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}">{{getName(d)}}</option>
+            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
           </select>
         </div>
 
