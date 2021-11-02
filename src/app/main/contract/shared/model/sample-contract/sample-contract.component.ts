@@ -356,7 +356,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
                 if (res.sign_unit == 'so_tai_lieu') {
                   this.isChangeText = true;
-                } else {this.isChangeText = false;}
+                } else {
+                  this.isChangeText = false;
+                }
 
                 element['number'] = _arrPage[_arrPage.length - 1];
                 element['position'] = this.signCurent['position'];
@@ -784,7 +786,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     data.offsetHeight = 0;
     data.position = "";
     if (data.sign_unit == 'text') {
-     this.isEnableText = false;
+      this.isEnableText = false;
     }
     let signElement = document.getElementById(data.id);
     if (signElement) {
@@ -882,7 +884,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (Math.round(this.objSignInfo.traf_x) <= 0) {
       return Math.round(this.objSignInfo.traf_x)
     } else
-    return Math.round(this.objSignInfo.traf_x) - 1;
+      return Math.round(this.objSignInfo.traf_x) - 1;
   }
 
   getTrafY() {
@@ -928,6 +930,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       return false;
     } else {
       let count = 0;
+      let count_text = 0;
       let arrSign_organization: { name: any; signature_party: any; }[] = [];
       let arrSign_partner: { name: any; signature_party: any; }[] = [];
       this.datas.contract_user_sign.forEach((element: any) => {
@@ -935,6 +938,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           element.sign_config.forEach((item: any) => {
             if (!item.name) {
               count++;
+            } else if (item.sign_unit == 'text' && !item.text_attribute_name) {
+              count_text++;
             } else {
               let data_sign = {
                 name: item.name,
@@ -949,6 +954,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
       if (count > 0) {
         alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
+        return false;
+      } else if (count_text > 0) {
+        alert('Thiếu tên trường cho đối tượng nhập Text!');
         return false;
       } else {
         let data_organization = this.list_sign_name.filter((p: any) => p.sign_unit == "organization");
@@ -999,6 +1007,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         //     return false;
         //   }
         // }
+
 
       }
     }
