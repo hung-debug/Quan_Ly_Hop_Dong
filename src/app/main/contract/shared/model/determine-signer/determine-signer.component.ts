@@ -175,8 +175,8 @@ export class DetermineSignerComponent implements OnInit {
   newPartnerLead(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
     })
   }
   addPartnerLead(a:number) {
@@ -193,8 +193,8 @@ export class DetermineSignerComponent implements OnInit {
   newPartnerView(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
     })
   }
   addPartnerView(a:number) {
@@ -211,11 +211,11 @@ export class DetermineSignerComponent implements OnInit {
   newPartnerSign(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
-      signType: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      signType: ['', Validators.required],
       isOtp: true,
-      phone: '',
+      phone: ['', Validators.required],
       id: ''
     })
   }
@@ -233,9 +233,9 @@ export class DetermineSignerComponent implements OnInit {
   newPartnerDoc(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
-      signType: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      signType: ['', Validators.required],
     })
   }
   addPartnerDoc(a:number) {
@@ -252,11 +252,11 @@ export class DetermineSignerComponent implements OnInit {
   newPartnerUser(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
-      signType: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      signType: ['', Validators.required],
       isOtp: true,
-      phone: '',
+      phone: ['', Validators.required],
     })
   }
   addPartnerUser(a:number) {

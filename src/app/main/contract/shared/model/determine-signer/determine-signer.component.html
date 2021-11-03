@@ -237,10 +237,19 @@
                           <div class="col-md-6">
                             <div class="label_item">Họ tên</div>
                             <input type="text" formControlName="name" class="form-control">
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerLead.get('name')?.errors?.required">
+                              Họ tên không được để trống
+                            </p>
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email</div>
                             <input type="text" formControlName="email" class="form-control">
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerLead.get('email')?.errors?.required">
+                              Email không được để trống
+                            </p>
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerLead.get('email')?.errors?.email">
+                              Email sai định dạng
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -266,10 +275,19 @@
                           <div class="col-md-6">
                             <div class="label_item">Họ tên <span class="require_star">*</span></div>
                             <input type="text" formControlName="name" class="form-control">
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerView.get('name')?.errors?.required">
+                              Họ tên không được để trống
+                            </p>
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email <span class="require_star">*</span></div>
                             <input type="text" formControlName="email" class="form-control">
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerView.get('email')?.errors?.required">
+                              Email không được để trống
+                            </p>
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerView.get('email')?.errors?.email">
+                              Email sai định dạng
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -295,10 +313,19 @@
                           <div class="col-md-6">
                             <div class="label_item">Họ tên <span class="require_star">*</span></div>
                             <input type="text" formControlName="name" class="form-control">
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerSign.get('name')?.errors?.required">
+                              Họ tên không được để trống
+                            </p>
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email <span class="require_star">*</span></div>
                             <input type="text" formControlName="email" class="form-control">
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerSign.get('email')?.errors?.required">
+                              Email không được để trống
+                            </p>
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerSign.get('email')?.errors?.email">
+                              Email sai định dạng
+                            </p>
                           </div>
                         </div>
                         <div class="row">
@@ -325,6 +352,9 @@
                                 </ng-template>
                               </ng-multiselect-dropdown>
                             </div>
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerSign.get('signType')?.errors?.required">
+                              Loại ký không được để trống
+                            </p>
                           </div>
                           <div class="col-md-1">
                             <div class="label_item">OTP</div>
@@ -333,6 +363,9 @@
                           <div class="col-md-5">
                             <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
                             <input type="text" formControlName="phone" class="form-control">
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerSign.get('phone')?.errors?.required">
+                              Số điện thoại không được để trống
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -358,10 +391,19 @@
                           <div class="col-md-6">
                             <div class="label_item">Họ tên <span class="require_star">*</span></div>
                             <input type="text" formControlName="name" class="form-control">
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerDoc.get('name')?.errors?.required">
+                              Họ tên không được để trống
+                            </p>
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email <span class="require_star">*</span></div>
                             <input type="text" formControlName="email" class="form-control">
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerDoc.get('email')?.errors?.required">
+                              Email không được để trống
+                            </p>
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerDoc.get('email')?.errors?.email">
+                              Email sai định dạng
+                            </p>
                           </div>
                         </div>
                         <div class="row">
@@ -388,6 +430,9 @@
                                 </ng-template>
                               </ng-multiselect-dropdown>
                             </div>
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerDoc.get('signType')?.errors?.required">
+                              Loại ký không được để trống
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -420,10 +465,16 @@
                           <div class="col-md-6">
                             <div class="label_item">Họ tên <span class="require_star">*</span></div>
                             <input type="text" formControlName="name" class="form-control">
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerUser.get('name')?.errors?.required">
+                              Họ tên không được để trống
+                            </p>
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email <span class="require_star">*</span></div>
                             <input type="text" formControlName="email" class="form-control">
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerUser.get('email')?.errors?.required">
+                              Email không được để trống
+                            </p>
                           </div>
                         </div>
                         <div class="row">
@@ -450,6 +501,9 @@
                                 </ng-template>
                               </ng-multiselect-dropdown>
                             </div>
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerUser.get('signType')?.errors?.required">
+                              Loại ký không được để trống
+                            </p>
                           </div>
                           <div class="col-md-1">
                             <div class="label_item">OTP</div>
@@ -458,6 +512,9 @@
                           <div class="col-md-5">
                             <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
                             <input type="text" formControlName="phone" class="form-control">
+                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerUser.get('phone')?.errors?.required">
+                              Số điện thoại không được để trống
+                            </p>
                           </div>
                         </div>
                       </div>
