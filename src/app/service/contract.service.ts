@@ -166,7 +166,7 @@ export class ContractService {
           id: '456',
           sign_unit: 'text',
           sign_config: "[]",
-          name: ""
+          name: "",
         },
         {
           id: '789',

@@ -54,9 +54,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
   isMove = false;
 
-  isObjNumber: any;
-  isObjDate: any;
-  _yearNow: any;
   objSignInfo: any = {
     id: "",
     showObjSign: false,
@@ -69,31 +66,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     offsetHeight: 0,
     offsetWidth: 0
   }
-  list_sign_name: any = [
-    {name: "Đỗ Thành Dương", id: "1"},
-    {name: "Đỗ Thanh Dương", id: "2"},
-    {name: "Phạm Văn Luân", id: "3"},
-    {name: "Phạm Văn Lâm", id: "4"}
-  ];
-  // listDelete = [];
-  signCurent: any;
-  formatDate: any;
-  changeValuePdf: any;
-  demoStaff: any;
-  base64Demo: any;
 
-  distanceValue = 2;
-  sortSigner: any;
-  isChecked: any;
-  id = "";
+  list_sign_name: any = [];
+  signCurent: any;
+
   isView: any;
   countAttachFile = 0;
-  arrExceptTaxCode: any = [];
-  maxLength = null;
   widthDrag: any;
-  location_sign_x: any = 0;
-  location_sign_y: any = 0;
+
   isEnableSelect: boolean = true;
+  isEnableText: boolean = false;
+  isChangeText: boolean = false;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -115,16 +98,27 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
 
-    this.list_sign_name.forEach((item: any) => {
-      item['selected'] = false;
-    })
+    // this.list_sign_name.forEach((item: any) => {
+    //   item['selected'] = false;
+    // })
+    if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
+      let is_user_sign = [...this.datas.userForm.userSigns];
+      this.getListSignName(is_user_sign, 'organization');
+    }
+
+    if (this.datas.partners.partnerSigns && this.datas.partners.partnerSigns.length > 0) {
+      let is_partner_sign = [...this.datas.partners.partnerSigns];
+      this.getListSignName(is_partner_sign, 'partner');
+    } else if (this.datas.partners.partnerUsers && this.datas.partners.partnerUsers.length > 0) {
+      let is_partner_users = [...this.datas.partners.partnerUsers];
+      this.getListSignName(is_partner_users, 'partner');
+    }
 
     if (!this.signCurent) {
       this.signCurent = {
         offsetWidth: 0,
         offsetHeight: 0
       }
-
     }
 
     // convert base64 file pdf to url
@@ -194,6 +188,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   }
 
+  getListSignName(listSignForm: any = [], type_unit: string) {
+    listSignForm.forEach((item: any) => {
+      item['selected'] = false;
+      item['sign_unit'] = type_unit;
+      item['signType'] = item.signType;
+      item['is_disable'] = false;
+      this.list_sign_name.push(item)
+    })
+  }
+
   resizeSignature = (event: any) => {
     let x = (parseFloat(event.target.getAttribute('data-x')) || 0)
     let y = (parseFloat(event.target.getAttribute('data-y')) || 0)
@@ -211,7 +215,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
         this.signCurent.offsetWidth = event.rect.width;
         this.signCurent.offsetHeight = event.rect.height;
-        console.log(this.signCurent, this.objSignInfo)
         this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.offsetWidth, this.signCurent.offsetHeight, this.objSignInfo);
         let _array = Object.values(this.obj_toa_do);
         this.signCurent.position = _array.join(",");
@@ -248,7 +251,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           if (element.id == id) {
             let _obj: any = {
               sign_unit: element.sign_unit,
-              name: element.name
+              name: element.name,
+              text_attribute_name: element.text_attribute_name
             }
             if (element.sign_config.length == 0) {
               _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
@@ -319,10 +323,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           // show toa do keo tha chu ky (demo)
           // this.location_sign_x = this.signCurent['dataset_x'];
           // this.location_sign_y  = this.signCurent['dataset_y'];
-
         }
 
-        this.objSignInfo.traf_y = Math.round(this.signCurent['dataset_x']);
+        this.objSignInfo.traf_x = Math.round(this.signCurent['dataset_x']);
         this.objSignInfo.traf_y = Math.round(this.signCurent['dataset_y']);
 
         this.tinhToaDoSign(event.relatedTarget.id, event.rect.width, event.rect.height, this.objSignInfo);
@@ -332,14 +335,31 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if ("top" in canvasInfo) {
           this.signCurent['top'] = (event.rect.top - canvasInfo.top).toFixed();
         }
+        let name_accept_signature = '';
         // lay lai danh sach signer sau khi keo vao hop dong
         this.datas.contract_user_sign.forEach((res: any) => {
           if (res.sign_config.length > 0) {
             let arrSignConfigItem = res.sign_config;
             arrSignConfigItem.forEach((element: any) => {
               if (element.id == this.signCurent['id']) {
-
                 let _arrPage = event.relatedTarget.id.split("-");
+                // gán hình thức kéo thả => disable element trong list sign
+                name_accept_signature = res.sign_unit;
+                // hiển thị ô nhập tên trường khi kéo thả đối tượng Text
+                if (res.sign_unit == 'text') {
+                  this.isEnableText = true;
+                  setTimeout(() => {
+                    //@ts-ignore
+                    document.getElementById('text-input-element').focus();
+                  }, 10)
+                } else this.isEnableText = false;
+
+                if (res.sign_unit == 'so_tai_lieu') {
+                  this.isChangeText = true;
+                } else {
+                  this.isChangeText = false;
+                }
+
                 element['number'] = _arrPage[_arrPage.length - 1];
                 element['position'] = this.signCurent['position'];
                 element['dataset_x'] = this.signCurent['dataset_x'];
@@ -355,6 +375,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   }
                   this.objSignInfo.offsetWidth = element['offsetWidth'];
                   this.objSignInfo.offsetHeight = element['offsetHeight'];
+                  this.objSignInfo.text_attribute_name = '';
+                  this.list_sign_name.forEach((item: any) => {
+                    item['selected'] = false;
+                  })
+                  // document.getElementById('select-dropdown'). = 0;
+                  // @ts-ignore
+                  document.getElementById('select-dropdown').value = "";
                   this.objDrag[this.signCurent['id']].count = 2;
                 } else {
                   element['offsetWidth'] = event.target.offsetWidth;
@@ -363,8 +390,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               }
             })
           }
-
         });
+        this.list_sign_name.forEach((element: any) => {
+          if (name_accept_signature == 'chu_ky_anh') {
+            if (!element.signType.filter((p: any) => p.item_id == 1)[0]) {
+              element.is_disable = true;
+            } else element.is_disable = false;
+          } else if (name_accept_signature == 'chu_ky_so') {
+            if (!element.signType.filter((p: any) => p.item_id == 2)[0]) {
+              element.is_disable = true;
+            } else element.is_disable = false;
+          } else element.is_disable = false;
+        })
       }
     } else {
       if (event.type == 'dragend') {
@@ -496,13 +533,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               this.objDrag[item.id] = {
                 count: 2
               }
+              count_total++;
             }
-            count_total++;
           })
         }
       });
       if (count_total == 0) {
         this.isEnableSelect = true;
+        this.isEnableText = false;
+        //@ts-ignore
+        document.getElementById('select-dropdown').value = "";
       }
     }
   }
@@ -651,7 +691,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (window.innerHeight < 670) {
       return {
         "overflow": "auto",
-        "height": "calc(50vh - 100px)"
+        "height": "calc(50vh - 113px)"
       }
     } else return {}
   }
@@ -691,14 +731,33 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // this.signCurent.offsetWidth = d.offsetWidth;
         // this.signCurent.offsetHeight = d.offsetHeight;
         // console.log(this.signCurent)
+
+        this.isEnableText = d.sign_unit == 'text';
+        this.isChangeText = d.sign_unit == 'so_tai_lieu';
+        if (this.isEnableText) {
+          this.objSignInfo.text_attribute_name = d.text_attribute_name
+        }
       }
       if (d.name) {
         this.list_sign_name.forEach((item: any) => {
           // if (item.id == d.id) {
+          if (d.sign_unit == 'chu_ky_anh') {
+            if (!item.signType.filter((p: any) => p.item_id == 1)[0]) {
+              item.is_disable = true;
+            } else item.is_disable = false;
+          } else if (d.sign_unit == 'chu_ky_so') {
+            if (!item.signType.filter((p: any) => p.item_id == 2)[0]) {
+              item.is_disable = true;
+            } else item.is_disable = false;
+          } else item.is_disable = false;
+
           if (item.name == d.name) {
             item.selected = true;
           } else item.selected = false;
         })
+      } else {
+        //@ts-ignore
+        document.getElementById('select-dropdown').value = "";
       }
     }
   }
@@ -726,12 +785,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     data.offsetWidth = 0;
     data.offsetHeight = 0;
     data.position = "";
+    if (data.sign_unit == 'text') {
+      this.isEnableText = false;
+    }
     let signElement = document.getElementById(data.id);
     if (signElement) {
       this.objSignInfo.traf_x = 0;
       this.objSignInfo.traf_y = 0;
       this.objSignInfo.offsetHeight = 0;
       this.objSignInfo.offsetWidth = 0;
+      //@ts-ignore
+      document.getElementById('select-dropdown').value = "";
       // this.signCurent.offsetWidth = 0;
       // this.signCurent.offsetHeight = 0;
     }
@@ -776,7 +840,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
-    console.log(e, property);
+    // console.log(e, this.objSignInfo, this.signCurent);
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
@@ -797,17 +861,34 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             isObjSign.offsetHeight = parseInt(e);
             signElement.setAttribute("height", isObjSign.offsetHeight);
           }
+        } else if (property == 'text') {
+          isObjSign.text_attribute_name = e;
+          signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
           if (data_name) {
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
+
+            isObjSign.signature_party = data_name.sign_unit;
+            signElement.setAttribute("signature_party", isObjSign.signature_party);
           }
         }
         // console.log(this.signCurent)
         // console.log(this.objSignInfo)
       }
     }
+  }
+
+  getTrafX() {
+    if (Math.round(this.objSignInfo.traf_x) <= 0) {
+      return Math.round(this.objSignInfo.traf_x)
+    } else
+      return Math.round(this.objSignInfo.traf_x) - 1;
+  }
+
+  getTrafY() {
+    return Math.round(this.objSignInfo.traf_y)
   }
 
   // edit size doi tuong ky
@@ -829,6 +910,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   next() {
     if (!this.validData()) return;
     else {
+      // console.log(this.datas);
       this.step = variable.stepSampleContract.step4;
       this.datas.stepLast = this.step
       this.nextOrPreviousStep(this.step);
@@ -846,9 +928,98 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (!data_not_drag) {
       alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')
       return false;
+    } else {
+      let count = 0;
+      let count_text = 0;
+      let arrSign_organization: { name: any; signature_party: any; }[] = [];
+      let arrSign_partner: { name: any; signature_party: any; }[] = [];
+      this.datas.contract_user_sign.forEach((element: any) => {
+        if (element.sign_config.length > 0) {
+          element.sign_config.forEach((item: any) => {
+            if (!item.name) {
+              count++;
+            } else if (item.sign_unit == 'text' && !item.text_attribute_name) {
+              count_text++;
+            } else {
+              let data_sign = {
+                name: item.name,
+                signature_party: item.signature_party
+              }
+              if (item.signature_party == "organization")
+                arrSign_organization.push(data_sign);
+              else arrSign_partner.push(data_sign);
+            }
+          })
+        }
+      })
+      if (count > 0) {
+        alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
+        return false;
+      } else if (count_text > 0) {
+        alert('Thiếu tên trường cho đối tượng nhập Text!');
+        return false;
+      } else {
+        let data_organization = this.list_sign_name.filter((p: any) => p.sign_unit == "organization");
+        // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
+        if (arrSign_organization.length < data_organization.length) {
+          alert('Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!');
+          return false;
+        }
+        // valid khi kéo kiểu ký vào nhiều hơn list danh sách đối tượng ký.
+        // if (arrSign_organization.length >= data_organization.length) {
+        //   let total_not_confilic = 0;
+        //   data_organization.forEach((item: any) => {
+        //     arrSign_organization.forEach((element: any) => {
+        //       if (item.name == element.name) {
+        //         total_not_confilic++;
+        //       }
+        //     })
+        //   })
+        //
+        //   if (total_not_confilic > 0) {
+        //     alert('Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!')
+        //     return false;
+        //   }
+        //
+        //   // let data_partner = this.list_sign_name.filter((p: any) => p.signature_party == "partner");
+        //
+        // }
+
+        let data_partner = this.list_sign_name.filter((p: any) => p.sign_unit == "partner");
+        // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
+        if (arrSign_partner.length < data_partner.length) {
+          alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
+          return false;
+        }
+        // valid khi kéo kiểu ký vào nhiều hơn list danh sách đối tượng ký.
+        // if (arrSign_organization.length >= data_partner.length) {
+        //   let total_not_confilic = 0;
+        //   data_partner.forEach((item: any) => {
+        //     arrSign_organization.forEach((element: any) => {
+        //       if (item.name != element.name) {
+        //         total_not_confilic++;
+        //       }
+        //     })
+        //   })
+        //
+        //   if (total_not_confilic > 0) {
+        //     alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!')
+        //     return false;
+        //   }
+        // }
+
+
+      }
     }
     return true;
   }
 
+  getName(data: any) {
+    if (data.sign_unit == 'organization') {
+      return 'Tổ chức của tôi - ' + data.name;
+    } else if (data.sign_unit == 'partner') {
+      return 'Đối tác - ' + data.name;
+    }
+  }
 
 }

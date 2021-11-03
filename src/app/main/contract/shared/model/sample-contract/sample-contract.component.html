@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="sample-contract.component.scss">
+<!--<link rel="stylesheet" href="sample-contract.component.scss">-->
 <div class="sample-contract row">
   <!--  information contract-->
   <div class="col-md-3 sample-contract__information" style="background-color: white; z-index: 10">
@@ -30,15 +30,15 @@
     <div class="location-change" [ngStyle]="changeDisplay()">
       <div class="sample-contract__information--user-sign">
         <label class="label">THUỘC TÍNH</label>
-        <div class="name-text">
+        <div class="name-text" *ngIf="isEnableText">
           <label class="label-require">Tên trường: *</label>
-          <input type="text">
+          <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
         </div>
         <div class="sign-unit-select">
-          <label class="label-require">Người ký: *</label>
-          <select class="form-select" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
+          <label class="label-require">{{isEnableText || isChangeText ? "Người nhập" : "Người ký"}}: *</label>
+          <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
             <option value="" hidden>Chọn người ký</option>
-            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}">{{d.name}}</option>
+            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
           </select>
         </div>
 
@@ -49,11 +49,11 @@
         <div class="location">
           <div class="location-drag">
             <div class="label" style="text-align: center">X:</div>
-            <input type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')" [ngModel]="objSignInfo.traf_x" [readOnly]="false">
+            <input type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')" [ngModel]="getTrafX()" [readOnly]="false">
           </div>
           <div class="location-drag">
             <div class="label" style="text-align: center">Y:</div>
-            <input type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')" [ngModel]="objSignInfo.traf_y" [readOnly]="false">
+            <input type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')" [ngModel]="getTrafY()" [readOnly]="false">
           </div>
         </div>
       </div>
@@ -72,14 +72,6 @@
         </div>
       </div>
     </div>
-
-    <hr>
-
-    <div>
-      <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
-      <button (click)="next()" type="button" name="next" class="next action-button pull-right">Tiếp theo</button>
-    </div>
-
   </div>
 
   <!--  file content-->
@@ -103,6 +95,13 @@
       </div>
 
     </div>
-
+  </div>
+</div>
+<div class="footer-sample-contract">
+  <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
+  <div class="content_footer">@Copyright 2021 - MobiFone</div>
+  <div>
+    <button type="button" name="saveDocument" class="next action-button pull-right">Lưu nháp</button>
+    <button (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
   </div>
 </div>

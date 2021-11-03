@@ -107,28 +107,32 @@ export class SidebarService {
       icon: 'fa fa-user',
       active: false,
       type: 'simple',
-      href: '/main/add-contract'
+      // href: '/main/add-contract'
+      href: '/main/contract-template'
     },
     {
       title: 'Tổ chức',
       icon: 'fa fa-users',
       active: false,
       type: 'simple',
-      href: '/main/add-contract'
+      // href: '/main/add-contract'
+      href: '/main/contract-template'
     },
     {
       title: 'Vai trò',
       icon: 'fa fa-puzzle-piece',
       active: false,
       type: 'simple',
-      href: '/main/add-contract'
+      // href: '/main/add-contract'
+      href: '/main/contract-template'
     },
     {
       title: 'Loại hợp đồng',
       icon: 'fa fa-cube',
       active: false,
       type: 'simple',
-      href: '/main/add-contract'
+      // href: '/main/add-contract'
+      href: '/main/contract-template'
     }
   ];
   constructor() { }

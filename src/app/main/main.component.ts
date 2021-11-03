@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AppService } from '../service/app.service';
-import { SidebarService } from './sidebar/sidebar.service';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AppService} from '../service/app.service';
+import {SidebarService} from './sidebar/sidebar.service';
 
 @Component({
   selector: 'app-main',
@@ -11,12 +11,14 @@ import { SidebarService } from './sidebar/sidebar.service';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-  title:String;
-  closeResult:string= '';
-  resetPasswordForm:any = FormGroup;
+  title: String;
+  closeResult: string = '';
+  resetPasswordForm: any = FormGroup;
   fieldTextTypeOld: boolean = false;
   fieldTextTypeNew: boolean = false;
   repeatFieldTextTypeNew: boolean = false;
+  isShowCopyRight: boolean = true;
+  isRouterContractNew: boolean = true;
 
   constructor(private router: Router,
               private modalService: NgbModal,
@@ -24,11 +26,11 @@ export class MainComponent implements OnInit {
               private appService: AppService,
               public sidebarservice: SidebarService,
               private changeDetectorRef: ChangeDetectorRef) {
-                this.title = 'err';
-              }
+    this.title = 'err';
+  }
 
   //open popup reset password
-  open(content:any) {
+  open(content: any) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -43,7 +45,7 @@ export class MainComponent implements OnInit {
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
       return 'by clicking on a backdrop';
     } else {
-      return  `with: ${reason}`;
+      return `with: ${reason}`;
     }
   }
 
@@ -66,13 +68,16 @@ export class MainComponent implements OnInit {
     this.fieldTextTypeNew = !this.fieldTextTypeNew;
   }
 
- //hien thi password dang text, dang ma
+  //hien thi password dang text, dang ma
   toggleRepeatFieldTextTypeNew() {
     this.repeatFieldTextTypeNew = !this.repeatFieldTextTypeNew;
   }
 
   ngOnInit(): void {
     //update title by component
+    if (this.router.url.includes('/main/add-contract')) {
+      this.isRouterContractNew = false;
+    } else this.isRouterContractNew = true;
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle);
     this.initResetPasswordForm();
   }
@@ -97,14 +102,26 @@ export class MainComponent implements OnInit {
   toggleSidebar() {
     this.sidebarservice.setSidebarState(!this.sidebarservice.getSidebarState());
   }
+
   toggleBackgroundImage() {
     this.sidebarservice.hasBackgroundImage = !this.sidebarservice.hasBackgroundImage;
   }
+
   getSideBarState() {
     return this.sidebarservice.getSidebarState();
   }
 
   hideSidebar() {
     this.sidebarservice.setSidebarState(true);
+  }
+
+  getName(e: any) {
+    if (e && e == "create-contract-new") {
+      this.isShowCopyRight = false;
+      this.isRouterContractNew = false
+    } else {
+      this.isShowCopyRight = true;
+      this.isRouterContractNew = true;
+    }
   }
 }
