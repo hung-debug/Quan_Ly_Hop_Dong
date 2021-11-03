@@ -54,6 +54,14 @@ export class DetermineSignerComponent implements OnInit {
       {
         item_id: 2,
         item_text: "Ký số bằng USB token",
+      },
+      {
+        item_id: 3,
+        item_text: "Ký số bằng sim KPI",
+      },
+      {
+        item_id: 4,
+        item_text: "Ký số bằng HSM",
       }
     ];
 
@@ -105,8 +113,8 @@ export class DetermineSignerComponent implements OnInit {
   newUserView(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
     })
   }
   addUserView() {
@@ -123,11 +131,11 @@ export class DetermineSignerComponent implements OnInit {
   newUserSign(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
-      signType: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      signType: ['', Validators.required],
       isOtp: true,
-      phone: '',
+      phone: ['', Validators.required],
       id: ''
     })
   }
@@ -145,9 +153,9 @@ export class DetermineSignerComponent implements OnInit {
   newUserDoc(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
-      signType: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      signType: ['', Validators.required],
     })
   }
   addUserDoc() {
@@ -306,6 +314,7 @@ export class DetermineSignerComponent implements OnInit {
   validData() {
     if (this.userForm.invalid) {
       console.log('vui lòng nhập đầy đủ dữ liệu userForm')
+      return false;
     }
     if (this.partners.invalid) {
       console.log('Vui lòng nhập đầy đủ dữ liệu partners')
