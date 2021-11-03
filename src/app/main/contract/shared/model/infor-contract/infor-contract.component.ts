@@ -48,6 +48,10 @@ export class InforContractComponent implements OnInit {
   dateDeadline:any;
   comment:any;
 
+  //error
+  errorContractName:any = '';
+  errorContractFile:any = '';
+
   constructor(
     private formBuilder: FormBuilder,
     private uploadService: FileUploadService
@@ -197,21 +201,26 @@ export class InforContractComponent implements OnInit {
 
   //--valid data step 1
   validData() {
+    this.clearError();
     if (!this.contractName) {
-      alert('Tên hợp đồng không được để trống!');
+      this.errorContractName = 'Tên hợp đồng không được để trống!';
       return false;
     }
     if (!this.datas.file_content) {
-      alert('File hợp đồng không được để trống!');
+      this.errorContractFile = 'File hợp đồng không được để trống!';
       return false;
     }
-    // this.datas.inforDetails
-    // if (this.inforDetails.invalid) {
-    //   console.log(this.datas);
-    //   // alert('Vui Lòng nhập đầy đủ thông tin')
 
-    // }
     return true
+  }
+
+  clearError(){
+    if (this.contractName) {
+      this.errorContractName = '';
+    }
+    if (this.datas.file_content) {
+      this.errorContractFile = '';
+    }
   }
 
   // --next step 2
@@ -229,9 +238,7 @@ export class InforContractComponent implements OnInit {
       this.step = variable.stepSampleContract.step2;
       this.datas.stepLast = this.step
       this.nextOrPreviousStep(this.step);
-      console.log(this.dateDeadline);
       console.log(this.datas);
-
     }
   }
 

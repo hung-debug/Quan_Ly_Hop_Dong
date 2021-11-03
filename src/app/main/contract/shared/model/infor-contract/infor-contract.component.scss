@@ -67,7 +67,14 @@ input[type="file"] {
       }
     }
   }
+}
 
+.file-contract{
+  height: 80px;
+  border: 1px solid #87CAFF;
+  cursor: pointer;
+  padding: 10px;
+  text-align: center;
 }
 
 .form-control{
@@ -100,6 +107,18 @@ button {
   margin: 10px 5px;
 }
 
+.draft-button {
+  width: 100px;
+  background: #FCAF17;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
+}
+
 .footer-infor-contract {
   display: flex;
   justify-content: space-between;
@@ -112,8 +131,6 @@ button {
     font-weight: 500;
   }
 }
-
-
 
 ::ng-deep .date-picker {
   width: 100%;
@@ -134,5 +151,11 @@ button {
       transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
     }
   }
+}
 
+.error-detail{
+  font-size: inherit;
+  padding: 7px;
+  margin-top: 5px;
+  margin-bottom: 0;
 }
