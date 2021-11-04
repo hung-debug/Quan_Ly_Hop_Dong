@@ -37,13 +37,21 @@ export class DetermineSignerComponent implements OnInit {
       name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
       userViews: this.formBuilder.array([]) ,
       userSigns: this.formBuilder.array([]) ,
-      // userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
       userDocs: this.formBuilder.array([]) ,
+      // userViews: (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]) ,
+      // userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
+      // userDocs: (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]) ,
     });
+
+    this.userForm.setControl('userViews', (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]));
+    this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
+    this.userForm.setControl('userDocs', (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]));
 
     this.partnerForm = this.formBuilder.group({
       partnerArrs : this.formBuilder.array([this.newPartner()])
     });
+
+    this.partnerForm.setControl('partnerArrs', (this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0) ? this.formBuilder.array(this.datas.partnerForm.partnerArrs) : this.formBuilder.array([this.newPartner()]));
 
 
     this.signTypeList = [
@@ -54,6 +62,14 @@ export class DetermineSignerComponent implements OnInit {
       {
         item_id: 2,
         item_text: "Ký số bằng USB token",
+      },
+      {
+        item_id: 3,
+        item_text: "Ký số bằng sim KPI",
+      },
+      {
+        item_id: 4,
+        item_text: "Ký số bằng HSM",
       }
     ];
 
@@ -75,7 +91,7 @@ export class DetermineSignerComponent implements OnInit {
     return this.partners = this.formBuilder.group({
       order: 1,
       type: 1,
-      name: '',
+      name: ['', Validators.required],
       partnerLeads: this.formBuilder.array([]) ,
       partnerViews: this.formBuilder.array([]) ,
       partnerSigns: this.formBuilder.array([]) ,
@@ -105,8 +121,8 @@ export class DetermineSignerComponent implements OnInit {
   newUserView(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
     })
   }
   addUserView() {
@@ -123,12 +139,12 @@ export class DetermineSignerComponent implements OnInit {
   newUserSign(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
-      signType: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      signType: ['', Validators.required],
       isOtp: true,
-      phone: '',
-      id: ''
+      phone: ['', Validators.required],
+      id: '',
     })
   }
   addUserSign() {
@@ -145,9 +161,9 @@ export class DetermineSignerComponent implements OnInit {
   newUserDoc(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
-      signType: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      signType: ['', Validators.required],
     })
   }
   addUserDoc() {
@@ -167,8 +183,8 @@ export class DetermineSignerComponent implements OnInit {
   newPartnerLead(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
     })
   }
   addPartnerLead(a:number) {
@@ -185,8 +201,8 @@ export class DetermineSignerComponent implements OnInit {
   newPartnerView(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
     })
   }
   addPartnerView(a:number) {
@@ -203,11 +219,11 @@ export class DetermineSignerComponent implements OnInit {
   newPartnerSign(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
-      signType: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      signType: ['', Validators.required],
       isOtp: true,
-      phone: '',
+      phone: ['', Validators.required],
       id: ''
     })
   }
@@ -225,9 +241,9 @@ export class DetermineSignerComponent implements OnInit {
   newPartnerDoc(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
-      signType: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      signType: ['', Validators.required],
     })
   }
   addPartnerDoc(a:number) {
@@ -244,11 +260,11 @@ export class DetermineSignerComponent implements OnInit {
   newPartnerUser(): FormGroup {
     return this.formBuilder.group({
       order: 1,
-      name: '',
-      email: '',
-      signType: '',
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      signType: ['', Validators.required],
       isOtp: true,
-      phone: '',
+      phone: ['', Validators.required],
     })
   }
   addPartnerUser(a:number) {
@@ -306,6 +322,7 @@ export class DetermineSignerComponent implements OnInit {
   validData() {
     if (this.userForm.invalid) {
       console.log('vui lòng nhập đầy đủ dữ liệu userForm')
+      return false;
     }
     if (this.partners.invalid) {
       console.log('Vui lòng nhập đầy đủ dữ liệu partners')

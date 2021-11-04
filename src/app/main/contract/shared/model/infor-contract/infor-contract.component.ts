@@ -48,6 +48,10 @@ export class InforContractComponent implements OnInit {
   dateDeadline:any;
   comment:any;
 
+  //error
+  errorContractName:any = '';
+  errorContractFile:any = '';
+
   constructor(
     private formBuilder: FormBuilder,
     private uploadService: FileUploadService
@@ -72,6 +76,14 @@ export class InforContractComponent implements OnInit {
     // keyboardEvents: true // enable keyboard events
   };
   ngOnInit(): void {
+    userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
+
+    this.contractName = this.datas.contractName ? this.datas.contractName : '';
+    this.contractNumber = this.datas.contractNumber ? this.datas.contractNumber : '';
+    this.contractType = this.datas.contractType ? this.datas.contractType : '';
+    this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : '';
+    this.dateDeadline = this.datas.dateDeadline ? this.datas.dateDeadline : '';
+    this.comment = this.datas.comment ? this.datas.comment : '';
 
     this.contractTypeList = [
       {
@@ -197,21 +209,26 @@ export class InforContractComponent implements OnInit {
 
   //--valid data step 1
   validData() {
+    this.clearError();
     if (!this.contractName) {
-      alert('Tên hợp đồng không được để trống!');
+      this.errorContractName = 'Tên hợp đồng không được để trống!';
       return false;
     }
     if (!this.datas.file_content) {
-      alert('File hợp đồng không được để trống!');
+      this.errorContractFile = 'File hợp đồng không được để trống!';
       return false;
     }
-    // this.datas.inforDetails
-    // if (this.inforDetails.invalid) {
-    //   console.log(this.datas);
-    //   // alert('Vui Lòng nhập đầy đủ thông tin')
 
-    // }
     return true
+  }
+
+  clearError(){
+    if (this.contractName) {
+      this.errorContractName = '';
+    }
+    if (this.datas.file_content) {
+      this.errorContractFile = '';
+    }
   }
 
   // --next step 2
@@ -229,9 +246,7 @@ export class InforContractComponent implements OnInit {
       this.step = variable.stepSampleContract.step2;
       this.datas.stepLast = this.step
       this.nextOrPreviousStep(this.step);
-      console.log(this.dateDeadline);
       console.log(this.datas);
-
     }
   }
 
