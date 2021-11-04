@@ -26,19 +26,23 @@
                   <div class="col-md-6">
                     <div class="label_item">Họ tên <span class="require_star">*</span></div>
                     <input type="text" formControlName="name" class="form-control">
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userView.get('name')?.errors?.required">
-                      Họ tên không được để trống
-                    </p>
+                    <div *ngIf="!userView.get('name')?.valid && (userView.get('name')?.dirty ||userView.get('name')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('name')?.errors?.required">
+                        Họ tên không được để trống
+                      </p>
+                    </div>
                   </div>
                   <div class="col-md-6">
                     <div class="label_item">Email <span class="require_star">*</span></div>
                     <input type="text" formControlName="email" class="form-control">
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userView.get('email')?.errors?.required">
-                      Email không được để trống
-                    </p>
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userView.get('email')?.errors?.email">
-                      Email sai định dạng
-                    </p>
+                    <div *ngIf="!userView.get('email')?.valid && (userView.get('email')?.dirty ||userView.get('email')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('email')?.errors?.required">
+                        Email không được để trống
+                      </p>
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('email')?.errors?.email">
+                        Email sai định dạng
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -64,19 +68,23 @@
                   <div class="col-md-6">
                     <div class="label_item">Họ tên <span class="require_star">*</span></div>
                     <input type="text" formControlName="name" class="form-control">
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userSign.get('name')?.errors?.required">
-                      Họ tên không được để trống
-                    </p>
+                    <div *ngIf="!userSign.get('name')?.valid && (userSign.get('name')?.dirty ||userSign.get('name')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userSign.get('name')?.errors?.required">
+                        Họ tên không được để trống
+                      </p>
+                    </div>
                   </div>
                   <div class="col-md-6">
                     <div class="label_item">Email <span class="require_star">*</span></div>
                     <input type="text" formControlName="email" class="form-control">
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userSign.get('email')?.errors?.required">
-                      Email không được để trống
-                    </p>
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userSign.get('email')?.errors?.email">
-                      Email sai định dạng
-                    </p>
+                    <div *ngIf="!userSign.get('email')?.valid && (userSign.get('email')?.dirty ||userSign.get('email')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userSign.get('email')?.errors?.required">
+                        Email không được để trống
+                      </p>
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userSign.get('email')?.errors?.email">
+                        Email sai định dạng
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div class="row">
@@ -103,9 +111,11 @@
                         </ng-template>
                       </ng-multiselect-dropdown>
                     </div>
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userSign.get('signType')?.errors?.required">
-                      Loại ký không được để trống
-                    </p>
+                    <div *ngIf="!userSign.get('signType')?.valid && (userSign.get('signType')?.dirty ||userSign.get('signType')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userSign.get('signType')?.errors?.required">
+                        Loại ký không được để trống
+                      </p>
+                    </div>
                   </div>
                   <div class="col-md-1">
                     <div class="label_item">OTP</div>
@@ -114,9 +124,11 @@
                   <div class="col-md-5">
                     <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
                     <input type="text" formControlName="phone" class="form-control">
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userSign.get('phone')?.errors?.required">
-                      Số điện thoại không được để trống
-                    </p>
+                    <div *ngIf="!userSign.get('phone')?.valid && (userSign.get('phone')?.dirty ||userSign.get('phone')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userSign.get('phone')?.errors?.required">
+                        Số điện thoại không được để trống
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -142,19 +154,23 @@
                   <div class="col-md-6">
                     <div class="label_item">Họ tên <span class="require_star">*</span></div>
                     <input type="text" formControlName="name" class="form-control">
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userDoc.get('name')?.errors?.required">
-                      Họ tên không được để trống
-                    </p>
+                    <div *ngIf="!userDoc.get('name')?.valid && (userDoc.get('name')?.dirty ||userDoc.get('name')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('name')?.errors?.required">
+                        Họ tên không được để trống
+                      </p>
+                    </div>
                   </div>
                   <div class="col-md-6">
                     <div class="label_item">Email <span class="require_star">*</span></div>
                     <input type="text" formControlName="email" class="form-control">
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userDoc.get('email')?.errors?.required">
-                      Email không được để trống
-                    </p>
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userDoc.get('email')?.errors?.email">
-                      Email sai định dạng
-                    </p>
+                    <div *ngIf="!userDoc.get('email')?.valid && (userDoc.get('email')?.dirty ||userDoc.get('email')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('email')?.errors?.required">
+                        Email không được để trống
+                      </p>
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('email')?.errors?.email">
+                        Email sai định dạng
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div class="row">
@@ -181,9 +197,11 @@
                         </ng-template>
                       </ng-multiselect-dropdown>
                     </div>
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userDoc.get('signType')?.errors?.required">
-                      Loại ký không được để trống
-                    </p>
+                    <div *ngIf="!userDoc.get('signType')?.valid && (userDoc.get('signType')?.dirty ||userDoc.get('signType')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('signType')?.errors?.required">
+                        Loại ký không được để trống
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -222,9 +240,11 @@
                   <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
                   <input class="form-control textOrg" id="name" name="name" formControlName="name">
                 </p>
-                <p class="alert alert-danger error-detail" role="alert" *ngIf="partners.get('name')?.errors?.required">
-                  Tên đối tác không được để trống
-                </p>
+                <div *ngIf="!partners.get('name')?.valid && (partners.get('name')?.dirty ||partners.get('name')?.touched)">
+                  <p class="alert alert-danger error-detail" role="alert" [hidden]="!partners.get('name')?.errors?.required">
+                    Tên đối tác không được để trống
+                  </p>
+                </div>
 
                 <!-- Partner lead -->
                 <div class="add_content" formArrayName="partnerLeads">
@@ -240,19 +260,23 @@
                           <div class="col-md-6">
                             <div class="label_item">Họ tên</div>
                             <input type="text" formControlName="name" class="form-control">
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerLead.get('name')?.errors?.required">
-                              Họ tên không được để trống
-                            </p>
+                            <div *ngIf="!partnerLead.get('name')?.valid && (partnerLead.get('name')?.dirty ||partnerLead.get('name')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerLead.get('name')?.errors?.required">
+                                Họ tên không được để trống
+                              </p>
+                            </div>
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email</div>
                             <input type="text" formControlName="email" class="form-control">
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerLead.get('email')?.errors?.required">
-                              Email không được để trống
-                            </p>
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerLead.get('email')?.errors?.email">
-                              Email sai định dạng
-                            </p>
+                            <div *ngIf="!partnerLead.get('email')?.valid && (partnerLead.get('email')?.dirty ||partnerLead.get('email')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerLead.get('email')?.errors?.required">
+                                Email không được để trống
+                              </p>
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerLead.get('email')?.errors?.email">
+                                Email sai định dạng
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -278,19 +302,23 @@
                           <div class="col-md-6">
                             <div class="label_item">Họ tên <span class="require_star">*</span></div>
                             <input type="text" formControlName="name" class="form-control">
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerView.get('name')?.errors?.required">
-                              Họ tên không được để trống
-                            </p>
+                            <div *ngIf="!partnerView.get('name')?.valid && (partnerView.get('name')?.dirty ||partnerView.get('name')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerView.get('name')?.errors?.required">
+                                Họ tên không được để trống
+                              </p>
+                            </div>
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email <span class="require_star">*</span></div>
                             <input type="text" formControlName="email" class="form-control">
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerView.get('email')?.errors?.required">
-                              Email không được để trống
-                            </p>
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerView.get('email')?.errors?.email">
-                              Email sai định dạng
-                            </p>
+                            <div *ngIf="!partnerView.get('email')?.valid && (partnerView.get('email')?.dirty ||partnerView.get('email')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerView.get('email')?.errors?.required">
+                                Email không được để trống
+                              </p>
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerView.get('email')?.errors?.email">
+                                Email sai định dạng
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -316,19 +344,23 @@
                           <div class="col-md-6">
                             <div class="label_item">Họ tên <span class="require_star">*</span></div>
                             <input type="text" formControlName="name" class="form-control">
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerSign.get('name')?.errors?.required">
-                              Họ tên không được để trống
-                            </p>
+                            <div *ngIf="!partnerSign.get('name')?.valid && (partnerSign.get('name')?.dirty ||partnerSign.get('name')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('name')?.errors?.required">
+                                Họ tên không được để trống
+                              </p>
+                            </div>
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email <span class="require_star">*</span></div>
                             <input type="text" formControlName="email" class="form-control">
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerSign.get('email')?.errors?.required">
-                              Email không được để trống
-                            </p>
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerSign.get('email')?.errors?.email">
-                              Email sai định dạng
-                            </p>
+                            <div *ngIf="!partnerSign.get('email')?.valid && (partnerSign.get('email')?.dirty ||partnerSign.get('email')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('email')?.errors?.required">
+                                Email không được để trống
+                              </p>
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('email')?.errors?.email">
+                                Email sai định dạng
+                              </p>
+                            </div>
                           </div>
                         </div>
                         <div class="row">
@@ -355,9 +387,11 @@
                                 </ng-template>
                               </ng-multiselect-dropdown>
                             </div>
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerSign.get('signType')?.errors?.required">
-                              Loại ký không được để trống
-                            </p>
+                            <div *ngIf="!partnerSign.get('signType')?.valid && (partnerSign.get('signType')?.dirty ||partnerSign.get('signType')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('signType')?.errors?.required">
+                                Loại ký không được để trống
+                              </p>
+                            </div>
                           </div>
                           <div class="col-md-1">
                             <div class="label_item">OTP</div>
@@ -366,9 +400,11 @@
                           <div class="col-md-5">
                             <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
                             <input type="text" formControlName="phone" class="form-control">
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerSign.get('phone')?.errors?.required">
-                              Số điện thoại không được để trống
-                            </p>
+                            <div *ngIf="!partnerSign.get('phone')?.valid && (partnerSign.get('phone')?.dirty ||partnerSign.get('phone')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('phone')?.errors?.required">
+                                Số điện thoại không được để trống
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -394,19 +430,23 @@
                           <div class="col-md-6">
                             <div class="label_item">Họ tên <span class="require_star">*</span></div>
                             <input type="text" formControlName="name" class="form-control">
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerDoc.get('name')?.errors?.required">
-                              Họ tên không được để trống
-                            </p>
+                            <div *ngIf="!partnerDoc.get('name')?.valid && (partnerDoc.get('name')?.dirty ||partnerDoc.get('name')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('name')?.errors?.required">
+                                Họ tên không được để trống
+                              </p>
+                            </div>
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email <span class="require_star">*</span></div>
                             <input type="text" formControlName="email" class="form-control">
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerDoc.get('email')?.errors?.required">
-                              Email không được để trống
-                            </p>
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerDoc.get('email')?.errors?.email">
-                              Email sai định dạng
-                            </p>
+                            <div *ngIf="!partnerDoc.get('email')?.valid && (partnerDoc.get('email')?.dirty ||partnerDoc.get('email')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('email')?.errors?.required">
+                                Email không được để trống
+                              </p>
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('email')?.errors?.email">
+                                Email sai định dạng
+                              </p>
+                            </div>
                           </div>
                         </div>
                         <div class="row">
@@ -433,9 +473,11 @@
                                 </ng-template>
                               </ng-multiselect-dropdown>
                             </div>
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerDoc.get('signType')?.errors?.required">
-                              Loại ký không được để trống
-                            </p>
+                            <div *ngIf="!partnerDoc.get('signType')?.valid && (partnerDoc.get('signType')?.dirty ||partnerDoc.get('signType')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('signType')?.errors?.required">
+                                Loại ký không được để trống
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -468,16 +510,20 @@
                           <div class="col-md-6">
                             <div class="label_item">Họ tên <span class="require_star">*</span></div>
                             <input type="text" formControlName="name" class="form-control">
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerUser.get('name')?.errors?.required">
-                              Họ tên không được để trống
-                            </p>
+                            <div *ngIf="!partnerUser.get('name')?.valid && (partnerUser.get('name')?.dirty ||partnerUser.get('name')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('name')?.errors?.required">
+                                Họ tên không được để trống
+                              </p>
+                            </div>
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email <span class="require_star">*</span></div>
                             <input type="text" formControlName="email" class="form-control">
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerUser.get('email')?.errors?.required">
-                              Email không được để trống
-                            </p>
+                            <div *ngIf="!partnerUser.get('email')?.valid && (partnerUser.get('email')?.dirty ||partnerUser.get('email')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('email')?.errors?.required">
+                                Email không được để trống
+                              </p>
+                            </div>
                           </div>
                         </div>
                         <div class="row">
@@ -504,9 +550,11 @@
                                 </ng-template>
                               </ng-multiselect-dropdown>
                             </div>
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerUser.get('signType')?.errors?.required">
-                              Loại ký không được để trống
-                            </p>
+                            <div *ngIf="!partnerUser.get('signType')?.valid && (partnerUser.get('signType')?.dirty ||partnerUser.get('signType')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('signType')?.errors?.required">
+                                Loại ký không được để trống
+                              </p>
+                            </div>
                           </div>
                           <div class="col-md-1">
                             <div class="label_item">OTP</div>
@@ -515,9 +563,11 @@
                           <div class="col-md-5">
                             <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
                             <input type="text" formControlName="phone" class="form-control">
-                            <p class="alert alert-danger error-detail" role="alert" *ngIf="partnerUser.get('phone')?.errors?.required">
-                              Số điện thoại không được để trống
-                            </p>
+                            <div *ngIf="!partnerUser.get('phone')?.valid && (partnerUser.get('phone')?.dirty ||partnerUser.get('phone')?.touched)">
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('phone')?.errors?.required">
+                                Số điện thoại không được để trống
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
