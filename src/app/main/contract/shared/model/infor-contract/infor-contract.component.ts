@@ -76,6 +76,14 @@ export class InforContractComponent implements OnInit {
     // keyboardEvents: true // enable keyboard events
   };
   ngOnInit(): void {
+    userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
+
+    this.contractName = this.datas.contractName ? this.datas.contractName : '';
+    this.contractNumber = this.datas.contractNumber ? this.datas.contractNumber : '';
+    this.contractType = this.datas.contractType ? this.datas.contractType : '';
+    this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : '';
+    this.dateDeadline = this.datas.dateDeadline ? this.datas.dateDeadline : '';
+    this.comment = this.datas.comment ? this.datas.comment : '';
 
     this.contractTypeList = [
       {

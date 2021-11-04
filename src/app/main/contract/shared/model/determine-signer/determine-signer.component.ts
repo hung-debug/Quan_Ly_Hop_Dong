@@ -37,13 +37,21 @@ export class DetermineSignerComponent implements OnInit {
       name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
       userViews: this.formBuilder.array([]) ,
       userSigns: this.formBuilder.array([]) ,
-      // userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
       userDocs: this.formBuilder.array([]) ,
+      // userViews: (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]) ,
+      // userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
+      // userDocs: (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]) ,
     });
+
+    this.userForm.setControl('userViews', (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]));
+    this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
+    this.userForm.setControl('userDocs', (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]));
 
     this.partnerForm = this.formBuilder.group({
       partnerArrs : this.formBuilder.array([this.newPartner()])
     });
+
+    this.partnerForm.setControl('partnerArrs', (this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0) ? this.formBuilder.array(this.datas.partnerForm.partnerArrs) : this.formBuilder.array([this.newPartner()]));
 
 
     this.signTypeList = [
@@ -83,7 +91,7 @@ export class DetermineSignerComponent implements OnInit {
     return this.partners = this.formBuilder.group({
       order: 1,
       type: 1,
-      name: '',
+      name: ['', Validators.required],
       partnerLeads: this.formBuilder.array([]) ,
       partnerViews: this.formBuilder.array([]) ,
       partnerSigns: this.formBuilder.array([]) ,
@@ -136,7 +144,7 @@ export class DetermineSignerComponent implements OnInit {
       signType: ['', Validators.required],
       isOtp: true,
       phone: ['', Validators.required],
-      id: ''
+      id: '',
     })
   }
   addUserSign() {
@@ -286,17 +294,18 @@ export class DetermineSignerComponent implements OnInit {
           item['id'] = Helper._randomNumber(10);
         })
       }
-      this.datas.partners = this.partners.value;
-      if (this.datas.partners.partnerSigns && this.datas.userForm.userSigns.length > 0) {
-        this.datas.partners.partnerSigns.forEach((item: any) => {
-          item['id'] = Helper._randomNumber(10);
-        })
-      }
-      if (this.datas.partners.partnerUsers && this.datas.partners.partnerUsers.length > 0) {
-        this.datas.partners.partnerUsers.forEach((item: any) => {
-          item['id'] = Helper._randomNumber(10);
-        })
-      }
+      //this.datas.partners = this.partners.value;
+      this.datas.partnerForm = this.partnerForm.value;
+      // if (this.datas.partners.partnerSigns && this.datas.userForm.userSigns.length > 0) {
+      //   this.datas.partners.partnerSigns.forEach((item: any) => {
+      //     item['id'] = Helper._randomNumber(10);
+      //   })
+      // }
+      // if (this.datas.partners.partnerUsers && this.datas.partners.partnerUsers.length > 0) {
+      //   this.datas.partners.partnerUsers.forEach((item: any) => {
+      //     item['id'] = Helper._randomNumber(10);
+      //   })
+      // }
       this.step = variable.stepSampleContract.step3;
       this.datas.stepLast = this.step
       // console.log(this.datas);

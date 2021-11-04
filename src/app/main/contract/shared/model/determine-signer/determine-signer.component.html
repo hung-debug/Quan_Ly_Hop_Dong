@@ -182,7 +182,7 @@
                       </ng-multiselect-dropdown>
                     </div>
                     <p class="alert alert-danger error-detail" role="alert" *ngIf="userDoc.get('signType')?.errors?.required">
-                      Họ tên không được để trống
+                      Loại ký không được để trống
                     </p>
                   </div>
                 </div>
@@ -221,6 +221,9 @@
                 <p>
                   <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
                   <input class="form-control textOrg" id="name" name="name" formControlName="name">
+                </p>
+                <p class="alert alert-danger error-detail" role="alert" *ngIf="partners.get('name')?.errors?.required">
+                  Tên đối tác không được để trống
                 </p>
 
                 <!-- Partner lead -->
@@ -542,9 +545,14 @@
   </form>
 
   <br/>
+  {{this.datas | json}}
+
+  <br/>
   {{this.userForm.value | json}}
   <br/>
   {{this.partnerForm.value | json}}
+
+
 </div>
 
 <div class="footer-determine" style="display: flex; justify-content: space-between">
