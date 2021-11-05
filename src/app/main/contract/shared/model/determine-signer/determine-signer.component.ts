@@ -30,22 +30,58 @@ export class DetermineSignerComponent implements OnInit {
     this.step = variable.stepSampleContract.step2
     //this.datas.determineDetails = this.determineDetails;
   }
+  data: any = [
+      {
+        "order": 1,
+        "name": "Nguyễn Tuấn Anh",
+        "email": "nguyentuananh@vhc.com.vn",
+        "signType": [
+          {
+            "item_id": 1,
+            "item_text": "Ký ảnh"
+          }
+        ],
+        "isOtp": true,
+        "phone": "0979889999",
+        "id": 3923609057,
+        "selected": false,
+        "sign_unit": "organization"
+      },
+      {
+        "order": 1,
+        "name": "Đỗ Thành Dương",
+        "email": "duongdt@vhc.com.vn",
+        "signType": [
+          {
+            "item_id": 1,
+            "item_text": "Ký ảnh"
+          }
+        ],
+        "isOtp": true,
+        "phone": "0979889889",
+        "id": 3900000225,
+        "selected": false,
+        "sign_unit": "organization"
+      }
+  ];
 
   ngOnInit(): void {
     this.userForm = this.formBuilder.group({
       order: 1,
       name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
-      userViews: this.formBuilder.array([]) ,
-      userSigns: this.formBuilder.array([]) ,
-      userDocs: this.formBuilder.array([]) ,
+      userViews: this.formBuilder.array([]),
+      userSigns: this.formBuilder.array([]),
+      userDocs: this.formBuilder.array([])
       // userViews: (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]) ,
       // userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
       // userDocs: (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]) ,
     });
 
-    this.userForm.setControl('userViews', (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]));
-    this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
-    this.userForm.setControl('userDocs', (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]));
+
+
+    // this.userForm.setControl('userViews', (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]));
+    // this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
+    // this.userForm.setControl('userDocs', (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]));
 
     this.partnerForm = this.formBuilder.group({
       partnerArrs : this.formBuilder.array([this.newPartner()])
@@ -81,7 +117,41 @@ export class DetermineSignerComponent implements OnInit {
       unSelectAllText: "Bỏ chọn tất cả",
       allowSearchFilter: true
     };
+
+    // const fa = (this.userForm.get('aliases') as FormArray);
+    this.addNewAlias();
   }
+
+  // gán lại dữ liệu value cho form
+  addNewAlias() {
+    const fa = (this.userForm.get('userSigns') as FormArray);
+    for (let i = 0; i < this.data.length; i++) {
+      fa.push(this.formBuilder.group(this.data[i]));
+    }
+    console.log(fa, this.data.length)
+  }
+
+
+  // this.data = [
+  //   {
+  //     "order": 1,
+  //     "name": "Nguyễn Tuấn Anh",
+  //     "email": "nguyentuananh@vhc.com.vn",
+  //     "signType": [
+  //       {
+  //         "item_id": 1,
+  //         "item_text": "Ký ảnh"
+  //       }
+  //     ],
+  //     "isOtp": true,
+  //     "phone": "0979889999",
+  //     "id": 3923609057,
+  //     "selected": false,
+  //     "sign_unit": "organization"
+  //   }]
+
+  // @ts-ignore
+
 
 
   partnerArrs() : FormArray {
@@ -134,6 +204,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //user sign
   userSigns() : FormArray {
+    console.log((this.userForm.get("userSigns") as FormArray).value)
     return this.userForm.get("userSigns") as FormArray
   }
   newUserSign(): FormGroup {

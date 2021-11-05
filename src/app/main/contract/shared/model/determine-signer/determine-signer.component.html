@@ -51,11 +51,11 @@
         </div>
 
         <!-- User sign -->
-        <div class="add_content" formArrayName="userSigns">
+        <div class="add_content" >
           <div class="label">Người ký</div>
           <hr>
-          <div *ngFor="let userSign of userSigns().controls; let i=index" [formGroupName]="i">
-            <div class="row">
+          <div formArrayName="userSigns" *ngFor="let alias of userSigns().controls; let i = index;">
+            <div class="row" [formGroupName]="i">
               <div class="col-md-1 order">
                 <input type="number" formControlName="order" class="form-control order_input">
               </div>
@@ -64,17 +64,17 @@
                   <div class="col-md-6">
                     <div class="label_item">Họ tên <span class="require_star">*</span></div>
                     <input type="text" formControlName="name" class="form-control">
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userSign.get('name')?.errors?.required">
+                    <p class="alert alert-danger error-detail" role="alert" *ngIf="alias.get('name')?.errors?.required">
                       Họ tên không được để trống
                     </p>
                   </div>
                   <div class="col-md-6">
                     <div class="label_item">Email <span class="require_star">*</span></div>
                     <input type="text" formControlName="email" class="form-control">
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userSign.get('email')?.errors?.required">
+                    <p class="alert alert-danger error-detail" role="alert" *ngIf="alias.get('email')?.errors?.required">
                       Email không được để trống
                     </p>
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userSign.get('email')?.errors?.email">
+                    <p class="alert alert-danger error-detail" role="alert" *ngIf="alias.get('email')?.errors?.email">
                       Email sai định dạng
                     </p>
                   </div>
@@ -103,7 +103,7 @@
                         </ng-template>
                       </ng-multiselect-dropdown>
                     </div>
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userSign.get('signType')?.errors?.required">
+                    <p class="alert alert-danger error-detail" role="alert" *ngIf="alias.get('signType')?.errors?.required">
                       Loại ký không được để trống
                     </p>
                   </div>
@@ -114,7 +114,7 @@
                   <div class="col-md-5">
                     <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
                     <input type="text" formControlName="phone" class="form-control">
-                    <p class="alert alert-danger error-detail" role="alert" *ngIf="userSign.get('phone')?.errors?.required">
+                    <p class="alert alert-danger error-detail" role="alert" *ngIf="alias.get('phone')?.errors?.required">
                       Số điện thoại không được để trống
                     </p>
                   </div>
