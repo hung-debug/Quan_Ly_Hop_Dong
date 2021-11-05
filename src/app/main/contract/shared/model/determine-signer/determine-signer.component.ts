@@ -289,21 +289,20 @@ export class DetermineSignerComponent implements OnInit {
     else {
       // gán value step 2 vào datas
       this.datas.userForm = this.userForm.value;
-      if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
-        this.datas.userForm.userSigns.forEach((item: any) => {
-          item['id'] = Helper._randomNumber(10);
-        })
-      }
-      //this.datas.partners = this.partners.value;
-      this.datas.partnerForm = this.partnerForm.value;
+      // if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
+      //   this.datas.userForm.userSigns.forEach((item: any) => {
+      //     // item['id'] = Helper._randomNumber(10);
+      //   })
+      // }
+      this.datas.partners = this.partners.value;
       // if (this.datas.partners.partnerSigns && this.datas.userForm.userSigns.length > 0) {
       //   this.datas.partners.partnerSigns.forEach((item: any) => {
-      //     item['id'] = Helper._randomNumber(10);
+      //     // item['id'] = Helper._randomNumber(10);
       //   })
       // }
       // if (this.datas.partners.partnerUsers && this.datas.partners.partnerUsers.length > 0) {
       //   this.datas.partners.partnerUsers.forEach((item: any) => {
-      //     item['id'] = Helper._randomNumber(10);
+      //     // item['id'] = Helper._randomNumber(10);
       //   })
       // }
       this.step = variable.stepSampleContract.step3;
