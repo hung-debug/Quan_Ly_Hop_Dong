@@ -167,7 +167,7 @@ export class DetermineSignerComponent implements OnInit {
     })
   }
   addUserDoc() {
-    this.userDocs().push(this.newUserSign());
+    this.userDocs().push(this.newUserDoc());
   }
   removeUserDoc(i:number) {
     this.userDocs().removeAt(i);

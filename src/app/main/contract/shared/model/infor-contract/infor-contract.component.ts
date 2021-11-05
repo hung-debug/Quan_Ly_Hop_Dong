@@ -144,6 +144,7 @@ export class InforContractComponent implements OnInit {
             fileInput.value = '';
             this.datas.file_content = base64result;
             this.datas.file_name = file_name;
+            this.datas.contractFile = file;
             // this.datas.documents['file_content_docx'] = null;
             // this.pdfSrc = Helper._getUrlPdf(base64result);
           };
