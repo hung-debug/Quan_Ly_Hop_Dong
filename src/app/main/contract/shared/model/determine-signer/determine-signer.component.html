@@ -55,11 +55,11 @@
         </div>
 
         <!-- User sign -->
-        <div class="add_content" formArrayName="userSigns">
+        <div class="add_content" >
           <div class="label">Người ký</div>
           <hr>
-          <div *ngFor="let userSign of userSigns().controls; let i=index" [formGroupName]="i">
-            <div class="row">
+          <div formArrayName="userSigns" *ngFor="let alias of userSigns().controls; let i = index;">
+            <div class="row" [formGroupName]="i">
               <div class="col-md-1 order">
                 <input type="number" formControlName="order" class="form-control order_input">
               </div>
@@ -68,23 +68,27 @@
                   <div class="col-md-6">
                     <div class="label_item">Họ tên <span class="require_star">*</span></div>
                     <input type="text" formControlName="name" class="form-control">
-                    <div *ngIf="!userSign.get('name')?.valid && (userSign.get('name')?.dirty ||userSign.get('name')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userSign.get('name')?.errors?.required">
+
+                    <div *ngIf="!alias.get('name')?.valid && (alias.get('name')?.dirty ||alias.get('name')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('name')?.errors?.required">
                         Họ tên không được để trống
                       </p>
                     </div>
+
                   </div>
                   <div class="col-md-6">
                     <div class="label_item">Email <span class="require_star">*</span></div>
                     <input type="text" formControlName="email" class="form-control">
-                    <div *ngIf="!userSign.get('email')?.valid && (userSign.get('email')?.dirty ||userSign.get('email')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userSign.get('email')?.errors?.required">
+
+                    <div *ngIf="!alias.get('email')?.valid && (alias.get('email')?.dirty ||alias.get('email')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('email')?.errors?.required">
                         Email không được để trống
                       </p>
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userSign.get('email')?.errors?.email">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('email')?.errors?.email">
                         Email sai định dạng
                       </p>
                     </div>
+
                   </div>
                 </div>
                 <div class="row">
@@ -111,11 +115,13 @@
                         </ng-template>
                       </ng-multiselect-dropdown>
                     </div>
-                    <div *ngIf="!userSign.get('signType')?.valid && (userSign.get('signType')?.dirty ||userSign.get('signType')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userSign.get('signType')?.errors?.required">
+
+                    <div *ngIf="!alias.get('signType')?.valid && (alias.get('signType')?.dirty ||alias.get('signType')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('signType')?.errors?.required">
                         Loại ký không được để trống
                       </p>
                     </div>
+
                   </div>
                   <div class="col-md-1">
                     <div class="label_item">OTP</div>
@@ -124,11 +130,13 @@
                   <div class="col-md-5">
                     <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
                     <input type="text" formControlName="phone" class="form-control">
-                    <div *ngIf="!userSign.get('phone')?.valid && (userSign.get('phone')?.dirty ||userSign.get('phone')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userSign.get('phone')?.errors?.required">
+
+                    <div *ngIf="!alias.get('phone')?.valid && (alias.get('phone')?.dirty ||alias.get('phone')?.touched)">
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('phone')?.errors?.required">
                         Số điện thoại không được để trống
                       </p>
                     </div>
+
                   </div>
                 </div>
               </div>

@@ -30,28 +30,64 @@ export class DetermineSignerComponent implements OnInit {
     this.step = variable.stepSampleContract.step2
     //this.datas.determineDetails = this.determineDetails;
   }
+  // data: any = [
+  //     {
+  //       "order": 1,
+  //       "name": "Nguyễn Tuấn Anh",
+  //       "email": "nguyentuananh@vhc.com.vn",
+  //       "signType": [
+  //         {
+  //           "item_id": 1,
+  //           "item_text": "Ký ảnh"
+  //         }
+  //       ],
+  //       "isOtp": true,
+  //       "phone": "0979889999",
+  //       "id": 3923609057,
+  //       "selected": false,
+  //       "sign_unit": "organization"
+  //     },
+  //     {
+  //       "order": 1,
+  //       "name": "Đỗ Thành Dương",
+  //       "email": "duongdt@vhc.com.vn",
+  //       "signType": [
+  //         {
+  //           "item_id": 1,
+  //           "item_text": "Ký ảnh"
+  //         }
+  //       ],
+  //       "isOtp": true,
+  //       "phone": "0979889889",
+  //       "id": 3900000225,
+  //       "selected": false,
+  //       "sign_unit": "organization"
+  //     }
+  // ];
 
   ngOnInit(): void {
     this.userForm = this.formBuilder.group({
       order: 1,
       name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
-      userViews: this.formBuilder.array([]) ,
-      userSigns: this.formBuilder.array([]) ,
-      userDocs: this.formBuilder.array([]) ,
+      userViews: this.formBuilder.array([]),
+      userSigns: this.formBuilder.array([]),
+      userDocs: this.formBuilder.array([])
       // userViews: (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]) ,
       // userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
       // userDocs: (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]) ,
     });
 
-    this.userForm.setControl('userViews', (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]));
-    this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
-    this.userForm.setControl('userDocs', (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]));
+
+
+    // this.userForm.setControl('userViews', (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]));
+    // this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
+    // this.userForm.setControl('userDocs', (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]));
 
     this.partnerForm = this.formBuilder.group({
       partnerArrs : this.formBuilder.array([this.newPartner()])
     });
 
-    this.partnerForm.setControl('partnerArrs', (this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0) ? this.formBuilder.array(this.datas.partnerForm.partnerArrs) : this.formBuilder.array([this.newPartner()]));
+    //this.partnerForm.setControl('partnerArrs', (this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0) ? this.formBuilder.array(this.datas.partnerForm.partnerArrs) : this.formBuilder.array([this.newPartner()]));
 
 
     this.signTypeList = [
@@ -81,7 +117,85 @@ export class DetermineSignerComponent implements OnInit {
       unSelectAllText: "Bỏ chọn tất cả",
       allowSearchFilter: true
     };
+
+    // if(this.datas.userForm && this.datas.userForm.userViews.length > 0){
+    //   this.setUserViews(this.datas.userForm.userViews);
+    // }
+    // if(this.datas.userForm && this.datas.userForm.userSigns.length > 0){
+    //   this.setUserSigns(this.datas.userForm.userSigns);
+    // }
+    // if(this.datas.userForm && this.datas.userForm.userDocs.length > 0){
+    //   this.setUserDocs(this.datas.userForm.userDocs);
+    // }
+    // if(this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0){
+    //   console.log(this.datas.partnerForm.partnerArrs);
+    //   this.setPartnerArrs(this.datas.partnerForm.partnerArrs);
+    // }
   }
+
+  // gán lại dữ liệu value cho form
+  setUserViews(data:any) {
+    const fa = (this.userForm.get('userViews') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
+    }
+  }
+
+  setUserSigns(data:any) {
+    const fa = (this.userForm.get('userSigns') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
+    }
+  }
+
+  setUserDocs(data:any) {
+    const fa = (this.userForm.get('userDocs') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
+    }
+  }
+
+  setPartnerArrs(data:any) {
+    const fa = (this.partnerForm.get("partnerArrs") as FormArray);
+    let faC:any;
+    console.log("data" + data);
+    for (let i = 0; i < data.length; i++) {
+      console.log("data " + i + "  " + data[i]);
+      // fa.push(this.formBuilder.group(data[i]));
+      // console.log("aaa1" + fa);
+      // console.log("e" + this.formBuilder.group(data[i]));
+      // faC = (fa.get("partnerSigns") as FormArray);
+      // console.log("aaa" + faC.length);
+      // for (let j = 0; j < faC.length; j++) {
+      //   //console.log(faC[j]);
+      //   faC.push(this.formBuilder.group(faC[j]));
+      // }
+
+    }
+
+  }
+
+
+  // this.data = [
+  //   {
+  //     "order": 1,
+  //     "name": "Nguyễn Tuấn Anh",
+  //     "email": "nguyentuananh@vhc.com.vn",
+  //     "signType": [
+  //       {
+  //         "item_id": 1,
+  //         "item_text": "Ký ảnh"
+  //       }
+  //     ],
+  //     "isOtp": true,
+  //     "phone": "0979889999",
+  //     "id": 3923609057,
+  //     "selected": false,
+  //     "sign_unit": "organization"
+  //   }]
+
+  // @ts-ignore
+
 
 
   partnerArrs() : FormArray {
@@ -134,6 +248,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //user sign
   userSigns() : FormArray {
+    //console.log((this.userForm.get("userSigns") as FormArray).value)
     return this.userForm.get("userSigns") as FormArray
   }
   newUserSign(): FormGroup {
@@ -294,7 +409,7 @@ export class DetermineSignerComponent implements OnInit {
       //     // item['id'] = Helper._randomNumber(10);
       //   })
       // }
-      this.datas.partners = this.partners.value;
+      this.datas.partnerForm = this.partnerForm.value;
       // if (this.datas.partners.partnerSigns && this.datas.userForm.userSigns.length > 0) {
       //   this.datas.partners.partnerSigns.forEach((item: any) => {
       //     // item['id'] = Helper._randomNumber(10);
@@ -307,7 +422,7 @@ export class DetermineSignerComponent implements OnInit {
       // }
       this.step = variable.stepSampleContract.step3;
       this.datas.stepLast = this.step
-      // console.log(this.datas);
+      console.log(this.datas);
       this.nextOrPreviousStep(this.step);
     }
   }
