@@ -7,6 +7,7 @@ import {InforContractComponent} from "../shared/model/infor-contract/infor-contr
 import {SampleContractComponent} from "../shared/model/sample-contract/sample-contract.component";
 import {variable} from "../../../config/variable";
 import { AppService } from 'src/app/service/app.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-contract',
@@ -20,6 +21,9 @@ export class AddContractComponent implements OnInit {
   @ViewChild('infoContract') InforContractComponent: InforContractComponent | unknown;
   @ViewChild('confirmInforContract') ConfirmInforContractComponent: ConfirmInforContractComponent | unknown;
 
+  action: string;
+  id: string;
+  private sub: any;
   datas: any = {
     stepLast: variable.stepSampleContract.step1,
   }
@@ -34,10 +38,25 @@ export class AddContractComponent implements OnInit {
   // step = 1;
   step = variable.stepSampleContract.step1;
   constructor(private formBuilder: FormBuilder,
-              private appService: AppService,) { }
+              private appService: AppService,
+              private route: ActivatedRoute,) { }
   ngOnInit() {
     //title
-    this.appService.setTitle('THÊM MỚI HỢP ĐỒNG');
+    this.sub = this.route.params.subscribe(params => {
+      this.action = params['action'];
+
+      //set title
+      if(this.action == 'add'){
+        this.appService.setTitle('THÊM MỚI HỢP ĐỒNG');
+      }else if(this.action == 'edit'){
+        this.id = params['id'];
+        this.appService.setTitle('SỬA HỢP ĐỒNG');
+      }else if(this.action == 'copy'){
+        this.id = params['id'];
+        this.appService.setTitle('SAO CHÉP HỢP ĐỒNG');
+      }
+    });
+
   }
 
   next(){

@@ -48,7 +48,11 @@ const routes: Routes = [
         component: ContractComponent,
       },
       {
-        path: 'add-contract',
+        path: 'form-contract/:action',
+        component: AddContractComponent,
+      },
+      {
+        path: 'form-contract/:action/:id',
         component: AddContractComponent,
       },
       {

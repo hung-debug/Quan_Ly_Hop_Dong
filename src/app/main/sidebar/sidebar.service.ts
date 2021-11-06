@@ -17,7 +17,7 @@ export class SidebarService {
     {
       title: 'Tạo mới',
       active: false,
-      href: '/main/add-contract'
+      href: '/main/form-contract/add'
     },
     {
       title: 'Hợp đồng đã tạo',
