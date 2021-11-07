@@ -1,3 +1,4 @@
+import { SignupComponent } from './login/signup/signup.component';
 import { ContractTemplateComponent } from './main/contract-template/contract-template.component';
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'signup',
+    component: SignupComponent,
   },
   {
     path: 'forgot-password',

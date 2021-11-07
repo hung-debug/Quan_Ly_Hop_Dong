@@ -3,11 +3,6 @@
   margin: 0 auto;
 }
 
-.form-signin .btn {
-  border-radius : 5rem;
-  letter-spacing: .1rem;
-}
-
 body, html {
   height: 100%;
   margin: 0;
@@ -27,7 +22,19 @@ body, html {
 .col-md-6 {
   padding: 0px;
 }
-
+.bg-header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+}
+.bg-header-login{
+  background-image: url(../../assets/img/logo_eContract_21.svg);
+  height: 100px;
+  width: 300px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 
 .bg-footer-login {
   background-image: url(../../assets/img/foot_login.svg);
@@ -49,4 +56,50 @@ body, html {
   color: white;
   height: 40px;
   font-size: 14px;
+  width: 100%;
+  border-radius: 5px;
+}
+.input-line {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.input-img {
+  padding: 10px;
+  background: #eff2f5;
+  border-radius: 5px 0 0 5px;
+}
+.input-text {
+  border: 0;
+  background: #EFF2F5;
+  padding: 10px;
+  width: 100%;
+  outline:0px;
+  border-radius: 0 5px 5px 0;
+}
+.icon-password{
+  top: 10px;
+  right: 20px;
+  position: absolute;
+}
+.forgot-password{
+  text-align: right;
+  a{
+    text-decoration: none;
+    color: #7b7a7a;
+    font-weight: 500;;
+    cursor: pointer;
+  }
+}
+.sub-login{
+  text-align: center;
+}
+.sign-up{
+  text-align: center;
+  a{
+    text-decoration: none;
+    color: #7b7a7a;
+    font-weight: 500;
+    cursor: pointer;
+  }
 }
