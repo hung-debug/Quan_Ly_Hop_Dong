@@ -1,55 +1,117 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { AppService } from 'src/app/service/app.service';
 import { single } from '../../data/data';
-// import {LegendPosition} from "@swimlane/ngx-charts/lib/common/types/legend.model";
+import { Chart } from 'angular-highcharts';
+
+//templateUrl: './dashboard.component.html',
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss', '../main.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  single: any[] = [];
-  view: [number, number] = [700, 250];
+  chart = new Chart({
+    colors: ['#058DC7', '#58A55C', '#ED1C24', '#FF710B'],
+    chart: {
+      type: 'pie',
+      style: {
+        fontFamily: 'Roboto',
+      }
+    },
+    title: {
+      text: 'Biểu đồ thống kê số lượng hợp đồng tạo',
+    },
+    credits: {
+      enabled: false
+    },
+    plotOptions : {
+      pie: {
+        dataLabels: {
+          enabled: false
+      },
+      showInLegend: true,
+         shadow: false,
+         center: ['50%', '50%'],
+         innerSize: '30%'
+      }
+    },
 
-  // options
-  gradient: boolean = true;
-  showLegend: boolean = true;
-  showLabels: boolean = false;
-  isDoughnut: boolean = true;
-  legendPosition: any;
-  legendTitle: string = 'Danh mục';
-  arcWidth: number = 0.4;
+    series : [{
+      type: 'pie',
+      name: 'Số hợp đồng',
+      data: [
+        ['Đang xử lý', 45.0],
+        ['Hoàn thành', 26.8],
+        ['Từ chối', 8.5],
+        ['Quá hạn', 6.2]
+      ],
+    }]
+  });
 
-  // colorScheme = {
-  //   domain: ['#2da133', '#FF710B', '#407EF9', '#F3E13F', '#ED1C24'],
-  // };
-
-  colorScheme: any;
-
+  chart2 = new Chart({
+    colors: ['#058DC7', '#58A55C', '#ED1C24', '#FF710B'],
+    chart: {
+      type: 'column',
+      style: {
+        fontFamily: 'Roboto',
+      }
+    },
+    title: {
+      text: 'Biểu đồ thống kê số lượng hợp đồng được gán'
+    },
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: false
+    },
+    xAxis: {
+      categories: [
+          ''
+      ],
+    },
+    yAxis: [{
+      title: {
+          text: 'Số lượng'
+      },
+    }],
+    plotOptions: {
+      series: {
+          borderWidth: 0,
+          dataLabels: {
+              enabled: true,
+          }
+      }
+    },
+    series : [
+    {
+      type: 'column',
+      name: 'Số hợp đồng',
+      data: [
+          ['Chưa xử lý', 45],
+      ]
+    },
+    {
+      type: 'column',
+      name: 'Số hợp đồng',
+      data: [
+        ['Đã xử lý', 26]
+      ]
+    }]
+  });
   constructor(
     private appService: AppService
   ) {
-    this.legendPosition = "right";
-    this.colorScheme = {
-      domain: ['#2da133', '#FF710B', '#407EF9', '#F3E13F', '#ED1C24']
-    }
-   Object.assign(this, { single });
+
   }
 
-  onSelect(data:any): void {
-     console.log('Item clicked', JSON.parse(JSON.stringify(data)));
-   }
-
-   onActivate(data:any): void {
-     console.log('Activate', JSON.parse(JSON.stringify(data)));
-   }
-
-   onDeactivate(data:any): void {
-     console.log('Deactivate', JSON.parse(JSON.stringify(data)));
-   }
 
   ngOnInit(): void {
     this.appService.setTitle('TRANG CHỦ');
+
+
+
+
   }
 
 }

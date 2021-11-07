@@ -1,4 +1,5 @@
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ChartModule } from 'angular-highcharts';
 import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { NgModule } from '@angular/core';
@@ -14,6 +15,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { CommonModule} from '@angular/common';
 
 import { DatepickerModule } from 'ng2-datepicker';
+
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -44,6 +46,7 @@ import { InforContractTemplateComponent } from './main/contract-template/shared/
 import { SampleContractTemplateComponent } from './main/contract-template/shared/model/sample-contract-template/sample-contract-template.component';
 import { SignupComponent } from './login/signup/signup.component';
 
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -70,7 +73,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DetermineSignerTemplateComponent,
     InforContractTemplateComponent,
     SampleContractTemplateComponent,
-    SignupComponent
+    SignupComponent,
   ],
   imports: [
     BrowserModule,
@@ -91,6 +94,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgxPaginationModule,
     MdbTabsModule,
     DatepickerModule,
+    ChartModule,
   ],
   providers: [ AppService,
     {
