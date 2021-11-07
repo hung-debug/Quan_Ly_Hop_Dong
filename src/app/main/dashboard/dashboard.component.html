@@ -1,10 +1,29 @@
-<div class="row">
-  <div class="col-md-6">
-    <div [chart]="chart"></div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 input-line">
+      <input type="text" placeholder="Từ ngày (ngày tạo)" class="input-text"/>
+      <img src="../../assets/img/db_calendar.svg" class="input-img">
+    </div>
+    <div class="col-md-4 input-line">
+      <input type="text" placeholder="Đến ngày (ngày tạo)" class="input-text"/>
+      <img src="../../assets/img/db_calendar.svg" class="input-img">
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <button class="btn btn-lg btn-block">Tìm kiếm</button>
+      </div>
+    </div>
   </div>
-  <div class="col-md-5">
-    <div [chart]="chart2"></div>
+  <div class="row" style="padding-top: 20px;">
+    <div class="col-md-6">
+      <div [chart]="chart"></div>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+      <div [chart]="chart2"></div>
+    </div>
+    <div class="col-md-1"></div>
   </div>
-  <div class="col-md-1"></div>
 </div>
 

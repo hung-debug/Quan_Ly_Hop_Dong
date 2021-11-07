@@ -1,26 +1,22 @@
 <div class="container-fluid">
-  <mdb-tabs [fill]="true">
-    <mdb-tab title="Hợp đồng của tôi"></mdb-tab>
-    <mdb-tab title="Hợp đồng của tổ chức"></mdb-tab>
+
+  <mdb-tabs [fill]="true" >
+    <mdb-tab title="Hợp đồng của tôi" value='mine' [ngClass]="{ 'active':type==='mine'}" *ngIf="action=='create'"></mdb-tab>
+    <mdb-tab title="Hợp đồng của tổ chức" value='my-org' [ngClass]="{ 'active':type==='my-org'}" *ngIf="action=='create'"></mdb-tab>
+    <mdb-tab title="Hợp đồng cần xử lý" value='wait-for-me' [ngClass]="{ 'active':type==='wait-for-me'}" *ngIf="action=='receive'"></mdb-tab>
+    <mdb-tab title="Hợp đồng được chia sẻ" value='share-for-me' [ngClass]="{ 'active':type==='share-for-me'}" *ngIf="action=='receive'"></mdb-tab>
   </mdb-tabs>
 
-  <div class="form-group">
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text">
-          <i class="fa fa-search" aria-hidden="true"></i>
-        </span>
-      </div>
-      <input type="text" id="search" class="form-control input-search" placeholder="Nhập từ khóa tìm kiếm theo tên hợp đồng"/>
-      <div class="input-group-append"  (click)="open(modal_filter)" style="cursor: pointer;">
-        <span class="input-group-text">
-          <i class="fa fa-filter"></i>
-        </span>
-      </div>
+  <div class="col-md-12">
+    <div class="input-line search">
+      <img src="../../assets/img/icon_search.svg" class="input-img" />
+      <input type="text" id="search" class="input-text" placeholder="Nhập từ khóa tìm kiếm theo tên hợp đồng"/>
+      <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="open(modal_filter)"/>
     </div>
   </div>
 
   <div class="row list_header">
+
     <div class="col-md-5"></div>
     <div class="col-md-2">Ngày tạo</div>
     <div class="col-md-2">Ngày hết hạn ký</div>
@@ -29,7 +25,7 @@
 
   <div class="item_contract" *ngFor="let item of contracts  | paginate:{itemsPerPage: page, currentPage:p}">
     <div class="row">
-      <div class="col-md-12 item_contract_name">{{item.contractName}}</div>
+      <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.contractName}}</div>
     </div>
     <div class="row">
       <div class="col-md-12 item_contract_infor">Bên A: {{item.userName}}</div>
@@ -56,10 +52,10 @@
       <div class="col-md-3 item_icon">
         <div class="row">
           <div class="{{iconClass}}" *ngIf="status == 'draft' || status == 'processing' || status == 'expire' || status == 'cancel' || status == 'fail' || status == 'overdue' || status == 'complete'">
-            <i class="fa fa-clone fa_icon" ngbTooltip="Sao chép" (click)="open(mymodal)"></i>
+            <i class="fa fa-clone fa_icon" ngbTooltip="Sao chép" (click)="openCopy(item.id)"></i>
           </div>
           <div class="{{iconClass}}" *ngIf="status == 'draft'">
-            <i class="fa fa-pencil-square fa_icon" ngbTooltip="Sửa hợp đồng"></i>
+            <i class="fa fa-pencil-square fa_icon" ngbTooltip="Sửa hợp đồng" (click)="openEdit(item.id)"></i>
           </div>
           <div class="{{iconClass}}" *ngIf="status == 'draft'">
             <i class="fa fa-minus-square fa_icon" ngbTooltip="Xóa hợp đồng"></i>

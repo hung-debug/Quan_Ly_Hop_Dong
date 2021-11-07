@@ -49,7 +49,7 @@ const routes: Routes = [
         component: UserGroupComponent,
       },
       {
-        path: 'contract/:status',
+        path: 'contract/:action/:status',
         component: ContractComponent,
       },
       {

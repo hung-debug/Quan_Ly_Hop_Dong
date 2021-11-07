@@ -33,37 +33,37 @@ export class SidebarService {
         {
           title: 'Bản nháp',
           active: false,
-          href: '/main/contract/draft'
+          href: '/main/contract/create/draft'
         },
         {
           title: 'Đang xử lý',
           active: false,
-          href: '/main/contract/processing'
+          href: '/main/contract/create/processing'
         },
         {
           title: 'Sắp hết hạn',
           active: false,
-          href: '/main/contract/expire'
+          href: '/main/contract/create/expire'
         },
         {
           title: 'Quá hạn',
           active: false,
-          href: '/main/contract/overdue'
+          href: '/main/contract/create/overdue'
         },
         {
           title: 'Từ chối',
           active: false,
-          href: '/main/contract/fail'
+          href: '/main/contract/create/fail'
         },
         {
           title: 'Hủy bỏ',
           active: false,
-          href: '/main/contract/cancel'
+          href: '/main/contract/create/cancel'
         },
         {
           title: 'Hoàn thành',
           active: false,
-          href: '/main/contract/complete'
+          href: '/main/contract/create/complete'
         }
       ]
     },
@@ -81,17 +81,17 @@ export class SidebarService {
         {
           title: 'Chờ xử lý',
           active: false,
-          href: '/main/contract/wait-processing'
+          href: '/main/contract/receive/wait-processing'
         },
         {
-          title: 'Đang xử lý',
+          title: 'Đã xử lý',
           active: false,
-          href: '/main/contract/processing'
+          href: '/main/contract/receive/processed'
         },
         {
           title: 'Đã hoàn thành',
           active: false,
-          href: '/main/contract/complete'
+          href: '/main/contract/receive/complete'
         }
       ]
     },

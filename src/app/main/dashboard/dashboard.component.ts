@@ -20,6 +20,9 @@ export class DashboardComponent implements OnInit {
     },
     title: {
       text: 'Biểu đồ thống kê số lượng hợp đồng tạo',
+      style: {
+        fontSize: '16px'
+     }
     },
     credits: {
       enabled: false
@@ -27,23 +30,24 @@ export class DashboardComponent implements OnInit {
     plotOptions : {
       pie: {
         dataLabels: {
-          enabled: false
+          enabled: false,
+
       },
       showInLegend: true,
          shadow: false,
          center: ['50%', '50%'],
-         innerSize: '30%'
-      }
+         innerSize: '40%'
+      },
     },
 
     series : [{
       type: 'pie',
       name: 'Số hợp đồng',
       data: [
-        ['Đang xử lý', 45.0],
-        ['Hoàn thành', 26.8],
-        ['Từ chối', 8.5],
-        ['Quá hạn', 6.2]
+        ['Đang xử lý', 45],
+        ['Hoàn thành', 26],
+        ['Từ chối', 8],
+        ['Quá hạn', 6]
       ],
     }]
   });
@@ -57,7 +61,10 @@ export class DashboardComponent implements OnInit {
       }
     },
     title: {
-      text: 'Biểu đồ thống kê số lượng hợp đồng được gán'
+      text: 'Biểu đồ thống kê số lượng hợp đồng được gán',
+      style: {
+        fontSize: '16px'
+     }
     },
     credits: {
       enabled: false

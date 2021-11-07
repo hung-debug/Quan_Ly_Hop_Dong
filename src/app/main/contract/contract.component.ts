@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { AppService } from 'src/app/service/app.service';
@@ -13,7 +13,9 @@ import locale from 'date-fns/locale/en-US';
   styleUrls: ['./contract.component.scss']
 })
 export class ContractComponent implements OnInit {
+  action:string;
   status: string;
+  type:string;
   private sub: any;
   closeResult:string= '';
   public contracts: any[] = [];
@@ -50,6 +52,7 @@ export class ContractComponent implements OnInit {
               private appService: AppService,
               private contractService: ContractService,
               private route: ActivatedRoute,
+              private router: Router,
     ) {}
 
   open(content:any) {
@@ -72,10 +75,11 @@ export class ContractComponent implements OnInit {
 
   ngOnInit(): void {
     this.sub = this.route.params.subscribe(params => {
+      this.action = params['action'];
       this.status = params['status'];
 
       //set title
-      this.appService.setTitle('DANH SÁCH HỢP ĐỒNG ' + this.convertStatusStr());
+      this.appService.setTitle('DANH SÁCH HỢP ĐỒNG ' + this.convertActionStr() + ' ' + this.convertStatusStr());
     });
 
     //get list contract
@@ -88,6 +92,17 @@ export class ContractComponent implements OnInit {
 
   }
 
+  private convertActionStr(): string{
+    if(this.action == 'create'){
+      this.type = 'mine';
+      return 'ĐÃ TẠO';
+    }else if(this.action == 'receive'){
+      this.type = 'wait-for-me';
+      return 'ĐÃ NHẬN';
+    }else{
+      return '';
+    }
+  }
 
   iconClass = 'col-md-100-1';
   private convertStatusStr(): string{
@@ -100,6 +115,9 @@ export class ContractComponent implements OnInit {
     }else if(this.status == 'processing'){
       this.iconClass = 'col-md-100-3';
       return 'ĐANG XỬ LÝ';
+    }else if(this.status == 'processed'){
+      this.iconClass = 'col-md-100-3';
+      return 'ĐÃ XỬ LÝ';
     }else if(this.status == 'expire'){
       this.iconClass = 'col-md-100-3';
       return 'SẮP HẾT HẠN';
@@ -126,6 +144,18 @@ export class ContractComponent implements OnInit {
     if(this.pageTotal < this.pageEnd){
       this.pageEnd = this.pageTotal;
     }
+  }
+
+  openDetail(id:number){
+    this.router.navigate(['main/form-contract/copy/' + id]);
+  }
+
+  openCopy(id:number){
+    this.router.navigate(['main/form-contract/copy/' + id]);
+  }
+
+  openEdit(id:number){
+    this.router.navigate(['main/form-contract/edit/' + id]);
   }
 
 }
