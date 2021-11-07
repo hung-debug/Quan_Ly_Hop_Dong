@@ -90,6 +90,23 @@ export class DetermineSignerComponent implements OnInit {
     //this.partnerForm.setControl('partnerArrs', (this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0) ? this.formBuilder.array(this.datas.partnerForm.partnerArrs) : this.formBuilder.array([this.newPartner()]));
 
 
+
+
+    if(this.datas.userForm && this.datas.userForm.userViews.length > 0){
+       this.setUserViews(this.datas.userForm.userViews);
+    }
+    if(this.datas.userForm && this.datas.userForm.userSigns.length > 0){
+       this.setUserSigns(this.datas.userForm.userSigns);
+    }
+    if(this.datas.userForm && this.datas.userForm.userDocs.length > 0){
+       this.setUserDocs(this.datas.userForm.userDocs);
+    }
+    // if(this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0){
+    //   console.log(this.datas.partnerForm.partnerArrs);
+    //   this.setPartnerArrs(this.datas.partnerForm.partnerArrs);
+    // }
+
+
     this.signTypeList = [
       {
         item_id: 1,
@@ -117,20 +134,6 @@ export class DetermineSignerComponent implements OnInit {
       unSelectAllText: "Bỏ chọn tất cả",
       allowSearchFilter: true
     };
-
-    // if(this.datas.userForm && this.datas.userForm.userViews.length > 0){
-    //   this.setUserViews(this.datas.userForm.userViews);
-    // }
-    // if(this.datas.userForm && this.datas.userForm.userSigns.length > 0){
-    //   this.setUserSigns(this.datas.userForm.userSigns);
-    // }
-    // if(this.datas.userForm && this.datas.userForm.userDocs.length > 0){
-    //   this.setUserDocs(this.datas.userForm.userDocs);
-    // }
-    // if(this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0){
-    //   console.log(this.datas.partnerForm.partnerArrs);
-    //   this.setPartnerArrs(this.datas.partnerForm.partnerArrs);
-    // }
   }
 
   // gán lại dữ liệu value cho form
@@ -145,6 +148,19 @@ export class DetermineSignerComponent implements OnInit {
     const fa = (this.userForm.get('userSigns') as FormArray);
     for (let i = 0; i < data.length; i++) {
       fa.push(this.formBuilder.group(data[i]));
+      // const faC:any = (fa.at(i).get('signType') as FormGroup);
+      // // // console.log(fa);
+      // // // console.log(faC);
+      // // // console.log(faC);
+      // // //const faAAA:any = (faC as FormArray);
+      // // // console.log(faAAA);
+      // for (let j = 0; j < faC.length; j++) {
+      //     faC.push(this.formBuilder.array(faC[j]));
+      // }
+
+      // console.log(faC);
+
+
     }
   }
 

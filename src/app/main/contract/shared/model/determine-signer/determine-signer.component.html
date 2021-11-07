@@ -93,10 +93,11 @@
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <div class="label_item">Loại ký <span class="require_star">*</span></div>
+                    <div class="label_item">Loại ký<span class="require_star">*</span></div>
                     <div  class="col">
                       <ng-multiselect-dropdown
                         formControlName="signType"
+                        [(ngModel)]="alias.value.signType"
                         [placeholder]="'-- Chọn --'"
                         [settings]="dropdownSignTypeSettings"
                         [data]="signTypeList">

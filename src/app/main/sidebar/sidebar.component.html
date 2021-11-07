@@ -13,14 +13,14 @@
             <span *ngIf="menu.type === 'header'">{{menu.title}}</span>
             <!-- Menu parent, click dropdown -->
             <a *ngIf="menu.href === '#'" (click)='toggle(menu)'>
-              <i class="{{menu.icon}}" style="font-size: 16px;"></i>
-              <span>{{menu.title}}</span>
+              <img src="{{menu.icon}}" />
+              <span style="margin-left: 8px;">{{menu.title}}</span>
               <span *ngIf="menu.badge" class="badge badge-pill" [ngClass]="menu.badge.class">{{menu.badge.text}}</span>
             </a>
             <!-- Menu click link -->
             <a *ngIf="menu.href !== '#' && menu.title != 'Tạo mới'" (click)='clickLink(menu)'>
-              <i class="{{menu.icon}}" style="font-size: 16px;"></i>
-              <span>{{menu.title}}</span>
+              <img src="{{menu.icon}}" />
+              <span style="margin-left: 8px;">{{menu.title}}</span>
               <span *ngIf="menu.badge" class="badge badge-pill" [ngClass]="menu.badge.class">{{menu.badge.text}}</span>
             </a>
             <span *ngIf="menu.title === 'Tạo mới'" (click)="clickLink(menu, 'create-contract-new')" class="sub_title_add">

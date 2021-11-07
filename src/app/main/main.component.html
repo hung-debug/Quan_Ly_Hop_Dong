@@ -5,20 +5,43 @@
         <div class="search-wrapper">
           <h3>{{title}}</h3>
         </div>
-        <div ngbDropdown class="d-inline-block">
-          <div class="social-icons" ngbDropdownToggle>
-              <div></div>
+        <div>
+          <div ngbDropdown class="d-inline-block">
+            <div class="social-icons" ngbDropdownToggle>
+              <span class="notification_login"></span>
+              <div class="label">Thông báo</div>
+            </div>
           </div>
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-            <button ngbDropdownItem class="drop" (click)="open(information_user_login)">
-              <i class="fa fa-user drop_icon"></i>Tài khoản
-            </button>
-            <button ngbDropdownItem class="drop" (click)="open(mymodal)">
-              <i class="fa fa-refresh drop_icon"></i>Đổi mật khẩu
-            </button>
-            <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
-              <i class="fa fa-sign-out drop_icon"></i>Đăng xuất
-            </button>
+          <div ngbDropdown class="d-inline-block">
+            <div class="social-icons" ngbDropdownToggle>
+                <span class="user_login"></span>
+                <div class="label">Tài khoản</div>
+            </div>
+
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
+              <button ngbDropdownItem class="drop" (click)="open(information_user_login)">
+                <div style="display: flex; align-items: center;">
+                  <div class="db_user">
+                    <div class="db_user_detail"></div>
+                  </div>
+                  <div>Thông tin tài khoản</div></div>
+              </button>
+              <button ngbDropdownItem class="drop" (click)="open(mymodal)">
+                <div style="display: flex; align-items: center;">
+                  <div class="db_user">
+                    <div class="db_password"></div>
+                  </div>
+                  <div>Đổi mật khẩu</div>
+                </div>
+              </button>
+              <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
+                <div style="display: flex; align-items: center;">
+                  <div class="db_user"><div class="db_log_out"></div>
+                </div>
+                <div>Đăng xuất</div>
+              </div>
+              </button>
+            </div>
           </div>
         </div>
       </header>

@@ -1,14 +1,15 @@
+import { UploadService } from './../../../../../service/upload.service';
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { NgbCalendar, NgbDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { FileUploadService } from 'src/app/service/upload.service';
 import {variable} from "../../../../../config/variable";
 import { Observable } from 'rxjs';
 import {AddContractComponent} from "../../../add-contract/add-contract.component";
 import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
+import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
   selector: 'app-infor-contract',
@@ -54,7 +55,8 @@ export class InforContractComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private uploadService: FileUploadService
+    private uploadService : UploadService,
+    private contractService: ContractService,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -76,7 +78,6 @@ export class InforContractComponent implements OnInit {
     // keyboardEvents: true // enable keyboard events
   };
   ngOnInit(): void {
-    userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
 
     this.contractName = this.datas.contractName ? this.datas.contractName : '';
     this.contractNumber = this.datas.contractNumber ? this.datas.contractNumber : '';
@@ -248,6 +249,23 @@ export class InforContractComponent implements OnInit {
       this.datas.stepLast = this.step
       this.nextOrPreviousStep(this.step);
       console.log(this.datas);
+
+      // //call API upload file
+      // this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
+      //   console.log(data);
+      // },
+      // error => {
+      // }
+      // );
+
+      // //call API step 1
+      // this.contractService.addContractStep1(this.datas).subscribe((data) => {
+      //   console.log(data);
+      // },
+      // error => {
+      // }
+      // );
+
     }
   }
 

@@ -9,7 +9,7 @@ export class SidebarService {
   menus = [
     {
       title: 'Trang chủ',
-      icon: 'fa fa-dashboard',
+      icon: '/assets/img/db_home.svg',
       active: true,
       type: 'simple',
       href: '/main/dashboard'
@@ -21,7 +21,7 @@ export class SidebarService {
     },
     {
       title: 'Hợp đồng đã tạo',
-      icon: 'fa fa-file-pdf-o',
+      icon: '/assets/img/db_processing.svg',
       active: false,
       type: 'dropdown',
       // badge: {
@@ -69,7 +69,7 @@ export class SidebarService {
     },
     {
       title: 'Hợp đồng đã nhận',
-      icon: 'fa fa-file-pdf-o',
+      icon: '/assets/img/db_processing.svg',
       active: false,
       type: 'dropdown',
       // badge: {
@@ -97,14 +97,14 @@ export class SidebarService {
     },
     {
       title: 'Mẫu hợp đồng',
-      icon: 'fa fa-building-o',
+      icon: '/assets/img/db_processing.svg',
       active: false,
       type: 'simple',
       href: '/main/contract-template'
     },
     {
       title: 'Người dùng',
-      icon: 'fa fa-user',
+      icon: '/assets/img/db_user.svg',
       active: false,
       type: 'simple',
       // href: '/main/add-contract'
@@ -112,7 +112,7 @@ export class SidebarService {
     },
     {
       title: 'Tổ chức',
-      icon: 'fa fa-users',
+      icon: '/assets/img/db_user_group.svg',
       active: false,
       type: 'simple',
       // href: '/main/add-contract'
@@ -120,7 +120,7 @@ export class SidebarService {
     },
     {
       title: 'Vai trò',
-      icon: 'fa fa-puzzle-piece',
+      icon: '/assets/img/db_role.svg',
       active: false,
       type: 'simple',
       // href: '/main/add-contract'
@@ -128,7 +128,7 @@ export class SidebarService {
     },
     {
       title: 'Loại hợp đồng',
-      icon: 'fa fa-cube',
+      icon: '/assets/img/db_contract_type.svg',
       active: false,
       type: 'simple',
       // href: '/main/add-contract'

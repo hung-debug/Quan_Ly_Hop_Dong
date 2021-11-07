@@ -1,11 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { map, catchError, retry } from 'rxjs/operators';
 
+export interface Contract {
+  status: string
+}
 @Injectable({
   providedIn: 'root'
 })
 export class ContractService {
+
+  addContractUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
+  errorData:any = {};
+  redirectUrl: string = '';
 
   constructor(private http: HttpClient) { }
 
@@ -186,6 +195,36 @@ export class ContractService {
 
   }
 
+  addContractStep1(datas:any) {
+    const headers = new HttpHeaders().append('Content-Type', 'application/json');
+    const body = JSON.stringify({contractName: '', contractNumber: ''});
+
+    return this.http.post<Contract>(this.addContractUrl, body, {'headers':headers})
+       .pipe(
+          map((contract) => {
+            if (JSON.parse(JSON.stringify(contract)).status == 0) {
+              return contract;
+            }else{
+              return null;
+            }
+         }),
+         catchError(this.handleError)
+       );
+  }
+
+  // Error handling
+  handleError(error:any) {
+    let errorMessage = '';
+    if(error.error instanceof ErrorEvent) {
+      // Get client-side error
+      errorMessage = error.error.message;
+    } else {
+      // Get server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    window.alert(errorMessage);
+    return throwError(errorMessage);
+ }
 
 
 }
