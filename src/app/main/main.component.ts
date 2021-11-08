@@ -81,7 +81,7 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     //update title by component
-    if (this.router.url.includes('/main/add-contract')) {
+    if (this.router.url.includes('/main/form-contract/add')) {
       this.isRouterContractNew = false;
     } else this.isRouterContractNew = true;
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle);

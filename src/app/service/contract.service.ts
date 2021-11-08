@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { map, catchError, retry } from 'rxjs/operators';
+import {Helper} from "../core/Helper";
 
 export interface Contract {
   status: string
@@ -166,25 +167,25 @@ export class ContractService {
 
       contract_user_sign: [
         {
-          id: '123',
+          id: Helper._ranDomNumberText(10),
           sign_unit: 'so_tai_lieu',
           sign_config: "[]",
           name: ""
         },
         {
-          id: '456',
+          id: Helper._ranDomNumberText(10),
           sign_unit: 'text',
           sign_config: "[]",
           name: "",
         },
         {
-          id: '789',
+          id: Helper._ranDomNumberText(10),
           sign_unit: 'chu_ky_anh',
           sign_config: "[]",
           name: ""
         },
         {
-          id: '101',
+          id: Helper._ranDomNumberText(10),
           sign_unit: 'chu_ky_so',
           sign_config: "[]",
           name: ""

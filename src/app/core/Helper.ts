@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+
 declare var $: any;
 
 @Injectable()
@@ -19,7 +20,7 @@ export class Helper {
         const byteArray = new Uint8Array(byteNumbers);
         byteArrays.push(byteArray);
       }
-      const blob = new Blob(byteArrays, { type: contentType });
+      const blob = new Blob(byteArrays, {type: contentType});
       return blob;
 
     }
@@ -42,6 +43,16 @@ export class Helper {
 
   static _randomNumber(length: number) {
     return Math.floor(Math.pow(10, length - 1) + Math.random() * 9 * Math.pow(10, length - 1));
+  }
+
+  static _ranDomNumberText(length: number) {
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
   }
 
 }
