@@ -17,6 +17,7 @@ export class ContractComponent implements OnInit {
   status: string;
   type:string;
   private sub: any;
+  searchText:string;
   closeResult:string= '';
   public contracts: any[] = [];
   p:number = 1;
@@ -147,30 +148,24 @@ export class ContractComponent implements OnInit {
   }
 
   autoSearch(event:any){
-    let key = event.target.value;
-    console.log(key);
-    if (key) {
-      console.log('key : ' + key);
-      this.contracts = this.contracts.filter(t=>t.contractName.toLowerCase().indexOf(key.toLowerCase())>= 0);
-    }else{
-      this.contractService.getContractList().subscribe(response => {
-        this.contracts = response.items;
-
-      });
-      this.pageTotal = this.contracts.length;
-        this.setPage();
-        console.log(this.pageTotal);
-    }
+    this.contractService.getContractList().subscribe(response => {
+      this.contracts = this.transform(response.items, event);
+    });
   }
 
-  // transform(event: any): any {
-  //   let key = event.target.value
-  //   if (key) {
-  //      return this.contracts.filter(val => val.contractName.toLowerCase().indexOf(key.toLowerCase())) >= 0);
-  //    } else {
-  //      return this.contracts;
-  //    }
-  //   }
+  transform(contracts:any, event:any):any[]  {
+    let searchText = event.target.value;
+    if (!contracts) {
+      return [];
+    }
+    if (!searchText) {
+      return contracts;
+    }
+    searchText = searchText.toLocaleLowerCase();
+    return contracts.filter((it:any) => {
+      return it.contractName.toLocaleLowerCase().includes(searchText);
+    });
+  }
 
   openDetail(id:number){
     this.router.navigate(['main/form-contract/copy/' + id]);

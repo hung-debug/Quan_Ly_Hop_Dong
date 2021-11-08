@@ -83,7 +83,7 @@ export class InforContractComponent implements OnInit {
     this.contractNumber = this.datas.contractNumber ? this.datas.contractNumber : '';
     this.contractType = this.datas.contractType ? this.datas.contractType : '';
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : '';
-    this.dateDeadline = this.datas.dateDeadline ? this.datas.dateDeadline : '';
+    this.dateDeadline = this.datas.dateDeadline ? this.datas.dateDeadline : new Date();
     this.comment = this.datas.comment ? this.datas.comment : '';
 
     this.contractTypeList = [
@@ -212,14 +212,14 @@ export class InforContractComponent implements OnInit {
   //--valid data step 1
   validData() {
     this.clearError();
-    if (!this.contractName) {
-      this.errorContractName = 'Tên hợp đồng không được để trống!';
-      return false;
-    }
-    if (!this.datas.file_content) {
-      this.errorContractFile = 'File hợp đồng không được để trống!';
-      return false;
-    }
+    // if (!this.contractName) {
+    //   this.errorContractName = 'Tên hợp đồng không được để trống!';
+    //   return false;
+    // }
+    // if (!this.datas.file_content) {
+    //   this.errorContractFile = 'File hợp đồng không được để trống!';
+    //   return false;
+    // }
 
     return true
   }

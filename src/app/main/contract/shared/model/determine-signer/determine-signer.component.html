@@ -15,7 +15,6 @@
         <!-- User view -->
         <div class="add_content"  formArrayName="userViews">
           <div class="label">Người xem xét</div>
-          <hr>
           <div *ngFor="let userView of userViews().controls; let i=index" [formGroupName]="i">
             <div class="row">
               <div class="col-md-1 order">
@@ -25,7 +24,10 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                    <input type="text" formControlName="name" class="form-control">
+                    <div class="form-control input-line">
+                      <img src="assets/img/icon_name.svg" class="input-img">
+                      <input type="text" formControlName="name" class="input-text">
+                    </div>
                     <div *ngIf="!userView.get('name')?.valid && (userView.get('name')?.dirty ||userView.get('name')?.touched)">
                       <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('name')?.errors?.required">
                         Họ tên không được để trống
@@ -34,7 +36,10 @@
                   </div>
                   <div class="col-md-6">
                     <div class="label_item">Email <span class="require_star">*</span></div>
-                    <input type="text" formControlName="email" class="form-control">
+                    <div class="form-control input-line">
+                      <img src="assets/img/login_email.svg" class="input-img">
+                      <input type="text" formControlName="email" class="input-text">
+                    </div>
                     <div *ngIf="!userView.get('email')?.valid && (userView.get('email')?.dirty ||userView.get('email')?.touched)">
                       <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('email')?.errors?.required">
                         Email không được để trống
@@ -57,7 +62,6 @@
         <!-- User sign -->
         <div class="add_content" >
           <div class="label">Người ký</div>
-          <hr>
           <div formArrayName="userSigns" *ngFor="let alias of userSigns().controls; let i = index;">
             <div class="row" [formGroupName]="i">
               <div class="col-md-1 order">
@@ -67,7 +71,10 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                    <input type="text" formControlName="name" class="form-control">
+                    <div class="form-control input-line">
+                      <img src="assets/img/icon_name.svg" class="input-img">
+                      <input type="text" formControlName="name" class="input-text">
+                    </div>
 
                     <div *ngIf="!alias.get('name')?.valid && (alias.get('name')?.dirty ||alias.get('name')?.touched)">
                       <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('name')?.errors?.required">
@@ -78,7 +85,10 @@
                   </div>
                   <div class="col-md-6">
                     <div class="label_item">Email <span class="require_star">*</span></div>
-                    <input type="text" formControlName="email" class="form-control">
+                    <div class="form-control input-line">
+                      <img src="assets/img/login_email.svg" class="input-img">
+                      <input type="text" formControlName="email" class="input-text">
+                    </div>
 
                     <div *ngIf="!alias.get('email')?.valid && (alias.get('email')?.dirty ||alias.get('email')?.touched)">
                       <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('email')?.errors?.required">
@@ -97,7 +107,6 @@
                     <div  class="col">
                       <ng-multiselect-dropdown
                         formControlName="signType"
-                        [(ngModel)]="alias.value.signType"
                         [placeholder]="'-- Chọn --'"
                         [settings]="dropdownSignTypeSettings"
                         [data]="signTypeList">
@@ -152,7 +161,6 @@
         <!-- User document -->
         <div class="add_content" formArrayName="userDocs">
           <div class="label">Văn thư</div>
-          <hr>
           <div *ngFor="let userDoc of userDocs().controls; let i=index" [formGroupName]="i">
             <div class="row">
               <div class="col-md-1 order">
@@ -162,7 +170,10 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                    <input type="text" formControlName="name" class="form-control">
+                    <div class="form-control input-line">
+                      <img src="assets/img/icon_name.svg" class="input-img">
+                      <input type="text" formControlName="name" class="input-text">
+                    </div>
                     <div *ngIf="!userDoc.get('name')?.valid && (userDoc.get('name')?.dirty ||userDoc.get('name')?.touched)">
                       <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('name')?.errors?.required">
                         Họ tên không được để trống
@@ -171,7 +182,10 @@
                   </div>
                   <div class="col-md-6">
                     <div class="label_item">Email <span class="require_star">*</span></div>
-                    <input type="text" formControlName="email" class="form-control">
+                    <div class="form-control input-line">
+                      <img src="assets/img/login_email.svg" class="input-img">
+                      <input type="text" formControlName="email" class="input-text">
+                    </div>
                     <div *ngIf="!userDoc.get('email')?.valid && (userDoc.get('email')?.dirty ||userDoc.get('email')?.touched)">
                       <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('email')?.errors?.required">
                         Email không được để trống
@@ -258,7 +272,6 @@
                 <!-- Partner lead -->
                 <div class="add_content" formArrayName="partnerLeads">
                   <div class="label">Người điều phối</div>
-                  <hr>
                   <div *ngFor="let partnerLead of partnerLeads(a).controls; let i=index" [formGroupName]="i">
                     <div class="row">
                       <div class="col-md-1 order">
@@ -268,7 +281,10 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="label_item">Họ tên</div>
-                            <input type="text" formControlName="name" class="form-control">
+                            <div class="form-control input-line">
+                              <img src="assets/img/icon_name.svg" class="input-img">
+                              <input type="text" formControlName="name" class="input-text">
+                            </div>
                             <div *ngIf="!partnerLead.get('name')?.valid && (partnerLead.get('name')?.dirty ||partnerLead.get('name')?.touched)">
                               <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerLead.get('name')?.errors?.required">
                                 Họ tên không được để trống
@@ -277,7 +293,10 @@
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email</div>
-                            <input type="text" formControlName="email" class="form-control">
+                            <div class="form-control input-line">
+                              <img src="assets/img/login_email.svg" class="input-img">
+                              <input type="text" formControlName="email" class="input-text">
+                            </div>
                             <div *ngIf="!partnerLead.get('email')?.valid && (partnerLead.get('email')?.dirty ||partnerLead.get('email')?.touched)">
                               <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerLead.get('email')?.errors?.required">
                                 Email không được để trống
@@ -300,7 +319,6 @@
                 <!-- Partner view -->
                 <div class="add_content" formArrayName="partnerViews">
                   <div class="label">Người xem xét</div>
-                  <hr>
                   <div *ngFor="let partnerView of partnerViews(a).controls; let i=index" [formGroupName]="i">
                     <div class="row">
                       <div class="col-md-1 order">
@@ -310,7 +328,10 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                            <input type="text" formControlName="name" class="form-control">
+                            <div class="form-control input-line">
+                              <img src="assets/img/icon_name.svg" class="input-img">
+                              <input type="text" formControlName="name" class="input-text">
+                            </div>
                             <div *ngIf="!partnerView.get('name')?.valid && (partnerView.get('name')?.dirty ||partnerView.get('name')?.touched)">
                               <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerView.get('name')?.errors?.required">
                                 Họ tên không được để trống
@@ -319,7 +340,10 @@
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email <span class="require_star">*</span></div>
-                            <input type="text" formControlName="email" class="form-control">
+                            <div class="form-control input-line">
+                              <img src="assets/img/login_email.svg" class="input-img">
+                              <input type="text" formControlName="email" class="input-text">
+                            </div>
                             <div *ngIf="!partnerView.get('email')?.valid && (partnerView.get('email')?.dirty ||partnerView.get('email')?.touched)">
                               <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerView.get('email')?.errors?.required">
                                 Email không được để trống
@@ -342,7 +366,6 @@
                 <!-- Partner sign -->
                 <div class="add_content" formArrayName="partnerSigns">
                   <div class="label">Người ký</div>
-                  <hr>
                   <div *ngFor="let partnerSign of partnerSigns(a).controls; let i=index" [formGroupName]="i">
                     <div class="row">
                       <div class="col-md-1 order">
@@ -352,7 +375,10 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                            <input type="text" formControlName="name" class="form-control">
+                            <div class="form-control input-line">
+                              <img src="assets/img/icon_name.svg" class="input-img">
+                              <input type="text" formControlName="name" class="input-text">
+                            </div>
                             <div *ngIf="!partnerSign.get('name')?.valid && (partnerSign.get('name')?.dirty ||partnerSign.get('name')?.touched)">
                               <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('name')?.errors?.required">
                                 Họ tên không được để trống
@@ -361,7 +387,10 @@
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email <span class="require_star">*</span></div>
-                            <input type="text" formControlName="email" class="form-control">
+                            <div class="form-control input-line">
+                              <img src="assets/img/login_email.svg" class="input-img">
+                              <input type="text" formControlName="email" class="input-text">
+                            </div>
                             <div *ngIf="!partnerSign.get('email')?.valid && (partnerSign.get('email')?.dirty ||partnerSign.get('email')?.touched)">
                               <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('email')?.errors?.required">
                                 Email không được để trống
@@ -428,7 +457,6 @@
                 <!-- Partner document -->
                 <div class="add_content" formArrayName="partnerDocs">
                   <div class="label">Văn thư</div>
-                  <hr>
                   <div *ngFor="let partnerDoc of partnerDocs(a).controls; let i=index" [formGroupName]="i">
                     <div class="row">
                       <div class="col-md-1 order">
@@ -438,7 +466,10 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                            <input type="text" formControlName="name" class="form-control">
+                            <div class="form-control input-line">
+                              <img src="assets/img/icon_name.svg" class="input-img">
+                              <input type="text" formControlName="name" class="input-text">
+                            </div>
                             <div *ngIf="!partnerDoc.get('name')?.valid && (partnerDoc.get('name')?.dirty ||partnerDoc.get('name')?.touched)">
                               <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('name')?.errors?.required">
                                 Họ tên không được để trống
@@ -447,7 +478,10 @@
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email <span class="require_star">*</span></div>
-                            <input type="text" formControlName="email" class="form-control">
+                            <div class="form-control input-line">
+                              <img src="assets/img/login_email.svg" class="input-img">
+                              <input type="text" formControlName="email" class="input-text">
+                            </div>
                             <div *ngIf="!partnerDoc.get('email')?.valid && (partnerDoc.get('email')?.dirty ||partnerDoc.get('email')?.touched)">
                               <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('email')?.errors?.required">
                                 Email không được để trống
@@ -508,7 +542,6 @@
                 <!-- Partner user -->
                 <div class="add_content" formArrayName="partnerUsers">
                   <div class="label">Người ký</div>
-                  <hr>
                   <div *ngFor="let partnerUser of partnerUsers(a)?.controls; let i=index" [formGroupName]="i">
                     <div class="row">
                       <div class="col-md-1 order">
@@ -518,7 +551,10 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                            <input type="text" formControlName="name" class="form-control">
+                            <div class="form-control input-line">
+                              <img src="assets/img/icon_name.svg" class="input-img">
+                              <input type="text" formControlName="name" class="input-text">
+                            </div>
                             <div *ngIf="!partnerUser.get('name')?.valid && (partnerUser.get('name')?.dirty ||partnerUser.get('name')?.touched)">
                               <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('name')?.errors?.required">
                                 Họ tên không được để trống
@@ -527,7 +563,10 @@
                           </div>
                           <div class="col-md-6">
                             <div class="label_item">Email <span class="require_star">*</span></div>
-                            <input type="text" formControlName="email" class="form-control">
+                            <div class="form-control input-line">
+                              <img src="assets/img/login_email.svg" class="input-img">
+                              <input type="text" formControlName="email" class="input-text">
+                            </div>
                             <div *ngIf="!partnerUser.get('email')?.valid && (partnerUser.get('email')?.dirty ||partnerUser.get('email')?.touched)">
                               <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('email')?.errors?.required">
                                 Email không được để trống

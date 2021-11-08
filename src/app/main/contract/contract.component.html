@@ -11,12 +11,12 @@
     <div class="input-line search">
       <img src="../../assets/img/icon_search.svg" class="input-img" />
       <input type="text" id="search" class="input-text" placeholder="Nhập từ khóa tìm kiếm theo tên hợp đồng"
-        (keyup)="autoSearch($event)"/>
+      (keyup)="autoSearch($event)" />
       <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="open(modal_filter)"/>
     </div>
   </div>
 
-  <div class="row list_header">
+  <div class="row list_header" *ngIf="contracts.length > 0;">
 
     <div class="col-md-5"></div>
     <div class="col-md-2">Ngày tạo</div>
@@ -24,7 +24,7 @@
     <div class="col-md-3">Thao tác</div>
   </div>
 
-  <div class="item_contract" *ngFor="let item of contracts  | paginate:{itemsPerPage: page, currentPage:p}">
+  <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}">
     <div class="row">
       <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.contractName}}</div>
     </div>
@@ -78,7 +78,7 @@
     </div>
   </div>
 
-  <div class="contract_footer">
+  <div class="contract_footer" *ngIf="contracts.length > 0;">
     <div class="footer_title"></div>
     <div class="footer_pagination">
       <pagination-controls (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
