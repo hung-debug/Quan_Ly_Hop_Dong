@@ -52,6 +52,23 @@ export class UserService {
    )
   }
 
+  sendResetPasswordToken(token:string, passwordOld:string, passwordNew:string) {
+    const headers = new HttpHeaders().append('Content-Type', 'application/json');
+    const body = JSON.stringify({token: token, passwordOld: passwordOld, passwordNew: passwordNew});
+    return this.http.post<User>(this.resetPasswordUrl, body, {'headers':headers})
+    .pipe(
+      map((user) => {
+        console.log(user);
+        if (JSON.parse(JSON.stringify(user)).status == 0) {
+          return user;
+        }else{
+          return null;
+        }
+     }),
+     catchError(this.handleError)
+   )
+  }
+
   // Error handling
   handleError(error:any) {
      let errorMessage = '';

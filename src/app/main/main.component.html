@@ -78,19 +78,14 @@
           <div class="col-md-1"></div>
           <div class="col-md-10">
             <div class="label_item">Mật khẩu cũ</div>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" style="padding: 10px;">
-                  <i class="fa fa-unlock-alt" aria-hidden="true" style="color: #106DB6;"></i>
-                </span>
-              </div>
+            <div class="form-input-line">
+              <img src="../../assets/img/login_password.svg" class="form-input-img">
               <input
                 [type]="fieldTextTypeOld ? 'text' : 'password'"
-                class="form-control"
+                class="form-input-text"
                 formControlName="passwordOld"
               />
-              <div class="input-group-append">
-                <span class="input-group-text" style="padding: 10px;">
+              <div class="form-icon-password">
                   <i
                     class="fa"
                     [ngClass]="{
@@ -99,7 +94,6 @@
                     }"
                     (click)="toggleFieldTextTypeOld()"
                   ></i>
-                </span>
               </div>
             </div>
           </div>
@@ -110,28 +104,22 @@
           <div class="col-md-1"></div>
           <div class="col-md-10">
             <div class="label_item">Mật khẩu mới</div>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" style="padding: 10px;">
-                  <i class="fa fa-unlock-alt" aria-hidden="true" style="color: #106DB6;"></i>
-                </span>
-              </div>
+            <div class="form-input-line">
+              <img src="../../assets/img/login_password.svg" class="form-input-img">
               <input
                 [type]="fieldTextTypeNew ? 'text' : 'password'"
-                class="form-control"
+                class="form-input-text"
                 formControlName="passwordNew"
               />
-              <div class="input-group-append">
-                <span class="input-group-text" style="padding: 10px;">
-                  <i
-                    class="fa"
-                    [ngClass]="{
-                      'fa-eye-slash': !fieldTextTypeNew,
-                      'fa-eye': fieldTextTypeNew
-                    }"
-                    (click)="toggleFieldTextTypeNew()"
-                  ></i>
-                </span>
+              <div class="form-icon-password">
+                <i
+                  class="fa"
+                  [ngClass]="{
+                    'fa-eye-slash': !fieldTextTypeNew,
+                    'fa-eye': fieldTextTypeNew
+                  }"
+                  (click)="toggleFieldTextTypeNew()"
+                ></i>
               </div>
             </div>
           </div>
@@ -142,40 +130,70 @@
           <div class="col-md-1"></div>
           <div class="col-md-10">
             <div class="label_item">Xác nhận lại mật khẩu mới</div>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" style="padding: 10px;">
-                  <i class="fa fa-unlock-alt" aria-hidden="true" style="color: #106DB6;"></i>
-                </span>
-              </div>
+            <div class="form-input-line">
+              <img src="../../assets/img/login_password.svg" class="form-input-img">
               <input
                 [type]="repeatFieldTextTypeNew ? 'text' : 'password'"
-                class="form-control"
+                class="form-input-text"
                 formControlName="confirmPasswordNew"
               />
-              <div class="input-group-append">
-                <span class="input-group-text" style="padding: 10px;">
-                  <i
-                    class="fa"
-                    [ngClass]="{
-                      'fa-eye-slash': !repeatFieldTextTypeNew,
-                      'fa-eye': repeatFieldTextTypeNew
-                    }"
-                    (click)="toggleRepeatFieldTextTypeNew()"
-                  ></i>
-                </span>
+              <div class="form-icon-password">
+                <i
+                  class="fa"
+                  [ngClass]="{
+                    'fa-eye-slash': !repeatFieldTextTypeNew,
+                    'fa-eye': repeatFieldTextTypeNew
+                  }"
+                  (click)="toggleRepeatFieldTextTypeNew()"
+                ></i>
               </div>
             </div>
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+        <div class="row" style="padding-top: 10px;">
+          <div class="col-md-1"></div>
+          <div class="col-md-10">
+            <p class="alert alert-danger" role="alert" *ngIf="error" style="text-align: center; font-size: 15px;">
+              <strong>{{errorDetail}}</strong>
+            </p>
           </div>
           <div class="col-md-1"></div>
         </div>
         <div class="row" style="text-align: center; padding-top: 10px;">
           <div class="col-md-12">
             <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.dismiss('Cross click'); sendResetPassword()">Gửi yêu cầu</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="sendResetPassword(); error ? false : open(modalNotifiReset)">Gửi yêu cầu</button>
           </div>
         </div>
       </form>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Popup notification reset password -->
+<ng-template #modalNotifiReset let-modal >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="modal-header" style="align-items: start; height: 50px;">
+          <h3>THÔNG BÁO</h3>
+          <button type="button" class="close" (click)="modal.dismiss('Cross click')" style="border: none;background: none;">
+            <span style="font-size: 25px;">×</span>
+          </button>
+        </div>
+
+          <!-- <div class="form-group">
+            <div class="input-group">
+              <p class="alert" role="alert"  [ngClass]="{'alert-danger' : status==0, 'alert-primary' : status==1}" style="text-align: center;">
+              {{notification}}
+            </p>
+            </div>
+          </div>
+          <div class="form-group" style="text-align: center; padding-top: 30px;">
+            <button (click)="modal.dismiss('Cross click'); status==1 ? returnLogin():1" class="btn btn-lg btn-block" style="background-color: #106DB6; color: white;">Đồng ý</button>
+          </div> -->
+      </div>
     </div>
   </div>
 </ng-template>

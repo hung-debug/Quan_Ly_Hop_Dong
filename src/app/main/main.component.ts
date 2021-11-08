@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AppService} from '../service/app.service';
+import { UserService } from '../service/user.service';
 import {SidebarService} from './sidebar/sidebar.service';
 
 @Component({
@@ -19,12 +20,17 @@ export class MainComponent implements OnInit {
   repeatFieldTextTypeNew: boolean = false;
   isShowCopyRight: boolean = true;
   isRouterContractNew: boolean = true;
+  error:boolean = false;
+  errorDetail:string = '';
+  status:number = 1;
+  notification:string = '';
 
   constructor(private router: Router,
               private modalService: NgbModal,
               private fb: FormBuilder,
               private appService: AppService,
               public sidebarservice: SidebarService,
+              private userService: UserService,
               private changeDetectorRef: ChangeDetectorRef) {
     this.title = 'err';
   }
@@ -95,7 +101,44 @@ export class MainComponent implements OnInit {
 
   //click reset password
   sendResetPassword() {
-    this.router.navigate(['/login']);
+    let passwordOld = this.resetPasswordForm.value.passwordOld;
+    let passwordNew = this.resetPasswordForm.value.passwordNew;
+    let confirmPasswordNew = this.resetPasswordForm.value.confirmPasswordNew;
+    if(passwordOld == ''){
+      this.error = true;
+      this.errorDetail = 'Mật khẩu cũ không được để trống!';
+    }else if(passwordNew == ''){
+      this.error = true;
+      this.errorDetail = 'Mật khẩu mới không được để trống!';
+    }else if(confirmPasswordNew == ''){
+      this.error = true;
+      this.errorDetail = 'Xác nhận mật khẩu mới không được để trống!';
+    }else{
+      if(passwordNew != confirmPasswordNew){
+        this.error = true;
+        this.errorDetail = 'Xác nhận mật khẩu mới không khớp!';
+      }else{
+        this.error = false;
+        this.userService.sendResetPasswordToken("", passwordOld, passwordNew).subscribe((data) => {
+
+          if(data != null){
+            this.status = 1;
+          }else{
+            this.status = 0;
+          }
+          if(this.status == 0){
+            this.notification = 'Đổi mật khẩu mới thất bại!';
+          }else{
+            this.notification = 'Đổi mật khẩu mới thành công. Vui lòng đăng nhập để tiếp tục!';
+          }
+        },
+        (error:any) => {
+          this.status = 0;
+          this.notification = 'Đổi mật khẩu mới thất bại!';
+        }
+        );
+      }
+    }
   }
 
   //side bar menu
