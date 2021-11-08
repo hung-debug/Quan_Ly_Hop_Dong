@@ -13,6 +13,7 @@ import {SampleContractComponent} from "./shared/model/sample-contract/sample-con
 import {ConfirmInforContractComponent} from "./shared/model/confirm-infor-contract/confirm-infor-contract.component";
 import {DetermineSignerComponent} from "./shared/model/determine-signer/determine-signer.component";
 import { SignContractComponent } from './shared/sign-sample-contract/sign-contract/sign-contract.component';
+import { DetailContractComponent } from './detail-contract/detail-contract.component';
 // import {NotificationService} from "../../service/notification/notification.service";
 
 
@@ -23,7 +24,8 @@ import { SignContractComponent } from './shared/sign-sample-contract/sign-contra
     SampleContractComponent,
     ConfirmInforContractComponent,
     DetermineSignerComponent,
-    SignContractComponent
+    SignContractComponent,
+    DetailContractComponent
   ],
   exports: [
     ContractHeaderComponent,

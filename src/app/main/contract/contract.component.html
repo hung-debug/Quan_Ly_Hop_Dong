@@ -10,7 +10,8 @@
   <div class="col-md-12">
     <div class="input-line search">
       <img src="../../assets/img/icon_search.svg" class="input-img" />
-      <input type="text" id="search" class="input-text" placeholder="Nhập từ khóa tìm kiếm theo tên hợp đồng"/>
+      <input type="text" id="search" class="input-text" placeholder="Nhập từ khóa tìm kiếm theo tên hợp đồng"
+        (keyup)="autoSearch($event)"/>
       <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="open(modal_filter)"/>
     </div>
   </div>

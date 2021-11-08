@@ -146,6 +146,32 @@ export class ContractComponent implements OnInit {
     }
   }
 
+  autoSearch(event:any){
+    let key = event.target.value;
+    console.log(key);
+    if (key) {
+      console.log('key : ' + key);
+      this.contracts = this.contracts.filter(t=>t.contractName.toLowerCase().indexOf(key.toLowerCase())>= 0);
+    }else{
+      this.contractService.getContractList().subscribe(response => {
+        this.contracts = response.items;
+
+      });
+      this.pageTotal = this.contracts.length;
+        this.setPage();
+        console.log(this.pageTotal);
+    }
+  }
+
+  // transform(event: any): any {
+  //   let key = event.target.value
+  //   if (key) {
+  //      return this.contracts.filter(val => val.contractName.toLowerCase().indexOf(key.toLowerCase())) >= 0);
+  //    } else {
+  //      return this.contracts;
+  //    }
+  //   }
+
   openDetail(id:number){
     this.router.navigate(['main/form-contract/copy/' + id]);
   }
