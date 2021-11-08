@@ -21,8 +21,10 @@ export class DashboardComponent implements OnInit {
     title: {
       text: 'Biểu đồ thống kê số lượng hợp đồng tạo',
       style: {
-        fontSize: '16px'
-     }
+        fontSize: '16px',
+        fontWeight: '500',
+      },
+      verticalAlign: 'bottom',
     },
     credits: {
       enabled: false
@@ -63,8 +65,11 @@ export class DashboardComponent implements OnInit {
     title: {
       text: 'Biểu đồ thống kê số lượng hợp đồng được gán',
       style: {
-        fontSize: '16px'
-     }
+        fontSize: '16px',
+        fontWeight: '500',
+
+      },
+      verticalAlign: 'bottom',
     },
     credits: {
       enabled: false

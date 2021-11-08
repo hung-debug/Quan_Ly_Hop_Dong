@@ -87,11 +87,6 @@ export class SidebarService {
           title: 'Đã xử lý',
           active: false,
           href: '/main/contract/receive/processed'
-        },
-        {
-          title: 'Đã hoàn thành',
-          active: false,
-          href: '/main/contract/receive/complete'
         }
       ]
     },

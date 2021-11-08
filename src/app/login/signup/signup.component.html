@@ -104,7 +104,7 @@
                 </div> -->
 
                 <div class="form-group sub-login" style="width: 60%;margin: 0 auto;">
-                  <button class="btn btn-lg btn-block">Gửi yêu cầu</button>
+                  <button class="btn btn-lg btn-block" (click)="sendSignup(); error ? false : open(modalNotifiSignup)">Gửi yêu cầu</button>
                 </div>
                 </div>
             </form>
@@ -115,3 +115,30 @@
     </div>
   </body>
 </html>
+
+<!-- Popup notification signup -->
+<ng-template #modalNotifiSignup let-modal >
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="modal-header" style="align-items: start; height: 50px;">
+          <h3>THÔNG BÁO</h3>
+          <button type="button" class="close" (click)="modal.dismiss('Cross click')" style="border: none;background: none;">
+            <span style="font-size: 25px;">×</span>
+          </button>
+        </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <p class="alert" role="alert"  [ngClass]="{'alert-danger' : status==0, 'alert-primary' : status==1}" style="text-align: center;    width: 100%;">
+              {{notification}}
+            </p>
+            </div>
+          </div>
+          <div class="form-group" style="text-align: center; padding-top: 30px;width: 100px;margin: 10px auto;">
+            <button (click)="modal.dismiss('Cross click'); status==1 ? returnLogin():1" class="btn btn-lg btn-block" style="background-color: #106DB6; color: white;">Đồng ý</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

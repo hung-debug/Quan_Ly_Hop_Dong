@@ -7,12 +7,15 @@
 }
 
 .item_contract:hover{
-  background-color: rgb(250, 248, 248);
+  background-color: rgb(255, 254, 254);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .item_contract_name {
   font-weight: 500;
+  font-size: 16px;
+  color: #106DB6;
+  text-decoration: underline;
 }
 
 .item_contract_infor{
@@ -181,4 +184,11 @@
   width: 20%;
 }
 
-
+.btn-block {
+  background-color: #106DB6;
+  color: white;
+  height: 40px;
+  font-size: 14px;
+  width: 100%;
+  border-radius: 5px;
+}
