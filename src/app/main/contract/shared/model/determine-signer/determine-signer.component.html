@@ -139,11 +139,14 @@
                   </div>
                   <div class="col-md-5">
                     <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
-                    <input type="text" formControlName="phone" class="form-control">
+                    <input type="text" formControlName="phone" class="form-control input_phone">
 
                     <div *ngIf="!alias.get('phone')?.valid && (alias.get('phone')?.dirty ||alias.get('phone')?.touched)">
                       <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('phone')?.errors?.required">
                         Số điện thoại không được để trống
+                      </p>
+                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('phone')?.errors?.pattern">
+                        Số điện thoại sai định dạng
                       </p>
                     </div>
 
@@ -437,10 +440,13 @@
                           </div>
                           <div class="col-md-5">
                             <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
-                            <input type="text" formControlName="phone" class="form-control">
+                            <input type="text" formControlName="phone" class="form-control input_phone">
                             <div *ngIf="!partnerSign.get('phone')?.valid && (partnerSign.get('phone')?.dirty ||partnerSign.get('phone')?.touched)">
                               <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('phone')?.errors?.required">
                                 Số điện thoại không được để trống
+                              </p>
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('phone')?.errors?.pattern">
+                                Số điện thoại sai định dạng
                               </p>
                             </div>
                           </div>
@@ -610,10 +616,13 @@
                           </div>
                           <div class="col-md-5">
                             <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
-                            <input type="text" formControlName="phone" class="form-control">
+                            <input type="text" formControlName="phone" class="form-control input_phone">
                             <div *ngIf="!partnerUser.get('phone')?.valid && (partnerUser.get('phone')?.dirty ||partnerUser.get('phone')?.touched)">
                               <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('phone')?.errors?.required">
                                 Số điện thoại không được để trống
+                              </p>
+                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('phone')?.errors?.pattern">
+                                Số điện thoại sai định dạng
                               </p>
                             </div>
                           </div>

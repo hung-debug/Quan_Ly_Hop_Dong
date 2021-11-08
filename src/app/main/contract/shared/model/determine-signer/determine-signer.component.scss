@@ -1,7 +1,7 @@
 .add_content{
   border-radius: 10px;
   border: 1px solid #0160AE;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .add_click{
   margin: 10px;
@@ -35,8 +35,13 @@
 }
 .order_input{
   background: #f9f9f9;
-  width: 44px;
   text-align: center;
+  padding: 5px 1px;
+  width: 40px;
+  font-size: inherit;
+}
+.input_phone{
+  font-size: inherit;
 }
 .remove{
   display: flex;
