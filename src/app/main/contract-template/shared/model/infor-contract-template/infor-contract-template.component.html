@@ -1,1 +1,94 @@
-<p>infor-contract-template works!</p>
+<!-- form step 1 -->
+<div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="label_item">Tên mẫu hợp đồng <span class="require_star">*</span></div>
+        <div class="input-group">
+          <input type="text" id="contractName" [(ngModel)]="contractName" class="form-control"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <p class="alert alert-danger error-detail" role="alert" *ngIf="errorContractName!=''">
+          {{errorContractName}}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="label_item">File mẫu hợp đồng <span class="require_star">*</span></div>
+        <input id="file-input" type="file" accept=".pdf"
+              (change)="fileChanged($event)" style="display: none;"/>
+        <div class="file-contract" (click)="addFile()">
+          <img src="assets/img/upload_file.svg" alt="mobifone.contract">
+          <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="this.datas.file_name==null">Chọn file hợp đồng (PDF, DOC, DOCX)</span>{{this.datas.file_name}}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <p class="alert alert-danger error-detail" role="alert" *ngIf="errorContractFile!=''">
+          {{errorContractFile}}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">Mã mẫu hợp đồng</div>
+        <div class="input-group">
+          <input type="text" id="contractNumber" [(ngModel)]="contractNumber" class="form-control"/>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">Loại mẫu hợp đồng</div>
+        <div class="col">
+          <ng-multiselect-dropdown id="contractType" [(ngModel)]="contractType" [placeholder]="'-- Chọn --'"
+            [settings]="dropdownTypeSettings" [data]="contractTypeList">
+            <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
+              <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                <label style="color: #333; font-weight: normal;"
+                  [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractTypeItems[id].isDisabled? 'lightgrey': ''}">{{getContractTypeItems[id].item_text}}
+                </label>
+              </div>
+            </ng-template>
+          </ng-multiselect-dropdown>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="select-file-contract">
+          <div class="file-approve">
+            <div class="label_item">File đính kèm</div>
+            <input id="attachFile" type="file" accept=".pdf, .doc, .docx"
+                  (change)="fileChangedAttach($event)" style="display: none;" multiple/>
+            <div class="select-contract" (click)="addFileAttach()">
+              <input type="text" placeholder="Chọn file đính kèm (PDF, DOC, DOCX)" readonly [ngModel]="this.datas.file_name_attach">
+              <img src="assets/img/attachment.svg" alt="mobifone.contract">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-infor-contract">
+  <div></div>
+  <div></div>
+  <div>
+    <button (click)="next()" type="button" name="next" class="next action-button pull-right">Tiếp theo</button>
+  </div>
+</div>
+
+

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
@@ -24,7 +25,8 @@ export class ContractTemplateComponent implements OnInit {
 
   constructor(private modalService: NgbModal,
               private appService: AppService,
-              private contractTemplateService: ContractTemplateService,) { }
+              private contractTemplateService: ContractTemplateService,
+              private router: Router,) { }
 
   ngOnInit(): void {
     this.appService.setTitle('DANH SÁCH MẪU HỢP ĐỒNG ');
@@ -78,4 +80,7 @@ export class ContractTemplateComponent implements OnInit {
     this.notification = "Xóa mẫu hợp đồng thành công";
   }
 
+  addContractTemplate(){
+    this.router.navigate(['/main/form-contract-template/add']);
+  }
 }
