@@ -25,6 +25,8 @@ export class ContractComponent implements OnInit {
   pageStart:number = 0;
   pageEnd:number = 0;
   pageTotal:number = 0;
+  statusPopup:number = 1;
+  notificationPopup:string = '';
 
   //filter contract
   contractType:any;
@@ -177,6 +179,11 @@ export class ContractComponent implements OnInit {
 
   openEdit(id:number){
     this.router.navigate(['main/form-contract/edit/' + id]);
+  }
+
+  deleteItem(id:number){
+    this.statusPopup = 1;
+    this.notificationPopup = "Xóa hợp đồng thành công";
   }
 
 }
