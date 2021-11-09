@@ -134,19 +134,26 @@ export class InforContractTemplateComponent implements OnInit {
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension.toLowerCase() == 'pdf') {
-          const fileReader = new FileReader();
-          fileReader.readAsDataURL(file);
-          fileReader.onload = (e) => {
-            //@ts-ignore
-            const base64result = fileReader.result.toString().split(',')[1];
-            const fileInput: any = document.getElementById('file-input');
-            fileInput.value = '';
-            this.datas.file_content = base64result;
-            this.datas.file_name = file_name;
-            this.datas.contractFile = file;
-            // this.datas.documents['file_content_docx'] = null;
-            // this.pdfSrc = Helper._getUrlPdf(base64result);
-          };
+          // const fileReader = new FileReader();
+          // fileReader.readAsDataURL(file);
+          // fileReader.onload = (e) => {
+          //   //@ts-ignore
+          //   const base64result = fileReader.result.toString().split(',')[1];
+          //   const fileInput: any = document.getElementById('file-input');
+          //   fileInput.value = '';
+          //   this.datas.file_content = base64result;
+          //   this.datas.file_name = file_name;
+          //   this.datas.contractFile = file;
+          //   // this.datas.documents['file_content_docx'] = null;
+          //   // this.pdfSrc = Helper._getUrlPdf(base64result);
+          // };
+
+
+          const fileInput: any = document.getElementById('file-input');
+          fileInput.value = '';
+          this.datas.file_name = file_name;
+          this.datas.contractFile = file;
+
         } else {
           alert('Chỉ hỗ trợ file có định dạng PDF')
         }
@@ -214,7 +221,7 @@ export class InforContractTemplateComponent implements OnInit {
       this.errorContractName = 'Tên mẫu hợp đồng không được để trống!';
       return false;
     }
-    if (!this.datas.file_content) {
+    if (!this.datas.contractFile) {
       this.errorContractFile = 'File mẫu hợp đồng không được để trống!';
       return false;
     }
@@ -226,7 +233,7 @@ export class InforContractTemplateComponent implements OnInit {
     if (this.contractName) {
       this.errorContractName = '';
     }
-    if (this.datas.file_content) {
+    if (this.datas.contractFile) {
       this.errorContractFile = '';
     }
   }
@@ -242,6 +249,15 @@ export class InforContractTemplateComponent implements OnInit {
       this.datas.contractConnect = this.contractConnect;
       this.datas.dateDeadline = this.dateDeadline;
       this.datas.comment = this.comment;
+
+
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(this.datas.contractFile);
+      fileReader.onload = (e) => {
+        //@ts-ignore
+        const base64result = fileReader.result.toString().split(',')[1];
+        this.datas.file_content = base64result;
+      };
 
       this.step = variable.stepSampleContract.step2;
       this.datas.stepLast = this.step
