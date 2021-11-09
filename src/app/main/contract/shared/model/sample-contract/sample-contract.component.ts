@@ -106,13 +106,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.getListSignName(is_user_sign, 'organization');
     }
 
-    if (this.datas.partners.partnerSigns && this.datas.partners.partnerSigns.length > 0) {
-      let is_partner_sign = [...this.datas.partners.partnerSigns];
-      this.getListSignName(is_partner_sign, 'partner');
-    } else if (this.datas.partners.partnerUsers && this.datas.partners.partnerUsers.length > 0) {
-      let is_partner_users = [...this.datas.partners.partnerUsers];
-      this.getListSignName(is_partner_users, 'partner');
+    if (this.datas.partnerForm.partnerArrs && this.datas.partnerForm.partnerArrs.length > 0) {
+      this.datas.partnerForm.partnerArrs.forEach((element: any) => {
+        if (element.partnerSigns && element.partnerSigns.length > 0) {
+          let is_partner_sign = [...element.partnerSigns];
+          this.getListSignName(is_partner_sign, 'partner');
+        } else if (element.partnerUsers && element.partnerUsers.length > 0) {
+          let is_partner_users = [...element.partnerUsers];
+          this.getListSignName(is_partner_users, 'partner');
+        }
+      })
     }
+
+
 
     if (!this.signCurent) {
       this.signCurent = {
