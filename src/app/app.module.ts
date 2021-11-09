@@ -45,6 +45,7 @@ import { DetermineSignerTemplateComponent } from './main/contract-template/share
 import { InforContractTemplateComponent } from './main/contract-template/shared/model/infor-contract-template/infor-contract-template.component';
 import { SampleContractTemplateComponent } from './main/contract-template/shared/model/sample-contract-template/sample-contract-template.component';
 import { SignupComponent } from './login/signup/signup.component';
+import { SignContractTemplateComponent } from './main/contract-template/shared/sign-sample-contract-template/sign-contract-template/sign-contract-template.component';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -74,6 +75,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     InforContractTemplateComponent,
     SampleContractTemplateComponent,
     SignupComponent,
+    SignContractTemplateComponent,
   ],
   imports: [
     BrowserModule,

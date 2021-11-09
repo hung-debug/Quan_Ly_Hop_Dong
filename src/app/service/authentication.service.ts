@@ -5,11 +5,8 @@ import { map, catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 export interface User {
-  tax_code: number,
-  username: string,
-  password: string,
-  tokenType: string,
-  token: string
+  type: string,
+  access_token: string,
 }
 
 @Injectable({
@@ -18,7 +15,7 @@ export interface User {
 export class AuthenticationService {
 
   //loginUrl = 'https://uatecontractapp.efy.com.vn/api/login';
-  loginUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
+  loginUrl:any = `${environment.apiUrl}/api/v1/auth`;
   errorData:any = {};
   redirectUrl: string = '';
 
@@ -47,12 +44,12 @@ export class AuthenticationService {
 
  loginAuthencation(username: string, password: string) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
-    const body = JSON.stringify({username: username, password: password});
+    const body = JSON.stringify({email: username, password: password});
 
     return this.http.post<User>(this.loginUrl, body, {'headers':headers})
        .pipe(
           map((user) => {
-            if (JSON.parse(JSON.stringify(user)).username == username) {
+            if (JSON.parse(JSON.stringify(user)).access_token != '') {
               localStorage.setItem('currentUser', JSON.stringify(user));
               return user;
             }else{

@@ -10,6 +10,7 @@ import { variable } from 'src/app/config/variable';
 export class ConfirmInforContractComponent implements OnInit {
   @Input() datas: any;
   @Input() step: any;
+  @Output() stepChangeDetermineSigner = new EventEmitter<string>();
   confirmForm!: FormGroup;
   @Output('stepChangeConfirmInforContract') stepChangeConfirmInforContract = new EventEmitter<Array<any>>();
 
@@ -50,30 +51,30 @@ export class ConfirmInforContractComponent implements OnInit {
 
     let partnerViews:string = '';
     conn = '';
-    if (this.datas.partners.partnerViews && this.datas.partners.partnerViews.length > 0) {
-      this.datas.partners.partnerViews.forEach((item: any) => {
-        partnerViews = partnerViews + conn + item.name + " - " + item.email;
-        conn = ",";
-      })
-    }
+    // if (this.datas.partners.partnerViews && this.datas.partners.partnerViews.length > 0) {
+    //   this.datas.partners.partnerViews.forEach((item: any) => {
+    //     partnerViews = partnerViews + conn + item.name + " - " + item.email;
+    //     conn = ",";
+    //   })
+    // }
 
     let partnerSigns:string = '';
     conn = '';
-    if (this.datas.partners.partnerSigns && this.datas.partners.partnerSigns.length > 0) {
-      this.datas.partners.partnerSigns.forEach((item: any) => {
-        partnerSigns = partnerSigns + conn + item.name + " - " + item.email;
-        conn = ",";
-      })
-    }
+    // if (this.datas.partners.partnerSigns && this.datas.partners.partnerSigns.length > 0) {
+    //   this.datas.partners.partnerSigns.forEach((item: any) => {
+    //     partnerSigns = partnerSigns + conn + item.name + " - " + item.email;
+    //     conn = ",";
+    //   })
+    // }
 
     let partnerDocs:string = '';
     conn = '';
-    if (this.datas.partners.partnerDocs && this.datas.partners.partnerDocs.length > 0) {
-      this.datas.partners.partnerDocs.forEach((item: any) => {
-        partnerDocs = partnerDocs + conn + item.name + " - " + item.email;
-        conn = ",";
-      })
-    }
+    // if (this.datas.partners.partnerDocs && this.datas.partners.partnerDocs.length > 0) {
+    //   this.datas.partners.partnerDocs.forEach((item: any) => {
+    //     partnerDocs = partnerDocs + conn + item.name + " - " + item.email;
+    //     conn = ",";
+    //   })
+    // }
 
     this.confirmForm = this.formBuilder.group({
 
@@ -89,4 +90,18 @@ export class ConfirmInforContractComponent implements OnInit {
     });
   }
 
+  back(e: any, step?: any) {
+    this.nextOrPreviousStep(step);
+  }
+
+  // next step event
+  next() {
+
+  }
+
+  // forward data component
+  nextOrPreviousStep(step: string) {
+    this.datas.stepLast = step;
+    this.stepChangeDetermineSigner.emit(step);
+  }
 }

@@ -4,8 +4,8 @@
     <app-contract-template-header #contractHeader [AddComponent]="this" [datas]="datas" [step]="step"></app-contract-template-header>
     <ng-container>
       <app-infor-contract-template #infoContract *ngIf="step == 'infor-contract'" [datas]="datas" [step]="step" (stepChangeInfoContract)="getStep($event)"></app-infor-contract-template>
-      <!-- <app-determine-signer-template #determineSigner *ngIf="step == 'determine-contract'" [datas]="datas" [step]="step" (stepChangeDetermineSigner)="getStep($event)"></app-determine-signer-template>
+      <app-determine-signer-template #determineSigner *ngIf="step == 'determine-contract'" [datas]="datas" [step]="step" (stepChangeDetermineSigner)="getStep($event)"></app-determine-signer-template>
       <app-sample-contract-template #sampleContract *ngIf="step == 'sample-contract'" [datas]="datas" [step]="step" (stepChangeSampleContract)="getStep($event)"></app-sample-contract-template>
-      <app-confirm-infor-contract-template #confirmInforContract *ngIf="step == 'confirm-contract'" [datas]="datas" [step]="step"></app-confirm-infor-contract-template> -->
+      <app-confirm-infor-contract-template #confirmInforContract *ngIf="step == 'confirm-contract'" [datas]="datas" [step]="step"></app-confirm-infor-contract-template>
     </ng-container>
   </div>
