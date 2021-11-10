@@ -6,6 +6,6 @@
     <app-infor-contract #infoContract *ngIf="step == 'infor-contract'" [datas]="datas" [step]="step" (stepChangeInfoContract)="getStep($event)"></app-infor-contract>
     <app-determine-signer #determineSigner *ngIf="step == 'determine-contract'" [datas]="datas" [step]="step" (stepChangeDetermineSigner)="getStep($event)"></app-determine-signer>
     <app-sample-contract #sampleContract *ngIf="step == 'sample-contract'" [datas]="datas" [step]="step" (stepChangeSampleContract)="getStep($event)"></app-sample-contract>
-    <app-confirm-infor-contract #confirmInforContract *ngIf="step == 'confirm-contract'" [datas]="datas" [step]="step"></app-confirm-infor-contract>
+    <app-confirm-infor-contract #confirmInforContract *ngIf="step == 'confirm-contract'" [datas]="datas"(stepChangeConfirmInforContract)="getStep($event)"></app-confirm-infor-contract>
   </ng-container>
 </div>

@@ -12,7 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatBadgeModule} from '@angular/material/badge';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { CommonModule} from '@angular/common';
+import { CommonModule, DatePipe} from '@angular/common';
 
 import { DatepickerModule } from 'ng2-datepicker';
 
@@ -98,7 +98,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DatepickerModule,
     ChartModule,
   ],
-  providers: [ AppService,
+  providers: [ AppService, DatePipe,
     {
     provide: PERFECT_SCROLLBAR_CONFIG,
     useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,

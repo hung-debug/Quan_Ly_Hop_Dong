@@ -354,7 +354,7 @@ export class DetermineSignerComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       signType: ['', Validators.required],
       isOtp: true,
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
       id: ''
     })
   }
@@ -395,7 +395,7 @@ export class DetermineSignerComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       signType: ['', Validators.required],
       isOtp: true,
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
     })
   }
   addPartnerUser(a:number) {
