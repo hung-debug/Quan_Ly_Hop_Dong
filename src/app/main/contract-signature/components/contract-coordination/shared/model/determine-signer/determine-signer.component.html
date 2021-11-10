@@ -3,7 +3,7 @@
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="col-md-1 order">
-          <input type="number" formControlName="order" class="form-control order_input">
+        <input type="number" formControlName="order" class="form-control order_input">
       </div>
       <div class="col-md-11 form_content">
         <p>
@@ -17,7 +17,7 @@
           <div *ngFor="let userView of userViews().controls; let i=index" [formGroupName]="i">
             <div class="row">
               <div class="col-md-1 order">
-                  <input type="number" formControlName="order" class="form-control order_input">
+                <input type="number" formControlName="order" class="form-control order_input">
               </div>
               <div class="col-md-10">
                 <div class="row">
@@ -51,7 +51,7 @@
                 </div>
               </div>
               <div class="col-md-1 remove">
-                  <i (click)="removeUserView(i)" class="fa fa-times-circle remove_icon"></i>
+                <i (click)="removeUserView(i)" class="fa fa-times-circle remove_icon"></i>
               </div>
             </div>
           </div>
@@ -119,7 +119,7 @@
                             <label
                               style="color: #333; font-weight: normal;"
                               [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                              >{{getSignTypeItems[id].item_text}}</label>
+                            >{{getSignTypeItems[id].item_text}}</label>
                           </div>
                         </ng-template>
                       </ng-multiselect-dropdown>
@@ -217,7 +217,7 @@
                             <label
                               style="color: #333; font-weight: normal;"
                               [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                              >{{getSignTypeItems[id].item_text}}</label>
+                            >{{getSignTypeItems[id].item_text}}</label>
                           </div>
                         </ng-template>
                       </ng-multiselect-dropdown>
@@ -247,7 +247,7 @@
         <div class="partner_content" >
           <div class="row">
             <div class="col-md-1 order">
-                <input type="number" formControlName="order" class="form-control order_input">
+              <input type="number" formControlName="order" class="form-control order_input">
             </div>
             <div class="col-md-11 form_content">
 
@@ -422,7 +422,7 @@
                                     <label
                                       style="color: #333; font-weight: normal;"
                                       [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                                      >{{getSignTypeItems[id].item_text}}</label>
+                                    >{{getSignTypeItems[id].item_text}}</label>
                                   </div>
                                 </ng-template>
                               </ng-multiselect-dropdown>
@@ -516,7 +516,7 @@
                                     <label
                                       style="color: #333; font-weight: normal;"
                                       [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                                      >{{getSignTypeItems[id].item_text}}</label>
+                                    >{{getSignTypeItems[id].item_text}}</label>
                                   </div>
                                 </ng-template>
                               </ng-multiselect-dropdown>
@@ -598,7 +598,7 @@
                                     <label
                                       style="color: #333; font-weight: normal;"
                                       [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                                      >{{getSignTypeItems[id].item_text}}</label>
+                                    >{{getSignTypeItems[id].item_text}}</label>
                                   </div>
                                 </ng-template>
                               </ng-multiselect-dropdown>
@@ -647,15 +647,6 @@
       </div>
     </div>
   </form>
-
-  <br/>
-  {{this.datas | json}}
-
-  <br/>
-  {{this.userForm.value | json}}
-  <br/>
-  {{this.partnerForm.value | json}}
-
 
 </div>
 

@@ -1,6 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {SignContractComponent} from "../sign-contract/sign-contract.component";
-// import {AddContractComponent} from "../../../contract/add-contract/add-contract.component";
+import {AddContractComponent} from "../contract-coordination/add-contract/add-contract.component";
+import {variable} from "../../../../config/variable";
 
 @Component({
   selector: 'app-index',
@@ -9,11 +10,18 @@ import {SignContractComponent} from "../sign-contract/sign-contract.component";
 })
 export class IndexComponent implements OnInit {
   @ViewChild('ContractSign') SignContractComponent: SignContractComponent;
-  // @ViewChild('AddContract') AddContractComponent: AddContractComponent
-
+  @ViewChild('AddContract') AddContractComponent: AddContractComponent
+  datas: any = {
+    step: variable.stepSampleContract.step_coordination,
+    contract: {}
+  }
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  dieuPhoiHd() {
+    this.datas.step = "confirm-coordination";
   }
 
 }

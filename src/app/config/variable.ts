@@ -1,5 +1,7 @@
 export const variable = {
   stepSampleContract: {
+    step_confirm_coordination: "confirm-coordination",
+    step_coordination: "infor-coordination",
     step1: "infor-contract",
     step2: "determine-contract",
     step3: "sample-contract",
