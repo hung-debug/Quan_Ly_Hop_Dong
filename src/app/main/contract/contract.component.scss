@@ -9,7 +9,6 @@
 .item_contract:hover{
   background-color: rgb(255, 254, 254);
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  cursor: pointer;
 }
 
 .item_contract_name {
@@ -219,5 +218,15 @@
   font-size: 14px;
   width: 100%;
   border-radius: 5px;
+}
+.div_icon{
+  padding: 0 10px;
+}
+.img_icon{
+  width: 18px;
+  cursor: pointer;
+}
+.img_icon:hover{
+  width: 30px;
 }
 

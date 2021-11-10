@@ -51,27 +51,30 @@
       </div>
 
       <div class="col-md-3 item_icon">
-        <div class="row">
-          <div class="{{iconClass}}" *ngIf="status == 'draft' || status == 'processing' || status == 'expire' || status == 'cancel' || status == 'fail' || status == 'overdue' || status == 'complete'">
-            <i class="fa fa-clone fa_icon" ngbTooltip="Sao chép" (click)="openCopy(item.id)"></i>
+        <div style="display: flex; justify-content: center;">
+          <div class="div_icon" *ngIf="status == 'draft' || status == 'processing' || status == 'expire' || status == 'cancel' || status == 'fail' || status == 'overdue' || status == 'complete'">
+            <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="Sao chép" (click)="openCopy(item.id)" />
           </div>
-          <div class="{{iconClass}}" *ngIf="status == 'draft'">
-            <i class="fa fa-pencil-square fa_icon" ngbTooltip="Sửa hợp đồng" (click)="openEdit(item.id)"></i>
+          <div class="div_icon" *ngIf="status == 'draft'">
+            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="Sửa hợp đồng" (click)="openEdit(item.id)" />
           </div>
-          <div class="{{iconClass}}" *ngIf="status == 'draft'">
-            <i class="fa fa-minus-square fa_icon" ngbTooltip="Xóa hợp đồng" (click)="deleteItem(item.id); open(modalNotifi)"></i>
+          <div class="div_icon" *ngIf="status == 'draft'">
+            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="Xóa hợp đồng" (click)="deleteItem(item.id); open(modalNotifi)" />
           </div>
-          <div class="{{iconClass}}" *ngIf="status == 'processing' || status == 'expire' || status == 'complete'">
-            <i class="fa fa-calendar-o fa_icon" ngbTooltip="Xem hợp đồng liên quan"></i>
+          <div class="div_icon" *ngIf="status == 'processing' || status == 'expire' || status == 'complete'">
+            <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="Xem hợp đồng liên quan" />
           </div>
-          <div class="{{iconClass}}" *ngIf="status == 'processing' || status == 'expire' || status == 'complete'">
-            <i class="fa fa-calendar-plus-o fa_icon" ngbTooltip="Thêm hợp đồng liên quan"></i>
+          <div class="div_icon" *ngIf="status == 'processing' || status == 'expire' || status == 'complete'">
+            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="Thêm hợp đồng liên quan" />
           </div>
-          <div class="{{iconClass}}" *ngIf="status == 'complete'">
-            <i class="fa fa-download fa_icon" ngbTooltip="Tải hợp đồng"></i>
+          <div class="div_icon" *ngIf="status == 'processing' || status == 'expire' || status == 'complete'">
+            <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="Hủy hợp đồng" />
           </div>
-          <div class="{{iconClass}}" *ngIf="status == 'complete'">
-            <i class="fa fa-share-square-o fa_icon" ngbTooltip="Chia sẻ"></i>
+          <div class="div_icon" *ngIf="status == 'complete'">
+            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Tải hợp đồng" />
+          </div>
+          <div class="div_icon" *ngIf="status == 'complete'">
+            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" />
           </div>
         </div>
       </div>
