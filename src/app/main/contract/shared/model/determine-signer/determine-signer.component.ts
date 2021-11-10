@@ -420,25 +420,33 @@ export class DetermineSignerComponent implements OnInit {
     else {
       // gán value step 2 vào datas
       this.datas.userForm = this.userForm.value;
-      // if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
-      //   this.datas.userForm.userSigns.forEach((item: any) => {
-      //     // item['id'] = Helper._randomNumber(10);
-      //   })
-      // }
+      if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
+        this.datas.userForm.userSigns.forEach((item: any) => {
+          item['id'] = Helper._ranDomNumberText(10);
+        })
+      }
+
       this.datas.partnerForm = this.partnerForm.value;
-      // if (this.datas.partners.partnerSigns && this.datas.userForm.userSigns.length > 0) {
-      //   this.datas.partners.partnerSigns.forEach((item: any) => {
-      //     // item['id'] = Helper._randomNumber(10);
-      //   })
-      // }
-      // if (this.datas.partners.partnerUsers && this.datas.partners.partnerUsers.length > 0) {
-      //   this.datas.partners.partnerUsers.forEach((item: any) => {
-      //     // item['id'] = Helper._randomNumber(10);
-      //   })
-      // }
+
+      if (this.datas.partnerForm.partnerArrs && this.datas.partnerForm.partnerArrs.length > 0) {
+        this.datas.partnerForm.partnerArrs.forEach((element: any) => {
+          if (element.partnerSigns && element.partnerSigns.length > 0) {
+            element.partnerSigns.forEach((item: any) => {
+              item['id'] = Helper._ranDomNumberText(10);
+            })
+          }
+          if (element.partnerUsers && element.partnerUsers.length > 0) {
+            element.partnerUsers.forEach((items: any) => {
+              items['id'] = Helper._ranDomNumberText(10);
+            })
+          }
+        })
+      }
+
+
       this.step = variable.stepSampleContract.step3;
       this.datas.stepLast = this.step
-      console.log(this.datas);
+      // console.log(this.datas);
       this.nextOrPreviousStep(this.step);
     }
   }
