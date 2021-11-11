@@ -17,6 +17,7 @@ export class DetermineSignerComponent implements OnInit {
   determineDetails!: FormGroup;
   userForm: FormGroup;
   partnerForm : FormGroup
+  submitted = false;
 
   //dropdown
   signTypeList: Array<any> = [];
@@ -416,6 +417,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // next step event
   next() {
+    this.submitted = true;
     if (!this.validData()) return;
     else {
       // gán value step 2 vào datas
@@ -460,11 +462,12 @@ export class DetermineSignerComponent implements OnInit {
   // valid data step 2
   validData() {
     if (this.userForm.invalid) {
-      console.log('vui lòng nhập đầy đủ dữ liệu userForm')
+      console.log('vui lòng nhập đầy đủ dữ liệu userForm');
       return false;
     }
-    if (this.partners.invalid) {
-      console.log('Vui lòng nhập đầy đủ dữ liệu partners')
+    if (this.partnerForm.invalid) {
+      console.log('Vui lòng nhập đầy đủ dữ liệu partnerForm');
+      return false;
     }
     return true;
   }
