@@ -53,7 +53,7 @@
               'fa-unlock-alt': item.status == 'Đang phát hành',
               'fa-unlock': item.status == 'Ngừng phát hành'
             }" [ngbTooltip]="item.status == 'Đang phát hành' ? 'Ngừng phát hành' : 'Mở phát hành'"
-            (click)="sendStatus(item.status); open(modalNotifi)"
+            (click)="confirmChangeStatus(item.status); open(modalConfirmChangeStatus)"
             ></i>
           </div>
           <div class="col-md-100-5">
@@ -63,7 +63,7 @@
             <i class="fa fa-files-o fa_icon" ngbTooltip="Tạo hợp đồng theo lô"></i>
           </div>
           <div class="col-md-100-5">
-            <i class="fa fa-share-square-o fa_icon" ngbTooltip="Chia sẻ"></i>
+            <i class="fa fa-share-square-o fa_icon" ngbTooltip="Chia sẻ" (click)="getDataShare(item.contractName, item.contractCode); open(modalShare)"></i>
           </div>
           <div class="col-md-100-5">
             <i class="fa fa-trash-o fa_icon icon_red" ngbTooltip="Xóa"
@@ -85,7 +85,7 @@
 </div>
 
 
-<!-- Popup notification signup -->
+<!-- Popup notification -->
 <ng-template #modalNotifi let-modal >
   <div class="popup_content">
     <div class="row">
@@ -101,15 +101,134 @@
       <div class="col-md-12">
           <div class="form-group">
             <div class="input-group">
-              <p class="alert" role="alert"  [ngClass]="{'alert-danger' : status==0, 'alert-primary' : status==1}" style="text-align: center;    width: 100%;">
+              <p class="alert" role="alert"  [ngClass]="{'alert-danger' : status==0, 'alert-success' : status==1}" style="text-align: center;    width: 100%;">
               {{notification}}
             </p>
             </div>
           </div>
-          <div class="form-group" style="text-align: center; padding-top: 30px;width: 100px;margin: 10px auto;">
-            <button (click)="modal.dismiss('Cross click');" class="btn btn-lg btn-block" style="background-color: #106DB6; color: white;">Đồng ý</button>
+      </div>
+    </div>
+    <div class="row" style="text-align: center; padding-top: 10px;">
+      <div class="col-md-12">
+        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.dismiss('Cross click');" >Đồng ý</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Popup confirm change status (xac nhan ngung, mo phat hanh)-->
+<ng-template #modalConfirmChangeStatus let-modal >
+  <div class="popup_content">
+    <div class="row">
+      <div class="col-md-10">
+        <h4 class="popup_title">THÔNG BÁO</h4>
+      </div>
+      <div class="col-md-2 popup_close">
+        <span (click)="modal.dismiss('Cross click')">×</span>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-12">
+          <div class="form-group">
+            <div class="input-group">
+              <p class="alert alert-primary" role="alert" style="text-align: center; width: 100%;">
+              {{notification}}
+            </p>
+            </div>
           </div>
       </div>
     </div>
+
+    <div class="row" style="text-align: center; padding-top: 10px;">
+      <div class="col-md-12">
+        <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
+        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.dismiss('Cross click'); sendChangeStatus(statusContract); open(modalNotifi)" >Đồng ý</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Popup share -->
+<ng-template #modalShare let-modal >
+  <div class="popup_content">
+    <div class="row">
+      <div class="col-md-10">
+        <h4 class="popup_title">CHIA SẺ MẪU HỢP ĐỒNG</h4>
+      </div>
+      <div class="col-md-2 popup_close">
+        <span (click)="modal.dismiss('Cross click')">×</span>
+      </div>
+    </div>
+    <hr>
+
+    <form [formGroup]="shareForm">
+      <div class="row">
+        <div class="col-md-7">
+          <div class="label_item">Tên mẫu hợp đồng</div>
+          <div class="form-input-readonly">
+            <span>{{shareForm.get('name').value}}</span>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="label_item">Mã</div>
+          <div class="form-input-readonly">
+            <span>{{shareForm.get('code').value}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="label_item">Tổ chức</div>
+          <div class="form-input-line">
+            <ng-multiselect-dropdown formControlName="organization" [placeholder]="'-- Chọn --'"
+              [settings]="dropdownOrganizationSettings" [data]="organizationList">
+              <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
+                <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                  <label style="color: #333; font-weight: normal;"
+                    [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getOrganizationItems[id].isDisabled? 'lightgrey': ''}">{{getOrganizationItems[id].item_text}}
+                  </label>
+                </div>
+              </ng-template>
+            </ng-multiselect-dropdown>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="label_item">Email</div>
+          <div class="form-input-line">
+            <ng-multiselect-dropdown formControlName="email" [placeholder]="'-- Chọn --'"
+              [settings]="dropdownEmailSettings" [data]="emailList">
+              <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
+                <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                  <label style="color: #333; font-weight: normal;"
+                    [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getEmailItems[id].isDisabled? 'lightgrey': ''}">{{getEmailItems[id].item_text}}
+                  </label>
+                </div>
+              </ng-template>
+            </ng-multiselect-dropdown>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="padding-top: 10px;">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <p class="alert alert-danger" role="alert" *ngIf="error" style="text-align: center; font-size: 15px;">
+            <strong>{{errorDetail}}</strong>
+          </p>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+      <div class="row" style="text-align: center; padding-top: 10px;">
+        <div class="col-md-12">
+          <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
+          <button type="button" class="btn btn-outline-dark btn_submit" (click)="sendShare(); error ? false : modal.close('Save click');open(modalNotifi)">Chia sẻ</button>
+        </div>
+      </div>
+    </form>
   </div>
 </ng-template>
