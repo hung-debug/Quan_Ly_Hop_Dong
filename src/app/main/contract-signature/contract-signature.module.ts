@@ -13,7 +13,9 @@ import { InforCoordinationComponent } from './components/contract-coordination/s
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
 import {DatepickerModule} from "ng2-datepicker";
-import {SignContractComponent} from "./shared/model/sign-contract/sign-contract.component";
+import {SignatureContractComponent} from "./shared/model/sign-contract/sign-contract.component";
+import { HeaderContractComponent } from './components/header-contract/header-contract.component';
+import { FooterSignatureComponent } from './components/footer-signature/footer-signature.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import {SignContractComponent} from "./shared/model/sign-contract/sign-contract.
     ConfirmInfoContractComponent,
     ContractHeaderComponent,
     InforCoordinationComponent,
-    SignContractComponent
+    SignatureContractComponent,
+    HeaderContractComponent,
+    FooterSignatureComponent
   ],
     imports: [
         CommonModule,

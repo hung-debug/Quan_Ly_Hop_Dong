@@ -13,7 +13,8 @@ export class IndexComponent implements OnInit {
   @ViewChild('AddContract') AddContractComponent: AddContractComponent
   datas: any = {
     step: variable.stepSampleContract.step_coordination,
-    contract: {}
+    contract: {},
+    action_title: 'Điều phối'
   }
   constructor() { }
 

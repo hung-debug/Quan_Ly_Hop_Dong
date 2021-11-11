@@ -1,10 +1,13 @@
+//@font-face {
+//  font-family: 'SF_Dexend_deca';
+//  src: url('assets/scss/font/LexendDeca-VariableFont_wght.ttf') format('ttf');
+//}
+
 .sample-contract {
   //height: calc(100vh - 221px);
-  //height: calc(100vh - 201px);
-  height: calc(100vh - 51px);
+  height: calc(100vh - 104px);
 
   &__file {
-
     //position: relative;
     .sig-img-daky{
       position: absolute;
@@ -16,7 +19,7 @@
   }
 
   .viewer-pdf {
-    height: calc(100vh - 51px);
+    height: calc(100vh - 114px);
     overflow-x: auto;
     text-align: center;
     background-color: rgba(239, 239, 239, 1);
@@ -32,8 +35,7 @@
 
   .viewer-pdf.isDrag{
     //height: calc(100vh - 221px);
-    //height: calc(100vh - 201px);
-    height: calc(100vh - 51px);
+    height: calc(100vh - 104px);
     overflow-x: auto;
     text-align: center;
     background-color: rgba(239, 239, 239, 1);
@@ -256,19 +258,6 @@
   //width: ;
 }
 
-//style button
-.action-button {
-  width: 100px;
-  background: #106DB6;
-  //font-weight: bold;
-  color: white;
-  border: 0 none;
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 10px 5px;
-  margin: 5px 5px;
-}
-
 .action-button-previous {
   width: 100px;
   background: #C5C5F1;
@@ -279,16 +268,4 @@
   cursor: pointer;
   padding: 10px 5px;
   margin: 5px 5px;
-}
-
-.footer-sample-contract {
-  border-top: 1px solid #ddd;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  .content_footer {
-    color:#0160AE;
-    font-size: 13px;
-    font-weight: 500;
-  }
 }

@@ -5,7 +5,7 @@ import {Component, OnInit, Input, AfterViewInit} from '@angular/core';
   templateUrl: './sign-contract.component.html',
   styleUrls: ['./sign-contract.component.scss']
 })
-export class SignatureContractComponent implements OnInit, AfterViewInit {
+export class SignContractComponent implements OnInit, AfterViewInit {
   @Input() datas: any;
   @Input() sign: any;
   constructor() { }

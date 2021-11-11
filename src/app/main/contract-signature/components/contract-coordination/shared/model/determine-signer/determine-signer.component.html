@@ -17,7 +17,7 @@
           <div *ngFor="let userView of userViews().controls; let i=index" [formGroupName]="i">
             <div class="row">
               <div class="col-md-1 order">
-                <input type="number" formControlName="order" class="form-control order_input">
+                <input type="number" formControlName="order" class="form-control order_input" [disabled]="true">
               </div>
               <div class="col-md-10">
                 <div class="row">
@@ -25,37 +25,37 @@
                     <div class="label_item">Họ tên <span class="require_star">*</span></div>
                     <div class="form-control input-line">
                       <img src="assets/img/icon_name.svg" class="input-img">
-                      <input type="text" formControlName="name" class="input-text">
+                      <input type="text" formControlName="name" class="input-text" [disabled]="true">
                     </div>
-                    <div *ngIf="!userView.get('name')?.valid && (userView.get('name')?.dirty ||userView.get('name')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('name')?.errors?.required">
-                        Họ tên không được để trống
-                      </p>
-                    </div>
+<!--                    <div *ngIf="!userView.get('name')?.valid && (userView.get('name')?.dirty ||userView.get('name')?.touched)">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('name')?.errors?.required">-->
+<!--                        Họ tên không được để trống-->
+<!--                      </p>-->
+<!--                    </div>-->
                   </div>
                   <div class="col-md-6">
                     <div class="label_item">Email <span class="require_star">*</span></div>
                     <div class="form-control input-line">
                       <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" formControlName="email" class="input-text">
+                      <input type="text" formControlName="email" class="input-text" [disabled]="true">
                     </div>
-                    <div *ngIf="!userView.get('email')?.valid && (userView.get('email')?.dirty ||userView.get('email')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('email')?.errors?.required">
-                        Email không được để trống
-                      </p>
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('email')?.errors?.email">
-                        Email sai định dạng
-                      </p>
-                    </div>
+<!--                    <div *ngIf="!userView.get('email')?.valid && (userView.get('email')?.dirty ||userView.get('email')?.touched)">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('email')?.errors?.required">-->
+<!--                        Email không được để trống-->
+<!--                      </p>-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('email')?.errors?.email">-->
+<!--                        Email sai định dạng-->
+<!--                      </p>-->
+<!--                    </div>-->
                   </div>
                 </div>
               </div>
-              <div class="col-md-1 remove">
-                <i (click)="removeUserView(i)" class="fa fa-times-circle remove_icon"></i>
-              </div>
+<!--              <div class="col-md-1 remove">-->
+<!--                <i (click)="removeUserView(i)" class="fa fa-times-circle remove_icon"></i>-->
+<!--              </div>-->
             </div>
           </div>
-          <div class="add_click"><a class="add_link" (click)="addUserView()"><i class="fa fa-plus-circle"></i> Thêm người xem xét</a></div>
+<!--          <div class="add_click"><a class="add_link" (click)="addUserView()"><i class="fa fa-plus-circle"></i> Thêm người xem xét</a></div>-->
         </div>
 
         <!-- User sign -->
@@ -64,7 +64,7 @@
           <div formArrayName="userSigns" *ngFor="let alias of userSigns().controls; let i = index;">
             <div class="row" [formGroupName]="i">
               <div class="col-md-1 order">
-                <input type="number" formControlName="order" class="form-control order_input">
+                <input type="number" formControlName="order" class="form-control order_input" [disabled]="true">
               </div>
               <div class="col-md-10">
                 <div class="row">
@@ -72,31 +72,31 @@
                     <div class="label_item">Họ tên <span class="require_star">*</span></div>
                     <div class="form-control input-line">
                       <img src="assets/img/icon_name.svg" class="input-img">
-                      <input type="text" formControlName="name" class="input-text">
+                      <input type="text" formControlName="name" class="input-text" [disabled]="true">
                     </div>
 
-                    <div *ngIf="!alias.get('name')?.valid && (alias.get('name')?.dirty ||alias.get('name')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('name')?.errors?.required">
-                        Họ tên không được để trống
-                      </p>
-                    </div>
+<!--                    <div *ngIf="!alias.get('name')?.valid && (alias.get('name')?.dirty ||alias.get('name')?.touched)">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('name')?.errors?.required">-->
+<!--                        Họ tên không được để trống-->
+<!--                      </p>-->
+<!--                    </div>-->
 
                   </div>
                   <div class="col-md-6">
                     <div class="label_item">Email <span class="require_star">*</span></div>
                     <div class="form-control input-line">
                       <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" formControlName="email" class="input-text">
+                      <input type="text" formControlName="email" class="input-text" [disabled]="true">
                     </div>
 
-                    <div *ngIf="!alias.get('email')?.valid && (alias.get('email')?.dirty ||alias.get('email')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('email')?.errors?.required">
-                        Email không được để trống
-                      </p>
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('email')?.errors?.email">
-                        Email sai định dạng
-                      </p>
-                    </div>
+<!--                    <div *ngIf="!alias.get('email')?.valid && (alias.get('email')?.dirty ||alias.get('email')?.touched)">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('email')?.errors?.required">-->
+<!--                        Email không được để trống-->
+<!--                      </p>-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('email')?.errors?.email">-->
+<!--                        Email sai định dạng-->
+<!--                      </p>-->
+<!--                    </div>-->
 
                   </div>
                 </div>
@@ -108,6 +108,7 @@
                         formControlName="signType"
                         [placeholder]="'-- Chọn --'"
                         [settings]="dropdownSignTypeSettings"
+                        [disabled]="true"
                         [data]="signTypeList">
                         <ng-template
                           #optionsTemplate
@@ -125,39 +126,39 @@
                       </ng-multiselect-dropdown>
                     </div>
 
-                    <div *ngIf="!alias.get('signType')?.valid && (alias.get('signType')?.dirty ||alias.get('signType')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('signType')?.errors?.required">
-                        Loại ký không được để trống
-                      </p>
-                    </div>
+<!--                    <div *ngIf="!alias.get('signType')?.valid && (alias.get('signType')?.dirty ||alias.get('signType')?.touched)">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('signType')?.errors?.required">-->
+<!--                        Loại ký không được để trống-->
+<!--                      </p>-->
+<!--                    </div>-->
 
                   </div>
                   <div class="col-md-1">
                     <div class="label_item">OTP</div>
-                    <input type="checkbox" formControlName="isOtp" class="form-check-input">
+                    <input type="checkbox" formControlName="isOtp" class="form-check-input" [disabled]="true">
                   </div>
                   <div class="col-md-5">
                     <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
-                    <input type="text" formControlName="phone" class="form-control input_phone">
+                    <input type="text" formControlName="phone" class="form-control input_phone" [disabled]="true">
 
-                    <div *ngIf="!alias.get('phone')?.valid && (alias.get('phone')?.dirty ||alias.get('phone')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('phone')?.errors?.required">
-                        Số điện thoại không được để trống
-                      </p>
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('phone')?.errors?.pattern">
-                        Số điện thoại sai định dạng
-                      </p>
-                    </div>
+<!--                    <div *ngIf="!alias.get('phone')?.valid && (alias.get('phone')?.dirty ||alias.get('phone')?.touched)">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('phone')?.errors?.required">-->
+<!--                        Số điện thoại không được để trống-->
+<!--                      </p>-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('phone')?.errors?.pattern">-->
+<!--                        Số điện thoại sai định dạng-->
+<!--                      </p>-->
+<!--                    </div>-->
 
                   </div>
                 </div>
               </div>
-              <div class="col-md-1 remove">
-                <i (click)="removeUserSign(i)" class="fa fa-times-circle remove_icon"></i>
-              </div>
+<!--              <div class="col-md-1 remove">-->
+<!--                <i (click)="removeUserSign(i)" class="fa fa-times-circle remove_icon"></i>-->
+<!--              </div>-->
             </div>
           </div>
-          <div class="add_click"><a class="add_link" (click)="addUserSign()"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
+<!--          <div class="add_click"><a class="add_link" (click)="addUserSign()"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>-->
         </div>
 
         <!-- User document -->
@@ -166,7 +167,7 @@
           <div *ngFor="let userDoc of userDocs().controls; let i=index" [formGroupName]="i">
             <div class="row">
               <div class="col-md-1 order">
-                <input type="number" formControlName="order" class="form-control order_input">
+                <input type="number" formControlName="order" class="form-control order_input" [disabled]="true">
               </div>
               <div class="col-md-10">
                 <div class="row">
@@ -174,28 +175,28 @@
                     <div class="label_item">Họ tên <span class="require_star">*</span></div>
                     <div class="form-control input-line">
                       <img src="assets/img/icon_name.svg" class="input-img">
-                      <input type="text" formControlName="name" class="input-text">
+                      <input type="text" formControlName="name" class="input-text" [disabled]="true">
                     </div>
-                    <div *ngIf="!userDoc.get('name')?.valid && (userDoc.get('name')?.dirty ||userDoc.get('name')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('name')?.errors?.required">
-                        Họ tên không được để trống
-                      </p>
-                    </div>
+<!--                    <div *ngIf="!userDoc.get('name')?.valid && (userDoc.get('name')?.dirty ||userDoc.get('name')?.touched)">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('name')?.errors?.required">-->
+<!--                        Họ tên không được để trống-->
+<!--                      </p>-->
+<!--                    </div>-->
                   </div>
                   <div class="col-md-6">
                     <div class="label_item">Email <span class="require_star">*</span></div>
                     <div class="form-control input-line">
                       <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" formControlName="email" class="input-text">
+                      <input type="text" formControlName="email" class="input-text" [disabled]="true">
                     </div>
-                    <div *ngIf="!userDoc.get('email')?.valid && (userDoc.get('email')?.dirty ||userDoc.get('email')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('email')?.errors?.required">
-                        Email không được để trống
-                      </p>
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('email')?.errors?.email">
-                        Email sai định dạng
-                      </p>
-                    </div>
+<!--                    <div *ngIf="!userDoc.get('email')?.valid && (userDoc.get('email')?.dirty ||userDoc.get('email')?.touched)">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('email')?.errors?.required">-->
+<!--                        Email không được để trống-->
+<!--                      </p>-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('email')?.errors?.email">-->
+<!--                        Email sai định dạng-->
+<!--                      </p>-->
+<!--                    </div>-->
                   </div>
                 </div>
                 <div class="row">
@@ -206,6 +207,7 @@
                         formControlName="signType"
                         [placeholder]="'-- Chọn --'"
                         [settings]="dropdownSignTypeSettings"
+                        [disabled]="true"
                         [data]="signTypeList">
                         <ng-template
                           #optionsTemplate
@@ -222,20 +224,20 @@
                         </ng-template>
                       </ng-multiselect-dropdown>
                     </div>
-                    <div *ngIf="!userDoc.get('signType')?.valid && (userDoc.get('signType')?.dirty ||userDoc.get('signType')?.touched)">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('signType')?.errors?.required">
-                        Loại ký không được để trống
-                      </p>
-                    </div>
+<!--                    <div *ngIf="!userDoc.get('signType')?.valid && (userDoc.get('signType')?.dirty ||userDoc.get('signType')?.touched)">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('signType')?.errors?.required">-->
+<!--                        Loại ký không được để trống-->
+<!--                      </p>-->
+<!--                    </div>-->
                   </div>
                 </div>
               </div>
-              <div class="col-md-1 remove">
-                <i (click)="removeUserDoc(i)" class="fa fa-times-circle remove_icon"></i>
-              </div>
+<!--              <div class="col-md-1 remove">-->
+<!--                <i (click)="removeUserDoc(i)" class="fa fa-times-circle remove_icon"></i>-->
+<!--              </div>-->
             </div>
           </div>
-          <div class="add_click"><a class="add_link" (click)="addUserDoc()"><i class="fa fa-plus-circle"></i> Thêm văn thư</a></div>
+<!--          <div class="add_click"><a class="add_link" (click)="addUserDoc()"><i class="fa fa-plus-circle"></i> Thêm văn thư</a></div>-->
         </div>
       </div>
     </div>
@@ -650,13 +652,12 @@
 
 </div>
 
-<div class="footer-determine" style="display: flex; justify-content: space-between">
+<div class="footer-determine" style="display: flex; justify-content: space-between; margin-top: 20px">
   <div style="width: 200px;">
     <button (click)="back($event, 'infor-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
   </div>
   <div class="content_footer">@Copyright 2021 - MobiFone</div>
   <div>
-    <button type="button" name="next" class="next draft-button">Lưu nháp</button>
     <button (click)="next()" type="button" name="next" class="next action-button pull-right">Tiếp theo</button>
   </div>
 </div>

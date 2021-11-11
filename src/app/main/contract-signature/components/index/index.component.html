@@ -1,7 +1,6 @@
-<div class="container-fluid">
-<!--  <app-sign-contract #ContractSign></app-sign-contract>-->
-
+<div class="container-fluid" style="padding-right: 0; overflow: hidden">
+  <app-header-contract [datas]="datas"></app-header-contract>
   <app-infor-coordination *ngIf="this.datas.step == 'infor-coordination'" [datas]="this.datas"></app-infor-coordination>
   <app-add-contract *ngIf="this.datas.step == 'confirm-coordination'" #AddContract [datas]="this.datas"></app-add-contract>
-<!--  <button *ngIf="this.datas.step == 'infor-coordination'" (click)="this.datas.step = 'confirm-coordination'">Điều phối hợp đồng</button>-->
+  <app-footer-signature *ngIf="this.datas.step == 'infor-coordination'" [datas]="datas"></app-footer-signature>
 </div>
