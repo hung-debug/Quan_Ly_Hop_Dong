@@ -102,10 +102,10 @@ export class DetermineSignerComponent implements OnInit {
     if(this.datas.userForm && this.datas.userForm.userDocs.length > 0){
        this.setUserDocs(this.datas.userForm.userDocs);
     }
-    // if(this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0){
-    //   console.log(this.datas.partnerForm.partnerArrs);
-    //   this.setPartnerArrs(this.datas.partnerForm.partnerArrs);
-    // }
+    if(this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0){
+      console.log(this.datas.partnerForm.partnerArrs);
+      this.setPartnerArrs(this.datas.partnerForm.partnerArrs);
+    }
 
 
     this.signTypeList = [
@@ -149,6 +149,8 @@ export class DetermineSignerComponent implements OnInit {
     const fa = (this.userForm.get('userSigns') as FormArray);
     for (let i = 0; i < data.length; i++) {
       fa.push(this.formBuilder.group(data[i]));
+
+
       // const faC:any = (fa.at(i).get('signType') as FormGroup);
       // // // console.log(fa);
       // // // console.log(faC);
@@ -173,21 +175,34 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   setPartnerArrs(data:any) {
-    const fa = (this.partnerForm.get("partnerArrs") as FormArray);
-    let faC:any;
+    const partnerArrs = (this.partnerForm.get("partnerArrs") as FormArray);
     console.log("data" + data);
     for (let i = 0; i < data.length; i++) {
-      console.log("data " + i + "  " + data[i]);
-      // fa.push(this.formBuilder.group(data[i]));
-      // console.log("aaa1" + fa);
-      // console.log("e" + this.formBuilder.group(data[i]));
-      // faC = (fa.get("partnerSigns") as FormArray);
-      // console.log("aaa" + faC.length);
-      // for (let j = 0; j < faC.length; j++) {
-      //   //console.log(faC[j]);
-      //   faC.push(this.formBuilder.group(faC[j]));
-      // }
 
+      const partnerLeads = (partnerArrs.at(i)?.get('partnerLeads') as FormArray) || [];
+      for (let j = 0; j < data[i].partnerLeads.length; j++) {
+        partnerLeads.push(this.formBuilder.group(data[i].partnerLeads[j]));
+      }
+
+      const partnerViews = (partnerArrs.at(i)?.get('partnerViews') as FormArray) || [];
+      for (let j = 0; j < data[i].partnerViews.length; j++) {
+        partnerViews.push(this.formBuilder.group(data[i].partnerViews[j]));
+      }
+
+      const partnerSigns = (partnerArrs.at(i)?.get('partnerSigns') as FormArray) || [];
+      for (let j = 0; j < data[i].partnerSigns.length; j++) {
+        partnerSigns.push(this.formBuilder.group(data[i].partnerSigns[j]));
+      }
+
+      const partnerDocs = (partnerArrs.at(i)?.get('partnerDocs') as FormArray) || [];
+      for (let j = 0; j < data[i].partnerDocs.length; j++) {
+        partnerDocs.push(this.formBuilder.group(data[i].partnerDocs[j]));
+      }
+
+      const partnerUsers = (partnerArrs.at(i)?.get('partnerUsers') as FormArray) || [];
+      for (let j = 0; j < data[i].partnerUsers.length; j++) {
+        partnerUsers.push(this.formBuilder.group(data[i].partnerUsers[j]));
+      }
     }
 
   }
