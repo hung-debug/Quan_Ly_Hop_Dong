@@ -66,7 +66,11 @@ export class DetermineSignerComponent implements OnInit {
       }
   ];
 
+  demo: any = [];
+
   ngOnInit(): void {
+    this.demo = this.datas.map((p: any) => p.signType);
+
     this.userForm = this.formBuilder.group({
       order: 1,
       name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
@@ -136,7 +140,7 @@ export class DetermineSignerComponent implements OnInit {
       allowSearchFilter: true
     };
     this.setUserSigns();
-    this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
+    // this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
   }
 
   // gán lại dữ liệu value cho form
@@ -153,6 +157,10 @@ export class DetermineSignerComponent implements OnInit {
     for (let i = 0; i < this.data.length; i++) {
       this.fa.push(this.formBuilder.group(this.data[i]));
     }
+
+    // this.data.forEach((item: any) => {
+    //   item.signType
+    // })
 
   }
 
