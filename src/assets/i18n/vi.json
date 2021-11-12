@@ -1,0 +1,28 @@
+{
+  "language": "VI",
+  "language_en": "Tiếng Anh",
+  "language_vi": "Tiếng Việt",
+  "notification": "Thông báo",
+  "search": "Tìm kiếm",
+  "account": "Tài khoản",
+
+  "menu.dashboard": "Trang chủ",
+  "menu.contract.add": "Tạo mới HĐ",
+  "menu.contract.create.list": "Hợp đồng đã tạo",
+  "menu.contract.receive.list": "Hợp đồng đã nhận",
+  "menu.contract.template.list": "Mẫu hợp đồng",
+  "menu.user.list": "Người dùng",
+  "menu.organization.list": "Tổ chức",
+  "menu.role.list": "Vai trò",
+  "menu.contract.type.list": "Loại hợp đồng",
+
+  "contract.status.draft": "Bản nháp",
+  "contract.status.processing": "Đang xử lý",
+  "contract.status.expire": "Sắp hết hạn",
+  "contract.status.overdue": "Quá hạn",
+  "contract.status.fail": "Từ chối",
+  "contract.status.cancel": "Hủy bỏ",
+  "contract.status.complete": "Hoàn thành",
+  "contract.status.wait-processing": "Chờ xử lý",
+  "contract.status.processed": "Đã xử lý"
+}

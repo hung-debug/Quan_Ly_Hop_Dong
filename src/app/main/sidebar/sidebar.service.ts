@@ -8,125 +8,114 @@ export class SidebarService {
   _hasBackgroundImage = true;
   menus = [
     {
-      title: 'Trang chủ',
+      title: 'menu.dashboard',
       icon: '/assets/img/db_home.svg',
       active: true,
       type: 'simple',
       href: '/main/dashboard'
     },
     {
-      title: 'Tạo mới',
+      title: 'menu.contract.add',
       active: false,
+      type: 'button',
       href: '/main/form-contract/add'
     },
     {
-      title: 'Hợp đồng đã tạo',
+      title: 'menu.contract.create.list',
       icon: '/assets/img/db_processing.svg',
       active: false,
       type: 'dropdown',
-      // badge: {
-      //   text: '6',
-      //   class: 'badge-danger'
-      // },
       href: '#',
       submenus: [
         {
-          title: 'Bản nháp',
+          title: 'contract.status.draft',
           active: false,
           href: '/main/contract/create/draft'
         },
         {
-          title: 'Đang xử lý',
+          title: 'contract.status.processing',
           active: false,
           href: '/main/contract/create/processing'
         },
         {
-          title: 'Sắp hết hạn',
+          title: 'contract.status.expire',
           active: false,
           href: '/main/contract/create/expire'
         },
         {
-          title: 'Quá hạn',
+          title: 'contract.status.overdue',
           active: false,
           href: '/main/contract/create/overdue'
         },
         {
-          title: 'Từ chối',
+          title: 'contract.status.fail',
           active: false,
           href: '/main/contract/create/fail'
         },
         {
-          title: 'Hủy bỏ',
+          title: 'contract.status.cancel',
           active: false,
           href: '/main/contract/create/cancel'
         },
         {
-          title: 'Hoàn thành',
+          title: 'contract.status.complete',
           active: false,
           href: '/main/contract/create/complete'
         }
       ]
     },
     {
-      title: 'Hợp đồng đã nhận',
+      title: 'menu.contract.receive.list',
       icon: '/assets/img/db_processing.svg',
       active: false,
       type: 'dropdown',
-      // badge: {
-      //   text: '160',
-      //   class: 'badge-danger'
-      // },
       href: '#',
       submenus: [
         {
-          title: 'Chờ xử lý',
+          title: 'contract.status.wait-processing',
           active: false,
           href: '/main/contract/receive/wait-processing'
         },
         {
-          title: 'Đã xử lý',
+          title: 'contract.status.processed',
           active: false,
           href: '/main/contract/receive/processed'
         }
       ]
     },
     {
-      title: 'Mẫu hợp đồng',
+      title: 'menu.contract.template.list',
       icon: '/assets/img/db_processing.svg',
       active: false,
       type: 'simple',
       href: '/main/contract-template'
     },
     {
-      title: 'Người dùng',
+      title: 'menu.user.list',
       icon: '/assets/img/db_user.svg',
       active: false,
       type: 'simple',
-      // href: '/main/add-contract'
       href: '/main/contract-template'
     },
     {
-      title: 'Tổ chức',
+      title: 'menu.organization.list',
       icon: '/assets/img/db_user_group.svg',
       active: false,
       type: 'simple',
-      // href: '/main/add-contract'
       href: '/main/contract-template'
     },
     {
-      title: 'Vai trò',
+      title: 'menu.role.list',
       icon: '/assets/img/db_role.svg',
       active: false,
       type: 'simple',
-      // href: '/main/add-contract'
       href: '/main/contract-template'
     },
     {
-      title: 'Loại hợp đồng',
+      title: 'menu.contract.type.list',
       icon: '/assets/img/db_contract_type.svg',
       active: false,
       type: 'simple',
-      // href: '/main/add-contract'
       href: '/main/contract-template'
     }
   ];

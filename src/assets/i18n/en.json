@@ -1,0 +1,28 @@
+{
+  "language": "EN",
+  "language_en": "English",
+  "language_vi": "Vietnam",
+  "notification": "Notification",
+  "search": "Search",
+  "account": "Account",
+
+  "menu.dashboard": "Dashboard",
+  "menu.contract.add": "Add contract",
+  "menu.contract.create.list": "Contract created",
+  "menu.contract.receive.list": "Contract received",
+  "menu.contract.template.list": "Contract form",
+  "menu.user.list": "User",
+  "menu.organization.list": "Organization",
+  "menu.role.list": "Role",
+  "menu.contract.type.list": "Type of contract",
+
+  "contract.status.draft": "Draft",
+  "contract.status.processing": "Processing",
+  "contract.status.expire": "Expire",
+  "contract.status.overdue": "Overdue",
+  "contract.status.fail": "Fail",
+  "contract.status.cancel": "Cancel",
+  "contract.status.complete": "Complete",
+  "contract.status.wait-processing": "Wait processing",
+  "contract.status.processed": "Processed"
+}

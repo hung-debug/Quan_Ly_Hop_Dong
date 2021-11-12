@@ -25,6 +25,8 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@ng-bootstrap/ng-bootstrap": "^10.0.0",
+    "@ngx-translate/core": "^14.0.0",
+    "@ngx-translate/http-loader": "^7.0.0",
     "@swimlane/ngx-charts": "^19.0.1",
     "@types/jquery": "^3.5.7",
     "angular-highcharts": "^12.0.0",

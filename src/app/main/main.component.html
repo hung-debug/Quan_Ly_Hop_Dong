@@ -9,13 +9,13 @@
           <div ngbDropdown class="d-inline-block">
             <div class="social-icons" ngbDropdownToggle>
               <span class="notification_login"></span>
-              <div class="label">Thông báo</div>
+              <div class="label">{{'notification' | translate }}</div>
             </div>
           </div>
           <div ngbDropdown class="d-inline-block">
             <div class="social-icons" ngbDropdownToggle>
                 <span class="user_login"></span>
-                <div class="label">Tài khoản</div>
+                <div class="label">{{'account' | translate }}</div>
             </div>
 
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
@@ -43,7 +43,30 @@
               </button>
             </div>
           </div>
-        </div>
+          <div ngbDropdown class="d-inline-block">
+              <div class="social-icons" ngbDropdownToggle>
+                <span class="db_icon_vietnam"></span>
+                <div class="label">{{'language' | translate }}</div>
+              </div>
+
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
+                <button ngbDropdownItem class="drop" (click)="switchLang('en')">
+                  <div style="display: flex; align-items: center;">
+                    <div class="db_user">
+                      <div class="db_icon_english"></div>
+                    </div>
+                    <div>{{'language_en' | translate }}</div></div>
+                </button>
+                <button ngbDropdownItem class="drop" (click)="switchLang('vi')">
+                  <div style="display: flex; align-items: center;">
+                    <div class="db_user">
+                      <div class="db_icon_vietnam"></div>
+                    </div>
+                    <div>{{'language_vi' | translate }}</div></div>
+                </button>
+              </div>
+            </div>
+          </div>
       </header>
 
       <div class="container-fluid content">
