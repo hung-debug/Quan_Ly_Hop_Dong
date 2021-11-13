@@ -81,12 +81,14 @@ export class SidebarService {
         {
           title: 'Chờ xử lý',
           active: false,
-          href: '/main/contract/receive/wait-processing'
+          href: '/main/contract-signature/receive/wait-processing'
+          // href: '/main/contract/receive/wait-processing'
         },
         {
           title: 'Đã xử lý',
           active: false,
-          href: '/main/contract/receive/processed'
+          href: '/main/contract-signature/receive/processed'
+          // href: '/main/contract/receive/processed'
         }
       ]
     },
