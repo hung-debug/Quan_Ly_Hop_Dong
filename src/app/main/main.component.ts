@@ -28,6 +28,7 @@ export class MainComponent implements OnInit {
 
   switchLang(lang: string) {
     this.translate.use(lang);
+    this.translate.currentLang = lang;
   }
   constructor(private router: Router,
               private modalService: NgbModal,

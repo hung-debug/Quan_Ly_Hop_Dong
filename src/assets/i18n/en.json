@@ -24,5 +24,12 @@
   "contract.status.cancel": "Cancel",
   "contract.status.complete": "Complete",
   "contract.status.wait-processing": "Wait processing",
-  "contract.status.processed": "Processed"
+  "contract.status.processed": "Processed",
+
+  "createdate.start": "From date (create date)",
+  "createdate.end": "To date (create date)",
+
+  "chart.contract.created": "Statistical chart of the number of contracts created",
+  "chart.contract.received": "Statistical chart of the number of assigned contracts",
+  "chart.number": "Quantity"
 }

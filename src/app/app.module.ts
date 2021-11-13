@@ -115,6 +115,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 })
 export class AppModule { }
 // AOT compilation support
+// export function httpTranslateLoader(http: HttpClient) {
+//   return new TranslateHttpLoader(http);
+// }
 export function httpTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }

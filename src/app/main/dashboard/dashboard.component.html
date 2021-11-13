@@ -2,11 +2,11 @@
 <div class="container">
   <div class="row">
     <div class="col-md-3 input-line">
-      <input type="text" placeholder="Từ ngày (ngày tạo)" class="input-text"/>
+      <input type="text" placeholder="{{'createdate.start' | translate }}" class="input-text"/>
       <img src="../../assets/img/db_calendar.svg" class="input-img">
     </div>
     <div class="col-md-3 input-line">
-      <input type="text" placeholder="Đến ngày (ngày tạo)" class="input-text"/>
+      <input type="text" placeholder="{{'createdate.end' | translate }}" class="input-text"/>
       <img src="../../assets/img/db_calendar.svg" class="input-img">
     </div>
     <div class="col-md-3">
@@ -17,11 +17,11 @@
   </div>
   <div class="row" style="padding-top: 20px;">
     <div class="col-md-6">
-      <div [chart]="chart"></div>
+      <div [chart]="chartCreated"></div>
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-4">
-      <div [chart]="chart2"></div>
+      <div [chart]="chartReceived"></div>
     </div>
     <div class="col-md-1"></div>
   </div>
