@@ -16,7 +16,7 @@ import * as $ from 'jquery';
 import interact from 'interactjs'
 import {ContractService} from "../../../../../../service/contract.service";
 import {environment} from "../../../../../../../environments/environment";
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from "@angular/material/dialog";
+// import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {ProcessingHandleEcontractComponent} from "../../../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
 
 @Component({
@@ -89,7 +89,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
-    public dialog: MatDialog
   ) {
     this.step = variable.stepSampleContract.step3
   }
@@ -504,14 +503,14 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
   processHandleContract() {
     // alert('Luồng xử lý hợp đồng!');
-    const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
-      width: '250px',
-      data: {datas: this.datas}
-    })
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('the close dialog');
-      let is_data = result
-    })
+    // const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
+    //   width: '250px',
+    //   data: {datas: this.datas}
+    // })
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log('the close dialog');
+    //   let is_data = result
+    // })
 
   }
 

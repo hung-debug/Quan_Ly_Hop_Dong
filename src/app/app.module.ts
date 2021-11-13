@@ -17,7 +17,6 @@ import { DatepickerModule } from 'ng2-datepicker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
@@ -47,7 +46,7 @@ import { InforContractTemplateComponent } from './main/contract-template/shared/
 import { SampleContractTemplateComponent } from './main/contract-template/shared/model/sample-contract-template/sample-contract-template.component';
 import { SignupComponent } from './login/signup/signup.component';
 import { SignContractTemplateComponent } from './main/contract-template/shared/sign-sample-contract-template/sign-contract-template/sign-contract-template.component';
-
+import {ContractSignatureModule} from "./main/contract-signature/contract-signature.module";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -98,6 +97,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MdbTabsModule,
     DatepickerModule,
     ChartModule,
+    // ContractSignatureModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
