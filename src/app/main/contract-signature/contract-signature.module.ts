@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IndexComponent } from './components/index/index.component';
-import {routing} from "./contract-signature.routing";
+// import {routing} from "./contract-signature.routing";
 import { SignContractComponent } from './components/sign-contract/sign-contract.component';
-import {NoAuthGuard} from "./shared/no-auth.guard";
 import { ContractSignatureComponent } from "./contract-signature.component";
 import { DatepickerModule } from "ng2-datepicker";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
@@ -66,18 +65,14 @@ export const contractSignatureRoutes: Routes = [
     NgbModule,
     NgxPaginationModule,
     MdbTabsModule,
-    RouterModule.forChild(contractSignatureRoutes)
+    RouterModule.forChild(contractSignatureRoutes),
+    ReactiveFormsModule,
+    NgMultiSelectDropDownModule,
+    // routing,
+    FormsModule,
     // ContractModule
 
   ],
-    imports: [
-        CommonModule,
-        routing,
-        FormsModule,
-        NgMultiSelectDropDownModule,
-        DatepickerModule,
-        ReactiveFormsModule,
-    ],
   providers: [NoAuthGuard]
 })
 export class ContractSignatureModule { }

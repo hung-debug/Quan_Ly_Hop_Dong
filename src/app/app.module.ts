@@ -97,7 +97,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MdbTabsModule,
     DatepickerModule,
     ChartModule,
-AppRoutingModule
+    AppRoutingModule,
     // ContractSignatureModule,
     TranslateModule.forRoot({
       loader: {
