@@ -16,6 +16,7 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './help/auth.guard';
 import {IndexComponent} from "./main/contract-signature/components/index/index.component";
 import {NoAuthGuard} from "./main/contract-signature/shared/no-auth.guard";
+import {ContractSignatureComponent} from "./main/contract-signature/contract-signature.component";
 
 const routes: Routes = [
   {
@@ -56,6 +57,10 @@ const routes: Routes = [
         component: ContractComponent,
       },
       {
+        path: 'contract-signature',
+        loadChildren: () => import('./main/contract-signature/contract-signature.module').then(m => m.ContractSignatureModule)
+      },
+      {
         path: 'form-contract/:action',
         component: AddContractComponent,
       },
@@ -81,12 +86,13 @@ const routes: Routes = [
       // }
     ],
   },
-  {
-    path: 'signature-contract',
-    component: IndexComponent,
+  /*{
+    path: 'contract-signature',
+    loadChildren: () => import('./main/contract-signature/contract-signature.module').then(m => m.ContractSignatureModule)
+    /!*component: ContractSignatureComponent,
     data: {type: 'notAccess'},
-    canActivate: [NoAuthGuard]
-  },
+    canActivate: [NoAuthGuard]*!/
+  },*/
   {
     path: '',
     redirectTo: 'login',

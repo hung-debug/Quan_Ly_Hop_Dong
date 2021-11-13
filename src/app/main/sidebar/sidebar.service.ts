@@ -74,12 +74,14 @@ export class SidebarService {
         {
           title: 'contract.status.wait-processing',
           active: false,
-          href: '/main/contract/receive/wait-processing'
+          href: '/main/contract-signature/receive/wait-processing'
+          // href: '/main/contract/receive/wait-processing'
         },
         {
           title: 'contract.status.processed',
           active: false,
-          href: '/main/contract/receive/processed'
+          href: '/main/contract-signature/receive/processed'
+          // href: '/main/contract/receive/processed'
         }
       ]
     },

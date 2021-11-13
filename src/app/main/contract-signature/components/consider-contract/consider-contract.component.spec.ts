@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SignContractComponent } from './sign-contract.component';
+import { ConsiderContractComponent } from './consider-contract.component';
 
-describe('SignContractComponent', () => {
-  let component: SignContractComponent;
-  let fixture: ComponentFixture<SignContractComponent>;
+describe('ConsiderContractComponent', () => {
+  let component: ConsiderContractComponent;
+  let fixture: ComponentFixture<ConsiderContractComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SignContractComponent ]
+      declarations: [ ConsiderContractComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SignContractComponent);
+    fixture = TestBed.createComponent(ConsiderContractComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

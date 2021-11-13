@@ -161,6 +161,10 @@ export class ContractHeaderComponent implements OnInit {
     this.nextStep(nextStep);
   }
 
+  t() {
+    console.log(this.datas);
+  }
+
   //--end
 
 }
