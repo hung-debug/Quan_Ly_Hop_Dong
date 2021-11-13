@@ -9,7 +9,7 @@
 
 #progressbar li {
   list-style-type: none;
-  color: #106DB6;
+  color: #cccccc;
   text-transform: uppercase;
   font-size: 12px;
   width: 25%;
@@ -76,12 +76,13 @@
 #progressbar li.inactive:before{
   background: white;
   color: #000;
-  border: 1px solid #87CAFF;
+  border: 1px solid #cccccc;
   z-index: 2;
   position: relative;
 }
 
 //style current active
 #progressbar li div.current_active {
-  font-weight: 600;
+  font-weight: 500;
+  color: #106DB6;
 }

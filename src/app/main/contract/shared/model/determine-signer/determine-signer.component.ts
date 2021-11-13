@@ -17,6 +17,7 @@ export class DetermineSignerComponent implements OnInit {
   determineDetails!: FormGroup;
   userForm: FormGroup;
   partnerForm : FormGroup
+  submitted = false;
 
   //dropdown
   signTypeList: Array<any> = [];
@@ -30,47 +31,42 @@ export class DetermineSignerComponent implements OnInit {
     this.step = variable.stepSampleContract.step2
     //this.datas.determineDetails = this.determineDetails;
   }
-  fa: any;
-  data: any = [
-      {
-        "order": 1,
-        "name": "Nguyễn Tuấn Anh",
-        "email": "nguyentuananh@vhc.com.vn",
-        "signType": [
-          {
-            "item_id": 1,
-            "item_text": "Ký ảnh"
-          }
-        ],
-        "isOtp": true,
-        "phone": "0979889999",
-        "id": 3923609057,
-        "selected": false,
-        "sign_unit": "organization"
-      },
-      {
-        "order": 1,
-        "name": "Đỗ Thành Dương",
-        "email": "duongdt@vhc.com.vn",
-        "signType": [
-          {
-            "item_id": 1,
-            "item_text": "Ký ảnh"
-          }
-        ],
-        "isOtp": true,
-        "phone": "0979889889",
-        "id": 3900000225,
-        "selected": false,
-        "sign_unit": "organization"
-      }
-  ];
-
-  demo: any = [];
+  // data: any = [
+  //     {
+  //       "order": 1,
+  //       "name": "Nguyễn Tuấn Anh",
+  //       "email": "nguyentuananh@vhc.com.vn",
+  //       "signType": [
+  //         {
+  //           "item_id": 1,
+  //           "item_text": "Ký ảnh"
+  //         }
+  //       ],
+  //       "isOtp": true,
+  //       "phone": "0979889999",
+  //       "id": 3923609057,
+  //       "selected": false,
+  //       "sign_unit": "organization"
+  //     },
+  //     {
+  //       "order": 1,
+  //       "name": "Đỗ Thành Dương",
+  //       "email": "duongdt@vhc.com.vn",
+  //       "signType": [
+  //         {
+  //           "item_id": 1,
+  //           "item_text": "Ký ảnh"
+  //         }
+  //       ],
+  //       "isOtp": true,
+  //       "phone": "0979889889",
+  //       "id": 3900000225,
+  //       "selected": false,
+  //       "sign_unit": "organization"
+  //     }
+  // ];
 
   ngOnInit(): void {
-    this.demo = this.datas.map((p: any) => p.signType);
-
     this.userForm = this.formBuilder.group({
       order: 1,
       name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
@@ -85,7 +81,7 @@ export class DetermineSignerComponent implements OnInit {
 
 
     // this.userForm.setControl('userViews', (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]));
-    this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
+    // this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
     // this.userForm.setControl('userDocs', (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]));
 
     this.partnerForm = this.formBuilder.group({
@@ -97,19 +93,19 @@ export class DetermineSignerComponent implements OnInit {
 
 
 
-    // if(this.datas.userForm && this.datas.userForm.userViews.length > 0){
-    //    this.setUserViews(this.datas.userForm.userViews);
-    // }
-    // if(this.datas.userForm && this.datas.userForm.userSigns.length > 0){
-    //    this.setUserSigns(this.datas.userForm.userSigns);
-    // }
-    // if(this.datas.userForm && this.datas.userForm.userDocs.length > 0){
-    //    this.setUserDocs(this.datas.userForm.userDocs);
-    // }
-    // if(this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0){
-    //   console.log(this.datas.partnerForm.partnerArrs);
-    //   this.setPartnerArrs(this.datas.partnerForm.partnerArrs);
-    // }
+    if(this.datas.userForm && this.datas.userForm.userViews.length > 0){
+       this.setUserViews(this.datas.userForm.userViews);
+    }
+    if(this.datas.userForm && this.datas.userForm.userSigns.length > 0){
+       this.setUserSigns(this.datas.userForm.userSigns);
+    }
+    if(this.datas.userForm && this.datas.userForm.userDocs.length > 0){
+       this.setUserDocs(this.datas.userForm.userDocs);
+    }
+    if(this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0){
+      console.log(this.datas.partnerForm.partnerArrs);
+      this.setPartnerArrs(this.datas.partnerForm.partnerArrs);
+    }
 
 
     this.signTypeList = [
@@ -139,8 +135,6 @@ export class DetermineSignerComponent implements OnInit {
       unSelectAllText: "Bỏ chọn tất cả",
       allowSearchFilter: true
     };
-    this.setUserSigns();
-    // this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
   }
 
   // gán lại dữ liệu value cho form
@@ -151,30 +145,28 @@ export class DetermineSignerComponent implements OnInit {
     }
   }
 
+  setUserSigns(data:any) {
+    const fa = (this.userForm.get('userSigns') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
 
-  setUserSigns(data?:any) {
-    this.fa = (this.userForm.get('userSigns') as FormArray);
-    for (let i = 0; i < this.data.length; i++) {
-      this.fa.push(this.formBuilder.group(this.data[i]));
+
+      // const faC:any = (fa.at(i).get('signType') as FormGroup);
+      // // // console.log(fa);
+      // // // console.log(faC);
+      // // // console.log(faC);
+      // // //const faAAA:any = (faC as FormArray);
+      // // // console.log(faAAA);
+      // for (let j = 0; j < faC.length; j++) {
+      //     faC.push(this.formBuilder.array(faC[j]));
+      // }
+
+      // console.log(faC);
+
+
     }
-
-    // this.data.forEach((item: any) => {
-    //   item.signType
-    // })
-
   }
 
-  setSign() {
-    return this.userSigns().controls;
-  }
-
-  getData(data_alias: any) {
-    return data_alias.value.signType;
-  }
-
-  get f() {
-    return this.userForm.controls;
-  }
   setUserDocs(data:any) {
     const fa = (this.userForm.get('userDocs') as FormArray);
     for (let i = 0; i < data.length; i++) {
@@ -183,21 +175,34 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   setPartnerArrs(data:any) {
-    const fa = (this.partnerForm.get("partnerArrs") as FormArray);
-    let faC:any;
+    const partnerArrs = (this.partnerForm.get("partnerArrs") as FormArray);
     console.log("data" + data);
     for (let i = 0; i < data.length; i++) {
-      console.log("data " + i + "  " + data[i]);
-      // fa.push(this.formBuilder.group(data[i]));
-      // console.log("aaa1" + fa);
-      // console.log("e" + this.formBuilder.group(data[i]));
-      // faC = (fa.get("partnerSigns") as FormArray);
-      // console.log("aaa" + faC.length);
-      // for (let j = 0; j < faC.length; j++) {
-      //   //console.log(faC[j]);
-      //   faC.push(this.formBuilder.group(faC[j]));
-      // }
 
+      const partnerLeads = (partnerArrs.at(i)?.get('partnerLeads') as FormArray) || [];
+      for (let j = 0; j < data[i].partnerLeads.length; j++) {
+        partnerLeads.push(this.formBuilder.group(data[i].partnerLeads[j]));
+      }
+
+      const partnerViews = (partnerArrs.at(i)?.get('partnerViews') as FormArray) || [];
+      for (let j = 0; j < data[i].partnerViews.length; j++) {
+        partnerViews.push(this.formBuilder.group(data[i].partnerViews[j]));
+      }
+
+      const partnerSigns = (partnerArrs.at(i)?.get('partnerSigns') as FormArray) || [];
+      for (let j = 0; j < data[i].partnerSigns.length; j++) {
+        partnerSigns.push(this.formBuilder.group(data[i].partnerSigns[j]));
+      }
+
+      const partnerDocs = (partnerArrs.at(i)?.get('partnerDocs') as FormArray) || [];
+      for (let j = 0; j < data[i].partnerDocs.length; j++) {
+        partnerDocs.push(this.formBuilder.group(data[i].partnerDocs[j]));
+      }
+
+      const partnerUsers = (partnerArrs.at(i)?.get('partnerUsers') as FormArray) || [];
+      for (let j = 0; j < data[i].partnerUsers.length; j++) {
+        partnerUsers.push(this.formBuilder.group(data[i].partnerUsers[j]));
+      }
     }
 
   }
@@ -365,7 +370,7 @@ export class DetermineSignerComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       signType: ['', Validators.required],
       isOtp: true,
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
       id: ''
     })
   }
@@ -406,7 +411,7 @@ export class DetermineSignerComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       signType: ['', Validators.required],
       isOtp: true,
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
     })
   }
   addPartnerUser(a:number) {
@@ -427,6 +432,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // next step event
   next() {
+    this.submitted = true;
     if (!this.validData()) return;
     else {
       // gán value step 2 vào datas
@@ -471,11 +477,12 @@ export class DetermineSignerComponent implements OnInit {
   // valid data step 2
   validData() {
     if (this.userForm.invalid) {
-      console.log('vui lòng nhập đầy đủ dữ liệu userForm')
+      console.log('vui lòng nhập đầy đủ dữ liệu userForm');
       return false;
     }
-    if (this.partners.invalid) {
-      console.log('Vui lòng nhập đầy đủ dữ liệu partners')
+    if (this.partnerForm.invalid) {
+      console.log('Vui lòng nhập đầy đủ dữ liệu partnerForm');
+      return false;
     }
     return true;
   }

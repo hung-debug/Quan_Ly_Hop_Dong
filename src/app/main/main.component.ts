@@ -5,6 +5,7 @@ import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AppService} from '../service/app.service';
 import { UserService } from '../service/user.service';
 import {SidebarService} from './sidebar/sidebar.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-main',
@@ -25,14 +26,20 @@ export class MainComponent implements OnInit {
   status:number = 1;
   notification:string = '';
 
+  switchLang(lang: string) {
+    this.translate.use(lang);
+  }
   constructor(private router: Router,
               private modalService: NgbModal,
               private fb: FormBuilder,
               private appService: AppService,
               public sidebarservice: SidebarService,
               private userService: UserService,
-              private changeDetectorRef: ChangeDetectorRef) {
+              private changeDetectorRef: ChangeDetectorRef,
+              public translate: TranslateService) {
     this.title = 'err';
+    translate.addLangs(['en', 'vi']);
+    translate.setDefaultLang('vi');
   }
 
   //open popup reset password
