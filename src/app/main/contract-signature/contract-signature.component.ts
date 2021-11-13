@@ -9,6 +9,7 @@ import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import {ContractSignatureService} from "../../service/contract-signature.service";
 import {CONTRACT_RECEIVE_COORDINATOR} from "./model/contract-model";
+import {variable} from "../../config/variable";
 @Component({
   selector: 'app-contract',
   templateUrl: './contract-signature.component.html',
@@ -51,6 +52,12 @@ export class ContractSignatureComponent implements OnInit {
     scrollBarColor: '#dfe3e9', // in case you customize you theme, here you define scroll bar color
     // keyboardEvents: true // enable keyboard events
   };
+  //
+  datas: any = {
+    step: variable.stepSampleContract.step_coordination,
+    contract: {},
+    action_title: 'Điều phối'
+  }
 
   constructor(private modalService: NgbModal,
               private appService: AppService,
@@ -181,7 +188,10 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openCoordinatorContract(id:number) {
-    this.router.navigate(['main/contract-signature/receive/wait-processing/coordinates-contract/' + id]);
+    if (!localStorage.getItem('data_coordinates_contract')) {
+      localStorage.setItem('data_coordinates_contract', JSON.stringify({data_coordinates: this.datas}));
+    }
+   void this.router.navigate(['main/contract-signature/receive/wait-processing/coordinates-contract/' + id]);
   }
 
   openSecretaryContract(id:number) {

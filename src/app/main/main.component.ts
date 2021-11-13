@@ -88,7 +88,7 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     //update title by component
-    if (this.router.url.includes('/main/form-contract/add')) {
+    if (this.router.url.includes('/main/form-contract/add') || this.router.url.includes('/coordinates-contract')) {
       this.isRouterContractNew = false;
     } else this.isRouterContractNew = true;
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle);
@@ -166,7 +166,7 @@ export class MainComponent implements OnInit {
   }
 
   getName(e: any) {
-    if (e && e == "create-contract-new") {
+    if (e && e == "create-contract-new" || e == "contract-signature") {
       this.isShowCopyRight = false;
       this.isRouterContractNew = false
     } else {

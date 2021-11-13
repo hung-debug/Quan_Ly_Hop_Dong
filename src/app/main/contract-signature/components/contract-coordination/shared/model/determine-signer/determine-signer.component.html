@@ -1,11 +1,11 @@
 <!-- form step 2 -->
-<div>
+<div style="padding-left: 0; padding-right: 15px">
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="col-md-1 order">
         <input type="number" formControlName="order" class="form-control order_input">
       </div>
-      <div class="col-md-11 form_content">
+      <div class="col-md-11 form_content label-disable">
         <p>
           <label class="labelOrg">TỔ CHỨC CỦA TÔI</label>
           <input class="form-control textOrg" type="text" id="name" name="name" formControlName="name" readonly>

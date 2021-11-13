@@ -38,7 +38,7 @@
           <label class="label-require">{{isEnableText || isChangeText ? "Người nhập" : "Người ký"}}: *</label>
           <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
             <option value="" hidden>Chọn người ký</option>
-            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
+            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}">{{getName(d)}}</option>
           </select>
         </div>
 
@@ -78,15 +78,15 @@
   <div class="col-md-9 sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
     <div id="pdf-viewer-step-3">
       <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-        <div class="resize-drag not-out-drop"
+        <div
              [id]="d.id"
              style="z-index: -1"
              #itemElement
              (click)="getSignSelect(d)"
-             [ngClass]="changeColorDrag(null,true)"
+             [ngClass]="{'resize-drag not-out-drop' : d.signType == 'partner'}"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
-          <div class="sig-img-daky" (click)="onCancel($event, d)">
+          <div *ngIf="d.signType == 'partner'" class="sig-img-daky" (click)="onCancel($event, d)">
             <img src="assets/img/clear.svg" alt="">
             <img src="assets/img/border-clear.svg" alt="">
           </div>

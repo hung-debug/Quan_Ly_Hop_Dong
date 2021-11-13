@@ -26,6 +26,7 @@ import {ProcessingHandleEcontractComponent} from "../../../../shared/model/proce
 })
 export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() datas: any;
+  data_coordinates: any;
   @Input() step: any;
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
   @Output() stepChangeSampleContract = new EventEmitter<string>();
@@ -94,9 +95,13 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   ngOnInit() {
+    let data_coordination = localStorage.getItem('data_coordinates_contract');
+    if (data_coordination) {
+      this.datas = JSON.parse(data_coordination).data_coordinates;
+    }
     // console.log(this.datas);
 
-    this.datas['contract_user_sign'] = this.contractService.objDefaultSampleContract().contract_user_sign;
+    // this.datas['contract_user_sign'] = this.contractService.objDefaultSampleContract().contract_user_sign;
 
     // console.log(this.datas.contract_user_sign)
     this.scale = 1;
@@ -494,10 +499,10 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     let arrSignConfig: any = [];
-    let cloneUserSign = [...this.datas.contract_user_sign];
-    cloneUserSign.forEach(element => {
-      arrSignConfig = arrSignConfig.concat(element.sign_config);
-    })
+    // let cloneUserSign = [...this.datas.contract_user_sign];
+    // cloneUserSign.forEach(element => {
+    //   arrSignConfig = arrSignConfig.concat(element.sign_config);
+    // })
     return arrSignConfig;
   }
 

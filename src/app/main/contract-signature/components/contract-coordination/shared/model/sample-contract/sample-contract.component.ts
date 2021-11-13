@@ -199,7 +199,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       item['selected'] = false;
       item['sign_unit'] = type_unit;
       item['signType'] = item.signType;
-      item['is_disable'] = false;
+      // item['is_disable'] = false;
       this.list_sign_name.push(item)
     })
   }
@@ -397,17 +397,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             })
           }
         });
-        this.list_sign_name.forEach((element: any) => {
-          if (name_accept_signature == 'chu_ky_anh') {
-            if (!element.signType.filter((p: any) => p.item_id == 1)[0]) {
-              element.is_disable = true;
-            } else element.is_disable = false;
-          } else if (name_accept_signature == 'chu_ky_so') {
-            if (!element.signType.filter((p: any) => p.item_id == 2)[0]) {
-              element.is_disable = true;
-            } else element.is_disable = false;
-          } else element.is_disable = false;
-        })
+        // this.list_sign_name.forEach((element: any) => {
+        //   if (name_accept_signature == 'chu_ky_anh') {
+        //     if (!element.signType.filter((p: any) => p.item_id == 1)[0]) {
+        //       element.is_disable = true;
+        //     } else element.is_disable = false;
+        //   } else if (name_accept_signature == 'chu_ky_so') {
+        //     if (!element.signType.filter((p: any) => p.item_id == 2)[0]) {
+        //       element.is_disable = true;
+        //     } else element.is_disable = false;
+        //   } else element.is_disable = false;
+        // })
       }
     } else {
       if (event.type == 'dragend') {
@@ -704,11 +704,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
 // hàm stype đối tượng boder kéo thả
-  changeColorDrag(role: any, isDaKeo?: any) {
-    if (isDaKeo) {
-      return 'ck-da-keo';
-    } else {
-      return 'employer-ck';
+  changeColorDrag(data: any, role: any, isDaKeo?: any) {
+    // if (isDaKeo) {
+    //   return 'ck-da-keo';
+    // } else {
+    //   return 'employer-ck';
+    // }
+    if (data.signType == 'partner') {
+      return 'resize-drag not-out-drop';
     }
   }
 
@@ -748,15 +751,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (d.name) {
         this.list_sign_name.forEach((item: any) => {
           // if (item.id == d.id) {
-          if (d.sign_unit == 'chu_ky_anh') {
-            if (!item.signType.filter((p: any) => p.item_id == 1)[0]) {
-              item.is_disable = true;
-            } else item.is_disable = false;
-          } else if (d.sign_unit == 'chu_ky_so') {
-            if (!item.signType.filter((p: any) => p.item_id == 2)[0]) {
-              item.is_disable = true;
-            } else item.is_disable = false;
-          } else item.is_disable = false;
+          // if (d.sign_unit == 'chu_ky_anh') {
+          //   if (!item.signType.filter((p: any) => p.item_id == 1)[0]) {
+          //     item.is_disable = true;
+          //   } else item.is_disable = false;
+          // } else if (d.sign_unit == 'chu_ky_so') {
+          //   if (!item.signType.filter((p: any) => p.item_id == 2)[0]) {
+          //     item.is_disable = true;
+          //   } else item.is_disable = false;
+          // } else item.is_disable = false;
 
           if (item.name == d.name) {
             item.selected = true;
@@ -786,6 +789,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   onCancel(e: any, data: any) {
+    console.log(e);
     data.dataset_x = 0;
     data.dataset_y = 0;
     data.number = 0;

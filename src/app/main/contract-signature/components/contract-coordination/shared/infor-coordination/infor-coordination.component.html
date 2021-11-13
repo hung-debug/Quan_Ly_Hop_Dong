@@ -1,7 +1,7 @@
 <!--<link rel="stylesheet" href="sample-contract.component.scss">-->
-<div class="sample-contract row" style="font-family: Roboto">
+<div class="sample-contract row">
   <!--  information contract-->
-  <div class="sample-contract__information" style="background-color: white; width: 24.7%">
+  <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
       <div style="padding-bottom: 10px; text-align: center" class="label">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
       <div style="line-height: 25px">
@@ -52,8 +52,9 @@
   </div>
 
   <!--  file content-->
-  <div class="sample-contract__file viewer-pdf isDrag"
-       style="background-color: #F2F2F2; position: relative; width: 74.7%">
+<!--  width: 74.7%-->
+  <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
+       style="background-color: #F2F2F2; position: relative;">
     <div id="pdf-viewer-step-3">
       <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
         <div class="resize-drag not-out-drop"
@@ -68,6 +69,7 @@
           <app-sign-contract [datas]="datas" [sign]="d"></app-sign-contract>
         </div>
       </div>
-
     </div>
 </div>
+<!--<app-footer-signature *ngIf="this.datas.step == 'infor-coordination'" [datas]="datas"></app-footer-signature>-->
+

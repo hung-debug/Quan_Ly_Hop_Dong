@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IndexComponent } from './components/index/index.component';
 // import {routing} from "./contract-signature.routing";
-import { SignContractComponent } from './components/sign-contract/sign-contract.component';
 import { ContractSignatureComponent } from "./contract-signature.component";
 import { DatepickerModule } from "ng2-datepicker";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
@@ -23,15 +22,16 @@ import { ContractHeaderComponent } from './components/contract-coordination/shar
 import { InforCoordinationComponent } from './components/contract-coordination/shared/infor-coordination/infor-coordination.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgMultiSelectDropDownModule} from "ng-multiselect-dropdown";
-import {SignatureContractComponent} from "./shared/model/sign-contract/sign-contract.component";
 import { HeaderContractComponent } from './components/header-contract/header-contract.component';
 import { FooterSignatureComponent } from './components/footer-signature/footer-signature.component';
 import { ProcessingHandleEcontractComponent } from './shared/model/processing-handle-econtract/processing-handle-econtract.component';
+import {SignContractComponent} from "./components/contract-coordination/shared/sign-sample-contract/sign-contract/sign-contract.component";
 
 export const contractSignatureRoutes: Routes = [
   { path: 'receive/wait-processing/consider-contract/:id', component: ConsiderContractComponent },
   { path: 'receive/wait-processing/personal-signature-contract/:id', component: SignaturePersonalContractComponent },
-  { path: 'receive/wait-processing/coordinates-contract/:id', component: CoordinatesContractComponent },
+  // { path: 'receive/wait-processing/coordinates-contract/:id', component: CoordinatesContractComponent },
+  { path: 'receive/wait-processing/coordinates-contract/:id', component: IndexComponent },
   { path: 'receive/wait-processing/secretary-contract/:id', component: SecretaryContractComponent },
   { path: 'receive/wait-processing', component: ContractSignatureComponent },
   { path: 'receive/processed', component: ContractSignatureComponent }
@@ -47,16 +47,15 @@ export const contractSignatureRoutes: Routes = [
     ConfirmInfoContractComponent,
     ContractHeaderComponent,
     InforCoordinationComponent,
-    SignatureContractComponent,
     HeaderContractComponent,
     FooterSignatureComponent,
     ProcessingHandleEcontractComponent,
-    SignContractComponent,
     ContractSignatureComponent,
     ConsiderContractComponent,
     SignaturePersonalContractComponent,
     CoordinatesContractComponent,
-    SecretaryContractComponent
+    SecretaryContractComponent,
+    SignContractComponent
     // AddContractComponent
   ],
   imports: [
