@@ -46,6 +46,7 @@ import {InforContractTemplateComponent} from './main/contract-template/shared/mo
 import {SampleContractTemplateComponent} from './main/contract-template/shared/model/sample-contract-template/sample-contract-template.component';
 import {SignupComponent} from './login/signup/signup.component';
 import {ContractSignatureModule} from "./main/contract-signature/contract-signature.module";
+import {MatDialogModule} from "@angular/material/dialog";
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -97,6 +98,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MdbTabsModule,
     DatepickerModule,
     ChartModule,
+    MatDialogModule
     // ContractSignatureModule // nguyên nhân lỗi The `Invalid configuration of route '**'. One of the following must ...
   ],
   providers: [AppService,

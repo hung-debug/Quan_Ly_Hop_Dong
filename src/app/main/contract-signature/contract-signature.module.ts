@@ -16,6 +16,7 @@ import {DatepickerModule} from "ng2-datepicker";
 import {SignatureContractComponent} from "./shared/model/sign-contract/sign-contract.component";
 import { HeaderContractComponent } from './components/header-contract/header-contract.component';
 import { FooterSignatureComponent } from './components/footer-signature/footer-signature.component';
+import { ProcessingHandleEcontractComponent } from './shared/model/processing-handle-econtract/processing-handle-econtract.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { FooterSignatureComponent } from './components/footer-signature/footer-s
     InforCoordinationComponent,
     SignatureContractComponent,
     HeaderContractComponent,
-    FooterSignatureComponent
+    FooterSignatureComponent,
+    ProcessingHandleEcontractComponent
   ],
     imports: [
         CommonModule,

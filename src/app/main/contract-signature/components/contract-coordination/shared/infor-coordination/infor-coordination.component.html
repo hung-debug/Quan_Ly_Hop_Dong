@@ -27,7 +27,7 @@
           </tr>
         </table>
         <div>
-          <u style="color: #106DB6">Xem hợp đồng liên quan</u>
+          <u style="color: #106DB6; padding-right: 3px">Xem hợp đồng liên quan</u>
           <img src="assets/img/hd_lien_quan.svg" alt="mobifone.eContract">
         </div>
       </div>
@@ -35,13 +35,14 @@
     <hr>
 
     <div class="location-change" [ngStyle]="changeDisplay()">
-      <div class="sample-contract__information--user-sign">
+      <div class="sample-contract__information--user-sign" style="line-height: 25px">
         <div style="text-align: center" class="label">CÁC BÊN LIÊN QUAN</div>
-        <ul style="list-style-type: none; padding-left: 0">
-          <li>CÔNG TY A</li>
-          <li>CÔNG TY B</li>
-          <li>CÔNG TY C</li>
-        </ul>
+        <div *ngFor="let d of this.isPartySignature">
+          <div>{{d.name}}</div>
+        </div>
+      </div>
+      <div>
+        <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Luồng xử lý hợp đồng</u>
       </div>
       <hr>
       <div class="flex-column">
@@ -63,14 +64,10 @@
              [ngClass]="changeColorDrag(null,true)"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
-          <div class="sig-img-daky" (click)="onCancel($event, d)">
-            <img src="assets/img/clear.svg" alt="">
-            <img src="assets/img/border-clear.svg" alt="">
           </div>
           <app-sign-contract [datas]="datas" [sign]="d"></app-sign-contract>
         </div>
       </div>
 
     </div>
-  </div>
 </div>

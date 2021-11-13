@@ -16,6 +16,8 @@ import * as $ from 'jquery';
 import interact from 'interactjs'
 import {ContractService} from "../../../../../../service/contract.service";
 import {environment} from "../../../../../../../environments/environment";
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {ProcessingHandleEcontractComponent} from "../../../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
 
 @Component({
   selector: 'app-infor-coordination',
@@ -78,9 +80,16 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   isEnableText: boolean = false;
   isChangeText: boolean = false;
 
+  isPartySignature: any = [
+    {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
+    {id: 2, name: 'Công ty newEZ Việt Nam'},
+    {id: 3, name: 'Tập đoàn Bảo Việt'}
+  ]
+
   constructor(
     private cdRef: ChangeDetectorRef,
-    private contractService: ContractService
+    private contractService: ContractService,
+    public dialog: MatDialog
   ) {
     this.step = variable.stepSampleContract.step3
   }
@@ -450,38 +459,38 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   // }
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
-  onCancel(e: any, data: any) {
-    data.dataset_x = 0;
-    data.dataset_y = 0;
-    data.number = 0;
-    data.offsetWidth = 0;
-    data.offsetHeight = 0;
-    data.position = "";
-    if (data.sign_unit == 'text') {
-      this.isEnableText = false;
-    }
-    let signElement = document.getElementById(data.id);
-    if (signElement) {
-      this.objSignInfo.traf_x = 0;
-      this.objSignInfo.traf_y = 0;
-      this.objSignInfo.offsetHeight = 0;
-      this.objSignInfo.offsetWidth = 0;
-      //@ts-ignore
-      document.getElementById('select-dropdown').value = "";
-      // this.signCurent.offsetWidth = 0;
-      // this.signCurent.offsetHeight = 0;
-    }
-    this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
-      if (element.sign_config.length > 0) {
-        element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
-        element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
-          itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.id;
-        })
-      }
-    });
-    this.eventMouseover();
-    this.cdRef.detectChanges();
-  }
+  // onCancel(e: any, data: any) {
+  //   data.dataset_x = 0;
+  //   data.dataset_y = 0;
+  //   data.number = 0;
+  //   data.offsetWidth = 0;
+  //   data.offsetHeight = 0;
+  //   data.position = "";
+  //   if (data.sign_unit == 'text') {
+  //     this.isEnableText = false;
+  //   }
+  //   let signElement = document.getElementById(data.id);
+  //   if (signElement) {
+  //     this.objSignInfo.traf_x = 0;
+  //     this.objSignInfo.traf_y = 0;
+  //     this.objSignInfo.offsetHeight = 0;
+  //     this.objSignInfo.offsetWidth = 0;
+  //     //@ts-ignore
+  //     document.getElementById('select-dropdown').value = "";
+  //     // this.signCurent.offsetWidth = 0;
+  //     // this.signCurent.offsetHeight = 0;
+  //   }
+  //   this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
+  //     if (element.sign_config.length > 0) {
+  //       element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
+  //       element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
+  //         itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.id;
+  //       })
+  //     }
+  //   });
+  //   this.eventMouseover();
+  //   this.cdRef.detectChanges();
+  // }
 
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
@@ -491,6 +500,19 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
     return arrSignConfig;
+  }
+
+  processHandleContract() {
+    // alert('Luồng xử lý hợp đồng!');
+    const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
+      width: '250px',
+      data: {datas: this.datas}
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+
   }
 
   showThumbnail() {

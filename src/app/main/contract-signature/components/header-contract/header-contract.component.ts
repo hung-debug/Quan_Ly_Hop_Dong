@@ -1,4 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
+import {variable} from "../../../../config/variable";
 
 @Component({
   selector: 'app-header-contract',
@@ -12,6 +13,10 @@ export class HeaderContractComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  comeBack() {
+    this.datas.step = variable.stepSampleContract.step_coordination;
   }
 
 }
