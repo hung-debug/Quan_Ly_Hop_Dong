@@ -1,48 +1,53 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpEvent, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpRequest, HttpEvent, HttpParams, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { catchError } from 'rxjs/operators';
 
+export interface File {
+  success:string,
+}
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
 
-  uploadFileUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
+  uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/2/single`;
+
+  token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
 
   constructor(private http: HttpClient) { }
 
-  // upload(file: File): Observable<HttpEvent<any>> {
-  //   const formData: FormData = new FormData();
-
-  //   formData.append('file', file);
-  //   console.log("AAAA" + formData);
-
-  //   const req = new HttpRequest('POST', `${this.baseUrl}/upload`, formData, {
-  //     reportProgress: true,
-  //     responseType: 'json'
-  //   });
-
-  //   return this.http.request(req);
-  // }
-
-  uploadFile(file: File): Observable<HttpEvent<any>> {
+  uploadFile(datas: any) {
 
     let formData = new FormData();
-    formData.append('upload', file);
+    formData.append('file', datas.contractFile);
 
-    let params = new HttpParams();
-
-    const options = {
-      params: params,
-      reportProgress: true,
-    };
-
-    const req = new HttpRequest('POST', this.uploadFileUrl, formData, options);
-    return this.http.request(req);
+    console.log(datas.contractFile);
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'multipart/form-data')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.post<File>(this.uploadFileUrl, formData, {'headers':headers})
+       .pipe();
   }
+
+
 
   // getFiles(): Observable<any> {
   //   return this.http.get(`${this.baseUrl}/files`);
   // }
+
+  // Error handling
+  handleError(error:any) {
+    let errorMessage = '';
+    if(error.error instanceof ErrorEvent) {
+      // Get client-side error
+      errorMessage = error.error.message;
+    } else {
+      // Get server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    window.alert(errorMessage);
+    return throwError(errorMessage);
+ }
 }

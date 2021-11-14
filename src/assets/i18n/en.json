@@ -25,11 +25,23 @@
   "contract.status.complete": "Complete",
   "contract.status.wait-processing": "Wait processing",
   "contract.status.processed": "Processed",
+  "contract.me": "My contract",
+  "contract.organization": "Organizational contract",
+  "contract.wait-for-me": "Contract to be handled",
+  "contract.share-for-me": "Shared contract",
+  "contract.search.name.placeholder": "Enter search keywords by contract name",
+  "contract.search": "Contract search",
+  "contract.type": "Contract type",
+  "contract.number": "Contract number",
 
+  "create-date": "Create date",
+  "expiration-date": "Expiration date",
   "createdate.start": "From date (create date)",
   "createdate.end": "To date (create date)",
 
   "chart.contract.created": "Statistical chart of the number of contracts created",
   "chart.contract.received": "Statistical chart of the number of assigned contracts",
-  "chart.number": "Quantity"
+  "chart.number": "Quantity",
+
+  "action": "Action"
 }

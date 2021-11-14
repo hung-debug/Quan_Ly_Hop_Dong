@@ -21,7 +21,7 @@ export class ContractComponent implements OnInit {
   closeResult:string= '';
   public contracts: any[] = [];
   p:number = 1;
-  page:number = 3;
+  page:number = 5;
   pageStart:number = 0;
   pageEnd:number = 0;
   pageTotal:number = 0;

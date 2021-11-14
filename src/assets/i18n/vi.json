@@ -25,11 +25,24 @@
   "contract.status.complete": "Hoàn thành",
   "contract.status.wait-processing": "Chờ xử lý",
   "contract.status.processed": "Đã xử lý",
+  "contract.me": "Hợp đồng của tôi",
+  "contract.organization": "Hợp đồng của tổ chức",
+  "contract.wait-for-me": "Hợp đồng cần xử lý",
+  "contract.share-for-me": "Hợp đồng được chia sẻ",
+  "contract.search.name.placeholder": "Nhập từ khóa tìm kiếm theo tên hợp đồng",
+  "contract.search": "Tìm kiếm hợp đồng",
+  "contract.type": "Loại hợp đồng",
+  "contract.number": "Số hợp đồng",
 
+
+  "create-date": "Ngày tạo",
+  "expiration-date": "Ngày hết hạn ký",
   "createdate.start": "Từ ngày (ngày tạo)",
   "createdate.end": "Đến ngày (ngày tạo)",
 
   "chart.contract.created": "Biểu đồ thống kê số lượng hợp đồng tạo",
   "chart.contract.received": "Biểu đồ thống kê số lượng hợp đồng được gán",
-  "chart.number": "Số lượng"
+  "chart.number": "Số lượng",
+
+  "action": "Thao tác"
 }

@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { map, catchError, retry } from 'rxjs/operators';
 import {Helper} from "../core/Helper";
+import { DatePipe } from '@angular/common';
 
 export interface Contract {
   id:number,
@@ -27,7 +28,8 @@ export class ContractService {
   errorData:any = {};
   redirectUrl: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    public datepipe: DatePipe,) { }
 
   public getContractList(): Observable<any> {
     const headers = { 'Authorization': 'Bearer ' + this.token}
@@ -42,14 +44,15 @@ export class ContractService {
                                  code: datas.code,
                                  contract_no: datas.code,
                                  sign_order: 1,
-                                 sign_time: "2021-11-14T11:06:15+0000",
+                                 sign_time: this.datepipe.transform(datas.sign_time, 'yyyy-MM-ddThh:mm:ssZ'),
                                  notes: datas.notes,
                                  type_id: 2,
                                  customer_id: 2,
                                  is_template: false,
                                  status: 1,
                                 });
-
+  console.log(headers);
+  console.log(body);
     return this.http.post<Contract>(this.addContractUrl, body, {'headers':headers})
        .pipe(
           map((contract) => {
