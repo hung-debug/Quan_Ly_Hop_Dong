@@ -174,4 +174,14 @@ export class MainComponent implements OnInit {
       this.isRouterContractNew = true;
     }
   }
+
+  getStyle() {
+    if (this.isShowCopyRight && this.isRouterContractNew) {
+      return {
+        'margin-top': '60px'
+      }
+    } else return {
+      'margin-top': '40px'
+    }
+  }
 }

@@ -14,8 +14,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './help/auth.guard';
-import {IndexComponent} from "./main/contract-signature/components/index/index.component";
 import {NoAuthGuard} from "./main/contract-signature/shared/no-auth.guard";
+import {IndexComponent} from "./main/contract-signature/components/index/index.component";
 import {ContractSignatureComponent} from "./main/contract-signature/contract-signature.component";
 
 const routes: Routes = [
@@ -86,13 +86,14 @@ const routes: Routes = [
       // }
     ],
   },
-  /*{
-    path: 'contract-signature',
-    loadChildren: () => import('./main/contract-signature/contract-signature.module').then(m => m.ContractSignatureModule)
-    /!*component: ContractSignatureComponent,
-    data: {type: 'notAccess'},
-    canActivate: [NoAuthGuard]*!/
-  },*/
+  // {
+  //   path: 'contract-signature',
+  //   // loadChildren: () => import('./main/contract-signature/contract-signature.module').then(m => m.ContractSignatureModule),
+  //   // component: ContractSignatureComponent,
+  //   component: IndexComponent,
+  //   data: {type: 'notAccess'},
+  //   canActivate: [NoAuthGuard]
+  // },
   {
     path: '',
     redirectTo: 'login',

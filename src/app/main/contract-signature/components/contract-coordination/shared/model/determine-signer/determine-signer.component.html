@@ -265,7 +265,7 @@
               <div *ngIf="partners.value.type==1">
                 <p>
                   <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
-                  <input class="form-control textOrg" id="name" name="name" formControlName="name">
+                  <input type="text" class="form-control textOrg" formControlName="name" name="name">
                 </p>
                 <div *ngIf="!partners.get('name')?.valid && (partners.get('name')?.dirty ||partners.get('name')?.touched)">
                   <p class="alert alert-danger error-detail" role="alert" [hidden]="!partners.get('name')?.errors?.required">
@@ -543,7 +543,7 @@
               <div *ngIf="partners.value.type==2">
                 <p>
                   <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
-                  <input class="form-control textOrg" id="name" name="name" formControlName="name">
+                  <input class="form-control textOrg"  formControlName="name">
                 </p>
 
                 <!-- Partner user -->

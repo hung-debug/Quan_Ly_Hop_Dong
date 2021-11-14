@@ -26,5 +26,8 @@
     display: flex;
     justify-content: space-between;
     width: 75.64%;
+    button {
+      outline: none;
+    }
   }
 }

@@ -3,7 +3,7 @@
   <!--  information contract-->
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-      <div style="padding-bottom: 10px; text-align: center" class="label">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
+      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
       <div style="line-height: 25px">
 <!--        <table>-->
 <!--          <tr>-->
@@ -33,27 +33,27 @@
 <!--          </tr>-->
 <!--        </table>-->
        <div>
-         <span>Loại hợp đồng:</span>
+         <span class="title-contract">Loại hợp đồng:</span>
          <span>{{datas.contract_information.type_contract}}</span>
        </div>
         <div>
-          <span>Tên hợp đồng:</span>
+          <span class="title-contract">Tên hợp đồng:</span>
           <span>{{datas.contract_information.name_contract}}</span>
         </div>
         <div>
-          <span>Số hợp đồng:</span>
+          <span class="title-contract">Số hợp đồng:</span>
           <span>{{datas.contract_information.number_contract}}</span>
         </div>
         <div>
-          <span>File đính kèm:</span>
+          <span class="title-contract">File đính kèm:</span>
           <span>
             <a *ngFor="let d of this.datas.contract_information.file_attach" style="color: #106DB6" rel="stylesheet" href="https://vnexpress.net/" target="_blank">{{d.file_name}}</a>
           </span>
         </div>
         <div>
-          <span>Hợp đồng liên quan:</span>
-          <span>
-            <a *ngFor="let d of this.datas.contract_information.file_related_contract" style="color: #106DB6" href="#">{{d.file_name}}</a>
+          <span class="title-contract">Hợp đồng liên quan:</span>
+          <span *ngFor="let d of this.datas.contract_information.file_related_contract" style="color: #106DB6">
+            {{d.file_name}} <span style="color: black">, </span>
           </span>
         </div>
 
@@ -63,7 +63,7 @@
 
     <div class="location-change" [ngStyle]="changeDisplay()">
       <div class="sample-contract__information--user-sign" style="line-height: 25px">
-        <div style="text-align: center" class="label">CÁC BÊN LIÊN QUAN</div>
+        <div style="text-align: center; font-weight: bold" class="label">CÁC BÊN LIÊN QUAN</div>
 <!--        <div *ngFor="let d of this.isPartySignature">-->
 <!--          <div>{{d.name}}</div>-->
 <!--        </div>-->
@@ -77,7 +77,7 @@
       </div>
       <hr>
       <div class="flex-column">
-        <div class="label" style="text-align: center">ĐIỀU PHỐI HỢP ĐỒNG</div>
+        <div class="label" style="text-align: center; font-weight: bold">ĐIỀU PHỐI HỢP ĐỒNG</div>
       </div>
     </div>
   </div>

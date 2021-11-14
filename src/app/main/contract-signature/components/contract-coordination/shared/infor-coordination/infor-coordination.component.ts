@@ -629,4 +629,17 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     this.datas.step = variable.stepSampleContract.step_confirm_coordination;
   }
 
+  getNameContract(data: any) {
+    return (' ' + data.file_name + ',').replace(/,\s*$/, "");
+  }
+
+
+
+  getNameCoordination() {
+    let nameFile = [];
+    for (let i = 0; i < this.datas.contract_information.file_related_contract; i++) {
+
+    }
+  }
+
 }

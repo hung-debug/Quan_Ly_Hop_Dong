@@ -27,6 +27,7 @@ import { FooterSignatureComponent } from './components/footer-signature/footer-s
 import { ProcessingHandleEcontractComponent } from './shared/model/processing-handle-econtract/processing-handle-econtract.component';
 import {SignContractComponent} from "./components/contract-coordination/shared/sign-sample-contract/sign-contract/sign-contract.component";
 import {MatDialogModule} from "@angular/material/dialog";
+import { ForwardContractComponent } from './shared/model/forward-contract/forward-contract.component';
 
 export const contractSignatureRoutes: Routes = [
   { path: 'receive/wait-processing/consider-contract/:id', component: ConsiderContractComponent },
@@ -56,7 +57,8 @@ export const contractSignatureRoutes: Routes = [
     SignaturePersonalContractComponent,
     CoordinatesContractComponent,
     SecretaryContractComponent,
-    SignContractComponent
+    SignContractComponent,
+    ForwardContractComponent,
     // AddContractComponent
   ],
   imports: [

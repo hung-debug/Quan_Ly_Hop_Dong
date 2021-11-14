@@ -30,6 +30,7 @@ export class DetermineSignerComponent implements OnInit {
     this.step = variable.stepSampleContract.step2
     //this.datas.determineDetails = this.determineDetails;
   }
+
   // data: any = [
   //     {
   //       "order": 1,
@@ -101,10 +102,16 @@ export class DetermineSignerComponent implements OnInit {
     if(this.datas.userForm && this.datas.userForm.userDocs.length > 0){
       this.setUserDocs(this.datas.userForm.userDocs);
     }
-    // if(this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0){
-    //   console.log(this.datas.partnerForm.partnerArrs);
-    //   this.setPartnerArrs(this.datas.partnerForm.partnerArrs);
-    // }
+
+    if (this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0) {
+      this.datas.partnerForm.partnerArrs.forEach(async (element: any) => {
+        await this.setPartnerDocs(element.partnerDocs);
+        await this.setPartnerLeads(element.partnerLeads);
+        await this.setPartnerSign(element.partnerSigns);
+        await this.setPartnerUser(element.partnerUsers);
+        await this.setPartnerViews(element.partnerViews);
+      })
+    }
 
 
     this.signTypeList = [
@@ -171,24 +178,64 @@ export class DetermineSignerComponent implements OnInit {
     }
   }
 
-  setPartnerArrs(data:any) {
-    const fa = (this.partnerForm.get("partnerArrs") as FormArray);
-    let faC:any;
-    console.log("data" + data);
+  // setPartnerArrs(data:any) {
+  //   const fa = (this.partnerForm.get("partnerArrs") as FormArray);
+  //   let faC:any;
+  //   console.log("data" + data);
+  //   for (let i = 0; i < data.length; i++) {
+  //     console.log("data " + i + "  " + data[i]);
+  //     // fa.push(this.formBuilder.group(data[i]));
+  //     // console.log("aaa1" + fa);
+  //     // console.log("e" + this.formBuilder.group(data[i]));
+  //     // faC = (fa.get("partnerSigns") as FormArray);
+  //     // console.log("aaa" + faC.length);
+  //     // for (let j = 0; j < faC.length; j++) {
+  //     //   //console.log(faC[j]);
+  //     //   faC.push(this.formBuilder.group(faC[j]));
+  //     // }
+  //
+  //   }
+  //
+  // }
+
+  // setName(data: any) {
+  //   const fa = (this.partners.get('name') as FormArray);
+  //   fa.value = data;
+  // }
+
+  setPartnerDocs(data: any) {
+    const fa = (this.partners.get('partnerDocs') as FormArray);
     for (let i = 0; i < data.length; i++) {
-      console.log("data " + i + "  " + data[i]);
-      // fa.push(this.formBuilder.group(data[i]));
-      // console.log("aaa1" + fa);
-      // console.log("e" + this.formBuilder.group(data[i]));
-      // faC = (fa.get("partnerSigns") as FormArray);
-      // console.log("aaa" + faC.length);
-      // for (let j = 0; j < faC.length; j++) {
-      //   //console.log(faC[j]);
-      //   faC.push(this.formBuilder.group(faC[j]));
-      // }
-
+      fa.push(this.formBuilder.group(data[i]));
     }
+  }
 
+  setPartnerLeads(data: any) {
+    const fa = (this.partners.get('partnerLeads') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
+    }
+  }
+
+  setPartnerSign(data: any) {
+    const fa = (this.partners.get('partnerSigns') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
+    }
+  }
+
+  setPartnerUser(data: any) {
+    const fa = (this.partners.get('partnerUsers') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
+    }
+  }
+
+  setPartnerViews(data: any) {
+    const fa = (this.partners.get('partnerViews') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
+    }
   }
 
 
@@ -412,6 +459,10 @@ export class DetermineSignerComponent implements OnInit {
   back(e: any, step?: any) {
     // if (!this.datas.isView) {
     this.nextOrPreviousStep(step);
+  }
+
+  getName(e: any) {
+    console.log(e)
   }
 
   // next step event

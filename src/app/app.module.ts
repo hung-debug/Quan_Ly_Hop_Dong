@@ -47,6 +47,7 @@ import {SampleContractTemplateComponent} from './main/contract-template/shared/m
 import {SignupComponent} from './login/signup/signup.component';
 import { SignContractTemplateComponent } from './main/contract-template/shared/sign-sample-contract-template/sign-contract-template/sign-contract-template.component';
 import {ContractSignatureModule} from "./main/contract-signature/contract-signature.module";
+import {MatDialogModule} from "@angular/material/dialog";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -99,6 +100,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ChartModule,
     AppRoutingModule,
     // ContractSignatureModule,
+    MatDialogModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

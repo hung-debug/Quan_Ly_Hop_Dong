@@ -133,6 +133,8 @@ export class IndexComponent implements OnInit {
       ]
     },
     "partnerForm": {
+      "order": 1,
+      "name": "CÔNG TY CỔ PHẦN VHCSOFT",
       "partnerArrs": [
         {
           "order": 1,
