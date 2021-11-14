@@ -86,9 +86,9 @@ export class ContractComponent implements OnInit {
     });
 
     //get list contract
-    this.contractService.getContractList().subscribe(response => {
-      this.contracts = response.items;
-      this.pageTotal = this.contracts.length;
+    this.contractService.getContractList().subscribe(data => {
+      this.contracts = data.entities;
+      this.pageTotal = data.total_elements;
       this.setPage();
       console.log(this.pageTotal);
     });

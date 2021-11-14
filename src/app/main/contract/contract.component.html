@@ -26,7 +26,7 @@
 
   <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}">
     <div class="row">
-      <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.contractName}}</div>
+      <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
     </div>
     <div class="row">
       <div class="col-md-12 item_contract_infor">Bên A: {{item.userName}}</div>
@@ -43,11 +43,11 @@
         </div>
       </div>
       <div class="col-md-2 calendar_create">
-        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.createDate}}</span>
+        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.createdAt | date: 'dd/MM/yyyy'}}</span>
       </div>
 
       <div class="col-md-2 calendar_deadline">
-        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.deadLine}}</span>
+        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.signTime | date: 'dd/MM/yyyy'}}</span>
       </div>
 
       <div class="col-md-3 item_icon">
