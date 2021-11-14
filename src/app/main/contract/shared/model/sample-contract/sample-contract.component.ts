@@ -930,6 +930,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   validData() {
+    console.log(this.datas);
     let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
     if (!data_not_drag) {
       alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')

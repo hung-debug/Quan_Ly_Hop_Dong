@@ -88,7 +88,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     // console.log(this.datas);
 
-    this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
+    // this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
 
     // console.log(this.datas.contract_user_sign)
     this.scale = 1;

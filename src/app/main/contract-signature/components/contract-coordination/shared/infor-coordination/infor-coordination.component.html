@@ -5,31 +5,58 @@
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
       <div style="padding-bottom: 10px; text-align: center" class="label">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
       <div style="line-height: 25px">
-        <table>
-          <tr>
-            <td>Loại hợp đồng:</td>
-            <td>ABC</td>
-          </tr>
-          <tr>
-            <td>Tên hợp đồng:</td>
-            <td>ABC</td>
-          </tr>
-          <tr>
-            <td>Số hợp đồng:</td>
-            <td>ABC</td>
-          </tr>
-          <tr>
-            <td>File đính kèm:</td>
-            <td>
-              <a style="color: #106DB6" rel="stylesheet" href="https://vnexpress.net/" target="_blank">
-                hopdong.docx</a>
-            </td>
-          </tr>
-        </table>
+<!--        <table>-->
+<!--          <tr>-->
+<!--            <td>Loại hợp đồng:</td>-->
+<!--            <td>{{datas.type_contract}}</td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>Tên hợp đồng:</td>-->
+<!--            <td>{{datas.name_contract}}</td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>Số hợp đồng:</td>-->
+<!--            <td>{{datas.number_contract}}</td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>File đính kèm:</td>-->
+<!--            <td>-->
+<!--              <a *ngFor="let d of this.datas.file_attach" style="color: #106DB6" rel="stylesheet" href="https://vnexpress.net/" target="_blank">-->
+<!--                {{d.file_name}}</a>-->
+<!--            </td>-->
+<!--          </tr>-->
+<!--          <tr>-->
+<!--            <td>Hợp đồng liên quan:</td>-->
+<!--            <td>-->
+<!--              <a *ngFor="let d of this.datas.file_related_contract" style="color: #106DB6" href="#">{{d.file_name}}</a>-->
+<!--            </td>-->
+<!--          </tr>-->
+<!--        </table>-->
+       <div>
+         <span>Loại hợp đồng:</span>
+         <span>{{datas.contract_information.type_contract}}</span>
+       </div>
         <div>
-          <u style="color: #106DB6; padding-right: 3px">Xem hợp đồng liên quan</u>
-          <img src="assets/img/hd_lien_quan.svg" alt="mobifone.eContract">
+          <span>Tên hợp đồng:</span>
+          <span>{{datas.contract_information.name_contract}}</span>
         </div>
+        <div>
+          <span>Số hợp đồng:</span>
+          <span>{{datas.contract_information.number_contract}}</span>
+        </div>
+        <div>
+          <span>File đính kèm:</span>
+          <span>
+            <a *ngFor="let d of this.datas.contract_information.file_attach" style="color: #106DB6" rel="stylesheet" href="https://vnexpress.net/" target="_blank">{{d.file_name}}</a>
+          </span>
+        </div>
+        <div>
+          <span>Hợp đồng liên quan:</span>
+          <span>
+            <a *ngFor="let d of this.datas.contract_information.file_related_contract" style="color: #106DB6" href="#">{{d.file_name}}</a>
+          </span>
+        </div>
+
       </div>
     </div>
     <hr>
@@ -37,9 +64,13 @@
     <div class="location-change" [ngStyle]="changeDisplay()">
       <div class="sample-contract__information--user-sign" style="line-height: 25px">
         <div style="text-align: center" class="label">CÁC BÊN LIÊN QUAN</div>
-        <div *ngFor="let d of this.isPartySignature">
-          <div>{{d.name}}</div>
+<!--        <div *ngFor="let d of this.isPartySignature">-->
+<!--          <div>{{d.name}}</div>-->
+<!--        </div>-->
+        <div *ngFor="let d of this.datas.contract_related">
+          <span>{{d.name_company}}</span>
         </div>
+
       </div>
       <div>
         <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Luồng xử lý hợp đồng</u>
@@ -65,7 +96,7 @@
              [ngClass]="changeColorDrag(null,true)"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
-          </div>
+<!--          </div>-->
           <app-sign-contract [datas]="datas" [sign]="d"></app-sign-contract>
         </div>
       </div>

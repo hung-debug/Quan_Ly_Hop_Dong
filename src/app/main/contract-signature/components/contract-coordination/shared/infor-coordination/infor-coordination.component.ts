@@ -95,11 +95,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   ngOnInit() {
-    let data_coordination = localStorage.getItem('data_coordinates_contract');
-    if (data_coordination) {
-      this.datas = JSON.parse(data_coordination).data_coordinates;
-    }
-    // console.log(this.datas);
+
+    console.log(this.datas);
 
     // this.datas['contract_user_sign'] = this.contractService.objDefaultSampleContract().contract_user_sign;
 
@@ -139,7 +136,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     }
 
     // convert base64 file pdf to url
-    this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
+    // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
+    this.pdfSrc = Helper._getUrlPdf(this.datas.contract_information.file_content);
     // render pdf to canvas
     this.getPage();
 
@@ -499,10 +497,10 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     let arrSignConfig: any = [];
-    // let cloneUserSign = [...this.datas.contract_user_sign];
-    // cloneUserSign.forEach(element => {
-    //   arrSignConfig = arrSignConfig.concat(element.sign_config);
-    // })
+    let cloneUserSign = [...this.datas.contract_user_sign];
+    cloneUserSign.forEach(element => {
+      arrSignConfig = arrSignConfig.concat(element.sign_config);
+    })
     return arrSignConfig;
   }
 
