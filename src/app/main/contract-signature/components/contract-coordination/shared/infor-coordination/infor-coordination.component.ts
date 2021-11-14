@@ -18,6 +18,8 @@ import {ContractService} from "../../../../../../service/contract.service";
 import {environment} from "../../../../../../../environments/environment";
 // import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {ProcessingHandleEcontractComponent} from "../../../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-infor-coordination',
@@ -90,6 +92,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
+    private modalService: NgbModal,
+    private dialog: MatDialog
   ) {
     this.step = variable.stepSampleContract.step3
   }
@@ -506,16 +510,28 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
   processHandleContract() {
     // alert('Luồng xử lý hợp đồng!');
-    // const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
-    //   width: '250px',
-    //   data: {datas: this.datas}
-    // })
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('the close dialog');
-    //   let is_data = result
-    // })
+    const data = this.datas;
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
+      width: '497px',
+      backdrop: 'static',
+      keyboard: true,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
 
   }
+
+  // open(content:any) {
+  //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+  //     const closeModel = `Closed with: ${result}`;
+  //   }, (reason) => {
+  //     // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //   });
+  // }
 
   showThumbnail() {
     this.objSignInfo.showObjSign = false;

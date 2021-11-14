@@ -37,14 +37,14 @@ export class IndexComponent implements OnInit {
     },
     contract_related: [
       {
-        name_company: 'Công ty cổ phần công nghệ cao Việt Nam',
+        name_company: 'VHCSOFT',
         name_signature: [
           {name: "Nguyễn Văn A", id: 111, statusApprove: 'Đã xem xét', responseTime: '08:20 14/11/2021'},
           {name: "Nguyễn Văn B", id: 112, statusApprove: 'Đã ký', responseTime: '08:25 12/11/2021'}
         ]
       },
       {
-        name_company: 'Công ty VHCSOFT',
+        name_company: 'TÊN ĐỐI TÁC',
         name_signature: [
           {name: "Nguyễn Văn C", id: 113, statusApprove: 'Chưa ký', responseTime: '10:20 14/11/2021'},
           {name: "Đỗ Thành ABC", id: 114, statusApprove: 'Đang ký', responseTime: '17:05 14/11/2021'}

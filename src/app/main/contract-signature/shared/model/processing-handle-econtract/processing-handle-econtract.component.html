@@ -1,1 +1,24 @@
-<p>processing-handle-econtract works!</p>
+<div class="container-fluid">
+  <h3 style="text-align: center; color: #106DB6">LUỒNG XỬ LÝ HỢP ĐỒNG</h3>
+<!--  <table>-->
+<!--    <tr *ngFor="let d of data.contract_related">-->
+<!--      <td *ngFor="let item of d.name_signature">{{item.name}}: {{item.}}</td>-->
+<!--    </tr>-->
+<!--  </table>-->
+  <div *ngFor="let d of data.contract_related">
+    <div *ngFor="let item of d.name_signature" style="display: flex; justify-content: space-between; text-align: center; margin-bottom: 10px">
+      <div style="display: flex; flex-direction: column">
+        <span>{{item.name}}</span>
+        <span style="color: #8B8B8B">({{d.name_company}})</span>
+      </div>
+      <div style="display: flex; flex-direction: column">
+        <span style="color: #106DB6">{{item.statusApprove}}</span>
+        <span style="color: #8B8B8B">({{item.responseTime}})</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-btn" style="text-align: center;">
+  <button style="width: 120px; height: 40px; background-color: #8B8B8B; border-radius: 5px; outline: none; color: white; border: 1px solid #8B8B8B" (click)="acceptRequest()">Thoát</button>
+</div>

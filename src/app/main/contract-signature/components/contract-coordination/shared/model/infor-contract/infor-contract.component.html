@@ -32,7 +32,7 @@
     <div class="col-md-12">
       <div class="form-group">
         <div class="label_item">File hợp đồng <span class="require_star">*</span></div>
-        <input id="file-input" type="file" accept=".pdf"
+        <input id="file-input" type="file" accept=".pdf" disabled
                (change)="fileChanged($event)" style="display: none;"/>
         <div class="file-contract" (click)="addFile()">
           <img src="assets/img/upload_file.svg" alt="mobifone.contract">

@@ -26,6 +26,7 @@ import { HeaderContractComponent } from './components/header-contract/header-con
 import { FooterSignatureComponent } from './components/footer-signature/footer-signature.component';
 import { ProcessingHandleEcontractComponent } from './shared/model/processing-handle-econtract/processing-handle-econtract.component';
 import {SignContractComponent} from "./components/contract-coordination/shared/sign-sample-contract/sign-contract/sign-contract.component";
+import {MatDialogModule} from "@angular/material/dialog";
 
 export const contractSignatureRoutes: Routes = [
   { path: 'receive/wait-processing/consider-contract/:id', component: ConsiderContractComponent },
@@ -69,8 +70,8 @@ export const contractSignatureRoutes: Routes = [
     NgMultiSelectDropDownModule,
     // routing,
     FormsModule,
+    MatDialogModule
     // ContractModule
-
   ],
   providers: [NoAuthGuard]
 })
