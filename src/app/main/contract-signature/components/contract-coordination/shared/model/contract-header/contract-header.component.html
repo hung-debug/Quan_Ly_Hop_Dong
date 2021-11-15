@@ -1,0 +1,24 @@
+<div class="col-md-12 col-md-offset-3" style="display: flex; height: 74px">
+  <!-- step by step -->
+  <div class="activity-card col" style="padding: 10px;text-align: center;">
+    <ul id="progressbar">
+      <li [ngClass]="(step == 'infor-contract' || step == 'determine-contract' ||
+                      step == 'sample-contract' || step == 'confirm-contract') ? 'active ' : 'inactive'">
+         <div [ngClass]="{'current_active' : step == 'infor-contract'}">Thông tin hợp đồng</div>
+      </li>
+
+      <li [ngClass]="(step == 'determine-contract' || step == 'sample-contract' ||
+                     step == 'confirm-contract') ? 'active' : 'inactive'">
+         <div [ngClass]="{'current_active' : step == 'determine-contract'}">Xác định người xử lý hợp đồng</div>
+      </li>
+
+      <li [ngClass]="(step == 'sample-contract' || step == 'confirm-contract') ? 'active' : 'inactive'">
+         <div [ngClass]="{'current_active' : step == 'sample-contract'}">Thiết kế hợp đồng</div>
+      </li>
+
+      <li [ngClass]="step == 'confirm-contract' ? 'active' : 'inactive'">
+         <div [ngClass]="{'current_active' : step == 'confirm-contract'}">Xác nhận thông tin hợp đồng</div>
+      </li>
+    </ul>
+  </div>
+</div>

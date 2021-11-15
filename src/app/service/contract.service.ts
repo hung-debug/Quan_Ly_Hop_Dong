@@ -123,7 +123,8 @@ export class ContractService {
       //         "top": "570",
       //         "number": "4",
       //         "offsetWidth": "135",
-      //         "offsetHeight": "28"
+      //         "offsetHeight": "28",
+      //         "signType": "organization"
       //       }
       //     ]
       //   },
@@ -141,7 +142,8 @@ export class ContractService {
       //         "top": "527",
       //         "number": "4",
       //         "offsetWidth": "135",
-      //         "offsetHeight": "28"
+      //         "offsetHeight": "28",
+      //         "signType": "organization"
       //       }
       //     ]
       //   },
@@ -159,7 +161,8 @@ export class ContractService {
       //         "top": "707",
       //         "number": "4",
       //         "offsetWidth": 106,
-      //         "offsetHeight": 66
+      //         "offsetHeight": 66,
+      //         "signType": "partner"
       //       },
       //       {
       //         "sign_unit": "chu_ky_anh",
@@ -171,7 +174,8 @@ export class ContractService {
       //         "top": "21",
       //         "number": "4",
       //         "offsetWidth": 100,
-      //         "offsetHeight": 50
+      //         "offsetHeight": 50,
+      //         "signType": "partner"
       //       }
       //     ]
       //   },

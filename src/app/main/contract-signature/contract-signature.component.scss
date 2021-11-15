@@ -1,0 +1,213 @@
+.item_contract {
+  border: 1px solid #1487E1;
+  border-radius: 10px;
+  padding: 8px;
+  margin-top: 5px;
+  line-height: 24px;
+}
+
+.item_contract:hover{
+  background-color: rgb(255, 254, 254);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  cursor: pointer;
+}
+
+.item_contract_name {
+  font-weight: 500;
+  font-size: 16px;
+  color: #106DB6;
+  text-decoration: underline;
+}
+
+.item_contract_infor{
+  color: #666666;
+}
+
+.status_blue{
+  color: #027e21;
+}
+
+.list_header{
+  color:#898989;
+  text-align: center;
+  padding: 12px 12px 0;
+  font-weight: 500;
+}
+
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #ddd;
+  margin: 0 4px;
+}
+
+.pagination a.active {
+  background-color: #106DB6;
+  color: white;
+  border: 1px solid #106DB6;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+
+.input-group-text{
+  padding: 8.5px;
+}
+.input-group-text i{
+  color: #106DB6;
+}
+.calendar_create{
+  text-align: center;
+  color:#106DB6
+}
+.calendar_deadline{
+  text-align: center;
+  color:red
+}
+.item_date{
+  padding-left: 3px;
+}
+.item_icon{
+  text-align: center;
+  color: #015393;
+}
+//popup
+.popup_content{
+  padding: 30px;
+}
+.popup_title{
+  margin: 0;
+  font-weight: 500;
+}
+.popup_close{
+  font-size: 25px;
+  text-align: right;
+  cursor: pointer;
+}
+.btn_close {
+  width: 90px;
+  font-size: inherit;
+  background: #6c6c6d;
+  color: white;
+  border: 1px solid #808183;
+}
+.btn_submit{
+  width: 90px;
+  font-size: inherit;
+  background: #106DB6;
+  color: white;
+  border: 1px solid #87CAFF;
+}
+.label_item{
+  padding: 10px 0px 5px;
+  color: #5e5e5e;
+}
+.search{
+  border: 1px solid #87CAFF;
+  border-radius: 15px;
+  height: 38px;
+}
+.input-line {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.input-img {
+  padding: 10px;
+  cursor: pointer;
+}
+.input-text {
+  border: 0;
+  padding: 10px;
+  width: 100%;
+  outline:0px;
+}
+
+:host ::ng-deep {
+  .ngx-pagination {
+    padding: 0;
+  }
+  .ngx-pagination a, .ngx-pagination button {
+    text-decoration: none;
+    background: #f3f3f3;
+  }
+  .ngx-pagination li {
+    width: 50px;
+    border-radius: 5px;
+  }
+  .ngx-pagination .pagination-previous a::before,
+  .ngx-pagination .pagination-previous.disabled::before {
+    font-family: 'Material Icons';
+    content: 'keyboard_arrow_left';
+    vertical-align: middle;
+    display: inline;
+    margin: 0;
+  }
+  .ngx-pagination .pagination-next a::after,
+  .ngx-pagination .pagination-next.disabled::after {
+    font-family: 'Material Icons';
+    content: 'keyboard_arrow_right';
+    vertical-align: middle;
+    display: inline;
+    margin: 0;
+  }
+
+  .nav-link.active {
+    color: #0d6efd;
+    font-weight: 500;
+    background-color: #c5ebff;
+  }
+  .nav-link {
+    color: #6c6c6d;
+  }
+}
+
+.fa_icon{
+  font-size: 17px;
+  cursor: pointer;
+}
+.contract_footer{
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.footer_title{
+  width: 120px;
+}
+.footer_pagination{
+  text-align: center;
+}
+.footer_page_number{
+  color: #0160AE
+}
+.col-md-100-1{
+  width: 100%;
+}
+.col-md-100-3{
+  width: 33.3%;
+}
+.col-md-100-5{
+  width: 20%;
+}
+
+::ng-deep .date-picker  input {
+  display: block !important;
+  width: 100% !important;
+  height: calc(2.25rem + 2px) !important;
+  padding: .375rem .75rem !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  color: #495057 !important;
+  background-color: #fff !important;
+  background-clip: padding-box !important;
+  border: 1px solid #ced4da !important;
+  border-radius: .25rem !important;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+}

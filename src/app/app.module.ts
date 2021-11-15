@@ -17,7 +17,6 @@ import { DatepickerModule } from 'ng2-datepicker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
@@ -37,17 +36,18 @@ import { ForgotPasswordComponent } from './login/forgot-password/forgot-password
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { SidebarComponent } from './main/sidebar/sidebar.component';
 import {ContractModule} from "./main/contract/contract.module";
-import { AppService } from './service/app.service';
-import { ContractTemplateComponent } from './main/contract-template/contract-template.component';
-import { AddContractTemplateComponent } from './main/contract-template/add-contract-template/add-contract-template.component';
-import { ConfirmInforContractTemplateComponent } from './main/contract-template/shared/model/confirm-infor-contract-template/confirm-infor-contract-template.component';
-import { ContractTemplateHeaderComponent } from './main/contract-template/shared/model/contract-template-header/contract-template-header.component';
-import { DetermineSignerTemplateComponent } from './main/contract-template/shared/model/determine-signer-template/determine-signer-template.component';
-import { InforContractTemplateComponent } from './main/contract-template/shared/model/infor-contract-template/infor-contract-template.component';
-import { SampleContractTemplateComponent } from './main/contract-template/shared/model/sample-contract-template/sample-contract-template.component';
-import { SignupComponent } from './login/signup/signup.component';
+import {AppService} from './service/app.service';
+import {ContractTemplateComponent} from './main/contract-template/contract-template.component';
+import {AddContractTemplateComponent} from './main/contract-template/add-contract-template/add-contract-template.component';
+import {ConfirmInforContractTemplateComponent} from './main/contract-template/shared/model/confirm-infor-contract-template/confirm-infor-contract-template.component';
+import {ContractTemplateHeaderComponent} from './main/contract-template/shared/model/contract-template-header/contract-template-header.component';
+import {DetermineSignerTemplateComponent} from './main/contract-template/shared/model/determine-signer-template/determine-signer-template.component';
+import {InforContractTemplateComponent} from './main/contract-template/shared/model/infor-contract-template/infor-contract-template.component';
+import {SampleContractTemplateComponent} from './main/contract-template/shared/model/sample-contract-template/sample-contract-template.component';
+import {SignupComponent} from './login/signup/signup.component';
 import { SignContractTemplateComponent } from './main/contract-template/shared/sign-sample-contract-template/sign-contract-template/sign-contract-template.component';
-
+import {ContractSignatureModule} from "./main/contract-signature/contract-signature.module";
+import {MatDialogModule} from "@angular/material/dialog";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -98,6 +98,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MdbTabsModule,
     DatepickerModule,
     ChartModule,
+    AppRoutingModule,
+    // ContractSignatureModule,
+    MatDialogModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

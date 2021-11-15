@@ -9,6 +9,19 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+@font-face {
+  font-family:font_lexend_deca;
+  src:url('assets/scss/font/LexendDeca-VariableFont_wght.ttf') format('ttf');
+  font-weight:normal;
+  font-style:normal;
+}
+//url('../fonts/Captureit.woff') format('woff');
+
+.label {
+  font-family: font_lexend_deca;
+  font-weight: normal;
+  font-style: normal;
+}
 
 /* For desktop: */
 .col-1 {width: 8.33%;}

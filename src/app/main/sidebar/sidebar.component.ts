@@ -1,7 +1,8 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
-import { trigger, state, style, transition, animate } from '@angular/animations';
-import { SidebarService } from './sidebar.service';
-import { Router } from '@angular/router';
+import {trigger, state, style, transition, animate} from '@angular/animations';
+import {SidebarService} from './sidebar.service';
+import {Router} from '@angular/router';
+
 // import { MenusService } from './menus.service';
 
 @Component({
@@ -10,22 +11,23 @@ import { Router } from '@angular/router';
   styleUrls: ['./sidebar.component.scss'],
   animations: [
     trigger('slide', [
-      state('up', style({ height: 0 })),
-      state('down', style({ height: '*' })),
+      state('up', style({height: 0})),
+      state('down', style({height: '*'})),
       transition('up <=> down', animate(200))
     ])
   ]
 })
 export class SidebarComponent implements OnInit {
   @Output() evenSelectSidebar = new EventEmitter<string>();
-  menus:any = [];
-  subMenus:any = [];
+  menus: any = [];
+  subMenus: any = [];
+
   constructor(
     public sidebarservice: SidebarService,
     private router: Router
-    ) {
+  ) {
     this.menus = sidebarservice.getMenuList();
-   }
+  }
 
   ngOnInit() {
   }
@@ -35,9 +37,9 @@ export class SidebarComponent implements OnInit {
   }
 
   // set active dropdown
-  toggle(currentMenu:any) {
+  toggle(currentMenu: any) {
     if (currentMenu.type === 'dropdown') {
-      this.menus.forEach((element:any) => {
+      this.menus.forEach((element: any) => {
         if (element === currentMenu) {
           currentMenu.active = !currentMenu.active;
         } else {
@@ -48,8 +50,8 @@ export class SidebarComponent implements OnInit {
   }
 
   //set active link
-  clickLink(currentMenu:any, nameFeature?: string){
-    this.menus.forEach((element:any) => {
+  clickLink(currentMenu: any, nameFeature?: string) {
+    this.menus.forEach((element: any) => {
       if (element === currentMenu) {
         currentMenu.active = !currentMenu.active;
       } else {
@@ -63,13 +65,13 @@ export class SidebarComponent implements OnInit {
   }
 
   //set active link child
-  clickLinkSub(currentMenu:any, currentSubMenu:any){
+  clickLinkSub(currentMenu: any, currentSubMenu: any, routerLink: string) {
     //find parent
-    this.menus.forEach((element:any) => {
+    this.menus.forEach((element: any) => {
       if (element === currentMenu) {
         this.subMenus = element.submenus;
         //set active child
-        this.subMenus.forEach((elementSub:any) => {
+        this.subMenus.forEach((elementSub: any) => {
           if (elementSub === currentSubMenu) {
             currentSubMenu.active = !currentSubMenu.active;
           } else {
@@ -79,6 +81,10 @@ export class SidebarComponent implements OnInit {
       }
     });
 
+    if (routerLink == 'contract-signature') {
+      this.evenSelectSidebar.emit(routerLink)
+    } else
+      this.evenSelectSidebar.emit(undefined)
     //set parent active
     currentMenu.active = true;
     this.getState(currentMenu);
@@ -86,7 +92,7 @@ export class SidebarComponent implements OnInit {
   }
 
   //set state dropdown
-  getState(currentMenu:any) {
+  getState(currentMenu: any) {
     if (currentMenu.active) {
       return 'down';
     } else {
