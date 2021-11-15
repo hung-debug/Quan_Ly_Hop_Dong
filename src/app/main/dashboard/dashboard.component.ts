@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
           chart: {
             type: 'pie',
             style: {
-              fontFamily: 'Roboto',
+              fontFamily: 'inherit',
             }
           },
           title: {
@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
           chart: {
             type: 'column',
             style: {
-              fontFamily: 'Roboto',
+              fontFamily: 'inherit',
             }
           },
           title: {
