@@ -10,6 +10,7 @@ import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import { ContractService } from 'src/app/service/contract.service';
+// import {moment} from "ngx-bootstrap/chronos/testing/chain";
 
 @Component({
   selector: 'app-infor-contract',
@@ -80,10 +81,11 @@ export class InforContractComponent implements OnInit {
   ngOnInit(): void {
 
     this.contractName = this.datas.contractName ? this.datas.contractName : '';
-    this.contractNumber = this.datas.contractNumber ? this.datas.contractNumber : '';
+    this.contractNumber = this.datas.contractNumber ? this.datas.contractNumber : '123-ABC';
     this.contractType = this.datas.contractType ? this.datas.contractType : '';
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : '';
-    this.dateDeadline = this.datas.dateDeadline ? this.datas.dateDeadline : new Date();
+    // this.dateDeadline = this.datas.dateDeadline ? this.datas.dateDeadline : new Date();
+    this.dateDeadline = new Date();
     this.comment = this.datas.comment ? this.datas.comment : '';
 
     this.contractTypeList = [

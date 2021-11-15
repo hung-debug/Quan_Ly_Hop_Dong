@@ -3,39 +3,12 @@
   <!--  information contract-->
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
-      <div style="line-height: 25px">
-<!--        <table>-->
-<!--          <tr>-->
-<!--            <td>Loại hợp đồng:</td>-->
-<!--            <td>{{datas.type_contract}}</td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>Tên hợp đồng:</td>-->
-<!--            <td>{{datas.name_contract}}</td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>Số hợp đồng:</td>-->
-<!--            <td>{{datas.number_contract}}</td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>File đính kèm:</td>-->
-<!--            <td>-->
-<!--              <a *ngFor="let d of this.datas.file_attach" style="color: #106DB6" rel="stylesheet" href="https://vnexpress.net/" target="_blank">-->
-<!--                {{d.file_name}}</a>-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>Hợp đồng liên quan:</td>-->
-<!--            <td>-->
-<!--              <a *ngFor="let d of this.datas.file_related_contract" style="color: #106DB6" href="#">{{d.file_name}}</a>-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--        </table>-->
-       <div>
-         <span class="title-contract">Loại hợp đồng:</span>
-         <span>{{datas.contract_information.type_contract}}</span>
-       </div>
+      <div style="padding-bottom: 10px; text-align: center" class="label">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
+      <div class="label infor-contract" style="line-height: 25px;">
+        <div>
+          <span class="title-contract">Loại hợp đồng:</span>
+          <span>{{datas.contract_information.type_contract}}</span>
+        </div>
         <div>
           <span class="title-contract">Tên hợp đồng:</span>
           <span>{{datas.contract_information.name_contract}}</span>
@@ -47,7 +20,8 @@
         <div>
           <span class="title-contract">File đính kèm:</span>
           <span>
-            <a *ngFor="let d of this.datas.contract_information.file_attach" style="color: #106DB6" rel="stylesheet" href="https://vnexpress.net/" target="_blank">{{d.file_name}}</a>
+            <a *ngFor="let d of this.datas.contract_information.file_attach" style="color: #106DB6" rel="stylesheet"
+               href="https://vnexpress.net/" target="_blank">{{d.file_name}}</a>
           </span>
         </div>
         <div>
@@ -56,34 +30,31 @@
             {{d.file_name}} <span style="color: black">, </span>
           </span>
         </div>
-
       </div>
     </div>
     <hr>
 
     <div class="location-change" [ngStyle]="changeDisplay()">
       <div class="sample-contract__information--user-sign" style="line-height: 25px">
-        <div style="text-align: center; font-weight: bold" class="label">CÁC BÊN LIÊN QUAN</div>
-<!--        <div *ngFor="let d of this.isPartySignature">-->
-<!--          <div>{{d.name}}</div>-->
-<!--        </div>-->
+        <div style="text-align: center;" class="label">CÁC BÊN LIÊN QUAN</div>
         <div *ngFor="let d of this.datas.contract_related">
-          <span>{{d.name_company}}</span>
+          <span class="label" style="color: black; font-size: 13px">{{d.name_company}}</span>
         </div>
 
       </div>
-      <div>
-        <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Luồng xử lý hợp đồng</u>
+      <div >
+        <u class="label" style="color: #106DB6; padding-right: 3px; cursor: pointer; font-size: 13px" (click)="processHandleContract()">Luồng xử lý hợp
+          đồng</u>
       </div>
       <hr>
       <div class="flex-column">
-        <div class="label" style="text-align: center; font-weight: bold">ĐIỀU PHỐI HỢP ĐỒNG</div>
+        <div class="label" style="text-align: center">ĐIỀU PHỐI HỢP ĐỒNG</div>
       </div>
     </div>
   </div>
 
   <!--  file content-->
-<!--  width: 74.7%-->
+  <!--  width: 74.7%-->
   <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
        style="background-color: #F2F2F2; position: relative;">
     <div id="pdf-viewer-step-3">
@@ -96,11 +67,11 @@
              [ngClass]="changeColorDrag(null,true)"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
-<!--          </div>-->
+          <!--          </div>-->
           <app-sign-contract [datas]="datas" [sign]="d"></app-sign-contract>
         </div>
       </div>
     </div>
-</div>
-<!--<app-footer-signature *ngIf="this.datas.step == 'infor-coordination'" [datas]="datas"></app-footer-signature>-->
+  </div>
+  <!--<app-footer-signature *ngIf="this.datas.step == 'infor-coordination'" [datas]="datas"></app-footer-signature>-->
 

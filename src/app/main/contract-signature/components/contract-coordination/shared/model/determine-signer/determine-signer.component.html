@@ -14,7 +14,7 @@
         <!-- User view -->
         <div class="add_content"  formArrayName="userViews">
           <div class="label">Người xem xét</div>
-          <div *ngFor="let userView of userViews().controls; let i=index" [formGroupName]="i">
+          <div *ngFor="let userView of userViews().controls; let i=index" [formGroupName]="i" style="padding-bottom: 15px">
             <div class="row">
               <div class="col-md-1 order">
                 <input type="number" formControlName="order" class="form-control order_input" readonly>
@@ -61,7 +61,7 @@
         <!-- User sign -->
         <div class="add_content" >
           <div class="label">Người ký</div>
-          <div formArrayName="userSigns" *ngFor="let alias of userSigns().controls; let i = index;">
+          <div formArrayName="userSigns" *ngFor="let alias of userSigns().controls; let i = index;" style="padding-bottom: 15px">
             <div class="row" [formGroupName]="i">
               <div class="col-md-1 order">
                 <input type="number" formControlName="order" class="form-control order_input" readonly>
@@ -164,7 +164,7 @@
         <!-- User document -->
         <div class="add_content" formArrayName="userDocs">
           <div class="label">Văn thư</div>
-          <div *ngFor="let userDoc of userDocs().controls; let i=index" [formGroupName]="i">
+          <div *ngFor="let userDoc of userDocs().controls; let i=index" [formGroupName]="i" style="padding-bottom: 15px">
             <div class="row">
               <div class="col-md-1 order">
                 <input type="number" formControlName="order" class="form-control order_input" readonly>
@@ -543,7 +543,7 @@
               <div *ngIf="partners.value.type==2">
                 <p>
                   <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
-                  <input class="form-control textOrg"  formControlName="name">
+                  <input class="form-control textOrg"  [value]="'CÔNG TY CÔNG NGHỆ THÔNG TIN'">
                 </p>
 
                 <!-- Partner user -->

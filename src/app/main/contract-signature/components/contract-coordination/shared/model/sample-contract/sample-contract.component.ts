@@ -651,7 +651,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let style: any = {
       "transform": 'translate(' + d['dataset_x'] + 'px, ' + d['dataset_y'] + 'px)',
       "position": "absolute",
-      "backgroundColor": '#EBF8FF'
+      "backgroundColor": '#EBF8FF',
+      "border": '1px solid #106DB6'
     }
 
     // if (sizeChange == "width" && e) {
@@ -706,13 +707,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 // hàm stype đối tượng boder kéo thả
   changeColorDrag(data: any, role: any, isDaKeo?: any) {
-    // if (isDaKeo) {
-    //   return 'ck-da-keo';
-    // } else {
-    //   return 'employer-ck';
-    // }
-    if (data.signType == 'partner') {
-      return 'resize-drag not-out-drop';
+    if (isDaKeo) {
+      return 'ck-da-keo';
+    } else {
+      return 'employer-ck';
     }
   }
 
@@ -848,6 +846,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     interact('.resize-drag').unset();
     interact('.not-out-drop').unset();
     interact.removeDocument(document);
+  }
+
+  disableText(e: any) {
+    return true;
   }
 
   // edit location doi tuong ky
