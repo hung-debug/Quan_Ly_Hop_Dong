@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
         this.chartContractCreated = translations['chart.contract.created'];
         this.chartContractReceived = translations['chart.contract.received'];
 
-        this.appService.setTitle(this.menuDashboard.toUpperCase());
+        this.appService.setTitle("menu.dashboard");
         this.chartCreated = new Chart({
           colors: ['#058DC7', '#58A55C', '#ED1C24', '#FF710B'],
           chart: {

@@ -1,5 +1,6 @@
 {
   "language": "VI",
+  "language_icon": "db_icon_vietnam",
   "language_en": "Tiếng Anh",
   "language_vi": "Tiếng Việt",
   "notification": "Thông báo",
@@ -16,6 +17,9 @@
   "menu.role.list": "Vai trò",
   "menu.contract.type.list": "Loại hợp đồng",
 
+  "contract.list": "Danh sách hợp đồng",
+  "contract.list.created": "Danh sách hợp đồng đã tạo",
+  "contract.list.received": "Danh sách hợp đồng đã nhận",
   "contract.status.draft": "Bản nháp",
   "contract.status.processing": "Đang xử lý",
   "contract.status.expire": "Sắp hết hạn",
@@ -33,7 +37,20 @@
   "contract.search": "Tìm kiếm hợp đồng",
   "contract.type": "Loại hợp đồng",
   "contract.number": "Số hợp đồng",
+  "contract.information": "Thông tin hợp đồng",
+  "contract.identify-signer": "Xác định người ký",
+  "contract.design": "Thiết kế hợp đồng",
+  "contract.confirm": "Xác nhận và hoàn tất",
+  "contract.add": "Thêm mới hợp đồng",
+  "contract.edit": "Sửa hợp đồng",
+  "contract.copy": "Sao chép hợp đồng",
 
+  "contract-template.list": "Danh sách mẫu hợp đồng",
+  "contract-template.create": "Mẫu hợp đồng tạo",
+  "contract-template.share": "Mẫu hợp đồng được chia sẻ",
+  "contract-template.name": "Tên mẫu hợp đồng",
+  "contract-template.type": "Loại mẫu hợp đồng",
+  "contract-template.code": "Mã mẫu",
 
   "create-date": "Ngày tạo",
   "expiration-date": "Ngày hết hạn ký",

@@ -102,9 +102,14 @@ export class DetermineSignerComponent implements OnInit {
     if(this.datas.userForm && this.datas.userForm.userDocs.length > 0){
        this.setUserDocs(this.datas.userForm.userDocs);
     }
-    if(this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0){
-      console.log(this.datas.partnerForm.partnerArrs);
-      this.setPartnerArrs(this.datas.partnerForm.partnerArrs);
+    if (this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0) {
+      this.datas.partnerForm.partnerArrs.forEach(async (element: any, index: any) => {
+        await this.setPartnerDocs(element.partnerDocs);
+        await this.setPartnerLeads(element.partnerLeads, index);
+        await this.setPartnerSign(element.partnerSigns);
+        await this.setPartnerUser(element.partnerUsers);
+        await this.setPartnerViews(element.partnerViews);
+      })
     }
 
 
@@ -169,6 +174,42 @@ export class DetermineSignerComponent implements OnInit {
 
   setUserDocs(data:any) {
     const fa = (this.userForm.get('userDocs') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
+    }
+  }
+
+  setPartnerDocs(data: any) {
+    const fa = (this.partners.get('partnerDocs') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
+    }
+  }
+
+  setPartnerLeads(data: any, index:any) {
+    //const fa = (this.partnerArrs().at(index).get('partnerLeads') as FormArray);
+    const fa = (this.partners.get('partnerLeads') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
+    }
+  }
+
+  setPartnerSign(data: any) {
+    const fa = (this.partners.get('partnerSigns') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
+    }
+  }
+
+  setPartnerUser(data: any) {
+    const fa = (this.partners.get('partnerUsers') as FormArray);
+    for (let i = 0; i < data.length; i++) {
+      fa.push(this.formBuilder.group(data[i]));
+    }
+  }
+
+  setPartnerViews(data: any) {
+    const fa = (this.partners.get('partnerViews') as FormArray);
     for (let i = 0; i < data.length; i++) {
       fa.push(this.formBuilder.group(data[i]));
     }

@@ -71,7 +71,7 @@
             <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="Hủy hợp đồng" />
           </div>
           <div class="div_icon" *ngIf="status == 'complete'">
-            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Tải hợp đồng" />
+            <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="Tải hợp đồng" />
           </div>
           <div class="div_icon" *ngIf="status == 'complete'">
             <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" />
@@ -86,7 +86,7 @@
     <div class="footer_pagination">
       <pagination-controls (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
     </div>
-    <div class="footer_page_number">Số lượng: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
+    <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
   </div>
 
 </div>

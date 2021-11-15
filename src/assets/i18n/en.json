@@ -1,5 +1,6 @@
 {
   "language": "EN",
+  "language_icon": "db_icon_english",
   "language_en": "English",
   "language_vi": "Vietnam",
   "notification": "Notification",
@@ -16,6 +17,9 @@
   "menu.role.list": "Role",
   "menu.contract.type.list": "Type of contract",
 
+  "contract.list": "Contract list",
+  "contract.list.created": "List of contracts created",
+  "contract.list.received": "List of contracts received",
   "contract.status.draft": "Draft",
   "contract.status.processing": "Processing",
   "contract.status.expire": "Expire",
@@ -33,6 +37,20 @@
   "contract.search": "Contract search",
   "contract.type": "Contract type",
   "contract.number": "Contract number",
+  "contract.information": "Contract information",
+  "contract.identify-signer": "Contract identify signer",
+  "contract.design": "Contract design",
+  "contract.confirm": "Contract confirm",
+  "contract.add": "Add contract",
+  "contract.edit": "Edit contract",
+  "contract.copy": "Copy contract",
+
+  "contract-template.list": "List of contract templates",
+  "contract-template.create": "Contract template created",
+  "contract-template.share": "Contract template shared",
+  "contract-template.name": "Contract template name",
+  "contract-template.type": "Contract template type",
+  "contract-template.code": "Contract template code",
 
   "create-date": "Create date",
   "expiration-date": "Expiration date",
