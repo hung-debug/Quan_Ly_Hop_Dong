@@ -49,15 +49,15 @@
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
           <div class="div_icon">
-            <img *ngIf="item.status == 'Đang phát hành'" src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Ngừng phát hành" (click)="confirmChangeStatus(item.status); open(modalConfirmChangeStatus)"/>
-            <img *ngIf="item.status == 'Ngừng phát hành'" src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Mở phát hành" (click)="confirmChangeStatus(item.status); open(modalConfirmChangeStatus)"/>
+            <img *ngIf="item.status == 'Đang phát hành'" src="../../assets/img/icon_stop_release.svg" class="img_icon" ngbTooltip="Ngừng phát hành" (click)="confirmChangeStatus(item.status); open(modalConfirmChangeStatus)"/>
+            <img *ngIf="item.status == 'Ngừng phát hành'" src="../../assets/img/icon_open_release.svg" class="img_icon" ngbTooltip="Mở phát hành" (click)="confirmChangeStatus(item.status); open(modalConfirmChangeStatus)"/>
           </div>
 
           <div class="div_icon">
-            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Tạo hợp đồng đơn lẻ" (click)="getDataShare(item.contractName, item.contractCode); open(modalShare)"/>
+            <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="Tạo hợp đồng đơn lẻ" (click)="getDataShare(item.contractName, item.contractCode); open(modalShare)"/>
           </div>
           <div class="div_icon">
-            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Tạo hợp đồng theo lô" (click)="getDataShare(item.contractName, item.contractCode); open(modalShare)"/>
+            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="Tạo hợp đồng theo lô" (click)="getDataShare(item.contractName, item.contractCode); open(modalShare)"/>
           </div>
           <div class="div_icon">
             <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" (click)="getDataShare(item.contractName, item.contractCode); open(modalShare)"/>
