@@ -13,6 +13,7 @@ import {RouterModule, Routes} from "@angular/router";
 import { SignaturePersonalContractComponent } from './components/signature-personal-contract/signature-personal-contract.component';
 import { CoordinatesContractComponent } from './components/coordinates-contract/coordinates-contract.component';
 import { SecretaryContractComponent } from './components/secretary-contract/secretary-contract.component';
+import { InfoSignContractComponent } from './shared/info-sign-contract/info-sign-contract.component';
 // import {AddContractComponent} from "./components/contract/add-contract/add-contract.component";
 // import {ContractModule} from "./components/contract/contract.module";
 
@@ -33,7 +34,8 @@ export const contractSignatureRoutes: Routes = [
     ConsiderContractComponent,
     SignaturePersonalContractComponent,
     CoordinatesContractComponent,
-    SecretaryContractComponent
+    SecretaryContractComponent,
+    InfoSignContractComponent
     // AddContractComponent
   ],
   imports: [
