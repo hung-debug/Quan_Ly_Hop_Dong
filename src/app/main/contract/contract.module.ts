@@ -6,6 +6,7 @@ import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DatepickerModule } from 'ng2-datepicker';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
 import { ContractHeaderComponent } from './shared/model/contract-header/contract-header.component';
 import {InforContractComponent} from "./shared/model/infor-contract/infor-contract.component";
@@ -14,6 +15,8 @@ import {ConfirmInforContractComponent} from "./shared/model/confirm-infor-contra
 import {DetermineSignerComponent} from "./shared/model/determine-signer/determine-signer.component";
 import { SignContractComponent } from './shared/sign-sample-contract/sign-contract/sign-contract.component';
 import { DetailContractComponent } from './detail-contract/detail-contract.component';
+import { HttpClient } from "@angular/common/http";
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 // import {NotificationService} from "../../service/notification/notification.service";
 
 
@@ -45,6 +48,13 @@ import { DetailContractComponent } from './detail-contract/detail-contract.compo
     ReactiveFormsModule,
     NgMultiSelectDropDownModule.forRoot(),
     DatepickerModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
   ],
   entryComponents: [
     ConfirmInforContractComponent,
@@ -57,3 +67,6 @@ import { DetailContractComponent } from './detail-contract/detail-contract.compo
   providers: []
 })
 export class ContractModule { }
+export function httpTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}

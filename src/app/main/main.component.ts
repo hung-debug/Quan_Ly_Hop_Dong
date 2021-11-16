@@ -13,7 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-  title: String;
+  title: string;
   closeResult: string = '';
   resetPasswordForm: any = FormGroup;
   fieldTextTypeOld: boolean = false;
@@ -28,6 +28,7 @@ export class MainComponent implements OnInit {
 
   switchLang(lang: string) {
     this.translate.use(lang);
+    this.translate.currentLang = lang;
   }
   constructor(private router: Router,
               private modalService: NgbModal,
@@ -91,7 +92,7 @@ export class MainComponent implements OnInit {
     if (this.router.url.includes('/main/form-contract/add') || this.router.url.includes('/coordinates-contract')) {
       this.isRouterContractNew = false;
     } else this.isRouterContractNew = true;
-    this.appService.getTitle().subscribe(appTitle => this.title = appTitle);
+    this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
     this.initResetPasswordForm();
   }
 

@@ -1,16 +1,16 @@
 <div class="container-fluid">
 
   <mdb-tabs [fill]="true" >
-    <mdb-tab title="Hợp đồng của tôi" value='mine' [ngClass]="{ 'active':type==='mine'}" *ngIf="action=='create'"></mdb-tab>
-    <mdb-tab title="Hợp đồng của tổ chức" value='my-org' [ngClass]="{ 'active':type==='my-org'}" *ngIf="action=='create'"></mdb-tab>
-    <mdb-tab title="Hợp đồng cần xử lý" value='wait-for-me' [ngClass]="{ 'active':type==='wait-for-me'}" *ngIf="action=='receive'"></mdb-tab>
-    <mdb-tab title="Hợp đồng được chia sẻ" value='share-for-me' [ngClass]="{ 'active':type==='share-for-me'}" *ngIf="action=='receive'"></mdb-tab>
+    <mdb-tab title="{{'contract.me' | translate}}" value='mine' [ngClass]="{ 'active':type==='mine'}" *ngIf="action=='create'"></mdb-tab>
+    <mdb-tab title="{{'contract.organization' | translate}}" value='my-org' [ngClass]="{ 'active':type==='my-org'}" *ngIf="action=='create'"></mdb-tab>
+    <mdb-tab title="{{'contract.wait-for-me' | translate}}" value='wait-for-me' [ngClass]="{ 'active':type==='wait-for-me'}" *ngIf="action=='receive'"></mdb-tab>
+    <mdb-tab title="{{'contract.share-for-me' | translate}}" value='share-for-me' [ngClass]="{ 'active':type==='share-for-me'}" *ngIf="action=='receive'"></mdb-tab>
   </mdb-tabs>
 
   <div class="col-md-12">
     <div class="input-line search">
       <img src="../../assets/img/icon_search.svg" class="input-img" />
-      <input type="text" id="search" class="input-text" placeholder="Nhập từ khóa tìm kiếm theo tên hợp đồng"
+      <input type="text" id="search" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}"
       (keyup)="autoSearch($event)" />
       <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="open(modal_filter)"/>
     </div>
@@ -19,14 +19,14 @@
   <div class="row list_header" *ngIf="contracts.length > 0;">
 
     <div class="col-md-5"></div>
-    <div class="col-md-2">Ngày tạo</div>
-    <div class="col-md-2">Ngày hết hạn ký</div>
-    <div class="col-md-3">Thao tác</div>
+    <div class="col-md-2">{{'create-date' | translate}}</div>
+    <div class="col-md-2">{{'expiration-date' | translate}}</div>
+    <div class="col-md-3">{{'action' | translate}}</div>
   </div>
 
   <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}">
     <div class="row">
-      <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.contractName}}</div>
+      <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
     </div>
     <div class="row">
       <div class="col-md-12 item_contract_infor">Bên A: {{item.userName}}</div>
@@ -43,11 +43,11 @@
         </div>
       </div>
       <div class="col-md-2 calendar_create">
-        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.createDate}}</span>
+        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.createdAt | date: 'dd/MM/yyyy'}}</span>
       </div>
 
       <div class="col-md-2 calendar_deadline">
-        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.deadLine}}</span>
+        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.signTime | date: 'dd/MM/yyyy'}}</span>
       </div>
 
       <div class="col-md-3 item_icon">
@@ -71,7 +71,7 @@
             <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="Hủy hợp đồng" />
           </div>
           <div class="div_icon" *ngIf="status == 'complete'">
-            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Tải hợp đồng" />
+            <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="Tải hợp đồng" />
           </div>
           <div class="div_icon" *ngIf="status == 'complete'">
             <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" />
@@ -86,7 +86,7 @@
     <div class="footer_pagination">
       <pagination-controls (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
     </div>
-    <div class="footer_page_number">Số lượng: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
+    <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
   </div>
 
 </div>
@@ -95,7 +95,7 @@
   <div class="popup_content">
     <div class="row">
       <div class="col-md-10">
-        <h4 class="popup_title">TÌM KIẾM HỢP ĐỒNG</h4>
+        <h4 class="popup_title">{{'contract.search' | translate}}</h4>
       </div>
       <div class="col-md-2 popup_close">
         <span (click)="modal.dismiss('Cross click')">×</span>
@@ -105,13 +105,13 @@
     <div>
       <div class="row">
         <div class="col-md-6">
-          <div class="label_item">Loại hợp đồng</div>
+          <div class="label_item">{{'contract.type' | translate}}</div>
           <div class="input-group">
             <input type="text" id="contractType" class="form-control"/>
           </div>
         </div>
         <div class="col-md-6">
-          <div class="label_item">Số hợp đồng</div>
+          <div class="label_item">{{'contract.number' | translate}}</div>
           <div class="input-group">
             <input type="text" id="contractNumber" class="form-control"/>
           </div>
@@ -119,14 +119,14 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-          <div class="label_item">Từ ngày (ngày tạo)</div>
+          <div class="label_item">{{'createdate.start' | translate}}</div>
           <div class="input-group">
             <ngx-datepicker [(ngModel)]="startCreateDate" [options]="options" class="date-picker"></ngx-datepicker>
             <img src="assets/img/db_calendar.svg" class="input-img-calendar">
           </div>
         </div>
         <div class="col-md-6">
-          <div class="label_item">Đến ngày (ngày tạo)</div>
+          <div class="label_item">{{'createdate.end' | translate}}</div>
           <div class="input-group">
             <ngx-datepicker [(ngModel)]="endCreateDate" [options]="options" class="date-picker"></ngx-datepicker>
             <img src="assets/img/db_calendar.svg" class="input-img-calendar">

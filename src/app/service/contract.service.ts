@@ -4,23 +4,66 @@ import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { map, catchError, retry } from 'rxjs/operators';
 import {Helper} from "../core/Helper";
+import { DatePipe } from '@angular/common';
 
 export interface Contract {
-  status: string
+  id:number,
+  name:string,
+  code:string,
+  typeId:string,
+  notes:string,
+  status: string,
+  createdAt:Date,
+  signTime:Date,
 }
 @Injectable({
   providedIn: 'root'
 })
 export class ContractService {
 
-  addContractUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
+  listContractUrl:any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
+  addContractUrl:any = `${environment.apiUrl}/api/v1/contracts`;
+
+  token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   errorData:any = {};
   redirectUrl: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    public datepipe: DatePipe,) { }
 
   public getContractList(): Observable<any> {
-    return this.http.get("/assets/data.json");
+    const headers = { 'Authorization': 'Bearer ' + this.token}
+    return this.http.get<Contract[]>(this.listContractUrl, { headers }).pipe();
+  }
+
+  addContractStep1(datas:any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({name: datas.name,
+                                 code: datas.code,
+                                 contract_no: datas.code,
+                                 sign_order: 1,
+                                 sign_time: this.datepipe.transform(datas.sign_time, 'yyyy-MM-ddThh:mm:ssZ'),
+                                 notes: datas.notes,
+                                 type_id: 2,
+                                 customer_id: 2,
+                                 is_template: false,
+                                 status: 1,
+                                });
+  console.log(headers);
+  console.log(body);
+    return this.http.post<Contract>(this.addContractUrl, body, {'headers':headers})
+       .pipe(
+          map((contract) => {
+            if (JSON.parse(JSON.stringify(contract)).id != 0) {
+              return contract;
+            }else{
+              return null;
+            }
+         }),
+         catchError(this.handleError)
+       );
   }
 
   objDefaultSampleContract() {
@@ -200,22 +243,7 @@ export class ContractService {
 
   }
 
-  addContractStep1(datas:any) {
-    const headers = new HttpHeaders().append('Content-Type', 'application/json');
-    const body = JSON.stringify({contractName: '', contractNumber: ''});
 
-    return this.http.post<Contract>(this.addContractUrl, body, {'headers':headers})
-       .pipe(
-          map((contract) => {
-            if (JSON.parse(JSON.stringify(contract)).status == 0) {
-              return contract;
-            }else{
-              return null;
-            }
-         }),
-         catchError(this.handleError)
-       );
-  }
 
   // Error handling
   handleError(error:any) {

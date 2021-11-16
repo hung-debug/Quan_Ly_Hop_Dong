@@ -3,7 +3,7 @@
   <main class="page-content">
       <header>
         <div class="search-wrapper">
-          <h3>{{title}}</h3>
+          <h3>{{title | translate}}</h3>
         </div>
         <div>
           <div ngbDropdown class="d-inline-block">
@@ -45,7 +45,7 @@
           </div>
           <div ngbDropdown class="d-inline-block">
               <div class="social-icons" ngbDropdownToggle>
-                <span class="db_icon_vietnam"></span>
+                <span class="{{'language_icon' | translate }}"></span>
                 <div class="label">{{'language' | translate }}</div>
               </div>
 

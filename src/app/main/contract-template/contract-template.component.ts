@@ -33,7 +33,7 @@ export class ContractTemplateComponent implements OnInit {
               private fb: FormBuilder,) { }
 
   ngOnInit(): void {
-    this.appService.setTitle('DANH SÁCH MẪU HỢP ĐỒNG ');
+    this.appService.setTitle('contract-template.list');
     //get list contract
     this.contractTemplateService.getContractTemplateList().subscribe(response => {
       this.contractsTemplate = response.items;
