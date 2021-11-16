@@ -91,6 +91,8 @@
 
   "error.partner.name.required": "Tên đối tác không được để trống",
 
+  "personal": "Cá nhân",
+  "organization" : "Tổ chức",
   "organization.me": "Tổ chức của tôi",
   "organization.partner.name": "Tên đối tác",
 
@@ -99,5 +101,14 @@
   "btn.next": "Tiếp theo",
   "btn.previous": "Quay lại",
   "btn.save-draff": "Lưu nháp",
-  "btn.close": "Đóng"
+  "btn.close": "Đóng",
+  "btn.cancel": "Hủy bỏ",
+  "btn.accept": "Đồng ý",
+  "btn.add.user.view": "Thêm người xem xét",
+  "btn.add.user.sign": "Thêm người ký",
+  "btn.add.user.lead": "Thêm người điều phối",
+  "btn.add.user.doc": "Thêm văn thư",
+  "btn.add.partner": "Thêm đối tác",
+
+  "no.contract.add.close": "Hợp đồng chưa hoàn thành. Bạn có muốn lưu bản nháp không?"
 }

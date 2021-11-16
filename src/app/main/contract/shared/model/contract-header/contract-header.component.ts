@@ -1,6 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {AddContractComponent} from "../../../add-contract/add-contract.component";
 import {variable} from "../../../../../config/variable";
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-contract-header',
@@ -17,14 +18,32 @@ export class ContractHeaderComponent implements OnInit {
     step_2: false,
     step_3: false
   }
+  closeResult:string= '';
 
-  constructor() {
+  constructor(private modalService: NgbModal,) {
     // this.step = variable.stepSampleContract.step4
   }
 
   ngOnInit(): void {
   }
 
+  open(content:any) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
 
   // btn quay lại
   back(e: any, step?: any) {

@@ -91,13 +91,24 @@
 
   "error.partner.name.required": "Partner is required",
 
-  "organization.me": "Tổ chức của tôi",
-  "organization.partner.name": "Tên đối tác",
+  "personal": "Personal",
+  "organization" : "Organization",
+  "organization.me": "My organization",
+  "organization.partner.name": "Partner name",
 
   "btn.search": "Search",
   "btn.add": "Add",
   "btn.next": "Next",
   "btn.previous": "Previous",
   "btn.save-draff": "Save draff",
-  "btn.close": "Close"
+  "btn.close": "Close",
+  "btn.cancel": "Cancel",
+  "btn.accept": "Accept",
+  "btn.add.user.view": "Add viewer",
+  "btn.add.user.sign": "Add signer",
+  "btn.add.user.lead": "Add leader",
+  "btn.add.user.doc": "Add document maker",
+  "btn.add.partner": "Add partner",
+
+  "no.contract.add.close": "The contract has not been completed. Do you want to save the draft?"
 }

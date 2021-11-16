@@ -55,7 +55,7 @@
               </div>
             </div>
           </div>
-          <div class="add_click"><a class="add_link" (click)="addUserView()"><i class="fa fa-plus-circle"></i> Thêm người xem xét</a></div>
+          <div class="add_click"><a class="add_link" (click)="addUserView()"><i class="fa fa-plus-circle"></i> {{'btn.add.user.view' | translate}}</a></div>
         </div>
 
         <!-- User sign -->
@@ -157,7 +157,7 @@
               </div>
             </div>
           </div>
-          <div class="add_click"><a class="add_link" (click)="addUserSign()"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
+          <div class="add_click"><a class="add_link" (click)="addUserSign()"><i class="fa fa-plus-circle"></i> {{'btn.add.user.sign' | translate}}</a></div>
         </div>
 
         <!-- User document -->
@@ -235,7 +235,7 @@
               </div>
             </div>
           </div>
-          <div class="add_click"><a class="add_link" (click)="addUserDoc()"><i class="fa fa-plus-circle"></i> Thêm văn thư</a></div>
+          <div class="add_click"><a class="add_link" (click)="addUserDoc()"><i class="fa fa-plus-circle"></i> {{'btn.add.user.doc' | translate}}</a></div>
         </div>
       </div>
     </div>
@@ -253,10 +253,10 @@
 
               <div class="row">
                 <div class="radio col-md-6 label_type">
-                  <label><input type="radio" formControlName="type" [value]="1" [ngModel]="partners.value.type"> <span> Tổ chức</span></label>
+                  <label><input type="radio" formControlName="type" [value]="1" [ngModel]="partners.value.type"> <span> {{'organization' | translate}}</span></label>
                 </div>
                 <div class="radio col-md-6 label_type">
-                  <label><input type="radio" formControlName="type" [value]="2" [ngModel]="partners.value.type"> <span> Cá nhân</span></label>
+                  <label><input type="radio" formControlName="type" [value]="2" [ngModel]="partners.value.type"> <span> {{'personal' | translate}}</span></label>
                 </div>
               </div>
 
@@ -315,7 +315,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="add_click"><a class="add_link" (click)="addPartnerLead(a)"><i class="fa fa-plus-circle"></i> Thêm người điều phối</a></div>
+                  <div class="add_click"><a class="add_link" (click)="addPartnerLead(a)"><i class="fa fa-plus-circle"></i> {{'btn.add.user.lead' | translate}}</a></div>
                 </div>
 
                 <!-- Partner view -->
@@ -362,7 +362,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="add_click"><a class="add_link" (click)="addPartnerView(a)"><i class="fa fa-plus-circle"></i> Thêm người xem xét</a></div>
+                  <div class="add_click"><a class="add_link" (click)="addPartnerView(a)"><i class="fa fa-plus-circle"></i> {{'btn.add.user.view' | translate}}</a></div>
                 </div>
 
                 <!-- Partner sign -->
@@ -456,7 +456,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="add_click"><a class="add_link" (click)="addPartnerSign(a)"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
+                  <div class="add_click"><a class="add_link" (click)="addPartnerSign(a)"><i class="fa fa-plus-circle"></i> {{'btn.add.user.sign' | translate}}</a></div>
                 </div>
 
                 <!-- Partner document -->
@@ -534,7 +534,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="add_click"><a class="add_link" (click)="addPartnerDoc(a)"><i class="fa fa-plus-circle"></i> Thêm văn thư</a></div>
+                  <div class="add_click"><a class="add_link" (click)="addPartnerDoc(a)"><i class="fa fa-plus-circle"></i> {{'btn.add.user.doc' | translate}}</a></div>
                 </div>
               </div>
 
@@ -637,7 +637,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="add_click"><a class="add_link" (click)="addPartnerUser(a)"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
+                  <div class="add_click"><a class="add_link" (click)="addPartnerUser(a)"><i class="fa fa-plus-circle"></i> {{'btn.add.user.sign' | translate}}</a></div>
                 </div>
               </div>
             </div>
@@ -648,7 +648,7 @@
     <div class="row">
       <div class="col-md-1"></div>
       <div class="col-md-11">
-        <div class="add_click"><a class="add_link" (click)="addPartner()"><i class="fa fa-plus-circle"></i> Thêm đối tác</a></div>
+        <div class="add_click"><a class="add_link" (click)="addPartner()"><i class="fa fa-plus-circle"></i> {{'btn.add.partner' | translate}}</a></div>
       </div>
     </div>
   </form>
