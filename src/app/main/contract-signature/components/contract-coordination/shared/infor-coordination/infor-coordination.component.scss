@@ -83,7 +83,13 @@
       .infor-contract {
         color: black !important;
         font-size: 13px !important;
-
+        .text-decoration-style {
+          color: #106DB6;
+          cursor: pointer
+        }
+        .text-decoration-style:hover {
+          text-decoration: underline;
+        }
       }
     }
 

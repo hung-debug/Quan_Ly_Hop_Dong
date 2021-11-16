@@ -1,42 +1,42 @@
 <!-- form step 1 -->
 <div>
-<!--  <div class="row">-->
-<!--    <div class="radio col-md-4 label_type">-->
-<!--      <label><input type="radio" name="type" checked> Hợp đồng đơn lẻ không theo mẫu</label>-->
-<!--    </div>-->
-<!--    <div class="radio col-md-4 label_type">-->
-<!--      <label><input type="radio" name="type"> Hợp đồng đơn lẻ theo mẫu</label>-->
-<!--    </div>-->
-<!--    <div class="radio col-md-4 label_type">-->
-<!--      <label><input type="radio" name="type"> Hợp đồng theo lô</label>-->
-<!--    </div>-->
-<!--  </div>-->
-
   <div class="row">
-    <div class="col-md-12">
-      <div class="form-group">
-        <div class="label_item">Tên hợp đồng <span class="require_star">*</span></div>
-        <div class="input-group">
-          <input type="text" id="contractName" [value]="contractName" class="form-control" disabled/>
-        </div>
-      </div>
-<!--      <div class="form-group">-->
-<!--        <p class="alert alert-danger error-detail" role="alert" *ngIf="errorContractName!=''">-->
-<!--          {{errorContractName}}-->
-<!--        </p>-->
-<!--      </div>-->
+    <div class="radio col-md-4 label_type">
+      <label><input type="radio" name="type" checked> {{'contract.not-by-template' | translate}}</label>
+    </div>
+    <div class="radio col-md-4 label_type">
+      <label><input type="radio" name="type"> {{'contract.by-template' | translate}}</label>
+    </div>
+    <div class="radio col-md-4 label_type">
+      <label><input type="radio" name="type"> {{'contract.by-batch' | translate}}</label>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
-        <div class="label_item">File hợp đồng <span class="require_star">*</span></div>
-        <input id="file-input" type="file" accept=".pdf" disabled
+        <div class="label_item">{{'contract.name' | translate}} <span class="require_star">*</span></div>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="name" class="form-control"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <p class="alert alert-danger error-detail" role="alert" *ngIf="errorContractName!=''">
+          {{errorContractName}}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="label_item">{{'contract.file' | translate}} <span class="require_star">*</span></div>
+        <input id="file-input" type="file" accept=".pdf"
                (change)="fileChanged($event)" style="display: none;"/>
         <div class="file-contract" (click)="addFile()">
           <img src="assets/img/upload_file.svg" alt="mobifone.contract">
-          <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="this.datas.file_name==null">Chọn file hợp đồng (PDF, DOC, DOCX)</span>{{this.datas.file_name}}</div>
+          <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="this.datas.file_name==null">{{'choose.contract.file' | translate }}</span>{{this.datas.file_name}}</div>
         </div>
       </div>
       <div class="form-group">
@@ -50,19 +50,19 @@
   <div class="row">
     <div class="col-md-5">
       <div class="form-group">
-        <div class="label_item">Số hợp đồng</div>
+        <div class="label_item">{{'contract.number' | translate}}</div>
         <div class="input-group">
-          <input type="text" id="contractNumber" [value]="contractNumber" disabled class="form-control"/>
+          <input type="text" [(ngModel)]="code" class="form-control"/>
         </div>
       </div>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5">
       <div class="form-group">
-        <div class="label_item">Loại hợp đồng</div>
+        <div class="label_item">{{'contract.type' | translate}}</div>
         <div class="col">
-          <ng-multiselect-dropdown id="contractType" [(ngModel)]="contractType" [placeholder]="'-- Chọn --'"
-                                   [settings]="dropdownTypeSettings" [data]="contractTypeList" [disabled]="true">
+          <ng-multiselect-dropdown [(ngModel)]="type_id" placeholder="{{'choose' | translate }}"
+                                   [settings]="dropdownTypeSettings" [data]="contractTypeList">
             <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
               <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                 <label style="color: #333; font-weight: normal;"
@@ -79,10 +79,10 @@
   <div class="row">
     <div class="col-md-5">
       <div class="form-group">
-        <div class="label_item">Hợp đồng liên quan</div>
+        <div class="label_item">{{'contract.connect' | translate}}</div>
         <div class="col">
-          <ng-multiselect-dropdown id="contractConnect" [(ngModel)]="contractConnect" [placeholder]="'-- Chọn --'"
-                                   [settings]="dropdownConnectSettings" [data]="contractConnectList" [disabled]="true">
+          <ng-multiselect-dropdown id="contractConnect" [(ngModel)]="contractConnect" placeholder="{{'choose' | translate }}"
+                                   [settings]="dropdownConnectSettings" [data]="contractConnectList">
             <ng-template #optionsTemplate let-item let-option="option"
                          let-id="id" let-isSelected="isSelected">
               <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -101,11 +101,11 @@
       <div class="form-group">
         <div class="select-file-contract">
           <div class="file-approve">
-            <div class="label_item">File đính kèm</div>
-            <input id="attachFile" type="file" accept=".pdf, .doc, .docx" disabled
+            <div class="label_item">{{'file.attach' | translate}}</div>
+            <input id="attachFile" type="file" accept=".pdf, .doc, .docx"
                    (change)="fileChangedAttach($event)" style="display: none;" multiple/>
             <div class="select-contract" (click)="addFileAttach()">
-              <input type="text" placeholder="Chọn file đính kèm (PDF, DOC, DOCX)" readonly [ngModel]="this.datas.file_name_attach">
+              <input type="text" placeholder="{{'choose.contract.file.attach' | translate }}" readonly [ngModel]="this.datas.file_name_attach">
               <img src="assets/img/attachment.svg" alt="mobifone.contract">
             </div>
           </div>
@@ -117,18 +117,18 @@
   <div class="row">
     <div class="col-md-5">
       <div class="form-group">
-        <div class="label_item">Lời nhắn</div>
+        <div class="label_item">{{'note' | translate}}</div>
         <div class="input-group">
-          <input type="text" id="comment" [(ngModel)]="comment" class="form-control" disabled/>
+          <input type="text" [(ngModel)]="notes" class="form-control"/>
         </div>
       </div>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5">
       <div class="form-group">
-        <div class="label_item">Ngày đến hạn ký <span class="require_star">*</span></div>
+        <div class="label_item">{{'expiration-date' | translate}} <span class="require_star">*</span></div>
         <div class="input-line">
-          <ngx-datepicker id="dateDeadline" [(ngModel)]="dateDeadline" [options]="options" class="date-picker input-text" ></ngx-datepicker>
+          <ngx-datepicker [(ngModel)]="sign_time" [options]="options" class="date-picker input-text"></ngx-datepicker>
           <img src="assets/img/db_calendar.svg" alt="mobifone.contract" class="input-img">
         </div>
       </div>
