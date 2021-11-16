@@ -82,9 +82,22 @@
   "user.otp": "OTP",
   "user.phone": "Phone",
 
+  "error.user.name.required": "Name is required",
+  "error.user.email.required": "Email is required",
+  "error.user.email.format": "Invalid email",
+  "error.user.sign-type.required": "Sign type is required",
+  "error.user.phone.required": "Phone number is required",
+  "error.user.phone.format": "Invalid phone number",
+
+  "error.partner.name.required": "Partner is required",
+
+  "organization.me": "Tổ chức của tôi",
+  "organization.partner.name": "Tên đối tác",
+
   "btn.search": "Search",
   "btn.add": "Add",
   "btn.next": "Next",
   "btn.previous": "Previous",
-  "btn.save-draff": "Save draff"
+  "btn.save-draff": "Save draff",
+  "btn.close": "Close"
 }

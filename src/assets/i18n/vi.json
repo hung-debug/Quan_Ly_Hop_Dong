@@ -82,9 +82,22 @@
   "user.otp": "OTP",
   "user.phone": "Số điện thoại",
 
+  "error.user.name.required": "Họ tên không được để trống",
+  "error.user.email.required": "Email không được để trống",
+  "error.user.email.format": "Email sai định dạng",
+  "error.user.sign-type.required": "Loại ký không được để trống",
+  "error.user.phone.required": "Số điện thoại không được để trống",
+  "error.user.phone.format": "Số điện thoại sai định dạng",
+
+  "error.partner.name.required": "Tên đối tác không được để trống",
+
+  "organization.me": "Tổ chức của tôi",
+  "organization.partner.name": "Tên đối tác",
+
   "btn.search": "Tìm kiếm",
   "btn.add": "Thêm mới",
   "btn.next": "Tiếp theo",
   "btn.previous": "Quay lại",
-  "btn.save-draff": "Lưu nháp"
+  "btn.save-draff": "Lưu nháp",
+  "btn.close": "Đóng"
 }
