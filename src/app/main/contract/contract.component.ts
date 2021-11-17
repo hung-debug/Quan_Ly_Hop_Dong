@@ -141,8 +141,8 @@ export class ContractComponent implements OnInit {
   }
 
   autoSearch(event:any){
-    this.contractService.getContractList().subscribe(response => {
-      this.contracts = this.transform(response.items, event);
+    this.contractService.getContractList().subscribe(data => {
+      this.contracts = this.transform(data.entities, event);
     });
   }
 
@@ -156,7 +156,7 @@ export class ContractComponent implements OnInit {
     }
     searchText = searchText.toLocaleLowerCase();
     return contracts.filter((it:any) => {
-      return it.contractName.toLocaleLowerCase().includes(searchText);
+      return it.name.toLocaleLowerCase().includes(searchText);
     });
   }
 
