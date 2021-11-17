@@ -255,19 +255,19 @@
 
               <div class="row">
                 <div class="radio col-md-6 label_type">
-                  <label><input type="radio" formControlName="type" [value]="1" [ngModel]="partners.value.type"> <span> Tổ chức</span></label>
+                  <label><input type="radio" formControlName="type" [value]="1" [ngModel]="partners.value.type"><span> Tổ chức</span></label>
                 </div>
                 <div class="radio col-md-6 label_type">
-                  <label><input type="radio" formControlName="type" [value]="2" [ngModel]="partners.value.type"> <span> Cá nhân</span></label>
+                  <label><input type="radio" formControlName="type" [value]="2" [ngModel]="partners.value.type"><span> Cá nhân</span></label>
                 </div>
               </div>
 
               <div *ngIf="partners.value.type==1">
                 <p>
                   <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
-                  <input type="text" class="form-control textOrg" formControlName="name" name="name">
+                  <input type="text" class="form-control textOrg" formControlName="name" name="name" >
                 </p>
-                <div *ngIf="!partners.get('name')?.valid && (partners.get('name')?.dirty ||partners.get('name')?.touched)">
+                <div *ngIf="!partners.get('name')?.valid && (partners.get('name')?.dirty || partners.get('name')?.touched)">
                   <p class="alert alert-danger error-detail" role="alert" [hidden]="!partners.get('name')?.errors?.required">
                     Tên đối tác không được để trống
                   </p>
@@ -543,7 +543,7 @@
               <div *ngIf="partners.value.type==2">
                 <p>
                   <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
-                  <input class="form-control textOrg"  [value]="'CÔNG TY CÔNG NGHỆ THÔNG TIN'">
+                  <input class="form-control textOrg"  [ngModel]="partners.value.name" formControlName="name" name="name">
                 </p>
 
                 <!-- Partner user -->

@@ -105,6 +105,7 @@ export class DetermineSignerComponent implements OnInit {
 
     if (this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0) {
       this.datas.partnerForm.partnerArrs.forEach(async (element: any) => {
+        this.setPartnerName(element);
         await this.setPartnerDocs(element.partnerDocs);
         await this.setPartnerLeads(element.partnerLeads);
         await this.setPartnerSign(element.partnerSigns);
@@ -142,6 +143,7 @@ export class DetermineSignerComponent implements OnInit {
       allowSearchFilter: true
     };
   }
+
 
   // gán lại dữ liệu value cho form
   setUserViews(data:any) {
@@ -202,6 +204,12 @@ export class DetermineSignerComponent implements OnInit {
   //   const fa = (this.partners.get('name') as FormArray);
   //   fa.value = data;
   // }
+
+
+  setPartnerName(data: any) {
+    const fa = this.partners.get('name');
+    fa?.setValue({name: data.name});
+  }
 
   setPartnerDocs(data: any) {
     const fa = (this.partners.get('partnerDocs') as FormArray);

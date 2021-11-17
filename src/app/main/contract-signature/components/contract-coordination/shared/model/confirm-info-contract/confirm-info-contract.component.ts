@@ -130,6 +130,7 @@ export class ConfirmInfoContractComponent implements OnInit {
 
   confirmContract() {
     this.datas.step = variable.stepSampleContract.step_coordination
+    this.datas['coordination_complete'] = true;
   }
 
 }

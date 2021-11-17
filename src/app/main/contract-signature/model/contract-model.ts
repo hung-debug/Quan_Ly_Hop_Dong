@@ -39,6 +39,7 @@ export const data_signature_contract = {
   //     ]
   //   }
   // ],
+  coordination_complete: false,
   "stepLast": "infor-coordination",
   "file_name": "quan_ly_hd-converted.pdf",
   file_name_attach: "quan_ly_hd.docx",
