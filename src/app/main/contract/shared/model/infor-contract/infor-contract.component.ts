@@ -247,20 +247,20 @@ export class InforContractComponent implements OnInit {
       console.log(data);
 
       //call API upload file
-      // this.uploadService.uploadFile(this.datas).subscribe((data) => {
-      //   console.log("File" + data);
+      this.uploadService.uploadFile(this.datas).subscribe((data) => {
+        console.log("File" + data);
 
         //next step
         this.step = variable.stepSampleContract.step2;
         this.datas.stepLast = this.step
         this.nextOrPreviousStep(this.step);
         console.log(this.datas);
-      // },
-      // error => {
-      //   console.log("false file");
-      //   return false;
-      // }
-      //);
+      },
+      error => {
+        console.log("false file");
+        return false;
+      }
+      );
 
     },
     error => {

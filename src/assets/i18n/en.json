@@ -57,9 +57,11 @@
   "contract-template.type": "Contract template type",
   "contract-template.code": "Contract template code",
 
+  "file.document": "File",
   "choose": "Choose",
   "choose.contract.file": "Choose file contract (PDF, DOC, DOCX)",
   "choose.contract.file.attach": "Choose file attach (PDF, DOC, DOCX)",
+  "choose.document.file.excel": "Choose file (XLS, XLSX)",
   "file.attach": "File attach",
   "note": "Note",
   "create-date": "Create date",

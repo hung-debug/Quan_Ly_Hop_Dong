@@ -2,20 +2,20 @@
 <div>
   <div class="row">
     <div class="radio col-md-4 label_type">
-      <label><input type="radio" name="type" checked> {{'contract.not-by-template' | translate}}</label>
+      <label><input type="radio" name="type"> {{'contract.not-by-template' | translate}}</label>
     </div>
     <div class="radio col-md-4 label_type">
       <label><input type="radio" name="type"> {{'contract.by-template' | translate}}</label>
     </div>
     <div class="radio col-md-4 label_type">
-      <label><input type="radio" name="type"> {{'contract.by-batch' | translate}}</label>
+      <label><input type="radio" name="type" checked> {{'contract.by-batch' | translate}}</label>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
-        <div class="label_item">{{'contract.name' | translate}} <span class="require_star">*</span></div>
+        <div class="label_item">{{'contract-template.name' | translate}} <span class="require_star">*</span></div>
         <div class="input-group">
           <input type="text" [(ngModel)]="name" class="form-control"/>
         </div>
@@ -31,12 +31,12 @@
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
-        <div class="label_item">{{'contract.file' | translate}} <span class="require_star">*</span></div>
-        <input id="file-input" type="file" accept=".pdf"
+        <div class="label_item">{{'file.document' | translate}} <span class="require_star">*</span></div>
+        <input id="file-input" type="file" accept=".xls,.xlsx"
               (change)="fileChanged($event)" style="display: none;"/>
         <div class="file-contract" (click)="addFile()">
-          <img src="assets/img/upload_file.svg" alt="mobifone.contract">
-          <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="this.datas.file_name==null">{{'choose.contract.file' | translate }}</span>{{this.datas.file_name}}</div>
+          <img src="assets/img/icon_file_excel.svg" alt="mobifone.contract">
+          <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="this.datas.file_name==null">{{'choose.document.file.excel' | translate }}</span>{{this.datas.file_name}}</div>
         </div>
       </div>
       <div class="form-group">
@@ -46,101 +46,12 @@
       </div>
     </div>
   </div>
-
-  <div class="row">
-    <div class="col-md-5">
-      <div class="form-group">
-        <div class="label_item">{{'contract.number' | translate}}</div>
-        <div class="input-group">
-          <input type="text" [(ngModel)]="code" class="form-control"/>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2"></div>
-    <div class="col-md-5">
-      <div class="form-group">
-        <div class="label_item">{{'contract.type' | translate}}</div>
-        <div class="col">
-          <ng-multiselect-dropdown [(ngModel)]="type_id" placeholder="{{'choose' | translate }}"
-            [settings]="dropdownTypeSettings" [data]="contractTypeList">
-            <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
-              <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                <label style="color: #333; font-weight: normal;"
-                  [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractTypeItems[id].isDisabled? 'lightgrey': ''}">{{getContractTypeItems[id].item_text}}
-                </label>
-              </div>
-            </ng-template>
-          </ng-multiselect-dropdown>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-5">
-      <div class="form-group">
-        <div class="label_item">{{'contract.connect' | translate}}</div>
-        <div class="col">
-          <ng-multiselect-dropdown id="contractConnect" [(ngModel)]="contractConnect" placeholder="{{'choose' | translate }}"
-            [settings]="dropdownConnectSettings" [data]="contractConnectList">
-            <ng-template #optionsTemplate let-item let-option="option"
-              let-id="id" let-isSelected="isSelected">
-              <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                <label style="color: #333; font-weight: normal;"
-                  [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
-                  {{getContractConnectItems[id].item_text}}
-                </label>
-              </div>
-            </ng-template>
-          </ng-multiselect-dropdown>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2"></div>
-    <div class="col-md-5">
-      <div class="form-group">
-        <div class="select-file-contract">
-          <div class="file-approve">
-            <div class="label_item">{{'file.attach' | translate}}</div>
-            <input id="attachFile" type="file" accept=".pdf, .doc, .docx"
-                  (change)="fileChangedAttach($event)" style="display: none;" multiple/>
-            <div class="select-contract" (click)="addFileAttach()">
-              <input type="text" placeholder="{{'choose.contract.file.attach' | translate }}" readonly [ngModel]="this.datas.file_name_attach">
-              <img src="assets/img/attachment.svg" alt="mobifone.contract">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-5">
-      <div class="form-group">
-        <div class="label_item">{{'note' | translate}}</div>
-        <div class="input-group">
-          <input type="text" [(ngModel)]="notes" class="form-control"/>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2"></div>
-    <div class="col-md-5">
-      <div class="form-group">
-        <div class="label_item">{{'expiration-date' | translate}} <span class="require_star">*</span></div>
-        <div class="input-line">
-          <ngx-datepicker [(ngModel)]="sign_time" [options]="options" class="date-picker input-text"></ngx-datepicker>
-          <img src="assets/img/db_calendar.svg" alt="mobifone.contract" class="input-img">
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <div class="footer-infor-contract">
-  <div style="width: 200px;"></div>
-  <div class="content_footer">@Copyright 2021 - MobiFone</div>
+  <div></div>
+  <div></div>
   <div>
-    <button type="button" name="next" class="next draft-button">{{'btn.save-draff' | translate }}</button>
     <button (click)="next()" type="button" name="next" class="next action-button pull-right">{{'btn.next' | translate }}</button>
   </div>
 </div>

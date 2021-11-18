@@ -57,9 +57,11 @@
   "contract-template.type": "Loại mẫu hợp đồng",
   "contract-template.code": "Mã mẫu",
 
+  "file.document": "File tài liệu",
   "choose": "Chọn",
   "choose.contract.file": "Chọn file hợp đồng (PDF, DOC, DOCX)",
   "choose.contract.file.attach": "Chọn file đính kèm (PDF, DOC, DOCX)",
+  "choose.document.file.excel": "Chọn file tài liệu (XLS, XLSX)",
   "file.attach": "File đính kèm",
   "note": "Lời nhắn",
   "create-date": "Ngày tạo",
