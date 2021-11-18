@@ -17,6 +17,10 @@ import { SignContractComponent } from './shared/sign-sample-contract/sign-contra
 import { DetailContractComponent } from './detail-contract/detail-contract.component';
 import { HttpClient } from "@angular/common/http";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { AddContractBatchComponent } from './add-contract-batch/add-contract-batch.component';
+import { ContractBatchHeaderComponent } from './shared-batch/model/contract-batch-header/contract-batch-header.component';
+import { ConfirmInforContractBatchComponent } from './shared-batch/model/confirm-infor-contract-batch/confirm-infor-contract-batch.component';
+import { InforContractBatchComponent } from './shared-batch/model/infor-contract-batch/infor-contract-batch.component';
 // import {NotificationService} from "../../service/notification/notification.service";
 
 
@@ -28,7 +32,11 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
     ConfirmInforContractComponent,
     DetermineSignerComponent,
     SignContractComponent,
-    DetailContractComponent
+    DetailContractComponent,
+    AddContractBatchComponent,
+    ContractBatchHeaderComponent,
+    ConfirmInforContractBatchComponent,
+    InforContractBatchComponent
   ],
   exports: [
     ContractHeaderComponent,
