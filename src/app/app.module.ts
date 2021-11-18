@@ -48,6 +48,8 @@ import {SignupComponent} from './login/signup/signup.component';
 import { SignContractTemplateComponent } from './main/contract-template/shared/sign-sample-contract-template/sign-contract-template/sign-contract-template.component';
 import {ContractSignatureModule} from "./main/contract-signature/contract-signature.module";
 import {MatDialogModule} from "@angular/material/dialog";
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { NgxSelectModule } from "ngx-select-ex";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -101,6 +103,15 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppRoutingModule,
     // ContractSignatureModule,
     MatDialogModule,
+    NgxSelectModule,
+    SweetAlert2Module.forRoot(
+      {
+        provideSwal: () => import('sweetalert2').then(({ default: swal }) => swal.mixin({
+          confirmButtonText: `Đồng ý`,
+          cancelButtonText: `Từ chối`
+        }))
+      }
+    ),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

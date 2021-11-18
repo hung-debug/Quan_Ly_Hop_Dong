@@ -3,6 +3,8 @@ import {SignContractComponent} from "../sign-contract/sign-contract.component";
 import {AddContractComponent} from "../contract-coordination/add-contract/add-contract.component";
 import {variable} from "../../../../config/variable";
 import {environment} from "../../../../../environments/environment";
+import {UserService} from "../../../../service/user.service";
+import {ContractSignatureService} from "../../../../service/contract-signature.service";
 
 @Component({
   selector: 'app-index',
@@ -12,15 +14,21 @@ import {environment} from "../../../../../environments/environment";
 export class IndexComponent implements OnInit {
   @ViewChild('ContractSign') SignContractComponent: SignContractComponent;
   @ViewChild('AddContract') AddContractComponent: AddContractComponent;
-  @Input() datas: any;
+  datas: any;
+  data_contract: any;
   // @Input() datas: any = {
   //   step: variable.stepSampleContract.step_coordination,
   //   contract: {},
   //   action_title: 'Điều phối'
   // }
 
+  constructor(
+    private contractSignatureService: ContractSignatureService
+  ) {
+  }
 
-  data_contract: any = {
+
+  /*data_contract: any = {
     contract_information: {
       type_contract: "Hợp đồng thương mại",
       name_contract: "Hợp đồng giao dịch phần mềm ứng dụng",
@@ -301,7 +309,7 @@ export class IndexComponent implements OnInit {
         ]
       }
     ]
-  }
+  }*/
 
 
   // data_contract: any = {
@@ -447,15 +455,16 @@ export class IndexComponent implements OnInit {
   //   ]
   // }
 
-  constructor() { }
-
   ngOnInit(): void {
-    let data_coordination = localStorage.getItem('data_coordinates_contract');
-    if (data_coordination) {
-      this.datas = JSON.parse(data_coordination).data_coordinates;
-    }
-    // this.datas = this.datas.concat(this.data_contract.contract_information);
-    this.datas = Object.assign(this.datas, this.data_contract);
+    this.contractSignatureService.getContractDetail().subscribe(response => {
+      this.data_contract = response;
+      let data_coordination = localStorage.getItem('data_coordinates_contract');
+      if (data_coordination) {
+        this.datas = JSON.parse(data_coordination).data_coordinates;
+      }
+      // this.datas = this.datas.concat(this.data_contract.contract_information);
+      this.datas = Object.assign(this.datas, this.data_contract);
+    });
   }
 
   dieuPhoiHd() {

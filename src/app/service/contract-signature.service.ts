@@ -23,6 +23,10 @@ export class ContractSignatureService {
     return this.http.get("/assets/data-contract-received.json");
   }
 
+  public getContractDetail(): Observable<any> {
+    return this.http.get("/assets/data-contract-sign.json");
+  }
+
   objDefaultSampleContract() {
     return {
       file_content: "base64",

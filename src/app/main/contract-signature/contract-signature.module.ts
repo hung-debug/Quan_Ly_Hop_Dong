@@ -28,10 +28,17 @@ import { ProcessingHandleEcontractComponent } from './shared/model/processing-ha
 import {SignContractComponent} from "./components/contract-coordination/shared/sign-sample-contract/sign-contract/sign-contract.component";
 import {MatDialogModule} from "@angular/material/dialog";
 import { ForwardContractComponent } from './shared/model/forward-contract/forward-contract.component';
+import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
+import { ImageSignContractComponent } from './components/consider-contract/image-sign-contract/image-sign-contract.component';
+import { ConfirmSignOtpComponent } from './components/consider-contract/confirm-sign-otp/confirm-sign-otp.component';
+import { PkiDialogSignComponent } from './components/consider-contract/pki-dialog-sign/pki-dialog-sign.component';
+import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
+import {NgxSelectModule} from "ngx-select-ex";
+import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialog-sign/hsm-dialog-sign.component';
 
 export const contractSignatureRoutes: Routes = [
   { path: 'receive/wait-processing/consider-contract/:id', component: ConsiderContractComponent },
-  { path: 'receive/wait-processing/personal-signature-contract/:id', component: SignaturePersonalContractComponent },
+  { path: 'receive/wait-processing/personal-signature-contract/:id', component: ConsiderContractComponent },
   // { path: 'receive/wait-processing/coordinates-contract/:id', component: CoordinatesContractComponent },
   { path: 'receive/wait-processing/coordinates-contract/:id', component: IndexComponent },
   { path: 'receive/wait-processing/secretary-contract/:id', component: SecretaryContractComponent },
@@ -59,22 +66,29 @@ export const contractSignatureRoutes: Routes = [
     SecretaryContractComponent,
     SignContractComponent,
     ForwardContractComponent,
+    ImageSignContractComponent,
+    ConfirmSignOtpComponent,
+    PkiDialogSignComponent,
+    ImageDialogSignComponent,
+    HsmDialogSignComponent,
     // AddContractComponent
   ],
-  imports: [
-    CommonModule,
-    DatepickerModule,
-    NgbModule,
-    NgxPaginationModule,
-    MdbTabsModule,
-    RouterModule.forChild(contractSignatureRoutes),
-    ReactiveFormsModule,
-    NgMultiSelectDropDownModule,
-    // routing,
-    FormsModule,
-    MatDialogModule
-    // ContractModule
-  ],
+    imports: [
+        CommonModule,
+        DatepickerModule,
+        NgbModule,
+        NgxPaginationModule,
+        MdbTabsModule,
+        RouterModule.forChild(contractSignatureRoutes),
+        ReactiveFormsModule,
+        NgMultiSelectDropDownModule,
+        // routing,
+        FormsModule,
+        MatDialogModule,
+        SweetAlert2Module,
+        NgxSelectModule,
+        // ContractModule
+    ],
   providers: [NoAuthGuard]
 })
 export class ContractSignatureModule { }
