@@ -1,0 +1,59 @@
+<!-- form step 1 -->
+<div>
+  <div class="row">
+    <div class="radio col-md-4 label_type">
+      <label><input type="radio" name="type"> {{'contract.not-by-template' | translate}}</label>
+    </div>
+    <div class="radio col-md-4 label_type">
+      <label><input type="radio" name="type"> {{'contract.by-template' | translate}}</label>
+    </div>
+    <div class="radio col-md-4 label_type">
+      <label><input type="radio" name="type" checked> {{'contract.by-batch' | translate}}</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="label_item">{{'contract-template.name' | translate}} <span class="require_star">*</span></div>
+        <div class="input-group">
+          <input type="text" [(ngModel)]="name" class="form-control"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <p class="alert alert-danger error-detail" role="alert" *ngIf="errorContractName!=''">
+          {{errorContractName}}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="label_item">{{'file.document' | translate}} <span class="require_star">*</span></div>
+        <input id="file-input" type="file" accept=".xls,.xlsx"
+              (change)="fileChanged($event)" style="display: none;"/>
+        <div class="file-contract" (click)="addFile()">
+          <img src="assets/img/icon_file_excel.svg" alt="mobifone.contract">
+          <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="this.datas.file_name==null">{{'choose.document.file.excel' | translate }}</span>{{this.datas.file_name}}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <p class="alert alert-danger error-detail" role="alert" *ngIf="errorContractFile!=''">
+          {{errorContractFile}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-infor-contract">
+  <div></div>
+  <div></div>
+  <div>
+    <button (click)="next()" type="button" name="next" class="next action-button pull-right">{{'btn.next' | translate }}</button>
+  </div>
+</div>
+
+

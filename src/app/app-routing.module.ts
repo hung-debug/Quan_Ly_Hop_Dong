@@ -1,3 +1,4 @@
+import { AddContractBatchComponent } from './main/contract/add-contract-batch/add-contract-batch.component';
 import { AddContractTemplateComponent } from './main/contract-template/add-contract-template/add-contract-template.component';
 import { SignupComponent } from './login/signup/signup.component';
 import { ContractTemplateComponent } from './main/contract-template/contract-template.component';
@@ -67,6 +68,14 @@ const routes: Routes = [
       {
         path: 'form-contract/:action/:id',
         component: AddContractComponent,
+      },
+      {
+        path: 'form-contract-batch/:action',
+        component: AddContractBatchComponent
+      },
+      {
+        path: 'form-contract-batch/:action/:id',
+        component: AddContractBatchComponent,
       },
       {
         path: 'contract-template',

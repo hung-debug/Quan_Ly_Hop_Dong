@@ -1,24 +1,22 @@
-import { UploadService } from './../../../../../service/upload.service';
-import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import { NgbCalendar, NgbDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import {variable} from "../../../../../config/variable";
+import { AddContractBatchComponent } from './../../../add-contract-batch/add-contract-batch.component';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
-import {AddContractComponent} from "../../../add-contract/add-contract.component";
+import { FormBuilder } from '@angular/forms';
+import { UploadService } from 'src/app/service/upload.service';
+import { ContractService } from 'src/app/service/contract.service';
+import { DatePipe } from '@angular/common';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
-import { ContractService } from 'src/app/service/contract.service';
-import { DatePipe } from '@angular/common';
-
+import {variable} from "../../../../../config/variable";
 @Component({
-  selector: 'app-infor-contract',
-  templateUrl: './infor-contract.component.html',
-  styleUrls: ['./infor-contract.component.scss']
+  selector: 'app-infor-contract-batch',
+  templateUrl: './infor-contract-batch.component.html',
+  styleUrls: ['./infor-contract-batch.component.scss']
 })
-export class InforContractComponent implements OnInit {
-  @Input() AddComponent: AddContractComponent | unknown;
+export class InforContractBatchComponent implements OnInit {
+
+  @Input() AddComponent: AddContractBatchComponent | unknown;
   @Input() datas: any;
   @Input() step: any;
 
@@ -61,7 +59,7 @@ export class InforContractComponent implements OnInit {
     private contractService: ContractService,
     public datepipe: DatePipe,
   ) {
-    this.step = variable.stepSampleContract.step1;
+    this.step = variable.stepBatchContract.step1;
   }
 
   // options sample with default values
@@ -138,26 +136,13 @@ export class InforContractComponent implements OnInit {
         const file_name = file.name;
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
-        if (extension.toLowerCase() == 'pdf') {
-          // const fileReader = new FileReader();
-          // fileReader.readAsDataURL(file);
-          // fileReader.onload = (e) => {
-          //   //@ts-ignore
-          //   const base64result = fileReader.result.toString().split(',')[1];
-          //   const fileInput: any = document.getElementById('file-input');
-          //   fileInput.value = '';
-          //   this.datas.file_content = base64result;
-          //   this.datas.file_name = file_name;
-          //   this.datas.contractFile = file;
-          //   // this.datas.documents['file_content_docx'] = null;
-          //   // this.pdfSrc = Helper._getUrlPdf(base64result);
-          // };
+        if (extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx') {
           const fileInput: any = document.getElementById('file-input');
           fileInput.value = '';
           this.datas.file_name = file_name;
           this.datas.contractFile = file;
         } else {
-          alert('Chỉ hỗ trợ file có định dạng PDF')
+          alert('Chỉ hỗ trợ file có định dạng XLS, XLSX')
         }
       } else {
         alert('Yêu cầu file nhỏ hơn 5MB');
@@ -242,32 +227,32 @@ export class InforContractComponent implements OnInit {
 
   callAPI() {
     //call API step 1
-    this.contractService.addContractStep1(this.datas).subscribe((data) => {
-      this.datas.id = data?.id;
-      console.log(data);
+    // this.contractService.addContractStep1(this.datas).subscribe((data) => {
+    //   this.datas.id = data?.id;
+    //   console.log(data);
 
-      //call API upload file
-      this.uploadService.uploadFile(this.datas).subscribe((data) => {
-        console.log("File" + data);
+    //   //call API upload file
+    //   this.uploadService.uploadFile(this.datas).subscribe((data) => {
+    //     console.log("File" + data);
 
         //next step
-        this.step = variable.stepSampleContract.step2;
+        this.step = variable.stepBatchContract.step2;
         this.datas.stepLast = this.step
         this.nextOrPreviousStep(this.step);
         console.log(this.datas);
-      },
-      error => {
-        console.log("false file");
-        return false;
-      }
-      );
+    //   },
+    //   error => {
+    //     console.log("false file");
+    //     return false;
+    //   }
+    //   );
 
-    },
-    error => {
-      console.log("false content");
-      return false;
-    }
-    );
+    // },
+    // error => {
+    //   console.log("false content");
+    //   return false;
+    // }
+    // );
 
   }
 
@@ -301,6 +286,5 @@ export class InforContractComponent implements OnInit {
     this.datas.stepLast = step;
     this.stepChangeInfoContract.emit(step);
   }
-
 
 }

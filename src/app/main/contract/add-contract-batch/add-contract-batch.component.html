@@ -1,0 +1,8 @@
+<!--xử lý gọi các component trong các step theo từng điều kiện-->
+<div class="container-fluid">
+  <app-contract-batch-header #contractHeader [AddComponent]="this" [datas]="datas" [step]="step"></app-contract-batch-header>
+  <ng-container>
+    <app-infor-contract-batch #infoContract *ngIf="step == 'infor-contract'" [datas]="datas" [step]="step" (stepChangeInfoContract)="getStep($event)"></app-infor-contract-batch>
+    <app-confirm-infor-contract-batch #confirmInforContract *ngIf="step == 'confirm-contract'" [datas]="datas"(stepChangeConfirmInforContract)="getStep($event)"></app-confirm-infor-contract-batch>
+  </ng-container>
+</div>

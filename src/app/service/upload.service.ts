@@ -12,9 +12,12 @@ export interface File {
 })
 export class UploadService {
 
-  uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/2/single`;
-
   token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+  organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.organization_id;
+
+  uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`+ this.organization_id + `/single`;
+
+
 
   constructor(private http: HttpClient) { }
 
@@ -23,12 +26,14 @@ export class UploadService {
     let formData = new FormData();
     formData.append('file', datas.contractFile);
 
-    console.log(datas.contractFile);
     const headers = new HttpHeaders()
       .append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.post<File>(this.uploadFileUrl, formData, {'headers':headers})
-       .pipe();
+
+    console.log(this.uploadFileUrl);
+    console.log(headers);
+    console.log(formData);
+    return this.http.post<File>(this.uploadFileUrl, formData, {'headers':headers});
   }
 
 
