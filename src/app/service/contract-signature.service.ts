@@ -196,22 +196,22 @@ export class ContractSignatureService {
 
   }
 
-  addContractStep1(datas:any) {
-    const headers = new HttpHeaders().append('Content-Type', 'application/json');
-    const body = JSON.stringify({contractName: '', contractNumber: ''});
-
-    return this.http.post<Contract>(this.addContractUrl, body, {'headers':headers})
-       .pipe(
-          map((contract) => {
-            if (JSON.parse(JSON.stringify(contract)).status == 0) {
-              return contract;
-            }else{
-              return null;
-            }
-         }),
-         catchError(this.handleError)
-       );
-  }
+  // addContractStep1(datas:any) {
+  //   const headers = new HttpHeaders().append('Content-Type', 'application/json');
+  //   const body = JSON.stringify({contractName: '', contractNumber: ''});
+  //
+  //   return this.http.post<Contract>(this.addContractUrl, body, {'headers':headers})
+  //      .pipe(
+  //         map((contract) => {
+  //           if (JSON.parse(JSON.stringify(contract)).status == 0) {
+  //             return contract;
+  //           }else{
+  //             return null;
+  //           }
+  //        }),
+  //        catchError(this.handleError)
+  //      );
+  // }
 
   // Error handling
   handleError(error:any) {

@@ -11,30 +11,50 @@ export interface File {
   providedIn: 'root'
 })
 export class UploadService {
+  uploadFileUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
 
-  token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
-  organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.organization_id;
+  // token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+  // organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.organization_id;
 
-  uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`+ this.organization_id + `/single`;
-
-
-
+  // uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`+ this.organization_id + `/single`;
+  //
+  //
+  //
   constructor(private http: HttpClient) { }
 
-  uploadFile(datas: any) {
+  // uploadFile(datas: any) {
+  //
+  //   let formData = new FormData();
+  //   formData.append('file', datas.contractFile);
+  //
+  //   const headers = new HttpHeaders()
+  //     .append('Content-Type', 'multipart/form-data')
+  //     .append('Authorization', 'Bearer ' + this.token);
+  //
+  //   console.log(this.uploadFileUrl);
+  //   console.log(headers);
+  //   console.log(formData);
+  //   return this.http.post<File>(this.uploadFileUrl, formData, {'headers':headers});
+  // }
+
+  uploadFile(file: File): Observable<HttpEvent<any>> {
 
     let formData = new FormData();
-    formData.append('file', datas.contractFile);
+    // @ts-ignore
+    formData.append('upload', file);
 
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'multipart/form-data')
-      .append('Authorization', 'Bearer ' + this.token);
+    let params = new HttpParams();
 
-    console.log(this.uploadFileUrl);
-    console.log(headers);
-    console.log(formData);
-    return this.http.post<File>(this.uploadFileUrl, formData, {'headers':headers});
+    const options = {
+      params: params,
+      reportProgress: true,
+    };
+
+    const req = new HttpRequest('POST', this.uploadFileUrl, formData, options);
+    return this.http.request(req);
   }
+
+
 
 
 
@@ -43,16 +63,16 @@ export class UploadService {
   // }
 
   // Error handling
-  handleError(error:any) {
-    let errorMessage = '';
-    if(error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    window.alert(errorMessage);
-    return throwError(errorMessage);
- }
+ //  handleError(error:any) {
+ //    let errorMessage = '';
+ //    if(error.error instanceof ErrorEvent) {
+ //      // Get client-side error
+ //      errorMessage = error.error.message;
+ //    } else {
+ //      // Get server-side error
+ //      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+ //    }
+ //    window.alert(errorMessage);
+ //    return throwError(errorMessage);
+ // }
 }

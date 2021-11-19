@@ -3,6 +3,7 @@ import {variable} from "../../../../../config/variable";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Helper} from "../../../../../core/Helper";
 import {ContractService} from "../../../../../service/contract.service";
+import * as ContractCreateDetermine from '../../contract_data'
 
 @Component({
   selector: 'app-determine-signer',
@@ -18,6 +19,11 @@ export class DetermineSignerComponent implements OnInit {
   userForm: FormGroup;
   partnerForm : FormGroup
   submitted = false;
+  data_determine: any;
+  data_origanzation: any;
+  is_data_role_1: any = [];
+  is_data_role_2: any = [];
+  is_data_role_3: any = {};
 
   //dropdown
   signTypeList: Array<any> = [];
@@ -26,9 +32,10 @@ export class DetermineSignerComponent implements OnInit {
   get determineContract() { return this.determineDetails.controls; }
   constructor(
     private formBuilder: FormBuilder,
-    private contractService: ContractService
+    private contractService: ContractService,
   ) {
     this.step = variable.stepSampleContract.step2
+    this.data_determine = ContractCreateDetermine.data_create_contract_determine;
     //this.datas.determineDetails = this.determineDetails;
   }
   // data: any = [
@@ -67,6 +74,12 @@ export class DetermineSignerComponent implements OnInit {
   // ];
 
   ngOnInit(): void {
+    console.log(this.data_determine);
+    this.data_origanzation =  this.data_determine.filter((p: any) => p.type == 1)[0];
+    this.is_data_role_1 = this.data_origanzation.recipients.filter((p: any) => p.role == 1);
+    this.is_data_role_2 = this.data_origanzation.recipients.filter((p: any) => p.role == 2);
+    // this.is_data_role_3 = this.data_origanzation.recipients.filter((p: any) => p.role == 3);
+
     this.userForm = this.formBuilder.group({
       order: 1,
       name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
