@@ -36,6 +36,34 @@ export class UploadService {
     return this.http.post<File>(this.uploadFileUrl, formData, {'headers':headers});
   }
 
+  // postFile(datas: any){
+  //   let fileToUpload:File = datas.contractFile;
+  //   const headers = new HttpHeaders()
+  //     .append('Content-Type', 'multipart/form-data')
+  //     .append('Authorization', 'Bearer ' + this.token);
+  //   const formData: FormData = new FormData();
+  //   formData.append('file', fileToUpload, fileToUpload.name);
+  //   console.log(this.uploadFileUrl);
+  //   console.log(fileToUpload);
+  //   console.log(headers);
+  //   console.log(formData);
+  //   return this.http
+  //     .post(this.uploadFileUrl, formData, { headers: headers });
+  // }
+
+  // uploadFile2(url: string, file: File): Observable<HttpEvent<any>> {
+
+  //   let formData = new FormData();
+  //   formData.append('file', file);
+
+  //   const headers = new HttpHeaders()
+  //     .append('Content-Type', 'multipart/form-data')
+  //     .append('Authorization', 'Bearer ' + this.token);
+
+  //   const req = new HttpRequest('POST', url, formData, { headers: headers });
+  //   return this.http.request(req);
+  // }
+
 
 
   // getFiles(): Observable<any> {

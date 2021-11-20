@@ -50,6 +50,7 @@ export class InforContractComponent implements OnInit {
   contractConnect:any;
   sign_time:any;
   notes:any;
+  file:File;
 
   //error
   errorContractName:any = '';
@@ -135,6 +136,7 @@ export class InforContractComponent implements OnInit {
     if (file) {
       // giới hạn file upload lên là 5mb
       if (e.target.files[0].size <= 5000000) {
+        console.log(e.target.files[0].size);
         const file_name = file.name;
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
@@ -156,6 +158,7 @@ export class InforContractComponent implements OnInit {
           fileInput.value = '';
           this.datas.file_name = file_name;
           this.datas.contractFile = file;
+          this.file = file;
         } else {
           alert('Chỉ hỗ trợ file có định dạng PDF')
         }
@@ -247,7 +250,7 @@ export class InforContractComponent implements OnInit {
       console.log(data);
 
       //call API upload file
-      this.uploadService.uploadFile(this.datas).subscribe((data) => {
+      this.contractService.postFile(this.file).subscribe((data) => {
         console.log("File" + data);
 
         //next step

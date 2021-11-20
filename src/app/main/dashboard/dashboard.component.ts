@@ -32,12 +32,12 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.translateService.get(['menu.dashboard', 'chart.contract.created', 'chart.contract.received'])
-      .subscribe(translations => {
-        this.menuDashboard = translations['menu.dashboard'];
-        this.chartContractCreated = translations['chart.contract.created'];
-        this.chartContractReceived = translations['chart.contract.received'];
-
+    // this.translateService.get(['menu.dashboard', 'chart.contract.created', 'chart.contract.received'])
+    //   .subscribe(translations => {
+    //     this.menuDashboard = translations['menu.dashboard'];
+    //     this.chartContractCreated = translations['chart.contract.created'];
+    //     this.chartContractReceived = translations['chart.contract.received'];
+    //   });
         this.appService.setTitle("menu.dashboard");
         this.chartCreated = new Chart({
           colors: ['#058DC7', '#58A55C', '#ED1C24', '#FF710B'],
@@ -140,6 +140,6 @@ export class DashboardComponent implements OnInit {
             ]
           }]
       });
-    });
+
   }
 }

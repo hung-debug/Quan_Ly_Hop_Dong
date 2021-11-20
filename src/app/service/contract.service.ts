@@ -38,6 +38,23 @@ export class ContractService {
     return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
   }
 
+  organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.organization_id;
+  uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`+ this.organization_id + `/single`;
+  postFile(fileToUpload: File){
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'multipart/form-data')
+      .append('Authorization', 'Bearer ' + this.token);
+    const formData: FormData = new FormData();
+    formData.append('file', fileToUpload);
+    console.log(this.uploadFileUrl);
+    console.log(fileToUpload);
+    console.log(headers);
+    console.log(formData);
+    return this.http
+    .post(this.uploadFileUrl, formData, { headers: headers })
+    //.pipe(map((response: any) => response.json()))
+  }
+
   addContractStep1(datas:any) {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
