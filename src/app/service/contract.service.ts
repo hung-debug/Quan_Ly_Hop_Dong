@@ -31,9 +31,11 @@ export class ContractService {
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
 
-  public getContractList(): Observable<any> {
+  public getContractList(filter_type:any, filter_contract_no:any, filter_from_date:any,filter_to_date:any): Observable<any> {
+    let listContractUrl = this.listContractUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" +  this.datepipe.transform(filter_from_date, 'yyyy-MM-ddThh:mm:ssZ') + "&to_date=" +  this.datepipe.transform(filter_to_date, 'yyyy-MM-ddThh:mm:ssZ');
+    console.log(listContractUrl);
     const headers = { 'Authorization': 'Bearer ' + this.token}
-    return this.http.get<Contract[]>(this.listContractUrl, { headers }).pipe();
+    return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
   }
 
   addContractStep1(datas:any) {

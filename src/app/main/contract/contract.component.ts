@@ -29,10 +29,10 @@ export class ContractComponent implements OnInit {
   notificationPopup:string = '';
 
   //filter contract
-  contractType:any;
-  contractNumber:any;
-  startCreateDate:any;
-  endCreateDate:any;
+  filter_type:any = "";
+  filter_contract_no:any = "";
+  filter_from_date:any = "";
+  filter_to_date:any = "";
 
   // options sample with default values
   options: DatepickerOptions = {
@@ -86,10 +86,11 @@ export class ContractComponent implements OnInit {
     });
 
     //get list contract
-    this.contractService.getContractList().subscribe(data => {
+    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
       this.setPage();
+      console.log(this.contracts);
       console.log(this.pageTotal);
     });
 
@@ -140,8 +141,18 @@ export class ContractComponent implements OnInit {
     }
   }
 
+  search(){
+    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
+      this.contracts = data.entities;
+      this.pageTotal = data.total_elements;
+      this.setPage();
+      console.log(this.contracts);
+      console.log(this.pageTotal);
+    });
+  }
+
   autoSearch(event:any){
-    this.contractService.getContractList().subscribe(data => {
+    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
       this.contracts = this.transform(data.entities, event);
     });
   }
