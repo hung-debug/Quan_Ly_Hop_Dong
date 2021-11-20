@@ -32,13 +32,13 @@
         <label class="label">THUỘC TÍNH</label>
         <div class="name-text" *ngIf="isEnableText">
           <label class="label-require">Tên trường: *</label>
-          <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
+          <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')" [disabled]="disableText(this.objSignInfo)">
         </div>
         <div class="sign-unit-select">
           <label class="label-require">{{isEnableText || isChangeText ? "Người nhập" : "Người ký"}}: *</label>
           <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
             <option value="" hidden>Chọn người ký</option>
-            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}">{{getName(d)}}</option>
+            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
           </select>
         </div>
 
@@ -49,11 +49,11 @@
         <div class="location">
           <div class="location-drag">
             <div class="label" style="text-align: center">X:</div>
-            <input type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')" [ngModel]="getTrafX()" [readOnly]="false">
+            <input type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')" [ngModel]="getTrafX()" [readOnly]="isEnableSelect">
           </div>
           <div class="location-drag">
             <div class="label" style="text-align: center">Y:</div>
-            <input type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')" [ngModel]="getTrafY()" [readOnly]="false">
+            <input type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')" [ngModel]="getTrafY()" [readOnly]="isEnableSelect">
           </div>
         </div>
       </div>
@@ -63,11 +63,11 @@
         <div class="location">
           <div class="location-drag">
             <div class="label">Chiều dài</div>
-            <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')" [ngModel]="objSignInfo.offsetWidth" [readOnly]="false">
+            <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')" [ngModel]="objSignInfo.offsetWidth" [readOnly]="isEnableSelect">
           </div>
           <div class="location-drag">
             <div class="label">Chiều rộng</div>
-            <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')" [ngModel]="objSignInfo.offsetHeight" [readOnly]="false">
+            <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')" [ngModel]="objSignInfo.offsetHeight" [readOnly]="isEnableSelect">
           </div>
         </div>
       </div>
@@ -83,10 +83,10 @@
              style="z-index: -1"
              #itemElement
              (click)="getSignSelect(d)"
-             [ngClass]="{'resize-drag not-out-drop' : d.signType == 'partner'}"
+             [ngClass]="getContractSign(d)"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
-          <div *ngIf="d.signType == 'partner'" class="sig-img-daky" (click)="onCancel($event, d)">
+          <div *ngIf="d.signature_party != 'organization' || !d.position" class="sig-img-daky" (click)="onCancel($event, d)">
             <img src="assets/img/clear.svg" alt="">
             <img src="assets/img/border-clear.svg" alt="">
           </div>

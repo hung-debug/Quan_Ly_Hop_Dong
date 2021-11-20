@@ -5,20 +5,23 @@
 <!--      <td *ngFor="let item of d.name_signature">{{item.name}}: {{item.}}</td>-->
 <!--    </tr>-->
 <!--  </table>-->
-  <div *ngFor="let d of data.contract_related">
-    <div *ngFor="let item of d.name_signature" style="display: flex; justify-content: space-between; text-align: center; margin-bottom: 10px">
-      <div style="display: flex; flex-direction: column">
-        <span>{{item.name}}</span>
-        <span style="color: #8B8B8B">({{d.name_company}})</span>
-      </div>
-      <div style="display: flex; flex-direction: column">
-        <span style="color: #106DB6">{{item.statusApprove}}</span>
-        <span style="color: #8B8B8B">({{item.responseTime}})</span>
+  <div style="max-height: 405px; overflow: auto;">
+    <div *ngFor="let d of is_list_name">
+      <div style="display: flex; justify-content: space-between; text-align: center; margin-bottom: 10px">
+        <div style="display: flex; flex-direction: column">
+          <span>{{d.name}}</span>
+          <span style="color: #8B8B8B">({{d.name_company}})</span>
+        </div>
+        <div style="display: flex; flex-direction: column">
+          <span style="color: #106DB6">Đã ký</span>
+          <span style="color: #8B8B8B">(08:20 12/10/12021)</span>
+        </div>
       </div>
     </div>
   </div>
+
 </div>
 
-<div class="footer-btn" style="text-align: center;">
+<div class="footer-btn" style="text-align: center; margin-top: 20px">
   <button style="width: 120px; height: 40px; background-color: #8B8B8B; border-radius: 5px; outline: none; color: white; border: 1px solid #8B8B8B" (click)="acceptRequest()">Thoát</button>
 </div>

@@ -8,10 +8,11 @@ import {Router} from "@angular/router";
   styleUrls: ['./processing-handle-econtract.component.scss']
 })
 export class ProcessingHandleEcontractComponent implements OnInit {
-
+  is_list_name: any = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
-      contract_related: any;
+      userForm: any;
+      partnerForm: any;
       content: any},
     public router: Router,
     public dialog: MatDialog,
@@ -21,6 +22,46 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
+    this.data.userForm.userDocs.forEach((item: any) => {
+      item['name_company'] = this.data.userForm.name;
+      this.is_list_name.push(item);
+    })
+    this.data.userForm.userSigns.forEach((item: any) => {
+      item['name_company'] = this.data.userForm.name;
+      this.is_list_name.push(item)
+    })
+    this.data.userForm.userViews.forEach((item: any) => {
+      item['name_company'] = this.data.userForm.name;
+      this.is_list_name.push(item);
+    })
+    this.data.partnerForm.partnerArrs.forEach((element: any) => {
+      if (element.partnerDocs.length > 0)
+      element.partnerDocs.forEach((item: any) => {
+        item['name_company'] = element.name
+        this.is_list_name.push(item)
+      })
+      if (element.partnerLeads.length > 0)
+      element.partnerLeads.forEach((item: any) => {
+        item['name_company'] = element.name
+        this.is_list_name.push(item);
+      })
+      if (element.partnerSigns.length > 0)
+      element.partnerSigns.forEach((item: any) => {
+        item['name_company'] = element.name
+        this.is_list_name.push(item);
+      })
+      if (element.partnerUsers.length > 0)
+      element.partnerUsers.forEach((item: any) => {
+        item['name_company'] = element.name
+        this.is_list_name.push(item);
+      })
+      if (element.partnerViews.length > 0)
+      element.partnerViews.forEach((item: any) => {
+        item['name_company'] = element.name
+        this.is_list_name.push(item);
+      })
+    })
+    console.log(this.is_list_name)
   }
 
   acceptRequest() {

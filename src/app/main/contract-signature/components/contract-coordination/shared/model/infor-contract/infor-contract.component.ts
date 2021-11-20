@@ -5,11 +5,12 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import { NgbCalendar, NgbDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import {variable} from "../../../../../../../config/variable";
 import { Observable } from 'rxjs';
-import {AddContractComponent} from "../../../../../../contract/add-contract/add-contract.component";
+import {AddContractComponent} from "../../../add-contract/add-contract.component";
 import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import { ContractService } from 'src/app/service/contract.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-infor-contract',
@@ -41,13 +42,14 @@ export class InforContractComponent implements OnInit {
   dropdownTypeSettings: any = {};
   dropdownConnectSettings: any = {};
 
-  contractName:any = '';
-  contractNumber:any;
-  contractType:any;
+  id:any;
+  name:any = '';
+  code:any;
+  type_id:any;
   attachFile:any;
   contractConnect:any;
-  dateDeadline:any;
-  comment:any;
+  sign_time:any;
+  notes:any;
 
   //error
   errorContractName:any = '';
@@ -57,6 +59,7 @@ export class InforContractComponent implements OnInit {
     private formBuilder: FormBuilder,
     private uploadService : UploadService,
     private contractService: ContractService,
+    public datepipe: DatePipe,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -79,12 +82,12 @@ export class InforContractComponent implements OnInit {
   };
   ngOnInit(): void {
 
-    this.contractName = this.datas.contractName ? this.datas.contractName : '';
-    this.contractNumber = this.datas.contractNumber ? this.datas.contractNumber : '';
-    this.contractType = this.datas.contractType ? this.datas.contractType : '';
+    this.name = this.datas.name ? this.datas.name : '';
+    this.code = this.datas.code ? this.datas.code : '';
+    this.type_id = this.datas.type_id ? this.datas.type_id : '';
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : '';
-    this.dateDeadline = this.datas.dateDeadline ? this.datas.dateDeadline : new Date();
-    this.comment = this.datas.comment ? this.datas.comment : '';
+    this.sign_time = this.datas.sign_time ? this.datas.sign_time : new Date();
+    this.notes = this.datas.notes ? this.datas.notes : '';
 
     this.contractTypeList = [
       {
@@ -136,19 +139,23 @@ export class InforContractComponent implements OnInit {
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension.toLowerCase() == 'pdf') {
-          const fileReader = new FileReader();
-          fileReader.readAsDataURL(file);
-          fileReader.onload = (e) => {
-            //@ts-ignore
-            const base64result = fileReader.result.toString().split(',')[1];
-            const fileInput: any = document.getElementById('file-input');
-            fileInput.value = '';
-            this.datas.file_content = base64result;
-            this.datas.file_name = file_name;
-            this.datas.contractFile = file;
-            // this.datas.documents['file_content_docx'] = null;
-            // this.pdfSrc = Helper._getUrlPdf(base64result);
-          };
+          // const fileReader = new FileReader();
+          // fileReader.readAsDataURL(file);
+          // fileReader.onload = (e) => {
+          //   //@ts-ignore
+          //   const base64result = fileReader.result.toString().split(',')[1];
+          //   const fileInput: any = document.getElementById('file-input');
+          //   fileInput.value = '';
+          //   this.datas.file_content = base64result;
+          //   this.datas.file_name = file_name;
+          //   this.datas.contractFile = file;
+          //   // this.datas.documents['file_content_docx'] = null;
+          //   // this.pdfSrc = Helper._getUrlPdf(base64result);
+          // };
+          const fileInput: any = document.getElementById('file-input');
+          fileInput.value = '';
+          this.datas.file_name = file_name;
+          this.datas.contractFile = file;
         } else {
           alert('Chỉ hỗ trợ file có định dạng PDF')
         }
@@ -212,40 +219,63 @@ export class InforContractComponent implements OnInit {
   //--valid data step 1
   validData() {
     this.clearError();
-    // if (!this.contractName) {
-    //   this.errorContractName = 'Tên hợp đồng không được để trống!';
-    //   return false;
-    // }
-    // if (!this.datas.file_content) {
-    //   this.errorContractFile = 'File hợp đồng không được để trống!';
-    //   return false;
-    // }
+    if (!this.name) {
+      this.errorContractName = 'Tên hợp đồng không được để trống!';
+      return false;
+    }
+    if (!this.datas.contractFile) {
+      this.errorContractFile = 'File hợp đồng không được để trống!';
+      return false;
+    }
 
     return true
   }
 
   clearError(){
-    if (this.contractName) {
+    if (this.name) {
       this.errorContractName = '';
     }
-    if (this.datas.file_content) {
+    if (this.datas.contractFile) {
       this.errorContractFile = '';
     }
   }
 
+  callAPI() {
+    //call API step 1
+    this.contractService.addContractStep1(this.datas).subscribe((data) => {
+        this.datas.id = data?.id;
+        console.log(data);
+
+        //call API upload file
+        // this.uploadService.uploadFile(this.datas).subscribe((data) => {
+        //   console.log("File" + data);
+
+        //next step
+        this.step = variable.stepSampleContract.step2;
+        this.datas.stepLast = this.step
+        this.nextOrPreviousStep(this.step);
+        console.log(this.datas);
+        // },
+        // error => {
+        //   console.log("false file");
+        //   return false;
+        // }
+        // );
+
+      },
+      error => {
+        console.log("false content");
+        return false;
+      }
+    );
+
+  }
+
   // --next step 2
   next() {
-      // gán value step 1 vào datas
-      this.datas.contractName = this.contractName;
-      this.datas.contractNumber = this.contractNumber;
-      this.datas.contractType = this.contractType;
-      this.datas.contractConnect = this.contractConnect;
-      this.datas.dateDeadline = this.dateDeadline;
-      this.datas.comment = this.comment;
-
-      this.step = variable.stepSampleContract.step2;
-      this.datas.stepLast = this.step
-      this.nextOrPreviousStep(this.step);
+    this.step = variable.stepSampleContract.step2;
+    this.datas.stepLast = this.step
+    this.nextOrPreviousStep(this.step);
 
   }
 
