@@ -676,65 +676,228 @@
 <!--</div>-->
 
 
-<div class="container-fluid" style="display: flex">
-  <div class="col-md-1">
-    <input style="width: 25px; height: 25px" type="number" [value]="this.data_origanzation.type">
-  </div>
-  <div class="col-md-11" style="display: flex; flex-direction: column">
-    <div style="display: flex">
-      <span>TỔ CHỨC CỦA TÔI - <input type="text" [(ngModel)]="this.data_origanzation.name"></span>
+<div class="container-fluid">
+  <div style="display: flex">
+    <div class="col-md-1">
+      <input style="width: 25px; height: 25px" type="number" [value]="this.data_organization.type">
     </div>
-    <div style="border: 1px solid #87CAFF; background-color: #F9FDFF; border-radius: 10px">
-      <div class="nguoi-xem-xet">
-        <h3>Người xem xét</h3>
-        <div  *ngFor="let d of is_data_role_1" style="display: flex">
-          <input style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
-          <div class="data-nguoi-xem-xet" style="display: flex">
-            <div>
-              <div>Họ tên: *</div>
-              <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+    <div class="col-md-11" style="display: flex; flex-direction: column">
+      <div style="display: flex">
+        <span>TỔ CHỨC CỦA TÔI - <input type="text" [(ngModel)]="this.data_organization.name"></span>
+      </div>
+      <div style="border: 1px solid #87CAFF; background-color: #F9FDFF; border-radius: 10px">
+        <div class="nguoi-xem-xet" style="border: 1px solid #ddd">
+          <h3 style="background-color: #C7D0E9">Người xem xét</h3>
+          <div *ngFor="let d of is_origanzation_reviewer; let index = index" style="display: flex; background-color: #E0E6F3">
+            <input style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
+            <div class="data-nguoi-xem-xet" style="display: flex">
+              <div>
+                <div>Họ tên: *</div>
+                <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+              </div>
+              <div>
+                <div>Email: *</div>
+                <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+              </div>
             </div>
-            <div>
-              <div>Email: *</div>
-              <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+            <button (click)="deleteReviewer(index)">Xóa</button>
+          </div>
+
+          <div><u class="label" style="color: #106DB6; background-color: #E0E6F3" (click)="addOriganzationReviewer()">Thêm
+            người xem xét</u></div>
+        </div>
+        <div class="nguoi-ky">
+          <h3>Người ký</h3>
+          <div *ngFor="let d of is_origanzation_signature" style="display: flex; background-color: #E0E6F3">
+            <input style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
+            <div style="display: flex; flex-direction: column">
+              <div class="data-nguoi-ky" style="display: flex">
+                <div>
+                  <div>Họ tên: *</div>
+                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+                </div>
+                <div>
+                  <div>Email: *</div>
+                  <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+                </div>
+              </div>
+              <div class="data-nguoi-ky" style="display: flex">
+                <div>
+                  <div>Loại ký: *</div>
+                  <select class="form-select" id="select-dropdown" aria-label="Default select example">
+                    <option value="" hidden>Chọn Loại ký</option>
+                    <option *ngFor="let data of d.sign_type, let i = index" value="{{data.id}}">{{data.name}}</option>
+                  </select>
+                </div>
+                <div>
+                  <input type="checkbox" [value]="1" [ngModel]="d.is_otp">
+                  <span>OTP</span>
+                </div>
+                <div>
+                  <div>Số điện thoại: *</div>
+                  <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div><u class="label" style="color: #106DB6; background-color: #E0E6F3" (click)="addOriganzationSignature()">Thêm
+            người ký</u></div>
+        </div>
+        <div class="van-thu">
+          <h3>Văn thư</h3>
+          <div style="display: flex; background-color: #E0E6F3">
+            <input style="width: 25px; height: 25px" type="number" [(ngModel)]="is_origanzation_document.ordering">
+            <div class="data-nguoi-ky" style="display: flex; flex-direction: column">
+              <div style="display: flex">
+                <div>
+                  <div>Họ tên: *</div>
+                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="is_origanzation_document.name">
+                </div>
+                <div>
+                  <div>Email: *</div>
+                  <input type="text" placeholder="Nhập Email" [(ngModel)]="is_origanzation_document.email">
+                </div>
+              </div>
+              <div>
+                <div>
+                  <div>Loại ký: *</div>
+                  <select class="form-select" aria-label="Default select example">
+                    <option value="" hidden>Chọn Loại ký</option>
+                    <option *ngFor="let data of is_origanzation_document.sign_type, let i = index"
+                            value="{{data.id}}">{{data.name}}</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="nguoi-ky">
-        <h3>Người xem xét</h3>
-        <div  *ngFor="let d of is_data_role_2" style="display: flex">
-          <input style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
-          <div class="data-nguoi-ky" style="display: flex">
-            <div>
-              <div>Họ tên: *</div>
-              <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
-            </div>
-            <div>
-              <div>Email: *</div>
-              <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+    </div>
+  </div>
+
+  <!--  Đối tác-->
+    <div *ngFor="let item of getDataPartner()" style="display: flex">
+      <div class="col-md-1">
+        <input style="width: 25px; height: 25px" type="number" [value]="item.ordering">
+      </div>
+      <div class="col-md-11" style="display: flex; flex-direction: column">
+        <div style="display: flex">
+          <span>Đối Tác - <input type="text" [(ngModel)]="item.name"></span>
+        </div>
+        <div style="border: 1px solid #87CAFF; background-color: #F9FDFF; border-radius: 10px">
+<!--          <div class="row">-->
+<!--            <div class="radio label_type">-->
+<!--              <label><input type="radio" name="type" [value]="item.selected" [ngModel]="item.selected" (ngModelChange)="changePartner($event, 2, item)">-->
+<!--                <span> {{'organization' | translate}}</span></label>-->
+<!--            </div>-->
+<!--            <div class="radio label_type">-->
+<!--              <label><input type="radio" name="type" [value]="item.selected" [ngModel]="item.selected" checked (ngModelChange)="changePartner($event, 3, item)">-->
+<!--                <span> {{'personal' | translate}}</span></label>-->
+<!--            </div>-->
+<!--          </div>-->
+          <div class="nguoi-dieu-phoi" style="border: 1px solid #ddd">
+            <h3 style="background-color: #C7D0E9">Người điều phối</h3>
+            <div *ngFor="let d of getPartnerCoordination(item)" style="display: flex; background-color: #E0E6F3">
+              <input style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
+              <div class="data-nguoi-xem-xet" style="display: flex">
+                <div>
+                  <div>Họ tên: *</div>
+                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+                </div>
+                <div>
+                  <div>Email: *</div>
+                  <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+                </div>
+              </div>
             </div>
           </div>
-          <div class="data-nguoi-ky" style="display: flex">
-            <div>
-              <div>Loại ký: *</div>
-              <select class="form-select" id="select-dropdown" aria-label="Default select example">
-                <option value="" hidden>Chọn Loại ký</option>
-                <option *ngFor="let data of d.sign_type, let i = index" value="{{d.id}}">{{d.name}}</option>
-              </select>
+          <div class="nguoi-xem-xet">
+            <h3>Người xem xét</h3>
+            <div *ngFor="let d of getPartnerReviewer(item)" style="display: flex; background-color: #E0E6F3">
+              <input style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
+              <div style="display: flex; flex-direction: column">
+                <div class="data-nguoi-ky" style="display: flex">
+                  <div>
+                    <div>Họ tên: *</div>
+                    <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+                  </div>
+                  <div>
+                    <div>Email: *</div>
+                    <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <input type="checkbox" [value]="1" [ngModel]="d.is_otp">
-              <span>OTP</span>
+            <div><u class="label" style="color: #106DB6; background-color: #E0E6F3" (click)="addPartnerReviewer(item)">Thêm người ký</u></div>
+          </div>
+
+          <div class="nguoi-ky">
+            <h3>Người ký</h3>
+            <div *ngFor="let d of getPartnerSignature(item)" style="display: flex; background-color: #E0E6F3">
+              <input style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
+              <div style="display: flex; flex-direction: column">
+                <div class="data-nguoi-ky" style="display: flex">
+                  <div>
+                    <div>Họ tên: *</div>
+                    <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+                  </div>
+                  <div>
+                    <div>Email: *</div>
+                    <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+                  </div>
+                </div>
+                <div class="data-nguoi-ky" style="display: flex">
+                  <div>
+                    <div>Loại ký: *</div>
+                    <select class="form-select" id="select-dropdown" aria-label="Default select example">
+                      <option value="" hidden>Chọn Loại ký</option>
+                      <option *ngFor="let data of d.sign_type, let i = index" value="{{data.id}}">{{data.name}}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <input type="checkbox" [value]="1" [ngModel]="d.is_otp">
+                    <span>OTP</span>
+                  </div>
+                  <div>
+                    <div>Số điện thoại: *</div>
+                    <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <div>Số điện thoại: *</div>
-              <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
+            <div><u class="label" style="color: #106DB6; background-color: #E0E6F3" (click)="addPartnerSignature(item)">Thêm người ký</u></div>
+          </div>
+
+          <div class="van-thu">
+            <h3>Văn thư</h3>
+            <div style="display: flex; background-color: #E0E6F3">
+              <input style="width: 25px; height: 25px" type="number" [(ngModel)]="getPartnerDocument(item).ordering">
+              <div class="data-nguoi-ky" style="display: flex; flex-direction: column">
+                <div style="display: flex">
+                  <div>
+                    <div>Họ tên: *</div>
+                    <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="getPartnerDocument(item).name">
+                  </div>
+                  <div>
+                    <div>Email: *</div>
+                    <input type="text" placeholder="Nhập Email" [(ngModel)]="getPartnerDocument(item).email">
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <div>Loại ký: *</div>
+                    <select class="form-select" aria-label="Default select example">
+                      <option value="" hidden>Chọn Loại ký</option>
+                      <option *ngFor="let data of getPartnerDocument(item).sign_type, let i = index"
+                              value="{{data.id}}">{{data.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="van-thu"></div>
     </div>
-  </div>
+
 </div>
