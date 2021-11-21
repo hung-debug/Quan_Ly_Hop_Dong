@@ -289,22 +289,6 @@ export class ContractService {
             "password": "", // pw click từ link email
             "is_otp": 1, // select otp
             "sign_type": [ // hình thức ký
-              {
-                "id": 1,
-                "name": "Ký ảnh"
-              },
-              {
-                "id": 2,
-                "name": "Ký số bằng USB token"
-              },
-              {
-                id: 3,
-                name: "Ký số bằng sim KPI"
-              },
-              {
-                id: 4,
-                name: "Ký số bằng HSM"
-              }
             ]
           },
           // Dữ liệu người ký
@@ -319,22 +303,6 @@ export class ContractService {
             "password": "ad", // pw click từ link email
             "is_otp": 1, // select otp
             "sign_type": [ // hình thức ký
-              {
-                "id": 1,
-                "name": "Ký ảnh"
-              },
-              {
-                "id": 2,
-                "name": "Ký số bằng USB token"
-              },
-              {
-                id: 3,
-                name: "Ký số bằng sim KPI"
-              },
-              {
-                id: 4,
-                name: "Ký số bằng HSM"
-              }
             ]
           },
           // dữ liệu văn thư
@@ -349,22 +317,6 @@ export class ContractService {
             "password": "", // pw click từ link email
             "is_otp": 1, // select otp
             "sign_type": [ // hình thức ký
-              {
-                "id": 1,
-                "name": "Ký ảnh"
-              },
-              {
-                "id": 2,
-                "name": "Ký số bằng USB token"
-              },
-              {
-                id: 3,
-                name: "Ký số bằng sim KPI"
-              },
-              {
-                id: 4,
-                name: "Ký số bằng HSM"
-              }
             ]
           },
         ],
@@ -516,24 +468,7 @@ export class ContractService {
             "username": "",
             "password": "",
             "is_otp": 1,
-            "sign_type": [
-              {
-                "id": 1,
-                "name": "Ký ảnh"
-              },
-              {
-                "id": 2,
-                "name": "Ký số bằng USB token"
-              },
-              {
-                id: 3,
-                name: "Ký số bằng sim KPI"
-              },
-              {
-                id: 4,
-                name: "Ký số bằng HSM"
-              }
-            ]
+            "sign_type": []
           },
           // người xem xét
           {
@@ -546,24 +481,7 @@ export class ContractService {
             "username": "",
             "password": "",
             "is_otp": 1,
-            "sign_type": [
-              {
-                "id": 1,
-                "name": "Ký ảnh"
-              },
-              {
-                "id": 2,
-                "name": "Ký số bằng USB token"
-              },
-              {
-                id: 3,
-                name: "Ký số bằng sim KPI"
-              },
-              {
-                id: 4,
-                name: "Ký số bằng HSM"
-              }
-            ]
+            "sign_type": []
           },
           // người ký
           {
@@ -576,24 +494,7 @@ export class ContractService {
             "username": "",
             "password": "",
             "is_otp": 1,
-            "sign_type": [
-              {
-                "id": 1,
-                "name": "Ký ảnh"
-              },
-              {
-                "id": 2,
-                "name": "Ký số bằng USB token"
-              },
-              {
-                id: 3,
-                name: "Ký số bằng sim KPI"
-              },
-              {
-                id: 4,
-                name: "Ký số bằng HSM"
-              }
-            ]
+            "sign_type": []
           },
           // văn thư
           {
@@ -606,24 +507,7 @@ export class ContractService {
             "username": "",
             "password": "",
             "is_otp": 1,
-            "sign_type": [
-              {
-                "id": 1,
-                "name": "Ký ảnh"
-              },
-              {
-                "id": 2,
-                "name": "Ký số bằng USB token"
-              },
-              {
-                id: 3,
-                name: "Ký số bằng sim KPI"
-              },
-              {
-                id: 4,
-                name: "Ký số bằng HSM"
-              }
-            ]
+            "sign_type": []
           }
         ],
       }
