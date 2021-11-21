@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { map, catchError, retry } from 'rxjs/operators';
 import {Helper} from "../core/Helper";
+import {BehaviorSubject} from "rxjs/index";
 
 export interface Contract {
   status: string
@@ -16,6 +17,7 @@ export class ContractSignatureService {
   addContractUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
   errorData:any = {};
   redirectUrl: string = '';
+  public imageSignObs$: BehaviorSubject<string> = new BehaviorSubject('');
 
   constructor(private http: HttpClient) { }
 
@@ -23,8 +25,20 @@ export class ContractSignatureService {
     return this.http.get("/assets/data-contract-received.json");
   }
 
+  public getSignatureListUser(): Observable<any> {
+    return this.http.get("/assets/data-signature-user.json");
+  }
+
   public getContractDetail(): Observable<any> {
     return this.http.get("/assets/data-contract-sign.json");
+  }
+
+  getProfileObs(): Observable<string> {
+    return this.imageSignObs$.asObservable();
+  }
+
+  setImageObs(image: string) {
+    this.imageSignObs$.next(image);
   }
 
   objDefaultSampleContract() {

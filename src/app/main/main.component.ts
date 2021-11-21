@@ -90,8 +90,8 @@ export class MainComponent implements OnInit {
     //update title by component
     if (this.router.url.includes('/main/form-contract/add') ||
       this.router.url.includes('/coordinates-contract') ||
-      this.router.url.includes('contract-signature/receive/wait-processing/consider-contract') ||
-      this.router.url.includes('contract-signature/receive/wait-processing/personal-signature-contract')
+      this.router.url.includes('/consider-contract') ||
+      this.router.url.includes('/personal-signature-contract')
     ) {
       this.isRouterContractNew = false;
     } else this.isRouterContractNew = true;

@@ -26,6 +26,8 @@ import {ConfirmSignOtpComponent} from "./confirm-sign-otp/confirm-sign-otp.compo
 import {ImageDialogSignComponent} from "./image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "./pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "./hsm-dialog-sign/hsm-dialog-sign.component";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-consider-contract',

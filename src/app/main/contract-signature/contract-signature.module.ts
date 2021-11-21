@@ -35,6 +35,7 @@ import { PkiDialogSignComponent } from './components/consider-contract/pki-dialo
 import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
 import {NgxSelectModule} from "ngx-select-ex";
 import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialog-sign/hsm-dialog-sign.component';
+import {AngularSignaturePadModule} from "@almothafar/angular-signature-pad";
 
 export const contractSignatureRoutes: Routes = [
   { path: 'receive/wait-processing/consider-contract/:id', component: ConsiderContractComponent },
@@ -87,6 +88,7 @@ export const contractSignatureRoutes: Routes = [
         MatDialogModule,
         SweetAlert2Module,
         NgxSelectModule,
+        AngularSignaturePadModule,
         // ContractModule
     ],
   providers: [NoAuthGuard]

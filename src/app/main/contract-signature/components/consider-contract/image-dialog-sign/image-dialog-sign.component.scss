@@ -39,3 +39,209 @@
     }
   }
 }
+
+.image-sign-acc {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #E9F4FD;
+  height: 42vh;
+}
+
+.image-sign-acc {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 42vh;
+}
+
+.select-signature-acc {
+  width: 30%;
+}
+
+.align-select {
+  margin-left: 2%;
+}
+::ng-deep .multiselect-dropdown {
+  .dropdown-btn {
+    border: 1px solid #87CAFF !important;
+    height: 38px;
+  }
+}
+
+//upload file
+input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  color: #106DB6;
+  width: 100%;
+  border-radius: 20px;
+}
+
+//label type contract
+.label_type{
+  text-align: center;
+  font-weight: 500;
+  padding: 10px;
+}
+
+//label item form
+.label_item{
+  padding: 12px 0px 3px;
+}
+
+.require_star{
+  color: red;
+}
+
+:host ::ng-deep {
+  .selected-item {
+    max-width: 100% !important;
+  }
+}
+
+.select-file-contract {
+  display: flex;
+  justify-content: space-between;
+  width : 100%;
+  .file-approve {
+    width : 100%;
+    .select-contract {
+      position: relative;
+      width: 100%;
+      input {
+        outline: none;
+        width: 100%;
+        height: 38px;
+        border-radius: 5px;
+        border: 1px solid #87CAFF;
+        padding-left: 10px;
+        cursor: pointer;
+      }
+      img {
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 25px;
+      }
+    }
+  }
+}
+
+.file-contract{
+  height: 80px;
+  border: 1px solid #87CAFF;
+  cursor: pointer;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.form-control{
+  border: 1px solid #87CAFF;
+}
+
+button {
+  //padding: 15px;
+  border: 0px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  width: 120px;
+  height: 40px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #106DB6;
+  font-size: 13px;
+}
+
+//style button
+.action-button {
+  width: 100px;
+  background: #106DB6;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
+}
+
+.draft-button {
+  width: 100px;
+  background: #FCAF17;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 10px 5px;
+}
+
+.footer-infor-contract {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .content_footer{
+    //text-align: center;
+    //margin: 10px;
+    color:#0160AE;
+    font-size: 13px;
+    font-weight: 500;
+  }
+}
+
+::ng-deep .date-picker {
+  width: 100%;
+  outline:0px;
+  .datepicker-container{
+    width: 100%;
+    input {
+      display: block !important;
+      width: 100% !important;
+      height: 38px !important;
+      padding: .375rem .75rem !important;
+      font-size: inherit !important;
+      line-height: 1.5 !important;
+      color: #495057 !important;
+      background-color: #fff !important;
+      background-clip: padding-box !important;
+      border: 1px solid #87CAFF !important;
+      border-radius: .25rem !important;
+      transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+      outline:0px !important;
+    }
+  }
+}
+
+.error-detail{
+  font-size: inherit;
+  padding: 7px;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+
+.input-line {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.input-img {
+  top: 10px;
+  right: 25px;
+  position: absolute;
+}
+.input-text {
+  border: 0;
+  width: 100%;
+  outline:0px;
+}

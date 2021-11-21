@@ -1,10 +1,13 @@
 <div *ngIf="sign.sign_unit == 'chu_ky_so' || sign.sign_unit == 'chu_ky_anh'" class="content">
-  <div class="skeleton-sign" (click)="doSign()" *ngIf="!checkShowEdit">
+  <div class="skeleton-sign" (click)="doSign()" *ngIf="!checkShowEdit && !imageSignConfirm">
     <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" alt="mobifone.contract">
     <span style="color: #106DB6;">{{sign.sign_unit == 'chu_ky_anh' ? 'Chữ ký ảnh' : 'Chữ ký số'}}</span>
   </div>
-  <div class="skeleton-sign" (click)="doSign()" *ngIf="checkShowEdit">
+  <div class="skeleton-sign" (click)="doSign()" *ngIf="checkShowEdit && !imageSignConfirm">
     <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" alt="mobifone.contract">
+  </div>
+  <div *ngIf="imageSignConfirm">
+    <img [src]="imageSignConfirm" alt="mobifone.contract" width="100px" height="54px">
   </div>
 
 </div>
