@@ -177,3 +177,45 @@ input[type=number] {
   outline: 0;
   font-size: 14px;
 }
+//
+
+.contract-determine {
+  display: flex;
+  align-items: center;
+  .contract__content--title {
+    color: #106DB6;
+    align-items: center;
+    margin-bottom: 8px;
+    > div {
+      width: 158px;
+    }
+    > input {
+      height: 37px;
+      width: 100%;
+      border-radius: 7px;
+      border: 1px solid #106DB6;
+    }
+  }
+
+  .contract__content--participants {
+    border-radius: 10px;
+    border: 1px solid #87CAFF;
+    background-color: #F9FDFF;
+    padding: 19px 10px 13px 10px;
+    .participants--content {
+      display: flex;
+      background-color: #FFFFFF;
+    }
+  }
+
+  .text-color {
+    background-color: #FFFFFF;
+  }
+}
+
+.contract-total {
+  border: 1px solid #106DB6;
+  color: #106DB6;
+  text-align: center;
+  border-radius: 5px;
+}

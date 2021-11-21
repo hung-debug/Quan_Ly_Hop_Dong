@@ -4,6 +4,7 @@ import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Helper} from "../../../../../core/Helper";
 import {ContractService} from "../../../../../service/contract.service";
 import * as ContractCreateDetermine from '../../contract_data'
+import {elements} from "@interactjs/snappers/all";
 
 @Component({
   selector: 'app-determine-signer',
@@ -70,7 +71,7 @@ export class DetermineSignerComponent implements OnInit {
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4)[0];
 
     // data đối tác
-    // this.data_parnter_organization =  this.is_determine_clone.filter((p: any) => p.type == 2)[0];
+    this.data_parnter_organization =  this.is_determine_clone.filter((p: any) => p.type == 2);
     // this.is_partner_origanzation_coordinator= this.data_parnter_organization.recipients.filter((p: any) => p.role == 2);
     // this.is_partner_origanzation_reviewer= this.data_parnter_organization.recipients.filter((p: any) => p.role == 1);
     // this.is_partner_origanzation_signature = this.data_parnter_organization.recipients.filter((p: any) => p.role == 3);
@@ -301,9 +302,9 @@ export class DetermineSignerComponent implements OnInit {
     })
   }
 
-  addPartner() {
-    this.partnerArrs().push(this.newPartner());
-  }
+  // addPartner() {
+  //   this.partnerArrs().push(this.newPartner());
+  // }
 
   //dropdown contract type
   get getSignTypeItems() {
@@ -571,12 +572,23 @@ export class DetermineSignerComponent implements OnInit {
     this.getDataPartner(number_type);
   }
 
-  changeData() {
-    this.getDataPartner(3, 'abc');
+  isOriganzationReviewer() {
+    return (this.is_determine_clone.filter((p: any) => p.type == 1)[0]).recipients.filter((p: any) => p.role == 1);
   }
 
+  isOriganzationSignature() {
+    return (this.is_determine_clone.filter((p: any) => p.type == 1)[0]).recipients.filter((p: any) => p.role == 3);
+  }
+  // recipients.filter((p: any) => p.role == 1)
+
+  getOrganization() {
+    return this.is_determine_clone.filter((p: any) => p.type == 1)[0];
+  }
+
+
   getDataPartner(number_type?: number, name?: string) {
-    return this.is_determine_clone.filter((p: any) => p.type == 2);
+    let data = [...this.is_determine_clone];
+    return data.filter((p: any) => p.type == 2);
   }
 
   getPartnerCoordination(item: any) {
@@ -600,10 +612,9 @@ export class DetermineSignerComponent implements OnInit {
     let data_determine_add = [];
     data_determine_add = [...this.contractService.getDataDetermine()];
     let data_organization = data_determine_add.filter((p: any) => p.type == 1)[0];
-    // this.is_origanzation_reviewer = data_organization.recipients.filter((p: any) => p.role == 1);
     let data = (data_organization.recipients.filter((p: any) => p.role == 1))[0];
     data.ordering = this.is_origanzation_reviewer.length + 1;
-    this.is_origanzation_reviewer.push(data);
+    this.is_origanzation_reviewer.push(data)
   }
 
   addOriganzationSignature() {
@@ -613,6 +624,11 @@ export class DetermineSignerComponent implements OnInit {
     let data = (data_organization.recipients.filter((p: any) => p.role == 3))[0];
     data.ordering = this.is_origanzation_signature.length + 1;
     this.is_origanzation_signature.push(data);
+    // this.is_determine_clone.forEach((p: any) => {
+    //   if (p.type == 1) {
+    //     p.recipients.push(data);
+    //   }
+    // })
   }
 
   addPartnerReviewer(item: any) {
@@ -620,13 +636,18 @@ export class DetermineSignerComponent implements OnInit {
     data_determine_add = [...this.contractService.getDataDetermine()];
     let data_partner = data_determine_add.filter((p: any) => p.type == 2)[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 1))[0];
-    let count_data = this.getPartnerReviewer(item)
+    // let count_data = this.getPartnerReviewer(item)
+    let count_data = item.recipients.filter((p: any) => p.role == 1);
     data.ordering = count_data.length + 1;
-    this.is_determine_clone.forEach((element: any, index: number) => {
-      if (index == item.ordering) {
-        element.recipients.push(data)
-      }
+    this.data_parnter_organization.forEach((element: any, index: number) => {
+      // const items = element.recipients.filter((p: any) => p.role == 1);
+      //   element.recipients.forEach((item: any, index: any) => {
+      //     if (item.role == 1) {
+            element.recipients.push(data);
+          // }
+        // })
     })
+    // this.data_parnter_organization.recipients.push(data);
   }
 
   addPartnerSignature(item: any) {
@@ -643,11 +664,91 @@ export class DetermineSignerComponent implements OnInit {
     })
   }
 
-  deleteReviewer(index: any) {
-    this.is_origanzation_reviewer.splice(index, 1);
+  deleteOriganzationReviewer(i: any) {
+    // this.is_determine_clone.forEach((p: any) => {
+    //   if (p.type == 1) {
+    //     p.recipients.splice(i, 1);
+    //     p.recipients.forEach((element:any, index: any) => {
+    //       if (element.role == 1) {
+    //         element.ordering = index + 1;
+    //       }
+    //     })
+    //   }
+    // })
+    this.is_origanzation_reviewer.splice(i, 1);
     this.is_origanzation_reviewer.forEach((element: any, index: any) => {
       element.ordering = index + 1;
     })
   }
+
+  deleteOriganzationSignature(index: any) {
+    this.is_origanzation_signature.splice(index, 1);
+    this.is_origanzation_signature.forEach((element: any, index: any) => {
+      element.ordering = index + 1;
+    })
+  }
+
+  deletePartnerCoordination(index: any, item: any) {
+    this.getPartnerCoordination(item).splice(index, 1);
+    this.getPartnerCoordination(item).forEach((element: any, index: any) => {
+      element.ordering = index + 1;
+    })
+  }
+
+  deletePartnerReviewer(index_item: any, item: any) {
+    let arr_clone = item.recipients.filter((p: any) => p.role == 1);
+    let arr_clone_different = item.recipients.filter((p: any) => p.role != 1);
+
+    const array_empty: any[] = [];
+    let new_arr: any[] = [];
+    arr_clone.forEach((element: any, index: number) => {
+      if (index != index_item) {
+        array_empty.push(element);
+      }
+    })
+
+    array_empty.forEach((item: any, index: number) => {
+      item.ordering = index + 1;
+    })
+    // array_empty.sort((a: any, b: any) => (a.ordering > b.ordering) ? 1 : ((b.ordering > a.ordering) ? -1 : 0));
+
+    // (item.recipients.filter((p: any) => p.role == 1)).forEach((element: any, index: any) => {
+    //   if (index == index_item) {
+    //     (item.recipients.filter((p: any) => p.role == 1)).splice(index, 1);
+    //   }
+    // })
+
+    console.log(item.recipients);
+
+    new_arr = arr_clone_different.concat(array_empty);
+    item.recipients = new_arr;
+
+
+
+    // this.getPartnerReviewer(item).splice((index_item), 1);
+
+  }
+
+  deletePartnerSignature(index: any, item: any) {
+    this.getPartnerSignature(item).splice(index, 1);
+    this.getPartnerSignature(item).forEach((element: any, index: any) => {
+      element.ordering = index + 1;
+    })
+  }
+
+  addPartner() {
+    let data_partner_add = [];
+    let data = [...this.contractService.getDataDetermine()];
+    // return data.filter((p: any) => p.type == 2);
+    data_partner_add = data.filter((p: any) => p.type == 2);
+    let count_data = data_partner_add[0];
+    count_data.ordering = data_partner_add.length + 1;
+    this.is_determine_clone.push(count_data);
+  }
+
+  getDataAll() {
+    console.log(this.is_determine_clone);
+  }
+
 
 }

@@ -13,7 +13,7 @@
 
 <!--        &lt;!&ndash; User view &ndash;&gt;-->
 <!--        <div class="add_content"  formArrayName="userViews">-->
-<!--          <div class="label">{{'user.view' | translate}}</div>-->
+<!--          <div class="label text-color">{{'user.view' | translate}}</div>-->
 <!--          <div *ngFor="let userView of userViews().controls; let i=index" [formGroupName]="i">-->
 <!--            <div class="row">-->
 <!--              <div class="col-md-1 order">-->
@@ -60,7 +60,7 @@
 
 <!--        &lt;!&ndash; User sign &ndash;&gt;-->
 <!--        <div class="add_content" >-->
-<!--          <div class="label">{{'user.sign' | translate}}</div>-->
+<!--          <div class="label text-color">{{'user.sign' | translate}}</div>-->
 <!--          <div formArrayName="userSigns" *ngFor="let alias of userSigns().controls; let i = index;">-->
 <!--            <div class="row" [formGroupName]="i">-->
 <!--              <div class="col-md-1 order">-->
@@ -162,7 +162,7 @@
 
 <!--        &lt;!&ndash; User document &ndash;&gt;-->
 <!--        <div class="add_content" formArrayName="userDocs">-->
-<!--          <div class="label">{{'user.doc' | translate}}</div>-->
+<!--          <div class="label text-color">{{'user.doc' | translate}}</div>-->
 <!--          <div *ngFor="let userDoc of userDocs().controls; let i=index" [formGroupName]="i">-->
 <!--            <div class="row">-->
 <!--              <div class="col-md-1 order">-->
@@ -273,7 +273,7 @@
 
 <!--                &lt;!&ndash; Partner lead &ndash;&gt;-->
 <!--                <div class="add_content" formArrayName="partnerLeads">-->
-<!--                  <div class="label">{{'user.lead' | translate}}</div>-->
+<!--                  <div class="label text-color">{{'user.lead' | translate}}</div>-->
 <!--                  <div *ngFor="let partnerLead of partnerLeads(a).controls; let i=index" [formGroupName]="i">-->
 <!--                    <div class="row">-->
 <!--                      <div class="col-md-1 order">-->
@@ -320,7 +320,7 @@
 
 <!--                &lt;!&ndash; Partner view &ndash;&gt;-->
 <!--                <div class="add_content" formArrayName="partnerViews">-->
-<!--                  <div class="label">{{'user.view' | translate}}</div>-->
+<!--                  <div class="label text-color">{{'user.view' | translate}}</div>-->
 <!--                  <div *ngFor="let partnerView of partnerViews(a).controls; let i=index" [formGroupName]="i">-->
 <!--                    <div class="row">-->
 <!--                      <div class="col-md-1 order">-->
@@ -367,7 +367,7 @@
 
 <!--                &lt;!&ndash; Partner sign &ndash;&gt;-->
 <!--                <div class="add_content" formArrayName="partnerSigns">-->
-<!--                  <div class="label">{{'user.sign' | translate}}</div>-->
+<!--                  <div class="label text-color">{{'user.sign' | translate}}</div>-->
 <!--                  <div *ngFor="let partnerSign of partnerSigns(a).controls; let i=index" [formGroupName]="i">-->
 <!--                    <div class="row">-->
 <!--                      <div class="col-md-1 order">-->
@@ -461,7 +461,7 @@
 
 <!--                &lt;!&ndash; Partner document &ndash;&gt;-->
 <!--                <div class="add_content" formArrayName="partnerDocs">-->
-<!--                  <div class="label">{{'user.doc' | translate}}</div>-->
+<!--                  <div class="label text-color">{{'user.doc' | translate}}</div>-->
 <!--                  <div *ngFor="let partnerDoc of partnerDocs(a).controls; let i=index" [formGroupName]="i">-->
 <!--                    <div class="row">-->
 <!--                      <div class="col-md-1 order">-->
@@ -551,7 +551,7 @@
 
 <!--                &lt;!&ndash; Partner user &ndash;&gt;-->
 <!--                <div class="add_content" formArrayName="partnerUsers">-->
-<!--                  <div class="label">{{'user.sign' | translate}}</div>-->
+<!--                  <div class="label text-color">{{'user.sign' | translate}}</div>-->
 <!--                  <div *ngFor="let partnerUser of partnerUsers(a)?.controls; let i=index" [formGroupName]="i">-->
 <!--                    <div class="row">-->
 <!--                      <div class="col-md-1 order">-->
@@ -677,90 +677,97 @@
 
 
 <div class="container-fluid">
-  <div style="display: flex">
+  <div class="contract-determine">
     <div class="col-md-1">
-      <input style="width: 25px; height: 25px" type="number" [value]="this.data_organization.type">
+<!--      <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="this.getOrganization().type">-->
+      <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="data_organization.type">
     </div>
-    <div class="col-md-11" style="display: flex; flex-direction: column">
-      <div style="display: flex">
-        <span>TỔ CHỨC CỦA TÔI - <input type="text" [(ngModel)]="this.data_organization.name"></span>
+    <div class="col-md-11 contract--content" style="display: flex; flex-direction: column">
+      <div class="contract__content--title" style="display: flex">
+        <div>TỔ CHỨC CỦA TÔI - </div>
+<!--        <input type="text" [(ngModel)]="this.getOrganization().name">-->
+        <input type="text" [(ngModel)]="data_organization.name">
       </div>
-      <div style="border: 1px solid #87CAFF; background-color: #F9FDFF; border-radius: 10px">
-        <div class="nguoi-xem-xet" style="border: 1px solid #ddd">
-          <h3 style="background-color: #C7D0E9">Người xem xét</h3>
-          <div *ngFor="let d of is_origanzation_reviewer; let index = index" style="display: flex; background-color: #E0E6F3">
-            <input style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
-            <div class="data-nguoi-xem-xet" style="display: flex">
-              <div>
-                <div>Họ tên: *</div>
+      <div class="contract__content--participants" style="border: 1px solid #87CAFF; background-color: #F9FDFF; border-radius: 10px">
+        <div class="participants-reviewer" style="border: 1px solid #ddd">
+          <div class="label text-color" style="background-color: #C7D0E9">Người xem xét</div>
+<!--          <div class="participants&#45;&#45;content" *ngFor="let d of isOriganzationReviewer(); let index = index">-->
+          <div class="participants--content" *ngFor="let d of is_origanzation_reviewer; let index = index">
+            <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
+            <div class="participants--input" style="display: flex">
+              <div class="participants__name">
+                <div class="label text-color">Họ tên: *</div>
                 <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
               </div>
-              <div>
-                <div>Email: *</div>
+              <div class="participants__email">
+                <div class="label text-color">Email: *</div>
                 <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
               </div>
             </div>
-            <button (click)="deleteReviewer(index)">Xóa</button>
+            <button (click)="deleteOriganzationReviewer(index)">Xóa</button>
           </div>
-
-          <div><u class="label" style="color: #106DB6; background-color: #E0E6F3" (click)="addOriganzationReviewer()">Thêm
-            người xem xét</u></div>
+          <div class="participants--add">
+            <u class="label text-color" style="color: #106DB6; background-color: #E0E6F3" (click)="addOriganzationReviewer()">Thêm người xem xét</u>
+          </div>
         </div>
-        <div class="nguoi-ky">
-          <h3>Người ký</h3>
-          <div *ngFor="let d of is_origanzation_signature" style="display: flex; background-color: #E0E6F3">
-            <input style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
-            <div style="display: flex; flex-direction: column">
-              <div class="data-nguoi-ky" style="display: flex">
-                <div>
-                  <div>Họ tên: *</div>
+        <div class="participants-signature">
+          <div class="label text-color">Người ký</div>
+          <div class="participants--content" *ngFor="let d of this.is_origanzation_signature; let index = index">
+            <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
+            <div class="participants__content--input" style="display: flex; flex-direction: column">
+              <div class="participants--input" style="display: flex">
+                <div class="participants__name">
+                  <div class="label text-color">Họ tên: *</div>
                   <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                 </div>
-                <div>
-                  <div>Email: *</div>
+                <div class="participants__email">
+                  <div class="label text-color">Email: *</div>
                   <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
                 </div>
               </div>
-              <div class="data-nguoi-ky" style="display: flex">
-                <div>
-                  <div>Loại ký: *</div>
-                  <select class="form-select" id="select-dropdown" aria-label="Default select example">
+              <div class="participants-information" style="display: flex">
+                <div class="participants-signature-type">
+                  <div  class="label text-color">Loại ký: *</div>
+                  <select class="form-select" aria-label="Default select example">
                     <option value="" hidden>Chọn Loại ký</option>
                     <option *ngFor="let data of d.sign_type, let i = index" value="{{data.id}}">{{data.name}}</option>
                   </select>
                 </div>
-                <div>
+                <div class="participants-otp">
                   <input type="checkbox" [value]="1" [ngModel]="d.is_otp">
-                  <span>OTP</span>
+                  <span class="label text-color">OTP</span>
                 </div>
-                <div>
-                  <div>Số điện thoại: *</div>
+                <div class="participants-phone">
+                  <div class="label text-color">Số điện thoại: *</div>
                   <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
                 </div>
               </div>
             </div>
+            <button (click)="deleteOriganzationSignature(index)">Xóa</button>
           </div>
-          <div><u class="label" style="color: #106DB6; background-color: #E0E6F3" (click)="addOriganzationSignature()">Thêm
-            người ký</u></div>
+          <div class="participants--add">
+            <u class="label text-color" style="color: #106DB6; background-color: #E0E6F3" (click)="addOriganzationSignature()">Thêm người ký</u>
+          </div>
         </div>
-        <div class="van-thu">
-          <h3>Văn thư</h3>
-          <div style="display: flex; background-color: #E0E6F3">
-            <input style="width: 25px; height: 25px" type="number" [(ngModel)]="is_origanzation_document.ordering">
-            <div class="data-nguoi-ky" style="display: flex; flex-direction: column">
-              <div style="display: flex">
-                <div>
-                  <div>Họ tên: *</div>
+        <div class="participants-document--content">
+          <div class="label text-color">Văn thư</div>
+          <div class="participants--content">
+            <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="is_origanzation_document.ordering">
+            <div class="participants__content--input" style="display: flex; flex-direction: column">
+              <div class="participants--input" style="display: flex">
+                <div class="participants__name">
+                  <div class="label text-color">Họ tên: *</div>
                   <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="is_origanzation_document.name">
                 </div>
-                <div>
-                  <div>Email: *</div>
-                  <input type="text" placeholder="Nhập Email" [(ngModel)]="is_origanzation_document.email">
+                <div class="participants__email">
+                  <div class="label text-color">Email: *</div>
+                  <input class="label text-color" type="text" placeholder="Nhập Email" [(ngModel)]="is_origanzation_document.email">
                 </div>
               </div>
-              <div>
-                <div>
-                  <div>Loại ký: *</div>
+
+              <div class="participants-information" style="display: flex">
+                <div class="participants-signature-type">
+                  <div class="label text-color">Loại ký: *</div>
                   <select class="form-select" aria-label="Default select example">
                     <option value="" hidden>Chọn Loại ký</option>
                     <option *ngFor="let data of is_origanzation_document.sign_type, let i = index"
@@ -775,80 +782,86 @@
     </div>
   </div>
 
+
   <!--  Đối tác-->
-    <div *ngFor="let item of getDataPartner()" style="display: flex">
+<!--    <div *ngFor="let item of getDataPartner()" style="display: flex">-->
+    <div *ngFor="let item of this.data_parnter_organization" style="display: flex">
       <div class="col-md-1">
-        <input style="width: 25px; height: 25px" type="number" [value]="item.ordering">
+        <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="item.ordering">
       </div>
-      <div class="col-md-11" style="display: flex; flex-direction: column">
-        <div style="display: flex">
-          <span>Đối Tác - <input type="text" [(ngModel)]="item.name"></span>
+      <div class="col-md-11 contract--content" style="display: flex; flex-direction: column">
+        <div class="contract__content--title" style="display: flex">
+          <div>Đối Tác - </div>
+          <input type="text" [(ngModel)]="item.name">
         </div>
-        <div style="border: 1px solid #87CAFF; background-color: #F9FDFF; border-radius: 10px">
-<!--          <div class="row">-->
-<!--            <div class="radio label_type">-->
-<!--              <label><input type="radio" name="type" [value]="item.selected" [ngModel]="item.selected" (ngModelChange)="changePartner($event, 2, item)">-->
-<!--                <span> {{'organization' | translate}}</span></label>-->
-<!--            </div>-->
-<!--            <div class="radio label_type">-->
-<!--              <label><input type="radio" name="type" [value]="item.selected" [ngModel]="item.selected" checked (ngModelChange)="changePartner($event, 3, item)">-->
-<!--                <span> {{'personal' | translate}}</span></label>-->
-<!--            </div>-->
-<!--          </div>-->
-          <div class="nguoi-dieu-phoi" style="border: 1px solid #ddd">
-            <h3 style="background-color: #C7D0E9">Người điều phối</h3>
-            <div *ngFor="let d of getPartnerCoordination(item)" style="display: flex; background-color: #E0E6F3">
-              <input style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
-              <div class="data-nguoi-xem-xet" style="display: flex">
-                <div>
-                  <div>Họ tên: *</div>
+        <div class="contract__content--participants">
+          <div class="row">
+            <div class="radio label_type">
+              <label><input type="radio" name="type" checked>
+                <span> {{'organization' | translate}}</span></label>
+            </div>
+            <div class="radio label_type">
+              <label><input type="radio" name="type">
+                <span> {{'personal' | translate}}</span></label>
+            </div>
+          </div>
+          <div class="participants-coordination" style="border: 1px solid #ddd">
+            <div class="label text-color" style="background-color: #C7D0E9">Người điều phối</div>
+            <div *ngFor="let d of getPartnerCoordination(item); let index = index" style="display: flex; background-color: #E0E6F3">
+<!--            <div *ngFor="let d of item.; let index = index" style="display: flex; background-color: #E0E6F3">-->
+              <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
+              <div class="participants--input" style="display: flex">
+                <div class="participants__name">
+                  <div class="label text-color">Họ tên: *</div>
                   <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                 </div>
-                <div>
-                  <div>Email: *</div>
+                <div class="participants__email">
+                  <div class="label text-color">Email: *</div>
                   <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
                 </div>
               </div>
+              <button (click)="deletePartnerCoordination(index, item)">Xóa</button>
             </div>
           </div>
-          <div class="nguoi-xem-xet">
-            <h3>Người xem xét</h3>
-            <div *ngFor="let d of getPartnerReviewer(item)" style="display: flex; background-color: #E0E6F3">
-              <input style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
-              <div style="display: flex; flex-direction: column">
-                <div class="data-nguoi-ky" style="display: flex">
-                  <div>
-                    <div>Họ tên: *</div>
+          <div class="participants-coordination-reviewer">
+            <div class="label text-color" class="label text-color">Người xem xét</div>
+            <div *ngFor="let d of getPartnerReviewer(item); let index = index" style="display: flex; background-color: #E0E6F3">
+              <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
+              <div class="participants-coordination__input" style="display: flex; flex-direction: column">
+                <div class="participants--input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label text-color">Họ tên: *</div>
                     <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                   </div>
-                  <div>
-                    <div>Email: *</div>
+                  <div class="participants__email">
+                    <div class="label text-color">Email: *</div>
                     <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
                   </div>
                 </div>
               </div>
+              <button (click)="deletePartnerReviewer(index, item)">Xóa</button>
             </div>
-            <div><u class="label" style="color: #106DB6; background-color: #E0E6F3" (click)="addPartnerReviewer(item)">Thêm người ký</u></div>
+            <div><u class="label text-color" style="color: #106DB6; background-color: #E0E6F3" (click)="addPartnerReviewer(item)">Thêm người ký</u></div>
           </div>
 
-          <div class="nguoi-ky">
-            <h3>Người ký</h3>
-            <div *ngFor="let d of getPartnerSignature(item)" style="display: flex; background-color: #E0E6F3">
-              <input style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
-              <div style="display: flex; flex-direction: column">
-                <div class="data-nguoi-ky" style="display: flex">
-                  <div>
-                    <div>Họ tên: *</div>
+          <div class="participants-coordination-signature">
+            <div class="label text-color">Người ký</div>
+            <div *ngFor="let d of getPartnerSignature(item); let index = index" style="display: flex; background-color: #E0E6F3">
+              <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
+              <div class="participants-coordination__input" style="display: flex; flex-direction: column">
+                <div class="participants--input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label text-color">Họ tên: *</div>
                     <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                   </div>
-                  <div>
-                    <div>Email: *</div>
+                  <div class="participants__email">
+                    <div class="label text-color">Email: *</div>
                     <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
                   </div>
                 </div>
                 <div class="data-nguoi-ky" style="display: flex">
                   <div>
-                    <div>Loại ký: *</div>
+                    <div class="label text-color">Loại ký: *</div>
                     <select class="form-select" id="select-dropdown" aria-label="Default select example">
                       <option value="" hidden>Chọn Loại ký</option>
                       <option *ngFor="let data of d.sign_type, let i = index" value="{{data.id}}">{{data.name}}</option>
@@ -856,36 +869,37 @@
                   </div>
                   <div>
                     <input type="checkbox" [value]="1" [ngModel]="d.is_otp">
-                    <span>OTP</span>
+                    <span class="label text-color">OTP</span>
                   </div>
                   <div>
-                    <div>Số điện thoại: *</div>
+                    <div class="label text-color">Số điện thoại: *</div>
                     <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
                   </div>
                 </div>
               </div>
+              <button (click)="deletePartnerSignature(index, item)">Xóa</button>
             </div>
-            <div><u class="label" style="color: #106DB6; background-color: #E0E6F3" (click)="addPartnerSignature(item)">Thêm người ký</u></div>
+            <div><u class="label text-color" style="color: #106DB6; background-color: #E0E6F3" (click)="addPartnerSignature(item)">Thêm người ký</u></div>
           </div>
 
-          <div class="van-thu">
-            <h3>Văn thư</h3>
+          <div class="participants-coordination-document">
+            <div class="label text-color">Văn thư</div>
             <div style="display: flex; background-color: #E0E6F3">
-              <input style="width: 25px; height: 25px" type="number" [(ngModel)]="getPartnerDocument(item).ordering">
-              <div class="data-nguoi-ky" style="display: flex; flex-direction: column">
-                <div style="display: flex">
-                  <div>
-                    <div>Họ tên: *</div>
+              <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="getPartnerDocument(item).ordering">
+              <div class="participants-coordination__input" style="display: flex; flex-direction: column">
+                <div class="participants--input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label text-color">Họ tên: *</div>
                     <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="getPartnerDocument(item).name">
                   </div>
-                  <div>
-                    <div>Email: *</div>
+                  <div class="participants__email">
+                    <div class="label text-color">Email: *</div>
                     <input type="text" placeholder="Nhập Email" [(ngModel)]="getPartnerDocument(item).email">
                   </div>
                 </div>
                 <div>
                   <div>
-                    <div>Loại ký: *</div>
+                    <div class="label text-color">Loại ký: *</div>
                     <select class="form-select" aria-label="Default select example">
                       <option value="" hidden>Chọn Loại ký</option>
                       <option *ngFor="let data of getPartnerDocument(item).sign_type, let i = index"
@@ -899,5 +913,10 @@
         </div>
       </div>
     </div>
-
+    <button (click)="addPartner()">
+      Thêm đối tác
+    </button>
 </div>
+<!--<button (click)="getDataAll()">-->
+<!--  Lấy dữ liệu-->
+<!--</button>-->
