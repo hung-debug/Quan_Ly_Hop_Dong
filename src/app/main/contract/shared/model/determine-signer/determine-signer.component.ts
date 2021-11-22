@@ -3,7 +3,7 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {type_signature, variable} from "../../../../../config/variable";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Helper} from "../../../../../core/Helper";
-import {ContractService} from "../../../../../service/contract.service";
+// import {ContractService} from "../../../../../service/contract.service";
 import * as ContractCreateDetermine from '../../contract_data'
 import {elements} from "@interactjs/snappers/all";
 
