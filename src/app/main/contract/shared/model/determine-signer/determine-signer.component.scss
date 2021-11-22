@@ -204,7 +204,7 @@ input[type=number] {
   font-size: 14px;
 }
 
-//
+// defind json data follow backend
 
 .contract-determine {
   display: flex;
@@ -248,6 +248,19 @@ input[type=number] {
       align-items: center;
       justify-content: space-around;
       border-radius: 0 0 11px 11px;
+
+      ::ng-deep .mat-form-field {
+        width: 100%;
+        background-color: white !important;
+        &-flex {
+          border: 1px solid #106DB6;
+          border-radius: 5px;
+          background-color: white !important;
+        }
+        &-infix {
+          border-top: 0;
+        }
+      }
 
       .participants__content--input .participants-information {
         display: flex;
@@ -368,3 +381,7 @@ input[type=number] {
   text-align: center;
   border-radius: 5px;
 }
+
+//::ng-deep .mat-form-field-flex {
+//  background-color: white;
+//}

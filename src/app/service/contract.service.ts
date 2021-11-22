@@ -27,26 +27,26 @@ export class ContractService {
   documentUrl:any = `${environment.apiUrl}/api/v1/documents`;
   addConfirmContractUrl:any = `${environment.apiUrl}/api/v1/contracts/`;
 
-  token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
-  customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
-  errorData:any = {};
-  redirectUrl: string = '';
+  // token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+  // customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
+  // errorData:any = {};
+  // redirectUrl: string = '';
 
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
 
-  public getContractList(filter_type:any, filter_contract_no:any, filter_from_date:any,filter_to_date:any): Observable<any> {
-    if(filter_from_date != ""){
-      filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
-    }
-    if(filter_to_date != ""){
-      filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
-    }
-    let listContractUrl = this.listContractUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "";
-    console.log(listContractUrl);
-    const headers = { 'Authorization': 'Bearer ' + this.token}
-    return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
-  }
+  // public getContractList(filter_type:any, filter_contract_no:any, filter_from_date:any,filter_to_date:any): Observable<any> {
+  //   if(filter_from_date != ""){
+  //     filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
+  //   }
+  //   if(filter_to_date != ""){
+  //     filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
+  //   }
+  //   let listContractUrl = this.listContractUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "";
+  //   console.log(listContractUrl);
+  //   const headers = { 'Authorization': 'Bearer ' + this.token}
+  //   return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
+  // }
 
   // addContractUrl: any = `${environment.apiUrl}/api/v1/auth/login`;
   // errorData: any = {};
@@ -60,64 +60,64 @@ export class ContractService {
   // }
 
 
-  addContractStep1(datas: any) {
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
-    const body = JSON.stringify({name: datas.name,
-                                 code: datas.code,
-                                 contract_no: datas.code,
-                                 //sign_order: 1,
-                                 sign_time: this.datepipe.transform(datas.sign_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-                                 notes: datas.notes,
-                                 type_id: 4,
-                                 //customer_id: this.customer_id,
-                                 //is_template: false,
-                                 //status: 1,
-                                 alias_url: "",
-                                 refs: [],
-                                });
-    console.log(headers);
-    console.log(body);
-    return this.http.post<Contract>(this.addContractUrl, body, {'headers':headers})
-       .pipe(
-          map((contract) => {
-            if (JSON.parse(JSON.stringify(contract)).id != 0) {
-              return contract;
-            }else{
-              return null;
-            }
-         }),
-         catchError(this.handleError)
-       );
-  }
+  // addContractStep1(datas: any) {
+  //   const headers = new HttpHeaders()
+  //     .append('Content-Type', 'application/json')
+  //     .append('Authorization', 'Bearer ' + this.token);
+  //   const body = JSON.stringify({name: datas.name,
+  //                                code: datas.code,
+  //                                contract_no: datas.code,
+  //                                //sign_order: 1,
+  //                                sign_time: this.datepipe.transform(datas.sign_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+  //                                notes: datas.notes,
+  //                                type_id: 4,
+  //                                //customer_id: this.customer_id,
+  //                                //is_template: false,
+  //                                //status: 1,
+  //                                alias_url: "",
+  //                                refs: [],
+  //                               });
+  //   console.log(headers);
+  //   console.log(body);
+  //   return this.http.post<Contract>(this.addContractUrl, body, {'headers':headers})
+  //      .pipe(
+  //         map((contract) => {
+  //           if (JSON.parse(JSON.stringify(contract)).id != 0) {
+  //             return contract;
+  //           }else{
+  //             return null;
+  //           }
+  //        }),
+  //        catchError(this.handleError)
+  //      );
+  // }
 
-  addDocument(datas:any) {
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
-    const body = JSON.stringify({name: datas.name,
-                                 type: 1,
-                                 path: datas.filePath,
-                                 internal: 1,
-                                 ordering: 1,
-                                 status: 1,
-                                 contract_id: datas.id,
-                                 is_primary: true,
-                                });
-  console.log(headers);
-  console.log(body);
-    return this.http.post<Contract>(this.documentUrl, body, {'headers':headers});
-  }
+  // addDocument(datas:any) {
+  //   const headers = new HttpHeaders()
+  //     .append('Content-Type', 'application/json')
+  //     .append('Authorization', 'Bearer ' + this.token);
+  //   const body = JSON.stringify({name: datas.name,
+  //                                type: 1,
+  //                                path: datas.filePath,
+  //                                internal: 1,
+  //                                ordering: 1,
+  //                                status: 1,
+  //                                contract_id: datas.id,
+  //                                is_primary: true,
+  //                               });
+  // console.log(headers);
+  // console.log(body);
+  //   return this.http.post<Contract>(this.documentUrl, body, {'headers':headers});
+  // }
 
-  addConfirmContract(datas:any) {
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
-    const body = "";
-    console.log(headers);
-    return this.http.put<Contract>(this.addConfirmContractUrl + datas.id + '/start-bpm' , body, {'headers':headers});
-  }
+  // addConfirmContract(datas:any) {
+  //   const headers = new HttpHeaders()
+  //     .append('Content-Type', 'application/json')
+  //     .append('Authorization', 'Bearer ' + this.token);
+  //   const body = "";
+  //   console.log(headers);
+  //   return this.http.put<Contract>(this.addConfirmContractUrl + datas.id + '/start-bpm' , body, {'headers':headers});
+  // }
 
   objDefaultSampleContract() {
     return {
@@ -367,7 +367,6 @@ export class ContractService {
         "name": "Đối tác tổ chức",
         "type": 2, // Đối tác tổ chức
         "ordering": 1,
-        "selected": true,
         "recipients": [
           // người điều phối
           {
@@ -380,24 +379,7 @@ export class ContractService {
             "username": "",
             "password": "",
             "is_otp": 1,
-            "sign_type": [
-              {
-                "id": 1,
-                "name": "Ký ảnh"
-              },
-              {
-                "id": 2,
-                "name": "Ký số bằng USB token"
-              },
-              {
-                id: 3,
-                name: "Ký số bằng sim KPI"
-              },
-              {
-                id: 4,
-                name: "Ký số bằng HSM"
-              }
-            ]
+            "sign_type": []
           },
           // người xem xét
           {
@@ -410,24 +392,7 @@ export class ContractService {
             "username": "",
             "password": "",
             "is_otp": 1,
-            "sign_type": [
-              {
-                "id": 1,
-                "name": "Ký ảnh"
-              },
-              {
-                "id": 2,
-                "name": "Ký số bằng USB token"
-              },
-              {
-                id: 3,
-                name: "Ký số bằng sim KPI"
-              },
-              {
-                id: 4,
-                name: "Ký số bằng HSM"
-              }
-            ]
+            "sign_type": []
           },
           // người ký
           {
@@ -440,24 +405,7 @@ export class ContractService {
             "username": "",
             "password": "",
             "is_otp": 1,
-            "sign_type": [
-              {
-                "id": 1,
-                "name": "Ký ảnh"
-              },
-              {
-                "id": 2,
-                "name": "Ký số bằng USB token"
-              },
-              {
-                id: 3,
-                name: "Ký số bằng sim KPI"
-              },
-              {
-                id: 4,
-                name: "Ký số bằng HSM"
-              }
-            ]
+            "sign_type": []
           },
           // văn thư
           {
@@ -470,24 +418,7 @@ export class ContractService {
             "username": "",
             "password": "",
             "is_otp": 1,
-            "sign_type": [
-              {
-                "id": 1,
-                "name": "Ký ảnh"
-              },
-              {
-                "id": 2,
-                "name": "Ký số bằng USB token"
-              },
-              {
-                id: 3,
-                name: "Ký số bằng sim KPI"
-              },
-              {
-                id: 4,
-                name: "Ký số bằng HSM"
-              }
-            ]
+            "sign_type": []
           }
         ],
       },
@@ -495,7 +426,6 @@ export class ContractService {
         "name": "Đối tác cá nhân",
         "type": 3, // Đối tác cá nhân
         "ordering": 1,
-        "selected": false,
         "recipients": [
           // người điều phối
           {
@@ -556,3 +486,19 @@ export class ContractService {
 
 }
 
+// {
+//   "id": 1,
+//   "name": "Ký ảnh"
+// },
+// {
+//   "id": 2,
+//   "name": "Ký số bằng USB token"
+// },
+// {
+//   id: 3,
+//     name: "Ký số bằng sim KPI"
+// },
+// {
+//   id: 4,
+//     name: "Ký số bằng HSM"
+// }

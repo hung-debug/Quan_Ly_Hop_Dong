@@ -675,23 +675,20 @@
 <!--  </div>-->
 <!--</div>-->
 
-
+<!--begin template-->
 <div class="container-fluid">
   <div class="contract-determine">
     <div class="col-md-1">
-      <!--      <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="this.getOrganization().type">-->
       <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="data_organization.type">
     </div>
     <div class="col-md-11 contract--content">
       <div class="contract__content--title">
         <div>TỔ CHỨC CỦA TÔI -</div>
-        <!--        <input type="text" [(ngModel)]="this.getOrganization().name">-->
         <input type="text" [(ngModel)]="data_organization.name" autofocus>
       </div>
       <div class="contract__content--participants">
         <div class="participants-border">
           <div class="label">Người xem xét</div>
-          <!--          <div class="participants&#45;&#45;content" *ngFor="let d of isOriganzationReviewer(); let index = index">-->
           <div class="participants--content" *ngFor="let d of is_origanzation_reviewer; let index = index">
             <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
                    [(ngModel)]="d.ordering">
@@ -733,7 +730,6 @@
                     <img src="assets/img/icon_name.svg" class="input-img">
                     <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                   </div>
-                  <!--                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">-->
                 </div>
                 <div class="participants__name">
                   <div class="label text-color">Email: *</div>
@@ -741,16 +737,16 @@
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
                   </div>
-                  <!--                  <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">-->
                 </div>
               </div>
               <div class="participants--input select-text-input" style="display: flex">
                 <div class="participants__name">
                   <div class="label text-color">Loại ký: *</div>
-                  <select class="form-select" aria-label="Default select example">
-                    <option value="" hidden>Chọn Loại ký</option>
-                    <option *ngFor="let data of d.sign_type, let i = index" value="{{data.id}}">{{data.name}}</option>
-                  </select>
+                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">
+                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'is_origanzation_signature', this.is_origanzation_signature, index)">
+                      <mat-option *ngFor="let topping of signTypeList" [value]="topping.id">{{topping.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
                 <div class="participants-otp">
                   <input type="checkbox" [value]="1" [ngModel]="d.is_otp">
@@ -771,7 +767,6 @@
             <u class="label text-color" style="color: #106DB6" (click)="addOriganzationSignature()">Thêm người ký</u>
           </div>
         </div>
-        <!--        <div class="participants-document&#45;&#45;content">-->
         <div class="participants-border">
           <div class="label">Văn thư</div>
           <div class="participants--content">
@@ -798,11 +793,11 @@
               <div class="participants-information">
                 <div class="participants-signature-type">
                   <div class="label text-color">Loại ký: *</div>
-                  <select class="form-select" aria-label="Default select example">
-                    <option value="" hidden>Chọn Loại ký</option>
-                    <option *ngFor="let data of is_origanzation_document.sign_type, let i = index"
-                            value="{{data.id}}">{{data.name}}</option>
-                  </select>
+                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">
+                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'is_origanzation_document')">
+                      <mat-option *ngFor="let topping of signTypeList" [value]="topping.id">{{topping.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
               </div>
             </div>
@@ -815,7 +810,6 @@
 
 
   <!--  Đối tác-->
-  <!--    <div *ngFor="let item of getDataPartner()" style="display: flex">-->
   <div class="contract-determine" *ngFor="let item of this.data_parnter_organization" style="display: flex">
     <div class="col-md-1">
       <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="item.ordering">
@@ -839,7 +833,6 @@
         <div class="participants-border">
           <div class="label">Người điều phối</div>
           <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
-            <!--            <div *ngFor="let d of item.; let index = index" style="display: flex; background-color: #E0E6F3">-->
             <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
                    [(ngModel)]="d.ordering">
             <div class="col-md-10 participants--input" style="display: flex">
@@ -856,7 +849,6 @@
                   <img src="assets/img/login_email.svg" class="input-img">
                   <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
                 </div>
-                <!--                  <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">-->
               </div>
             </div>
 
@@ -864,14 +856,14 @@
               <img src="assets/img/border_close.svg" alt="close.vn">
               <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
             </div>
-            <!--              <i (click)="deletePartnerCoordination(index, item)" class="fa fa-times-circle remove_icon"></i>-->
           </div>
         </div>
 
         <div class="participants-border">
           <div class="label">Người xem xét</div>
           <div class="participants--content" *ngFor="let d of getPartnerReviewer(item); let index = index">
-            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
+            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                   [(ngModel)]="d.ordering">
             <div class="col-md-10 participants--input">
               <div class="participants__name">
                 <div class="label text-color">Họ tên: *</div>
@@ -901,12 +893,12 @@
         <div class="participants-border">
           <div class="label">Người ký</div>
           <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
-            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
+            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                   [(ngModel)]="d.ordering">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label text-color">Họ tên: *</div>
-<!--                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">-->
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
                     <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
@@ -914,7 +906,6 @@
                 </div>
                 <div class="participants__name">
                   <div class="label text-color">Email: *</div>
-<!--                  <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">-->
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
@@ -924,10 +915,11 @@
               <div class="participants--input select-text-input" style="display: flex">
                 <div class="participants__name">
                   <div class="label text-color">Loại ký: *</div>
-                  <select class="form-select" aria-label="Default select example">
-                    <option value="" hidden>Chọn Loại ký</option>
-                    <option *ngFor="let data of d.sign_type, let i = index" value="{{data.id}}">{{data.name}}</option>
-                  </select>
+                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">
+                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'get_partner_signature', getPartnerSignature(item), index)">
+                      <mat-option *ngFor="let topping of signTypeList; let i = index" [value]="topping.id">{{topping.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
                 <div class="participants-otp">
                   <input type="checkbox" [value]="1" [ngModel]="d.is_otp">
@@ -943,13 +935,10 @@
               <img src="assets/img/border_close.svg" alt="close.vn">
               <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
             </div>
-<!--            <i (click)="deletePartnerSignature(index, item)" class="fa fa-times-circle remove_icon"></i>-->
           </div>
           <div class="participants--add">
             <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item)">Thêm người ký</u>
           </div>
-<!--          <div><u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item)">Thêm người ký</u>-->
-<!--          </div>-->
         </div>
 
         <div class="participants-border">
@@ -961,16 +950,11 @@
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label text-color">Họ tên: *</div>
-<!--                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="getPartnerDocument(item).name">-->
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
                     <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="getPartnerDocument(item).name">
                   </div>
                 </div>
-<!--                <div class="participants__name">-->
-<!--                  <div class="label text-color">Email: *</div>-->
-<!--                  <input type="text" placeholder="Nhập Email" [(ngModel)]="getPartnerDocument(item).email">-->
-<!--                </div>-->
                 <div class="participants__name">
                   <div class="label text-color">Email: *</div>
                   <div class="input-data">
@@ -983,11 +967,18 @@
               <div class="participants-information">
                 <div class="participants-signature-type">
                   <div class="label text-color">Loại ký: *</div>
-                  <select class="form-select" aria-label="Default select example">
-                    <option value="" hidden>Chọn Loại ký</option>
-                    <option *ngFor="let data of getPartnerDocument(item).sign_type, let i = index"
-                            value="{{data.id}}">{{data.name}}</option>
-                  </select>
+
+                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">
+                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'get_partner_document', getPartnerDocument(item))">
+                      <mat-option *ngFor="let topping of signTypeList; let i = index" [value]="topping.id">{{topping.name}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+<!--                  <select class="form-select" aria-label="Default select example">-->
+<!--                    <option value="" hidden>Chọn Loại ký</option>-->
+<!--                    <option *ngFor="let data of getPartnerDocument(item).sign_type, let i = index"-->
+<!--                            value="{{data.id}}">{{data.name}}</option>-->
+<!--                  </select>-->
                 </div>
               </div>
             </div>
@@ -997,9 +988,6 @@
       </div>
     </div>
   </div>
-<!--  <div (click)="addPartner()">-->
-<!--    Thêm đối tác-->
-<!--  </div>-->
   <div style="display: flex">
     <div class="col-md-1"></div>
     <div class="col-md-11" style="display: inline-block; cursor: pointer">
@@ -1014,11 +1002,14 @@
 
 <div class="footer-determine" style="display: flex; justify-content: space-between">
   <div style="width: 200px;">
-    <button (click)="back($event, 'infor-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
+    <button (click)="back($event, 'infor-contract')" type="button" name="next" class="next action-button"
+            style="background-color: #8B8B8B">Quay lại
+    </button>
   </div>
   <div class="content_footer">@Copyright 2021 - MobiFone</div>
   <div>
     <button type="button" name="next" class="next draft-button">{{'btn.save-draff' | translate }}</button>
-    <button (click)="next()" type="button" name="next" class="next action-button pull-right">{{'btn.next' | translate }}</button>
+    <button (click)="next()" type="button" name="next"
+            class="next action-button pull-right">{{'btn.next' | translate }}</button>
   </div>
 </div>

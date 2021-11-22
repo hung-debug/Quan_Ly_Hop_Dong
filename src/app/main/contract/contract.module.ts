@@ -21,6 +21,8 @@ import { AddContractBatchComponent } from './add-contract-batch/add-contract-bat
 import { ContractBatchHeaderComponent } from './shared-batch/model/contract-batch-header/contract-batch-header.component';
 import { ConfirmInforContractBatchComponent } from './shared-batch/model/confirm-infor-contract-batch/confirm-infor-contract-batch.component';
 import { InforContractBatchComponent } from './shared-batch/model/infor-contract-batch/infor-contract-batch.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatSelectModule} from "@angular/material/select";
 // import {NotificationService} from "../../service/notification/notification.service";
 
 
@@ -62,7 +64,9 @@ import { InforContractBatchComponent } from './shared-batch/model/infor-contract
         useFactory: httpTranslateLoader,
         deps: [HttpClient]
       }
-    })
+    }),
+    MatFormFieldModule,
+    MatSelectModule
   ],
   entryComponents: [
     ConfirmInforContractComponent,
