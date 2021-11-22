@@ -1,7 +1,9 @@
 import { DatePipe } from '@angular/common';
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { variable } from 'src/app/config/variable';
+import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
   selector: 'app-confirm-infor-contract',
@@ -14,7 +16,9 @@ export class ConfirmInforContractComponent implements OnInit {
   @Output() stepChangeConfirmInforContract = new EventEmitter<string>();
 
   constructor(private formBuilder: FormBuilder,
-              public datepipe: DatePipe) {
+              public datepipe: DatePipe,
+              private contractService: ContractService,
+              private router: Router,) {
     this.step = variable.stepSampleContract.step4
   }
 
@@ -122,12 +126,27 @@ export class ConfirmInforContractComponent implements OnInit {
 
   // next step event
   next() {
-
+    this.callAPI();
   }
 
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
     this.stepChangeConfirmInforContract.emit(step);
+  }
+
+  callAPI() {
+    //call API step confirm
+    this.contractService.addConfirmContract(this.datas).subscribe((data) => {
+
+      console.log(JSON.stringify(data));
+      this.router.navigate(['/main/contract/create/draft']);
+    },
+    error => {
+      console.log("false content");
+      return false;
+    }
+    );
+
   }
 }
