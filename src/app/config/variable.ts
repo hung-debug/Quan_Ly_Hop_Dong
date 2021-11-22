@@ -14,3 +14,22 @@ export const variable = {
     step2: "confirm-contract",
   },
 }
+
+export const type_signature = [
+  {
+    id: 1,
+    name: "Ký ảnh"
+  },
+  {
+    id: 2,
+    name: "Ký số bằng USB token"
+  },
+  {
+    id: 3,
+    name: "Ký số bằng sim KPI"
+  },
+  {
+    id: 4,
+    name: "Ký số bằng HSM"
+  }
+]

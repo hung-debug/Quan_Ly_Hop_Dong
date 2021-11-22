@@ -1,3 +1,4 @@
+import { ContractService } from 'src/app/service/contract.service';
 import { UploadService } from './../../../../../service/upload.service';
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
@@ -9,7 +10,6 @@ import {AddContractComponent} from "../../../add-contract/add-contract.component
 import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
-import { ContractService } from 'src/app/service/contract.service';
 import { DatePipe } from '@angular/common';
 
 @Component({

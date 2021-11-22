@@ -39,6 +39,7 @@ export class UploadService {
     return this.http.post<File>(this.uploadFileUrl, formData, {'headers':headers});
   }
 
+
   // getFiles(): Observable<any> {
   //   return this.http.get(`${this.baseUrl}/files`);
   // }
@@ -55,5 +56,5 @@ export class UploadService {
     }
     window.alert(errorMessage);
     return throwError(errorMessage);
- }
+  }
 }

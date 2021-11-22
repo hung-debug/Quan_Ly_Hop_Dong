@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IndexComponent } from './components/index/index.component';
-// import {routing} from "./contract-signature.routing";
+// import { SignContractComponent } from './components/sign-contract/sign-contract.component';
+import {NoAuthGuard} from "./shared/no-auth.guard";
 import { ContractSignatureComponent } from "./contract-signature.component";
 import { DatepickerModule } from "ng2-datepicker";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
@@ -12,7 +13,6 @@ import {RouterModule, Routes} from "@angular/router";
 import { SignaturePersonalContractComponent } from './components/signature-personal-contract/signature-personal-contract.component';
 import { CoordinatesContractComponent } from './components/coordinates-contract/coordinates-contract.component';
 import { SecretaryContractComponent } from './components/secretary-contract/secretary-contract.component';
-import {NoAuthGuard} from "./shared/no-auth.guard";
 import { AddContractComponent } from './components/contract-coordination/add-contract/add-contract.component';
 import { InforContractComponent } from './components/contract-coordination/shared/model/infor-contract/infor-contract.component';
 import { DetermineSignerComponent } from './components/contract-coordination/shared/model/determine-signer/determine-signer.component';
@@ -29,6 +29,9 @@ import {SignContractComponent} from "./components/contract-coordination/shared/s
 import {MatDialogModule} from "@angular/material/dialog";
 import { ForwardContractComponent } from './shared/model/forward-contract/forward-contract.component';
 import {TranslateModule} from "@ngx-translate/core";
+import { InfoSignContractComponent } from './shared/info-sign-contract/info-sign-contract.component';
+// import {AddContractComponent} from "./components/contract/add-contract/add-contract.component";
+// import {ContractModule} from "./components/contract/contract.module";
 
 export const contractSignatureRoutes: Routes = [
   { path: 'receive/wait-processing/consider-contract/:id', component: ConsiderContractComponent },
@@ -60,6 +63,7 @@ export const contractSignatureRoutes: Routes = [
     SecretaryContractComponent,
     SignContractComponent,
     ForwardContractComponent,
+    InfoSignContractComponent,
     // AddContractComponent
   ],
   imports: [

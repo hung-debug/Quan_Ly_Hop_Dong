@@ -63,8 +63,8 @@ export class ContractService {
                                  alias_url: "",
                                  refs: [],
                                 });
-  console.log(headers);
-  console.log(body);
+    console.log(headers);
+    console.log(body);
     return this.http.post<Contract>(this.addContractUrl, body, {'headers':headers})
        .pipe(
           map((contract) => {
@@ -270,15 +270,13 @@ export class ContractService {
       ]
     }
 
-
   }
 
 
-
   // Error handling
-  handleError(error:any) {
+  handleError(error: any) {
     let errorMessage = '';
-    if(error.error instanceof ErrorEvent) {
+    if (error.error instanceof ErrorEvent) {
       // Get client-side error
       errorMessage = error.error.message;
     } else {
@@ -287,7 +285,251 @@ export class ContractService {
     }
     window.alert(errorMessage);
     return throwError(errorMessage);
- }
+  }
 
+  getDataDetermine() {
+    return [
+      {
+        "name": "", // tên bên tham gia
+        "type": 1, // loại bên tham gia: tổ chức của tôi | đối tác | cá nhân
+        "ordering": 1, // thứ tự thực hiện ký kết của các bên tham gia
+        "recipients": [
+          // Dữ liệu người xem xét
+          {
+            "name": "", // tên người tham gia
+            "email": "", // email người tham gia
+            "phone": "", // sđt người tham gia
+            "role": 1, // loại tham gia: xem xét|điều phối| ký | văn thư
+            "ordering": 1, // thứ tự thực hiện của người tham gia
+            "status": 1, // Trạng thái chưa xử lý/ đã xử lý
+            "username": "", // username khi click từ link email
+            "password": "", // pw click từ link email
+            "is_otp": 1, // select otp
+            "sign_type": [ // hình thức ký
+            ]
+          },
+          // Dữ liệu người ký
+          {
+            "name": "", // tên người tham gia
+            "email": "", // email người tham gia
+            "phone": "", // sđt người tham gia
+            "role": 3, // loại tham gia: xem xét|điều phối| ký | văn thư
+            "ordering": 1, // thứ tự thực hiện của người tham gia
+            "status": 1, // Trạng thái chưa xử lý/ đã xử lý
+            "username": "thangbt", // username khi click từ link email
+            "password": "ad", // pw click từ link email
+            "is_otp": 1, // select otp
+            "sign_type": [ // hình thức ký
+            ]
+          },
+          // dữ liệu văn thư
+          {
+            "name": "", // tên người tham gia
+            "email": "", // email người tham gia
+            "phone": "", // sđt người tham gia
+            "role": 4, // loại tham gia: xem xét|điều phối| ký | văn thư
+            "ordering": 1, // thứ tự thực hiện của người tham gia
+            "status": 1, // Trạng thái chưa xử lý/ đã xử lý
+            "username": "", // username khi click từ link email
+            "password": "", // pw click từ link email
+            "is_otp": 1, // select otp
+            "sign_type": [ // hình thức ký
+            ]
+          },
+        ],
+      },
+      // Đối tác
+      // Tổ chức
+      {
+        "name": "Đối tác tổ chức",
+        "type": 2, // Đối tác tổ chức
+        "ordering": 1,
+        "selected": true,
+        "recipients": [
+          // người điều phối
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 2, // người điều phối
+            "ordering": 1,
+            "status": 1,
+            "username": "",
+            "password": "",
+            "is_otp": 1,
+            "sign_type": [
+              {
+                "id": 1,
+                "name": "Ký ảnh"
+              },
+              {
+                "id": 2,
+                "name": "Ký số bằng USB token"
+              },
+              {
+                id: 3,
+                name: "Ký số bằng sim KPI"
+              },
+              {
+                id: 4,
+                name: "Ký số bằng HSM"
+              }
+            ]
+          },
+          // người xem xét
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 1, // người xem xét
+            "ordering": 1,
+            "status": 1,
+            "username": "",
+            "password": "",
+            "is_otp": 1,
+            "sign_type": [
+              {
+                "id": 1,
+                "name": "Ký ảnh"
+              },
+              {
+                "id": 2,
+                "name": "Ký số bằng USB token"
+              },
+              {
+                id: 3,
+                name: "Ký số bằng sim KPI"
+              },
+              {
+                id: 4,
+                name: "Ký số bằng HSM"
+              }
+            ]
+          },
+          // người ký
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 3, // người ký
+            "ordering": 1,
+            "status": 1,
+            "username": "",
+            "password": "",
+            "is_otp": 1,
+            "sign_type": [
+              {
+                "id": 1,
+                "name": "Ký ảnh"
+              },
+              {
+                "id": 2,
+                "name": "Ký số bằng USB token"
+              },
+              {
+                id: 3,
+                name: "Ký số bằng sim KPI"
+              },
+              {
+                id: 4,
+                name: "Ký số bằng HSM"
+              }
+            ]
+          },
+          // văn thư
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 4, // văn thư
+            "ordering": 1,
+            "status": 1,
+            "username": "",
+            "password": "",
+            "is_otp": 1,
+            "sign_type": [
+              {
+                "id": 1,
+                "name": "Ký ảnh"
+              },
+              {
+                "id": 2,
+                "name": "Ký số bằng USB token"
+              },
+              {
+                id: 3,
+                name: "Ký số bằng sim KPI"
+              },
+              {
+                id: 4,
+                name: "Ký số bằng HSM"
+              }
+            ]
+          }
+        ],
+      },
+      {
+        "name": "Đối tác cá nhân",
+        "type": 3, // Đối tác cá nhân
+        "ordering": 1,
+        "selected": false,
+        "recipients": [
+          // người điều phối
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 2, // người điều phối
+            "ordering": 1,
+            "status": 1,
+            "username": "",
+            "password": "",
+            "is_otp": 1,
+            "sign_type": []
+          },
+          // người xem xét
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 1, // người xem xét
+            "ordering": 1,
+            "status": 1,
+            "username": "",
+            "password": "",
+            "is_otp": 1,
+            "sign_type": []
+          },
+          // người ký
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 3, // người ký
+            "ordering": 1,
+            "status": 1,
+            "username": "",
+            "password": "",
+            "is_otp": 1,
+            "sign_type": []
+          },
+          // văn thư
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 4, // văn thư
+            "ordering": 1,
+            "status": 1,
+            "username": "",
+            "password": "",
+            "is_otp": 1,
+            "sign_type": []
+          }
+        ],
+      }
+    ]
+  }
 
 }
+
