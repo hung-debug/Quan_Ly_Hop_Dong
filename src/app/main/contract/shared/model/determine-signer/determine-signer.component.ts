@@ -1,3 +1,4 @@
+import { ContractService } from 'src/app/service/contract.service';
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {type_signature, variable} from "../../../../../config/variable";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";

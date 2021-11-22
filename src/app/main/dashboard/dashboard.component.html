@@ -16,12 +16,15 @@
     </div>
   </div>
   <div class="row" style="padding-top: 20px;">
-    <div class="col-md-6">
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
       <div [chart]="chartCreated"></div>
+      <div style="text-align: center;">{{'chart.contract.created' | translate}}</div>
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-4">
       <div [chart]="chartReceived"></div>
+      <div style="text-align: center;">{{'chart.contract.received' | translate}}</div>
     </div>
     <div class="col-md-1"></div>
   </div>

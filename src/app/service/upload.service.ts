@@ -6,6 +6,9 @@ import { catchError } from 'rxjs/operators';
 
 export interface File {
   success:string,
+  fileObject:{
+    filePath:string,
+  }
 }
 @Injectable({
   providedIn: 'root'
@@ -27,7 +30,7 @@ export class UploadService {
     formData.append('file', datas.contractFile);
 
     const headers = new HttpHeaders()
-      .append('Content-Type', 'multipart/form-data')
+      //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
 
     console.log(this.uploadFileUrl);
@@ -63,7 +66,6 @@ export class UploadService {
   //   const req = new HttpRequest('POST', url, formData, { headers: headers });
   //   return this.http.request(req);
   // }
-
 
 
   // getFiles(): Observable<any> {

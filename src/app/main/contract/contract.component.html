@@ -107,13 +107,13 @@
         <div class="col-md-6">
           <div class="label_item">{{'contract.type' | translate}}</div>
           <div class="input-group">
-            <input type="text" id="contractType" class="form-control"/>
+            <input type="text" [(ngModel)]="filter_type" class="form-control"/>
           </div>
         </div>
         <div class="col-md-6">
           <div class="label_item">{{'contract.number' | translate}}</div>
           <div class="input-group">
-            <input type="text" id="contractNumber" class="form-control"/>
+            <input type="text" [(ngModel)]="filter_contract_no" class="form-control"/>
           </div>
         </div>
       </div>
@@ -121,14 +121,14 @@
         <div class="col-md-6">
           <div class="label_item">{{'createdate.start' | translate}}</div>
           <div class="input-group">
-            <ngx-datepicker [(ngModel)]="startCreateDate" [options]="options" class="date-picker"></ngx-datepicker>
+            <ngx-datepicker [(ngModel)]="filter_from_date" [options]="options" class="date-picker"></ngx-datepicker>
             <img src="assets/img/db_calendar.svg" class="input-img-calendar">
           </div>
         </div>
         <div class="col-md-6">
           <div class="label_item">{{'createdate.end' | translate}}</div>
           <div class="input-group">
-            <ngx-datepicker [(ngModel)]="endCreateDate" [options]="options" class="date-picker"></ngx-datepicker>
+            <ngx-datepicker [(ngModel)]="filter_to_date" [options]="options" class="date-picker"></ngx-datepicker>
             <img src="assets/img/db_calendar.svg" class="input-img-calendar">
           </div>
         </div>
@@ -137,7 +137,7 @@
     <div class="row" style="text-align: center; padding-top: 10px;">
       <div class="col-md-12">
         <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
-        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.close('Save click')">Tìm kiếm</button>
+        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.close('Save click'); search()">Tìm kiếm</button>
       </div>
     </div>
   </div>

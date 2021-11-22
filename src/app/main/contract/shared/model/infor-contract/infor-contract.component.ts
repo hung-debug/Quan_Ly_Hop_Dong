@@ -1,3 +1,4 @@
+import { ContractService } from 'src/app/service/contract.service';
 import { UploadService } from './../../../../../service/upload.service';
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
@@ -9,7 +10,6 @@ import {AddContractComponent} from "../../../add-contract/add-contract.component
 import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
-import { ContractService } from 'src/app/service/contract.service';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -50,6 +50,7 @@ export class InforContractComponent implements OnInit {
   contractConnect:any;
   sign_time:any;
   notes:any;
+  filePath:any;
 
   //error
   errorContractName:any = '';
@@ -135,6 +136,7 @@ export class InforContractComponent implements OnInit {
     if (file) {
       // giới hạn file upload lên là 5mb
       if (e.target.files[0].size <= 5000000) {
+        console.log(e.target.files[0].size);
         const file_name = file.name;
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
@@ -242,32 +244,45 @@ export class InforContractComponent implements OnInit {
 
   callAPI() {
     //call API step 1
-    // this.contractService.addContractStep1(this.datas).subscribe((data) => {
-    //   this.datas.id = data?.id;
-    //   console.log(data);
-    //
-    //   //call API upload file
-    //   this.uploadService.uploadFile(this.datas).subscribe((data) => {
-    //     console.log("File" + data);
-    //
-    //     //next step
-        this.step = variable.stepSampleContract.step2;
-        this.datas.stepLast = this.step
-        this.nextOrPreviousStep(this.step);
-        console.log(this.datas);
-    //   },
-    //   error => {
-    //     console.log("false file");
-    //     return false;
-    //   }
-    //   );
-    //
-    // },
-    // error => {
-    //   console.log("false content");
-    //   return false;
-    // }
-    // );
+    this.contractService.addContractStep1(this.datas).subscribe((data) => {
+      this.datas.id = data?.id;
+      console.log(data);
+
+      //call API upload file
+      this.uploadService.uploadFile(this.datas).subscribe((data) => {
+        console.log("File " + data.success);
+        this.datas.filePath = data.fileObject.filePath;
+        console.log(this.datas.filePath);
+        console.log(JSON.stringify(data));
+
+        this.contractService.addDocument(this.datas).subscribe((data) => {
+          console.log(JSON.stringify(data));
+
+          //next step
+          this.step = variable.stepSampleContract.step2;
+          this.datas.stepLast = this.step
+          this.nextOrPreviousStep(this.step);
+          console.log(this.datas);
+
+        },
+        error => {
+          console.log("false connect file");
+          return false;
+        }
+        );
+      },
+      error => {
+        console.log("false file");
+        return false;
+      }
+      );
+
+    },
+    error => {
+      console.log("false content");
+      return false;
+    }
+    );
 
   }
 
