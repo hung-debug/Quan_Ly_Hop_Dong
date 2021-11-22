@@ -23,8 +23,10 @@ export class ContractService {
 
   listContractUrl:any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
   addContractUrl:any = `${environment.apiUrl}/api/v1/contracts`;
+  documentUrl:any = `${environment.apiUrl}/api/v1/documents`;
 
   token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+  customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
   errorData:any = {};
   redirectUrl: string = '';
 
@@ -32,27 +34,16 @@ export class ContractService {
     public datepipe: DatePipe,) { }
 
   public getContractList(filter_type:any, filter_contract_no:any, filter_from_date:any,filter_to_date:any): Observable<any> {
-    let listContractUrl = this.listContractUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" +  this.datepipe.transform(filter_from_date, 'yyyy-MM-ddThh:mm:ssZ') + "&to_date=" +  this.datepipe.transform(filter_to_date, 'yyyy-MM-ddThh:mm:ssZ');
+    if(filter_from_date != ""){
+      filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
+    }
+    if(filter_to_date != ""){
+      filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
+    }
+    let listContractUrl = this.listContractUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "";
     console.log(listContractUrl);
     const headers = { 'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
-  }
-
-  organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.organization_id;
-  uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`+ this.organization_id + `/single`;
-  postFile(fileToUpload: File){
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'multipart/form-data')
-      .append('Authorization', 'Bearer ' + this.token);
-    const formData: FormData = new FormData();
-    formData.append('file', fileToUpload);
-    console.log(this.uploadFileUrl);
-    console.log(fileToUpload);
-    console.log(headers);
-    console.log(formData);
-    return this.http
-    .post(this.uploadFileUrl, formData, { headers: headers })
-    //.pipe(map((response: any) => response.json()))
   }
 
   addContractStep1(datas:any) {
@@ -62,13 +53,15 @@ export class ContractService {
     const body = JSON.stringify({name: datas.name,
                                  code: datas.code,
                                  contract_no: datas.code,
-                                 sign_order: 1,
-                                 sign_time: this.datepipe.transform(datas.sign_time, 'yyyy-MM-ddThh:mm:ssZ'),
+                                 //sign_order: 1,
+                                 sign_time: this.datepipe.transform(datas.sign_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
                                  notes: datas.notes,
-                                 type_id: 2,
-                                 customer_id: 2,
-                                 is_template: false,
-                                 status: 1,
+                                 type_id: 4,
+                                 //customer_id: this.customer_id,
+                                 //is_template: false,
+                                 //status: 1,
+                                 alias_url: "",
+                                 refs: [],
                                 });
   console.log(headers);
   console.log(body);
@@ -83,6 +76,24 @@ export class ContractService {
          }),
          catchError(this.handleError)
        );
+  }
+
+  addDocument(datas:any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({name: datas.name,
+                                 type: 1,
+                                 path: datas.filePath,
+                                 internal: 1,
+                                 ordering: 1,
+                                 status: 1,
+                                 contract_id: datas.id,
+                                 is_primary: true,
+                                });
+  console.log(headers);
+  console.log(body);
+    return this.http.post<Contract>(this.documentUrl, body, {'headers':headers});
   }
 
   objDefaultSampleContract() {

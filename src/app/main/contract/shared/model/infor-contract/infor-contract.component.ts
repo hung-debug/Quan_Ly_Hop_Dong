@@ -50,7 +50,7 @@ export class InforContractComponent implements OnInit {
   contractConnect:any;
   sign_time:any;
   notes:any;
-  file:File;
+  filePath:any;
 
   //error
   errorContractName:any = '';
@@ -158,7 +158,6 @@ export class InforContractComponent implements OnInit {
           fileInput.value = '';
           this.datas.file_name = file_name;
           this.datas.contractFile = file;
-          this.file = file;
         } else {
           alert('Chỉ hỗ trợ file có định dạng PDF')
         }
@@ -250,14 +249,27 @@ export class InforContractComponent implements OnInit {
       console.log(data);
 
       //call API upload file
-      this.contractService.postFile(this.file).subscribe((data) => {
-        console.log("File" + data);
+      this.uploadService.uploadFile(this.datas).subscribe((data) => {
+        console.log("File " + data.success);
+        this.datas.filePath = data.fileObject.filePath;
+        console.log(this.datas.filePath);
+        console.log(JSON.stringify(data));
 
-        //next step
-        this.step = variable.stepSampleContract.step2;
-        this.datas.stepLast = this.step
-        this.nextOrPreviousStep(this.step);
-        console.log(this.datas);
+        this.contractService.addDocument(this.datas).subscribe((data) => {
+          console.log(JSON.stringify(data));
+
+          //next step
+          this.step = variable.stepSampleContract.step2;
+          this.datas.stepLast = this.step
+          this.nextOrPreviousStep(this.step);
+          console.log(this.datas);
+
+        },
+        error => {
+          console.log("false connect file");
+          return false;
+        }
+        );
       },
       error => {
         console.log("false file");
