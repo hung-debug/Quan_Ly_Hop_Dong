@@ -1,8 +1,9 @@
 import { ContractService } from 'src/app/service/contract.service';
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {type_signature, variable} from "../../../../../config/variable";
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
 import {Helper} from "../../../../../core/Helper";
+// import {ContractService} from "../../../../../service/contract.service";
 import * as ContractCreateDetermine from '../../contract_data'
 import {elements} from "@interactjs/snappers/all";
 
@@ -23,25 +24,24 @@ export class DetermineSignerComponent implements OnInit {
   data_determine: any;
   data_organization: any;
   data_parnter_organization: any = [];
-  individual: any;
-  is_partner: any;
 
   is_origanzation_reviewer: any = [];
   is_origanzation_signature: any = [];
   is_origanzation_document: any = {};
 
-  is_partner_origanzation_reviewer: any = [];
-  is_partner_origanzation_coordinator: any = [];
-  is_partner_origanzation_signature: any = [];
-  is_partner_origanzation_document: any = {};
-
-  is_partner_individual_reviewer: any = [];
-  is_partner_individual_coordinator: any = [];
-  is_partner_individual_signature: any = [];
-  is_partner_individual_document: any = {};
+  // is_partner_origanzation_reviewer: any = [];
+  // is_partner_origanzation_coordinator: any = [];
+  // is_partner_origanzation_signature: any = [];
+  // is_partner_origanzation_document: any = {};
+  //
+  // is_partner_individual_reviewer: any = [];
+  // is_partner_individual_coordinator: any = [];
+  // is_partner_individual_signature: any = [];
+  // is_partner_individual_document: any = {};
 
   is_determine_clone: any;
   list_type_signature: any = type_signature;
+  toppings = new FormControl();
 
 
   //dropdown
@@ -126,29 +126,47 @@ export class DetermineSignerComponent implements OnInit {
     }
 
 
+    // this.signTypeList = [
+    //   {
+    //     item_id: 1,
+    //     item_text: "Ký ảnh",
+    //   },
+    //   {
+    //     item_id: 2,
+    //     item_text: "Ký số bằng USB token",
+    //   },
+    //   {
+    //     item_id: 3,
+    //     item_text: "Ký số bằng sim KPI",
+    //   },
+    //   {
+    //     item_id: 4,
+    //     item_text: "Ký số bằng HSM",
+    //   }
+    // ];
     this.signTypeList = [
       {
-        item_id: 1,
-        item_text: "Ký ảnh",
+        id: 1,
+        name: "Ký ảnh"
       },
       {
-        item_id: 2,
-        item_text: "Ký số bằng USB token",
+        id: 2,
+        name: "Ký số bằng USB token"
       },
       {
-        item_id: 3,
-        item_text: "Ký số bằng sim KPI",
+        id: 3,
+        name: "Ký số bằng sim KPI"
       },
       {
-        item_id: 4,
-        item_text: "Ký số bằng HSM",
+        id: 4,
+        name: "Ký số bằng HSM"
       }
-    ];
+    ]
 
     this.dropdownSignTypeSettings = {
       singleSelection: false,
-      idField: "item_id",
-      textField: "item_text",
+      idField: "id",
+      textField: "name",
       selectAllText: "Chọn tất cả",
       unSelectAllText: "Bỏ chọn tất cả",
       allowSearchFilter: true
@@ -515,35 +533,36 @@ export class DetermineSignerComponent implements OnInit {
     if (!this.validData()) return;
     else {
       // gán value step 2 vào datas
-      this.datas.userForm = this.userForm.value;
-      if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
-        this.datas.userForm.userSigns.forEach((item: any) => {
-          item['id'] = Helper._ranDomNumberText(10);
-        })
-      }
+      // this.datas.userForm = this.userForm.value;
+      // if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
+      //   this.datas.userForm.userSigns.forEach((item: any) => {
+      //     item['id'] = Helper._ranDomNumberText(10);
+      //   })
+      // }
+      //
+      // this.datas.partnerForm = this.partnerForm.value;
+      // if (this.datas.partnerForm.partnerArrs && this.datas.partnerForm.partnerArrs.length > 0) {
+      //   this.datas.partnerForm.partnerArrs.forEach((element: any) => {
+      //     if (element.partnerSigns && element.partnerSigns.length > 0) {
+      //       element.partnerSigns.forEach((item: any) => {
+      //         item['id'] = Helper._ranDomNumberText(10);
+      //       })
+      //     }
+      //     if (element.partnerUsers && element.partnerUsers.length > 0) {
+      //       element.partnerUsers.forEach((items: any) => {
+      //         items['id'] = Helper._ranDomNumberText(10);
+      //       })
+      //     }
+      //   })
+      // }
 
-      this.datas.partnerForm = this.partnerForm.value;
-
-      if (this.datas.partnerForm.partnerArrs && this.datas.partnerForm.partnerArrs.length > 0) {
-        this.datas.partnerForm.partnerArrs.forEach((element: any) => {
-          if (element.partnerSigns && element.partnerSigns.length > 0) {
-            element.partnerSigns.forEach((item: any) => {
-              item['id'] = Helper._ranDomNumberText(10);
-            })
-          }
-          if (element.partnerUsers && element.partnerUsers.length > 0) {
-            element.partnerUsers.forEach((items: any) => {
-              items['id'] = Helper._ranDomNumberText(10);
-            })
-          }
-        })
-      }
+      console.log(this.is_determine_clone);
 
 
-      this.step = variable.stepSampleContract.step3;
-      this.datas.stepLast = this.step
-      // console.log(this.datas);
-      this.nextOrPreviousStep(this.step);
+      // this.step = variable.stepSampleContract.step3;
+      // this.datas.stepLast = this.step
+      // // console.log(this.datas);
+      // this.nextOrPreviousStep(this.step);
     }
   }
 
@@ -564,6 +583,31 @@ export class DetermineSignerComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  // BEGIN DATA
+
+  getOriganzationTypeSign(e: any, name_type_sign: string, data?: any, index?: any) {
+    // let data_select = this.signTypeList.filter((p: any) => p.id == e);
+    let data_select: any[] = [];
+    this.signTypeList.forEach((element: any) => {
+      e.forEach((item: any) => {
+        if (element.id == item) {
+          data_select.push(element);
+        }
+      })
+    })
+    if (name_type_sign == 'is_origanzation_document') {
+      this.is_origanzation_document.sign_type = data_select;
+    } else if (name_type_sign == 'is_origanzation_signature' || name_type_sign == 'get_partner_signature' && data) {
+      data[index].sign_type = data_select;
+    } else if (name_type_sign == 'get_partner_document') {
+      data.sign_type = data_select;
+    }
+  }
+
+  onItemSelect(item: any) {
+    console.log('onItemSelect', item);
   }
 
   changePartner(e: any, number_type: number, item: any) {

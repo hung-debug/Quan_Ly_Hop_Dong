@@ -15,29 +15,57 @@ export interface File {
 })
 export class UploadService {
 
-  token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
-  organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.organization_id;
-
-  uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`+ this.organization_id + `/single`;
+  // token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+  // organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.organization_id;
+  //
+  // uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`+ this.organization_id + `/single`;
 
 
 
   constructor(private http: HttpClient) { }
 
-  uploadFile(datas: any) {
+  // uploadFile(datas: any) {
+  //
+  //   let formData = new FormData();
+  //   formData.append('file', datas.contractFile);
+  //
+  //   const headers = new HttpHeaders()
+  //     //.append('Content-Type', 'multipart/form-data')
+  //     .append('Authorization', 'Bearer ' + this.token);
 
-    let formData = new FormData();
-    formData.append('file', datas.contractFile);
+    // console.log(this.uploadFileUrl);
+    // console.log(headers);
+    // console.log(formData);
+  //   return this.http.post<File>(this.uploadFileUrl, formData, {'headers':headers});
+  // }
 
-    const headers = new HttpHeaders()
-      //.append('Content-Type', 'multipart/form-data')
-      .append('Authorization', 'Bearer ' + this.token);
+  // postFile(datas: any){
+  //   let fileToUpload:File = datas.contractFile;
+  //   const headers = new HttpHeaders()
+  //     .append('Content-Type', 'multipart/form-data')
+  //     .append('Authorization', 'Bearer ' + this.token);
+  //   const formData: FormData = new FormData();
+  //   formData.append('file', fileToUpload, fileToUpload.name);
+  //   console.log(this.uploadFileUrl);
+  //   console.log(fileToUpload);
+  //   console.log(headers);
+  //   console.log(formData);
+  //   return this.http
+  //     .post(this.uploadFileUrl, formData, { headers: headers });
+  // }
 
-    console.log(this.uploadFileUrl);
-    console.log(headers);
-    console.log(formData);
-    return this.http.post<File>(this.uploadFileUrl, formData, {'headers':headers});
-  }
+  // uploadFile2(url: string, file: File): Observable<HttpEvent<any>> {
+
+  //   let formData = new FormData();
+  //   formData.append('file', file);
+
+  //   const headers = new HttpHeaders()
+  //     .append('Content-Type', 'multipart/form-data')
+  //     .append('Authorization', 'Bearer ' + this.token);
+
+  //   const req = new HttpRequest('POST', url, formData, { headers: headers });
+  //   return this.http.request(req);
+  // }
 
 
   // getFiles(): Observable<any> {
