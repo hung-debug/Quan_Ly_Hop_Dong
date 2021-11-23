@@ -1,13 +1,21 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-3 input-line">
-      <input type="text" placeholder="{{'createdate.start' | translate }}" class="input-text"/>
-      <img src="../../assets/img/db_calendar.svg" class="input-img">
+    <div class="col-md-3">
+      <div>{{'createdate.start' | translate}}</div>
+      <div class="input-line">
+        <ngx-datepicker [(ngModel)]="filter_from_date" [options]="options" class="date-picker"></ngx-datepicker>
+        <img src="assets/img/db_calendar.svg" class="input-img">
+        <!-- <input type="text" class="input-text"/>
+        <img src="../../assets/img/db_calendar.svg" class="input-img"> -->
+      </div>
     </div>
-    <div class="col-md-3 input-line">
-      <input type="text" placeholder="{{'createdate.end' | translate }}" class="input-text"/>
-      <img src="../../assets/img/db_calendar.svg" class="input-img">
+    <div class="col-md-3">
+      <div>{{'createdate.end' | translate}}</div>
+      <div class="input-line">
+        <input type="text" class="input-text"/>
+        <img src="../../assets/img/db_calendar.svg" class="input-img">
+      </div>
     </div>
     <div class="col-md-3">
       <div class="form-group">
