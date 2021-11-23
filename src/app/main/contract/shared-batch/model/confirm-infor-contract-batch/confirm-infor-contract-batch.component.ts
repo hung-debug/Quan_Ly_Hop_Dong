@@ -81,7 +81,7 @@ export class ConfirmInforContractBatchComponent implements OnInit, OnDestroy, Af
     private modalService: NgbModal,
     private dialog: MatDialog
   ) {
-    this.step = variable.stepSampleContract.step3
+    this.step = variable.stepBatchContract.step2
   }
 
   ngOnInit() {

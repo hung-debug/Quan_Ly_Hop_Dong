@@ -205,15 +205,15 @@ export class InforContractBatchComponent implements OnInit {
 
   //--valid data step 1
   validData() {
-    this.clearError();
-    if (!this.name) {
-      this.errorContractName = 'Tên hợp đồng không được để trống!';
-      return false;
-    }
-    if (!this.datas.contractFile) {
-      this.errorContractFile = 'File hợp đồng không được để trống!';
-      return false;
-    }
+    // this.clearError();
+    // if (!this.name) {
+    //   this.errorContractName = 'Tên hợp đồng không được để trống!';
+    //   return false;
+    // }
+    // if (!this.datas.contractFile) {
+    //   this.errorContractFile = 'File hợp đồng không được để trống!';
+    //   return false;
+    // }
 
     return true
   }
@@ -270,13 +270,13 @@ export class InforContractBatchComponent implements OnInit {
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
 
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(this.datas.contractFile);
-      fileReader.onload = (e) => {
-        //@ts-ignore
-        const base64result = fileReader.result.toString().split(',')[1];
-        this.datas.file_content = base64result;
-      };
+      // const fileReader = new FileReader();
+      // fileReader.readAsDataURL(this.datas.contractFile);
+      // fileReader.onload = (e) => {
+      //   //@ts-ignore
+      //   const base64result = fileReader.result.toString().split(',')[1];
+      //   this.datas.file_content = base64result;
+      // };
 
       this.callAPI();
     }
@@ -290,7 +290,8 @@ export class InforContractBatchComponent implements OnInit {
   }
 
 
-  changeAddSampleContract(link:any){
+  changeAddContract(link:any){
+    console.log(link);
     this.router.navigate([link]);
   }
 }

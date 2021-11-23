@@ -3,57 +3,92 @@
   <!--  information contract-->
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-      <div style="padding-bottom: 10px; text-align: center" class="label">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
-      <div class="label infor-contract" style="line-height: 25px;">
-        <div class="type-contract">
-          <div style="display: inline-block; padding-right: 5px">Loại hợp đồng:</div>
-<!--          <span>{{datas.contractType}}</span>-->
-          <div style="display: inline-block" *ngFor="let d of this.datas.type_id; let i = index">
-            <span>{{d.item_text}}</span>
-            <span>{{i == (this.datas.type_id.length - 1) ? '' : ', '}}</span>
-          </div>
-        </div>
-        <div class="name-contract">
-          <div class="title-contract" style="display: inline-block">Tên hợp đồng:</div>
-          <div style="display: inline-block">{{datas.name}}</div>
-        </div>
-        <div class="number-contract">
-          <div class="title-contract" style="display: inline-block">Số hợp đồng:</div>
-          <div style="display: inline-block">{{datas.code}}</div>
-        </div>
-        <div class="file-attach-contract">
-          <div class="title-contract" style="display: inline-block">File đính kèm:</div>
-          <div style="display: inline-block">
-            <span class="text-decoration-style">{{this.datas.attachFile.name}}</span>
-          </div>
-        </div>
-        <div class="contract-coordination">
-          <div class="title-contract" style="display: inline-block">Hợp đồng liên quan:</div>
-          <div style="display: inline-block" *ngFor="let d of this.datas.contractConnect; let i = index">
-            <span class="text-decoration-style">{{d.item_text}}</span>
-            <span>{{i == (this.datas.contractConnect.length - 1) ? '' : ', '}}</span>
-          </div>
-        </div>
+      <div style="padding-bottom: 10px; text-align: center" class="label">SỐ HỢP ĐỒNG THEO LÔ</div>
+      <div style="line-height: 25px; text-align: center;">
+        <img src="/assets/img/icon_previous.svg" style="padding-right: 10px"/>
+
+        <input type="text" value="3" style="width: 30px;text-align: center;border-radius: 3px;border: 1px solid #106DB6;"/>/4
+        <img src="/assets/img/icon_next.svg" style="padding-left: 10px"/>
       </div>
     </div>
     <hr>
 
     <div class="location-change" [ngStyle]="changeDisplay()">
       <div class="sample-contract__information--user-sign" style="line-height: 25px">
-        <div style="text-align: center;" class="label">CÁC BÊN LIÊN QUAN</div>
-        <div>{{datas.userForm.name}}</div>
-        <div *ngFor="let d of this.datas.partnerForm.partnerArrs">
-          <span class="label" style="color: black; font-size: 13px">{{d.name}}</span>
+        <div style="text-align: center;" class="label">THÔNG TIN CÁC BÊN KÝ</div>
+      </div>
+      <div>
+        <div style="background: #C7D0E9;
+        padding: 8px;
+        margin: 10px 0;">
+          BÊN KÝ 1
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <div class="label_item">Người xem xét</div>
+              <div>
+                <div class="input_text">Nguyễn Văn A - abc@gmail.com.vn</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <div class="label_item">Người ký</div>
+              <div>
+                <div class="input_text">Nguyễn Văn A - abc@gmail.com.vn</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <div class="label_item">Văn thư</div>
+              <div>
+                <div class="input_text">Nguyễn Văn A - abc@gmail.com.vn</div>
+              </div>
+            </div>
+          </div>
         </div>
 
-      </div>
-      <div >
-        <u class="label" style="color: #106DB6; padding-right: 3px; cursor: pointer; font-size: 13px" (click)="processHandleContract()">Luồng xử lý hợp
-          đồng</u>
-      </div>
-      <hr>
-      <div class="flex-column">
-        <div class="label" style="text-align: center">ĐIỀU PHỐI HỢP ĐỒNG</div>
+        <div style="background: #C7D0E9;
+        padding: 8px;
+        margin: 10px 0;">
+          BÊN KÝ 2
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <div class="label_item">Người xem xét</div>
+              <div>
+                <div class="input_text">Nguyễn Văn A - abc@gmail.com.vn</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <div class="label_item">Người ký</div>
+              <div>
+                <div class="input_text">Nguyễn Văn A - abc@gmail.com.vn</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <div class="label_item">Văn thư</div>
+              <div>
+                <div class="input_text">Nguyễn Văn A - abc@gmail.com.vn</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

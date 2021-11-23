@@ -2,8 +2,7 @@
   <!-- step by step -->
   <div class="activity-card col" style="padding: 10px;text-align: center;">
     <ul id="progressbar">
-      <li [ngClass]="(step == 'infor-contract' || step == 'determine-contract' ||
-                      step == 'sample-contract' || step == 'confirm-contract') ? 'active ' : 'inactive'">
+      <li [ngClass]="(step == 'infor-contract' || step == 'confirm-contract') ? 'active ' : 'inactive'">
         <div [ngClass]="{'current_active' : step == 'infor-contract'}">{{'contract.information' | translate}}</div>
       </li>
 
