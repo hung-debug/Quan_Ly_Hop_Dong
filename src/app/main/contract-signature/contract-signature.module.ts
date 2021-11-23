@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IndexComponent } from './components/index/index.component';
-// import { SignContractComponent } from './components/sign-contract/sign-contract.component';
-import {NoAuthGuard} from "./shared/no-auth.guard";
+// import {routing} from "./contract-signature.routing";
 import { ContractSignatureComponent } from "./contract-signature.component";
 import { DatepickerModule } from "ng2-datepicker";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
@@ -13,6 +12,7 @@ import {RouterModule, Routes} from "@angular/router";
 import { SignaturePersonalContractComponent } from './components/signature-personal-contract/signature-personal-contract.component';
 import { CoordinatesContractComponent } from './components/coordinates-contract/coordinates-contract.component';
 import { SecretaryContractComponent } from './components/secretary-contract/secretary-contract.component';
+import {NoAuthGuard} from "./shared/no-auth.guard";
 import { AddContractComponent } from './components/contract-coordination/add-contract/add-contract.component';
 import { InforContractComponent } from './components/contract-coordination/shared/model/infor-contract/infor-contract.component';
 import { DetermineSignerComponent } from './components/contract-coordination/shared/model/determine-signer/determine-signer.component';
@@ -30,12 +30,18 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { ForwardContractComponent } from './shared/model/forward-contract/forward-contract.component';
 import {TranslateModule} from "@ngx-translate/core";
 import { InfoSignContractComponent } from './shared/info-sign-contract/info-sign-contract.component';
-// import {AddContractComponent} from "./components/contract/add-contract/add-contract.component";
-// import {ContractModule} from "./components/contract/contract.module";
+import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
+import { ImageSignContractComponent } from './components/consider-contract/image-sign-contract/image-sign-contract.component';
+import { ConfirmSignOtpComponent } from './components/consider-contract/confirm-sign-otp/confirm-sign-otp.component';
+import { PkiDialogSignComponent } from './components/consider-contract/pki-dialog-sign/pki-dialog-sign.component';
+import { ImageDialogSignComponent } from './components/consider-contract/image-dialog-sign/image-dialog-sign.component';
+import {NgxSelectModule} from "ngx-select-ex";
+import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialog-sign/hsm-dialog-sign.component';
+import {AngularSignaturePadModule} from "@almothafar/angular-signature-pad";
 
 export const contractSignatureRoutes: Routes = [
   { path: 'receive/wait-processing/consider-contract/:id', component: ConsiderContractComponent },
-  { path: 'receive/wait-processing/personal-signature-contract/:id', component: SignaturePersonalContractComponent },
+  { path: 'receive/wait-processing/personal-signature-contract/:id', component: ConsiderContractComponent },
   // { path: 'receive/wait-processing/coordinates-contract/:id', component: CoordinatesContractComponent },
   { path: 'receive/wait-processing/coordinates-contract/:id', component: IndexComponent },
   { path: 'receive/wait-processing/secretary-contract/:id', component: SecretaryContractComponent },
@@ -63,24 +69,31 @@ export const contractSignatureRoutes: Routes = [
     SecretaryContractComponent,
     SignContractComponent,
     ForwardContractComponent,
-    InfoSignContractComponent,
+    ImageSignContractComponent,
+    ConfirmSignOtpComponent,
+    PkiDialogSignComponent,
+    ImageDialogSignComponent,
+    HsmDialogSignComponent,
     // AddContractComponent
   ],
-  imports: [
-    CommonModule,
-    DatepickerModule,
-    NgbModule,
-    NgxPaginationModule,
-    MdbTabsModule,
-    RouterModule.forChild(contractSignatureRoutes),
-    ReactiveFormsModule,
-    NgMultiSelectDropDownModule,
-    // routing,
-    FormsModule,
-    MatDialogModule,
-    TranslateModule,
-    // ContractModule
-  ],
+    imports: [
+        CommonModule,
+        DatepickerModule,
+        NgbModule,
+        NgxPaginationModule,
+        MdbTabsModule,
+        RouterModule.forChild(contractSignatureRoutes),
+        ReactiveFormsModule,
+        NgMultiSelectDropDownModule,
+        // routing,
+        FormsModule,
+        MatDialogModule,
+        SweetAlert2Module,
+        NgxSelectModule,
+        AngularSignaturePadModule,
+		TranslateModule
+        // ContractModule
+    ],
   providers: [NoAuthGuard]
 })
 export class ContractSignatureModule { }

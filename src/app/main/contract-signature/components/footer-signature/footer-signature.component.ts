@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {variable} from "../../../../config/variable";
 import {ProcessingHandleEcontractComponent} from "../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
 import {MatDialog} from "@angular/material/dialog";
@@ -10,7 +10,8 @@ import {ForwardContractComponent} from "../../shared/model/forward-contract/forw
   styleUrls: ['./footer-signature.component.scss']
 })
 export class FooterSignatureComponent implements OnInit {
-  @Input() datas: any
+  @Input() datas: any;
+  @Output() submitChanges = new EventEmitter<number>();
 
   constructor(
     private dialog: MatDialog
@@ -24,6 +25,8 @@ export class FooterSignatureComponent implements OnInit {
     if (this.datas.action_title == 'Điều phối') {
       console.log(this.datas);
       this.datas.step = variable.stepSampleContract.step_confirm_coordination;
+    } else if ([1, 2].includes(this.datas.roleContractReceived)) {
+      this.submitChanges.emit(1);
     }
   }
 
