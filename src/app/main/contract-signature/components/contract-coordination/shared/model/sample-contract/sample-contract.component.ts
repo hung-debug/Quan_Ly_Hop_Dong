@@ -391,17 +391,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             })
           }
         });
-        this.list_sign_name.forEach((element: any) => {
-          if (name_accept_signature == 'chu_ky_anh') {
-            if (!element.signType.filter((p: any) => p.item_id == 1)[0]) {
-              element.is_disable = true;
-            } else element.is_disable = false;
-          } else if (name_accept_signature == 'chu_ky_so') {
-            if (!element.signType.filter((p: any) => p.item_id == 2)[0]) {
-              element.is_disable = true;
-            } else element.is_disable = false;
-          } else element.is_disable = false;
-        })
+        // this.list_sign_name.forEach((element: any) => {
+        //     if (name_accept_signature == 'chu_ky_anh') {
+        //     if (!element.signType.filter((p: any) => p.item_id == 1)[0]) {
+        //       element.is_disable = true;
+        //     } else element.is_disable = false;
+        //   } else if (name_accept_signature == 'chu_ky_so') {
+        //     if (!element.signType.filter((p: any) => p.item_id == 2)[0]) {
+        //       element.is_disable = true;
+        //     } else element.is_disable = false;
+        //   } else element.is_disable = false;
+        // })
       }
     } else {
       if (event.type == 'dragend') {
