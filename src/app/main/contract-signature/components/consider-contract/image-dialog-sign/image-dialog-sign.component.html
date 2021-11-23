@@ -38,20 +38,23 @@
       </div>
       <div *ngIf="typeImageSignatureRadio == 2">
         <div class="form-group">
-          <div class="select-file-contract">
+          <div class="select-file-contract" [hidden]="imgSignPCSelect">
             <div class="file-approve">
-              <div class="label_item">File đính kèm</div>
-              <input id="attachFileSignature" type="file" accept=".jpg, .png, .jdeg"
-                     (change)="fileChangedAttach($event)" style="display: none;" multiple/>
-              <div class="select-contract" (click)="addFileAttach()">
-                <input type="text" placeholder="Chọn file đính kèm (JPG, PNG, JDEG)" readonly [ngModel]="datas.file_name_attach">
-                <img src="assets/img/attachment.svg" alt="mobifone.contract">
+              <div class="label_item">File đính kèm:</div>
+              <input id="attachFileSignature" type="file" accept=".jpg, .png, .jpge"
+                     (change)="fileChangedAttach($event)" style="display: none;"/>
+              <div class="select-contract container-img-file" (click)="addFileAttach()">
+                <div class="upload-image-region d-flex flex-column container-img-file-1">
+                  <img src="assets/img/img-icon.svg" alt="#" width="50px">
+                  <div class="text-choose-file">Chọn file ảnh chữ ký từ máy tính của bạn.</div>
+                  <div class="text-support-extension">Hỗ trợ định dạng PNG, JPG, JPGE</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div class="image-sign-acc-2 mt-4">
-          <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 0 auto;">
+          <img *ngIf="imgSignPCSelect" (click)="addFileAttach()" [src]="imgSignPCSelect" alt="" style="display: block;margin: 0 auto;width: 40vw;">
         </div>
       </div>
       <div>
@@ -66,7 +69,7 @@
     <div class="select-option">
       <button
         class="dx-button-form dx-button-close dx-button-90"
-        type="button" (click)="uploadImage()">Xác nhận
+        type="button" (click)="uploadImage()">OK
       </button>
     </div>
   </div>
