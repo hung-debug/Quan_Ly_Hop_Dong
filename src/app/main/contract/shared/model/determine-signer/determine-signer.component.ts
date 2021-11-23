@@ -1,4 +1,4 @@
-import { ContractService } from 'src/app/service/contract.service';
+import {ContractService} from 'src/app/service/contract.service';
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {type_signature, variable} from "../../../../../config/variable";
 import {FormArray, FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
@@ -40,12 +40,11 @@ export class DetermineSignerComponent implements OnInit {
   // is_partner_individual_document: any = {};
 
   is_determine_clone: any;
-  list_type_signature: any = type_signature;
   toppings = new FormControl();
 
 
   //dropdown
-  signTypeList: Array<any> = [];
+  signTypeList: Array<any> = type_signature;
   dropdownSignTypeSettings: any = {};
 
   get determineContract() {
@@ -56,22 +55,16 @@ export class DetermineSignerComponent implements OnInit {
     private formBuilder: FormBuilder,
     private contractService: ContractService,
   ) {
-    this.bindData();
     this.step = variable.stepSampleContract.step2
     //this.datas.determineDetails = this.determineDetails;
   }
 
-  bindData(){
-    const anotherList:any[]=[
-      { id:1,value:"test 1"},
-      { id:2,value:"test 2"}
-    ]
-    this.toppings.setValue(anotherList)
-  }
-
 
   ngOnInit(): void {
-    this.is_determine_clone = [...this.contractService.getDataDetermine()];
+    if (this.datas.determine_contract)
+      this.is_determine_clone = this.datas.determine_contract
+    else
+      this.is_determine_clone = [...this.contractService.getDataDetermine()];
     // data Tổ chức của tôi
     this.data_organization = this.is_determine_clone.filter((p: any) => p.type == 1)[0];
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 1);
@@ -133,44 +126,6 @@ export class DetermineSignerComponent implements OnInit {
         await this.setPartnerViews(element.partnerViews);
       })
     }
-
-
-    // this.signTypeList = [
-    //   {
-    //     item_id: 1,
-    //     item_text: "Ký ảnh",
-    //   },
-    //   {
-    //     item_id: 2,
-    //     item_text: "Ký số bằng USB token",
-    //   },
-    //   {
-    //     item_id: 3,
-    //     item_text: "Ký số bằng sim KPI",
-    //   },
-    //   {
-    //     item_id: 4,
-    //     item_text: "Ký số bằng HSM",
-    //   }
-    // ];
-    this.signTypeList = [
-      {
-        id: 1,
-        name: "Ký ảnh"
-      },
-      {
-        id: 2,
-        name: "Ký số bằng USB token"
-      },
-      {
-        id: 3,
-        name: "Ký số bằng sim KPI"
-      },
-      {
-        id: 4,
-        name: "Ký số bằng HSM"
-      }
-    ]
 
     this.dropdownSignTypeSettings = {
       singleSelection: false,
@@ -541,45 +496,56 @@ export class DetermineSignerComponent implements OnInit {
     this.submitted = true;
     // if (!this.validData()) return;
     // else {
-      // gán value step 2 vào datas
-      // this.datas.userForm = this.userForm.value;
-      // if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
-      //   this.datas.userForm.userSigns.forEach((item: any) => {
-      //     item['id'] = Helper._ranDomNumberText(10);
-      //   })
-      // }
-      //
-      // this.datas.partnerForm = this.partnerForm.value;
-      // if (this.datas.partnerForm.partnerArrs && this.datas.partnerForm.partnerArrs.length > 0) {
-      //   this.datas.partnerForm.partnerArrs.forEach((element: any) => {
-      //     if (element.partnerSigns && element.partnerSigns.length > 0) {
-      //       element.partnerSigns.forEach((item: any) => {
-      //         item['id'] = Helper._ranDomNumberText(10);
-      //       })
-      //     }
-      //     if (element.partnerUsers && element.partnerUsers.length > 0) {
-      //       element.partnerUsers.forEach((items: any) => {
-      //         items['id'] = Helper._ranDomNumberText(10);
-      //       })
-      //     }
-      //   })
-      // }
+    // gán value step 2 vào datas
+    // this.datas.userForm = this.userForm.value;
+    // if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
+    //   this.datas.userForm.userSigns.forEach((item: any) => {
+    //     item['id'] = Helper._ranDomNumberText(10);
+    //   })
+    // }
+    //
+    // this.datas.partnerForm = this.partnerForm.value;
+    // if (this.datas.partnerForm.partnerArrs && this.datas.partnerForm.partnerArrs.length > 0) {
+    //   this.datas.partnerForm.partnerArrs.forEach((element: any) => {
+    //     if (element.partnerSigns && element.partnerSigns.length > 0) {
+    //       element.partnerSigns.forEach((item: any) => {
+    //         item['id'] = Helper._ranDomNumberText(10);
+    //       })
+    //     }
+    //     if (element.partnerUsers && element.partnerUsers.length > 0) {
+    //       element.partnerUsers.forEach((items: any) => {
+    //         items['id'] = Helper._ranDomNumberText(10);
+    //       })
+    //     }
+    //   })
+    // }
 
-      this.is_determine_clone.forEach((element: any, index: number) => {
-          element.recipients.forEach((item: any) =>{
-            if (item.role == 3 || item.role == 4) {
-              item['id'] = Helper._ranDomNumberText(10);
-            }
-          })
+    // this.data_organization = this.is_determine_clone.filter((p: any) => p.type == 1)[0];
+    // this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 1);
+    // this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
+    // this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4)[0];
+
+    this.is_determine_clone.forEach((element: any) => {
+      element.recipients.forEach((item: any) => {
+        if (element.type == 1) {
+          if (item.role == 3)
+            Array.prototype.push.apply(element.recipients, this.is_origanzation_signature.filter((p: any) => p.ordering != item.ordering && p.type == item.type));
+          if (item.role == 1)
+            Array.prototype.push.apply(element.recipients, this.is_origanzation_reviewer.filter((p: any) => p.ordering != item.ordering && p.type == item.type));
+        }
+        if (item.role == 3 || item.role == 4) {
+          item['id'] = Helper._ranDomNumberText(10); // tạm thời client render ra, sau khi call api thì mỗi đối tượng obj ký đó sẽ có id
+        }
       })
+    })
 
-      console.log(this.is_determine_clone);
+    console.log(this.is_determine_clone);
 
-      this.datas.determine_contract = this.is_determine_clone;
-      this.step = variable.stepSampleContract.step3;
-      this.datas.stepLast = this.step
-      // console.log(this.datas);
-      this.nextOrPreviousStep(this.step);
+    this.datas.determine_contract = this.is_determine_clone;
+    this.step = variable.stepSampleContract.step3;
+    this.datas.stepLast = this.step
+    // console.log(this.datas);
+    this.nextOrPreviousStep(this.step);
     // }
   }
 
@@ -587,6 +553,10 @@ export class DetermineSignerComponent implements OnInit {
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
     this.stepChangeDetermineSigner.emit(step);
+  }
+
+  getData(e: any) {
+    console.log(e)
   }
 
   // valid data step 2
@@ -604,23 +574,30 @@ export class DetermineSignerComponent implements OnInit {
 
   // BEGIN DATA
 
-  getOriganzationTypeSign(e: any, name_type_sign: string, data?: any, index?: any) {
-    // let data_select = this.signTypeList.filter((p: any) => p.id == e);
-    let data_select: any[] = [];
-    this.signTypeList.forEach((element: any) => {
-      e.forEach((item: any) => {
-        if (element.id == item) {
-          data_select.push(element);
-        }
-      })
-    })
-    if (name_type_sign == 'is_origanzation_document') {
-      this.is_origanzation_document.sign_type = data_select;
-    } else if (name_type_sign == 'is_origanzation_signature' || name_type_sign == 'get_partner_signature' && data) {
-      data[index].sign_type = data_select;
-    } else if (name_type_sign == 'get_partner_document') {
-      data.sign_type = data_select;
-    }
+  // getOriganzationTypeSign(e: any, name_type_sign: string, data?: any, index?: any) {
+  //   // let data_select = this.signTypeList.filter((p: any) => p.id == e);
+  //   let data_select: any[] = [];
+  //   this.signTypeList.forEach((element: any) => {
+  //     e.forEach((item: any) => {
+  //       if (element.id == item) {
+  //         data_select.push(element);
+  //       }
+  //     })
+  //   })
+  //   if (name_type_sign == 'is_origanzation_document') {
+  //     this.is_origanzation_document.sign_type = data_select;
+  //   } else if (name_type_sign == 'is_origanzation_signature' || name_type_sign == 'get_partner_signature' && data) {
+  //     data[index].sign_type = data_select;
+  //   } else if (name_type_sign == 'get_partner_document') {
+  //     data.sign_type = data_select;
+  //   }
+  // }
+
+  get getContractConnectItems() {
+    return this.signTypeList.reduce((acc, curr) => {
+      acc[curr.id] = curr;
+      return acc;
+    }, {});
   }
 
   getValueData(data: any, index: any) {
