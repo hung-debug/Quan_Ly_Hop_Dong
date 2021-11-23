@@ -5,6 +5,8 @@ import {variable} from "../../../../config/variable";
 import {environment} from "../../../../../environments/environment";
 import {UserService} from "../../../../service/user.service";
 import {ContractSignatureService} from "../../../../service/contract-signature.service";
+import * as contractModel from '../../model/contract-model';
+import {data_signature_contract} from "../../model/contract-model";
 
 @Component({
   selector: 'app-index',
@@ -26,6 +28,7 @@ export class IndexComponent implements OnInit {
   constructor(
     private contractSignatureService: ContractSignatureService
   ) {
+    this.data_contract = contractModel.data_signature_contract;
   }
 
 
@@ -458,7 +461,7 @@ export class IndexComponent implements OnInit {
 
   ngOnInit(): void {
     this.contractSignatureService.getContractDetail().subscribe(response => {
-      this.data_contract = response;
+      // this.data_contract = response;
       let data_coordination = localStorage.getItem('data_coordinates_contract');
       if (data_coordination) {
         this.datas = JSON.parse(data_coordination).data_coordinates;
