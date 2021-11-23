@@ -11,6 +11,7 @@ import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-infor-contract',
@@ -61,6 +62,7 @@ export class InforContractComponent implements OnInit {
     private uploadService : UploadService,
     private contractService: ContractService,
     public datepipe: DatePipe,
+    private router: Router,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -317,5 +319,9 @@ export class InforContractComponent implements OnInit {
     this.stepChangeInfoContract.emit(step);
   }
 
+  changeAddContract(link:any){
+    console.log(link);
+    this.router.navigate([link]);
+  }
 
 }
