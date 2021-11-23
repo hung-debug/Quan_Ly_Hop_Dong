@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
       this.errorDetail = "Mật khẩu không được để trống";
     }else {
       if(this.loginForm.value.username == 'admin' && this.loginForm.value.password == '123'){
-        localStorage.setItem('currentUser', 'admin');
+        localStorage.setItem('currentUser', '{"username":"admin","email": "phamvanlambvo@gmail.com"}');
         this.error  = false;
         this.router.navigate(['/main/dashboard']);
       }else{

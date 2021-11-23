@@ -1,1 +1,108 @@
-<p>consider-contract works!</p>
+<div class="sample-contract row" *ngIf="loaded">
+  <!--  information contract-->
+  <div class="col-md-3 sample-contract__information" style="background-color: white;">
+    <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
+      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
+      <div style="line-height: 25px">
+        <div>
+          <span class="title-contract">Loại hợp đồng:</span>
+          <span>{{datas.contract_information.type_contract}}</span>
+        </div>
+        <div>
+          <span class="title-contract">Tên hợp đồng:</span>
+          <span>{{datas.contract_information.name_contract}}</span>
+        </div>
+        <div>
+          <span class="title-contract">Số hợp đồng:</span>
+          <span>{{datas.contract_information.number_contract}}</span>
+        </div>
+        <div>
+          <span class="title-contract">File đính kèm:</span>
+          <span>
+            <a *ngFor="let d of this.datas.contract_information.file_attach" style="color: #106DB6" rel="stylesheet" href="https://vnexpress.net/" target="_blank">{{d.file_name}}</a>
+          </span>
+        </div>
+        <div>
+          <span class="title-contract">Hợp đồng liên quan:</span>
+          <span *ngFor="let d of this.datas.contract_information.file_related_contract" style="color: #106DB6">
+            {{d.file_name}} <span style="color: black">, </span>
+          </span>
+        </div>
+
+      </div>
+    </div>
+    <hr>
+
+    <div class="location-change" [ngStyle]="changeDisplay()">
+      <div class="sample-contract__information--user-sign" style="line-height: 25px">
+        <div style="text-align: center; font-weight: bold" class="label">CÁC BÊN LIÊN QUAN</div>
+        <!--        <div *ngFor="let d of this.isPartySignature">-->
+        <!--          <div>{{d.name}}</div>-->
+        <!--        </div>-->
+        <div *ngFor="let d of this.datas.contract_related">
+          <span>{{d.name_company}}</span>
+        </div>
+
+      </div>
+      <div>
+        <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Luồng xử lý hợp đồng</u>
+      </div>
+      <hr>
+      <div class="flex-column">
+        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 1">
+          <p class="d-flex justify-content-center mb-4">XEM XÉT HỢP ĐỒNG</p>
+          <p class="d-flex mb-2 text-align-left mx-3">Bạn có đồng ý xem xét hợp đồng không?</p>
+          <div class="confirm-radio d-flex justify-content-between mx-4">
+            <div class="radio-confirm">
+              <input id="radio-confirm-consider" type="radio" name="confirm-radio-consider" [value]="1" [(ngModel)]="confirmConsider">
+              <label for="radio-confirm-consider" class="ms-2">Đồng ý</label>
+            </div>
+            <div class="radio-refuse">
+              <input id="radio-refuse-consider" type="radio" name='confirm-radio-consider' [value]="2" [(ngModel)]="confirmConsider">
+              <label for="radio-refuse-consider" class="ms-2">Không đồng ý</label>
+            </div>
+          </div>
+        </div>
+        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2">
+          <p class="d-flex justify-content-center mb-4 text-uppercase">XÁC NHẬN KÝ HỢP ĐỒNG</p>
+          <p class="d-flex mb-2 text-align-left mx-3">Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?</p>
+          <div class="confirm-radio d-flex justify-content-between mx-4">
+            <div class="radio-confirm">
+              <input id="radio-confirm-signature" type="radio" name="confirm-radio-signature" [value]="1" [(ngModel)]='confirmSignature'>
+              <label for="radio-confirm-signature" class="ms-2">Đồng ý</label>
+            </div>
+            <div class="radio-refuse">
+              <input id="radio-refuse-signature" type="radio" name='confirm-radio-signature' [value]="2" [(ngModel)]='confirmSignature'>
+              <label for="radio-refuse-signature" class="ms-2">Không đồng ý</label>
+            </div>
+          </div>
+          <p class="mb-3 mt-3 text-align-left">Chọn loại ký</p>
+          <ngx-select [placeholder]="'Chọn loại ký'" [items]="optionsSign" [(ngModel)]="typeSign" optionValueField="item_id" optionTextField="item_text"></ngx-select>
+          <p style="color:#ED1C24;" class="mt-xl-4">Bạn cần nhập vào ô thông tin trên hợp đồng để hoàn thành.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  file content-->
+  <!--  width: 74.7%-->
+  <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
+       style="background-color: #F2F2F2; position: relative;">
+    <div id="pdf-viewer-step-3">
+      <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+        <div class="resize-drag not-out-drop"
+             [id]="d.id"
+             style="z-index: -1"
+             #itemElement
+             (click)="getSignSelect(d)"
+             [ngClass]="changeColorDrag(null,true)"
+             [ngStyle]="changePosition(d)">
+          <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
+          <!--          </div>-->
+          <app-image-sign-contract [datas]="datas" [sign]="d"></app-image-sign-contract>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer-signature *ngIf="loaded" [datas]="datas" (submitChanges)="submitEvents($event)"></app-footer-signature>
