@@ -743,7 +743,7 @@
                 <div class="participants__name">
                   <div class="label text-color">Loại ký: *</div>
                   <mat-form-field appearance="fill" style="background-color: white; width: 100%">
-                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'is_origanzation_signature', this.is_origanzation_signature, index)">
+                    <mat-select placeholder="Chọn loại ký" [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'is_origanzation_signature', this.is_origanzation_signature, index)">
                       <mat-option *ngFor="let topping of signTypeList" [value]="topping.id">{{topping.name}}</mat-option>
                     </mat-select>
                   </mat-form-field>

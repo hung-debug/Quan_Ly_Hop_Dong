@@ -86,7 +86,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    // console.log(this.datas);
+    console.log(this.datas);
 
     this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
 
@@ -101,22 +101,45 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // this.list_sign_name.forEach((item: any) => {
     //   item['selected'] = false;
     // })
-    if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
-      let is_user_sign = [...this.datas.userForm.userSigns];
-      this.getListSignName(is_user_sign, 'organization');
-    }
-
-    if (this.datas.partnerForm.partnerArrs && this.datas.partnerForm.partnerArrs.length > 0) {
-      this.datas.partnerForm.partnerArrs.forEach((element: any) => {
-        if (element.partnerSigns && element.partnerSigns.length > 0) {
-          let is_partner_sign = [...element.partnerSigns];
-          this.getListSignName(is_partner_sign, 'partner');
-        } else if (element.partnerUsers && element.partnerUsers.length > 0) {
-          let is_partner_users = [...element.partnerUsers];
-          this.getListSignName(is_partner_users, 'partner');
+    if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
+      // let data_list_user_sign: any[] = [];
+      let data_user_sign = [...this.datas.determine_contract];
+      data_user_sign.forEach((element: any) => {
+        if (element.type == 1) {
+          element.recipients.forEach((item: any) => {
+            if (item.role == 3 || item.role == 4) {
+              item['type_unit'] = 'organization';
+              item['selected'] = false;
+              item['is_disable'] = false;
+              this.list_sign_name.push(item);
+            }
+          })
+        } else if (element.type == 2) {
+          element.recipients.forEach((item: any) => {
+            if (item.role == 3 || item.role == 4) {
+              item['type_unit'] = 'partner'
+              item['selected'] = false;
+              item['is_disable'] = false;
+              this.list_sign_name.push(item);
+            }
+          })
         }
       })
+      // this.getListSignName(data_list_user_sign);
     }
+
+    console.log(this.list_sign_name)
+    // if (this.datas.partnerForm.partnerArrs && this.datas.partnerForm.partnerArrs.length > 0) {
+    //   this.datas.partnerForm.partnerArrs.forEach((element: any) => {
+    //     if (element.partnerSigns && element.partnerSigns.length > 0) {
+    //       let is_partner_sign = [...element.partnerSigns];
+    //       this.getListSignName(is_partner_sign, 'partner');
+    //     } else if (element.partnerUsers && element.partnerUsers.length > 0) {
+    //       let is_partner_users = [...element.partnerUsers];
+    //       this.getListSignName(is_partner_users, 'partner');
+    //     }
+    //   })
+    // }
 
 
 
@@ -194,11 +217,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   }
 
-  getListSignName(listSignForm: any = [], type_unit: string) {
+  getListSignName(listSignForm: any = []) {
     listSignForm.forEach((item: any) => {
       item['selected'] = false;
-      item['sign_unit'] = type_unit;
-      item['signType'] = item.signType;
+      // item['sign_unit'] = type_unit;
+      // item['signType'] = item.signType;
       item['is_disable'] = false;
       this.list_sign_name.push(item)
     })
@@ -399,11 +422,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         });
         this.list_sign_name.forEach((element: any) => {
           if (name_accept_signature == 'chu_ky_anh') {
-            if (!element.signType.filter((p: any) => p.item_id == 1)[0]) {
+            if (!element.sign_type.filter((p: any) => p.id == 1)[0]) {
               element.is_disable = true;
             } else element.is_disable = false;
           } else if (name_accept_signature == 'chu_ky_so') {
-            if (!element.signType.filter((p: any) => p.item_id == 2)[0]) {
+            if (!element.sign_type.filter((p: any) => p.id == 2)[0]) {
               element.is_disable = true;
             } else element.is_disable = false;
           } else element.is_disable = false;
@@ -748,11 +771,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.list_sign_name.forEach((item: any) => {
           // if (item.id == d.id) {
           if (d.sign_unit == 'chu_ky_anh') {
-            if (!item.signType.filter((p: any) => p.item_id == 1)[0]) {
+            if (!item.sign_type.filter((p: any) => p.id == 1)[0]) {
               item.is_disable = true;
             } else item.is_disable = false;
           } else if (d.sign_unit == 'chu_ky_so') {
-            if (!item.signType.filter((p: any) => p.item_id == 2)[0]) {
+            if (!item.sign_type.filter((p: any) => p.id == 2)[0]) {
               item.is_disable = true;
             } else item.is_disable = false;
           } else item.is_disable = false;
@@ -1022,9 +1045,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getName(data: any) {
-    if (data.sign_unit == 'organization') {
+    if (data.type_unit == 'organization') {
       return 'Tổ chức của tôi - ' + data.name;
-    } else if (data.sign_unit == 'partner') {
+    } else if (data.type_unit == 'partner') {
       return 'Đối tác - ' + data.name;
     }
   }
