@@ -1,132 +1,82 @@
-<!-- form step 4 -->
-<div class="labelOrg">HỢP ĐỒNG</div>
-  <div class="infor_contact">
-    <div class="row">
-      <div class="col-md-5">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <div class="label_item">Tên file hợp đồng</div>
-              <div>
-                <div [innerHTML]="contractFileName" class="input_text"></div>
-              </div>
-            </div>
+<!--<link rel="stylesheet" href="sample-contract.component.scss">-->
+<div class="sample-contract row">
+  <!--  information contract-->
+  <div class="col-md-3 sample-contract__information" style="background-color: white;">
+    <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
+      <div style="padding-bottom: 10px; text-align: center" class="label">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
+      <div class="label infor-contract" style="line-height: 25px;">
+        <div class="type-contract">
+          <div style="display: inline-block; padding-right: 5px">Loại hợp đồng:</div>
+<!--          <span>{{datas.contractType}}</span>-->
+          <div style="display: inline-block" *ngFor="let d of this.datas.type_id; let i = index">
+            <span>{{d.item_text}}</span>
+            <span>{{i == (this.datas.type_id.length - 1) ? '' : ', '}}</span>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <div class="label_item">Ngày hết hạn ký</div>
-              <div>
-                <div [innerHTML]="dateDeadline" class="input_text"></div>
-              </div>
-            </div>
+        <div class="name-contract">
+          <div class="title-contract" style="display: inline-block">Tên hợp đồng:</div>
+          <div style="display: inline-block">{{datas.name}}</div>
+        </div>
+        <div class="number-contract">
+          <div class="title-contract" style="display: inline-block">Số hợp đồng:</div>
+          <div style="display: inline-block">{{datas.code}}</div>
+        </div>
+        <div class="file-attach-contract">
+          <div class="title-contract" style="display: inline-block">File đính kèm:</div>
+          <div style="display: inline-block">
+            <span class="text-decoration-style">{{this.datas.attachFile.name}}</span>
           </div>
         </div>
-      </div>
-      <div class="col-md-2"></div>
-      <div class="col-md-5">
-        <div class="form-group">
-          <div class="label_item">Lời nhắn</div>
-          <div>
-            <div [innerHTML]="comment" class="input_text"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="labelOrg">CÁC BÊN KÝ</div>
-  <div class="determine_contact">
-    <div class="user_contact">
-      <div class="label">CÔNG TY TNHH ABC</div>
-      <div class="content_determine">
-        <div class="row">
-          <div class="col-md-5">
-            <div class="form-group">
-              <div class="label_item">Người xem xét</div>
-              <div>
-                <div [innerHTML]="userViews" class="input_text"></div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-2"></div>
-          <div class="col-md-5">
-            <div class="form-group">
-              <div class="label_item">Người ký</div>
-              <div>
-                <div [innerHTML]="userSigns" class="input_text"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-5">
-            <div class="form-group">
-              <div class="label_item">Văn thư</div>
-              <div>
-                <div [innerHTML]="userDocs" class="input_text"></div>
-              </div>
-            </div>
+        <div class="contract-coordination">
+          <div class="title-contract" style="display: inline-block">Hợp đồng liên quan:</div>
+          <div style="display: inline-block" *ngFor="let d of this.datas.contractConnect; let i = index">
+            <span class="text-decoration-style">{{d.item_text}}</span>
+            <span>{{i == (this.datas.contractConnect.length - 1) ? '' : ', '}}</span>
           </div>
         </div>
       </div>
     </div>
+    <hr>
 
-    <div class="partner_contact">
-      <div class="label">ĐỐI TÁC</div>
-      <div class="content_determine">
-        <div class="row">
-          <div class="col-md-5">
-            <div class="form-group">
-              <div class="label_item">Người điều phối</div>
-              <div>
-                <div [innerHTML]="partnerLeads" class="input_text"></div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-2"></div>
-          <div class="col-md-5">
-            <div class="form-group">
-              <div class="label_item">Người xem xét</div>
-              <div>
-                <div [innerHTML]="partnerViews" class="input_text"></div>
-              </div>
-            </div>
-          </div>
+    <div class="location-change" [ngStyle]="changeDisplay()">
+      <div class="sample-contract__information--user-sign" style="line-height: 25px">
+        <div style="text-align: center;" class="label">CÁC BÊN LIÊN QUAN</div>
+        <div>{{datas.userForm.name}}</div>
+        <div *ngFor="let d of this.datas.partnerForm.partnerArrs">
+          <span class="label" style="color: black; font-size: 13px">{{d.name}}</span>
         </div>
 
-        <div class="row">
-          <div class="col-md-5">
-            <div class="form-group">
-              <div class="label_item">Người ký</div>
-              <div>
-                <div [innerHTML]="partnerSigns" class="input_text"></div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-2"></div>
-          <div class="col-md-5">
-            <div class="form-group">
-              <div class="label_item">Văn thư</div>
-              <div>
-                <div [innerHTML]="partnerDocs" class="input_text"></div>
-              </div>
-            </div>
-          </div>
+      </div>
+      <div >
+        <u class="label" style="color: #106DB6; padding-right: 3px; cursor: pointer; font-size: 13px" (click)="processHandleContract()">Luồng xử lý hợp
+          đồng</u>
+      </div>
+      <hr>
+      <div class="flex-column">
+        <div class="label" style="text-align: center">ĐIỀU PHỐI HỢP ĐỒNG</div>
+      </div>
+    </div>
+  </div>
+
+  <!--  file content-->
+  <!--  width: 74.7%-->
+  <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
+       style="background-color: #F2F2F2; position: relative;">
+    <div id="pdf-viewer-step-3">
+      <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+        <div class="resize-drag not-out-drop"
+             [id]="d.id"
+             style="z-index: -1"
+             #itemElement
+             (click)="getSignSelect(d)"
+             [ngClass]="changeColorDrag(null,true)"
+             [ngStyle]="changePosition(d)">
+          <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
+          <!--          </div>-->
+          <app-sign-contract [datas]="datas" [sign]="d"></app-sign-contract>
         </div>
       </div>
     </div>
   </div>
-<div class="footer-infor-contract">
-  <div style="width: 200px;">
-    <button (click)="back($event, 'infor-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
-  </div>
-  <div class="content_footer"></div>
-  <div>
-    <button (click)="next()" type="button" name="next" class="next action-button pull-right">Tiếp theo</button>
-  </div>
-</div>
-
+  <!--<app-footer-signature *ngIf="this.datas.step == 'infor-coordination'" [datas]="datas"></app-footer-signature>-->
 

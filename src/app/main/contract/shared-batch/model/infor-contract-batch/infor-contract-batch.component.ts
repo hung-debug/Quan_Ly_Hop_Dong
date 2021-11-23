@@ -9,6 +9,7 @@ import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import {variable} from "../../../../../config/variable";
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-infor-contract-batch',
   templateUrl: './infor-contract-batch.component.html',
@@ -58,6 +59,7 @@ export class InforContractBatchComponent implements OnInit {
     private uploadService : UploadService,
     private contractService: ContractService,
     public datepipe: DatePipe,
+    private router: Router,
   ) {
     this.step = variable.stepBatchContract.step1;
   }
@@ -287,4 +289,8 @@ export class InforContractBatchComponent implements OnInit {
     this.stepChangeInfoContract.emit(step);
   }
 
+
+  changeAddSampleContract(link:any){
+    this.router.navigate([link]);
+  }
 }

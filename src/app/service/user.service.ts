@@ -13,8 +13,8 @@ export interface User {
 })
 export class UserService {
 
-  forgotPasswordUrl:any = `${environment.apiUrl}/api/v1/auth/password/request`;
-  resetPasswordUrl:any = `${environment.apiUrl}/api/v1/auth/password/recover`;
+  forgotPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/request`;
+  resetPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/recover`;
 
   constructor(private http: HttpClient) { }
 

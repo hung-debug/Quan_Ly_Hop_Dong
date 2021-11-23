@@ -2,13 +2,13 @@
 <div>
   <div class="row">
     <div class="radio col-md-4 label_type">
-      <label><input type="radio" name="type"> {{'contract.not-by-template' | translate}}</label>
+      <label><input type="radio" name="type" onclick="changeAddSampleContract('/main/form-contract/add')"> {{'contract.not-by-template' | translate}}</label>
     </div>
     <div class="radio col-md-4 label_type">
-      <label><input type="radio" name="type"> {{'contract.by-template' | translate}}</label>
+      <label><input type="radio" name="type" onclick="changeAddSampleContract('/main/form-contract-batch/add')"> {{'contract.by-template' | translate}}</label>
     </div>
     <div class="radio col-md-4 label_type">
-      <label><input type="radio" name="type" checked> {{'contract.by-batch' | translate}}</label>
+      <label><input type="radio" name="type" checked onclick="changeAddSampleContract('/main/form-contract-batch/add')"> {{'contract.by-batch' | translate}}</label>
     </div>
   </div>
 
@@ -43,6 +43,16 @@
         <p class="alert alert-danger error-detail" role="alert" *ngIf="errorContractFile!=''">
           {{errorContractFile}}
         </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div>
+          Bạn chưa có file mẫu? <a>Tải file mẫu</a>
+        </div>
       </div>
     </div>
   </div>
