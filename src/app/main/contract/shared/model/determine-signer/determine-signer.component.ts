@@ -56,8 +56,17 @@ export class DetermineSignerComponent implements OnInit {
     private formBuilder: FormBuilder,
     private contractService: ContractService,
   ) {
+    this.bindData();
     this.step = variable.stepSampleContract.step2
     //this.datas.determineDetails = this.determineDetails;
+  }
+
+  bindData(){
+    const anotherList:any[]=[
+      { id:1,value:"test 1"},
+      { id:2,value:"test 2"}
+    ]
+    this.toppings.setValue(anotherList)
   }
 
 
@@ -530,8 +539,8 @@ export class DetermineSignerComponent implements OnInit {
   // next step event
   next() {
     this.submitted = true;
-    if (!this.validData()) return;
-    else {
+    // if (!this.validData()) return;
+    // else {
       // gán value step 2 vào datas
       // this.datas.userForm = this.userForm.value;
       // if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
@@ -556,14 +565,22 @@ export class DetermineSignerComponent implements OnInit {
       //   })
       // }
 
+      this.is_determine_clone.forEach((element: any, index: number) => {
+          element.recipients.forEach((item: any) =>{
+            if (item.role == 3 || item.role == 4) {
+              item['id'] = Helper._ranDomNumberText(10);
+            }
+          })
+      })
+
       console.log(this.is_determine_clone);
 
-
-      // this.step = variable.stepSampleContract.step3;
-      // this.datas.stepLast = this.step
-      // // console.log(this.datas);
-      // this.nextOrPreviousStep(this.step);
-    }
+      this.datas.determine_contract = this.is_determine_clone;
+      this.step = variable.stepSampleContract.step3;
+      this.datas.stepLast = this.step
+      // console.log(this.datas);
+      this.nextOrPreviousStep(this.step);
+    // }
   }
 
   // forward data component
@@ -604,6 +621,13 @@ export class DetermineSignerComponent implements OnInit {
     } else if (name_type_sign == 'get_partner_document') {
       data.sign_type = data_select;
     }
+  }
+
+  getValueData(data: any, index: any) {
+    return [
+      {id: 1, name: 'Ký ảnh'},
+      {id: 2, name: 'Ký số'}
+    ]
   }
 
   onItemSelect(item: any) {
