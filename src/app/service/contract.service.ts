@@ -267,28 +267,24 @@ export class ContractService {
 
       contract_user_sign: [
         {
-          id: Helper._ranDomNumberText(10),
+          recipient_id: Helper._ranDomNumberText(10),
           sign_unit: 'so_tai_lieu',
           sign_config: "[]",
-          name: ""
         },
         {
-          id: Helper._ranDomNumberText(10),
+          recipient_id: Helper._ranDomNumberText(10),
           sign_unit: 'text',
           sign_config: "[]",
-          name: "",
         },
         {
-          id: Helper._ranDomNumberText(10),
+          recipient_id: Helper._ranDomNumberText(10),
           sign_unit: 'chu_ky_anh',
           sign_config: "[]",
-          name: ""
         },
         {
-          id: Helper._ranDomNumberText(10),
+          recipient_id: Helper._ranDomNumberText(10),
           sign_unit: 'chu_ky_so',
           sign_config: "[]",
-          name: ""
         },
       ]
     }

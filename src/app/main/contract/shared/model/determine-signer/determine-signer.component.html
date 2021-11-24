@@ -742,11 +742,17 @@
               <div class="participants--input select-text-input" style="display: flex">
                 <div class="participants__name">
                   <div class="label text-color">Loại ký: *</div>
-                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">
-                    <mat-select placeholder="Chọn loại ký" [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'is_origanzation_signature', this.is_origanzation_signature, index)">
-                      <mat-option *ngFor="let topping of signTypeList" [value]="topping.id">{{topping.name}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <ng-multiselect-dropdown id="contractConnect" [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
+                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                    <ng-template #optionsTemplate let-item let-option="option"
+                                 let-id="id" let-isSelected="isSelected">
+                      <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                        <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                          {{getContractConnectItems[id].name}}
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ng-multiselect-dropdown>
                 </div>
                 <div class="participants-otp">
                   <input type="checkbox" [value]="1" [ngModel]="d.is_otp">
@@ -793,11 +799,18 @@
               <div class="participants-information">
                 <div class="participants-signature-type">
                   <div class="label text-color">Loại ký: *</div>
-                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">
-                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'is_origanzation_document')">
-                      <mat-option *ngFor="let topping of signTypeList" [value]="topping.id">{{topping.name}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+
+                  <ng-multiselect-dropdown id="contractConnect" [(ngModel)]="is_origanzation_document.sign_type" placeholder="{{'choose' | translate }}"
+                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                    <ng-template #optionsTemplate let-item let-option="option"
+                                 let-id="id" let-isSelected="isSelected">
+                      <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                        <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                          {{getContractConnectItems[id].name}}
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ng-multiselect-dropdown>
                 </div>
               </div>
             </div>
@@ -835,7 +848,7 @@
           <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
             <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
                    [(ngModel)]="d.ordering">
-            <div class="col-md-10 participants--input" style="display: flex">
+            <div class="col-md-10 participants--input" style="display: flex; margin-bottom: 14px">
               <div class="participants__name">
                 <div class="label text-color">Họ tên: *</div>
                 <div class="input-data">
@@ -915,11 +928,24 @@
               <div class="participants--input select-text-input" style="display: flex">
                 <div class="participants__name">
                   <div class="label text-color">Loại ký: *</div>
-                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">
-                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'get_partner_signature', getPartnerSignature(item), index)">
-                      <mat-option *ngFor="let topping of signTypeList; let i = index" [value]="topping.id">{{topping.name}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+
+                  <ng-multiselect-dropdown id="contractConnect" [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
+                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                    <ng-template #optionsTemplate let-item let-option="option"
+                                 let-id="id" let-isSelected="isSelected">
+                      <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                        <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                          {{getContractConnectItems[id].name}}
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ng-multiselect-dropdown>
+
+<!--                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">-->
+<!--                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'get_partner_signature', getPartnerSignature(item), index)">-->
+<!--                      <mat-option *ngFor="let topping of signTypeList; let i = index" [value]="topping.id">{{topping.name}}</mat-option>-->
+<!--                    </mat-select>-->
+<!--                  </mat-form-field>-->
                 </div>
                 <div class="participants-otp">
                   <input type="checkbox" [value]="1" [ngModel]="d.is_otp">
@@ -968,17 +994,18 @@
                 <div class="participants-signature-type">
                   <div class="label text-color">Loại ký: *</div>
 
-                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">
-                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'get_partner_document', getPartnerDocument(item))">
-                      <mat-option *ngFor="let topping of signTypeList; let i = index" [value]="topping.id">{{topping.name}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                  <ng-multiselect-dropdown id="contractConnect" [(ngModel)]="getPartnerDocument(item).sign_type" placeholder="{{'choose' | translate }}"
+                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                    <ng-template #optionsTemplate let-item let-option="option"
+                                 let-id="id" let-isSelected="isSelected">
+                      <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                        <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                          {{getContractConnectItems[id].name}}
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ng-multiselect-dropdown>
 
-<!--                  <select class="form-select" aria-label="Default select example">-->
-<!--                    <option value="" hidden>Chọn Loại ký</option>-->
-<!--                    <option *ngFor="let data of getPartnerDocument(item).sign_type, let i = index"-->
-<!--                            value="{{data.id}}">{{data.name}}</option>-->
-<!--                  </select>-->
                 </div>
               </div>
             </div>

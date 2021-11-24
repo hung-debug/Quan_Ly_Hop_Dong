@@ -63,8 +63,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     traf_y: 0,
     x1: 0,
     y1: 0,
-    offsetHeight: 0,
-    offsetWidth: 0
+    height: 0,
+    width: 0
   }
 
   list_sign_name: any = [];
@@ -145,8 +145,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     if (!this.signCurent) {
       this.signCurent = {
-        offsetWidth: 0,
-        offsetHeight: 0
+        width: 0,
+        height: 0
       }
     }
 
@@ -234,17 +234,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == event.target.id)[0];
     if (this.signCurent) {
       if (event.rect.width <= 280) {
-        this.signCurent.dataset_x = x;
-        this.signCurent.dataset_y = y;
+        this.signCurent.coordinate_x = x;
+        this.signCurent.coordinate_y = y;
         this.objSignInfo.id = event.target.id;
         this.objSignInfo.traf_x = x;
         this.objSignInfo.traf_y = y;
-        this.objSignInfo.offsetWidth = event.rect.width;
-        this.objSignInfo.offsetHeight = event.rect.height;
+        this.objSignInfo.width = event.rect.width;
+        this.objSignInfo.height = event.rect.height;
 
-        this.signCurent.offsetWidth = event.rect.width;
-        this.signCurent.offsetHeight = event.rect.height;
-        this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.offsetWidth, this.signCurent.offsetHeight, this.objSignInfo);
+        this.signCurent.width = event.rect.width;
+        this.signCurent.height = event.rect.height;
+        this.tinhToaDoSign("canvas-step3-" + this.signCurent.page, this.signCurent.width, this.signCurent.height, this.objSignInfo);
         let _array = Object.values(this.obj_toa_do);
         this.signCurent.position = _array.join(",");
       }
@@ -277,16 +277,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         id = event.target.id.replace("chua-keo-", "");
         // this.datas.documents.document_user_sign_clone.forEach((element, index) => {
         this.datas.contract_user_sign.forEach((element: any, index: any) => {
-          if (element.id == id) {
+          if (element.recipient_id == id) {
             let _obj: any = {
               sign_unit: element.sign_unit,
               name: element.name,
-              text_attribute_name: element.text_attribute_name
+              text_attribute_name: element.text_attribute_name,
+              required: 1,
+              contract_id: null,
+              document_id: null
             }
             if (element.sign_config.length == 0) {
-              _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
+              _obj['id'] = 'signer-' + index + '-index-0_' + element.recipient_id; // Thêm id cho chữ ký trong hợp đồng
             } else {
-              _obj['id'] = 'signer-' + index + '-index-' + (element.sign_config.length) + '_' + element.id;
+              _obj['id'] = 'signer-' + index + '-index-' + (element.sign_config.length) + '_' + element.recipient_id;
             }
             element['sign_config'].push(_obj);
           }
@@ -333,8 +336,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         let _sign = <HTMLElement>document.getElementById(this.signCurent['id']);
         if (_sign) {
           _sign.style.transform = "translate(" + layerX + "px," + layerY + "px)";
-          this.signCurent['dataset_x'] = layerX;
-          this.signCurent['dataset_y'] = layerY;
+          this.signCurent['coordinate_x'] = layerX;
+          this.signCurent['coordinate_y'] = layerY;
           _sign.setAttribute("data-x", layerX + "px");
           _sign.setAttribute("data-y", layerY + "px");
           this.objSignInfo.traf_x = layerX;
@@ -342,7 +345,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           //
           this.objSignInfo['id'] = this.signCurent['id'];
           //
-          this.tinhToaDoSign(event.relatedTarget.id, this.signCurent.offsetWidth, this.signCurent.offsetHeight, this.objSignInfo);
+          this.tinhToaDoSign(event.relatedTarget.id, this.signCurent.width, this.signCurent.height, this.objSignInfo);
           this.signCurent.position = _array.join(",");
           _sign.style.display = '';
           // @ts-ignore
@@ -350,12 +353,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.isEnableSelect = false;
 
           // show toa do keo tha chu ky (demo)
-          // this.location_sign_x = this.signCurent['dataset_x'];
-          // this.location_sign_y  = this.signCurent['dataset_y'];
+          // this.location_sign_x = this.signCurent['coordinate_x'];
+          // this.location_sign_y  = this.signCurent['coordinate_y'];
         }
 
-        this.objSignInfo.traf_x = Math.round(this.signCurent['dataset_x']);
-        this.objSignInfo.traf_y = Math.round(this.signCurent['dataset_y']);
+        this.objSignInfo.traf_x = Math.round(this.signCurent['coordinate_x']);
+        this.objSignInfo.traf_y = Math.round(this.signCurent['coordinate_y']);
 
         this.tinhToaDoSign(event.relatedTarget.id, event.rect.width, event.rect.height, this.objSignInfo);
         this.signCurent['position'] = _array.join(",");
@@ -391,19 +394,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
                 element['number'] = _arrPage[_arrPage.length - 1];
                 element['position'] = this.signCurent['position'];
-                element['dataset_x'] = this.signCurent['dataset_x'];
-                element['dataset_y'] = this.signCurent['dataset_y'];
+                element['coordinate_x'] = this.signCurent['coordinate_x'];
+                element['coordinate_y'] = this.signCurent['coordinate_y'];
                 if (!this.objDrag[this.signCurent['id']].count) {
-                  // element['offsetWidth'] = this.datas.configs.e_document.format_signature_image.signature_width;
+                  // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                   if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-                    element['offsetWidth'] = '135';
-                    element['offsetHeight'] = '28';
+                    element['width'] = '135';
+                    element['height'] = '28';
                   } else {
-                    element['offsetWidth'] = '135';
-                    element['offsetHeight'] = '85';
+                    element['width'] = '135';
+                    element['height'] = '85';
                   }
-                  this.objSignInfo.offsetWidth = element['offsetWidth'];
-                  this.objSignInfo.offsetHeight = element['offsetHeight'];
+                  this.objSignInfo.width = element['width'];
+                  this.objSignInfo.height = element['height'];
                   this.objSignInfo.text_attribute_name = '';
                   this.list_sign_name.forEach((item: any) => {
                     item['selected'] = false;
@@ -413,8 +416,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   document.getElementById('select-dropdown').value = "";
                   this.objDrag[this.signCurent['id']].count = 2;
                 } else {
-                  element['offsetWidth'] = event.target.offsetWidth;
-                  element['offsetHeight'] = event.target.offsetHeight;
+                  element['width'] = event.target.offsetWidth;
+                  element['height'] = event.target.offsetHeight;
                 }
               }
             })
@@ -444,10 +447,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           let signCurent = this.convertToSignConfig().filter((p: any) => p.id == id)[0];
           // translate the element
           if (signCurent) {
-            event.target.style.webkitTransform = event.target.style.transform = 'translate(' + signCurent['dataset_x'] + 'px, ' + signCurent['dataset_y'] + 'px)'
+            event.target.style.webkitTransform = event.target.style.transform = 'translate(' + signCurent['coordinate_x'] + 'px, ' + signCurent['coordinate_y'] + 'px)'
             // update the posiion attributes
-            event.target.setAttribute('data-x', signCurent['dataset_x'])
-            event.target.setAttribute('data-y', signCurent['dataset_y'])
+            event.target.setAttribute('data-x', signCurent['coordinate_x'])
+            event.target.setAttribute('data-y', signCurent['coordinate_y'])
           }
         }
       }
@@ -598,8 +601,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
           // else
           //   a.style.display = 'none';
-          a.setAttribute("data-x", element['dataset_x']);
-          a.setAttribute("data-y", element['dataset_y']);
+          a.setAttribute("data-x", element['coordinate_x']);
+          a.setAttribute("data-y", element['coordinate_y']);
         }
       });
     }
@@ -670,7 +673,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any) {
     let style: any = {
-      "transform": 'translate(' + d['dataset_x'] + 'px, ' + d['dataset_y'] + 'px)',
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
     }
@@ -688,8 +691,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //     }
     //   }
     // } else {
-    if (d['offsetWidth']) {
-      style.width = parseInt(d['offsetWidth']) + "px";
+    if (d['width']) {
+      style.width = parseInt(d['width']) + "px";
     }
     // }
 
@@ -706,8 +709,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //     }
     //   }
     // } else {
-    if (d['offsetHeight']) {
-      style.height = parseInt(d['offsetHeight']) + "px";
+    if (d['height']) {
+      style.height = parseInt(d['height']) + "px";
     }
     // }
 
@@ -742,8 +745,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (set_id) {
       // set lại id cho đối tượng ký đã click
       this.objSignInfo.id = set_id.id;
-      // this.objSignInfo.offsetWidth = set_id.offsetWidth;
-      // this.objSignInfo.offsetHeight = set_id.offsetWidth;
+      // this.objSignInfo.width = set_id.width;
+      // this.objSignInfo.height = set_id.width;
       signElement = document.getElementById(this.objSignInfo.id);
     } else
       signElement = document.getElementById(this.objSignInfo.id);
@@ -751,14 +754,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
       if (isObjSign) {
-        this.objSignInfo.traf_x = d.dataset_x;
-        this.objSignInfo.traf_y = d.dataset_y;
+        this.objSignInfo.traf_x = d.coordinate_x;
+        this.objSignInfo.traf_y = d.coordinate_y;
         // this.signCurent.name = d.name;
 
-        this.objSignInfo.offsetWidth = parseInt(d.offsetWidth);
-        this.objSignInfo.offsetHeight = parseInt(d.offsetHeight);
-        // this.signCurent.offsetWidth = d.offsetWidth;
-        // this.signCurent.offsetHeight = d.offsetHeight;
+        this.objSignInfo.width = parseInt(d.width);
+        this.objSignInfo.height = parseInt(d.height);
+        // this.signCurent.width = d.width;
+        // this.signCurent.height = d.height;
         // console.log(this.signCurent)
 
         this.isEnableText = d.sign_unit == 'text';
@@ -808,11 +811,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   onCancel(e: any, data: any) {
-    data.dataset_x = 0;
-    data.dataset_y = 0;
+    data.coordinate_x = 0;
+    data.coordinate_y = 0;
     data.number = 0;
-    data.offsetWidth = 0;
-    data.offsetHeight = 0;
+    data.width = 0;
+    data.height = 0;
     data.position = "";
     if (data.sign_unit == 'text') {
       this.isEnableText = false;
@@ -821,18 +824,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (signElement) {
       this.objSignInfo.traf_x = 0;
       this.objSignInfo.traf_y = 0;
-      this.objSignInfo.offsetHeight = 0;
-      this.objSignInfo.offsetWidth = 0;
+      this.objSignInfo.height = 0;
+      this.objSignInfo.width = 0;
       //@ts-ignore
       document.getElementById('select-dropdown').value = "";
-      // this.signCurent.offsetWidth = 0;
-      // this.signCurent.offsetHeight = 0;
+      // this.signCurent.width = 0;
+      // this.signCurent.height = 0;
     }
     this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
       if (element.sign_config.length > 0) {
         element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
         element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
-          itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.id;
+          itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.recipient_id;
         })
       }
     });
@@ -855,8 +858,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   // tạo id cho đối tượng chưa được kéo thả
-  getIdSignChuaKeo(id: any) {
-    return "chua-keo-" + id;
+  getIdSignChuaKeo(recipient_id: any) {
+    return "chua-keo-" + recipient_id;
   }
 
   ngOnDestroy() {
@@ -876,19 +879,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (isObjSign) {
         if (property == 'location') {
           if (locationChange == 'x') {
-            isObjSign.dataset_x = parseInt(e);
-            signElement.setAttribute("data-x", isObjSign.dataset_x);
+            isObjSign.coordinate_x = parseInt(e);
+            signElement.setAttribute("data-x", isObjSign.coordinate_x);
           } else {
-            isObjSign.dataset_y = parseInt(e);
-            signElement.setAttribute("data-y", isObjSign.dataset_y);
+            isObjSign.coordinate_y = parseInt(e);
+            signElement.setAttribute("data-y", isObjSign.coordinate_y);
           }
         } else if (property == 'size') {
           if (locationChange == 'width') {
-            isObjSign.offsetWidth = parseInt(e);
-            signElement.setAttribute("width", isObjSign.offsetWidth);
+            isObjSign.width = parseInt(e);
+            signElement.setAttribute("width", isObjSign.width);
           } else {
-            isObjSign.offsetHeight = parseInt(e);
-            signElement.setAttribute("height", isObjSign.offsetHeight);
+            isObjSign.height = parseInt(e);
+            signElement.setAttribute("height", isObjSign.height);
           }
         } else if (property == 'text') {
           isObjSign.text_attribute_name = e;
@@ -939,7 +942,23 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   next() {
     if (!this.validData()) return;
     else {
-      console.log(this.datas);
+
+      let data_sample_contract: string | any[] = [];
+      this.datas.contract_user_sign.forEach((element: any) => {
+        if (element.sign_config.length > 0) {
+          element.sign_config.forEach((item: any) => {
+            item.id = item.id.split("_")[item.id.split("_").length - 1];
+            item['recipient_id'] = item.id;
+            delete item.id;
+          })
+          Array.prototype.push.apply(data_sample_contract, element.sign_config);
+        }
+      })
+
+      // Đây là dữ liệu mảng request truyền lên cho server
+      console.log(data_sample_contract);
+
+
       this.step = variable.stepSampleContract.step4;
       this.datas.stepLast = this.step
       this.nextOrPreviousStep(this.step);
@@ -1037,7 +1056,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         //     return false;
         //   }
         // }
-
 
       }
     }
