@@ -7,7 +7,7 @@
       <!--      <div>-->
       <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class"
            style="display: inline-block; margin-bottom: 15px">
-        <div *ngIf="!d.sign_config.position" class="resize-drag" (click)="showThumbnail()" [id]=getIdSignChuaKeo(d.recipient_id)>
+        <div *ngIf="!d.sign_config.position" class="resize-drag" (click)="showThumbnail()" [id]=getIdSignChuaKeo(d.id)>
           <div class="signature-sample-drag" style="position: relative">
             <div *ngIf="d.sign_unit == 'so_tai_lieu' || d.sign_unit == 'text'" [ngStyle]="setWidth(d)"
                  class="content-drag"

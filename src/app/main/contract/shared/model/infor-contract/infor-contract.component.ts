@@ -260,7 +260,8 @@ export class InforContractComponent implements OnInit {
     //
           //next step
           this.step = variable.stepSampleContract.step2;
-          this.datas.stepLast = this.step
+          this.datas.stepLast = this.step;
+          this.datas.document_id = '123456abc';
           this.nextOrPreviousStep(this.step);
           console.log(this.datas);
     //

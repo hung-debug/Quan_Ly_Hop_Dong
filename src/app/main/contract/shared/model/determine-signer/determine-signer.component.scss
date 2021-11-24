@@ -325,10 +325,11 @@ input[type=number] {
 
       .select-text-input {
         display: flex;
-        margin: 0 29px;
+        //margin: 0 29px;
+        margin: 0 44px;
 
         div:first-child, div:last-child {
-          width: 43%;
+          width: 42%;
         }
 
         .participants__name:last-child {
@@ -368,6 +369,10 @@ input[type=number] {
       &:not(:last-child) {
         margin-bottom: 10px;
       }
+    }
+
+    ::ng-deep .multiselect-dropdown .dropdown-btn {
+      border: 1px solid #106DB6 !important;
     }
 
   }
