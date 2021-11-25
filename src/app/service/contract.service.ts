@@ -291,6 +291,31 @@ export class ContractService {
 
   }
 
+  getDataFormatContractUserSign() {
+    return [
+      {
+        id: Helper._ranDomNumberText(10),
+        sign_unit: 'so_tai_lieu',
+        sign_config: []
+      },
+      {
+        id: Helper._ranDomNumberText(10),
+        sign_unit: 'text',
+        sign_config: []
+      },
+      {
+        id: Helper._ranDomNumberText(10),
+        sign_unit: 'chu_ky_anh',
+        sign_config: []
+      },
+      {
+        id: Helper._ranDomNumberText(10),
+        sign_unit: 'chu_ky_so',
+        sign_config: []
+      },
+    ]
+  }
+
 
   // Error handling
   handleError(error: any) {
@@ -356,11 +381,12 @@ export class ContractService {
             ]
           },
         ],
+        "contract_id": 1
       },
       // Đối tác
       // Tổ chức
       {
-        "name": "Đối tác tổ chức",
+        "name": "",
         "type": 2, // Đối tác tổ chức
         "ordering": 1,
         "recipients": [
@@ -417,11 +443,13 @@ export class ContractService {
             "sign_type": []
           }
         ],
+        "contract_id": 1
       },
       {
         "name": "Đối tác cá nhân",
         "type": 3, // Đối tác cá nhân
         "ordering": 1,
+        "contract_id": 1,
         "recipients": [
           // người điều phối
           {
