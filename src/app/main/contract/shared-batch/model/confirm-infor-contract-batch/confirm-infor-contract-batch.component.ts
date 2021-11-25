@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from 'src/app/config/variable';
 import { Helper } from 'src/app/core/Helper';
 import { ContractService } from 'src/app/service/contract.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-confirm-infor-contract-batch',
   templateUrl: './confirm-infor-contract-batch.component.html',
@@ -96,8 +97,8 @@ export class ConfirmInforContractBatchComponent implements OnInit, OnDestroy, Af
       }
     }
 
-    // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
-    this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+    this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
+    //this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
     this.getPage();
   }
 
@@ -292,8 +293,8 @@ export class ConfirmInforContractBatchComponent implements OnInit, OnDestroy, Af
   changeDisplay() {
     if (window.innerHeight < 670) {
       return {
-        "overflow": "auto",
-        "height": "calc(50vh - 113px)"
+        "overflow-y": "auto",
+        "height": "calc(100vh - 250px)"
       }
     } else return {}
   }

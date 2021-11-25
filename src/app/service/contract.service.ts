@@ -23,6 +23,7 @@ export interface Contract {
 export class ContractService {
 
   listContractUrl:any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
+  listContractMyProcessUrl:any = `${environment.apiUrl}/api/v1/contracts/my-process`;
   addContractUrl:any = `${environment.apiUrl}/api/v1/contracts`;
   documentUrl:any = `${environment.apiUrl}/api/v1/documents`;
   addConfirmContractUrl:any = `${environment.apiUrl}/api/v1/contracts/`;
@@ -46,6 +47,19 @@ export class ContractService {
   //   console.log(listContractUrl);
   //   const headers = { 'Authorization': 'Bearer ' + this.token}
   //   return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
+  // }
+
+  // public getContractMyProcessList(filter_type:any, filter_contract_no:any, filter_from_date:any,filter_to_date:any): Observable<any> {
+  //   if(filter_from_date != ""){
+  //     filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
+  //   }
+  //   if(filter_to_date != ""){
+  //     filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
+  //   }
+  //   let listContractMyProcessUrl = this.listContractMyProcessUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "";
+  //   console.log(listContractMyProcessUrl);
+  //   const headers = { 'Authorization': 'Bearer ' + this.token}
+  //   return this.http.get<Contract[]>(listContractMyProcessUrl, { headers }).pipe();
   // }
 
   // addContractUrl: any = `${environment.apiUrl}/api/v1/auth/login`;
