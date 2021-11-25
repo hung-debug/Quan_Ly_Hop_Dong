@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
-
+import { ToastService } from 'src/app/service/toast.service';
 @Component({
   selector: 'app-contract-template',
   templateUrl: './contract-template.component.html',
@@ -30,7 +30,8 @@ export class ContractTemplateComponent implements OnInit {
               private appService: AppService,
               private contractTemplateService: ContractTemplateService,
               private router: Router,
-              private fb: FormBuilder,) { }
+              private fb: FormBuilder,
+              private toastService : ToastService) { }
 
   ngOnInit(): void {
     this.appService.setTitle('contract-template.list');
@@ -79,17 +80,15 @@ export class ContractTemplateComponent implements OnInit {
     }
   }
   sendChangeStatus(statusContract:string){
-    this.status = 1;
     if(statusContract == 'Đang phát hành'){
-      this.notification = "Ngừng phát hành thành công";
+      this.toastService.showSuccessHTMLWithTimeout("Ngừng phát hành thành công", "", 10000);
     }else{
-      this.notification = "Mở phát hành thành công";
+      this.toastService.showSuccessHTMLWithTimeout("Mở phát hành thành công", "", 10000);
     }
   }
 
   deleteItem(id:number){
-    this.status = 1;
-    this.notification = "Xóa mẫu hợp đồng thành công";
+    this.toastService.showSuccessHTMLWithTimeout("Xóa mẫu hợp đồng thành công", "", 10000);
   }
 
   addContractTemplate(){
@@ -172,7 +171,6 @@ export class ContractTemplateComponent implements OnInit {
   }
 
   sendShare(){
-    this.status = 1;
-    this.notification = "Chia sẻ thành công";
+    this.toastService.showSuccessHTMLWithTimeout("Chia sẻ mẫu hợp đồng thành công", "", 10000);
   }
 }

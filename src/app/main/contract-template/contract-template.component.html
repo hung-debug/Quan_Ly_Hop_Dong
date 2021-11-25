@@ -63,7 +63,7 @@
             <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" (click)="getDataShare(item.contractName, item.contractCode); open(modalShare)"/>
           </div>
           <div class="div_icon">
-            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="Xóa hợp đồng" (click)="deleteItem(item.id); open(modalNotifi)" />
+            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="Xóa hợp đồng" (click)="deleteItem(item.id);" />
           </div>
         </div>
       </div>
@@ -117,7 +117,7 @@
   <div class="popup_content">
     <div class="row">
       <div class="col-md-10">
-        <h4 class="popup_title">THÔNG BÁO</h4>
+        <h4 class="popup_title">XÁC NHẬN</h4>
       </div>
       <div class="col-md-2 popup_close">
         <span (click)="modal.dismiss('Cross click')">×</span>
@@ -139,7 +139,7 @@
     <div class="row" style="text-align: center; padding-top: 10px;">
       <div class="col-md-12">
         <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">{{'btn.cancel' | translate}}</button>
-        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.dismiss('Cross click'); sendChangeStatus(statusContract); open(modalNotifi)">{{'btn.accept' | translate}}</button>
+        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.dismiss('Cross click'); sendChangeStatus(statusContract)">{{'btn.accept' | translate}}</button>
       </div>
     </div>
   </div>
@@ -222,7 +222,7 @@
       <div class="row" style="text-align: center; padding-top: 10px;">
         <div class="col-md-12">
           <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
-          <button type="button" class="btn btn-outline-dark btn_submit" (click)="sendShare(); error ? false : modal.close('Save click');open(modalNotifi)">Chia sẻ</button>
+          <button type="button" class="btn btn-outline-dark btn_submit" (click)="sendShare(); error ? false : modal.close('Save click');">Chia sẻ</button>
         </div>
       </div>
     </form>

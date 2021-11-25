@@ -12,6 +12,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatBadgeModule} from '@angular/material/badge';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { CommonModule, DatePipe} from '@angular/common';
+import { ToastrModule } from 'ngx-toastr';
 
 import { DatepickerModule } from 'ng2-datepicker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -118,7 +119,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         useFactory: httpTranslateLoader,
         deps: [HttpClient]
       }
-    })
+    }),
+    ToastrModule.forRoot(),
   ],
   providers: [ AppService, DatePipe,
     {
