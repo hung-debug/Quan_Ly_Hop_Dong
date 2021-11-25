@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../service/authentication.service';
 
 @Component({
@@ -17,7 +18,11 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthenticationService,
     private router: Router,
-  ) { }
+    public translate: TranslateService,
+  ) {
+    translate.addLangs(['en', 'vi']);
+    translate.setDefaultLang('vi');
+   }
 
   loginForm = new FormGroup({
     tax_code: new FormControl(''),
@@ -61,7 +66,11 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
 
+  switchLang(lang: string) {
+    this.translate.use(lang);
+    this.translate.currentLang = lang;
   }
 
 }
