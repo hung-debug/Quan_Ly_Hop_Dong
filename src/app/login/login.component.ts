@@ -20,8 +20,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     public translate: TranslateService,
   ) {
-    translate.addLangs(['en', 'vi']);
-    translate.setDefaultLang('vi');
+
    }
 
   loginForm = new FormGroup({

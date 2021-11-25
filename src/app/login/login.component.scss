@@ -1,13 +1,29 @@
+body {
+  height: 100%;
+  background: #f7f7f7;
+}
+.container{
+  background: white;
+}
+.content_header{
+  height: 50px;
+}
+.content_body{
+  height: calc(100vh - 214px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.content_footer{
+  height: 164px;
+}
+.header_language {
+  float: right;
+  padding: 5px;
+}
 .form-signin {
   width: 60%;
   margin: 0 auto;
-}
-
-body, html {
-  height: 100%;
-  margin: 0;
-  padding:0;
-  background: #f7f7f7;
 }
 .bg {
   background-image: url("../../assets/img/digital_sign.svg");
@@ -26,7 +42,6 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 20px;
 }
 .bg-header-login{
   background-image: url(../../assets/img/logo_eContract_21.svg);
@@ -35,22 +50,12 @@ body, html {
   background-repeat: no-repeat;
   background-size: cover;
 }
-
 .bg-footer-login {
   background-image: url(../../assets/img/foot_login.svg);
   height: 100%;
   background-repeat: no-repeat;
   background-size: cover;
 }
-
-.input-group {
-    height: 40px;
-}
-
-.input-group-text{
-  padding: 12px;
-}
-
 .btn-block {
   background-color: #106DB6;
   color: white;
@@ -103,6 +108,8 @@ body, html {
     cursor: pointer;
   }
 }
+
+//drop down multi language
 .social-icons {
   display: flex;
   align-items: center;
@@ -122,17 +129,15 @@ body, html {
   display:none;
 }
 .drop_menu{
-  //margin-top: 22px;
-  border-color: #368ee0;
+  border-color: #C2E4FF;
   padding: 0;
   font-size: inherit;
-  right: 0px;
+  right: 10px;
   left: unset !important;
 }
 .drop{
   padding: 10px;
   color:#106DB6;
-  min-height: 55px;
 }
 .db_user{
   display: flex;
