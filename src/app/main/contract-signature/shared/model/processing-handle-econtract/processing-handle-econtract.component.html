@@ -13,8 +13,8 @@
           <span style="color: #8B8B8B">({{d.name_company}})</span>
         </div>
         <div style="display: flex; flex-direction: column">
-          <span style="color: #106DB6">Đã ký</span>
-          <span style="color: #8B8B8B">(08:20 12/10/12021)</span>
+          <span [style.color]="d.status == 1 ? '#106DB6' : '#545252'">{{getStatus(d)}}</span>
+          <span style="color: #8B8B8B">({{getDateTime(d) | date: 'HH:mm dd/MM/yyyy'}})</span>
         </div>
       </div>
     </div>
