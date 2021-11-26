@@ -51,6 +51,7 @@ import {ContractSignatureModule} from "./main/contract-signature/contract-signat
 import {MatDialogModule} from "@angular/material/dialog";
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { NgxSelectModule } from "ngx-select-ex";
+import { PipeTrs } from './model/pipe';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -80,6 +81,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SampleContractTemplateComponent,
     SignupComponent,
     SignContractTemplateComponent,
+    PipeTrs,
   ],
   imports: [
     BrowserModule,
