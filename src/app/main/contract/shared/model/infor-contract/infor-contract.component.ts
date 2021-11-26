@@ -246,46 +246,47 @@ export class InforContractComponent implements OnInit {
 
   callAPI() {
     //call API step 1
-    // this.contractService.addContractStep1(this.datas).subscribe((data) => {
-    //   this.datas.id = data?.id;
-    //   console.log(data);
-    //
-    //   //call API upload file
-    //   this.uploadService.uploadFile(this.datas).subscribe((data) => {
-    //     console.log("File " + data.success);
-    //     this.datas.filePath = data.fileObject.filePath;
-    //     console.log(this.datas.filePath);
-    //     console.log(JSON.stringify(data));
-    //
-    //     this.contractService.addDocument(this.datas).subscribe((data) => {
-    //       console.log(JSON.stringify(data));
-    //
+    this.contractService.addContractStep1(this.datas).subscribe((data) => {
+      this.datas.id = data?.id;
+      console.log(data);
+
+      //call API upload file
+      this.uploadService.uploadFile(this.datas).subscribe((data) => {
+        console.log(data);
+        console.log("File " + data.success);
+        this.datas.filePath = data.fileObject.filePath;
+        console.log(this.datas.filePath);
+        console.log(JSON.stringify(data));
+
+        this.contractService.addDocument(this.datas).subscribe((data) => {
+          console.log(JSON.stringify(data));
+
           //next step
           this.step = variable.stepSampleContract.step2;
           this.datas.stepLast = this.step;
           this.datas.document_id = '123456abc';
           this.nextOrPreviousStep(this.step);
           console.log(this.datas);
-    //
-    //     },
-    //     error => {
-    //       console.log("false connect file");
-    //       return false;
-    //     }
-    //     );
-    //   },
-    //   error => {
-    //     console.log("false file");
-    //     return false;
-    //   }
-    //   );
-    //
-    // },
-    // error => {
-    //   console.log("false content");
-    //   return false;
-    // }
-    // );
+
+        },
+        error => {
+          console.log("false connect file");
+          return false;
+        }
+        );
+      },
+      error => {
+        console.log("false file");
+        return false;
+      }
+      );
+
+    },
+    error => {
+      console.log("false content");
+      return false;
+    }
+    );
 
   }
 

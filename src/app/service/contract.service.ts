@@ -28,110 +28,98 @@ export class ContractService {
   documentUrl:any = `${environment.apiUrl}/api/v1/documents`;
   addConfirmContractUrl:any = `${environment.apiUrl}/api/v1/contracts/`;
 
-  // token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
-  // customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
-  // errorData:any = {};
-  // redirectUrl: string = '';
+  token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+  customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
+  errorData:any = {};
+  redirectUrl: string = '';
 
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
 
-  // public getContractList(filter_type:any, filter_contract_no:any, filter_from_date:any,filter_to_date:any): Observable<any> {
-  //   if(filter_from_date != ""){
-  //     filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
-  //   }
-  //   if(filter_to_date != ""){
-  //     filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
-  //   }
-  //   let listContractUrl = this.listContractUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "";
-  //   console.log(listContractUrl);
-  //   const headers = { 'Authorization': 'Bearer ' + this.token}
-  //   return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
-  // }
+  public getContractList(filter_type:any, filter_contract_no:any, filter_from_date:any,filter_to_date:any): Observable<any> {
+    if(filter_from_date != ""){
+      filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
+    }
+    if(filter_to_date != ""){
+      filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
+    }
+    let listContractUrl = this.listContractUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "";
+    console.log(listContractUrl);
+    const headers = { 'Authorization': 'Bearer ' + this.token}
+    return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
+  }
 
-  // public getContractMyProcessList(filter_type:any, filter_contract_no:any, filter_from_date:any,filter_to_date:any): Observable<any> {
-  //   if(filter_from_date != ""){
-  //     filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
-  //   }
-  //   if(filter_to_date != ""){
-  //     filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
-  //   }
-  //   let listContractMyProcessUrl = this.listContractMyProcessUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "";
-  //   console.log(listContractMyProcessUrl);
-  //   const headers = { 'Authorization': 'Bearer ' + this.token}
-  //   return this.http.get<Contract[]>(listContractMyProcessUrl, { headers }).pipe();
-  // }
+  public getContractMyProcessList(filter_type:any, filter_contract_no:any, filter_from_date:any,filter_to_date:any): Observable<any> {
+    if(filter_from_date != ""){
+      filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
+    }
+    if(filter_to_date != ""){
+      filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
+    }
+    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "";
+    console.log(listContractMyProcessUrl);
+    const headers = { 'Authorization': 'Bearer ' + this.token}
+    return this.http.get<Contract[]>(listContractMyProcessUrl, { headers }).pipe();
+  }
 
-  // addContractUrl: any = `${environment.apiUrl}/api/v1/auth/login`;
-  // errorData: any = {};
-  // redirectUrl: string = '';
-  //
-  // constructor(private http: HttpClient) {
-  // }
-  //
-  // public getContractList(): Observable<any> {
-  //   return this.http.get("/assets/data.json");
-  // }
+  addContractStep1(datas: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({name: datas.name,
+                                 code: datas.code,
+                                 contract_no: datas.code,
+                                 //sign_order: 1,
+                                 sign_time: this.datepipe.transform(datas.sign_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+                                 notes: datas.notes,
+                                 type_id: 4,
+                                 //customer_id: this.customer_id,
+                                 //is_template: false,
+                                 //status: 1,
+                                 alias_url: "",
+                                 refs: [],
+                                });
+    console.log(headers);
+    console.log(body);
+    return this.http.post<Contract>(this.addContractUrl, body, {'headers':headers})
+       .pipe(
+          map((contract) => {
+            if (JSON.parse(JSON.stringify(contract)).id != 0) {
+              return contract;
+            }else{
+              return null;
+            }
+         }),
+         catchError(this.handleError)
+       );
+  }
 
+  addDocument(datas:any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({name: datas.name,
+                                 type: 1,
+                                 path: datas.filePath,
+                                 internal: 1,
+                                 ordering: 1,
+                                 status: 1,
+                                 contract_id: datas.id,
+                                 is_primary: true,
+                                });
+  console.log(headers);
+  console.log(body);
+    return this.http.post<Contract>(this.documentUrl, body, {'headers':headers});
+  }
 
-  // addContractStep1(datas: any) {
-  //   const headers = new HttpHeaders()
-  //     .append('Content-Type', 'application/json')
-  //     .append('Authorization', 'Bearer ' + this.token);
-  //   const body = JSON.stringify({name: datas.name,
-  //                                code: datas.code,
-  //                                contract_no: datas.code,
-  //                                //sign_order: 1,
-  //                                sign_time: this.datepipe.transform(datas.sign_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-  //                                notes: datas.notes,
-  //                                type_id: 4,
-  //                                //customer_id: this.customer_id,
-  //                                //is_template: false,
-  //                                //status: 1,
-  //                                alias_url: "",
-  //                                refs: [],
-  //                               });
-  //   console.log(headers);
-  //   console.log(body);
-  //   return this.http.post<Contract>(this.addContractUrl, body, {'headers':headers})
-  //      .pipe(
-  //         map((contract) => {
-  //           if (JSON.parse(JSON.stringify(contract)).id != 0) {
-  //             return contract;
-  //           }else{
-  //             return null;
-  //           }
-  //        }),
-  //        catchError(this.handleError)
-  //      );
-  // }
-
-  // addDocument(datas:any) {
-  //   const headers = new HttpHeaders()
-  //     .append('Content-Type', 'application/json')
-  //     .append('Authorization', 'Bearer ' + this.token);
-  //   const body = JSON.stringify({name: datas.name,
-  //                                type: 1,
-  //                                path: datas.filePath,
-  //                                internal: 1,
-  //                                ordering: 1,
-  //                                status: 1,
-  //                                contract_id: datas.id,
-  //                                is_primary: true,
-  //                               });
-  // console.log(headers);
-  // console.log(body);
-  //   return this.http.post<Contract>(this.documentUrl, body, {'headers':headers});
-  // }
-
-  // addConfirmContract(datas:any) {
-  //   const headers = new HttpHeaders()
-  //     .append('Content-Type', 'application/json')
-  //     .append('Authorization', 'Bearer ' + this.token);
-  //   const body = "";
-  //   console.log(headers);
-  //   return this.http.put<Contract>(this.addConfirmContractUrl + datas.id + '/start-bpm' , body, {'headers':headers});
-  // }
+  addConfirmContract(datas:any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = "";
+    console.log(headers);
+    return this.http.put<Contract>(this.addConfirmContractUrl + datas.id + '/start-bpm' , body, {'headers':headers});
+  }
 
   objDefaultSampleContract() {
     return {
