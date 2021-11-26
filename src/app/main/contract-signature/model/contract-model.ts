@@ -259,7 +259,8 @@ export const data_signature_contract_2 = {
     "type_id": 1,
     "status": 0,
     document_id: 1,
-    file_content: environment.base64_file_content_demo
+    file_content: environment.base64_file_content_demo,
+    file_name: 'hop_dong_eContract.pdf',
   },
 //step buoc 2
   determine_contract: [

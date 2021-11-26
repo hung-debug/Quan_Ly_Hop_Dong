@@ -76,16 +76,16 @@ export class DetermineSignerComponent implements OnInit {
     // this.is_partner_individual_signature = this.individual.recipients.filter((p: any) => p.role == 3);
     // this.is_partner_individual_document = this.individual.recipients.filter((p: any) => p.role == 4)[0];
 
-    this.userForm = this.formBuilder.group({
-      order: 1,
-      name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
-      userViews: this.formBuilder.array([]),
-      userSigns: this.formBuilder.array([]),
-      userDocs: this.formBuilder.array([])
-      // userViews: (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]) ,
-      // userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
-      // userDocs: (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]) ,
-    });
+    // this.userForm = this.formBuilder.group({
+    //   order: 1,
+    //   name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
+    //   userViews: this.formBuilder.array([]),
+    //   userSigns: this.formBuilder.array([]),
+    //   userDocs: this.formBuilder.array([])
+    //   // userViews: (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]) ,
+    //   // userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
+    //   // userDocs: (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]) ,
+    // });
 
 
     // this.userForm.setControl('userViews', (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]));

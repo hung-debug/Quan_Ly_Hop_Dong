@@ -29,7 +29,7 @@ export class ContractService {
   addConfirmContractUrl:any = `${environment.apiUrl}/api/v1/contracts/`;
 
   token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
-  customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
+  // customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
   errorData:any = {};
   redirectUrl: string = '';
 
