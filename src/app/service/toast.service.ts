@@ -14,4 +14,11 @@ export class ToastService {
       enableHtml :  true
     })
   }
+
+  showErrorHTMLWithTimeout(message:any, title:any, timespan:any){
+    this.toastr.error(message, title ,{
+      timeOut :  timespan,
+      enableHtml :  true
+    })
+  }
 }
