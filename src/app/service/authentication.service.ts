@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import {map, catchError, tap} from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 export interface User {
@@ -29,8 +29,18 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) { }
 
+  loginAuthencation(username: string, password: string) {
+    const headers = new HttpHeaders().append('Content-Type', 'application/json');
+    const body = JSON.stringify({email: username, password: password});
 
- loginAuthencation(username: string, password: string) {
+    this.http.post<any>(this.loginUrl, body).subscribe(
+      (res: any) => {
+        console.log(res);
+      },( err: any) => console.log(err)
+    )
+  }
+
+ loginAuthencation1(username: string, password: string) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
     const body = JSON.stringify({email: username, password: password});
 

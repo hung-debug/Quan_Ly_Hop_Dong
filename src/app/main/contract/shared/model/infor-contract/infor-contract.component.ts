@@ -1,17 +1,17 @@
-import { ContractService } from 'src/app/service/contract.service';
-import { UploadService } from './../../../../../service/upload.service';
-import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
-import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import {ContractService} from 'src/app/service/contract.service';
+import {UploadService} from './../../../../../service/upload.service';
+import {HttpErrorResponse, HttpEventType, HttpResponse} from '@angular/common/http';
+import {Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import { NgbCalendar, NgbDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import {NgbCalendar, NgbDatepicker, NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import {variable} from "../../../../../config/variable";
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 import {AddContractComponent} from "../../../add-contract/add-contract.component";
-import { DatepickerOptions } from 'ng2-datepicker';
-import { getYear } from 'date-fns';
+import {DatepickerOptions} from 'ng2-datepicker';
+import {getYear} from 'date-fns';
 import locale from 'date-fns/locale/en-US';
-import { DatePipe } from '@angular/common';
-import { Router } from '@angular/router';
+import {DatePipe} from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-infor-contract',
@@ -43,23 +43,23 @@ export class InforContractComponent implements OnInit {
   dropdownTypeSettings: any = {};
   dropdownConnectSettings: any = {};
 
-  id:any;
-  name:any = '';
-  code:any;
-  type_id:any;
-  attachFile:any;
-  contractConnect:any;
-  sign_time:any;
-  notes:any;
-  filePath:any;
+  id: any;
+  name: any = '';
+  code: any;
+  type_id: any;
+  attachFile: any;
+  contractConnect: any;
+  sign_time: any;
+  notes: any;
+  filePath: any;
 
   //error
-  errorContractName:any = '';
-  errorContractFile:any = '';
+  errorContractName: any = '';
+  errorContractFile: any = '';
 
   constructor(
     private formBuilder: FormBuilder,
-    private uploadService : UploadService,
+    private uploadService: UploadService,
     private contractService: ContractService,
     public datepipe: DatePipe,
     private router: Router,
@@ -83,6 +83,7 @@ export class InforContractComponent implements OnInit {
     scrollBarColor: '#dfe3e9', // in case you customize you theme, here you define scroll bar color
     // keyboardEvents: true // enable keyboard events
   };
+
   ngOnInit(): void {
 
     this.name = this.datas.name ? this.datas.name : '';
@@ -177,7 +178,7 @@ export class InforContractComponent implements OnInit {
   fileChangedAttach(e: any) {
     console.log(e.target.files)
     let files = e.target.files;
-    for(let i = 0; i < files.length; i++){
+    for (let i = 0; i < files.length; i++) {
 
       const file = e.target.files[i];
       if (file) {
@@ -235,7 +236,7 @@ export class InforContractComponent implements OnInit {
     return true
   }
 
-  clearError(){
+  clearError() {
     if (this.name) {
       this.errorContractName = '';
     }
@@ -246,47 +247,47 @@ export class InforContractComponent implements OnInit {
 
   callAPI() {
     //call API step 1
-    // this.contractService.addContractStep1(this.datas).subscribe((data) => {
-    //   this.datas.id = data?.id;
-    //   console.log(data);
-    //
-    //   //call API upload file
-    //   this.uploadService.uploadFile(this.datas).subscribe((data) => {
-    //     console.log(data);
-    //     console.log("File " + data.success);
-    //     this.datas.filePath = data.fileObject.filePath;
-    //     console.log(this.datas.filePath);
-    //     console.log(JSON.stringify(data));
-    //
-    //     this.contractService.addDocument(this.datas).subscribe((data) => {
-    //       console.log(JSON.stringify(data));
-    //
-    //       //next step
-          this.step = variable.stepSampleContract.step2;
-          this.datas.stepLast = this.step;
-          // this.datas.document_id = '1';
-          this.nextOrPreviousStep(this.step);
-          console.log(this.datas);
-    //
-    //     },
-    //     error => {
-    //       console.log("false connect file");
-    //       return false;
-    //     }
-    //     );
-    //   },
-    //   error => {
-    //     console.log("false file");
-    //     return false;
-    //   }
-    //   );
-    //
-    // },
-    // error => {
-    //   console.log("false content");
-    //   return false;
-    // }
-    // );
+    this.contractService.addContractStep1(this.datas).subscribe((data) => {
+        this.datas.id = data?.id;
+        console.log(data);
+
+        //call API upload file
+        this.uploadService.uploadFile(this.datas).subscribe((data) => {
+            console.log(data);
+            console.log("File " + data.success);
+            this.datas.filePath = data.fileObject.filePath;
+            console.log(this.datas.filePath);
+            console.log(JSON.stringify(data));
+
+            this.contractService.addDocument(this.datas).subscribe((data) => {
+                console.log(JSON.stringify(data));
+
+                //next step
+                this.step = variable.stepSampleContract.step2;
+                this.datas.stepLast = this.step;
+                // this.datas.document_id = '1';
+                this.nextOrPreviousStep(this.step);
+                console.log(this.datas);
+
+              },
+              error => {
+                console.log("false connect file");
+                return false;
+              }
+            );
+          },
+          error => {
+            console.log("false file");
+            return false;
+          }
+        );
+
+      },
+      error => {
+        console.log("false content");
+        return false;
+      }
+    );
 
   }
 
@@ -321,7 +322,7 @@ export class InforContractComponent implements OnInit {
     this.stepChangeInfoContract.emit(step);
   }
 
-  changeAddContract(link:any){
+  changeAddContract(link: any) {
     console.log(link);
     this.router.navigate([link]);
   }
