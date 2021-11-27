@@ -487,22 +487,35 @@ export class DetermineSignerComponent implements OnInit {
     this.submitted = true;
     if (!this.validData()) return;
     else {
-      let recipient_id = 150;
-      this.is_determine_clone.forEach((element: any) => {
-        element.recipients.forEach((item: any) => {
-          if (item.role == 3 || item.role == 4) {
-            item['id'] = Helper._ranDomNumberText(10); // tạm thời client render ra, sau khi call api thì mỗi đối tượng obj ký đó sẽ có id
-          }
-          item['recipient_id'] = recipient_id++;
-        })
-      })
-
-      this.datas.determine_contract = this.is_determine_clone;
-      this.step = variable.stepSampleContract.step3;
-      this.datas.stepLast = this.step
-      // console.log(this.datas);
-      this.nextOrPreviousStep(this.step);
+      // let recipient_id = 150;
+      // this.is_determine_clone.forEach((element: any) => {
+      //   element.recipients.forEach((item: any) => {
+      //     if (item.role == 3 || item.role == 4) {
+      //       item['id'] = Helper._ranDomNumberText(10); // tạm thời client render ra, sau khi call api thì mỗi đối tượng obj ký đó sẽ có id
+      //     }
+      //     item['recipient_id'] = recipient_id++;
+      //   })
+      // })
+      this.callAPI();
     }
+  }
+
+  callAPI() {
+    console.log(this.datas.determine_contract);
+    this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res) => {
+        // this.datas.id = data?.id;
+        console.log(res);
+        this.datas.determine_contract = res ? res : this.is_determine_clone;
+        this.step = variable.stepSampleContract.step3;
+        this.datas.stepLast = this.step
+        // console.log(this.datas);
+        this.nextOrPreviousStep(this.step);
+      },
+      error => {
+        console.log("false content");
+        return false;
+      }
+    );
   }
 
   // forward data component

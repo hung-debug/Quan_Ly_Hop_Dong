@@ -142,14 +142,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     console.log(this.datas);
 
-    if (!this.data_api_step3) {
-      this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
-    } else {
+    // if (!this.data_api_step3) {
+    //   this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
+    // } else {
       // let data_defind = this.data_api_step3;
-      let data_sign_config_cks = this.data_api_step3.filter((p: any) => p.sign_unit == 'chu_ky_so');
-      let data_sign_config_cka = this.data_api_step3.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-      let data_sign_config_text = this.data_api_step3.filter((p: any) => p.sign_unit == 'text');
-      let data_sign_config_so_tai_lieu = this.data_api_step3.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+      let data_sign_config_cks = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
+      let data_sign_config_cka = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+      let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
+      let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
 
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
@@ -165,7 +165,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
         }
       })
-    }
+    // }
 
     // console.log(this.datas.contract_user_sign)
     this.scale = 1;
@@ -211,7 +211,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     // convert base64 file pdf to url
-    this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+    // this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+    this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
     // render pdf to canvas
     this.getPage();
 
@@ -1009,8 +1010,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.contract_user_sign.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {
-            // item.id = item.id.split("_")[item.id.split("_").length - 1];
-            // item['id'] = item.id;
             delete item.id;
           })
           Array.prototype.push.apply(data_sample_contract, element.sign_config);
@@ -1020,10 +1019,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       // Đây là dữ liệu mảng request truyền lên cho server
       console.log(data_sample_contract);
 
-
-      this.step = variable.stepSampleContract.step4;
-      this.datas.stepLast = this.step
-      this.nextOrPreviousStep(this.step);
+      // this.step = variable.stepSampleContract.step4;
+      // this.datas.stepLast = this.step
+      // this.nextOrPreviousStep(this.step);
     }
   }
 

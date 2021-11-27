@@ -25,6 +25,7 @@ export class ContractService {
   listContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
   listContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
   addContractUrl: any = `${environment.apiUrl}/api/v1/contracts`;
+  addDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/contract/`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
 
@@ -84,6 +85,24 @@ export class ContractService {
     console.log(headers);
     console.log(body);
     return this.http.post<Contract>(this.addContractUrl, body, {'headers': headers})
+      .pipe(
+        map((contract) => {
+          if (JSON.parse(JSON.stringify(contract)).id != 0) {
+            return contract;
+          } else {
+            return null;
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getContractDetermine(data_determine: any, id: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify(data_determine);
+    return this.http.post<Contract>(this.addDetermineUrl + id, body, {'headers': headers})
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -342,6 +361,7 @@ export class ContractService {
         "name": "", // tên bên tham gia
         "type": 1, // loại bên tham gia: tổ chức của tôi | đối tác | cá nhân
         "ordering": 1, // thứ tự thực hiện ký kết của các bên tham gia
+        status: 1, //
         "recipients": [
           // Dữ liệu người xem xét
           {
@@ -350,7 +370,7 @@ export class ContractService {
             "phone": "", // sđt người tham gia
             "role": 1, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
-            "status": 1, // Trạng thái chưa xử lý/ đã xử lý
+            "status": 0, // Trạng thái chưa xử lý/ đã xử lý
             "username": "", // username khi click từ link email
             "password": "", // pw click từ link email
             "is_otp": 1, // select otp
@@ -364,7 +384,7 @@ export class ContractService {
             "phone": "", // sđt người tham gia
             "role": 3, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
-            "status": 1, // Trạng thái chưa xử lý/ đã xử lý
+            "status": 0, // Trạng thái chưa xử lý/ đã xử lý
             "username": "thangbt", // username khi click từ link email
             "password": "ad", // pw click từ link email
             "is_otp": 1, // select otp
@@ -378,7 +398,7 @@ export class ContractService {
             "phone": "", // sđt người tham gia
             "role": 4, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
-            "status": 1, // Trạng thái chưa xử lý/ đã xử lý
+            "status": 0, // Trạng thái chưa xử lý/ đã xử lý
             "username": "", // username khi click từ link email
             "password": "", // pw click từ link email
             "is_otp": 1, // select otp
@@ -386,7 +406,7 @@ export class ContractService {
             ]
           },
         ],
-        "contract_id": 1
+        // "contract_id": 1
       },
       // Đối tác
       // Tổ chức
@@ -394,6 +414,7 @@ export class ContractService {
         "name": "",
         "type": 2, // Đối tác tổ chức
         "ordering": 1,
+        status: 1,
         "recipients": [
           // người điều phối
           {
@@ -402,7 +423,7 @@ export class ContractService {
             "phone": "",
             "role": 2, // người điều phối
             "ordering": 1,
-            "status": 1,
+            "status": 0,
             "username": "",
             "password": "",
             "is_otp": 1,
@@ -415,7 +436,7 @@ export class ContractService {
             "phone": "",
             "role": 1, // người xem xét
             "ordering": 1,
-            "status": 1,
+            "status": 0,
             "username": "",
             "password": "",
             "is_otp": 1,
@@ -428,7 +449,7 @@ export class ContractService {
             "phone": "",
             "role": 3, // người ký
             "ordering": 1,
-            "status": 1,
+            "status": 0,
             "username": "",
             "password": "",
             "is_otp": 1,
@@ -441,20 +462,21 @@ export class ContractService {
             "phone": "",
             "role": 4, // văn thư
             "ordering": 1,
-            "status": 1,
+            "status": 0,
             "username": "",
             "password": "",
             "is_otp": 1,
             "sign_type": []
           }
         ],
-        "contract_id": 1
+        // "contract_id": 1
       },
       {
         "name": "Đối tác cá nhân",
         "type": 3, // Đối tác cá nhân
         "ordering": 1,
-        "contract_id": 1,
+        // "contract_id": 1,
+        status: 1,
         "recipients": [
           // người điều phối
           {
@@ -463,7 +485,7 @@ export class ContractService {
             "phone": "",
             "role": 2, // người điều phối
             "ordering": 1,
-            "status": 1,
+            "status": 0,
             "username": "",
             "password": "",
             "is_otp": 1,
@@ -476,7 +498,7 @@ export class ContractService {
             "phone": "",
             "role": 1, // người xem xét
             "ordering": 1,
-            "status": 1,
+            "status": 0,
             "username": "",
             "password": "",
             "is_otp": 1,
@@ -489,7 +511,7 @@ export class ContractService {
             "phone": "",
             "role": 3, // người ký
             "ordering": 1,
-            "status": 1,
+            "status": 0,
             "username": "",
             "password": "",
             "is_otp": 1,
@@ -502,7 +524,7 @@ export class ContractService {
             "phone": "",
             "role": 4, // văn thư
             "ordering": 1,
-            "status": 1,
+            "status": 0,
             "username": "",
             "password": "",
             "is_otp": 1,
