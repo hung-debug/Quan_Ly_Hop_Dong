@@ -131,7 +131,7 @@ export class MainComponent implements OnInit {
         this.errorDetail = 'Xác nhận mật khẩu mới không khớp!';
       }else{
         this.error = false;
-        this.userService.sendResetPasswordToken("", passwordOld, passwordNew).subscribe((data) => {
+        this.userService.sendResetPasswordToken(passwordOld, passwordNew).subscribe((data) => {
 
           if(data != null){
             this.status = 1;
@@ -146,7 +146,7 @@ export class MainComponent implements OnInit {
         },
         (error:any) => {
           this.status = 0;
-          this.notification = 'Đổi mật khẩu mới thất bại!';
+          this.notification = 'Có lỗi! Vui lòng liên hệ với nhà phát triển để được xử lý';
         }
         );
       }

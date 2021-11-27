@@ -20,7 +20,7 @@ export class ContractComponent implements OnInit {
   searchText:string;
   closeResult:string= '';
   public contracts: any[] = [];
-  p:number = 0;
+  p:number = 1;
   page:number = 5;
   pageStart:number = 0;
   pageEnd:number = 0;
@@ -83,19 +83,27 @@ export class ContractComponent implements OnInit {
 
       //set title
       this.appService.setTitle(this.convertActionStr());
+
+      this.getContractList();
     });
 
+
+
+  }
+
+  private getContractList(){
+    this.p = 1;
     //get list contract
     this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
       this.contracts = data.entities;
-      this.pageTotal = data.total_elements;
-      if(this.pageTotal > 0){
-        this.setPage();
+      this.pageTotal = this.contracts.length;
+      if(this.pageTotal == 0){
+        this.p = 0;
       }
+      this.setPage();
       console.log(this.contracts);
       console.log(this.pageTotal);
     });
-
   }
 
   private convertActionStr(): string{
@@ -136,28 +144,26 @@ export class ContractComponent implements OnInit {
   }
 
   setPage(){
-    this.pageStart = (this.p)*this.page+1;
-    this.pageEnd = (this.p+1)*this.page;
+    this.pageStart = (this.p-1)*this.page+1;
+    this.pageEnd = (this.p)*this.page;
     if(this.pageTotal < this.pageEnd){
       this.pageEnd = this.pageTotal;
     }
   }
 
   search(){
-    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
-      this.contracts = data.entities;
-      this.pageTotal = data.total_elements;
-      if(this.pageTotal > 0){
-        this.setPage();
-      }
-      console.log(this.contracts);
-      console.log(this.pageTotal);
-    });
+    this.getContractList();
   }
 
   autoSearch(event:any){
+    this.p = 1;
     this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
       this.contracts = this.transform(data.entities, event);
+      this.pageTotal = this.contracts.length;
+      if(this.pageTotal == 0){
+        this.p = 0;
+      }
+      this.setPage();
     });
   }
 
