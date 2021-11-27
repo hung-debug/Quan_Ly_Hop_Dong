@@ -81,10 +81,10 @@
     </div>
   </div>
 
-  <div class="contract_footer" *ngIf="contracts.length > 0;">
+  <div class="contract_footer">
     <div class="footer_title"></div>
     <div class="footer_pagination">
-      <pagination-controls (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
+      <pagination-controls *ngIf="contracts.length > 0;" (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
     </div>
     <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
   </div>

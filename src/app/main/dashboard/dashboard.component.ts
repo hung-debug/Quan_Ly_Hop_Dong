@@ -90,7 +90,7 @@ export class DashboardComponent implements OnInit {
             showInLegend: true,
                shadow: false,
                center: ['50%', '50%'],
-               innerSize: '40%'
+               innerSize: '60%'
             },
           },
 

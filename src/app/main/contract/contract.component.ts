@@ -20,7 +20,7 @@ export class ContractComponent implements OnInit {
   searchText:string;
   closeResult:string= '';
   public contracts: any[] = [];
-  p:number = 1;
+  p:number = 0;
   page:number = 5;
   pageStart:number = 0;
   pageEnd:number = 0;
@@ -89,7 +89,9 @@ export class ContractComponent implements OnInit {
     this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
-      this.setPage();
+      if(this.pageTotal > 0){
+        this.setPage();
+      }
       console.log(this.contracts);
       console.log(this.pageTotal);
     });
@@ -134,8 +136,8 @@ export class ContractComponent implements OnInit {
   }
 
   setPage(){
-    this.pageStart = (this.p-1)*this.page+1;
-    this.pageEnd = (this.p)*this.page;
+    this.pageStart = (this.p)*this.page+1;
+    this.pageEnd = (this.p+1)*this.page;
     if(this.pageTotal < this.pageEnd){
       this.pageEnd = this.pageTotal;
     }
@@ -145,7 +147,9 @@ export class ContractComponent implements OnInit {
     this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
-      this.setPage();
+      if(this.pageTotal > 0){
+        this.setPage();
+      }
       console.log(this.contracts);
       console.log(this.pageTotal);
     });
