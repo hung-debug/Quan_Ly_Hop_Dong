@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
         },
         error => {
             this.error = true;
-            this.errorDetail = "Tên đăng nhập hoặc mật khẩu không đúng";
+            this.errorDetail = "Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý";
         }
         );
       }

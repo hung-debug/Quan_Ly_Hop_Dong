@@ -13,7 +13,31 @@
     </div>
     <hr>
 
-    <div class="location-change" [ngStyle]="changeDisplay()">
+    <perfect-scrollbar style="position: relative;width: 180px; max-height: 120px;overflow: auto;" >
+      <div class="content">
+        Scroll<br>
+        me!<br>
+
+        I<br>
+        am<br>
+        an<br>
+        example<br>
+        content<br>
+        text<br>
+        for<br>
+        this<br>
+        really<br>
+        cooooooooooooooooooooooooooooooooooooooooooooooooool<br>
+        scrollable<br>
+      </div>
+    </perfect-scrollbar>
+
+    <div style="max-height: calc(100vh - 250px);
+    height: calc(100vh - 250px);
+    overflow-y: auto;
+    position: relative;">
+    <perfect-scrollbar>
+    <div>
       <div class="sample-contract__information--user-sign" style="line-height: 25px">
         <div style="text-align: center;" class="label">THÔNG TIN CÁC BÊN KÝ</div>
       </div>
@@ -91,6 +115,8 @@
         </div>
       </div>
     </div>
+  </perfect-scrollbar>
+</div>
   </div>
 
   <!--  file content-->
