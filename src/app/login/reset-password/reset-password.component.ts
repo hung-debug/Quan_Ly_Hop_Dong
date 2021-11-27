@@ -113,7 +113,7 @@ export class ResetPasswordComponent implements OnInit {
         },
         (error:any) => {
           this.status = 0;
-          this.notification = 'Đổi mật khẩu mới thất bại!';
+          this.notification = 'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý';
         }
         );
       }

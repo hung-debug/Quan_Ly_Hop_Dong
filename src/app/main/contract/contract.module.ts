@@ -8,6 +8,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DatepickerModule } from 'ng2-datepicker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+
 import { ContractHeaderComponent } from './shared/model/contract-header/contract-header.component';
 import {InforContractComponent} from "./shared/model/infor-contract/infor-contract.component";
 import {SampleContractComponent} from "./shared/model/sample-contract/sample-contract.component";
@@ -25,7 +29,9 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 // import {NotificationService} from "../../service/notification/notification.service";
 
-
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
 @NgModule({
   declarations: [
     ContractHeaderComponent,
@@ -66,7 +72,8 @@ import {MatSelectModule} from "@angular/material/select";
       }
     }),
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    PerfectScrollbarModule,
   ],
   entryComponents: [
     ConfirmInforContractComponent,
@@ -76,7 +83,12 @@ import {MatSelectModule} from "@angular/material/select";
     DetermineSignerComponent,
     SignContractComponent
   ],
-  providers: []
+  providers: [
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+      }
+  ]
 })
 export class ContractModule { }
 export function httpTranslateLoader(http: HttpClient) {
