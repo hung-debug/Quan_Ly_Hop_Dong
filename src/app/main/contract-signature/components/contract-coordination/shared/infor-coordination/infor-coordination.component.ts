@@ -83,11 +83,11 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   isEnableText: boolean = false;
   isChangeText: boolean = false;
 
-  isPartySignature: any = [
-    {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
-    {id: 2, name: 'Công ty newEZ Việt Nam'},
-    {id: 3, name: 'Tập đoàn Bảo Việt'}
-  ]
+  // isPartySignature: any = [
+  //   {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
+  //   {id: 2, name: 'Công ty newEZ Việt Nam'},
+  //   {id: 3, name: 'Tập đoàn Bảo Việt'}
+  // ]
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -99,39 +99,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   ngOnInit() {
-
-    console.log(this.datas);
-
-    // this.datas['contract_user_sign'] = this.contractService.objDefaultSampleContract().contract_user_sign;
-
-    // console.log(this.datas.contract_user_sign)
     this.scale = 1;
-    // this.datas.contract_user_sign.forEach((item: any) => {
-    //   if (item['sign_config'] && typeof (item["sign_config"]) == 'string') {
-    //     item['sign_config'] = JSON.parse(item['sign_config']);
-    //   }
-    // })
-
-    // this.list_sign_name.forEach((item: any) => {
-    //   item['selected'] = false;
-    // })
-    // if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
-    //   let is_user_sign = [...this.datas.userForm.userSigns];
-    //   this.getListSignName(is_user_sign, 'organization');
-    // }
-    //
-    // if (this.datas.partnerForm.partnerArrs && this.datas.partnerForm.partnerArrs.length > 0) {
-    //   this.datas.partnerForm.partnerArrs.forEach((element: any) => {
-    //     if (element.partnerSigns && element.partnerSigns.length > 0) {
-    //       let is_partner_sign = [...element.partnerSigns];
-    //       this.getListSignName(is_partner_sign, 'partner');
-    //     } else if (element.partnerUsers && element.partnerUsers.length > 0) {
-    //       let is_partner_users = [...element.partnerUsers];
-    //       this.getListSignName(is_partner_users, 'partner');
-    //     }
-    //   })
-    // }
-
     if (!this.signCurent) {
       this.signCurent = {
         offsetWidth: 0,
@@ -139,33 +107,79 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       }
     }
 
-    // convert base64 file pdf to url
+
+    if (!this.datas.sample_contract) {
+      this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
+    } else {
+      // let data_defind = this.data_api_step3;
+      let data_sign_config_cks = this.datas.sample_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
+      let data_sign_config_cka = this.datas.sample_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+      let data_sign_config_text = this.datas.sample_contract.filter((p: any) => p.sign_unit == 'text');
+      let data_sign_config_so_tai_lieu = this.datas.sample_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+
+      this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+
+      this.datas.contract_user_sign.forEach((element: any) => {
+        console.log(element.sign_unit, element.sign_config);
+        if(element.sign_unit == 'so_tai_lieu') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+        } else if (element.sign_unit == 'chu_ky_so') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
+        } else if (element.sign_unit == 'text') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+        } else if (element.sign_unit == 'chu_ky_anh') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+        }
+      })
+    }
+
+    // console.log(this.datas.contract_user_sign)
+    this.scale = 1;
+
+    // this.list_sign_name.forEach((item: any) => {
+    //   item['selected'] = false;
+    // })
+    // if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
+      // let data_list_user_sign: any[] = [];
+      let data_user_sign = [...this.datas.determine_contract];
+      data_user_sign.forEach((element: any) => {
+        if (element.type == 1) {
+          element.recipients.forEach((item: any) => {
+            if (item.role == 3 || item.role == 4) {
+              item['type_unit'] = 'organization';
+              item['selected'] = false;
+              item['is_disable'] = false;
+              this.list_sign_name.push(item);
+            }
+          })
+        } else if (element.type == 2) {
+          element.recipients.forEach((item: any) => {
+            if (item.role == 3 || item.role == 4) {
+              item['type_unit'] = 'partner'
+              item['selected'] = false;
+              item['is_disable'] = false;
+              this.list_sign_name.push(item);
+            }
+          })
+        }
+      })
+      // this.getListSignName(data_list_user_sign);
+    // }
+
     // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
-    this.pdfSrc = Helper._getUrlPdf(this.datas.contract_information.file_content);
-    // render pdf to canvas
+    this.pdfSrc = Helper._getUrlPdf(this.datas.infor_contract.file_content);
     this.getPage();
-
-    // event drag and drop
-
   }
 
-  getListSignName(listSignForm: any = [], type_unit: string) {
-    listSignForm.forEach((item: any) => {
-      item['selected'] = false;
-      item['sign_unit'] = type_unit;
-      item['signType'] = item.signType;
-      item['is_disable'] = false;
-      this.list_sign_name.push(item)
-    })
-  }
-
-
-  // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
-
-
-  // Hàm tính tọa độ ký
-
-  // Hàm event khi bắt đầu kéo (drag) đối tượng ký
+  // getListSignName(listSignForm: any = [], type_unit: string) {
+  //   listSignForm.forEach((item: any) => {
+  //     item['selected'] = false;
+  //     item['sign_unit'] = type_unit;
+  //     item['signType'] = item.signType;
+  //     item['is_disable'] = false;
+  //     this.list_sign_name.push(item)
+  //   })
+  // }
 
   setWidth(d: any) {
     return {
@@ -190,9 +204,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
         this.arrPage.push({page: page});
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
-        // canvas.style.paddingLeft = '15px';
-        // canvas.style.border = '9px solid transparent';
-        // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
         let idPdf = 'pdf-viewer-step-3'
         let viewer = document.getElementById(idPdf);
         if (viewer) {
@@ -235,12 +246,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      // @ts-ignore
-      // document.getElementById('input-location-x').focus();
-      let width_drag_element = document.getElementById('width-element-info');
-      this.widthDrag = width_drag_element ? ((width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left) - 15) : '';
-    }, 100)
     this.setPosition();
     this.eventMouseover();
   }
@@ -256,8 +261,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
           }
           // else
           //   a.style.display = 'none';
-          a.setAttribute("data-x", element['dataset_x']);
-          a.setAttribute("data-y", element['dataset_y']);
+          a.setAttribute("data-x", element['coordinate_x']);
+          a.setAttribute("data-y", element['coordinate_y']);
         }
       });
     }
@@ -328,46 +333,18 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any) {
     let style: any = {
-      "transform": 'translate(' + d['dataset_x'] + 'px, ' + d['dataset_y'] + 'px)',
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
     }
 
-    // if (sizeChange == "width" && e) {
-    //   let signElement = document.getElementById(this.objSignInfo.id);
-    //   if (signElement) {
-    //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-    //     if (isObjSign) {
-    //       if (sizeChange == 'width') {
-    //         style.width = parseInt(e) + 'px';
-    //       } else {
-    //         style.height = parseInt(e) + 'px';
-    //       }
-    //     }
-    //   }
-    // } else {
-    if (d['offsetWidth']) {
-      style.width = parseInt(d['offsetWidth']) + "px";
+    if (d['width']) {
+      style.width = parseInt(d['width']) + "px";
     }
-    // }
 
-    // if (sizeChange == "height" && e) {
-    //   let signElement = document.getElementById(this.objSignInfo.id);
-    //   if (signElement) {
-    //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-    //     if (isObjSign) {
-    //       if (sizeChange == 'width') {
-    //         style.width = parseInt(e) + 'px';
-    //       } else {
-    //         style.height = parseInt(e) + 'px';
-    //       }
-    //     }
-    //   }
-    // } else {
-    if (d['offsetHeight']) {
-      style.height = parseInt(d['offsetHeight']) + "px";
+    if (d['height']) {
+      style.height = parseInt(d['height']) + "px";
     }
-    // }
 
     return style;
   }
@@ -409,12 +386,12 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
       if (isObjSign) {
-        this.objSignInfo.traf_x = d.dataset_x;
-        this.objSignInfo.traf_y = d.dataset_y;
+        this.objSignInfo.traf_x = d.coordinate_x;
+        this.objSignInfo.traf_y = d.coordinate_y;
         // this.signCurent.name = d.name;
 
-        this.objSignInfo.offsetWidth = parseInt(d.offsetWidth);
-        this.objSignInfo.offsetHeight = parseInt(d.offsetHeight);
+        this.objSignInfo.offsetWidth = parseInt(d.width);
+        this.objSignInfo.offsetHeight = parseInt(d.height);
         // this.signCurent.offsetWidth = d.offsetWidth;
         // this.signCurent.offsetHeight = d.offsetHeight;
         // console.log(this.signCurent)
@@ -449,55 +426,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     }
   }
 
-  // getIdSignClick() {
-  //   let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
-  //   return set_id.id;
-  //   // this.datas.contract_user_sign.forEach((element: any, index: any) => {
-  //   //   if (element.id == id) {
-  //   //     if (element.sign_config.length == 0) {
-  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
-  //   //     } else {
-  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-' + (element.sign_config.length) + '_' + element.id;
-  //   //     }
-  //   //     // element['sign_config'].push(_obj);
-  //   //   }
-  //   // })
-  // }
-
-  // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
-  // onCancel(e: any, data: any) {
-  //   data.dataset_x = 0;
-  //   data.dataset_y = 0;
-  //   data.number = 0;
-  //   data.offsetWidth = 0;
-  //   data.offsetHeight = 0;
-  //   data.position = "";
-  //   if (data.sign_unit == 'text') {
-  //     this.isEnableText = false;
-  //   }
-  //   let signElement = document.getElementById(data.id);
-  //   if (signElement) {
-  //     this.objSignInfo.traf_x = 0;
-  //     this.objSignInfo.traf_y = 0;
-  //     this.objSignInfo.offsetHeight = 0;
-  //     this.objSignInfo.offsetWidth = 0;
-  //     //@ts-ignore
-  //     document.getElementById('select-dropdown').value = "";
-  //     // this.signCurent.offsetWidth = 0;
-  //     // this.signCurent.offsetHeight = 0;
-  //   }
-  //   this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
-  //     if (element.sign_config.length > 0) {
-  //       element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
-  //       element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
-  //         itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.id;
-  //       })
-  //     }
-  //   });
-  //   this.eventMouseover();
-  //   this.cdRef.detectChanges();
-  // }
-
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     let arrSignConfig: any = [];
@@ -520,18 +448,10 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
-    })
+    }, null, () => {
+    }).unsubscribe();
 
   }
-
-  // open(content:any) {
-  //   this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-  //     const closeModel = `Closed with: ${result}`;
-  //   }, (reason) => {
-  //     // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //   });
-  // }
 
   showThumbnail() {
     this.objSignInfo.showObjSign = false;
@@ -550,75 +470,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     interact.removeDocument(document);
   }
 
-  // edit location doi tuong ky
-  changePositionSign(e: any, locationChange: any, property: any) {
-    // console.log(e, this.objSignInfo, this.signCurent);
-    let signElement = document.getElementById(this.objSignInfo.id);
-    if (signElement) {
-      let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-      if (isObjSign) {
-        if (property == 'location') {
-          if (locationChange == 'x') {
-            isObjSign.dataset_x = parseInt(e);
-            signElement.setAttribute("data-x", isObjSign.dataset_x);
-          } else {
-            isObjSign.dataset_y = parseInt(e);
-            signElement.setAttribute("data-y", isObjSign.dataset_y);
-          }
-        } else if (property == 'size') {
-          if (locationChange == 'width') {
-            isObjSign.offsetWidth = parseInt(e);
-            signElement.setAttribute("width", isObjSign.offsetWidth);
-          } else {
-            isObjSign.offsetHeight = parseInt(e);
-            signElement.setAttribute("height", isObjSign.offsetHeight);
-          }
-        } else if (property == 'text') {
-          isObjSign.text_attribute_name = e;
-          signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
-        } else {
-          let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
-          if (data_name) {
-            isObjSign.name = data_name.name;
-            signElement.setAttribute("name", isObjSign.name);
-
-            isObjSign.signature_party = data_name.sign_unit;
-            signElement.setAttribute("signature_party", isObjSign.signature_party);
-          }
-        }
-        // console.log(this.signCurent)
-        // console.log(this.objSignInfo)
-      }
-    }
-  }
-
-  getTrafX() {
-    if (Math.round(this.objSignInfo.traf_x) <= 0) {
-      return Math.round(this.objSignInfo.traf_x)
-    } else
-      return Math.round(this.objSignInfo.traf_x) - 1;
-  }
-
-  getTrafY() {
-    return Math.round(this.objSignInfo.traf_y)
-  }
-
-  // edit size doi tuong ky
-  // changeSizeSign(e: any, sizeChange: any) {
-  //   let signElement = document.getElementById(this.objSignInfo.id);
-  //   if (signElement) {
-  //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-  //     if (isObjSign) {
-  //
-  //     }
-  //   }
-  // }
-
-  back(e: any, step?: any) {
-    // if (!this.datas.isView) {
-    this.nextOrPreviousStep(step);
-  }
-
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
@@ -629,17 +480,5 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     this.datas.step = variable.stepSampleContract.step_confirm_coordination;
   }
 
-  getNameContract(data: any) {
-    return (' ' + data.file_name + ',').replace(/,\s*$/, "");
-  }
-
-
-
-  getNameCoordination() {
-    let nameFile = [];
-    for (let i = 0; i < this.datas.contract_information.file_related_contract; i++) {
-
-    }
-  }
 
 }

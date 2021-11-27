@@ -1,16 +1,16 @@
 <div class="container-fluid">
   <mdb-tabs [fill]="true">
-    <mdb-tab title="Mẫu hợp đồng tạo"></mdb-tab>
-    <mdb-tab title="Mẫu hợp đồng được chia sẻ"></mdb-tab>
+    <mdb-tab title="{{'contract-template.create' | translate}}"></mdb-tab>
+    <mdb-tab title="{{'contract-template.share' | translate}}"></mdb-tab>
   </mdb-tabs>
 
   <div class="row">
     <div class="col-md-5">
-      <div>Tên mẫu hợp đồng</div>
+      <div>{{'contract-template.name' | translate}}</div>
       <input type="text" id="contractTemplateName" class="form-control input-search"/>
     </div>
     <div class="col-md-5">
-      <div>Loại mẫu hợp đồng</div>
+      <div>{{'contract-template.type' | translate}}</div>
       <input type="text" id="contractTemplateType" class="form-control input-search"/>
     </div>
     <div class="col-md-2 btn_add">
@@ -20,9 +20,9 @@
 
   <div class="row list_header">
     <div class="col-md-5"></div>
-    <div class="col-md-2">Ngày tạo</div>
-    <div class="col-md-2">Mã mẫu</div>
-    <div class="col-md-3">Thao tác</div>
+    <div class="col-md-2">{{'create-date' | translate}}</div>
+    <div class="col-md-2">{{'contract-template.code' | translate}}</div>
+    <div class="col-md-3">{{'action' | translate}}</div>
   </div>
 
   <div class="item_contract" *ngFor="let item of contractsTemplate  | paginate:{itemsPerPage: page, currentPage:p}">
@@ -47,27 +47,23 @@
       </div>
 
       <div class="col-md-3 item_icon">
-        <div class="row">
-          <div class="col-md-100-5">
-            <i class="fa fa_icon" [ngClass]="{
-              'fa-unlock-alt': item.status == 'Đang phát hành',
-              'fa-unlock': item.status == 'Ngừng phát hành'
-            }" [ngbTooltip]="item.status == 'Đang phát hành' ? 'Ngừng phát hành' : 'Mở phát hành'"
-            (click)="confirmChangeStatus(item.status); open(modalConfirmChangeStatus)"
-            ></i>
+        <div style="display: flex; justify-content: center;">
+          <div class="div_icon">
+            <img *ngIf="item.status == 'Đang phát hành'" src="../../assets/img/icon_stop_release.svg" class="img_icon" ngbTooltip="Ngừng phát hành" (click)="confirmChangeStatus(item.status); open(modalConfirmChangeStatus)"/>
+            <img *ngIf="item.status == 'Ngừng phát hành'" src="../../assets/img/icon_open_release.svg" class="img_icon" ngbTooltip="Mở phát hành" (click)="confirmChangeStatus(item.status); open(modalConfirmChangeStatus)"/>
           </div>
-          <div class="col-md-100-5">
-            <i class="fa fa-file-o fa_icon" ngbTooltip="Tạo hợp đồng đơn lẻ"></i>
+
+          <div class="div_icon">
+            <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="Tạo hợp đồng đơn lẻ" (click)="getDataShare(item.contractName, item.contractCode); open(modalShare)"/>
           </div>
-          <div class="col-md-100-5">
-            <i class="fa fa-files-o fa_icon" ngbTooltip="Tạo hợp đồng theo lô"></i>
+          <div class="div_icon">
+            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="Tạo hợp đồng theo lô" (click)="getDataShare(item.contractName, item.contractCode); open(modalShare)"/>
           </div>
-          <div class="col-md-100-5">
-            <i class="fa fa-share-square-o fa_icon" ngbTooltip="Chia sẻ" (click)="getDataShare(item.contractName, item.contractCode); open(modalShare)"></i>
+          <div class="div_icon">
+            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" (click)="getDataShare(item.contractName, item.contractCode); open(modalShare)"/>
           </div>
-          <div class="col-md-100-5">
-            <i class="fa fa-trash-o fa_icon icon_red" ngbTooltip="Xóa"
-            (click)="deleteItem(item.id); open(modalNotifi)"></i>
+          <div class="div_icon">
+            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="Xóa hợp đồng" (click)="deleteItem(item.id);" />
           </div>
         </div>
       </div>
@@ -79,7 +75,7 @@
     <div class="footer_pagination">
       <pagination-controls (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
     </div>
-    <div class="footer_page_number">Số lượng: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
+    <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
   </div>
 
 </div>
@@ -121,7 +117,7 @@
   <div class="popup_content">
     <div class="row">
       <div class="col-md-10">
-        <h4 class="popup_title">THÔNG BÁO</h4>
+        <h4 class="popup_title">XÁC NHẬN</h4>
       </div>
       <div class="col-md-2 popup_close">
         <span (click)="modal.dismiss('Cross click')">×</span>
@@ -142,8 +138,8 @@
 
     <div class="row" style="text-align: center; padding-top: 10px;">
       <div class="col-md-12">
-        <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
-        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.dismiss('Cross click'); sendChangeStatus(statusContract); open(modalNotifi)" >Đồng ý</button>
+        <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">{{'btn.cancel' | translate}}</button>
+        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.dismiss('Cross click'); sendChangeStatus(statusContract)">{{'btn.accept' | translate}}</button>
       </div>
     </div>
   </div>
@@ -226,7 +222,7 @@
       <div class="row" style="text-align: center; padding-top: 10px;">
         <div class="col-md-12">
           <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
-          <button type="button" class="btn btn-outline-dark btn_submit" (click)="sendShare(); error ? false : modal.close('Save click');open(modalNotifi)">Chia sẻ</button>
+          <button type="button" class="btn btn-outline-dark btn_submit" (click)="sendShare(); error ? false : modal.close('Save click');">Chia sẻ</button>
         </div>
       </div>
     </form>

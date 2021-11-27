@@ -8,10 +8,21 @@ import {Router} from "@angular/router";
   styleUrls: ['./processing-handle-econtract.component.scss']
 })
 export class ProcessingHandleEcontractComponent implements OnInit {
+  is_list_name: any = [];
+  status: any = [
+    {
+      value: 0,
+      name: 'Tạm dừng'
+    },
+    {
+      value: 1,
+      name: 'Hoạt động'
+    }
+  ]
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
-      contract_related: any;
+      determine_contract: any,
       content: any},
     public router: Router,
     public dialog: MatDialog,
@@ -20,7 +31,27 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.data);
+    this.data.determine_contract.forEach((item: any) => {
+      item.recipients.forEach((element: any) => {
+        let data = {
+          name: element.name,
+          name_company: item.name,
+          status: element.status
+        }
+        this.is_list_name.push(data);
+      })
+    })
+    // console.log(this.is_list_name)
+  }
+
+  getStatus(data: any) {
+    if (data && data.status) {
+      return this.status.filter((p: any) => p.value == data.status)[0].name;
+    } else return ''
+  }
+
+  getDateTime(data: any) {
+    return (new Date());
   }
 
   acceptRequest() {

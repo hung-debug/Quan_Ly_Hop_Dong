@@ -1,3 +1,4 @@
+import { ContractService } from 'src/app/service/contract.service';
 import { UploadService } from './../../../../../service/upload.service';
 import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
@@ -9,7 +10,8 @@ import {AddContractComponent} from "../../../add-contract/add-contract.component
 import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
-import { ContractService } from 'src/app/service/contract.service';
+import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-infor-contract',
@@ -41,13 +43,15 @@ export class InforContractComponent implements OnInit {
   dropdownTypeSettings: any = {};
   dropdownConnectSettings: any = {};
 
-  contractName:any = '';
-  contractNumber:any;
-  contractType:any;
+  id:any;
+  name:any = '';
+  code:any;
+  type_id:any;
   attachFile:any;
   contractConnect:any;
-  dateDeadline:any;
-  comment:any;
+  sign_time:any;
+  notes:any;
+  filePath:any;
 
   //error
   errorContractName:any = '';
@@ -57,6 +61,8 @@ export class InforContractComponent implements OnInit {
     private formBuilder: FormBuilder,
     private uploadService : UploadService,
     private contractService: ContractService,
+    public datepipe: DatePipe,
+    private router: Router,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -79,12 +85,12 @@ export class InforContractComponent implements OnInit {
   };
   ngOnInit(): void {
 
-    this.contractName = this.datas.contractName ? this.datas.contractName : '';
-    this.contractNumber = this.datas.contractNumber ? this.datas.contractNumber : '';
-    this.contractType = this.datas.contractType ? this.datas.contractType : '';
+    this.name = this.datas.name ? this.datas.name : '';
+    this.code = this.datas.code ? this.datas.code : '';
+    this.type_id = this.datas.type_id ? this.datas.type_id : '';
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : '';
-    this.dateDeadline = this.datas.dateDeadline ? this.datas.dateDeadline : new Date();
-    this.comment = this.datas.comment ? this.datas.comment : '';
+    this.sign_time = this.datas.sign_time ? this.datas.sign_time : new Date();
+    this.notes = this.datas.notes ? this.datas.notes : '';
 
     this.contractTypeList = [
       {
@@ -132,6 +138,7 @@ export class InforContractComponent implements OnInit {
     if (file) {
       // giới hạn file upload lên là 5mb
       if (e.target.files[0].size <= 5000000) {
+        console.log(e.target.files[0].size);
         const file_name = file.name;
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
@@ -216,7 +223,7 @@ export class InforContractComponent implements OnInit {
   //--valid data step 1
   validData() {
     this.clearError();
-    if (!this.contractName) {
+    if (!this.name) {
       this.errorContractName = 'Tên hợp đồng không được để trống!';
       return false;
     }
@@ -229,7 +236,7 @@ export class InforContractComponent implements OnInit {
   }
 
   clearError(){
-    if (this.contractName) {
+    if (this.name) {
       this.errorContractName = '';
     }
     if (this.datas.contractFile) {
@@ -237,17 +244,63 @@ export class InforContractComponent implements OnInit {
     }
   }
 
+  callAPI() {
+    //call API step 1
+    this.contractService.addContractStep1(this.datas).subscribe((data) => {
+      this.datas.id = data?.id;
+      console.log(data);
+
+      //call API upload file
+      this.uploadService.uploadFile(this.datas).subscribe((data) => {
+        console.log(data);
+        console.log("File " + data.success);
+        this.datas.filePath = data.fileObject.filePath;
+        console.log(this.datas.filePath);
+        console.log(JSON.stringify(data));
+
+        this.contractService.addDocument(this.datas).subscribe((data) => {
+          console.log(JSON.stringify(data));
+
+          //next step
+          this.step = variable.stepSampleContract.step2;
+          this.datas.stepLast = this.step;
+          this.datas.document_id = '123456abc';
+          this.nextOrPreviousStep(this.step);
+          console.log(this.datas);
+
+        },
+        error => {
+          console.log("false connect file");
+          return false;
+        }
+        );
+      },
+      error => {
+        console.log("false file");
+        return false;
+      }
+      );
+
+    },
+    error => {
+      console.log("false content");
+      return false;
+    }
+    );
+
+  }
+
   // --next step 2
   next() {
     if (!this.validData()) return;
     else {
       // gán value step 1 vào datas
-      this.datas.contractName = this.contractName;
-      this.datas.contractNumber = this.contractNumber;
-      this.datas.contractType = this.contractType;
+      this.datas.name = this.name;
+      this.datas.code = this.code;
+      this.datas.type_id = this.type_id;
       this.datas.contractConnect = this.contractConnect;
-      this.datas.dateDeadline = this.dateDeadline;
-      this.datas.comment = this.comment;
+      this.datas.sign_time = this.sign_time;
+      this.datas.notes = this.notes;
 
       const fileReader = new FileReader();
       fileReader.readAsDataURL(this.datas.contractFile);
@@ -257,27 +310,7 @@ export class InforContractComponent implements OnInit {
         this.datas.file_content = base64result;
       };
 
-      this.step = variable.stepSampleContract.step2;
-      this.datas.stepLast = this.step
-      this.nextOrPreviousStep(this.step);
-      console.log(this.datas);
-
-      // //call API upload file
-      // this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
-      //   console.log(data);
-      // },
-      // error => {
-      // }
-      // );
-
-      // //call API step 1
-      // this.contractService.addContractStep1(this.datas).subscribe((data) => {
-      //   console.log(data);
-      // },
-      // error => {
-      // }
-      // );
-
+      this.callAPI();
     }
   }
 
@@ -288,5 +321,9 @@ export class InforContractComponent implements OnInit {
     this.stepChangeInfoContract.emit(step);
   }
 
+  changeAddContract(link:any){
+    console.log(link);
+    this.router.navigate([link]);
+  }
 
 }

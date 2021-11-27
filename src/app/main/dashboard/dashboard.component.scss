@@ -16,6 +16,9 @@
   outline:0px;
   border-radius: 5px;
 }
+.btn_search{
+  align-self: flex-end;
+}
 .btn-block {
   background-color: #106DB6;
   color: white;
@@ -23,4 +26,26 @@
   font-size: 14px;
   width: 100px;
   border-radius: 5px;
+}
+::ng-deep .date-picker {
+  width: 100%;
+  outline:0px;
+  .datepicker-container{
+    width: 100%;
+    input {
+      display: block !important;
+      width: 100% !important;
+      height: 38px !important;
+      padding: .375rem .75rem !important;
+      font-size: inherit !important;
+      line-height: 1.5 !important;
+      color: #495057 !important;
+      background-color: #fff !important;
+      background-clip: padding-box !important;
+      border: 1px solid #87CAFF !important;
+      border-radius: .25rem !important;
+      transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+      outline:0px !important;
+    }
+  }
 }

@@ -195,7 +195,7 @@
   color: #2680eb;
   border-radius: 2px;
 }
-.staff-ck-da-keo {
+.ck-da-keo {
   border: 1px solid #92bff5;
   color: #2680eb;
   border-radius: 2px;
@@ -220,13 +220,6 @@
   box-sizing: border-box;
   //padding: 10px;
 
-  .name-sig-img-daky {
-    position: absolute;
-    background-color: white;
-    top: -15px;
-    left: 6px;
-    padding: 0 4px;
-  }
 
   .sig-img-daky {
     cursor: pointer;
@@ -240,6 +233,21 @@
       right: 3px;
     }
   }
+}
+
+.name-sig-img-daky {
+  font-size: 12px;
+  position: absolute;
+  background-color: white;
+  top: -15px;
+  left: 6px;
+  padding: 0 4px;
+}
+
+.ck-chua-keo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .drag-image{

@@ -1,53 +1,52 @@
 <!-- form step 4 -->
-<form [formGroup]="confirmForm" id="msform">
-  <div class="labelOrg">HỢP ĐỒNG</div>
-  <div class="infor_contact">
-    <div class="row">
-      <div class="col-md-5">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <div class="label_item">Tên file hợp đồng</div>
-              <div class="input-group">
-                <input type="text" id="contractFileName" class="form-control" formControlName="contractFileName" readonly/>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <div class="label_item">Ngày hết hạn ký</div>
-              <div class="input-group">
-                <input type="text" id="dateDeadline" class="form-control" formControlName="dateDeadline" readonly/>
-              </div>
+<div class="labelOrg">HỢP ĐỒNG</div>
+<div class="infor_contact">
+  <div class="row">
+    <div class="col-md-5">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <div class="label_item">Tên file hợp đồng</div>
+            <div>
+              <div [innerHTML]="contractFileName" class="input_text"></div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-md-2"></div>
-      <div class="col-md-5">
-        <div class="form-group">
-          <div class="label_item">Lời nhắn</div>
-          <div class="input-group">
-            <input type="text" id="comment" class="form-control" formControlName="comment" readonly/>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <div class="label_item">Ngày hết hạn ký</div>
+            <div>
+              <div [innerHTML]="dateDeadline" class="input_text"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">Lời nhắn</div>
+        <div>
+          <div [innerHTML]="comment" class="input_text"></div>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 
-  <div class="labelOrg">CÁC BÊN KÝ</div>
-  <div class="determine_contact">
-    <div class="user_contact">
-      <div>CÔNG TY TNHH ABC</div>
-      <hr>
+<div class="labelOrg">CÁC BÊN KÝ</div>
+<div class="determine_contact">
+  <div class="user_contact">
+    <div class="label">CÔNG TY TNHH ABC</div>
+    <div class="content_determine">
       <div class="row">
         <div class="col-md-5">
           <div class="form-group">
             <div class="label_item">Người xem xét</div>
-            <div class="input-group">
-              <input type="text" id="userViews" class="form-control" formControlName="userViews" readonly/>
+            <div>
+              <div [innerHTML]="userViews" class="input_text"></div>
             </div>
           </div>
         </div>
@@ -55,8 +54,8 @@
         <div class="col-md-5">
           <div class="form-group">
             <div class="label_item">Người ký</div>
-            <div class="input-group">
-              <input type="text" id="userSigns" class="form-control" formControlName="userSigns" readonly/>
+            <div>
+              <div [innerHTML]="userSigns" class="input_text"></div>
             </div>
           </div>
         </div>
@@ -66,49 +65,70 @@
         <div class="col-md-5">
           <div class="form-group">
             <div class="label_item">Văn thư</div>
-            <div class="input-group">
-              <input type="text" id="userDocs" class="form-control" formControlName="userDocs" readonly/>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="partner_contact">
-      <div>CÔNG TY TNHH ABC</div>
-      <hr>
-      <div class="row">
-        <div class="col-md-5">
-          <div class="form-group">
-            <div class="label_item">Người xem xét</div>
-            <div class="input-group">
-              <input type="text" id="partnerViews" class="form-control" formControlName="partnerViews" readonly/>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-2"></div>
-        <div class="col-md-5">
-          <div class="form-group">
-            <div class="label_item">Người ký</div>
-            <div class="input-group">
-              <input type="text" id="partnerSigns" class="form-control" formControlName="partnerSigns" readonly/>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-5">
-          <div class="form-group">
-            <div class="label_item">Văn thư</div>
-            <div class="input-group">
-              <input type="text" id="partnerDocs" class="form-control" formControlName="partnerDocs" readonly/>
+            <div>
+              <div [innerHTML]="userDocs" class="input_text"></div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</form>
-<div class="content_footer">@Copyright 2021 - MobiFone</div>
+
+  <div class="partner_contact">
+    <div class="label">ĐỐI TÁC</div>
+    <div class="content_determine">
+      <div class="row">
+        <div class="col-md-5">
+          <div class="form-group">
+            <div class="label_item">Người điều phối</div>
+            <div>
+              <div [innerHTML]="partnerLeads" class="input_text"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+          <div class="form-group">
+            <div class="label_item">Người xem xét</div>
+            <div>
+              <div [innerHTML]="partnerViews" class="input_text"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-5">
+          <div class="form-group">
+            <div class="label_item">Người ký</div>
+            <div>
+              <div [innerHTML]="partnerSigns" class="input_text"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+          <div class="form-group">
+            <div class="label_item">Văn thư</div>
+            <div>
+              <div [innerHTML]="partnerDocs" class="input_text"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="footer-infor-contract">
+  <div style="width: 200px;">
+    <button (click)="back($event, 'sample-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
+  </div>
+<!--  <div class="content_footer"></div>-->
+<!--  <div>-->
+<!--    <button type="button" name="next" class="next draft-button">Lưu nháp</button>-->
+<!--    <button (click)="next()" type="button" name="next" class="next action-button pull-right">Tiếp theo</button>-->
+<!--  </div>-->
+  <button style="width: 300px; height: 40px; border-radius: 5px" type="button" name="next" class="next action-button " (click)="confirmContract()">Xác nhận và gửi hợp đồng</button>
+</div>
+
 

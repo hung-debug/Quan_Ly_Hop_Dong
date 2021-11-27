@@ -7,6 +7,15 @@ import { environment } from '../../environments/environment';
 export interface User {
   type: string,
   access_token: string,
+  customer:{
+    id:number,
+    name:string,
+    email:string,
+    phone:string,
+    status:string,
+    organization_id:string,
+    type_id:string,
+  }
 }
 
 @Injectable({
@@ -14,33 +23,12 @@ export interface User {
 })
 export class AuthenticationService {
 
-  //loginUrl = 'https://uatecontractapp.efy.com.vn/api/login';
   loginUrl:any = `${environment.apiUrl}/api/v1/auth`;
   errorData:any = {};
   redirectUrl: string = '';
 
   constructor(private http: HttpClient) { }
 
-  // loginAuthencation(username: string, password: string) {
-  //   console.log(this.loginUrl);
-
-  //   let postData:any = {username: username, password: password };
-  //   return this.http.get<User>(this.loginUrl, postData)
-  //     .pipe(map(user => {
-  //       if (JSON.parse(JSON.stringify(user)).status == "error") {
-  //         // console.log(JSON.stringify(user));
-  //         // localStorage.removeItem('currentUser');
-  //         localStorage.setItem('currentUser', JSON.stringify(user));
-  //         return user;
-  //       } else {
-  //         // localStorage.removeItem('currentUser');
-  //         console.log(JSON.stringify(user));
-  //         return null;
-  //       }
-  //     }),
-  //       catchError(this.handleError)
-  //     );
-  // }
 
  loginAuthencation(username: string, password: string) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');

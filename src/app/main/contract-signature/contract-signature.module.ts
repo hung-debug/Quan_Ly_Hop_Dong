@@ -28,6 +28,8 @@ import { ProcessingHandleEcontractComponent } from './shared/model/processing-ha
 import {SignContractComponent} from "./components/contract-coordination/shared/sign-sample-contract/sign-contract/sign-contract.component";
 import {MatDialogModule} from "@angular/material/dialog";
 import { ForwardContractComponent } from './shared/model/forward-contract/forward-contract.component';
+import {TranslateModule} from "@ngx-translate/core";
+import { InfoSignContractComponent } from './shared/info-sign-contract/info-sign-contract.component';
 import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 import { ImageSignContractComponent } from './components/consider-contract/image-sign-contract/image-sign-contract.component';
 import { ConfirmSignOtpComponent } from './components/consider-contract/confirm-sign-otp/confirm-sign-otp.component';
@@ -91,6 +93,7 @@ export const contractSignatureRoutes: Routes = [
         SweetAlert2Module,
         NgxSelectModule,
         AngularSignaturePadModule,
+		TranslateModule
         // ContractModule
     ],
   providers: [NoAuthGuard]

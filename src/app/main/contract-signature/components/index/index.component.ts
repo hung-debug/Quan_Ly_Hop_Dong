@@ -5,6 +5,8 @@ import {variable} from "../../../../config/variable";
 import {environment} from "../../../../../environments/environment";
 import {UserService} from "../../../../service/user.service";
 import {ContractSignatureService} from "../../../../service/contract-signature.service";
+import * as contractModel from '../../model/contract-model';
+import {data_signature_contract, data_signature_contract_2} from "../../model/contract-model";
 
 @Component({
   selector: 'app-index',
@@ -14,17 +16,20 @@ import {ContractSignatureService} from "../../../../service/contract-signature.s
 export class IndexComponent implements OnInit {
   @ViewChild('ContractSign') SignContractComponent: SignContractComponent;
   @ViewChild('AddContract') AddContractComponent: AddContractComponent;
-  datas: any;
-  data_contract: any;
+  @Input() datas: any;
+ data_contract: any;
   // @Input() datas: any = {
   //   step: variable.stepSampleContract.step_coordination,
   //   contract: {},
   //   action_title: 'Điều phối'
   // }
 
+
   constructor(
     private contractSignatureService: ContractSignatureService
   ) {
+    // this.data_contract = contractModel.data_signature_contract;
+    this.data_contract = contractModel.data_signature_contract_2;
   }
 
 
@@ -456,15 +461,22 @@ export class IndexComponent implements OnInit {
   // }
 
   ngOnInit(): void {
-    this.contractSignatureService.getContractDetail().subscribe(response => {
-      this.data_contract = response;
-      let data_coordination = localStorage.getItem('data_coordinates_contract');
-      if (data_coordination) {
-        this.datas = JSON.parse(data_coordination).data_coordinates;
-      }
-      // this.datas = this.datas.concat(this.data_contract.contract_information);
-      this.datas = Object.assign(this.datas, this.data_contract);
-    });
+    // this.contractSignatureService.getContractDetail().subscribe(response => {
+    //   // this.data_contract = response;
+    //   let data_coordination = localStorage.getItem('data_coordinates_contract');
+    //   if (data_coordination) {
+    //     this.datas = JSON.parse(data_coordination).data_coordinates;
+    //   }
+    //   // this.datas = this.datas.concat(this.data_contract.contract_information);
+    //   this.datas = Object.assign(this.datas, this.data_contract);
+    // });
+    this.datas = {
+      "step": "infor-coordination",
+      "contract": {},
+      "action_title": "Điều phối"
+    };
+    this.datas = Object.assign(this.datas, this.data_contract);
+    console.log(this.datas);
   }
 
   dieuPhoiHd() {

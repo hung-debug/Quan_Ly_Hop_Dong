@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -24,7 +25,15 @@ export class ResetPasswordComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private modalService: NgbModal,
-              private userService: UserService,) { }
+              private userService: UserService,
+              public translate: TranslateService,) {
+
+  }
+
+  switchLang(lang: string) {
+    this.translate.use(lang);
+    this.translate.currentLang = lang;
+  }
 
   initResetPasswordgForm() {
     this.resetPasswordForm = this.fb.group({

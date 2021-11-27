@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-signup',
@@ -16,7 +17,13 @@ export class SignupComponent implements OnInit {
   error:boolean = false;
   errorDetail:string = '';
   constructor(private modalService: NgbModal,
-              private router: Router,) { }
+              private router: Router,
+              public translate: TranslateService,) { }
+
+  switchLang(lang: string) {
+    this.translate.use(lang);
+    this.translate.currentLang = lang;
+  }
 
   ngOnInit(): void {
   }

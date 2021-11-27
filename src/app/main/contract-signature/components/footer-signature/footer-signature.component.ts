@@ -23,6 +23,7 @@ export class FooterSignatureComponent implements OnInit {
 
   action() {
     if (this.datas.action_title == 'Điều phối') {
+      console.log(this.datas);
       this.datas.step = variable.stepSampleContract.step_confirm_coordination;
     } else if ([1, 2].includes(this.datas.roleContractReceived)) {
       this.submitChanges.emit(1);

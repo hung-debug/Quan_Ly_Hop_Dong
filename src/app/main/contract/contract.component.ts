@@ -21,7 +21,7 @@ export class ContractComponent implements OnInit {
   closeResult:string= '';
   public contracts: any[] = [];
   p:number = 1;
-  page:number = 3;
+  page:number = 5;
   pageStart:number = 0;
   pageEnd:number = 0;
   pageTotal:number = 0;
@@ -29,10 +29,10 @@ export class ContractComponent implements OnInit {
   notificationPopup:string = '';
 
   //filter contract
-  contractType:any;
-  contractNumber:any;
-  startCreateDate:any;
-  endCreateDate:any;
+  filter_type:any = "";
+  filter_contract_no:any = "";
+  filter_from_date:any = "";
+  filter_to_date:any = "";
 
   // options sample with default values
   options: DatepickerOptions = {
@@ -82,60 +82,52 @@ export class ContractComponent implements OnInit {
       this.status = params['status'];
 
       //set title
-      this.appService.setTitle('DANH SÁCH HỢP ĐỒNG ' + this.convertActionStr() + ' ' + this.convertStatusStr());
+      this.appService.setTitle(this.convertActionStr());
     });
 
     //get list contract
-    this.contractService.getContractList().subscribe(response => {
-      this.contracts = response.items;
-      this.pageTotal = this.contracts.length;
+    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
+      this.contracts = data.entities;
+      this.pageTotal = data.total_elements;
       this.setPage();
+      console.log(this.contracts);
       console.log(this.pageTotal);
     });
 
   }
 
   private convertActionStr(): string{
+    console.log(this.action);
     if(this.action == 'create'){
       this.type = 'mine';
-      return 'ĐÃ TẠO';
+      return 'contract.list.created';
     }else if(this.action == 'receive'){
       this.type = 'wait-for-me';
-      return 'ĐÃ NHẬN';
+      return 'contract.list.received';
     }else{
       return '';
     }
   }
 
-  iconClass = 'col-md-100-1';
   private convertStatusStr(): string{
     if(this.status == 'draft'){
-      this.iconClass = 'col-md-100-3';
-      return 'BẢN NHÁP';
+      return 'contract.status.draft';
     }else if(this.status == 'wait-processing'){
-      this.iconClass = 'col-md-100-3';
-      return 'CHỜ XỬ LÝ';
+      return 'contract.status.wait-processing';
     }else if(this.status == 'processing'){
-      this.iconClass = 'col-md-100-3';
-      return 'ĐANG XỬ LÝ';
+      return 'contract.status.processing';
     }else if(this.status == 'processed'){
-      this.iconClass = 'col-md-100-3';
-      return 'ĐÃ XỬ LÝ';
+      return 'contract.status.processed';
     }else if(this.status == 'expire'){
-      this.iconClass = 'col-md-100-3';
-      return 'SẮP HẾT HẠN';
+      return 'contract.status.expire';
     }else if(this.status == 'overdue'){
-      this.iconClass = 'col-md-100-1';
-      return 'QUÁ HẠN';
+      return 'contract.status.overdue';
     }else if(this.status == 'fail'){
-      this.iconClass = 'col-md-100-1';
-      return 'TỪ CHỐI';
+      return 'contract.status.fail';
     }else if(this.status == 'cancel'){
-      this.iconClass = 'col-md-100-1';
-      return 'ĐÃ HỦY BỎ';
+      return 'contract.status.cancel';
     }else if(this.status == 'complete'){
-      this.iconClass = 'col-md-100-5';
-      return 'ĐÃ HOÀN THÀNH';
+      return 'contract.status.complete';
     }else{
       return '';
     }
@@ -149,9 +141,19 @@ export class ContractComponent implements OnInit {
     }
   }
 
+  search(){
+    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
+      this.contracts = data.entities;
+      this.pageTotal = data.total_elements;
+      this.setPage();
+      console.log(this.contracts);
+      console.log(this.pageTotal);
+    });
+  }
+
   autoSearch(event:any){
-    this.contractService.getContractList().subscribe(response => {
-      this.contracts = this.transform(response.items, event);
+    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
+      this.contracts = this.transform(data.entities, event);
     });
   }
 
@@ -165,7 +167,7 @@ export class ContractComponent implements OnInit {
     }
     searchText = searchText.toLocaleLowerCase();
     return contracts.filter((it:any) => {
-      return it.contractName.toLocaleLowerCase().includes(searchText);
+      return it.name.toLocaleLowerCase().includes(searchText);
     });
   }
 

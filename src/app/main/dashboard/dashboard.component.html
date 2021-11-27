@@ -1,27 +1,34 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-3 input-line">
-      <input type="text" placeholder="Từ ngày (ngày tạo)" class="input-text"/>
-      <img src="../../assets/img/db_calendar.svg" class="input-img">
-    </div>
-    <div class="col-md-3 input-line">
-      <input type="text" placeholder="Đến ngày (ngày tạo)" class="input-text"/>
-      <img src="../../assets/img/db_calendar.svg" class="input-img">
+    <div class="col-md-3">
+      <div>{{'createdate.start' | translate}}</div>
+      <div class="input-line">
+        <ngx-datepicker [(ngModel)]="filter_from_date" [options]="options" class="date-picker"></ngx-datepicker>
+        <img src="assets/img/db_calendar.svg" class="input-img">
+      </div>
     </div>
     <div class="col-md-3">
-      <div class="form-group">
-        <button class="btn btn-lg btn-block">{{'search' | translate }}</button>
+      <div>{{'createdate.end' | translate}}</div>
+      <div class="input-line">
+        <ngx-datepicker [(ngModel)]="filter_to_date" [options]="options" class="date-picker"></ngx-datepicker>
+        <img src="assets/img/db_calendar.svg" class="input-img">
       </div>
+    </div>
+    <div class="col-md-3 btn_search">
+      <button class="btn btn-lg btn-block">{{'btn.search' | translate }}</button>
     </div>
   </div>
   <div class="row" style="padding-top: 20px;">
-    <div class="col-md-6">
-      <div [chart]="chart"></div>
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+      <div [chart]="chartCreated"></div>
+      <div style="text-align: center;">{{'chart.contract.created' | translate}}</div>
     </div>
     <div class="col-md-1"></div>
     <div class="col-md-4">
-      <div [chart]="chart2"></div>
+      <div [chart]="chartReceived"></div>
+      <div style="text-align: center;">{{'chart.contract.received' | translate}}</div>
     </div>
     <div class="col-md-1"></div>
   </div>

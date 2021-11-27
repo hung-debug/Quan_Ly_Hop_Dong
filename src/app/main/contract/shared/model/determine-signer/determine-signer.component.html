@@ -1,677 +1,1042 @@
-<!-- form step 2 -->
-<div>
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-    <div class="row">
-      <div class="col-md-1 order">
-          <input type="number" formControlName="order" class="form-control order_input">
-      </div>
-      <div class="col-md-11 form_content">
-        <p>
-          <label class="labelOrg">TỔ CHỨC CỦA TÔI</label>
-          <input class="form-control textOrg" type="text" id="name" name="name" formControlName="name" readonly>
-        </p>
+<!--&lt;!&ndash; form step 2 &ndash;&gt;-->
+<!--<div>-->
+<!--  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">-->
+<!--    <div class="row">-->
+<!--      <div class="col-md-1 order">-->
+<!--          <input type="number" formControlName="order" class="form-control order_input">-->
+<!--      </div>-->
+<!--      <div class="col-md-11 form_content">-->
+<!--        <p>-->
+<!--          <label class="labelOrg">{{'organization.me' | translate}}</label>-->
+<!--          <input class="form-control textOrg" type="text" id="name" name="name" formControlName="name" readonly>-->
+<!--        </p>-->
 
-        <!-- User view -->
-        <div class="add_content"  formArrayName="userViews">
+<!--        &lt;!&ndash; User view &ndash;&gt;-->
+<!--        <div class="add_content"  formArrayName="userViews">-->
+<!--          <div class="label text-color">{{'user.view' | translate}}</div>-->
+<!--          <div *ngFor="let userView of userViews().controls; let i=index" [formGroupName]="i">-->
+<!--            <div class="row">-->
+<!--              <div class="col-md-1 order">-->
+<!--                  <input type="number" formControlName="order" class="form-control order_input">-->
+<!--              </div>-->
+<!--              <div class="col-md-10">-->
+<!--                <div class="row">-->
+<!--                  <div class="col-md-6">-->
+<!--                    <div class="label_item">{{'user.name' | translate}} <span class="require_star">*</span></div>-->
+<!--                    <div class="form-control input-line">-->
+<!--                      <img src="assets/img/icon_name.svg" class="input-img">-->
+<!--                      <input type="text" formControlName="name" class="input-text">-->
+<!--                    </div>-->
+<!--                    <div *ngIf="!userView.get('name')?.valid && (userView.get('name')?.dirty || (userView.get('name')?.touched || submitted))">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('name')?.errors?.required">-->
+<!--                        {{'error.user.name.required' | translate}}-->
+<!--                      </p>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="col-md-6">-->
+<!--                    <div class="label_item">{{'user.email' | translate}} <span class="require_star">*</span></div>-->
+<!--                    <div class="form-control input-line">-->
+<!--                      <img src="assets/img/login_email.svg" class="input-img">-->
+<!--                      <input type="text" formControlName="email" class="input-text">-->
+<!--                    </div>-->
+<!--                    <div *ngIf="!userView.get('email')?.valid && (userView.get('email')?.dirty || (userView.get('email')?.touched || submitted))">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('email')?.errors?.required">-->
+<!--                        {{'error.user.email.required' | translate}}-->
+<!--                      </p>-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('email')?.errors?.email">-->
+<!--                        {{'error.user.email.format' | translate}}-->
+<!--                      </p>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="col-md-1 remove">-->
+<!--                  <i (click)="removeUserView(i)" class="fa fa-times-circle remove_icon"></i>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="add_click"><a class="add_link" (click)="addUserView()"><i class="fa fa-plus-circle"></i> {{'btn.add.user.view' | translate}}</a></div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; User sign &ndash;&gt;-->
+<!--        <div class="add_content" >-->
+<!--          <div class="label text-color">{{'user.sign' | translate}}</div>-->
+<!--          <div formArrayName="userSigns" *ngFor="let alias of userSigns().controls; let i = index;">-->
+<!--            <div class="row" [formGroupName]="i">-->
+<!--              <div class="col-md-1 order">-->
+<!--                <input type="number" formControlName="order" class="form-control order_input">-->
+<!--              </div>-->
+<!--              <div class="col-md-10">-->
+<!--                <div class="row">-->
+<!--                  <div class="col-md-6">-->
+<!--                    <div class="label_item">{{'user.name' | translate}} <span class="require_star">*</span></div>-->
+<!--                    <div class="form-control input-line">-->
+<!--                      <img src="assets/img/icon_name.svg" class="input-img">-->
+<!--                      <input type="text" formControlName="name" class="input-text">-->
+<!--                    </div>-->
+
+<!--                    <div *ngIf="!alias.get('name')?.valid && (alias.get('name')?.dirty || (alias.get('name')?.touched || submitted))">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('name')?.errors?.required">-->
+<!--                        {{'error.user.name.required' | translate}}-->
+<!--                      </p>-->
+<!--                    </div>-->
+
+<!--                  </div>-->
+<!--                  <div class="col-md-6">-->
+<!--                    <div class="label_item">{{'user.email' | translate}} <span class="require_star">*</span></div>-->
+<!--                    <div class="form-control input-line">-->
+<!--                      <img src="assets/img/login_email.svg" class="input-img">-->
+<!--                      <input type="text" formControlName="email" class="input-text">-->
+<!--                    </div>-->
+
+<!--                    <div *ngIf="!alias.get('email')?.valid && (alias.get('email')?.dirty || (alias.get('email')?.touched || submitted))">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('email')?.errors?.required">-->
+<!--                        {{'error.user.email.required' | translate}}-->
+<!--                      </p>-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('email')?.errors?.email">-->
+<!--                        {{'error.user.email.format' | translate}}-->
+<!--                      </p>-->
+<!--                    </div>-->
+
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                  <div class="col-md-6">-->
+<!--                    <div class="label_item">{{'user.sign-type' | translate}} <span class="require_star">*</span></div>-->
+<!--                    <div class="col">-->
+<!--                      <ng-multiselect-dropdown-->
+<!--                        formControlName="signType"-->
+<!--                        placeholder="{{'choose' | translate}}"-->
+<!--                        [settings]="dropdownSignTypeSettings"-->
+<!--                        [data]="signTypeList">-->
+<!--                        <ng-template-->
+<!--                          #optionsTemplate-->
+<!--                          let-item-->
+<!--                          let-option="option"-->
+<!--                          let-id="id"-->
+<!--                          let-isSelected="isSelected">-->
+<!--                          <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">-->
+<!--                            <label-->
+<!--                              style="color: #333; font-weight: normal;"-->
+<!--                              [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"-->
+<!--                              >{{getSignTypeItems[id].item_text}}</label>-->
+<!--                          </div>-->
+<!--                        </ng-template>-->
+<!--                      </ng-multiselect-dropdown>-->
+<!--                    </div>-->
+
+<!--                    <div *ngIf="!alias.get('signType')?.valid && (alias.get('signType')?.dirty || (alias.get('signType')?.touched || submitted))">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('signType')?.errors?.required">-->
+<!--                        {{'error.user.sign-type.required' | translate}}-->
+<!--                      </p>-->
+<!--                    </div>-->
+
+<!--                  </div>-->
+<!--                  <div class="col-md-1">-->
+<!--                    <div class="label_item">{{'user.otp' | translate}}</div>-->
+<!--                    <input type="checkbox" formControlName="isOtp" class="form-check-input">-->
+<!--                  </div>-->
+<!--                  <div class="col-md-5">-->
+<!--                    <div class="label_item">{{'user.phone' | translate}} <span class="require_star">*</span></div>-->
+<!--                    <input type="text" formControlName="phone" class="form-control input_phone">-->
+
+<!--                    <div *ngIf="!alias.get('phone')?.valid && (alias.get('phone')?.dirty || (alias.get('phone')?.touched || submitted))">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('phone')?.errors?.required">-->
+<!--                        {{'error.user.phone.required' | translate}}-->
+<!--                      </p>-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('phone')?.errors?.pattern">-->
+<!--                        {{'error.user.phone.format' | translate}}-->
+<!--                      </p>-->
+<!--                    </div>-->
+
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="col-md-1 remove">-->
+<!--                <i (click)="removeUserSign(i)" class="fa fa-times-circle remove_icon"></i>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="add_click"><a class="add_link" (click)="addUserSign()"><i class="fa fa-plus-circle"></i> {{'btn.add.user.sign' | translate}}</a></div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; User document &ndash;&gt;-->
+<!--        <div class="add_content" formArrayName="userDocs">-->
+<!--          <div class="label text-color">{{'user.doc' | translate}}</div>-->
+<!--          <div *ngFor="let userDoc of userDocs().controls; let i=index" [formGroupName]="i">-->
+<!--            <div class="row">-->
+<!--              <div class="col-md-1 order">-->
+<!--                <input type="number" formControlName="order" class="form-control order_input">-->
+<!--              </div>-->
+<!--              <div class="col-md-10">-->
+<!--                <div class="row">-->
+<!--                  <div class="col-md-6">-->
+<!--                    <div class="label_item">{{'user.name' | translate}} <span class="require_star">*</span></div>-->
+<!--                    <div class="form-control input-line">-->
+<!--                      <img src="assets/img/icon_name.svg" class="input-img">-->
+<!--                      <input type="text" formControlName="name" class="input-text">-->
+<!--                    </div>-->
+<!--                    <div *ngIf="!userDoc.get('name')?.valid && (userDoc.get('name')?.dirty || (userDoc.get('name')?.touched || submitted))">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('name')?.errors?.required">-->
+<!--                        {{'error.user.name.required' | translate}}-->
+<!--                      </p>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="col-md-6">-->
+<!--                    <div class="label_item">{{'user.email' | translate}} <span class="require_star">*</span></div>-->
+<!--                    <div class="form-control input-line">-->
+<!--                      <img src="assets/img/login_email.svg" class="input-img">-->
+<!--                      <input type="text" formControlName="email" class="input-text">-->
+<!--                    </div>-->
+<!--                    <div *ngIf="!userDoc.get('email')?.valid && (userDoc.get('email')?.dirty || (userDoc.get('email')?.touched || submitted))">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('email')?.errors?.required">-->
+<!--                        {{'error.user.email.required' | translate}}-->
+<!--                      </p>-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('email')?.errors?.email">-->
+<!--                        {{'error.user.email.format' | translate}}-->
+<!--                      </p>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                  <div class="col-md-6">-->
+<!--                    <div class="label_item">{{'user.sign-type' | translate}} <span class="require_star">*</span></div>-->
+<!--                    <div class="col">-->
+<!--                      <ng-multiselect-dropdown-->
+<!--                        formControlName="signType"-->
+<!--                        placeholder="{{'choose' | translate}}"-->
+<!--                        [settings]="dropdownSignTypeSettings"-->
+<!--                        [data]="signTypeList">-->
+<!--                        <ng-template-->
+<!--                          #optionsTemplate-->
+<!--                          let-item-->
+<!--                          let-option="option"-->
+<!--                          let-id="id"-->
+<!--                          let-isSelected="isSelected">-->
+<!--                          <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">-->
+<!--                            <label-->
+<!--                              style="color: #333; font-weight: normal;"-->
+<!--                              [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"-->
+<!--                              >{{getSignTypeItems[id].item_text}}</label>-->
+<!--                          </div>-->
+<!--                        </ng-template>-->
+<!--                      </ng-multiselect-dropdown>-->
+<!--                    </div>-->
+<!--                    <div *ngIf="!userDoc.get('signType')?.valid && (userDoc.get('signType')?.dirty || (userDoc.get('signType')?.touched || submitted))">-->
+<!--                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('signType')?.errors?.required">-->
+<!--                        {{'error.user.sign-type.required' | translate}}-->
+<!--                      </p>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="col-md-1 remove">-->
+<!--                <i (click)="removeUserDoc(i)" class="fa fa-times-circle remove_icon"></i>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="add_click"><a class="add_link" (click)="addUserDoc()"><i class="fa fa-plus-circle"></i> {{'btn.add.user.doc' | translate}}</a></div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </form>-->
+
+<!--  <form [formGroup]="partnerForm">-->
+<!--    <div formArrayName='partnerArrs' *ngFor="let partners of partnerArrs().controls; let a = index;">-->
+<!--      <div [formGroupName]="a">-->
+<!--        <div class="partner_content" >-->
+<!--          <div class="row">-->
+<!--            <div class="col-md-1 order">-->
+<!--                <input type="number" formControlName="order" class="form-control order_input">-->
+<!--            </div>-->
+<!--            <div class="col-md-11 form_content">-->
+
+<!--              <div class="row">-->
+<!--                <div class="radio col-md-6 label_type">-->
+<!--                  <label><input type="radio" formControlName="type" [value]="1" [ngModel]="partners.value.type"> <span> {{'organization' | translate}}</span></label>-->
+<!--                </div>-->
+<!--                <div class="radio col-md-6 label_type">-->
+<!--                  <label><input type="radio" formControlName="type" [value]="2" [ngModel]="partners.value.type"> <span> {{'personal' | translate}}</span></label>-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--              <div *ngIf="partners.value.type==1">-->
+<!--                <p>-->
+<!--                  <label class="labelOrg">{{'organization.partner.name' | translate}} <span class="require_star">*</span></label>-->
+<!--                  <input class="form-control textOrg" id="name" name="name" formControlName="name">-->
+<!--                </p>-->
+<!--                <div *ngIf="!partners.get('name')?.valid && (partners.get('name')?.dirty || (partners.get('name')?.touched || submitted))">-->
+<!--                  <p class="alert alert-danger error-detail" role="alert" [hidden]="!partners.get('name')?.errors?.required">-->
+<!--                    {{'error.partner.name.required' | translate}}-->
+<!--                  </p>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Partner lead &ndash;&gt;-->
+<!--                <div class="add_content" formArrayName="partnerLeads">-->
+<!--                  <div class="label text-color">{{'user.lead' | translate}}</div>-->
+<!--                  <div *ngFor="let partnerLead of partnerLeads(a).controls; let i=index" [formGroupName]="i">-->
+<!--                    <div class="row">-->
+<!--                      <div class="col-md-1 order">-->
+<!--                        <input type="number" formControlName="order" class="form-control order_input">-->
+<!--                      </div>-->
+<!--                      <div class="col-md-10">-->
+<!--                        <div class="row">-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.name' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <div class="form-control input-line">-->
+<!--                              <img src="assets/img/icon_name.svg" class="input-img">-->
+<!--                              <input type="text" formControlName="name" class="input-text">-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerLead.get('name')?.valid && (partnerLead.get('name')?.dirty || (partnerLead.get('name')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerLead.get('name')?.errors?.required">-->
+<!--                                {{'error.user.name.required' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.email' | translate}}</div>-->
+<!--                            <div class="form-control input-line">-->
+<!--                              <img src="assets/img/login_email.svg" class="input-img">-->
+<!--                              <input type="text" formControlName="email" class="input-text">-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerLead.get('email')?.valid && (partnerLead.get('email')?.dirty || (partnerLead.get('email')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerLead.get('email')?.errors?.required">-->
+<!--                                {{'error.user.email.required' | translate}}-->
+<!--                              </p>-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerLead.get('email')?.errors?.email">-->
+<!--                                {{'error.user.email.format' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-1 remove">-->
+<!--                        <i (click)="removePartnerLead(a, i)" class="fa fa-times-circle remove_icon"></i>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="add_click"><a class="add_link" (click)="addPartnerLead(a)"><i class="fa fa-plus-circle"></i> {{'btn.add.user.lead' | translate}}</a></div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Partner view &ndash;&gt;-->
+<!--                <div class="add_content" formArrayName="partnerViews">-->
+<!--                  <div class="label text-color">{{'user.view' | translate}}</div>-->
+<!--                  <div *ngFor="let partnerView of partnerViews(a).controls; let i=index" [formGroupName]="i">-->
+<!--                    <div class="row">-->
+<!--                      <div class="col-md-1 order">-->
+<!--                        <input type="number" formControlName="order" class="form-control order_input">-->
+<!--                      </div>-->
+<!--                      <div class="col-md-10">-->
+<!--                        <div class="row">-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.name' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <div class="form-control input-line">-->
+<!--                              <img src="assets/img/icon_name.svg" class="input-img">-->
+<!--                              <input type="text" formControlName="name" class="input-text">-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerView.get('name')?.valid && (partnerView.get('name')?.dirty || (partnerView.get('name')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerView.get('name')?.errors?.required">-->
+<!--                                {{'error.user.name.required' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.email' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <div class="form-control input-line">-->
+<!--                              <img src="assets/img/login_email.svg" class="input-img">-->
+<!--                              <input type="text" formControlName="email" class="input-text">-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerView.get('email')?.valid && (partnerView.get('email')?.dirty || (partnerView.get('email')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerView.get('email')?.errors?.required">-->
+<!--                                {{'error.user.email.required' | translate}}-->
+<!--                              </p>-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerView.get('email')?.errors?.email">-->
+<!--                                {{'error.user.email.format' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-1 remove">-->
+<!--                        <i (click)="removePartnerView(a, i)" class="fa fa-times-circle remove_icon"></i>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="add_click"><a class="add_link" (click)="addPartnerView(a)"><i class="fa fa-plus-circle"></i> {{'btn.add.user.view' | translate}}</a></div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Partner sign &ndash;&gt;-->
+<!--                <div class="add_content" formArrayName="partnerSigns">-->
+<!--                  <div class="label text-color">{{'user.sign' | translate}}</div>-->
+<!--                  <div *ngFor="let partnerSign of partnerSigns(a).controls; let i=index" [formGroupName]="i">-->
+<!--                    <div class="row">-->
+<!--                      <div class="col-md-1 order">-->
+<!--                        <input type="number" formControlName="order" class="form-control order_input">-->
+<!--                      </div>-->
+<!--                      <div class="col-md-10">-->
+<!--                        <div class="row">-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.name' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <div class="form-control input-line">-->
+<!--                              <img src="assets/img/icon_name.svg" class="input-img">-->
+<!--                              <input type="text" formControlName="name" class="input-text">-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerSign.get('name')?.valid && (partnerSign.get('name')?.dirty || (partnerSign.get('name')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('name')?.errors?.required">-->
+<!--                                {{'error.user.name.required' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.email' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <div class="form-control input-line">-->
+<!--                              <img src="assets/img/login_email.svg" class="input-img">-->
+<!--                              <input type="text" formControlName="email" class="input-text">-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerSign.get('email')?.valid && (partnerSign.get('email')?.dirty || (partnerSign.get('email')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('email')?.errors?.required">-->
+<!--                                {{'error.user.email.required' | translate}}-->
+<!--                              </p>-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('email')?.errors?.email">-->
+<!--                                {{'error.user.email.format' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                        <div class="row">-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.sign-type' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <div class="col">-->
+<!--                              <ng-multiselect-dropdown-->
+<!--                                formControlName="signType"-->
+<!--                                placeholder="{{'choose' | translate}}"-->
+<!--                                [settings]="dropdownSignTypeSettings"-->
+<!--                                [data]="signTypeList">-->
+<!--                                <ng-template-->
+<!--                                  #optionsTemplate-->
+<!--                                  let-item-->
+<!--                                  let-option="option"-->
+<!--                                  let-id="id"-->
+<!--                                  let-isSelected="isSelected">-->
+<!--                                  <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">-->
+<!--                                    <label-->
+<!--                                      style="color: #333; font-weight: normal;"-->
+<!--                                      [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"-->
+<!--                                      >{{getSignTypeItems[id].item_text}}</label>-->
+<!--                                  </div>-->
+<!--                                </ng-template>-->
+<!--                              </ng-multiselect-dropdown>-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerSign.get('signType')?.valid && (partnerSign.get('signType')?.dirty || (partnerSign.get('signType')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('signType')?.errors?.required">-->
+<!--                                {{'error.user.sign-type.required' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                          <div class="col-md-1">-->
+<!--                            <div class="label_item">{{'user.otp' | translate}}</div>-->
+<!--                            <input type="checkbox" formControlName="isOtp" class="form-check-input">-->
+<!--                          </div>-->
+<!--                          <div class="col-md-5">-->
+<!--                            <div class="label_item">{{'user.phone' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <input type="text" formControlName="phone" class="form-control input_phone">-->
+<!--                            <div *ngIf="!partnerSign.get('phone')?.valid && (partnerSign.get('phone')?.dirty || (partnerSign.get('phone')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('phone')?.errors?.required">-->
+<!--                                {{'error.user.phone.required' | translate}}-->
+<!--                              </p>-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('phone')?.errors?.pattern">-->
+<!--                                {{'error.user.phone.format' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-1 remove">-->
+<!--                        <i (click)="removePartnerSign(a, i)" class="fa fa-times-circle remove_icon"></i>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="add_click"><a class="add_link" (click)="addPartnerSign(a)"><i class="fa fa-plus-circle"></i> {{'btn.add.user.sign' | translate}}</a></div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Partner document &ndash;&gt;-->
+<!--                <div class="add_content" formArrayName="partnerDocs">-->
+<!--                  <div class="label text-color">{{'user.doc' | translate}}</div>-->
+<!--                  <div *ngFor="let partnerDoc of partnerDocs(a).controls; let i=index" [formGroupName]="i">-->
+<!--                    <div class="row">-->
+<!--                      <div class="col-md-1 order">-->
+<!--                        <input type="number" formControlName="order" class="form-control order_input">-->
+<!--                      </div>-->
+<!--                      <div class="col-md-10">-->
+<!--                        <div class="row">-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.name' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <div class="form-control input-line">-->
+<!--                              <img src="assets/img/icon_name.svg" class="input-img">-->
+<!--                              <input type="text" formControlName="name" class="input-text">-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerDoc.get('name')?.valid && (partnerDoc.get('name')?.dirty || (partnerDoc.get('name')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('name')?.errors?.required">-->
+<!--                                {{'error.user.name.required' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.email' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <div class="form-control input-line">-->
+<!--                              <img src="assets/img/login_email.svg" class="input-img">-->
+<!--                              <input type="text" formControlName="email" class="input-text">-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerDoc.get('email')?.valid && (partnerDoc.get('email')?.dirty || (partnerDoc.get('email')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('email')?.errors?.required">-->
+<!--                                {{'error.user.email.required' | translate}}-->
+<!--                              </p>-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('email')?.errors?.email">-->
+<!--                                {{'error.user.email.format' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                        <div class="row">-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.sign-type' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <div class="col">-->
+<!--                              <ng-multiselect-dropdown-->
+<!--                                formControlName="signType"-->
+<!--                                placeholder="{{'choose' | translate}}"-->
+<!--                                [settings]="dropdownSignTypeSettings"-->
+<!--                                [data]="signTypeList">-->
+<!--                                <ng-template-->
+<!--                                  #optionsTemplate-->
+<!--                                  let-item-->
+<!--                                  let-option="option"-->
+<!--                                  let-id="id"-->
+<!--                                  let-isSelected="isSelected">-->
+<!--                                  <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">-->
+<!--                                    <label-->
+<!--                                      style="color: #333; font-weight: normal;"-->
+<!--                                      [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"-->
+<!--                                      >{{getSignTypeItems[id].item_text}}</label>-->
+<!--                                  </div>-->
+<!--                                </ng-template>-->
+<!--                              </ng-multiselect-dropdown>-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerDoc.get('signType')?.valid && (partnerDoc.get('signType')?.dirty || (partnerDoc.get('signType')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('signType')?.errors?.required">-->
+<!--                                {{'error.user.sign-type.required' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-1 remove">-->
+<!--                        <i (click)="removePartnerDoc(a, i)" class="fa fa-times-circle remove_icon"></i>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="add_click"><a class="add_link" (click)="addPartnerDoc(a)"><i class="fa fa-plus-circle"></i> {{'btn.add.user.doc' | translate}}</a></div>-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--              <div *ngIf="partners.value.type==2">-->
+<!--                <p>-->
+<!--                  <label class="labelOrg">{{'organization.partner.name' | translate}} <span class="require_star">*</span></label>-->
+<!--                  <input class="form-control textOrg" id="name" name="name" formControlName="name">-->
+<!--                </p>-->
+<!--                <div *ngIf="!partners.get('name')?.valid && (partners.get('name')?.dirty || (partners.get('name')?.touched || submitted))">-->
+<!--                  <p class="alert alert-danger error-detail" role="alert" [hidden]="!partners.get('name')?.errors?.required">-->
+<!--                    {{'error.partner.name.required' | translate}}-->
+<!--                  </p>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Partner user &ndash;&gt;-->
+<!--                <div class="add_content" formArrayName="partnerUsers">-->
+<!--                  <div class="label text-color">{{'user.sign' | translate}}</div>-->
+<!--                  <div *ngFor="let partnerUser of partnerUsers(a)?.controls; let i=index" [formGroupName]="i">-->
+<!--                    <div class="row">-->
+<!--                      <div class="col-md-1 order">-->
+<!--                        <input type="number" formControlName="order" class="form-control order_input">-->
+<!--                      </div>-->
+<!--                      <div class="col-md-10">-->
+<!--                        <div class="row">-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.name' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <div class="form-control input-line">-->
+<!--                              <img src="assets/img/icon_name.svg" class="input-img">-->
+<!--                              <input type="text" formControlName="name" class="input-text">-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerUser.get('name')?.valid && (partnerUser.get('name')?.dirty || (partnerUser.get('name')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('name')?.errors?.required">-->
+<!--                                {{'error.user.name.required' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.email' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <div class="form-control input-line">-->
+<!--                              <img src="assets/img/login_email.svg" class="input-img">-->
+<!--                              <input type="text" formControlName="email" class="input-text">-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerUser.get('email')?.valid && (partnerUser.get('email')?.dirty || (partnerUser.get('email')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('email')?.errors?.required">-->
+<!--                                {{'error.user.email.required' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                        <div class="row">-->
+<!--                          <div class="col-md-6">-->
+<!--                            <div class="label_item">{{'user.sign-type' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <div class="col">-->
+<!--                              <ng-multiselect-dropdown-->
+<!--                                formControlName="signType"-->
+<!--                                placeholder="{{'choose' | translate}}"-->
+<!--                                [settings]="dropdownSignTypeSettings"-->
+<!--                                [data]="signTypeList">-->
+<!--                                <ng-template-->
+<!--                                  #optionsTemplate-->
+<!--                                  let-item-->
+<!--                                  let-option="option"-->
+<!--                                  let-id="id"-->
+<!--                                  let-isSelected="isSelected">-->
+<!--                                  <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">-->
+<!--                                    <label-->
+<!--                                      style="color: #333; font-weight: normal;"-->
+<!--                                      [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"-->
+<!--                                      >{{getSignTypeItems[id].item_text}}</label>-->
+<!--                                  </div>-->
+<!--                                </ng-template>-->
+<!--                              </ng-multiselect-dropdown>-->
+<!--                            </div>-->
+<!--                            <div *ngIf="!partnerUser.get('signType')?.valid && (partnerUser.get('signType')?.dirty || (partnerUser.get('signType')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('signType')?.errors?.required">-->
+<!--                                {{'error.user.sign-type.required' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                          <div class="col-md-1">-->
+<!--                            <div class="label_item">{{'user.otp' | translate}}</div>-->
+<!--                            <input type="checkbox" formControlName="isOtp" class="form-check-input">-->
+<!--                          </div>-->
+<!--                          <div class="col-md-5">-->
+<!--                            <div class="label_item">{{'user.phone' | translate}} <span class="require_star">*</span></div>-->
+<!--                            <input type="text" formControlName="phone" class="form-control input_phone">-->
+<!--                            <div *ngIf="!partnerUser.get('phone')?.valid && (partnerUser.get('phone')?.dirty || (partnerUser.get('phone')?.touched || submitted))">-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('phone')?.errors?.required">-->
+<!--                                {{'error.user.phone.required' | translate}}-->
+<!--                              </p>-->
+<!--                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('phone')?.errors?.pattern">-->
+<!--                                {{'error.user.phone.format' | translate}}-->
+<!--                              </p>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-1 remove">-->
+<!--                        <i (click)="removePartnerUser(a, i)" class="fa fa-times-circle remove_icon"></i>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="add_click"><a class="add_link" (click)="addPartnerUser(a)"><i class="fa fa-plus-circle"></i> {{'btn.add.user.sign' | translate}}</a></div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--      <div class="col-md-1"></div>-->
+<!--      <div class="col-md-11">-->
+<!--        <div class="add_click"><a class="add_link" (click)="addPartner()"><i class="fa fa-plus-circle"></i> {{'btn.add.partner' | translate}}</a></div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </form>-->
+
+<!--  &lt;!&ndash; <br/>-->
+<!--  {{this.datas | json}} &ndash;&gt;-->
+
+<!--  <br/>-->
+<!--  {{this.userForm.value | json}}-->
+<!--  <br/>-->
+<!--  {{this.partnerForm.value | json}}-->
+
+
+<!--</div>-->
+
+<!--<div class="footer-determine" style="display: flex; justify-content: space-between">-->
+<!--  <div style="width: 200px;">-->
+<!--    <button (click)="back($event, 'infor-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>-->
+<!--  </div>-->
+<!--  <div class="content_footer">@Copyright 2021 - MobiFone</div>-->
+<!--  <div>-->
+<!--    <button type="button" name="next" class="next draft-button">{{'btn.save-draff' | translate }}</button>-->
+<!--    <button (click)="next()" type="button" name="next" class="next action-button pull-right">{{'btn.next' | translate }}</button>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--begin template-->
+<div class="container-fluid">
+  <div class="contract-determine">
+    <div class="col-md-1">
+      <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="data_organization.ordering" disabled>
+    </div>
+    <div class="col-md-11 contract--content">
+      <div class="contract__content--title">
+        <div>TỔ CHỨC CỦA TÔI -</div>
+        <input type="text" [(ngModel)]="data_organization.name" autofocus>
+      </div>
+      <div class="contract__content--participants">
+        <div class="participants-border">
           <div class="label">Người xem xét</div>
-          <div *ngFor="let userView of userViews().controls; let i=index" [formGroupName]="i">
-            <div class="row">
-              <div class="col-md-1 order">
-                  <input type="number" formControlName="order" class="form-control order_input">
-              </div>
-              <div class="col-md-10">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                    <div class="form-control input-line">
-                      <img src="assets/img/icon_name.svg" class="input-img">
-                      <input type="text" formControlName="name" class="input-text">
-                    </div>
-                    <div *ngIf="!userView.get('name')?.valid && (userView.get('name')?.dirty || (userView.get('name')?.touched || submitted))">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('name')?.errors?.required">
-                        Họ tên không được để trống
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="label_item">Email <span class="require_star">*</span></div>
-                    <div class="form-control input-line">
-                      <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" formControlName="email" class="input-text">
-                    </div>
-                    <div *ngIf="!userView.get('email')?.valid && (userView.get('email')?.dirty || (userView.get('email')?.touched || submitted))">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('email')?.errors?.required">
-                        Email không được để trống
-                      </p>
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userView.get('email')?.errors?.email">
-                        Email sai định dạng
-                      </p>
-                    </div>
-                  </div>
+<!--          <div class="participants&#45;&#45;content" *ngFor="let d of is_origanzation_reviewer; let index = index">-->
+          <div class="participants--content" *ngFor="let d of getOriganzationReviewer(); let index = index">
+            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                   [(ngModel)]="d.ordering" disabled>
+            <div class="col-md-10 participants--input" style="display: flex">
+              <div class="participants__name">
+                <div class="label text-color">Họ tên: *</div>
+                <div class="input-data">
+                  <img src="assets/img/icon_name.svg" class="input-img">
+                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                 </div>
               </div>
-              <div class="col-md-1 remove">
-                  <i (click)="removeUserView(i)" class="fa fa-times-circle remove_icon"></i>
+              <div class="participants__name">
+                <div class="label text-color">Email: *</div>
+                <div class="input-data">
+                  <img src="assets/img/login_email.svg" class="input-img">
+                  <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+                </div>
               </div>
             </div>
+            <div class="col-md-1 delete-element" (click)="deleteOriganzationReviewer(index)">
+              <img src="assets/img/border_close.svg" alt="close.vn">
+              <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
+            </div>
           </div>
-          <div class="add_click"><a class="add_link" (click)="addUserView()"><i class="fa fa-plus-circle"></i> Thêm người xem xét</a></div>
+          <div class="participants--add">
+            <u class="label text-color" (click)="addOriganzationReviewer()">Thêm người xem xét</u>
+          </div>
         </div>
-
-        <!-- User sign -->
-        <div class="add_content" >
+        <div class="participants-border">
           <div class="label">Người ký</div>
-          <div formArrayName="userSigns" *ngFor="let alias of userSigns().controls; let i = index;">
-            <div class="row" [formGroupName]="i">
-              <div class="col-md-1 order">
-                <input type="number" formControlName="order" class="form-control order_input">
-              </div>
-              <div class="col-md-10">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                    <div class="form-control input-line">
-                      <img src="assets/img/icon_name.svg" class="input-img">
-                      <input type="text" formControlName="name" class="input-text">
-                    </div>
-
-                    <div *ngIf="!alias.get('name')?.valid && (alias.get('name')?.dirty || (alias.get('name')?.touched || submitted))">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('name')?.errors?.required">
-                        Họ tên không được để trống
-                      </p>
-                    </div>
-
-                  </div>
-                  <div class="col-md-6">
-                    <div class="label_item">Email <span class="require_star">*</span></div>
-                    <div class="form-control input-line">
-                      <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" formControlName="email" class="input-text">
-                    </div>
-
-                    <div *ngIf="!alias.get('email')?.valid && (alias.get('email')?.dirty || (alias.get('email')?.touched || submitted))">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('email')?.errors?.required">
-                        Email không được để trống
-                      </p>
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('email')?.errors?.email">
-                        Email sai định dạng
-                      </p>
-                    </div>
-
+<!--          <div class="participants&#45;&#45;content" *ngFor="let d of this.is_origanzation_signature; let index = index">-->
+          <div class="participants--content" *ngFor="let d of getOriganzationSignature(); let index = index">
+            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                   [(ngModel)]="d.ordering" disabled>
+            <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
+              <div class="participants--input" style="display: flex">
+                <div class="participants__name">
+                  <div class="label text-color">Họ tên: *</div>
+                  <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input #abcd [id]="'signature-origanzation-' + d.ordering" type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="label_item">Loại ký<span class="require_star">*</span></div>
-                    <div class="col">
-                      <ng-multiselect-dropdown
-                        formControlName="signType"
-                        [placeholder]="'-- Chọn --'"
-                        [settings]="dropdownSignTypeSettings"
-                        [data]="signTypeList">
-                        <ng-template
-                          #optionsTemplate
-                          let-item
-                          let-option="option"
-                          let-id="id"
-                          let-isSelected="isSelected">
-                          <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                            <label
-                              style="color: #333; font-weight: normal;"
-                              [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                              >{{getSignTypeItems[id].item_text}}</label>
-                          </div>
-                        </ng-template>
-                      </ng-multiselect-dropdown>
-                    </div>
-
-                    <div *ngIf="!alias.get('signType')?.valid && (alias.get('signType')?.dirty || (alias.get('signType')?.touched || submitted))">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('signType')?.errors?.required">
-                        Loại ký không được để trống
-                      </p>
-                    </div>
-
-                  </div>
-                  <div class="col-md-1">
-                    <div class="label_item">OTP</div>
-                    <input type="checkbox" formControlName="isOtp" class="form-check-input">
-                  </div>
-                  <div class="col-md-5">
-                    <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
-                    <input type="text" formControlName="phone" class="form-control input_phone">
-
-                    <div *ngIf="!alias.get('phone')?.valid && (alias.get('phone')?.dirty || (alias.get('phone')?.touched || submitted))">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('phone')?.errors?.required">
-                        Số điện thoại không được để trống
-                      </p>
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!alias.get('phone')?.errors?.pattern">
-                        Số điện thoại sai định dạng
-                      </p>
-                    </div>
-
+                <div class="participants__name">
+                  <div class="label text-color">Email: *</div>
+                  <div class="input-data">
+                    <img src="assets/img/login_email.svg" class="input-img">
+                    <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
                   </div>
                 </div>
               </div>
-              <div class="col-md-1 remove">
-                <i (click)="removeUserSign(i)" class="fa fa-times-circle remove_icon"></i>
+              <div class="participants--input select-text-input" style="display: flex">
+                <div class="participants__name">
+                  <div class="label text-color">Loại ký: *</div>
+                  <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
+                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                    <ng-template #optionsTemplate let-item let-option="option"
+                                 let-id="id" let-isSelected="isSelected">
+                      <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                        <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                          {{getContractConnectItems[id].name}}
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ng-multiselect-dropdown>
+                </div>
+                <div class="participants-otp">
+                  <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
+                  <span class="label text-color">OTP</span>
+                </div>
+                <div class="participants__name">
+                  <div class="label text-color">Số điện thoại: *</div>
+                  <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
+                </div>
               </div>
             </div>
+            <div class="col-md-1 delete-element" (click)="deleteOriganzationSignature(index)">
+              <img src="assets/img/border_close.svg" alt="close.vn">
+              <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
+            </div>
           </div>
-          <div class="add_click"><a class="add_link" (click)="addUserSign()"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
+          <div class="participants--add">
+            <u class="label text-color" style="color: #106DB6" (click)="addOriganzationSignature()">Thêm người ký</u>
+          </div>
         </div>
-
-        <!-- User document -->
-        <div class="add_content" formArrayName="userDocs">
+        <div class="participants-border">
           <div class="label">Văn thư</div>
-          <div *ngFor="let userDoc of userDocs().controls; let i=index" [formGroupName]="i">
-            <div class="row">
-              <div class="col-md-1 order">
-                <input type="number" formControlName="order" class="form-control order_input">
-              </div>
-              <div class="col-md-10">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                    <div class="form-control input-line">
-                      <img src="assets/img/icon_name.svg" class="input-img">
-                      <input type="text" formControlName="name" class="input-text">
-                    </div>
-                    <div *ngIf="!userDoc.get('name')?.valid && (userDoc.get('name')?.dirty || (userDoc.get('name')?.touched || submitted))">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('name')?.errors?.required">
-                        Họ tên không được để trống
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="label_item">Email <span class="require_star">*</span></div>
-                    <div class="form-control input-line">
-                      <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" formControlName="email" class="input-text">
-                    </div>
-                    <div *ngIf="!userDoc.get('email')?.valid && (userDoc.get('email')?.dirty || (userDoc.get('email')?.touched || submitted))">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('email')?.errors?.required">
-                        Email không được để trống
-                      </p>
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('email')?.errors?.email">
-                        Email sai định dạng
-                      </p>
-                    </div>
+          <div class="participants--content">
+            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="getOriganzationDocument().ordering" disabled>
+            <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
+              <div class="participants--input" style="display: flex">
+                <div class="participants__name">
+                  <div class="label text-color">Họ tên: *</div>
+                  <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="getOriganzationDocument().name">
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="label_item">Loại ký <span class="require_star">*</span></div>
-                    <div class="col">
-                      <ng-multiselect-dropdown
-                        formControlName="signType"
-                        [placeholder]="'-- Chọn --'"
-                        [settings]="dropdownSignTypeSettings"
-                        [data]="signTypeList">
-                        <ng-template
-                          #optionsTemplate
-                          let-item
-                          let-option="option"
-                          let-id="id"
-                          let-isSelected="isSelected">
-                          <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                            <label
-                              style="color: #333; font-weight: normal;"
-                              [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                              >{{getSignTypeItems[id].item_text}}</label>
-                          </div>
-                        </ng-template>
-                      </ng-multiselect-dropdown>
-                    </div>
-                    <div *ngIf="!userDoc.get('signType')?.valid && (userDoc.get('signType')?.dirty || (userDoc.get('signType')?.touched || submitted))">
-                      <p class="alert alert-danger error-detail" role="alert" [hidden]="!userDoc.get('signType')?.errors?.required">
-                        Loại ký không được để trống
-                      </p>
-                    </div>
+                <div class="participants__name">
+                  <div class="label text-color">Email: *</div>
+                  <div class="input-data">
+                    <img src="assets/img/login_email.svg" class="input-img">
+                    <input type="text" placeholder="Nhập Email" [(ngModel)]="getOriganzationDocument().email">
                   </div>
                 </div>
               </div>
-              <div class="col-md-1 remove">
-                <i (click)="removeUserDoc(i)" class="fa fa-times-circle remove_icon"></i>
-              </div>
-            </div>
-          </div>
-          <div class="add_click"><a class="add_link" (click)="addUserDoc()"><i class="fa fa-plus-circle"></i> Thêm văn thư</a></div>
-        </div>
-      </div>
-    </div>
-  </form>
 
-  <form [formGroup]="partnerForm">
-    <div formArrayName='partnerArrs' *ngFor="let partners of partnerArrs().controls; let a = index;">
-      <div [formGroupName]="a">
-        <div class="partner_content" >
-          <div class="row">
-            <div class="col-md-1 order">
-                <input type="number" formControlName="order" class="form-control order_input">
-            </div>
-            <div class="col-md-11 form_content">
+              <div class="participants-information">
+                <div class="participants-signature-type">
+                  <div class="label text-color">Loại ký: *</div>
 
-              <div class="row">
-                <div class="radio col-md-6 label_type">
-                  <label><input type="radio" formControlName="type" [value]="1" [ngModel]="partners.value.type"> <span> Tổ chức</span></label>
-                </div>
-                <div class="radio col-md-6 label_type">
-                  <label><input type="radio" formControlName="type" [value]="2" [ngModel]="partners.value.type"> <span> Cá nhân</span></label>
-                </div>
-              </div>
-
-              <div *ngIf="partners.value.type==1">
-                <p>
-                  <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
-                  <input class="form-control textOrg" id="name" name="name" formControlName="name">
-                </p>
-                <div *ngIf="!partners.get('name')?.valid && (partners.get('name')?.dirty || (partners.get('name')?.touched || submitted))">
-                  <p class="alert alert-danger error-detail" role="alert" [hidden]="!partners.get('name')?.errors?.required">
-                    Tên đối tác không được để trống
-                  </p>
-                </div>
-
-                <!-- Partner lead -->
-                <div class="add_content" formArrayName="partnerLeads">
-                  <div class="label">Người điều phối</div>
-                  <div *ngFor="let partnerLead of partnerLeads(a).controls; let i=index" [formGroupName]="i">
-                    <div class="row">
-                      <div class="col-md-1 order">
-                        <input type="number" formControlName="order" class="form-control order_input">
+                  <ng-multiselect-dropdown [(ngModel)]="getOriganzationDocument().sign_type" placeholder="{{'choose' | translate }}"
+                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                    <ng-template #optionsTemplate let-item let-option="option"
+                                 let-id="id" let-isSelected="isSelected">
+                      <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                        <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                          {{getContractConnectItems[id].name}}
+                        </label>
                       </div>
-                      <div class="col-md-10">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="label_item">Họ tên</div>
-                            <div class="form-control input-line">
-                              <img src="assets/img/icon_name.svg" class="input-img">
-                              <input type="text" formControlName="name" class="input-text">
-                            </div>
-                            <div *ngIf="!partnerLead.get('name')?.valid && (partnerLead.get('name')?.dirty || (partnerLead.get('name')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerLead.get('name')?.errors?.required">
-                                Họ tên không được để trống
-                              </p>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="label_item">Email</div>
-                            <div class="form-control input-line">
-                              <img src="assets/img/login_email.svg" class="input-img">
-                              <input type="text" formControlName="email" class="input-text">
-                            </div>
-                            <div *ngIf="!partnerLead.get('email')?.valid && (partnerLead.get('email')?.dirty || (partnerLead.get('email')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerLead.get('email')?.errors?.required">
-                                Email không được để trống
-                              </p>
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerLead.get('email')?.errors?.email">
-                                Email sai định dạng
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-1 remove">
-                        <i (click)="removePartnerLead(a, i)" class="fa fa-times-circle remove_icon"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="add_click"><a class="add_link" (click)="addPartnerLead(a)"><i class="fa fa-plus-circle"></i> Thêm người điều phối</a></div>
-                </div>
-
-                <!-- Partner view -->
-                <div class="add_content" formArrayName="partnerViews">
-                  <div class="label">Người xem xét</div>
-                  <div *ngFor="let partnerView of partnerViews(a).controls; let i=index" [formGroupName]="i">
-                    <div class="row">
-                      <div class="col-md-1 order">
-                        <input type="number" formControlName="order" class="form-control order_input">
-                      </div>
-                      <div class="col-md-10">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                            <div class="form-control input-line">
-                              <img src="assets/img/icon_name.svg" class="input-img">
-                              <input type="text" formControlName="name" class="input-text">
-                            </div>
-                            <div *ngIf="!partnerView.get('name')?.valid && (partnerView.get('name')?.dirty || (partnerView.get('name')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerView.get('name')?.errors?.required">
-                                Họ tên không được để trống
-                              </p>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="label_item">Email <span class="require_star">*</span></div>
-                            <div class="form-control input-line">
-                              <img src="assets/img/login_email.svg" class="input-img">
-                              <input type="text" formControlName="email" class="input-text">
-                            </div>
-                            <div *ngIf="!partnerView.get('email')?.valid && (partnerView.get('email')?.dirty || (partnerView.get('email')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerView.get('email')?.errors?.required">
-                                Email không được để trống
-                              </p>
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerView.get('email')?.errors?.email">
-                                Email sai định dạng
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-1 remove">
-                        <i (click)="removePartnerView(a, i)" class="fa fa-times-circle remove_icon"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="add_click"><a class="add_link" (click)="addPartnerView(a)"><i class="fa fa-plus-circle"></i> Thêm người xem xét</a></div>
-                </div>
-
-                <!-- Partner sign -->
-                <div class="add_content" formArrayName="partnerSigns">
-                  <div class="label">Người ký</div>
-                  <div *ngFor="let partnerSign of partnerSigns(a).controls; let i=index" [formGroupName]="i">
-                    <div class="row">
-                      <div class="col-md-1 order">
-                        <input type="number" formControlName="order" class="form-control order_input">
-                      </div>
-                      <div class="col-md-10">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                            <div class="form-control input-line">
-                              <img src="assets/img/icon_name.svg" class="input-img">
-                              <input type="text" formControlName="name" class="input-text">
-                            </div>
-                            <div *ngIf="!partnerSign.get('name')?.valid && (partnerSign.get('name')?.dirty || (partnerSign.get('name')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('name')?.errors?.required">
-                                Họ tên không được để trống
-                              </p>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="label_item">Email <span class="require_star">*</span></div>
-                            <div class="form-control input-line">
-                              <img src="assets/img/login_email.svg" class="input-img">
-                              <input type="text" formControlName="email" class="input-text">
-                            </div>
-                            <div *ngIf="!partnerSign.get('email')?.valid && (partnerSign.get('email')?.dirty || (partnerSign.get('email')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('email')?.errors?.required">
-                                Email không được để trống
-                              </p>
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('email')?.errors?.email">
-                                Email sai định dạng
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="label_item">Loại ký <span class="require_star">*</span></div>
-                            <div class="col">
-                              <ng-multiselect-dropdown
-                                formControlName="signType"
-                                [placeholder]="'-- Chọn --'"
-                                [settings]="dropdownSignTypeSettings"
-                                [data]="signTypeList">
-                                <ng-template
-                                  #optionsTemplate
-                                  let-item
-                                  let-option="option"
-                                  let-id="id"
-                                  let-isSelected="isSelected">
-                                  <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                                    <label
-                                      style="color: #333; font-weight: normal;"
-                                      [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                                      >{{getSignTypeItems[id].item_text}}</label>
-                                  </div>
-                                </ng-template>
-                              </ng-multiselect-dropdown>
-                            </div>
-                            <div *ngIf="!partnerSign.get('signType')?.valid && (partnerSign.get('signType')?.dirty || (partnerSign.get('signType')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('signType')?.errors?.required">
-                                Loại ký không được để trống
-                              </p>
-                            </div>
-                          </div>
-                          <div class="col-md-1">
-                            <div class="label_item">OTP</div>
-                            <input type="checkbox" formControlName="isOtp" class="form-check-input">
-                          </div>
-                          <div class="col-md-5">
-                            <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
-                            <input type="text" formControlName="phone" class="form-control input_phone">
-                            <div *ngIf="!partnerSign.get('phone')?.valid && (partnerSign.get('phone')?.dirty || (partnerSign.get('phone')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('phone')?.errors?.required">
-                                Số điện thoại không được để trống
-                              </p>
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerSign.get('phone')?.errors?.pattern">
-                                Số điện thoại sai định dạng
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-1 remove">
-                        <i (click)="removePartnerSign(a, i)" class="fa fa-times-circle remove_icon"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="add_click"><a class="add_link" (click)="addPartnerSign(a)"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
-                </div>
-
-                <!-- Partner document -->
-                <div class="add_content" formArrayName="partnerDocs">
-                  <div class="label">Văn thư</div>
-                  <div *ngFor="let partnerDoc of partnerDocs(a).controls; let i=index" [formGroupName]="i">
-                    <div class="row">
-                      <div class="col-md-1 order">
-                        <input type="number" formControlName="order" class="form-control order_input">
-                      </div>
-                      <div class="col-md-10">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                            <div class="form-control input-line">
-                              <img src="assets/img/icon_name.svg" class="input-img">
-                              <input type="text" formControlName="name" class="input-text">
-                            </div>
-                            <div *ngIf="!partnerDoc.get('name')?.valid && (partnerDoc.get('name')?.dirty || (partnerDoc.get('name')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('name')?.errors?.required">
-                                Họ tên không được để trống
-                              </p>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="label_item">Email <span class="require_star">*</span></div>
-                            <div class="form-control input-line">
-                              <img src="assets/img/login_email.svg" class="input-img">
-                              <input type="text" formControlName="email" class="input-text">
-                            </div>
-                            <div *ngIf="!partnerDoc.get('email')?.valid && (partnerDoc.get('email')?.dirty || (partnerDoc.get('email')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('email')?.errors?.required">
-                                Email không được để trống
-                              </p>
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('email')?.errors?.email">
-                                Email sai định dạng
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="label_item">Loại ký <span class="require_star">*</span></div>
-                            <div class="col">
-                              <ng-multiselect-dropdown
-                                formControlName="signType"
-                                [placeholder]="'-- Chọn --'"
-                                [settings]="dropdownSignTypeSettings"
-                                [data]="signTypeList">
-                                <ng-template
-                                  #optionsTemplate
-                                  let-item
-                                  let-option="option"
-                                  let-id="id"
-                                  let-isSelected="isSelected">
-                                  <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                                    <label
-                                      style="color: #333; font-weight: normal;"
-                                      [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                                      >{{getSignTypeItems[id].item_text}}</label>
-                                  </div>
-                                </ng-template>
-                              </ng-multiselect-dropdown>
-                            </div>
-                            <div *ngIf="!partnerDoc.get('signType')?.valid && (partnerDoc.get('signType')?.dirty || (partnerDoc.get('signType')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerDoc.get('signType')?.errors?.required">
-                                Loại ký không được để trống
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-1 remove">
-                        <i (click)="removePartnerDoc(a, i)" class="fa fa-times-circle remove_icon"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="add_click"><a class="add_link" (click)="addPartnerDoc(a)"><i class="fa fa-plus-circle"></i> Thêm văn thư</a></div>
-                </div>
-              </div>
-
-              <div *ngIf="partners.value.type==2">
-                <p>
-                  <label class="labelOrg">TÊN ĐỐI TÁC <span class="require_star">*</span></label>
-                  <input class="form-control textOrg" id="name" name="name" formControlName="name">
-                </p>
-                <div *ngIf="!partners.get('name')?.valid && (partners.get('name')?.dirty || (partners.get('name')?.touched || submitted))">
-                  <p class="alert alert-danger error-detail" role="alert" [hidden]="!partners.get('name')?.errors?.required">
-                    Tên đối tác không được để trống
-                  </p>
-                </div>
-
-                <!-- Partner user -->
-                <div class="add_content" formArrayName="partnerUsers">
-                  <div class="label">Người ký</div>
-                  <div *ngFor="let partnerUser of partnerUsers(a)?.controls; let i=index" [formGroupName]="i">
-                    <div class="row">
-                      <div class="col-md-1 order">
-                        <input type="number" formControlName="order" class="form-control order_input">
-                      </div>
-                      <div class="col-md-10">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="label_item">Họ tên <span class="require_star">*</span></div>
-                            <div class="form-control input-line">
-                              <img src="assets/img/icon_name.svg" class="input-img">
-                              <input type="text" formControlName="name" class="input-text">
-                            </div>
-                            <div *ngIf="!partnerUser.get('name')?.valid && (partnerUser.get('name')?.dirty || (partnerUser.get('name')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('name')?.errors?.required">
-                                Họ tên không được để trống
-                              </p>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="label_item">Email <span class="require_star">*</span></div>
-                            <div class="form-control input-line">
-                              <img src="assets/img/login_email.svg" class="input-img">
-                              <input type="text" formControlName="email" class="input-text">
-                            </div>
-                            <div *ngIf="!partnerUser.get('email')?.valid && (partnerUser.get('email')?.dirty || (partnerUser.get('email')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('email')?.errors?.required">
-                                Email không được để trống
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="label_item">Loại ký <span class="require_star">*</span></div>
-                            <div class="col">
-                              <ng-multiselect-dropdown
-                                formControlName="signType"
-                                [placeholder]="'-- Chọn --'"
-                                [settings]="dropdownSignTypeSettings"
-                                [data]="signTypeList">
-                                <ng-template
-                                  #optionsTemplate
-                                  let-item
-                                  let-option="option"
-                                  let-id="id"
-                                  let-isSelected="isSelected">
-                                  <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                                    <label
-                                      style="color: #333; font-weight: normal;"
-                                      [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getSignTypeItems[id].isDisabled? 'lightgrey': ''}"
-                                      >{{getSignTypeItems[id].item_text}}</label>
-                                  </div>
-                                </ng-template>
-                              </ng-multiselect-dropdown>
-                            </div>
-                            <div *ngIf="!partnerUser.get('signType')?.valid && (partnerUser.get('signType')?.dirty || (partnerUser.get('signType')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('signType')?.errors?.required">
-                                Loại ký không được để trống
-                              </p>
-                            </div>
-                          </div>
-                          <div class="col-md-1">
-                            <div class="label_item">OTP</div>
-                            <input type="checkbox" formControlName="isOtp" class="form-check-input">
-                          </div>
-                          <div class="col-md-5">
-                            <div class="label_item">Số điện thoại <span class="require_star">*</span></div>
-                            <input type="text" formControlName="phone" class="form-control input_phone">
-                            <div *ngIf="!partnerUser.get('phone')?.valid && (partnerUser.get('phone')?.dirty || (partnerUser.get('phone')?.touched || submitted))">
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('phone')?.errors?.required">
-                                Số điện thoại không được để trống
-                              </p>
-                              <p class="alert alert-danger error-detail" role="alert" [hidden]="!partnerUser.get('phone')?.errors?.pattern">
-                                Số điện thoại sai định dạng
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-1 remove">
-                        <i (click)="removePartnerUser(a, i)" class="fa fa-times-circle remove_icon"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="add_click"><a class="add_link" (click)="addPartnerUser(a)"><i class="fa fa-plus-circle"></i> Thêm người ký</a></div>
+                    </ng-template>
+                  </ng-multiselect-dropdown>
                 </div>
               </div>
             </div>
+            <div class="col-md-1"></div>
           </div>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-1"></div>
-      <div class="col-md-11">
-        <div class="add_click"><a class="add_link" (click)="addPartner()"><i class="fa fa-plus-circle"></i> Thêm đối tác</a></div>
+  </div>
+
+
+  <!--  Đối tác-->
+  <div class="contract-determine" *ngFor="let item of this.data_parnter_organization" style="display: flex">
+    <div class="col-md-1">
+      <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="item.ordering" disabled>
+    </div>
+    <div class="col-md-11 contract--content">
+      <div class="contract__content--title">
+        <div style="width: 72px">Đối Tác -</div>
+        <input type="text" [(ngModel)]="item.name">
+      </div>
+      <div class="contract__content--participants">
+        <!--          <div class="row">-->
+        <!--            <div class="radio label_type">-->
+        <!--              <label><input type="radio" name="type" checked>-->
+        <!--                <span> {{'organization' | translate}}</span></label>-->
+        <!--            </div>-->
+        <!--            <div class="radio label_type">-->
+        <!--              <label><input type="radio" name="type">-->
+        <!--                <span> {{'personal' | translate}}</span></label>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <div class="participants-border">
+          <div class="label">Người điều phối</div>
+          <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
+            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering" disabled>
+            <div class="col-md-10 participants--input" style="display: flex; margin-bottom: 14px">
+              <div class="participants__name">
+                <div class="label text-color">Họ tên: *</div>
+                <div class="input-data">
+                  <img src="assets/img/icon_name.svg" class="input-img">
+                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+                </div>
+              </div>
+              <div class="participants__name">
+                <div class="label text-color">Email: *</div>
+                <div class="input-data">
+                  <img src="assets/img/login_email.svg" class="input-img">
+                  <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-1 delete-element" (click)="deletePartnerCoordination(index, item)">
+              <img src="assets/img/border_close.svg" alt="close.vn">
+              <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
+            </div>
+          </div>
+        </div>
+
+        <div class="participants-border">
+          <div class="label">Người xem xét</div>
+          <div class="participants--content" *ngFor="let d of getPartnerReviewer(item); let index = index">
+            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                   [(ngModel)]="d.ordering" disabled>
+            <div class="col-md-10 participants--input">
+              <div class="participants__name">
+                <div class="label text-color">Họ tên: *</div>
+                <div class="input-data">
+                  <img src="assets/img/icon_name.svg" class="input-img">
+                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+                </div>
+              </div>
+              <div class="participants__name">
+                <div class="label text-color">Email: *</div>
+                <div class="input-data">
+                  <img src="assets/img/login_email.svg" class="input-img">
+                  <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-1 delete-element" (click)="deletePartnerReviewer(index, item)">
+              <img src="assets/img/border_close.svg" alt="close.vn">
+              <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
+            </div>
+          </div>
+          <div class="participants--add">
+            <u class="label text-color" (click)="addPartnerReviewer(item)">Thêm người xem xét</u>
+          </div>
+        </div>
+
+        <div class="participants-border">
+          <div class="label">Người ký</div>
+          <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
+            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                   [(ngModel)]="d.ordering" disabled>
+            <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
+              <div class="participants--input" style="display: flex">
+                <div class="participants__name">
+                  <div class="label text-color">Họ tên: *</div>
+                  <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input  [id]="'signature-partner-' + d.ordering" type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+                  </div>
+                </div>
+                <div class="participants__name">
+                  <div class="label text-color">Email: *</div>
+                  <div class="input-data">
+                    <img src="assets/img/login_email.svg" class="input-img">
+                    <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+                  </div>
+                </div>
+              </div>
+              <div class="participants--input select-text-input" style="display: flex">
+                <div class="participants__name">
+                  <div class="label text-color">Loại ký: *</div>
+
+                  <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
+                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                    <ng-template #optionsTemplate let-item let-option="option"
+                                 let-id="id" let-isSelected="isSelected">
+                      <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                        <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                          {{getContractConnectItems[id].name}}
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ng-multiselect-dropdown>
+
+<!--                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">-->
+<!--                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'get_partner_signature', getPartnerSignature(item), index)">-->
+<!--                      <mat-option *ngFor="let topping of signTypeList; let i = index" [value]="topping.id">{{topping.name}}</mat-option>-->
+<!--                    </mat-select>-->
+<!--                  </mat-form-field>-->
+                </div>
+                <div class="participants-otp">
+                  <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
+                  <span class="label text-color">OTP</span>
+                </div>
+                <div class="participants__name">
+                  <div class="label text-color">Số điện thoại: *</div>
+                  <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
+              <img src="assets/img/border_close.svg" alt="close.vn">
+              <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
+            </div>
+          </div>
+          <div class="participants--add">
+            <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item)">Thêm người ký</u>
+          </div>
+        </div>
+
+        <div class="participants-border">
+          <div class="label">Văn thư</div>
+          <div class="participants--content">
+            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                   [(ngModel)]="getPartnerDocument(item).ordering" disabled>
+            <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
+              <div class="participants--input" style="display: flex">
+                <div class="participants__name">
+                  <div class="label text-color">Họ tên: *</div>
+                  <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="getPartnerDocument(item).name">
+                  </div>
+                </div>
+                <div class="participants__name">
+                  <div class="label text-color">Email: *</div>
+                  <div class="input-data">
+                    <img src="assets/img/login_email.svg" class="input-img">
+                    <input type="text" placeholder="Nhập Email" [(ngModel)]="getPartnerDocument(item).email">
+                  </div>
+                </div>
+              </div>
+
+              <div class="participants-information">
+                <div class="participants-signature-type">
+                  <div class="label text-color">Loại ký: *</div>
+
+                  <ng-multiselect-dropdown [(ngModel)]="getPartnerDocument(item).sign_type" placeholder="{{'choose' | translate }}"
+                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                    <ng-template #optionsTemplate let-item let-option="option"
+                                 let-id="id" let-isSelected="isSelected">
+                      <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                        <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                          {{getContractConnectItems[id].name}}
+                        </label>
+                      </div>
+                    </ng-template>
+                  </ng-multiselect-dropdown>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-md-1"></div>
+          </div>
+        </div>
       </div>
     </div>
-  </form>
-
-  <!-- <br/>
-  {{this.datas | json}} -->
-
-  <br/>
-  {{this.userForm.value | json}}
-  <br/>
-  {{this.partnerForm.value | json}}
-
+  </div>
+  <div style="display: flex">
+    <div class="col-md-1"></div>
+    <div class="col-md-11" style="display: inline-block; cursor: pointer">
+      <u class="label text-color" (click)="addPartner()" style="background-color: #FFFFFF">Thêm đối tác</u>
+    </div>
+  </div>
 
 </div>
+<!--<button (click)="getDataAll()">-->
+<!--  Lấy dữ liệu-->
+<!--</button>-->
 
 <div class="footer-determine" style="display: flex; justify-content: space-between">
   <div style="width: 200px;">
-    <button (click)="back($event, 'infor-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
+    <button (click)="back($event, 'infor-contract')" type="button" name="next" class="next action-button"
+            style="background-color: #8B8B8B">Quay lại
+    </button>
   </div>
   <div class="content_footer">@Copyright 2021 - MobiFone</div>
   <div>
-    <button type="button" name="next" class="next draft-button">Lưu nháp</button>
-    <button (click)="next()" type="button" name="next" class="next action-button pull-right">Tiếp theo</button>
+    <button type="button" name="next" class="next draft-button">{{'btn.save-draff' | translate }}</button>
+    <button (click)="next()" type="button" name="next"
+            class="next action-button pull-right">{{'btn.next' | translate }}</button>
   </div>
 </div>
-

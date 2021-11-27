@@ -86,11 +86,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    // console.log(this.datas);
-
-    // this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
-
-    // console.log(this.datas.contract_user_sign)
     this.scale = 1;
     this.datas.contract_user_sign.forEach((item: any) => {
       if (item['sign_config'] && typeof (item["sign_config"]) == 'string') {
@@ -101,10 +96,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // this.list_sign_name.forEach((item: any) => {
     //   item['selected'] = false;
     // })
-    if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
-      let is_user_sign = [...this.datas.userForm.userSigns];
-      this.getListSignName(is_user_sign, 'organization');
-    }
+    // if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
+    //   let is_user_sign = [...this.datas.userForm.userSigns];
+    //   this.getListSignName(is_user_sign, 'organization');
+    // }
 
     if (this.datas.partnerForm.partnerArrs && this.datas.partnerForm.partnerArrs.length > 0) {
       this.datas.partnerForm.partnerArrs.forEach((element: any) => {
@@ -118,8 +113,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
     }
 
-
-
     if (!this.signCurent) {
       this.signCurent = {
         offsetWidth: 0,
@@ -129,7 +122,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     // convert base64 file pdf to url
     // this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
-    this.pdfSrc = Helper._getUrlPdf(this.datas.contract_information.file_content);
+    this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
     // render pdf to canvas
     this.getPage();
 
@@ -200,7 +193,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       item['selected'] = false;
       item['sign_unit'] = type_unit;
       item['signType'] = item.signType;
-      // item['is_disable'] = false;
+      item['is_disable'] = false;
       this.list_sign_name.push(item)
     })
   }
@@ -399,7 +392,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
         });
         // this.list_sign_name.forEach((element: any) => {
-        //   if (name_accept_signature == 'chu_ky_anh') {
+        //     if (name_accept_signature == 'chu_ky_anh') {
         //     if (!element.signType.filter((p: any) => p.item_id == 1)[0]) {
         //       element.is_disable = true;
         //     } else element.is_disable = false;
@@ -645,13 +638,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     });
   }
 
+  getContractSign(data: any) {
+    if (data.signature_party != "organization" || !data.position) {
+      return "resize-drag not-out-drop ck-da-keo";
+    } else return 'ck-chua-keo';
+  }
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any) {
     let style: any = {
       "transform": 'translate(' + d['dataset_x'] + 'px, ' + d['dataset_y'] + 'px)',
       "position": "absolute",
-      "backgroundColor": '#EBF8FF'
+      "backgroundColor": '#EBF8FF',
+      "border": '1px solid #106DB6',
+      "border-radius": '3px'
     }
 
     // if (sizeChange == "width" && e) {
@@ -706,18 +706,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 // hàm stype đối tượng boder kéo thả
   changeColorDrag(data: any, role: any, isDaKeo?: any) {
-    // if (isDaKeo) {
-    //   return 'ck-da-keo';
-    // } else {
-    //   return 'employer-ck';
-    // }
-    if (data.signType == 'partner') {
-      return 'resize-drag not-out-drop';
+    if (isDaKeo) {
+      return 'ck-da-keo';
+    } else {
+      return 'employer-ck';
     }
   }
 
   // get select người ký
   getSignSelect(d: any) {
+    // if (d.signature_party !== "organization") {
+    if (d.signature_party == "organization") {
+      this.isEnableSelect = true;
+    } else
+      this.isEnableSelect = false;
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
@@ -752,15 +754,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (d.name) {
         this.list_sign_name.forEach((item: any) => {
           // if (item.id == d.id) {
-          // if (d.sign_unit == 'chu_ky_anh') {
-          //   if (!item.signType.filter((p: any) => p.item_id == 1)[0]) {
-          //     item.is_disable = true;
-          //   } else item.is_disable = false;
-          // } else if (d.sign_unit == 'chu_ky_so') {
-          //   if (!item.signType.filter((p: any) => p.item_id == 2)[0]) {
-          //     item.is_disable = true;
-          //   } else item.is_disable = false;
-          // } else item.is_disable = false;
+          if (d.sign_unit == 'chu_ky_anh') {
+            if (!item.signType.filter((p: any) => p.item_id == 1)[0]) {
+              item.is_disable = true;
+            } else item.is_disable = false;
+          } else if (d.sign_unit == 'chu_ky_so') {
+            if (!item.signType.filter((p: any) => p.item_id == 2)[0]) {
+              item.is_disable = true;
+            } else item.is_disable = false;
+          } else item.is_disable = false;
 
           if (item.name == d.name) {
             item.selected = true;
@@ -771,6 +773,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         document.getElementById('select-dropdown').value = "";
       }
     }
+    // }
   }
 
   // getIdSignClick() {
@@ -848,6 +851,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     interact('.resize-drag').unset();
     interact('.not-out-drop').unset();
     interact.removeDocument(document);
+  }
+
+  disableText(e: any) {
+    return true;
   }
 
   // edit location doi tuong ky
