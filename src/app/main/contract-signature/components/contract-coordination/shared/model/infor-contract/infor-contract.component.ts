@@ -11,6 +11,7 @@ import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import { ContractService } from 'src/app/service/contract.service';
 import { DatePipe } from '@angular/common';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-infor-contract',
@@ -54,12 +55,14 @@ export class InforContractComponent implements OnInit {
   //error
   errorContractName:any = '';
   errorContractFile:any = '';
+  infor_contract: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private uploadService : UploadService,
     private contractService: ContractService,
     public datepipe: DatePipe,
+    private router: Router,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -82,12 +85,12 @@ export class InforContractComponent implements OnInit {
   };
   ngOnInit(): void {
 
-    this.name = this.datas.name ? this.datas.name : '';
-    this.code = this.datas.code ? this.datas.code : '';
-    this.type_id = this.datas.type_id ? this.datas.type_id : '';
+    this.name = this.datas.infor_contract.name ? this.datas.infor_contract.name : '';
+    this.code = this.datas.infor_contract.code ? this.datas.infor_contract.code : '';
+    this.type_id = this.datas.infor_contract.type_id ? this.datas.infor_contract.type_id : '';
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : '';
     this.sign_time = this.datas.sign_time ? this.datas.sign_time : new Date();
-    this.notes = this.datas.notes ? this.datas.notes : '';
+    this.notes = this.datas.infor_contract.notes ? this.datas.infor_contract.notes : '';
 
     this.contractTypeList = [
       {
@@ -284,6 +287,11 @@ export class InforContractComponent implements OnInit {
     // this.datas.documents.document.step = step;
     this.datas.stepLast = step;
     this.stepChangeInfoContract.emit(step);
+  }
+
+  changeAddContract(link:any){
+    console.log(link);
+    this.router.navigate([link]);
   }
 
 
