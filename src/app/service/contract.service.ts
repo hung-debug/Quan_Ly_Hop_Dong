@@ -29,6 +29,7 @@ export class ContractService {
   addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+  changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
 
   token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
@@ -160,6 +161,15 @@ export class ContractService {
     const body = "";
     console.log(headers);
     return this.http.put<Contract>(this.addConfirmContractUrl + datas.id + '/start-bpm', body, {'headers': headers});
+  }
+
+  changeStatusContract(datas: any, statusNew:any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = "";
+    console.log(headers);
+    return this.http.post<Contract>(this.changeStatusContractUrl + datas.id + '/change-status/' + statusNew, body, {'headers': headers});
   }
 
   objDefaultSampleContract() {

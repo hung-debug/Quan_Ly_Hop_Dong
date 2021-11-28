@@ -188,10 +188,11 @@ export class ConfirmInforContractComponent implements OnInit {
 
   callAPI() {
     //call API step confirm
-    this.contractService.addConfirmContract(this.datas).subscribe((data) => {
+    //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
+    this.contractService.changeStatusContract(this.datas, 10).subscribe((data) => {
 
       console.log(JSON.stringify(data));
-      this.router.navigate(['/main/contract/create/draft']);
+      this.router.navigate(['/main/contract/create/processing']);
     },
     error => {
       console.log("false content");
