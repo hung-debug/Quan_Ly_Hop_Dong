@@ -211,8 +211,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     // convert base64 file pdf to url
-    // this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
-    this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
+    this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+    // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
     // render pdf to canvas
     this.getPage();
 
