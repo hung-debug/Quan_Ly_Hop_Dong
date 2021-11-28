@@ -11,7 +11,7 @@ export class PipeTrs implements PipeTransform {
     if(value == 0){
       return 'Lưu nháp';
     }else if(value == 10){
-      return 'Đã được tạo và đưa vào quy trình xử lý nghiệp vụ';
+      return 'Hoàn thành tạo hợp đồng';
     }else if(value == 20){
       return 'Đang xử lý';
     }else if(value == 30){
