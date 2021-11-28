@@ -12,6 +12,7 @@ import {getYear} from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import {DatePipe} from '@angular/common';
 import {Router} from '@angular/router';
+import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
   selector: 'app-infor-contract',
@@ -63,6 +64,7 @@ export class InforContractComponent implements OnInit {
     private contractService: ContractService,
     public datepipe: DatePipe,
     private router: Router,
+    private toastService : ToastService,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -315,6 +317,73 @@ export class InforContractComponent implements OnInit {
 
       this.callAPI();
     }
+  }
+
+  saveDraff() {
+    if (!this.validData()) return;
+    else {
+      // gán value step 1 vào datas
+      this.datas.name = this.name;
+      this.datas.code = this.code;
+      this.datas.type_id = this.type_id;
+      this.datas.contractConnect = this.contractConnect;
+      this.datas.sign_time = this.sign_time;
+      this.datas.notes = this.notes;
+
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(this.datas.contractFile);
+      fileReader.onload = (e) => {
+        //@ts-ignore
+        const base64result = fileReader.result.toString().split(',')[1];
+        this.datas.file_content = base64result;
+      };
+
+      this.callAPI_Draff();
+    }
+  }
+
+  callAPI_Draff() {
+    //call API step 1
+    this.contractService.addContractStep1(this.datas).subscribe((data) => {
+        this.datas.id = data?.id;
+        this.datas.contract_id = data?.id;
+        console.log(data);
+
+        //call API upload file
+        this.uploadService.uploadFile(this.datas).subscribe((data) => {
+            console.log(data);
+            console.log("File " + data.success);
+            this.datas.filePath = data.fileObject.filePath;
+            console.log(this.datas.filePath);
+            console.log(JSON.stringify(data));
+
+            this.contractService.addDocument(this.datas).subscribe((data) => {
+                console.log(JSON.stringify(data));
+
+                //next step
+                this.router.navigate(['/main/contract/create/draff']);
+                this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 10000);
+
+              },
+              error => {
+                console.log("false connect file");
+                return false;
+              }
+            );
+          },
+          error => {
+            console.log("false file");
+            return false;
+          }
+        );
+
+      },
+      error => {
+        console.log("false content");
+        return false;
+      }
+    );
+
   }
 
   // forward data component
