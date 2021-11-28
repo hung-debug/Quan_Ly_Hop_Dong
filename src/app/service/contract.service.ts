@@ -470,9 +470,7 @@ export class ContractService {
           }
         ],
         // "contract_id": 1
-      },
-        "contract_id": 1
-      },
+      }
       // {
       //   "name": "Đối tác cá nhân",
       //   "type": 3, // Đối tác cá nhân

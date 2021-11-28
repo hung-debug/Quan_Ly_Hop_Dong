@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, Observable } from 'rxjs';
-import {map, catchError, tap} from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 export interface User {
@@ -29,34 +29,24 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) { }
 
+
   loginAuthencation(username: string, password: string) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
     const body = JSON.stringify({email: username, password: password});
 
-    this.http.post<any>(this.loginUrl, body).subscribe(
-      (res: any) => {
-        console.log(res);
-      },( err: any) => console.log(err)
-    )
-  }
-
- loginAuthencation1(username: string, password: string) {
-    const headers = new HttpHeaders().append('Content-Type', 'application/json');
-    const body = JSON.stringify({email: username, password: password});
-
     return this.http.post<User>(this.loginUrl, body, {'headers':headers})
-       .pipe(
-          map((user) => {
-            if (JSON.parse(JSON.stringify(user)).access_token != '') {
-              localStorage.setItem('currentUser', JSON.stringify(user));
-              return user;
-            }else{
-              console.log(JSON.stringify(user));
-              return null;
-            }
-         }),
-         catchError(this.handleError)
-       );
+      .pipe(
+        map((user) => {
+          if (JSON.parse(JSON.stringify(user)).access_token != '') {
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            return user;
+          }else{
+            console.log(JSON.stringify(user));
+            return null;
+          }
+        }),
+        catchError(this.handleError)
+      );
   }
 
   isLoggedInSuccess() {
