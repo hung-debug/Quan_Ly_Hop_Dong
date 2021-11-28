@@ -134,6 +134,15 @@ export class ContractService {
       );
   }
 
+  getListDataCoordination(id: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({type: id});
+    let listContractUrl = this.addConfirmContractUrl + id;
+    return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();
+  }
+
   addDocument(datas: any) {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')

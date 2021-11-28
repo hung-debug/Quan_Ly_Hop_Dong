@@ -99,6 +99,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   ngOnInit() {
+    console.log(this.datas);
     this.scale = 1;
     if (!this.signCurent) {
       this.signCurent = {

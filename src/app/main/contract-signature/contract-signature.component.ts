@@ -10,6 +10,8 @@ import locale from 'date-fns/locale/en-US';
 import {ContractSignatureService} from "../../service/contract-signature.service";
 import {CONTRACT_RECEIVE_COORDINATOR} from "./model/contract-model";
 import {variable} from "../../config/variable";
+import {HttpClient} from "@angular/common/http";
+import {ContractService} from "../../service/contract.service";
 @Component({
   selector: 'app-contract',
   templateUrl: './contract-signature.component.html',
@@ -62,8 +64,9 @@ export class ContractSignatureComponent implements OnInit {
   constructor(private modalService: NgbModal,
               private appService: AppService,
               private contractService: ContractSignatureService,
+              public isContractService: ContractService,
               private route: ActivatedRoute,
-              private router: Router,
+              private router: Router
     ) {
     this.constantModel = contractModel;
   }
@@ -188,10 +191,16 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openCoordinatorContract(id:number) {
-    if (!localStorage.getItem('data_coordinates_contract')) {
-      localStorage.setItem('data_coordinates_contract', JSON.stringify({data_coordinates: this.datas}));
-    }
-   void this.router.navigate(['main/contract-signature/receive/wait-processing/coordinates-contract/' + id]);
+    this.isContractService.getListDataCoordination(44).subscribe((res: any) => {
+      console.log(res);
+      if (!localStorage.getItem('data_coordinates_contract')) {
+        let data_coordination = {...this.datas, ...res};
+        localStorage.setItem('data_coordinates_contract', JSON.stringify({data_coordinates: data_coordination}));
+      }
+      this.router.navigate(['main/contract-signature/receive/wait-processing/coordinates-contract/' + id]);
+    }, (res: any) => {
+      alert('Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý!')
+    })
   }
 
   openSecretaryContract(id:number) {
