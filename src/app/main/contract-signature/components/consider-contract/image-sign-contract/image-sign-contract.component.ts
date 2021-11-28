@@ -33,18 +33,17 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
         if (currentUser != null) {
           const cu = JSON.parse(currentUser);
           console.log(localStorage.getItem('currentUser'));
-          const isShowImage = this.datas.userForm.userSigns.some((userE: any) => { return cu.email === this.sign.email});
+          // const isShowImage = this.datas.userForm.userSigns.some((userE: any) => { return cu.email === this.sign.email});
           console.log('okok', imageStr);
-          if (isShowImage) {
-            this.imageSignConfirm = imageStr;
-          }
+          // if (isShowImage) {
+          //   this.imageSignConfirm = imageStr;
+          // }
           return true;
         }
       });
   }
 
   ngAfterViewInit() {
-    // console.log(this.sign)
     if (this.sign.sign_unit == 'so_tai_lieu' || this.sign.sign_unit == 'text') {
       setTimeout(() => {
         // @ts-ignore
