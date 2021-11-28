@@ -26,6 +26,7 @@ export class ContractService {
   listContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
   addContractUrl: any = `${environment.apiUrl}/api/v1/contracts`;
   addDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/contract/`;
+  addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
 
@@ -85,6 +86,24 @@ export class ContractService {
     console.log(headers);
     console.log(body);
     return this.http.post<Contract>(this.addContractUrl, body, {'headers': headers})
+      .pipe(
+        map((contract) => {
+          if (JSON.parse(JSON.stringify(contract)).id != 0) {
+            return contract;
+          } else {
+            return null;
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getContractSample(data_sample_contract: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify(data_sample_contract);
+    return this.http.post<Contract>(this.addSampleCntractUrl, body, {'headers': headers})
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {

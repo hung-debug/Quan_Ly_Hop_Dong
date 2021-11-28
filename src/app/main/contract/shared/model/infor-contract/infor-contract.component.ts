@@ -249,6 +249,7 @@ export class InforContractComponent implements OnInit {
     //call API step 1
     this.contractService.addContractStep1(this.datas).subscribe((data) => {
         this.datas.id = data?.id;
+        this.datas.contract_id = data?.id;
         console.log(data);
 
         //call API upload file
@@ -264,6 +265,7 @@ export class InforContractComponent implements OnInit {
 
                 //next step
                 this.step = variable.stepSampleContract.step2;
+                this.datas.document_id = data?.id;
                 this.datas.stepLast = this.step;
                 // this.datas.document_id = '1';
                 this.nextOrPreviousStep(this.step);

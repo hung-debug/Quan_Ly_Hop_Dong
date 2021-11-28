@@ -146,21 +146,25 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //   this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
     // } else {
       // let data_defind = this.data_api_step3;
+
+
+
+
       let data_sign_config_cks = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
       let data_sign_config_cka = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-      let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
-      let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+      // let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
+      // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
 
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
       this.datas.contract_user_sign.forEach((element: any) => {
         console.log(element.sign_unit, element.sign_config);
         if(element.sign_unit == 'so_tai_lieu') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+          // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
         } else if (element.sign_unit == 'chu_ky_so') {
           Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
         } else if (element.sign_unit == 'text') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+          // Array.prototype.push.apply(element.sign_config, data_sign_config_text);
         } else if (element.sign_unit == 'chu_ky_anh') {
           Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
         }
@@ -966,8 +970,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             isObjSign.signature_party = data_name.type_unit;
             signElement.setAttribute("signature_party", isObjSign.signature_party);
 
-            isObjSign.recipient_id = data_name.recipient_id;
+            isObjSign.recipient_id = data_name.id;
             signElement.setAttribute("recipient_id", isObjSign.recipient_id);
+
+            isObjSign.status = data_name.status;
+            signElement.setAttribute("status", isObjSign.status);
           }
         }
         // console.log(this.signCurent)
@@ -1010,18 +1017,46 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.contract_user_sign.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {
+            item['font'] = 'Aria';
+            item['font_size'] = 14;
+            if (!item.type) {
+              item['type'] = 1;
+            }
+            item['contract_id'] = this.datas.contract_id;
+            item['document_id'] = this.datas.document_id;
+            // item['recipient_id'] = element.id;
             delete item.id;
+            delete item.sign_unit;
+            delete item.position;
+            delete item.left;
+            delete item.top;
+            delete item.position;
+            delete item.text_attribute_name;
+            delete item.signature_party;
           })
           Array.prototype.push.apply(data_sample_contract, element.sign_config);
         }
       })
 
-      // Đây là dữ liệu mảng request truyền lên cho server
       console.log(data_sample_contract);
+      this.contractService.getContractSample(data_sample_contract).subscribe((data) => {
+          console.log(JSON.stringify(data));
 
-      // this.step = variable.stepSampleContract.step4;
-      // this.datas.stepLast = this.step
-      // this.nextOrPreviousStep(this.step);
+
+          this.step = variable.stepSampleContract.step4;
+          this.datas.stepLast = this.step
+          this.nextOrPreviousStep(this.step);
+
+        },
+        error => {
+          console.log("false connect file");
+          return false;
+        }
+      );
+      // Đây là dữ liệu mảng request truyền lên cho server
+
+
+
     }
   }
 
