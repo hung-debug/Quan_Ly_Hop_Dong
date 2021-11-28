@@ -319,7 +319,7 @@ export class InforContractComponent implements OnInit {
     }
   }
 
-  saveDraff() {
+  saveDraft() {
     if (!this.validData()) return;
     else {
       // gán value step 1 vào datas
@@ -338,11 +338,11 @@ export class InforContractComponent implements OnInit {
         this.datas.file_content = base64result;
       };
 
-      this.callAPI_Draff();
+      this.callAPI_Draft();
     }
   }
 
-  callAPI_Draff() {
+  callAPI_Draft() {
     //call API step 1
     this.contractService.addContractStep1(this.datas).subscribe((data) => {
         this.datas.id = data?.id;
