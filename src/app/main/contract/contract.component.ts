@@ -28,11 +28,14 @@ export class ContractComponent implements OnInit {
   statusPopup:number = 1;
   notificationPopup:string = '';
 
+  title:any="";
+
   //filter contract
   filter_type:any = "";
   filter_contract_no:any = "";
   filter_from_date:any = "";
   filter_to_date:any = "";
+  filter_status:any="";
 
   // options sample with default values
   options: DatepickerOptions = {
@@ -82,6 +85,8 @@ export class ContractComponent implements OnInit {
       this.status = params['status'];
 
       //set title
+      this.convertStatusStr();
+
       this.appService.setTitle(this.convertActionStr());
 
       this.getContractList();
@@ -94,13 +99,32 @@ export class ContractComponent implements OnInit {
   private getContractList(){
     this.p = 1;
     //get list contract
-    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
+    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = this.contracts.length;
+      console.log(this.contracts);
       if(this.pageTotal == 0){
         this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      }else{
+        this.setPage();
       }
-      this.setPage();
+      this.contracts.forEach((key : any, v: any) => {
+        let participants = key.participants;
+        console.log(participants);
+        participants.forEach((key : any, val: any) => {
+          if (key.type == 1) {
+            this.contracts[v].sideA = key.name;
+          }else{
+            this.contracts[v].sideB = key.name;
+          }
+          console.log(this.contracts[v].sideA);
+        })
+      });
+
+
+
       console.log(this.contracts);
       console.log(this.pageTotal);
     });
@@ -119,27 +143,32 @@ export class ContractComponent implements OnInit {
     }
   }
 
-  private convertStatusStr(): string{
+  private convertStatusStr(){
     if(this.status == 'draft'){
-      return 'contract.status.draft';
+      this.filter_status = 0;
+      this.title = 'contract.status.draft';
     }else if(this.status == 'wait-processing'){
-      return 'contract.status.wait-processing';
+      this.title = 'contract.status.wait-processing';
     }else if(this.status == 'processing'){
-      return 'contract.status.processing';
+      this.filter_status = 20;
+      this.title = 'contract.status.processing';
     }else if(this.status == 'processed'){
-      return 'contract.status.processed';
+      this.title = 'contract.status.processed';
     }else if(this.status == 'expire'){
-      return 'contract.status.expire';
+      this.title = 'contract.status.expire';
     }else if(this.status == 'overdue'){
-      return 'contract.status.overdue';
+      this.title = 'contract.status.overdue';
     }else if(this.status == 'fail'){
-      return 'contract.status.fail';
+      this.filter_status = 31;
+      this.title = 'contract.status.fail';
     }else if(this.status == 'cancel'){
-      return 'contract.status.cancel';
+      this.filter_status = 32;
+      this.title = 'contract.status.cancel';
     }else if(this.status == 'complete'){
-      return 'contract.status.complete';
+      this.filter_status = 30;
+      this.title = 'contract.status.complete';
     }else{
-      return '';
+      this.title = '';
     }
   }
 
@@ -157,13 +186,16 @@ export class ContractComponent implements OnInit {
 
   autoSearch(event:any){
     this.p = 1;
-    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date).subscribe(data => {
+    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
       this.contracts = this.transform(data.entities, event);
       this.pageTotal = this.contracts.length;
       if(this.pageTotal == 0){
         this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      }else{
+        this.setPage();
       }
-      this.setPage();
     });
   }
 

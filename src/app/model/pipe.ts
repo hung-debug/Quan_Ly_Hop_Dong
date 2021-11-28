@@ -15,7 +15,7 @@ export class PipeTrs implements PipeTransform {
     }else if(value == 20){
       return 'Đang xử lý';
     }else if(value == 30){
-      return 'Đã ký (hoàn thành)';
+      return 'Hoàn thành';
     }else if(value == 31){
       return 'Từ chối';
     }else if(value == 32){
