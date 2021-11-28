@@ -15,6 +15,7 @@ export interface Contract {
 export class ContractSignatureService {
 
   addContractUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
+
   errorData:any = {};
   redirectUrl: string = '';
   public imageSignObs$: BehaviorSubject<string> = new BehaviorSubject('');

@@ -5,6 +5,7 @@ import {environment} from '../../environments/environment';
 import {map, catchError, retry} from 'rxjs/operators';
 import {Helper} from "../core/Helper";
 import {DatePipe} from '@angular/common';
+import {forkJoin} from "rxjs";
 
 export interface Contract {
   id: number,
@@ -29,6 +30,10 @@ export class ContractService {
   addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+  addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
+  addGetFileContract:any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
+  addGetObjectSignature:any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
+
 
   token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
@@ -170,6 +175,22 @@ export class ContractService {
     console.log(headers);
     return this.http.put<Contract>(this.addConfirmContractUrl + datas.id + '/start-bpm', body, {'headers': headers});
   }
+
+
+  getDetailContract() {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let arrApi = [];
+    arrApi = [
+      this.http.get<Contract[]>(this.addGetDataContract + 44, {headers}),
+      this.http.get<Contract[]>(this.addGetFileContract + 155, {headers}),
+      this.http.get<Contract[]>(this.addGetObjectSignature + 44, {headers}),
+    ];
+    return forkJoin(arrApi);
+  }
+
+
 
   objDefaultSampleContract() {
     return {

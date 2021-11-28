@@ -167,7 +167,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       // this.getListSignName(data_list_user_sign);
     // }
 
-    // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
     this.pdfSrc = Helper._getUrlPdf(this.datas.infor_contract.file_content);
     this.getPage();
   }
