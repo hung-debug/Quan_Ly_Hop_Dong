@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
     public translate: TranslateService,
   ) {
 
-   }
+  }
 
   loginForm = new FormGroup({
     tax_code: new FormControl(''),
@@ -41,8 +41,21 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('currentUser', '{"username":"admin","email": "phamvanlambvo@gmail.com"}');
         this.error  = false;
         this.router.navigate(['/main/dashboard']);
-      }else {
-        this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password);
+      }else{
+        this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password).subscribe((data) => {
+            if (this.authService.isLoggedInSuccess() == true) {
+              this.error  = false;
+              this.router.navigate(['/main/dashboard']);
+            } else {
+              this.error  = true;
+              this.errorDetail = "Tên đăng nhập hoặc mật khẩu không đúng";
+            }
+          },
+          error => {
+            this.error = true;
+            this.errorDetail = "Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý";
+          }
+        );
       }
     }
   }
