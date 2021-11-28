@@ -822,7 +822,6 @@
     </div>
   </div>
 
-
   <!--  Đối tác-->
   <div class="contract-determine" *ngFor="let item of this.data_parnter_organization" style="display: flex">
     <div class="col-md-1">
@@ -834,87 +833,27 @@
         <input type="text" [(ngModel)]="item.name">
       </div>
       <div class="contract__content--participants">
-        <!--          <div class="row">-->
-        <!--            <div class="radio label_type">-->
-        <!--              <label><input type="radio" name="type" checked>-->
-        <!--                <span> {{'organization' | translate}}</span></label>-->
-        <!--            </div>-->
-        <!--            <div class="radio label_type">-->
-        <!--              <label><input type="radio" name="type">-->
-        <!--                <span> {{'personal' | translate}}</span></label>-->
-        <!--            </div>-->
-        <!--          </div>-->
-        <div class="participants-border">
-          <div class="label">Người điều phối</div>
-          <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
-            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering" disabled>
-            <div class="col-md-10 participants--input" style="display: flex; margin-bottom: 14px">
-              <div class="participants__name">
-                <div class="label text-color">Họ tên: *</div>
-                <div class="input-data">
-                  <img src="assets/img/icon_name.svg" class="input-img">
-                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
-                </div>
-              </div>
-              <div class="participants__name">
-                <div class="label text-color">Email: *</div>
-                <div class="input-data">
-                  <img src="assets/img/login_email.svg" class="input-img">
-                  <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-1 delete-element" (click)="deletePartnerCoordination(index, item)">
-              <img src="assets/img/border_close.svg" alt="close.vn">
-              <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
-            </div>
+        <div class="row">
+          <div class="radio col-md-6 label_type">
+            <label><input type="radio" name="type" [value]="2" [(ngModel)]="item.type">
+              <span> {{'organization' | translate}}</span></label>
+          </div>
+          <div class="radio col-md-6 label_type">
+            <label><input type="radio" name="type" [value]="3" [(ngModel)]="item.type">
+              <span> {{'personal' | translate}}</span></label>
           </div>
         </div>
-
-        <div class="participants-border">
-          <div class="label">Người xem xét</div>
-          <div class="participants--content" *ngFor="let d of getPartnerReviewer(item); let index = index">
-            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
-                   [(ngModel)]="d.ordering" disabled>
-            <div class="col-md-10 participants--input">
-              <div class="participants__name">
-                <div class="label text-color">Họ tên: *</div>
-                <div class="input-data">
-                  <img src="assets/img/icon_name.svg" class="input-img">
-                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
-                </div>
-              </div>
-              <div class="participants__name">
-                <div class="label text-color">Email: *</div>
-                <div class="input-data">
-                  <img src="assets/img/login_email.svg" class="input-img">
-                  <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-1 delete-element" (click)="deletePartnerReviewer(index, item)">
-              <img src="assets/img/border_close.svg" alt="close.vn">
-              <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
-            </div>
-          </div>
-          <div class="participants--add">
-            <u class="label text-color" (click)="addPartnerReviewer(item)">Thêm người xem xét</u>
-          </div>
-        </div>
-
-        <div class="participants-border">
-          <div class="label">Người ký</div>
-          <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
-            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
-                   [(ngModel)]="d.ordering" disabled>
-            <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
-              <div class="participants--input" style="display: flex">
+        <div *ngIf="item.type==2">
+          <div class="participants-border">
+            <div class="label">Người điều phối</div>
+            <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
+              <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering" disabled>
+              <div class="col-md-10 participants--input" style="display: flex; margin-bottom: 14px">
                 <div class="participants__name">
                   <div class="label text-color">Họ tên: *</div>
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
-                    <input  [id]="'signature-partner-' + d.ordering" type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+                    <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                   </div>
                 </div>
                 <div class="participants__name">
@@ -925,92 +864,222 @@
                   </div>
                 </div>
               </div>
-              <div class="participants--input select-text-input" style="display: flex">
-                <div class="participants__name">
-                  <div class="label text-color">Loại ký: *</div>
 
-                  <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList">
-                    <ng-template #optionsTemplate let-item let-option="option"
-                                 let-id="id" let-isSelected="isSelected">
-                      <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                        <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
-                          {{getContractConnectItems[id].name}}
-                        </label>
-                      </div>
-                    </ng-template>
-                  </ng-multiselect-dropdown>
-
-<!--                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">-->
-<!--                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'get_partner_signature', getPartnerSignature(item), index)">-->
-<!--                      <mat-option *ngFor="let topping of signTypeList; let i = index" [value]="topping.id">{{topping.name}}</mat-option>-->
-<!--                    </mat-select>-->
-<!--                  </mat-form-field>-->
-                </div>
-                <div class="participants-otp">
-                  <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
-                  <span class="label text-color">OTP</span>
-                </div>
-                <div class="participants__name">
-                  <div class="label text-color">Số điện thoại: *</div>
-                  <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
-                </div>
+              <div class="col-md-1 delete-element" (click)="deletePartnerCoordination(index, item)">
+                <img src="assets/img/border_close.svg" alt="close.vn">
+                <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
               </div>
             </div>
-            <div class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
-              <img src="assets/img/border_close.svg" alt="close.vn">
-              <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
-            </div>
           </div>
-          <div class="participants--add">
-            <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item)">Thêm người ký</u>
-          </div>
-        </div>
 
-        <div class="participants-border">
-          <div class="label">Văn thư</div>
-          <div class="participants--content">
-            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
-                   [(ngModel)]="getPartnerDocument(item).ordering" disabled>
-            <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
-              <div class="participants--input" style="display: flex">
+          <div class="participants-border">
+            <div class="label">Người xem xét</div>
+            <div class="participants--content" *ngFor="let d of getPartnerReviewer(item); let index = index">
+              <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                    [(ngModel)]="d.ordering" disabled>
+              <div class="col-md-10 participants--input">
                 <div class="participants__name">
                   <div class="label text-color">Họ tên: *</div>
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
-                    <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="getPartnerDocument(item).name">
+                    <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                   </div>
                 </div>
                 <div class="participants__name">
                   <div class="label text-color">Email: *</div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="Nhập Email" [(ngModel)]="getPartnerDocument(item).email">
+                    <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
                   </div>
                 </div>
               </div>
-
-              <div class="participants-information">
-                <div class="participants-signature-type">
-                  <div class="label text-color">Loại ký: *</div>
-
-                  <ng-multiselect-dropdown [(ngModel)]="getPartnerDocument(item).sign_type" placeholder="{{'choose' | translate }}"
-                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList">
-                    <ng-template #optionsTemplate let-item let-option="option"
-                                 let-id="id" let-isSelected="isSelected">
-                      <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                        <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
-                          {{getContractConnectItems[id].name}}
-                        </label>
-                      </div>
-                    </ng-template>
-                  </ng-multiselect-dropdown>
-
-                </div>
+              <div class="col-md-1 delete-element" (click)="deletePartnerReviewer(index, item)">
+                <img src="assets/img/border_close.svg" alt="close.vn">
+                <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
               </div>
             </div>
-            <div class="col-md-1"></div>
+            <div class="participants--add">
+              <u class="label text-color" (click)="addPartnerReviewer(item)">Thêm người xem xét</u>
+            </div>
           </div>
+
+          <div class="participants-border">
+            <div class="label">Người ký</div>
+            <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
+              <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                    [(ngModel)]="d.ordering" disabled>
+              <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
+                <div class="participants--input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label text-color">Họ tên: *</div>
+                    <div class="input-data">
+                      <img src="assets/img/icon_name.svg" class="input-img">
+                      <input  [id]="'signature-partner-' + d.ordering" type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+                    </div>
+                  </div>
+                  <div class="participants__name">
+                    <div class="label text-color">Email: *</div>
+                    <div class="input-data">
+                      <img src="assets/img/login_email.svg" class="input-img">
+                      <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+                    </div>
+                  </div>
+                </div>
+                <div class="participants--input select-text-input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label text-color">Loại ký: *</div>
+
+                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
+                                            [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                      <ng-template #optionsTemplate let-item let-option="option"
+                                  let-id="id" let-isSelected="isSelected">
+                        <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                          <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                            {{getContractConnectItems[id].name}}
+                          </label>
+                        </div>
+                      </ng-template>
+                    </ng-multiselect-dropdown>
+
+  <!--                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">-->
+  <!--                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'get_partner_signature', getPartnerSignature(item), index)">-->
+  <!--                      <mat-option *ngFor="let topping of signTypeList; let i = index" [value]="topping.id">{{topping.name}}</mat-option>-->
+  <!--                    </mat-select>-->
+  <!--                  </mat-form-field>-->
+                  </div>
+                  <div class="participants-otp">
+                    <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
+                    <span class="label text-color">OTP</span>
+                  </div>
+                  <div class="participants__name">
+                    <div class="label text-color">Số điện thoại: *</div>
+                    <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
+                <img src="assets/img/border_close.svg" alt="close.vn">
+                <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
+              </div>
+            </div>
+            <div class="participants--add">
+              <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item)">Thêm người ký</u>
+            </div>
+          </div>
+
+          <div class="participants-border">
+            <div class="label">Văn thư</div>
+            <div class="participants--content">
+              <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                    [(ngModel)]="getPartnerDocument(item).ordering" disabled>
+              <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
+                <div class="participants--input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label text-color">Họ tên: *</div>
+                    <div class="input-data">
+                      <img src="assets/img/icon_name.svg" class="input-img">
+                      <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="getPartnerDocument(item).name">
+                    </div>
+                  </div>
+                  <div class="participants__name">
+                    <div class="label text-color">Email: *</div>
+                    <div class="input-data">
+                      <img src="assets/img/login_email.svg" class="input-img">
+                      <input type="text" placeholder="Nhập Email" [(ngModel)]="getPartnerDocument(item).email">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="participants-information">
+                  <div class="participants-signature-type">
+                    <div class="label text-color">Loại ký: *</div>
+
+                    <ng-multiselect-dropdown [(ngModel)]="getPartnerDocument(item).sign_type" placeholder="{{'choose' | translate }}"
+                                            [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                      <ng-template #optionsTemplate let-item let-option="option"
+                                  let-id="id" let-isSelected="isSelected">
+                        <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                          <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                            {{getContractConnectItems[id].name}}
+                          </label>
+                        </div>
+                      </ng-template>
+                    </ng-multiselect-dropdown>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-1"></div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="item.type==3">
+          <div class="participants-border">
+            <div class="label">Người ký</div>
+            <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
+              <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                    [(ngModel)]="d.ordering" disabled>
+              <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
+                <div class="participants--input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label text-color">Họ tên: *</div>
+                    <div class="input-data">
+                      <img src="assets/img/icon_name.svg" class="input-img">
+                      <input  [id]="'signature-partner-' + d.ordering" type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+                    </div>
+                  </div>
+                  <div class="participants__name">
+                    <div class="label text-color">Email: *</div>
+                    <div class="input-data">
+                      <img src="assets/img/login_email.svg" class="input-img">
+                      <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+                    </div>
+                  </div>
+                </div>
+                <div class="participants--input select-text-input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label text-color">Loại ký: *</div>
+
+                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
+                                            [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                      <ng-template #optionsTemplate let-item let-option="option"
+                                  let-id="id" let-isSelected="isSelected">
+                        <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                          <label style="color: #333; font-weight: normal;" [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                            {{getContractConnectItems[id].name}}
+                          </label>
+                        </div>
+                      </ng-template>
+                    </ng-multiselect-dropdown>
+
+  <!--                  <mat-form-field appearance="fill" style="background-color: white; width: 100%">-->
+  <!--                    <mat-select [formControl]="toppings" multiple style="background-color: white" (valueChange)="getOriganzationTypeSign($event, 'get_partner_signature', getPartnerSignature(item), index)">-->
+  <!--                      <mat-option *ngFor="let topping of signTypeList; let i = index" [value]="topping.id">{{topping.name}}</mat-option>-->
+  <!--                    </mat-select>-->
+  <!--                  </mat-form-field>-->
+                  </div>
+                  <div class="participants-otp">
+                    <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
+                    <span class="label text-color">OTP</span>
+                  </div>
+                  <div class="participants__name">
+                    <div class="label text-color">Số điện thoại: *</div>
+                    <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
+                <img src="assets/img/border_close.svg" alt="close.vn">
+                <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
+              </div>
+            </div>
+            <div class="participants--add">
+              <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item)">Thêm người ký</u>
+            </div>
+          </div>
+
+
         </div>
       </div>
     </div>

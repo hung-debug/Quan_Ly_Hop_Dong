@@ -6,6 +6,7 @@ import {AppService} from '../service/app.service';
 import { UserService } from '../service/user.service';
 import {SidebarService} from './sidebar/sidebar.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastService } from '../service/toast.service';
 
 @Component({
   selector: 'app-main',
@@ -37,7 +38,8 @@ export class MainComponent implements OnInit {
               public sidebarservice: SidebarService,
               private userService: UserService,
               private changeDetectorRef: ChangeDetectorRef,
-              public translate: TranslateService) {
+              public translate: TranslateService,
+              private toastService : ToastService) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang('vi');
@@ -130,23 +132,23 @@ export class MainComponent implements OnInit {
         this.error = true;
         this.errorDetail = 'Xác nhận mật khẩu mới không khớp!';
       }else{
-        this.error = false;
-        this.userService.sendResetPasswordToken("", passwordOld, passwordNew).subscribe((data) => {
-
+        this.userService.sendResetPasswordToken(passwordOld, passwordNew).subscribe((data) => {
+          this.error = false;
           if(data != null){
             this.status = 1;
           }else{
             this.status = 0;
           }
           if(this.status == 0){
-            this.notification = 'Đổi mật khẩu mới thất bại!';
+            this.toastService.showErrorHTMLWithTimeout("Đổi mật khẩu mới thất bại!", "", 10000);
           }else{
-            this.notification = 'Đổi mật khẩu mới thành công. Vui lòng đăng nhập để tiếp tục!';
+            this.toastService.showSuccessHTMLWithTimeout("Đổi mật khẩu mới thành công. Vui lòng đăng nhập để tiếp tục!", "", 10000);
+            this.logout();
           }
         },
         (error:any) => {
           this.status = 0;
-          this.notification = 'Đổi mật khẩu mới thất bại!';
+          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để được xử lý", "", 10000);
         }
         );
       }

@@ -63,7 +63,7 @@ export class DetermineSignerComponent implements OnInit {
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4)[0];
 
     // data đối tác
-    this.data_parnter_organization = this.is_determine_clone.filter((p: any) => p.type == 2);
+    this.data_parnter_organization = this.is_determine_clone.filter((p: any) => (p.type == 2 ||  p.type == 3));
     // this.is_partner_origanzation_coordinator= this.data_parnter_organization.recipients.filter((p: any) => p.role == 2);
     // this.is_partner_origanzation_reviewer= this.data_parnter_organization.recipients.filter((p: any) => p.role == 1);
     // this.is_partner_origanzation_signature = this.data_parnter_organization.recipients.filter((p: any) => p.role == 3);
@@ -609,7 +609,7 @@ export class DetermineSignerComponent implements OnInit {
 // tạo mảng đối tác
   getDataPartner(number_type?: number, name?: string) {
     let data = [...this.is_determine_clone];
-    return data.filter((p: any) => p.type == 2);
+    return data.filter((p: any) => (p.type == 2 ||  p.type == 3));
   }
 
   getOriganzationDocument() {
@@ -660,7 +660,7 @@ export class DetermineSignerComponent implements OnInit {
   addPartnerReviewer(item: any) {
     let data_determine_add = [];
     data_determine_add = [...this.contractService.getDataDetermine()];
-    let data_partner = data_determine_add.filter((p: any) => p.type == 2)[0];
+    let data_partner = data_determine_add.filter((p: any) => (p.type == 2 ||  p.type == 3))[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 1))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 1);
     data.ordering = count_data.length + 1;
@@ -673,7 +673,7 @@ export class DetermineSignerComponent implements OnInit {
   addPartnerSignature(item: any) {
     let data_determine_add = [];
     data_determine_add = [...this.contractService.getDataDetermine()];
-    let data_partner = data_determine_add.filter((p: any) => p.type == 2)[0];
+    let data_partner = data_determine_add.filter((p: any) => (p.type == 2 || p.type == 3))[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 3))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 3);
     data.ordering = count_data.length + 1;
@@ -779,7 +779,7 @@ export class DetermineSignerComponent implements OnInit {
     let data_partner_add = [];
     let data = [...this.contractService.getDataDetermine()];
     // return data.filter((p: any) => p.type == 2);
-    data_partner_add = data.filter((p: any) => p.type == 2);
+    data_partner_add = data.filter((p: any) => (p.type == 2 ||  p.type == 3));
     let count_data = data_partner_add[0];
     count_data.ordering = data_partner_add.length + 1;
     // this.is_determine_clone.push(count_data);

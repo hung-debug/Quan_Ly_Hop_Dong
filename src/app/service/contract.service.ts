@@ -471,67 +471,29 @@ export class ContractService {
         ],
         // "contract_id": 1
       },
-      {
-        "name": "Đối tác cá nhân",
-        "type": 3, // Đối tác cá nhân
-        "ordering": 1,
-        // "contract_id": 1,
-        status: 1,
-        "recipients": [
-          // người điều phối
-          {
-            "name": "",
-            "email": "",
-            "phone": "",
-            "role": 2, // người điều phối
-            "ordering": 1,
-            "status": 0,
-            "username": "",
-            "password": "",
-            "is_otp": 1,
-            "sign_type": []
-          },
-          // người xem xét
-          {
-            "name": "",
-            "email": "",
-            "phone": "",
-            "role": 1, // người xem xét
-            "ordering": 1,
-            "status": 0,
-            "username": "",
-            "password": "",
-            "is_otp": 1,
-            "sign_type": []
-          },
-          // người ký
-          {
-            "name": "",
-            "email": "",
-            "phone": "",
-            "role": 3, // người ký
-            "ordering": 1,
-            "status": 0,
-            "username": "",
-            "password": "",
-            "is_otp": 1,
-            "sign_type": []
-          },
-          // văn thư
-          {
-            "name": "",
-            "email": "",
-            "phone": "",
-            "role": 4, // văn thư
-            "ordering": 1,
-            "status": 0,
-            "username": "",
-            "password": "",
-            "is_otp": 1,
-            "sign_type": []
-          }
-        ],
-      }
+        "contract_id": 1
+      },
+      // {
+      //   "name": "Đối tác cá nhân",
+      //   "type": 3, // Đối tác cá nhân
+      //   "ordering": 1,
+      //   "contract_id": 1,
+      //   "recipients": [
+      //     // người ký
+      //     {
+      //       "name": "",
+      //       "email": "",
+      //       "phone": "",
+      //       "role": 3, // người ký
+      //       "ordering": 1,
+      //       "status": 1,
+      //       "username": "",
+      //       "password": "",
+      //       "is_otp": 1,
+      //       "sign_type": []
+      //     }
+      //   ],
+      // }
     ]
   }
 
