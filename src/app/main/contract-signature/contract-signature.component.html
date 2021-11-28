@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<!-- <div class="container-fluid">
 
   <mdb-tabs [fill]="true" >
     <mdb-tab title="Hợp đồng của tôi" value='mine' [ngClass]="{ 'active':type==='mine'}" *ngIf="action=='create'"></mdb-tab>
@@ -182,4 +182,225 @@
       style="padding: 5px; width: 100px; background: #106DB6; color: white; border: 1px solid #87CAFF;">Ok</button>
     </div>
   </div>
+</ng-template> -->
+
+
+<div class="container-fluid">
+
+  <mdb-tabs [fill]="true" >
+    <mdb-tab title="{{'contract.me' | translate}}" value='mine' [ngClass]="{ 'active':type==='mine'}" *ngIf="action=='create'"></mdb-tab>
+    <mdb-tab title="{{'contract.organization' | translate}}" value='my-org' [ngClass]="{ 'active':type==='my-org'}" *ngIf="action=='create'"></mdb-tab>
+    <mdb-tab title="{{'contract.wait-for-me' | translate}}" value='wait-for-me' [ngClass]="{ 'active':type==='wait-for-me'}" *ngIf="action=='receive'"></mdb-tab>
+    <mdb-tab title="{{'contract.share-for-me' | translate}}" value='share-for-me' [ngClass]="{ 'active':type==='share-for-me'}" *ngIf="action=='receive'"></mdb-tab>
+  </mdb-tabs>
+
+  <div class="col-md-12">
+    <div class="input-line search">
+      <img src="../../assets/img/icon_search.svg" class="input-img" />
+      <input type="text" id="search" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}"
+      (keyup)="autoSearch($event)" />
+      <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="open(modal_filter)"/>
+    </div>
+  </div>
+
+  <div class="row list_header" *ngIf="contracts.length > 0;">
+
+    <div class="col-md-5"></div>
+    <div class="col-md-2">{{'create-date' | translate}}</div>
+    <div class="col-md-2">{{'expiration-date' | translate}}</div>
+    <div class="col-md-3">{{'action' | translate}}</div>
+  </div>
+
+  <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}">
+    <div class="row">
+      <div class="col-md-12 item_contract_name">{{item.name}}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 item_contract_infor">Bên A: {{item.sideA}}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 item_contract_infor">Bên B: {{item.sideB}}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-5">
+        <div class="row">
+          <div class="col-md-12 item_contract_infor">Trạng thái:
+            <span class="status_blue">Đang xử lý</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2 calendar_create">
+        <!-- <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy'}}</span> -->
+        <i class="fa fa-calendar fa_icon"></i><span class="item_date">29/11/2021</span>
+      </div>
+
+      <div class="col-md-2 calendar_deadline">
+        <!-- <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span> -->
+        <i class="fa fa-calendar fa_icon"></i><span class="item_date">29/11/2021</span>
+      </div>
+
+      <div class="col-md-3 item_icon">
+        <div style="display: flex; justify-content: center;">
+          <div class="div_icon" *ngIf="item.role == '1'">
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item.id)">Xem xét</button>
+          </div>
+          <div class="div_icon" *ngIf="item.role == '2'">
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item.id)">Điều phối</button>
+          </div>
+          <div class="div_icon" *ngIf="item.role == '3'">
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item.id)">Ký</button>
+          </div>
+          <div class="div_icon" *ngIf="item.role == '4'">
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item.id)">Văn thư</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contract_footer">
+    <div class="footer_title"></div>
+    <div class="footer_pagination">
+      <pagination-controls *ngIf="contracts.length > 0;" (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
+    </div>
+    <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
+  </div>
+
+</div>
+
+<ng-template #modal_filter let-modal >
+  <div class="popup_content">
+    <div class="row">
+      <div class="col-md-10">
+        <h4 class="popup_title">{{'contract.search' | translate}}</h4>
+      </div>
+      <div class="col-md-2 popup_close">
+        <span (click)="modal.dismiss('Cross click')">×</span>
+      </div>
+    </div>
+    <hr>
+    <div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="label_item">{{'contract.type' | translate}}</div>
+          <div class="input-group">
+            <input type="text" [(ngModel)]="filter_type" class="form-control"/>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="label_item">{{'contract.number' | translate}}</div>
+          <div class="input-group">
+            <input type="text" [(ngModel)]="filter_contract_no" class="form-control"/>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="label_item">{{'createdate.start' | translate}}</div>
+          <div class="input-group">
+            <ngx-datepicker [(ngModel)]="filter_from_date" [options]="options" class="date-picker"></ngx-datepicker>
+            <img src="assets/img/db_calendar.svg" class="input-img-calendar">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="label_item">{{'createdate.end' | translate}}</div>
+          <div class="input-group">
+            <ngx-datepicker [(ngModel)]="filter_to_date" [options]="options" class="date-picker"></ngx-datepicker>
+            <img src="assets/img/db_calendar.svg" class="input-img-calendar">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="text-align: center; padding-top: 10px;">
+      <div class="col-md-12">
+        <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
+        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.close('Save click'); search()">Tìm kiếm</button>
+      </div>
+    </div>
+  </div>
 </ng-template>
+
+<ng-template #mymodal let-modal >
+  <div class="popup_content">
+    <div class="row">
+      <div class="col-md-10">
+        <h4 class="popup_title">LỊCH SỬ HỢP ĐỒNG</h4>
+      </div>
+      <div class="col-md-2 popup_close">
+        <span (click)="modal.dismiss('Cross click')">×</span>
+      </div>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <div style="color: #8B8B8B; padding-top: 5px;">Tên hợp đồng</div>
+      <div style="color: #000000; padding-top: 5px;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
+      <div class="container">
+        <div class="row">
+          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
+          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
+          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
+        </div>
+        <div class="row">
+          <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
+          <div class="col-4" style="color: #000000; padding-top: 5px;">20/10/2021</div>
+          <div class="col-4" style="color: #47A920; padding-top: 5px;">Đang xử lý</div>
+        </div>
+      </div>
+    </div>
+    <div style="border-top: 1px solid #dee2e6; margin-top: 10px;"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-12" style="color: #8B8B8B; padding-top: 10px;">Danh sách ký</div>
+      </div>
+      <div class="row">
+        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
+        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
+        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
+      </div>
+      <div class="row">
+        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
+        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
+        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
+      </div>
+      <div class="row">
+        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
+        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
+        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
+      </div>
+    </div>
+    <div style="float: right; padding-top: 20px;">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')"
+      style="padding: 5px; width: 100px; background: #106DB6; color: white; border: 1px solid #87CAFF;">Ok</button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Popup notification signup -->
+<ng-template #modalNotifi let-modal >
+  <div class="popup_content">
+    <div class="row">
+      <div class="col-md-10">
+        <h4 class="popup_title">THÔNG BÁO</h4>
+      </div>
+      <div class="col-md-2 popup_close">
+        <span (click)="modal.dismiss('Cross click')">×</span>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-12">
+          <div class="form-group">
+            <div class="input-group">
+              <p class="alert" role="alert"  [ngClass]="{'alert-danger' : statusPopup==0, 'alert-primary' : statusPopup==1}" style="text-align: center;    width: 100%;">
+              {{notificationPopup}}
+            </p>
+            </div>
+          </div>
+          <div class="form-group" style="text-align: center; padding-top: 30px;width: 100px;margin: 10px auto;">
+            <button (click)="modal.dismiss('Cross click');" class="btn btn-lg btn-block" style="background-color: #106DB6; color: white;">Đồng ý</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+

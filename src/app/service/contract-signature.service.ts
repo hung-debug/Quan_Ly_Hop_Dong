@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { map, catchError, retry } from 'rxjs/operators';
 import {Helper} from "../core/Helper";
 import {BehaviorSubject} from "rxjs/index";
+import { DatePipe } from '@angular/common';
 
 export interface Contract {
   status: string
@@ -14,15 +15,28 @@ export interface Contract {
 })
 export class ContractSignatureService {
 
-  addContractUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
+  listContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
+
+  token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+
   errorData:any = {};
   redirectUrl: string = '';
   public imageSignObs$: BehaviorSubject<string> = new BehaviorSubject('');
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    public datepipe: DatePipe,) { }
 
-  public getContractList(): Observable<any> {
-    return this.http.get("/assets/data-contract-received.json");
+  public getContractMyProcessList(filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any): Observable<any> {
+    if (filter_from_date != "") {
+      filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
+    }
+    if (filter_to_date != "") {
+      filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
+    }
+    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status;
+    console.log(listContractMyProcessUrl);
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
   }
 
   public getSignatureListUser(): Observable<any> {
@@ -214,22 +228,6 @@ export class ContractSignatureService {
 
   }
 
-  addContractStep1(datas:any) {
-    const headers = new HttpHeaders().append('Content-Type', 'application/json');
-    const body = JSON.stringify({contractName: '', contractNumber: ''});
-
-    return this.http.post<Contract>(this.addContractUrl, body, {'headers':headers})
-       .pipe(
-          map((contract) => {
-            if (JSON.parse(JSON.stringify(contract)).status == 0) {
-              return contract;
-            }else{
-              return null;
-            }
-         }),
-         catchError(this.handleError)
-       );
-  }
 
   // Error handling
   handleError(error:any) {

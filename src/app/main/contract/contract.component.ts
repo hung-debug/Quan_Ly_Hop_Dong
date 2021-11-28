@@ -122,9 +122,6 @@ export class ContractComponent implements OnInit {
           console.log(this.contracts[v].sideA);
         })
       });
-
-
-
       console.log(this.contracts);
       console.log(this.pageTotal);
     });
@@ -155,8 +152,10 @@ export class ContractComponent implements OnInit {
     }else if(this.status == 'processed'){
       this.title = 'contract.status.processed';
     }else if(this.status == 'expire'){
+      this.filter_status = -1;
       this.title = 'contract.status.expire';
     }else if(this.status == 'overdue'){
+      this.filter_status = -1;
       this.title = 'contract.status.overdue';
     }else if(this.status == 'fail'){
       this.filter_status = 31;
@@ -196,6 +195,19 @@ export class ContractComponent implements OnInit {
       }else{
         this.setPage();
       }
+
+      this.contracts.forEach((key : any, v: any) => {
+        let participants = key.participants;
+        console.log(participants);
+        participants.forEach((key : any, val: any) => {
+          if (key.type == 1) {
+            this.contracts[v].sideA = key.name;
+          }else{
+            this.contracts[v].sideB = key.name;
+          }
+          console.log(this.contracts[v].sideA);
+        })
+      });
     });
   }
 
