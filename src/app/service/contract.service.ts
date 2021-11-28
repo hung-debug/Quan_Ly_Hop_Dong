@@ -30,6 +30,7 @@ export class ContractService {
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+  processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
 
   token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
@@ -115,6 +116,13 @@ export class ContractService {
         }),
         catchError(this.handleError)
       );
+  }
+
+  processAuthorizeContract(infoAuthorize: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.post<any>(this.processAuthorizeContractUrl, infoAuthorize, {'headers': headers});
   }
 
   getContractDetermine(data_determine: any, id: any) {

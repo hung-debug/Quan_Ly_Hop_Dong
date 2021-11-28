@@ -136,9 +136,9 @@ export class ConsiderContractComponent implements OnInit {
         if (params && params.length > 0) {
           params.forEach(item => {
             if (item.path == 'consider-contract') {
-              this.datas.roleContractReceived = 1;
-            } else if (item.path == 'personal-signature-contract') {
               this.datas.roleContractReceived = 2;
+            } else if (item.path == 'personal-signature-contract') {
+              this.datas.roleContractReceived = 3;
             }
           })
         }
@@ -558,11 +558,11 @@ export class ConsiderContractComponent implements OnInit {
         confirmButtonText: 'Xác nhận',
         cancelButtonText: 'Hủy'
       }).then((result) => {
-        if (this.datas.roleContractReceived == 1) {
+        if (this.datas.roleContractReceived == 2) {
           if (this.confirmConsider == 1) {
 
           }
-        } else if (this.datas.roleContractReceived == 2) {
+        } else if (this.datas.roleContractReceived == 3) {
           if (this.confirmSignature == 1) {
             if ([2].includes(this.datas.roleContractReceived) && this.isOtp) {
               this.confirmOtpSignContract();
@@ -653,13 +653,13 @@ export class ConsiderContractComponent implements OnInit {
   }
 
   getTextAlertConfirm() {
-    if (this.datas.roleContractReceived == 1) {
+    if (this.datas.roleContractReceived == 2) {
       if (this.confirmConsider == 1) {
         return 'Bạn có chắc chắn xác nhận hợp đồng này?';
       } else if (this.confirmConsider == 2) {
         return 'Bạn có chắc chắn từ chối hợp đồng này?';
       }
-    } else if (this.datas.roleContractReceived == 2) {
+    } else if (this.datas.roleContractReceived == 3) {
       if (this.confirmSignature == 1) {
         return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?';
       } else if (this.confirmSignature == 2) {

@@ -89,7 +89,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doEditText() {
-    if ([1,2].includes(this.datas.roleContractReceived)) {
+    if ([2,3].includes(this.datas.roleContractReceived)) {
       this.checkShowEdit = !this.checkShowEdit;
       setTimeout(()=>{
         this.inputEditText.nativeElement.focus();
