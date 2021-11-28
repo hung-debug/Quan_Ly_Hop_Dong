@@ -147,9 +147,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // } else {
       // let data_defind = this.data_api_step3;
 
-
-
-
       let data_sign_config_cks = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
       let data_sign_config_cka = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
       // let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
@@ -187,6 +184,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               item['type_unit'] = 'organization';
               item['selected'] = false;
               item['is_disable'] = false;
+              item['type'] = element.type;
               this.list_sign_name.push(item);
             }
           })
@@ -196,6 +194,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               item['type_unit'] = 'partner'
               item['selected'] = false;
               item['is_disable'] = false;
+              item['type'] = element.type;
               this.list_sign_name.push(item);
             }
           })
@@ -975,6 +974,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.status = data_name.status;
             signElement.setAttribute("status", isObjSign.status);
+
+            isObjSign.type = data_name.type;
+            signElement.setAttribute("type", isObjSign.type);
           }
         }
         // console.log(this.signCurent)
@@ -1019,11 +1021,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           element.sign_config.forEach((item: any) => {
             item['font'] = 'Aria';
             item['font_size'] = 14;
-            if (!item.type) {
-              item['type'] = 1;
-            }
+            // if (!item.type) {
+            //   item['type'] = 1;
+            // }
             item['contract_id'] = this.datas.contract_id;
             item['document_id'] = this.datas.document_id;
+            if (item.text_attribute_name) {
+              item.name = item.text_attribute_name;
+            }
             // item['recipient_id'] = element.id;
             delete item.id;
             delete item.sign_unit;
