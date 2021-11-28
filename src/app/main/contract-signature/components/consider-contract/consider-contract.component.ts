@@ -28,6 +28,7 @@ import {PkiDialogSignComponent} from "./pki-dialog-sign/pki-dialog-sign.componen
 import {HsmDialogSignComponent} from "./hsm-dialog-sign/hsm-dialog-sign.component";
 import {Subject, throwError} from "rxjs";
 import {catchError, map, take, takeUntil} from "rxjs/operators";
+import {environment} from "../../../../../environments/environment";
 
 @Component({
   selector: 'app-consider-contract',
@@ -127,10 +128,10 @@ export class ConsiderContractComponent implements OnInit {
   ngOnInit(): void {
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
     // this.contractSignatureService.getContractDetail().subscribe(response => {
-    this.contractService.getDetailContract().subscribe(response => {
-      // init data
-
-    });
+    // this.contractService.getDetailContract().subscribe(response => {
+    //   // init data
+    //
+    // });
 
     this.getDataContractSignature();
   }
@@ -209,7 +210,8 @@ export class ConsiderContractComponent implements OnInit {
       }
 
       // convert base64 file pdf to url
-      this.pdfSrc = "http://14.160.91.174:1390/vhcsoft-ec-bucket/2021/11/28/YCNB_20201123_HD_MOBIFONE_VHC_1609228929_1-%C4%91%C3%A3%20chuy%E1%BB%83n%20%C4%91%E1%BB%95i.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ec_admin%2F20211128%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211128T182413Z&X-Amz-Expires=7200&X-Amz-SignedHeaders=host&X-Amz-Signature=a125682eec63cff5df8874fd22468091ec22c0cf7523474cef6b5d8ee91cf268";
+      // this.pdfSrc = "http://14.160.91.174:1390/vhcsoft-ec-bucket/2021/11/28/YCNB_20201123_HD_MOBIFONE_VHC_1609228929_1-%C4%91%C3%A3%20chuy%E1%BB%83n%20%C4%91%E1%BB%95i.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ec_admin%2F20211128%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211128T182413Z&X-Amz-Expires=7200&X-Amz-SignedHeaders=host&X-Amz-Signature=a125682eec63cff5df8874fd22468091ec22c0cf7523474cef6b5d8ee91cf268";
+      this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
       // render pdf to canvas
       this.getPage();
       this.loaded = true;
@@ -312,13 +314,14 @@ export class ConsiderContractComponent implements OnInit {
       this.convertToSignConfig().forEach((element: any) => {
         let a = document.getElementById(element.id);
         if (a) {
-          if (element['position']) { // @ts-ignore
+          // if (element['position']) { // @ts-ignore
+          if (element['coordinate_x'] && element['coordinate_y']) { // @ts-ignore
             a.style["z-index"] = '1';
           }
           // else
           //   a.style.display = 'none';
-          a.setAttribute("data-x", element['dataset_x']);
-          a.setAttribute("data-y", element['dataset_y']);
+          a.setAttribute("data-x", element['coordinate_x']);
+          a.setAttribute("data-y", element['coordinate_y']);
         }
       });
     }
@@ -387,16 +390,46 @@ export class ConsiderContractComponent implements OnInit {
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any) {
     let style: any = {
-      "transform": 'translate(' + d['dataset_x'] + 'px, ' + d['dataset_y'] + 'px)',
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
     }
-    if (d['offsetWidth']) {
-      style.width = parseInt(d['offsetWidth']) + "px";
+
+    // if (sizeChange == "width" && e) {
+    //   let signElement = document.getElementById(this.objSignInfo.id);
+    //   if (signElement) {
+    //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+    //     if (isObjSign) {
+    //       if (sizeChange == 'width') {
+    //         style.width = parseInt(e) + 'px';
+    //       } else {
+    //         style.height = parseInt(e) + 'px';
+    //       }
+    //     }
+    //   }
+    // } else {
+    if (d['width']) {
+      style.width = parseInt(d['width']) + "px";
     }
-    if (d['offsetHeight']) {
-      style.height = parseInt(d['offsetHeight']) + "px";
+    // }
+
+    // if (sizeChange == "height" && e) {
+    //   let signElement = document.getElementById(this.objSignInfo.id);
+    //   if (signElement) {
+    //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+    //     if (isObjSign) {
+    //       if (sizeChange == 'width') {
+    //         style.width = parseInt(e) + 'px';
+    //       } else {
+    //         style.height = parseInt(e) + 'px';
+    //       }
+    //     }
+    //   }
+    // } else {
+    if (d['height']) {
+      style.height = parseInt(d['height']) + "px";
     }
+    // }
 
     return style;
   }
@@ -438,8 +471,8 @@ export class ConsiderContractComponent implements OnInit {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
       if (isObjSign) {
-        this.objSignInfo.traf_x = d.dataset_x;
-        this.objSignInfo.traf_y = d.dataset_y;
+        this.objSignInfo.traf_x = d.coordinate_x;
+        this.objSignInfo.traf_y = d.coordinate_y;
         // this.signCurent.name = d.name;
 
         this.objSignInfo.offsetWidth = parseInt(d.offsetWidth);
@@ -544,19 +577,19 @@ export class ConsiderContractComponent implements OnInit {
       if (isObjSign) {
         if (property == 'location') {
           if (locationChange == 'x') {
-            isObjSign.dataset_x = parseInt(e);
-            signElement.setAttribute("data-x", isObjSign.dataset_x);
+            isObjSign.coordinate_x = parseInt(e);
+            signElement.setAttribute("data-x", isObjSign.coordinate_x);
           } else {
-            isObjSign.dataset_y = parseInt(e);
-            signElement.setAttribute("data-y", isObjSign.dataset_y);
+            isObjSign.coordinate_y = parseInt(e);
+            signElement.setAttribute("data-y", isObjSign.coordinate_y);
           }
         } else if (property == 'size') {
           if (locationChange == 'width') {
-            isObjSign.offsetWidth = parseInt(e);
-            signElement.setAttribute("width", isObjSign.offsetWidth);
+            isObjSign.width = parseInt(e);
+            signElement.setAttribute("width", isObjSign.width);
           } else {
-            isObjSign.offsetHeight = parseInt(e);
-            signElement.setAttribute("height", isObjSign.offsetHeight);
+            isObjSign.height = parseInt(e);
+            signElement.setAttribute("height", isObjSign.height);
           }
         } else if (property == 'text') {
           isObjSign.text_attribute_name = e;
