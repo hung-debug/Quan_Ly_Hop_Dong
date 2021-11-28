@@ -502,14 +502,19 @@ export class DetermineSignerComponent implements OnInit {
 
   callAPI() {
     console.log(this.datas.determine_contract);
-    this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res) => {
+    this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res: any) => {
         // this.datas.id = data?.id;
-        console.log(res);
-        this.datas.determine_contract = res ? res : this.is_determine_clone;
-        this.step = variable.stepSampleContract.step3;
-        this.datas.stepLast = this.step
-        // console.log(this.datas);
-        this.nextOrPreviousStep(this.step);
+        // console.log(res);
+        if (res && res.length > 0) {
+          this.datas.determine_contract = res ? res : this.is_determine_clone;
+          this.step = variable.stepSampleContract.step3;
+          this.datas.stepLast = this.step
+          // console.log(this.datas);
+          this.nextOrPreviousStep(this.step);
+        } else {
+          alert('Bạn đã nhập thiếu dữ liệu, vui lòng kiểm tra lại các trường dữ liệu cần nhập!');
+          return false;
+        }
       },
       error => {
         console.log("false content");
