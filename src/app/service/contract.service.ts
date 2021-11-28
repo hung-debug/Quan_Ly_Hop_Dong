@@ -135,6 +135,15 @@ export class ContractService {
       );
   }
 
+  getListDataCoordination(id: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({type: id});
+    let listContractUrl = this.addConfirmContractUrl + id;
+    return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();
+  }
+
   addDocument(datas: any) {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -397,7 +406,7 @@ export class ContractService {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "0979889156", // sđt người tham gia
-            "role": 1, // loại tham gia: xem xét|điều phối| ký | văn thư
+            "role": 2, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
             "username": "", // username khi click từ link email
@@ -450,7 +459,7 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "0979889156",
-            "role": 2, // người điều phối
+            "role": 1, // người điều phối
             "ordering": 1,
             "status": 0,
             "username": "",
@@ -463,7 +472,7 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "0979889156",
-            "role": 1, // người xem xét
+            "role": 2, // người xem xét
             "ordering": 1,
             "status": 0,
             "username": "",

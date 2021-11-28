@@ -58,7 +58,7 @@ export class DetermineSignerComponent implements OnInit {
       this.is_determine_clone = [...this.contractService.getDataDetermine()];
     // data Tổ chức của tôi
     this.data_organization = this.is_determine_clone.filter((p: any) => p.type == 1)[0];
-    this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 1);
+    this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4)[0];
 
@@ -623,12 +623,12 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo đối tượng người điều phối đối tác
   getPartnerCoordination(item: any) {
-    return item.recipients.filter((p: any) => p.role == 2)
+    return item.recipients.filter((p: any) => p.role == 1)
   }
 
   // tạo mảng người xem xét đối tác
   getPartnerReviewer(item: any) {
-    return item.recipients.filter((p: any) => p.role == 1)
+    return item.recipients.filter((p: any) => p.role == 2)
   }
 
   // tạo mảng người ký đối tác tổ chức
@@ -646,7 +646,7 @@ export class DetermineSignerComponent implements OnInit {
     let data_determine_add = [];
     data_determine_add = [...this.contractService.getDataDetermine()];
     let data_organization = data_determine_add.filter((p: any) => p.type == 1)[0];
-    let data = (data_organization.recipients.filter((p: any) => p.role == 1))[0];
+    let data = (data_organization.recipients.filter((p: any) => p.role == 2))[0];
     data.ordering = this.getOriganzationReviewer().length + 1;
     this.data_organization.recipients.push(data)
   }
@@ -666,8 +666,8 @@ export class DetermineSignerComponent implements OnInit {
     let data_determine_add = [];
     data_determine_add = [...this.contractService.getDataDetermine()];
     let data_partner = data_determine_add.filter((p: any) => (p.type == 2 ||  p.type == 3))[0];
-    let data = (data_partner.recipients.filter((p: any) => p.role == 1))[0];
-    let count_data = item.recipients.filter((p: any) => p.role == 1);
+    let data = (data_partner.recipients.filter((p: any) => p.role == 2))[0];
+    let count_data = item.recipients.filter((p: any) => p.role == 2);
     data.ordering = count_data.length + 1;
     this.data_parnter_organization.forEach((element: any, index: number) => {
       element.recipients.push(data);
@@ -689,13 +689,13 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo mảng đối tượng người xem xét tổ chức của tôi
   getOriganzationReviewer() {
-    return this.data_organization.recipients.filter((p: any) => p.role == 1);
+    return this.data_organization.recipients.filter((p: any) => p.role == 2);
   }
 
   // xóa đối tượng người xem xét tổ chức của tôi
   deleteOriganzationReviewer(i: any) {
-    let arr_clone = this.data_organization.recipients.filter((p: any) => p.role == 1);
-    let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 1);
+    let arr_clone = this.data_organization.recipients.filter((p: any) => p.role == 2);
+    let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 2);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
     arr_clone.forEach((element: any, index: number) => {
@@ -737,7 +737,8 @@ export class DetermineSignerComponent implements OnInit {
 
   // xóa đối tượng điều phối hợp đồng
   deletePartnerCoordination(index: any, item: any) {
-    this.getPartnerCoordination(item).splice(index, 1);
+    // this.getPartnerCoordination(item).splice(index, 1);
+    item.recipients.splice(index, 1);
     this.getPartnerCoordination(item).forEach((element: any, index: any) => {
       element.ordering = index + 1;
     })
@@ -745,8 +746,8 @@ export class DetermineSignerComponent implements OnInit {
 
   // xóa đối tượng người xem xét đối tác
   deletePartnerReviewer(index_item: any, item: any) {
-    let arr_clone = item.recipients.filter((p: any) => p.role == 1);
-    let arr_clone_different = item.recipients.filter((p: any) => p.role != 1);
+    let arr_clone = item.recipients.filter((p: any) => p.role == 2);
+    let arr_clone_different = item.recipients.filter((p: any) => p.role != 2);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
     arr_clone.forEach((element: any, index: number) => {
