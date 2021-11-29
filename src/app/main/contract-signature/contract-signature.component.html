@@ -213,13 +213,13 @@
 
   <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}">
     <div class="row">
-      <div class="col-md-12 item_contract_name">{{item.name}}</div>
+      <div class="col-md-12 item_contract_name">{{item.contractName}}</div>
     </div>
     <div class="row">
-      <div class="col-md-12 item_contract_infor">Bên A: {{item.sideA}}</div>
+      <div class="col-md-12 item_contract_infor">Số hợp đồng: {{item.contractNumber}}</div>
     </div>
     <div class="row">
-      <div class="col-md-12 item_contract_infor">Bên B: {{item.sideB}}</div>
+      <div class="col-md-12 item_contract_infor">Người xử lý: {{item.name}} - {{item.email}}</div>
     </div>
     <div class="row">
       <div class="col-md-5">

@@ -263,7 +263,13 @@ export class ContractSignatureComponent implements OnInit {
     this.p = 1;
     //get list contract
     this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
-      this.contracts = data.entities;
+      this.contracts = data.entities.filter((i:any) => i.status==1)
+
+
+    //   this.contracts.forEach((element,index)=>{
+    //     if(element.status==0) delete this.contracts[index];
+    //  });
+
       this.pageTotal = this.contracts.length;
       console.log(this.contracts);
       if(this.pageTotal == 0){
@@ -274,16 +280,19 @@ export class ContractSignatureComponent implements OnInit {
         this.setPage();
       }
       this.contracts.forEach((key : any, v: any) => {
-        let participants = key.participants;
-        console.log(participants);
-        participants.forEach((key : any, val: any) => {
-          if (key.type == 1) {
-            this.contracts[v].sideA = key.name;
-          }else{
-            this.contracts[v].sideB = key.name;
-          }
-          console.log(this.contracts[v].sideA);
-        })
+        let contractName = key.participant.contract.name;
+        let contractNumber = key.participant.contract.code;
+        console.log(contractName);
+        this.contracts[v].contractName = contractName;
+        this.contracts[v].contractNumber = contractNumber;
+        // participant.forEach((key : any, val: any) => {
+        //   if (key.type == 1) {
+        //     this.contracts[v].sideA = key.name;
+        //   }else{
+        //     this.contracts[v].sideB = key.name;
+        //   }
+        //   console.log(this.contracts[v].sideA);
+        // })
       });
       console.log(this.contracts);
       console.log(this.pageTotal);
@@ -343,7 +352,7 @@ export class ContractSignatureComponent implements OnInit {
   autoSearch(event:any){
     this.p = 1;
     this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
-      this.contracts = this.transform(data.entities, event);
+      this.contracts = this.transform(data.entities, event).filter((i:any) => i.status==1);
       this.pageTotal = this.contracts.length;
       if(this.pageTotal == 0){
         this.p = 0;
@@ -354,16 +363,19 @@ export class ContractSignatureComponent implements OnInit {
       }
 
       this.contracts.forEach((key : any, v: any) => {
-        let participants = key.participants;
-        console.log(participants);
-        participants.forEach((key : any, val: any) => {
-          if (key.type == 1) {
-            this.contracts[v].sideA = key.name;
-          }else{
-            this.contracts[v].sideB = key.name;
-          }
-          console.log(this.contracts[v].sideA);
-        })
+        let contractName = key.participant.contract.name;
+        let contractNumber = key.participant.contract.code;
+        console.log(contractName);
+        this.contracts[v].contractName = contractName;
+        this.contracts[v].contractNumber = contractNumber;
+        // participant.forEach((key : any, val: any) => {
+        //   if (key.type == 1) {
+        //     this.contracts[v].sideA = key.name;
+        //   }else{
+        //     this.contracts[v].sideB = key.name;
+        //   }
+        //   console.log(this.contracts[v].sideA);
+        // })
       });
     });
   }
@@ -378,7 +390,7 @@ export class ContractSignatureComponent implements OnInit {
     }
     searchText = searchText.toLocaleLowerCase();
     return contracts.filter((it:any) => {
-      return it.name.toLocaleLowerCase().includes(searchText);
+      return it.participant.contract.name.toLocaleLowerCase().includes(searchText);
     });
   }
 
