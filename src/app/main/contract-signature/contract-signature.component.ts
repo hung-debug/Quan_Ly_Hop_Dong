@@ -374,9 +374,9 @@ export class ContractSignatureComponent implements OnInit {
     this.p = 1;
     this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
       if(this.filter_status==0){
-        this.contracts = data.entities.filter((i:any) => i.status==1)
+        this.contracts = this.transform(data.entities.filter((i:any) => i.status==1), event);
       }else{
-        this.contracts = data.entities.filter((i:any) => (i.status==2 || i.status==3))
+        this.contracts = this.transform(data.entities.filter((i:any) => (i.status==2 || i.status==3)), event);
       }
       this.pageTotal = this.contracts.length;
       if(this.pageTotal == 0){
