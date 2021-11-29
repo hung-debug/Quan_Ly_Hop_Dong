@@ -240,7 +240,7 @@ export class ConsiderContractComponent implements OnInit {
       }
 
       // convert base64 file pdf to url
-      this.pdfSrc = this.datas.i_data_file_contract.path;
+      this.pdfSrc = this.datas.i_data_file_contract[0].path;
       // render pdf to canvas
       this.getPage();
       this.loaded = true;
