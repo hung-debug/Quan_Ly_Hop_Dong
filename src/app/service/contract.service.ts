@@ -238,13 +238,13 @@ export class ContractService {
     return this.http.put<any>(this.updateInfoContractUrl + datas.id, datas,{'headers': headers});
   }
 
-  updateInfoContractConsider(datas: any) {
+  updateInfoContractConsider(datas: any, recipient_id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     console.log(headers);
-    return this.http.put<any>(this.updateInfoContractConsiderUrl + datas.recipient_id, datas, {'headers': headers});
+    return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, {'headers': headers});
   }
 
   uploadFileImageSignature(formData: any) {
