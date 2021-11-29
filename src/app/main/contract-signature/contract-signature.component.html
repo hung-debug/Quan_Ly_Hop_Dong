@@ -225,18 +225,18 @@
       <div class="col-md-5">
         <div class="row">
           <div class="col-md-12 item_contract_infor">Trạng thái:
-            <span class="status_blue">Đang xử lý</span>
+            <span class="status_blue" *ngIf="item.status == 1">Chờ xử lý</span>
+            <span class="status_blue" *ngIf="item.status == 2">Đã xử lý</span>
+            <span class="status_blue" *ngIf="item.status == 3">Từ chối</span>
           </div>
         </div>
       </div>
       <div class="col-md-2 calendar_create">
-        <!-- <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy'}}</span> -->
-        <i class="fa fa-calendar fa_icon"></i><span class="item_date">29/11/2021</span>
+        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractCreateTime | date: 'dd/MM/yyyy HH:mm'}}</span>
       </div>
 
       <div class="col-md-2 calendar_deadline">
-        <!-- <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span> -->
-        <i class="fa fa-calendar fa_icon"></i><span class="item_date">29/11/2021</span>
+        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy'}}</span>
       </div>
 
       <div class="col-md-3 item_icon">

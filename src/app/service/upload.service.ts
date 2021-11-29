@@ -15,17 +15,23 @@ export interface File {
 })
 export class UploadService {
 
-  token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
-  organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.organization_id;
 
-  uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`+ this.organization_id + `/single`;
+  token:any;
+  organization_id:any;
+
+  uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
 
 
 
   constructor(private http: HttpClient) { }
 
-  uploadFile(datas: any) {
+  getCurrentUser(){
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+    this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.organization_id;
+  }
 
+  uploadFile(datas: any) {
+    this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', datas.contractFile);
 
@@ -36,7 +42,7 @@ export class UploadService {
     console.log(this.uploadFileUrl);
     console.log(headers);
     console.log(formData);
-    return this.http.post<File>(this.uploadFileUrl, formData, {'headers':headers});
+    return this.http.post<File>(this.uploadFileUrl + this.organization_id + `/single`, formData, {'headers':headers});
   }
 
   // postFile(datas: any){
