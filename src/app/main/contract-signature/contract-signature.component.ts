@@ -246,6 +246,14 @@ export class ContractSignatureComponent implements OnInit {
       // this.action = params['action'];
       // this.status = params['status'];
 
+      if (this.router.url.includes('contract-signature/receive/processed')){
+        this.status = 'processed';
+      }else if (this.router.url.includes('contract-signature/receive/wait-processing')){
+        this.status = 'wait-processing';
+      }
+      console.log(this.router.url);
+      console.log(this.status);
+
       //set title
       this.convertStatusStr();
       this.action = 'receive';
@@ -263,7 +271,12 @@ export class ContractSignatureComponent implements OnInit {
     this.p = 1;
     //get list contract
     this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
-      this.contracts = data.entities.filter((i:any) => i.status==1)
+      if(this.filter_status==0){
+        this.contracts = data.entities.filter((i:any) => i.status==1)
+      }else{
+        this.contracts = data.entities.filter((i:any) => (i.status==2 || i.status==3))
+      }
+
 
 
     //   this.contracts.forEach((element,index)=>{
@@ -283,10 +296,14 @@ export class ContractSignatureComponent implements OnInit {
         let contractId = key.participant.contract.id;
         let contractName = key.participant.contract.name;
         let contractNumber = key.participant.contract.code;
+        let contractSignTime = key.participant.contract.sign_time;
+        let contractCreateTime = key.participant.contract.created_time;
         console.log(contractName);
         this.contracts[v].contractId = contractId;
         this.contracts[v].contractName = contractName;
         this.contracts[v].contractNumber = contractNumber;
+        this.contracts[v].contractSignTime = contractSignTime;
+        this.contracts[v].contractCreateTime = contractCreateTime;
         // participant.forEach((key : any, val: any) => {
         //   if (key.type == 1) {
         //     this.contracts[v].sideA = key.name;
@@ -313,11 +330,13 @@ export class ContractSignatureComponent implements OnInit {
       this.filter_status = 0;
       this.title = 'contract.status.draft';
     }else if(this.status == 'wait-processing'){
+      this.filter_status = 0;
       this.title = 'contract.status.wait-processing';
     }else if(this.status == 'processing'){
       this.filter_status = 20;
       this.title = 'contract.status.processing';
     }else if(this.status == 'processed'){
+      this.filter_status = 1;
       this.title = 'contract.status.processed';
     }else if(this.status == 'expire'){
       this.filter_status = -1;
@@ -354,7 +373,11 @@ export class ContractSignatureComponent implements OnInit {
   autoSearch(event:any){
     this.p = 1;
     this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
-      this.contracts = this.transform(data.entities, event).filter((i:any) => i.status==1);
+      if(this.filter_status==0){
+        this.contracts = data.entities.filter((i:any) => i.status==1)
+      }else{
+        this.contracts = data.entities.filter((i:any) => (i.status==2 || i.status==3))
+      }
       this.pageTotal = this.contracts.length;
       if(this.pageTotal == 0){
         this.p = 0;
@@ -365,11 +388,17 @@ export class ContractSignatureComponent implements OnInit {
       }
 
       this.contracts.forEach((key : any, v: any) => {
+        let contractId = key.participant.contract.id;
         let contractName = key.participant.contract.name;
         let contractNumber = key.participant.contract.code;
+        let contractSignTime = key.participant.contract.sign_time;
+        let contractCreateTime = key.participant.contract.created_time;
         console.log(contractName);
+        this.contracts[v].contractId = contractId;
         this.contracts[v].contractName = contractName;
         this.contracts[v].contractNumber = contractNumber;
+        this.contracts[v].contractSignTime = contractSignTime;
+        this.contracts[v].contractCreateTime = contractCreateTime;
         // participant.forEach((key : any, val: any) => {
         //   if (key.type == 1) {
         //     this.contracts[v].sideA = key.name;
