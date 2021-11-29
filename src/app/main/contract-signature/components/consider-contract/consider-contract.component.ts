@@ -240,8 +240,7 @@ export class ConsiderContractComponent implements OnInit {
       }
 
       // convert base64 file pdf to url
-      // this.pdfSrc = "http://14.160.91.174:1390/vhcsoft-ec-bucket/2021/11/28/YCNB_20201123_HD_MOBIFONE_VHC_1609228929_1-%C4%91%C3%A3%20chuy%E1%BB%83n%20%C4%91%E1%BB%95i.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ec_admin%2F20211128%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211128T182413Z&X-Amz-Expires=7200&X-Amz-SignedHeaders=host&X-Amz-Signature=a125682eec63cff5df8874fd22468091ec22c0cf7523474cef6b5d8ee91cf268";
-      this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
+      this.pdfSrc = this.datas.i_data_file_contract.path;
       // render pdf to canvas
       this.getPage();
       this.loaded = true;
