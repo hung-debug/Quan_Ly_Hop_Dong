@@ -434,10 +434,19 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openSignatureContract(item: any) {
-    this.router.navigate(['main/contract-signature/receive/wait-processing/personal-signature-contract/' + item.contractId],
+    this.isContractService.getListDataCoordination(44).subscribe((res: any) => {
+      console.log(res);
+      if (!localStorage.getItem('data_coordinates_contract')) {
+        let data_coordination = {...this.datas, ...res};
+        localStorage.setItem('data_coordinates_contract', JSON.stringify({data_coordinates: data_coordination}));
+      }
+      this.router.navigate(['main/contract-signature/receive/wait-processing/personal-signature-contract/' + item.contractId],
       {
         queryParams: { 'recipientId': item.id }
       });
+    }, (res: any) => {
+      alert('Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý!')
+    })
   }
 
   openCoordinatorContract(id:number) {
