@@ -1,4 +1,4 @@
-<div class="sample-contract row" *ngIf="loaded">
+<div class="sample-contract row" *ngIf="loaded && valid">
   <!--  information contract-->
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
@@ -49,7 +49,7 @@
       </div>
       <hr>
       <div class="flex-column">
-        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 1">
+        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2">
           <p class="d-flex justify-content-center mb-4">XEM XÉT HỢP ĐỒNG</p>
           <p class="d-flex mb-2 text-align-left mx-3">Bạn có đồng ý xem xét hợp đồng không?</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
@@ -63,7 +63,7 @@
             </div>
           </div>
         </div>
-        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2">
+        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 3">
           <p class="d-flex justify-content-center mb-4 text-uppercase">XÁC NHẬN KÝ HỢP ĐỒNG</p>
           <p class="d-flex mb-2 text-align-left mx-3">Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
@@ -76,9 +76,9 @@
               <label for="radio-refuse-signature" class="ms-2">Không đồng ý</label>
             </div>
           </div>
-          <p class="mb-3 mt-3 text-align-left">Chọn loại ký</p>
+          <!--<p class="mb-3 mt-3 text-align-left">Chọn loại ký</p>
           <ngx-select [placeholder]="'Chọn loại ký'" [items]="optionsSign" [(ngModel)]="typeSign" optionValueField="item_id" optionTextField="item_text"></ngx-select>
-          <p style="color:#ED1C24;" class="mt-xl-4">Bạn cần nhập vào ô thông tin trên hợp đồng để hoàn thành.</p>
+          <p style="color:#ED1C24;" class="mt-xl-4">Bạn cần nhập vào ô thông tin trên hợp đồng để hoàn thành.</p>-->
         </div>
       </div>
     </div>
@@ -92,13 +92,12 @@
       <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
         <div class="resize-drag not-out-drop"
              [id]="d.id"
-             style="z-index: -1"
+             style="z-index: -1; width:135px!important;height:85px!important;"
              #itemElement
              (click)="getSignSelect(d)"
              [ngClass]="changeColorDrag(null,true)"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
-          <!--          </div>-->
           <app-image-sign-contract [datas]="datas" [sign]="d"></app-image-sign-contract>
         </div>
       </div>

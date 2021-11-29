@@ -14,7 +14,7 @@ import {INgxSelectOption} from "ngx-select-ex/ngx-select/ngx-select.interfaces";
 export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   myForm: FormGroup;
   datas: any;
-  typeImageSignatureRadio: any = 1;
+  typeImageSignatureRadio: any = 2;
   @ViewChild('signature')
   public signaturePad: SignaturePadComponent;
   imgSignAccountSelect: string;
@@ -39,7 +39,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.typeImageSignatureRadio = 1;
+    this.typeImageSignatureRadio = 2;
     this.datas = this.data;
     this.initListSignatureAccountUser();
   }
@@ -99,7 +99,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
       setTimeout(() => {
         this.signaturePad.set('backgroundColor', 'rgba(233, 243, 251, 1)');
         this.signaturePad.set('border', 'none');
-        this.signaturePad.set('canvasHeight', 650);
+        this.signaturePad.set('canvasHeight', 500);
         this.signaturePad.set('canvasWidth', 950);
         this.signaturePad.clear();
       }, 200);
@@ -121,13 +121,16 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   uploadImage() {
-    this.dialogRef.close();
+
     if (this.typeImageSignatureRadio == 1) {
-      this.contractSignatureService.setImageObs(this.imgSignAccountSelect);
+      // this.contractSignatureService.setImageObs(this.imgSignAccountSelect);
+      this.dialogRef.close(this.imgSignAccountSelect);
     } else if (this.typeImageSignatureRadio == 2) {
-      this.contractSignatureService.setImageObs(this.imgSignPCSelect);
+      // this.contractSignatureService.setImageObs(this.imgSignPCSelect);
+      this.dialogRef.close(this.imgSignPCSelect);
     } else if (this.typeImageSignatureRadio == 3) {
-      this.contractSignatureService.setImageObs(this.imgSignDrawing);
+      // this.contractSignatureService.setImageObs(this.imgSignDrawing);
+      this.dialogRef.close(this.imgSignDrawing);
     }
   }
 }

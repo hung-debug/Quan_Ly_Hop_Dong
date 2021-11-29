@@ -2,6 +2,8 @@ import {Component, Inject, OnInit, ElementRef} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
+import {ContractService} from "../../../../../service/contract.service";
+import {ToastService} from "../../../../../service/toast.service";
 
 @Component({
   selector: 'app-forward-contract',
@@ -10,12 +12,15 @@ import {Router} from "@angular/router";
 })
 export class ForwardContractComponent implements OnInit {
   myForm: FormGroup;
-  datas: any
+  datas: any;
+  currentUser: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {},
     public router: Router,
     public dialog: MatDialog,
     private fbd: FormBuilder,
+    private contractService: ContractService,
+    private toastService : ToastService,
     private el: ElementRef
   ) { }
 
@@ -23,6 +28,7 @@ export class ForwardContractComponent implements OnInit {
 
   ngOnInit(): void {
     this.datas = this.data;
+    this.getCurrentUser();
     this.myForm = this.fbd.group({
       name: this.fbd.control("", [Validators.required]),
       email: this.fbd.control("", [Validators.required]),
@@ -30,22 +36,28 @@ export class ForwardContractComponent implements OnInit {
   }
 
   onSubmit() {
-    let isSub = false;
-    const keyObj = [
-      {code: "name", name: 'Họ và tên'},
-      {code: "email", name: 'Email'},
-    ];
-    for (const key of Object.keys(this.myForm.controls)) {
-      if (this.myForm.controls[key].invalid) {
-        const keyError = keyObj.filter((item) => item.code === key)[0];
-        const invalidControl = this.el.nativeElement.querySelector('[formcontrolname="' + key + '"]');
-        alert(keyError.name + " " + 'không được để trống')
-        // Library.notify(keyError.name + " " + 'không được để trống', sEnum.statusApi.error);
-        invalidControl.focus();
-        isSub = true;
-        break;
+    if (this.currentUser) {
+      const dataAuthorize = {
+        email: this.myForm.value.email,
+        full_name: this.myForm.value.name,
+        role: this.datas.roleContractReceived,
+        participant_id: 4,
+        is_replace: this.datas.is_content != 'forward_contract'
+
       }
+      this.contractService.processAuthorizeContract(dataAuthorize).subscribe(
+        data => {
+          this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền') + ' thành công!'
+            , "", 1000);
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+        }
+      )
     }
+  }
+
+  getCurrentUser(): any {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '');
   }
 
 }

@@ -5,6 +5,10 @@ import {ConfirmSignOtpComponent} from "../confirm-sign-otp/confirm-sign-otp.comp
 import {ContractSignatureService} from "../../../../../service/contract-signature.service";
 import {takeUntil} from "rxjs/operators";
 import {Subject} from "rxjs";
+import Swal from "sweetalert2";
+import {ImageDialogSignComponent} from "../image-dialog-sign/image-dialog-sign.component";
+import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.component";
+import {HsmDialogSignComponent} from "../hsm-dialog-sign/hsm-dialog-sign.component";
 
 @Component({
   selector: 'app-image-sign-contract',
@@ -18,6 +22,8 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   checkShowEdit = false;
   unsubscribe$: Subject<string> = new Subject();
   imageSignConfirm: string;
+  currentUser: any;
+  value: string;
   constructor(
     private dialog: MatDialog,
     private contractSignatureService: ContractSignatureService,
@@ -26,6 +32,10 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     console.log(this.sign);
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '');
+    if (currentUser != null && currentUser.customer) {
+      this.currentUser = currentUser.customer;
+    }
     this.contractSignatureService.getProfileObs()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(imageStr => {
@@ -52,7 +62,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     }
   }
 
-  doSign() {
+  doSign1() {
     /*console.log(this.datas.roleContractReceived);
     if ([2].includes(this.datas.roleContractReceived)) {
       this.checkShowEdit = !this.checkShowEdit;
@@ -62,6 +72,106 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       }
 
     }*/
+  }
+
+  doSign() {
+    if (this.sign.sign_unit == 'chu_ky_anh') {
+      this.openPopupSignContract(1);
+    }
+  }
+
+  confirmOtpSignContract() {
+    const data = {
+      title: 'Xác nhận otp',
+      is_content: 'forward_contract'
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '497px';
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.data = data;
+    const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((result: any) => {
+      this.openPopupSignContract(1);
+    })
+  }
+
+  openPopupSignContract(typeSign: any) {
+    if (typeSign == 1) {
+      this.imageDialogSignOpen();
+    } else if (typeSign == 3) {
+      this.pkiDialogSignOpen();
+    } else if (typeSign == 4) {
+      this.hsmDialogSignOpen();
+    }
+  }
+
+  imageDialogSignOpen() {
+    const data = {
+      title: 'KÝ HỢP ĐỒNG ',
+      is_content: 'forward_contract'
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '1024px';
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.data = data;
+    const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      this.sign.value = result;
+    })
+  }
+
+  pkiDialogSignOpen() {
+    const data = {
+      title: 'CHỮ KÝ PKI',
+      is_content: 'forward_contract'
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '497px';
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.data = data;
+    const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  hsmDialogSignOpen() {
+    const data = {
+      title: 'CHỮ KÝ HSM',
+      is_content: 'forward_contract'
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '497px';
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.data = data;
+    const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  getTextAlertConfirm() {
+    /*if (this.datas.roleContractReceived == 2) {
+      if (this.confirmConsider == 1) {
+        return 'Bạn có chắc chắn xác nhận hợp đồng này?';
+      } else if (this.confirmConsider == 2) {
+        return 'Bạn có chắc chắn từ chối hợp đồng này?';
+      }
+    } else if (this.datas.roleContractReceived == 3) {
+      if (this.confirmSignature == 1) {
+        return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?';
+      } else if (this.confirmSignature == 2) {
+        return 'Bạn không đồng ý với nội dung của hợp đồng và không xác nhận ký?';
+      }
+    }*/
+    return ""
   }
 
   doneEditTextSign() {
@@ -88,7 +198,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doEditText() {
-    if ([1,2].includes(this.datas.roleContractReceived)) {
+    if ([2,3].includes(this.datas.roleContractReceived)) {
       this.checkShowEdit = !this.checkShowEdit;
       setTimeout(()=>{
         this.inputEditText.nativeElement.focus();

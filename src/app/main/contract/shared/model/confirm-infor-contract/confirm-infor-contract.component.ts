@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { variable } from 'src/app/config/variable';
 import { ContractService } from 'src/app/service/contract.service';
+import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
   selector: 'app-confirm-infor-contract',
@@ -18,7 +19,8 @@ export class ConfirmInforContractComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               public datepipe: DatePipe,
               private contractService: ContractService,
-              private router: Router,) {
+              private router: Router,
+              private toastService : ToastService,) {
     this.step = variable.stepSampleContract.step4
   }
 
@@ -188,10 +190,12 @@ export class ConfirmInforContractComponent implements OnInit {
 
   callAPI() {
     //call API step confirm
-    this.contractService.addConfirmContract(this.datas).subscribe((data) => {
+    //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
+    this.contractService.changeStatusContract(this.datas.id, 10).subscribe((data) => {
 
       console.log(JSON.stringify(data));
-      this.router.navigate(['/main/contract/create/draft']);
+      this.router.navigate(['/main/contract/create/processing']);
+      this.toastService.showSuccessHTMLWithTimeout("Tạo hợp đồng thành công!", "", 10000);
     },
     error => {
       console.log("false content");

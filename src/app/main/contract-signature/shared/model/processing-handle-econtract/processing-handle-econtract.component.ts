@@ -22,7 +22,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
-      determine_contract: any,
+      is_data_contract: any,
       content: any},
     public router: Router,
     public dialog: MatDialog,
@@ -31,7 +31,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.data.determine_contract.forEach((item: any) => {
+    this.data.is_data_contract.participants.forEach((item: any) => {
       item.recipients.forEach((element: any) => {
         let data = {
           name: element.name,
@@ -44,10 +44,12 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     // console.log(this.is_list_name)
   }
 
-  getStatus(data: any) {
-    if (data && data.status) {
-      return this.status.filter((p: any) => p.value == data.status)[0].name;
-    } else return ''
+  getStatus(status: any) {
+    if (status == 1) {
+      return 'Hoạt động';
+    } else if (status == 0) {
+      return 'Tạm dừng';
+    }
   }
 
   getDateTime(data: any) {
