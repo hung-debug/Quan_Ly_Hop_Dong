@@ -1,6 +1,6 @@
 <div class="footer-contract">
   <div class="content_footer">@Copyright 2021 - MobiFone</div>
-  <div class="btn_footer">
+  <div class="btn_footer" *ngIf="!view">
     <div class="label">
       <button *ngIf="!this.datas.coordination_complete" type="button" name="next" class="next action-button" (click)="processingAuthorization()">Ủy quyền</button>
       <button *ngIf="!this.datas.coordination_complete" type="button" name="next" class="next action-button" (click)="forWardContract()">Chuyển tiếp</button>

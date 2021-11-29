@@ -114,6 +114,7 @@ export class ConsiderContractComponent implements OnInit {
   typeSign: any = 0;
   isOtp: boolean = false;
   recipientId: any;
+  view: any;
   idContract: any;
   isDataFileContract: any;
   isDataContract: any;
@@ -150,6 +151,7 @@ export class ConsiderContractComponent implements OnInit {
     this.activeRoute.queryParams
       .subscribe(params => {
           this.recipientId = params.recipientId;
+          this.view = params.view;
           console.log(this.recipientId);
         }
       );
@@ -438,7 +440,7 @@ export class ConsiderContractComponent implements OnInit {
     //   }
     // } else {
     if (d['width']) {
-      style.width = 135 + "px";
+      style.width = parseInt(d['width']) + "px";
     }
     // }
 
@@ -456,7 +458,7 @@ export class ConsiderContractComponent implements OnInit {
     //   }
     // } else {
     if (d['height']) {
-      style.height = 85 + "px";
+      style.height = parseInt(d['height']) + "px";
     }
     // }
 
