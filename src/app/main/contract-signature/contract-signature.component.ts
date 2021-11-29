@@ -280,9 +280,11 @@ export class ContractSignatureComponent implements OnInit {
         this.setPage();
       }
       this.contracts.forEach((key : any, v: any) => {
+        let contractId = key.participant.contract.id;
         let contractName = key.participant.contract.name;
         let contractNumber = key.participant.contract.code;
         console.log(contractName);
+        this.contracts[v].contractId = contractId;
         this.contracts[v].contractName = contractName;
         this.contracts[v].contractNumber = contractNumber;
         // participant.forEach((key : any, val: any) => {
