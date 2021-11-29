@@ -213,13 +213,13 @@
 
   <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}">
     <div class="row">
-      <div class="col-md-12 item_contract_name">{{item.name}}</div>
+      <div class="col-md-12 item_contract_name">{{item.contractName}}</div>
     </div>
     <div class="row">
-      <div class="col-md-12 item_contract_infor">Bên A: {{item.sideA}}</div>
+      <div class="col-md-12 item_contract_infor">Số hợp đồng: {{item.contractNumber}}</div>
     </div>
     <div class="row">
-      <div class="col-md-12 item_contract_infor">Bên B: {{item.sideB}}</div>
+      <div class="col-md-12 item_contract_infor">Người xử lý: {{item.name}} - {{item.email}}</div>
     </div>
     <div class="row">
       <div class="col-md-5">
@@ -242,16 +242,16 @@
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
           <div class="div_icon" *ngIf="item.status == 1 && item.role == 1">
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item.id)">Xem xét</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item.contractId)">Điều phối</button>
           </div>
           <div class="div_icon" *ngIf="item.status == 1 && item.role == 2">
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item.id)">Điều phối</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item.contractId)">Xem xét</button>
           </div>
           <div class="div_icon" *ngIf="item.status == 1 && item.role == 3">
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item.id)">Ký</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item.contractId)">Ký</button>
           </div>
           <div class="div_icon" *ngIf="item.status == 1 && item.role == 4">
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item.id)">Văn thư</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item.contractId)">Văn thư</button>
           </div>
         </div>
       </div>

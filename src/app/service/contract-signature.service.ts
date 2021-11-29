@@ -15,11 +15,10 @@ export interface Contract {
 })
 export class ContractSignatureService {
 
-  addContractUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
-
   listContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
 
   token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+  addContractUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
 
   errorData:any = {};
   redirectUrl: string = '';

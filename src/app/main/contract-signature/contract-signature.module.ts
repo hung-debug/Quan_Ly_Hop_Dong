@@ -38,6 +38,7 @@ import { ImageDialogSignComponent } from './components/consider-contract/image-d
 import {NgxSelectModule} from "ngx-select-ex";
 import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialog-sign/hsm-dialog-sign.component';
 import {AngularSignaturePadModule} from "@almothafar/angular-signature-pad";
+import {ChooseTypeSignComponent} from "./components/consider-contract/choose-type-sign/choose-type-sign.component";
 
 export const contractSignatureRoutes: Routes = [
   { path: 'receive/wait-processing/consider-contract/:id', component: ConsiderContractComponent },
@@ -72,6 +73,7 @@ export const contractSignatureRoutes: Routes = [
     ImageSignContractComponent,
     ConfirmSignOtpComponent,
     PkiDialogSignComponent,
+    ChooseTypeSignComponent,
     ImageDialogSignComponent,
     HsmDialogSignComponent,
     // AddContractComponent

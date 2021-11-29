@@ -32,6 +32,7 @@ export class ContractService {
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
   addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
   addGetFileContract:any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
