@@ -19,7 +19,7 @@
             </div>
 
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-              <button ngbDropdownItem class="drop" (click)="open(information_user_login)">
+              <button ngbDropdownItem class="drop" (click)="getCurrentUser(); open(information_user_login)">
                 <div style="display: flex; align-items: center;">
                   <div class="db_user">
                     <div class="db_user_detail"></div>
@@ -209,19 +209,31 @@
     <div>
       <div class="row">
         <div class="col-md-12 item_text">
-          <div><i class="fa fa-address-book-o fa_icon"></i><span class="label_infor">Họ tên: Admin</span></div>
+          <div><i class="fa fa-address-book-o fa_icon"></i><span class="label_infor">Họ tên: {{currentUserForm.get('name').value}}</span></div>
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-12 item_text">
-          <div><i class="fa fa-envelope-o fa_icon"></i><span class="label_infor">Email: anhnt@vhc.com.vn</span></div>
+          <div><i class="fa fa-envelope-o fa_icon"></i><span class="label_infor">Email: {{currentUserForm.get('email').value}}</span></div>
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-12 item_text">
-          <div><i class="fa fa-institution fa_icon"></i><span class="label_infor">Tổ chức: Công ty cổ phần phần mềm công nghệ cao Việt Nam</span></div>
+          <div><i class="fa fa-pencil fa_icon"></i><span class="label_infor">Số điện thoại: {{currentUserForm.get('phone').value}}</span></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 item_text">
+          <div><i class="fa fa-pencil fa_icon"></i><span class="label_infor">Trạng thái: {{currentUserForm.get('status').value}}</span></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 item_text">
+          <div><i class="fa fa-institution fa_icon"></i><span class="label_infor">Tổ chức: {{currentUserForm.get('organization_id').value}}</span></div>
         </div>
       </div>
 

@@ -27,6 +27,9 @@ export class MainComponent implements OnInit {
   status:number = 1;
   notification:string = '';
 
+  //user detail
+  currentUserForm: any = FormGroup;
+
   switchLang(lang: string) {
     this.translate.use(lang);
     this.translate.currentLang = lang;
@@ -191,5 +194,16 @@ export class MainComponent implements OnInit {
     } else return {
       'margin-top': '40px'
     }
+  }
+
+  getCurrentUser(){
+    this.currentUserForm = this.fb.group({
+      name : JSON.parse(localStorage.getItem('currentUser')||'').customer.name,
+      email : JSON.parse(localStorage.getItem('currentUser')||'').customer.email,
+      phone : JSON.parse(localStorage.getItem('currentUser')||'').customer.phone,
+      status : JSON.parse(localStorage.getItem('currentUser')||'').customer.status,
+      organization_id : JSON.parse(localStorage.getItem('currentUser')||'').customer.organization_id,
+      type_id : JSON.parse(localStorage.getItem('currentUser')||'').customer.type_id,
+    });
   }
 }
