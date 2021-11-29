@@ -7,6 +7,7 @@ import { ContractService } from 'src/app/service/contract.service';
 
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
+import { ToastService } from 'src/app/service/toast.service';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -29,6 +30,8 @@ export class ContractComponent implements OnInit {
   notificationPopup:string = '';
 
   title:any="";
+  id:any="";
+  notification:any="";
 
   //filter contract
   filter_type:any = "";
@@ -59,6 +62,7 @@ export class ContractComponent implements OnInit {
               private contractService: ContractService,
               private route: ActivatedRoute,
               private router: Router,
+              private toastService : ToastService,
     ) {}
 
   open(content:any) {
@@ -240,6 +244,25 @@ export class ContractComponent implements OnInit {
   deleteItem(id:number){
     this.statusPopup = 1;
     this.notificationPopup = "Xóa hợp đồng thành công";
+  }
+
+  getDataContractCancel(id:any){
+    this.id=id;
+    this.notification="Bạn có chắc chắn muốn hủy hợp đồng không?";
+  }
+
+  changeStatus(id:any, status:any){
+    this.contractService.changeStatusContract(id, status).subscribe((data) => {
+
+      console.log(JSON.stringify(data));
+      this.router.navigate(['/main/contract/create/cancel']);
+      this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thành công!", "", 10000);
+    },
+    error => {
+      this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thất bại!", "", 10000);
+      return false;
+    }
+    );
   }
 
 }

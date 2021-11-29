@@ -192,13 +192,13 @@ export class ContractService {
     return this.http.put<Contract>(this.addConfirmContractUrl + datas.id + '/start-bpm', body, {'headers': headers});
   }
 
-  changeStatusContract(datas: any, statusNew:any) {
+  changeStatusContract(id: any, statusNew:any) {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = "";
     console.log(headers);
-    return this.http.post<Contract>(this.changeStatusContractUrl + datas.id + '/change-status/' + statusNew, body, {'headers': headers});
+    return this.http.post<Contract>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, {'headers': headers});
   }
 
   considerRejectContract(id: any) {
