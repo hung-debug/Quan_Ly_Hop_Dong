@@ -15,7 +15,7 @@ export class ForwardContractComponent implements OnInit {
   datas: any;
   currentUser: any;
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: {},
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
     public dialog: MatDialog,
     private fbd: FormBuilder,
@@ -40,8 +40,8 @@ export class ForwardContractComponent implements OnInit {
       const dataAuthorize = {
         email: this.myForm.value.email,
         full_name: this.myForm.value.name,
-        role: this.datas.roleContractReceived,
-        participant_id: 4,
+        role: this.datas.dataContract.roleContractReceived,
+        participant_id: this.datas.dataContract.is_data_contract.participants[0].id,
         is_replace: this.datas.is_content != 'forward_contract'
 
       }

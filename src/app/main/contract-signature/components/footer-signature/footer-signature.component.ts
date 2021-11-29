@@ -33,7 +33,8 @@ export class FooterSignatureComponent implements OnInit {
   processingAuthorization() {
     const data = {
       title: 'ỦY QUYỀN XỬ LÝ',
-      is_content: 'processing_author'
+      is_content: 'processing_author',
+      dataContract: this.datas
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(ForwardContractComponent, {
