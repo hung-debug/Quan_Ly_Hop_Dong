@@ -37,13 +37,12 @@ export class AuthenticationService {
     return this.http.post<User>(this.loginUrl, body, {'headers':headers})
       .pipe(
         map((user) => {
-          if (JSON.parse(JSON.stringify(user)).access_token != '') {
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            return user;
-          }else{
-            console.log(JSON.stringify(user));
-            return null;
+          console.log(user);
+          if (JSON.parse(<string>localStorage.getItem('currentUser'))) {
+            localStorage.removeItem('currentUser');
+            // return user;
           }
+          localStorage.setItem('currentUser', JSON.stringify(user));
         }),
         catchError(this.handleError)
       );
