@@ -41,6 +41,7 @@ export class ContractService {
   updateInfoContractConsiderUrl:any = `${environment.apiUrl}/api/v1/processes/approval/`;
   rejectContractUrl:any = `${environment.apiUrl}/api/v1/processes/reject/`;
   uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
+  uploadFileBase64Url:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
   currentUser:any = JSON.parse(localStorage.getItem('currentUser') || '').customer;
 
 
@@ -224,7 +225,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = "";
     console.log(headers);
-    return this.http.put<any>(this.rejectContractUrl + id, {'headers': headers});
+    return this.http.put<any>(this.rejectContractUrl + id, null,{'headers': headers});
   }
 
   updateInfoContractSignature(datas: any) {
@@ -242,15 +243,8 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = {
-        name: datas.name,
-        value: datas.value,
-        font: datas.font,
-        font_size: datas.font_size
-      }
-    ;
     console.log(headers);
-    return this.http.put<any>(this.updateInfoContractConsiderUrl + datas.recipient_id + '/' + datas.id , body, {'headers': headers});
+    return this.http.put<any>(this.updateInfoContractConsiderUrl + datas.recipient_id, datas, {'headers': headers});
   }
 
   uploadFileImageSignature(formData: any) {
@@ -260,6 +254,15 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
 
     return this.http.post<File>(this.uploadFileUrl + this.currentUser.organization_id + `/single`, formData, {'headers':headers});
+  }
+
+  uploadFileImageBase64Signature(formData: any) {
+
+    const headers = new HttpHeaders()
+      //.append('Content-Type', 'multipart/form-data')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.post<any>(this.uploadFileBase64Url + this.currentUser.organization_id + `/base64`, formData, {'headers':headers});
   }
 
 

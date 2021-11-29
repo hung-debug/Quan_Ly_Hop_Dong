@@ -88,6 +88,7 @@ export class ConsiderContractComponent implements OnInit {
 
   list_sign_name: any = [];
   signCurent: any;
+  currentUser: any;
 
   isView: any;
   countAttachFile = 0;
@@ -128,6 +129,7 @@ export class ConsiderContractComponent implements OnInit {
     private toastService : ToastService,
     private dialog: MatDialog
   ) {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer;
   }
 
   ngOnInit(): void {
@@ -826,18 +828,19 @@ export class ConsiderContractComponent implements OnInit {
     } else {
       for(const signUpdate of this.isDataObjectSignature) {
         console.log('ki anh', signUpdate);
-        if (signUpdate && signUpdate.type == 2 && this.datas.roleContractReceived == 3) {
+        if (signUpdate && signUpdate.type == 2 && this.datas.roleContractReceived == 3 && signUpdate.email == this.currentUser.email) {
 
-          let formData = new FormData();
-          formData.append('file', this.dataURIToBlob(signUpdate.value));
-
-          this.contractService.uploadFileImageSignature(formData).subscribe(data => {
+          const formData = {
+            "name": "image.jpg",
+            "content": signUpdate.value
+          }
+          this.contractService.uploadFileImageBase64Signature(formData).subscribe(data => {
             this.datas.filePath = data?.fileObject?.filePath;
 
 
             if (this.datas.filePath) {
               signUpdate.value = this.datas.filePath;
-              this.contractService.updateInfoContractConsider(signUpdate).subscribe((data) => {
+              /*this.contractService.updateInfoContractConsider(signUpdate).subscribe((data) => {
 
                   // this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 10000);
 
@@ -845,30 +848,52 @@ export class ConsiderContractComponent implements OnInit {
                 error => {
                   this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
                 }
-              );
+              );*/
             }
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
           });
         } else if (signUpdate && signUpdate.type == 1 && this.datas.roleContractReceived == 2) {
-          this.contractService.updateInfoContractConsider(signUpdate).subscribe(
+          /*this.contractService.updateInfoContractConsider(signUpdate).subscribe(
             (result) => {
               // this.toastService.showSuccessHTMLWithTimeout('Ký hợp đồng thành công', '', 1000);
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
             }
-          )
+          )*/
         } else if (signUpdate && signUpdate.type == 1 && this.datas.roleContractReceived == 3) {
           console.log('ki chu', signUpdate);
-          this.contractService.updateInfoContractConsider(signUpdate).subscribe(
+          /*this.contractService.updateInfoContractConsider(signUpdate).subscribe(
             (result) => {
               // this.toastService.showSuccessHTMLWithTimeout('Ký hợp đồng thành công', '', 1000);
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
             }
-          )
+          )*/
         }
       }
+      setTimeout(() => {
+        this.signContract();
+      },2000);
     }
 
+  }
+
+  signContract() {
+    const signUpdate = this.isDataObjectSignature.filter((item: any) => item.email === this.currentUser.email).map((item: any) =>  {
+      return {
+        name: item.name,
+        value: item.value,
+        font: item.font,
+        font_size: item.font_size
+      }});
+    this.contractService.updateInfoContractConsider(signUpdate).subscribe(
+      (result) => {
+        this.toastService.showSuccessHTMLWithTimeout('Ký hợp đồng thành công', '', 1000);
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+      }
+    )
   }
 
   t() {
