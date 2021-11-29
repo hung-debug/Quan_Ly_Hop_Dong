@@ -188,7 +188,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               this.list_sign_name.push(item);
             }
           })
-        } else if (element.type == 2) {
+        } else if (element.type == 2 || element.type == 3) {
           element.recipients.forEach((item: any) => {
             if (item.role == 3 || item.role == 4) {
               item['type_unit'] = 'partner'
