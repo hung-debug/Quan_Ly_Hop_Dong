@@ -826,7 +826,7 @@ export class ConsiderContractComponent implements OnInit {
     } else {
       for(const signUpdate of this.isDataObjectSignature) {
         console.log('ki anh', signUpdate);
-        if (signUpdate && signUpdate.type == 2 && !signUpdate.value && this.datas.roleContractReceived == 3) {
+        if (signUpdate && signUpdate.type == 2 && this.datas.roleContractReceived == 3) {
 
           let formData = new FormData();
           formData.append('file', this.dataURIToBlob(signUpdate.value));
@@ -837,7 +837,7 @@ export class ConsiderContractComponent implements OnInit {
 
             if (this.datas.filePath) {
               signUpdate.value = this.datas.filePath;
-              this.contractService.updateInfoContractSignature(signUpdate).subscribe((data) => {
+              this.contractService.updateInfoContractConsider(signUpdate).subscribe((data) => {
 
                   // this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 10000);
 
@@ -858,7 +858,7 @@ export class ConsiderContractComponent implements OnInit {
           )
         } else if (signUpdate && signUpdate.type == 1 && this.datas.roleContractReceived == 3) {
           console.log('ki chu', signUpdate);
-          this.contractService.updateInfoContractSignature(signUpdate).subscribe(
+          this.contractService.updateInfoContractConsider(signUpdate).subscribe(
             (result) => {
               // this.toastService.showSuccessHTMLWithTimeout('Ký hợp đồng thành công', '', 1000);
             }, error => {

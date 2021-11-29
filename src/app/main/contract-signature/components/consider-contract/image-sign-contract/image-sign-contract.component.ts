@@ -22,6 +22,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   checkShowEdit = false;
   unsubscribe$: Subject<string> = new Subject();
   imageSignConfirm: string;
+  currentUser: any;
   value: string;
   constructor(
     private dialog: MatDialog,
@@ -31,6 +32,10 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     console.log(this.sign);
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '');
+    if (currentUser != null && currentUser.customer) {
+      this.currentUser = currentUser.customer;
+    }
     this.contractSignatureService.getProfileObs()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(imageStr => {

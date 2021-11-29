@@ -216,7 +216,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = "";
     console.log(headers);
-    return this.http.put<any>(this.updateInfoContractUrl + datas.document_id, datas,{'headers': headers});
+    return this.http.put<any>(this.updateInfoContractUrl + datas.id, datas,{'headers': headers});
   }
 
   updateInfoContractConsider(datas: any) {
@@ -231,7 +231,7 @@ export class ContractService {
       }
     ;
     console.log(headers);
-    return this.http.put<any>(this.updateInfoContractConsiderUrl + datas.document_id + '/' + datas.id , body, {'headers': headers});
+    return this.http.put<any>(this.updateInfoContractConsiderUrl + datas.recipient_id + '/' + datas.id , body, {'headers': headers});
   }
 
   uploadFileImageSignature(formData: any) {
