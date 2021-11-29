@@ -27,8 +27,10 @@ import {ImageDialogSignComponent} from "./image-dialog-sign/image-dialog-sign.co
 import {PkiDialogSignComponent} from "./pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "./hsm-dialog-sign/hsm-dialog-sign.component";
 import {Subject, throwError} from "rxjs";
-import {catchError, map, take, takeUntil} from "rxjs/operators";
 import {environment} from "../../../../../environments/environment";
+import {ToastService} from "../../../../service/toast.service";
+import {HttpHeaders} from "@angular/common/http";
+import {File} from "../../../../service/upload.service";
 
 @Component({
   selector: 'app-consider-contract',
@@ -109,10 +111,12 @@ export class ConsiderContractComponent implements OnInit {
     {item_id: 4, item_text: 'Ký số bằng HSM'}
   ];
   typeSign: any = 0;
-  isOtp: boolean = true;
+  isOtp: boolean = false;
+  idContract: any;
   isDataFileContract: any;
   isDataContract: any;
   isDataObjectSignature: any;
+  valid: boolean = false;
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -121,6 +125,7 @@ export class ConsiderContractComponent implements OnInit {
     private modalService: NgbModal,
     private activeRoute: ActivatedRoute,
     private appService: AppService,
+    private toastService : ToastService,
     private dialog: MatDialog
   ) {
   }
@@ -137,12 +142,16 @@ export class ConsiderContractComponent implements OnInit {
   }
 
   getDataContractSignature() {
-    this.contractService.getDetailContract().subscribe(rs => {
+    this.idContract = this.activeRoute.snapshot.paramMap.get('id');
+    this.contractService.getDetailContract(this.idContract).subscribe(rs => {
       console.log(rs);
 
       this.isDataContract = rs[0];
       this.isDataFileContract = rs[1];
       this.isDataObjectSignature = rs[2];
+      if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
+        this.valid = true;
+      }
       // console.log(response);
       // this.data_contract = response;
       this.data_contract = {
@@ -160,16 +169,22 @@ export class ConsiderContractComponent implements OnInit {
         // 1: van ban, 2: ky anh, 3: ky so
         // tam thoi de 1: ky anh, 2: ky so
         if (element.type == 1) {
-          element['sign_unit'] = 'chu_ky_anh'
+          element['sign_unit'] = 'text'
         }
         if (element.type == 2) {
+          element['sign_unit'] = 'chu_ky_anh'
+        }
+        if (element.type == 3) {
           element['sign_unit'] = 'chu_ky_so'
+        }
+        if (element.type == 4) {
+          element['sign_unit'] = 'so_tai_lieu'
         }
       })
 
       let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
       let data_sign_config_cka = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-      // let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
+      let data_sign_config_text = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
       // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
 
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
@@ -180,6 +195,10 @@ export class ConsiderContractComponent implements OnInit {
           Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
         } else if (element.sign_unit == 'chu_ky_anh') {
           Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+        } else if (element.sign_unit == 'text') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+        } else if (element.sign_unit == 'so_tai_lieu') {
+          // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
         }
       })
       // }
@@ -188,6 +207,7 @@ export class ConsiderContractComponent implements OnInit {
 
       this.datas.action_title = 'Xác nhận';
       this.activeRoute.url.subscribe(params => {
+        console.log(params);
         if (params && params.length > 0) {
           params.forEach(item => {
             if (item.path == 'consider-contract') {
@@ -409,7 +429,7 @@ export class ConsiderContractComponent implements OnInit {
     //   }
     // } else {
     if (d['width']) {
-      style.width = parseInt(d['width']) + "px";
+      style.width = 135 + "px";
     }
     // }
 
@@ -427,7 +447,7 @@ export class ConsiderContractComponent implements OnInit {
     //   }
     // } else {
     if (d['height']) {
-      style.height = parseInt(d['height']) + "px";
+      style.height = 85 + "px";
     }
     // }
 
@@ -663,17 +683,16 @@ export class ConsiderContractComponent implements OnInit {
         confirmButtonText: 'Xác nhận',
         cancelButtonText: 'Hủy'
       }).then((result) => {
-        if (this.datas.roleContractReceived == 2) {
-          if (this.confirmConsider == 1) {
-
-          }
-        } else if (this.datas.roleContractReceived == 3) {
-          if (this.confirmSignature == 1) {
-            if ([2].includes(this.datas.roleContractReceived) && this.isOtp) {
+        if (result.isConfirmed) {
+          if (this.datas.roleContractReceived == 2) {
+            this.signContractSubmit();
+          } else if (this.datas.roleContractReceived == 3) {
+            /*if ([2].includes(this.datas.roleContractReceived) && this.isOtp) {
               this.confirmOtpSignContract();
             } else {
               this.openPopupSignContract(this.typeSign);
-            }
+            }*/
+            this.signContractSubmit();
           }
         }
       });
@@ -778,6 +797,78 @@ export class ConsiderContractComponent implements OnInit {
     for (let i = 0; i < this.datas.contract_information.file_related_contract; i++) {
 
     }
+  }
+
+  dataURIToBlob(dataURI: string) {
+    const splitDataURI = dataURI.split(',')
+    const byteString = splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1])
+    const mimeString = splitDataURI[0].split(':')[1].split(';')[0]
+
+    const ia = new Uint8Array(byteString.length)
+    for (let i = 0; i < byteString.length; i++)
+      ia[i] = byteString.charCodeAt(i)
+
+    return new Blob([ia], { type: mimeString })
+  }
+
+  signContractSubmit() {
+
+    if ((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
+      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2)
+    ) {
+      this.contractService.considerRejectContract(this.idContract).subscribe(
+        (result) => {
+          this.toastService.showSuccessHTMLWithTimeout('Từ chối hợp đồng thành công', '', 1000);
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+        }
+      )
+    } else {
+      for(const signUpdate of this.isDataObjectSignature) {
+        console.log('ki anh', signUpdate);
+        if (signUpdate && signUpdate.type == 2 && !signUpdate.value && this.datas.roleContractReceived == 3) {
+
+          let formData = new FormData();
+          formData.append('file', this.dataURIToBlob(signUpdate.value));
+
+          this.contractService.uploadFileImageSignature(formData).subscribe(data => {
+            this.datas.filePath = data?.fileObject?.filePath;
+
+
+            if (this.datas.filePath) {
+              signUpdate.value = this.datas.filePath;
+              this.contractService.updateInfoContractSignature(signUpdate).subscribe((data) => {
+
+                  // this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 10000);
+
+                },
+                error => {
+                  this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+                }
+              );
+            }
+          });
+        } else if (signUpdate && signUpdate.type == 1 && this.datas.roleContractReceived == 2) {
+          this.contractService.updateInfoContractConsider(signUpdate).subscribe(
+            (result) => {
+              // this.toastService.showSuccessHTMLWithTimeout('Ký hợp đồng thành công', '', 1000);
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+            }
+          )
+        } else if (signUpdate && signUpdate.type == 1 && this.datas.roleContractReceived == 3) {
+          console.log('ki chu', signUpdate);
+          this.contractService.updateInfoContractSignature(signUpdate).subscribe(
+            (result) => {
+              // this.toastService.showSuccessHTMLWithTimeout('Ký hợp đồng thành công', '', 1000);
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+            }
+          )
+        }
+      }
+    }
+
   }
 
   t() {

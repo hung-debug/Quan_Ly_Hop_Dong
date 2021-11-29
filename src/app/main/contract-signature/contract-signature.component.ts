@@ -108,7 +108,7 @@ export class ContractSignatureComponent implements OnInit {
               public isContractService: ContractService,
               private route: ActivatedRoute,
               private router: Router
-    ) {
+  ) {
     this.constantModel = contractModel;
   }
 

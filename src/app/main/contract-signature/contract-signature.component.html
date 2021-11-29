@@ -198,7 +198,7 @@
     <div class="input-line search">
       <img src="../../assets/img/icon_search.svg" class="input-img" />
       <input type="text" id="search" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}"
-      (keyup)="autoSearch($event)" />
+             (keyup)="autoSearch($event)" />
       <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="open(modal_filter)"/>
     </div>
   </div>
@@ -211,7 +211,7 @@
     <div class="col-md-3">{{'action' | translate}}</div>
   </div>
 
-  <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}; let i = index">
+  <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}">
     <div class="row">
       <div class="col-md-12 item_contract_name">{{item.name}}</div>
     </div>
@@ -241,16 +241,16 @@
 
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
-          <div class="div_icon" *ngIf="i == 1">
+          <div class="div_icon" *ngIf="item.status == 1 && item.role == 1">
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item.id)">Xem xét</button>
           </div>
-          <div class="div_icon" *ngIf="i == 2">
+          <div class="div_icon" *ngIf="item.status == 1 && item.role == 2">
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item.id)">Điều phối</button>
           </div>
-          <div class="div_icon" *ngIf="i == 3">
+          <div class="div_icon" *ngIf="item.status == 1 && item.role == 3">
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item.id)">Ký</button>
           </div>
-          <div class="div_icon" *ngIf="i == 4">
+          <div class="div_icon" *ngIf="item.status == 1 && item.role == 4">
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item.id)">Văn thư</button>
           </div>
         </div>
@@ -370,7 +370,7 @@
     </div>
     <div style="float: right; padding-top: 20px;">
       <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')"
-      style="padding: 5px; width: 100px; background: #106DB6; color: white; border: 1px solid #87CAFF;">Ok</button>
+              style="padding: 5px; width: 100px; background: #106DB6; color: white; border: 1px solid #87CAFF;">Ok</button>
     </div>
   </div>
 </ng-template>
@@ -389,16 +389,16 @@
     <hr>
     <div class="row">
       <div class="col-md-12">
-          <div class="form-group">
-            <div class="input-group">
-              <p class="alert" role="alert"  [ngClass]="{'alert-danger' : statusPopup==0, 'alert-primary' : statusPopup==1}" style="text-align: center;    width: 100%;">
+        <div class="form-group">
+          <div class="input-group">
+            <p class="alert" role="alert"  [ngClass]="{'alert-danger' : statusPopup==0, 'alert-primary' : statusPopup==1}" style="text-align: center;    width: 100%;">
               {{notificationPopup}}
             </p>
-            </div>
           </div>
-          <div class="form-group" style="text-align: center; padding-top: 30px;width: 100px;margin: 10px auto;">
-            <button (click)="modal.dismiss('Cross click');" class="btn btn-lg btn-block" style="background-color: #106DB6; color: white;">Đồng ý</button>
-          </div>
+        </div>
+        <div class="form-group" style="text-align: center; padding-top: 30px;width: 100px;margin: 10px auto;">
+          <button (click)="modal.dismiss('Cross click');" class="btn btn-lg btn-block" style="background-color: #106DB6; color: white;">Đồng ý</button>
+        </div>
       </div>
     </div>
   </div>

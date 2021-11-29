@@ -6,6 +6,7 @@ import {map, catchError, retry} from 'rxjs/operators';
 import {Helper} from "../core/Helper";
 import {DatePipe} from '@angular/common';
 import {forkJoin} from "rxjs";
+import {File} from "./upload.service";
 
 export interface Contract {
   id: number,
@@ -35,6 +36,11 @@ export class ContractService {
   addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
   addGetFileContract:any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
   addGetObjectSignature:any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
+  updateInfoContractUrl:any = `${environment.apiUrl}/api/v1/fields/`;
+  updateInfoContractConsiderUrl:any = `${environment.apiUrl}/api/v1/processes/approval/`;
+  rejectContractUrl:any = `${environment.apiUrl}/api/v1/processes/reject/`;
+  uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
+  currentUser:any = JSON.parse(localStorage.getItem('currentUser') || '').customer;
 
 
   token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
@@ -194,16 +200,58 @@ export class ContractService {
     return this.http.post<Contract>(this.changeStatusContractUrl + datas.id + '/change-status/' + statusNew, body, {'headers': headers});
   }
 
+  considerRejectContract(id: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = "";
+    console.log(headers);
+    return this.http.put<any>(this.rejectContractUrl + id, {'headers': headers});
+  }
 
-  getDetailContract() {
+  updateInfoContractSignature(datas: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = "";
+    console.log(headers);
+    return this.http.put<any>(this.updateInfoContractUrl + datas.document_id, datas,{'headers': headers});
+  }
+
+  updateInfoContractConsider(datas: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = {
+        name: datas.name,
+        value: datas.value,
+        font: datas.font,
+        font_size: datas.font_size
+      }
+    ;
+    console.log(headers);
+    return this.http.put<any>(this.updateInfoContractConsiderUrl + datas.document_id + '/' + datas.id , body, {'headers': headers});
+  }
+
+  uploadFileImageSignature(formData: any) {
+
+    const headers = new HttpHeaders()
+      //.append('Content-Type', 'multipart/form-data')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.post<File>(this.uploadFileUrl + this.currentUser.organization_id + `/single`, formData, {'headers':headers});
+  }
+
+
+  getDetailContract(idContract: any) {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     let arrApi = [];
     arrApi = [
-      this.http.get<Contract[]>(this.addGetDataContract + 44, {headers}),
-      this.http.get<Contract[]>(this.addGetFileContract + 155, {headers}),
-      this.http.get<Contract[]>(this.addGetObjectSignature + 44, {headers}),
+      this.http.get<any>(this.addGetDataContract + idContract, {headers}),
+      this.http.get<any>(this.addGetFileContract + idContract, {headers}),
+      this.http.get<any>(this.addGetObjectSignature + idContract, {headers}),
     ];
     return forkJoin(arrApi);
   }

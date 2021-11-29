@@ -49,6 +49,10 @@ export class ContractSignatureService {
     return this.http.get("/assets/data-contract-sign.json");
   }
 
+  public getContractList(): Observable<any> {
+    return this.http.get("/assets/data-contract-received.json");
+  }
+
   getProfileObs(): Observable<string> {
     return this.imageSignObs$.asObservable();
   }
