@@ -245,10 +245,10 @@
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item.contractId)">Điều phối</button>
           </div>
           <div class="div_icon" *ngIf="item.status == 1 && item.role == 2">
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item.contractId)">Xem xét</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item)">Xem xét</button>
           </div>
           <div class="div_icon" *ngIf="item.status == 1 && item.role == 3">
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item.contractId)">Ký</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item)">Ký</button>
           </div>
           <div class="div_icon" *ngIf="item.status == 1 && item.role == 4">
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item.contractId)">Văn thư</button>

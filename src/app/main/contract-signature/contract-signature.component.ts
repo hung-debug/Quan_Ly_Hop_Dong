@@ -425,12 +425,19 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
-  openConsiderContract(id:number) {
-    this.router.navigate(['main/contract-signature/receive/wait-processing/consider-contract/' + id]);
+  openConsiderContract(item: any) {
+    this.router.navigate(['main/contract-signature/receive/wait-processing/consider-contract/' + item.contractId],
+      {
+        queryParams: { 'recipientId': item.id }
+      }
+    );
   }
 
-  openSignatureContract(id: number) {
-    this.router.navigate(['main/contract-signature/receive/wait-processing/personal-signature-contract/' + id]);
+  openSignatureContract(item: any) {
+    this.router.navigate(['main/contract-signature/receive/wait-processing/personal-signature-contract/' + item.contractId],
+      {
+        queryParams: { 'recipientId': item.id }
+      });
   }
 
   openCoordinatorContract(id:number) {

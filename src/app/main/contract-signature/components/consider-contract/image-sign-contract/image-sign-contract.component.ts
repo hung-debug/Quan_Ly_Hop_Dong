@@ -36,7 +36,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     if (currentUser != null && currentUser.customer) {
       this.currentUser = currentUser.customer;
     }
-    this.contractSignatureService.getProfileObs()
+    /*this.contractSignatureService.getProfileObs()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(imageStr => {
         const currentUser = localStorage.getItem('currentUser');
@@ -50,7 +50,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
           // }
           return true;
         }
-      });
+      });*/
   }
 
   ngAfterViewInit() {
@@ -75,7 +75,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doSign() {
-    if (this.sign.sign_unit == 'chu_ky_anh') {
+    if (this.sign.sign_unit == 'chu_ky_anh' && this.sign?.recipient?.email == this.currentUser.email) {
       this.openPopupSignContract(1);
     }
   }
@@ -198,7 +198,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doEditText() {
-    if ([2,3].includes(this.datas.roleContractReceived)) {
+    if ([2,3].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email) {
       this.checkShowEdit = !this.checkShowEdit;
       setTimeout(()=>{
         this.inputEditText.nativeElement.focus();

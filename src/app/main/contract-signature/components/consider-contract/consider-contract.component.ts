@@ -18,7 +18,7 @@ import * as $ from "jquery";
 import {ProcessingHandleEcontractComponent} from "../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
 import interact from "interactjs";
 import {variable} from "../../../../config/variable";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import Swal from 'sweetalert2'
 import {AppService} from "../../../../service/app.service";
 import {ForwardContractComponent} from "../../shared/model/forward-contract/forward-contract.component";
@@ -113,6 +113,7 @@ export class ConsiderContractComponent implements OnInit {
   ];
   typeSign: any = 0;
   isOtp: boolean = false;
+  recipientId: any;
   idContract: any;
   isDataFileContract: any;
   isDataContract: any;
@@ -125,6 +126,7 @@ export class ConsiderContractComponent implements OnInit {
     private contractService: ContractService,
     private modalService: NgbModal,
     private activeRoute: ActivatedRoute,
+    private router: Router,
     private appService: AppService,
     private toastService : ToastService,
     private dialog: MatDialog
@@ -145,6 +147,12 @@ export class ConsiderContractComponent implements OnInit {
 
   getDataContractSignature() {
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
+    this.activeRoute.queryParams
+      .subscribe(params => {
+          this.recipientId = params.recipientId;
+          console.log(this.recipientId);
+        }
+      );
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
       console.log(rs);
 
@@ -818,9 +826,10 @@ export class ConsiderContractComponent implements OnInit {
     if ((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2)
     ) {
-      this.contractService.considerRejectContract(this.idContract).subscribe(
+      this.contractService.considerRejectContract(this.recipientId).subscribe(
         (result) => {
           this.toastService.showSuccessHTMLWithTimeout('Từ chối hợp đồng thành công', '', 1000);
+          this.router.navigate(['/main/contract-signature/receive/processed']);
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
         }
@@ -828,7 +837,7 @@ export class ConsiderContractComponent implements OnInit {
     } else {
       for(const signUpdate of this.isDataObjectSignature) {
         console.log('ki anh', signUpdate);
-        if (signUpdate && signUpdate.type == 2 && this.datas.roleContractReceived == 3 && signUpdate.email == this.currentUser.email) {
+        if (signUpdate && signUpdate.type == 2 && this.datas.roleContractReceived == 3 && signUpdate?.recipient?.email === this.currentUser.email) {
 
           const formData = {
             "name": "image.jpg",
@@ -880,16 +889,17 @@ export class ConsiderContractComponent implements OnInit {
   }
 
   signContract() {
-    const signUpdate = this.isDataObjectSignature.filter((item: any) => item.email === this.currentUser.email).map((item: any) =>  {
+    const signUpdate = this.isDataObjectSignature.filter((item: any) => item?.recipient?.email === this.currentUser.email).map((item: any) =>  {
       return {
         name: item.name,
         value: item.value,
         font: item.font,
         font_size: item.font_size
       }});
-    this.contractService.updateInfoContractConsider(signUpdate).subscribe(
+    this.contractService.updateInfoContractConsider(signUpdate, this.recipientId).subscribe(
       (result) => {
         this.toastService.showSuccessHTMLWithTimeout('Ký hợp đồng thành công', '', 1000);
+        this.router.navigate(['/main/contract-signature/receive/processed']);
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
       }
