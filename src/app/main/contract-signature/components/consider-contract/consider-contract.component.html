@@ -6,27 +6,27 @@
       <div style="line-height: 25px">
         <div>
           <span class="title-contract">Loại hợp đồng:</span>
-          <span>{{datas.contract_information.type_contract}}</span>
+          <span>{{datas.is_data_contract.type_id}}</span>
         </div>
         <div>
           <span class="title-contract">Tên hợp đồng:</span>
-          <span>{{datas.contract_information.name_contract}}</span>
+          <span>{{datas.is_data_contract.name}}</span>
         </div>
         <div>
           <span class="title-contract">Số hợp đồng:</span>
-          <span>{{datas.contract_information.number_contract}}</span>
+          <span>{{datas.is_data_contract.code}}</span>
         </div>
         <div>
           <span class="title-contract">File đính kèm:</span>
-          <span>
-            <a *ngFor="let d of this.datas.contract_information.file_attach" style="color: #106DB6" rel="stylesheet" href="https://vnexpress.net/" target="_blank">{{d.file_name}}</a>
-          </span>
+<!--          <span>-->
+<!--            <a *ngFor="let d of this.datas.contract_information.file_attach" style="color: #106DB6" rel="stylesheet" href="https://vnexpress.net/" target="_blank">{{d.file_name}}</a>-->
+<!--          </span>-->
         </div>
         <div>
           <span class="title-contract">Hợp đồng liên quan:</span>
-          <span *ngFor="let d of this.datas.contract_information.file_related_contract" style="color: #106DB6">
-            {{d.file_name}} <span style="color: black">, </span>
-          </span>
+<!--          <span *ngFor="let d of this.datas.contract_information.file_related_contract" style="color: #106DB6">-->
+<!--            {{d.file_name}} <span style="color: black">, </span>-->
+<!--          </span>-->
         </div>
 
       </div>
@@ -98,7 +98,6 @@
              [ngClass]="changeColorDrag(null,true)"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
-          <!--          </div>-->
           <app-image-sign-contract [datas]="datas" [sign]="d"></app-image-sign-contract>
         </div>
       </div>
