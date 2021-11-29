@@ -241,10 +241,10 @@
 
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
-          <div class="div_icon" *ngIf="item.status == 1 && item.role == 1">
+          <div class="div_icon" *ngIf="item.status == 1 && item.role == 2">
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item.id)">Xem xét</button>
           </div>
-          <div class="div_icon" *ngIf="item.status == 1 && item.role == 2">
+          <div class="div_icon" *ngIf="item.status == 1 && item.role == 1">
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item.id)">Điều phối</button>
           </div>
           <div class="div_icon" *ngIf="item.status == 1 && item.role == 3">
