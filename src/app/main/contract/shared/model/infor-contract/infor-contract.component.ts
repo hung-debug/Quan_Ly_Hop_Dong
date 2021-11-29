@@ -97,30 +97,30 @@ export class InforContractComponent implements OnInit {
 
     this.contractTypeList = [
       {
-        item_id: 1,
-        item_text: "Loại hợp đồng A",
+        id: 1,
+        name: "Loại hợp đồng A",
       },
       {
-        item_id: 2,
-        item_text: "Loại hợp đồng B",
+        id: 2,
+        name: "Loại hợp đồng B",
       }
     ];
 
     this.contractConnectList = [
       {
-        item_id: 1,
-        item_text: "Hợp đồng A",
+        ref_id: 1,
+        ref_name: "Hợp đồng A",
       },
       {
-        item_id: 2,
-        item_text: "Hợp đồng B",
+        ref_id: 2,
+        ref_name: "Hợp đồng B",
       }
     ];
 
     this.dropdownTypeSettings = {
       singleSelection: true,
-      idField: "item_id",
-      textField: "item_text",
+      idField: "id",
+      textField: "name",
       selectAllText: "Chọn tất cả",
       unSelectAllText: "Bỏ chọn tất cả",
       allowSearchFilter: true
@@ -128,8 +128,8 @@ export class InforContractComponent implements OnInit {
 
     this.dropdownConnectSettings = {
       singleSelection: false,
-      idField: "item_id",
-      textField: "item_text",
+      idField: "ref_id",
+      textField: "ref_name",
       selectAllText: "Chọn tất cả",
       unSelectAllText: "Bỏ chọn tất cả",
       allowSearchFilter: true

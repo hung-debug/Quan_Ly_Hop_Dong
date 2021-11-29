@@ -95,7 +95,8 @@ export class ContractService {
       //is_template: false,
       //status: 1,
       alias_url: "",
-      refs: [],
+      //refs: datas.contractConnect
+      refs:[]
     });
     console.log(headers);
     console.log(body);
