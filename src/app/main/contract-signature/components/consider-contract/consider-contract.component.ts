@@ -684,6 +684,10 @@ export class ConsiderContractComponent implements OnInit {
 
   submitEvents(e: any) {
     console.log(e);
+    if (!this.validateSignature()) {
+      this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
+      return;
+    }
     if (e && e == 1) {
       Swal.fire({
         title: this.getTextAlertConfirm(),
@@ -905,6 +909,13 @@ export class ConsiderContractComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
       }
     )
+  }
+
+  validateSignature() {
+    const validSign = this.isDataObjectSignature.filter(
+      (item: any) => item?.recipient?.email === this.currentUser.email && item.required && !item.value
+    )
+    return validSign.length == 0;
   }
 
   t() {

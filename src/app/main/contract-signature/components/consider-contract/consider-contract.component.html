@@ -86,11 +86,11 @@
 
   <!--  file content-->
   <!--  width: 74.7%-->
-  <div class="col-md-9 sample-contract__file viewer-pdf isDrag" *ngIf="!view"
+  <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
        style="background-color: #F2F2F2; position: relative;">
     <div id="pdf-viewer-step-3">
       <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-        <div class="resize-drag not-out-drop"
+        <div class="resize-drag not-out-drop" *ngIf="!view"
              [id]="d.id"
              style="z-index: -1; width:135px!important;height:85px!important;"
              #itemElement
@@ -98,7 +98,7 @@
              [ngClass]="changeColorDrag(null,true)"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
-          <app-image-sign-contract [datas]="datas" [view]="view" [sign]="d"></app-image-sign-contract>
+          <app-image-sign-contract *ngIf="!view" [datas]="datas" [view]="view" [sign]="d"></app-image-sign-contract>
         </div>
       </div>
     </div>
