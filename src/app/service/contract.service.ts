@@ -44,8 +44,8 @@ export class ContractService {
   currentUser:any = JSON.parse(localStorage.getItem('currentUser') || '').customer;
 
 
-  token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
-  customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
+  token:any;
+  customer_id:any;
   errorData: any = {};
   redirectUrl: string = '';
 
@@ -53,7 +53,13 @@ export class ContractService {
               public datepipe: DatePipe,) {
   }
 
+  getCurrentUser(){
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+    this.customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
+  }
+
   public getContractList(filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any): Observable<any> {
+    this.getCurrentUser();
     if (filter_from_date != "") {
       filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
     }
@@ -67,6 +73,7 @@ export class ContractService {
   }
 
   public getContractMyProcessList(filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any): Observable<any> {
+    this.getCurrentUser();
     if (filter_from_date != "") {
       filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
     }
@@ -80,6 +87,7 @@ export class ContractService {
   }
 
   addContractStep1(datas: any) {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -114,6 +122,7 @@ export class ContractService {
   }
 
   getContractSample(data_sample_contract: any) {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -132,6 +141,7 @@ export class ContractService {
   }
 
   processAuthorizeContract(infoAuthorize: any) {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -139,6 +149,7 @@ export class ContractService {
   }
 
   getContractDetermine(data_determine: any, id: any) {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -157,6 +168,7 @@ export class ContractService {
   }
 
   getListDataCoordination(id: any) {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -166,6 +178,7 @@ export class ContractService {
   }
 
   addDocument(datas: any) {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -185,6 +198,7 @@ export class ContractService {
   }
 
   addConfirmContract(datas: any) {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -194,6 +208,7 @@ export class ContractService {
   }
 
   changeStatusContract(id: any, statusNew:any) {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -203,6 +218,7 @@ export class ContractService {
   }
 
   considerRejectContract(id: any) {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -212,6 +228,7 @@ export class ContractService {
   }
 
   updateInfoContractSignature(datas: any) {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -221,6 +238,7 @@ export class ContractService {
   }
 
   updateInfoContractConsider(datas: any) {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -236,7 +254,7 @@ export class ContractService {
   }
 
   uploadFileImageSignature(formData: any) {
-
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
@@ -246,6 +264,7 @@ export class ContractService {
 
 
   getDetailContract(idContract: any) {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);

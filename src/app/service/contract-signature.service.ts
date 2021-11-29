@@ -27,9 +27,12 @@ export class ContractSignatureService {
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
 
+  getCurrentUser(){
+    this.token = JSON.parse(localStorage.getItem('currentUser')||'').access_token;
+  }
+
   public getContractMyProcessList(filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any): Observable<any> {
-    console.log(JSON.parse(<string>localStorage.getItem('currentUser')));
-    let is_token = JSON.parse(<string>localStorage.getItem('currentUser'));
+    this.getCurrentUser();
     if (filter_from_date != "") {
       filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
     }
@@ -38,7 +41,7 @@ export class ContractSignatureService {
     }
     let listContractMyProcessUrl = this.listContractMyProcessUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status;
     console.log(listContractMyProcessUrl);
-    const headers = {'Authorization': 'Bearer ' + is_token.access_token}
+    const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
   }
 
