@@ -17,7 +17,7 @@ export class UserService {
   resetPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/recover`;
   resetPasswordTokenUrl:any = `${environment.apiUrl}/api/v1/customers/changePassword`;
 
-  token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+
 
   constructor(private http: HttpClient) { }
 
@@ -56,9 +56,10 @@ export class UserService {
   }
 
   sendResetPasswordToken(passwordOld:string, passwordNew:string) {
+    let token = JSON.parse(localStorage.getItem('currentUser') || '')?.access_token;
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
+      .append('Authorization', 'Bearer ' + token);
     const body = JSON.stringify({password: passwordOld, newPassword: passwordNew});
     return this.http.post<User>(this.resetPasswordTokenUrl, body, {'headers':headers})
     .pipe(
