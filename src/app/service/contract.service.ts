@@ -34,14 +34,14 @@ export class ContractService {
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
 
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
-  addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
-  addGetFileContract:any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
-  addGetObjectSignature:any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
-  updateInfoContractUrl:any = `${environment.apiUrl}/api/v1/fields/`;
-  updateInfoContractConsiderUrl:any = `${environment.apiUrl}/api/v1/processes/approval/`;
-  rejectContractUrl:any = `${environment.apiUrl}/api/v1/processes/reject/`;
-  uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
-  currentUser:any = JSON.parse(localStorage.getItem('currentUser') || '').customer;
+  addGetDataContract: any = `${environment.apiUrl}/api/v1/contracts/`;
+  addGetFileContract: any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
+  addGetObjectSignature: any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
+  updateInfoContractUrl: any = `${environment.apiUrl}/api/v1/fields/`;
+  updateInfoContractConsiderUrl: any = `${environment.apiUrl}/api/v1/processes/approval/`;
+  rejectContractUrl: any = `${environment.apiUrl}/api/v1/processes/reject/`;
+  uploadFileUrl: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
+  currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '').customer;
 
 
   token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
@@ -53,7 +53,7 @@ export class ContractService {
               public datepipe: DatePipe,) {
   }
 
-  public getContractList(filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any): Observable<any> {
+  public getContractList(filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status: any): Observable<any> {
     if (filter_from_date != "") {
       filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
     }
@@ -192,7 +192,7 @@ export class ContractService {
     return this.http.put<Contract>(this.addConfirmContractUrl + datas.id + '/start-bpm', body, {'headers': headers});
   }
 
-  changeStatusContract(id: any, statusNew:any) {
+  changeStatusContract(id: any, statusNew: any) {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -216,7 +216,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = "";
     console.log(headers);
-    return this.http.put<any>(this.updateInfoContractUrl + datas.id, datas,{'headers': headers});
+    return this.http.put<any>(this.updateInfoContractUrl + datas.id, datas, {'headers': headers});
   }
 
   updateInfoContractConsider(datas: any) {
@@ -231,7 +231,7 @@ export class ContractService {
       }
     ;
     console.log(headers);
-    return this.http.put<any>(this.updateInfoContractConsiderUrl + datas.recipient_id + '/' + datas.id , body, {'headers': headers});
+    return this.http.put<any>(this.updateInfoContractConsiderUrl + datas.recipient_id + '/' + datas.id, body, {'headers': headers});
   }
 
   uploadFileImageSignature(formData: any) {
@@ -240,7 +240,7 @@ export class ContractService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.post<File>(this.uploadFileUrl + this.currentUser.organization_id + `/single`, formData, {'headers':headers});
+    return this.http.post<File>(this.uploadFileUrl + this.currentUser.organization_id + `/single`, formData, {'headers': headers});
   }
 
 
@@ -256,7 +256,6 @@ export class ContractService {
     ];
     return forkJoin(arrApi);
   }
-
 
 
   objDefaultSampleContract() {
@@ -471,6 +470,30 @@ export class ContractService {
     return throwError(errorMessage);
   }
 
+  getDatermineRole3() {
+    return {
+      "name": "",
+      "type": 3, // Đối tác cá nhân
+      "ordering": 1,
+      "contract_id": 1,
+      "recipients": [
+        // người ký
+        {
+          "name": "",
+          "email": "",
+          "phone": "",
+          "role": 3, // người ký
+          "ordering": 1,
+          "status": 1,
+          "username": "",
+          "password": "",
+          "is_otp": 1,
+          "sign_type": []
+        }
+      ],
+    }
+  }
+
   getDataDetermine() {
     return [
       {
@@ -586,9 +609,9 @@ export class ContractService {
           }
         ],
         // "contract_id": 1
-      }
+      },
       // {
-      //   "name": "Đối tác cá nhân",
+      //   "name": "",
       //   "type": 3, // Đối tác cá nhân
       //   "ordering": 1,
       //   "contract_id": 1,
