@@ -180,7 +180,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       data_user_sign.forEach((element: any) => {
         if (element.type == 1) {
           element.recipients.forEach((item: any) => {
-            if (item.role == 3 || item.role == 4) {
+            if (item.role == 3 || item.role == 4 || item.role == 2) {
               item['type_unit'] = 'organization';
               item['selected'] = false;
               item['is_disable'] = false;
@@ -188,9 +188,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               this.list_sign_name.push(item);
             }
           })
-        } else if (element.type == 2) {
+        } else if (element.type == 2 || element.type == 3) {
           element.recipients.forEach((item: any) => {
-            if (item.role == 3 || item.role == 4) {
+            if (item.role == 3 || item.role == 4 || item.role == 2) {
               item['type_unit'] = 'partner'
               item['selected'] = false;
               item['is_disable'] = false;

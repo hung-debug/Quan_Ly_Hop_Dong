@@ -637,27 +637,27 @@ export class ContractService {
         ],
         // "contract_id": 1
       },
-      // {
-      //   "name": "",
-      //   "type": 3, // Đối tác cá nhân
-      //   "ordering": 1,
-      //   "contract_id": 1,
-      //   "recipients": [
-      //     // người ký
-      //     {
-      //       "name": "",
-      //       "email": "",
-      //       "phone": "",
-      //       "role": 3, // người ký
-      //       "ordering": 1,
-      //       "status": 1,
-      //       "username": "",
-      //       "password": "",
-      //       "is_otp": 1,
-      //       "sign_type": []
-      //     }
-      //   ],
-      // }
+      {
+        "name": "",
+        "type": 3, // Đối tác cá nhân
+        "ordering": 1,
+        "contract_id": 1,
+        "recipients": [
+          // người ký
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 3, // người ký
+            "ordering": 1,
+            "status": 1,
+            "username": "",
+            "password": "",
+            "is_otp": 1,
+            "sign_type": []
+          }
+        ],
+      }
     ]
   }
 
