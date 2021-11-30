@@ -13,6 +13,7 @@ import locale from 'date-fns/locale/en-US';
 import {DatePipe} from '@angular/common';
 import {Router} from '@angular/router';
 import { ToastService } from 'src/app/service/toast.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-infor-contract',
@@ -65,6 +66,7 @@ export class InforContractComponent implements OnInit {
     public datepipe: DatePipe,
     private router: Router,
     private toastService : ToastService,
+    private spinner: NgxSpinnerService
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -272,22 +274,24 @@ export class InforContractComponent implements OnInit {
                 // this.datas.document_id = '1';
                 this.nextOrPreviousStep(this.step);
                 console.log(this.datas);
-
+                this.spinner.hide();
               },
               error => {
+                this.spinner.hide();
                 console.log("false connect file");
                 return false;
               }
             );
           },
           error => {
+            this.spinner.hide();
             console.log("false file");
             return false;
           }
         );
-
       },
       error => {
+        this.spinner.hide();
         console.log("false content");
         return false;
       }
@@ -297,7 +301,8 @@ export class InforContractComponent implements OnInit {
 
   // --next step 2
   next() {
-    if (!this.validData()) return;
+    this.spinner.show();
+    if (!this.validData()){ this.spinner.hide();}
     else {
       // gán value step 1 vào datas
       this.datas.name = this.name;
@@ -317,6 +322,7 @@ export class InforContractComponent implements OnInit {
 
       this.callAPI();
     }
+
   }
 
   saveDraft() {
