@@ -11,6 +11,7 @@ import {ForwardContractComponent} from "../../shared/model/forward-contract/forw
 })
 export class FooterSignatureComponent implements OnInit {
   @Input() datas: any;
+  @Input() view: any;
   @Output() submitChanges = new EventEmitter<number>();
 
   constructor(

@@ -114,6 +114,7 @@ export class ConsiderContractComponent implements OnInit {
   typeSign: any = 0;
   isOtp: boolean = false;
   recipientId: any;
+  view: any;
   idContract: any;
   isDataFileContract: any;
   isDataContract: any;
@@ -150,6 +151,7 @@ export class ConsiderContractComponent implements OnInit {
     this.activeRoute.queryParams
       .subscribe(params => {
           this.recipientId = params.recipientId;
+          this.view = params.view;
           console.log(this.recipientId);
         }
       );
@@ -438,7 +440,7 @@ export class ConsiderContractComponent implements OnInit {
     //   }
     // } else {
     if (d['width']) {
-      style.width = 135 + "px";
+      style.width = parseInt(d['width']) + "px";
     }
     // }
 
@@ -456,7 +458,7 @@ export class ConsiderContractComponent implements OnInit {
     //   }
     // } else {
     if (d['height']) {
-      style.height = 85 + "px";
+      style.height = parseInt(d['height']) + "px";
     }
     // }
 
@@ -682,6 +684,10 @@ export class ConsiderContractComponent implements OnInit {
 
   submitEvents(e: any) {
     console.log(e);
+    if (!this.validateSignature()) {
+      this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
+      return;
+    }
     if (e && e == 1) {
       Swal.fire({
         title: this.getTextAlertConfirm(),
@@ -903,6 +909,13 @@ export class ConsiderContractComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
       }
     )
+  }
+
+  validateSignature() {
+    const validSign = this.isDataObjectSignature.filter(
+      (item: any) => item?.recipient?.email === this.currentUser.email && item.required && !item.value
+    )
+    return validSign.length == 0;
   }
 
   t() {

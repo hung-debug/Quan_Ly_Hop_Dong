@@ -433,6 +433,17 @@ export class ContractSignatureComponent implements OnInit {
     );
   }
 
+  openConsiderContractViewProcesse(item: any) {
+    if (item.status == 2) {
+      this.router.navigate(['main/contract-signature/receive/wait-processing/consider-contract/' + item.contractId],
+        {
+          queryParams: { 'recipientId': item.id , 'view': true}
+        }
+      );
+    }
+
+  }
+
   openSignatureContract(item: any) {
     this.isContractService.getListDataCoordination(44).subscribe((res: any) => {
       console.log(res);
