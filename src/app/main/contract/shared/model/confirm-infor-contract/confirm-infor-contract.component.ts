@@ -90,6 +90,13 @@ export class ConfirmInforContractComponent implements OnInit {
               this.connPartnerDocs = "<br>";
             }
           })
+        } else if (element.type == 3) {
+          element.recipients.forEach((item: any) => {
+            if (item.role == 3 && item.name) {
+              this.partnerSigns += this.connPartnerSigns + item.name + " - " + item.email;
+              this.connPartnerSigns = "<br>";
+            }
+          })
         }
       })
       // this.getListSignName(data_list_user_sign);
