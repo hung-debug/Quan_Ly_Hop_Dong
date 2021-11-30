@@ -252,51 +252,78 @@ export class InforContractComponent implements OnInit {
   callAPI() {
     //call API step 1
     this.contractService.addContractStep1(this.datas).subscribe((data) => {
-        this.datas.id = data?.id;
-        this.datas.contract_id = data?.id;
-        console.log(data);
+      console.log(JSON.stringify(data));
+      this.datas.id = data?.id;
+      this.datas.contract_id = data?.id;
 
-        //call API upload file
-        this.uploadService.uploadFile(this.datas).subscribe((data) => {
-            console.log(data);
-            console.log("File " + data.success);
-            this.datas.filePath = data.fileObject.filePath;
-            console.log(this.datas.filePath);
+        this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
             console.log(JSON.stringify(data));
+            this.datas.filePath = data.fileObject.filePath;
 
             this.contractService.addDocument(this.datas).subscribe((data) => {
                 console.log(JSON.stringify(data));
-
-                //next step
-                this.step = variable.stepSampleContract.step2;
                 this.datas.document_id = data?.id;
-                this.datas.stepLast = this.step;
-                // this.datas.document_id = '1';
-                this.nextOrPreviousStep(this.step);
-                console.log(this.datas);
-                this.spinner.hide();
+
+                if(this.datas.attachFile != null){
+                  this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
+                    console.log(JSON.stringify(data));
+                    this.datas.filePathAttach = data.fileObject.filePath;
+
+                    this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
+                      console.log(JSON.stringify(data));
+                      this.datas.document_attach_id = data?.id;
+
+                      //next step
+                      this.step = variable.stepSampleContract.step2;
+                      this.datas.stepLast = this.step;
+                      // this.datas.document_id = '1';
+                      this.nextOrPreviousStep(this.step);
+                      console.log(this.datas);
+                      this.spinner.hide();
+                      },
+                      error => {
+                        this.spinner.hide();
+                        this.toastService.showErrorHTMLWithTimeout("Liên kết file đính kèm thất bại!", "", 10000);
+                        return false;
+                      }
+                    );
+                  },
+                  error => {
+                    this.spinner.hide();
+                    this.toastService.showErrorHTMLWithTimeout("Đẩy file đính kèm thất bại!", "", 10000);
+                    return false;
+                  }
+                  );
+                }else {
+                  //next step
+                  this.step = variable.stepSampleContract.step2;
+                  this.datas.stepLast = this.step;
+                  // this.datas.document_id = '1';
+                  this.nextOrPreviousStep(this.step);
+                  console.log(this.datas);
+                  this.spinner.hide();
+                }
               },
               error => {
                 this.spinner.hide();
-                console.log("false connect file");
+                this.toastService.showErrorHTMLWithTimeout("Liên kết file hợp đồng thất bại!", "", 10000);
                 return false;
               }
             );
           },
           error => {
             this.spinner.hide();
-            console.log("false file");
+            this.toastService.showErrorHTMLWithTimeout("Đẩy file thất bại!", "", 10000);
             return false;
           }
         );
       },
       error => {
         this.spinner.hide();
-        console.log("false content");
+        this.toastService.showErrorHTMLWithTimeout("Đẩy thông tin hợp đồng thất bại!", "", 10000);
         return false;
       }
     );
-
   }
 
   // --next step 2

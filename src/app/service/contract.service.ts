@@ -199,6 +199,26 @@ export class ContractService {
     return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
   }
 
+  addDocumentAttach(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: datas.name,
+      type: 1,
+      path: datas.filePathAttach,
+      internal: 1,
+      ordering: 1,
+      status: 1,
+      contract_id: datas.id,
+      is_primary: false,
+    });
+    console.log(headers);
+    console.log(body);
+    return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
+  }
+
   addConfirmContract(datas: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()

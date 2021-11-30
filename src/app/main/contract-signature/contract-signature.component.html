@@ -225,9 +225,18 @@
       <div class="col-md-5">
         <div class="row">
           <div class="col-md-12 item_contract_infor">Trạng thái:
-            <span class="status_blue" *ngIf="item.status == 1">Chờ xử lý</span>
-            <span class="status_blue" *ngIf="item.status == 2">Đã xử lý</span>
-            <span class="status_blue" *ngIf="item.status == 3">Từ chối</span>
+            <span class="status_blue" *ngIf="item.status == 1 && item.role == 1">Chờ điều phối</span>
+            <span class="status_blue" *ngIf="item.status == 1 && item.role == 2">Chờ xem xét</span>
+            <span class="status_blue" *ngIf="item.status == 1 && item.role == 3">Chờ ký</span>
+            <span class="status_blue" *ngIf="item.status == 1 && item.role == 4">Chờ văn thư</span>
+            <span class="status_blue" *ngIf="item.status == 2 && item.role == 1">Đã điều phối</span>
+            <span class="status_blue" *ngIf="item.status == 2 && item.role == 2">Đã xem xét</span>
+            <span class="status_blue" *ngIf="item.status == 2 && item.role == 3">Đã ký</span>
+            <span class="status_blue" *ngIf="item.status == 2 && item.role == 4">Đã văn thư</span>
+            <span class="status_blue" *ngIf="item.status == 3 && item.role == 1">Đã từ chối điều phối</span>
+            <span class="status_blue" *ngIf="item.status == 3 && item.role == 2">Đã từ chối xem xét</span>
+            <span class="status_blue" *ngIf="item.status == 3 && item.role == 3">Đã từ chối ký</span>
+            <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">Đã từ chối văn thư</span>
           </div>
         </div>
       </div>
