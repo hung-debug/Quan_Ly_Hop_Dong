@@ -123,6 +123,10 @@ export class ContractService {
       );
   }
 
+  getInforOriganzation() {
+
+  }
+
   getContractSample(data_sample_contract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()

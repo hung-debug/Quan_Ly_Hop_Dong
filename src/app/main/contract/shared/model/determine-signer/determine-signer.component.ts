@@ -67,59 +67,11 @@ export class DetermineSignerComponent implements OnInit {
     // data đối tác
     this.data_parnter_organization = this.is_determine_clone.filter((p: any) => p.type == 2);
     this.data_parnter_individual = this.is_determine_clone.filter((p: any) => p.type == 3);
-    // this.is_partner_origanzation_coordinator= this.data_parnter_organization.recipients.filter((p: any) => p.role == 2);
-    // this.is_partner_origanzation_reviewer= this.data_parnter_organization.recipients.filter((p: any) => p.role == 1);
-    // this.is_partner_origanzation_signature = this.data_parnter_organization.recipients.filter((p: any) => p.role == 3);
-    // this.is_partner_origanzation_document = this.data_parnter_organization.recipients.filter((p: any) => p.role == 4)[0];
 
-    //data cá nhân
-    // this.individual =  this.is_determine_clone.filter((p: any) => p.type == 3)[0];
-    // this.is_partner_individual_coordinator= this.individual.recipients.filter((p: any) => p.role == 2);
-    // this.is_partner_individual_reviewer= this.individual.recipients.filter((p: any) => p.role == 1);
-    // this.is_partner_individual_signature = this.individual.recipients.filter((p: any) => p.role == 3);
-    // this.is_partner_individual_document = this.individual.recipients.filter((p: any) => p.role == 4)[0];
-
-    // this.userForm = this.formBuilder.group({
-    //   order: 1,
-    //   name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
-    //   userViews: this.formBuilder.array([]),
-    //   userSigns: this.formBuilder.array([]),
-    //   userDocs: this.formBuilder.array([])
-    //   // userViews: (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]) ,
-    //   // userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
-    //   // userDocs: (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]) ,
-    // });
-
-
-    // this.userForm.setControl('userViews', (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]));
-    // this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
-    // this.userForm.setControl('userDocs', (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]));
 
     this.partnerForm = this.formBuilder.group({
       partnerArrs: this.formBuilder.array([this.newPartner()])
     });
-
-    //this.partnerForm.setControl('partnerArrs', (this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0) ? this.formBuilder.array(this.datas.partnerForm.partnerArrs) : this.formBuilder.array([this.newPartner()]));
-
-
-    if (this.datas.userForm && this.datas.userForm.userViews.length > 0) {
-      this.setUserViews(this.datas.userForm.userViews);
-    }
-    if (this.datas.userForm && this.datas.userForm.userSigns.length > 0) {
-      this.setUserSigns(this.datas.userForm.userSigns);
-    }
-    if (this.datas.userForm && this.datas.userForm.userDocs.length > 0) {
-      this.setUserDocs(this.datas.userForm.userDocs);
-    }
-    if (this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0) {
-      this.datas.partnerForm.partnerArrs.forEach(async (element: any, index: any) => {
-        await this.setPartnerDocs(element.partnerDocs);
-        await this.setPartnerLeads(element.partnerLeads, index);
-        await this.setPartnerSign(element.partnerSigns);
-        await this.setPartnerUser(element.partnerUsers);
-        await this.setPartnerViews(element.partnerViews);
-      })
-    }
 
     this.dropdownSignTypeSettings = {
       singleSelection: false,
@@ -130,134 +82,6 @@ export class DetermineSignerComponent implements OnInit {
       allowSearchFilter: true
     };
   }
-
-  // gán lại dữ liệu value cho form
-  setUserViews(data: any) {
-    const fa = (this.userForm.get('userViews') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setUserSigns(data: any) {
-    const fa = (this.userForm.get('userSigns') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-
-
-      // const faC:any = (fa.at(i).get('signType') as FormGroup);
-      // // // console.log(fa);
-      // // // console.log(faC);
-      // // // console.log(faC);
-      // // //const faAAA:any = (faC as FormArray);
-      // // // console.log(faAAA);
-      // for (let j = 0; j < faC.length; j++) {
-      //     faC.push(this.formBuilder.array(faC[j]));
-      // }
-
-      // console.log(faC);
-
-
-    }
-  }
-
-  setUserDocs(data: any) {
-    const fa = (this.userForm.get('userDocs') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setPartnerDocs(data: any) {
-    const fa = (this.partners.get('partnerDocs') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setPartnerLeads(data: any, index: any) {
-    //const fa = (this.partnerArrs().at(index).get('partnerLeads') as FormArray);
-    const fa = (this.partners.get('partnerLeads') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setPartnerSign(data: any) {
-    const fa = (this.partners.get('partnerSigns') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setPartnerUser(data: any) {
-    const fa = (this.partners.get('partnerUsers') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setPartnerViews(data: any) {
-    const fa = (this.partners.get('partnerViews') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setPartnerArrs(data: any) {
-    const partnerArrs = (this.partnerForm.get("partnerArrs") as FormArray);
-    console.log("data" + data);
-    for (let i = 0; i < data.length; i++) {
-
-      const partnerLeads = (partnerArrs.at(i)?.get('partnerLeads') as FormArray) || [];
-      for (let j = 0; j < data[i].partnerLeads.length; j++) {
-        partnerLeads.push(this.formBuilder.group(data[i].partnerLeads[j]));
-      }
-
-      const partnerViews = (partnerArrs.at(i)?.get('partnerViews') as FormArray) || [];
-      for (let j = 0; j < data[i].partnerViews.length; j++) {
-        partnerViews.push(this.formBuilder.group(data[i].partnerViews[j]));
-      }
-
-      const partnerSigns = (partnerArrs.at(i)?.get('partnerSigns') as FormArray) || [];
-      for (let j = 0; j < data[i].partnerSigns.length; j++) {
-        partnerSigns.push(this.formBuilder.group(data[i].partnerSigns[j]));
-      }
-
-      const partnerDocs = (partnerArrs.at(i)?.get('partnerDocs') as FormArray) || [];
-      for (let j = 0; j < data[i].partnerDocs.length; j++) {
-        partnerDocs.push(this.formBuilder.group(data[i].partnerDocs[j]));
-      }
-
-      const partnerUsers = (partnerArrs.at(i)?.get('partnerUsers') as FormArray) || [];
-      for (let j = 0; j < data[i].partnerUsers.length; j++) {
-        partnerUsers.push(this.formBuilder.group(data[i].partnerUsers[j]));
-      }
-    }
-
-  }
-
-
-  // this.data = [
-  //   {
-  //     "order": 1,
-  //     "name": "Nguyễn Tuấn Anh",
-  //     "email": "nguyentuananh@vhc.com.vn",
-  //     "signType": [
-  //       {
-  //         "item_id": 1,
-  //         "item_text": "Ký ảnh"
-  //       }
-  //     ],
-  //     "isOtp": true,
-  //     "phone": "0979889999",
-  //     "id": 3923609057,
-  //     "selected": false,
-  //     "sign_unit": "organization"
-  //   }]
-
-  // @ts-ignore
-
 
   partnerArrs(): FormArray {
     return this.partnerForm.get("partnerArrs") as FormArray
@@ -607,6 +431,10 @@ export class DetermineSignerComponent implements OnInit {
     }, {});
   }
 
+  getDataSignature(e: any) {
+    console.log(e)
+  }
+
   getValueData(data: any, index: any) {
     return [
       {id: 1, name: 'Ký ảnh'},
@@ -895,11 +723,18 @@ export class DetermineSignerComponent implements OnInit {
     let data_partner_add = [];
     let data = [...this.contractService.getDataDetermine()];
     // return data.filter((p: any) => p.type == 2);
-    data_partner_add = data.filter((p: any) => (p.type == 2 || p.type == 3));
+    data_partner_add = data.filter((p: any) => (p.type == 2));
     let count_data = data_partner_add[0];
     count_data.ordering = data_partner_add.length + 1;
     // this.is_determine_clone.push(count_data);
     this.data_parnter_organization.push(count_data);
+  }
+
+  deletePartner(index: any) {
+    this.data_parnter_organization.splice(index, 1);
+    this.data_parnter_organization.forEach((res: any, index: number) => {
+      res.ordering =  index + 1;
+    })
   }
 
   changeData(item: any, index: any) {

@@ -12,8 +12,8 @@ import {getYear} from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import {DatePipe} from '@angular/common';
 import {Router} from '@angular/router';
-import { ToastService } from 'src/app/service/toast.service';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {ToastService} from 'src/app/service/toast.service';
+import {NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-infor-contract',
@@ -65,7 +65,7 @@ export class InforContractComponent implements OnInit {
     private contractService: ContractService,
     public datepipe: DatePipe,
     private router: Router,
-    private toastService : ToastService,
+    private toastService: ToastService,
     private spinner: NgxSpinnerService
   ) {
     this.step = variable.stepSampleContract.step1;
@@ -249,13 +249,12 @@ export class InforContractComponent implements OnInit {
     }
   }
 
-  callAPI() {
+  async callAPI() {
     //call API step 1
     this.contractService.addContractStep1(this.datas).subscribe((data) => {
-      console.log(JSON.stringify(data));
-      this.datas.id = data?.id;
-      this.datas.contract_id = data?.id;
-
+        console.log(JSON.stringify(data));
+        this.datas.id = data?.id;
+        this.datas.contract_id = data?.id;
         this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
             console.log(JSON.stringify(data));
             this.datas.filePath = data.fileObject.filePath;
@@ -264,37 +263,37 @@ export class InforContractComponent implements OnInit {
                 console.log(JSON.stringify(data));
                 this.datas.document_id = data?.id;
 
-                if(this.datas.attachFile != null){
+                if (this.datas.attachFile != null) {
                   this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
-                    console.log(JSON.stringify(data));
-                    this.datas.filePathAttach = data.fileObject.filePath;
-
-                    this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
                       console.log(JSON.stringify(data));
-                      this.datas.document_attach_id = data?.id;
+                      this.datas.filePathAttach = data.fileObject.filePath;
 
-                      //next step
-                      this.step = variable.stepSampleContract.step2;
-                      this.datas.stepLast = this.step;
-                      // this.datas.document_id = '1';
-                      this.nextOrPreviousStep(this.step);
-                      console.log(this.datas);
+                      this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
+                          console.log(JSON.stringify(data));
+                          this.datas.document_attach_id = data?.id;
+
+                          //next step
+                          this.step = variable.stepSampleContract.step2;
+                          this.datas.stepLast = this.step;
+                          // this.datas.document_id = '1';
+                          this.nextOrPreviousStep(this.step);
+                          console.log(this.datas);
+                          this.spinner.hide();
+                        },
+                        error => {
+                          this.spinner.hide();
+                          this.toastService.showErrorHTMLWithTimeout("Liên kết file đính kèm thất bại!", "", 10000);
+                          return false;
+                        }
+                      );
+                    },
+                    error => {
                       this.spinner.hide();
-                      },
-                      error => {
-                        this.spinner.hide();
-                        this.toastService.showErrorHTMLWithTimeout("Liên kết file đính kèm thất bại!", "", 10000);
-                        return false;
-                      }
-                    );
-                  },
-                  error => {
-                    this.spinner.hide();
-                    this.toastService.showErrorHTMLWithTimeout("Đẩy file đính kèm thất bại!", "", 10000);
-                    return false;
-                  }
+                      this.toastService.showErrorHTMLWithTimeout("Đẩy file đính kèm thất bại!", "", 10000);
+                      return false;
+                    }
                   );
-                }else {
+                } else {
                   //next step
                   this.step = variable.stepSampleContract.step2;
                   this.datas.stepLast = this.step;
@@ -329,8 +328,9 @@ export class InforContractComponent implements OnInit {
   // --next step 2
   next() {
     this.spinner.show();
-    if (!this.validData()){ this.spinner.hide();}
-    else {
+    if (!this.validData()) {
+      this.spinner.hide();
+    } else {
       // gán value step 1 vào datas
       this.datas.name = this.name;
       this.datas.code = this.code;
