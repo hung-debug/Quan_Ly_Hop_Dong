@@ -18,6 +18,7 @@ import {HsmDialogSignComponent} from "../hsm-dialog-sign/hsm-dialog-sign.compone
 export class ImageSignContractComponent implements OnInit, AfterViewInit {
   @Input() datas: any;
   @Input() sign: any;
+  @Input() view: any;
   @ViewChild('inputEditText') inputEditText: ElementRef;
   checkShowEdit = false;
   unsubscribe$: Subject<string> = new Subject();
@@ -75,7 +76,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doSign() {
-    if (this.sign.sign_unit == 'chu_ky_anh' && this.sign?.recipient?.email == this.currentUser.email) {
+    if (this.sign.sign_unit == 'chu_ky_anh' && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.openPopupSignContract(1);
     }
   }
@@ -198,7 +199,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doEditText() {
-    if ([2,3].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email) {
+    if ([2,3].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.checkShowEdit = !this.checkShowEdit;
       setTimeout(()=>{
         this.inputEditText.nativeElement.focus();

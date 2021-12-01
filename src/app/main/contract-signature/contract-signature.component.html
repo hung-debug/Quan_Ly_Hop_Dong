@@ -213,7 +213,7 @@
 
   <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}">
     <div class="row">
-      <div class="col-md-12 item_contract_name">{{item.contractName}}</div>
+      <div class="col-md-12 item_contract_name" (click)="openConsiderContractViewProcesse(item)">{{item.contractName}}</div>
     </div>
     <div class="row">
       <div class="col-md-12 item_contract_infor">Số hợp đồng: {{item.contractNumber}}</div>
@@ -225,9 +225,18 @@
       <div class="col-md-5">
         <div class="row">
           <div class="col-md-12 item_contract_infor">Trạng thái:
-            <span class="status_blue" *ngIf="item.status == 1">Chờ xử lý</span>
-            <span class="status_blue" *ngIf="item.status == 2">Đã xử lý</span>
-            <span class="status_blue" *ngIf="item.status == 3">Từ chối</span>
+            <span class="status_blue" *ngIf="item.status == 1 && item.role == 1">Chờ điều phối</span>
+            <span class="status_blue" *ngIf="item.status == 1 && item.role == 2">Chờ xem xét</span>
+            <span class="status_blue" *ngIf="item.status == 1 && item.role == 3">Chờ ký</span>
+            <span class="status_blue" *ngIf="item.status == 1 && item.role == 4">Chờ văn thư</span>
+            <span class="status_blue" *ngIf="item.status == 2 && item.role == 1">Đã điều phối</span>
+            <span class="status_blue" *ngIf="item.status == 2 && item.role == 2">Đã xem xét</span>
+            <span class="status_blue" *ngIf="item.status == 2 && item.role == 3">Đã ký</span>
+            <span class="status_blue" *ngIf="item.status == 2 && item.role == 4">Đã văn thư</span>
+            <span class="status_blue" *ngIf="item.status == 3 && item.role == 1">Đã từ chối điều phối</span>
+            <span class="status_blue" *ngIf="item.status == 3 && item.role == 2">Đã từ chối xem xét</span>
+            <span class="status_blue" *ngIf="item.status == 3 && item.role == 3">Đã từ chối ký</span>
+            <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">Đã từ chối văn thư</span>
           </div>
         </div>
       </div>
@@ -241,17 +250,16 @@
 
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
-          <!-- <div class="div_icon" *ngIf="item.status == 1 && item.role == 1"> -->
-          <div class="div_icon" *ngIf="(item.status == 1 || item.status == 0) && item.role == 1">
+          <div class="div_icon" *ngIf="(item.status == 1 ) && item.role == 1">
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item.contractId)">Điều phối</button>
           </div>
-          <div class="div_icon" *ngIf="(item.status == 1 || item.status == 0) && item.role == 2">
+          <div class="div_icon" *ngIf="(item.status == 1) && item.role == 2">
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item)">Xem xét</button>
           </div>
-          <div class="div_icon" *ngIf="(item.status == 1 || item.status == 0) && item.role == 3">
+          <div class="div_icon" *ngIf="(item.status == 1) && item.role == 3">
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item)">Ký</button>
           </div>
-          <div class="div_icon" *ngIf="(item.status == 1 || item.status == 0) && item.role == 4">
+          <div class="div_icon" *ngIf="(item.status == 1) && item.role == 4">
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item.contractId)">Văn thư</button>
           </div>
         </div>

@@ -55,10 +55,11 @@ export class ConfirmInforContractComponent implements OnInit {
 
     if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
       let data_user_sign = [...this.datas.determine_contract];
+      console.log(data_user_sign);
       data_user_sign.forEach((element: any) => {
         if (element.type == 1) {
           element.recipients.forEach((item: any) => {
-            if (item.role == 1 && item.name) {
+            if (item.role == 2 && item.name) {
               this.userViews += this.connUserViews + item.name + " - " + item.email;
               this.connUserViews = "<br>";
             }
@@ -74,12 +75,12 @@ export class ConfirmInforContractComponent implements OnInit {
         } else if (element.type == 2) {
           element.recipients.forEach((item: any) => {
             if (item.role == 1 && item.name) {
-              this.partnerViews += this.connPartnerViews + item.name + " - " + item.email;
-              this.connPartnerViews = "<br>";
-            }
-            else if (item.role == 2 && item.name) {
               this.partnerLeads += this.connPartnerLeads + item.name + " - " + item.email;
               this.connPartnerLeads = "<br>";
+            }
+            else if (item.role == 2 && item.name) {
+              this.partnerViews += this.connPartnerViews + item.name + " - " + item.email;
+              this.connPartnerViews = "<br>";
             }
             else if (item.role == 3 && item.name) {
               this.partnerSigns += this.connPartnerSigns + item.name + " - " + item.email;
@@ -88,6 +89,13 @@ export class ConfirmInforContractComponent implements OnInit {
             else if (item.role == 4 && item.name) {
               this.partnerDocs += this.connPartnerDocs + item.name + " - " + item.email;
               this.connPartnerDocs = "<br>";
+            }
+          })
+        } else if (element.type == 3) {
+          element.recipients.forEach((item: any) => {
+            if (item.role == 3 && item.name) {
+              this.partnerSigns += this.connPartnerSigns + item.name + " - " + item.email;
+              this.connPartnerSigns = "<br>";
             }
           })
         }

@@ -271,10 +271,11 @@ export class ContractSignatureComponent implements OnInit {
     this.p = 1;
     //get list contract
     this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
-      if (this.filter_status == 0) {
-        this.contracts = data.entities.filter((i: any) => (i.status == 1 || i.status == 0))
-      } else {
-        this.contracts = data.entities.filter((i: any) => (i.status == 2 || i.status == 3))
+      if(this.filter_status==0){
+        this.contracts = data.entities.filter((i:any) => (i.status==1))
+      }else{
+        this.contracts = data.entities.filter((i:any) => (i.status==2 || i.status==3))
+      }
       }
 
 
@@ -372,10 +373,10 @@ export class ContractSignatureComponent implements OnInit {
   autoSearch(event: any) {
     this.p = 1;
     this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
-      if (this.filter_status == 0) {
-        this.contracts = this.transform(data.entities.filter((i: any) => (i.status == 1 || i.status == 0)), event);
-      } else {
-        this.contracts = this.transform(data.entities.filter((i: any) => (i.status == 2 || i.status == 3)), event);
+      if(this.filter_status==0){
+        this.contracts = this.transform(data.entities.filter((i:any) => (i.status==1)), event);
+      }else{
+        this.contracts = this.transform(data.entities.filter((i:any) => (i.status==2 || i.status==3)), event);
       }
       this.pageTotal = this.contracts.length;
       if (this.pageTotal == 0) {
@@ -441,11 +442,31 @@ export class ContractSignatureComponent implements OnInit {
     })
   }
 
+  openConsiderContractViewProcesse(item: any) {
+    if (item.status == 2) {
+      this.router.navigate(['main/contract-signature/receive/wait-processing/consider-contract/' + item.contractId],
+        {
+          queryParams: { 'recipientId': item.id , 'view': true}
+        }
+      );
+    }
+
+  }
+
   openSignatureContract(item: any) {
-    this.router.navigate(['main/contract-signature/receive/wait-processing/personal-signature-contract/' + item.contractId],
+    this.isContractService.getListDataCoordination(44).subscribe((res: any) => {
+      console.log(res);
+      if (!localStorage.getItem('data_coordinates_contract')) {
+        let data_coordination = {...this.datas, ...res};
+        localStorage.setItem('data_coordinates_contract', JSON.stringify({data_coordinates: data_coordination}));
+      }
+      this.router.navigate(['main/contract-signature/receive/wait-processing/personal-signature-contract/' + item.contractId],
       {
         queryParams: {'recipientId': item.id}
       });
+    }, (res: any) => {
+      alert('Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý!')
+    })
   }
 
   openCoordinatorContract(id: number) {
