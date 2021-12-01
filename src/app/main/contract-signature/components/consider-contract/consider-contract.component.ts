@@ -683,8 +683,8 @@ export class ConsiderContractComponent implements OnInit {
   }
 
   submitEvents(e: any) {
-    console.log(e);
-    if (!this.validateSignature()) {
+    if (!this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
+      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2))) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
       return;
     }
