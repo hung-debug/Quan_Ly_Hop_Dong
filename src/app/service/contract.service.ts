@@ -32,6 +32,7 @@ export class ContractService {
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+  listContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/organizations/`;
 
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
 
@@ -47,6 +48,7 @@ export class ContractService {
 
   token:any;
   customer_id:any;
+  organization_id:any;
   errorData: any = {};
   redirectUrl: string = '';
 
@@ -57,6 +59,15 @@ export class ContractService {
   getCurrentUser(){
     this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
     this.customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
+    this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.organization_id;
+  }
+
+  public getContractTypeList(): Observable<any> {
+    this.getCurrentUser();
+    let listContractTypeUrl = this.listContractTypeUrl + this.organization_id;
+    console.log(listContractTypeUrl);
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<Contract[]>(listContractTypeUrl, {headers}).pipe();
   }
 
   public getContractList(filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any): Observable<any> {
@@ -68,7 +79,7 @@ export class ContractService {
     if (filter_to_date != "") {
       filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
     }
-    let listContractUrl = this.listContractUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status;
+    let listContractUrl = this.listContractUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&size=1000";
     console.log(listContractUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();
@@ -100,13 +111,13 @@ export class ContractService {
       //sign_order: 1,
       sign_time: this.datepipe.transform(datas.sign_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
       notes: datas.notes,
-      type_id: 4,
+      type_id: datas.type_id,
       //customer_id: this.customer_id,
       //is_template: false,
       //status: 1,
       alias_url: "",
-      //refs: datas.contractConnect
-      refs:[]
+      refs: datas.contractConnect,
+      //refs:[]
     });
     console.log(headers);
     console.log(body);
@@ -513,7 +524,7 @@ export class ContractService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-    window.alert(errorMessage);
+    console.log(errorMessage);
     return throwError(errorMessage);
   }
 
