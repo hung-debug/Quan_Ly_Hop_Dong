@@ -184,7 +184,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               item['type_unit'] = 'organization';
               item['selected'] = false;
               item['is_disable'] = false;
-              item['type'] = element.type;
+              // item['type'] = element.type;
               this.list_sign_name.push(item);
             }
           })
@@ -1021,13 +1021,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           element.sign_config.forEach((item: any) => {
             item['font'] = 'Aria';
             item['font_size'] = 14;
-            // if (!item.type) {
-            //   item['type'] = 1;
-            // }
             item['contract_id'] = this.datas.contract_id;
             item['document_id'] = this.datas.document_id;
             if (item.text_attribute_name) {
               item.name = item.text_attribute_name;
+            }
+            if (item.sign_unit == 'chu_ky_anh') {
+              item['type']=2;
+            } else if (item.sign_unit == 'chu_ky_so') {
+              item['type']=3;
+            } else if (item.sign_unit == 'so_tai_lieu') {
+              item['type']=4;
+            } else {
+              item['type']=1;
             }
             // item['recipient_id'] = element.id;
             delete item.id;

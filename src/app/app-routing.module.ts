@@ -89,6 +89,10 @@ const routes: Routes = [
         path: 'form-contract-template/:action/:id',
         component: AddContractTemplateComponent,
       },
+      {
+        path: 'user',
+        component: UserComponent,
+      },
       // {
       //   path: 'step-3-contract',
       //   component: createContractComponent
