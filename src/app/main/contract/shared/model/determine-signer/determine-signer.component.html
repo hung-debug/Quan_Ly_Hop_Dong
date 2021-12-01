@@ -19,14 +19,14 @@
                    [(ngModel)]="d.ordering">
             <div class="col-md-10 participants--input" style="display: flex">
               <div class="participants__name">
-                <div class="label text-color">Họ tên: *</div>
+                <div class="label text-color">Họ tên: <span class="required-title">*</span></div>
                 <div class="input-data">
                   <img src="assets/img/icon_name.svg" class="input-img">
                   <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                 </div>
               </div>
               <div class="participants__name">
-                <div class="label text-color">Email: *</div>
+                <div class="label text-color">Email: <span class="required-title">*</span></div>
                 <div class="input-data">
                   <img src="assets/img/login_email.svg" class="input-img">
                   <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
@@ -51,7 +51,7 @@
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
-                  <div class="label text-color">Họ tên: *</div>
+                  <div class="label text-color">Họ tên: <span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
                     <input #abcd [id]="'signature-origanzation-' + d.ordering" type="text" placeholder="Nhập họ và tên"
@@ -59,7 +59,7 @@
                   </div>
                 </div>
                 <div class="participants__name">
-                  <div class="label text-color">Email: *</div>
+                  <div class="label text-color">Email: <span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
@@ -68,7 +68,7 @@
               </div>
               <div class="participants--input select-text-input" style="display: flex">
                 <div class="participants__name">
-                  <div class="label text-color">Loại ký: *</div>
+                  <div class="label text-color">Loại ký: <span class="required-title">*</span></div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
                                            [settings]="dropdownSignTypeSettings" [data]="signTypeList"
                                            (change)="getDataSignature($event)">
@@ -82,13 +82,14 @@
                       </div>
                     </ng-template>
                   </ng-multiselect-dropdown>
+                  <div class="required-title notify">Bạn chỉ được phép chọn 1 kiểu ký số!</div>
                 </div>
                 <div class="participants-otp">
                   <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
                   <span class="label text-color">OTP</span>
                 </div>
                 <div class="participants__name">
-                  <div class="label text-color">Số điện thoại: *</div>
+                  <div class="label text-color">Số điện thoại: <span class="required-title">*</span></div>
                   <input type="number" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
                 </div>
               </div>
@@ -110,14 +111,14 @@
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
-                  <div class="label text-color">Họ tên: *</div>
+                  <div class="label text-color">Họ tên: <span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
                     <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                   </div>
                 </div>
                 <div class="participants__name">
-                  <div class="label text-color">Email: *</div>
+                  <div class="label text-color">Email: <span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
@@ -127,7 +128,7 @@
 
               <div class="participants-information">
                 <div class="participants-signature-type">
-                  <div class="label text-color">Loại ký: *</div>
+                  <div class="label text-color">Loại ký: <span class="required-title">*</span></div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
                                            [settings]="dropdownSignTypeSettings" [data]="signTypeList">
                     <ng-template #optionsTemplate let-item let-option="option"
@@ -140,6 +141,7 @@
                       </div>
                     </ng-template>
                   </ng-multiselect-dropdown>
+                  <div class="required-title notify">Bạn chỉ được phép chọn 1 kiểu ký số!</div>
                 </div>
               </div>
             </div>
@@ -192,14 +194,14 @@
                      [(ngModel)]="d.ordering">
               <div class="col-md-10 participants--input" style="display: flex; margin-bottom: 14px">
                 <div class="participants__name">
-                  <div class="label text-color">Họ tên: *</div>
+                  <div class="label text-color">Họ tên: <span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
                     <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                   </div>
                 </div>
                 <div class="participants__name">
-                  <div class="label text-color">Email: *</div>
+                  <div class="label text-color">Email: <span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
@@ -223,14 +225,14 @@
                      [(ngModel)]="d.ordering">
               <div class="col-md-10 participants--input">
                 <div class="participants__name">
-                  <div class="label text-color">Họ tên: *</div>
+                  <div class="label text-color">Họ tên: <span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
                     <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                   </div>
                 </div>
                 <div class="participants__name">
-                  <div class="label text-color">Email: *</div>
+                  <div class="label text-color">Email: <span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
@@ -255,7 +257,7 @@
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
-                    <div class="label text-color">Họ tên: *</div>
+                    <div class="label text-color">Họ tên: <span class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/icon_name.svg" class="input-img">
                       <input [id]="'signature-partner-' + d.ordering" type="text" placeholder="Nhập họ và tên"
@@ -263,7 +265,7 @@
                     </div>
                   </div>
                   <div class="participants__name">
-                    <div class="label text-color">Email: *</div>
+                    <div class="label text-color">Email: <span class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
                       <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
@@ -272,7 +274,7 @@
                 </div>
                 <div class="participants--input select-text-input" style="display: flex">
                   <div class="participants__name">
-                    <div class="label text-color">Loại ký: *</div>
+                    <div class="label text-color">Loại ký: <span class="required-title">*</span></div>
 
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
                                              [settings]="dropdownSignTypeSettings" [data]="signTypeList">
@@ -286,13 +288,14 @@
                         </div>
                       </ng-template>
                     </ng-multiselect-dropdown>
+                    <div class="required-title notify">Bạn chỉ được phép chọn 1 kiểu ký số!</div>
                   </div>
                   <div class="participants-otp">
                     <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
                     <span class="label text-color">OTP</span>
                   </div>
                   <div class="participants__name">
-                    <div class="label text-color">Số điện thoại: *</div>
+                    <div class="label text-color">Số điện thoại: <span class="required-title">*</span></div>
                     <input type="number" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
                   </div>
                 </div>
@@ -316,14 +319,14 @@
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
-                    <div class="label text-color">Họ tên: *</div>
+                    <div class="label text-color">Họ tên: <span class="required-title"> *</span></div>
                     <div class="input-data">
                       <img src="assets/img/icon_name.svg" class="input-img">
                       <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
                     </div>
                   </div>
                   <div class="participants__name">
-                    <div class="label text-color">Email: *</div>
+                    <div class="label text-color">Email: <span class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
                       <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
@@ -333,10 +336,8 @@
 
                 <div class="participants-information">
                   <div class="participants-signature-type">
-                    <div class="label text-color">Loại ký: *</div>
-
-                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                                             [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                    <div class="label text-color">Loại ký: <span class="required-title">*</span></div>
+                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}" [settings]="dropdownSignTypeSettings" [data]="signTypeList">
                       <ng-template #optionsTemplate let-item let-option="option"
                                    let-id="id" let-isSelected="isSelected">
                         <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -347,7 +348,7 @@
                         </div>
                       </ng-template>
                     </ng-multiselect-dropdown>
-
+                    <div class="required-title notify">Bạn chỉ được phép chọn 1 kiểu ký số!</div>
                   </div>
                 </div>
               </div>
@@ -373,7 +374,7 @@
                 <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
                   <div class="participants--input" style="display: flex">
                     <div class="participants__name">
-                      <div class="label text-color">Họ tên: *</div>
+                      <div class="label text-color">Họ tên: <span class="required-title">*</span></div>
                       <div class="input-data">
                         <img src="assets/img/icon_name.svg" class="input-img">
                         <input [id]="'signature-partner-' + d.ordering" type="text" placeholder="Nhập họ và tên"
@@ -381,7 +382,7 @@
                       </div>
                     </div>
                     <div class="participants__name">
-                      <div class="label text-color">Email: *</div>
+                      <div class="label text-color">Email: <span class="required-title">*</span></div>
                       <div class="input-data">
                         <img src="assets/img/login_email.svg" class="input-img">
                         <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
@@ -390,7 +391,7 @@
                   </div>
                   <div class="participants--input select-text-input" style="display: flex">
                     <div class="participants__name">
-                      <div class="label text-color">Loại ký: *</div>
+                      <div class="label text-color">Loại ký: <span class="required-title">*</span></div>
 
                       <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
                                                [settings]="dropdownSignTypeSettings" [data]="signTypeList">
@@ -404,13 +405,14 @@
                           </div>
                         </ng-template>
                       </ng-multiselect-dropdown>
+                      <div class="required-title notify">Bạn chỉ được phép chọn 1 kiểu ký số!</div>
                     </div>
                     <div class="participants-otp">
                       <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
                       <span class="label text-color">OTP</span>
                     </div>
                     <div class="participants__name">
-                      <div class="label text-color">Số điện thoại: *</div>
+                      <div class="label text-color">Số điện thoại: <span class="required-title">*</span></div>
                       <input type="number" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
                     </div>
                   </div>

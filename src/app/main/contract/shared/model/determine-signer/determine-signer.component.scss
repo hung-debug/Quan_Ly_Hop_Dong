@@ -390,6 +390,15 @@ input[type=number] {
   border-radius: 5px;
 }
 
+.required-title {
+  color: red;
+}
+
+.notify {
+  width: 100% !important;
+  text-align: left;
+}
+
 //::ng-deep .mat-form-field-flex {
 //  background-color: white;
 //}
