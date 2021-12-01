@@ -352,26 +352,43 @@ export class InforContractComponent implements OnInit {
 
   }
 
+  defineData(datas:any){
+    console.log(this.type_id);
+    if(this.type_id != null){
+      this.datas.type_id = this.type_id[0].id;
+    }
+
+    if(this.contractConnect != null){
+      const array_empty: any[] = [];
+      this.contractConnect.forEach((element: any, index: number) => {
+        array_empty.push(element.ref_id);
+      })
+      this.datas.contractConnect = array_empty;
+      console.log(array_empty);
+    }
+  }
+
   saveDraft() {
     if (!this.validData()) return;
     else {
       // gán value step 1 vào datas
       this.datas.name = this.name;
       this.datas.code = this.code;
-      this.datas.type_id = this.type_id;
-      this.datas.contractConnect = this.contractConnect;
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
 
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(this.datas.contractFile);
-      fileReader.onload = (e) => {
-        //@ts-ignore
-        const base64result = fileReader.result.toString().split(',')[1];
-        this.datas.file_content = base64result;
-      };
+      this.defineData(this.datas);
+      console.log(this.datas);
 
-      this.callAPI_Draft();
+      // const fileReader = new FileReader();
+      // fileReader.readAsDataURL(this.datas.contractFile);
+      // fileReader.onload = (e) => {
+      //   //@ts-ignore
+      //   const base64result = fileReader.result.toString().split(',')[1];
+      //   this.datas.file_content = base64result;
+      // };
+
+      // this.callAPI_Draft();
     }
   }
 
