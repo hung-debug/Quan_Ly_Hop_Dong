@@ -31,11 +31,11 @@
     <div class="col-md-4">
       <div>{{'organization' | translate}}</div>
       <div>
-        <input type="text" [(ngModel)]="organization_id"/>
+        <input type="text" [(ngModel)]="organization_id" readonly/>
       </div>
     </div>
     <div class="col-md-4 btn_save">
-      <button class="btn btn-lg btn-block">{{'btn.update' | translate }}</button>
+      <button class="btn btn-lg btn-block" (click)="updateInforUser()">{{'btn.update' | translate }}</button>
     </div>
   </div>
 </div>
@@ -57,7 +57,7 @@
           </div>
         </div>
         <div class="btn-footer">
-          <button class="btn btn-lg btn-block">{{'btn.update' | translate }}</button>
+          <button class="btn btn-lg btn-block" (click)="updateSignFileImageUser()">{{'btn.update' | translate }}</button>
         </div>
       </div>
     </div>
@@ -84,7 +84,7 @@
           </div>
         </div>
         <div class="btn-footer">
-          <button class="btn btn-lg btn-block">{{'btn.update' | translate }}</button>
+          <button class="btn btn-lg btn-block" (click)="updateSignKpiUser()">{{'btn.update' | translate }}</button>
         </div>
       </div>
     </div>
@@ -103,7 +103,7 @@
           </div>
         </div>
         <div class="btn-footer">
-          <button class="btn btn-lg btn-block">{{'btn.update' | translate }}</button>
+          <button class="btn btn-lg btn-block" (click)="updateSignHsmUser()">{{'btn.update' | translate }}</button>
         </div>
       </div>
     </div>

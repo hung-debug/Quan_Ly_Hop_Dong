@@ -524,7 +524,7 @@ export class ContractService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-    console.log(errorMessage);
+    console.error(errorMessage);
     return throwError(errorMessage);
   }
 

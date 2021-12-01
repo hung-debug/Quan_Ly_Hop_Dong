@@ -1,5 +1,6 @@
 .label-header{
   text-transform: uppercase;
+  color: #106DB6;
 }
 .content-body{
   border: 1px solid #87CAFF;
@@ -17,11 +18,12 @@ hr{
   border: 1px solid #87CAFF;
 }
 input {
-  outline: none;
-  height: 33px;
+  border: 0;
+  background: #EFF2F5;
+  padding: 7px;
   width: 100%;
-  border-radius: 7px;
-  border: 1px solid #77C3FF  ;
+  outline:0px;
+  border-radius: 5px;
 }
 .btn_save{
   align-self: flex-end;

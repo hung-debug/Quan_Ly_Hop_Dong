@@ -85,7 +85,7 @@ export class UserService {
        // Get server-side error
        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
      }
-     window.alert(errorMessage);
+     console.error(errorMessage);
      return throwError(errorMessage);
   }
 }

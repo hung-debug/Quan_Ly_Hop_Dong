@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/service/app.service';
+import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
   selector: 'app-user',
@@ -19,7 +20,8 @@ export class UserComponent implements OnInit {
 
   nameHsm:any;
 
-  constructor(private appService: AppService,) { }
+  constructor(private appService: AppService,
+    private toastService : ToastService,) { }
 
   ngOnInit(): void {
     this.appService.setTitle("user.information");
@@ -28,6 +30,22 @@ export class UserComponent implements OnInit {
     this.email = JSON.parse(localStorage.getItem('currentUser')||'').customer.email;
     this.phone = JSON.parse(localStorage.getItem('currentUser')||'').customer.phone;
     this.organization_id = JSON.parse(localStorage.getItem('currentUser')||'').customer.organization_id;
+  }
+
+  updateInforUser(){
+    this.toastService.showSuccessHTMLWithTimeout("Cập nhật thông tin thành công!", "", 10000);
+  }
+
+  updateSignFileImageUser(){
+    this.toastService.showSuccessHTMLWithTimeout("Cập nhật file chữ ký ảnh thành công!", "", 10000);
+  }
+
+  updateSignKpiUser(){
+    this.toastService.showSuccessHTMLWithTimeout("Cập nhật chữ ký KPI thành công!", "", 10000);
+  }
+
+  updateSignHsmUser(){
+    this.toastService.showSuccessHTMLWithTimeout("Cập nhật chữ ký HSM thành công!", "", 10000);
   }
 
 }
