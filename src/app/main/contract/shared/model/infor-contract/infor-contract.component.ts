@@ -264,20 +264,16 @@ export class InforContractComponent implements OnInit {
         this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
             console.log(JSON.stringify(data));
             this.datas.filePath = data.fileObject.filePath;
-
             this.contractService.addDocument(this.datas).subscribe((data) => {
                 console.log(JSON.stringify(data));
                 this.datas.document_id = data?.id;
-
                 if (this.datas.attachFile != null) {
                   this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
                       console.log(JSON.stringify(data));
                       this.datas.filePathAttach = data.fileObject.filePath;
-
                       this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
                           console.log(JSON.stringify(data));
                           this.datas.document_attach_id = data?.id;
-
                           //next step
                           this.step = variable.stepSampleContract.step2;
                           this.datas.stepLast = this.step;
@@ -300,6 +296,14 @@ export class InforContractComponent implements OnInit {
                     }
                   );
                 } else {
+                  this.contractService.getDataNotifyOriganzation().subscribe((res: any) => {
+                    this.datas.name_origanzation = res.name;
+                  }, () => {
+                    this.spinner.hide();
+                    this.toastService.showErrorHTMLWithTimeout("Đã xảy ra lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!", "", 10000);
+                    return false;
+                  })
+
                   //next step
                   this.step = variable.stepSampleContract.step2;
                   this.datas.stepLast = this.step;

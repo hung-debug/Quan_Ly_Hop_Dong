@@ -45,6 +45,7 @@ export class ContractService {
   uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
   uploadFileBase64Url:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
   currentUser:any = JSON.parse(localStorage.getItem('currentUser') || '').customer;
+  getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
 
   token:any;
   customer_id:any;
@@ -163,6 +164,14 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.post<any>(this.processAuthorizeContractUrl, infoAuthorize, {'headers': headers});
+  }
+
+  getDataNotifyOriganzation() {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listContractUrl = this.getNotifyOriganzation + JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
+    return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();
   }
 
   getContractDetermine(data_determine: any, id: any) {
