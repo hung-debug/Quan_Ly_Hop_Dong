@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { DatepickerOptions } from 'ng2-datepicker';
-import { AppService } from 'src/app/service/app.service';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {DatepickerOptions} from 'ng2-datepicker';
+import {AppService} from 'src/app/service/app.service';
 import * as contractModel from './model/contract-model';
 
-import { getYear } from 'date-fns';
+import {getYear} from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import {ContractSignatureService} from "../../service/contract-signature.service";
 import {CONTRACT_RECEIVE_COORDINATOR} from "./model/contract-model";
 import {variable} from "../../config/variable";
 import {HttpClient} from "@angular/common/http";
 import {ContractService} from "../../service/contract.service";
+
 @Component({
   selector: 'app-contract',
   templateUrl: './contract-signature.component.html',
@@ -61,29 +62,29 @@ export class ContractSignatureComponent implements OnInit {
     action_title: 'Điều phối'
   }
 
-  action:string;
+  action: string;
   status: string;
-  type:string;
+  type: string;
   private sub: any;
-  searchText:string;
-  closeResult:string= '';
+  searchText: string;
+  closeResult: string = '';
   public contracts: any[] = [];
-  p:number = 1;
-  page:number = 5;
-  pageStart:number = 0;
-  pageEnd:number = 0;
-  pageTotal:number = 0;
-  statusPopup:number = 1;
-  notificationPopup:string = '';
+  p: number = 1;
+  page: number = 5;
+  pageStart: number = 0;
+  pageEnd: number = 0;
+  pageTotal: number = 0;
+  statusPopup: number = 1;
+  notificationPopup: string = '';
 
-  title:any="";
+  title: any = "";
 
   //filter contract
-  filter_type:any = "";
-  filter_contract_no:any = "";
-  filter_from_date:any = "";
-  filter_to_date:any = "";
-  filter_status:any="";
+  filter_type: any = "";
+  filter_contract_no: any = "";
+  filter_from_date: any = "";
+  filter_to_date: any = "";
+  filter_status: any = "";
 
   // options sample with default values
   options: DatepickerOptions = {
@@ -223,7 +224,7 @@ export class ContractSignatureComponent implements OnInit {
   //   });
   // }
 
-  open(content:any) {
+  open(content: any) {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -237,7 +238,7 @@ export class ContractSignatureComponent implements OnInit {
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
       return 'by clicking on a backdrop';
     } else {
-      return  `with: ${reason}`;
+      return `with: ${reason}`;
     }
   }
 
@@ -246,9 +247,9 @@ export class ContractSignatureComponent implements OnInit {
       // this.action = params['action'];
       // this.status = params['status'];
 
-      if (this.router.url.includes('contract-signature/receive/processed')){
+      if (this.router.url.includes('contract-signature/receive/processed')) {
         this.status = 'processed';
-      }else if (this.router.url.includes('contract-signature/receive/wait-processing')){
+      } else if (this.router.url.includes('contract-signature/receive/wait-processing')) {
         this.status = 'wait-processing';
       }
       console.log(this.router.url);
@@ -264,10 +265,9 @@ export class ContractSignatureComponent implements OnInit {
     });
 
 
-
   }
 
-  private getContractList(){
+  private getContractList() {
     this.p = 1;
     //get list contract
     this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
@@ -276,23 +276,23 @@ export class ContractSignatureComponent implements OnInit {
       }else{
         this.contracts = data.entities.filter((i:any) => (i.status==2 || i.status==3))
       }
+      }
 
 
-
-    //   this.contracts.forEach((element,index)=>{
-    //     if(element.status==0) delete this.contracts[index];
-    //  });
+      //   this.contracts.forEach((element,index)=>{
+      //     if(element.status==0) delete this.contracts[index];
+      //  });
 
       this.pageTotal = this.contracts.length;
       console.log(this.contracts);
-      if(this.pageTotal == 0){
+      if (this.pageTotal == 0) {
         this.p = 0;
         this.pageStart = 0;
         this.pageEnd = 0;
-      }else{
+      } else {
         this.setPage();
       }
-      this.contracts.forEach((key : any, v: any) => {
+      this.contracts.forEach((key: any, v: any) => {
         let contractId = key.participant.contract.id;
         let contractName = key.participant.contract.name;
         let contractNumber = key.participant.contract.code;
@@ -318,59 +318,59 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
-  private convertActionStr(): string{
+  private convertActionStr(): string {
 
 
     return 'contract.list.received';
 
   }
 
-  private convertStatusStr(){
-    if(this.status == 'draft'){
+  private convertStatusStr() {
+    if (this.status == 'draft') {
       this.filter_status = 0;
       this.title = 'contract.status.draft';
-    }else if(this.status == 'wait-processing'){
+    } else if (this.status == 'wait-processing') {
       this.filter_status = 0;
       this.title = 'contract.status.wait-processing';
-    }else if(this.status == 'processing'){
+    } else if (this.status == 'processing') {
       this.filter_status = 20;
       this.title = 'contract.status.processing';
-    }else if(this.status == 'processed'){
+    } else if (this.status == 'processed') {
       this.filter_status = 1;
       this.title = 'contract.status.processed';
-    }else if(this.status == 'expire'){
+    } else if (this.status == 'expire') {
       this.filter_status = -1;
       this.title = 'contract.status.expire';
-    }else if(this.status == 'overdue'){
+    } else if (this.status == 'overdue') {
       this.filter_status = -1;
       this.title = 'contract.status.overdue';
-    }else if(this.status == 'fail'){
+    } else if (this.status == 'fail') {
       this.filter_status = 31;
       this.title = 'contract.status.fail';
-    }else if(this.status == 'cancel'){
+    } else if (this.status == 'cancel') {
       this.filter_status = 32;
       this.title = 'contract.status.cancel';
-    }else if(this.status == 'complete'){
+    } else if (this.status == 'complete') {
       this.filter_status = 30;
       this.title = 'contract.status.complete';
-    }else{
+    } else {
       this.title = '';
     }
   }
 
-  setPage(){
-    this.pageStart = (this.p-1)*this.page+1;
-    this.pageEnd = (this.p)*this.page;
-    if(this.pageTotal < this.pageEnd){
+  setPage() {
+    this.pageStart = (this.p - 1) * this.page + 1;
+    this.pageEnd = (this.p) * this.page;
+    if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
   }
 
-  search(){
+  search() {
     this.getContractList();
   }
 
-  autoSearch(event:any){
+  autoSearch(event: any) {
     this.p = 1;
     this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
       if(this.filter_status==0){
@@ -379,15 +379,15 @@ export class ContractSignatureComponent implements OnInit {
         this.contracts = this.transform(data.entities.filter((i:any) => (i.status==2 || i.status==3)), event);
       }
       this.pageTotal = this.contracts.length;
-      if(this.pageTotal == 0){
+      if (this.pageTotal == 0) {
         this.p = 0;
         this.pageStart = 0;
         this.pageEnd = 0;
-      }else{
+      } else {
         this.setPage();
       }
 
-      this.contracts.forEach((key : any, v: any) => {
+      this.contracts.forEach((key: any, v: any) => {
         let contractId = key.participant.contract.id;
         let contractName = key.participant.contract.name;
         let contractNumber = key.participant.contract.code;
@@ -411,7 +411,7 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
-  transform(contracts:any, event:any):any[]  {
+  transform(contracts: any, event: any): any[] {
     let searchText = event.target.value;
     if (!contracts) {
       return [];
@@ -420,17 +420,26 @@ export class ContractSignatureComponent implements OnInit {
       return contracts;
     }
     searchText = searchText.toLocaleLowerCase();
-    return contracts.filter((it:any) => {
+    return contracts.filter((it: any) => {
       return it.participant.contract.name.toLocaleLowerCase().includes(searchText);
     });
   }
 
   openConsiderContract(item: any) {
-    this.router.navigate(['main/contract-signature/receive/wait-processing/consider-contract/' + item.contractId],
-      {
-        queryParams: { 'recipientId': item.id }
+    this.isContractService.getListDataCoordination(44).subscribe((res: any) => {
+      console.log(res);
+      if (!localStorage.getItem('data_coordinates_contract')) {
+        let data_coordination = {...this.datas, ...res};
+        localStorage.setItem('data_coordinates_contract', JSON.stringify({data_coordinates: data_coordination}));
       }
-    );
+      this.router.navigate(['main/contract-signature/receive/wait-processing/consider-contract/' + item.contractId],
+        {
+          queryParams: {'recipientId': item.id}
+        }
+      );
+    }, (res: any) => {
+      alert('Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý!')
+    })
   }
 
   openConsiderContractViewProcesse(item: any) {
@@ -453,14 +462,14 @@ export class ContractSignatureComponent implements OnInit {
       }
       this.router.navigate(['main/contract-signature/receive/wait-processing/personal-signature-contract/' + item.contractId],
       {
-        queryParams: { 'recipientId': item.id }
+        queryParams: {'recipientId': item.id}
       });
     }, (res: any) => {
       alert('Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý!')
     })
   }
 
-  openCoordinatorContract(id:number) {
+  openCoordinatorContract(id: number) {
     this.isContractService.getListDataCoordination(44).subscribe((res: any) => {
       console.log(res);
       if (!localStorage.getItem('data_coordinates_contract')) {
@@ -473,7 +482,7 @@ export class ContractSignatureComponent implements OnInit {
     })
   }
 
-  openSecretaryContract(id:number) {
+  openSecretaryContract(id: number) {
     this.router.navigate(['main/contract-signature/receive/wait-processing/secretary-contract/' + id]);
   }
 
