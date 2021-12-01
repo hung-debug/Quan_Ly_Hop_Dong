@@ -19,26 +19,26 @@
             </div>
 
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-              <button ngbDropdownItem class="drop" (click)="getCurrentUser(); open(information_user_login)">
+              <button ngbDropdownItem class="drop" (click)="infoUserDetail()">
                 <div style="display: flex; align-items: center;">
                   <div class="db_user">
                     <div class="db_user_detail"></div>
                   </div>
-                  <div>Thông tin tài khoản</div></div>
+                  <div>{{'user.information' | translate }}</div></div>
               </button>
               <button ngbDropdownItem class="drop" (click)="open(mymodal)">
                 <div style="display: flex; align-items: center;">
                   <div class="db_user">
                     <div class="db_password"></div>
                   </div>
-                  <div>Đổi mật khẩu</div>
+                  <div>{{'login.reset_password_new' | translate }}</div>
                 </div>
               </button>
               <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
                 <div style="display: flex; align-items: center;">
                   <div class="db_user"><div class="db_log_out"></div>
                 </div>
-                <div>Đăng xuất</div>
+                <div>{{'logout' | translate }}</div>
               </div>
               </button>
             </div>
@@ -190,58 +190,6 @@
           </div>
         </div>
       </form>
-    </div>
-  </div>
-</ng-template>
-
-<!-- Popup information user login -->
-<ng-template #information_user_login let-modal >
-  <div class="popup_content">
-    <div class="row">
-      <div class="col-md-10">
-        <h4 class="popup_title">THÔNG TIN TÀI KHOẢN</h4>
-      </div>
-      <div class="col-md-2 popup_close">
-        <span (click)="modal.dismiss('Cross click')">×</span>
-      </div>
-    </div>
-    <hr>
-    <div>
-      <div class="row">
-        <div class="col-md-12 item_text">
-          <div><i class="fa fa-address-book-o fa_icon"></i><span class="label_infor">Họ tên: {{currentUserForm.get('name').value}}</span></div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-12 item_text">
-          <div><i class="fa fa-envelope-o fa_icon"></i><span class="label_infor">Email: {{currentUserForm.get('email').value}}</span></div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-12 item_text">
-          <div><i class="fa fa-pencil fa_icon"></i><span class="label_infor">Số điện thoại: {{currentUserForm.get('phone').value}}</span></div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-12 item_text">
-          <div><i class="fa fa-pencil fa_icon"></i><span class="label_infor">Trạng thái: {{currentUserForm.get('status').value}}</span></div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-12 item_text">
-          <div><i class="fa fa-institution fa_icon"></i><span class="label_infor">Tổ chức: {{currentUserForm.get('organization_id').value}}</span></div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-12 item_text">
-          <div><i class="fa fa-pencil fa_icon"></i> <a href=""><span class="label_infor">Thay đổi chữ ký</span></a></div>
-        </div>
-      </div>
     </div>
   </div>
 </ng-template>

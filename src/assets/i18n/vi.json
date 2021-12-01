@@ -14,10 +14,13 @@
   "signup": "Đăng ký",
   "signup.not_account": "Bạn chưa có tài khoản",
   "login.reset_password": "Đặt lại mật khẩu",
+  "login.reset_password_new": "Đổi mật khẩu",
   "login.password_new.confirm.note": "Nhập mật khẩu mới và xác nhận lại mật khẩu",
   "login.password_new": "Mật khẩu mới",
   "login.password_old": "Mật khẩu cũ",
   "login.password_new.confirm": "Xác nhận mật khẩu mới",
+
+  "logout": "Đăng xuất",
 
   "menu.dashboard": "Trang chủ",
   "menu.contract.add": "Tạo mới HĐ",
@@ -96,6 +99,15 @@
   "user.sign-type": "Loại ký",
   "user.otp": "OTP",
   "user.phone": "Số điện thoại",
+  "user.birthday": "Ngày sinh",
+  "user.network": "Ngày sinh",
+  "user.information.individual": "Thông tin cá nhân",
+  "user.information": "Thông tin tài khoản",
+
+  "sign.update" : "Cập nhật chữ ký",
+  "sign.file-image" : "File chữ ký ảnh",
+  "sign.kpi" : "Chữ ký KPI",
+  "sign.hsm" : "Chữ ký HSM",
 
   "error.user.name.required": "Họ tên không được để trống",
   "error.user.email.required": "Email không được để trống",
@@ -122,6 +134,7 @@
   "btn.next": "Tiếp theo",
   "btn.previous": "Quay lại",
   "btn.save-draff": "Lưu nháp",
+  "btn.update": "Cập nhật",
   "btn.close": "Đóng",
   "btn.cancel": "Hủy bỏ",
   "btn.accept": "Đồng ý",

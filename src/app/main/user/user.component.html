@@ -1,17 +1,111 @@
-<div style="text-transform: uppercase;">Thông tin cá nhân</div>
-<div style="border: 1px solid #87CAFF;">
+<div class="label-header">{{'user.information.individual' | translate}}</div>
+<div class="content-body">
   <div class="row">
-    <div class="col-md-3">
-      <div>Họ và tên</div>
+    <div class="col-md-4">
+      <div>{{'user.name' | translate}}</div>
       <div>
-        <input />
+        <input type="text" [(ngModel)]="name"/>
       </div>
     </div>
-    <div class="col-md-3">
-
+    <div class="col-md-4">
+      <div>{{'user.email' | translate}}</div>
+      <div>
+        <input type="text" [(ngModel)]="email"/>
+      </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
+      <div>{{'user.information.individual' | translate}}</div>
+      <div>
+        <input type="text" [(ngModel)]="birthday"/>
+      </div>
+    </div>
+  </div>
 
+  <div class="row">
+    <div class="col-md-4">
+      <div>{{'user.phone' | translate}}</div>
+      <div>
+        <input type="text" [(ngModel)]="phone"/>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div>{{'organization' | translate}}</div>
+      <div>
+        <input type="text" [(ngModel)]="organization_id"/>
+      </div>
+    </div>
+    <div class="col-md-4 btn_save">
+      <button class="btn btn-lg btn-block">{{'btn.update' | translate }}</button>
+    </div>
+  </div>
+</div>
+
+<br>
+<div class="label-header">{{'sign.update' | translate}}</div>
+<div class="content-body">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="label-header">
+        {{'sign.file-image' | translate}}
+      </div>
+      <div class="content-body">
+        <div class="select-contract container-img-file" >
+          <div class="upload-image-region d-flex flex-column container-img-file-1">
+            <img src="assets/img/img-icon.svg" alt="#" width="50px">
+            <div class="text-choose-file">Chọn file ảnh chữ ký từ máy tính của bạn.</div>
+            <div class="text-support-extension">Hỗ trợ định dạng PNG, JPG, JPGE</div>
+          </div>
+        </div>
+        <div class="btn-footer">
+          <button class="btn btn-lg btn-block">{{'btn.update' | translate }}</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="label-header">
+        {{'sign.kpi' | translate}}
+      </div>
+      <div class="content-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div>{{'user.phone' | translate}}</div>
+            <div>
+              <input type="text" [(ngModel)]="phoneKpi"/>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div>{{'user.network' | translate}}</div>
+            <div>
+              <input type="text" [(ngModel)]="networkKpi"/>
+            </div>
+          </div>
+        </div>
+        <div class="btn-footer">
+          <button class="btn btn-lg btn-block">{{'btn.update' | translate }}</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="label-header">
+        {{'sign.hsm' | translate}}
+      </div>
+      <div class="content-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div>{{'user.email' | translate}}</div>
+            <div>
+              <input type="text" [(ngModel)]="nameHsm"/>
+            </div>
+          </div>
+        </div>
+        <div class="btn-footer">
+          <button class="btn btn-lg btn-block">{{'btn.update' | translate }}</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

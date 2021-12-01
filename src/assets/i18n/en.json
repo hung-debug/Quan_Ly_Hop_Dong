@@ -14,10 +14,13 @@
   "signup": "Signup",
   "signup.not_account": "Do not have an account",
   "login.reset_password": "Reset password",
+  "login.reset_password_new": "Reset password",
   "login.password_new.confirm.note": "Enter new password and confirm password again",
   "login.password_new": "New password",
   "login.password_old": "Old password",
   "login.password_new.confirm": "Confirm new password",
+
+  "logout": "Logout",
 
   "menu.dashboard": "Dashboard",
   "menu.contract.add": "Add contract",
@@ -96,6 +99,15 @@
   "user.sign-type": "Sign type",
   "user.otp": "OTP",
   "user.phone": "Phone",
+  "user.birthday": "Birthday",
+  "user.network": "Network",
+  "user.information.individual": "Personal information",
+  "user.information": "Account information",
+
+  "sign.update" : "Update signature",
+  "sign.file-image" : "Image signature file",
+  "sign.kpi" : "KPI signature",
+  "sign.hsm" : "HSM signature",
 
   "error.user.name.required": "Name is required",
   "error.user.email.required": "Email is required",
@@ -122,6 +134,7 @@
   "btn.next": "Next",
   "btn.previous": "Previous",
   "btn.save-draff": "Save draff",
+  "btn.update": "Update",
   "btn.close": "Close",
   "btn.cancel": "Cancel",
   "btn.accept": "Accept",
