@@ -65,61 +65,13 @@ export class DetermineSignerComponent implements OnInit {
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
     // data đối tác
-    this.data_parnter_organization = this.is_determine_clone.filter((p: any) => p.type == 2);
-    this.data_parnter_individual = this.is_determine_clone.filter((p: any) => p.type == 3);
-    // this.is_partner_origanzation_coordinator= this.data_parnter_organization.recipients.filter((p: any) => p.role == 2);
-    // this.is_partner_origanzation_reviewer= this.data_parnter_organization.recipients.filter((p: any) => p.role == 1);
-    // this.is_partner_origanzation_signature = this.data_parnter_organization.recipients.filter((p: any) => p.role == 3);
-    // this.is_partner_origanzation_document = this.data_parnter_organization.recipients.filter((p: any) => p.role == 4)[0];
+    this.data_parnter_organization = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+    // this.data_parnter_individual = this.is_determine_clone.filter((p: any) => p.type == 3);
 
-    //data cá nhân
-    // this.individual =  this.is_determine_clone.filter((p: any) => p.type == 3)[0];
-    // this.is_partner_individual_coordinator= this.individual.recipients.filter((p: any) => p.role == 2);
-    // this.is_partner_individual_reviewer= this.individual.recipients.filter((p: any) => p.role == 1);
-    // this.is_partner_individual_signature = this.individual.recipients.filter((p: any) => p.role == 3);
-    // this.is_partner_individual_document = this.individual.recipients.filter((p: any) => p.role == 4)[0];
-
-    // this.userForm = this.formBuilder.group({
-    //   order: 1,
-    //   name: 'CÔNG TY CỔ PHẦN PHẦN MỀM CÔNG NGHỆ CAO VIỆT NAM',
-    //   userViews: this.formBuilder.array([]),
-    //   userSigns: this.formBuilder.array([]),
-    //   userDocs: this.formBuilder.array([])
-    //   // userViews: (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]) ,
-    //   // userSigns: (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]) ,
-    //   // userDocs: (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]) ,
-    // });
-
-
-    // this.userForm.setControl('userViews', (this.datas.userForm && this.datas.userForm.userViews.length > 0) ? this.formBuilder.array(this.datas.userForm.userViews) : this.formBuilder.array([]));
-    // this.userForm.setControl('userSigns', (this.datas.userForm && this.datas.userForm.userSigns.length > 0) ? this.formBuilder.array(this.datas.userForm.userSigns) : this.formBuilder.array([]));
-    // this.userForm.setControl('userDocs', (this.datas.userForm && this.datas.userForm.userDocs.length > 0) ? this.formBuilder.array(this.datas.userForm.userDocs) : this.formBuilder.array([]));
 
     this.partnerForm = this.formBuilder.group({
       partnerArrs: this.formBuilder.array([this.newPartner()])
     });
-
-    //this.partnerForm.setControl('partnerArrs', (this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0) ? this.formBuilder.array(this.datas.partnerForm.partnerArrs) : this.formBuilder.array([this.newPartner()]));
-
-
-    if (this.datas.userForm && this.datas.userForm.userViews.length > 0) {
-      this.setUserViews(this.datas.userForm.userViews);
-    }
-    if (this.datas.userForm && this.datas.userForm.userSigns.length > 0) {
-      this.setUserSigns(this.datas.userForm.userSigns);
-    }
-    if (this.datas.userForm && this.datas.userForm.userDocs.length > 0) {
-      this.setUserDocs(this.datas.userForm.userDocs);
-    }
-    if (this.datas.partnerForm && this.datas.partnerForm.partnerArrs.length > 0) {
-      this.datas.partnerForm.partnerArrs.forEach(async (element: any, index: any) => {
-        await this.setPartnerDocs(element.partnerDocs);
-        await this.setPartnerLeads(element.partnerLeads, index);
-        await this.setPartnerSign(element.partnerSigns);
-        await this.setPartnerUser(element.partnerUsers);
-        await this.setPartnerViews(element.partnerViews);
-      })
-    }
 
     this.dropdownSignTypeSettings = {
       singleSelection: false,
@@ -130,134 +82,6 @@ export class DetermineSignerComponent implements OnInit {
       allowSearchFilter: true
     };
   }
-
-  // gán lại dữ liệu value cho form
-  setUserViews(data: any) {
-    const fa = (this.userForm.get('userViews') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setUserSigns(data: any) {
-    const fa = (this.userForm.get('userSigns') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-
-
-      // const faC:any = (fa.at(i).get('signType') as FormGroup);
-      // // // console.log(fa);
-      // // // console.log(faC);
-      // // // console.log(faC);
-      // // //const faAAA:any = (faC as FormArray);
-      // // // console.log(faAAA);
-      // for (let j = 0; j < faC.length; j++) {
-      //     faC.push(this.formBuilder.array(faC[j]));
-      // }
-
-      // console.log(faC);
-
-
-    }
-  }
-
-  setUserDocs(data: any) {
-    const fa = (this.userForm.get('userDocs') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setPartnerDocs(data: any) {
-    const fa = (this.partners.get('partnerDocs') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setPartnerLeads(data: any, index: any) {
-    //const fa = (this.partnerArrs().at(index).get('partnerLeads') as FormArray);
-    const fa = (this.partners.get('partnerLeads') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setPartnerSign(data: any) {
-    const fa = (this.partners.get('partnerSigns') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setPartnerUser(data: any) {
-    const fa = (this.partners.get('partnerUsers') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setPartnerViews(data: any) {
-    const fa = (this.partners.get('partnerViews') as FormArray);
-    for (let i = 0; i < data.length; i++) {
-      fa.push(this.formBuilder.group(data[i]));
-    }
-  }
-
-  setPartnerArrs(data: any) {
-    const partnerArrs = (this.partnerForm.get("partnerArrs") as FormArray);
-    console.log("data" + data);
-    for (let i = 0; i < data.length; i++) {
-
-      const partnerLeads = (partnerArrs.at(i)?.get('partnerLeads') as FormArray) || [];
-      for (let j = 0; j < data[i].partnerLeads.length; j++) {
-        partnerLeads.push(this.formBuilder.group(data[i].partnerLeads[j]));
-      }
-
-      const partnerViews = (partnerArrs.at(i)?.get('partnerViews') as FormArray) || [];
-      for (let j = 0; j < data[i].partnerViews.length; j++) {
-        partnerViews.push(this.formBuilder.group(data[i].partnerViews[j]));
-      }
-
-      const partnerSigns = (partnerArrs.at(i)?.get('partnerSigns') as FormArray) || [];
-      for (let j = 0; j < data[i].partnerSigns.length; j++) {
-        partnerSigns.push(this.formBuilder.group(data[i].partnerSigns[j]));
-      }
-
-      const partnerDocs = (partnerArrs.at(i)?.get('partnerDocs') as FormArray) || [];
-      for (let j = 0; j < data[i].partnerDocs.length; j++) {
-        partnerDocs.push(this.formBuilder.group(data[i].partnerDocs[j]));
-      }
-
-      const partnerUsers = (partnerArrs.at(i)?.get('partnerUsers') as FormArray) || [];
-      for (let j = 0; j < data[i].partnerUsers.length; j++) {
-        partnerUsers.push(this.formBuilder.group(data[i].partnerUsers[j]));
-      }
-    }
-
-  }
-
-
-  // this.data = [
-  //   {
-  //     "order": 1,
-  //     "name": "Nguyễn Tuấn Anh",
-  //     "email": "nguyentuananh@vhc.com.vn",
-  //     "signType": [
-  //       {
-  //         "item_id": 1,
-  //         "item_text": "Ký ảnh"
-  //       }
-  //     ],
-  //     "isOtp": true,
-  //     "phone": "0979889999",
-  //     "id": 3923609057,
-  //     "selected": false,
-  //     "sign_unit": "organization"
-  //   }]
-
-  // @ts-ignore
-
 
   partnerArrs(): FormArray {
     return this.partnerForm.get("partnerArrs") as FormArray
@@ -490,40 +314,32 @@ export class DetermineSignerComponent implements OnInit {
     this.submitted = true;
     if (!this.validData()) return;
     else {
-      // let recipient_id = 150;
-      // this.is_determine_clone.forEach((element: any) => {
-      //   element.recipients.forEach((item: any) => {
-      //     if (item.role == 3 || item.role == 4) {
-      //       item['id'] = Helper._ranDomNumberText(10); // tạm thời client render ra, sau khi call api thì mỗi đối tượng obj ký đó sẽ có id
-      //     }
-      //     item['recipient_id'] = recipient_id++;
-      //   })
-      // })
-      this.callAPI();
-    }
-  }
-
-  callAPI() {
-    console.log(this.is_determine_clone);
-    this.contractService.getContractDetermine(this.checked ? this.is_determine_clone.filter((p: any) => p.type != 3) : this.is_determine_clone.filter((p: any) => p.type != 2), this.datas.id).subscribe((res: any) => {
-        // this.datas.id = data?.id;
-        // console.log(res);
-        if (res && res.length > 0) {
-          this.datas.determine_contract = res ? res : this.is_determine_clone;
-          this.step = variable.stepSampleContract.step3;
-          this.datas.stepLast = this.step
-          // console.log(this.datas);
-          this.nextOrPreviousStep(this.step);
-        } else {
-          alert('Bạn đã nhập thiếu dữ liệu, vui lòng kiểm tra lại các trường dữ liệu cần nhập!');
+      this.is_determine_clone.forEach((items: any, index: number) => {
+        if (items.type == 3) {
+          let data = items.recipients.filter((p: any) => p.role == 3);
+          this.is_determine_clone[index].recipients = data;
+        }
+      })
+      this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res: any) => {
+          // this.datas.id = data?.id;
+          // console.log(res);
+          if (res && res.length > 0) {
+            this.datas.determine_contract = res ? res : this.is_determine_clone;
+            this.step = variable.stepSampleContract.step3;
+            this.datas.stepLast = this.step
+            // console.log(this.datas);
+            this.nextOrPreviousStep(this.step);
+          } else {
+            alert('Bạn đã nhập thiếu dữ liệu, vui lòng kiểm tra lại các trường dữ liệu cần nhập!');
+            return false;
+          }
+        },
+        error => {
+          console.log("false content");
           return false;
         }
-      },
-      error => {
-        console.log("false content");
-        return false;
-      }
-    );
+      );
+    }
   }
 
   // forward data component
@@ -538,14 +354,6 @@ export class DetermineSignerComponent implements OnInit {
 
   // valid data step 2
   validData() {
-    // if (this.userForm.invalid) {
-    //   console.log('vui lòng nhập đầy đủ dữ liệu userForm');
-    //   return false;
-    // }
-    // if (this.partnerForm.invalid) {
-    //   console.log('Vui lòng nhập đầy đủ dữ liệu partnerForm');
-    //   return false;
-    // }
     let count = 0;
     this.data_organization.recipients.forEach((element: any) => {
       if (element.role == 3 && !element.name) {
@@ -557,44 +365,9 @@ export class DetermineSignerComponent implements OnInit {
       }
     })
 
-    if (this.checked) {
-      this.data_parnter_organization.forEach((element: any) => {
-        if (element.name) {
-          element.recipients.forEach((items: any) => {
-            if (items.role == 3 && !items.name) {
-              alert('Vui lòng nhập người ký của đối tác!');
-              //@ts-ignore
-              document.getElementById('signature-partner-' + items.ordering).focus();
-              count++;
-            }
-          })
-        } else {
-          alert('Vui lòng nhập tên của bên tham gia!');
-          count++;
-        }
-      })
-    } else {
-      this.data_parnter_individual.forEach((element: any) => {
-        if (element.name) {
-          element.recipients.forEach((items: any) => {
-            if (items.role == 3 && !items.name) {
-              alert('Vui lòng nhập người ký của đối tác!');
-              //@ts-ignore
-              document.getElementById('signature-partner-' + items.ordering).focus();
-              count++;
-            }
-          })
-        } else {
-          alert('Vui lòng nhập tên của bên tham gia!');
-          count++;
-        }
-      })
-    }
-
     if (count > 0) {
       return false;
     }
-
     return true;
   }
 
@@ -605,6 +378,10 @@ export class DetermineSignerComponent implements OnInit {
       acc[curr.id] = curr;
       return acc;
     }, {});
+  }
+
+  getDataSignature(e: any) {
+    console.log(e)
   }
 
   getValueData(data: any, index: any) {
@@ -701,56 +478,48 @@ export class DetermineSignerComponent implements OnInit {
     this.data_organization.recipients.push(data);
   }
 
-  // thêm đối tượng người xem xét đối tác
-  addPartnerReviewer(item: any) {
+  // thêm đối tượng người xem xét đối tác (done)
+  addPartnerReviewer(item: any, index: number) {
     let data_determine_add = [];
     data_determine_add = [...this.contractService.getDataDetermine()];
     let data_partner = data_determine_add.filter((p: any) => p.type == 2)[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 2))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 2);
     data.ordering = count_data.length + 1;
-    this.data_parnter_organization.forEach((element: any, index: number) => {
-      element.recipients.push(data);
-    })
+    this.data_parnter_organization[index].recipients.push(data);
   }
 
-  // thêm đối tượng người điều phối
-  addPartnerCoordination(item: any) {
+  // thêm đối tượng người điều phối (done)
+  addPartnerCoordination(item: any, index: number) {
     let data_determine_add = [];
     data_determine_add = [...this.contractService.getDataDetermine()];
     let data_partner = data_determine_add.filter((p: any) => p.type == 2)[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 1))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 1);
     data.ordering = count_data.length + 1;
-    this.data_parnter_organization.forEach((element: any, index: number) => {
-      element.recipients.push(data);
-    })
+    this.data_parnter_organization[index].recipients.push(data);
   }
 
-  // thêm đối tượng ký đối tác
-  addPartnerSignature(item: any) {
+  // thêm đối tượng ký đối tác (done)
+  addPartnerSignature(item: any, index: number) {
     let data_determine_add = [];
     data_determine_add = [...this.contractService.getDataDetermine()];
     let data_partner = data_determine_add.filter((p: any) => (p.type == 2))[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 3))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 3);
     data.ordering = count_data.length + 1;
-    this.data_parnter_organization.forEach((element: any, index: number) => {
-      element.recipients.push(data);
-    })
+    this.data_parnter_organization[index].recipients.push(data);
   }
 
-  // thêm đối tượng văn thư đối tác
-  addPartnerDocument(item: any) {
+  // thêm đối tượng văn thư đối tác (done)
+  addPartnerDocument(item: any, index: number) {
     let data_determine_add = [];
     data_determine_add = [...this.contractService.getDataDetermine()];
     let data_partner = data_determine_add.filter((p: any) => (p.type == 2))[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 4))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 4);
     data.ordering = count_data.length + 1;
-    this.data_parnter_organization.forEach((element: any, index: number) => {
-      element.recipients.push(data);
-    })
+    this.data_parnter_organization[index].recipients.push(data);
   }
 
   // tạo mảng đối tượng người xem xét tổ chức của tôi
@@ -758,7 +527,7 @@ export class DetermineSignerComponent implements OnInit {
     return this.data_organization.recipients.filter((p: any) => p.role == 2);
   }
 
-  // xóa đối tượng người xem xét tổ chức của tôi
+  // xóa đối tượng người xem xét tổ chức của tôi (done)
   deleteOriganzationReviewer(i: any) {
     let arr_clone = this.data_organization.recipients.filter((p: any) => p.role == 2);
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 2);
@@ -781,7 +550,7 @@ export class DetermineSignerComponent implements OnInit {
     return this.data_organization.recipients.filter((p: any) => p.role == 3);
   }
 
-  // xóa đối tượng người ký tổ chức của tôi
+  // xóa đối tượng người ký tổ chức của tôi (done)
   deleteOriganzationSignature(i: any) {
     let arr_clone = this.data_organization.recipients.filter((p: any) => p.role == 3);
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 3);
@@ -799,7 +568,7 @@ export class DetermineSignerComponent implements OnInit {
     this.data_organization.recipients = new_arr;
   }
 
-  // xóa văn thư tổ chức của tôi
+  // xóa văn thư tổ chức của tôi (done)
   deleteOriganzationDocument(i: any) {
     let arr_clone = this.data_organization.recipients.filter((p: any) => p.role == 4);
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 4);
@@ -817,10 +586,8 @@ export class DetermineSignerComponent implements OnInit {
     this.data_organization.recipients = new_arr;
   }
 
-  //
-
-  // xóa đối tượng điều phối hợp đồng
-  deletePartnerCoordination(index_item: any, item: any) {
+  // xóa đối tượng điều phối hợp đồng (done)
+  deletePartnerCoordination(index_item: any, item: any, id:number) {
     let arr_clone = item.recipients.filter((p: any) => p.role == 1);
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 1);
     const array_empty: any[] = [];
@@ -838,7 +605,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   // xóa đối tượng người xem xét đối tác
-  deletePartnerReviewer(index_item: any, item: any) {
+  deletePartnerReviewer(index_item: any, item: any, id: number) {
     let arr_clone = item.recipients.filter((p: any) => p.role == 2);
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 2);
     const array_empty: any[] = [];
@@ -890,16 +657,29 @@ export class DetermineSignerComponent implements OnInit {
     item.recipients = new_arr;
   }
 
+  dataParnterOrganization() {
+    return this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+  }
+
   // thêm đối tác
   addPartner() {
-    let data_partner_add = [];
+    let data_partner_add = {};
     let data = [...this.contractService.getDataDetermine()];
-    // return data.filter((p: any) => p.type == 2);
-    data_partner_add = data.filter((p: any) => (p.type == 2 || p.type == 3));
-    let count_data = data_partner_add[0];
-    count_data.ordering = data_partner_add.length + 1;
-    // this.is_determine_clone.push(count_data);
-    this.data_parnter_organization.push(count_data);
+    data_partner_add = data.filter((p: any) => (p.type == 2))[0];
+    this.is_determine_clone.push(data_partner_add);
+    this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3).forEach((res: any, index: number) => {
+      res.ordering =  index + 1;
+    })
+
+    console.log(this.data_parnter_organization);
+  }
+
+  // xóa đối tham gia bên đối tác
+  deletePartner(index: any) {
+    this.is_determine_clone.splice(index, 1);
+    this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3).forEach((res: any, index: number) => {
+      res.ordering =  index + 1;
+    })
   }
 
   changeData(item: any, index: any) {
@@ -910,10 +690,32 @@ export class DetermineSignerComponent implements OnInit {
     this.data_parnter_organization[index] = data_partner_add;
   }
 
-  // getDataAll() {
-  //   console.log(this.is_determine_clone);
-  //   console.log(this.data_organization);
-  //   console.log(this.data_parnter_organization);
-  // }
+  changeType(e: any, item: any, index: number) {
+    console.log(item, e);
+    item.name = "";
+    let newArr: any[] = [];
+    for (let i = 0; i < item.recipients.length; i++) {
+      if (!newArr.some((p: any) => p.role == item.recipients[i].role)) {
+        newArr.push(item.recipients[i]);
+      }
+    }
+    if (newArr.length) {
+      newArr.forEach((item: any) => {
+        if (item.role == 3) {
+          item.name = "";
+          item.email = "";
+          item.phone = "";
+          item.role = 3; // người ký
+          item.ordering = 1;
+          item.status = 1;
+          item.username = "";
+          item.password = "";
+          item.is_otp = 1;
+          item.sign_type = [];
+        }
+      })
+    }
+    this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
+  }
 
 }
