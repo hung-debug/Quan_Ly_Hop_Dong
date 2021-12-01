@@ -361,7 +361,10 @@ export class InforContractComponent implements OnInit {
   defineData(datas:any){
     console.log(this.type_id);
     if(this.type_id != null){
-      this.datas.type_id = this.type_id[0].id;
+      this.type_id.forEach((element: any, index: number) => {
+        this.datas.type_id = element.id;
+      })
+
     }
 
     console.log(this.contractConnect);
