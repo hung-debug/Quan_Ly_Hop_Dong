@@ -2,7 +2,8 @@
 <div class="container-fluid">
   <div class="contract-determine">
     <div class="col-md-1">
-      <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="data_organization.ordering">
+      <input class="contract-total" style="width: 25px; height: 25px" type="number"
+             [value]="data_organization.ordering">
     </div>
     <div class="col-md-11 contract--content">
       <div class="contract__content--title">
@@ -69,7 +70,8 @@
                 <div class="participants__name">
                   <div class="label text-color">Loại ký: *</div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList" (change)="getDataSignature($event)">
+                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList"
+                                           (change)="getDataSignature($event)">
                     <ng-template #optionsTemplate let-item let-option="option"
                                  let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -87,7 +89,7 @@
                 </div>
                 <div class="participants__name">
                   <div class="label text-color">Số điện thoại: *</div>
-                  <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
+                  <input type="number" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
                 </div>
               </div>
             </div>
@@ -155,34 +157,34 @@
   </div>
 
   <!--  Đối tác-->
-  <div class="row">
-    <!--          Tổ chức của đối tác-->
-    <div class="radio col-md-6 label_type">
-      <!--      <label><input type="radio" name="type" [value]="2" [(ngModel)]="item.type">-->
-      <label><input type="radio" name="type" [value]="true" [(ngModel)]="this.checked">
-        <span> {{'organization' | translate}}</span></label>
-    </div>
-    <!--          cá nhân của đối tác-->
-    <div class="radio col-md-6 label_type">
-      <!--      <label><input type="radio" name="type" [value]="3" [(ngModel)]="item.type">-->
-      <label><input type="radio" name="type" [value]="false" [(ngModel)]="this.checked">
-        <span> {{'personal' | translate}}</span></label>
-    </div>
-  </div>
 
-  <div *ngIf="this.checked">
-    <div class="contract-determine" *ngFor="let item of this.data_parnter_organization; let index = index" style="display: flex">
-      <div class="col-md-1">
-        <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="item.ordering">
+  <div class="contract-determine" *ngFor="let item of dataParnterOrganization(); let id = index"
+       style="display: flex">
+    <div class="col-md-1">
+      <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="item.ordering">
+    </div>
+    <div class="col-md-11 contract--content">
+      <div class="contract__content--title">
+        <div style="width: 72px">Đối Tác -</div>
+        <input type="text" [(ngModel)]="item.name" (change)="getData(item)">
       </div>
-      <div class="col-md-11 contract--content">
-        <div class="contract__content--title">
-          <div style="width: 72px">Đối Tác -</div><input type="text" [(ngModel)]="item.name" (change)="getData(item)">
+      <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
+        <u class="label text-color" (click)="deletePartner(id)" style="background-color: #FFFFFF; cursor: pointer">Xóa đối tác</u>
+      </div>
+      <div class="contract__content--participants">
+        <div class="row">
+          <div class="radio col-md-6 label_type">
+            <label><input type="radio" name="type" [value]="2" [(ngModel)]="item.type"
+                          (change)="changeType($event, item, id)">
+              <span> {{'organization' | translate}}</span></label>
+          </div>
+          <div class="radio col-md-6 label_type">
+            <label><input type="radio" name="type" [value]="3" [(ngModel)]="item.type"
+                          (change)="changeType($event, item, id)">
+              <span> {{'personal' | translate}}</span></label>
+          </div>
         </div>
-        <div style="display: flex; justify-content: flex-end; cursor: pointer">
-          <u *ngIf="this.data_parnter_organization.length > 1" class="label text-color" (click)="deletePartner(index)" style="background-color: #FFFFFF">Xóa đối tác</u>
-        </div>
-        <div class="contract__content--participants">
+        <div *ngIf="item.type == 2">
           <div class="participants-border">
             <div class="label">Người điều phối</div>
             <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
@@ -204,13 +206,13 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-1 delete-element" (click)="deletePartnerCoordination(index, item)">
+              <div class="col-md-1 delete-element" (click)="deletePartnerCoordination(index, item, id)">
                 <img src="assets/img/border_close.svg" alt="close.vn">
                 <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
               </div>
             </div>
             <div class="participants--add">
-              <u class="label text-color" (click)="addPartnerCoordination(item)">Thêm người điều phối</u>
+              <u class="label text-color" (click)="addPartnerCoordination(item, id)">Thêm người điều phối</u>
             </div>
           </div>
 
@@ -235,13 +237,13 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-1 delete-element" (click)="deletePartnerReviewer(index, item)">
+              <div class="col-md-1 delete-element" (click)="deletePartnerReviewer(index, item, id)">
                 <img src="assets/img/border_close.svg" alt="close.vn">
                 <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
               </div>
             </div>
             <div class="participants--add">
-              <u class="label text-color" (click)="addPartnerReviewer(item)">Thêm người xem xét</u>
+              <u class="label text-color" (click)="addPartnerReviewer(item, id)">Thêm người xem xét</u>
             </div>
           </div>
 
@@ -291,7 +293,7 @@
                   </div>
                   <div class="participants__name">
                     <div class="label text-color">Số điện thoại: *</div>
-                    <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
+                    <input type="number" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
                   </div>
                 </div>
               </div>
@@ -301,7 +303,8 @@
               </div>
             </div>
             <div class="participants--add">
-              <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item)">Thêm người ký</u>
+              <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item, id)">Thêm người
+                ký</u>
             </div>
           </div>
 
@@ -354,104 +357,87 @@
               </div>
             </div>
             <div class="participants--add">
-              <u class="label text-color" style="color: #106DB6" (click)="addPartnerDocument(item)">Thêm người ký</u>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="!this.checked">
-    <div class="contract-determine" *ngFor="let item of data_parnter_individual; let index = index" style="display: flex">
-      <div class="col-md-1">
-        <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="item.ordering">
-      </div>
-      <div class="col-md-11 contract--content">
-        <div class="contract__content--title">
-          <div style="width: 72px">Đối Tác -</div>
-          <input type="text" [(ngModel)]="item.name" (change)="getData(item)">
-        </div>
-        <div class="contract__content--participants">
-          <div class="participants-border">
-            <div class="label">Người ký</div>
-            <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
-              <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
-                     [(ngModel)]="d.ordering">
-              <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
-                <div class="participants--input" style="display: flex">
-                  <div class="participants__name">
-                    <div class="label text-color">Họ tên: *</div>
-                    <div class="input-data">
-                      <img src="assets/img/icon_name.svg" class="input-img">
-                      <input [id]="'signature-partner-' + d.ordering" type="text" placeholder="Nhập họ và tên"
-                             [(ngModel)]="d.name">
-                    </div>
-                  </div>
-                  <div class="participants__name">
-                    <div class="label text-color">Email: *</div>
-                    <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
-                    </div>
-                  </div>
-                </div>
-                <div class="participants--input select-text-input" style="display: flex">
-                  <div class="participants__name">
-                    <div class="label text-color">Loại ký: *</div>
-
-                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                                             [settings]="dropdownSignTypeSettings" [data]="signTypeList">
-                      <ng-template #optionsTemplate let-item let-option="option"
-                                   let-id="id" let-isSelected="isSelected">
-                        <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                          <label style="color: #333; font-weight: normal;"
-                                 [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
-                            {{getContractConnectItems[id].name}}
-                          </label>
-                        </div>
-                      </ng-template>
-                    </ng-multiselect-dropdown>
-                  </div>
-                  <div class="participants-otp">
-                    <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
-                    <span class="label text-color">OTP</span>
-                  </div>
-                  <div class="participants__name">
-                    <div class="label text-color">Số điện thoại: *</div>
-                    <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
-                <img src="assets/img/border_close.svg" alt="close.vn">
-                <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
-              </div>
-            </div>
-            <div class="participants--add">
-              <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item)">Thêm người
+              <u class="label text-color" style="color: #106DB6" (click)="addPartnerDocument(item, id)">Thêm người
                 ký</u>
             </div>
           </div>
         </div>
+
+        <div *ngIf="item.type == 3">
+          <div class="contract__content--participants">
+            <div class="participants-border">
+              <div class="label">Người ký</div>
+              <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
+                <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                       [(ngModel)]="d.ordering">
+                <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
+                  <div class="participants--input" style="display: flex">
+                    <div class="participants__name">
+                      <div class="label text-color">Họ tên: *</div>
+                      <div class="input-data">
+                        <img src="assets/img/icon_name.svg" class="input-img">
+                        <input [id]="'signature-partner-' + d.ordering" type="text" placeholder="Nhập họ và tên"
+                               [(ngModel)]="d.name">
+                      </div>
+                    </div>
+                    <div class="participants__name">
+                      <div class="label text-color">Email: *</div>
+                      <div class="input-data">
+                        <img src="assets/img/login_email.svg" class="input-img">
+                        <input type="text" placeholder="Nhập Email" [(ngModel)]="d.email">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="participants--input select-text-input" style="display: flex">
+                    <div class="participants__name">
+                      <div class="label text-color">Loại ký: *</div>
+
+                      <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
+                                               [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                        <ng-template #optionsTemplate let-item let-option="option"
+                                     let-id="id" let-isSelected="isSelected">
+                          <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                            <label style="color: #333; font-weight: normal;"
+                                   [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                              {{getContractConnectItems[id].name}}
+                            </label>
+                          </div>
+                        </ng-template>
+                      </ng-multiselect-dropdown>
+                    </div>
+                    <div class="participants-otp">
+                      <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
+                      <span class="label text-color">OTP</span>
+                    </div>
+                    <div class="participants__name">
+                      <div class="label text-color">Số điện thoại: *</div>
+                      <input type="number" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
+                  <img src="assets/img/border_close.svg" alt="close.vn">
+                  <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
+                </div>
+              </div>
+              <div class="participants--add">
+                <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item, id)">Thêm người
+                  ký</u>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-
     </div>
   </div>
-
-
-  <div style="display: flex">
-    <div class="col-md-1"></div>
-    <div class="col-md-10" style="display: inline-block; cursor: pointer">
-      <u class="label text-color" (click)="addPartner()" style="background-color: #FFFFFF">Thêm đối tác</u>
-    </div>
-  </div>
-
 </div>
-<!--<button (click)="getDataAll()">-->
-<!--  Lấy dữ liệu-->
-<!--</button>-->
+
+<div style="display: flex">
+  <div class="col-md-1"></div>
+  <div class="col-md-10" style="display: inline-block; cursor: pointer">
+    <u class="label text-color" (click)="addPartner()" style="background-color: #FFFFFF">Thêm đối tác</u>
+  </div>
+</div>
 
 <div class="footer-determine" style="display: flex; justify-content: space-between">
   <div style="width: 200px;">
