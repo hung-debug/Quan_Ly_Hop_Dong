@@ -132,7 +132,7 @@ export class ConsiderContractComponent implements OnInit {
     private toastService : ToastService,
     private dialog: MatDialog
   ) {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer;
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
   ngOnInit(): void {
@@ -895,6 +895,7 @@ export class ConsiderContractComponent implements OnInit {
   signContract() {
     const signUpdate = this.isDataObjectSignature.filter((item: any) => item?.recipient?.email === this.currentUser.email).map((item: any) =>  {
       return {
+        id: item.id,
         name: item.name,
         value: item.value,
         font: item.font,
@@ -912,7 +913,7 @@ export class ConsiderContractComponent implements OnInit {
 
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
-      (item: any) => item?.recipient?.email === this.currentUser.email && item.required && !item.value
+      (item: any) => item?.recipient?.email === this.currentUser.email && item.required && !item.value && item.type != 3
     )
     return validSign.length == 0;
   }

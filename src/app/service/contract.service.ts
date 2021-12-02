@@ -44,7 +44,7 @@ export class ContractService {
   rejectContractUrl:any = `${environment.apiUrl}/api/v1/processes/reject/`;
   uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
   uploadFileBase64Url:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
-  currentUser:any = JSON.parse(localStorage.getItem('currentUser') || '').customer;
+  currentUser:any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
 
   token:any;
@@ -302,7 +302,7 @@ export class ContractService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.post<File>(this.uploadFileUrl + this.currentUser.organization_id + `/single`, formData, {'headers': headers});
+    return this.http.post<File>(this.uploadFileUrl + this.currentUser?.organizationId + `/single`, formData, {'headers': headers});
   }
 
   uploadFileImageBase64Signature(formData: any) {
@@ -311,7 +311,7 @@ export class ContractService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.post<any>(this.uploadFileBase64Url + this.currentUser.organization_id + `/base64`, formData, {'headers':headers});
+    return this.http.post<any>(this.uploadFileBase64Url + this.currentUser?.organizationId + `/base64`, formData, {'headers':headers});
   }
 
 

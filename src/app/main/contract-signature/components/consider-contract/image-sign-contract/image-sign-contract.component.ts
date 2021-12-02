@@ -33,9 +33,9 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     console.log(this.sign);
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '');
-    if (currentUser != null && currentUser.customer) {
-      this.currentUser = currentUser.customer;
+    const currentUserC = JSON.parse(localStorage.getItem('currentUser') || '');
+    if (currentUserC != null && currentUserC.customer?.info) {
+      this.currentUser = currentUserC.customer?.info;
     }
     /*this.contractSignatureService.getProfileObs()
       .pipe(takeUntil(this.unsubscribe$))
