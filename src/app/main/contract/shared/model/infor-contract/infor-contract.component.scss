@@ -1,10 +1,18 @@
 ::ng-deep .multiselect-dropdown {
   .dropdown-btn {
     border: 1px solid #87CAFF !important;
-    height: 38px;
+    min-height: 38px;
+    height: auto;
   }
 }
-
+.input_text {
+  padding-left: 10px;
+  outline: none;
+  height: 37px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #87CAFF;
+}
 //upload file
 input[type="file"] {
   display: none;

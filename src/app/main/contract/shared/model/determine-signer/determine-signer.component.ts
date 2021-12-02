@@ -80,7 +80,8 @@ export class DetermineSignerComponent implements OnInit {
       textField: "name",
       selectAllText: "Chọn tất cả",
       unSelectAllText: "Bỏ chọn tất cả",
-      allowSearchFilter: true
+      allowSearchFilter: true,
+      itemsShowLimit: 2,
     };
   }
 

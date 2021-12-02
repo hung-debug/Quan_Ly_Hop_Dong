@@ -1,7 +1,8 @@
 ::ng-deep .multiselect-dropdown {
   .dropdown-btn {
     border: 1px solid #87CAFF !important;
-    height: 38px;
+    min-height: 38px;
+    height: auto;
   }
 }
 
