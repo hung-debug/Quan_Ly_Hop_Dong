@@ -895,6 +895,7 @@ export class ConsiderContractComponent implements OnInit {
   signContract() {
     const signUpdate = this.isDataObjectSignature.filter((item: any) => item?.recipient?.email === this.currentUser.email).map((item: any) =>  {
       return {
+        id: item.id,
         name: item.name,
         value: item.value,
         font: item.font,
