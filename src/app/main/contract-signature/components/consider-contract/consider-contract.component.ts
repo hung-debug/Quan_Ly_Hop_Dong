@@ -912,7 +912,7 @@ export class ConsiderContractComponent implements OnInit {
 
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
-      (item: any) => item?.recipient?.email === this.currentUser.email && item.required && !item.value
+      (item: any) => item?.recipient?.email === this.currentUser.email && item.required && !item.value && item.type != 3
     )
     return validSign.length == 0;
   }
