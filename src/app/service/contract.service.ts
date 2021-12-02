@@ -167,10 +167,11 @@ export class ContractService {
   }
 
   getDataNotifyOriganzation() {
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    let listContractUrl = this.getNotifyOriganzation + JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
+    let listContractUrl = this.getNotifyOriganzation + this.organization_id;
     return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();
   }
 

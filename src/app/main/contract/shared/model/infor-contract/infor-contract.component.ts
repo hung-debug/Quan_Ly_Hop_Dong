@@ -267,51 +267,54 @@ export class InforContractComponent implements OnInit {
             this.contractService.addDocument(this.datas).subscribe((data) => {
                 console.log(JSON.stringify(data));
                 this.datas.document_id = data?.id;
-                if (this.datas.attachFile != null) {
-                  this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
-                      console.log(JSON.stringify(data));
-                      this.datas.filePathAttach = data.fileObject.filePath;
-                      this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
-                          console.log(JSON.stringify(data));
-                          this.datas.document_attach_id = data?.id;
-                          //next step
-                          this.step = variable.stepSampleContract.step2;
-                          this.datas.stepLast = this.step;
-                          // this.datas.document_id = '1';
-                          this.nextOrPreviousStep(this.step);
-                          console.log(this.datas);
-                          this.spinner.hide();
-                        },
-                        error => {
-                          this.spinner.hide();
-                          this.toastService.showErrorHTMLWithTimeout("Liên kết file đính kèm thất bại!", "", 10000);
-                          return false;
-                        }
-                      );
-                    },
-                    error => {
-                      this.spinner.hide();
-                      this.toastService.showErrorHTMLWithTimeout("Đẩy file đính kèm thất bại!", "", 10000);
-                      return false;
-                    }
-                  );
-                } else {
-                  this.contractService.getDataNotifyOriganzation().subscribe((res: any) => {
-                    this.datas.name_origanzation = res.name;
-                  }, () => {
-                    this.spinner.hide();
-                    this.toastService.showErrorHTMLWithTimeout("Đã xảy ra lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!", "", 10000);
-                    return false;
-                  })
 
-                  //next step
-                  this.step = variable.stepSampleContract.step2;
-                  this.datas.stepLast = this.step;
-                  // this.datas.document_id = '1';
-                  this.nextOrPreviousStep(this.step);
-                  console.log(this.datas);
+                this.contractService.getDataNotifyOriganzation().subscribe((data: any) => {
+                  console.log(JSON.stringify(data));
+                  this.datas.name_origanzation = data.name;
+
+                  if (this.datas.attachFile != null) {
+                    this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
+                        console.log(JSON.stringify(data));
+                        this.datas.filePathAttach = data.fileObject.filePath;
+                        this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
+                            console.log(JSON.stringify(data));
+                            this.datas.document_attach_id = data?.id;
+                            //next step
+                            this.step = variable.stepSampleContract.step2;
+                            this.datas.stepLast = this.step;
+                            // this.datas.document_id = '1';
+                            this.nextOrPreviousStep(this.step);
+                            console.log(this.datas);
+                            this.spinner.hide();
+                          },
+                          error => {
+                            this.spinner.hide();
+                            this.toastService.showErrorHTMLWithTimeout("Liên kết file đính kèm thất bại!", "", 10000);
+                            return false;
+                          }
+                        );
+                      },
+                      error => {
+                        this.spinner.hide();
+                        this.toastService.showErrorHTMLWithTimeout("Đẩy file đính kèm thất bại!", "", 10000);
+                        return false;
+                      }
+                    );
+                  } else {
+
+                    //next step
+                    this.step = variable.stepSampleContract.step2;
+                    this.datas.stepLast = this.step;
+                    // this.datas.document_id = '1';
+                    this.nextOrPreviousStep(this.step);
+                    console.log(this.datas);
+                    this.spinner.hide();
+                  }
+                }, error => {
                   this.spinner.hide();
-                }
+                  this.toastService.showErrorHTMLWithTimeout("Lấy thông tin tổ chức thất bại!", "", 10000);
+                  return false;
+                })
               },
               error => {
                 this.spinner.hide();
