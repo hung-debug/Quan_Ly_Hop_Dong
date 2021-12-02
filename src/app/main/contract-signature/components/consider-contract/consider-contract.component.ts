@@ -132,7 +132,7 @@ export class ConsiderContractComponent implements OnInit {
     private toastService : ToastService,
     private dialog: MatDialog
   ) {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer;
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
   ngOnInit(): void {
