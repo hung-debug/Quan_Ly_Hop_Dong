@@ -58,7 +58,7 @@ export class InforContractComponent implements OnInit {
   type_id: any;
   attachFile: any;
   contractConnect: any;
-  sign_time: any;
+  sign_time: Date;
   notes: any;
   filePath: any;
 
@@ -104,7 +104,8 @@ export class InforContractComponent implements OnInit {
     this.code = this.datas.code ? this.datas.code : null;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
-    this.sign_time = this.datas.sign_time ? this.datas.sign_time : new Date();
+    this.sign_time = new Date();
+    this.sign_time = this.datas.sign_time ? this.datas.sign_time : this.sign_time.setDate(this.sign_time.getDate() + 30);
     this.notes = this.datas.notes ? this.datas.notes : null;
 
     this.contractService.getContractTypeList().subscribe(data => {
@@ -164,6 +165,8 @@ export class InforContractComponent implements OnInit {
           fileInput.value = '';
           this.datas.file_name = file_name;
           this.datas.contractFile = file;
+        } else if (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx') {
+          this.toastService.showErrorHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 10000);
         } else {
           this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF", "", 10000);
         }
