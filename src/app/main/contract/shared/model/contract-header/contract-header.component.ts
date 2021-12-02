@@ -2,6 +2,7 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {AddContractComponent} from "../../../add-contract/add-contract.component";
 import {variable} from "../../../../../config/variable";
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-contract-header',
@@ -10,7 +11,8 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ContractHeaderComponent implements OnInit {
   @Input() AddComponent: AddContractComponent | unknown;
-  @Output('stepChange') stepChange = new EventEmitter<Array<any>>();
+  @Output() dataStepContract = new EventEmitter<string>();
+  // @Output('stepChange') stepChange = new EventEmitter<Array<any>>();
   @Input() datas: any;
   @Input() step: any;
   stepHeader: any = {
@@ -20,7 +22,10 @@ export class ContractHeaderComponent implements OnInit {
   }
   closeResult:string= '';
 
-  constructor(private modalService: NgbModal,) {
+  constructor(
+    private modalService: NgbModal,
+    private router: Router
+  ) {
     // this.step = variable.stepSampleContract.step4
   }
 
@@ -33,6 +38,18 @@ export class ContractHeaderComponent implements OnInit {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  saveContract(modal: any) {
+    // this.datas['closeCreateContract'] = this.datas.step;
+    // setTimeout(() => {
+    //   modal.close('Save click');
+    // }, 2000)
+  }
+
+  closeCreateContract(modal: any) {
+    modal.close('Save click');
+    void this.router.navigate(['/main/dashboard']);
   }
 
   private getDismissReason(reason: any): string {
@@ -156,7 +173,6 @@ export class ContractHeaderComponent implements OnInit {
   nextStep(step: any) {
     // this.datas.documents.document.step = step;
     this.datas.stepLast = step;
-    this.stepChange.emit(step);
   }
 
   previous(){

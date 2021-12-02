@@ -27,7 +27,7 @@ export class UploadService {
 
   getCurrentUser(){
     this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
-    this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.organization_id;
+    this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
   }
 
   uploadFile(file: any) {
