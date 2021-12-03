@@ -191,7 +191,10 @@
   "no.push.contract.draft.success": "Save draft successfully",
   "no.signup.success": "Signup successfully",
   "no.reset-password.login.success": "Change the new password successfully. Please login to continue",
+  "no.contract.download.file.success": "Download contract file successfully",
 
+  "no.contract.download.file.error": "Download contract file failed",
+  "no.contract.get.file.error": "Get contract file failed",
   "no.reset.password.error": "Reset password failed",
   "no.push.information.contract.error": "Push contract information failed",
   "no.push.file.contract.error": "Push contract file failed",

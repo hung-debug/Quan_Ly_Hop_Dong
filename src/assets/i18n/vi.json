@@ -191,7 +191,10 @@
   "no.push.contract.draft.success": "Lưu nháp thành công",
   "no.signup.success": "Đăng ký thành công",
   "no.reset-password.login.success": "Đổi mật khẩu mới thành công. Vui lòng đăng nhập để tiếp tục",
+  "no.contract.download.file.success": "Tải file hợp đồng thành công",
 
+  "no.contract.download.file.error": "Tải file hợp đồng thất bại",
+  "no.contract.get.file.error": "Lấy file hợp đồng thất bại",
   "no.reset.password.error": "Đổi mật khẩu mới thất bại",
   "no.push.information.contract.error": "Đẩy thông tin hợp đồng thất bại",
   "no.push.file.contract.error": "Đẩy file thất bại",

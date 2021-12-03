@@ -285,11 +285,11 @@ export class ContractComponent implements OnInit {
         window.URL.revokeObjectURL(url);
         a.remove();
 
-        this.toastService.showSuccessHTMLWithTimeout("Tải file hợp đồng thành công!", "", 10000);
-      }), (error: any) => this.toastService.showSuccessHTMLWithTimeout("Tải file hợp đồng thất bại!", "", 10000);
+        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 10000);
+      }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 10000);
     },
     error => {
-      this.toastService.showSuccessHTMLWithTimeout("Lấy file hợp đồng thất bại!", "", 10000);
+      this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 10000);
     }
      );
   }
