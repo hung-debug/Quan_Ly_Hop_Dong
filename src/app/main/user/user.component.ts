@@ -40,19 +40,19 @@ export class UserComponent implements OnInit {
   }
 
   updateInforUser(){
-    this.toastService.showSuccessHTMLWithTimeout("Cập nhật thông tin thành công!", "", 10000);
+    this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 10000);
   }
 
   updateSignFileImageUser(){
-    this.toastService.showSuccessHTMLWithTimeout("Cập nhật file chữ ký ảnh thành công!", "", 10000);
+    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.file.image.success", "", 10000);
   }
 
   updateSignKpiUser(){
-    this.toastService.showSuccessHTMLWithTimeout("Cập nhật chữ ký KPI thành công!", "", 10000);
+    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.kpi.success", "", 10000);
   }
 
   updateSignHsmUser(){
-    this.toastService.showSuccessHTMLWithTimeout("Cập nhật chữ ký HSM thành công!", "", 10000);
+    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.hsm.success", "", 10000);
   }
 
 }

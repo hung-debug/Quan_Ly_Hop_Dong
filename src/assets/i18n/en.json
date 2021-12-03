@@ -174,5 +174,17 @@
   "btn.add.user.doc": "Add document maker",
   "btn.add.partner": "Add partner",
 
-  "no.contract.add.close": "The contract has not been completed. Do you want to save the draft?"
+  "no.contract.add.close": "The contract has not been completed. Do you want to save the draft?",
+  "no.update.information.success": "Updated successfully",
+  "no.update.sign.file.image.success": "Updated file sign image successfully",
+  "no.update.sign.kpi.success": "Updated sign KPI successfully",
+  "no.update.sign.hsm.success": "Updated sign HSM successfully",
+  "no.push.contract.draft.success": "Save draft successfully",
+
+  "no.push.information.contract.error": "Push contract information failed",
+  "no.push.file.contract.error": "Push contract file failed",
+  "no.push.file.connect.contract.error": "Push contract file connect failed",
+  "no.push.file.attach.error": "Push file attachment failed",
+  "no.push.file.connect.attach.error": "Push file attachment connect failed",
+  "no.get.information.organization.error": "Get information organization failed"
 }

@@ -293,14 +293,14 @@ export class InforContractComponent implements OnInit {
                           },
                           error => {
                             this.spinner.hide();
-                            this.toastService.showErrorHTMLWithTimeout("Liên kết file đính kèm thất bại!", "", 10000);
+                            this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 10000);
                             return false;
                           }
                         );
                       },
                       error => {
                         this.spinner.hide();
-                        this.toastService.showErrorHTMLWithTimeout("Đẩy file đính kèm thất bại!", "", 10000);
+                        this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 10000);
                         return false;
                       }
                     );
@@ -316,27 +316,27 @@ export class InforContractComponent implements OnInit {
                   }
                 }, error => {
                   this.spinner.hide();
-                  this.toastService.showErrorHTMLWithTimeout("Lấy thông tin tổ chức thất bại!", "", 10000);
+                  this.toastService.showErrorHTMLWithTimeout("no.get.information.organization.error", "", 10000);
                   return false;
                 })
               },
               error => {
                 this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout("Liên kết file hợp đồng thất bại!", "", 10000);
+                this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
                 return false;
               }
             );
           },
           error => {
             this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout("Đẩy file thất bại!", "", 10000);
+            this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 10000);
             return false;
           }
         );
       },
       error => {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Đẩy thông tin hợp đồng thất bại!", "", 10000);
+        this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 10000);
         return false;
       }
     );
@@ -444,47 +444,47 @@ export class InforContractComponent implements OnInit {
 
                       //next step
                       this.router.navigate(['/main/contract/create/draff']);
-                      this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 10000);
+                      this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 10000);
 
                       this.spinner.hide();
                       },
                       error => {
                         this.spinner.hide();
-                        this.toastService.showErrorHTMLWithTimeout("Liên kết file đính kèm thất bại!", "", 10000);
+                        this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 10000);
                         return false;
                       }
                     );
                     },
                     error => {
                       this.spinner.hide();
-                      this.toastService.showErrorHTMLWithTimeout("Đẩy file đính kèm thất bại!", "", 10000);
+                      this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 10000);
                       return false;
                     }
                   );
                 }else {
                   //next step
                   this.router.navigate(['/main/contract/create/draff']);
-                  this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 10000);
+                  this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 10000);
                   this.spinner.hide();
                 }
               },
               error => {
                 this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout("Liên kết file hợp đồng thất bại!", "", 10000);
+                this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
                 return false;
               }
             );
           },
           error => {
             this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout("Đẩy file thất bại!", "", 10000);
+            this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 10000);
             return false;
           }
         );
       },
       error => {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Đẩy thông tin hợp đồng thất bại!", "", 10000);
+        this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 10000);
         return false;
       }
     );
