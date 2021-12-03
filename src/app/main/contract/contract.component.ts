@@ -271,9 +271,9 @@ export class ContractComponent implements OnInit {
 
   downloadContract(id:any){
     this.contractService.getFileContract(id).subscribe((data) => {
-      console.log(data);
+      //console.log(data);
       this.uploadService.downloadFile(data[0].path).subscribe((response: any) => {
-        console.log(response);
+        //console.log(response);
 
         let url = window.URL.createObjectURL(response);
         let a = document.createElement('a');
