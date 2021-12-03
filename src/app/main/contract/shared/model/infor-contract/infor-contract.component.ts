@@ -231,11 +231,11 @@ export class InforContractComponent implements OnInit {
   validData() {
     this.clearError();
     if (!this.name) {
-      this.errorContractName = 'Tên hợp đồng không được để trống!';
+      this.errorContractName = 'error.contract.name.required';
       return false;
     }
     if (!this.datas.contractFile) {
-      this.errorContractFile = 'File hợp đồng không được để trống!';
+      this.errorContractFile = 'error.contract.file.required';
       return false;
     }
     // console.log(Math.floor((this.sign_time.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24));

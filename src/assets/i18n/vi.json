@@ -139,6 +139,15 @@
   "sign.kpi" : "Chữ ký KPI",
   "sign.hsm" : "Chữ ký HSM",
 
+  "error.server": "Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý",
+  "error.username.required": "Tên đăng nhập không được để trống",
+  "error.password.required": "Mật khẩu không được để trống",
+  "error.username.password": "Tên đăng nhập hoặc mật khẩu không đúng",
+  "error.password-new.required": "Mật khẩu mới không được để trống",
+  "error.confirm-password-new.required": "Xác nhận mật khẩu mới không được để trống",
+  "error.confirm-password-new.incorrect": "Xác nhận mật khẩu mới không khớp",
+  "error.contract.name.required": "Tên hợp đồng không được để trống",
+  "error.contract.file.required": "File hợp đồng không được để trống",
   "error.user.name.required": "Họ tên không được để trống",
   "error.user.email.required": "Email không được để trống",
   "error.user.email.format": "Email sai định dạng",
@@ -180,12 +189,14 @@
   "no.update.sign.kpi.success": "Cập nhật chữ ký KPI thành công",
   "no.update.sign.hsm.success": "Cập nhật chữ ký HSM thành công",
   "no.push.contract.draft.success": "Lưu nháp thành công",
+  "no.signup.success": "Đăng ký thành công",
+  "no.reset-password.login.success": "Đổi mật khẩu mới thành công. Vui lòng đăng nhập để tiếp tục",
 
+  "no.reset.password.error": "Đổi mật khẩu mới thất bại",
   "no.push.information.contract.error": "Đẩy thông tin hợp đồng thất bại",
   "no.push.file.contract.error": "Đẩy file thất bại",
   "no.push.file.connect.contract.error": "Liên kết file hợp đồng thất bại",
   "no.push.file.attach.error": "Đẩy file đính kèm thất bại",
   "no.push.file.connect.attach.error": "Liên kết file đính kèm thất bại",
   "no.get.information.organization.error": "Lấy thông tin tổ chức thất bại"
-
 }
