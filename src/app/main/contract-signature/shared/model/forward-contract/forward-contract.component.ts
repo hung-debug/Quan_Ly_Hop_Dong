@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, ElementRef} from '@angular/core';
+import {Component, Inject, OnInit, ElementRef, Input} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
@@ -41,7 +41,7 @@ export class ForwardContractComponent implements OnInit {
         email: this.myForm.value.email,
         full_name: this.myForm.value.name,
         role: this.datas.dataContract.roleContractReceived,
-        participant_id: this.datas.dataContract.is_data_contract.participants[0].id,
+        recipient_id: this.datas.recipientId,
         is_replace: this.datas.is_content != 'forward_contract'
 
       }
