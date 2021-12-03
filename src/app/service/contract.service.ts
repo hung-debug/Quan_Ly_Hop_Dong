@@ -59,8 +59,8 @@ export class ContractService {
 
   getCurrentUser(){
     this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
-    this.customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.id;
-    this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.organization_id;
+    this.customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id;
+    this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
   }
 
   public getContractTypeList(): Observable<any> {

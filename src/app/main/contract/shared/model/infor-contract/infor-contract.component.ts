@@ -370,16 +370,24 @@ export class InforContractComponent implements OnInit {
   }
 
   defineData(datas:any){
+    this.datas.name = this.name;
+    this.datas.sign_time = this.sign_time;
+    if(this.datas.code == ''){
+      this.datas.code = null;
+    }
+    if(this.datas.notes == ''){
+      this.datas.notes = null;
+    }
+
     console.log(this.type_id);
-    if(this.type_id != null){
+    if(this.type_id != null && this.type_id != ''){
       this.type_id.forEach((element: any, index: number) => {
         this.datas.type_id = element.id;
       })
-
     }
 
     console.log(this.contractConnect);
-    if(this.contractConnect != null){
+    if(this.contractConnect != null && this.contractConnect != ''){
       const array_empty: ContractConnectArr[] = [];
       this.contractConnect.forEach((element: any, index: number) => {
         const data = new ContractConnectArr(element.id);
@@ -395,11 +403,6 @@ export class InforContractComponent implements OnInit {
     if (!this.validData()) return;
     else {
       // gán value step 1 vào datas
-      this.datas.name = this.name;
-      this.datas.code = this.code;
-      this.datas.sign_time = this.sign_time;
-      this.datas.notes = this.notes;
-
       this.defineData(this.datas);
       console.log(this.datas);
 

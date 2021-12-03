@@ -2,21 +2,19 @@
 <div class="container-fluid">
   <div class="contract-determine">
     <div class="col-md-1">
-      <input class="contract-total" style="width: 25px; height: 25px" type="number"
-             [value]="data_organization.ordering">
+      <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="data_organization.ordering">
     </div>
     <div class="col-md-11 contract--content">
       <div class="contract__content--title">
         <div>TỔ CHỨC CỦA TÔI -</div>
-        <input type="text" [(ngModel)]="data_organization.name" autofocus>
+        <input type="text" [(ngModel)]="data_organization.name" autofocus disabled>
       </div>
       <div class="contract__content--participants">
         <div class="participants-border">
           <div class="label">Người xem xét</div>
           <!--          <div class="participants&#45;&#45;content" *ngFor="let d of is_origanzation_reviewer; let index = index">-->
           <div class="participants--content" *ngFor="let d of getOriganzationReviewer(); let index = index">
-            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
-                   [(ngModel)]="d.ordering">
+            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
             <div class="col-md-10 participants--input" style="display: flex">
               <div class="participants__name">
                 <div class="label text-color">Họ tên: <span class="required-title">*</span></div>
@@ -46,8 +44,7 @@
           <div class="label">Người ký</div>
           <!--          <div class="participants&#45;&#45;content" *ngFor="let d of this.is_origanzation_signature; let index = index">-->
           <div class="participants--content" *ngFor="let d of getOriganzationSignature(); let index = index">
-            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
-                   [(ngModel)]="d.ordering">
+            <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
@@ -66,6 +63,7 @@
                   </div>
                 </div>
               </div>
+
               <div class="participants--input select-text-input" style="display: flex">
                 <div class="participants__name">
                   <div class="label text-color">Loại ký: <span class="required-title">*</span></div>
@@ -94,10 +92,11 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-1 delete-element" (click)="deleteOriganzationSignature(index)">
+            <div *ngIf="getOriganzationSignature().length > 1" class="col-md-1 delete-element" (click)="deleteOriganzationSignature(index)">
               <img src="assets/img/border_close.svg" alt="close.vn">
               <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
             </div>
+            <div *ngIf="getOriganzationSignature().length == 1" class="col-md-1 delete-element"></div>
           </div>
           <div class="participants--add">
             <u class="label text-color" style="color: #106DB6" (click)="addOriganzationSignature()">Thêm người ký</u>
@@ -168,7 +167,7 @@
     <div class="col-md-11 contract--content">
       <div class="contract__content--title">
         <div style="width: 72px">Đối Tác -</div>
-        <input type="text" [(ngModel)]="item.name" (change)="getData(item)">
+        <input type="text" [(ngModel)]="item.name" [disabled]="item.type == 3">
       </div>
       <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
         <u class="label text-color" (click)="deletePartner(id)" style="background-color: #FFFFFF; cursor: pointer">Xóa đối tác</u>
@@ -300,10 +299,11 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
+              <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn">
                 <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
               </div>
+              <div *ngIf="getPartnerSignature(item).length == 1" class="col-md-1 delete-element"></div>
             </div>
             <div class="participants--add">
               <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item, id)">Thêm người
@@ -358,8 +358,7 @@
               </div>
             </div>
             <div class="participants--add">
-              <u class="label text-color" style="color: #106DB6" (click)="addPartnerDocument(item, id)">Thêm người
-                ký</u>
+              <u class="label text-color" style="color: #106DB6" (click)="addPartnerDocument(item, id)">Thêm người ký</u>
             </div>
           </div>
         </div>
@@ -394,7 +393,7 @@
                       <div class="label text-color">Loại ký: <span class="required-title">*</span></div>
 
                       <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                                               [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                                               [settings]="dropdownSignTypeSettings" [data]="signTypeList" (onSelect)="onItemSelect($event, d.sign_type)">
                         <ng-template #optionsTemplate let-item let-option="option"
                                      let-id="id" let-isSelected="isSelected">
                           <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -417,14 +416,14 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
+                <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
                   <img src="assets/img/border_close.svg" alt="close.vn">
                   <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
                 </div>
+                <div *ngIf="getPartnerSignature(item).length == 1" class="col-md-1 delete-element"></div>
               </div>
-              <div class="participants--add">
-                <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item, id)">Thêm người
-                  ký</u>
+              <div *ngIf="getPartnerSignature(item).length > 1" class="participants--add">
+                <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item, id)">Thêm người ký</u>
               </div>
             </div>
           </div>

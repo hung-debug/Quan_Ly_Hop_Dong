@@ -31,7 +31,7 @@
     <div class="col-md-4">
       <div>{{'organization' | translate}}</div>
       <div>
-        <input type="text" [(ngModel)]="organization_id" readonly/>
+        <div class="input_text" [innerHTML]="organization_name" readonly></div>
       </div>
     </div>
     <div class="col-md-4 btn_save">

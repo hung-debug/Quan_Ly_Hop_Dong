@@ -104,6 +104,10 @@ export class AddContractComponent implements OnInit {
     this.step = e;
   }
 
+  getDataStepContract(e: any) {
+
+  }
+
   t() {
     console.log(this);
   }

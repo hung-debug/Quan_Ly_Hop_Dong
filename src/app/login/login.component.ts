@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
         this.error  = false;
         this.router.navigate(['/main/dashboard']);
       }else{
-        this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password).subscribe((data) => {
+        this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, 0).subscribe((data) => {
             if (this.authService.isLoggedInSuccess() == true) {
               this.error  = false;
               this.router.navigate(['/main/dashboard']);

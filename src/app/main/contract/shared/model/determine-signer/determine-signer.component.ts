@@ -6,6 +6,8 @@ import {Helper} from "../../../../../core/Helper";
 // import {ContractService} from "../../../../../service/contract.service";
 import * as ContractCreateDetermine from '../../contract_data'
 import {elements} from "@interactjs/snappers/all";
+import {NgxSpinnerService} from "ngx-spinner";
+import {ToastService} from "../../../../../service/toast.service";
 
 @Component({
   selector: 'app-determine-signer',
@@ -16,6 +18,7 @@ export class DetermineSignerComponent implements OnInit {
   @Input() datas: any;
   @Input() step: any;
   @Output() stepChangeDetermineSigner = new EventEmitter<string>();
+  @Output('dataStepContract') dataStepContract = new EventEmitter<Array<any>>();
   @ViewChild("abcd") fieldAbcd: any;
   determine_step = false;
   determineDetails!: FormGroup;
@@ -47,6 +50,8 @@ export class DetermineSignerComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private contractService: ContractService,
+    private spinner: NgxSpinnerService,
+    private toastService: ToastService
   ) {
     this.step = variable.stepSampleContract.step2
     //this.datas.determineDetails = this.determineDetails;
@@ -69,43 +74,19 @@ export class DetermineSignerComponent implements OnInit {
     this.data_parnter_organization = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
     // this.data_parnter_individual = this.is_determine_clone.filter((p: any) => p.type == 3);
 
-
-    this.partnerForm = this.formBuilder.group({
-      partnerArrs: this.formBuilder.array([this.newPartner()])
-    });
-
     this.dropdownSignTypeSettings = {
       singleSelection: false,
       idField: "id",
       textField: "name",
-      selectAllText: "Chọn tất cả",
-      unSelectAllText: "Bỏ chọn tất cả",
+      // selectAllText: "Chọn tất cả",
+      // unSelectAllText: "Bỏ chọn tất cả",
+      enableCheckAll: false,
       allowSearchFilter: true,
       itemsShowLimit: 2,
+      limitSelection: 2,
+      disabledField: 'item_disable',
     };
   }
-
-  partnerArrs(): FormArray {
-    return this.partnerForm.get("partnerArrs") as FormArray
-  }
-
-  newPartner(): FormGroup {
-    return this.partners = this.formBuilder.group({
-      order: 1,
-      type: 1,
-      name: ['', Validators.required],
-      partnerLeads: this.formBuilder.array([]),
-      partnerViews: this.formBuilder.array([]),
-      partnerSigns: this.formBuilder.array([]),
-      partnerDocs: this.formBuilder.array([]),
-
-      partnerUsers: this.formBuilder.array([]),
-    })
-  }
-
-  // addPartner() {
-  //   this.partnerArrs().push(this.newPartner());
-  // }
 
   //dropdown contract type
   get getSignTypeItems() {
@@ -115,192 +96,6 @@ export class DetermineSignerComponent implements OnInit {
     }, {});
   }
 
-  name = 'Angular';
-
-  //user view
-  userViews(): FormArray {
-    return this.userForm.get("userViews") as FormArray
-  }
-
-  newUserView(): FormGroup {
-    return this.formBuilder.group({
-      order: 1,
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-    })
-  }
-
-  addUserView() {
-    this.userViews().push(this.newUserView());
-  }
-
-  removeUserView(i: number) {
-    this.userViews().removeAt(i);
-  }
-
-  //user sign
-  userSigns(): FormArray {
-    //console.log((this.userForm.get("userSigns") as FormArray).value)
-    return this.userForm.get("userSigns") as FormArray
-  }
-
-  newUserSign(): FormGroup {
-    return this.formBuilder.group({
-      order: 1,
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      signType: ['', Validators.required],
-      isOtp: true,
-      phone: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
-      id: '',
-    })
-  }
-
-  addUserSign() {
-    this.userSigns().push(this.newUserSign());
-  }
-
-  removeUserSign(i: number) {
-    this.userSigns().removeAt(i);
-  }
-
-  //user document
-  userDocs(): FormArray {
-    return this.userForm.get("userDocs") as FormArray
-  }
-
-  newUserDoc(): FormGroup {
-    return this.formBuilder.group({
-      order: 1,
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      signType: ['', Validators.required],
-    })
-  }
-
-  addUserDoc() {
-    this.userDocs().push(this.newUserDoc());
-  }
-
-  removeUserDoc(i: number) {
-    this.userDocs().removeAt(i);
-  }
-
-  //partner
-  partners: FormGroup;
-
-  //user partner lead
-  partnerLeads(a: number): FormArray {
-    return this.partnerArrs().at(a).get("partnerLeads") as FormArray
-  }
-
-  newPartnerLead(): FormGroup {
-    return this.formBuilder.group({
-      order: 1,
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-    })
-  }
-
-  addPartnerLead(a: number) {
-    this.partnerLeads(a).push(this.newPartnerLead());
-  }
-
-  removePartnerLead(a: number, i: number) {
-    this.partnerLeads(a).removeAt(i);
-  }
-
-  //partner view
-  partnerViews(a: number): FormArray {
-    return this.partnerArrs().at(a).get("partnerViews") as FormArray
-  }
-
-  newPartnerView(): FormGroup {
-    return this.formBuilder.group({
-      order: 1,
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-    })
-  }
-
-  addPartnerView(a: number) {
-    this.partnerViews(a).push(this.newPartnerView());
-  }
-
-  removePartnerView(a: number, i: number) {
-    this.partnerViews(a).removeAt(i);
-  }
-
-  //partner sign
-  partnerSigns(a: number): FormArray {
-    return this.partnerArrs().at(a).get("partnerSigns") as FormArray
-  }
-
-  newPartnerSign(): FormGroup {
-    return this.formBuilder.group({
-      order: 1,
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      signType: ['', Validators.required],
-      isOtp: true,
-      phone: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
-      id: ''
-    })
-  }
-
-  addPartnerSign(a: number) {
-    this.partnerSigns(a).push(this.newPartnerSign());
-  }
-
-  removePartnerSign(a: number, i: number) {
-    this.partnerSigns(a).removeAt(i);
-  }
-
-  //partner document
-  partnerDocs(a: number): FormArray {
-    return this.partnerArrs().at(a).get("partnerDocs") as FormArray
-  }
-
-  newPartnerDoc(): FormGroup {
-    return this.formBuilder.group({
-      order: 1,
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      signType: ['', Validators.required],
-    })
-  }
-
-  addPartnerDoc(a: number) {
-    this.partnerDocs(a).push(this.newPartnerDoc());
-  }
-
-  removePartnerDoc(a: number, i: number) {
-    this.partnerDocs(a).removeAt(i);
-  }
-
-  //partner user (ca nhan)
-  partnerUsers(a: number): FormArray {
-    return this.partnerArrs().at(a).get("partnerUsers") as FormArray
-  }
-
-  newPartnerUser(): FormGroup {
-    return this.formBuilder.group({
-      order: 1,
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      signType: ['', Validators.required],
-      isOtp: true,
-      phone: ['', [Validators.required, Validators.pattern("[0-9 ]{10}")]],
-    })
-  }
-
-  addPartnerUser(a: number) {
-    this.partnerUsers(a).push(this.newPartnerUser());
-  }
-
-  removePartnerUser(a: number, i: number) {
-    this.partnerUsers(a).removeAt(i);
-  }
 
   onSubmit() {
     console.log(this.userForm.value);
@@ -325,23 +120,21 @@ export class DetermineSignerComponent implements OnInit {
       this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res: any) => {
           // this.datas.id = data?.id;
           // console.log(res);
-          if (res && res.length > 0) {
-            this.datas.determine_contract = res ? res : this.is_determine_clone;
-            this.step = variable.stepSampleContract.step3;
-            this.datas.stepLast = this.step
-            // console.log(this.datas);
-            this.nextOrPreviousStep(this.step);
-          } else {
-            alert('Bạn đã nhập thiếu dữ liệu, vui lòng kiểm tra lại các trường dữ liệu cần nhập!');
-            return false;
-          }
+          this.datas.determine_contract = res ? res : this.is_determine_clone;
+          this.step = variable.stepSampleContract.step3;
+          this.datas.stepLast = this.step
+          this.nextOrPreviousStep(this.step);
         },
-        error => {
-          console.log("false content");
-          return false;
+        (res: any) => {
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout(res.error, "", 10000);
         }
       );
     }
+  }
+
+  saveDataStep(datas: any) {
+
   }
 
   // forward data component
@@ -357,20 +150,148 @@ export class DetermineSignerComponent implements OnInit {
   // valid data step 2
   validData() {
     let count = 0;
-    this.data_organization.recipients.forEach((element: any) => {
-      if (element.role == 3 && !element.name) {
-        alert('Vui lòng nhập đối tượng ký tổ chức của tôi!');
+    let dataArr = [];
+    dataArr = this.data_organization.recipients;
+
+    for (let i = 0; i < dataArr.length; i++) {
+      if (!dataArr[i].name) {
+        this.spinner.hide();
         // @ts-ignore
-        document.getElementById("signature-origanzation-" + element.ordering).focus();
-        // this.fieldAbcd.nativeElement.focus();
+        // document.getElementById("signature-origanzation-" + element.ordering).focus();
+        this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!", "", 10000);
         count++;
+        break;
       }
-    })
+      if (!dataArr[i].email) {
+        this.spinner.hide();
+        // @ts-ignore
+        // document.getElementById("signature-origanzation-" + element.ordering).focus();
+        this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập email" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!", "", 10000);
+        count++;
+        break;
+      }
+
+      if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
+        this.spinner.hide();
+        // @ts-ignore
+        this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại ký của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!", "", 10000);
+        count++;
+        break;
+      }
+
+      if (!dataArr[i].phone && dataArr[i].role == 3 && (dataArr[i].is_otp || dataArr[i].is_otp == 1)) {
+        this.spinner.hide();
+        // @ts-ignore
+        this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi!", "", 10000);
+        count++;
+        break;
+      }
+    }
+
+    if (count == 0) {
+      // validate phía đối tác
+      let dataArrPartner = [];
+      dataArrPartner = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+      for (let j = 0; j < dataArrPartner.length; j++) {
+        for (let k = 0; k < dataArrPartner[j].recipients.length; k++) {
+          if (dataArrPartner[j].type != 3) {
+            if (!dataArrPartner[j].name) {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập tên của đối tác tổ chức!", "", 10000);
+              count++;
+              break;
+            }
+
+            if (!dataArrPartner[j].recipients[k].name) {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!", "", 10000);
+              count++;
+              break;
+            }
+            if (!dataArrPartner[j].recipients[k].email) {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!", "", 10000);
+              count++;
+              break;
+            }
+
+            if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role)) {
+              this.spinner.hide();
+              // @ts-ignore
+              this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại ký của" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!", "", 10000);
+              count++;
+              break;
+            }
+
+            if (!dataArrPartner[j].recipients[k].phone && dataArrPartner[j].recipients[k].role == 3 && (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
+              this.spinner.hide();
+              // @ts-ignore
+              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "của đối tác!", "", 10000);
+              count++;
+              break;
+            }
+          } else if (dataArrPartner[j].type == 3) {
+            if (!dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3) {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!", "", 10000);
+              count++;
+              break;
+            }
+            if (!dataArrPartner[j].recipients[k].email && dataArrPartner[j].recipients[k].role == 3) {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!", "", 10000);
+              count++;
+              break;
+            }
+
+            if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role) && dataArrPartner[j].recipients[k].role == 3) {
+              this.spinner.hide();
+              // @ts-ignore
+              this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại ký của" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!", "", 10000);
+              count++;
+              break;
+            }
+
+            if (!dataArrPartner[j].recipients[k].phone &&
+              dataArrPartner[j].recipients[k].role == 3 &&
+              (dataArrPartner[j].recipients[k].is_otp ||
+                dataArrPartner[j].recipients[k].is_otp == 1) &&
+              dataArrPartner[j].recipients[k].role == 3) {
+              this.spinner.hide();
+              // @ts-ignore
+              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "của đối tác!", "", 10000);
+              count++;
+              break;
+            }
+          }
+        }
+      }
+    }
 
     if (count > 0) {
       return false;
     }
     return true;
+  }
+
+  getNameObject(role_numer: number) {
+    switch (role_numer) {
+      case 1:
+        return ' người điều phối ';
+        break;
+      case 2:
+        return ' người xem xét ';
+        break;
+      case 3:
+        return ' người ký ';
+        break;
+      case 4:
+        return ' văn thư ';
+        break;
+      default:
+        return '';
+        break;
+    }
   }
 
   // BEGIN DATA
@@ -393,28 +314,13 @@ export class DetermineSignerComponent implements OnInit {
     ]
   }
 
-  onItemSelect(item: any) {
-    console.log('onItemSelect', item);
+  onItemSelect(e: any, data: any) {
+
   }
 
   changePartner(e: any, number_type: number, item: any) {
-    console.log(e);
     this.getDataPartner(number_type);
   }
-
-  // isOriganzationReviewer() {
-  //   return (this.is_determine_clone.filter((p: any) => p.type == 1)[0]).recipients.filter((p: any) => p.role == 1);
-  // }
-  //
-  // isOriganzationSignature() {
-  //   return (this.is_determine_clone.filter((p: any) => p.type == 1)[0]).recipients.filter((p: any) => p.role == 3);
-  // }
-
-  // recipients.filter((p: any) => p.role == 1)
-
-  // getOrganization() {
-  //   return this.is_determine_clone.filter((p: any) => p.type == 1)[0];
-  // }
 
 // tạo mảng đối tác
   getDataPartner(number_type?: number, name?: string) {
@@ -589,7 +495,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   // xóa đối tượng điều phối hợp đồng (done)
-  deletePartnerCoordination(index_item: any, item: any, id:number) {
+  deletePartnerCoordination(index_item: any, item: any, id: number) {
     let arr_clone = item.recipients.filter((p: any) => p.role == 1);
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 1);
     const array_empty: any[] = [];
@@ -670,7 +576,7 @@ export class DetermineSignerComponent implements OnInit {
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];
     this.is_determine_clone.push(data_partner_add);
     this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3).forEach((res: any, index: number) => {
-      res.ordering =  index + 1;
+      res.ordering = index + 1;
     })
 
     console.log(this.data_parnter_organization);
@@ -680,7 +586,7 @@ export class DetermineSignerComponent implements OnInit {
   deletePartner(index: any) {
     this.is_determine_clone.splice(index, 1);
     this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3).forEach((res: any, index: number) => {
-      res.ordering =  index + 1;
+      res.ordering = index + 1;
     })
   }
 

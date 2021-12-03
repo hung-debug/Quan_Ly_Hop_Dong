@@ -17,9 +17,36 @@ export class UserService {
   resetPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/recover`;
   resetPasswordTokenUrl:any = `${environment.apiUrl}/api/v1/customers/changePassword`;
 
-
+  token:any;
+  customer_id:any;
+  organization_id:any;
+  name:any;
+  email:any;
+  phone:any;
 
   constructor(private http: HttpClient) { }
+
+  getCurrentUser(){
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
+    this.customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id;
+    this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
+
+    this.name = JSON.parse(localStorage.getItem('currentUser')||'').customer.info.name;
+    this.email = JSON.parse(localStorage.getItem('currentUser')||'').customer.info.email;
+    this.phone = JSON.parse(localStorage.getItem('currentUser')||'').customer.info.phone;
+  }
+
+  getInforUser(){
+    this.getCurrentUser();
+    return {
+      token: this.token,
+      customer_id: this.customer_id,
+      organization_id: this.organization_id,
+      name: this.name,
+      email: this.email,
+      phone: this.phone,
+    };
+  }
 
   sendForgotPassword(email:string) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
@@ -56,10 +83,10 @@ export class UserService {
   }
 
   sendResetPasswordToken(passwordOld:string, passwordNew:string) {
-    let token = JSON.parse(localStorage.getItem('currentUser') || '')?.access_token;
+    this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + token);
+      .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({password: passwordOld, newPassword: passwordNew});
     return this.http.post<User>(this.resetPasswordTokenUrl, body, {'headers':headers})
     .pipe(

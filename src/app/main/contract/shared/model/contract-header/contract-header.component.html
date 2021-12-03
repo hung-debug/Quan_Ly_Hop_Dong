@@ -54,8 +54,10 @@
     </div>
     <div class="row" style="text-align: center; padding-top: 10px;">
       <div class="col-md-12">
-        <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">{{'btn.cancel' | translate}}</button>
-        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.dismiss('Cross click');" >{{'btn.accept' | translate}}</button>
+<!--        <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">{{'btn.cancel' | translate}}</button>-->
+        <button type="button" class="btn btn-outline-dark btn_close" (click)="closeCreateContract(modal)">{{'btn.cancel' | translate}}</button>
+<!--        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.dismiss('Cross click');" >{{'btn.accept' | translate}}</button>-->
+        <button type="button" class="btn btn-outline-dark btn_submit" (click)="saveContract(modal)">{{'btn.accept' | translate}}</button>
       </div>
     </div>
   </div>
