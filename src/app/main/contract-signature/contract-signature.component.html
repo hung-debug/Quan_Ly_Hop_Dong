@@ -1,190 +1,3 @@
-<!-- <div class="container-fluid">
-
-  <mdb-tabs [fill]="true" >
-    <mdb-tab title="Hợp đồng của tôi" value='mine' [ngClass]="{ 'active':type==='mine'}" *ngIf="action=='create'"></mdb-tab>
-    <mdb-tab title="Hợp đồng của tổ chức" value='my-org' [ngClass]="{ 'active':type==='my-org'}" *ngIf="action=='create'"></mdb-tab>
-    <mdb-tab title="Hợp đồng cần xử lý 1212" value='wait-for-me' [ngClass]="{ 'active':type==='wait-for-me'}" *ngIf="action=='receive'"></mdb-tab>
-    <mdb-tab title="Hợp đồng được chia sẻ123123" value='share-for-me' [ngClass]="{ 'active':type==='share-for-me'}" *ngIf="action=='receive'"></mdb-tab>
-  </mdb-tabs>
-
-  <div class="col-md-12">
-    <div class="input-line search">
-      <img src="../../assets/img/icon_search.svg" class="input-img" />
-      <input type="text" id="search" class="input-text" placeholder="Nhập từ khóa tìm kiếm theo tên hợp đồng"
-      (keyup)="autoSearch($event)" />
-      <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="open(modal_filter)"/>
-    </div>
-  </div>
-
-  <div class="row list_header" *ngIf="contracts.length > 0;">
-
-    <div class="col-md-5"></div>
-    <div class="col-md-2">Ngày tạo</div>
-    <div class="col-md-2">Ngày hết hạn ký</div>
-    <div class="col-md-3">Thao tác</div>
-  </div>
-
-  <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}" (click)="t(item)">
-    <div class="row">
-      <div class="col-md-12 item_contract_name">{{item.contractName}}</div>
-    </div>
-    <div class="row">
-      <div class="col-md-12 item_contract_infor">Bên A: {{item.userName}}</div>
-    </div>
-    <div class="row">
-      <div class="col-md-12 item_contract_infor">Bên B: {{item.partnerName}}</div>
-    </div>
-    <div class="row">
-      <div class="col-md-5">
-        <div class="row">
-          <div class="col-md-12 item_contract_infor">Trạng thái:
-            <span class="status_blue">{{item.status}}</span>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2 calendar_create">
-        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.createDate}}</span>
-      </div>
-
-      <div class="col-md-2 calendar_deadline">
-        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.deadLine}}</span>
-      </div>
-
-      <div class="col-md-3 item_icon">
-        <div class="row">
-          <div class="{{iconClass}}" *ngIf="item.roleContractReceived == constantModel.CONTRACT_RECEIVE_CONSIDER">
-            <i class="fa fa-clone fa_icon" ngbTooltip="Xem xét hợp đồng" (click)="openConsiderContract(item.id)"></i>
-          </div>
-          <div class="{{iconClass}}" *ngIf="item.roleContractReceived == constantModel.CONTRACT_RECEIVE_COORDINATOR">
-            <i class="fa fa-pencil-square fa_icon" ngbTooltip="Điều phối hợp đồng" (click)="openCoordinatorContract(item.id)"></i>
-          </div>
-          <div class="{{iconClass}}" *ngIf="item.roleContractReceived == constantModel.CONTRACT_RECEIVE_SIGNATURE">
-            <i class="fa fa-minus-square fa_icon" ngbTooltip="Ký hợp đồng" (click)="openSignatureContract(item.id)"></i>
-          </div>
-          <div class="{{iconClass}}" *ngIf="item.roleContractReceived == constantModel.CONTRACT_RECEIVE_SECRETARY">
-            <i class="fa fa-calendar-o fa_icon" ngbTooltip="Văn thư" (click)="openSecretaryContract(item.id)"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="contract_footer" *ngIf="contracts.length > 0;">
-    <div class="footer_title"></div>
-    <div class="footer_pagination">
-      <pagination-controls (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
-    </div>
-    <div class="footer_page_number">Số lượng: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
-  </div>
-
-</div>
-
-<ng-template #modal_filter let-modal >
-  <div class="popup_content">
-    <div class="row">
-      <div class="col-md-10">
-        <h4 class="popup_title">TÌM KIẾM HỢP ĐỒNG</h4>
-      </div>
-      <div class="col-md-2 popup_close">
-        <span (click)="modal.dismiss('Cross click')">×</span>
-      </div>
-    </div>
-    <hr>
-    <div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="label_item">Loại hợp đồng</div>
-          <div class="input-group">
-            <input type="text" id="contractType" class="form-control"/>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="label_item">Số hợp đồng</div>
-          <div class="input-group">
-            <input type="text" id="contractNumber" class="form-control"/>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="label_item">Từ ngày (ngày tạo)</div>
-          <div class="input-group">
-            <ngx-datepicker [(ngModel)]="startCreateDate" [options]="options" class="date-picker"></ngx-datepicker>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="label_item">Đến ngày (ngày tạo)</div>
-          <div class="input-group">
-            <ngx-datepicker [(ngModel)]="endCreateDate" [options]="options" class="date-picker"></ngx-datepicker>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row" style="text-align: center; padding-top: 10px;">
-      <div class="col-md-12">
-        <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
-        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.close('Save click')">Tìm kiếm</button>
-      </div>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #mymodal let-modal >
-  <div class="popup_content">
-    <div class="row">
-      <div class="col-md-10">
-        <h4 class="popup_title">LỊCH SỬ HỢP ĐỒNG</h4>
-      </div>
-      <div class="col-md-2 popup_close">
-        <span (click)="modal.dismiss('Cross click')">×</span>
-      </div>
-    </div>
-    <hr>
-    <div class="modal-body">
-      <div style="color: #8B8B8B; padding-top: 5px;">Tên hợp đồng</div>
-      <div style="color: #000000; padding-top: 5px;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
-      <div class="container">
-        <div class="row">
-          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
-          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
-          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
-        </div>
-        <div class="row">
-          <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-          <div class="col-4" style="color: #000000; padding-top: 5px;">20/10/2021</div>
-          <div class="col-4" style="color: #47A920; padding-top: 5px;">Đang xử lý</div>
-        </div>
-      </div>
-    </div>
-    <div style="border-top: 1px solid #dee2e6; margin-top: 10px;"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-12" style="color: #8B8B8B; padding-top: 10px;">Danh sách ký</div>
-      </div>
-      <div class="row">
-        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
-        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
-      </div>
-      <div class="row">
-        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
-        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
-      </div>
-      <div class="row">
-        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
-        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
-      </div>
-    </div>
-    <div style="float: right; padding-top: 20px;">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')"
-      style="padding: 5px; width: 100px; background: #106DB6; color: white; border: 1px solid #87CAFF;">Ok</button>
-    </div>
-  </div>
-</ng-template> -->
-
-
 <div class="container-fluid">
 
   <mdb-tabs [fill]="true" >
@@ -216,27 +29,27 @@
       <div class="col-md-12 item_contract_name" (click)="openConsiderContractViewProcesse(item)">{{item.contractName}}</div>
     </div>
     <div class="row">
-      <div class="col-md-12 item_contract_infor">Số hợp đồng: {{item.contractNumber}}</div>
+      <div class="col-md-12 item_contract_infor">{{'contract.number' | translate}}: {{item.contractNumber}}</div>
     </div>
     <div class="row">
-      <div class="col-md-12 item_contract_infor">Người xử lý: {{item.name}} - {{item.email}}</div>
+      <div class="col-md-12 item_contract_infor">{{'contract.person-process' | translate}}: {{item.name}} - {{item.email}}</div>
     </div>
     <div class="row">
       <div class="col-md-5">
         <div class="row">
-          <div class="col-md-12 item_contract_infor">Trạng thái:
-            <span class="status_blue" *ngIf="item.status == 1 && item.role == 1">Chờ điều phối</span>
-            <span class="status_blue" *ngIf="item.status == 1 && item.role == 2">Chờ xem xét</span>
-            <span class="status_blue" *ngIf="item.status == 1 && item.role == 3">Chờ ký</span>
-            <span class="status_blue" *ngIf="item.status == 1 && item.role == 4">Chờ văn thư</span>
-            <span class="status_blue" *ngIf="item.status == 2 && item.role == 1">Đã điều phối</span>
-            <span class="status_blue" *ngIf="item.status == 2 && item.role == 2">Đã xem xét</span>
-            <span class="status_blue" *ngIf="item.status == 2 && item.role == 3">Đã ký</span>
-            <span class="status_blue" *ngIf="item.status == 2 && item.role == 4">Đã văn thư</span>
-            <span class="status_blue" *ngIf="item.status == 3 && item.role == 1">Đã từ chối điều phối</span>
-            <span class="status_blue" *ngIf="item.status == 3 && item.role == 2">Đã từ chối xem xét</span>
-            <span class="status_blue" *ngIf="item.status == 3 && item.role == 3">Đã từ chối ký</span>
-            <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">Đã từ chối văn thư</span>
+          <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
+            <span class="status_blue" *ngIf="item.status == 1 && item.role == 1">{{'contract.wait-lead' | translate}}</span>
+            <span class="status_blue" *ngIf="item.status == 1 && item.role == 2">{{'contract.wait-view' | translate}}</span>
+            <span class="status_blue" *ngIf="item.status == 1 && item.role == 3">{{'contract.wait-sign' | translate}}</span>
+            <span class="status_blue" *ngIf="item.status == 1 && item.role == 4">{{'contract.wait-document' | translate}}</span>
+            <span class="status_blue" *ngIf="item.status == 2 && item.role == 1">{{'contract.leaded' | translate}}</span>
+            <span class="status_blue" *ngIf="item.status == 2 && item.role == 2">{{'contract.viewed' | translate}}</span>
+            <span class="status_blue" *ngIf="item.status == 2 && item.role == 3">{{'contract.signed' | translate}}</span>
+            <span class="status_blue" *ngIf="item.status == 2 && item.role == 4">{{'contract.documented' | translate}}</span>
+            <span class="status_blue" *ngIf="item.status == 3 && item.role == 1">{{'contract.lead-refused' | translate}}</span>
+            <span class="status_blue" *ngIf="item.status == 3 && item.role == 2">{{'contract.view-refused' | translate}}</span>
+            <span class="status_blue" *ngIf="item.status == 3 && item.role == 3">{{'contract.sign-refused' | translate}}</span>
+            <span class="status_blue" *ngIf="item.status == 3 && item.role == 4">{{'contract.document-refused' | translate}}</span>
           </div>
         </div>
       </div>
@@ -251,16 +64,16 @@
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
           <div class="div_icon" *ngIf="(item.status == 1 ) && item.role == 1">
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item.contractId)">Điều phối</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item.contractId)">{{'contract.lead' | translate}}</button>
           </div>
           <div class="div_icon" *ngIf="(item.status == 1) && item.role == 2">
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item)">Xem xét</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item)">{{'contract.view' | translate}}</button>
           </div>
           <div class="div_icon" *ngIf="(item.status == 1) && item.role == 3">
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item)">Ký</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item)">{{'contract.sign' | translate}}</button>
           </div>
           <div class="div_icon" *ngIf="(item.status == 1) && item.role == 4">
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item.contractId)">Văn thư</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item.contractId)">{{'contract.document' | translate}}</button>
           </div>
         </div>
       </div>
@@ -325,61 +138,6 @@
         <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
         <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.close('Save click'); search()">Tìm kiếm</button>
       </div>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #mymodal let-modal >
-  <div class="popup_content">
-    <div class="row">
-      <div class="col-md-10">
-        <h4 class="popup_title">LỊCH SỬ HỢP ĐỒNG</h4>
-      </div>
-      <div class="col-md-2 popup_close">
-        <span (click)="modal.dismiss('Cross click')">×</span>
-      </div>
-    </div>
-    <hr>
-    <div class="modal-body">
-      <div style="color: #8B8B8B; padding-top: 5px;">Tên hợp đồng</div>
-      <div style="color: #000000; padding-top: 5px;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
-      <div class="container">
-        <div class="row">
-          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
-          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
-          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
-        </div>
-        <div class="row">
-          <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-          <div class="col-4" style="color: #000000; padding-top: 5px;">20/10/2021</div>
-          <div class="col-4" style="color: #47A920; padding-top: 5px;">Đang xử lý</div>
-        </div>
-      </div>
-    </div>
-    <div style="border-top: 1px solid #dee2e6; margin-top: 10px;"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-12" style="color: #8B8B8B; padding-top: 10px;">Danh sách ký</div>
-      </div>
-      <div class="row">
-        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
-        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
-      </div>
-      <div class="row">
-        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
-        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
-      </div>
-      <div class="row">
-        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
-        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
-      </div>
-    </div>
-    <div style="float: right; padding-top: 20px;">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')"
-              style="padding: 5px; width: 100px; background: #106DB6; color: white; border: 1px solid #87CAFF;">Ok</button>
     </div>
   </div>
 </ng-template>

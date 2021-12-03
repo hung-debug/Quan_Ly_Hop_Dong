@@ -9,18 +9,18 @@ export class PipeTrs implements PipeTransform {
 
   transform(value: number): string {
     if(value == 0){
-      return 'Lưu nháp';
+      return 'contract.status.draft';
     }else if(value == 10){
-      return 'Hoàn thành tạo hợp đồng';
+      return 'contract.status.create.complete';
     }else if(value == 20){
-      return 'Đang xử lý';
+      return 'contract.status.processing';
     }else if(value == 30){
-      return 'Hoàn thành';
+      return 'contract.status.complete';
     }else if(value == 31){
-      return 'Từ chối';
+      return 'contract.status.fail';
     }else if(value == 32){
-      return 'Huỷ bỏ';
+      return 'contract.status.cancel';
     }
-    return 'Chưa xác định';
+    return 'contract.status.undefined';
   }
 }
