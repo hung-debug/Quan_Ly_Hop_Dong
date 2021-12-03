@@ -21,4 +21,11 @@ export class ToastService {
       enableHtml :  true
     })
   }
+
+  showWarningHTMLWithTimeout(message:any, title:any, timespan:any){
+    this.toastr.warning(message, title ,{
+      timeOut :  timespan,
+      enableHtml :  true
+    })
+  }
 }
