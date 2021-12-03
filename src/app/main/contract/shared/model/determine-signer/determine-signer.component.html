@@ -2,12 +2,12 @@
 <div class="container-fluid">
   <div class="contract-determine">
     <div class="col-md-1">
-      <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="data_organization.ordering">
+      <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="data_organization.ordering">
     </div>
     <div class="col-md-11 contract--content">
       <div class="contract__content--title">
         <div>TỔ CHỨC CỦA TÔI -</div>
-        <input type="text" [(ngModel)]="data_organization.name" autofocus disabled>
+        <input type="text" [(ngModel)]="data_organization.name" disabled>
       </div>
       <div class="contract__content--participants">
         <div class="participants-border">
@@ -20,7 +20,7 @@
                 <div class="label text-color">Họ tên: <span class="required-title">*</span></div>
                 <div class="input-data">
                   <img src="assets/img/icon_name.svg" class="input-img">
-                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name">
+                  <input type="text" placeholder="Nhập họ và tên" [(ngModel)]="d.name" autofocus>
                 </div>
               </div>
               <div class="participants__name">
@@ -80,7 +80,7 @@
                       </div>
                     </ng-template>
                   </ng-multiselect-dropdown>
-                  <div class="required-title notify">Bạn chỉ được phép chọn 1 kiểu ký số!</div>
+                  <div class="required-title notify">Lưu ý: bạn chỉ được phép chọn 1 kiểu ký số!</div>
                 </div>
                 <div class="participants-otp">
                   <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
@@ -140,7 +140,7 @@
                       </div>
                     </ng-template>
                   </ng-multiselect-dropdown>
-                  <div class="required-title notify">Bạn chỉ được phép chọn 1 kiểu ký số!</div>
+                  <div class="required-title notify">Lưu ý: bạn chỉ được phép chọn 1 kiểu ký số!</div>
                 </div>
               </div>
             </div>
@@ -162,7 +162,7 @@
   <div class="contract-determine" *ngFor="let item of dataParnterOrganization(); let id = index"
        style="display: flex">
     <div class="col-md-1">
-      <input class="contract-total" style="width: 25px; height: 25px" type="number" [value]="item.ordering">
+      <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="item.ordering">
     </div>
     <div class="col-md-11 contract--content">
       <div class="contract__content--title">
@@ -287,7 +287,7 @@
                         </div>
                       </ng-template>
                     </ng-multiselect-dropdown>
-                    <div class="required-title notify">Bạn chỉ được phép chọn 1 kiểu ký số!</div>
+                    <div class="required-title notify">Lưu ý: bạn chỉ được phép chọn 1 kiểu ký số!</div>
                   </div>
                   <div class="participants-otp">
                     <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
@@ -348,7 +348,7 @@
                         </div>
                       </ng-template>
                     </ng-multiselect-dropdown>
-                    <div class="required-title notify">Bạn chỉ được phép chọn 1 kiểu ký số!</div>
+                    <div class="required-title notify">Lưu ý: bạn chỉ được phép chọn 1 kiểu ký số!</div>
                   </div>
                 </div>
               </div>
@@ -404,7 +404,7 @@
                           </div>
                         </ng-template>
                       </ng-multiselect-dropdown>
-                      <div class="required-title notify">Bạn chỉ được phép chọn 1 kiểu ký số!</div>
+                      <div class="required-title notify">Lưu ý: bạn chỉ được phép chọn 1 kiểu ký số!</div>
                     </div>
                     <div class="participants-otp">
                       <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
