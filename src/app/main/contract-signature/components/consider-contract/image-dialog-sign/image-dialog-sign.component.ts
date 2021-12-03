@@ -97,7 +97,6 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   t(ev: number) {
     if (ev == 3) {
       setTimeout(() => {
-        this.signaturePad.set('backgroundColor', 'rgba(233, 243, 251, 1)');
         this.signaturePad.set('border', 'none');
         this.signaturePad.set('canvasHeight', 500);
         this.signaturePad.set('canvasWidth', 950);

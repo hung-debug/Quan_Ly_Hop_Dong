@@ -165,8 +165,8 @@ export class ConsiderContractComponent implements OnInit {
       let data_coordination = localStorage.getItem('data_coordinates_contract');
       if (data_coordination) {
         this.datas = JSON.parse(data_coordination).data_coordinates;
+        this.datas = Object.assign(this.datas, this.data_contract);
       }
-      this.datas = Object.assign(this.datas, this.data_contract);
 
       this.datas.is_data_object_signature.forEach((element: any) => {
         // 1: van ban, 2: ky anh, 3: ky so
@@ -402,12 +402,13 @@ export class ConsiderContractComponent implements OnInit {
 
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
-  changePosition(d?: any, e?: any, sizeChange?: any) {
+  changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
     let style: any = {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
     }
+    style.backgroundColor = d.value ? '' : '#EBF8FF';
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";
     }
@@ -430,11 +431,13 @@ export class ConsiderContractComponent implements OnInit {
   }
 
 // hàm stype đối tượng boder kéo thả
-  changeColorDrag(role: any, isDaKeo?: any) {
-    if (isDaKeo) {
+  changeColorDrag(role: any, valueSign: any, isDaKeo?: any) {
+    if (isDaKeo && !valueSign.value) {
       return 'ck-da-keo';
-    } else {
+    } else if (!valueSign.value) {
       return 'employer-ck';
+    } else {
+      return '';
     }
   }
 
@@ -498,9 +501,11 @@ export class ConsiderContractComponent implements OnInit {
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     if (this.datas && this.isDataObjectSignature && this.isDataObjectSignature.length) {
-      let arrSignConfig: any = [];
-      arrSignConfig = this.datas.is_data_object_signature;
-      return arrSignConfig;
+    //   let arrSignConfig: any = [];
+    //   arrSignConfig = this.datas.is_data_object_signature;
+      return this.datas.is_data_object_signature.filter(
+        (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived
+      );
     } else {
       return [];
     }
@@ -757,7 +762,10 @@ export class ConsiderContractComponent implements OnInit {
 
     for(const signUpdate of this.isDataObjectSignature) {
       console.log('ki anh', signUpdate);
-      if (signUpdate && signUpdate.type == 2 && this.datas.roleContractReceived == 3 && signUpdate?.recipient?.email === this.currentUser.email) {
+      if (signUpdate && signUpdate.type == 2 && this.datas.roleContractReceived == 3
+        && signUpdate?.recipient?.email === this.currentUser.email
+        && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+      ) {
 
         const formData = {
           "name": "image.jpg",
@@ -782,7 +790,9 @@ export class ConsiderContractComponent implements OnInit {
   }
 
   signContract() {
-    const signUpdate = this.isDataObjectSignature.filter((item: any) => item?.recipient?.email === this.currentUser.email).map((item: any) =>  {
+    const signUpdate = this.isDataObjectSignature.filter(
+      (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+      .map((item: any) =>  {
       return {
         id: item.id,
         name: item.name,
@@ -792,7 +802,9 @@ export class ConsiderContractComponent implements OnInit {
       }});
     this.contractService.updateInfoContractConsider(signUpdate, this.recipientId).subscribe(
       (result) => {
-        this.toastService.showSuccessHTMLWithTimeout('Ký hợp đồng thành công', '', 1000);
+        this.toastService.showSuccessHTMLWithTimeout(
+          this.datas?.roleContractReceived == 3 ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+          , '', 1000);
         this.router.navigate(['/main/contract-signature/receive/processed']);
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
@@ -803,7 +815,7 @@ export class ConsiderContractComponent implements OnInit {
   async rejectContract() {
     let inputValue = '';
     const { value: textRefuse } = await Swal.fire({
-      title: 'Bạn có chắc chắn từ chối hợp đồng này không? Vui lòng nhập lý do từ chối:',
+      title: 'Bạn có chắc chắn hủy hợp đồng này không? Vui lòng nhập lý do hủy:',
       input: 'text',
       inputValue: inputValue,
       showCancelButton: true,
@@ -813,7 +825,7 @@ export class ConsiderContractComponent implements OnInit {
       cancelButtonText: 'Hủy',
       inputValidator: (value) => {
         if (!value) {
-          return 'Bạn cần nhập lý do từ chối hợp đồng!'
+          return 'Bạn cần nhập lý do hủy hợp đồng!'
         } else {
           return null;
         }
@@ -823,21 +835,21 @@ export class ConsiderContractComponent implements OnInit {
     if (textRefuse) {
       this.contractService.considerRejectContract(this.recipientId, textRefuse).subscribe(
         (result) => {
-          this.toastService.showSuccessHTMLWithTimeout('Từ chối hợp đồng thành công', '', 1000);
+          this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công', '', 1000);
           this.router.navigate(['/main/contract-signature/receive/processed']);
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
         }
       )
     } else {
-      this.toastService.showWarningHTMLWithTimeout('Bạn cần nhập lý do từ chối hợp đồng', '', 1000)
+      this.toastService.showWarningHTMLWithTimeout('Bạn cần nhập lý do hủy hợp đồng', '', 1000)
     }
 
   }
 
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
-      (item: any) => item?.recipient?.email === this.currentUser.email && item.required && !item.value && item.type != 3
+      (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && item.required && !item.value && item.type != 3
     )
     return validSign.length == 0;
   }
