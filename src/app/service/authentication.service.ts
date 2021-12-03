@@ -30,9 +30,9 @@ export class AuthenticationService {
   constructor(private http: HttpClient) { }
 
 
-  loginAuthencation(username: string, password: string) {
+  loginAuthencation(username: string, password: string, type: number) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
-    const body = JSON.stringify({email: username, password: password});
+    const body = JSON.stringify({email: username, password: password, type: type});
 
     return this.http.post<User>(this.loginUrl, body, {'headers':headers})
       .pipe(
