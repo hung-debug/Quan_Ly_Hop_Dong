@@ -1,3 +1,4 @@
+import { UploadService } from 'src/app/service/upload.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -64,7 +65,8 @@ export class ContractComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private toastService : ToastService,
-              private http: HttpClient
+              private http: HttpClient,
+              private uploadService: UploadService,
     ) {}
 
   open(content:any) {
@@ -270,40 +272,26 @@ export class ContractComponent implements OnInit {
   downloadContract(id:any){
     this.contractService.getFileContract(id).subscribe((data) => {
 
-      console.log(JSON.stringify(data));
-      console.log(JSON.stringify(data[0].path));
-      let link = document.createElement('a');
-      link.setAttribute('type', 'hidden');
-      link.href = 'assets/file';
-      link.download = JSON.stringify(data[0].path);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      this.uploadService.downloadFile(data[0].path).subscribe((response: any) => {
+        // console.log(response);
 
-      // const link = document.createElement('a');
-      // link.setAttribute('type', 'hidden');
-      // link.setAttribute('target', '_blank');
-      // link.setAttribute('href', 'assets/file');
-      // link.setAttribute('download', data[0].path);
-      // document.body.appendChild(link);
-      // link.click();
-      // link.remove();
+        let url = window.URL.createObjectURL(response);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = url;
+        a.download = response.filename;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
 
-      // let blob = new Blob([data], {type: 'application/pdf'});
-
-      // var downloadURL = window.URL.createObjectURL(data);
-      // var link = document.createElement('a');
-      // link.href = downloadURL;
-      // link.download = data[0].path;
-      // link.click();
-
-      this.toastService.showSuccessHTMLWithTimeout("Tải file hợp đồng thành công!", "", 10000);
+        this.toastService.showSuccessHTMLWithTimeout("Tải file hợp đồng thành công!", "", 10000);
+      }), (error: any) => this.toastService.showSuccessHTMLWithTimeout("Tải file hợp đồng thất bại!", "", 10000);
     },
     error => {
-      this.toastService.showSuccessHTMLWithTimeout("Tải file hợp đồng thất bại!", "", 10000);
-      return false;
+      this.toastService.showSuccessHTMLWithTimeout("Lấy file hợp đồng thất bại!", "", 10000);
     }
-    );
+     );
   }
 
 }
