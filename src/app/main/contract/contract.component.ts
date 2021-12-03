@@ -8,6 +8,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import { ToastService } from 'src/app/service/toast.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -63,6 +64,7 @@ export class ContractComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private toastService : ToastService,
+              private http: HttpClient
     ) {}
 
   open(content:any) {
@@ -260,6 +262,45 @@ export class ContractComponent implements OnInit {
     },
     error => {
       this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thất bại!", "", 10000);
+      return false;
+    }
+    );
+  }
+
+  downloadContract(id:any){
+    this.contractService.getFileContract(id).subscribe((data) => {
+
+      console.log(JSON.stringify(data));
+      console.log(JSON.stringify(data[0].path));
+      let link = document.createElement('a');
+      link.setAttribute('type', 'hidden');
+      link.href = 'assets/file';
+      link.download = JSON.stringify(data[0].path);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      // const link = document.createElement('a');
+      // link.setAttribute('type', 'hidden');
+      // link.setAttribute('target', '_blank');
+      // link.setAttribute('href', 'assets/file');
+      // link.setAttribute('download', data[0].path);
+      // document.body.appendChild(link);
+      // link.click();
+      // link.remove();
+
+      // let blob = new Blob([data], {type: 'application/pdf'});
+
+      // var downloadURL = window.URL.createObjectURL(data);
+      // var link = document.createElement('a');
+      // link.href = downloadURL;
+      // link.download = data[0].path;
+      // link.click();
+
+      this.toastService.showSuccessHTMLWithTimeout("Tải file hợp đồng thành công!", "", 10000);
+    },
+    error => {
+      this.toastService.showSuccessHTMLWithTimeout("Tải file hợp đồng thất bại!", "", 10000);
       return false;
     }
     );
