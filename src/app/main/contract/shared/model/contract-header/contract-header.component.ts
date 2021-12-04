@@ -12,15 +12,17 @@ import {Router} from "@angular/router";
 export class ContractHeaderComponent implements OnInit {
   @Input() AddComponent: AddContractComponent | unknown;
   @Output() dataStepContract = new EventEmitter<string>();
-  // @Output('stepChange') stepChange = new EventEmitter<Array<any>>();
+  @Output('stepChange') stepChange = new EventEmitter<Array<any>>();
   @Input() datas: any;
   @Input() step: any;
+  @Input() saveDraft: any;
   stepHeader: any = {
     step_1: false,
     step_2: false,
     step_3: false
   }
   closeResult:string= '';
+  message: string;
 
   constructor(
     private modalService: NgbModal,
@@ -41,10 +43,10 @@ export class ContractHeaderComponent implements OnInit {
   }
 
   saveContract(modal: any) {
-    // this.datas['closeCreateContract'] = this.datas.step;
-    // setTimeout(() => {
-    //   modal.close('Save click');
-    // }, 2000)
+    if (this.datas.stepLast == 'determine-contract') {
+      this.datas.save_draft.determine_signer = true;
+      this.datas['close_modal'] = modal;
+    }
   }
 
   closeCreateContract(modal: any) {

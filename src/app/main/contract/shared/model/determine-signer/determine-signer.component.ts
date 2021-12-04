@@ -1,5 +1,5 @@
 import {ContractService} from 'src/app/service/contract.service';
-import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges} from '@angular/core';
 import {type_signature, variable} from "../../../../../config/variable";
 import {FormArray, FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
 import {Helper} from "../../../../../core/Helper";
@@ -8,6 +8,7 @@ import * as ContractCreateDetermine from '../../contract_data'
 import {elements} from "@interactjs/snappers/all";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../../../service/toast.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-determine-signer',
@@ -17,8 +18,11 @@ import {ToastService} from "../../../../../service/toast.service";
 export class DetermineSignerComponent implements OnInit {
   @Input() datas: any;
   @Input() step: any;
+  @Input() saveDraftStep: any;
   @Output() stepChangeDetermineSigner = new EventEmitter<string>();
-  @Output('dataStepContract') dataStepContract = new EventEmitter<Array<any>>();
+  @Output() saveDraftDetermineSigner = new EventEmitter<string>();
+  // @Output('dataStepContract') dataStepContract = new EventEmitter<Array<any>>();
+  // @Output('saveDraft') saveDraft = new EventEmitter<string>();
   @ViewChild("abcd") fieldAbcd: any;
   determine_step = false;
   determineDetails!: FormGroup;
@@ -38,7 +42,6 @@ export class DetermineSignerComponent implements OnInit {
   is_determine_clone: any;
   toppings = new FormControl();
 
-
   //dropdown
   signTypeList: Array<any> = type_signature;
   dropdownSignTypeSettings: any = {};
@@ -51,7 +54,8 @@ export class DetermineSignerComponent implements OnInit {
     private formBuilder: FormBuilder,
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router
   ) {
     this.step = variable.stepSampleContract.step2
     //this.datas.determineDetails = this.determineDetails;
@@ -88,6 +92,14 @@ export class DetermineSignerComponent implements OnInit {
     };
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes);
+    // console.log(this.saveDraftStep);
+    if (this.saveDraftStep) {
+      this.getApiDetermine();
+    }
+  }
+
   //dropdown contract type
   get getSignTypeItems() {
     return this.signTypeList.reduce((acc, curr) => {
@@ -110,31 +122,38 @@ export class DetermineSignerComponent implements OnInit {
   next() {
     this.submitted = true;
     if (!this.validData()) return;
-    else {
-      this.is_determine_clone.forEach((items: any, index: number) => {
-        if (items.type == 3) {
-          let data = items.recipients.filter((p: any) => p.role == 3);
-          this.is_determine_clone[index].recipients = data;
-        }
-      })
-      this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res: any) => {
-          // this.datas.id = data?.id;
-          // console.log(res);
-          this.datas.determine_contract = res ? res : this.is_determine_clone;
-          this.step = variable.stepSampleContract.step3;
-          this.datas.stepLast = this.step
-          this.nextOrPreviousStep(this.step);
-        },
-        (res: any) => {
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout(res.error, "", 10000);
-        }
-      );
-    }
+    else
+      this.getApiDetermine();
+
   }
 
-  saveDataStep(datas: any) {
-
+  getApiDetermine() {
+    this.is_determine_clone.forEach((items: any, index: number) => {
+      if (items.type == 3) {
+        let data = items.recipients.filter((p: any) => p.role == 3);
+        this.is_determine_clone[index].recipients = data;
+      }
+    })
+    this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res: any) => {
+        // this.datas.id = data?.id;
+      if (!this.saveDraftStep) {
+        this.datas.determine_contract = res ? res : this.is_determine_clone;
+        this.step = variable.stepSampleContract.step3;
+        this.datas.stepLast = this.step
+        this.nextOrPreviousStep(this.step);
+      } else {
+        this.datas.save_draft.determine_signer = false;
+        this.saveDraftDetermineSigner.emit('save_draft_determine_contract');
+        if (this.datas['close_modal']) {
+          this.datas.close_modal.close('Save click');
+        }
+        void this.router.navigate(['/main/dashboard']);
+      }},
+      (res: any) => {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout(res.error, "", 10000);
+      }
+    );
   }
 
   // forward data component

@@ -378,7 +378,7 @@ export class InforContractComponent implements OnInit {
 
     }
 
-    console.log(this.contractConnect);
+        console.log(this.contractConnect);
     if(this.contractConnect != null){
       const array_empty: ContractConnectArr[] = [];
       this.contractConnect.forEach((element: any, index: number) => {
