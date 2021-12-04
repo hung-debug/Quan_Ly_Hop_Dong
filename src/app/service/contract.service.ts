@@ -7,6 +7,7 @@ import {Helper} from "../core/Helper";
 import {DatePipe} from '@angular/common';
 import {forkJoin} from "rxjs";
 
+
 export interface Contract {
   id: number,
   name: string,
@@ -27,6 +28,10 @@ export interface File {
   providedIn: 'root'
 })
 export class ContractService {
+
+  // private messageShareData = new BehaviorSubject('default message');
+  // currentMessage = this.messageShareData.asObservable();
+
 
   listContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
   listContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
@@ -60,6 +65,10 @@ export class ContractService {
   constructor(private http: HttpClient,
               public datepipe: DatePipe,) {
   }
+
+  // changeMessage(message: string) {
+  //   this.messageShareData.next(message);
+  // }
 
   getCurrentUser(){
     this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;

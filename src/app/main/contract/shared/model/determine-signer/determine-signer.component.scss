@@ -390,6 +390,7 @@ input[type=number] {
   color: #106DB6;
   text-align: center;
   border-radius: 5px;
+  outline: none;
 }
 
 .required-title {
@@ -399,6 +400,7 @@ input[type=number] {
 .notify {
   width: 100% !important;
   text-align: left;
+  color: #ffc107;
 }
 
 //::ng-deep .mat-form-field-flex {
