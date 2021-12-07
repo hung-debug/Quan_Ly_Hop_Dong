@@ -1,9 +1,9 @@
 import {ContractService} from 'src/app/service/contract.service';
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges} from '@angular/core';
 import {type_signature, variable} from "../../../../../config/variable";
-import {FormArray, FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
+import {parttern} from "../../../../../config/parttern";
+import {FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
 import {Helper} from "../../../../../core/Helper";
-// import {ContractService} from "../../../../../service/contract.service";
 import * as ContractCreateDetermine from '../../contract_data'
 import {elements} from "@interactjs/snappers/all";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -38,6 +38,7 @@ export class DetermineSignerComponent implements OnInit {
   is_origanzation_document: any = {};
   checked: boolean = true;
   checkedChange: any = [];
+  pattern = parttern;
 
   is_determine_clone: any;
   toppings = new FormControl();
@@ -124,7 +125,6 @@ export class DetermineSignerComponent implements OnInit {
     if (!this.validData()) return;
     else
       this.getApiDetermine();
-
   }
 
   getApiDetermine() {
@@ -171,37 +171,53 @@ export class DetermineSignerComponent implements OnInit {
     let count = 0;
     let dataArr = [];
     dataArr = this.data_organization.recipients;
-
     for (let i = 0; i < dataArr.length; i++) {
       if (!dataArr[i].name) {
-        this.spinner.hide();
-        // @ts-ignore
-        // document.getElementById("signature-origanzation-" + element.ordering).focus();
-        this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!", "", 10000);
+        this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!");
         count++;
         break;
       }
       if (!dataArr[i].email) {
-        this.spinner.hide();
-        // @ts-ignore
-        // document.getElementById("signature-origanzation-" + element.ordering).focus();
-        this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập email" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!", "", 10000);
+        this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;
+      }
+      if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
+        this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+        count++;
+        break;
+      } else if (dataArr[i].sign_type.length > 0 && dataArr[i].role != 2) {
+        let is_duplicate = [];
+        is_duplicate = dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+        if (is_duplicate.length > 1) {
+          this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+          count++;
+          break;
+        }
+        is_duplicate = [];
       }
 
-      if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
-        this.spinner.hide();
-        // @ts-ignore
-        this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại ký của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!", "", 10000);
-        count++;
-        break;
-      }
 
       if (!dataArr[i].phone && dataArr[i].role == 3 && (dataArr[i].is_otp || dataArr[i].is_otp == 1)) {
-        this.spinner.hide();
-        // @ts-ignore
-        this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi!", "", 10000);
+        this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi!")
+        count++;
+        break;
+      }
+      // @ts-ignore
+      if (!this.pattern.name.test(dataArr[i].name)) {
+        this.getNotificationValid("Tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+        count++;
+        break;
+      }
+      // @ts-ignore
+      if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email)) {
+        this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+        count++;
+        break;
+      }
+      //@ts-ignore
+      if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
+        this.getNotificationValid("Số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
       }
@@ -215,70 +231,93 @@ export class DetermineSignerComponent implements OnInit {
         for (let k = 0; k < dataArrPartner[j].recipients.length; k++) {
           if (dataArrPartner[j].type != 3) {
             if (!dataArrPartner[j].name) {
-              this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập tên của đối tác tổ chức!", "", 10000);
+              this.getNotificationValid("Vui lòng nhập tên của đối tác tổ chức!")
               count++;
               break;
             }
 
             if (!dataArrPartner[j].recipients[k].name) {
-              this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!", "", 10000);
+              this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
               count++;
               break;
             }
             if (!dataArrPartner[j].recipients[k].email) {
-              this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!", "", 10000);
+              this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
               count++;
               break;
             }
 
             if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role)) {
-              this.spinner.hide();
-              // @ts-ignore
-              this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại ký của" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!", "", 10000);
+              this.getNotificationValid("Vui lòng chọn loại ký" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!")
+              count++;
+              break;
+            } else if (dataArrPartner[j].recipients[k].sign_type.length > 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role)) {
+              let isPartnerOriganzationDuplicate = [];
+              isPartnerOriganzationDuplicate = dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+              if (isPartnerOriganzationDuplicate.length > 1) {
+                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!")
+                count++;
+                break;
+              }
+              isPartnerOriganzationDuplicate = [];
+            }
+
+            if (!dataArrPartner[j].recipients[k].phone && dataArrPartner[j].recipients[k].role == 3 && (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
+              this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "của đối tác!")
               count++;
               break;
             }
 
-            if (!dataArrPartner[j].recipients[k].phone && dataArrPartner[j].recipients[k].role == 3 && (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
-              this.spinner.hide();
-              // @ts-ignore
-              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "của đối tác!", "", 10000);
-              count++;
-              break;
-            }
           } else if (dataArrPartner[j].type == 3) {
             if (!dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3) {
-              this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!", "", 10000);
+              this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
               count++;
               break;
             }
             if (!dataArrPartner[j].recipients[k].email && dataArrPartner[j].recipients[k].role == 3) {
-              this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!", "", 10000);
+              this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
               count++;
               break;
             }
 
             if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role) && dataArrPartner[j].recipients[k].role == 3) {
-              this.spinner.hide();
-              // @ts-ignore
-              this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn loại ký của" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!", "", 10000);
+              this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!")
               count++;
               break;
+            } else if (dataArrPartner[j].recipients[k].sign_type.length > 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role) && dataArrPartner[j].recipients[k].role == 3) {
+              let isPartnerCaNhanDuplicate = [];
+              isPartnerCaNhanDuplicate = dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+              if (isPartnerCaNhanDuplicate.length > 1) {
+                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!")
+                count++;
+                break;
+              }
+              isPartnerCaNhanDuplicate = [];
             }
 
             if (!dataArrPartner[j].recipients[k].phone &&
               dataArrPartner[j].recipients[k].role == 3 &&
-              (dataArrPartner[j].recipients[k].is_otp ||
-                dataArrPartner[j].recipients[k].is_otp == 1) &&
-              dataArrPartner[j].recipients[k].role == 3) {
-              this.spinner.hide();
-              // @ts-ignore
-              this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "của đối tác!", "", 10000);
+              (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
+              this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(3) + "của đối tác!")
+              count++;
+              break;
+            }
+
+            //@ts-ignore
+            if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
+              this.getNotificationValid("Tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " đối tác cá nhân không hợp lệ!");
+              count++;
+              break;
+            }
+            //@ts-ignore
+            if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email) && dataArrPartner[j].recipients[k].role == 3) {
+              this.getNotificationValid("Email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân không hợp lệ!")
+              count++;
+              break;
+            }
+            //@ts-ignore
+            if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
+              this.getNotificationValid("Số điện thoại" + this.getNameObject(3) + "của đối tác không hợp lệ!")
               count++;
               break;
             }
@@ -291,6 +330,11 @@ export class DetermineSignerComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  getNotificationValid(is_notify: string) {
+    this.spinner.hide();
+    this.toastService.showErrorHTMLWithTimeout(is_notify, "", 10000);
   }
 
   getNameObject(role_numer: number) {
@@ -331,10 +375,6 @@ export class DetermineSignerComponent implements OnInit {
       {id: 1, name: 'Ký ảnh'},
       {id: 2, name: 'Ký số'}
     ]
-  }
-
-  onItemSelect(e: any, data: any) {
-
   }
 
   changePartner(e: any, number_type: number, item: any) {

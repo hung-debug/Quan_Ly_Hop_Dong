@@ -201,5 +201,16 @@
   "no.push.file.connect.contract.error": "Push contract file connect failed",
   "no.push.file.attach.error": "Push file attachment failed",
   "no.push.file.connect.attach.error": "Push file attachment connect failed",
-  "no.get.information.organization.error": "Get information organization failed"
+  "no.get.information.organization.error": "Get information organization failed",
+
+  "nhap_sdt": "Nhập số điện thoại",
+  "to_chuc_cua_toi": "TỔ CHỨC CỦA TÔI",
+  "note_chon_loai_ki_so": "Lưu ý: bạn chỉ được phép chọn 1 kiểu ký số!",
+  "doi_tac": "Đối tác",
+  "xoa_doi_tac_to_chuc": "Xóa đối tác tổ chức",
+  "xoa_doi_tac_ca_nhan": "Xóa đối tác cá nhân",
+  "them_doi_tac": "Thêm đối tác",
+  "nhap_email": "Nhập email",
+  "nhap_ho_va_ten": "Nhập họ và tên",
+  "nhap_ten_doi_tac_to_chuc": "Nhập tên đối tác tổ chức..."
 }

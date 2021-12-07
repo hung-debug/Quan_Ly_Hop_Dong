@@ -201,5 +201,15 @@
   "no.push.file.connect.contract.error": "Liên kết file hợp đồng thất bại",
   "no.push.file.attach.error": "Đẩy file đính kèm thất bại",
   "no.push.file.connect.attach.error": "Liên kết file đính kèm thất bại",
-  "no.get.information.organization.error": "Lấy thông tin tổ chức thất bại"
-}
+  "no.get.information.organization.error": "Lấy thông tin tổ chức thất bại",
+
+  "nhap_sdt": "Nhập số điện thoại",
+  "to_chuc_cua_toi": "TỔ CHỨC CỦA TÔI",
+  "note_chon_loai_ki_so": "Lưu ý: bạn chỉ được phép chọn 1 kiểu ký số!",
+  "doi_tac": "Đối tác",
+  "xoa_doi_tac_to_chuc": "Xóa đối tác tổ chức",
+  "xoa_doi_tac_ca_nhan": "Xóa đối tác cá nhân",
+  "them_doi_tac": "Thêm đối tác",
+  "nhap_email": "Nhập email",
+  "nhap_ho_va_ten": "Nhập họ và tên",
+  "nhap_ten_doi_tac_to_chuc": "Nhập tên đối tác tổ chức..."}
