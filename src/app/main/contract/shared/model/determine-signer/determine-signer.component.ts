@@ -46,6 +46,7 @@ export class DetermineSignerComponent implements OnInit {
   //dropdown
   signTypeList: Array<any> = type_signature;
   dropdownSignTypeSettings: any = {};
+  getNameIndividual: string = "";
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -115,7 +116,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // next step event
   next() {
-    this.submitted = true;
+    // this.submitted = true;
     if (!this.validData()) return;
     else
       this.getApiDetermine();
@@ -320,12 +321,38 @@ export class DetermineSignerComponent implements OnInit {
       }
     }
 
-
+    if (count == 0) {
+      if (this.getCheckDuplicateEmail()){
+        this.getNotificationValid("Địa chỉ email không được trùng nhau giữa các bên tham gia!");
+        return false
+      }
+    }
 
     if (count > 0) {
       return false;
     }
     return true;
+  }
+
+  getCheckDuplicateEmail() {
+    let arrCheckEmail = [];
+    for (let i = 0; i < this.is_determine_clone.length; i++) {
+      const element = this.is_determine_clone[i].recipients;
+      for (let j = 0; j < element.length; j++) {
+        if (element[j].email) {
+          arrCheckEmail.push(element[j].email);
+        }
+      }
+    }
+    var valueSoFar = Object.create(null);
+    for (var k = 0; k < arrCheckEmail.length; ++k) {
+      var value = arrCheckEmail[k];
+      if (value in valueSoFar) {
+        return true;
+      }
+      valueSoFar[value] = true;
+    }
+    return false;
   }
 
   getNotificationValid(is_notify: string) {
@@ -400,6 +427,12 @@ export class DetermineSignerComponent implements OnInit {
   // tạo mảng người xem xét đối tác
   getPartnerReviewer(item: any) {
     return item.recipients.filter((p: any) => p.role == 2)
+  }
+
+  getName(e: any, item: any) {
+    this.getNameIndividual = e.target.value;
+    item.name = e.target.value;
+
   }
 
   // tạo mảng người ký đối tác tổ chức
