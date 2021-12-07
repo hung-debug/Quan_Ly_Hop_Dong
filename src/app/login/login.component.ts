@@ -32,28 +32,28 @@ export class LoginComponent implements OnInit {
   loginUser() {
     if(this.loginForm.value.username == ''){
       this.error  = true;
-      this.errorDetail = "Tên đăng nhập không được để trống";
+      this.errorDetail = "error.username.required";
     }else if(this.loginForm.value.password == ''){
       this.error  = true;
-      this.errorDetail = "Mật khẩu không được để trống";
+      this.errorDetail = "error.password.required";
     }else {
       if(this.loginForm.value.username == 'admin' && this.loginForm.value.password == '123'){
         localStorage.setItem('currentUser', '{"username":"admin","email": "phamvanlambvo@gmail.com"}');
         this.error  = false;
         this.router.navigate(['/main/dashboard']);
       }else{
-        this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password).subscribe((data) => {
+        this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, 0).subscribe((data) => {
             if (this.authService.isLoggedInSuccess() == true) {
               this.error  = false;
               this.router.navigate(['/main/dashboard']);
             } else {
               this.error  = true;
-              this.errorDetail = "Tên đăng nhập hoặc mật khẩu không đúng";
+              this.errorDetail = "error.username.password";
             }
           },
           error => {
             this.error = true;
-            this.errorDetail = "Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý";
+            this.errorDetail = "error.server";
           }
         );
       }

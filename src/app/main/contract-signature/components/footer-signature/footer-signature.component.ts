@@ -12,6 +12,7 @@ import {ForwardContractComponent} from "../../shared/model/forward-contract/forw
 export class FooterSignatureComponent implements OnInit {
   @Input() datas: any;
   @Input() view: any;
+  @Input() recipientId: any;
   @Output() submitChanges = new EventEmitter<number>();
 
   constructor(
@@ -35,7 +36,8 @@ export class FooterSignatureComponent implements OnInit {
     const data = {
       title: 'ỦY QUYỀN XỬ LÝ',
       is_content: 'processing_author',
-      dataContract: this.datas
+      dataContract: this.datas,
+      recipientId: this.recipientId
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(ForwardContractComponent, {
@@ -53,7 +55,9 @@ export class FooterSignatureComponent implements OnInit {
   forWardContract() {
     const data = {
       title: 'CHUYỂN TIẾP',
-      is_content: 'forward_contract'
+      is_content: 'forward_contract',
+      dataContract: this.datas,
+      recipientId: this.recipientId
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(ForwardContractComponent, {

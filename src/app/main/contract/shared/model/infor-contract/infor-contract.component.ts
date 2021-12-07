@@ -231,11 +231,11 @@ export class InforContractComponent implements OnInit {
   validData() {
     this.clearError();
     if (!this.name) {
-      this.errorContractName = 'Tên hợp đồng không được để trống!';
+      this.errorContractName = 'error.contract.name.required';
       return false;
     }
     if (!this.datas.contractFile) {
-      this.errorContractFile = 'File hợp đồng không được để trống!';
+      this.errorContractFile = 'error.contract.file.required';
       return false;
     }
     // console.log(Math.floor((this.sign_time.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24));
@@ -293,14 +293,14 @@ export class InforContractComponent implements OnInit {
                           },
                           error => {
                             this.spinner.hide();
-                            this.toastService.showErrorHTMLWithTimeout("Liên kết file đính kèm thất bại!", "", 10000);
+                            this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 10000);
                             return false;
                           }
                         );
                       },
                       error => {
                         this.spinner.hide();
-                        this.toastService.showErrorHTMLWithTimeout("Đẩy file đính kèm thất bại!", "", 10000);
+                        this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 10000);
                         return false;
                       }
                     );
@@ -316,27 +316,27 @@ export class InforContractComponent implements OnInit {
                   }
                 }, error => {
                   this.spinner.hide();
-                  this.toastService.showErrorHTMLWithTimeout("Lấy thông tin tổ chức thất bại!", "", 10000);
+                  this.toastService.showErrorHTMLWithTimeout("no.get.information.organization.error", "", 10000);
                   return false;
                 })
               },
               error => {
                 this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout("Liên kết file hợp đồng thất bại!", "", 10000);
+                this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
                 return false;
               }
             );
           },
           error => {
             this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout("Đẩy file thất bại!", "", 10000);
+            this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 10000);
             return false;
           }
         );
       },
       error => {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Đẩy thông tin hợp đồng thất bại!", "", 10000);
+        this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 10000);
         return false;
       }
     );
@@ -370,16 +370,25 @@ export class InforContractComponent implements OnInit {
   }
 
   defineData(datas:any){
+    this.datas.name = this.name;
+    this.datas.sign_time = this.sign_time;
+    if(this.datas.code == ''){
+      this.datas.code = null;
+    }
+    if(this.datas.notes == ''){
+      this.datas.notes = null;
+    }
+
     console.log(this.type_id);
-    if(this.type_id != null){
+    if(this.type_id != null && this.type_id != ''){
       this.type_id.forEach((element: any, index: number) => {
         this.datas.type_id = element.id;
       })
-
     }
 
-        console.log(this.contractConnect);
-    if(this.contractConnect != null){
+
+    console.log(this.contractConnect);
+    if(this.contractConnect != null && this.contractConnect != ''){
       const array_empty: ContractConnectArr[] = [];
       this.contractConnect.forEach((element: any, index: number) => {
         const data = new ContractConnectArr(element.id);
@@ -395,11 +404,6 @@ export class InforContractComponent implements OnInit {
     if (!this.validData()) return;
     else {
       // gán value step 1 vào datas
-      this.datas.name = this.name;
-      this.datas.code = this.code;
-      this.datas.sign_time = this.sign_time;
-      this.datas.notes = this.notes;
-
       this.defineData(this.datas);
       console.log(this.datas);
 
@@ -441,47 +445,47 @@ export class InforContractComponent implements OnInit {
 
                       //next step
                       this.router.navigate(['/main/contract/create/draff']);
-                      this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 10000);
+                      this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 10000);
 
                       this.spinner.hide();
                       },
                       error => {
                         this.spinner.hide();
-                        this.toastService.showErrorHTMLWithTimeout("Liên kết file đính kèm thất bại!", "", 10000);
+                        this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 10000);
                         return false;
                       }
                     );
                     },
                     error => {
                       this.spinner.hide();
-                      this.toastService.showErrorHTMLWithTimeout("Đẩy file đính kèm thất bại!", "", 10000);
+                      this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 10000);
                       return false;
                     }
                   );
                 }else {
                   //next step
                   this.router.navigate(['/main/contract/create/draff']);
-                  this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 10000);
+                  this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 10000);
                   this.spinner.hide();
                 }
               },
               error => {
                 this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout("Liên kết file hợp đồng thất bại!", "", 10000);
+                this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
                 return false;
               }
             );
           },
           error => {
             this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout("Đẩy file thất bại!", "", 10000);
+            this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 10000);
             return false;
           }
         );
       },
       error => {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Đẩy thông tin hợp đồng thất bại!", "", 10000);
+        this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 10000);
         return false;
       }
     );

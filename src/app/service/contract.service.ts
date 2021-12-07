@@ -6,8 +6,7 @@ import {map, catchError, retry} from 'rxjs/operators';
 import {Helper} from "../core/Helper";
 import {DatePipe} from '@angular/common';
 import {forkJoin} from "rxjs";
-import {File} from "./upload.service";
-import {BehaviorSubject} from "rxjs/index";
+
 
 export interface Contract {
   id: number,
@@ -19,6 +18,11 @@ export interface Contract {
   createdAt: Date,
   signTime: Date,
 }
+export interface File {
+  path: string,
+}
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -263,6 +267,14 @@ export class ContractService {
     return this.http.put<Contract>(this.addConfirmContractUrl + datas.id + '/start-bpm', body, {'headers': headers});
   }
 
+  getFileContract(idContract: any) : Observable<any> {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<File>(this.addGetFileContract + idContract, {headers}).pipe();
+  }
+
   changeStatusContract(id: any, statusNew:any) {
     this.getCurrentUser();
 
@@ -274,14 +286,16 @@ export class ContractService {
     return this.http.post<Contract>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, {'headers': headers});
   }
 
-  considerRejectContract(id: any) {
+  considerRejectContract(id: any, reason: string) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = "";
+    const body = {
+      reason: reason
+    };
     console.log(headers);
-    return this.http.put<any>(this.rejectContractUrl + id, null,{'headers': headers});
+    return this.http.put<any>(this.rejectContractUrl + id, body,{'headers': headers});
   }
 
   updateInfoContractSignature(datas: any) {
