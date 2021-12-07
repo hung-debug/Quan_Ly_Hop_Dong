@@ -16,6 +16,8 @@ import * as $ from 'jquery';
 
 import interact from 'interactjs'
 import {ContractService} from "../../../../../service/contract.service";
+import {NgxSpinnerService} from "ngx-spinner";
+import {ToastService} from "../../../../../service/toast.service";
 
 @Component({
   selector: 'app-sample-contract',
@@ -126,15 +128,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 
 
-  //   "dataset_x": 44,
-  // "dataset_y": 2953.3333333333335,
-  // "position": "317,235,497,265",
+    //   "dataset_x": 44,
+    // "dataset_y": 2953.3333333333335,
+    // "position": "317,235,497,265",
 
   ]; // data dữ liệu api trả về
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private spinner: NgxSpinnerService,
+    private toastService: ToastService,
   ) {
     this.step = variable.stepSampleContract.step3
   }
@@ -145,27 +149,27 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // if (!this.data_api_step3) {
     //   this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
     // } else {
-      // let data_defind = this.data_api_step3;
+    // let data_defind = this.data_api_step3;
 
-      let data_sign_config_cks = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
-      let data_sign_config_cka = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-      // let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
-      // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+    let data_sign_config_cks = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
+    let data_sign_config_cka = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+    // let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
+    // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
 
-      this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+    this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
-      this.datas.contract_user_sign.forEach((element: any) => {
-        console.log(element.sign_unit, element.sign_config);
-        if(element.sign_unit == 'so_tai_lieu') {
-          // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
-        } else if (element.sign_unit == 'chu_ky_so') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
-        } else if (element.sign_unit == 'text') {
-          // Array.prototype.push.apply(element.sign_config, data_sign_config_text);
-        } else if (element.sign_unit == 'chu_ky_anh') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
-        }
-      })
+    this.datas.contract_user_sign.forEach((element: any) => {
+      console.log(element.sign_unit, element.sign_config);
+      if (element.sign_unit == 'so_tai_lieu') {
+        // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+      } else if (element.sign_unit == 'chu_ky_so') {
+        Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
+      } else if (element.sign_unit == 'text') {
+        // Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+      } else if (element.sign_unit == 'chu_ky_anh') {
+        Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+      }
+    })
     // }
 
     // console.log(this.datas.contract_user_sign)
@@ -1027,13 +1031,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               item.name = item.text_attribute_name;
             }
             if (item.sign_unit == 'chu_ky_anh') {
-              item['type']=2;
+              item['type'] = 2;
             } else if (item.sign_unit == 'chu_ky_so') {
-              item['type']=3;
+              item['type'] = 3;
             } else if (item.sign_unit == 'so_tai_lieu') {
-              item['type']=4;
+              item['type'] = 4;
             } else {
-              item['type']=1;
+              item['type'] = 1;
             }
             // item['recipient_id'] = element.id;
             delete item.id;
@@ -1067,7 +1071,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       // Đây là dữ liệu mảng request truyền lên cho server
 
 
-
     }
   }
 
@@ -1078,10 +1081,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   validData() {
-    console.log(this.datas);
+    // console.log(this.datas);
     let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
     if (!data_not_drag) {
-      alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')
+      this.spinner.hide();
+      this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn ít nhất 1 đối tượng kéo thả!", "", 10000);
+      // alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')
       return false;
     } else {
       let count = 0;
@@ -1108,16 +1113,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       })
       if (count > 0) {
-        alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
+        // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 10000);
         return false;
       } else if (count_text > 0) {
-        alert('Thiếu tên trường cho đối tượng nhập Text!');
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 10000);
+        // alert('Thiếu tên trường cho đối tượng nhập Text!');
         return false;
       } else {
         let data_organization = this.list_sign_name.filter((p: any) => p.sign_unit == "organization");
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
         if (arrSign_organization.length < data_organization.length) {
-          alert('Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!');
+          // alert('Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!');
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!", "", 10000);
           return false;
         }
         // valid khi kéo kiểu ký vào nhiều hơn list danh sách đối tượng ký.
@@ -1143,7 +1154,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         let data_partner = this.list_sign_name.filter((p: any) => p.sign_unit == "partner");
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
         if (arrSign_partner.length < data_partner.length) {
-          alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
+          // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!", "", 10000);
           return false;
         }
         // valid khi kéo kiểu ký vào nhiều hơn list danh sách đối tượng ký.

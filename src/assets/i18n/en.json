@@ -154,5 +154,20 @@
   "them_doi_tac": "Thêm đối tác",
   "nhap_email": "Nhập email",
   "nhap_ho_va_ten": "Nhập họ và tên",
-  "nhap_ten_doi_tac_to_chuc": "Nhập tên đối tác tổ chức..."
+  "nhap_ten_doi_tac_to_chuc": "Nhập tên đối tác tổ chức...",
+  "valid_trung_email": "Địa chỉ email không được trùng nhau giữa các bên tham gia!",
+  "vui_long_nhap_ten": "Vui lòng nhập tên",
+  "to_chuc_of_toi": "tổ chức của tôi!",
+  "vui_long_nhap_email": "Vui lòng nhập email",
+  "vui_long_nhap_loai_ky": "Vui lòng chọn loại ký của",
+  "vui_long_chi_chon_1_loai_ky_so": "Vui lòng chỉ chọn 1 loại ký số của",
+  "vui_long_nhap_sdt": "Vui lòng nhập số điện thoại của",
+  "name": "Tên",
+  "email_of": "Email của",
+  "sdt_of": "Số điện thoại của",
+  "to_chuc_of_me_ko_hop_le": "tổ chức của tôi không hợp lệ!",
+  "valid_nhap_ten_dt_tc": "Vui lòng nhập tên của đối tác tổ chức!",
+  "of_doi_tac": " của đối tác!",
+  "of_doi_tac_ca_nhan": "của đối tác cá nhân!",
+  "doi_tac_ca_nhan_ko_hop_le": " đối tác cá nhân không hợp lệ!"
 }
