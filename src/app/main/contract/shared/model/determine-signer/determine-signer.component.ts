@@ -94,8 +94,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
-    // console.log(this.saveDraftStep);
+    // console.log(changes);
     if (this.saveDraftStep) {
       this.getApiDetermine();
     }
@@ -107,11 +106,6 @@ export class DetermineSignerComponent implements OnInit {
       acc[curr.item_id] = curr;
       return acc;
     }, {});
-  }
-
-
-  onSubmit() {
-    console.log(this.userForm.value);
   }
 
   back(e: any, step?: any) {
@@ -325,6 +319,8 @@ export class DetermineSignerComponent implements OnInit {
         }
       }
     }
+
+
 
     if (count > 0) {
       return false;

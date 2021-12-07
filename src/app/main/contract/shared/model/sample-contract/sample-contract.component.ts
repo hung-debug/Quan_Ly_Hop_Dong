@@ -1019,7 +1019,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.contract_user_sign.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {
-            item['font'] = 'Aria';
+            item['font'] = 'Arial';
             item['font_size'] = 14;
             item['contract_id'] = this.datas.contract_id;
             item['document_id'] = this.datas.document_id;
