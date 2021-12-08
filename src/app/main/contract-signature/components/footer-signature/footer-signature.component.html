@@ -4,9 +4,9 @@
     <div class="label">
       <button *ngIf="!this.datas.coordination_complete" type="button" name="next" class="next action-button" (click)="processingAuthorization()">Ủy quyền</button>
       <button *ngIf="!this.datas.coordination_complete" type="button" name="next" class="next action-button" (click)="forWardContract()">Chuyển tiếp</button>
-      <button type="button" name="next" class="next action-button" (click)="forWardContract()">Tải file</button>
     </div>
     <div class="label">
+      <button type="button" name="next" class="next action-button" (click)="downloadFilePDF()">Tải file</button>
       <button *ngIf="!this.datas.coordination_complete && ![2,3].includes(this.datas.roleContractReceived)" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Từ chối</button>
       <button *ngIf="!this.datas.coordination_complete" (click)="action()" type="button" name="next" class="next action-button">{{this.datas.action_title}}</button>
     </div>
