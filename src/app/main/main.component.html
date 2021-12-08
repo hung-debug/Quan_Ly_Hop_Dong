@@ -26,7 +26,7 @@
                   </div>
                   <div>{{'user.information' | translate }}</div></div>
               </button>
-              <button ngbDropdownItem class="drop" (click)="open(mymodal)">
+              <button ngbDropdownItem class="drop" (click)="open(modalResetPassword)">
                 <div style="display: flex; align-items: center;">
                   <div class="db_user">
                     <div class="db_password"></div>
@@ -83,11 +83,11 @@
 </div>
 
 <!-- Popup reset password -->
-<ng-template #mymodal let-modal >
+<ng-template #modalResetPassword let-modal >
   <div class="popup_content">
     <div class="row">
       <div class="col-md-10">
-        <h4 class="popup_title">ĐỔI MẬT KHẨU</h4>
+        <h4 class="popup_title">{{'login.reset_password_new' | translate }}</h4>
       </div>
       <div class="col-md-2 popup_close">
         <span (click)="modal.dismiss('Cross click')">×</span>
@@ -100,7 +100,7 @@
         <div class="row">
           <div class="col-md-1"></div>
           <div class="col-md-10">
-            <div class="label_item">Mật khẩu cũ</div>
+            <div class="label_item">{{'login.password_old' | translate }}</div>
             <div class="form-input-line">
               <img src="../../assets/img/login_password.svg" class="form-input-img">
               <input
@@ -126,7 +126,7 @@
         <div class="row">
           <div class="col-md-1"></div>
           <div class="col-md-10">
-            <div class="label_item">Mật khẩu mới</div>
+            <div class="label_item">{{'login.password_new' | translate }}</div>
             <div class="form-input-line">
               <img src="../../assets/img/login_password.svg" class="form-input-img">
               <input
@@ -152,7 +152,7 @@
         <div class="row">
           <div class="col-md-1"></div>
           <div class="col-md-10">
-            <div class="label_item">Xác nhận lại mật khẩu mới</div>
+            <div class="label_item">{{'login.password_new.confirm' | translate }}</div>
             <div class="form-input-line">
               <img src="../../assets/img/login_password.svg" class="form-input-img">
               <input
@@ -185,8 +185,8 @@
         </div>
         <div class="row" style="text-align: center; padding-top: 10px;">
           <div class="col-md-12">
-            <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="sendResetPassword(); status==0 ? modal.close('Save click'):0">Gửi yêu cầu</button>
+            <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">{{'btn.cancel' | translate }}</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="sendResetPassword(); status==0 ? modal.close('Save click'):0">{{'btn.sendRequest' | translate }}</button>
           </div>
         </div>
       </form>

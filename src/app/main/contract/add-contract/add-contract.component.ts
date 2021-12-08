@@ -1,13 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ConfirmInforContractComponent} from "../shared/model/confirm-infor-contract/confirm-infor-contract.component";
 import {ContractHeaderComponent} from "../shared/model/contract-header/contract-header.component";
 import {DetermineSignerComponent} from "../shared/model/determine-signer/determine-signer.component";
 import {InforContractComponent} from "../shared/model/infor-contract/infor-contract.component";
 import {SampleContractComponent} from "../shared/model/sample-contract/sample-contract.component";
 import {variable} from "../../../config/variable";
-import { AppService } from 'src/app/service/app.service';
-import { ActivatedRoute } from '@angular/router';
+import {AppService} from 'src/app/service/app.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-add-contract',
@@ -26,6 +26,12 @@ export class AddContractComponent implements OnInit {
   private sub: any;
   datas: any = {
     stepLast: variable.stepSampleContract.step1,
+    save_draft: {
+      'infor_contract': false,
+      'determine_signer': false,
+      'sample_contract': false,
+      'confirm_infor_contract': false
+    }
   }
   personalDetails!: FormGroup;
   addressDetails!: FormGroup;
@@ -37,21 +43,24 @@ export class AddContractComponent implements OnInit {
   confirm_step = false;
   // step = 1;
   step = variable.stepSampleContract.step1;
+
   constructor(private formBuilder: FormBuilder,
               private appService: AppService,
-              private route: ActivatedRoute,) { }
+              private route: ActivatedRoute,) {
+  }
+
   ngOnInit() {
     //title
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
 
       //set title
-      if(this.action == 'add'){
+      if (this.action == 'add') {
         this.appService.setTitle('contract.add');
-      }else if(this.action == 'edit'){
+      } else if (this.action == 'edit') {
         this.id = params['id'];
         this.appService.setTitle('contract.edit');
-      }else if(this.action == 'copy'){
+      } else if (this.action == 'copy') {
         this.id = params['id'];
         this.appService.setTitle('contract.copy');
       }
@@ -59,43 +68,47 @@ export class AddContractComponent implements OnInit {
 
   }
 
-  next(){
-    if(this.step=='infor-contract'){
+  next() {
+    if (this.step == 'infor-contract') {
       this.personal_step = true;
-      if (this.personalDetails.invalid) { return  }
+      if (this.personalDetails.invalid) {
+        return
+      }
       this.step = 'determine-contract';
-    }
-    else if(this.step=='determine-contract'){
+    } else if (this.step == 'determine-contract') {
       this.address_step = true;
-      if (this.addressDetails.invalid) { return }
+      if (this.addressDetails.invalid) {
+        return
+      }
       this.step = 'sample-contract';
-    }
-    else if(this.step=='sample-contract'){
+    } else if (this.step == 'sample-contract') {
       this.education_step = true;
-      if (this.educationalDetails.invalid) { return }
+      if (this.educationalDetails.invalid) {
+        return
+      }
       this.step = 'confirm-contract';
     }
   }
 
-  previous(){
+  previous() {
     // this.step--
-    if(this.step=='infor-contract'){
+    if (this.step == 'infor-contract') {
       this.personal_step = false;
-    }
-    else if(this.step=='determine-contract'){
+    } else if (this.step == 'determine-contract') {
       this.address_step = false;
       this.education_step = false;
-    }
-    else if(this.step=='sample-contract'){
+    } else if (this.step == 'sample-contract') {
       this.education_step = false;
       this.confirm_step = false;
     }
   }
 
-  submit(){
-    if(this.step=='confirm-contract'){
+  submit() {
+    if (this.step == 'confirm-contract') {
       this.confirm_step = true;
-      if (this.confirmDetails.invalid) { return }
+      if (this.confirmDetails.invalid) {
+        return
+      }
     }
   }
 
@@ -103,6 +116,7 @@ export class AddContractComponent implements OnInit {
     // this.step = this.datas.stepLast;
     this.step = e;
   }
+
 
   getDataStepContract(e: any) {
 

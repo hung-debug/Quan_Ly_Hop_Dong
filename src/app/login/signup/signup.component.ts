@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
   selector: 'app-signup',
@@ -18,7 +19,8 @@ export class SignupComponent implements OnInit {
   errorDetail:string = '';
   constructor(private modalService: NgbModal,
               private router: Router,
-              public translate: TranslateService,) { }
+              public translate: TranslateService,
+              private toastService: ToastService,) { }
 
   switchLang(lang: string) {
     this.translate.use(lang);
@@ -55,9 +57,7 @@ export class SignupComponent implements OnInit {
   }
 
   sendSignup(){
-    this.error = false;
-    this.status = 1;
-    this.notification = "Đăng ký thành công";
+    this.toastService.showSuccessHTMLWithTimeout("no.signup.success", "", 10000);
   }
 
   //return login

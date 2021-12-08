@@ -29,16 +29,16 @@
       <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
     </div>
     <div class="row">
-      <div class="col-md-12 item_contract_infor">Bên A: {{item.sideA}}</div>
+      <div class="col-md-12 item_contract_infor">{{'contract.side.a' | translate}}: {{item.sideA}}</div>
     </div>
     <div class="row">
-      <div class="col-md-12 item_contract_infor">Bên B: {{item.sideB}}</div>
+      <div class="col-md-12 item_contract_infor">{{'contract.side.b' | translate}}: {{item.sideB}}</div>
     </div>
     <div class="row">
       <div class="col-md-5">
         <div class="row">
-          <div class="col-md-12 item_contract_infor">Trạng thái:
-            <span class="status_blue">{{item.status | pipe}}</span>
+          <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
+            <span class="status_blue">{{item.status | pipe | translate}}</span>
           </div>
         </div>
       </div>
@@ -53,28 +53,28 @@
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
           <div class="div_icon" *ngIf="status == 'draft' || status == 'processing' || status == 'expire' || status == 'cancel' || status == 'fail' || status == 'overdue' || status == 'complete'">
-            <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="Sao chép" (click)="openCopy(item.id)" />
+            <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
           </div>
           <div class="div_icon" *ngIf="status == 'draft'">
-            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="Sửa hợp đồng" (click)="openEdit(item.id)" />
+            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
           </div>
           <div class="div_icon" *ngIf="status == 'draft'">
-            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="Xóa hợp đồng" (click)="deleteItem(item.id); open(modalNotifi)" />
+            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteItem(item.id); open(modalNotifi)" />
           </div>
           <div class="div_icon" *ngIf="status == 'processing' || status == 'expire' || status == 'complete'">
-            <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="Xem hợp đồng liên quan" />
+            <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" />
           </div>
           <div class="div_icon" *ngIf="status == 'processing' || status == 'expire' || status == 'complete'">
-            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="Thêm hợp đồng liên quan" />
+            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" />
           </div>
           <div class="div_icon" *ngIf="status == 'processing' || status == 'expire' || status == 'complete'">
-            <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="Hủy hợp đồng" (click)="getDataContractCancel(item.id); open(modalConfirmChangeStatus)"/>
+            <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="getDataContractCancel(item.id); open(modalConfirmChangeStatus)"/>
           </div>
           <div class="div_icon" *ngIf="status == 'complete'">
-            <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="Tải hợp đồng" />
+            <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
           </div>
           <div class="div_icon" *ngIf="status == 'complete'">
-            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" />
+            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" />
           </div>
         </div>
       </div>
@@ -139,61 +139,6 @@
         <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
         <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.close('Save click'); search()">Tìm kiếm</button>
       </div>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #mymodal let-modal >
-  <div class="popup_content">
-    <div class="row">
-      <div class="col-md-10">
-        <h4 class="popup_title">LỊCH SỬ HỢP ĐỒNG</h4>
-      </div>
-      <div class="col-md-2 popup_close">
-        <span (click)="modal.dismiss('Cross click')">×</span>
-      </div>
-    </div>
-    <hr>
-    <div class="modal-body">
-      <div style="color: #8B8B8B; padding-top: 5px;">Tên hợp đồng</div>
-      <div style="color: #000000; padding-top: 5px;">Hợp đồng nguyên tắc mua bán vật liệu xây dựng</div>
-      <div class="container">
-        <div class="row">
-          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
-          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
-          <div class="col-4" style="color: #8B8B8B; padding-top: 10px;">Người tạo</div>
-        </div>
-        <div class="row">
-          <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-          <div class="col-4" style="color: #000000; padding-top: 5px;">20/10/2021</div>
-          <div class="col-4" style="color: #47A920; padding-top: 5px;">Đang xử lý</div>
-        </div>
-      </div>
-    </div>
-    <div style="border-top: 1px solid #dee2e6; margin-top: 10px;"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-12" style="color: #8B8B8B; padding-top: 10px;">Danh sách ký</div>
-      </div>
-      <div class="row">
-        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
-        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
-      </div>
-      <div class="row">
-        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
-        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
-      </div>
-      <div class="row">
-        <div class="col-4" style="color: #000000; padding-top: 5px;">Nguyễn Văn A</div>
-        <div class="col-4" style="color: #000000; padding-top: 5px;">abc@gmail.com.vn</div>
-        <div class="col-4" style="color: #106DB6; padding-top: 5px;">Đã xem xét</div>
-      </div>
-    </div>
-    <div style="float: right; padding-top: 20px;">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')"
-      style="padding: 5px; width: 100px; background: #106DB6; color: white; border: 1px solid #87CAFF;">Ok</button>
     </div>
   </div>
 </ng-template>

@@ -1,3 +1,4 @@
+import { UploadService } from 'src/app/service/upload.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -8,6 +9,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import { ToastService } from 'src/app/service/toast.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -63,6 +65,8 @@ export class ContractComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private toastService : ToastService,
+              private http: HttpClient,
+              private uploadService: UploadService,
     ) {}
 
   open(content:any) {
@@ -263,6 +267,31 @@ export class ContractComponent implements OnInit {
       return false;
     }
     );
+  }
+
+  downloadContract(id:any){
+    this.contractService.getFileContract(id).subscribe((data) => {
+      //console.log(data);
+      this.uploadService.downloadFile(data[0].path).subscribe((response: any) => {
+        //console.log(response);
+
+        let url = window.URL.createObjectURL(response);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = url;
+        a.download = data[0].name;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+
+        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 10000);
+      }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 10000);
+    },
+    error => {
+      this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 10000);
+    }
+     );
   }
 
 }

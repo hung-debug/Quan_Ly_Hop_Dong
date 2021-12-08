@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -26,7 +27,8 @@ export class ResetPasswordComponent implements OnInit {
               private route: ActivatedRoute,
               private modalService: NgbModal,
               private userService: UserService,
-              public translate: TranslateService,) {
+              public translate: TranslateService,
+              private toastService: ToastService,) {
 
   }
 
@@ -87,16 +89,16 @@ export class ResetPasswordComponent implements OnInit {
     let confirmpassword = this.resetPasswordForm.value.confirmpassword;
     if(password == ''){
       this.error = true;
-      this.errorDetail = 'Mật khẩu mới không được để trống!';
+      this.errorDetail = 'error.password-new.required';
     }else if(confirmpassword == ''){
       this.error = true;
-      this.errorDetail = 'Xác nhận mật khẩu mới không được để trống!';
+      this.errorDetail = 'error.confirm-password-new.required';
     }else{
       if(password != confirmpassword){
         this.error = true;
-        this.errorDetail = 'Xác nhận mật khẩu mới không khớp!';
+        this.errorDetail = 'error.confirm-password-new.incorrect';
       }else{
-        this.error = false;
+
         let token = this.token;
         this.userService.sendResetPassword(token, password).subscribe((data) => {
 
@@ -106,23 +108,20 @@ export class ResetPasswordComponent implements OnInit {
             this.status = 0;
           }
           if(this.status == 0){
-            this.notification = 'Đổi mật khẩu mới thất bại!';
+            this.error = false;
+            this.toastService.showErrorHTMLWithTimeout("no.reset.password.error", "", 10000);
           }else{
-            this.notification = 'Đổi mật khẩu mới thành công. Vui lòng đăng nhập để tiếp tục!';
+            this.error = false;
+            this.toastService.showSuccessHTMLWithTimeout("no.reset-password.login.success", "", 10000);
+            this.router.navigate(['/login']);
           }
         },
         (error:any) => {
-          this.status = 0;
-          this.notification = 'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý';
+          this.error = true;
+          this.errorDetail = 'error.server';
         }
         );
       }
     }
   }
-
-  //return login
-  returnLogin() {
-    this.router.navigate(['/login']);
-  }
-
 }

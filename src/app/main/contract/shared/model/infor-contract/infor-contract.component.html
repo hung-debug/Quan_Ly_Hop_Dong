@@ -22,7 +22,7 @@
       </div>
       <div class="form-group">
         <p class="alert alert-danger error-detail" role="alert" *ngIf="errorContractName!=''">
-          {{errorContractName}}
+          {{errorContractName | translate}}
         </p>
       </div>
     </div>
@@ -41,7 +41,7 @@
       </div>
       <div class="form-group">
         <p class="alert alert-danger error-detail" role="alert" *ngIf="errorContractFile!=''">
-          {{errorContractFile}}
+          {{errorContractFile | translate}}
         </p>
       </div>
     </div>

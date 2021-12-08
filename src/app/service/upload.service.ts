@@ -45,6 +45,10 @@ export class UploadService {
     return this.http.post<File>(this.uploadFileUrl + this.organization_id + `/single`, formData, {'headers':headers});
   }
 
+  downloadFile(path:any): any {
+		return this.http.get(path, {responseType: 'blob'});
+  }
+
   // Error handling
   handleError(error:any) {
     let errorMessage = '';
