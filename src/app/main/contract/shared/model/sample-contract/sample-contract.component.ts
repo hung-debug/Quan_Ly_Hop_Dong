@@ -146,31 +146,31 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     console.log(this.datas);
 
-    // if (!this.data_api_step3) {
-    //   this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
-    // } else {
-    // let data_defind = this.data_api_step3;
+    if (!this.data_api_step3) {
+      this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
+    } else {
+    let data_defind = this.data_api_step3;
 
-    let data_sign_config_cks = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
-    let data_sign_config_cka = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+    // let data_sign_config_cks = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
+    // let data_sign_config_cka = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
     // let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
     // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
 
     this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
-    this.datas.contract_user_sign.forEach((element: any) => {
-      console.log(element.sign_unit, element.sign_config);
-      if (element.sign_unit == 'so_tai_lieu') {
-        // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
-      } else if (element.sign_unit == 'chu_ky_so') {
-        Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
-      } else if (element.sign_unit == 'text') {
-        // Array.prototype.push.apply(element.sign_config, data_sign_config_text);
-      } else if (element.sign_unit == 'chu_ky_anh') {
-        Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
-      }
-    })
-    // }
+    // this.datas.contract_user_sign.forEach((element: any) => {
+    //   console.log(element.sign_unit, element.sign_config);
+    //   if (element.sign_unit == 'so_tai_lieu') {
+    //     // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+    //   } else if (element.sign_unit == 'chu_ky_so') {
+    //     Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
+    //   } else if (element.sign_unit == 'text') {
+    //     // Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+    //   } else if (element.sign_unit == 'chu_ky_anh') {
+    //     Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+    //   }
+    // })
+    }
 
     // console.log(this.datas.contract_user_sign)
     this.scale = 1;
