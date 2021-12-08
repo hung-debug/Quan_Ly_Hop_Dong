@@ -30,7 +30,7 @@ import {Subject, throwError} from "rxjs";
 import {environment} from "../../../../../environments/environment";
 import {ToastService} from "../../../../service/toast.service";
 import {HttpHeaders} from "@angular/common/http";
-import {File} from "../../../../service/upload.service";
+import {File, UploadService} from "../../../../service/upload.service";
 
 @Component({
   selector: 'app-consider-contract',
@@ -130,6 +130,7 @@ export class ConsiderContractComponent implements OnInit {
     private router: Router,
     private appService: AppService,
     private toastService : ToastService,
+    private uploadService : UploadService,
     private dialog: MatDialog
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
@@ -619,7 +620,7 @@ export class ConsiderContractComponent implements OnInit {
   }
 
   submitEvents(e: any) {
-    if (!this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
+    if (e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2))) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
       return;
@@ -644,6 +645,9 @@ export class ConsiderContractComponent implements OnInit {
     } else if (e && e == 1 && ((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2))) {
       this.rejectContract();
+    }
+    if (e && e == 2) {
+      this.downloadContract(this.idContract);
     }
   }
 
@@ -857,6 +861,31 @@ export class ConsiderContractComponent implements OnInit {
 
   t() {
     console.log(this);
+  }
+
+  downloadContract(id:any){
+    this.contractService.getFileContract(id).subscribe((data) => {
+        //console.log(data);
+        this.uploadService.downloadFile(data[0].path).subscribe((response: any) => {
+          //console.log(response);
+
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = data[0].name;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 10000);
+        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 10000);
+      },
+      error => {
+        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 10000);
+      }
+    );
   }
 
 }

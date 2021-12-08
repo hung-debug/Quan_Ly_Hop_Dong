@@ -32,6 +32,10 @@ export class FooterSignatureComponent implements OnInit {
     }
   }
 
+  downloadFilePDF() {
+    this.submitChanges.emit(2);
+  }
+
   processingAuthorization() {
     const data = {
       title: 'ỦY QUYỀN XỬ LÝ',
