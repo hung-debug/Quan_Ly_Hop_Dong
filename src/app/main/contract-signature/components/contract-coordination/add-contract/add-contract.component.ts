@@ -37,7 +37,7 @@ export class AddContractComponent implements OnInit {
   education_step = false;
   confirm_step = false;
   // step = 1;
-  stepLast = variable.stepSampleContract.step1;
+  stepLast = variable.stepSampleContract.step2;
   constructor(private formBuilder: FormBuilder,
               private appService: AppService,
               private route: ActivatedRoute,) {
