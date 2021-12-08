@@ -179,7 +179,7 @@
     <div class="col-md-11 contract--content">
       <div class="contract__content--title">
         <div style="width: 72px">{{'doi_tac' | translate | uppercase}} -</div>
-        <input *ngIf="item.type == 2" type="text" placeholder="{{(item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate}}" [(ngModel)]="item.name" [disabled]="item.type == 3">
+        <input type="text" placeholder="{{(item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate}}" [(ngModel)]="item.name" [disabled]="item.type == 3">
 <!--        <input *ngIf="item.type == 3" type="text" [ngModel]="this.getNameIndividual" disabled>-->
       </div>
       <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">

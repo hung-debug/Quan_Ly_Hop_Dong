@@ -131,19 +131,20 @@ export class DetermineSignerComponent implements OnInit {
     })
     this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res: any) => {
         // this.datas.id = data?.id;
-      if (!this.saveDraftStep) {
-        this.datas.determine_contract = res ? res : this.is_determine_clone;
-        this.step = variable.stepSampleContract.step3;
-        this.datas.stepLast = this.step
-        this.nextOrPreviousStep(this.step);
-      } else {
-        this.datas.save_draft.determine_signer = false;
-        this.saveDraftDetermineSigner.emit('save_draft_determine_contract');
-        if (this.datas['close_modal']) {
-          this.datas.close_modal.close('Save click');
+        if (!this.saveDraftStep) {
+          this.datas.determine_contract = res ? res : this.is_determine_clone;
+          this.step = variable.stepSampleContract.step3;
+          this.datas.stepLast = this.step
+          this.nextOrPreviousStep(this.step);
+        } else {
+          this.datas.save_draft.determine_signer = false;
+          this.saveDraftDetermineSigner.emit('save_draft_determine_contract');
+          if (this.datas['close_modal']) {
+            this.datas.close_modal.close('Save click');
+          }
+          void this.router.navigate(['/main/dashboard']);
         }
-        void this.router.navigate(['/main/dashboard']);
-      }},
+      },
       (res: any) => {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout(res.error, "", 10000);
@@ -192,7 +193,6 @@ export class DetermineSignerComponent implements OnInit {
         is_duplicate = [];
       }
 
-
       if (!dataArr[i].phone && dataArr[i].role == 3 && (dataArr[i].is_otp || dataArr[i].is_otp == 1)) {
         this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi!")
         count++;
@@ -219,9 +219,17 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     if (count == 0) {
+      if (this.getCheckDuplicateEmail('only_party_origanzation', dataArr)) {
+        this.getNotificationValid("Email tổ chức của tôi không được trùng nhau!");
+        return false
+      }
+    }
+
+
+    let dataArrPartner = [];
+    dataArrPartner = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+    if (count == 0) {
       // validate phía đối tác
-      let dataArrPartner = [];
-      dataArrPartner = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
       for (let j = 0; j < dataArrPartner.length; j++) {
         for (let k = 0; k < dataArrPartner[j].recipients.length; k++) {
           if (dataArrPartner[j].type != 3) {
@@ -322,8 +330,16 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     if (count == 0) {
-      if (this.getCheckDuplicateEmail()){
-        this.getNotificationValid("Địa chỉ email không được trùng nhau giữa các bên tham gia!");
+      // dataArrPartyCheckEmail = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+      if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
+        this.getNotificationValid("Email đối tác không được trùng nhau!");
+        return false
+      }
+    }
+
+    if (count == 0) {
+      if (this.getCheckDuplicateEmail('allCheckEmail', this.is_determine_clone)) {
+        this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
         return false
       }
     }
@@ -334,16 +350,27 @@ export class DetermineSignerComponent implements OnInit {
     return true;
   }
 
-  getCheckDuplicateEmail() {
+  getCheckDuplicateEmail(isParty: string, dataValid?: any) {
     let arrCheckEmail = [];
-    for (let i = 0; i < this.is_determine_clone.length; i++) {
-      const element = this.is_determine_clone[i].recipients;
-      for (let j = 0; j < element.length; j++) {
-        if (element[j].email) {
-          arrCheckEmail.push(element[j].email);
+    if (isParty != 'only_party_origanzation') {
+      // for (let i = 0; i < this.is_determine_clone.length; i++) {
+      //   const element = this.is_determine_clone[i].recipients;
+      for (let i = 0; i < dataValid.length; i++) {
+        const element = dataValid[i].recipients;
+        for (let j = 0; j < element.length; j++) {
+          if (element[j].email) {
+            arrCheckEmail.push(element[j].email);
+          }
+        }
+      }
+    } else {
+      for (let i = 0; i < dataValid.length; i++) {
+        if (dataValid[i].email) {
+          arrCheckEmail.push(dataValid[i].email);
         }
       }
     }
+
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckEmail.length; ++k) {
       var value = arrCheckEmail[k];
@@ -672,7 +699,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // xóa đối tham gia bên đối tác
   deletePartner(index: any) {
-    this.is_determine_clone.splice(index, 1);
+    this.is_determine_clone.splice(index + 1, 1);
     this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3).forEach((res: any, index: number) => {
       res.ordering = index + 1;
     })

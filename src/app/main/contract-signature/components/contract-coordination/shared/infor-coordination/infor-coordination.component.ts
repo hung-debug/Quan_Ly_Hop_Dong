@@ -17,9 +17,12 @@ import interact from 'interactjs'
 import {ContractService} from "../../../../../../service/contract.service";
 import {environment} from "../../../../../../../environments/environment";
 // import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from "@angular/material/dialog";
-import {ProcessingHandleEcontractComponent} from "../../../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
+import {
+  ProcessingHandleEcontractComponent
+} from "../../../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {MatDialog} from "@angular/material/dialog";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-infor-coordination',
@@ -82,6 +85,11 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   isEnableSelect: boolean = true;
   isEnableText: boolean = false;
   isChangeText: boolean = false;
+  idContract: any;
+  data_contract: any = {};
+  isDataFileContract: any;
+  isDataContract: any;
+  isDataObjectSignature: any;
 
   // isPartySignature: any = [
   //   {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
@@ -93,7 +101,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
     private modalService: NgbModal,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private activeRoute: ActivatedRoute,
   ) {
     this.step = variable.stepSampleContract.step3
   }
@@ -108,40 +117,92 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       }
     }
 
+    this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
     if (!this.datas.sample_contract) {
       this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
     } else {
       // let data_defind = this.data_api_step3;
-      let data_sign_config_cks = this.datas.sample_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
-      let data_sign_config_cka = this.datas.sample_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-      let data_sign_config_text = this.datas.sample_contract.filter((p: any) => p.sign_unit == 'text');
-      let data_sign_config_so_tai_lieu = this.datas.sample_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+      // let data_sign_config_cks = this.datas.sample_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
+      // let data_sign_config_cka = this.datas.sample_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+      // let data_sign_config_text = this.datas.sample_contract.filter((p: any) => p.sign_unit == 'text');
+      // let data_sign_config_so_tai_lieu = this.datas.sample_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+      //
+      // this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+      //
+      // this.datas.contract_user_sign.forEach((element: any) => {
+      //   console.log(element.sign_unit, element.sign_config);
+      //   if(element.sign_unit == 'so_tai_lieu') {
+      //     Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+      //   } else if (element.sign_unit == 'chu_ky_so') {
+      //     Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
+      //   } else if (element.sign_unit == 'text') {
+      //     Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+      //   } else if (element.sign_unit == 'chu_ky_anh') {
+      //     Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+      //   }
+      // })
+    }
+
+    this.contractService.getDetailContract(this.idContract).subscribe((rs) => {
+      console.log(rs);
+      this.isDataContract = rs[0];
+      this.isDataFileContract = rs[1];
+      this.isDataObjectSignature = rs[2];
+      // if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
+      //   this.valid = true;
+      // }
+      this.data_contract = {
+        is_data_contract: rs[0],
+        i_data_file_contract: rs[1],
+        is_data_object_signature: rs[2]
+      };
+      let data_coordination = localStorage.getItem('data_coordinates_contract');
+      if (data_coordination) {
+        this.datas = JSON.parse(data_coordination).data_coordinates;
+        this.datas = Object.assign(this.datas, this.data_contract);
+      }
+
+      this.scale = 1;
+
+      this.datas.is_data_object_signature.forEach((element: any) => {
+        // 1: van ban, 2: ky anh, 3: ky so
+        // tam thoi de 1: ky anh, 2: ky so
+        if (element.type == 1) {
+          element['sign_unit'] = 'text'
+        }
+        if (element.type == 2) {
+          element['sign_unit'] = 'chu_ky_anh'
+        }
+        if (element.type == 3) {
+          element['sign_unit'] = 'chu_ky_so'
+        }
+        if (element.type == 4) {
+          element['sign_unit'] = 'so_tai_lieu'
+        }
+      })
+
+      let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
+      let data_sign_config_cka = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+      let data_sign_config_text = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
+      // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
 
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
       this.datas.contract_user_sign.forEach((element: any) => {
-        console.log(element.sign_unit, element.sign_config);
-        if(element.sign_unit == 'so_tai_lieu') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
-        } else if (element.sign_unit == 'chu_ky_so') {
+        // console.log(element.sign_unit, element.sign_config);
+        if (element.sign_unit == 'chu_ky_so') {
           Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
-        } else if (element.sign_unit == 'text') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_text);
         } else if (element.sign_unit == 'chu_ky_anh') {
           Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+        } else if (element.sign_unit == 'text') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+        } else if (element.sign_unit == 'so_tai_lieu') {
+          // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
         }
       })
-    }
+      // }
 
-    // console.log(this.datas.contract_user_sign)
-    this.scale = 1;
-
-    // this.list_sign_name.forEach((item: any) => {
-    //   item['selected'] = false;
-    // })
-    // if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
-      // let data_list_user_sign: any[] = [];
       let data_user_sign = [...this.datas.determine_contract];
       data_user_sign.forEach((element: any) => {
         if (element.type == 1) {
@@ -164,22 +225,11 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
           })
         }
       })
-      // this.getListSignName(data_list_user_sign);
-    // }
 
-    this.pdfSrc = Helper._getUrlPdf(this.datas.infor_contract.file_content);
-    this.getPage();
+      this.pdfSrc = Helper._getUrlPdf(this.datas.infor_contract.file_content);
+      this.getPage();
+    })
   }
-
-  // getListSignName(listSignForm: any = [], type_unit: string) {
-  //   listSignForm.forEach((item: any) => {
-  //     item['selected'] = false;
-  //     item['sign_unit'] = type_unit;
-  //     item['signType'] = item.signType;
-  //     item['is_disable'] = false;
-  //     this.list_sign_name.push(item)
-  //   })
-  // }
 
   setWidth(d: any) {
     return {
