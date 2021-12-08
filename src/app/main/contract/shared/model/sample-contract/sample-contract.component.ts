@@ -151,25 +151,25 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     } else {
     let data_defind = this.data_api_step3;
 
-    // let data_sign_config_cks = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
-    // let data_sign_config_cka = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+    let data_sign_config_cks = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
+    let data_sign_config_cka = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
     // let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
     // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
 
     this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
-    // this.datas.contract_user_sign.forEach((element: any) => {
-    //   console.log(element.sign_unit, element.sign_config);
-    //   if (element.sign_unit == 'so_tai_lieu') {
-    //     // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
-    //   } else if (element.sign_unit == 'chu_ky_so') {
-    //     Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
-    //   } else if (element.sign_unit == 'text') {
-    //     // Array.prototype.push.apply(element.sign_config, data_sign_config_text);
-    //   } else if (element.sign_unit == 'chu_ky_anh') {
-    //     Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
-    //   }
-    // })
+    this.datas.contract_user_sign.forEach((element: any) => {
+      console.log(element.sign_unit, element.sign_config);
+      if (element.sign_unit == 'so_tai_lieu') {
+        // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+      } else if (element.sign_unit == 'chu_ky_so') {
+        Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
+      } else if (element.sign_unit == 'text') {
+        // Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+      } else if (element.sign_unit == 'chu_ky_anh') {
+        Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+      }
+    })
     }
 
     // console.log(this.datas.contract_user_sign)
@@ -827,9 +827,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
         this.objSignInfo.width = parseInt(d.width);
         this.objSignInfo.height = parseInt(d.height);
-        // this.signCurent.width = d.width;
-        // this.signCurent.height = d.height;
-        // console.log(this.signCurent)
 
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
