@@ -41,11 +41,11 @@ import {AngularSignaturePadModule} from "@almothafar/angular-signature-pad";
 import {ChooseTypeSignComponent} from "./components/consider-contract/choose-type-sign/choose-type-sign.component";
 
 export const contractSignatureRoutes: Routes = [
-  { path: 'receive/wait-processing/consider-contract/:id', component: ConsiderContractComponent },
-  { path: 'receive/wait-processing/personal-signature-contract/:id', component: ConsiderContractComponent },
+  { path: 'consider/:id', component: ConsiderContractComponent },
+  { path: 'signatures/:id', component: ConsiderContractComponent },
   // { path: 'receive/wait-processing/coordinates-contract/:id', component: CoordinatesContractComponent },
-  { path: 'receive/wait-processing/coordinates-contract/:id', component: IndexComponent },
-  { path: 'receive/wait-processing/secretary-contract/:id', component: SecretaryContractComponent },
+  { path: 'coordinates/:id', component: IndexComponent },
+  { path: 'secretary/:id', component: ConsiderContractComponent },
   { path: 'receive/wait-processing', component: ContractSignatureComponent },
   { path: 'receive/processed', component: ContractSignatureComponent }
 ];

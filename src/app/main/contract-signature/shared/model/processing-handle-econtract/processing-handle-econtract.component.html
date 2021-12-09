@@ -5,7 +5,7 @@
 <!--      <td *ngFor="let item of d.name_signature">{{item.name}}: {{item.}}</td>-->
 <!--    </tr>-->
 <!--  </table>-->
-  <div style="max-height: 405px; overflow: auto;">
+  <div style="max-height: 405px; overflow: auto;font-size: 14px">
     <div *ngFor="let d of is_list_name">
       <div style="display: flex; justify-content: space-between; text-align: center; margin-bottom: 10px">
         <div class="col-md-6" style="display: flex; flex-direction: column">
@@ -13,8 +13,8 @@
           <span style="color: #8B8B8B">({{d.name_company}})</span>
         </div>
         <div class="col-md-6" style="display: flex; flex-direction: column">
-          <span [style.color]="d.status == 1 ? '#106DB6' : '#545252'">{{getStatus(d.status)}}</span>
-          <span style="color: #8B8B8B">({{getDateTime(d) | date: 'HH:mm dd/MM/yyyy'}})</span>
+          <span [style.color]="d.status != 0 ? '#106DB6' : '#545252'">{{d.status}}</span>
+          <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
         </div>
       </div>
     </div>

@@ -36,7 +36,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         let data = {
           name: element.name,
           name_company: item.name,
-          status: element.status
+          status: this.checkStatusUser(element.status, element.role),
+          process_at: element.process_at
         }
         this.is_list_name.push(data);
       })
@@ -52,8 +53,27 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     }
   }
 
-  getDateTime(data: any) {
-    return (new Date());
+  checkStatusUser(status: any, role: any) {
+    let res = '';
+    if (status == 0) {
+      res += 'Chưa ';
+    } else if (status == 1) {
+      res += 'Đang ';
+    } else if (status == 2) {
+      res += 'Đồng ý ';
+    } else if (status == 3) {
+      res += 'Từ chối ';
+    }
+    if (role == 1) {
+      res +=  'điều phối';
+    } else if (role == 2) {
+      res +=  'xem xét';
+    } else if (role == 3) {
+      res +=  'ký';
+    } else if (role == 4) {
+      res =  'Văn thư ' + res?.toLowerCase() + 'xử lý';
+    }
+    return res;
   }
 
   acceptRequest() {

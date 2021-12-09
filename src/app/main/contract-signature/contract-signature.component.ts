@@ -424,7 +424,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openConsiderContract(item: any) {
-    this.router.navigate(['main/contract-signature/receive/wait-processing/consider-contract/' + item.contractId],
+    this.router.navigate(['main/contract-signature/consider/' + item.contractId],
       {
         queryParams: { 'recipientId': item.id }
       }
@@ -447,7 +447,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openSignatureContract(item: any) {
-    this.router.navigate(['main/contract-signature/receive/wait-processing/personal-signature-contract/' + item.contractId],
+    this.router.navigate(['main/contract-signature/signatures/' + item.contractId],
       {
         queryParams: { 'recipientId': item.id }
       });
@@ -467,7 +467,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openSecretaryContract(id:number) {
-    this.router.navigate(['main/contract-signature/receive/wait-processing/secretary-contract/' + id]);
+    this.router.navigate(['main/contract-signature/secretary/' + id]);
   }
 
   t(item: any) {

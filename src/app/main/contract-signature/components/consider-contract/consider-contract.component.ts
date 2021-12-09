@@ -53,6 +53,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   };
   confirmConsider = 1;
   confirmSignature = 1;
+  confirmSecretary = 1;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -144,7 +145,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     this.activeRoute.queryParams
       .subscribe(params => {
           this.recipientId = params.recipientId;
-          console.log(this.recipientId);
         }
       );
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
@@ -209,18 +209,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       // this.datas = this.datas.concat(this.data_contract.contract_information);
 
       this.datas.action_title = 'Xác nhận';
-      this.activeRoute.url.subscribe(params => {
-        console.log(params);
-        if (params && params.length > 0) {
-          params.forEach(item => {
-            if (item.path == 'consider-contract') {
-              this.datas.roleContractReceived = 2;
-            } else if (item.path == 'personal-signature-contract') {
-              this.datas.roleContractReceived = 3;
-            }
-          })
-        }
-      });
+      this.datas.roleContractReceived = this.recipient.role;
 
 
       this.scale = 1;
