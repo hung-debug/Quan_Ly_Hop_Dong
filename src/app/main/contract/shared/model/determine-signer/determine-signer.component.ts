@@ -162,6 +162,13 @@ export class DetermineSignerComponent implements OnInit {
     console.log(item)
   }
 
+  getOtp(data: any) {
+    let checkSignType = data.sign_type.filter((p: any) => p.id == 1);
+    if (checkSignType.length > 0) {
+      return true
+    } else return false;
+  }
+
   // valid data step 2
   validData() {
     let count = 0;
@@ -733,7 +740,7 @@ export class DetermineSignerComponent implements OnInit {
           item.status = 0;
           // item.username = "";
           // item.password = "";
-          item.is_otp = 1;
+          item.is_otp = 0;
           item.sign_type = [];
         }
       })

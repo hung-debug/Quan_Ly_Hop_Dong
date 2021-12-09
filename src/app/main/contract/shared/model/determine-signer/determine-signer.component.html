@@ -23,7 +23,7 @@
                   <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" autofocus>
                 </div>
               </div>
-              <div class="participants-otp" style="z-index: -1">
+              <div *ngIf="getOtp(d)" class="participants-otp" style="z-index: -1">
                 <input type="checkbox">
                 <span class="label text-color">OTP</span>
               </div>
@@ -59,7 +59,7 @@
                            [(ngModel)]="d.name">
                   </div>
                 </div>
-                <div class="participants-otp" style="z-index: -1">
+                <div *ngIf="getOtp(d)" class="participants-otp" style="z-index: -1">
                   <input type="checkbox">
                   <span class="label text-color">OTP</span>
                 </div>
@@ -90,7 +90,7 @@
                   </ng-multiselect-dropdown>
                   <div class="required-title notify">{{'note_chon_loai_ki_so' | translate}}</div>
                 </div>
-                <div class="participants-otp">
+                <div *ngIf="getOtp(d)" class="participants-otp">
                   <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
                   <span class="label text-color">OTP</span>
                 </div>
@@ -212,7 +212,7 @@
                     <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">
                   </div>
                 </div>
-                <div class="participants-otp" style="z-index: -1">
+                <div *ngIf="getOtp(d)" class="participants-otp" style="z-index: -1">
                   <input type="checkbox">
                   <span class="label text-color">OTP</span>
                 </div>
@@ -247,7 +247,7 @@
                     <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">
                   </div>
                 </div>
-                <div class="participants-otp" style="z-index: -1">
+                <div *ngIf="getOtp(d)" class="participants-otp" style="z-index: -1">
                   <input type="checkbox">
                   <span class="label text-color">OTP</span>
                 </div>
@@ -284,7 +284,7 @@
                              [(ngModel)]="d.name">
                     </div>
                   </div>
-                  <div class="participants-otp" style="z-index: -1">
+                  <div *ngIf="getOtp(d)" class="participants-otp" style="z-index: -1">
                     <input type="checkbox">
                     <span class="label text-color">OTP</span>
                   </div>
@@ -314,7 +314,7 @@
                     </ng-multiselect-dropdown>
                     <div class="required-title notify">{{'note_chon_loai_ki_so' | translate}}</div>
                   </div>
-                  <div class="participants-otp">
+                  <div  *ngIf="getOtp(d)" class="participants-otp">
                     <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
                     <span class="label text-color">OTP</span>
                   </div>
@@ -408,7 +408,7 @@
                                [(ngModel)]="d.name" (change)="getName($event, item)">
                       </div>
                     </div>
-                    <div class="participants-otp" style="z-index: -1">
+                    <div *ngIf="getOtp(d)" class="participants-otp" style="z-index: -1">
                       <input type="checkbox">
                       <span class="label text-color">OTP</span>
                     </div>
@@ -438,7 +438,7 @@
                       </ng-multiselect-dropdown>
                       <div class="required-title notify">{{'note_chon_loai_ki_so' | translate}}</div>
                     </div>
-                    <div class="participants-otp">
+                    <div *ngIf="getOtp(d)" class="participants-otp">
                       <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
                       <span class="label text-color">OTP</span>
                     </div>

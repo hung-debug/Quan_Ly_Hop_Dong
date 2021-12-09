@@ -513,7 +513,7 @@ export class ContractService {
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
             // "username": "", // username khi click từ link email
             // "password": "", // pw click từ link email
-            "is_otp": 1, // select otp
+            "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
             ]
           },
@@ -527,7 +527,7 @@ export class ContractService {
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
             // "username": "thangbt", // username khi click từ link email
             // "password": "ad", // pw click từ link email
-            "is_otp": 1, // select otp
+            "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
             ]
           },
@@ -541,7 +541,7 @@ export class ContractService {
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
             // "username": "", // username khi click từ link email
             // "password": "", // pw click từ link email
-            "is_otp": 1, // select otp
+            "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
             ]
           },
@@ -566,7 +566,7 @@ export class ContractService {
             "status": 0,
             // "username": "",
             // "password": "",
-            "is_otp": 1,
+            "is_otp": 0,
             "sign_type": []
           },
           // người xem xét
@@ -579,7 +579,7 @@ export class ContractService {
             "status": 0,
             // "username": "",
             // "password": "",
-            "is_otp": 1,
+            "is_otp": 0,
             "sign_type": []
           },
           // người ký
@@ -592,7 +592,7 @@ export class ContractService {
             "status": 0,
             // "username": "",
             // "password": "",
-            "is_otp": 1,
+            "is_otp": 0,
             "sign_type": []
           },
           // văn thư
@@ -605,7 +605,7 @@ export class ContractService {
             "status": 0,
             // "username": "",
             // "password": "",
-            "is_otp": 1,
+            "is_otp": 0,
             "sign_type": []
           }
         ],
