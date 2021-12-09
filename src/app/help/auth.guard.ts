@@ -15,6 +15,13 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     // return this.authService.isAuthorized;
     localStorage.setItem('url', state.url);
+    let is_local = localStorage.getItem('url');
+    if (is_local?.includes('loginType')) {
+      let dataLoginType = is_local.split("loginType")[is_local.split("loginType").length - 1];
+      if (dataLoginType == "=1") {
+        localStorage.setItem('urlLoginType', JSON.stringify({loginType: true}));
+      }
+    }
     console.log(localStorage.getItem('url'));
     console.log(localStorage.getItem('currentUser'));
 

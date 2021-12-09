@@ -1,6 +1,6 @@
 <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
-  <app-sidebar (evenSelectSidebar)="getName($event)"></app-sidebar>
-  <main class="page-content">
+  <app-sidebar *ngIf="getShowHideSideBar()" (evenSelectSidebar)="getName($event)"></app-sidebar>
+  <main class="page-content" [ngStyle]="getStyleWithSideBar()">
       <header>
         <div class="search-wrapper">
           <h3>{{title | translate}}</h3>
