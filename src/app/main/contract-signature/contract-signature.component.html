@@ -26,7 +26,7 @@
 
   <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}">
     <div class="row">
-      <div class="col-md-12 item_contract_name" (click)="openConsiderContractViewProcesse(item)">{{item.contractName}}</div>
+      <div class="col-md-12 item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
     </div>
     <div class="row">
       <div class="col-md-12 item_contract_infor">{{'contract.number' | translate}}: {{item.contractNumber}}</div>

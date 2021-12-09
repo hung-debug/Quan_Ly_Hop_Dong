@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService } from '../service/authentication.service';
 
@@ -14,11 +14,14 @@ export class LoginComponent implements OnInit {
   error: Boolean = false;
   errorDetail:string = '';
   fieldTextType: boolean = false;
+  private sub: any;
+  type:any=0;
 
   constructor(
     private authService: AuthenticationService,
     private router: Router,
     public translate: TranslateService,
+    private route: ActivatedRoute,
   ) {
 
   }
@@ -42,10 +45,15 @@ export class LoginComponent implements OnInit {
         this.error  = false;
         this.router.navigate(['/main/dashboard']);
       }else{
-        this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, 0).subscribe((data) => {
+        this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
             if (this.authService.isLoggedInSuccess() == true) {
               this.error  = false;
-              this.router.navigate(['/main/dashboard']);
+              if(this.type == 0){
+                this.router.navigate(['/main/dashboard']);
+              }else {
+                this.router.navigate([localStorage.getItem('url')]);
+              }
+
             } else {
               this.error  = true;
               this.errorDetail = "error.username.password";
@@ -65,6 +73,12 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.router.url.endsWith('login')) {
+      this.sub = this.route.params.subscribe(params => {
+        this.type = params['type'];
+      });
+    }
+    console.log(this.type);
   }
 
   switchLang(lang: string) {

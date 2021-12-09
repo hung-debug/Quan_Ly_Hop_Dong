@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
+import { ContractService } from 'src/app/service/contract.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -43,7 +44,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private appService: AppService,
-    private translateService: TranslateService
+    private contractService: ContractService,
   ) {
 
   }
@@ -62,49 +63,57 @@ export class DashboardComponent implements OnInit {
     //     this.chartContractReceived = translations['chart.contract.received'];
     //   });
         this.appService.setTitle("menu.dashboard");
-        this.chartCreated = new Chart({
-          colors: ['#058DC7', '#58A55C', '#ED1C24', '#FF710B'],
-          chart: {
-            type: 'pie',
-            style: {
-              fontFamily: 'inherit',
-            }
-          },
-          title: {
-            text: this.chartContractCreated,
-            style: {
-              fontSize: '16px',
-              fontWeight: '500',
-            },
-            verticalAlign: 'bottom',
-          },
-          credits: {
-            enabled: false
-          },
-          plotOptions : {
-            pie: {
-              dataLabels: {
-                enabled: false,
+        this.contractService.getContractList("", "", this.filter_from_date, this.filter_to_date, "").subscribe(data => {
+          console.log(data.entities);
+          let numberProcess = data.entities.filter((i:any) => i.status==1).length;
+          console.log(numberProcess);
+            this.chartCreated = new Chart({
+              colors: ['#058DC7', '#58A55C', '#ED1C24', '#FF710B'],
+              chart: {
+                type: 'pie',
+                style: {
+                  fontFamily: 'inherit',
+                }
+              },
+              title: {
+                text: this.chartContractCreated,
+                style: {
+                  fontSize: '16px',
+                  fontWeight: '500',
+                },
+                verticalAlign: 'bottom',
+              },
+              credits: {
+                enabled: false
+              },
+              plotOptions : {
+                pie: {
+                  dataLabels: {
+                    enabled: false,
 
-            },
-            showInLegend: true,
-               shadow: false,
-               center: ['50%', '50%'],
-               innerSize: '60%'
-            },
-          },
+                },
+                showInLegend: true,
+                   shadow: false,
+                   center: ['50%', '50%'],
+                   innerSize: '60%'
+                },
+              },
 
-          series : [{
-            type: 'pie',
-            name: 'Số hợp đồng',
-            data: [
-              ['Đang xử lý', 45],
-              ['Hoàn thành', 26],
-              ['Từ chối', 8],
-              ['Quá hạn', 6]
-            ],
-          }]
+              series : [{
+                type: 'pie',
+                name: 'Số hợp đồng',
+                data: [
+                  ['Đang xử lý', 45],
+                  ['Hoàn thành', 26],
+                  ['Từ chối', 8],
+                  ['Quá hạn', 6]
+                ],
+              }]
+            });
+
+
         });
+
 
         this.chartReceived = new Chart({
           colors: ['#058DC7', '#58A55C', '#ED1C24', '#FF710B'],

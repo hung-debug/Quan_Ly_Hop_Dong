@@ -120,7 +120,7 @@ export class ContractComponent implements OnInit {
       }
       this.contracts.forEach((key : any, v: any) => {
         let participants = key.participants;
-        console.log(participants);
+        //console.log(participants);
         participants.forEach((key : any, val: any) => {
           if (key.type == 1) {
             this.contracts[v].sideA = key.name;
@@ -234,7 +234,7 @@ export class ContractComponent implements OnInit {
   }
 
   openDetail(id:number){
-    this.router.navigate(['main/form-contract/copy/' + id]);
+    this.router.navigate(['main/form-contract/detail/' + id]);
   }
 
   openCopy(id:number){

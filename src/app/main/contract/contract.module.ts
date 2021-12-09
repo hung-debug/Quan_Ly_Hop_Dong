@@ -1,3 +1,4 @@
+import { ImageSignContractComponent } from '../contract/detail-contract/image-sign-contract/image-sign-contract.component';
 import { BrowserModule } from "@angular/platform-browser";
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -45,7 +46,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AddContractBatchComponent,
     ContractBatchHeaderComponent,
     ConfirmInforContractBatchComponent,
-    InforContractBatchComponent
+    InforContractBatchComponent,
+    ImageSignContractComponent
   ],
   exports: [
     ContractHeaderComponent,

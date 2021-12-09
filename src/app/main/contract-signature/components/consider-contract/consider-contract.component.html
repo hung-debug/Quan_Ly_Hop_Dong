@@ -48,7 +48,7 @@
         <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Luồng xử lý hợp đồng</u>
       </div>
       <hr>
-      <div class="flex-column" *ngIf="!view">
+      <div class="flex-column" *ngIf="![2,3].includes(recipient.status)">
         <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2">
           <p class="d-flex justify-content-center mb-4">XEM XÉT HỢP ĐỒNG</p>
           <p class="d-flex mb-2 text-align-left mx-3">Bạn có đồng ý xem xét hợp đồng không?</p>
@@ -63,17 +63,17 @@
             </div>
           </div>
         </div>
-        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 3">
+        <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 3 || this.datas.roleContractReceived == 4">
           <p class="d-flex justify-content-center mb-4 text-uppercase">XÁC NHẬN KÝ HỢP ĐỒNG</p>
           <p class="d-flex mb-2 text-align-left mx-3">Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
             <div class="radio-confirm">
-              <input id="radio-confirm-signature" type="radio" name="confirm-radio-signature" [value]="1" [(ngModel)]='confirmSignature'>
-              <label for="radio-confirm-signature" class="ms-2">Đồng ý</label>
+              <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSecretary'>
+              <label for="radio-confirm-secretary" class="ms-2">Đồng ý</label>
             </div>
             <div class="radio-refuse">
-              <input id="radio-refuse-signature" type="radio" name='confirm-radio-signature' [value]="2" [(ngModel)]='confirmSignature'>
-              <label for="radio-refuse-signature" class="ms-2">Không đồng ý</label>
+              <input id="radio-refuse-secretary" type="radio" name='confirm-radio-secretary' [value]="2" [(ngModel)]='confirmSecretary'>
+              <label for="radio-refuse-secretary" class="ms-2">Không đồng ý</label>
             </div>
           </div>
           <!--<p class="mb-3 mt-3 text-align-left">Chọn loại ký</p>
@@ -90,7 +90,7 @@
        style="background-color: #F2F2F2; position: relative;">
     <div id="pdf-viewer-step-3">
       <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-        <div class="resize-drag not-out-drop" *ngIf="!view"
+        <div class="resize-drag not-out-drop" *ngIf="![2,3].includes(recipient.status)"
              [id]="d.id"
              style="z-index: -1;"
              #itemElement
@@ -98,10 +98,10 @@
              [ngClass]="changeColorDrag(null, d, true)"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
-          <app-image-sign-contract *ngIf="!view" [datas]="datas" [view]="view" [sign]="d"></app-image-sign-contract>
+          <app-image-sign-contract *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
         </div>
       </div>
     </div>
   </div>
 </div>
-<app-footer-signature *ngIf="loaded" [datas]="datas" [view]="view" [recipientId]="recipientId" (submitChanges)="submitEvents($event)"></app-footer-signature>
+<app-footer-signature *ngIf="loaded" [datas]="datas" [view]="[2,3].includes(recipient.status)" [recipientId]="recipientId" (submitChanges)="submitEvents($event)"></app-footer-signature>
