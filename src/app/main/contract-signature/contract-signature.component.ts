@@ -460,7 +460,7 @@ export class ContractSignatureComponent implements OnInit {
         let data_coordination = {...this.datas, ...res};
         localStorage.setItem('data_coordinates_contract', JSON.stringify({data_coordinates: data_coordination}));
       }
-      this.router.navigate(['main/contract-signature/receive/wait-processing/coordinates-contract/' + id]);
+      this.router.navigate(['main/contract-signature/coordinates/' + id]);
     }, (res: any) => {
       alert('Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý!')
     })

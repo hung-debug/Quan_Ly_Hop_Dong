@@ -92,15 +92,15 @@
       <div style="line-height: 25px">
         <div>
           <span class="title-contract">Loại hợp đồng:</span>
-          <span>{{datas.is_data_contract.type_id}}</span>
+          <span>{{datas.type_id}}</span>
         </div>
         <div>
           <span class="title-contract">Tên hợp đồng:</span>
-          <span>{{datas.is_data_contract.name}}</span>
+          <span>{{datas.name}}</span>
         </div>
         <div>
           <span class="title-contract">Số hợp đồng:</span>
-          <span>{{datas.is_data_contract.code}}</span>
+          <span>{{datas.code}}</span>
         </div>
         <div>
           <span class="title-contract">File đính kèm:</span>
@@ -191,5 +191,5 @@
   </div>
 </div>
 <!--<app-footer-signature *ngIf="loaded" [datas]="datas" [view]="view" [recipientId]="recipientId" (submitChanges)="submitEvents($event)"></app-footer-signature>-->
-<app-footer-signature *ngIf="this.datas.step == 'infor-coordination'" [datas]="datas" [view]="view" [recipientId]="recipientId"></app-footer-signature>
+<!--<app-footer-signature *ngIf="this.datas.step == 'infor-coordination'" [datas]="datas" [view]="view" [recipientId]="recipientId"></app-footer-signature>-->
 

@@ -150,12 +150,14 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
         i_data_file_contract: rs[1],
         is_data_object_signature: rs[2]
       };
-      /*let data_coordination = localStorage.getItem('data_coordinates_contract');
+      let data_coordination = localStorage.getItem('data_coordinates_contract');
       if (data_coordination) {
-        this.datas = JSON.parse(data_coordination).data_coordinates;
-        this.datas = Object.assign(this.datas, this.data_contract);
-      }*/
-      this.datas = this.data_contract;
+        let datas_local = JSON.parse(data_coordination).data_coordinates;
+        this.datas = Object.assign(datas_local, this.data_contract);
+      } else {
+        this.datas = this.data_contract;
+      }
+      // this.datas = this.data_contract;
 
       this.datas.is_data_object_signature.forEach((element: any) => {
         // 1: van ban, 2: ky anh, 3: ky so

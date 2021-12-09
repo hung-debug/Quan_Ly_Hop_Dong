@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
+import {Location} from "@angular/common";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
   constructor(
-    private router: Router,
+    private router: Router
   ) { }
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -16,13 +17,20 @@ export class AuthGuard implements CanActivate {
     localStorage.setItem('url', state.url);
     console.log(localStorage.getItem('url'));
     console.log(localStorage.getItem('currentUser'));
-    if (localStorage.getItem('currentUser') != null) {
-      console.log(localStorage.getItem('currentUser'));
-      return true;
-    } else {
-      console.log("No Log in")
+
+    let url = next.url.filter((p: any) => (p.path == 'main'))[0];
+    if (url && !localStorage.getItem('currentUser')) {
       this.router.navigate(['/login']);
       return false;
+    } else {
+      if (localStorage.getItem('currentUser') != null) {
+        console.log(localStorage.getItem('currentUser'));
+        return true;
+      } else {
+        console.log("No Log in")
+        this.router.navigate(['/login']);
+        return false;
+      }
     }
   }
 

@@ -25,9 +25,14 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent,
   },
+  // {
+  //   path: 'login/:type',
+  //   component: LoginComponent,
+  // },
   {
-    path: 'login/:type',
-    component: LoginComponent,
+    path: 'main/contract-signature/:data',
+    data: { type: 'notAccess'},
+    component: LoginComponent
   },
   {
     path: 'signup',
