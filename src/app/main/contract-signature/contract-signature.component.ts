@@ -466,8 +466,11 @@ export class ContractSignatureComponent implements OnInit {
     })
   }
 
-  openSecretaryContract(id:number) {
-    this.router.navigate(['main/contract-signature/secretary/' + id]);
+  openSecretaryContract(item:any) {
+    this.router.navigate(['main/contract-signature/secretary/' + item.contractId],
+      {
+        queryParams: { 'recipientId': item.id }
+      });
   }
 
   t(item: any) {

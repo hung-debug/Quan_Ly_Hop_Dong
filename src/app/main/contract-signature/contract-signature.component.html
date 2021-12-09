@@ -73,7 +73,7 @@
             <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item)">{{'contract.sign' | translate}}</button>
           </div>
           <div class="div_icon" *ngIf="(item.status == 1) && item.role == 4">
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item.contractId)">{{'contract.document' | translate}}</button>
+            <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item)">{{'contract.document' | translate}}</button>
           </div>
         </div>
       </div>

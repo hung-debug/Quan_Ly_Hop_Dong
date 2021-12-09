@@ -612,12 +612,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
   submitEvents(e: any) {
     if (e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
-      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2))) {
+      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSecretary == 2))) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
       return;
     }
     if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
-      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2))) {
+      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSecretary == 2))) {
       Swal.fire({
         title: this.getTextAlertConfirm(),
         icon: 'warning',
@@ -628,13 +628,15 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         cancelButtonText: 'Hủy'
       }).then((result) => {
         if (result.isConfirmed) {
-          if ([2, 3].includes(this.datas.roleContractReceived)) {
+          if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
             this.signContractSubmit();
           }
         }
       });
     } else if (e && e == 1 && ((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
-      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2))) {
+      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) ||
+      (this.datas.roleContractReceived == 4 && this.confirmSecretary == 2)
+    )) {
       this.rejectContract();
     }
     if (e && e == 2) {
@@ -726,7 +728,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       } else if (this.confirmConsider == 2) {
         return 'Bạn có chắc chắn từ chối hợp đồng này?';
       }
-    } else if (this.datas.roleContractReceived == 3) {
+    } else if ([3,4].includes(this.datas.roleContractReceived)) {
       if (this.confirmSignature == 1) {
         return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?';
       } else if (this.confirmSignature == 2) {
@@ -758,7 +760,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
     for(const signUpdate of this.isDataObjectSignature) {
       console.log('ki anh', signUpdate);
-      if (signUpdate && signUpdate.type == 2 && this.datas.roleContractReceived == 3
+      if (signUpdate && signUpdate.type == 2 && [3,4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
@@ -799,9 +801,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     this.contractService.updateInfoContractConsider(signUpdate, this.recipientId).subscribe(
       (result) => {
         this.toastService.showSuccessHTMLWithTimeout(
-          this.datas?.roleContractReceived == 3 ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+          [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
           , '', 1000);
-        this.router.navigate(['/main/contract-signature/receive/processed']);
+        this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
       }

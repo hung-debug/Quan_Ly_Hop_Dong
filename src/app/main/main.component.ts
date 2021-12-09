@@ -95,9 +95,11 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     //update title by component
     if (this.router.url.includes('/main/form-contract/add') ||
-      this.router.url.includes('/coordinates-contract') ||
-      this.router.url.includes('/consider-contract') ||
-      this.router.url.includes('/personal-signature-contract')
+      this.router.url.includes('/coordinates') ||
+      this.router.url.includes('/consider') ||
+      this.router.url.includes('/signature') ||
+      this.router.url.includes('/secretary') ||
+      this.router.url.includes('/form-contract/detail')
     ) {
       this.isRouterContractNew = false;
     } else this.isRouterContractNew = true;

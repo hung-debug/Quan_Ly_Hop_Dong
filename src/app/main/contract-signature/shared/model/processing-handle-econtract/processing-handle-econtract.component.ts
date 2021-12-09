@@ -59,10 +59,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       res += 'Chưa ';
     } else if (status == 1) {
       res += 'Đang ';
-    } else if (status == 2) {
-      res += 'Đồng ý ';
-    } else if (status == 3) {
-      res += 'Từ chối ';
+    } else if (status == 2 || status == 3) {
+      res += 'Đã ';
     }
     if (role == 1) {
       res +=  'điều phối';

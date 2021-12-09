@@ -3,7 +3,7 @@
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
       <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
-      <div style="line-height: 25px">
+      <!--<div style="line-height: 25px">
         <div>
           <span class="title-contract">Loại hợp đồng:</span>
           <span>{{datas.is_data_contract.type_id}}</span>
@@ -18,27 +18,18 @@
         </div>
         <div>
           <span class="title-contract">File đính kèm:</span>
-<!--          <span>-->
-<!--            <a *ngFor="let d of this.datas.contract_information.file_attach" style="color: #106DB6" rel="stylesheet" href="https://vnexpress.net/" target="_blank">{{d.file_name}}</a>-->
-<!--          </span>-->
         </div>
         <div>
           <span class="title-contract">Hợp đồng liên quan:</span>
-<!--          <span *ngFor="let d of this.datas.contract_information.file_related_contract" style="color: #106DB6">-->
-<!--            {{d.file_name}} <span style="color: black">, </span>-->
-<!--          </span>-->
         </div>
 
-      </div>
+      </div>-->
     </div>
-    <hr>
+<!--    <hr>-->
 
-    <div class="location-change" [ngStyle]="changeDisplay()">
-      <div class="sample-contract__information--user-sign" style="line-height: 25px">
+    <!--<div class="location-change" [ngStyle]="changeDisplay()">
+      <div class="sample-contract__information&#45;&#45;user-sign" style="line-height: 25px">
         <div style="text-align: center; font-weight: bold" class="label">CÁC BÊN LIÊN QUAN</div>
-        <!--        <div *ngFor="let d of this.isPartySignature">-->
-        <!--          <div>{{d.name}}</div>-->
-        <!--        </div>-->
         <div *ngFor="let d of this.datas.contract_related">
           <span>{{d.name_company}}</span>
         </div>
@@ -47,7 +38,7 @@
       <div>
         <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Luồng xử lý hợp đồng</u>
       </div>
-    </div>
+    </div>-->
   </div>
 
   <!--  file content-->
@@ -55,7 +46,7 @@
   <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
        style="background-color: #F2F2F2; position: relative;">
     <div id="pdf-viewer-step-3">
-      <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+      <!--<div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
         <div class="resize-drag not-out-drop"
              [id]="d.id"
              style="z-index: -1;"
@@ -66,7 +57,17 @@
           <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
           <app-image-sign-contract-detail [datas]="datas"  [sign]="d"></app-image-sign-contract-detail>
         </div>
-      </div>
+      </div>-->
+    </div>
+  </div>
+</div>
+<div class="footer-contract">
+  <div class="content_footer">@Copyright 2021 - MobiFone</div>
+  <div class="btn_footer">
+    <div class="label">
+    </div>
+    <div class="label">
+      <button type="button" name="next" class="next action-button" *ngIf="view" (click)="downloadContract(idContract)">Tải file</button>
     </div>
   </div>
 </div>
