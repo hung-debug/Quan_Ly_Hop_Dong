@@ -1,3 +1,4 @@
+import { DetailContractComponent } from './main/contract/detail-contract/detail-contract.component';
 import { AddContractBatchComponent } from './main/contract/add-contract-batch/add-contract-batch.component';
 import { AddContractTemplateComponent } from './main/contract-template/add-contract-template/add-contract-template.component';
 import { SignupComponent } from './login/signup/signup.component';
@@ -70,8 +71,8 @@ const routes: Routes = [
         component: AddContractComponent,
       },
       {
-        path: 'form-contract/:action/:id',
-        component: AddContractComponent,
+        path: 'form-contract/detail/:id',
+        component: DetailContractComponent,
       },
       {
         path: 'form-contract-batch/:action',
@@ -96,6 +97,10 @@ const routes: Routes = [
       {
         path: 'user',
         component: UserComponent,
+      },
+      {
+        path: 'form-contract/:action',
+        component: AddContractComponent,
       },
       // {
       //   path: 'step-3-contract',

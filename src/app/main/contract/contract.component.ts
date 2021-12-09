@@ -234,7 +234,7 @@ export class ContractComponent implements OnInit {
   }
 
   openDetail(id:number){
-    this.router.navigate(['main/form-contract/copy/' + id]);
+    this.router.navigate(['main/form-contract/detail/' + id]);
   }
 
   openCopy(id:number){

@@ -431,6 +431,10 @@ export class ContractSignatureComponent implements OnInit {
     );
   }
 
+  openDetail(id:number){
+    this.router.navigate(['main/form-contract/detail/' + id]);
+  }
+
   openConsiderContractViewProcesse(item: any) {
     if (item.status == 2) {
       this.router.navigate(['main/contract-signature/receive/wait-processing/consider-contract/' + item.contractId],
