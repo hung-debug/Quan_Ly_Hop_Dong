@@ -29,6 +29,7 @@ export class MainComponent implements OnInit {
 
   //user detail
   currentUserForm: any = FormGroup;
+  urlLoginType: any;
 
   switchLang(lang: string) {
     this.translate.use(lang);
@@ -95,11 +96,11 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     //update title by component
+    this.urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
     if (this.router.url.includes('/main/form-contract/add') ||
       this.router.url.includes('/coordinates') ||
       this.router.url.includes('/consider-contract') ||
-      this.router.url.includes('/personal-signature-contract' ||
-        this.router.url.includes('/main/contract-signature'))
+      this.router.url.includes('/personal-signature-contract') || this.router.url.includes('/main/contract-signature')
     ) {
       this.isRouterContractNew = false;
     } else this.isRouterContractNew = true;
@@ -180,8 +181,8 @@ export class MainComponent implements OnInit {
   }
 
   getStyleWithSideBar() {
-    let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
-    if (urlLoginType) {
+    // let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
+    if (this.urlLoginType) {
       return {
         'padding-left': '0px'
       };
@@ -190,9 +191,22 @@ export class MainComponent implements OnInit {
     }
   }
 
+  getStyleSideBar() {
+    // let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
+    if (this.urlLoginType) {
+      return {
+        "width": "100%",
+        'left': '0px'
+      };
+    } else return {
+      "width": "calc(100% - 220px)",
+      'left': '220px'
+    }
+  }
+
   getShowHideSideBar() {
-    let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
-    if (urlLoginType) {
+    // let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
+    if (this.urlLoginType) {
       return false;
     } else return true;
   }
