@@ -4,6 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   QueryList,
@@ -13,7 +14,6 @@ import {ContractSignatureService} from "../../../../service/contract-signature.s
 import {ContractService} from "../../../../service/contract.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
-import {Helper} from "../../../../core/Helper";
 import * as $ from "jquery";
 import {ProcessingHandleEcontractComponent} from "../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
 import interact from "interactjs";
@@ -21,23 +21,20 @@ import {variable} from "../../../../config/variable";
 import {ActivatedRoute, Router} from "@angular/router";
 import Swal from 'sweetalert2'
 import {AppService} from "../../../../service/app.service";
-import {ForwardContractComponent} from "../../shared/model/forward-contract/forward-contract.component";
 import {ConfirmSignOtpComponent} from "./confirm-sign-otp/confirm-sign-otp.component";
 import {ImageDialogSignComponent} from "./image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "./pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "./hsm-dialog-sign/hsm-dialog-sign.component";
-import {Subject, throwError} from "rxjs";
-import {environment} from "../../../../../environments/environment";
+import {throwError} from "rxjs";
 import {ToastService} from "../../../../service/toast.service";
-import {HttpHeaders} from "@angular/common/http";
-import {File, UploadService} from "../../../../service/upload.service";
+import {UploadService} from "../../../../service/upload.service";
 
 @Component({
   selector: 'app-consider-contract',
   templateUrl: './consider-contract.component.html',
   styleUrls: ['./consider-contract.component.scss']
 })
-export class ConsiderContractComponent implements OnInit {
+export class ConsiderContractComponent implements OnInit, OnDestroy {
   datas: any;
   data_contract: any;
   data_coordinates: any;
@@ -91,6 +88,7 @@ export class ConsiderContractComponent implements OnInit {
   currentUser: any;
 
   isView: any;
+  view = true;
   countAttachFile = 0;
   widthDrag: any;
 
@@ -114,7 +112,7 @@ export class ConsiderContractComponent implements OnInit {
   typeSign: any = 0;
   isOtp: boolean = false;
   recipientId: any;
-  view: any;
+  recipient: any;
   idContract: any;
   isDataFileContract: any;
   isDataContract: any;
@@ -146,7 +144,6 @@ export class ConsiderContractComponent implements OnInit {
     this.activeRoute.queryParams
       .subscribe(params => {
           this.recipientId = params.recipientId;
-          this.view = params.view;
           console.log(this.recipientId);
         }
       );
@@ -169,6 +166,7 @@ export class ConsiderContractComponent implements OnInit {
         this.datas = Object.assign(this.datas, this.data_contract);
       }*/
       this.datas = this.data_contract;
+      this.checkIsViewContract();
 
       this.datas.is_data_object_signature.forEach((element: any) => {
         // 1: van ban, 2: ky anh, 3: ky so
@@ -235,7 +233,11 @@ export class ConsiderContractComponent implements OnInit {
       }
 
       // convert base64 file pdf to url
-      this.pdfSrc = this.datas.i_data_file_contract[0].path;
+      for (const fc of this.datas.i_data_file_contract) {
+        if (fc.is_primary) {
+          this.pdfSrc = fc.path;
+        }
+      }
       // render pdf to canvas
       this.getPage();
       this.loaded = true;
@@ -886,6 +888,19 @@ export class ConsiderContractComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 10000);
       }
     );
+  }
+
+  checkIsViewContract() {
+    if (this.datas?.is_data_contract?.participants?.length) {
+      for (const participant of this.datas.is_data_contract.participants) {
+        for (const recipient of participant.recipients) {
+          if (this.recipientId == recipient.id) {
+            this.recipient = recipient;
+            return;
+          }
+        }
+      }
+    }
   }
 
 }
