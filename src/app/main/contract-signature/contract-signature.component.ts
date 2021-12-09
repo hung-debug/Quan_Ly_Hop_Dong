@@ -298,7 +298,6 @@ export class ContractSignatureComponent implements OnInit {
         let contractNumber = key.participant.contract.code;
         let contractSignTime = key.participant.contract.sign_time;
         let contractCreateTime = key.participant.contract.created_time;
-        console.log(contractName);
         this.contracts[v].contractId = contractId;
         this.contracts[v].contractName = contractName;
         this.contracts[v].contractNumber = contractNumber;
@@ -393,7 +392,6 @@ export class ContractSignatureComponent implements OnInit {
         let contractNumber = key.participant.contract.code;
         let contractSignTime = key.participant.contract.sign_time;
         let contractCreateTime = key.participant.contract.created_time;
-        console.log(contractName);
         this.contracts[v].contractId = contractId;
         this.contracts[v].contractName = contractName;
         this.contracts[v].contractNumber = contractNumber;
@@ -437,7 +435,7 @@ export class ContractSignatureComponent implements OnInit {
     if (item.status == 2) {
       this.router.navigate(['main/contract-signature/receive/wait-processing/consider-contract/' + item.contractId],
         {
-          queryParams: { 'recipientId': item.id , 'view': true}
+          queryParams: { 'recipientId': item.id }
         }
       );
     }
