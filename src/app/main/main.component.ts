@@ -3,10 +3,10 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AppService} from '../service/app.service';
-import { UserService } from '../service/user.service';
+import {UserService} from '../service/user.service';
 import {SidebarService} from './sidebar/sidebar.service';
-import { TranslateService } from '@ngx-translate/core';
-import { ToastService } from '../service/toast.service';
+import {TranslateService} from '@ngx-translate/core';
+import {ToastService} from '../service/toast.service';
 
 @Component({
   selector: 'app-main',
@@ -22,18 +22,20 @@ export class MainComponent implements OnInit {
   repeatFieldTextTypeNew: boolean = false;
   isShowCopyRight: boolean = true;
   isRouterContractNew: boolean = true;
-  error:boolean = false;
-  errorDetail:string = '';
-  status:number = 1;
-  notification:string = '';
+  error: boolean = false;
+  errorDetail: string = '';
+  status: number = 1;
+  notification: string = '';
 
   //user detail
   currentUserForm: any = FormGroup;
+  urlLoginType: any;
 
   switchLang(lang: string) {
     this.translate.use(lang);
     this.translate.currentLang = lang;
   }
+
   constructor(private router: Router,
               private modalService: NgbModal,
               private fb: FormBuilder,
@@ -42,7 +44,7 @@ export class MainComponent implements OnInit {
               private userService: UserService,
               private changeDetectorRef: ChangeDetectorRef,
               public translate: TranslateService,
-              private toastService : ToastService) {
+              private toastService: ToastService) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang('vi');
@@ -94,6 +96,7 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     //update title by component
+    this.urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
     if (this.router.url.includes('/main/form-contract/add') ||
       this.router.url.includes('/coordinates') ||
       this.router.url.includes('/consider') ||
@@ -125,38 +128,38 @@ export class MainComponent implements OnInit {
     let passwordOld = this.resetPasswordForm.value.passwordOld;
     let passwordNew = this.resetPasswordForm.value.passwordNew;
     let confirmPasswordNew = this.resetPasswordForm.value.confirmPasswordNew;
-    if(passwordOld == ''){
+    if (passwordOld == '') {
       this.error = true;
       this.errorDetail = 'Mật khẩu cũ không được để trống!';
-    }else if(passwordNew == ''){
+    } else if (passwordNew == '') {
       this.error = true;
       this.errorDetail = 'Mật khẩu mới không được để trống!';
-    }else if(confirmPasswordNew == ''){
+    } else if (confirmPasswordNew == '') {
       this.error = true;
       this.errorDetail = 'Xác nhận mật khẩu mới không được để trống!';
-    }else{
-      if(passwordNew != confirmPasswordNew){
+    } else {
+      if (passwordNew != confirmPasswordNew) {
         this.error = true;
         this.errorDetail = 'Xác nhận mật khẩu mới không khớp!';
-      }else{
+      } else {
         this.userService.sendResetPasswordToken(passwordOld, passwordNew).subscribe((data) => {
-          this.error = false;
-          if(data != null){
-            this.status = 1;
-          }else{
+            this.error = false;
+            if (data != null) {
+              this.status = 1;
+            } else {
+              this.status = 0;
+            }
+            if (this.status == 0) {
+              this.toastService.showErrorHTMLWithTimeout("Đổi mật khẩu mới thất bại!", "", 10000);
+            } else {
+              this.toastService.showSuccessHTMLWithTimeout("Đổi mật khẩu mới thành công. Vui lòng đăng nhập để tiếp tục!", "", 10000);
+              this.logout();
+            }
+          },
+          (error: any) => {
             this.status = 0;
+            this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để được xử lý", "", 10000);
           }
-          if(this.status == 0){
-            this.toastService.showErrorHTMLWithTimeout("Đổi mật khẩu mới thất bại!", "", 10000);
-          }else{
-            this.toastService.showSuccessHTMLWithTimeout("Đổi mật khẩu mới thành công. Vui lòng đăng nhập để tiếp tục!", "", 10000);
-            this.logout();
-          }
-        },
-        (error:any) => {
-          this.status = 0;
-          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để được xử lý", "", 10000);
-        }
         );
       }
     }
@@ -179,6 +182,37 @@ export class MainComponent implements OnInit {
     this.sidebarservice.setSidebarState(true);
   }
 
+  getStyleWithSideBar() {
+    // let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
+    if (this.urlLoginType) {
+      return {
+        'padding-left': '0px'
+      };
+    } else return {
+      'padding-left': '220px'
+    }
+  }
+
+  getStyleSideBar() {
+    // let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
+    if (this.urlLoginType) {
+      return {
+        "width": "100%",
+        'left': '0px'
+      };
+    } else return {
+      "width": "calc(100% - 220px)",
+      'left': '220px'
+    }
+  }
+
+  getShowHideSideBar() {
+    // let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
+    if (this.urlLoginType) {
+      return false;
+    } else return true;
+  }
+
   getName(e: any) {
     if (e && e == "create-contract-new" || e == "contract-signature") {
       this.isShowCopyRight = false;
@@ -199,7 +233,7 @@ export class MainComponent implements OnInit {
     }
   }
 
-  infoUserDetail(){
+  infoUserDetail() {
     this.router.navigate(['/main/user']);
   }
 }

@@ -55,6 +55,7 @@ export class ContractService {
   uploadFileBase64Url:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
   currentUser:any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
+  isDataDetermine: any = `${environment.apiUrl} /api/v1/participants/byRecipient/`;
 
   token:any;
   customer_id:any;
@@ -275,6 +276,14 @@ export class ContractService {
     return this.http.get<File>(this.addGetFileContract + idContract, {headers}).pipe();
   }
 
+  getDetermineCoordination() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<File>(this.isDataDetermine + 869, {headers}).pipe();
+  }
+
   changeStatusContract(id: any, statusNew:any) {
     this.getCurrentUser();
 
@@ -395,109 +404,6 @@ export class ContractService {
         }
       ],
 
-      // contract_user_sign: [
-      //   {
-      //     "id": "123",
-      //     "sign_unit": "so_tai_lieu",
-      //     "sign_config": [
-      //       {
-      //         "sign_unit": "so_tai_lieu",
-      //         "id": "signer-0-index-0_123",
-      //         "dataset_x": 44,
-      //         "dataset_y": 2953.3333333333335,
-      //         "position": "317,235,497,265",
-      //         "left": 44,
-      //         "top": "570",
-      //         "number": "4",
-      //         "offsetWidth": "135",
-      //         "offsetHeight": "28",
-      //         "signType": "organization"
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     "id": "456",
-      //     "sign_unit": "text",
-      //     "sign_config": [
-      //       {
-      //         "sign_unit": "text",
-      //         "id": "signer-1-index-0_456",
-      //         "dataset_x": 316.5,
-      //         "dataset_y": 2910.3333333333335,
-      //         "position": "149,0,284,85",
-      //         "left": 317,
-      //         "top": "527",
-      //         "number": "4",
-      //         "offsetWidth": "135",
-      //         "offsetHeight": "28",
-      //         "signType": "organization"
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     "id": "789",
-      //     "sign_unit": "chu_ky_anh",
-      //     "sign_config": [
-      //       {
-      //         "sign_unit": "chu_ky_anh",
-      //         "id": "signer-2-index-0_789",
-      //         "dataset_x": 149,
-      //         "dataset_y": 3090.3330891927085,
-      //         "position": "148,8,283,93",
-      //         "left": 149,
-      //         "top": "707",
-      //         "number": "4",
-      //         "offsetWidth": 106,
-      //         "offsetHeight": 66,
-      //         "signType": "partner"
-      //       },
-      //       {
-      //         "sign_unit": "chu_ky_anh",
-      //         "id": "signer-2-index-1_789",
-      //         "dataset_x": 448,
-      //         "dataset_y": 2404.6665852864585,
-      //         "position": "390,663,570,765",
-      //         "left": 448,
-      //         "top": "21",
-      //         "number": "4",
-      //         "offsetWidth": 100,
-      //         "offsetHeight": 50,
-      //         "signType": "partner"
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     "id": "101",
-      //     "sign_unit": "chu_ky_so",
-      //     "sign_config": [
-      //       {
-      //         "sign_unit": "chu_ky_so",
-      //         "id": "signer-3-index-0_101",
-      //         "dataset_x": 407.5,
-      //         "dataset_y": 3084.9998372395835,
-      //         "position": "409,14,544,99",
-      //         "left": 408,
-      //         "top": "702",
-      //         "number": "4",
-      //         "offsetWidth": 135,
-      //         "offsetHeight": 85
-      //       },
-      //       {
-      //         "sign_unit": "chu_ky_so",
-      //         "id": "signer-3-index-1_101",
-      //         "dataset_x": 48.5,
-      //         "dataset_y": 2555.6665852864585,
-      //         "position": "43,645,223,747",
-      //         "left": 49,
-      //         "top": "172",
-      //         "number": "4",
-      //         "offsetWidth": 135,
-      //         "offsetHeight": 85
-      //       }
-      //     ]
-      //   }
-      // ]
-
 
       contract_user_sign: [
         {
@@ -607,7 +513,7 @@ export class ContractService {
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
             // "username": "", // username khi click từ link email
             // "password": "", // pw click từ link email
-            "is_otp": 1, // select otp
+            "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
             ]
           },
@@ -621,7 +527,7 @@ export class ContractService {
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
             // "username": "thangbt", // username khi click từ link email
             // "password": "ad", // pw click từ link email
-            "is_otp": 1, // select otp
+            "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
             ]
           },
@@ -635,7 +541,7 @@ export class ContractService {
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
             // "username": "", // username khi click từ link email
             // "password": "", // pw click từ link email
-            "is_otp": 1, // select otp
+            "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
             ]
           },
@@ -660,7 +566,7 @@ export class ContractService {
             "status": 0,
             // "username": "",
             // "password": "",
-            "is_otp": 1,
+            "is_otp": 0,
             "sign_type": []
           },
           // người xem xét
@@ -673,7 +579,7 @@ export class ContractService {
             "status": 0,
             // "username": "",
             // "password": "",
-            "is_otp": 1,
+            "is_otp": 0,
             "sign_type": []
           },
           // người ký
@@ -686,7 +592,7 @@ export class ContractService {
             "status": 0,
             // "username": "",
             // "password": "",
-            "is_otp": 1,
+            "is_otp": 0,
             "sign_type": []
           },
           // văn thư
@@ -699,7 +605,7 @@ export class ContractService {
             "status": 0,
             // "username": "",
             // "password": "",
-            "is_otp": 1,
+            "is_otp": 0,
             "sign_type": []
           }
         ],
