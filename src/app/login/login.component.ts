@@ -107,17 +107,17 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.router.url);
     if (!this.router.url.endsWith('login')) {
-      // this.sub = this.route.params.subscribe(params => {
-      //   this.type = params['loginType'];
-      // });
+      this.sub = this.route.params.subscribe(params => {
+        this.type = params['loginType'];
+      });
       
     }
-    this.type = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
-    if (this.type) {
-      this.type = 1;
-    } else {
-      this.type = 0;
-    }
+    // this.type = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
+    // if (this.type) {
+    //   this.type = 1;
+    // } else {
+    //   this.type = 0;
+    // }
     console.log(this.type);
   }
 
