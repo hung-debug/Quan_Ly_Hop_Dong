@@ -3,6 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {AuthenticationService} from '../service/authentication.service';
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-login',
@@ -78,6 +79,13 @@ export class LoginComponent implements OnInit {
                       {
                         queryParams: {'recipientId': isRecipientId}
                       });
+                  }
+                } else {
+                  this.error = false;
+                  if (this.type == 0) {
+                    this.router.navigate(['/main/dashboard']);
+                  } else {
+                    this.router.navigate([localStorage.getItem('url')]);
                   }
                 }
               } else {

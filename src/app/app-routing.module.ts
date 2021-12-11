@@ -30,9 +30,10 @@ const routes: Routes = [
   //   component: LoginComponent,
   // },
   {
-    path: 'main/contract-signature/:data',
+    path: 'contract-signature/signatures/:data',
     data: { type: 'notAccess'},
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'signup',
