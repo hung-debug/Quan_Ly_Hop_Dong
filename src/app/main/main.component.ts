@@ -96,7 +96,7 @@ export class MainComponent implements OnInit {
 
   ngOnInit(): void {
     //update title by component
-    this.urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
+    this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('urlLoginType')));
     if (this.router.url.includes('/main/form-contract/add') ||
       this.router.url.includes('/coordinates') ||
       this.router.url.includes('/consider-contract') ||
@@ -116,6 +116,7 @@ export class MainComponent implements OnInit {
   //click logout
   logout() {
     localStorage.clear();
+    sessionStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('url');
     this.router.navigate(['/login']);

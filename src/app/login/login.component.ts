@@ -45,13 +45,13 @@ export class LoginComponent implements OnInit {
         this.error = false;
         this.router.navigate(['/main/dashboard']);
       } else {
-        if (localStorage.getItem('urlLoginType')) {
+        if (sessionStorage.getItem('urlLoginType')) {
           this.type = 1;
         } else this.type = 0;
         this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
             if (this.authService.isLoggedInSuccess() == true) {
-              if (localStorage.getItem("url")) {
-                let urlLink = localStorage.getItem("url");
+              if (sessionStorage.getItem("url")) {
+                let urlLink = sessionStorage.getItem("url");
                 if (urlLink) {
                   let url_check = urlLink.split("/")[urlLink.split("/").length - 1];
                   let isContractId = url_check.split("?")[0];
