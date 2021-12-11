@@ -12,12 +12,19 @@ export class AuthGuard implements CanActivate {
   ) { }
   canActivate(
     next: ActivatedRouteSnapshot,
+    // @ts-ignore
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     // return this.authService.isAuthorized;
+    if (localStorage.getItem('url')) {
+      localStorage.removeItem('url');
+    }
     localStorage.setItem('url', state.url);
     let is_local = localStorage.getItem('url');
     if (is_local?.includes('loginType')) {
       let dataLoginType = is_local.split("loginType")[is_local.split("loginType").length - 1];
+      if (localStorage.getItem('urlLoginType')) {
+        localStorage.removeItem('urlLoginType')
+      }
       if (dataLoginType == "=1") {
         localStorage.setItem('urlLoginType', JSON.stringify({loginType: true}));
       }
@@ -26,9 +33,13 @@ export class AuthGuard implements CanActivate {
     console.log(localStorage.getItem('currentUser'));
 
     let url = next.url.filter((p: any) => (p.path == 'main'))[0];
-    if (url && !localStorage.getItem('currentUser')) {
-      this.router.navigate(['/login']);
-      return false;
+    if (url) {
+      if (!localStorage.getItem('currentUser')) {
+        this.router.navigate(['/login']);
+        return false;
+      } else {
+        return true;
+      }
     } else {
       if (localStorage.getItem('currentUser') != null) {
         console.log(localStorage.getItem('currentUser'));
