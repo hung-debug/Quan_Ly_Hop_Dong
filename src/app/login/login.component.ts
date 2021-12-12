@@ -3,6 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {AuthenticationService} from '../service/authentication.service';
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-login',
@@ -45,10 +46,13 @@ export class LoginComponent implements OnInit {
         this.error = false;
         this.router.navigate(['/main/dashboard']);
       } else {
+        if (sessionStorage.getItem('urlLoginType')) {
+          this.type = 1;
+        } else this.type = 0;
         this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
             if (this.authService.isLoggedInSuccess() == true) {
-              if (localStorage.getItem("url")) {
-                let urlLink = localStorage.getItem("url");
+              if (sessionStorage.getItem("url")) {
+                let urlLink = sessionStorage.getItem("url");
                 if (urlLink) {
                   let url_check = urlLink.split("/")[urlLink.split("/").length - 1];
                   let isContractId = url_check.split("?")[0];
@@ -75,6 +79,13 @@ export class LoginComponent implements OnInit {
                       {
                         queryParams: {'recipientId': isRecipientId}
                       });
+                  }
+                } else {
+                  this.error = false;
+                  if (this.type == 0) {
+                    this.router.navigate(['/main/dashboard']);
+                  } else {
+                    this.router.navigate([localStorage.getItem('url')]);
                   }
                 }
               } else {
