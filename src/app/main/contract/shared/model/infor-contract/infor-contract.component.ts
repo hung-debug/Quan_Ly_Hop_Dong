@@ -267,7 +267,9 @@ export class InforContractComponent implements OnInit {
         this.datas.contract_id = data?.id;
         this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
             console.log(JSON.stringify(data));
-            this.datas.filePath = data.fileObject.filePath;
+            this.datas.filePath = data.file_object.file_path;
+            this.datas.fileName = data.file_object.filename;
+            this.datas.fileBucket = data.file_object.bucket;
             this.contractService.addDocument(this.datas).subscribe((data) => {
                 console.log(JSON.stringify(data));
                 this.datas.document_id = data?.id;
@@ -279,7 +281,9 @@ export class InforContractComponent implements OnInit {
                   if (this.datas.attachFile != null) {
                     this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
                         console.log(JSON.stringify(data));
-                        this.datas.filePathAttach = data.fileObject.filePath;
+                        this.datas.filePathAttach = data.file_object.file_path;
+                        this.datas.fileNameAttach = data.file_object.filename;
+                        this.datas.fileBucketAttach = data.file_object.bucket;
                         this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
                             console.log(JSON.stringify(data));
                             this.datas.document_attach_id = data?.id;
@@ -428,8 +432,9 @@ export class InforContractComponent implements OnInit {
 
         this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
             console.log(JSON.stringify(data));
-            this.datas.filePath = data.fileObject.filePath;
-
+            this.datas.filePath = data.file_object.file_path;
+            this.datas.fileName = data.file_object.filename;
+            this.datas.fileBucket = data.file_object.bucket;
             this.contractService.addDocument(this.datas).subscribe((data) => {
                 console.log(JSON.stringify(data));
                 this.datas.document_id = data?.id;
@@ -437,8 +442,9 @@ export class InforContractComponent implements OnInit {
                 if(this.datas.attachFile != null){
                   this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
                     console.log(JSON.stringify(data));
-                    this.datas.filePathAttach = data.fileObject.filePath;
-
+                    this.datas.filePathAttach = data.file_object.file_path;
+                    this.datas.fileNameAttach = data.file_object.filename;
+                    this.datas.fileBucketAttach = data.file_object.bucket;
                     this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
                       console.log(JSON.stringify(data));
                       this.datas.document_attach_id = data?.id;

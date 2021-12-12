@@ -6,8 +6,10 @@ import { catchError } from 'rxjs/operators';
 
 export interface File {
   success:string,
-  fileObject:{
-    filePath:string,
+  file_object:{
+    filename:string,
+    bucket:string,
+    file_path:string,
   }
 }
 @Injectable({

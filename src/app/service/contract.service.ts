@@ -227,11 +227,12 @@ export class ContractService {
       name: datas.name,
       type: 1,
       path: datas.filePath,
+      filename: datas.fileName,
+      bucket: datas.fileBucket,
       internal: 1,
       ordering: 1,
       status: 1,
       contract_id: datas.id,
-      is_primary: true,
     });
     console.log(headers);
     console.log(body);
@@ -247,11 +248,12 @@ export class ContractService {
       name: datas.name,
       type: 1,
       path: datas.filePathAttach,
+      filename: datas.fileNameAttach,
+      bucket: datas.fileBucketAttach,
       internal: 1,
       ordering: 1,
       status: 1,
       contract_id: datas.id,
-      is_primary: false,
     });
     console.log(headers);
     console.log(body);
