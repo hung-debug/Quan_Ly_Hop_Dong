@@ -119,9 +119,16 @@ export class LoginComponent implements OnInit {
     console.log(this.router.url);
     if (!this.router.url.endsWith('login')) {
       this.sub = this.route.params.subscribe(params => {
-        this.type = params['type'];
+        this.type = params['loginType'];
       });
+      
     }
+    // this.type = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
+    // if (this.type) {
+    //   this.type = 1;
+    // } else {
+    //   this.type = 0;
+    // }
     console.log(this.type);
   }
 

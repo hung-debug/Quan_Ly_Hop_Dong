@@ -3,7 +3,7 @@
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
       <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
-      <!--<div style="line-height: 25px">
+      <div style="line-height: 25px">
         <div>
           <span class="title-contract">Loại hợp đồng:</span>
           <span>{{datas.is_data_contract.type_id}}</span>
@@ -23,11 +23,11 @@
           <span class="title-contract">Hợp đồng liên quan:</span>
         </div>
 
-      </div>-->
+      </div>
     </div>
-<!--    <hr>-->
+   <hr>
 
-    <!--<div class="location-change" [ngStyle]="changeDisplay()">
+    <div class="location-change" [ngStyle]="changeDisplay()">
       <div class="sample-contract__information&#45;&#45;user-sign" style="line-height: 25px">
         <div style="text-align: center; font-weight: bold" class="label">CÁC BÊN LIÊN QUAN</div>
         <div *ngFor="let d of this.datas.contract_related">
@@ -38,7 +38,7 @@
       <div>
         <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Luồng xử lý hợp đồng</u>
       </div>
-    </div>-->
+    </div>
   </div>
 
   <!--  file content-->
@@ -46,7 +46,7 @@
   <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
        style="background-color: #F2F2F2; position: relative;">
     <div id="pdf-viewer-step-3">
-      <!--<div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+      <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
         <div class="resize-drag not-out-drop"
              [id]="d.id"
              style="z-index: -1;"
@@ -57,7 +57,7 @@
           <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
           <app-image-sign-contract-detail [datas]="datas"  [sign]="d"></app-image-sign-contract-detail>
         </div>
-      </div>-->
+      </div>
     </div>
   </div>
 </div>
