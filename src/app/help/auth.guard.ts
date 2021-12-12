@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
     })
     //@ts-ignore
     // let url = next.url.includes('/main/contract-signature/signatures/');
-    if (next.data && next.data.type == 'notAccess' && next.url.some((p: any) => p.path == 'contract-signature')) {
+    if (next.queryParams.loginType && next.queryParams.loginType== 1 && next._urlSegment.segments.some((p: any) => p.path == 'contract-signature')) {
       console.log(next.url);
       if (!sessionStorage.getItem('url')) {
         sessionStorage.setItem('url', state.url);
@@ -41,7 +41,10 @@ export class AuthGuard implements CanActivate {
             sessionStorage.setItem('urlLoginType', JSON.stringify({loginType: true}));
           }
         }
-        this.router.navigate(['/login']);
+        this.router.navigate(['/login'],
+          {
+            queryParams: { 'loginType': 1 }
+          });
         return false;
       } else return true;
     } else {
