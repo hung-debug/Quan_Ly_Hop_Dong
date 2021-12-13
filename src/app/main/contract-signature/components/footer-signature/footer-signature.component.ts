@@ -29,12 +29,11 @@ export class FooterSignatureComponent implements OnInit {
     if (action_string == 'dieu_phoi') {
       console.log(this.datas);
       let data_coordination = this.datas.is_data_contract.participants;
-      let recipient_data = [];
+      let recipient_data = {};
       let emailCurrent = this.contractService.getAuthCurrentUser().email;
       for (let i = 0; i < data_coordination.length; i++) {
-        for (let j = 0; j < data_coordination[i].recipientId; j++) {
-          console.log(data_coordination[i].recipientId[j].email)
-          if (data_coordination[i].recipientId[j].email == emailCurrent) {
+        for (let j = 0; j < data_coordination[i].recipients.length; j++) {
+          if (data_coordination[i].recipients[j].email == emailCurrent) {
             console.log(111);
             recipient_data = data_coordination[i];
             break;
@@ -49,7 +48,11 @@ export class FooterSignatureComponent implements OnInit {
       // }, () => {
       //
       // })
-      // this.datas.step = variable.stepSampleContract.step_confirm_coordination;
+      if (recipient_data) {
+        this.datas.determine_contract = recipient_data;
+        this.datas.step = variable.stepSampleContract.step_confirm_coordination;
+      }
+
     } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
       this.submitChanges.emit(1);
     }
