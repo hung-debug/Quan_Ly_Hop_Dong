@@ -23,10 +23,10 @@ export class FooterSignatureComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  action() {
-    if (this.datas.action_title == 'Điều phối') {
+  action(action_string?: string) {
+    if (action_string == 'dieu_phoi') {
       console.log(this.datas);
-      this.datas.step = variable.stepSampleContract.step_confirm_coordination;
+      // this.datas.step = variable.stepSampleContract.step_confirm_coordination;
     } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
       this.submitChanges.emit(1);
     }

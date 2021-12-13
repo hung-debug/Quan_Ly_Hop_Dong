@@ -6,7 +6,7 @@ import {environment} from "../../../../../environments/environment";
 import {UserService} from "../../../../service/user.service";
 import {ContractSignatureService} from "../../../../service/contract-signature.service";
 import * as contractModel from '../../model/contract-model';
-import {data_signature_contract, data_signature_contract_2} from "../../model/contract-model";
+import {data_signature_contract} from "../../model/contract-model";
 import {ContractService} from "../../../../service/contract.service";
 import {ToastService} from "../../../../service/toast.service";
 
@@ -18,7 +18,7 @@ import {ToastService} from "../../../../service/toast.service";
 export class IndexComponent implements OnInit {
   @ViewChild('ContractSign') SignContractComponent: SignContractComponent;
   @ViewChild('AddContract') AddContractComponent: AddContractComponent;
-  @Input() datas: any;
+  datas: any = {};
  data_contract: any;
   // @Input() datas: any = {
   //   step: variable.stepSampleContract.step_coordination,
@@ -33,28 +33,31 @@ export class IndexComponent implements OnInit {
     private toastService : ToastService,
   ) {
     // this.data_contract = contractModel.data_signature_contract;
-    this.data_contract = contractModel.data_signature_contract_2;
+    // this.data_contract = contractModel.data_signature_contract_2;
   }
 
   ngOnInit(): void {
-    this.datas = {
-      "step": "infor-coordination",
-      "contract": {},
-      "action_title": "Điều phối",
-      "recipientId_coordination": 869 // get tu param
-    };
-    // this.getDataApiDetermine();
-    this.datas = Object.assign(this.datas, this.data_contract);
+    // @ts-ignore
+    let dataLocal = JSON.parse(localStorage.getItem('data_coordinates_contract_id'));
+    this.contractService.getDetailContract(dataLocal.data_coordinates.id).subscribe(rs => {
+      let data_api = {
+        is_data_contract: rs[0],
+        i_data_file_contract: rs[1],
+        is_data_object_signature: rs[2]
+      }
+      this.datas = {
+        "step": "infor-coordination",
+        "contract": {},
+        "action_title": "Điều phối",
+        // "recipientId_coordination": "hdkadskahd" // get tu param
+      };
+      this.datas = Object.assign(this.datas, data_api)
+    }, () => {
+
+    })
+    // this.datas = Object.assign(this.datas, this.data_contract);
     console.log(this.datas);
   }
-
-  // getDataApiDetermine() {
-  //   this.contractService.getDetermineCoordination().subscribe((res: any) => {
-  //
-  //   }, () => {
-  //     this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
-  //   })
-  // }
 
   dieuPhoiHd() {
     // this.datas.step = "confirm-coordination";
