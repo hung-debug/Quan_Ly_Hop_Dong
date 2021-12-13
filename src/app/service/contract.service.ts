@@ -246,7 +246,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       name: datas.name,
-      type: 1,
+      type: 3,
       path: datas.filePathAttach,
       filename: datas.fileNameAttach,
       bucket: datas.fileBucketAttach,

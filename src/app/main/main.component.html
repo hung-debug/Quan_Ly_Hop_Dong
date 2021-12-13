@@ -5,7 +5,7 @@
         <div class="search-wrapper">
           <h3>{{title | translate}}</h3>
         </div>
-        <div>
+        <div *ngIf="getShowHideSideBar()">
           <div ngbDropdown class="d-inline-block">
             <div class="social-icons" ngbDropdownToggle>
               <span class="notification_login"></span>
