@@ -58,6 +58,7 @@ export class ContractService {
   isDataDetermine: any = `${environment.apiUrl} /api/v1/participants/byRecipient/`;
   getAccountSignDigital: any = `http://localhost:6704/api/mobi/getcert?mst=`;
   postSignDigital: any = `http://localhost:6704/api/mobi/signpdf`;
+  imageMobiBase64: any;
 
   token:any;
   customer_id:any;
@@ -67,6 +68,9 @@ export class ContractService {
 
   constructor(private http: HttpClient,
               public datepipe: DatePipe,) {
+    this.http.get('sign-digital.txt').subscribe(data => {
+      this.imageMobiBase64 = data;
+    })
   }
 
   // changeMessage(message: string) {
@@ -196,14 +200,14 @@ export class ContractService {
     this.getCurrentUser();
     let datePost = {
       certSerial: signCertDigital.Serial,
-      // fieldName: "",
-      // fileData: "JVBERi0xLjcNCiW1tbW1DQoxIDAgb2JqDQo8PC9UeXBlL0Nhd
-      // imageData: "iVBORw0KGgoAAAANSUhEUgAAAR8AAAEXCAYAAACUBEAgAAAAB
-      // page: "1"
-      // ph: "100"
-      // pw: "100"
-      // px: "200"
-      // py: "200",
+      fieldName: "",
+      fileData: signCertDigital.value,
+      imageData: this.imageMobiBase64,
+      page: signCertDigital.value,
+      ph: signCertDigital.height,
+      pw: signCertDigital.width,
+      px: signCertDigital.coordinate_x,
+      py: signCertDigital.coordinate_y,
       signDate: new Date().toLocaleString(),
       typeSign: "4"
     }
