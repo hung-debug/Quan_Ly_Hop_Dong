@@ -3,6 +3,7 @@ import {variable} from "../../../../config/variable";
 import {ProcessingHandleEcontractComponent} from "../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ForwardContractComponent} from "../../shared/model/forward-contract/forward-contract.component";
+import {ContractService} from "../../../../service/contract.service";
 
 @Component({
   selector: 'app-footer-signature',
@@ -16,7 +17,8 @@ export class FooterSignatureComponent implements OnInit {
   @Output() submitChanges = new EventEmitter<number>();
 
   constructor(
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private contractService: ContractService
   ) {
   }
 
@@ -26,6 +28,27 @@ export class FooterSignatureComponent implements OnInit {
   action(action_string?: string) {
     if (action_string == 'dieu_phoi') {
       console.log(this.datas);
+      let data_coordination = this.datas.is_data_contract.participants;
+      let recipient_data = [];
+      let emailCurrent = this.contractService.getAuthCurrentUser().email;
+      for (let i = 0; i < data_coordination.length; i++) {
+        for (let j = 0; j < data_coordination[i].recipientId; j++) {
+          console.log(data_coordination[i].recipientId[j].email)
+          if (data_coordination[i].recipientId[j].email == emailCurrent) {
+            console.log(111);
+            recipient_data = data_coordination[i];
+            break;
+          }
+        }
+      }
+
+      console.log(recipient_data);
+
+      // this.contractService.getDetermineCoordination(this.datas.is_data_contract).subscribe((res: any) => {
+      //
+      // }, () => {
+      //
+      // })
       // this.datas.step = variable.stepSampleContract.step_confirm_coordination;
     } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
       this.submitChanges.emit(1);

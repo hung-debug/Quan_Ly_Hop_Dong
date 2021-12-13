@@ -20,21 +20,12 @@ export class IndexComponent implements OnInit {
   @ViewChild('AddContract') AddContractComponent: AddContractComponent;
   datas: any = {};
  data_contract: any;
-  // @Input() datas: any = {
-  //   step: variable.stepSampleContract.step_coordination,
-  //   contract: {},
-  //   action_title: 'Điều phối'
-  // }
-
 
   constructor(
     private contractSignatureService: ContractSignatureService,
     private contractService: ContractService,
     private toastService : ToastService,
-  ) {
-    // this.data_contract = contractModel.data_signature_contract;
-    // this.data_contract = contractModel.data_signature_contract_2;
-  }
+  ) {}
 
   ngOnInit(): void {
     // @ts-ignore
@@ -49,7 +40,6 @@ export class IndexComponent implements OnInit {
         "step": "infor-coordination",
         "contract": {},
         "action_title": "Điều phối",
-        // "recipientId_coordination": "hdkadskahd" // get tu param
       };
       this.datas = Object.assign(this.datas, data_api)
     }, () => {
