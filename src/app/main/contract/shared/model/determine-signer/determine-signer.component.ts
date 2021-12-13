@@ -748,4 +748,14 @@ export class DetermineSignerComponent implements OnInit {
     this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
   }
 
+  // style select otp and phone with signature
+  getStyleSignature(data: any) {
+    let dataCheck = data.sign_type.filter((p: any) => p.id == 1);
+    if (dataCheck.length > 0) {
+      return {
+        'width': '40%'
+      }
+    } else return {'width': '90%'}
+  }
+
 }
