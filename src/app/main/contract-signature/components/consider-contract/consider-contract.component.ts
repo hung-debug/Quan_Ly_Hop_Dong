@@ -813,6 +813,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     }, error => {
       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
     });
+    if (signUploadObs$.length == 0) {
+      this.signContract();
+    }
 
   }
 
