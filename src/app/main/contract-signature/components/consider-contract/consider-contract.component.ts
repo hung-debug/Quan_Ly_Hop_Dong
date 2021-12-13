@@ -25,7 +25,7 @@ import {ConfirmSignOtpComponent} from "./confirm-sign-otp/confirm-sign-otp.compo
 import {ImageDialogSignComponent} from "./image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "./pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "./hsm-dialog-sign/hsm-dialog-sign.component";
-import {throwError} from "rxjs";
+import {forkJoin, throwError} from "rxjs";
 import {ToastService} from "../../../../service/toast.service";
 import {UploadService} from "../../../../service/upload.service";
 
@@ -119,6 +119,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   isDataContract: any;
   isDataObjectSignature: any;
   valid: boolean = false;
+  signCertDigital: any;
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -223,7 +224,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
       // convert base64 file pdf to url
       for (const fc of this.datas.i_data_file_contract) {
-        if (fc.is_primary) {
+        if (fc.type == 1) {
           this.pdfSrc = fc.path;
         }
       }
@@ -611,6 +612,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   }
 
   submitEvents(e: any) {
+    this.signDigitalDocument();
     if (e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSecretary == 2))) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
@@ -630,6 +632,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         if (result.isConfirmed) {
           if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
             this.signContractSubmit();
+            // this.signDigitalDocument();
           }
         }
       });
@@ -756,8 +759,29 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     return new Blob([ia], { type: mimeString })
   }
 
-  signContractSubmit() {
+  signDigitalDocument() {
+    this.contractService.getAllAccountsDigital().subscribe(
+      result => {
+        this.signCertDigital = result;
+      }
+    );
+    setTimeout(() => {
+      for(const signUpdate of this.isDataObjectSignature) {
+        console.log('ki anh', signUpdate);
+        if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+          && signUpdate?.recipient?.email === this.currentUser.email
+          && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+        ) {
+          this.contractService.postSignDigitalMobi(this.signCertDigital);
+        }
+      }
+    }, 2000);
+  }
 
+  signContractSubmit() {
+    const signUploadObs$ = [];
+    let indexSignUpload: any[] = [];
+    let iu = 0;
     for(const signUpdate of this.isDataObjectSignature) {
       console.log('ki anh', signUpdate);
       if (signUpdate && signUpdate.type == 2 && [3,4].includes(this.datas.roleContractReceived)
@@ -766,24 +790,30 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       ) {
 
         const formData = {
-          "name": "image.jpg",
+          "name": "image_" + new Date().getTime() + "jpg",
           "content": signUpdate.value
         }
-        this.contractService.uploadFileImageBase64Signature(formData).subscribe(data => {
-          this.datas.filePath = data?.fileObject?.filePath;
-
-
-          if (this.datas.filePath) {
-            signUpdate.value = this.datas.filePath;
-          }
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
-        });
+        signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
+        indexSignUpload.push(iu);
       }
+      iu++;
     }
-    setTimeout(() => {
+
+    forkJoin(signUploadObs$).subscribe(results => {
+      let ir = 0;
+      for (const resE of results) {
+        this.datas.filePath = resE?.file_object?.file_path;
+
+
+        if (this.datas.filePath) {
+          this.isDataObjectSignature[indexSignUpload[ir]].value = this.datas.filePath;
+        }
+        ir++;
+      }
       this.signContract();
-    },2000);
+    }, error => {
+      this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+    });
 
   }
 

@@ -56,6 +56,8 @@ export class ContractService {
   currentUser:any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
   isDataDetermine: any = `${environment.apiUrl} /api/v1/participants/byRecipient/`;
+  getAccountSignDigital: any = `http://localhost:6704/api/mobi/getcert?mst=`;
+  postSignDigital: any = `http://localhost:6704/api/mobi/signpdf`;
 
   token:any;
   customer_id:any;
@@ -178,6 +180,39 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.post<any>(this.processAuthorizeContractUrl, infoAuthorize, {'headers': headers});
+  }
+
+  getAllAccountsDigital() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json; charset=utf-8')
+      .append('Sec-Fetch-Mode', 'cors')
+      .append('Connection', 'keep-alive')
+      .append('Sec-Fetch-Site', 'cross-site');
+    return this.http.get<any>(this.getAccountSignDigital, {'headers': headers});
+  }
+
+  postSignDigitalMobi(signCertDigital: any) {
+    this.getCurrentUser();
+    let datePost = {
+      certSerial: signCertDigital.Serial,
+      // fieldName: "",
+      // fileData: "JVBERi0xLjcNCiW1tbW1DQoxIDAgb2JqDQo8PC9UeXBlL0Nhd
+      // imageData: "iVBORw0KGgoAAAANSUhEUgAAAR8AAAEXCAYAAACUBEAgAAAAB
+      // page: "1"
+      // ph: "100"
+      // pw: "100"
+      // px: "200"
+      // py: "200",
+      signDate: new Date().toLocaleString(),
+      typeSign: "4"
+    }
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json; charset=utf-8')
+      .append('Sec-Fetch-Mode', 'cors')
+      .append('Connection', 'keep-alive')
+      .append('Sec-Fetch-Site', 'cross-site');
+    return this.http.post<any>(this.getAccountSignDigital, datePost,{'headers': headers});
   }
 
   getDataNotifyOriganzation() {

@@ -220,7 +220,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
       // convert base64 file pdf to url
       for (const fc of this.datas.i_data_file_contract) {
-        if (fc.is_primary) {
+        if (fc.type == 1) {
           this.pdfSrc = fc.path;
         }
       }
