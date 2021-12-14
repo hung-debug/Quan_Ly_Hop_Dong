@@ -814,7 +814,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
         }
       }
-    }, 6000);
+    }, 4000);
   }
 
   signContractSubmit() {
@@ -830,7 +830,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
         const formData = {
           "name": "image_" + new Date().getTime() + ".jpg",
-          "content": signUpdate.value
+          "content": signUpdate.value,
+          organizationId: this.data_contract?.is_data_contract?.organization_id
         }
         signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
         indexSignUpload.push(iu);

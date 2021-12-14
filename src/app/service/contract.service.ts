@@ -407,7 +407,7 @@ export class ContractService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.post<any>(this.uploadFileBase64Url + this.currentUser?.organizationId + `/base64`, formData, {'headers':headers});
+    return this.http.post<any>(this.uploadFileBase64Url + formData?.organizationId + `/base64`, formData, {'headers':headers});
   }
 
 
