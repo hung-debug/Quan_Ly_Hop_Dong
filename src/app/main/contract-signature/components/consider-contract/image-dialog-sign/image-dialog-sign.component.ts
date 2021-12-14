@@ -23,7 +23,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   optionsFileSignAccount: any;
 
   public signaturePadOptions: NgSignaturePadOptions = { // passed through to szimek/signature_pad constructor
-    minWidth: 5,
+    minWidth: 6,
+    maxWidth: 6,
     canvasWidth: 500,
     canvasHeight: 300
   };

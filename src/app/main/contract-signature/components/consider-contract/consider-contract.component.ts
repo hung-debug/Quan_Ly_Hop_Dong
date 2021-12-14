@@ -97,6 +97,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   isEnableText: boolean = false;
   isChangeText: boolean = false;
   loaded: boolean = false;
+  allFileAttachment: any[];
 
   isPartySignature: any = [
     {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
@@ -167,6 +168,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         this.datas = Object.assign(this.datas, this.data_contract);
       }*/
       this.datas = this.data_contract;
+      this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
       this.checkIsViewContract();
 
       this.datas.is_data_object_signature.forEach((element: any) => {
@@ -223,10 +225,18 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }
 
       // convert base64 file pdf to url
-      for (const fc of this.datas.i_data_file_contract) {
-        if (fc.type == 1) {
-          this.pdfSrc = fc.path;
+      if (this.datas?.i_data_file_contract) {
+        let fileC = null;
+        const pdfC2 = this.datas.i_data_file_contract.find((p: any) => p.type == 2);
+        const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
+        if (pdfC2) {
+          fileC = pdfC2.path;
+        } else if (pdfC1) {
+          fileC = pdfC1.path;
+        } else {
+          return;
         }
+        this.pdfSrc = fileC;
       }
       // render pdf to canvas
       this.getPage();
@@ -630,8 +640,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }).then((result) => {
         if (result.isConfirmed) {
           if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-            this.signContractSubmit();
-            // this.signDigitalDocument();
+            const signD = this.isDataObjectSignature.find((item: any) => item.type == 3 && item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && !item.value);
+            if (signD) {
+              this.signDigitalDocument();
+            } else {
+              this.signContractSubmit();
+            }
           }
         }
       });
@@ -766,15 +780,48 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     );
     setTimeout(() => {
       for(const signUpdate of this.isDataObjectSignature) {
-        console.log('ki anh', signUpdate);
         if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
           && signUpdate?.recipient?.email === this.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
-          this.contractService.postSignDigitalMobi(this.signCertDigital);
+          this.contractService.getFileContract(this.idContract).subscribe((data) => {
+            let fileC = null;
+            const pdfC2 = data.find((p: any) => p.type == 2);
+            const pdfC1 = data.find((p: any) => p.type == 1);
+            if (pdfC2) {
+              fileC = pdfC2.path;
+            } else if (pdfC1) {
+              fileC = pdfC1.path;
+            } else {
+              return;
+            }
+
+            const signDigital = JSON.parse(JSON.stringify(signUpdate));
+            signDigital.Serial = this.signCertDigital.Serial;
+            this.contractService.getDataFileUrl(fileC).subscribe(
+              (data) => {
+                signDigital.valueBase64 = btoa(
+                  new Uint8Array(data)
+                    .reduce((data, byte) => data + String.fromCharCode(byte), '')
+                );
+                this.contractService.postSignDigitalMobi(signDigital).subscribe(
+                  (response) => {
+                    this.contractService.updateDigitalSignatured(signUpdate.id, response.FileDataSigned).subscribe(
+                      (res) => {
+                        this.toastService.showSuccessHTMLWithTimeout("Ký hợp đồng thành công", "", 1000);
+                        this.router.navigate(['main/form-contract/detail/' + this.idContract]);
+                      }
+                    )
+                  }
+                )
+              }
+            );
+
+          });
+
         }
       }
-    }, 2000);
+    }, 4000);
   }
 
   signContractSubmit() {
@@ -789,8 +836,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       ) {
 
         const formData = {
-          "name": "image_" + new Date().getTime() + "jpg",
-          "content": signUpdate.value
+          "name": "image_" + new Date().getTime() + ".jpg",
+          "content": signUpdate.value,
+          organizationId: this.data_contract?.is_data_contract?.organization_id
         }
         signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
         indexSignUpload.push(iu);
@@ -880,7 +928,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
       (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && item.required && !item.value && item.type != 3
-    )
+    );
     return validSign.length == 0;
   }
 

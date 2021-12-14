@@ -18,9 +18,9 @@
         </div>
         <div>
           <span class="title-contract">File đính kèm:</span>
-<!--          <span>-->
-<!--            <a *ngFor="let d of this.datas.contract_information.file_attach" style="color: #106DB6" rel="stylesheet" href="https://vnexpress.net/" target="_blank">{{d.file_name}}</a>-->
-<!--          </span>-->
+          <span *ngFor="let d of allFileAttachment">
+            <a style="color: #106DB6" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
+          </span>
         </div>
         <div>
           <span class="title-contract">Hợp đồng liên quan:</span>

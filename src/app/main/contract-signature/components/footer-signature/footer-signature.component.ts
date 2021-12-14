@@ -25,16 +25,14 @@ export class FooterSignatureComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  action(action_string?: string) {
-    if (action_string == 'dieu_phoi') {
-      console.log(this.datas);
+  action() {
+    if (this.datas.action_title == 'dieu_phoi') {
       let data_coordination = this.datas.is_data_contract.participants;
       let recipient_data = {};
       let emailCurrent = this.contractService.getAuthCurrentUser().email;
       for (let i = 0; i < data_coordination.length; i++) {
         for (let j = 0; j < data_coordination[i].recipients.length; j++) {
           if (data_coordination[i].recipients[j].email == emailCurrent) {
-            console.log(111);
             recipient_data = data_coordination[i];
             break;
           }

@@ -36,6 +36,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         let data = {
           name: element.name,
           name_company: item.name,
+          emailRecipients: element.email,
           status: this.checkStatusUser(element.status, element.role),
           process_at: element.process_at
         }
