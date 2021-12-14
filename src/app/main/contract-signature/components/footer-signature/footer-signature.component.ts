@@ -26,8 +26,8 @@ export class FooterSignatureComponent implements OnInit {
     console.log(this.datas);
   }
 
-  action(action_string?: string) {
-    if (action_string == 'dieu_phoi') {
+  action() {
+    if (this.datas.action_title == 'Điều phối') {
       console.log(this.datas);
       let data_coordination = this.datas.is_data_contract.participants;
       let recipient_data = {};
