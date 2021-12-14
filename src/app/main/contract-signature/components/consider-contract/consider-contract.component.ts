@@ -630,8 +630,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }).then((result) => {
         if (result.isConfirmed) {
           if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-            this.signContractSubmit();
-            // this.signDigitalDocument();
+            // this.signContractSubmit();
+            this.signDigitalDocument();
           }
         }
       });
@@ -771,10 +771,43 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
           && signUpdate?.recipient?.email === this.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
-          this.contractService.postSignDigitalMobi(this.signCertDigital);
+          this.contractService.getFileContract(this.idContract).subscribe((data) => {
+            let fileC = null;
+            const pdfC2 = data.find((p: any) => p.type == 2);
+            const pdfC1 = data.find((p: any) => p.type == 1);
+            if (pdfC2) {
+              fileC = pdfC2.path;
+            } else if (pdfC1) {
+              fileC = pdfC1.path;
+            } else {
+              return;
+            }
+
+            const signDigital = JSON.parse(JSON.stringify(signUpdate));
+            signDigital.Serial = this.signCertDigital.Serial;
+            this.contractService.getDataFileUrl(fileC).subscribe(
+              (data) => {
+                signDigital.valueBase64 = btoa(
+                  new Uint8Array(data)
+                    .reduce((data, byte) => data + String.fromCharCode(byte), '')
+                );
+                this.contractService.postSignDigitalMobi(signDigital).subscribe(
+                  (response) => {
+                    this.contractService.updateDigitalSignatured(signUpdate.id, response.FileDataSigned).subscribe(
+                      (res) => {
+                        console.log(res);
+                      }
+                    )
+                  }
+                )
+              }
+            );
+
+          });
+
         }
       }
-    }, 2000);
+    }, 6000);
   }
 
   signContractSubmit() {
@@ -789,7 +822,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       ) {
 
         const formData = {
-          "name": "image_" + new Date().getTime() + "jpg",
+          "name": "image_" + new Date().getTime() + ".jpg",
           "content": signUpdate.value
         }
         signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
@@ -880,7 +913,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
       (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && item.required && !item.value && item.type != 3
-    )
+    );
     return validSign.length == 0;
   }
 

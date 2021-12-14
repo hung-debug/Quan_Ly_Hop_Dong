@@ -56,6 +56,7 @@ export class ContractService {
   currentUser:any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
   isDataDetermine: any = `${environment.apiUrl} /api/v1/participants/byRecipient/`;
+  signDigitalMobi: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
   getAccountSignDigital: any = `http://localhost:6704/api/mobi/getcert?mst=`;
   postSignDigital: any = `http://localhost:6704/api/mobi/signpdf`;
   imageMobiBase64: any;
@@ -68,7 +69,9 @@ export class ContractService {
 
   constructor(private http: HttpClient,
               public datepipe: DatePipe,) {
-    this.http.get('sign-digital.txt').subscribe(data => {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/text');
+    this.http.get('/assets/sign-digital.txt', { responseType: 'text', headers }).subscribe(data => {
       this.imageMobiBase64 = data;
     })
   }
@@ -201,14 +204,14 @@ export class ContractService {
     let datePost = {
       certSerial: signCertDigital.Serial,
       fieldName: "",
-      fileData: signCertDigital.value,
+      fileData: signCertDigital.valueBase64,
       imageData: this.imageMobiBase64,
-      page: signCertDigital.value,
-      ph: signCertDigital.height,
-      pw: signCertDigital.width,
-      px: signCertDigital.coordinate_x,
-      py: signCertDigital.coordinate_y,
-      signDate: new Date().toLocaleString(),
+      page: signCertDigital.page.toString(),
+      ph: Math.floor(signCertDigital.height).toString(),
+      pw: Math.floor(signCertDigital.width).toString(),
+      px: Math.floor(signCertDigital.coordinate_x).toString(),
+      py: Math.floor(signCertDigital.coordinate_y).toString(),
+      signDate: "11-05-2019 09:55:55",
       typeSign: "4"
     }
     const headers = new HttpHeaders()
@@ -216,7 +219,14 @@ export class ContractService {
       .append('Sec-Fetch-Mode', 'cors')
       .append('Connection', 'keep-alive')
       .append('Sec-Fetch-Site', 'cross-site');
-    return this.http.post<any>(this.getAccountSignDigital, datePost,{'headers': headers});
+    console.log(datePost);
+    return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
+  }
+
+  getDataFileUrl(url: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/arraybuffer');
+    return this.http.get(url, { responseType: 'arraybuffer', headers });
   }
 
   getDataNotifyOriganzation() {
@@ -346,6 +356,19 @@ export class ContractService {
     };
     console.log(headers);
     return this.http.put<any>(this.rejectContractUrl + id, body,{'headers': headers});
+  }
+
+  updateDigitalSignatured(id: any, base64: string) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = {
+      name: "contract_" + new Date().getTime() + ".pdf",
+      content: "data:application/pdf," + base64
+    };
+    console.log(headers);
+    return this.http.put<any>(this.signDigitalMobi + id, body,{'headers': headers});
   }
 
   updateInfoContractSignature(datas: any) {
