@@ -1,1 +1,25 @@
-<p>unit works!</p>
+<div class="container">
+    <div class="row">
+      <div class="col-md-3">
+        <div>Mã tổ chức</div>
+        <div class="input-line">
+            <input type="text" [(ngModel)]="code" class="input_text"/>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div>Tên tổ chức</div>
+        <div class="input-line">
+            <input type="text" [(ngModel)]="name" class="input_text"/>
+        </div>
+      </div>
+      <div class="col-md-6 btn_search">
+        <button class="btn btn-lg btn-block btn_submit">{{'btn.search' | translate }}</button>
+        <button class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+      
+    </div>
+  </div>
+  
+  

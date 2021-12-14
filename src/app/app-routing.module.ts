@@ -19,6 +19,7 @@ import { AuthGuard } from './help/auth.guard';
 import {NoAuthGuard} from "./main/contract-signature/shared/no-auth.guard";
 import {IndexComponent} from "./main/contract-signature/components/index/index.component";
 import {ContractSignatureComponent} from "./main/contract-signature/contract-signature.component";
+import { UnitComponent } from './main/unit/unit.component';
 
 const routes: Routes = [
   {
@@ -101,8 +102,8 @@ const routes: Routes = [
         component: AddContractTemplateComponent,
       },
       {
-        path: 'user',
-        component: UserComponent,
+        path: 'unit',
+        component: UnitComponent,
       },
       {
         path: 'form-contract/:action',

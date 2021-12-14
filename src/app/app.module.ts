@@ -53,6 +53,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { NgxSelectModule } from "ngx-select-ex";
 import { PipeTrs } from './model/pipe';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { AddUnitComponent } from './main/unit/add-unit/add-unit.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -83,6 +84,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SignupComponent,
     SignContractTemplateComponent,
     PipeTrs,
+    AddUnitComponent,
   ],
   imports: [
     BrowserModule,

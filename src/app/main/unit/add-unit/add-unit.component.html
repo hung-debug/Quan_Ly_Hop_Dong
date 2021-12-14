@@ -1,0 +1,89 @@
+<div class="container-fluid">
+    <div style="text-align: center; font-weight: bold">
+      <h3 style="color: #106DB6; font-family: inherit;">{{this.datas.title}}</h3>
+    </div>
+    <form (ngSubmit)="onSubmit()" [formGroup]="addForm" class="content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="label text-color">Tên tổ chức <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="name" autofocus>
+                </div>
+            </div>
+        
+            <div class="col-md-6">
+                <div class="label text-color">Tên viết tắt <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <img src="assets/img/login_email.svg" class="input-img">
+                    <input type="text" formControlName="short_name">
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label text-color">Mã tổ chức <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="code" autofocus>
+                </div>
+            </div>
+        
+            <div class="col-md-6">
+                <div class="label text-color">Địa chỉ email</div>
+                <div class="input-data">
+                    <img src="assets/img/login_email.svg" class="input-img">
+                    <input type="text" formControlName="email">
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label text-color">Tổ chức cấp trên</div>
+                <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="parent_id" autofocus>
+                </div>
+            </div>
+        
+            <div class="col-md-6">
+                <div class="label text-color">Số điện thoại</div>
+                <div class="input-data">
+                    <img src="assets/img/login_email.svg" class="input-img">
+                    <input type="text" formControlName="phone">
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label text-color">Fax</div>
+                <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="fax" autofocus>
+                </div>
+            </div>
+        
+            <div class="col-md-6" style="align-self: center;">
+                <div class="row">
+                    <div class="col-md-5">
+                        <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status">
+                        <span> Hoạt động</span>
+                    </div>
+                    <div class="col-md-7">
+                        <input type="radio" name='confirm-radio-consider' [value]="2" formControlName="status">
+                        <span> Không hoạt động</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row" style="justify-content: center;padding-top: 10px;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">Hủy</button>
+            <button class="save-button">Lưu lại</button>
+        </div>
+    </form>
+  </div>
+  
