@@ -939,7 +939,24 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   downloadContract(id:any){
     this.contractService.getFileContract(id).subscribe((data) => {
         //console.log(data);
-        this.uploadService.downloadFile(data[0].path).subscribe((response: any) => {
+        let fileC: any = null;
+
+        if (this.datas?.i_data_file_contract) {
+          const pdfC2 = this.datas.i_data_file_contract.find((p: any) => p.type == 2);
+          const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
+          if (pdfC2) {
+            fileC = pdfC2.path;
+          } else if (pdfC1) {
+            fileC = pdfC1.path;
+          } else {
+            return;
+          }
+          this.pdfSrc = fileC;
+        }
+        if (!fileC) {
+          return;
+        }
+        this.uploadService.downloadFile(fileC).subscribe((response: any) => {
           //console.log(response);
 
           let url = window.URL.createObjectURL(response);
