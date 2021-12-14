@@ -223,10 +223,18 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }
 
       // convert base64 file pdf to url
-      for (const fc of this.datas.i_data_file_contract) {
-        if (fc.type == 1) {
-          this.pdfSrc = fc.path;
+      if (this.datas?.i_data_file_contract) {
+        let fileC = null;
+        const pdfC2 = this.datas.i_data_file_contract.find((p: any) => p.type == 2);
+        const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
+        if (pdfC2) {
+          fileC = pdfC2.path;
+        } else if (pdfC1) {
+          fileC = pdfC1.path;
+        } else {
+          return;
         }
+        this.pdfSrc = fileC;
       }
       // render pdf to canvas
       this.getPage();
@@ -630,8 +638,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }).then((result) => {
         if (result.isConfirmed) {
           if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-            // this.signContractSubmit();
-            this.signDigitalDocument();
+            this.signContractSubmit();
+            // this.signDigitalDocument();
           }
         }
       });
@@ -766,7 +774,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     );
     setTimeout(() => {
       for(const signUpdate of this.isDataObjectSignature) {
-        console.log('ki anh', signUpdate);
         if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
           && signUpdate?.recipient?.email === this.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived

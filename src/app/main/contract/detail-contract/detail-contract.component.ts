@@ -219,10 +219,18 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       }
 
       // convert base64 file pdf to url
-      for (const fc of this.datas.i_data_file_contract) {
-        if (fc.type == 1) {
-          this.pdfSrc = fc.path;
+      if (this.datas?.i_data_file_contract) {
+        let fileC = null;
+        const pdfC2 = this.datas.i_data_file_contract.find((p: any) => p.type == 2);
+        const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
+        if (pdfC2) {
+          fileC = pdfC2.path;
+        } else if (pdfC1) {
+          fileC = pdfC1.path;
+        } else {
+          return;
         }
+        this.pdfSrc = fileC;
       }
       // render pdf to canvas
       this.getPage();
