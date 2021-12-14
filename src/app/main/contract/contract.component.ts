@@ -259,7 +259,10 @@ export class ContractComponent implements OnInit {
     this.contractService.changeStatusContract(id, status).subscribe((data) => {
 
       console.log(JSON.stringify(data));
-      this.router.navigate(['/main/contract/create/cancel']);
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate(['/main/contract/create/cancel']);
+      });
+      //this.router.navigate(['/main/contract/create/cancel']);
       this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thành công!", "", 10000);
     },
     error => {

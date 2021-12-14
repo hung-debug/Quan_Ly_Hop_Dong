@@ -202,11 +202,14 @@ export class ConfirmInforContractComponent implements OnInit {
     this.contractService.changeStatusContract(this.datas.id, 10).subscribe((data) => {
 
       console.log(JSON.stringify(data));
-      this.router.navigate(['/main/contract/create/processing']);
+      //this.router.navigate(['/main/contract/create/processing']);
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate(['/main/contract/create/processing']);
+      });
       this.toastService.showSuccessHTMLWithTimeout("Tạo hợp đồng thành công!", "", 10000);
     },
     error => {
-      console.log("false content");
+      this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 10000);
       return false;
     }
     );
