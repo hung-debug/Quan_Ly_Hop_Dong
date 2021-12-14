@@ -640,8 +640,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }).then((result) => {
         if (result.isConfirmed) {
           if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-            this.signContractSubmit();
-            // this.signDigitalDocument();
+            const signD = this.isDataObjectSignature.find((item: any) => item.type == 3 && item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && !item.value);
+            if (signD) {
+              this.signDigitalDocument();
+            } else {
+              this.signContractSubmit();
+            }
           }
         }
       });
@@ -804,7 +808,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
                   (response) => {
                     this.contractService.updateDigitalSignatured(signUpdate.id, response.FileDataSigned).subscribe(
                       (res) => {
-                        console.log(res);
+                        this.toastService.showSuccessHTMLWithTimeout("Ký hợp đồng thành công", "", 1000);
+                        this.router.navigate(['main/form-contract/detail/' + this.idContract]);
                       }
                     )
                   }
