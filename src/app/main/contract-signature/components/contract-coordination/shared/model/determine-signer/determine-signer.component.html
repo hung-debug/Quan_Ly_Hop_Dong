@@ -1,6 +1,6 @@
 <!--begin template-->
 <div class="container-fluid">
-  <div class="contract-determine">
+  <div class="contract-determine" *ngIf="data_organization">
     <div class="col-md-1">
       <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="data_organization.ordering">
     </div>
@@ -473,11 +473,11 @@
 </div>
 
 <div class="footer-determine" style="display: flex; justify-content: space-between">
-  <div style="width: 200px;">
-    <button (click)="back($event, 'infor-contract')" type="button" name="next" class="next action-button"
-            style="background-color: #8B8B8B">{{'btn.previous' | translate}}
-    </button>
-  </div>
+<!--  <div style="width: 200px;">-->
+<!--    <button (click)="back($event, 'infor-contract')" type="button" name="next" class="next action-button"-->
+<!--            style="background-color: #8B8B8B">{{'btn.previous' | translate}}-->
+<!--    </button>-->
+<!--  </div>-->
   <div class="content_footer">@Copyright 2021 - MobiFone</div>
   <div>
     <button type="button" name="next" class="next draft-button">{{'btn.save-draff' | translate }}</button>

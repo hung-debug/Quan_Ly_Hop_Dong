@@ -10,7 +10,7 @@ export class SidebarService {
     {
       title: 'menu.dashboard',
       icon: '/assets/img/db_home.svg',
-      active: true,
+      active: false,
       type: 'simple',
       href: '/main/dashboard'
     },
@@ -97,28 +97,28 @@ export class SidebarService {
       icon: '/assets/img/db_user.svg',
       active: false,
       type: 'simple',
-      href: '/main/contract-template'
+      href: '/main/user'
     },
     {
       title: 'menu.organization.list',
       icon: '/assets/img/db_user_group.svg',
       active: false,
       type: 'simple',
-      href: '/main/contract-template'
+      href: '/main/organization'
     },
     {
       title: 'menu.role.list',
       icon: '/assets/img/db_role.svg',
       active: false,
       type: 'simple',
-      href: '/main/contract-template'
+      href: '/main/role'
     },
     {
       title: 'menu.contract.type.list',
       icon: '/assets/img/db_contract_type.svg',
       active: false,
       type: 'simple',
-      href: '/main/contract-template'
+      href: '/main/contract-type'
     }
   ];
   constructor() { }
