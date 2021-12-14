@@ -110,6 +110,7 @@ export class DetermineSignerComponent implements OnInit {
 
   back(e: any, step?: any) {
     // if (!this.datas.isView) {
+    // this.datas.step = step;
     this.nextOrPreviousStep(step);
   }
 
@@ -134,6 +135,7 @@ export class DetermineSignerComponent implements OnInit {
           this.datas.determine_contract = res ? res : this.is_determine_clone;
           this.step = variable.stepSampleContract.step3;
           this.datas.stepLast = this.step
+          // this.datas.step = this.step
           this.nextOrPreviousStep(this.step);
         // } else {
         //   this.datas.save_draft.determine_signer = false;

@@ -23,6 +23,7 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.datas);
   }
 
   action(action_string?: string) {
@@ -34,7 +35,6 @@ export class FooterSignatureComponent implements OnInit {
       for (let i = 0; i < data_coordination.length; i++) {
         for (let j = 0; j < data_coordination[i].recipients.length; j++) {
           if (data_coordination[i].recipients[j].email == emailCurrent) {
-            console.log(111);
             recipient_data = data_coordination[i];
             break;
           }
@@ -42,12 +42,6 @@ export class FooterSignatureComponent implements OnInit {
       }
 
       console.log(recipient_data);
-
-      // this.contractService.getDetermineCoordination(this.datas.is_data_contract).subscribe((res: any) => {
-      //
-      // }, () => {
-      //
-      // })
       if (recipient_data) {
         this.datas.determine_contract = recipient_data;
         this.datas.step = variable.stepSampleContract.step_confirm_coordination;
