@@ -83,6 +83,10 @@ export class ContractService {
     this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
   }
 
+  getAuthCurrentUser() {
+    return JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+  }
+
   public getContractTypeList(): Observable<any> {
     this.getCurrentUser();
     let listContractTypeUrl = this.listContractTypeUrl + this.organization_id;
@@ -153,10 +157,6 @@ export class ContractService {
         }),
         catchError(this.handleError)
       );
-  }
-
-  getInforOriganzation() {
-
   }
 
   getContractSample(data_sample_contract: any) {
@@ -317,12 +317,12 @@ export class ContractService {
     return this.http.get<File>(this.addGetFileContract + idContract, {headers}).pipe();
   }
 
-  getDetermineCoordination() {
+  getDetermineCoordination(idCoordination: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<File>(this.isDataDetermine + 869, {headers}).pipe();
+    return this.http.get<File>(this.isDataDetermine + idCoordination, {headers}).pipe();
   }
 
   changeStatusContract(id: any, statusNew:any) {

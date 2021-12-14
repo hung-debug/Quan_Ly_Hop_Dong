@@ -92,15 +92,15 @@
       <div style="line-height: 25px">
         <div>
           <span class="title-contract">Loại hợp đồng:</span>
-          <span>{{datas.type_id}}</span>
+          <span>{{datas.is_data_contract.type_id}}</span>
         </div>
         <div>
           <span class="title-contract">Tên hợp đồng:</span>
-          <span>{{datas.name}}</span>
+          <span>{{datas.is_data_contract.name}}</span>
         </div>
         <div>
           <span class="title-contract">Số hợp đồng:</span>
-          <span>{{datas.code}}</span>
+          <span>{{datas.is_data_contract.code}}</span>
         </div>
         <div>
           <span class="title-contract">File đính kèm:</span>
@@ -125,8 +125,8 @@
         <!--        <div *ngFor="let d of this.isPartySignature">-->
         <!--          <div>{{d.name}}</div>-->
         <!--        </div>-->
-        <div *ngFor="let d of this.datas.contract_related">
-          <span>{{d.name_company}}</span>
+        <div *ngFor="let d of this.datas.is_data_contract.participants">
+          <span>{{d.name}}</span>
         </div>
 
       </div>

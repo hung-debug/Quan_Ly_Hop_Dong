@@ -77,7 +77,7 @@
                   <div class="label text-color">{{'user.sign-type' | translate}}: <span class="required-title">*</span></div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
                                            [settings]="dropdownSignTypeSettings" [data]="signTypeList"
-                                           (change)="getDataSignature($event)">
+                                           (ngModelChange)="selectWithOtp($event, d)">
                     <ng-template #optionsTemplate let-item let-option="option"
                                  let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -91,7 +91,7 @@
                   <div class="required-title notify">{{'note_chon_loai_ki_so' | translate}}</div>
                 </div>
                 <div *ngIf="getOtp(d)" class="participants-otp">
-                  <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
+                  <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp" (ngModelChange)="changeOtp(d)">
                   <span class="label text-color">OTP</span>
                 </div>
                 <div *ngIf="getOtp(d)" class="participants__name">
@@ -141,7 +141,7 @@
                 <div class="participants-signature-type">
                   <div class="label text-color">{{'user.sign-type' | translate}}: <span class="required-title">*</span></div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                                           [settings]="dropdownSignTypeSettings" [data]="signTypeList" (ngModelChange)="selectWithOtp($event, d)">
                     <ng-template #optionsTemplate let-item let-option="option"
                                  let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -301,7 +301,7 @@
                     <div class="label text-color">{{'user.sign-type' | translate}}: <span class="required-title">*</span></div>
 
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                                             [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                                             [settings]="dropdownSignTypeSettings" [data]="signTypeList" (ngModelChange)="selectWithOtp($event, d)">
                       <ng-template #optionsTemplate let-item let-option="option"
                                    let-id="id" let-isSelected="isSelected">
                         <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -315,7 +315,7 @@
                     <div class="required-title notify">{{'note_chon_loai_ki_so' | translate}}</div>
                   </div>
                   <div  *ngIf="getOtp(d)" class="participants-otp">
-                    <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
+                    <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp" (ngModelChange)="changeOtp(d)">
                     <span class="label text-color">OTP</span>
                   </div>
                   <div *ngIf="getOtp(d)" class="participants__name">
@@ -365,7 +365,7 @@
                 <div class="participants-information">
                   <div class="participants-signature-type">
                     <div class="label text-color">{{'user.sign-type' | translate}}: <span class="required-title">*</span></div>
-                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}" [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}" [settings]="dropdownSignTypeSettings" [data]="signTypeList" (ngModelChange)="selectWithOtp($event, d)">
                       <ng-template #optionsTemplate let-item let-option="option"
                                    let-id="id" let-isSelected="isSelected">
                         <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -421,11 +421,10 @@
                     </div>
                   </div>
                   <div class="participants--input select-text-input" style="display: flex">
-                    <div class="participants__name">
+                    <div class="participants__name" [ngStyle]="getStyleSignature(d)">
                       <div class="label text-color">{{'user.sign-type' | translate}}: <span class="required-title">*</span></div>
-
                       <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                                               [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                                               [settings]="dropdownSignTypeSettings" [data]="signTypeList" (ngModelChange)="selectWithOtp($event, d)">
                         <ng-template #optionsTemplate let-item let-option="option"
                                      let-id="id" let-isSelected="isSelected">
                           <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -439,10 +438,10 @@
                       <div class="required-title notify">{{'note_chon_loai_ki_so' | translate}}</div>
                     </div>
                     <div *ngIf="getOtp(d)" class="participants-otp">
-                      <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp">
+                      <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp" (ngModelChange)="changeOtp(d)">
                       <span class="label text-color">OTP</span>
                     </div>
-                    <div class="participants__name">
+                    <div *ngIf="getOtp(d)" class="participants__name">
                       <div class="label text-color">{{'user.phone' | translate}}: <span *ngIf="d.is_otp" class="required-title">*</span></div>
                       <input type="number" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
                     </div>

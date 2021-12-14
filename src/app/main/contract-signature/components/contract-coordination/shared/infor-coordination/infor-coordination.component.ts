@@ -137,26 +137,27 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
           console.log(this.recipientId);
         }
       );
-    this.contractService.getDetailContract(this.idContract).subscribe(rs => {
-      console.log(rs);
-      this.isDataContract = rs[0];
-      this.isDataFileContract = rs[1];
-      this.isDataObjectSignature = rs[2];
-      if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
+    // this.contractService.getDetailContract(this.idContract).subscribe(rs => {
+    //   console.log(rs);
+      // this.isDataContract = rs[0];
+      // this.isDataFileContract = rs[1];
+      // this.isDataObjectSignature = rs[2];
+      if (this.datas.is_data_contract && this.datas.i_data_file_contract[1] && this.datas.i_data_file_contract[1].length && this.datas.is_data_object_signature[2] && this.datas.is_data_object_signature[2].length) {
         this.valid = true;
       }
-      this.data_contract = {
-        is_data_contract: rs[0],
-        i_data_file_contract: rs[1],
-        is_data_object_signature: rs[2]
-      };
-      let data_coordination = localStorage.getItem('data_coordinates_contract');
-      if (data_coordination) {
-        let datas_local = JSON.parse(data_coordination).data_coordinates;
-        this.datas = Object.assign(datas_local, this.data_contract);
-      } else {
-        this.datas = this.data_contract;
-      }
+      // this.data_contract = {
+      //   is_data_contract: rs[0],
+      //   i_data_file_contract: rs[1],
+      //   is_data_object_signature: rs[2]
+      // };
+
+      // let data_coordination = localStorage.getItem('data_coordinates_contract_id');
+      // if (data_coordination) {
+      //   let datas_local = JSON.parse(data_coordination).data_coordinates;
+      //   this.datas = Object.assign(this.datas, datas_local);
+      // } else {
+      //   this.datas = this.data_contract;
+      // }
       // this.datas = this.data_contract;
 
       this.datas.is_data_object_signature.forEach((element: any) => {
@@ -228,10 +229,10 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       // render pdf to canvas
       this.getPage();
       this.loaded = true;
-    }, (res: any) => {
-      // @ts-ignore
-      this.handleError();
-    })
+    // }, (res: any) => {
+    //   // @ts-ignore
+    //   this.handleError();
+    // })
   }
 
   handleError(error: any) {

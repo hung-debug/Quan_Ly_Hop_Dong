@@ -18,18 +18,22 @@ export const variable = {
 export const type_signature = [
   {
     id: 1,
-    name: "Ký ảnh"
+    name: "Ký ảnh",
+    is_otp: false
   },
   {
     id: 2,
-    name: "Ký số bằng USB token"
+    name: "Ký số bằng USB token",
+    is_otp: false
   },
   {
     id: 3,
-    name: "Ký số bằng sim KPI"
+    name: "Ký số bằng sim KPI",
+    is_otp: false
   },
   {
     id: 4,
-    name: "Ký số bằng HSM"
+    name: "Ký số bằng HSM",
+    is_otp: false
   }
 ]
