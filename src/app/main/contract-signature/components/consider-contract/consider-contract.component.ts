@@ -97,6 +97,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   isEnableText: boolean = false;
   isChangeText: boolean = false;
   loaded: boolean = false;
+  allFileAttachment: any[];
 
   isPartySignature: any = [
     {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
@@ -167,6 +168,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         this.datas = Object.assign(this.datas, this.data_contract);
       }*/
       this.datas = this.data_contract;
+      this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
       this.checkIsViewContract();
 
       this.datas.is_data_object_signature.forEach((element: any) => {
