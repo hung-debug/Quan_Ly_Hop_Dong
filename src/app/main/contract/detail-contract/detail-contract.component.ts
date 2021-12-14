@@ -104,6 +104,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   isDataContract: any;
   isDataObjectSignature: any;
   valid: boolean = false;
+  allFileAttachment: any[];
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -152,6 +153,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.datas = Object.assign(this.datas, this.data_contract);
       }*/
       this.datas = this.data_contract;
+      this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
       this.checkIsViewContract();
 
       this.datas.is_data_object_signature.forEach((element: any) => {
