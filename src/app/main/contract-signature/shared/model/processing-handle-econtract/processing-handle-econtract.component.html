@@ -10,7 +10,8 @@
       <div style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
         <div class="col-md-6" style="display: flex; flex-direction: column;text-align: left;">
           <span>{{d.name}}</span>
-          <span style="color: #8B8B8B">({{d.name_company}})</span>
+          <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
+          <span style="color: #8B8B8B" *ngIf="d.name_company">{{d.name_company}}</span>
         </div>
         <div class="col-md-6" style="display: flex; flex-direction: column;text-align: center">
           <span [style.color]="d.status != 0 ? '#106DB6' : '#545252'">{{d.status}}</span>
