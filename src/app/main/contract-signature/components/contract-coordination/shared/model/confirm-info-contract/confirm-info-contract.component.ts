@@ -201,11 +201,14 @@ export class ConfirmInfoContractComponent implements OnInit {
   callAPI() {
     //call API step confirm
     //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
-    this.contractService.changeStatusContract(this.datas.id, 10).subscribe((data) => {
+    this.contractService.changeStatusContract(this.datas.data_contract_document_id.contract_id, 10).subscribe((data) => {
 
         console.log(JSON.stringify(data));
-        this.router.navigate(['/main/contract/create/processing']);
-        this.toastService.showSuccessHTMLWithTimeout("Tạo hợp đồng thành công!", "", 10000);
+        setTimeout(() => {
+          this.datas.step = variable.stepSampleContract.step_coordination;
+          this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.data_contract_document_id.contract_id]);
+          this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 10000);
+        }, 100)
       },
       error => {
         console.log("false content");

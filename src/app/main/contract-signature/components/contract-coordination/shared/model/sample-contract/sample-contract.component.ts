@@ -95,7 +95,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     console.log(this.datas);
     this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
 
-    // cập nhật dữ liệu
+    // cập nhật defind dữ liệu
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
     this.datas.determine_contract.forEach((res: any) => {
@@ -124,6 +124,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
     let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
     this.dataSignPosition = [...data_sign_position, ...dataNotSignPosition];
+
+    this.dataSignPosition.forEach((res: any) => {
+      if (res.sign_unit == 'text') {
+        res['text_attribute_name'] = res.name;
+      }
+    })
 
     let data_sign_config_cks = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_so');
     let data_sign_config_cka = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_anh');
@@ -995,8 +1001,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           element.sign_config.forEach((item: any) => {
             item['font'] = 'Arial';
             item['font_size'] = 14;
-            item['contract_id'] = this.datas.contract_id;
-            item['document_id'] = this.datas.document_id;
+            item['contract_id'] = this.datas.data_contract_document_id.contract_id;
+            item['document_id'] = this.datas.data_contract_document_id.document_id;
             if (item.text_attribute_name) {
               item.name = item.text_attribute_name;
             }
@@ -1021,7 +1027,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       console.log(data_sample_contract);
       this.contractService.getContractSample(data_sample_contract).subscribe((data) => {
           console.log(JSON.stringify(data));
-
+          this.datas.is_data_object_signature = data_sample_contract;
           this.step = variable.stepSampleContract.step4;
           this.datas.stepLast = this.step
           this.nextOrPreviousStep(this.step);
