@@ -23,6 +23,7 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.datas);
   }
 
   action() {
@@ -40,12 +41,6 @@ export class FooterSignatureComponent implements OnInit {
       }
 
       console.log(recipient_data);
-
-      // this.contractService.getDetermineCoordination(this.datas.is_data_contract).subscribe((res: any) => {
-      //
-      // }, () => {
-      //
-      // })
       if (recipient_data) {
         this.datas.determine_contract = recipient_data;
         this.datas.step = variable.stepSampleContract.step_confirm_coordination;

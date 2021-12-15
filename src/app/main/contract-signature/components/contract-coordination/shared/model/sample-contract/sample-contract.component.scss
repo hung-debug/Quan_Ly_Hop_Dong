@@ -1,6 +1,6 @@
 .sample-contract {
   //height: calc(100vh - 221px);
-  height: calc(100vh - 185px);
+  height: calc(100vh - 201px);
 
   &__file {
 
@@ -15,7 +15,7 @@
   }
 
   .viewer-pdf {
-    height: calc(100vh - 121px);
+    height: calc(100vh - 154px);
     overflow-x: auto;
     text-align: center;
     background-color: rgba(239, 239, 239, 1);
@@ -31,7 +31,7 @@
 
   .viewer-pdf.isDrag{
     //height: calc(100vh - 221px);
-    height: calc(100vh - 185px);
+    height: calc(100vh - 201px);
     overflow-x: auto;
     text-align: center;
     background-color: rgba(239, 239, 239, 1);
@@ -124,7 +124,8 @@
         align-items: center;
         div {
           //padding-right: 20px;
-          width: 88px;
+          //width: 88px;
+          width: 56px;
           //font-size: 13px;
           color: #666666;
 
@@ -195,7 +196,7 @@
   color: #2680eb;
   border-radius: 2px;
 }
-.ck-da-keo {
+.staff-ck-da-keo {
   border: 1px solid #92bff5;
   color: #2680eb;
   border-radius: 2px;
@@ -220,6 +221,13 @@
   box-sizing: border-box;
   //padding: 10px;
 
+  .name-sig-img-daky {
+    position: absolute;
+    background-color: white;
+    top: -15px;
+    left: 6px;
+    padding: 0 4px;
+  }
 
   .sig-img-daky {
     cursor: pointer;
@@ -233,21 +241,6 @@
       right: 3px;
     }
   }
-}
-
-.name-sig-img-daky {
-  font-size: 12px;
-  position: absolute;
-  background-color: white;
-  top: -15px;
-  left: 6px;
-  padding: 0 4px;
-}
-
-.ck-chua-keo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .drag-image{

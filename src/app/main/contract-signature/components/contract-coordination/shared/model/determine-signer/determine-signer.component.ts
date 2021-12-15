@@ -110,7 +110,8 @@ export class DetermineSignerComponent implements OnInit {
 
   back(e: any, step?: any) {
     // if (!this.datas.isView) {
-    this.nextOrPreviousStep(step);
+    this.datas.step = step;
+    // this.nextOrPreviousStep(step);
   }
 
   // next step event
@@ -134,6 +135,7 @@ export class DetermineSignerComponent implements OnInit {
           this.datas.determine_contract = res ? res : this.is_determine_clone;
           this.step = variable.stepSampleContract.step3;
           this.datas.stepLast = this.step
+          // this.datas.step = this.step
           this.nextOrPreviousStep(this.step);
         // } else {
         //   this.datas.save_draft.determine_signer = false;
@@ -702,7 +704,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // xóa đối tham gia bên đối tác
   deletePartner(index: any) {
-    this.is_determine_clone.splice(index + 1, 1);
+    this.is_determine_clone.splice(index, 1);
     this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3).forEach((res: any, index: number) => {
       res.ordering = index + 1;
     })

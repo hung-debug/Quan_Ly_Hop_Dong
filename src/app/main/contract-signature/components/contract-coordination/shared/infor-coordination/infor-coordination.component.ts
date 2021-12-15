@@ -200,7 +200,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
       // this.datas = this.datas.concat(this.data_contract.contract_information);
 
-      this.datas.action_title = 'Xác nhận';
+      // this.datas.action_title = 'Xác nhận';
       this.activeRoute.url.subscribe(params => {
         console.log(params);
         if (params && params.length > 0) {

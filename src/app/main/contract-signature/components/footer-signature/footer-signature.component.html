@@ -9,6 +9,7 @@
 <!--      <button type="button" name="next" class="next action-button" *ngIf="view" (click)="downloadFilePDF()">Tải file</button>-->
       <button *ngIf="!this.datas.coordination_complete && ![2,3,4].includes(this.datas.roleContractReceived) && !view" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Từ chối</button>
       <button *ngIf="!this.datas.coordination_complete && !view" (click)="action()" type="button" name="next" class="next action-button">{{this.datas.action_title == 'dieu_phoi' ? 'Điều phối' : 'Xác nhận'}}</button>
+
     </div>
   </div>
 <!--  <div>-->
