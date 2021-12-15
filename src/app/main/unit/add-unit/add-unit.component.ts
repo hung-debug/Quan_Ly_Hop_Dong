@@ -31,7 +31,7 @@ export class AddUnitComponent implements OnInit {
       email: null,
       phone: null,
       fax: null,
-      status: null,
+      status: 1,
       parent_id: null,
     });
   }
