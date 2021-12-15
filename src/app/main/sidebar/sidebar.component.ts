@@ -31,11 +31,10 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.menus.forEach((element:any) => {
+      element.active = false;
       if(element.href != '#'){
         if (this.router.url.includes(element.href)) {
           element.active = true;
-        }else{
-          element.active = false;
         }
       }else{
         this.subMenus = element.submenus
