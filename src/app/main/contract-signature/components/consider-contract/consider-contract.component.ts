@@ -28,6 +28,7 @@ import {HsmDialogSignComponent} from "./hsm-dialog-sign/hsm-dialog-sign.componen
 import {forkJoin, throwError} from "rxjs";
 import {ToastService} from "../../../../service/toast.service";
 import {UploadService} from "../../../../service/upload.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-consider-contract',
@@ -131,6 +132,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     private appService: AppService,
     private toastService : ToastService,
     private uploadService : UploadService,
+    private spinner: NgxSpinnerService,
     private dialog: MatDialog
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
@@ -519,7 +521,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     const data = this.datas;
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
-      width: '497px',
+      width: '800px',
       backdrop: 'static',
       keyboard: true,
       data
@@ -824,6 +826,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   }
 
   signContractSubmit() {
+    this.spinner.show();
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
     let iu = 0;
@@ -882,6 +885,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         this.toastService.showSuccessHTMLWithTimeout(
           [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
           , '', 1000);
+        this.spinner.hide();
         this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
@@ -913,6 +917,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       this.contractService.considerRejectContract(this.recipientId, textRefuse).subscribe(
         (result) => {
           this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công', '', 1000);
+          this.spinner.hide();
           this.router.navigate(['/main/contract-signature/receive/processed']);
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);

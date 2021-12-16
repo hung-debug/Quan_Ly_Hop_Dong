@@ -517,7 +517,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     const data = this.datas;
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
-      width: '497px',
+      width: '800px',
       backdrop: 'static',
       keyboard: true,
       data
