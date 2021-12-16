@@ -70,7 +70,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     } else if (role == 3) {
       res +=  'ký';
     } else if (role == 4) {
-      res =  'Văn thư ' + res?.toLowerCase() + 'xử lý';
+      res =  res + ' đóng dấu';
     }
     return res;
   }

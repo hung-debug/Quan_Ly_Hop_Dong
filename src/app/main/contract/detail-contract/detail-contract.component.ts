@@ -642,7 +642,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         }
       });
     } else if (e && e == 1 && ((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
-      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2))) {
+      ([3,4].includes(this.datas.roleContractReceived) && this.confirmSignature == 2))) {
       this.rejectContract();
     }
     if (e && e == 2) {

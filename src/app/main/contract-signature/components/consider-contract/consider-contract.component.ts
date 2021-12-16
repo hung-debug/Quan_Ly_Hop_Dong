@@ -53,7 +53,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   };
   confirmConsider = 1;
   confirmSignature = 1;
-  confirmSecretary = 1;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -621,14 +620,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     return (' ' + data.file_name + ',').replace(/,\s*$/, "");
   }
 
-  submitEvents(e: any) {
+  async submitEvents(e: any) {
     if (e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
-      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSecretary == 2))) {
+      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
       return;
     }
     if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
-      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSecretary == 2))) {
+      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
       Swal.fire({
         title: this.getTextAlertConfirm(),
         icon: 'warning',
@@ -651,9 +650,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       });
     } else if (e && e == 1 && ((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) ||
-      (this.datas.roleContractReceived == 4 && this.confirmSecretary == 2)
+      (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
     )) {
-      this.rejectContract();
+      await this.rejectContract();
     }
     if (e && e == 2) {
       this.downloadContract(this.idContract);
