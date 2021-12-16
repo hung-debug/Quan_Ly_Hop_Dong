@@ -555,7 +555,7 @@ export class ContractService {
       {
         "name": "",
         "type": 2, // Đối tác tổ chức
-        "ordering": 1,
+        "ordering": 2,
         status: 1,
         "recipients": [
           // người điều phối

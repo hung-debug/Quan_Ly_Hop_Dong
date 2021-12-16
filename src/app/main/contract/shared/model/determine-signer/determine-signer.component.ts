@@ -715,7 +715,7 @@ export class DetermineSignerComponent implements OnInit {
     let data = [...this.contractService.getDataDetermine()];
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];
     this.is_determine_clone.push(data_partner_add);
-    this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3).forEach((res: any, index: number) => {
+    this.is_determine_clone.forEach((res: any, index: number) => {
       res.ordering = index + 1;
     })
 
@@ -725,7 +725,7 @@ export class DetermineSignerComponent implements OnInit {
   // xóa đối tham gia bên đối tác
   deletePartner(index: any) {
     this.is_determine_clone.splice(index + 1, 1);
-    this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3).forEach((res: any, index: number) => {
+    this.is_determine_clone.forEach((res: any, index: number) => {
       res.ordering = index + 1;
     })
   }

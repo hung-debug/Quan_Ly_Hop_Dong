@@ -496,7 +496,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               element.is_disable = false;
             } else element.is_disable = true;
           } else if (name_accept_signature == 'chu_ky_so') {
-            if (element.sign_type.some((p: any) => p.id == 2) || element.role == 2) {
+            if (element.sign_type.some((p: any) => p.id == 2) && element.role != 2) {
               element.is_disable = false;
             } else element.is_disable = true;
           } else element.is_disable = false;
@@ -838,17 +838,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.list_sign_name.forEach((item: any) => {
           // if (item.id == d.id) {
           if (d.sign_unit == 'chu_ky_anh') {
-            // if (!item.sign_type.filter((p: any) => p.id == 1)[0]) {
             if (item.sign_type.some((p: any) => p.id == 1) && item.role != 2) {
               item.is_disable = false;
             } else item.is_disable = true;
           } else if (d.sign_unit == 'chu_ky_so') {
-            // if (!item.sign_type.filter((p: any) => p.id == 2)[0]) {
-            if (item.sign_type.some((p: any) => p.id == 2) || item.role == 2) {
+            if (item.sign_type.some((p: any) => p.id == 2) && item.role != 2) {
               item.is_disable = false;
             } else item.is_disable = true;
           } else item.is_disable = false;
-
           if (d.name && item.name == d.name) {
             item.selected = true;
           } else item.selected = false;
@@ -858,26 +855,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           document.getElementById('select-dropdown').value = "";
 
       }
-      // if (d.name) {
-      //   this.list_sign_name.forEach((item: any) => {
-      //     // if (item.id == d.id) {
-      //     if (d.sign_unit == 'chu_ky_anh') {
-      //       if (!item.sign_type.filter((p: any) => p.id == 1)[0]) {
-      //         item.is_disable = true;
-      //       } else item.is_disable = false;
-      //     } else if (d.sign_unit == 'chu_ky_so') {
-      //       if (!item.sign_type.filter((p: any) => p.id == 2)[0]) {
-      //         item.is_disable = true;
-      //       } else item.is_disable = false;
-      //     } else item.is_disable = false;
-      //     if (item.name == d.name) {
-      //       item.selected = true;
-      //     } else item.selected = false;
-      //   })
-      // } else {
-      //   //@ts-ignore
-      //   document.getElementById('select-dropdown').value = "";
-      // }
     }
   }
 
@@ -1112,25 +1089,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let count_text = 0;
       let arrSign_organization: { name: any; signature_party: any; }[] = [];
       let arrSign_partner: { name: any; signature_party: any; }[] = [];
-      // this.datas.contract_user_sign.forEach((element: any) => {
-      //   if (element.sign_config.length > 0) {
-      //     element.sign_config.forEach((item: any) => {
-      //       if (!item.name) {
-      //         count++;
-      //       } else if (item.sign_unit == 'text' && !item.text_attribute_name) {
-      //         count_text++;
-      //       } else {
-      //         let data_sign = {
-      //           name: item.name,
-      //           signature_party: item.signature_party
-      //         }
-      //         if (item.signature_party == "organization")
-      //           arrSign_organization.push(data_sign);
-      //         else arrSign_partner.push(data_sign);
-      //       }
-      //     })
-      //   }
-      // })
 
       for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
