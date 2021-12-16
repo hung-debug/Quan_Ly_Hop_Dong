@@ -235,6 +235,6 @@ export class MainComponent implements OnInit {
   }
 
   infoUserDetail() {
-    this.router.navigate(['/main/user']);
+    this.router.navigate(['/main/user-infor']);
   }
 }

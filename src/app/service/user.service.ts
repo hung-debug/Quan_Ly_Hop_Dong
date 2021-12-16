@@ -16,6 +16,7 @@ export class UserService {
   forgotPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/request`;
   resetPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/recover`;
   resetPasswordTokenUrl:any = `${environment.apiUrl}/api/v1/customers/changePassword`;
+  addUserUrl:any = `${environment.apiUrl}/api/v1/customer`;
 
   token:any;
   customer_id:any;
@@ -100,6 +101,26 @@ export class UserService {
      }),
      catchError(this.handleError)
    )
+  }
+
+  addUser(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: datas.name,
+      short_name: datas.short_name,
+      code: datas.code,
+      email: datas.email,
+      phone: datas.phone,
+      fax: datas.fax,
+      status: 1,
+      parent_id: datas.parent_id,
+    });
+    console.log(headers);
+    console.log(body);
+    return this.http.post<User>(this.addUserUrl, body, {'headers': headers});
   }
 
   // Error handling

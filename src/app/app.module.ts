@@ -55,6 +55,8 @@ import { PipeTrs } from './model/pipe';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { AddUnitComponent } from './main/unit/add-unit/add-unit.component';
 import {TreeTableModule} from 'primeng/treetable';
+import { AddUserComponent } from './main/user/add-user/add-user.component';
+import { InforUserComponent } from './main/user/infor-user/infor-user.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -86,6 +88,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SignContractTemplateComponent,
     PipeTrs,
     AddUnitComponent,
+    AddUserComponent,
+    InforUserComponent,
   ],
   imports: [
     BrowserModule,

@@ -5,7 +5,7 @@
     <form (ngSubmit)="onSubmit()" [formGroup]="addForm" class="content">
         <div class="row">
             <div class="col-md-6">
-                <div class="label text-color">Tên tổ chức <span class="required-title">*</span></div>
+                <div class="label text-color">Họ tên <span class="required-title">*</span></div>
                 <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
                     <input type="text" formControlName="name" autofocus>
@@ -13,25 +13,7 @@
             </div>
         
             <div class="col-md-6">
-                <div class="label text-color">Tên viết tắt <span class="required-title">*</span></div>
-                <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" formControlName="short_name">
-                </div>
-            </div>
-        </div>
-
-        <div class="row" style="padding-top: 10px;">
-            <div class="col-md-6">
-                <div class="label text-color">Mã tổ chức <span class="required-title">*</span></div>
-                <div class="input-data">
-                    <img src="assets/img/icon_name.svg" class="input-img">
-                    <input type="text" formControlName="code" autofocus>
-                </div>
-            </div>
-        
-            <div class="col-md-6">
-                <div class="label text-color">Địa chỉ email <span class="required-title">*</span></div>
+                <div class="label text-color">Email <span class="required-title">*</span></div>
                 <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" formControlName="email">
@@ -41,31 +23,41 @@
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label text-color">Tổ chức cấp trên</div>
+                <div class="label text-color">Số điện thoại</div>
                 <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
-                    <input type="text" formControlName="parent_id" autofocus>
+                    <input type="text" formControlName="phone" autofocus>
                 </div>
             </div>
         
             <div class="col-md-6">
-                <div class="label text-color">Số điện thoại <span class="required-title">*</span></div>
+                <div class="label text-color">Ngày sinh</div>
                 <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" formControlName="phone">
+                    <input type="text" formControlName="birthday">
                 </div>
             </div>
         </div>
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label text-color">Fax</div>
+                <div class="label text-color">Tổ chức</div>
                 <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
-                    <input type="text" formControlName="fax" autofocus>
+                    <input type="text" formControlName="organizationId" autofocus>
                 </div>
             </div>
         
+            <div class="col-md-6">
+                <div class="label text-color">Vai trò</div>
+                <div class="input-data">
+                    <img src="assets/img/login_email.svg" class="input-img">
+                    <input type="text" formControlName="role">
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
             <div class="col-md-6" style="align-self: center;">
                 <div class="row">
                     <div class="col-md-5">

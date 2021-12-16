@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
 import { NodeService } from 'src/app/service/node.service';
-import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 import { AddUnitComponent } from './add-unit/add-unit.component';
 
 // export interface TreeNode {

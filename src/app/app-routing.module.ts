@@ -20,6 +20,7 @@ import {NoAuthGuard} from "./main/contract-signature/shared/no-auth.guard";
 import {IndexComponent} from "./main/contract-signature/components/index/index.component";
 import {ContractSignatureComponent} from "./main/contract-signature/contract-signature.component";
 import { UnitComponent } from './main/unit/unit.component';
+import { InforUserComponent } from './main/user/infor-user/infor-user.component';
 
 const routes: Routes = [
   {
@@ -60,6 +61,10 @@ const routes: Routes = [
       {
         path: 'user',
         component: UserComponent,
+      },
+      {
+        path: 'user-infor',
+        component: InforUserComponent,
       },
       {
         path: 'user-group',
