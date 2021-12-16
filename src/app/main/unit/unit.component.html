@@ -18,8 +18,32 @@
       </div>
     </div>
     <div class="row" style="padding-top: 20px;">
-      
+      <p-treeTable [value]="files | paginate:{itemsPerPage: page, currentPage:p}" id="table">
+        <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of cols">
+          {{col.header}}
+          </th>
+        </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+          <tr>
+            <td *ngFor="let col of cols; let i = index">
+              <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+              {{rowData[col.field]}}
+            </td>
+          </tr>
+        </ng-template>
+      </p-treeTable>
+
+      <div class="contract_footer">
+        <div class="footer_title"></div>
+        <div class="footer_pagination">
+          <pagination-controls *ngIf="files.length > 0;" (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
+        </div>
+        <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
+      </div>
     </div>
   </div>
-  
+ 
   

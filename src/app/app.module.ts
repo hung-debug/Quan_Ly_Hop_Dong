@@ -54,6 +54,7 @@ import { NgxSelectModule } from "ngx-select-ex";
 import { PipeTrs } from './model/pipe';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { AddUnitComponent } from './main/unit/add-unit/add-unit.component';
+import {TreeTableModule} from 'primeng/treetable';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -127,6 +128,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     }),
     ToastrModule.forRoot(),
     NgxSpinnerModule,
+    TreeTableModule,
   ],
   providers: [ AppService, DatePipe,
     {
