@@ -509,7 +509,7 @@ export class ContractService {
           {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
-            "phone": "0979889156", // sđt người tham gia
+            "phone": "", // sđt người tham gia
             "role": 2, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
@@ -537,7 +537,7 @@ export class ContractService {
           {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
-            "phone": "0979889156", // sđt người tham gia
+            "phone": "", // sđt người tham gia
             "role": 4, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
@@ -562,7 +562,7 @@ export class ContractService {
           {
             "name": "",
             "email": "",
-            "phone": "0979889156",
+            "phone": "",
             "role": 1, // người điều phối
             "ordering": 1,
             "status": 0,
@@ -575,7 +575,7 @@ export class ContractService {
           {
             "name": "",
             "email": "",
-            "phone": "0979889156",
+            "phone": "",
             "role": 2, // người xem xét
             "ordering": 1,
             "status": 0,
@@ -601,7 +601,7 @@ export class ContractService {
           {
             "name": "",
             "email": "",
-            "phone": "0979889156",
+            "phone": "",
             "role": 4, // văn thư
             "ordering": 1,
             "status": 0,
