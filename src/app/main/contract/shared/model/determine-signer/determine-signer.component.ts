@@ -68,7 +68,8 @@ export class DetermineSignerComponent implements OnInit {
     if (this.datas.determine_contract)
       this.is_determine_clone = this.datas.determine_contract
     else
-      this.is_determine_clone = [...this.contractService.getDataDetermine()];
+      // this.is_determine_clone = [...this.contractService.getDataDetermine()];
+      this.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
     // data Tổ chức của tôi
     this.data_organization = this.is_determine_clone.filter((p: any) => p.type == 1)[0];
     this.data_organization.name = this.datas.name_origanzation ? this.datas.name_origanzation : '';
@@ -534,7 +535,8 @@ export class DetermineSignerComponent implements OnInit {
     let data = (data_partner.recipients.filter((p: any) => p.role == 2))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 2);
     data.ordering = count_data.length + 1;
-    this.data_parnter_organization[index].recipients.push(data);
+    // this.data_parnter_organization[index].recipients.push(data);
+    (this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
 
   // thêm đối tượng người điều phối (done)
@@ -545,7 +547,8 @@ export class DetermineSignerComponent implements OnInit {
     let data = (data_partner.recipients.filter((p: any) => p.role == 1))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 1);
     data.ordering = count_data.length + 1;
-    this.data_parnter_organization[index].recipients.push(data);
+    // this.data_parnter_organization[index].recipients.push(data);
+    (this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
 
   // thêm đối tượng ký đối tác (done)
@@ -556,7 +559,8 @@ export class DetermineSignerComponent implements OnInit {
     let data = (data_partner.recipients.filter((p: any) => p.role == 3))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 3);
     data.ordering = count_data.length + 1;
-    this.data_parnter_organization[index].recipients.push(data);
+    // this.data_parnter_organization[index].recipients.push(data);
+    (this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
 
   // thêm đối tượng văn thư đối tác (done)
@@ -567,7 +571,8 @@ export class DetermineSignerComponent implements OnInit {
     let data = (data_partner.recipients.filter((p: any) => p.role == 4))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 4);
     data.ordering = count_data.length + 1;
-    this.data_parnter_organization[index].recipients.push(data);
+    // this.data_parnter_organization[index].recipients.push(data);
+    (this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
 
   // tạo mảng đối tượng người xem xét tổ chức của tôi
@@ -712,7 +717,8 @@ export class DetermineSignerComponent implements OnInit {
   // thêm đối tác
   addPartner() {
     let data_partner_add = {};
-    let data = [...this.contractService.getDataDetermine()];
+    // let data = [...this.contractService.getDataDetermine()];
+    let data = [...this.contractService.getDataDetermineInitialization()];
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];
     this.is_determine_clone.push(data_partner_add);
     this.is_determine_clone.forEach((res: any, index: number) => {

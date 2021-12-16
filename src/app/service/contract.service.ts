@@ -637,21 +637,48 @@ export class ContractService {
     ]
   }
 
-}
+  getDataDetermineInitialization() {
+    return [
+      {
+        "name": "",
+        "type": 1,
+        "ordering": 1,
+        status: 1,
+        "recipients": [
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 3,
+            "ordering": 1,
+            "status": 0,
+            "is_otp": 0,
+            "sign_type": [
+            ]
+          }
+        ],
+      },
+      {
+        "name": "",
+        "type": 2,
+        "ordering": 2,
+        status: 1,
+        "recipients": [
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 3,
+            "ordering": 1,
+            "status": 0,
+            "is_otp": 0,
+            "sign_type": []
+          }
+        ],
+      },
+    ]
+  }
 
-// {
-//   "id": 1,
-//   "name": "Ký ảnh"
-// },
-// {
-//   "id": 2,
-//   "name": "Ký số bằng USB token"
-// },
-// {
-//   id: 3,
-//     name: "Ký số bằng sim KPI"
-// },
-// {
-//   id: 4,
-//     name: "Ký số bằng HSM"
-// }
+
+
+}
