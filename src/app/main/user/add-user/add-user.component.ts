@@ -4,7 +4,9 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
-
+import { getYear } from 'date-fns';
+import locale from 'date-fns/locale/en-US';
+import { DatepickerOptions } from 'ng2-datepicker';
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -22,6 +24,23 @@ export class AddUserComponent implements OnInit {
     public dialogRef: MatDialogRef<AddUserComponent>,
     public router: Router,
     public dialog: MatDialog,) { }
+
+  // options sample with default values
+  options: DatepickerOptions = {
+    minYear: getYear(new Date()) - 30, // minimum available and selectable year
+    maxYear: getYear(new Date()) + 30, // maximum available and selectable year
+    placeholder: '', // placeholder in case date model is null | undefined, example: 'Please pick a date'
+    format: 'dd/MM/yyyy', // date format to display in input
+    formatTitle: 'MM/yyyy',
+    formatDays: 'EEEEE',
+    firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
+    locale: locale, // date-fns locale
+    position: 'bottom',
+    inputClass: '', // custom input CSS class to be applied
+    calendarClass: 'datepicker-default', // custom datepicker calendar CSS class to be applied
+    scrollBarColor: '#dfe3e9', // in case you customize you theme, here you define scroll bar color
+    // keyboardEvents: true // enable keyboard events
+  };
 
   ngOnInit(): void {
     this.datas = this.data;

@@ -110,13 +110,12 @@ export class UserService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       name: datas.name,
-      short_name: datas.short_name,
-      code: datas.code,
       email: datas.email,
       phone: datas.phone,
-      fax: datas.fax,
-      status: 1,
-      parent_id: datas.parent_id,
+      organizationId: datas.organizationId,
+      birthday: datas.birthday,
+      role: datas.role,
+      status: datas.status,
     });
     console.log(headers);
     console.log(body);
