@@ -1,15 +1,15 @@
 <div class="container-fluid">
     <div class="row">
       <div class="col-md-3">
-        <div>Mã tổ chức</div>
+        <div>Tên loại hợp đồng</div>
         <div class="input-line">
-            <input type="text" [(ngModel)]="code" class="input_text"/>
+            <input type="text" [(ngModel)]="name" class="input_text"/>
         </div>
       </div>
       <div class="col-md-3">
-        <div>Tên tổ chức</div>
+        <div>Mã loại hợp đồng</div>
         <div class="input-line">
-            <input type="text" [(ngModel)]="name" class="input_text"/>
+            <input type="text" [(ngModel)]="code" class="input_text"/>
         </div>
       </div>
       <div class="col-md-6 btn_search">
@@ -22,15 +22,14 @@
         <ng-template pTemplate="header" let-columns>
         <tr>
           <th *ngFor="let col of cols" [ttSortableColumn]="col.field">
-            {{col.header}}
-            <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
+          {{col.header}}
+          <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
           </th>
         </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
           <!-- <tr>
             <td *ngFor="let col of cols; let i = index">
-              <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
               {{rowData[col.field]}}
             </td>
           </tr> -->
@@ -44,7 +43,7 @@
           </tr>
         </ng-template>
       </p-treeTable>
-
+  
       <div class="contract_footer">
         <div class="footer_title"></div>
         <div class="footer_pagination">
@@ -54,5 +53,5 @@
       </div>
     </div>
   </div>
- 
+  
   

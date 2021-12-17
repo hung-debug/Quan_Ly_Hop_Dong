@@ -21,7 +21,6 @@
 }
 
 #table {
-  font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
@@ -35,8 +34,6 @@
 #table tr:hover {background-color: #ddd;}
 
 #table th {
-  padding-top: 12px;
-  padding-bottom: 12px;
   text-align: center;
   background-color: #E2ECF6;
   color: #106DB6;
@@ -98,4 +95,24 @@
 }
 .footer_page_number{
   color: #0160AE
+}
+
+#table tr:last-child th:first-child {
+  border-top-left-radius: 10px;
+}
+#table tr:last-child th:last-child {
+  border-top-right-radius: 10px;
+}
+#table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+#table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+:host ::ng-deep {
+  .pi-fw {
+    color:  #106DB6;
+    margin-right: 5px;
+  }
 }

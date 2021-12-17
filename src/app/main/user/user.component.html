@@ -27,21 +27,30 @@
     <p-treeTable [value]="files | paginate:{itemsPerPage: page, currentPage:p}" id="table">
       <ng-template pTemplate="header" let-columns>
       <tr>
-        <th *ngFor="let col of cols">
+        <th *ngFor="let col of cols" [ttSortableColumn]="col.field">
         {{col.header}}
+        <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
         </th>
       </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
-        <tr>
+        <!-- <tr>
           <td *ngFor="let col of cols; let i = index">
             {{rowData[col.field]}}
           </td>
+        </tr> -->
+        <tr>
+          <td>
+              <p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler>
+              <a style="color: #106DB6;">{{rowData.name}}</a>
+          </td>
+          <td>{{rowData.size}}</td>
+          <td>{{rowData.type}}</td>
         </tr>
       </ng-template>
     </p-treeTable>
 
-    <div class="contract_footer">
+    <div class="contract_footer"> 
       <div class="footer_title"></div>
       <div class="footer_pagination">
         <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>

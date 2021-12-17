@@ -1,0 +1,32 @@
+<div class="container-fluid">
+    <div style="text-align: center; font-weight: bold">
+      <h3 style="color: #106DB6; font-family: inherit;">{{this.datas.title}}</h3>
+    </div>
+    <form (ngSubmit)="onSubmit()" [formGroup]="addForm" class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="label text-color">Mã loại hợp đồng <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="code" autofocus>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-12">
+                <div class="label text-color">Tên loại hợp đồng <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="name">
+                </div>
+            </div>
+        </div>
+    
+        <div class="row" style="justify-content: center;padding-top: 10px;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">Hủy</button>
+            <button class="save-button">Lưu lại</button>
+        </div>
+    </form>
+  </div>
+  

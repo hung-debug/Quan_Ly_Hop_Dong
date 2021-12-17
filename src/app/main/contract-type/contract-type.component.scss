@@ -7,20 +7,20 @@
     background-color: #106DB6;
     font-size: 13px;
     margin: 0 10px;
-}
-.input_text {
+  }
+  .input_text {
     padding-left: 10px;
     outline: none;
     height: 33px;
     width: 100%;
     border-radius: 5px;
     border: 1px solid #87CAFF;
-}
-.btn_search{
+  }
+  .btn_search{
     align-self: flex-end;
-}
-
-#table {
+  }
+  
+  #table {
     border-collapse: collapse;
     width: 100%;
   }
@@ -38,7 +38,7 @@
     background-color: #E2ECF6;
     color: #106DB6;
   }
-
+  
   :host ::ng-deep {
     .ngx-pagination {
       padding: 0;
@@ -96,7 +96,7 @@
   .footer_page_number{
     color: #0160AE
   }
-  
+
   #table tr:last-child th:first-child {
     border-top-left-radius: 10px;
   }
@@ -116,3 +116,4 @@
       margin-right: 5px;
     }
   }
+  

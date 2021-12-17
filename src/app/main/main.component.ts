@@ -235,6 +235,8 @@ export class MainComponent implements OnInit {
   }
 
   infoUserDetail() {
-    this.router.navigate(['/main/user-infor']);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/user-infor']);
+    });
   }
 }

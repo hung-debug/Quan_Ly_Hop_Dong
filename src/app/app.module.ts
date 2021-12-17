@@ -59,6 +59,9 @@ import { AddUserComponent } from './main/user/add-user/add-user.component';
 import { InforUserComponent } from './main/user/infor-user/infor-user.component';
 import { DetailUnitComponent } from './main/unit/detail-unit/detail-unit.component';
 import { DetailUserComponent } from './main/user/detail-user/detail-user.component';
+import { ContractTypeComponent } from './main/contract-type/contract-type.component';
+import { AddContractTypeComponent } from './main/contract-type/add-contract-type/add-contract-type.component';
+import { DetailContractTypeComponent } from './main/contract-type/detail-contract-type/detail-contract-type.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -94,6 +97,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     InforUserComponent,
     DetailUnitComponent,
     DetailUserComponent,
+    ContractTypeComponent,
+    AddContractTypeComponent,
+    DetailContractTypeComponent,
   ],
   imports: [
     BrowserModule,

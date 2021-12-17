@@ -1131,15 +1131,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           return false;
         }
 
-        if (!arrSign_organization.some((p: any) => p.role == 3)) {
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng người ký của tổ chức, vui lòng chọn đối tượng ký!", "", 10000);
-          return false;
-        } else if (!arrSign_organization.some((p: any) => p.role == 4)) {
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký văn thư của tổ chức, vui lòng chọn đối tượng ký!", "", 10000);
-          return false;
-        }
+        // if (!arrSign_organization.some((p: any) => p.role == 3)) {
+        //   this.spinner.hide();
+        //   this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng người ký của tổ chức, vui lòng chọn đối tượng ký!", "", 10000);
+        //   return false;
+        // } else if (!arrSign_organization.some((p: any) => p.role == 4)) {
+        //   this.spinner.hide();
+        //   this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký văn thư của tổ chức, vui lòng chọn đối tượng ký!", "", 10000);
+        //   return false;
+        // }
 
         let data_partner = this.list_sign_name.filter((p: any) => p.type_unit == "partner" && p.role != 2);
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
@@ -1150,15 +1150,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           return false;
         }
 
-        if (!arrSign_partner.some((p: any) => p.role == 3)) {
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng người ký của đối tác, vui lòng chọn đối tượng ký!", "", 10000);
-          return false;
-        } else if (!arrSign_partner.some((p: any) => p.role == 4)) {
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký văn thư của đối tác, vui lòng chọn đối tượng ký!", "", 10000);
-          return false;
-        }
+        // if (!arrSign_partner.some((p: any) => p.role == 3)) {
+        //   this.spinner.hide();
+        //   this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng người ký của đối tác, vui lòng chọn đối tượng ký!", "", 10000);
+        //   return false;
+        // } else if (!arrSign_partner.some((p: any) => p.role == 4)) {
+        //   this.spinner.hide();
+        //   this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký văn thư của đối tác, vui lòng chọn đối tượng ký!", "", 10000);
+        //   return false;
+        // }
 
       }
     }

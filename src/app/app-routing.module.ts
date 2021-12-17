@@ -21,16 +21,13 @@ import {IndexComponent} from "./main/contract-signature/components/index/index.c
 import {ContractSignatureComponent} from "./main/contract-signature/contract-signature.component";
 import { UnitComponent } from './main/unit/unit.component';
 import { InforUserComponent } from './main/user/infor-user/infor-user.component';
+import { ContractTypeComponent } from './main/contract-type/contract-type.component';
 
 const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
   },
-  // {
-  //   path: 'login/:type',
-  //   component: LoginComponent,
-  // },
   {
     path: 'contract-signature/signatures/:data',
     data: { type: 'notAccess'},
@@ -114,10 +111,10 @@ const routes: Routes = [
         path: 'form-contract/:action',
         component: AddContractComponent,
       },
-      // {
-      //   path: 'step-3-contract',
-      //   component: createContractComponent
-      // }
+      {
+        path: 'contract-type',
+        component: ContractTypeComponent,
+      },
     ],
   },
   // {
@@ -135,12 +132,6 @@ const routes: Routes = [
   },
   { path: '**', component: PageNotFoundComponent }
 ];
-
-// {
-//   path: '**',
-//     redirectTo: 'home',
-//   //canActivate: [ AuthGuardService ] // remove this line
-// }
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
