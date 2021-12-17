@@ -57,6 +57,8 @@ import { AddUnitComponent } from './main/unit/add-unit/add-unit.component';
 import {TreeTableModule} from 'primeng/treetable';
 import { AddUserComponent } from './main/user/add-user/add-user.component';
 import { InforUserComponent } from './main/user/infor-user/infor-user.component';
+import { DetailUnitComponent } from './main/unit/detail-unit/detail-unit.component';
+import { DetailUserComponent } from './main/user/detail-user/detail-user.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -90,6 +92,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AddUnitComponent,
     AddUserComponent,
     InforUserComponent,
+    DetailUnitComponent,
+    DetailUserComponent,
   ],
   imports: [
     BrowserModule,
