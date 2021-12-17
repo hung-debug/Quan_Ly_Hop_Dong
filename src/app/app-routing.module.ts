@@ -22,6 +22,7 @@ import {ContractSignatureComponent} from "./main/contract-signature/contract-sig
 import { UnitComponent } from './main/unit/unit.component';
 import { InforUserComponent } from './main/user/infor-user/infor-user.component';
 import { ContractTypeComponent } from './main/contract-type/contract-type.component';
+import { RoleComponent } from './main/role/role.component';
 
 const routes: Routes = [
   {
@@ -114,6 +115,10 @@ const routes: Routes = [
       {
         path: 'contract-type',
         component: ContractTypeComponent,
+      },
+      {
+        path: 'role',
+        component: RoleComponent,
       },
     ],
   },
