@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-processing-handle-econtract',
@@ -38,7 +39,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           name_company: item.name,
           emailRecipients: element.email,
           status: this.checkStatusUser(element.status, element.role),
-          process_at: element.process_at
+          process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").add(7, 'hours').format("YYYY/MM/DD HH:mm:ss") : null
         }
         this.is_list_name.push(data);
       })
@@ -70,7 +71,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     } else if (role == 3) {
       res +=  'ký';
     } else if (role == 4) {
-      res =  'Văn thư ' + res?.toLowerCase() + 'xử lý';
+      res =  res + ' đóng dấu';
     }
     return res;
   }

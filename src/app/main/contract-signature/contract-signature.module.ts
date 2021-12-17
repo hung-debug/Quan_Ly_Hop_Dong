@@ -39,6 +39,7 @@ import {NgxSelectModule} from "ngx-select-ex";
 import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialog-sign/hsm-dialog-sign.component';
 import {AngularSignaturePadModule} from "@almothafar/angular-signature-pad";
 import {ChooseTypeSignComponent} from "./components/consider-contract/choose-type-sign/choose-type-sign.component";
+import {NgxSpinnerModule} from "ngx-spinner";
 
 export const contractSignatureRoutes: Routes = [
   { path: 'consider/:id', component: ConsiderContractComponent },
@@ -78,24 +79,25 @@ export const contractSignatureRoutes: Routes = [
     HsmDialogSignComponent,
     // AddContractComponent
   ],
-    imports: [
-        CommonModule,
-        DatepickerModule,
-        NgbModule,
-        NgxPaginationModule,
-        MdbTabsModule,
-        RouterModule.forChild(contractSignatureRoutes),
-        ReactiveFormsModule,
-        NgMultiSelectDropDownModule,
-        // routing,
-        FormsModule,
-        MatDialogModule,
-        SweetAlert2Module,
-        NgxSelectModule,
-        AngularSignaturePadModule,
-		TranslateModule
-        // ContractModule
-    ],
+  imports: [
+    CommonModule,
+    DatepickerModule,
+    NgbModule,
+    NgxPaginationModule,
+    MdbTabsModule,
+    RouterModule.forChild(contractSignatureRoutes),
+    ReactiveFormsModule,
+    NgMultiSelectDropDownModule,
+    // routing,
+    FormsModule,
+    MatDialogModule,
+    SweetAlert2Module,
+    NgxSelectModule,
+    AngularSignaturePadModule,
+    TranslateModule,
+    NgxSpinnerModule,
+    // ContractModule
+  ],
   providers: [NoAuthGuard]
 })
 export class ContractSignatureModule { }

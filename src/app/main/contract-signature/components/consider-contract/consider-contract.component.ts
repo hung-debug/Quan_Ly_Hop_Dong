@@ -28,6 +28,7 @@ import {HsmDialogSignComponent} from "./hsm-dialog-sign/hsm-dialog-sign.componen
 import {forkJoin, throwError} from "rxjs";
 import {ToastService} from "../../../../service/toast.service";
 import {UploadService} from "../../../../service/upload.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-consider-contract',
@@ -53,7 +54,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   };
   confirmConsider = 1;
   confirmSignature = 1;
-  confirmSecretary = 1;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -132,6 +132,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     private appService: AppService,
     private toastService : ToastService,
     private uploadService : UploadService,
+    private spinner: NgxSpinnerService,
     private dialog: MatDialog
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
@@ -520,7 +521,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     const data = this.datas;
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
-      width: '497px',
+      width: '800px',
       backdrop: 'static',
       keyboard: true,
       data
@@ -621,14 +622,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     return (' ' + data.file_name + ',').replace(/,\s*$/, "");
   }
 
-  submitEvents(e: any) {
+  async submitEvents(e: any) {
     if (e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
-      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSecretary == 2))) {
+      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
       return;
     }
     if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
-      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSecretary == 2))) {
+      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
       Swal.fire({
         title: this.getTextAlertConfirm(),
         icon: 'warning',
@@ -651,9 +652,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       });
     } else if (e && e == 1 && ((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) ||
-      (this.datas.roleContractReceived == 4 && this.confirmSecretary == 2)
+      (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
     )) {
-      this.rejectContract();
+      await this.rejectContract();
     }
     if (e && e == 2) {
       this.downloadContract(this.idContract);
@@ -825,6 +826,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   }
 
   signContractSubmit() {
+    this.spinner.show();
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
     let iu = 0;
@@ -883,6 +885,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         this.toastService.showSuccessHTMLWithTimeout(
           [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
           , '', 1000);
+        this.spinner.hide();
         this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
@@ -914,6 +917,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       this.contractService.considerRejectContract(this.recipientId, textRefuse).subscribe(
         (result) => {
           this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công', '', 1000);
+          this.spinner.hide();
           this.router.navigate(['/main/contract-signature/receive/processed']);
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);

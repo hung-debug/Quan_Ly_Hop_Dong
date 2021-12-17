@@ -39,6 +39,8 @@
     "interactjs": "^1.10.11",
     "jquery": "^3.6.0",
     "mdb-angular-ui-kit": "^1.4.0",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.34",
     "ng-multiselect-dropdown": "^0.3.4",
     "ng2-datepicker": "^12.0.0",
     "ngx-bootstrap": "^7.1.0",

@@ -68,11 +68,11 @@
           <p class="d-flex mb-2 text-align-left mx-3">Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
             <div class="radio-confirm">
-              <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSecretary'>
+              <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature'>
               <label for="radio-confirm-secretary" class="ms-2">Đồng ý</label>
             </div>
             <div class="radio-refuse">
-              <input id="radio-refuse-secretary" type="radio" name='confirm-radio-secretary' [value]="2" [(ngModel)]='confirmSecretary'>
+              <input id="radio-refuse-secretary" type="radio" name='confirm-radio-secretary' [value]="2" [(ngModel)]='confirmSignature'>
               <label for="radio-refuse-secretary" class="ms-2">Không đồng ý</label>
             </div>
           </div>
@@ -105,3 +105,11 @@
   </div>
 </div>
 <app-footer-signature *ngIf="loaded" [datas]="datas" [view]="[2,3].includes(recipient.status)" [recipientId]="recipientId" (submitChanges)="submitEvents($event)"></app-footer-signature>
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-spin-clockwise"
+>
+  <p style="font-size: 18px; color: white">Đang xử lý...</p>
+</ngx-spinner>
