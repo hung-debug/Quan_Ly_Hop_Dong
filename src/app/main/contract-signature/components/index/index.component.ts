@@ -39,7 +39,7 @@ export class IndexComponent implements OnInit {
       this.datas = {
         "step": "infor-coordination",
         "contract": {},
-        "action_title": "Điều phối",
+        "action_title": "dieu_phoi",
         "data_contract_document_id": {
           contract_id: data_api.is_data_object_signature[0].contract_id,
           document_id: data_api.is_data_object_signature[0].document_id
