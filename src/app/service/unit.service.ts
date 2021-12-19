@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {environment} from '../../environments/environment';
-
+import {Observable} from 'rxjs';
 
 export interface Unit {
   id: number,
@@ -19,6 +19,7 @@ export interface Unit {
 })
 export class UnitService {
 
+  listUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
   addUnitUrl: any = `${environment.apiUrl}/api/v1/organizations`;
   getUnitByIdUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
 
@@ -35,6 +36,15 @@ export class UnitService {
   }
 
   constructor(private http: HttpClient,) { }
+
+  public getUnitList(filter_code: any, filter_name: any): Observable<any> {
+    this.getCurrentUser();
+
+    let listUnitUrl = this.listUnitUrl + '?code=' + filter_code + '&name=' + filter_name + "&size=1000";
+    console.log(listUnitUrl);
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<Unit[]>(listUnitUrl, {headers}).pipe();
+  }
 
   addUnit(datas: any) {
     this.getCurrentUser();

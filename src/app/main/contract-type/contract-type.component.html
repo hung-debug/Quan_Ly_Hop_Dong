@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="row" style="padding-top: 20px;">
-      <p-treeTable [value]="files | paginate:{itemsPerPage: page, currentPage:p}" id="table">
+      <p-treeTable [value]="files"  [paginator]="true" [rows]="5" id="table">
         <ng-template pTemplate="header" let-columns>
         <tr>
           <th *ngFor="let col of cols" [ttSortableColumn]="col.field">
@@ -42,15 +42,13 @@
             <td>{{rowData.type}}</td>
           </tr>
         </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+          <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template>
+        <ng-template pTemplate="paginatorright" let-state>
+          {{'chart.number' | translate}}: {{state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}
+        </ng-template> 
       </p-treeTable>
-  
-      <div class="contract_footer">
-        <div class="footer_title"></div>
-        <div class="footer_pagination">
-          <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
-        </div>
-        <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
-      </div>
     </div>
   </div>
   

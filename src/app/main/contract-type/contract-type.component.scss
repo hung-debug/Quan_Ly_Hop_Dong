@@ -115,5 +115,29 @@
       color:  #106DB6;
       margin-right: 5px;
     }
+  
+    .p-paginator-pages button{
+      color: black;
+      float: left;
+      padding: 8px 16px;
+      text-decoration: none;
+      transition: background-color .3s;
+      border: 1px solid #ddd;
+      margin: 4px;
+      height: 26px;
+      width: 50px;
+      border-radius: 5px;
+      background-color: #e6e6e6;
+    }
+  
+    .p-paginator-pages button.p-highlight {
+      background-color: #2199e8;
+      color: white;
+      border: 1px solid #2199e8;
+    }
+  
+    .p-paginator-bottom .p-ripple{
+      padding: 10px;
+    }
   }
   

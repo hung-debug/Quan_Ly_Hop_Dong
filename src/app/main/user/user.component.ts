@@ -35,6 +35,7 @@ export class UserComponent implements OnInit {
       console.log(response);
       this.files = response.data;
       this.pageTotal = this.files.length;
+      console.log(this.files);
       this.setPage();
     });
     

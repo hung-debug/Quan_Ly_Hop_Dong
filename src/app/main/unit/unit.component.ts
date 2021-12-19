@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
 import { NodeService } from 'src/app/service/node.service';
+import { UnitService } from 'src/app/service/unit.service';
 import { AddUnitComponent } from './add-unit/add-unit.component';
 
-// export interface TreeNode {
-//   data?: any;
-//   children?: TreeNode[];
-//   leaf?: boolean;
-//   expanded?: boolean;
-//   }
+export interface TreeNode {
+  name?: any;
+  short_name?: any;
+  code?: any;
+  status?: any;
+  parent_id?: any;
+  children?: TreeNode[];
+  }
 @Component({
   selector: 'app-unit',
   templateUrl: './unit.component.html',
@@ -26,28 +28,37 @@ export class UnitComponent implements OnInit {
 
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private nodeService: NodeService) { }
+    private unitService: UnitService) { }
 
-  code:any;
-  name:any;
-  files: TreeNode[];
+  code:any = "";
+  name:any = "";
+  list: any[];
   cols: any[];
 
   ngOnInit(): void {
     this.appService.setTitle("DANH SÁCH TỔ CHỨC");
-    this.nodeService.list().subscribe(response => {
+    this.unitService.getUnitList(this.code, this.name).subscribe(response => {
       console.log(response);
-      this.files = response.data;
-      this.pageTotal = this.files.length;
-      this.setPage();
+      this.list = response.entities;
+      console.log(this.list);
     });
-    
-    console.log(this.files);
-      this.cols = [
-      { field: 'name', header: 'Name' },
-      { field: 'size', header: 'Size' },
-      { field: 'type', header: 'Type' }
+
+    this.cols = [
+      { field: 'name', header: 'Tên tổ chức' },
+      { field: 'short_name', header: 'Tên viết tắt' },
+      { field: 'code', header: 'Mã tổ chức' },
+      { field: 'status', header: 'Trạng thái' },
+      { field: 'parent_id', header: '' },
+      { field: 'id', header: '' },
       ];
+  }
+
+  searchUnit(){
+    this.unitService.getUnitList(this.code, this.name).subscribe(response => {
+      console.log(response);
+      this.list = response.entities;
+      console.log(this.list);
+    });
   }
 
   addUnit() {

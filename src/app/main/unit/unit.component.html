@@ -13,45 +13,40 @@
         </div>
       </div>
       <div class="col-md-6 btn_search">
-        <button class="btn btn-lg btn-block btn_submit">{{'btn.search' | translate }}</button>
+        <button class="btn btn-lg btn-block btn_submit" (click)="searchUnit()">{{'btn.search' | translate }}</button>
         <button class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
       </div>
     </div>
     <div class="row" style="padding-top: 20px;">
-      <p-treeTable [value]="files | paginate:{itemsPerPage: page, currentPage:p}" id="table">
+      <p-table [value]="list" [paginator]="true" [rows]="5" id="table">
         <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th *ngFor="let col of cols" [ttSortableColumn]="col.field">
-            {{col.header}}
-            <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
-          </th>
-        </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
-          <!-- <tr>
-            <td *ngFor="let col of cols; let i = index">
-              <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-              {{rowData[col.field]}}
-            </td>
-          </tr> -->
           <tr>
-            <td>
-                <p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler>
-                <a style="color: #106DB6;">{{rowData.name}}</a>
-            </td>
-            <td>{{rowData.size}}</td>
-            <td>{{rowData.type}}</td>
+              <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+                  {{col.header}}
+                  <p-sortIcon [field]="col.field" *ngIf="col.header!=''"></p-sortIcon>
+              </th>
           </tr>
         </ng-template>
-      </p-treeTable>
-
-      <div class="contract_footer">
-        <div class="footer_title"></div>
-        <div class="footer_pagination">
-          <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
-        </div>
-        <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
-      </div>
+        <ng-template pTemplate="body" let-list>
+            <tr>
+                <td>{{list.name}}</td>
+                <td>{{list.short_name}}</td>
+                <td>{{list.code}}</td>
+                <td>{{list.status==1?'Hoạt động':'Không hoạt động'}}</td>
+                <td>{{list.parent_id==null?'Tổ chức cha':'Tổ chức con'}}</td>
+                <td>
+                  <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="addUnit()"/>
+                  <img src="../../../assets/img/icon_delete.svg" width="16px" (click)="addUnit()" style="margin-left: 10px;"/>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+          <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template>
+        <ng-template pTemplate="paginatorright" let-state>
+          <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template> 
+    </p-table>
     </div>
   </div>
  
