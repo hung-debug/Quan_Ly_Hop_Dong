@@ -104,5 +104,6 @@ export class AddContractComponent implements OnInit {
   getStep(e: any) {
     // this.step = this.datas.stepLast;
     this.stepLast = e;
+    console.log(this.stepLast);
   }
 }

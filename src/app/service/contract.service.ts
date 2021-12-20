@@ -571,7 +571,7 @@ export class ContractService {
           {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
-            "phone": "0979889156", // sđt người tham gia
+            "phone": "", // sđt người tham gia
             "role": 2, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
@@ -599,7 +599,7 @@ export class ContractService {
           {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
-            "phone": "0979889156", // sđt người tham gia
+            "phone": "", // sđt người tham gia
             "role": 4, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
@@ -617,14 +617,14 @@ export class ContractService {
       {
         "name": "",
         "type": 2, // Đối tác tổ chức
-        "ordering": 1,
+        "ordering": 2,
         status: 1,
         "recipients": [
           // người điều phối
           {
             "name": "",
             "email": "",
-            "phone": "0979889156",
+            "phone": "",
             "role": 1, // người điều phối
             "ordering": 1,
             "status": 0,
@@ -637,7 +637,7 @@ export class ContractService {
           {
             "name": "",
             "email": "",
-            "phone": "0979889156",
+            "phone": "",
             "role": 2, // người xem xét
             "ordering": 1,
             "status": 0,
@@ -663,7 +663,7 @@ export class ContractService {
           {
             "name": "",
             "email": "",
-            "phone": "0979889156",
+            "phone": "",
             "role": 4, // văn thư
             "ordering": 1,
             "status": 0,
@@ -699,21 +699,48 @@ export class ContractService {
     ]
   }
 
-}
+  getDataDetermineInitialization() {
+    return [
+      {
+        "name": "",
+        "type": 1,
+        "ordering": 1,
+        status: 1,
+        "recipients": [
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 3,
+            "ordering": 1,
+            "status": 0,
+            "is_otp": 0,
+            "sign_type": [
+            ]
+          }
+        ],
+      },
+      {
+        "name": "",
+        "type": 2,
+        "ordering": 2,
+        status: 1,
+        "recipients": [
+          {
+            "name": "",
+            "email": "",
+            "phone": "",
+            "role": 3,
+            "ordering": 1,
+            "status": 0,
+            "is_otp": 0,
+            "sign_type": []
+          }
+        ],
+      },
+    ]
+  }
 
-// {
-//   "id": 1,
-//   "name": "Ký ảnh"
-// },
-// {
-//   "id": 2,
-//   "name": "Ký số bằng USB token"
-// },
-// {
-//   id: 3,
-//     name: "Ký số bằng sim KPI"
-// },
-// {
-//   id: 4,
-//     name: "Ký số bằng HSM"
-// }
+
+
+}

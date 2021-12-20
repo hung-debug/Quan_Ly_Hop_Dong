@@ -19,16 +19,16 @@ import { AuthGuard } from './help/auth.guard';
 import {NoAuthGuard} from "./main/contract-signature/shared/no-auth.guard";
 import {IndexComponent} from "./main/contract-signature/components/index/index.component";
 import {ContractSignatureComponent} from "./main/contract-signature/contract-signature.component";
+import { UnitComponent } from './main/unit/unit.component';
+import { InforUserComponent } from './main/user/infor-user/infor-user.component';
+import { ContractTypeComponent } from './main/contract-type/contract-type.component';
+import { RoleComponent } from './main/role/role.component';
 
 const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
   },
-  // {
-  //   path: 'login/:type',
-  //   component: LoginComponent,
-  // },
   {
     path: 'contract-signature/signatures/:data',
     data: { type: 'notAccess'},
@@ -59,6 +59,10 @@ const routes: Routes = [
       {
         path: 'user',
         component: UserComponent,
+      },
+      {
+        path: 'user-infor',
+        component: InforUserComponent,
       },
       {
         path: 'user-group',
@@ -101,17 +105,21 @@ const routes: Routes = [
         component: AddContractTemplateComponent,
       },
       {
-        path: 'user',
-        component: UserComponent,
+        path: 'unit',
+        component: UnitComponent,
       },
       {
         path: 'form-contract/:action',
         component: AddContractComponent,
       },
-      // {
-      //   path: 'step-3-contract',
-      //   component: createContractComponent
-      // }
+      {
+        path: 'contract-type',
+        component: ContractTypeComponent,
+      },
+      {
+        path: 'role',
+        component: RoleComponent,
+      },
     ],
   },
   // {
@@ -129,12 +137,6 @@ const routes: Routes = [
   },
   { path: '**', component: PageNotFoundComponent }
 ];
-
-// {
-//   path: '**',
-//     redirectTo: 'home',
-//   //canActivate: [ AuthGuardService ] // remove this line
-// }
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

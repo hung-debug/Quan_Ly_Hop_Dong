@@ -31,6 +31,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     this.menus.forEach((element:any) => {
+      element.active = false;
       if(element.href != '#'){
         if (this.router.url.includes(element.href)) {
           element.active = true;
@@ -70,7 +71,8 @@ export class SidebarComponent implements OnInit {
   clickLink(currentMenu: any, nameFeature?: string) {
     this.menus.forEach((element: any) => {
       if (element === currentMenu) {
-        currentMenu.active = !currentMenu.active;
+        //currentMenu.active = !currentMenu.active;
+        element.active = true;
       } else {
         element.active = false;
       }
@@ -90,7 +92,8 @@ export class SidebarComponent implements OnInit {
         //set active child
         this.subMenus.forEach((elementSub: any) => {
           if (elementSub === currentSubMenu) {
-            currentSubMenu.active = !currentSubMenu.active;
+            //currentSubMenu.active = !currentSubMenu.active;
+            elementSub.active = true;
           } else {
             elementSub.active = false;
           }

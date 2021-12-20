@@ -104,7 +104,7 @@ export class SidebarService {
       icon: '/assets/img/db_user_group.svg',
       active: false,
       type: 'simple',
-      href: '/main/organization'
+      href: '/main/unit'
     },
     {
       title: 'menu.role.list',

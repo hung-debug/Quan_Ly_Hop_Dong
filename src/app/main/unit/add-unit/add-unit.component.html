@@ -1,0 +1,109 @@
+<div class="container-fluid">
+    <div style="text-align: center; font-weight: bold">
+      <h3 style="color: #106DB6; font-family: inherit;">{{this.datas.title}}</h3>
+    </div>
+    <form (ngSubmit)="onSubmit()" [formGroup]="addForm" class="content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="label text-color">Tên tổ chức <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="name">
+                </div>
+                <!-- <div *ngIf="!addForm.get('name')?.valid && (addForm.get('name')?.dirty || (addForm.get('name')?.touched))">
+                    <p class="alert alert-danger error-detail" role="alert" [hidden]="!addForm.get('name')?.errors?.required">
+                    Tên tổ chức không được để trống
+                    </p>
+                </div>   -->
+            </div>
+        
+            <div class="col-md-6">
+                <div class="label text-color">Tên viết tắt <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="short_name">
+                </div>
+                <!-- <div *ngIf="!addForm.get('short_name')?.valid && (addForm.get('short_name')?.dirty || (addForm.get('short_name')?.touched))">
+                    <p class="alert alert-danger error-detail" role="alert" [hidden]="!addForm.get('short_name')?.errors?.required">
+                    Tên viết tắt không được để trống
+                    </p>
+                </div>   -->
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label text-color">Mã tổ chức <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="code">
+                </div>
+            </div>
+        
+            <div class="col-md-6">
+                <div class="label text-color">Địa chỉ email <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="email">
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label text-color">Tổ chức cấp trên</div>
+                <div>
+                    <p-dropdown appendTo="body"
+                        [options]="orgList" 
+                        formControlName="parent_id" 
+                        optionLabel="name" 
+                        optionValue="id" 
+                        placeholder="Chọn tổ chức" 
+                        [filter]="true" 
+                        filterBy="name" 
+                        [showClear]="true"  
+                        ></p-dropdown>
+                    <!-- <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="parent_id"> -->
+                </div>
+            </div>
+        
+            <div class="col-md-6">
+                <div class="label text-color">Số điện thoại <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="phone">
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label text-color">Fax</div>
+                <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" formControlName="fax">
+                </div>
+            </div>
+        
+            <div class="col-md-6" style="align-self: center;">
+                <div class="row">
+                    <div class="col-md-5">
+                        <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
+                        <span> Hoạt động</span>
+                    </div>
+                    <div class="col-md-7">
+                        <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
+                        <span> Không hoạt động</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row" style="justify-content: center;padding-top: 10px;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">Hủy</button>
+            <button class="save-button">Lưu lại</button>
+        </div>
+    </form>
+  </div>
+  

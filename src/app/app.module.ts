@@ -53,6 +53,20 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { NgxSelectModule } from "ngx-select-ex";
 import { PipeTrs } from './model/pipe';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { AddUnitComponent } from './main/unit/add-unit/add-unit.component';
+import {TreeTableModule} from 'primeng/treetable';
+import {TableModule} from 'primeng/table';
+import {DropdownModule} from 'primeng/dropdown';
+import {CalendarModule} from 'primeng/calendar';
+import { AddUserComponent } from './main/user/add-user/add-user.component';
+import { InforUserComponent } from './main/user/infor-user/infor-user.component';
+import { DetailUnitComponent } from './main/unit/detail-unit/detail-unit.component';
+import { DetailUserComponent } from './main/user/detail-user/detail-user.component';
+import { ContractTypeComponent } from './main/contract-type/contract-type.component';
+import { AddContractTypeComponent } from './main/contract-type/add-contract-type/add-contract-type.component';
+import { DetailContractTypeComponent } from './main/contract-type/detail-contract-type/detail-contract-type.component';
+import { RoleComponent } from './main/role/role.component';
+import { AddRoleComponent } from './main/role/add-role/add-role.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -83,6 +97,16 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SignupComponent,
     SignContractTemplateComponent,
     PipeTrs,
+    AddUnitComponent,
+    AddUserComponent,
+    InforUserComponent,
+    DetailUnitComponent,
+    DetailUserComponent,
+    ContractTypeComponent,
+    AddContractTypeComponent,
+    DetailContractTypeComponent,
+    RoleComponent,
+    AddRoleComponent,
   ],
   imports: [
     BrowserModule,
@@ -125,6 +149,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     }),
     ToastrModule.forRoot(),
     NgxSpinnerModule,
+    TreeTableModule,
+    TableModule,
+    DropdownModule,
+    CalendarModule,
   ],
   providers: [ AppService, DatePipe,
     {

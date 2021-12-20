@@ -1,111 +1,60 @@
-<div class="label-header">{{'user.information.individual' | translate}}</div>
-<div class="content-body">
+<div class="container-fluid">
   <div class="row">
-    <div class="col-md-4">
-      <div>{{'user.name' | translate}}</div>
-      <div>
-        <input type="text" [(ngModel)]="name"/>
+    <div class="col-md-3">
+      <div>Họ tên</div>
+      <div class="input-line">
+          <input type="text" [(ngModel)]="name" class="input_text"/>
       </div>
     </div>
-    <div class="col-md-4">
-      <div>{{'user.email' | translate}}</div>
-      <div>
-        <input type="text" [(ngModel)]="email"/>
+    <div class="col-md-3">
+      <div>Email</div>
+      <div class="input-line">
+          <input type="text" [(ngModel)]="email" class="input_text"/>
       </div>
     </div>
-    <div class="col-md-4">
-      <div>{{'user.birthday' | translate}}</div>
-      <div>
-        <input type="text" [(ngModel)]="birthday"/>
+    <div class="col-md-3">
+      <div>Số điện thoại</div>
+      <div class="input-line">
+          <input type="text" [(ngModel)]="phone" class="input_text"/>
       </div>
+    </div>
+    <div class="col-md-3 btn_search">
+      <button class="btn btn-lg btn-block btn_submit">{{'btn.search' | translate }}</button>
+      <button class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
     </div>
   </div>
-
-  <div class="row">
-    <div class="col-md-4">
-      <div>{{'user.phone' | translate}}</div>
-      <div>
-        <input type="text" [(ngModel)]="phone"/>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div>{{'organization' | translate}}</div>
-      <div>
-        <div class="input_text" [innerHTML]="organization_name" readonly></div>
-      </div>
-    </div>
-    <div class="col-md-4 btn_save">
-      <button class="btn btn-lg btn-block" (click)="updateInforUser()">{{'btn.update' | translate }}</button>
-    </div>
-  </div>
-</div>
-
-<br>
-<div class="label-header">{{'sign.update' | translate}}</div>
-<div class="content-body">
-  <div class="row">
-    <div class="col-md-4">
-      <div class="label-header">
-        {{'sign.file-image' | translate}}
-      </div>
-      <div class="content-body">
-        <div class="select-contract container-img-file" >
-          <div class="upload-image-region d-flex flex-column container-img-file-1">
-            <img src="assets/img/img-icon.svg" alt="#" width="50px">
-            <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
-            <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
-          </div>
-        </div>
-        <div class="btn-footer">
-          <button class="btn btn-lg btn-block" (click)="updateSignFileImageUser()">{{'btn.update' | translate }}</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="label-header">
-        {{'sign.kpi' | translate}}
-      </div>
-      <div class="content-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div>{{'user.phone' | translate}}</div>
-            <div>
-              <input type="text" [(ngModel)]="phoneKpi"/>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div>{{'user.network' | translate}}</div>
-            <div>
-              <input type="text" [(ngModel)]="networkKpi"/>
-            </div>
-          </div>
-        </div>
-        <div class="btn-footer">
-          <button class="btn btn-lg btn-block" (click)="updateSignKpiUser()">{{'btn.update' | translate }}</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="label-header">
-        {{'sign.hsm' | translate}}
-      </div>
-      <div class="content-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div>{{'user.email' | translate}}</div>
-            <div>
-              <input type="text" [(ngModel)]="nameHsm"/>
-            </div>
-          </div>
-        </div>
-        <div class="btn-footer">
-          <button class="btn btn-lg btn-block" (click)="updateSignHsmUser()">{{'btn.update' | translate }}</button>
-        </div>
-      </div>
-    </div>
+  <div class="row" style="padding-top: 20px;">
+    <p-treeTable [value]="files"  [paginator]="true" [rows]="5" id="table">
+      <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of cols" [ttSortableColumn]="col.field">
+        {{col.header}}
+        <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
+        </th>
+      </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+        <!-- <tr>
+          <td *ngFor="let col of cols; let i = index">
+            {{rowData[col.field]}}
+          </td>
+        </tr> -->
+        <tr>
+          <td>
+              <p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler>
+              <a style="color: #106DB6;">{{rowData.name}}</a>
+          </td>
+          <td>{{rowData.size}}</td>
+          <td>{{rowData.type}}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+      </ng-template>
+      <ng-template pTemplate="paginatorright" let-state>
+        {{'chart.number' | translate}}: {{state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}
+      </ng-template> 
+    </p-treeTable>
   </div>
 </div>
+

@@ -16,6 +16,8 @@ export class UserService {
   forgotPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/request`;
   resetPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/recover`;
   resetPasswordTokenUrl:any = `${environment.apiUrl}/api/v1/customers/changePassword`;
+  addUserUrl:any = `${environment.apiUrl}/api/v1/customer`;
+  getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customer`;
 
   token:any;
   customer_id:any;
@@ -100,6 +102,38 @@ export class UserService {
      }),
      catchError(this.handleError)
    )
+  }
+
+  addUser(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: datas.name,
+      email: datas.email,
+      phone: datas.phone,
+      organizationId: datas.organizationId,
+      birthday: datas.birthday,
+      role: datas.role,
+      status: datas.status,
+    });
+    console.log(headers);
+    console.log(body);
+    return this.http.post<User>(this.addUserUrl, body, {'headers': headers});
+  }
+
+  getUserById(id:any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      
+    });
+    console.log(headers);
+    console.log(body);
+    return this.http.post<User>(this.getUserByIdUrl, body, {'headers': headers});
   }
 
   // Error handling
