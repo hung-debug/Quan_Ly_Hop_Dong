@@ -13,6 +13,10 @@ import { UnitService } from 'src/app/service/unit.service';
 export class AddUnitComponent implements OnInit {
   addForm: FormGroup;
   datas: any;
+
+  dropdownOrgSettings: any = {};
+  orgList: Array<any> = [];
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
@@ -23,6 +27,12 @@ export class AddUnitComponent implements OnInit {
     public dialog: MatDialog,) { }
 
   ngOnInit(): void {
+
+    this.unitService.getUnitList('', '').subscribe(data => {
+      console.log(data.entities);
+      this.orgList = data.entities;
+    });
+
     this.datas = this.data;
 
     //lay du lieu form cap nhat

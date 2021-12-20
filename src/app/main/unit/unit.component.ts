@@ -45,12 +45,12 @@ export class UnitComponent implements OnInit {
     });
 
     this.cols = [
-      { field: 'name', header: 'Tên tổ chức' },
-      { field: 'short_name', header: 'Tên viết tắt' },
-      { field: 'code', header: 'Mã tổ chức' },
-      { field: 'status', header: 'Trạng thái' },
-      { field: 'parent_id', header: '' },
-      { field: 'id', header: '' },
+      { field: 'name', header: 'Tên tổ chức', style:'text-align: left;' },
+      { field: 'short_name', header: 'Tên viết tắt', style:'text-align: left;' },
+      { field: 'code', header: 'Mã tổ chức', style:'text-align: left;' },
+      { field: 'status', header: 'Trạng thái', style:'text-align: left;' },
+      { field: 'parent_id', header: 'Loại tổ chức', style:'text-align: left;' },
+      { field: 'id', header: 'Quản lý', style:'text-align: center;' },
       ];
   }
 
