@@ -57,7 +57,7 @@
              (click)="getSignSelect(d)"
              [ngClass]="changeColorDrag(null, d, true)"
              [ngStyle]="changePosition(d)">
-          <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
+          <div class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
           <app-image-sign-contract-detail [datas]="datas"  [sign]="d"></app-image-sign-contract-detail>
         </div>
       </div>

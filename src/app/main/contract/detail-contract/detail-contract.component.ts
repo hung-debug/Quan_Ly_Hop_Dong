@@ -37,8 +37,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   objPdfProperties: any = {
     pages: [],
   };
-  confirmConsider = 1;
-  confirmSignature = 1;
+  confirmConsider = null;
+  confirmSignature = null;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -408,7 +408,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
     }
-    style.backgroundColor = d.value ? '' : '#EBF8FF';
+    style.backgroundColor = d.valueSign ? '' : '#EBF8FF';
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";
     }
@@ -432,9 +432,9 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
 // hàm stype đối tượng boder kéo thả
   changeColorDrag(role: any, valueSign: any, isDaKeo?: any) {
-    if (isDaKeo && !valueSign.value) {
+    if (isDaKeo && !valueSign.valueSign) {
       return 'ck-da-keo';
-    } else if (!valueSign.value) {
+    } else if (!valueSign.valueSign) {
       return 'employer-ck';
     } else {
       return '';
@@ -773,7 +773,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
         const formData = {
           "name": "image.jpg",
-          "content": signUpdate.value
+          "content": signUpdate.valueSign
         }
         this.contractService.uploadFileImageBase64Signature(formData).subscribe(data => {
           this.datas.filePath = data?.fileObject?.filePath;
@@ -853,7 +853,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
-      (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && item.required && !item.value && item.type != 3
+      (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && item.required && !item.valueSign && item.type != 3
     )
     return validSign.length == 0;
   }
