@@ -17,6 +17,8 @@ export class AddUnitComponent implements OnInit {
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
 
+  
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
@@ -24,7 +26,19 @@ export class AddUnitComponent implements OnInit {
     private toastService : ToastService,
     public dialogRef: MatDialogRef<AddUnitComponent>,
     public router: Router,
-    public dialog: MatDialog,) { }
+    public dialog: MatDialog,) { 
+
+      this.addForm = this.fbd.group({
+        nameOrg: this.fbd.control("", [Validators.required]),
+        short_name: this.fbd.control("", [Validators.required]),
+        code: this.fbd.control("", [Validators.required]),
+        email: this.fbd.control("", [Validators.required]),
+        phone: this.fbd.control("", [Validators.required]),
+        fax: null,
+        status: 1,
+        parent_id: null,
+      });
+    }
 
   ngOnInit(): void {
 
@@ -40,7 +54,7 @@ export class AddUnitComponent implements OnInit {
       this.unitService.getUnitById(this.data.id).subscribe(
         data => {
           this.addForm = this.fbd.group({
-            name: this.fbd.control(data.name, [Validators.required]),
+            nameOrg: this.fbd.control(data.name, [Validators.required]),
             short_name: this.fbd.control(data.short_name, [Validators.required]),
             code: this.fbd.control(data.code, [Validators.required]),
             email: this.fbd.control(data.email, [Validators.required]),
@@ -57,7 +71,7 @@ export class AddUnitComponent implements OnInit {
     //khoi tao form them moi
     }else{
       this.addForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required]),
+        nameOrg: this.fbd.control("", [Validators.required]),
         short_name: this.fbd.control("", [Validators.required]),
         code: this.fbd.control("", [Validators.required]),
         email: this.fbd.control("", [Validators.required]),
@@ -72,7 +86,7 @@ export class AddUnitComponent implements OnInit {
   onSubmit() {
     const data = {
       id: "",
-      name: this.addForm.value.name,
+      name: this.addForm.value.nameOrg,
       short_name: this.addForm.value.short_name,
       code: this.addForm.value.code,
       email: this.addForm.value.email,

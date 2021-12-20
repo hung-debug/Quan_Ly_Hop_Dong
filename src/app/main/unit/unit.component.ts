@@ -21,12 +21,6 @@ export interface TreeNode {
 })
 export class UnitComponent implements OnInit {
 
-  p:number = 1;
-  page:number = 5; 
-  pageStart:number = 0;
-  pageEnd:number = 0;
-  pageTotal:number = 0;
-
   constructor(private appService: AppService,
     private dialog: MatDialog,
     private unitService: UnitService) { }
@@ -38,11 +32,7 @@ export class UnitComponent implements OnInit {
 
   ngOnInit(): void {
     this.appService.setTitle("DANH SÁCH TỔ CHỨC");
-    this.unitService.getUnitList(this.code, this.name).subscribe(response => {
-      console.log(response);
-      this.list = response.entities;
-      console.log(this.list);
-    });
+    this.searchUnit();
 
     this.cols = [
       { field: 'name', header: 'Tên tổ chức', style:'text-align: left;' },
@@ -114,13 +104,4 @@ export class UnitComponent implements OnInit {
       let is_data = result
     })
   }
-
-  setPage(){
-    this.pageStart = (this.p-1)*this.page+1;
-    this.pageEnd = (this.p)*this.page;
-    if(this.pageTotal < this.pageEnd){
-      this.pageEnd = this.pageTotal;
-    }
-  }
-
 }

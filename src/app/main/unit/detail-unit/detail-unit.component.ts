@@ -42,6 +42,17 @@ export class DetailUnitComponent implements OnInit {
         this.fax = data.fax,
         this.status = data.status,
         this.parent_id = data.parent_id
+        
+        if(data.parent_id != null){
+          this.unitService.getUnitById(data.parent_id).subscribe(
+            data => {
+              console.log(data);
+              this.parent_id = data.name
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+            }
+          )
+        }
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
       }
