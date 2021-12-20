@@ -4,6 +4,7 @@ import { AppService } from 'src/app/service/app.service';
 import { NodeService } from 'src/app/service/node.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { AddUnitComponent } from './add-unit/add-unit.component';
+import { DetailUnitComponent } from './detail-unit/detail-unit.component';
 
 export interface TreeNode {
   name?: any;
@@ -77,6 +78,43 @@ export class UnitComponent implements OnInit {
       let is_data = result
     })
   }
+
+  editUnit(id:any) {
+    const data = {
+      title: 'CẬP NHẬT THÔNG TIN TỔ CHỨC',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AddUnitComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  detailUnit(id:any) {
+    const data = {
+      title: 'THÔNG TIN TỔ CHỨC',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DetailUnitComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
   setPage(){
     this.pageStart = (this.p-1)*this.page+1;
     this.pageEnd = (this.p)*this.page;

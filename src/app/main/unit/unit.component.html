@@ -29,14 +29,14 @@
         </ng-template>
         <ng-template pTemplate="body" let-list>
             <tr>
-                <td>{{list.name}}</td>
+                <td><a (click)="detailUnit(list.id)" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
                 <td>{{list.short_name}}</td>
                 <td>{{list.code}}</td>
                 <td>{{list.status==1?'Hoạt động':'Không hoạt động'}}</td>
                 <td>{{list.parent_id==null?'Tổ chức cha':'Tổ chức con'}}</td>
                 <td>
-                  <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="addUnit()"/>
-                  <img src="../../../assets/img/icon_delete.svg" width="16px" (click)="addUnit()" style="margin-left: 10px;"/>
+                  <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUnit(list.id)" style="cursor: pointer;"/>
+                  <img src="../../../assets/img/icon_delete.svg" width="16px" (click)="addUnit()" style="margin-left: 10px;cursor: pointer;"/>
                 </td>
             </tr>
         </ng-template>
