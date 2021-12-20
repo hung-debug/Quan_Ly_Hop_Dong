@@ -24,9 +24,9 @@
         </div>
         <div>
           <span class="title-contract">Hợp đồng liên quan:</span>
-<!--          <span *ngFor="let d of this.datas.contract_information.file_related_contract" style="color: #106DB6">-->
-<!--            {{d.file_name}} <span style="color: black">, </span>-->
-<!--          </span>-->
+          <span *ngFor="let d of allRelateToContract;let i = index">
+            <a style="color: #106DB6;" [style.margin-left]="i != 0 ? '8px' : ''" rel="stylesheet" [href]="'/main/form-contract/detail/' + d.ref_id" target="_blank">{{d.ref_id}}</a>
+          </span>
         </div>
 
       </div>
@@ -97,7 +97,7 @@
              (click)="getSignSelect(d)"
              [ngClass]="changeColorDrag(null, d, true)"
              [ngStyle]="changePosition(d)">
-          <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
+          <div class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
           <app-image-sign-contract *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
         </div>
       </div>

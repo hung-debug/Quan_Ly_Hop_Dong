@@ -52,8 +52,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   objPdfProperties: any = {
     pages: [],
   };
-  confirmConsider = 1;
-  confirmSignature = 1;
+  confirmConsider = null;
+  confirmSignature = null;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -98,6 +98,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   isChangeText: boolean = false;
   loaded: boolean = false;
   allFileAttachment: any[];
+  allRelateToContract: any[];
 
   isPartySignature: any = [
     {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
@@ -170,6 +171,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }*/
       this.datas = this.data_contract;
       this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
+      this.allRelateToContract = this.datas.is_data_contract.refs;
       this.checkIsViewContract();
 
       this.datas.is_data_object_signature.forEach((element: any) => {
@@ -413,7 +415,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
     }
-    style.backgroundColor = d.value ? '' : '#EBF8FF';
+    style.backgroundColor = d.valueSign ? '' : '#EBF8FF';
+    style.display = ((this.confirmConsider && this.confirmConsider == 1) || (this.confirmSignature && this.confirmSignature == 1)) ? '' : 'none';
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";
     }
@@ -437,9 +440,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
 // hàm stype đối tượng boder kéo thả
   changeColorDrag(role: any, valueSign: any, isDaKeo?: any) {
-    if (isDaKeo && !valueSign.value) {
+    if (isDaKeo && !valueSign.valueSign) {
       return 'ck-da-keo';
-    } else if (!valueSign.value) {
+    } else if (!valueSign.valueSign) {
       return 'employer-ck';
     } else {
       return '';
@@ -623,6 +626,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   }
 
   async submitEvents(e: any) {
+    if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
+      this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng', '', 1000);
+      return;
+    }
     if (e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
@@ -641,7 +648,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }).then((result) => {
         if (result.isConfirmed) {
           if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-            const signD = this.isDataObjectSignature.find((item: any) => item.type == 3 && item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && !item.value);
+            const signD = this.isDataObjectSignature.find((item: any) => item.type == 3 && item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && !item.valueSign);
             if (signD) {
               this.signDigitalDocument();
             } else {
@@ -801,7 +808,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
             signDigital.Serial = this.signCertDigital.Serial;
             this.contractService.getDataFileUrl(fileC).subscribe(
               (data) => {
-                signDigital.valueBase64 = btoa(
+                signDigital.valueSignBase64 = btoa(
                   new Uint8Array(data)
                     .reduce((data, byte) => data + String.fromCharCode(byte), '')
                 );
@@ -839,7 +846,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
         const formData = {
           "name": "image_" + new Date().getTime() + ".jpg",
-          "content": signUpdate.value,
+          "content": signUpdate.valueSign,
           organizationId: this.data_contract?.is_data_contract?.organization_id
         }
         signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
@@ -870,7 +877,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   }
 
   signContract() {
-    const signUpdate = this.isDataObjectSignature.filter(
+    const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
+    const signUpdatePayload = signUpdateTemp.filter(
       (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
       .map((item: any) =>  {
       return {
@@ -880,7 +888,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         font: item.font,
         font_size: item.font_size
       }});
-    this.contractService.updateInfoContractConsider(signUpdate, this.recipientId).subscribe(
+    this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId).subscribe(
       (result) => {
         this.toastService.showSuccessHTMLWithTimeout(
           [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
@@ -931,7 +939,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
-      (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && item.required && !item.value && item.type != 3
+      (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && item.required && !item.valueSign && item.type != 3
     );
     return validSign.length == 0;
   }
