@@ -236,4 +236,46 @@ export class AddUserComponent implements OnInit {
   //     )
   //   }
   }
+
+  fileChangedAttach(e: any) {
+    console.log(e.target.files)
+    let files = e.target.files;
+    for(let i = 0; i < files.length; i++){
+
+      const file = e.target.files[i];
+      if (file) {
+        // giới hạn file upload lên là 5mb
+        if (e.target.files[0].size <= 50000000) {
+          const file_name = file.name;
+          const extension = file.name.split('.').pop();
+          this.handleUpload(e);
+          // this.datas.file_name_attach = file_name;
+          //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
+          // this.datas.attachFile = file;
+          //this.datas.attachFile = e.target.files;
+          console.log(this.datas.attachFile);
+        } else {
+          this.datas.file_name_attach = '';
+          this.datas.attachFile = '';
+          alert('Yêu cầu file nhỏ hơn 50MB');
+          break;
+        }
+      }
+    }
+  }
+  imgSignPCSelect: string;
+  handleUpload(event: any) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      console.log(reader.result);
+      this.imgSignPCSelect = reader.result? reader.result.toString() : '';
+    };
+  }
+
+  addFileAttach() {
+    // @ts-ignore
+    document.getElementById('attachFileSignature').click();
+  }
 }

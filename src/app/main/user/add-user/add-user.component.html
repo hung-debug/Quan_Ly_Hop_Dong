@@ -16,8 +16,8 @@
        </div>
        <div class="col-md-4">
         <div class="label text-color">{{'user.birthday' | translate}}</div>
-        <div class="input-data">
-            <input type="text" formControlName="birthday">
+        <div>
+          <p-calendar formControlName="birthday" [showIcon]="true" dateFormat="dd/mm/yy" ></p-calendar>
         </div>
        </div>
      </div>
@@ -82,15 +82,23 @@
          <div class="label-header">
            {{'sign.file-image' | translate}}
          </div>
-         <div class="content-body">
-           <div class="select-contract container-img-file" >
-             <div class="upload-image-region d-flex flex-column container-img-file-1">
-               <img src="assets/img/img-icon.svg" alt="#" width="50px">
-               <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
-               <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
-             </div>
-           </div>
-         </div>
+        <div class="content-body">
+           <div [hidden]="imgSignPCSelect">
+            <input id="attachFileSignature" type="file" accept=".jpg, .png, .jpge"
+            (change)="fileChangedAttach($event)" style="display: none;"/>
+            <div class="select-contract container-img-file" (click)="addFileAttach()">
+              <div class="upload-image-region d-flex flex-column container-img-file-1">
+                <img src="assets/img/img-icon.svg" alt="#" width="50px">
+                <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
+                <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="image-div">
+            <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;height: 30vh;">
+            <img class="hidden_img" (click)="addFileAttach()" src="assets/img/img-icon.svg" width="30" height="30" />
+          </div>
+        </div>
        </div>
    
        <div class="col-md-4">

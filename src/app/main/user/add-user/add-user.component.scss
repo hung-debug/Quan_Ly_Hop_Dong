@@ -56,7 +56,7 @@
   color: #106DB6;
 }
 .content-body{
-  border: 1px solid #87CAFF;
+  border: 1px solid #106DB6;
   border-radius: 7px;
 }
 .btn-footer{
@@ -77,6 +77,12 @@ hr{
   justify-content: center;
   background: #E9F4FD;
   margin: 10px;
+  border-radius: 10px;
+}
+
+.container-img-file:hover {
+  background: #b4ddff;
+  cursor: pointer;
 }
 
 .container-img-file-1 {
@@ -93,5 +99,40 @@ hr{
   margin-top: 8px;
   color: #ED1C24;
   font-weight: 500;
+}
+:host ::ng-deep {
+  .p-calendar {
+    font-size: 13px !important;
+    font-family: 'font_lexend_deca';
+    width: 100%;
+  }
+  .p-datepicker table td {
+    padding: 0;
+  }
+  .p-calendar-w-btn, .p-calendar-w-btn .p-inputtext {
+    height: 33px;
+  }
+  .p-calendar-w-btn .p-inputtext{
+    border: 1px solid #106DB6 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+.image-div {
+  position: relative;
+  margin:5px;
+}
+.image-div:hover .hidden_img {
+  display: block;
+}
+.hidden_img:hover {
+  cursor: pointer;
+}
+.image-div .hidden_img {
+  position:absolute;
+  top:0;
+  left:0;
+  display:none;
 }
   
