@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
 import { NodeService } from 'src/app/service/node.service';
@@ -21,7 +22,8 @@ export class UserComponent implements OnInit {
 
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private nodeService: NodeService) { }
+    private nodeService: NodeService,
+    public router: Router,) { }
 
   name:any;
   email:any;
@@ -48,21 +50,9 @@ export class UserComponent implements OnInit {
   }
 
   addUnit() {
-    const data = {
-      title: 'THÊM MỚI NGƯỜI DÙNG'
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(AddUserComponent, {
-      width: '580px',
-      backdrop: 'static',
-      keyboard: false,
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
-    })
+    this.router.navigate(['/main/form-user/add']);
   }
+  
   setPage(){
     this.pageStart = (this.p-1)*this.page+1;
     this.pageEnd = (this.p)*this.page;

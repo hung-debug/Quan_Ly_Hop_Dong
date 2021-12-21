@@ -3,17 +3,14 @@ import {UploadService} from './../../../../../service/upload.service';
 import {HttpErrorResponse, HttpEventType, HttpResponse} from '@angular/common/http';
 import {Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {NgbCalendar, NgbDatepicker, NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import {variable} from "../../../../../config/variable";
 import {Observable} from 'rxjs';
 import {AddContractComponent} from "../../../add-contract/add-contract.component";
-import {DatepickerOptions} from 'ng2-datepicker';
-import {getYear} from 'date-fns';
-import locale from 'date-fns/locale/en-US';
 import {DatePipe} from '@angular/common';
 import {Router} from '@angular/router';
 import {ToastService} from 'src/app/service/toast.service';
 import {NgxSpinnerService} from 'ngx-spinner';
+import * as moment from "moment";
 
 export class ContractConnectArr {
   ref_id: number;
@@ -67,7 +64,7 @@ export class InforContractComponent implements OnInit {
   errorContractFile: any = '';
   errorSignTime:any = '';
 
-  minDate:any;
+  minDate:Date = moment().toDate();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -81,31 +78,13 @@ export class InforContractComponent implements OnInit {
     this.step = variable.stepSampleContract.step1;
   }
 
-  // options sample with default values
-  options: DatepickerOptions = {
-    minYear: getYear(new Date()) - 30, // minimum available and selectable year
-    maxYear: getYear(new Date()) + 30, // maximum available and selectable year
-    placeholder: '', // placeholder in case date model is null | undefined, example: 'Please pick a date'
-    format: 'dd/MM/yyyy', // date format to display in input
-    formatTitle: 'MM/yyyy',
-    formatDays: 'EEEEE',
-    firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
-    locale: locale, // date-fns locale
-    position: 'bottom',
-    inputClass: '', // custom input CSS class to be applied
-    calendarClass: 'datepicker-default', // custom datepicker calendar CSS class to be applied
-    scrollBarColor: '#dfe3e9', // in case you customize you theme, here you define scroll bar color
-    // keyboardEvents: true // enable keyboard events
-  };
-
   ngOnInit(): void {
 
     this.name = this.datas.name ? this.datas.name : null;
     this.code = this.datas.code ? this.datas.code : null;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
-    this.sign_time = new Date();
-    this.sign_time = this.datas.sign_time ? this.datas.sign_time : this.sign_time.setDate(this.sign_time.getDate() + 30);
+    this.sign_time = this.datas.sign_time ? this.datas.sign_time : moment(new Date()).add(30, 'day').toDate() ;
     this.notes = this.datas.notes ? this.datas.notes : null;
 
     this.contractService.getContractTypeList().subscribe(data => {

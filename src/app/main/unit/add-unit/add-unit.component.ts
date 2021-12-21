@@ -41,7 +41,7 @@ export class AddUnitComponent implements OnInit {
     }
 
   ngOnInit(): void {
-
+    //lay danh sach to chuc
     this.unitService.getUnitList('', '').subscribe(data => {
       console.log(data.entities);
       this.orgList = data.entities;

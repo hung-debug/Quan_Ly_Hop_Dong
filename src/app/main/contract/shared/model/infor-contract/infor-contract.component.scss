@@ -1,6 +1,6 @@
 ::ng-deep .multiselect-dropdown {
   .dropdown-btn {
-    border: 1px solid #87CAFF !important;
+    border: 1px solid #106DB6 !important;
     min-height: 38px;
     height: auto;
   }
@@ -11,7 +11,7 @@
   height: 37px;
   width: 100%;
   border-radius: 5px;
-  border: 1px solid #87CAFF;
+  border: 1px solid #106DB6;
 }
 //upload file
 input[type="file"] {
@@ -63,7 +63,7 @@ input[type="file"] {
         width: 100%;
         height: 38px;
         border-radius: 5px;
-        border: 1px solid #87CAFF;
+        border: 1px solid #106DB6;
         padding-left: 10px;
         cursor: pointer;
       }
@@ -79,7 +79,7 @@ input[type="file"] {
 
 .file-contract{
   height: 80px;
-  border: 1px solid #87CAFF;
+  border: 1px solid #106DB6;
   cursor: pointer;
   padding: 10px;
   text-align: center;
@@ -87,7 +87,7 @@ input[type="file"] {
 }
 
 .form-control{
-  border: 1px solid #87CAFF;
+  border: 1px solid #106DB6;
 }
 
 button {
@@ -141,28 +141,25 @@ button {
   }
 }
 
-::ng-deep .date-picker {
-  width: 100%;
-  outline:0px;
-  .datepicker-container{
+:host ::ng-deep {
+  .p-calendar {
+    font-size: 13px !important;
+    font-family: 'font_lexend_deca';
     width: 100%;
-    input {
-      display: block !important;
-      width: 100% !important;
-      height: 38px !important;
-      padding: .375rem .75rem !important;
-      font-size: inherit !important;
-      line-height: 1.5 !important;
-      color: #495057 !important;
-      background-color: #fff !important;
-      background-clip: padding-box !important;
-      border: 1px solid #87CAFF !important;
-      border-radius: .25rem !important;
-      transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
-      outline:0px !important;
-    }
+  }
+  .p-datepicker table td {
+    padding: 0;
+  }
+  .p-calendar-w-btn, .p-calendar-w-btn .p-inputtext {
+    height: 33px;
+  }
+  .p-inputtext{
+    border: 1px solid #106DB6 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
   }
 }
+
 
 .error-detail{
   font-size: inherit;

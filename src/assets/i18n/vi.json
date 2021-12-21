@@ -130,12 +130,13 @@
   "user.otp": "OTP",
   "user.phone": "Số điện thoại",
   "user.birthday": "Ngày sinh",
-  "user.network": "Ngày sinh",
+  "user.network": "Nhà mạng",
   "user.information.individual": "Thông tin cá nhân",
   "user.information": "Thông tin tài khoản",
+  "user.name.v2": "Tên người dùng",
 
-  "sign.update" : "Cập nhật chữ ký",
-  "sign.file-image" : "File chữ ký ảnh",
+  "sign.information" : "Thông tin chữ ký",
+  "sign.file-image" : "File ảnh chữ ký",
   "sign.kpi" : "Chữ ký KPI",
   "sign.hsm" : "Chữ ký HSM",
 

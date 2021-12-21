@@ -133,8 +133,9 @@
   "user.network": "Network",
   "user.information.individual": "Personal information",
   "user.information": "Account information",
+  "user.name.v2": "Username",
 
-  "sign.update" : "Update signature",
+  "sign.information" : "Signature information",
   "sign.file-image" : "Image signature file",
   "sign.kpi" : "KPI signature",
   "sign.hsm" : "HSM signature",
