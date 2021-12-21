@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import {environment} from '../../environments/environment';
 
 export interface ContractType {
@@ -17,6 +18,7 @@ export class ContractTypeService {
 
   addContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types`;
   getContractTypeByIdUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
+  listContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/organizations/`;
 
   token:any;
   customer_id:any;
@@ -47,11 +49,19 @@ export class ContractTypeService {
     return this.http.post<ContractType>(this.addContractTypeUrl, body, {'headers': headers});
   }
 
-  getUnitById(id: any) {
+  getContractTypeById(id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.get<ContractType>(this.getContractTypeByIdUrl + id, {headers}).pipe();
+  }
+
+  public getContractTypeList(code:any, name:any): Observable<any> {
+    this.getCurrentUser();
+    let listContractTypeUrl = this.listContractTypeUrl + this.organization_id;
+    console.log(listContractTypeUrl);
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<ContractType[]>(listContractTypeUrl, {headers}).pipe();
   }
 }

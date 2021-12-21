@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
+import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { NodeService } from 'src/app/service/node.service';
+import { DetailContractComponent } from '../contract/detail-contract/detail-contract.component';
 import {AddContractTypeComponent} from './add-contract-type/add-contract-type.component'
+import { DetailContractTypeComponent } from './detail-contract-type/detail-contract-type.component';
 @Component({
   selector: 'app-contract-type',
   templateUrl: './contract-type.component.html',
@@ -11,45 +14,41 @@ import {AddContractTypeComponent} from './add-contract-type/add-contract-type.co
 })
 export class ContractTypeComponent implements OnInit {
 
-  p:number = 1;
-  page:number = 5; 
-  pageStart:number = 0;
-  pageEnd:number = 0;
-  pageTotal:number = 0;
-
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private nodeService: NodeService) { }
+    private contractTypeService: ContractTypeService) { }
 
-  name:any;
-  code:any;
-  files: TreeNode[];
+  code:any = "";
+  name:any = "";
+  list: any[];
   cols: any[];
 
   ngOnInit(): void {
     this.appService.setTitle("DANH SÁCH LOẠI HỢP ĐỒNG");
-    this.nodeService.list().subscribe(response => {
-      console.log(response);
-      this.files = response.data;
-      this.pageTotal = this.files.length;
-      this.setPage();
-    });
-    
-    console.log(this.files);
-      this.cols = [
-      { field: 'name', header: 'Name' },
-      { field: 'size', header: 'Size' },
-      { field: 'type', header: 'Type' }
+    this.searchContractType();
+
+    this.cols = [
+      { field: 'name', header: 'Tên loại hợp đồng', style:'text-align: left;' },
+      { field: 'code', header: 'Mã loại hợp đồng', style:'text-align: left;' },
+      { field: 'id', header: 'Quản lý', style:'text-align: center;' },
       ];
   }
 
-  addUnit() {
+  searchContractType(){
+    this.contractTypeService.getContractTypeList(this.code, this.name).subscribe(response => {
+      console.log(response);
+      this.list = response;
+      console.log(this.list);
+    });
+  }
+
+  addContractType() {
     const data = {
       title: 'THÊM MỚI LOẠI HỢP ĐỒNG'
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AddContractTypeComponent, {
-      width: '400px',
+      width: '480px',
       backdrop: 'static',
       keyboard: false,
       data
@@ -59,12 +58,41 @@ export class ContractTypeComponent implements OnInit {
       let is_data = result
     })
   }
-  setPage(){
-    this.pageStart = (this.p-1)*this.page+1;
-    this.pageEnd = (this.p)*this.page;
-    if(this.pageTotal < this.pageEnd){
-      this.pageEnd = this.pageTotal;
-    }
+
+  editContractType(id:any) {
+    const data = {
+      title: 'CẬP NHẬT THÔNG TIN LOẠI HỢP ĐỒNG',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AddContractTypeComponent, {
+      width: '480px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  detailContractType(id:any) {
+    const data = {
+      title: 'THÔNG TIN LOẠI HỢP ĐỒNG',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DetailContractTypeComponent, {
+      width: '480px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
 }
