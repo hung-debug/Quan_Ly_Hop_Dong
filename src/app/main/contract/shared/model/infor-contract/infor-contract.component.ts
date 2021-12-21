@@ -44,10 +44,8 @@ export class InforContractComponent implements OnInit {
   fileInfosAttach?: Observable<any>;
 
   //dropdown
-  contractTypeList: Array<any> = [];
+  typeList: Array<any> = [];
   contractConnectList: Array<any> = [];
-  dropdownTypeSettings: any = {};
-  dropdownConnectSettings: any = {};
 
   id: any;
   name: any;
@@ -87,34 +85,17 @@ export class InforContractComponent implements OnInit {
     this.sign_time = this.datas.sign_time ? this.datas.sign_time : moment(new Date()).add(30, 'day').toDate() ;
     this.notes = this.datas.notes ? this.datas.notes : null;
 
+    this.convertData(this.datas);
+
     this.contractService.getContractTypeList().subscribe(data => {
       console.log(data);
-      this.contractTypeList = data
+      this.typeList = data
     });
 
-    this.contractService.getContractList('', '', '', '', '').subscribe(data => {
+    this.contractService.getContractList('', '', '', '', 30).subscribe(data => {
       console.log(data.entities);
       this.contractConnectList = data.entities;
     });
-
-    this.dropdownTypeSettings = {
-      singleSelection: true,
-      idField: "id",
-      textField: "name",
-      selectAllText: "Chọn tất cả",
-      unSelectAllText: "Bỏ chọn tất cả",
-      allowSearchFilter: true
-    };
-
-    this.dropdownConnectSettings = {
-      singleSelection: false,
-      idField: "id",
-      textField: "name",
-      selectAllText: "Chọn tất cả",
-      unSelectAllText: "Bỏ chọn tất cả",
-      allowSearchFilter: true,
-      itemsShowLimit: 2,
-    };
   }
 
   fileChanged(e: any) {
@@ -188,14 +169,6 @@ export class InforContractComponent implements OnInit {
   addFileAttach() {
     // @ts-ignore
     document.getElementById('attachFile').click();
-  }
-
-  //dropdown contract type
-  get getContractTypeItems() {
-    return this.contractTypeList.reduce((acc, curr) => {
-      acc[curr.item_id] = curr;
-      return acc;
-    }, {});
   }
 
   //dropdown contract connect
@@ -352,6 +325,20 @@ export class InforContractComponent implements OnInit {
 
   }
 
+  convertData(datas:any){
+    console.log(this.datas.contractConnect);
+    if(this.datas.contractConnect != null && this.datas.contractConnect != ''){
+      const array_empty: any [] = [];
+      this.datas.contractConnect.forEach((element: any, index: number) => {
+        console.log(element);
+        const data = element.ref_id;
+        array_empty.push(data);
+      })
+      this.contractConnect = array_empty;
+      console.log(array_empty);
+    }
+  }
+
   defineData(datas:any){
     this.datas.name = this.name;
     this.datas.sign_time = this.sign_time;
@@ -361,24 +348,19 @@ export class InforContractComponent implements OnInit {
     if(this.datas.notes == ''){
       this.datas.notes = null;
     }
-
-    console.log(this.type_id);
-    if(this.type_id != null && this.type_id != ''){
-      this.type_id.forEach((element: any, index: number) => {
-        this.datas.type_id = element.id;
-      })
-    }
-
+    this.datas.type_id = this.type_id;
 
     console.log(this.contractConnect);
     if(this.contractConnect != null && this.contractConnect != ''){
       const array_empty: ContractConnectArr[] = [];
       this.contractConnect.forEach((element: any, index: number) => {
-        const data = new ContractConnectArr(element.id);
+        const data = new ContractConnectArr(element);
         array_empty.push(data);
       })
       this.datas.contractConnect = array_empty;
       console.log(array_empty);
+    }else{
+      this.datas.contractConnect = null;
     }
   }
 

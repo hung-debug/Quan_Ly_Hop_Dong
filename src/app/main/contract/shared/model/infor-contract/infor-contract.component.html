@@ -61,16 +61,17 @@
       <div class="form-group">
         <div class="label_item">{{'contract.type' | translate}}</div>
         <div>
-          <ng-multiselect-dropdown [(ngModel)]="type_id" placeholder="{{'choose' | translate }}"
-            [settings]="dropdownTypeSettings" [data]="contractTypeList">
-            <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
-              <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
-                <label style="color: #333; font-weight: normal;"
-                  [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractTypeItems[id].isDisabled? 'lightgrey': ''}">{{getContractTypeItems[id].name}}
-                </label>
-              </div>
-            </ng-template>
-          </ng-multiselect-dropdown>
+          <p-dropdown 
+            panelStyleClass="font"
+            [options]="typeList" 
+            [(ngModel)]="type_id" 
+            optionLabel="name" 
+            optionValue="id" 
+            placeholder="Chọn loại hợp đồng" 
+            [filter]="true" 
+            filterBy="name" 
+            [showClear]="true"  
+            ></p-dropdown>
         </div>
       </div>
     </div>
@@ -81,7 +82,7 @@
       <div class="form-group">
         <div class="label_item">{{'contract.connect' | translate}}</div>
         <div>
-          <ng-multiselect-dropdown id="contractConnect" [(ngModel)]="contractConnect" placeholder="{{'choose' | translate }}"
+          <!-- <ng-multiselect-dropdown id="contractConnect" [(ngModel)]="contractConnect" placeholder="{{'choose' | translate }}"
             [settings]="dropdownConnectSettings" [data]="contractConnectList">
             <ng-template #optionsTemplate let-item let-option="option"
               let-id="id" let-isSelected="isSelected">
@@ -92,7 +93,8 @@
                 </label>
               </div>
             </ng-template>
-          </ng-multiselect-dropdown>
+          </ng-multiselect-dropdown> -->
+          <p-multiSelect styleClass="font" [options]="contractConnectList" [(ngModel)]="contractConnect" optionLabel="name" optionValue="id" display="chip" placeholder="Chọn hợp đồng" ></p-multiSelect>
         </div>
       </div>
     </div>
@@ -135,7 +137,7 @@
         <p class="alert alert-danger error-detail" role="alert" *ngIf="errorSignTime!=''">
           {{errorSignTime}}
         </p>
-      </div>
+      </div> 
     </div>
   </div>
 </div>

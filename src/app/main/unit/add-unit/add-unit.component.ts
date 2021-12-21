@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-add-unit',
@@ -26,7 +27,8 @@ export class AddUnitComponent implements OnInit {
     private toastService : ToastService,
     public dialogRef: MatDialogRef<AddUnitComponent>,
     public router: Router,
-    public dialog: MatDialog,) { 
+    public dialog: MatDialog,
+    private userService : UserService,) { 
 
       this.addForm = this.fbd.group({
         nameOrg: this.fbd.control("", [Validators.required]),
@@ -44,7 +46,9 @@ export class AddUnitComponent implements OnInit {
     //lay danh sach to chuc
     this.unitService.getUnitList('', '').subscribe(data => {
       console.log(data.entities);
-      this.orgList = data.entities;
+      let orgId = this.userService.getInforUser();
+      console.log(orgId);
+      this.orgList = data.entities.filter((i: any) => (i.id == orgId || i.parent_id == orgId));
     });
 
     this.datas = this.data;
