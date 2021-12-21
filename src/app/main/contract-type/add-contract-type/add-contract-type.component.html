@@ -9,6 +9,9 @@
                 <div class="input-data">
                     <input type="text" formControlName="code" autofocus>
                 </div>
+                <div *ngIf="submitted && f.code.errors" class="invalid">
+                    <div *ngIf="f.code.errors.required">Mã loại hợp đồng không được để trống</div>
+                </div>
             </div>
         </div>
 
@@ -17,6 +20,9 @@
                 <div class="label text-color">Tên loại hợp đồng <span class="required-title">*</span></div>
                 <div class="input-data">
                     <input type="text" formControlName="name">
+                </div>
+                <div *ngIf="submitted && f.name.errors" class="invalid">
+                    <div *ngIf="f.name.errors.required">Tên loại hợp đồng không được để trống</div>
                 </div>
             </div>
         </div>

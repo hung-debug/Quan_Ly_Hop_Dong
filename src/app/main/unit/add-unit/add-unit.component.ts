@@ -17,8 +17,8 @@ export class AddUnitComponent implements OnInit {
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
-
-  
+  submitted = false;
+  get f() { return this.addForm.controls; }
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -34,20 +34,19 @@ export class AddUnitComponent implements OnInit {
         nameOrg: this.fbd.control("", [Validators.required]),
         short_name: this.fbd.control("", [Validators.required]),
         code: this.fbd.control("", [Validators.required]),
-        email: this.fbd.control("", [Validators.required]),
+        email: this.fbd.control("", [Validators.required, Validators.email]),
         phone: this.fbd.control("", [Validators.required]),
         fax: null,
         status: 1,
-        parent_id: null,
+        parent_id: this.fbd.control("", [Validators.required]),
       });
     }
 
   ngOnInit(): void {
+    let orgId = this.userService.getInforUser().organization_id;
     //lay danh sach to chuc
     this.unitService.getUnitList('', '').subscribe(data => {
       console.log(data.entities);
-      let orgId = this.userService.getInforUser();
-      console.log(orgId);
       this.orgList = data.entities.filter((i: any) => (i.id == orgId || i.parent_id == orgId));
     });
 
@@ -61,11 +60,11 @@ export class AddUnitComponent implements OnInit {
             nameOrg: this.fbd.control(data.name, [Validators.required]),
             short_name: this.fbd.control(data.short_name, [Validators.required]),
             code: this.fbd.control(data.code, [Validators.required]),
-            email: this.fbd.control(data.email, [Validators.required]),
+            email: this.fbd.control(data.email, [Validators.required, Validators.email]),
             phone: this.fbd.control(data.phone, [Validators.required]),
             fax: this.fbd.control(data.fax),
             status: this.fbd.control(data.status),
-            parent_id: this.fbd.control(data.parent_id),
+            parent_id: this.fbd.control(data.parent_id, [Validators.required]),
           });
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
@@ -78,16 +77,21 @@ export class AddUnitComponent implements OnInit {
         nameOrg: this.fbd.control("", [Validators.required]),
         short_name: this.fbd.control("", [Validators.required]),
         code: this.fbd.control("", [Validators.required]),
-        email: this.fbd.control("", [Validators.required]),
+        email: this.fbd.control("", [Validators.required, Validators.email]),
         phone: this.fbd.control("", [Validators.required]),
         fax: null,
         status: 1,
-        parent_id: null,
+        parent_id: this.fbd.control(orgId, [Validators.required]),
       });
     }
   }
 
   onSubmit() {
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.addForm.invalid) {
+      return;
+    }
     const data = {
       id: "",
       name: this.addForm.value.nameOrg,

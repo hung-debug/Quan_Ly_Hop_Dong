@@ -9,6 +9,9 @@
                 <div class="input-data">
                     <input type="text" formControlName="nameOrg">
                 </div>
+                <div *ngIf="submitted && f.nameOrg.errors" class="invalid">
+                    <div *ngIf="f.nameOrg.errors.required">Tên tổ chức không được để trống</div>
+                </div>
             </div>
         
             <div class="col-md-6">
@@ -16,7 +19,9 @@
                 <div class="input-data">
                     <input type="text" formControlName="short_name">
                 </div>
-               
+                <div *ngIf="submitted && f.short_name.errors" class="invalid">
+                    <div *ngIf="f.short_name.errors.required">Tên viết tắt không được để trống</div>
+                </div>
             </div>
         </div>
 
@@ -26,6 +31,9 @@
                 <div class="input-data">
                     <input type="text" formControlName="code">
                 </div>
+                <div *ngIf="submitted && f.code.errors" class="invalid">
+                    <div *ngIf="f.code.errors.required">Mã tổ chức không được để trống</div>
+                </div>
             </div>
         
             <div class="col-md-6">
@@ -33,12 +41,16 @@
                 <div class="input-data">
                     <input type="text" formControlName="email">
                 </div>
+                <div *ngIf="submitted && f.email.errors" class="invalid">
+                    <div *ngIf="f.email.errors.required">Email không được để trống</div>
+                    <div *ngIf="f.email.errors.email">Email không đúng định dạng</div>
+                </div>
             </div>
         </div>
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label text-color">Tổ chức cấp trên</div>
+                <div class="label text-color">Tổ chức cấp trên <span class="required-title">*</span></div>
                 <div>
                     <p-dropdown 
                         panelStyleClass="font"
@@ -53,12 +65,18 @@
                         [showClear]="true"  
                         ></p-dropdown>
                 </div>
+                <div *ngIf="submitted && f.parent_id.errors" class="invalid">
+                    <div *ngIf="f.parent_id.errors.required">Tổ chức cấp trên không được để trống</div>
+                </div>
             </div>
         
             <div class="col-md-6">
                 <div class="label text-color">Số điện thoại <span class="required-title">*</span></div>
                 <div class="input-data">
-                    <input type="text" formControlName="phone">
+                    <input type="number" formControlName="phone">
+                </div>
+                <div *ngIf="submitted && f.phone.errors" class="invalid">
+                    <div *ngIf="f.phone.errors.required">Số điện thoại không được để trống</div>
                 </div>
             </div>
         </div>

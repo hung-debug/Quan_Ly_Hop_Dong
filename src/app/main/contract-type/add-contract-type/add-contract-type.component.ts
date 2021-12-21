@@ -15,6 +15,10 @@ export class AddContractTypeComponent implements OnInit {
 
   addForm: FormGroup;
   datas: any;
+
+  submitted = false;
+  get f() { return this.addForm.controls; }
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
@@ -54,6 +58,11 @@ export class AddContractTypeComponent implements OnInit {
   }
 
   onSubmit() {
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.addForm.invalid) {
+      return;
+    }
     const data = {
       name: this.addForm.value.name,
       code: this.addForm.value.code,

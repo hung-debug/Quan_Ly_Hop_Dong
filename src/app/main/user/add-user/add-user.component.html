@@ -7,11 +7,18 @@
           <div class="input-data">
               <input type="text" formControlName="name">
           </div>
+          <div *ngIf="submitted && f.name.errors" class="invalid">
+            <div *ngIf="f.name.errors.required">Họ tên không được để trống</div>
+          </div>
        </div>
        <div class="col-md-4">
           <div class="label text-color">{{'user.email' | translate}} <span class="required-title">*</span></div>
           <div class="input-data">
               <input type="text" formControlName="email">
+          </div>
+          <div *ngIf="submitted && f.email.errors" class="invalid">
+            <div *ngIf="f.email.errors.required">Email không được để trống</div>
+            <div *ngIf="f.email.errors.email">Email không đúng định dạng</div>
           </div>
        </div>
        <div class="col-md-4">
@@ -26,24 +33,30 @@
        <div class="col-md-4">
           <div class="label text-color">{{'user.phone' | translate}} <span class="required-title">*</span></div>
           <div class="input-data">
-              <input type="text" formControlName="phone">
+              <input type="number" formControlName="phone">
+          </div>
+          <div *ngIf="submitted && f.phone.errors" class="invalid">
+            <div *ngIf="f.phone.errors.required">Số điện thoại không được để trống</div>
           </div>
        </div>
        <div class="col-md-4">
          <div class="label text-color">{{'organization' | translate}} <span class="required-title">*</span></div>
          <div>
           <p-dropdown 
-          panelStyleClass="font"
-          [options]="orgList" 
-          formControlName="organizationId" 
-          optionLabel="name" 
-          optionValue="id" 
-          placeholder="Chọn tổ chức" 
-          [filter]="true" 
-          filterBy="name" 
-          [showClear]="true"  
-          ></p-dropdown>
+            panelStyleClass="font"
+            [options]="orgList" 
+            formControlName="organizationId" 
+            optionLabel="name" 
+            optionValue="id" 
+            placeholder="Chọn tổ chức" 
+            [filter]="true" 
+            filterBy="name" 
+            [showClear]="true"  
+            ></p-dropdown>
          </div>
+          <div *ngIf="submitted && f.organizationId.errors" class="invalid">
+            <div *ngIf="f.organizationId.errors.required">Tổ chức không được để trống</div>
+          </div>
        </div>
        <div class="col-md-4">
         <div class="label text-color">Vai trò <span class="required-title">*</span></div>
@@ -59,6 +72,9 @@
          filterBy="name" 
          [showClear]="true"  
          ></p-dropdown>
+        </div>
+        <div *ngIf="submitted && f.role.errors" class="invalid">
+          <div *ngIf="f.role.errors.required">Vai trò không được để trống</div>
         </div>
       </div>
      </div>

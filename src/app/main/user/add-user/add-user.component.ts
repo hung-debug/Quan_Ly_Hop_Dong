@@ -15,79 +15,9 @@ import { UnitService } from 'src/app/service/unit.service';
   styleUrls: ['./add-user.component.scss']
 })
 export class AddUserComponent implements OnInit {
-
-  // addForm: FormGroup;
-  // datas: any;
-  // constructor(
-  //   @Inject(MAT_DIALOG_DATA) public data: any,
-  //   private fbd: FormBuilder,
-  //   private userService : UserService,
-  //   private toastService : ToastService,
-  //   public dialogRef: MatDialogRef<AddUserComponent>,
-  //   public router: Router,
-  //   public dialog: MatDialog,) { }
-
-  // // options sample with default values
-  // options: DatepickerOptions = {
-  //   minYear: getYear(new Date()) - 30, // minimum available and selectable year
-  //   maxYear: getYear(new Date()) + 30, // maximum available and selectable year
-  //   placeholder: '', // placeholder in case date model is null | undefined, example: 'Please pick a date'
-  //   format: 'dd/MM/yyyy', // date format to display in input
-  //   formatTitle: 'MM/yyyy',
-  //   formatDays: 'EEEEE',
-  //   firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
-  //   locale: locale, // date-fns locale
-  //   position: 'bottom',
-  //   inputClass: '', // custom input CSS class to be applied
-  //   calendarClass: 'datepicker-default', // custom datepicker calendar CSS class to be applied
-  //   scrollBarColor: '#dfe3e9', // in case you customize you theme, here you define scroll bar color
-  //   // keyboardEvents: true // enable keyboard events
-  // };
-
-  // ngOnInit(): void {
-  //   this.datas = this.data;
-  //   this.addForm = this.fbd.group({
-  //     name: this.fbd.control("", [Validators.required]),
-  //     email: this.fbd.control("", [Validators.required]),
-  //     phone: this.fbd.control("", [Validators.required]),
-  //     organizationId: null,
-  //     birthday: null,
-  //     role: null,
-  //     status: 1,
-  //   });
-  // }
-
-  // onSubmit() {
-  //   const data = {
-  //     name: this.addForm.value.name,
-  //     email: this.addForm.value.email,
-  //     phone: this.addForm.value.phone,
-  //     organizationId: this.addForm.value.organizationId,
-  //     birthday: this.addForm.value.birthday,
-  //     role: this.addForm.value.role,
-  //     status: this.addForm.value.status,
-  //   }
-  //   this.userService.addUser(data).subscribe(
-  //     data => {
-  //       this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng thành công!', "", 1000);
-  //       this.dialogRef.close();
-  //       this.router.navigate(['/main/unit']);
-  //     }, error => {
-  //       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
-  //     }
-  //   )
-  // }
-  user:any;
-  name:any;
-  email:any;
-  phone:any;
-  birthday:any;
-  organization_name:any;
-
-  phoneKpi:any;
-  networkKpi:any;
-
-  nameHsm:any;
+  
+  submitted = false;
+  get f() { return this.addForm.controls; }
 
   action: string;
   private sub: any;
@@ -108,7 +38,7 @@ export class AddUserComponent implements OnInit {
     ) {
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required]),
-        email: this.fbd.control("", [Validators.required]),
+        email: this.fbd.control("", [Validators.required, Validators.email]),
         birthday: null,
         phone: this.fbd.control("", [Validators.required]),
         organizationId: this.fbd.control("", [Validators.required]),
@@ -138,7 +68,7 @@ export class AddUserComponent implements OnInit {
 
         this.addForm = this.fbd.group({
           name: this.fbd.control("", [Validators.required]),
-          email: this.fbd.control("", [Validators.required]),
+          email: this.fbd.control("", [Validators.required, Validators.email]),
           birthday: null,
           phone: this.fbd.control("", [Validators.required]),
           organizationId: this.fbd.control("", [Validators.required]),
@@ -157,14 +87,18 @@ export class AddUserComponent implements OnInit {
         this.unitService.getUnitById(id).subscribe(
           data => {
             this.addForm = this.fbd.group({
-              name: this.fbd.control(data.name, [Validators.required]),
-              short_name: this.fbd.control(data.short_name, [Validators.required]),
-              code: this.fbd.control(data.code, [Validators.required]),
-              email: this.fbd.control(data.email, [Validators.required]),
-              phone: this.fbd.control(data.phone, [Validators.required]),
-              fax: this.fbd.control(data.fax),
-              status: this.fbd.control(data.status),
-              parent_id: this.fbd.control(data.parent_id),
+              name: this.fbd.control("", [Validators.required]),
+              email: this.fbd.control("", [Validators.required, Validators.email]),
+              birthday: null,
+              phone: this.fbd.control("", [Validators.required]),
+              organizationId: this.fbd.control("", [Validators.required]),
+              role: this.fbd.control("", [Validators.required]),
+              status: 1,
+    
+              phoneKpi: null,
+              networkKpi: null,
+    
+              nameHsm: null
             });
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
@@ -197,6 +131,11 @@ export class AddUserComponent implements OnInit {
   }
 
   onSubmit() {
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.addForm.invalid) {
+      return;
+    }
     const data = {
       id: "",
       name: this.addForm.value.nameOrg,
