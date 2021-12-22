@@ -73,7 +73,7 @@
             <div class="col-md-6">
                 <div class="label text-color">Số điện thoại <span class="required-title">*</span></div>
                 <div class="input-data">
-                    <input type="number" formControlName="phone">
+                    <input type="text" formControlName="phone">
                 </div>
                 <div *ngIf="submitted && f.phone.errors" class="invalid">
                     <div *ngIf="f.phone.errors.required">Số điện thoại không được để trống</div>

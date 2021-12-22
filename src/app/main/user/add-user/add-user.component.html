@@ -33,7 +33,7 @@
        <div class="col-md-4">
           <div class="label text-color">{{'user.phone' | translate}} <span class="required-title">*</span></div>
           <div class="input-data">
-              <input type="number" formControlName="phone">
+              <input type="text" formControlName="phone">
           </div>
           <div *ngIf="submitted && f.phone.errors" class="invalid">
             <div *ngIf="f.phone.errors.required">Số điện thoại không được để trống</div>
@@ -111,7 +111,7 @@
             </div>
           </div>
           <div class="image-div">
-            <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;height: 30vh;">
+            <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
             <img class="hidden_img" (click)="addFileAttach()" src="assets/img/img-icon.svg" width="30" height="30" />
           </div>
         </div>

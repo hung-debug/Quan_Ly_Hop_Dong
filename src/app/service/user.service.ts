@@ -5,7 +5,18 @@ import { map, catchError, retry } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 export interface User {
-  status: string
+  id: any,
+  name: any,
+  email: any,
+  phone: any,
+  birthday: any,
+  status: any,
+  phone_sign: any,
+  phone_tel: any,
+  sign_image: any,
+  hsm_name: any,
+  type_id: any,
+  organization_id: any
 }
 
 @Injectable({
@@ -16,8 +27,9 @@ export class UserService {
   forgotPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/request`;
   resetPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/recover`;
   resetPasswordTokenUrl:any = `${environment.apiUrl}/api/v1/customers/changePassword`;
-  addUserUrl:any = `${environment.apiUrl}/api/v1/customer`;
-  getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customer`;
+  addUserUrl:any = `${environment.apiUrl}/api/v1/customers`;
+  getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customers/`;
+  listUserUrl:any = `${environment.apiUrl}/api/v1/customers/search`;
 
   token:any;
   customer_id:any;
@@ -113,10 +125,18 @@ export class UserService {
       name: datas.name,
       email: datas.email,
       phone: datas.phone,
-      organizationId: datas.organizationId,
+      organization_id: datas.organizationId,
       birthday: datas.birthday,
-      role: datas.role,
+      //role: datas.role,
       status: datas.status,
+      type_id: 1,
+
+      sign_image: [{"bucket":"default-bucket", "path": "2021/22/12/namtv1.png"}],
+
+      phone_sign: datas.phoneKpi,
+      phone_tel: 1,
+
+      hsm_name: datas.nameHsm
     });
     console.log(headers);
     console.log(body);
@@ -128,12 +148,17 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = JSON.stringify({
-      
-    });
+    
     console.log(headers);
-    console.log(body);
-    return this.http.post<User>(this.getUserByIdUrl, body, {'headers': headers});
+    return this.http.get<User>(this.getUserByIdUrl + id, {'headers': headers});
+  }
+
+  public getUserList(filter_organization_id: any, filter_email: any): Observable<any> {
+    this.getCurrentUser();
+ 
+    let listUserUrl = this.listUserUrl + '?name=&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email + "&size=1000";
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<User[]>(listUserUrl, {headers}).pipe();
   }
 
   // Error handling

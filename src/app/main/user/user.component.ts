@@ -7,6 +7,7 @@ import { NodeService } from 'src/app/service/node.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { AddUserComponent } from './add-user/add-user.component';
+import { DetailUserComponent } from './detail-user/detail-user.component';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -14,51 +15,47 @@ import { AddUserComponent } from './add-user/add-user.component';
 })
 export class UserComponent implements OnInit {
 
-  p:number = 1;
-  page:number = 5; 
-  pageStart:number = 0;
-  pageEnd:number = 0;
-  pageTotal:number = 0;
-
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private nodeService: NodeService,
-    public router: Router,) { }
+    private userService: UserService,
+    private router : Router,) { }
 
-  name:any;
-  email:any;
-  phone:any;
-  files: TreeNode[];
+  organization_id:any = "";
+  email:any = "";
+  list: any[];
   cols: any[];
 
   ngOnInit(): void {
-    this.appService.setTitle("DANH SÁCH NGƯỜI DÙNG");
-    this.nodeService.list().subscribe(response => {
-      console.log(response);
-      this.files = response.data;
-      this.pageTotal = this.files.length;
-      console.log(this.files);
-      this.setPage();
-    });
-    
-    console.log(this.files);
-      this.cols = [
-      { field: 'name', header: 'Name' },
-      { field: 'size', header: 'Size' },
-      { field: 'type', header: 'Type' }
+    this.appService.setTitle("DANH SÁCH TỔ CHỨC");
+    this.searchUser();
+
+    this.cols = [
+      { field: 'name', header: 'Họ và tên', style:'text-align: left;' },
+      { field: 'email', header: 'Email', style:'text-align: left;' },
+      { field: 'phone', header: 'Số điện thoại', style:'text-align: left;' },
+      { field: 'organization_id', header: 'Tổ chức', style:'text-align: left;' },
+      { field: 'status', header: 'Trạng thái', style:'text-align: left;' },
+      { field: 'type_id', header: 'Vai trò', style:'text-align: left;' },
+      { field: 'id', header: 'Quản lý', style:'text-align: center;' },
       ];
   }
 
-  addUnit() {
-    this.router.navigate(['/main/form-user/add']);
-  }
-  
-  setPage(){
-    this.pageStart = (this.p-1)*this.page+1;
-    this.pageEnd = (this.p)*this.page;
-    if(this.pageTotal < this.pageEnd){
-      this.pageEnd = this.pageTotal;
-    }
+  searchUser(){
+    this.userService.getUserList(this.organization_id, this.email).subscribe(response => {
+      console.log(response);
+      this.list = response.entities;
+      console.log(this.list);
+    });
   }
 
+  addUser() {
+    this.router.navigate(['/main/form-user/add']);
+  }
+
+  editUnit(id:any) {
+  }
+
+  detailUser(id:any) {
+    this.router.navigate(['/main/user-detail/' + id]);
+  }
 }

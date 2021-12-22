@@ -21,6 +21,7 @@ export class AddUserComponent implements OnInit {
 
   action: string;
   private sub: any;
+  id:any;
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
@@ -138,42 +139,42 @@ export class AddUserComponent implements OnInit {
     }
     const data = {
       id: "",
-      name: this.addForm.value.nameOrg,
-      short_name: this.addForm.value.short_name,
-      code: this.addForm.value.code,
+      name: this.addForm.value.name,
       email: this.addForm.value.email,
+      birthday: this.addForm.value.birthday,
       phone: this.addForm.value.phone,
-      fax: this.addForm.value.fax,
+      organizationId: this.addForm.value.organizationId,
+      role: this.addForm.value.role,
       status: this.addForm.value.status,
-      parent_id: this.addForm.value.parent_id,
+      phoneKpi: this.addForm.value.phoneKpi,
+      networkKpi: this.addForm.value.networkKpi,
+      nameHsm: this.addForm.value.nameHsm,
     }
-  //   console.log(data);
-  //   if(this.data.id !=null){
-  //     data.id = this.data.id;
-  //     this.unitService.updateUnit(data).subscribe(
-  //       data => {
-  //         this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 1000);
-  //         this.dialogRef.close();
-  //         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-  //           this.router.navigate(['/main/unit']);
-  //         });
-  //       }, error => {
-  //         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
-  //       }
-  //     )
-  //   }else{
-  //     this.unitService.addUnit(data).subscribe(
-  //       data => {
-  //         this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 1000);
-  //         this.dialogRef.close();
-  //         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-  //           this.router.navigate(['/main/unit']);
-  //         });
-  //       }, error => {
-  //         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
-  //       }
-  //     )
-  //   }
+    console.log(data);
+    if(this.id !=null){
+      data.id = this.id;
+      this.unitService.updateUnit(data).subscribe(
+        data => {
+          this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 1000);
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/user']);
+          });
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+        }
+      )
+    }else{
+      this.userService.addUser(data).subscribe(
+        data => {
+          this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 1000);
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/user']);
+          });
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+        }
+      )
+    }
   }
 
   fileChangedAttach(e: any) {
