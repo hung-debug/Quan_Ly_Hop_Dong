@@ -52,7 +52,8 @@ export class UserComponent implements OnInit {
     this.router.navigate(['/main/form-user/add']);
   }
 
-  editUnit(id:any) {
+  editUser(id:any) {
+    this.router.navigate(['/main/form-user/edit/' + id]);
   }
 
   detailUser(id:any) {

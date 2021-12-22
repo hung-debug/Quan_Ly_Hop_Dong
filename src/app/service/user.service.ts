@@ -28,6 +28,7 @@ export class UserService {
   resetPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/recover`;
   resetPasswordTokenUrl:any = `${environment.apiUrl}/api/v1/customers/changePassword`;
   addUserUrl:any = `${environment.apiUrl}/api/v1/customers`;
+  updateUserUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   listUserUrl:any = `${environment.apiUrl}/api/v1/customers/search`;
 
@@ -127,11 +128,10 @@ export class UserService {
       phone: datas.phone,
       organization_id: datas.organizationId,
       birthday: datas.birthday,
-      //role: datas.role,
       status: datas.status,
       type_id: 1,
 
-      sign_image: [{"bucket":"default-bucket", "path": "2021/22/12/namtv1.png"}],
+      sign_image: [],
 
       phone_sign: datas.phoneKpi,
       phone_tel: 1,
@@ -141,6 +141,32 @@ export class UserService {
     console.log(headers);
     console.log(body);
     return this.http.post<User>(this.addUserUrl, body, {'headers': headers});
+  }
+
+  updateUser(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: datas.name,
+      email: datas.email,
+      phone: datas.phone,
+      organization_id: datas.organizationId,
+      birthday: datas.birthday,
+      status: datas.status,
+      type_id: 1,
+
+      sign_image: [],
+
+      phone_sign: datas.phoneKpi,
+      phone_tel: 1,
+
+      hsm_name: datas.nameHsm
+    });
+    console.log(headers);
+    console.log(body);
+    return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
   }
 
   getUserById(id:any){

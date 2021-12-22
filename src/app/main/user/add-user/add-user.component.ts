@@ -85,21 +85,21 @@ export class AddUserComponent implements OnInit {
         let id = params['id'];
         this.appService.setTitle('CẬP NHẬT THÔNG TIN NGƯỜI DÙNG');
 
-        this.unitService.getUnitById(id).subscribe(
+        this.userService.getUserById(id).subscribe(
           data => {
             this.addForm = this.fbd.group({
-              name: this.fbd.control("", [Validators.required]),
-              email: this.fbd.control("", [Validators.required, Validators.email]),
-              birthday: null,
-              phone: this.fbd.control("", [Validators.required]),
-              organizationId: this.fbd.control("", [Validators.required]),
-              role: this.fbd.control("", [Validators.required]),
-              status: 1,
-    
-              phoneKpi: null,
-              networkKpi: null,
-    
-              nameHsm: null
+              name: this.fbd.control(data.name, [Validators.required]),
+              email: this.fbd.control(data.email, [Validators.required, Validators.email]),
+              birthday: data.birthday,
+              phone: this.fbd.control(data.phone, [Validators.required]),
+              organizationId: this.fbd.control(data.organization_id, [Validators.required]),
+              role: this.fbd.control(data.type_id, [Validators.required]),
+              status: data.status,
+
+              phoneKpi: data.phone_sign,
+              networkKpi: data.phone_tel,
+
+              nameHsm: data.hsm_name
             });
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
@@ -153,7 +153,7 @@ export class AddUserComponent implements OnInit {
     console.log(data);
     if(this.id !=null){
       data.id = this.id;
-      this.unitService.updateUnit(data).subscribe(
+      this.userService.updateUser(data).subscribe(
         data => {
           this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 1000);
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {

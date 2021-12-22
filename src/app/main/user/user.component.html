@@ -35,15 +35,15 @@
               <td>{{list.status}}</td>
               <td>{{list.type_id}}</td>
               <td style="text-align: center">
-                <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUnit(list.id)" style="cursor: pointer;"/>
+                <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
               </td>
           </tr>
       </ng-template>
       <ng-template pTemplate="paginatorleft" let-state>
-        <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
       </ng-template>
       <ng-template pTemplate="paginatorright" let-state>
-        <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
       </ng-template> 
     </p-table>
   </div>

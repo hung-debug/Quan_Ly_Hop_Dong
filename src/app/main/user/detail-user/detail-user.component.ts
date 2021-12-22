@@ -22,7 +22,8 @@ export class DetailUserComponent implements OnInit {
   phoneKpi:any="";
   networkKpi:any="";
 
-  nameHsm: null
+  nameHsm:any="";
+  imgSignPCSelect:any
 
   action: string;
   private sub: any;
@@ -55,6 +56,11 @@ export class DetailUserComponent implements OnInit {
           this.organizationId = data.organization_id;
           this.role = data.type_id;
           this.status = data.status;
+
+          this.phoneKpi = data.phone_sign; 
+          this.networkKpi = data.phone_tel;
+
+          this.nameHsm = data.hsm_name;
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
         }

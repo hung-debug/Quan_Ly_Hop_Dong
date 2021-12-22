@@ -39,11 +39,6 @@
     border-radius: 10px;
   }
   
-  .container-img-file:hover {
-    background: #b4ddff;
-    cursor: pointer;
-  }
-  
   .container-img-file-1 {
     justify-content: center;
     align-items: center;
@@ -78,16 +73,6 @@
     }
   }
   
-  .image-div {
-    position: relative;
-    margin:5px;
-  }
-  .image-div:hover .hidden_img {
-    display: block;
-  }
-  .hidden_img:hover {
-    cursor: pointer;
-  }
   .image-div .hidden_img {
     position:absolute;
     top:0;
