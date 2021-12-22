@@ -87,7 +87,7 @@
     width: 50px !important;
   }
 
-  .p-datatable-table, .ng-star-inserted{
+  .p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{
     font-size: 13px;
     font-family: font_lexend_deca;
   }
@@ -95,5 +95,4 @@
     border-width: 0;
   }
 }
-
   

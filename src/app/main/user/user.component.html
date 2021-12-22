@@ -2,8 +2,18 @@
   <div class="row">
     <div class="col-md-3">
       <div>Tổ chức</div>
-      <div class="input-line">
-        <input type="text" [(ngModel)]="organization_id" class="input_text"/>
+      <div>
+        <p-dropdown 
+          panelStyleClass="font"
+          [options]="orgList" 
+          [(ngModel)]="organization_id" 
+          optionLabel="name" 
+          optionValue="id" 
+          placeholder="Chọn tổ chức" 
+          [filter]="true" 
+          filterBy="name" 
+          [showClear]="true"  
+          ></p-dropdown>
       </div>
     </div>
     <div class="col-md-3">
@@ -31,9 +41,9 @@
               <td><a (click)="detailUser(list.id)" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
               <td>{{list.email}}</td>
               <td>{{list.phone}}</td>
-              <td>{{list.organization_id}}</td>
-              <td>{{list.status}}</td>
-              <td>{{list.type_id}}</td>
+              <td>{{list.organization.name}}</td>
+              <td>{{list.status==1?'Hoạt động':'Không hoạt động'}}</td>
+              <td>{{list.type.name}}</td>
               <td style="text-align: center">
                 <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
               </td>

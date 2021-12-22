@@ -25,9 +25,11 @@ export class AddUserComponent implements OnInit {
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
+  networkList: Array<any> = [];
 
   addForm: FormGroup;
   datas: any;
+  attachFile:any;
 
   constructor(private appService: AppService,
     private toastService : ToastService,
@@ -49,7 +51,9 @@ export class AddUserComponent implements OnInit {
         phoneKpi: null,
         networkKpi: null,
 
-        nameHsm: null
+        nameHsm: null,
+
+        fileImage:null
       });
      }
 
@@ -59,6 +63,12 @@ export class AddUserComponent implements OnInit {
       console.log(data.entities);
       this.orgList = data.entities;
     });
+
+    this.networkList = [
+      { id : '1', name: 'Mobifone'},
+      { id : '2', name: 'Viettel'},
+      { id : '3', name: 'Vietnamobile'}
+    ];
 
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
@@ -79,13 +89,15 @@ export class AddUserComponent implements OnInit {
           phoneKpi: null,
           networkKpi: null,
 
-          nameHsm: null
+          nameHsm: null,
+
+          fileImage:null
         });
       } else if (this.action == 'edit') {
-        let id = params['id'];
+        this.id = params['id'];
         this.appService.setTitle('CẬP NHẬT THÔNG TIN NGƯỜI DÙNG');
 
-        this.userService.getUserById(id).subscribe(
+        this.userService.getUserById(this.id).subscribe(
           data => {
             this.addForm = this.fbd.group({
               name: this.fbd.control(data.name, [Validators.required]),
@@ -99,7 +111,9 @@ export class AddUserComponent implements OnInit {
               phoneKpi: data.phone_sign,
               networkKpi: data.phone_tel,
 
-              nameHsm: data.hsm_name
+              nameHsm: data.hsm_name,
+
+              fileImage:data.sign_image
             });
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
@@ -149,6 +163,7 @@ export class AddUserComponent implements OnInit {
       phoneKpi: this.addForm.value.phoneKpi,
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,
+      fileImage: this.addForm.value.fileImage,
     }
     console.log(data);
     if(this.id !=null){
@@ -160,7 +175,7 @@ export class AddUserComponent implements OnInit {
             this.router.navigate(['/main/user']);
           });
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+          this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
         }
       )
     }else{
@@ -171,7 +186,7 @@ export class AddUserComponent implements OnInit {
             this.router.navigate(['/main/user']);
           });
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+          this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 1000);
         }
       )
     }
@@ -189,14 +204,10 @@ export class AddUserComponent implements OnInit {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
           this.handleUpload(e);
-          // this.datas.file_name_attach = file_name;
-          //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
-          // this.datas.attachFile = file;
-          //this.datas.attachFile = e.target.files;
-          console.log(this.datas.attachFile);
+          this.attachFile = file;
+          console.log(this.attachFile);
         } else {
-          this.datas.file_name_attach = '';
-          this.datas.attachFile = '';
+          this.attachFile = null;
           alert('Yêu cầu file nhỏ hơn 50MB');
           break;
         }

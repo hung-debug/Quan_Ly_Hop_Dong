@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 
 @Component({
@@ -39,6 +40,7 @@ export class DetailUserComponent implements OnInit {
     private userService : UserService,
     private route: ActivatedRoute,
     public router: Router,
+    private unitService: UnitService,
     ) {
      }
 
@@ -61,6 +63,17 @@ export class DetailUserComponent implements OnInit {
           this.networkKpi = data.phone_tel;
 
           this.nameHsm = data.hsm_name;
+
+          if(data.organization_id != null){
+            this.unitService.getUnitById(data.organization_id).subscribe(
+              data => {
+                console.log(data);
+                this.organizationId = data.name
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+              }
+            )
+          }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
         }
