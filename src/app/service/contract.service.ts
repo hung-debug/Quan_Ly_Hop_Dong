@@ -37,14 +37,14 @@ export class ContractService {
   listContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
   addContractUrl: any = `${environment.apiUrl}/api/v1/contracts`;
   addDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/contract/`;
+  addDetermineCoorditionUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+  coordinationSuccess: any = `${environment.apiUrl}/api/v1/processes/coordinator/`;
   listContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/organizations/`;
-
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
-
   addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
   addGetFileContract:any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
   addGetObjectSignature:any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
@@ -257,6 +257,27 @@ export class ContractService {
       );
   }
 
+
+  getContractDetermineCoordination(data_determine: any, id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify(data_determine);
+    return this.http.put<Contract>(this.addDetermineCoorditionUrl + id, body, {'headers': headers})
+      .pipe(
+        map((contract) => {
+          if (JSON.parse(JSON.stringify(contract)).id != 0) {
+            return contract;
+          } else {
+            return null;
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+
   getListDataCoordination(id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -337,13 +358,22 @@ export class ContractService {
 
   changeStatusContract(id: any, statusNew:any) {
     this.getCurrentUser();
-
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = "";
     console.log(headers);
     return this.http.post<Contract>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, {'headers': headers});
+  }
+
+  coordinationContract(id: any, data: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = "";
+    // console.log(headers);
+    return this.http.put<Contract>(this.coordinationSuccess + id, data, {'headers': headers});
   }
 
   considerRejectContract(id: any, reason: string) {

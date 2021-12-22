@@ -98,8 +98,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // cập nhật defind dữ liệu
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
-    this.datas.determine_contract.forEach((res: any) => {
-      res.recipients.forEach((element: any) => {
+    // this.datas.determine_contract.forEach((res: any) => {
+      this.datas.determine_contract.recipients.forEach((element: any) => {
         let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == element.id)[0];
         if (data_duplicate) {
           // lấy ra dữ liệu bị trùng và update lại với dữ liệu mới;
@@ -108,16 +108,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           data_duplicate.phoneNumber = element.phoneNumber;
           data_duplicate.sign_type = element.sign_type;
           data_duplicate.is_otp = element.is_otp;
-          data_duplicate['is_type_party'] = res.type;
+          data_duplicate['is_type_party'] = this.datas.determine_contract.type;
           data_duplicate['role'] = data_duplicate.recipient.role;
           dataPosition.push(data_duplicate)
         } else {
-          element['is_type_party'] = res.type;
+          element['is_type_party'] = this.datas.determine_contract.type;
           element['role'] = element.role;
           dataNotPosition.push(element)
         }
       })
-    })
+    // })
 
     console.log(dataNotPosition, dataPosition);
 
