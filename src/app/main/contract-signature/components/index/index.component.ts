@@ -30,7 +30,7 @@ export class IndexComponent implements OnInit {
   ngOnInit(): void {
     // @ts-ignore
     let dataLocal = JSON.parse(localStorage.getItem('data_coordinates_contract_id'));
-    this.contractService.getDetailContract(dataLocal.data_coordinates.id).subscribe(rs => {
+    this.contractService.getDetailContract(dataLocal.data_coordinates_id).subscribe(rs => {
       let data_api = {
         is_data_contract: rs[0],
         i_data_file_contract: rs[1],
@@ -43,7 +43,9 @@ export class IndexComponent implements OnInit {
         "data_contract_document_id": {
           contract_id: data_api.is_data_object_signature[0].contract_id,
           document_id: data_api.is_data_object_signature[0].document_id
-        }
+        },
+        view: false,
+        coordination_complete: false
       };
       this.datas = Object.assign(this.datas, data_api)
     }, () => {

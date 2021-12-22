@@ -7,6 +7,7 @@ export const CONTRACT_RECEIVE_SIGNATURE = 3;
 export const CONTRACT_RECEIVE_SECRETARY = 4;
 
 export const data_signature_contract = {
+
   coordination_complete: false,
   "stepLast": "infor-coordination",
   "file_name": "quan_ly_hd-converted.pdf",

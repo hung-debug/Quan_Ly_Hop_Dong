@@ -3,7 +3,7 @@
   <!--  information contract-->
   <div class="col-md-3 sample-contract__information" style="background-color: white; z-index: 10">
     <div class="sample-contract__information--drag" id="width-element-info" style="position: relative">
-      <label style="padding-bottom: 10px" class="label">CÁC THÀNH PHẦN (<span style="color: red">KÉO THẢ</span>)</label>
+      <div style="padding-bottom: 10px" class="label">CÁC THÀNH PHẦN (<span style="color: red">KÉO THẢ</span>)</div>
       <!--      <div>-->
       <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class"
            style="display: inline-block; margin-bottom: 15px">
@@ -100,7 +100,7 @@
   <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
   <div class="content_footer">@Copyright 2021 - MobiFone</div>
   <div>
-    <button type="button" name="saveDocument" class="next action-button" style="background-color: #FCAF17">Lưu nháp</button>
+<!--    <button type="button" name="saveDocument" class="next action-button" style="background-color: #FCAF17">Lưu nháp</button>-->
     <button (click)="next()" type="button" name="next" class="next action-button">Tiếp theo</button>
   </div>
 </div>
