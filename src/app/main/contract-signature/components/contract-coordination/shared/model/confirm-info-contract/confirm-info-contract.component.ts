@@ -14,7 +14,8 @@ import { ToastService } from 'src/app/service/toast.service';
 export class ConfirmInfoContractComponent implements OnInit {
   @Input() datas: any;
   @Input() step: any;
-  @Output() stepChangeConfirmInforContract = new EventEmitter<string>();
+  // @Output() stepChangeConfirmInforContract = new EventEmitter<string>();
+  @Output() stepChangeSampleContract = new EventEmitter<string>();
 
   constructor(private formBuilder: FormBuilder,
               public datepipe: DatePipe,
@@ -116,7 +117,8 @@ export class ConfirmInfoContractComponent implements OnInit {
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
-    this.stepChangeConfirmInforContract.emit(step);
+    // this.stepChangeConfirmInforContract.emit(step);
+    this.stepChangeSampleContract.emit(step);
   }
 
   callAPI() {
