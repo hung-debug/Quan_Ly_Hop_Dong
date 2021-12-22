@@ -884,7 +884,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       return {
         id: item.id,
         name: item.name,
-        value: item.value,
+        value: item.type == 1 ? item.valueSign : item.value,
         font: item.font,
         font_size: item.font_size
       }});
