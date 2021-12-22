@@ -171,7 +171,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   selectWithOtp(e: any, data: any) {
-    this.changeOtp(data);
+    // this.changeOtp(data);
   }
 
   changeOtp(data: any) {

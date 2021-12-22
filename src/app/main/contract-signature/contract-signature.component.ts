@@ -343,12 +343,15 @@ export class ContractSignatureComponent implements OnInit {
 
   openCoordinatorContract(item: any) {
     this.isContractService.getListDataCoordination(item.contractId).subscribe((res: any) => {
-      console.log(res);
-      if (!localStorage.getItem('data_coordinates_contract_id')) {
+      // console.log(res);
+      if (res) {
+        if (localStorage.getItem('data_coordinates_contract_id')) {
+          localStorage.removeItem('data_coordinates_contract_id');
+        }
         let data_coordination = {...this.datas, ...res};
         localStorage.setItem('data_coordinates_contract_id', JSON.stringify({data_coordinates: data_coordination}));
+        this.router.navigate(['main/contract-signature/coordinates/' + item.contractId]);
       }
-      this.router.navigate(['main/contract-signature/coordinates/' + item.contractId]);
     }, (res: any) => {
       alert('Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý!')
     })
