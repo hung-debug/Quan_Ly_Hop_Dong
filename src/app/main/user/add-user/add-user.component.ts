@@ -9,6 +9,7 @@ import locale from 'date-fns/locale/en-US';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { AppService } from 'src/app/service/app.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { RoleService } from 'src/app/service/role.service';
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -26,6 +27,7 @@ export class AddUserComponent implements OnInit {
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
   networkList: Array<any> = [];
+  roleList: Array<any> = [];
 
   addForm: FormGroup;
   datas: any;
@@ -38,6 +40,7 @@ export class AddUserComponent implements OnInit {
     private route: ActivatedRoute,
     private fbd: FormBuilder,
     public router: Router,
+    private roleService: RoleService,
     ) {
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required]),
@@ -62,6 +65,12 @@ export class AddUserComponent implements OnInit {
     this.unitService.getUnitList('', '').subscribe(data => {
       console.log(data.entities);
       this.orgList = data.entities;
+    });
+
+    //lay danh sach vai tro
+    this.roleService.getRoleList('', '').subscribe(data => {
+      console.log(data);
+      this.roleList = data;
     });
 
     this.networkList = [
