@@ -39,8 +39,8 @@
         <!--        <div *ngFor="let d of this.isPartySignature">-->
         <!--          <div>{{d.name}}</div>-->
         <!--        </div>-->
-        <div *ngFor="let d of this.datas.contract_related">
-          <span>{{d.name_company}}</span>
+        <div *ngFor="let d of this.datas?.is_data_contract?.participants">
+          <div>{{d.name}}</div>
         </div>
 
       </div>

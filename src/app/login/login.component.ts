@@ -73,7 +73,10 @@ export class LoginComponent implements OnInit {
                         queryParams: {'recipientId': isRecipientId}
                       });
                   } else if (urlLink.includes('secretary')) {
-                    this.router.navigate(['main/contract-signature/secretary/' + isContractId]);
+                    this.router.navigate(['main/contract-signature/secretary/' + isContractId],
+                      {
+                        queryParams: {'recipientId': isRecipientId}
+                      });
                   } else {
                     this.router.navigate(['/main/contract-signature/signatures/' + isContractId],
                       {
@@ -121,7 +124,7 @@ export class LoginComponent implements OnInit {
       this.sub = this.route.params.subscribe(params => {
         this.type = params['loginType'];
       });
-      
+
     }
     // this.type = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
     // if (this.type) {
