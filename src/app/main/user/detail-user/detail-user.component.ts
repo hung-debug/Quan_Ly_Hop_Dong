@@ -5,7 +5,7 @@ import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
-
+import { networkList } from "../../../data/data";
 @Component({
   selector: 'app-detail-user',
   templateUrl: './detail-user.component.html',
@@ -66,6 +66,7 @@ export class DetailUserComponent implements OnInit {
 
           this.nameHsm = data.hsm_name;
 
+          //set name
           if(data.organization_id != null){
             this.unitService.getUnitById(data.organization_id).subscribe(
               data => {
@@ -81,6 +82,13 @@ export class DetailUserComponent implements OnInit {
             this.roleService.getRoleById(data.type_id).subscribe(data => {
               console.log(data);
               this.role = data.name;
+            });
+          }
+          if(data.phone_tel != null){
+            networkList.filter((i: any) => {
+              if(i.id == data.phone_tel){
+                this.networkKpi = i.name;
+              }
             });
           }
         }, error => {

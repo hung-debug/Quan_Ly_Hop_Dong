@@ -10,6 +10,8 @@ import { DatepickerOptions } from 'ng2-datepicker';
 import { AppService } from 'src/app/service/app.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { RoleService } from 'src/app/service/role.service';
+import { networkList } from "../../../data/data";
+import * as moment from "moment";
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -73,11 +75,7 @@ export class AddUserComponent implements OnInit {
       this.roleList = data;
     });
 
-    this.networkList = [
-      { id : '1', name: 'Mobifone'},
-      { id : '2', name: 'Viettel'},
-      { id : '3', name: 'Vietnamobile'}
-    ];
+    this.networkList = networkList;
 
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
@@ -108,10 +106,11 @@ export class AddUserComponent implements OnInit {
 
         this.userService.getUserById(this.id).subscribe(
           data => {
+            console.log(data);
             this.addForm = this.fbd.group({
               name: this.fbd.control(data.name, [Validators.required]),
               email: this.fbd.control(data.email, [Validators.required, Validators.email]),
-              birthday: data.birthday,
+              birthday: data.birthday==null?null:new Date(data.birthday),
               phone: this.fbd.control(data.phone, [Validators.required]),
               organizationId: this.fbd.control(data.organization_id, [Validators.required]),
               role: this.fbd.control(data.type_id, [Validators.required]),
@@ -124,6 +123,7 @@ export class AddUserComponent implements OnInit {
 
               fileImage:data.sign_image
             });
+            console.log(this.addForm);
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
           }
