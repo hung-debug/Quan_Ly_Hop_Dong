@@ -784,11 +784,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   }
 
   signDigitalDocument() {
-    this.contractService.getAllAccountsDigital().subscribe(
+    this.contractService.getAllAccountsDigital().then((res) => {
+      this.signCertDigital = res.data;
+    });
+      /*.subscribe(
       result => {
         this.signCertDigital = result;
       }
-    );
+    );*/
     setTimeout(() => {
       for(const signUpdate of this.isDataObjectSignature) {
         if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
