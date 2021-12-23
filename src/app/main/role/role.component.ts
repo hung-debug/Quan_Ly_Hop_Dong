@@ -3,7 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
 import { NodeService } from 'src/app/service/node.service';
+import { RoleService } from 'src/app/service/role.service';
 import { AddRoleComponent } from './add-role/add-role.component';
+import {DetailRoleComponent} from './detail-role/detail-role.component';
 
 @Component({
   selector: 'app-role',
@@ -12,45 +14,42 @@ import { AddRoleComponent } from './add-role/add-role.component';
 })
 export class RoleComponent implements OnInit {
 
-  p:number = 1;
-  page:number = 5; 
-  pageStart:number = 0;
-  pageEnd:number = 0;
-  pageTotal:number = 0;
-
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private nodeService: NodeService) { }
+    private roleService: RoleService) { }
 
-  code:any;
-  name:any;
-  files: TreeNode[];
+  code:any = "";
+  name:any = "";
+  list: any[];
   cols: any[];
 
   ngOnInit(): void {
     this.appService.setTitle("DANH SÁCH VAI TRÒ");
-    this.nodeService.list().subscribe(response => {
-      console.log(response);
-      this.files = response.data;
-      this.pageTotal = this.files.length;
-      this.setPage();
-    });
-    
-    console.log(this.files);
-      this.cols = [
-      { field: 'name', header: 'Name' },
-      { field: 'size', header: 'Size' },
-      { field: 'type', header: 'Type' }
+    this.searchRole();
+
+    this.cols = [
+      { field: 'name', header: 'Tên vai trò', style:'text-align: left;' },
+      { field: 'code', header: 'Mã vai trò', style:'text-align: left;' },
+      { field: 'role', header: 'Chức năng vai trò', style:'text-align: left;' },
+      { field: 'id', header: 'Quản lý', style:'text-align: center;' },
       ];
   }
 
-  addUnit() {
+  searchRole(){
+    this.roleService.getRoleList(this.code, this.name).subscribe(response => {
+      console.log(response);
+      this.list = response;
+      console.log(this.list);
+    });
+  }
+
+  addRole() {
     const data = {
       title: 'THÊM MỚI VAI TRÒ'
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AddRoleComponent, {
-      width: '780px',
+      width: '580px',
       backdrop: 'static',
       keyboard: false,
       data
@@ -60,11 +59,40 @@ export class RoleComponent implements OnInit {
       let is_data = result
     })
   }
-  setPage(){
-    this.pageStart = (this.p-1)*this.page+1;
-    this.pageEnd = (this.p)*this.page;
-    if(this.pageTotal < this.pageEnd){
-      this.pageEnd = this.pageTotal;
-    }
+
+  editRole(id:any) {
+    const data = {
+      title: 'CẬP NHẬT THÔNG TIN VAI TRÒ',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AddRoleComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  detailRole(id:any) {
+    const data = {
+      title: 'THÔNG TIN VAI TRÒ',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DetailRoleComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 }

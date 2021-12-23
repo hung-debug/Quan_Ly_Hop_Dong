@@ -9,6 +9,7 @@ export interface Role {
   code: string,
   ordering: string,
   organization_id: string,
+  role: string,
 }
 @Injectable({
   providedIn: 'root'

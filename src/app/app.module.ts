@@ -67,6 +67,7 @@ import { AddContractTypeComponent } from './main/contract-type/add-contract-type
 import { DetailContractTypeComponent } from './main/contract-type/detail-contract-type/detail-contract-type.component';
 import { RoleComponent } from './main/role/role.component';
 import { AddRoleComponent } from './main/role/add-role/add-role.component';
+import { DetailRoleComponent } from './main/role/detail-role/detail-role.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -107,6 +108,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DetailContractTypeComponent,
     RoleComponent,
     AddRoleComponent,
+    DetailRoleComponent,
   ],
   imports: [
     BrowserModule,
