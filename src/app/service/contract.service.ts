@@ -192,12 +192,21 @@ export class ContractService {
 
   getAllAccountsDigital() {
     this.getCurrentUser();
+    let config = {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Sec-Fetch-Mode': 'cors',
+        'Connection': 'keep-alive',
+        'Sec-Fetch-Site': 'cross-site'
+      }
+    }
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json; charset=utf-8')
       .append('Sec-Fetch-Mode', 'cors')
       .append('Connection', 'keep-alive')
       .append('Sec-Fetch-Site', 'cross-site');
-    return this.http.get<any>(this.getAccountSignDigital, {'headers': headers});
+    // return this.http.get<any>(this.getAccountSignDigital, {'headers': headers});
+    return axios.get(this.getAccountSignDigital, config);
   }
 
   postSignDigitalMobi(signCertDigital: any) {
