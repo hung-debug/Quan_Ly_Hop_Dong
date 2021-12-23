@@ -57,7 +57,8 @@
 :host ::ng-deep {
   .pi-fw {
     color:  #106DB6;
-    margin-right: 5px;
+    font-size: 10px;
+    font-weight: 600;
   }
 
   .p-paginator .p-paginator-pages .p-paginator-page{
@@ -91,7 +92,7 @@
     font-size: 13px;
     font-family: font_lexend_deca;
   }
-  .p-datatable .p-paginator-bottom {
+  .p-treetable .p-paginator-bottom {
     border-width: 0;
   }
 }
