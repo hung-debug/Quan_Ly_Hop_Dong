@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {AuthenticationService} from '../service/authentication.service';
 import {HttpErrorResponse} from "@angular/common/http";
+import {DeviceDetectorService} from "ngx-device-detector";
 
 @Component({
   selector: 'app-login',
@@ -17,10 +18,13 @@ export class LoginComponent implements OnInit {
   fieldTextType: boolean = false;
   private sub: any;
   type: any = 0;
+  deviceInfo: any;
+  role: number;
 
   constructor(
     private authService: AuthenticationService,
     private router: Router,
+    private deviceService: DeviceDetectorService,
     public translate: TranslateService,
     private route: ActivatedRoute,
   ) {
@@ -65,24 +69,38 @@ export class LoginComponent implements OnInit {
                     let is_RecipientId = url_check.split("?")[url_check.split("?").length - 1];
                     isRecipientId = is_RecipientId.split("=")[is_RecipientId.split("=").length - 1];
                   }
-                  if (urlLink.includes('coordinates')) {
-                    this.router.navigate(['main/contract-signature/coordinates/' + isContractId]);
-                  } else if (urlLink.includes('consider')) {
-                    this.router.navigate(['/main/contract-signature/consider/' + isContractId],
-                      {
-                        queryParams: {'recipientId': isRecipientId}
-                      });
-                  } else if (urlLink.includes('secretary')) {
-                    this.router.navigate(['main/contract-signature/secretary/' + isContractId],
-                      {
-                        queryParams: {'recipientId': isRecipientId}
-                      });
+                  if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+                    if (urlLink.includes('coordinates')) {
+                      this.role = 1;
+                    } else if (urlLink.includes('consider')) {
+                      this.role = 2;
+                    } else if (urlLink.includes('signatures')) {
+                      this.role = 3;
+                    } else if (urlLink.includes('secretary')) {
+                      this.role = 4;
+                    }
+                    window.location.href = `econtract://app/login/${isContractId}/${isRecipientId}/${this.role}/${this.type}`;
                   } else {
-                    this.router.navigate(['/main/contract-signature/signatures/' + isContractId],
-                      {
-                        queryParams: {'recipientId': isRecipientId}
-                      });
+                    if (urlLink.includes('coordinates')) {
+                      this.router.navigate(['main/contract-signature/coordinates/' + isContractId]);
+                    } else if (urlLink.includes('consider')) {
+                      this.router.navigate(['/main/contract-signature/consider/' + isContractId],
+                        {
+                          queryParams: {'recipientId': isRecipientId}
+                        });
+                    } else if (urlLink.includes('secretary')) {
+                      this.router.navigate(['main/contract-signature/secretary/' + isContractId],
+                        {
+                          queryParams: {'recipientId': isRecipientId}
+                        });
+                    } else {
+                      this.router.navigate(['/main/contract-signature/signatures/' + isContractId],
+                        {
+                          queryParams: {'recipientId': isRecipientId}
+                        });
+                    }
                   }
+
                 } else {
                   this.error = false;
                   if (this.type == 0) {
