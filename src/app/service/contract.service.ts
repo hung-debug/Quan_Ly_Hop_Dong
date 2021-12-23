@@ -6,6 +6,7 @@ import {map, catchError, retry} from 'rxjs/operators';
 import {Helper} from "../core/Helper";
 import {DatePipe} from '@angular/common';
 import {forkJoin} from "rxjs";
+import axios from 'axios';
 
 
 export interface Contract {
@@ -201,10 +202,18 @@ export class ContractService {
 
   postSignDigitalMobi(signCertDigital: any) {
     this.getCurrentUser();
-    let datePost = {
+    let config = {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Sec-Fetch-Mode': 'cors',
+        'Connection': 'keep-alive',
+        'Sec-Fetch-Site': 'cross-site'
+      }
+    }
+    let dataPost = {
       certSerial: signCertDigital.Serial,
       fieldName: "",
-      fileData: signCertDigital.valueBase64,
+      fileData: signCertDigital.valueSignBase64,
       imageData: this.imageMobiBase64,
       page: signCertDigital.page.toString(),
       ph: Math.floor(signCertDigital.height).toString(),
@@ -214,13 +223,10 @@ export class ContractService {
       signDate: "11-05-2019 09:55:55",
       typeSign: "4"
     }
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json; charset=utf-8')
-      .append('Sec-Fetch-Mode', 'cors')
-      .append('Connection', 'keep-alive')
-      .append('Sec-Fetch-Site', 'cross-site');
-    console.log(datePost);
-    return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
+    return axios.post(this.postSignDigital, dataPost, config);
+    // console.log(datePost);
+    // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
+
   }
 
   getDataFileUrl(url: any) {

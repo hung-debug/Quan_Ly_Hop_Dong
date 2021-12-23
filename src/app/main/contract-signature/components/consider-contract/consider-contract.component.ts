@@ -29,6 +29,7 @@ import {forkJoin, throwError} from "rxjs";
 import {ToastService} from "../../../../service/toast.service";
 import {UploadService} from "../../../../service/upload.service";
 import {NgxSpinnerService} from "ngx-spinner";
+import { DigitalSignatureService} from "../service/digital-sign.service";
 
 @Component({
   selector: 'app-consider-contract',
@@ -134,6 +135,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     private toastService : ToastService,
     private uploadService : UploadService,
     private spinner: NgxSpinnerService,
+    private digitalSignatureService: DigitalSignatureService,
     private dialog: MatDialog
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
@@ -141,6 +143,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
+    this.digitalSignatureService.getJson();
     this.getDataContractSignature();
   }
 
@@ -812,7 +815,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
                   new Uint8Array(data)
                     .reduce((data, byte) => data + String.fromCharCode(byte), '')
                 );
-                this.contractService.postSignDigitalMobi(signDigital).subscribe(
+                /*this.contractService.postSignDigitalMobi(signDigital).subscribe(
                   (response) => {
                     this.contractService.updateDigitalSignatured(signUpdate.id, response.FileDataSigned).subscribe(
                       (res) => {
@@ -821,7 +824,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
                       }
                     )
                   }
-                )
+                )*/
+                this.contractService.postSignDigitalMobi(signDigital).then(result => {
+                  console.log(result)});
               }
             );
 
