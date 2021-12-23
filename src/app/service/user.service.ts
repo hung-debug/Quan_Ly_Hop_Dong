@@ -34,6 +34,7 @@ export class UserService {
   updateUserUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   listUserUrl:any = `${environment.apiUrl}/api/v1/customers/search`;
+  getUserByEmailUrl:any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
 
   token:any;
   customer_id:any;
@@ -188,6 +189,18 @@ export class UserService {
     
     console.log(headers);
     return this.http.get<User>(this.getUserByIdUrl + id, {'headers': headers});
+  }
+
+  getUserByEmail(email:any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      email: email
+    });
+    console.log(headers);
+    return this.http.post<User>(this.getUserByEmailUrl, body, {'headers': headers});
   }
 
   public getUserList(filter_organization_id: any, filter_email: any): Observable<any> {

@@ -24,7 +24,7 @@ export class AddUserComponent implements OnInit {
 
   action: string;
   private sub: any;
-  id:any;
+  id:any=null;
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
@@ -48,7 +48,7 @@ export class AddUserComponent implements OnInit {
         name: this.fbd.control("", [Validators.required]),
         email: this.fbd.control("", [Validators.required, Validators.email]),
         birthday: null,
-        phone: this.fbd.control("", [Validators.required]),
+        phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
         organizationId: this.fbd.control("", [Validators.required]),
         role: this.fbd.control("", [Validators.required]),
         status: 1,
@@ -88,7 +88,7 @@ export class AddUserComponent implements OnInit {
           name: this.fbd.control("", [Validators.required]),
           email: this.fbd.control("", [Validators.required, Validators.email]),
           birthday: null,
-          phone: this.fbd.control("", [Validators.required]),
+          phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
           organizationId: this.fbd.control("", [Validators.required]),
           role: this.fbd.control("", [Validators.required]),
           status: 1,
@@ -111,7 +111,7 @@ export class AddUserComponent implements OnInit {
               name: this.fbd.control(data.name, [Validators.required]),
               email: this.fbd.control(data.email, [Validators.required, Validators.email]),
               birthday: data.birthday==null?null:new Date(data.birthday),
-              phone: this.fbd.control(data.phone, [Validators.required]),
+              phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
               organizationId: this.fbd.control(data.organization_id, [Validators.required]),
               role: this.fbd.control(data.type_id, [Validators.required]),
               status: data.status,
@@ -175,6 +175,7 @@ export class AddUserComponent implements OnInit {
       fileImage: this.addForm.value.fileImage,
     }
     console.log(data);
+    
     if(this.id !=null){
       data.id = this.id;
       this.userService.updateUser(data).subscribe(
@@ -188,14 +189,26 @@ export class AddUserComponent implements OnInit {
         }
       )
     }else{
-      this.userService.addUser(data).subscribe(
-        data => {
-          this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 1000);
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-            this.router.navigate(['/main/user']);
-          });
+      //kiem tra email da ton tai trong he thong hay chua
+      this.userService.getUserByEmail(data.email).subscribe(
+        dataByEmail => {
+          if(dataByEmail.id == 0){
+            //call api them moi
+            this.userService.addUser(data).subscribe(
+              data => {
+                this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 1000);
+                this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                  this.router.navigate(['/main/user']);
+                });
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 1000);
+              }
+            )
+          }else{
+            this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 1000);
+          }
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 1000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
         }
       )
     }
