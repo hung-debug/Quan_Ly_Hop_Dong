@@ -5,15 +5,19 @@
             "data":{  
                 "name":"Applications",
                 "size":"200mb",
+                
                 "type":"Folder"
             },
+            "expanded": true,
             "children":[  
                 {  
                     "data":{  
                         "name":"Angular",
                         "size":"25mb",
+                        
                         "type":"Folder"
                     },
+                    "expanded": true,
                     "children":[  
                         {  
                             "data":{  

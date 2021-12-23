@@ -16,12 +16,14 @@ export class RoleComponent implements OnInit {
 
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private roleService: RoleService) { }
+    private roleService: RoleService,
+    private nodeService: NodeService) { }
 
   code:any = "";
   name:any = "";
   list: any[];
   cols: any[];
+  files:any[];
 
   ngOnInit(): void {
     this.appService.setTitle("DANH SÁCH VAI TRÒ");
@@ -33,7 +35,9 @@ export class RoleComponent implements OnInit {
       { field: 'role', header: 'Chức năng vai trò', style:'text-align: left;' },
       { field: 'id', header: 'Quản lý', style:'text-align: center;' },
       ];
+   
   }
+  
 
   searchRole(){
     this.roleService.getRoleList(this.code, this.name).subscribe(response => {

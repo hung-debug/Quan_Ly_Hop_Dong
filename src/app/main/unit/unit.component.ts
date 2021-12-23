@@ -6,14 +6,14 @@ import { UnitService } from 'src/app/service/unit.service';
 import { AddUnitComponent } from './add-unit/add-unit.component';
 import { DetailUnitComponent } from './detail-unit/detail-unit.component';
 
-export interface TreeNode {
-  name?: any;
-  short_name?: any;
-  code?: any;
-  status?: any;
-  parent_id?: any;
-  children?: TreeNode[];
+export class TreeNode {
+  data:{
+    name:any;
   }
+  constructor(name:any) {
+    this.data.name = name;
+  }
+}
 @Component({
   selector: 'app-unit',
   templateUrl: './unit.component.html',
@@ -23,12 +23,15 @@ export class UnitComponent implements OnInit {
 
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private unitService: UnitService) { }
+    private unitService: UnitService,
+    private nodeService: NodeService) { }
 
   code:any = "";
   name:any = "";
   list: any[];
   cols: any[];
+  files:any[];
+  test:any;
 
   ngOnInit(): void {
     this.appService.setTitle("DANH SÁCH TỔ CHỨC");
@@ -42,14 +45,70 @@ export class UnitComponent implements OnInit {
       { field: 'parent_id', header: 'Loại tổ chức', style:'text-align: left;' },
       { field: 'id', header: 'Quản lý', style:'text-align: center;' },
       ];
+
+      this.nodeService.list().subscribe(response => {
+        
+        this.files = response.data;
+        console.log(this.files);
+      });
+
+      
   }
 
+  array_empty: any[] = [];
   searchUnit(){
     this.unitService.getUnitList(this.code, this.name).subscribe(response => {
-      console.log(response);
       this.list = response.entities;
       console.log(this.list);
+
+      let arrCha = this.list.filter((p: any) => p.parent_id == null);
+      console.log(arrCha);
+
+      let data:any="";
+
+      arrCha.forEach((element: any, index: number) => {
+        let dataChildren:any[]=[];
+
+        this.findChildren(dataChildren, element);
+        
+        data = {
+          data:
+          {
+            id: element.id, 
+            name: element.name, 
+            short_name: element.short_name,
+            code: element.code,
+            status: element.status,
+            parent_id: element.parent_id,
+          }
+        };
+        
+        this.array_empty.push(data);
+        
+      })
+      console.log(this.list);
+      console.log(this.array_empty);
     });
+  }
+
+  findChildren(dataChildren:any, element:any){
+    let arrCon = this.list.filter((p: any) => p.parent_id == element.id);
+      arrCon.forEach((elementCon: any, indexCOn: number) => {
+        dataChildren.push(
+        {
+          data:
+          {
+            id: elementCon.id, 
+            name: elementCon.name, 
+            short_name: elementCon.short_name,
+            code: elementCon.code,
+            status: elementCon.status,
+            parent_id: elementCon.parent_id,
+          },
+          children: []
+        })
+        ;
+      })
   }
 
   addUnit() {
