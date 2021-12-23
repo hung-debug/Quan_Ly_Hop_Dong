@@ -956,6 +956,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     console.log(this);
   }
 
+  tL() {
+    window.location.href = 'fb://profile/duocnghi';
+  }
+
   downloadContract(id:any){
     this.contractService.getFileContract(id).subscribe((data) => {
         //console.log(data);
