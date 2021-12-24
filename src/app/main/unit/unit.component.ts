@@ -33,6 +33,7 @@ export class UnitComponent implements OnInit {
   cols: any[];
   files:any[];
   test:any;
+  total:any;
 
   ngOnInit(): void {
     this.appService.setTitle("DANH SÁCH TỔ CHỨC");
@@ -61,6 +62,7 @@ export class UnitComponent implements OnInit {
     this.unitService.getUnitList(this.code, this.name).subscribe(response => {
       this.listData = response.entities;
       console.log(this.listData);
+      this.total = this.listData.length;
 
       let arrCha = this.listData.filter((p: any) => p.parent_id == null);
       let data:any="";
