@@ -29,6 +29,7 @@ export class UnitComponent implements OnInit {
   code:any = "";
   name:any = "";
   list: any[];
+  listData:any[];
   cols: any[];
   files:any[];
   test:any;
@@ -46,31 +47,28 @@ export class UnitComponent implements OnInit {
       { field: 'id', header: 'Quản lý', style:'text-align: center;' },
       ];
 
-      this.nodeService.list().subscribe(response => {
+      // this.nodeService.list().subscribe(response => {
         
-        this.files = response.data;
-        console.log(this.files);
-      });
+      //   this.files = response;
+      //   console.log(this.files);
+      // });
 
       
-  }
+  }  
 
-  array_empty: any[] = [];
+  array_empty: any = [];
   searchUnit(){
     this.unitService.getUnitList(this.code, this.name).subscribe(response => {
-      this.list = response.entities;
-      console.log(this.list);
+      this.listData = response.entities;
+      console.log(this.listData);
 
-      let arrCha = this.list.filter((p: any) => p.parent_id == null);
-      console.log(arrCha);
-
+      let arrCha = this.listData.filter((p: any) => p.parent_id == null);
       let data:any="";
 
+      this.array_empty=[];
       arrCha.forEach((element: any, index: number) => {
-        let dataChildren:any[]=[];
-
-        this.findChildren(dataChildren, element);
-        
+        let dataChildren;
+        dataChildren = this.findChildren(element);
         data = {
           data:
           {
@@ -80,35 +78,39 @@ export class UnitComponent implements OnInit {
             code: element.code,
             status: element.status,
             parent_id: element.parent_id,
-          }
+          },
+          expanded: true,
+          children: dataChildren
         };
         
         this.array_empty.push(data);
         
       })
+      this.list = this.array_empty;
       console.log(this.list);
-      console.log(this.array_empty);
     });
   }
 
-  findChildren(dataChildren:any, element:any){
-    let arrCon = this.list.filter((p: any) => p.parent_id == element.id);
-      arrCon.forEach((elementCon: any, indexCOn: number) => {
-        dataChildren.push(
+  findChildren(element:any){
+    let dataChildren:any[]=[];
+    let arrCon = this.listData.filter((p: any) => p.parent_id == element.id);
+    arrCon.forEach((elementCon: any, indexCOn: number) => {
+      dataChildren.push(
+      {
+        data:
         {
-          data:
-          {
-            id: elementCon.id, 
-            name: elementCon.name, 
-            short_name: elementCon.short_name,
-            code: elementCon.code,
-            status: elementCon.status,
-            parent_id: elementCon.parent_id,
-          },
-          children: []
-        })
-        ;
-      })
+          id: elementCon.id, 
+          name: elementCon.name, 
+          short_name: elementCon.short_name,
+          code: elementCon.code,
+          status: elementCon.status,
+          parent_id: elementCon.parent_id,
+        },
+        expanded: true,
+        children: this.findChildren(elementCon)
+      });
+    })
+    return dataChildren;
   }
 
   addUnit() {
