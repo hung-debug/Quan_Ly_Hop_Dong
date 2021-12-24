@@ -142,23 +142,13 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       // this.isDataContract = rs[0];
       // this.isDataFileContract = rs[1];
       // this.isDataObjectSignature = rs[2];
-      if (this.datas.is_data_contract && this.datas.i_data_file_contract[1] && this.datas.i_data_file_contract[1].length && this.datas.is_data_object_signature[2] && this.datas.is_data_object_signature[2].length) {
+      if (this.datas.is_data_contract &&
+        this.datas.i_data_file_contract[1] &&
+        this.datas.i_data_file_contract[1].length &&
+        this.datas.is_data_object_signature[2] &&
+        this.datas.is_data_object_signature[2].length) {
         this.valid = true;
       }
-      // this.data_contract = {
-      //   is_data_contract: rs[0],
-      //   i_data_file_contract: rs[1],
-      //   is_data_object_signature: rs[2]
-      // };
-
-      // let data_coordination = localStorage.getItem('data_coordinates_contract_id');
-      // if (data_coordination) {
-      //   let datas_local = JSON.parse(data_coordination).data_coordinates;
-      //   this.datas = Object.assign(this.datas, datas_local);
-      // } else {
-      //   this.datas = this.data_contract;
-      // }
-      // this.datas = this.data_contract;
 
       this.datas.is_data_object_signature.forEach((element: any) => {
         // 1: van ban, 2: ky anh, 3: ky so
@@ -180,12 +170,11 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
       let data_sign_config_cka = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
       let data_sign_config_text = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
-      // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+      let data_sign_config_so_tai_lieu = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'so_tai_lieu');
 
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
       this.datas.contract_user_sign.forEach((element: any) => {
-        // console.log(element.sign_unit, element.sign_config);
         if (element.sign_unit == 'chu_ky_so') {
           Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
         } else if (element.sign_unit == 'chu_ky_anh') {
@@ -193,7 +182,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
         } else if (element.sign_unit == 'text') {
           Array.prototype.push.apply(element.sign_config, data_sign_config_text);
         } else if (element.sign_unit == 'so_tai_lieu') {
-          // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+          Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
         }
       })
       // }
