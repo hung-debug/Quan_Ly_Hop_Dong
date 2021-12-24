@@ -244,6 +244,12 @@ export class ContractService {
     return this.http.get(url, { responseType: 'arraybuffer', headers });
   }
 
+  getDataFileUrlPromise(url: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/arraybuffer');
+    return this.http.get(url, { responseType: 'arraybuffer', headers }).toPromise();
+  }
+
   getDataNotifyOriganzation() {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -342,6 +348,14 @@ export class ContractService {
     return this.http.get<File>(this.addGetFileContract + idContract, {headers}).pipe();
   }
 
+  getFileContractPromise(idContract: any) : Promise<any> {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<File>(this.addGetFileContract + idContract, {headers}).toPromise();
+  }
+
   getDetermineCoordination(idCoordination: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -383,7 +397,7 @@ export class ContractService {
       content: "data:application/pdf," + base64
     };
     console.log(headers);
-    return this.http.put<any>(this.signDigitalMobi + id, body,{'headers': headers});
+    return this.http.put<any>(this.signDigitalMobi + id, body,{'headers': headers}).toPromise();
   }
 
   updateInfoContractSignature(datas: any) {

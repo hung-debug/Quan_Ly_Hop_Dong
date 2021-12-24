@@ -15,7 +15,9 @@ import {ContractService} from "../../../../service/contract.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import * as $ from "jquery";
-import {ProcessingHandleEcontractComponent} from "../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
+import {
+  ProcessingHandleEcontractComponent
+} from "../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
 import interact from "interactjs";
 import {variable} from "../../../../config/variable";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -29,7 +31,8 @@ import {forkJoin, throwError} from "rxjs";
 import {ToastService} from "../../../../service/toast.service";
 import {UploadService} from "../../../../service/upload.service";
 import {NgxSpinnerService} from "ngx-spinner";
-import { DigitalSignatureService} from "../service/digital-sign.service";
+import {DigitalSignatureService} from "../service/digital-sign.service";
+import {encode} from "base64-arraybuffer";
 
 @Component({
   selector: 'app-consider-contract',
@@ -648,12 +651,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         cancelButtonColor: '#b0bec5',
         confirmButtonText: 'Xác nhận',
         cancelButtonText: 'Hủy'
-      }).then((result) => {
+      }).then(async (result) => {
         if (result.isConfirmed) {
           if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
             const signD = this.isDataObjectSignature.find((item: any) => item.type == 3 && item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && !item.valueSign);
             if (signD) {
-              this.signDigitalDocument();
+              await this.signDigitalDocument();
             } else {
               this.signContractSubmit();
             }
@@ -783,61 +786,39 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     return new Blob([ia], { type: mimeString })
   }
 
-  signDigitalDocument() {
-    this.contractService.getAllAccountsDigital().then((res) => {
+  async signDigitalDocument() {
+    const res: any = await this.contractService.getAllAccountsDigital();
+    if (res) {
       this.signCertDigital = res.data;
-    });
-      /*.subscribe(
-      result => {
-        this.signCertDigital = result;
-      }
-    );*/
-    setTimeout(() => {
       for(const signUpdate of this.isDataObjectSignature) {
         if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
           && signUpdate?.recipient?.email === this.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
-          this.contractService.getFileContract(this.idContract).subscribe((data) => {
-            let fileC = null;
-            const pdfC2 = data.find((p: any) => p.type == 2);
-            const pdfC1 = data.find((p: any) => p.type == 1);
-            if (pdfC2) {
-              fileC = pdfC2.path;
-            } else if (pdfC1) {
-              fileC = pdfC1.path;
-            } else {
-              return;
-            }
+          let fileC = await this.contractService.getFileContractPromise(this.idContract);
+          const pdfC2 = fileC.find((p: any) => p.type == 2);
+          const pdfC1 = fileC.find((p: any) => p.type == 1);
+          if (pdfC2) {
+            fileC = pdfC2.path;
+          } else if (pdfC1) {
+            fileC = pdfC1.path;
+          } else {
+            return;
+          }
 
-            const signDigital = JSON.parse(JSON.stringify(signUpdate));
-            signDigital.Serial = this.signCertDigital.Serial;
-            this.contractService.getDataFileUrl(fileC).subscribe(
-              (data) => {
-                signDigital.valueSignBase64 = btoa(
-                  new Uint8Array(data)
-                    .reduce((data, byte) => data + String.fromCharCode(byte), '')
-                );
-                /*this.contractService.postSignDigitalMobi(signDigital).subscribe(
-                  (response) => {
-                    this.contractService.updateDigitalSignatured(signUpdate.id, response.FileDataSigned).subscribe(
-                      (res) => {
-                        this.toastService.showSuccessHTMLWithTimeout("Ký hợp đồng thành công", "", 1000);
-                        this.router.navigate(['main/form-contract/detail/' + this.idContract]);
-                      }
-                    )
-                  }
-                )*/
-                this.contractService.postSignDigitalMobi(signDigital).then(result => {
-                  console.log(result)});
-              }
-            );
+          const signDigital = JSON.parse(JSON.stringify(signUpdate));
+          signDigital.Serial = this.signCertDigital.Serial;
+          const base64String = await this.contractService.getDataFileUrlPromise(fileC);
+          signDigital.valueSignBase64 = encode(base64String);
+          console.log(signDigital.valueSignBase64);
 
-          });
-
+          const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital);
+          await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
         }
       }
-    }, 4000);
+    } else {
+      return;
+    }
   }
 
   signContractSubmit() {
@@ -956,10 +937,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     console.log(this);
   }
 
-  tL() {
-    window.location.href = 'fb://profile/duocnghi';
-  }
-
   downloadContract(id:any){
     this.contractService.getFileContract(id).subscribe((data) => {
         //console.log(data);
@@ -1013,6 +990,16 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  _base64ToArrayBuffer(base64: any) {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+      bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
   }
 
 }
