@@ -81,6 +81,10 @@ export class SidebarComponent implements OnInit {
       this.evenSelectSidebar.emit(nameFeature)
     } else this.evenSelectSidebar.emit(undefined)
     this.router.navigate(['/' + currentMenu.href]);
+    //@ts-ignore
+    if (JSON.parse(localStorage.getItem('coordination_complete'))) {
+      localStorage.removeItem('coordination_complete')
+    }
   }
 
   //set active link child
@@ -109,6 +113,10 @@ export class SidebarComponent implements OnInit {
     currentMenu.active = true;
     this.getState(currentMenu);
     this.router.navigate(['/' + currentSubMenu.href]);
+    //@ts-ignore
+    if (JSON.parse(localStorage.getItem('coordination_complete'))) {
+      localStorage.removeItem('coordination_complete')
+    }
   }
 
   //set state dropdown

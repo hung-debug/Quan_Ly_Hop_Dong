@@ -26,6 +26,11 @@ export class FooterSignatureComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.datas);
+    //@ts-ignore
+    let isCheckCoordination = JSON.parse(localStorage.getItem('coordination_complete'));
+    if (isCheckCoordination) {
+      this.datas.coordination_complete = true;
+    }
   }
 
   action() {

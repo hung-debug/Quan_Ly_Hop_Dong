@@ -1031,7 +1031,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             data.forEach((element: any) => {
               if (p.recipient_id == element.recipient_id) {
                 p = element;
-              }
+              } else this.datas.is_data_object_signature.push(element);
             })
           })
 

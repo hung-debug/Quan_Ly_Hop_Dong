@@ -135,8 +135,10 @@ export class ConfirmInfoContractComponent implements OnInit {
         console.log(JSON.stringify(data));
         setTimeout(() => {
           this.datas.step = variable.stepSampleContract.step_coordination;
+          // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
+          localStorage.setItem('coordination_complete', JSON.stringify(true));
           this.datas.coordination_complete = true;
-          this.datas.view = true;
+          // this.datas.view = true;
           this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.data_contract_document_id.contract_id]);
           this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 10000);
         }, 100)

@@ -44,8 +44,8 @@ export class IndexComponent implements OnInit {
           contract_id: data_api.is_data_object_signature[0].contract_id,
           document_id: data_api.is_data_object_signature[0].document_id
         },
-        view: false,
-        coordination_complete: false
+        // view: false,
+        // coordination_complete: false
       };
       this.datas = Object.assign(this.datas, data_api)
     }, () => {

@@ -469,13 +469,14 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     let arrSignConfig: any = [];
-    // let cloneUserSign = [...this.datas.contract_user_sign];
     let cloneUserSign = [...this.datas.is_data_object_signature];
-    // cloneUserSign.forEach(element => {
-    //   arrSignConfig = arrSignConfig.concat(element.sign_config);
-    // })
+    cloneUserSign.forEach(element => {
+      if ((element.recipient && ![2,3].includes(element.recipient.status)) || (!element.recipient && ![2,3].includes(element.status))) {
+        arrSignConfig = arrSignConfig.concat(element);
+      }
+    })
     // return arrSignConfig;
-    return cloneUserSign;
+    return arrSignConfig;
   }
 
   // convertToSignConfig() {
