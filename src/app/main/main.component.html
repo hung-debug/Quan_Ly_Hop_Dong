@@ -75,11 +75,12 @@
             <router-outlet></router-outlet>
           </div>
         </div>
-        <div *ngIf="this.isShowCopyRight && this.isRouterContractNew" class="content_footer">
-          @Copyright 2021 - MobiFone
-        </div>
       </div>
+      
   </main>
+  <div *ngIf="this.isShowCopyRight && this.isRouterContractNew" class="content_footer">
+    <div>@Copyright 2021 - MobiFone</div>
+  </div>
 </div>
 
 <!-- Popup reset password -->
