@@ -50,6 +50,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   thePDF = null;
   pageNumber = 1;
   canvasWidth = 0;
+  ratioPDF = 595 / 1240;
   arrPage: any = [];
   objDrag: any = {};
   scale: any;
@@ -101,6 +102,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   isEnableText: boolean = false;
   isChangeText: boolean = false;
   loaded: boolean = false;
+  loadedPdfView: boolean = false;
   allFileAttachment: any[];
   allRelateToContract: any[];
 
@@ -317,6 +319,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.setPosition();
         this.eventMouseover();
+        this.loadedPdfView = true;
       }, 100)
     })
   }
@@ -376,6 +379,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       this.canvasWidth = viewport.width;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
+      this.prepareInfoSignUsbToken(pageNumber, canvas.height);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
       if (!_objPage) {
         this.objPdfProperties.pages.push({
@@ -654,12 +658,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }).then(async (result) => {
         if (result.isConfirmed) {
           if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-            const signD = this.isDataObjectSignature.find((item: any) => item.type == 3 && item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && !item.valueSign);
-            if (signD) {
-              await this.signDigitalDocument();
-            } else {
-              this.signContractSubmit();
-            }
+            this.signContractSubmit();
           }
         }
       });
@@ -878,7 +877,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         font_size: item.font_size
       }});
     this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId).subscribe(
-      (result) => {
+      async (result) => {
+        await this.signDigitalDocument();
         this.toastService.showSuccessHTMLWithTimeout(
           [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
           , '', 1000);
@@ -992,14 +992,22 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     }
   }
 
-  _base64ToArrayBuffer(base64: any) {
-    var binary_string = window.atob(base64);
-    var len = binary_string.length;
-    var bytes = new Uint8Array(len);
-    for (var i = 0; i < len; i++) {
-      bytes[i] = binary_string.charCodeAt(i);
-    }
-    return bytes.buffer;
+  prepareInfoSignUsbToken(page: any, heightPage: any) {
+    this.isDataObjectSignature.map((sign: any) => {
+      if (sign.type == 3
+        && sign?.recipient?.email === this.currentUser.email
+        && sign?.recipient?.role === this.datas?.roleContractReceived
+        && sign?.page == page) {
+        sign.signDigitalX = sign.coordinate_x * this.ratioPDF;
+        sign.signDigitalY = (heightPage - sign.coordinate_y - sign.height) * this.ratioPDF;
+        sign.signDigitalWidth = (sign.coordinate_x + sign.width) * this.ratioPDF;
+        sign.signDigitalHeight = (heightPage - sign.coordinate_y) * this.ratioPDF;
+        console.log(sign);
+        return sign;
+      } else {
+        return sign;
+      }
+    });
   }
 
 }
