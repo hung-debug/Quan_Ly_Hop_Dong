@@ -138,9 +138,9 @@ export class UserService {
       organization_id: datas.organizationId,
       birthday: datas.birthday,
       status: datas.status,
-      type_id: 1,
+      type_id: datas.role,
 
-      sign_image: [],
+      sign_image: datas.sign_image,
 
       phone_sign: datas.phoneKpi,
       phone_tel: datas.networkKpi,
@@ -167,9 +167,9 @@ export class UserService {
       organization_id: datas.organizationId,
       birthday: datas.birthday,
       status: datas.status,
-      type_id: 1,
+      type_id: datas.role,
 
-      sign_image: [],
+      sign_image: datas.sign_image,
 
       phone_sign: datas.phoneKpi,
       phone_tel: datas.networkKpi,

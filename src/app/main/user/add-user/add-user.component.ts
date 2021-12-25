@@ -12,6 +12,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import { RoleService } from 'src/app/service/role.service';
 import { networkList } from "../../../data/data";
 import * as moment from "moment";
+import { UploadService } from 'src/app/service/upload.service';
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -43,6 +44,7 @@ export class AddUserComponent implements OnInit {
     private fbd: FormBuilder,
     public router: Router,
     private roleService: RoleService,
+    private uploadService:UploadService
     ) {
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required]),
@@ -53,7 +55,7 @@ export class AddUserComponent implements OnInit {
         role: this.fbd.control("", [Validators.required]),
         status: 1,
 
-        phoneKpi: null,
+        phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
         networkKpi: null,
 
         nameHsm: null,
@@ -93,7 +95,7 @@ export class AddUserComponent implements OnInit {
           role: this.fbd.control("", [Validators.required]),
           status: 1,
 
-          phoneKpi: null,
+          phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
           networkKpi: null,
 
           nameHsm: null,
@@ -116,7 +118,7 @@ export class AddUserComponent implements OnInit {
               role: this.fbd.control(data.type_id, [Validators.required]),
               status: data.status,
 
-              phoneKpi: data.phone_sign,
+              phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
               networkKpi: data.phone_tel,
 
               nameHsm: data.hsm_name,
@@ -172,38 +174,94 @@ export class AddUserComponent implements OnInit {
       phoneKpi: this.addForm.value.phoneKpi,
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,
-      fileImage: this.addForm.value.fileImage,
+      fileImage: this.attachFile,
+      sign_image: []
     }
     console.log(data);
     
     if(this.id !=null){
       data.id = this.id;
-      this.userService.updateUser(data).subscribe(
-        data => {
-          this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 1000);
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-            this.router.navigate(['/main/user']);
-          });
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
-        }
-      )
+      if(data.fileImage != null){
+        this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
+          console.log(JSON.stringify(dataFile));
+          const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
+          const sign_image:never[]=[];
+          (sign_image as string[]).push(sign_image_content);
+          data.sign_image = sign_image;
+          console.log(data);
+
+          this.userService.updateUser(data).subscribe(
+            data => {
+              this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 1000);
+              this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                this.router.navigate(['/main/user']);
+              });
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
+            }
+          )
+        },
+        error => {
+          this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 10000);
+          return false;
+        });
+      }else{
+        this.userService.updateUser(data).subscribe(
+          data => {
+            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 1000);
+            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+              this.router.navigate(['/main/user']);
+            });
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
+          }
+        )
+      }
     }else{
       //kiem tra email da ton tai trong he thong hay chua
       this.userService.getUserByEmail(data.email).subscribe(
         dataByEmail => {
           if(dataByEmail.id == 0){
-            //call api them moi
-            this.userService.addUser(data).subscribe(
-              data => {
-                this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 1000);
-                this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                  this.router.navigate(['/main/user']);
-                });
-              }, error => {
-                this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 1000);
-              }
-            )
+
+            if(data.fileImage != null){
+              this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
+                console.log(JSON.stringify(dataFile));
+                const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
+                const sign_image:never[]=[];
+                (sign_image as string[]).push(sign_image_content);
+                data.sign_image = sign_image;
+                console.log(data);
+      
+                //call api them moi
+                this.userService.addUser(data).subscribe(
+                  data => {
+                    this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 1000);
+                    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                      this.router.navigate(['/main/user']);
+                    });
+                  }, error => {
+                    this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 1000);
+                  }
+                )
+              },
+              error => {
+                this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 10000);
+                return false;
+              });
+            }else{
+
+              //call api them moi
+              this.userService.addUser(data).subscribe(
+                data => {
+                  this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 1000);
+                  this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                    this.router.navigate(['/main/user']);
+                  });
+                }, error => {
+                  this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 1000);
+                }
+              )
+            }
           }else{
             this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 1000);
           }

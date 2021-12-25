@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AppService } from 'src/app/service/app.service';
 import { NodeService } from 'src/app/service/node.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { UserService } from 'src/app/service/user.service';
 import { AddUnitComponent } from './add-unit/add-unit.component';
 import { DetailUnitComponent } from './detail-unit/detail-unit.component';
 
@@ -24,7 +25,8 @@ export class UnitComponent implements OnInit {
   constructor(private appService: AppService,
     private dialog: MatDialog,
     private unitService: UnitService,
-    private nodeService: NodeService) { }
+    private nodeService: NodeService,
+    private userService: UserService) { }
 
   code:any = "";
   name:any = "";
@@ -59,16 +61,19 @@ export class UnitComponent implements OnInit {
 
   array_empty: any = [];
   searchUnit(){
+    //lay id to chuc nguoi truy cap
+    //let orgId = this.userService.getInforUser().organization_id;
+
     this.unitService.getUnitList(this.code, this.name).subscribe(response => {
       this.listData = response.entities;
       console.log(this.listData);
       this.total = this.listData.length;
 
-      let arrCha = this.listData.filter((p: any) => p.parent_id == null);
+      //let arrCha = this.listData.filter((p: any) => p.id == orgId);
       let data:any="";
 
       this.array_empty=[];
-      arrCha.forEach((element: any, index: number) => {
+      this.listData.forEach((element: any, index: number) => {
         let dataChildren;
         dataChildren = this.findChildren(element);
         data = {
@@ -86,7 +91,6 @@ export class UnitComponent implements OnInit {
         };
         
         this.array_empty.push(data);
-        
       })
       this.list = this.array_empty;
       console.log(this.list);
