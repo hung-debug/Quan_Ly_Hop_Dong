@@ -132,14 +132,14 @@ export class DashboardComponent implements OnInit {
           type: 'column',
           name: 'Số hợp đồng',
           data: [
-              ['Chưa xử lý', data.total_process],
+              ['Chưa xử lý', data.processing],
           ]
         },
         {
           type: 'column',
           name: 'Số hợp đồng',
           data: [
-            ['Đã xử lý', data.total_signed]
+            ['Đã xử lý', data.processed]
           ]
         }]
       });

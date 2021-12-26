@@ -14,8 +14,9 @@
 
 <div class="text-sign" *ngIf="sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu'">
   <!--  <input id="input-text" type="text" [placeholder]="sign.sign_unit == 'text' ? 'Nhập text' : 'Nhập số tài liệu'">-->
-  <div class="skeleton-sign"  *ngIf="!checkShowEdit && !sign.valueSign">
-    <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{sign.valueSign ? sign.valueSign : ((sign.sign_unit == 'text') ? 'Text' : 'Số hợp đồng')}}</span>
+
+  <div class="skeleton-sign"  *ngIf="!checkShowEdit && !sign.value">
+    <span id="input-text" [ngbTooltip]="sign.value ? sign.value : ''">{{sign.value ? sign.value : ((sign.sign_unit == 'text') ? 'Text' : 'Số hợp đồng')}}</span>
   </div>
   <div class="skeleton-sign" *ngIf="checkShowEdit && !sign.valueSign">
     <input type="text" class="input-edit-text" [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign()" #inputEditText>
