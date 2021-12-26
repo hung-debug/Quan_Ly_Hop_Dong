@@ -30,7 +30,7 @@ export class IndexComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.router.url);
+    // console.log(this.router.url);
     // @ts-ignore
     let dataLocal = JSON.parse(localStorage.getItem('data_coordinates_contract_id'));
     let data_element = undefined;

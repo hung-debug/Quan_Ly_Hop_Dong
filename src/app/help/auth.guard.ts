@@ -27,7 +27,8 @@ export class AuthGuard implements CanActivate {
     })
     //@ts-ignore
     // let url = next.url.includes('/main/contract-signature/signatures/');
-    if (next.queryParams.loginType && next.queryParams.loginType== 1 && next._urlSegment.segments.some((p: any) => p.path == 'contract-signature')) {
+    // next.queryParams.loginType && next.queryParams.loginType== 1 &&
+    if (next._urlSegment.segments.some((p: any) => p.path == 'contract-signature')) {
       console.log(next.url);
       if (!sessionStorage.getItem('url')) {
         sessionStorage.setItem('url', state.url);
