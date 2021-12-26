@@ -47,7 +47,7 @@ export class ForwardContractComponent implements OnInit {
         full_name: this.myForm.value.name,
         role: this.datas.dataContract.roleContractReceived,
         recipient_id: this.datas.recipientId,
-        is_replace: this.datas.is_content != 'forward_contract'
+        is_replace: false/*this.datas.is_content != 'forward_contract'*/
       }
       this.contractService.processAuthorizeContract(dataAuthorize).subscribe(
         data => {
