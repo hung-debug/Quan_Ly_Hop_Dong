@@ -88,7 +88,9 @@
   <!--  information contract-->
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
+      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label">THÔNG TIN CHI TIẾT HỢP
+        ĐỒNG
+      </div>
       <div style="line-height: 25px">
         <div>
           <span class="title-contract">Loại hợp đồng:</span>
@@ -104,59 +106,74 @@
         </div>
         <div>
           <span class="title-contract">File đính kèm:</span>
-          <!--          <span>-->
-          <!--            <a *ngFor="let d of this.datas.contract_information.file_attach" style="color: #106DB6" rel="stylesheet" href="https://vnexpress.net/" target="_blank">{{d.file_name}}</a>-->
-          <!--          </span>-->
+          <span *ngFor="let d of this.datas.i_data_file_contract, let i = index">
+              <a style="color: #106DB6" rel="stylesheet" href="{{d.path}}" target="_blank">
+                {{d.filename}}
+              </a>
+            <span>{{i == (this.datas.i_data_file_contract.length - 1) ? '' : ', '}}</span>
+            </span>
         </div>
         <div>
           <span class="title-contract">Hợp đồng liên quan:</span>
-          <!--          <span *ngFor="let d of this.datas.contract_information.file_related_contract" style="color: #106DB6">-->
-          <!--            {{d.file_name}} <span style="color: black">, </span>-->
-          <!--          </span>-->
+          <span *ngFor="let d of this.datas.is_data_contract.refs, let i = index" style="color: #106DB6">
+            <a style="color: #106DB6" rel="stylesheet" href="#" target="_blank">
+              {{d.ref_id}}
+            </a>
+            <span>{{i == (this.datas.is_data_contract.refs.length - 1) ? '' : ', '}}</span>
+          </span>
         </div>
 
-      </div>
-    </div>
-    <hr>
+<!--        <div class="title-contract" style="display: inline-block">Hợp đồng liên quan:</div>-->
+<!--        <div style="display: inline-block; color: #106DB6"-->
+<!--             *ngFor="let d of this.datas.is_data_contract.refs; let i = index">-->
+<!--          <span class="text-decoration-style">{{d.ref_id}}</span>-->
+<!--          <span>{{i == (this.datas.is_data_contract.refs.length - 1) ? '' : ', '}}</span>-->
+<!--        </div>-->
+<!--        <div style="display: inline-block">-->
 
-    <div class="location-change" [ngStyle]="changeDisplay()">
-      <div class="sample-contract__information--user-sign" style="line-height: 25px">
-        <div style="text-align: center; font-weight: bold" class="label">CÁC BÊN LIÊN QUAN</div>
-        <!--        <div *ngFor="let d of this.isPartySignature">-->
-        <!--          <div>{{d.name}}</div>-->
-        <!--        </div>-->
-        <div *ngFor="let d of this.datas.is_data_contract.participants">
-          <span>{{d.name}}</span>
         </div>
-
-      </div>
-      <div>
-        <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Luồng xử lý hợp đồng</u>
       </div>
       <hr>
-    </div>
-  </div>
 
-  <!--  file content-->
-  <!--  width: 74.7%-->
-  <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
-       style="background-color: #F2F2F2; position: relative;">
-    <div id="pdf-viewer-step-3">
-      <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-        <div class="resize-drag not-out-drop" *ngIf="!view"
-             [id]="d.id"
-             style="z-index: -1;"
-             #itemElement
-             (click)="getSignSelect(d)"
-             [ngClass]="changeColorDrag(null, true)"
-             [ngStyle]="changePosition(d)">
-          <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
-          <app-image-sign-contract *ngIf="!view" [datas]="datas" [view]="view" [sign]="d"></app-image-sign-contract>
+      <div class="location-change" [ngStyle]="changeDisplay()">
+        <div class="sample-contract__information--user-sign" style="line-height: 25px">
+          <div style="text-align: center; font-weight: bold" class="label">CÁC BÊN LIÊN QUAN</div>
+          <!--        <div *ngFor="let d of this.isPartySignature">-->
+          <!--          <div>{{d.name}}</div>-->
+          <!--        </div>-->
+          <div *ngFor="let d of this.datas.is_data_contract.participants">
+            <span>{{d.name}}</span>
+          </div>
+
+        </div>
+        <div>
+          <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Luồng xử lý
+            hợp đồng</u>
+        </div>
+        <hr>
+      </div>
+    </div>
+
+    <!--  file content-->
+    <!--  width: 74.7%-->
+    <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
+         style="background-color: #F2F2F2; position: relative;">
+      <div id="pdf-viewer-step-3">
+        <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+          <div class="resize-drag not-out-drop" *ngIf="!view"
+               [id]="d.id"
+               style="z-index: -1;"
+               #itemElement
+               (click)="getSignSelect(d)"
+               [ngClass]="changeColorDrag(null, true)"
+               [ngStyle]="changePosition(d)">
+            <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
+            <app-image-sign-contract *ngIf="!view" [datas]="datas" [view]="view" [sign]="d"></app-image-sign-contract>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<!--<app-footer-signature *ngIf="loaded" [datas]="datas" [view]="view" [recipientId]="recipientId" (submitChanges)="submitEvents($event)"></app-footer-signature>-->
-<!--<app-footer-signature *ngIf="this.datas.step == 'infor-coordination'" [datas]="datas" [view]="view" [recipientId]="recipientId"></app-footer-signature>-->
+  <!--<app-footer-signature *ngIf="loaded" [datas]="datas" [view]="view" [recipientId]="recipientId" (submitChanges)="submitEvents($event)"></app-footer-signature>-->
+  <!--<app-footer-signature *ngIf="this.datas.step == 'infor-coordination'" [datas]="datas" [view]="view" [recipientId]="recipientId"></app-footer-signature>-->
 

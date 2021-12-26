@@ -85,6 +85,10 @@ export class SidebarComponent implements OnInit {
     if (JSON.parse(localStorage.getItem('coordination_complete'))) {
       localStorage.removeItem('coordination_complete')
     }
+    //@ts-ignore
+    if (JSON.parse(localStorage.getItem('data_coordinates_contract_id'))) {
+      localStorage.removeItem('data_coordinates_contract_id');
+    }
   }
 
   //set active link child
@@ -116,6 +120,10 @@ export class SidebarComponent implements OnInit {
     //@ts-ignore
     if (JSON.parse(localStorage.getItem('coordination_complete'))) {
       localStorage.removeItem('coordination_complete')
+    }
+    //@ts-ignore
+    if (JSON.parse(localStorage.getItem('data_coordinates_contract_id'))) {
+      localStorage.removeItem('data_coordinates_contract_id');
     }
   }
 

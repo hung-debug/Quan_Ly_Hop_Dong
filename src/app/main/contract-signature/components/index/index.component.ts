@@ -9,6 +9,7 @@ import * as contractModel from '../../model/contract-model';
 import {data_signature_contract} from "../../model/contract-model";
 import {ContractService} from "../../../../service/contract.service";
 import {ToastService} from "../../../../service/toast.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-index',
@@ -25,12 +26,24 @@ export class IndexComponent implements OnInit {
     private contractSignatureService: ContractSignatureService,
     private contractService: ContractService,
     private toastService : ToastService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    // console.log(this.router.url);
     // @ts-ignore
     let dataLocal = JSON.parse(localStorage.getItem('data_coordinates_contract_id'));
-    this.contractService.getDetailContract(dataLocal.data_coordinates_id).subscribe(rs => {
+    let data_element = undefined;
+    if (!dataLocal) {
+      let dataUrl = this.router.url.split("?");
+      let is_element = dataUrl[0];
+      let items_element = is_element.split("/");
+      data_element = items_element[items_element.length - 1];
+    } else {
+      data_element = dataLocal.data_coordinates_id;
+    }
+    // dataLocal.data_coordinates_id
+    this.contractService.getDetailContract(data_element).subscribe(rs => {
       let data_api = {
         is_data_contract: rs[0],
         i_data_file_contract: rs[1],
