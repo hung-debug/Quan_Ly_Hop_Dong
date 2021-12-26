@@ -466,12 +466,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 if (!this.objDrag[this.signCurent['id']].count) {
                   // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                   if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-                    element['width'] = '135';
-                    element['height'] = '28';
+                    if (res.sign == 'so_tai_lieu' && this.datas.code) {
+                      element['width'] = '';
+                      element['height'] = '';
+                    } else {
+                      element['width'] = '135';
+                      element['height'] = '28';
+                    }
                   } else {
                     element['width'] = '135';
                     element['height'] = '85';
                   }
+
                   this.objSignInfo.width = element['width'];
                   this.objSignInfo.height = element['height'];
                   this.objSignInfo.text_attribute_name = '';
@@ -500,6 +506,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               element.is_disable = false;
             } else element.is_disable = true;
           } else element.is_disable = false;
+          // else if (name_accept_signature == 'so_tai_lieu' && this.datas.code) {
+          //   element.is_disable = true;
+          // }
         })
       }
     } else {
@@ -779,6 +788,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (d['height']) {
       style.height = parseInt(d['height']) + "px";
     }
+
+    if (this.datas.code && d.sign_unit == 'so_tai_lieu') {
+      style.padding = '6px';
+    }
     // }
 
     return style;
@@ -846,6 +859,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               item.is_disable = false;
             } else item.is_disable = true;
           } else item.is_disable = false;
+          // else if (d.sign_unit == 'so_tai_lieu' && this.datas.code) {
+          //   item.is_disable = true;
+          // }
           if (d.name && item.name == d.name) {
             item.selected = true;
           } else item.selected = false;
