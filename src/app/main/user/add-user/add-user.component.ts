@@ -35,6 +35,7 @@ export class AddUserComponent implements OnInit {
   addForm: FormGroup;
   datas: any;
   attachFile:any;
+  sign_image:[];
 
   constructor(private appService: AppService,
     private toastService : ToastService,
@@ -125,6 +126,9 @@ export class AddUserComponent implements OnInit {
 
               fileImage:data.sign_image
             });
+            this.imgSignPCSelect = data.sign_image.length>0?data.sign_image[0].path:null;
+            this.sign_image = data.sign_image.length>0?data.sign_image:[];
+            console.log("aaa");
             console.log(this.addForm);
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
@@ -206,6 +210,9 @@ export class AddUserComponent implements OnInit {
           return false;
         });
       }else{
+        if(this.sign_image.length > 0){
+          data.sign_image = this.sign_image;
+        }
         this.userService.updateUser(data).subscribe(
           data => {
             this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 1000);

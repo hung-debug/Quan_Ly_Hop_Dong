@@ -66,6 +66,8 @@ export class InforUserComponent implements OnInit {
     this.addHsmForm = this.fbd.group({
       nameHsm: null
     });
+
+    
  }
 
   ngOnInit(): void {
@@ -106,6 +108,10 @@ export class InforUserComponent implements OnInit {
         this.addHsmForm = this.fbd.group({
           nameHsm: dataByEmail.hsm_name
         });
+        console.log(dataByEmail);
+        this.imgSignPCSelect = dataByEmail.sign_image.length>0?dataByEmail.sign_image[0].path:null;
+        console.log("aaa");
+        console.log(this.imgSignPCSelect);
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
       }

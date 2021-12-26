@@ -49,9 +49,14 @@ export class FooterSignatureComponent implements OnInit {
 
       console.log(recipient_data);
       if (recipient_data) {
-        // this.datas.determine_contract = recipient_data;
         // @ts-ignore
         if (recipient_data['recipients']) {
+          //@ts-ignore
+          let dataCoordination = recipient_data['recipients'].filter((p: any) => p.role == 1)[0];
+          if (dataCoordination) {
+            this.datas.recipient_id_coordition = dataCoordination.id;
+          }
+          console.log(this.datas.recipient_id_coordition);
           //@ts-ignore
           let data = recipient_data['recipients'].filter((p: any) => p.role != 1);
           //@ts-ignore

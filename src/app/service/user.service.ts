@@ -190,31 +190,46 @@ export class UserService {
     if(datas.birthday != null){
         datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
     }
-    let body:any = "";
-    if(type == 'infor'){
-      body = JSON.stringify({
-        name: datas.name,
-        email: datas.email,
-        phone: datas.phone,
-        organization_id: datas.organizationId,
-        birthday: datas.birthday,
-        status: datas.status,
-        type_id: datas.role
-      });
-    }else if(type == 'file-image'){
-      body = JSON.stringify({
-        sign_image: datas.sign_image
-      });
-    }else if(type == 'kpi'){
-      body = JSON.stringify({
-        phone_sign: datas.phoneKpi,
-        phone_tel: datas.networkKpi
-      });
-    }else if(type == 'hsm'){
-      body = JSON.stringify({
-        hsm_name: datas.nameHsm
-      });
-    }
+    const body = JSON.stringify({
+      name: datas.name,
+      email: datas.email,
+      phone: datas.phone,
+      organization_id: datas.organizationId,
+      birthday: datas.birthday,
+      status: datas.status,
+      type_id: datas.role,
+      
+      sign_image: datas.sign_image,
+
+      phone_sign: datas.phoneKpi,
+      phone_tel: datas.networkKpi,
+
+      hsm_name: datas.nameHsm
+    });
+    // if(type == 'infor'){
+    //   body = JSON.stringify({
+    //     name: datas.name,
+    //     email: datas.email,
+    //     phone: datas.phone,
+    //     organization_id: datas.organizationId,
+    //     birthday: datas.birthday,
+    //     status: datas.status,
+    //     type_id: datas.role
+    //   });
+    // }else if(type == 'file-image'){
+    //   body = JSON.stringify({
+    //     sign_image: datas.sign_image
+    //   });
+    // }else if(type == 'kpi'){
+    //   body = JSON.stringify({
+    //     phone_sign: datas.phoneKpi,
+    //     phone_tel: datas.networkKpi
+    //   });
+    // }else if(type == 'hsm'){
+    //   body = JSON.stringify({
+    //     hsm_name: datas.nameHsm
+    //   });
+    // }
     
     console.log(headers);
     console.log(body);
