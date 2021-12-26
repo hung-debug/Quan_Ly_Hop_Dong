@@ -998,10 +998,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         && sign?.recipient?.email === this.currentUser.email
         && sign?.recipient?.role === this.datas?.roleContractReceived
         && sign?.page == page) {
-        sign.signDigitalX = sign.coordinate_x * this.ratioPDF;
-        sign.signDigitalY = (heightPage - sign.coordinate_y - sign.height) * this.ratioPDF;
-        sign.signDigitalWidth = (sign.coordinate_x + sign.width) * this.ratioPDF;
-        sign.signDigitalHeight = (heightPage - sign.coordinate_y) * this.ratioPDF;
+        sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
+        sign.signDigitalY = (heightPage - sign.coordinate_y - sign.height)/* * this.ratioPDF*/;
+        sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
+        sign.signDigitalHeight = (heightPage - sign.coordinate_y)/* * this.ratioPDF*/;
         console.log(sign);
         return sign;
       } else {
