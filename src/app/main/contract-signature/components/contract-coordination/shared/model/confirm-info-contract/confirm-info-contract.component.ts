@@ -52,9 +52,9 @@ export class ConfirmInfoContractComponent implements OnInit {
   ngOnInit(): void {
     console.log("step4" + this.datas.contract_user_sign);
 
-    this.contractFileName = this.datas.file_name;
-    this.dateDeadline = this.datepipe.transform(this.datas.sign_time, 'dd/MM/yyyy') || '';
-    this.comment = this.datas.notes;
+    this.contractFileName = this.datas.i_data_file_contract[0].filename;
+    this.dateDeadline = this.datepipe.transform(this.datas.is_data_contract.sign_time, 'dd/MM/yyyy') || '';
+    this.comment = this.datas.is_data_contract.notes;
 
     if (this.datas.determine_contract) {
       let data_user_sign = JSON.parse(JSON.stringify(this.datas.determine_contract));
