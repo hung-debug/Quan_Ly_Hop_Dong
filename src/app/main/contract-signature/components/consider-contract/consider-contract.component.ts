@@ -51,6 +51,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   pageNumber = 1;
   canvasWidth = 0;
   ratioPDF = 595 / 1240;
+  currentHeight = 0;
   arrPage: any = [];
   objDrag: any = {};
   scale: any;
@@ -999,15 +1000,16 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         && sign?.recipient?.role === this.datas?.roleContractReceived
         && sign?.page == page) {
         sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
-        sign.signDigitalY = (heightPage - sign.coordinate_y - sign.height)/* * this.ratioPDF*/;
+        sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
         sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
-        sign.signDigitalHeight = (heightPage - sign.coordinate_y)/* * this.ratioPDF*/;
+        sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
         console.log(sign);
         return sign;
       } else {
         return sign;
       }
     });
+    this.currentHeight += heightPage;
   }
 
 }
