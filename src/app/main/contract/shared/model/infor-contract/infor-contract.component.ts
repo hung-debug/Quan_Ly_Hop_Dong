@@ -224,7 +224,7 @@ export class InforContractComponent implements OnInit {
             this.datas.fileBucket = data.file_object.bucket;
             this.contractService.addDocument(this.datas).subscribe((data) => {
                 console.log(JSON.stringify(data));
-                this.datas.document_id = data?.id;
+                
 
                 //upload file hop dong lan 2
                 this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
@@ -233,6 +233,7 @@ export class InforContractComponent implements OnInit {
                   this.datas.fileBucketDone = data.file_object.bucket;
   
                   this.contractService.addDocumentDone(this.datas).subscribe((data) => {
+                    this.datas.document_id = data?.id;
                     console.log(data);
 
                     this.contractService.getDataNotifyOriganzation().subscribe((data: any) => {
@@ -423,7 +424,6 @@ export class InforContractComponent implements OnInit {
             this.datas.fileBucket = data.file_object.bucket;
             this.contractService.addDocument(this.datas).subscribe((data) => {
                 console.log(JSON.stringify(data));
-                this.datas.document_id = data?.id;
 
                 //upload file hop dong lan 2
                 this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
@@ -432,6 +432,8 @@ export class InforContractComponent implements OnInit {
                   this.datas.fileBucketDone = data.file_object.bucket;
 
                   this.contractService.addDocumentDone(this.datas).subscribe((data) => {
+                    this.datas.document_id = data?.id;
+                    
                     if(this.datas.attachFile != null){
                       this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
                         console.log(JSON.stringify(data));
