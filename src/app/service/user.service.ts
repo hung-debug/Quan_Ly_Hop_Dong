@@ -4,6 +4,7 @@ import { throwError, Observable } from 'rxjs';
 import { map, catchError, retry } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { DatePipe } from '@angular/common';
 export interface User {
   id: any,
   name: any,
@@ -16,7 +17,9 @@ export interface User {
   sign_image: any,
   hsm_name: any,
   type_id: any,
-  organization_id: any
+  organization_id: any,
+  organization:any,
+  type:any,
 }
 
 @Injectable({
@@ -31,6 +34,7 @@ export class UserService {
   updateUserUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   listUserUrl:any = `${environment.apiUrl}/api/v1/customers/search`;
+  getUserByEmailUrl:any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
 
   token:any;
   customer_id:any;
@@ -39,7 +43,8 @@ export class UserService {
   email:any;
   phone:any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    public datepipe: DatePipe,) { }
 
   getCurrentUser(){
     this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
@@ -122,6 +127,10 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+    if(datas.birthday != null){
+      datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
+    }
+    
     const body = JSON.stringify({
       name: datas.name,
       email: datas.email,
@@ -129,12 +138,12 @@ export class UserService {
       organization_id: datas.organizationId,
       birthday: datas.birthday,
       status: datas.status,
-      type_id: 1,
+      type_id: datas.role,
 
-      sign_image: [],
+      sign_image: datas.sign_image,
 
       phone_sign: datas.phoneKpi,
-      phone_tel: 1,
+      phone_tel: datas.networkKpi,
 
       hsm_name: datas.nameHsm
     });
@@ -148,6 +157,9 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+    if(datas.birthday != null){
+        datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
+    }
     const body = JSON.stringify({
       name: datas.name,
       email: datas.email,
@@ -155,12 +167,12 @@ export class UserService {
       organization_id: datas.organizationId,
       birthday: datas.birthday,
       status: datas.status,
-      type_id: 1,
+      type_id: datas.role,
 
-      sign_image: [],
+      sign_image: datas.sign_image,
 
       phone_sign: datas.phoneKpi,
-      phone_tel: 1,
+      phone_tel: datas.networkKpi,
 
       hsm_name: datas.nameHsm
     });
@@ -177,6 +189,18 @@ export class UserService {
     
     console.log(headers);
     return this.http.get<User>(this.getUserByIdUrl + id, {'headers': headers});
+  }
+
+  getUserByEmail(email:any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      email: email
+    });
+    console.log(headers);
+    return this.http.post<User>(this.getUserByEmailUrl, body, {'headers': headers});
   }
 
   public getUserList(filter_organization_id: any, filter_email: any): Observable<any> {

@@ -14,7 +14,7 @@
        <div class="col-md-4">
           <div class="label text-color">{{'user.email' | translate}} <span class="required-title">*</span></div>
           <div class="input-data">
-              <input type="text" formControlName="email">
+              <input type="text" formControlName="email" [readonly]="id != null">
           </div>
           <div *ngIf="submitted && f.email.errors" class="invalid">
             <div *ngIf="f.email.errors.required">Email không được để trống</div>
@@ -37,6 +37,7 @@
           </div>
           <div *ngIf="submitted && f.phone.errors" class="invalid">
             <div *ngIf="f.phone.errors.required">Số điện thoại không được để trống</div>
+            <div *ngIf="f.phone.errors.pattern">Số điện thoại sai định dạng</div>
           </div>
        </div>
        <div class="col-md-4">
@@ -51,7 +52,8 @@
             placeholder="Chọn tổ chức" 
             [filter]="true" 
             filterBy="name" 
-            [showClear]="true"  
+            [showClear]="id != null?false:true"
+            [readonly]="id != null"  
             ></p-dropdown>
          </div>
           <div *ngIf="submitted && f.organizationId.errors" class="invalid">
@@ -63,7 +65,7 @@
         <div>
          <p-dropdown 
          panelStyleClass="font"
-         [options]="orgList" 
+         [options]="roleList" 
          formControlName="role" 
          optionLabel="name" 
          optionValue="id" 
@@ -128,6 +130,9 @@
                <div class="input-data">
                   <input type="text" formControlName="phoneKpi">
                </div>
+               <div *ngIf="submitted && f.phoneKpi.errors" class="invalid">
+                <div *ngIf="f.phoneKpi.errors.pattern">Số điện thoại sai định dạng</div>
+              </div>
              </div>
            </div>
            <div class="row">
@@ -136,7 +141,7 @@
                <div>
                 <p-dropdown 
                   panelStyleClass="font"
-                  [options]="orgList" 
+                  [options]="networkList" 
                   formControlName="networkKpi" 
                   optionLabel="name" 
                   optionValue="id" 

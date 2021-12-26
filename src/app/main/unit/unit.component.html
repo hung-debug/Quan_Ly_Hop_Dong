@@ -18,33 +18,31 @@
     </div>
   </div>
   <div class="row" style="padding-top: 20px;">
-    <p-table [value]="list" [paginator]="true" [rows]="10" id="table">
+    <p-treeTable [value]="list" id="table" [autoLayout]="true">
       <ng-template pTemplate="header" let-columns>
+      <tr> 
+        <th *ngFor="let col of cols" [style]='col.style'>
+          {{col.header}}
+        </th>
+      </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
         <tr>
-            <th *ngFor="let col of cols" [style]='col.style'>
-              {{col.header}}
-            </th>
+          <td><p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler><a (click)="detailUnit(rowData.id)" style="color: #0160AE; cursor: pointer;">{{rowData.name}}</a></td>
+          <td>{{rowData.short_name}}</td>
+          <td>{{rowData.code}}</td>
+          <td>{{rowData.status==1?'Hoạt động':'Không hoạt động'}}</td>
+          <td>{{rowData.parent_id==null?'Tổ chức cha':'Tổ chức con'}}</td>
+          <td style="text-align: center">
+            <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUnit(rowData.id)" style="cursor: pointer;"/>
+          </td>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-list>
-          <tr>
-              <td><a (click)="detailUnit(list.id)" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
-              <td>{{list.short_name}}</td>
-              <td>{{list.code}}</td>
-              <td>{{list.status==1?'Hoạt động':'Không hoạt động'}}</td>
-              <td>{{list.parent_id==null?'Tổ chức cha':'Tổ chức con'}}</td>
-              <td style="text-align: center">
-                <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUnit(list.id)" style="cursor: pointer;"/>
-              </td>
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="paginatorleft" let-state>
-        <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-      </ng-template>
-      <ng-template pTemplate="paginatorright" let-state>
-        <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-      </ng-template> 
-    </p-table>
+      
+    </p-treeTable>
+    <div class="footer_page_number">
+      {{'chart.number' | translate}}: {{total}}
+    </div> 
   </div>
 </div>
  

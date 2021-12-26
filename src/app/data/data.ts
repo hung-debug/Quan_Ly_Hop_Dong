@@ -20,3 +20,8 @@ export var single = [
   "value": 6
 }
 ];
+export var networkList = [
+  { id : 1, name: 'Mobifone'},
+  { id : 2, name: 'Viettel'},
+  { id : 3, name: 'Vietnamobile'}
+];

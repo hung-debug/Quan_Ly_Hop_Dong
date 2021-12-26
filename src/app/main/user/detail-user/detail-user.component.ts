@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
+import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
-
+import { networkList } from "../../../data/data";
 @Component({
   selector: 'app-detail-user',
   templateUrl: './detail-user.component.html',
@@ -39,6 +41,8 @@ export class DetailUserComponent implements OnInit {
     private userService : UserService,
     private route: ActivatedRoute,
     public router: Router,
+    private unitService: UnitService,
+    private roleService: RoleService,
     ) {
      }
 
@@ -61,6 +65,32 @@ export class DetailUserComponent implements OnInit {
           this.networkKpi = data.phone_tel;
 
           this.nameHsm = data.hsm_name;
+
+          //set name
+          if(data.organization_id != null){
+            this.unitService.getUnitById(data.organization_id).subscribe(
+              data => {
+                console.log(data);
+                this.organizationId = data.name
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+              }
+            )
+          }
+          if(data.type_id != null){
+            //lay danh sach vai tro
+            this.roleService.getRoleById(data.type_id).subscribe(data => {
+              console.log(data);
+              this.role = data.name;
+            });
+          }
+          if(data.phone_tel != null){
+            networkList.filter((i: any) => {
+              if(i.id == data.phone_tel){
+                this.networkKpi = i.name;
+              }
+            });
+          }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
         }

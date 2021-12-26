@@ -3,17 +3,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { AppService } from 'src/app/service/app.service';
 import { NodeService } from 'src/app/service/node.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { UserService } from 'src/app/service/user.service';
 import { AddUnitComponent } from './add-unit/add-unit.component';
 import { DetailUnitComponent } from './detail-unit/detail-unit.component';
 
-export interface TreeNode {
-  name?: any;
-  short_name?: any;
-  code?: any;
-  status?: any;
-  parent_id?: any;
-  children?: TreeNode[];
+export class TreeNode {
+  data:{
+    name:any;
   }
+  constructor(name:any) {
+    this.data.name = name;
+  }
+}
 @Component({
   selector: 'app-unit',
   templateUrl: './unit.component.html',
@@ -23,12 +24,18 @@ export class UnitComponent implements OnInit {
 
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private unitService: UnitService) { }
+    private unitService: UnitService,
+    private nodeService: NodeService,
+    private userService: UserService) { }
 
   code:any = "";
   name:any = "";
   list: any[];
+  listData:any[];
   cols: any[];
+  files:any[];
+  test:any;
+  total:any;
 
   ngOnInit(): void {
     this.appService.setTitle("DANH SÁCH TỔ CHỨC");
@@ -42,14 +49,74 @@ export class UnitComponent implements OnInit {
       { field: 'parent_id', header: 'Loại tổ chức', style:'text-align: left;' },
       { field: 'id', header: 'Quản lý', style:'text-align: center;' },
       ];
-  }
 
+      // this.nodeService.list().subscribe(response => {
+        
+      //   this.files = response;
+      //   console.log(this.files);
+      // });
+
+      
+  }  
+
+  array_empty: any = [];
   searchUnit(){
+    //lay id to chuc nguoi truy cap
+    //let orgId = this.userService.getInforUser().organization_id;
+
     this.unitService.getUnitList(this.code, this.name).subscribe(response => {
-      console.log(response);
-      this.list = response.entities;
+      this.listData = response.entities;
+      console.log(this.listData);
+      this.total = this.listData.length;
+
+      //let arrCha = this.listData.filter((p: any) => p.id == orgId);
+      let data:any="";
+
+      this.array_empty=[];
+      this.listData.forEach((element: any, index: number) => {
+        let dataChildren;
+        dataChildren = this.findChildren(element);
+        data = {
+          data:
+          {
+            id: element.id, 
+            name: element.name, 
+            short_name: element.short_name,
+            code: element.code,
+            status: element.status,
+            parent_id: element.parent_id,
+          },
+          expanded: true,
+          children: dataChildren
+        };
+        
+        this.array_empty.push(data);
+      })
+      this.list = this.array_empty;
       console.log(this.list);
     });
+  }
+
+  findChildren(element:any){
+    let dataChildren:any[]=[];
+    let arrCon = this.listData.filter((p: any) => p.parent_id == element.id);
+    arrCon.forEach((elementCon: any, indexCOn: number) => {
+      dataChildren.push(
+      {
+        data:
+        {
+          id: elementCon.id, 
+          name: elementCon.name, 
+          short_name: elementCon.short_name,
+          code: elementCon.code,
+          status: elementCon.status,
+          parent_id: elementCon.parent_id,
+        },
+        expanded: true,
+        children: this.findChildren(elementCon)
+      });
+    })
+    return dataChildren;
   }
 
   addUnit() {

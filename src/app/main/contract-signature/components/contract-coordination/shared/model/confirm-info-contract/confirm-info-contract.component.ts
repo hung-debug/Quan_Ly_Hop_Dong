@@ -14,7 +14,8 @@ import { ToastService } from 'src/app/service/toast.service';
 export class ConfirmInfoContractComponent implements OnInit {
   @Input() datas: any;
   @Input() step: any;
-  @Output() stepChangeConfirmInforContract = new EventEmitter<string>();
+  // @Output() stepChangeConfirmInforContract = new EventEmitter<string>();
+  @Output() stepChangeSampleContract = new EventEmitter<string>();
 
   constructor(private formBuilder: FormBuilder,
               public datepipe: DatePipe,
@@ -51,16 +52,16 @@ export class ConfirmInfoContractComponent implements OnInit {
   ngOnInit(): void {
     console.log("step4" + this.datas.contract_user_sign);
 
-    this.contractFileName = this.datas.file_name;
-    this.dateDeadline = this.datepipe.transform(this.datas.sign_time, 'dd/MM/yyyy') || '';
-    this.comment = this.datas.notes;
+    this.contractFileName = this.datas.i_data_file_contract[0].filename;
+    this.dateDeadline = this.datepipe.transform(this.datas.is_data_contract.sign_time, 'dd/MM/yyyy') || '';
+    this.comment = this.datas.is_data_contract.notes;
 
-    if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
-      let data_user_sign = [...this.datas.determine_contract];
+    if (this.datas.determine_contract) {
+      let data_user_sign = JSON.parse(JSON.stringify(this.datas.determine_contract));
       console.log(data_user_sign);
-      data_user_sign.forEach((element: any) => {
-        if (element.type == 1) {
-          element.recipients.forEach((item: any) => {
+      // data_user_sign.forEach((element: any) => {
+        if (data_user_sign.type == 1) {
+          data_user_sign.recipients.forEach((item: any) => {
             if (item.role == 2 && item.name) {
               this.userViews += this.connUserViews + item.name + " - " + item.email;
               this.connUserViews = "<br>";
@@ -74,8 +75,8 @@ export class ConfirmInfoContractComponent implements OnInit {
               this.connUserDocs = "<br>";
             }
           })
-        } else if (element.type == 2) {
-          element.recipients.forEach((item: any) => {
+        } else if (data_user_sign.type == 2) {
+          data_user_sign.recipients.forEach((item: any) => {
             if (item.role == 1 && item.name) {
               this.partnerLeads += this.connPartnerLeads + item.name + " - " + item.email;
               this.connPartnerLeads = "<br>";
@@ -93,94 +94,15 @@ export class ConfirmInfoContractComponent implements OnInit {
               this.connPartnerDocs = "<br>";
             }
           })
-        } else if (element.type == 3) {
-          element.recipients.forEach((item: any) => {
+        } else if (data_user_sign.type == 3) {
+          data_user_sign.recipients.forEach((item: any) => {
             if (item.role == 3 && item.name) {
               this.partnerSigns += this.connPartnerSigns + item.name + " - " + item.email;
               this.connPartnerSigns = "<br>";
             }
           })
         }
-      })
-      // this.getListSignName(data_list_user_sign);
     }
-
-    // this.conn = '';
-    // if (this.datas.userForm.userViews && this.datas.userForm.userViews.length > 0) {
-    //   this.datas.userForm.userViews.forEach((item: any) => {
-    //     this.userViews = this.userViews + this.conn + item.name + " - " + item.email;
-    //     this.conn = "<br>";
-    //   })
-    // }
-
-    // let userSigns:string = '';
-    // this.conn = '';
-    // if (this.datas.userForm.userSigns && this.datas.userForm.userSigns.length > 0) {
-    //   this.datas.userForm.userSigns.forEach((item: any) => {
-    //     this.userSigns = this.userSigns + this.conn + item.name + " - " + item.email;
-    //     this.conn = "<br>";
-    //   })
-    // }
-
-    // let userDocs:string = '';
-    // this.conn = '';
-    // if (this.datas.userForm.userDocs && this.datas.userForm.userDocs.length > 0) {
-    //   this.datas.userForm.userDocs.forEach((item: any) => {
-    //     this.userDocs = this.userDocs + this.conn + item.name + " - " + item.email;
-    //     this.conn = "<br>";
-    //   })
-    // }
-
-    // let connLeads = '';
-    // let connViews = '';
-    // let connSigns = '';
-    // let connDocs = '';
-    // let connUsers = '';
-    // if (this.datas.partnerForm.partnerArrs && this.datas.partnerForm.partnerArrs.length > 0) {
-    //   this.datas.partnerForm.partnerArrs.forEach((element: any) => {
-
-    //     if(element.type == 1){
-    //       if (element.partnerLeads && element.partnerLeads.length > 0) {
-    //         element.partnerLeads.forEach((item: any) => {
-    //           this.partnerLeads = this.partnerLeads + connLeads + item.name + " - " + item.email;
-    //           connLeads = "<br>";
-    //         })
-    //       }
-
-    //       if (element.partnerViews && element.partnerViews.length > 0) {
-    //         element.partnerViews.forEach((item: any) => {
-    //           this.partnerViews = this.partnerViews + connViews + item.name + " - " + item.email;
-    //           connViews = "<br>";
-    //         })
-    //       }
-
-    //       if (element.partnerSigns && element.partnerSigns.length > 0) {
-    //         element.partnerSigns.forEach((item: any) => {
-    //           this.partnerSigns = this.partnerSigns + connSigns + item.name + " - " + item.email;
-    //           connSigns = "<br>";
-    //         })
-    //       }
-
-    //       if (element.partnerDocs && element.partnerDocs.length > 0) {
-    //         element.partnerDocs.forEach((item: any) => {
-    //           this.partnerDocs = this.partnerDocs + connDocs + item.name + " - " + item.email;
-    //           connDocs = "<br>";
-    //         })
-    //       }
-    //     }else{
-    //       if (element.partnerUsers && element.partnerUsers.length > 0) {
-    //         element.partnerUsers.forEach((item: any) => {
-    //           this.partnerUsers = this.partnerUsers + connUsers + item.name + " - " + item.email;
-    //           connUsers = "<br>";
-    //         })
-    //       }
-    //     }
-    //   })
-    // }
-
-    // if(this.partnerUsers != ''){
-    //   this.partnerSigns += '<br>' + this.partnerUsers;
-    // }
   }
 
   back(e: any, step?: any) {
@@ -195,17 +117,28 @@ export class ConfirmInfoContractComponent implements OnInit {
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
-    this.stepChangeConfirmInforContract.emit(step);
+    // this.stepChangeConfirmInforContract.emit(step);
+    this.stepChangeSampleContract.emit(step);
   }
 
   callAPI() {
     //call API step confirm
-    //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
-    this.contractService.changeStatusContract(this.datas.data_contract_document_id.contract_id, 10).subscribe((data) => {
+    this.datas.determine_contract.recipients.forEach((item: any) => {
+      if (!item.phone) {
+        item.phone = null;
+      }
+      delete item.id;
+    })
 
+    // this.contractService.addConfirmContract(this.datas).subscribe((data) => {
+    this.contractService.coordinationContract(this.datas.determine_contract.id , this.datas.determine_contract.recipients).subscribe((data) => {
         console.log(JSON.stringify(data));
         setTimeout(() => {
           this.datas.step = variable.stepSampleContract.step_coordination;
+          // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
+          localStorage.setItem('coordination_complete', JSON.stringify(true));
+          this.datas.coordination_complete = true;
+          // this.datas.view = true;
           this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.data_contract_document_id.contract_id]);
           this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 10000);
         }, 100)

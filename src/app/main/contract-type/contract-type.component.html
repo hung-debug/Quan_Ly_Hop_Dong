@@ -18,7 +18,7 @@
     </div>
   </div>
   <div class="row" style="padding-top: 20px;">
-    <p-table [value]="list" [paginator]="true" [rows]="10" id="table">
+    <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
       <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of cols" [style]='col.style'>

@@ -98,8 +98,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // cập nhật defind dữ liệu
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
-    this.datas.determine_contract.forEach((res: any) => {
-      res.recipients.forEach((element: any) => {
+    // this.datas.determine_contract.forEach((res: any) => {
+      this.datas.determine_contract.recipients.forEach((element: any) => {
         let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == element.id)[0];
         if (data_duplicate) {
           // lấy ra dữ liệu bị trùng và update lại với dữ liệu mới;
@@ -108,16 +108,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           data_duplicate.phoneNumber = element.phoneNumber;
           data_duplicate.sign_type = element.sign_type;
           data_duplicate.is_otp = element.is_otp;
-          data_duplicate['is_type_party'] = res.type;
+          data_duplicate['is_type_party'] = this.datas.determine_contract.type;
           data_duplicate['role'] = data_duplicate.recipient.role;
           dataPosition.push(data_duplicate)
         } else {
-          element['is_type_party'] = res.type;
+          element['is_type_party'] = this.datas.determine_contract.type;
           element['role'] = element.role;
           dataNotPosition.push(element)
         }
       })
-    })
+    // })
 
     console.log(dataNotPosition, dataPosition);
 
@@ -150,7 +150,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
 
-    console.log(this.datas.contract_user_sign)
+    // console.log(this.datas.contract_user_sign)
     this.scale = 1;
 
     // this.list_sign_name.forEach((item: any) => {
@@ -196,7 +196,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     // convert base64 file pdf to url
-    this.pdfSrc = this.datas.i_data_file_contract[0].path;
+    let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
+    let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
+    if (fileContract_2) {
+      this.pdfSrc = fileContract_2.path;
+    } else {
+      this.pdfSrc = fileContract_1.path;
+    }
+
     // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
     // render pdf to canvas
     this.getPage();
@@ -1025,9 +1032,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
 
       console.log(data_sample_contract);
-      this.contractService.getContractSample(data_sample_contract).subscribe((data) => {
+      this.contractService.getContractSample(data_sample_contract).subscribe((data: any) => {
           console.log(JSON.stringify(data));
-          this.datas.is_data_object_signature = data_sample_contract;
+          this.datas.is_data_object_signature.forEach((p: any) => {
+            data.forEach((element: any) => {
+              if (p.recipient_id == element.recipient_id) {
+                p = element;
+              } else this.datas.is_data_object_signature.push(element);
+            })
+          })
+
+          // this.datas.is_data_object_signature = data_sample_contract;
           this.step = variable.stepSampleContract.step4;
           this.datas.stepLast = this.step
           this.nextOrPreviousStep(this.step);

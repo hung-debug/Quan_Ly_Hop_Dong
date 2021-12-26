@@ -30,6 +30,7 @@ export class AuthGuard implements CanActivate {
     })
     //@ts-ignore
     // let url = next.url.includes('/main/contract-signature/signatures/');
+
     if (next.queryParams.loginType && next.queryParams.loginType== 1 && next._urlSegment.segments.some((p: any) => p.path == 'contract-signature')) {
 
       if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
@@ -52,6 +53,7 @@ export class AuthGuard implements CanActivate {
           console.log(`econtract://app/login/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}`)
         }
       } else if (!sessionStorage.getItem('url')) {
+
         sessionStorage.setItem('url', state.url);
         let is_local = sessionStorage.getItem('url');
         if (is_local?.includes('loginType')) {

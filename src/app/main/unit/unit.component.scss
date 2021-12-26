@@ -57,9 +57,13 @@
 :host ::ng-deep {
   .pi-fw {
     color:  #106DB6;
-    margin-right: 5px;
+    font-size: 10px;
+    font-weight: 600;
   }
-
+  .p-treetable-toggler {
+    width: 1rem !important;
+    height: 1rem !important;
+  }
   .p-paginator .p-paginator-pages .p-paginator-page{
     color: black;
     float: left;
@@ -87,13 +91,16 @@
     width: 50px !important;
   }
 
-  .p-datatable-table, .ng-star-inserted{
+  .p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{
     font-size: 13px;
     font-family: font_lexend_deca;
   }
-  .p-datatable .p-paginator-bottom {
+  .p-treetable .p-paginator-bottom {
     border-width: 0;
   }
 }
-
-  
+.footer_page_number{
+  color: #0160AE;
+  padding: 8px 16px;
+  text-align: right;
+} 

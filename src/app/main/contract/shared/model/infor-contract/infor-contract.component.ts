@@ -226,55 +226,80 @@ export class InforContractComponent implements OnInit {
                 console.log(JSON.stringify(data));
                 this.datas.document_id = data?.id;
 
-                this.contractService.getDataNotifyOriganzation().subscribe((data: any) => {
-                  console.log(JSON.stringify(data));
-                  this.datas.name_origanzation = data.name;
+                //upload file hop dong lan 2
+                this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
+                  this.datas.filePathDone = data.file_object.file_path;
+                  this.datas.fileNameDone = data.file_object.filename;
+                  this.datas.fileBucketDone = data.file_object.bucket;
+  
+                  this.contractService.addDocumentDone(this.datas).subscribe((data) => {
+                    console.log(data);
 
-                  if (this.datas.attachFile != null) {
-                    this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
-                        console.log(JSON.stringify(data));
-                        this.datas.filePathAttach = data.file_object.file_path;
-                        this.datas.fileNameAttach = data.file_object.filename;
-                        this.datas.fileBucketAttach = data.file_object.bucket;
-                        this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
+                    this.contractService.getDataNotifyOriganzation().subscribe((data: any) => {
+                      console.log(JSON.stringify(data));
+                      this.datas.name_origanzation = data.name;
+    
+                      if (this.datas.attachFile != null) {
+                        this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
                             console.log(JSON.stringify(data));
-                            this.datas.document_attach_id = data?.id;
-                            //next step
-                            this.step = variable.stepSampleContract.step2;
-                            this.datas.stepLast = this.step;
-                            // this.datas.document_id = '1';
-                            this.nextOrPreviousStep(this.step);
-                            console.log(this.datas);
-                            this.spinner.hide();
+                            this.datas.filePathAttach = data.file_object.file_path;
+                            this.datas.fileNameAttach = data.file_object.filename;
+                            this.datas.fileBucketAttach = data.file_object.bucket;
+                            this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
+                                console.log(JSON.stringify(data));
+                                this.datas.document_attach_id = data?.id;
+                                //next step
+                                this.step = variable.stepSampleContract.step2;
+                                this.datas.stepLast = this.step;
+                                // this.datas.document_id = '1';
+                                this.nextOrPreviousStep(this.step);
+                                console.log(this.datas);
+                                this.spinner.hide();
+                              },
+                              error => {
+                                this.spinner.hide();
+                                this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 10000);
+                                return false;
+                              }
+                            );
                           },
                           error => {
                             this.spinner.hide();
-                            this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 10000);
+                            this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 10000);
                             return false;
                           }
                         );
-                      },
-                      error => {
+                      } else {
+    
+                        //next step
+                        this.step = variable.stepSampleContract.step2;
+                        this.datas.stepLast = this.step;
+                        // this.datas.document_id = '1';
+                        this.nextOrPreviousStep(this.step);
+                        console.log(this.datas);
                         this.spinner.hide();
-                        this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 10000);
-                        return false;
                       }
-                    );
-                  } else {
-
-                    //next step
-                    this.step = variable.stepSampleContract.step2;
-                    this.datas.stepLast = this.step;
-                    // this.datas.document_id = '1';
-                    this.nextOrPreviousStep(this.step);
-                    console.log(this.datas);
+                    }, error => {
+                      this.spinner.hide();
+                      this.toastService.showErrorHTMLWithTimeout("no.get.information.organization.error", "", 10000);
+                      return false;
+                    })
+                  },
+              
+                  error => {
                     this.spinner.hide();
+                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
+                    return false;
                   }
-                }, error => {
+                  );
+                },
+              
+                error => {
                   this.spinner.hide();
-                  this.toastService.showErrorHTMLWithTimeout("no.get.information.organization.error", "", 10000);
+                  this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
                   return false;
-                })
+                }
+              );
               },
               error => {
                 this.spinner.hide();
@@ -400,42 +425,66 @@ export class InforContractComponent implements OnInit {
                 console.log(JSON.stringify(data));
                 this.datas.document_id = data?.id;
 
-                if(this.datas.attachFile != null){
-                  this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
-                    console.log(JSON.stringify(data));
-                    this.datas.filePathAttach = data.file_object.file_path;
-                    this.datas.fileNameAttach = data.file_object.filename;
-                    this.datas.fileBucketAttach = data.file_object.bucket;
-                    this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
-                      console.log(JSON.stringify(data));
-                      this.datas.document_attach_id = data?.id;
+                //upload file hop dong lan 2
+                this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
+                  this.datas.filePathDone = data.file_object.file_path;
+                  this.datas.fileNameDone = data.file_object.filename;
+                  this.datas.fileBucketDone = data.file_object.bucket;
 
+                  this.contractService.addDocumentDone(this.datas).subscribe((data) => {
+                    if(this.datas.attachFile != null){
+                      this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
+                        console.log(JSON.stringify(data));
+                        this.datas.filePathAttach = data.file_object.file_path;
+                        this.datas.fileNameAttach = data.file_object.filename;
+                        this.datas.fileBucketAttach = data.file_object.bucket;
+                        this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
+                          console.log(JSON.stringify(data));
+                          this.datas.document_attach_id = data?.id;
+    
+                          //next step
+                          this.router.navigate(['/main/contract/create/draff']);
+                          this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 10000);
+    
+                          this.spinner.hide();
+                          },
+                          error => {
+                            this.spinner.hide();
+                            this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 10000);
+                            return false;
+                          }
+                        );
+                        },
+                        error => {
+                          this.spinner.hide();
+                          this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 10000);
+                          return false;
+                        }
+                      );
+                    }else {
                       //next step
                       this.router.navigate(['/main/contract/create/draff']);
                       this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 10000);
-
                       this.spinner.hide();
-                      },
-                      error => {
-                        this.spinner.hide();
-                        this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 10000);
-                        return false;
-                      }
-                    );
-                    },
-                    error => {
-                      this.spinner.hide();
-                      this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 10000);
-                      return false;
                     }
+                  },
+              
+                  error => {
+                    this.spinner.hide();
+                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
+                    return false;
+                  }
                   );
-                }else {
-                  //next step
-                  this.router.navigate(['/main/contract/create/draff']);
-                  this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 10000);
+                },
+              
+                error => {
                   this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
+                  return false;
                 }
+              );
               },
+              
               error => {
                 this.spinner.hide();
                 this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
