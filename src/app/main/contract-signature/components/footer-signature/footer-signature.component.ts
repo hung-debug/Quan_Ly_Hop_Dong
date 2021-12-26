@@ -1,6 +1,8 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {variable} from "../../../../config/variable";
-import {ProcessingHandleEcontractComponent} from "../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
+import {
+  ProcessingHandleEcontractComponent
+} from "../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ForwardContractComponent} from "../../shared/model/forward-contract/forward-contract.component";
 import {ContractService} from "../../../../service/contract.service";
@@ -24,6 +26,11 @@ export class FooterSignatureComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.datas);
+    //@ts-ignore
+    let isCheckCoordination = JSON.parse(localStorage.getItem('coordination_complete'));
+    if (isCheckCoordination) {
+      this.datas.coordination_complete = true;
+    }
   }
 
   action() {
@@ -42,6 +49,21 @@ export class FooterSignatureComponent implements OnInit {
 
       console.log(recipient_data);
       if (recipient_data) {
+        // this.datas.determine_contract = recipient_data;
+        // @ts-ignore
+        if (recipient_data['recipients']) {
+          //@ts-ignore
+          let data = recipient_data['recipients'].filter((p: any) => p.role != 1);
+          //@ts-ignore
+          recipient_data['recipients'] = data;
+          // recipient_data['recipients'].forEach((element: any, index: number) => {
+          //   if (element.role == 1) {
+          //     // @ts-ignore
+          //     delete recipient_data['recipients'][index];
+          //   }
+          // })
+        }
+
         this.datas.determine_contract = recipient_data;
         this.datas.step = variable.stepSampleContract.step_confirm_coordination;
       }

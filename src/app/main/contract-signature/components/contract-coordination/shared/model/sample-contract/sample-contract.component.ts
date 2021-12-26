@@ -1025,9 +1025,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
 
       console.log(data_sample_contract);
-      this.contractService.getContractSample(data_sample_contract).subscribe((data) => {
+      this.contractService.getContractSample(data_sample_contract).subscribe((data: any) => {
           console.log(JSON.stringify(data));
-          this.datas.is_data_object_signature = data_sample_contract;
+          this.datas.is_data_object_signature.forEach((p: any) => {
+            data.forEach((element: any) => {
+              if (p.recipient_id == element.recipient_id) {
+                p = element;
+              } else this.datas.is_data_object_signature.push(element);
+            })
+          })
+
+          // this.datas.is_data_object_signature = data_sample_contract;
           this.step = variable.stepSampleContract.step4;
           this.datas.stepLast = this.step
           this.nextOrPreviousStep(this.step);

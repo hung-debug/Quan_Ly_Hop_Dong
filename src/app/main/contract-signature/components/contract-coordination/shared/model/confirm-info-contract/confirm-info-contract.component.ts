@@ -123,22 +123,31 @@ export class ConfirmInfoContractComponent implements OnInit {
 
   callAPI() {
     //call API step confirm
-    //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
-    // this.contractService.coordinationContract(this.datas.determine_contract.id , this.datas.determine_contract).subscribe((data) => {
-        // console.log(JSON.stringify(data));
+    this.datas.determine_contract.recipients.forEach((item: any) => {
+      if (!item.phone) {
+        item.phone = null;
+      }
+      delete item.id;
+    })
+
+    // this.contractService.addConfirmContract(this.datas).subscribe((data) => {
+    this.contractService.coordinationContract(this.datas.determine_contract.id , this.datas.determine_contract.recipients).subscribe((data) => {
+        console.log(JSON.stringify(data));
         setTimeout(() => {
           this.datas.step = variable.stepSampleContract.step_coordination;
+          // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
+          localStorage.setItem('coordination_complete', JSON.stringify(true));
           this.datas.coordination_complete = true;
-          this.datas.view = true;
+          // this.datas.view = true;
           this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.data_contract_document_id.contract_id]);
           this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 10000);
         }, 100)
-      // },
-      // error => {
-      //   console.log("false content");
-      //   return false;
-      // }
-    // );
+      },
+      error => {
+        console.log("false content");
+        return false;
+      }
+    );
 
   }
 
