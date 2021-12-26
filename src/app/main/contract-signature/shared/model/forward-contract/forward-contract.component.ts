@@ -67,8 +67,8 @@ export class ForwardContractComponent implements OnInit {
   }
 
   checkCanSwitchContract() {
-    if (this.datas?.is_data_contract?.participants?.length) {
-      for (const participant of this.datas.is_data_contract.participants) {
+    if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
+      for (const participant of this.datas.dataContract.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
           if (this.myForm.value.email == recipient.email) {
             return false;
