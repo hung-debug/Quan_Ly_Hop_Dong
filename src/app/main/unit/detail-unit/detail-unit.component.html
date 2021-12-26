@@ -1,1 +1,73 @@
-<p>detail-unit works!</p>
+<div class="container-fluid">
+    <div style="text-align: center; font-weight: bold">
+      <h3 style="color: #106DB6; font-family: inherit;">{{this.data.title}}</h3>
+    </div>
+    <div class="content">
+        <div class="row">  
+            <div class="col-md-6">  
+                <div class="label_item">Tên tổ chức</div>
+                <div>
+                    <div [innerHTML]="name" class="input_text"></div>
+                </div>
+            </div>
+        
+            <div class="col-md-6">
+                <div class="label_item">Tên viết tắt</div>
+                <div>
+                    <div [innerHTML]="short_name" class="input_text"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label_item">Mã tổ chức</div>
+                <div>
+                    <div [innerHTML]="code" class="input_text"></div>
+                </div>
+            </div>
+        
+            <div class="col-md-6">
+                <div class="label_item">Địa chỉ email</div>
+                <div>
+                    <div [innerHTML]="email" class="input_text"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label_item">Tổ chức cấp trên</div>
+                <div>
+                    <div [innerHTML]="parent_id" class="input_text"></div>
+                </div>
+            </div>
+        
+            <div class="col-md-6">
+                <div class="label_item">Số điện thoại</div>
+                <div>
+                    <div [innerHTML]="phone" class="input_text"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label_item">Fax</div>
+                <div>
+                    <div [innerHTML]="fax" class="input_text"></div>
+                </div>
+            </div>
+        
+            <div class="col-md-6" style="align-self: center;">
+                <input type="radio" checked style="outline: none;">
+                <span> {{status==1?'Hoạt động':'Không hoạt động'}}</span>
+            </div>
+        </div>
+    
+        <div class="row" style="justify-content: center;padding-top: 10px;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">Hủy</button>
+        </div>
+    </div>
+  </div>
+  

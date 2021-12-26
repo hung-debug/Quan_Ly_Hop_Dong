@@ -1,6 +1,6 @@
 <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
   <app-sidebar *ngIf="getShowHideSideBar()" (evenSelectSidebar)="getName($event)"></app-sidebar>
-  <main class="page-content" [ngStyle]="getStyleWithSideBar()">
+  <main class="page-content" [ngStyle]="getStyleWithSideBar()" style="padding-bottom: 25px;">
       <header [ngStyle]="getStyleSideBar()">
         <div class="search-wrapper">
           <h3>{{title | translate}}</h3>
@@ -75,11 +75,12 @@
             <router-outlet></router-outlet>
           </div>
         </div>
-        <div *ngIf="this.isShowCopyRight && this.isRouterContractNew" class="content_footer">
-          @Copyright 2021 - MobiFone
-        </div>
       </div>
+      
   </main>
+  <div *ngIf="this.isShowCopyRight && this.isRouterContractNew" class="content_footer">
+    <div>@Copyright 2021 - MobiFone</div>
+  </div>
 </div>
 
 <!-- Popup reset password -->

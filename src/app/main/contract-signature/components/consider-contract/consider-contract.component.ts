@@ -15,7 +15,9 @@ import {ContractService} from "../../../../service/contract.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import * as $ from "jquery";
-import {ProcessingHandleEcontractComponent} from "../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
+import {
+  ProcessingHandleEcontractComponent
+} from "../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
 import interact from "interactjs";
 import {variable} from "../../../../config/variable";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -29,6 +31,8 @@ import {forkJoin, throwError} from "rxjs";
 import {ToastService} from "../../../../service/toast.service";
 import {UploadService} from "../../../../service/upload.service";
 import {NgxSpinnerService} from "ngx-spinner";
+import {DigitalSignatureService} from "../service/digital-sign.service";
+import {encode} from "base64-arraybuffer";
 
 @Component({
   selector: 'app-consider-contract',
@@ -46,14 +50,16 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   thePDF = null;
   pageNumber = 1;
   canvasWidth = 0;
+  ratioPDF = 595 / 1240;
+  currentHeight = 0;
   arrPage: any = [];
   objDrag: any = {};
   scale: any;
   objPdfProperties: any = {
     pages: [],
   };
-  confirmConsider = 1;
-  confirmSignature = 1;
+  confirmConsider = null;
+  confirmSignature = null;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -97,7 +103,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   isEnableText: boolean = false;
   isChangeText: boolean = false;
   loaded: boolean = false;
+  loadedPdfView: boolean = false;
   allFileAttachment: any[];
+  allRelateToContract: any[];
 
   isPartySignature: any = [
     {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
@@ -133,6 +141,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     private toastService : ToastService,
     private uploadService : UploadService,
     private spinner: NgxSpinnerService,
+    private digitalSignatureService: DigitalSignatureService,
     private dialog: MatDialog
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
@@ -140,6 +149,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
+    this.digitalSignatureService.getJson();
     this.getDataContractSignature();
   }
 
@@ -170,6 +180,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }*/
       this.datas = this.data_contract;
       this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
+      this.allRelateToContract = this.datas.is_data_contract.refs;
       this.checkIsViewContract();
 
       this.datas.is_data_object_signature.forEach((element: any) => {
@@ -309,6 +320,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.setPosition();
         this.eventMouseover();
+        this.loadedPdfView = true;
       }, 100)
     })
   }
@@ -368,6 +380,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       this.canvasWidth = viewport.width;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
+      this.prepareInfoSignUsbToken(pageNumber, canvas.height);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
       if (!_objPage) {
         this.objPdfProperties.pages.push({
@@ -413,7 +426,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
     }
-    style.backgroundColor = d.value ? '' : '#EBF8FF';
+    style.backgroundColor = d.valueSign ? '' : '#EBF8FF';
+    style.display = ((this.confirmConsider && this.confirmConsider == 1) || (this.confirmSignature && this.confirmSignature == 1)) ? '' : 'none';
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";
     }
@@ -437,9 +451,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
 // hàm stype đối tượng boder kéo thả
   changeColorDrag(role: any, valueSign: any, isDaKeo?: any) {
-    if (isDaKeo && !valueSign.value) {
+    if (isDaKeo && !valueSign.valueSign) {
       return 'ck-da-keo';
-    } else if (!valueSign.value) {
+    } else if (!valueSign.valueSign) {
       return 'employer-ck';
     } else {
       return '';
@@ -623,6 +637,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   }
 
   async submitEvents(e: any) {
+    if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
+      this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng', '', 1000);
+      return;
+    }
     if (e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
@@ -638,15 +656,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         cancelButtonColor: '#b0bec5',
         confirmButtonText: 'Xác nhận',
         cancelButtonText: 'Hủy'
-      }).then((result) => {
+      }).then(async (result) => {
         if (result.isConfirmed) {
           if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-            const signD = this.isDataObjectSignature.find((item: any) => item.type == 3 && item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && !item.value);
-            if (signD) {
-              this.signDigitalDocument();
-            } else {
-              this.signContractSubmit();
-            }
+            this.signContractSubmit();
           }
         }
       });
@@ -773,56 +786,39 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     return new Blob([ia], { type: mimeString })
   }
 
-  signDigitalDocument() {
-    this.contractService.getAllAccountsDigital().subscribe(
-      result => {
-        this.signCertDigital = result;
-      }
-    );
-    setTimeout(() => {
+  async signDigitalDocument() {
+    const res: any = await this.contractService.getAllAccountsDigital();
+    if (res) {
+      this.signCertDigital = res.data;
       for(const signUpdate of this.isDataObjectSignature) {
         if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
           && signUpdate?.recipient?.email === this.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
-          this.contractService.getFileContract(this.idContract).subscribe((data) => {
-            let fileC = null;
-            const pdfC2 = data.find((p: any) => p.type == 2);
-            const pdfC1 = data.find((p: any) => p.type == 1);
-            if (pdfC2) {
-              fileC = pdfC2.path;
-            } else if (pdfC1) {
-              fileC = pdfC1.path;
-            } else {
-              return;
-            }
+          let fileC = await this.contractService.getFileContractPromise(this.idContract);
+          const pdfC2 = fileC.find((p: any) => p.type == 2);
+          const pdfC1 = fileC.find((p: any) => p.type == 1);
+          if (pdfC2) {
+            fileC = pdfC2.path;
+          } else if (pdfC1) {
+            fileC = pdfC1.path;
+          } else {
+            return;
+          }
 
-            const signDigital = JSON.parse(JSON.stringify(signUpdate));
-            signDigital.Serial = this.signCertDigital.Serial;
-            this.contractService.getDataFileUrl(fileC).subscribe(
-              (data) => {
-                signDigital.valueBase64 = btoa(
-                  new Uint8Array(data)
-                    .reduce((data, byte) => data + String.fromCharCode(byte), '')
-                );
-                this.contractService.postSignDigitalMobi(signDigital).subscribe(
-                  (response) => {
-                    this.contractService.updateDigitalSignatured(signUpdate.id, response.FileDataSigned).subscribe(
-                      (res) => {
-                        this.toastService.showSuccessHTMLWithTimeout("Ký hợp đồng thành công", "", 1000);
-                        this.router.navigate(['main/form-contract/detail/' + this.idContract]);
-                      }
-                    )
-                  }
-                )
-              }
-            );
+          const signDigital = JSON.parse(JSON.stringify(signUpdate));
+          signDigital.Serial = this.signCertDigital.Serial;
+          const base64String = await this.contractService.getDataFileUrlPromise(fileC);
+          signDigital.valueSignBase64 = encode(base64String);
+          console.log(signDigital.valueSignBase64);
 
-          });
-
+          const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital);
+          await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
         }
       }
-    }, 4000);
+    } else {
+      return;
+    }
   }
 
   signContractSubmit() {
@@ -839,7 +835,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
         const formData = {
           "name": "image_" + new Date().getTime() + ".jpg",
-          "content": signUpdate.value,
+          "content": signUpdate.valueSign,
           organizationId: this.data_contract?.is_data_contract?.organization_id
         }
         signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
@@ -870,18 +866,20 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   }
 
   signContract() {
-    const signUpdate = this.isDataObjectSignature.filter(
+    const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
+    const signUpdatePayload = signUpdateTemp.filter(
       (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
       .map((item: any) =>  {
       return {
         id: item.id,
         name: item.name,
-        value: item.value,
+        value: item.type == 1 ? item.valueSign : item.value,
         font: item.font,
         font_size: item.font_size
       }});
-    this.contractService.updateInfoContractConsider(signUpdate, this.recipientId).subscribe(
-      (result) => {
+    this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId).subscribe(
+      async (result) => {
+        await this.signDigitalDocument();
         this.toastService.showSuccessHTMLWithTimeout(
           [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
           , '', 1000);
@@ -931,7 +929,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
   validateSignature() {
     const validSign = this.isDataObjectSignature.filter(
-      (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && item.required && !item.value && item.type != 3
+      (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived && item.required && !item.valueSign && item.type != 3
     );
     return validSign.length == 0;
   }
@@ -993,6 +991,25 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  prepareInfoSignUsbToken(page: any, heightPage: any) {
+    this.isDataObjectSignature.map((sign: any) => {
+      if (sign.type == 3
+        && sign?.recipient?.email === this.currentUser.email
+        && sign?.recipient?.role === this.datas?.roleContractReceived
+        && sign?.page == page) {
+        sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
+        sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
+        sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
+        sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
+        console.log(sign);
+        return sign;
+      } else {
+        return sign;
+      }
+    });
+    this.currentHeight += heightPage;
   }
 
 }

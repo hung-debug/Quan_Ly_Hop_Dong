@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-add-unit',
@@ -13,6 +14,12 @@ import { UnitService } from 'src/app/service/unit.service';
 export class AddUnitComponent implements OnInit {
   addForm: FormGroup;
   datas: any;
+
+  dropdownOrgSettings: any = {};
+  orgList: Array<any> = [];
+  submitted = false;
+  get f() { return this.addForm.controls; }
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
@@ -20,25 +27,74 @@ export class AddUnitComponent implements OnInit {
     private toastService : ToastService,
     public dialogRef: MatDialogRef<AddUnitComponent>,
     public router: Router,
-    public dialog: MatDialog,) { }
+    public dialog: MatDialog,
+    private userService : UserService,) { 
+
+      this.addForm = this.fbd.group({
+        nameOrg: this.fbd.control("", [Validators.required]),
+        short_name: this.fbd.control("", [Validators.required]),
+        code: this.fbd.control("", [Validators.required]),
+        email: this.fbd.control("", [Validators.required, Validators.email]),
+        phone: this.fbd.control("", [Validators.required]),
+        fax: null,
+        status: 1,
+        parent_id: this.fbd.control("", [Validators.required]),
+      });
+    }
 
   ngOnInit(): void {
-    this.datas = this.data;
-    this.addForm = this.fbd.group({
-      name: this.fbd.control("", [Validators.required]),
-      short_name: this.fbd.control("", [Validators.required]),
-      code: this.fbd.control("", [Validators.required]),
-      email: this.fbd.control("", [Validators.required]),
-      phone: this.fbd.control("", [Validators.required]),
-      fax: null,
-      status: 1,
-      parent_id: null,
+    let orgId = this.userService.getInforUser().organization_id;
+    //lay danh sach to chuc
+    this.unitService.getUnitList('', '').subscribe(data => {
+      console.log(data.entities);
+      this.orgList = data.entities.filter((i: any) => (i.id == orgId || i.parent_id == orgId));
     });
+
+    this.datas = this.data;
+
+    //lay du lieu form cap nhat
+    if( this.data.id != null){
+      this.unitService.getUnitById(this.data.id).subscribe(
+        data => {
+          this.addForm = this.fbd.group({
+            nameOrg: this.fbd.control(data.name, [Validators.required]),
+            short_name: this.fbd.control(data.short_name, [Validators.required]),
+            code: this.fbd.control(data.code, [Validators.required]),
+            email: this.fbd.control(data.email, [Validators.required, Validators.email]),
+            phone: this.fbd.control(data.phone, [Validators.required]),
+            fax: this.fbd.control(data.fax),
+            status: this.fbd.control(data.status),
+            parent_id: this.fbd.control(data.parent_id, [Validators.required]),
+          });
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+        }
+      )
+
+    //khoi tao form them moi
+    }else{
+      this.addForm = this.fbd.group({
+        nameOrg: this.fbd.control("", [Validators.required]),
+        short_name: this.fbd.control("", [Validators.required]),
+        code: this.fbd.control("", [Validators.required]),
+        email: this.fbd.control("", [Validators.required, Validators.email]),
+        phone: this.fbd.control("", [Validators.required]),
+        fax: null,
+        status: 1,
+        parent_id: this.fbd.control(orgId, [Validators.required]),
+      });
+    }
   }
 
   onSubmit() {
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.addForm.invalid) {
+      return;
+    }
     const data = {
-      name: this.addForm.value.name,
+      id: "",
+      name: this.addForm.value.nameOrg,
       short_name: this.addForm.value.short_name,
       code: this.addForm.value.code,
       email: this.addForm.value.email,
@@ -47,15 +103,33 @@ export class AddUnitComponent implements OnInit {
       status: this.addForm.value.status,
       parent_id: this.addForm.value.parent_id,
     }
-    this.unitService.addUnit(data).subscribe(
-      data => {
-        this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 1000);
-        this.dialogRef.close();
-        this.router.navigate(['/main/unit']);
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
-      }
-    )
+    console.log(data);
+    if(this.data.id !=null){
+      data.id = this.data.id;
+      this.unitService.updateUnit(data).subscribe(
+        data => {
+          this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 1000);
+          this.dialogRef.close();
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/unit']);
+          });
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+        }
+      )
+    }else{
+      this.unitService.addUnit(data).subscribe(
+        data => {
+          this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 1000);
+          this.dialogRef.close();
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/unit']);
+          });
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+        }
+      )
+    }
   }
 
 }

@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
 import { NodeService } from 'src/app/service/node.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { AddUserComponent } from './add-user/add-user.component';
+import { DetailUserComponent } from './detail-user/detail-user.component';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -13,61 +16,55 @@ import { AddUserComponent } from './add-user/add-user.component';
 })
 export class UserComponent implements OnInit {
 
-  p:number = 1;
-  page:number = 5; 
-  pageStart:number = 0;
-  pageEnd:number = 0;
-  pageTotal:number = 0;
-
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private nodeService: NodeService) { }
+    private userService: UserService,
+    private unitService: UnitService,
+    private router : Router,) { }
 
-  name:any;
-  email:any;
-  phone:any;
-  files: TreeNode[];
+  organization_id:any = "";
+  email:any = "";
+  list: any[];
   cols: any[];
+  orgList: Array<any> = [];
 
   ngOnInit(): void {
     this.appService.setTitle("DANH SÁCH NGƯỜI DÙNG");
-    this.nodeService.list().subscribe(response => {
-      console.log(response);
-      this.files = response.data;
-      this.pageTotal = this.files.length;
-      this.setPage();
+    this.searchUser();
+
+    this.unitService.getUnitList('', '').subscribe(data => {
+      console.log(data.entities);
+      this.orgList = data.entities;
     });
-    
-    console.log(this.files);
-      this.cols = [
-      { field: 'name', header: 'Name' },
-      { field: 'size', header: 'Size' },
-      { field: 'type', header: 'Type' }
+
+    this.cols = [
+      { field: 'name', header: 'Họ và tên', style:'text-align: left;' },
+      { field: 'email', header: 'Email', style:'text-align: left;' },
+      { field: 'phone', header: 'Số điện thoại', style:'text-align: left;' },
+      { field: 'organization.name', header: 'Tổ chức', style:'text-align: left;' },
+      { field: 'status', header: 'Trạng thái', style:'text-align: left;' },
+      { field: 'type.name', header: 'Vai trò', style:'text-align: left;' },
+      { field: 'id', header: 'Quản lý', style:'text-align: center;' },
       ];
   }
 
-  addUnit() {
-    const data = {
-      title: 'THÊM MỚI NGƯỜI DÙNG'
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(AddUserComponent, {
-      width: '580px',
-      backdrop: 'static',
-      keyboard: false,
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
-    })
-  }
-  setPage(){
-    this.pageStart = (this.p-1)*this.page+1;
-    this.pageEnd = (this.p)*this.page;
-    if(this.pageTotal < this.pageEnd){
-      this.pageEnd = this.pageTotal;
-    }
+  searchUser(){
+    this.userService.getUserList(this.organization_id==null?"":this.organization_id, this.email).subscribe(response => {
+      console.log(response);
+      this.list = response.entities;
+      console.log(this.list);
+    });
   }
 
+  addUser() {
+    this.router.navigate(['/main/form-user/add']);
+  }
+
+  editUser(id:any) {
+    this.router.navigate(['/main/form-user/edit/' + id]);
+  }
+
+  detailUser(id:any) {
+    this.router.navigate(['/main/user-detail/' + id]);
+  }
 }

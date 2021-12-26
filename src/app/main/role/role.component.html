@@ -1,57 +1,50 @@
 <div class="container-fluid">
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-5">
         <div>Tên vai trò</div>
         <div class="input-line">
             <input type="text" [(ngModel)]="name" class="input_text"/>
         </div>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-5">
         <div>Mã vai trò</div>
         <div class="input-line">
             <input type="text" [(ngModel)]="code" class="input_text"/>
         </div>
       </div>
-      <div class="col-md-6 btn_search">
-        <button class="btn btn-lg btn-block btn_submit">{{'btn.search' | translate }}</button>
-        <button class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
+      <div class="col-md-2 btn_search" style="text-align: end; padding: 0;">
+        <button class="btn btn-lg btn-block btn_submit" (click)="searchRole()">{{'btn.search' | translate }}</button>
+      </div>
+      <div class="col-md-2 btn_search" style="text-align: left; padding: 0; margin-top: 10px;">
+        <button class="btn btn-lg btn-block btn_submit" (click)="addRole()">{{'btn.add' | translate }}</button>
       </div>
     </div>
     <div class="row" style="padding-top: 20px;">
-      <p-treeTable [value]="files | paginate:{itemsPerPage: page, currentPage:p}" id="table">
+      <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
         <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th *ngFor="let col of cols" [ttSortableColumn]="col.field">
-            {{col.header}}
-            <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
-          </th>
-        </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
-          <!-- <tr>
-            <td *ngFor="let col of cols; let i = index">
-              <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-              {{rowData[col.field]}}
-            </td>
-          </tr> -->
           <tr>
-            <td>
-                <p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler>
-                <a style="color: #106DB6;">{{rowData.name}}</a>
-            </td>
-            <td>{{rowData.size}}</td>
-            <td>{{rowData.type}}</td>
+              <th *ngFor="let col of cols" [style]='col.style'>
+                {{col.header}}
+              </th>
           </tr>
         </ng-template>
-      </p-treeTable>
-
-      <div class="contract_footer">
-        <div class="footer_title"></div>
-        <div class="footer_pagination">
-          <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
-        </div>
-        <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
-      </div>
+        <ng-template pTemplate="body" let-list>
+            <tr>
+                <td><a (click)="detailRole(list.id)" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
+                <td>{{list.code}}</td>
+                <td></td>
+                <td style="text-align: center">
+                  <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editRole(list.id)" style="cursor: pointer;"/>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+          <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template>
+        <ng-template pTemplate="paginatorright" let-state>
+          <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template> 
+      </p-table>
     </div>
   </div>
  

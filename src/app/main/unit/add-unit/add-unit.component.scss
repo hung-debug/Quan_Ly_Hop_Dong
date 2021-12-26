@@ -9,14 +9,10 @@
     display: flex;
     align-items: center;
 
-    > img {
-        padding-left: 14px;
-    }
-
     > input {
         border: none;
         outline: none;
-        padding-left: 19px;
+        padding-left: 15px;
         width: 100%;
     }
 }  
@@ -42,3 +38,26 @@
     font-size: 13px;
     margin: 0 10px;
 }
+.error-detail{
+    font-size: inherit;
+    padding: 6px;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+:host ::ng-deep {
+    .p-dropdown {
+        border: 1px solid #106DB6;
+        border-radius: 5px;
+        height: 33px;
+        width: 100%;
+        outline: 0;
+        color: black !important;
+    }
+    .p-dropdown-label {
+        padding: 5px 5px 5px 15px;
+    }
+}
+.invalid{
+    color: red;
+}
+  

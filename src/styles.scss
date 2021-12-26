@@ -15,7 +15,17 @@ body { margin: 0; font-family: font_lexend_deca , Roboto, "Helvetica Neue", sans
   font-weight:normal;
   font-style:normal;
 }
-
+.font, .p-inputtext, .p-component{
+  font-size: 13px !important;
+  font-family: font_lexend_deca !important;
+}
+.p-dropdown-filter, .p-dropdown-label, .p-dropdown-panel,
+.p-multiselect-label, .p-multiselect-token-label {
+  color: black !important;
+}
+.p-dropdown-filter, .p-multiselect-filter-container .p-inputtext {
+  padding: 5px !important;
+}
 /* For desktop: */
 .col-1 {width: 8.33%;}
 .col-2 {width: 16.66%;}

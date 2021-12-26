@@ -23,6 +23,8 @@ import { UnitComponent } from './main/unit/unit.component';
 import { InforUserComponent } from './main/user/infor-user/infor-user.component';
 import { ContractTypeComponent } from './main/contract-type/contract-type.component';
 import { RoleComponent } from './main/role/role.component';
+import { AddUserComponent } from './main/user/add-user/add-user.component';
+import { DetailUserComponent } from './main/user/detail-user/detail-user.component';
 
 const routes: Routes = [
   {
@@ -59,6 +61,18 @@ const routes: Routes = [
       {
         path: 'user',
         component: UserComponent,
+      },
+      {
+        path: 'form-user/:action',
+        component: AddUserComponent,
+      },
+      {
+        path: 'form-user/:action/:id',
+        component: AddUserComponent,
+      },
+      {
+        path: 'user-detail/:id',
+        component: DetailUserComponent,
       },
       {
         path: 'user-infor',

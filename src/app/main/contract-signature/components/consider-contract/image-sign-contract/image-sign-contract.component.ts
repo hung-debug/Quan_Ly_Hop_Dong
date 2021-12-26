@@ -120,7 +120,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      this.sign.value = result;
+      this.sign.valueSign = result;
     })
   }
 

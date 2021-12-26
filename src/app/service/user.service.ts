@@ -4,8 +4,22 @@ import { throwError, Observable } from 'rxjs';
 import { map, catchError, retry } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { DatePipe } from '@angular/common';
 export interface User {
-  status: string
+  id: any,
+  name: any,
+  email: any,
+  phone: any,
+  birthday: any,
+  status: any,
+  phone_sign: any,
+  phone_tel: any,
+  sign_image: any,
+  hsm_name: any,
+  type_id: any,
+  organization_id: any,
+  organization:any,
+  type:any,
 }
 
 @Injectable({
@@ -16,8 +30,11 @@ export class UserService {
   forgotPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/request`;
   resetPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/recover`;
   resetPasswordTokenUrl:any = `${environment.apiUrl}/api/v1/customers/changePassword`;
-  addUserUrl:any = `${environment.apiUrl}/api/v1/customer`;
-  getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customer`;
+  addUserUrl:any = `${environment.apiUrl}/api/v1/customers`;
+  updateUserUrl:any = `${environment.apiUrl}/api/v1/customers/`;
+  getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customers/`;
+  listUserUrl:any = `${environment.apiUrl}/api/v1/customers/search`;
+  getUserByEmailUrl:any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
 
   token:any;
   customer_id:any;
@@ -26,7 +43,8 @@ export class UserService {
   email:any;
   phone:any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    public datepipe: DatePipe,) { }
 
   getCurrentUser(){
     this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
@@ -109,18 +127,58 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+    if(datas.birthday != null){
+      datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
+    }
+    
     const body = JSON.stringify({
       name: datas.name,
       email: datas.email,
       phone: datas.phone,
-      organizationId: datas.organizationId,
+      organization_id: datas.organizationId,
       birthday: datas.birthday,
-      role: datas.role,
       status: datas.status,
+      type_id: datas.role,
+
+      sign_image: datas.sign_image,
+
+      phone_sign: datas.phoneKpi,
+      phone_tel: datas.networkKpi,
+
+      hsm_name: datas.nameHsm
     });
     console.log(headers);
     console.log(body);
     return this.http.post<User>(this.addUserUrl, body, {'headers': headers});
+  }
+
+  updateUser(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    if(datas.birthday != null){
+        datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
+    }
+    const body = JSON.stringify({
+      name: datas.name,
+      email: datas.email,
+      phone: datas.phone,
+      organization_id: datas.organizationId,
+      birthday: datas.birthday,
+      status: datas.status,
+      type_id: datas.role,
+
+      sign_image: datas.sign_image,
+
+      phone_sign: datas.phoneKpi,
+      phone_tel: datas.networkKpi,
+
+      hsm_name: datas.nameHsm
+    });
+    console.log(headers);
+    console.log(body);
+    return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
   }
 
   getUserById(id:any){
@@ -128,12 +186,29 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+    
+    console.log(headers);
+    return this.http.get<User>(this.getUserByIdUrl + id, {'headers': headers});
+  }
+
+  getUserByEmail(email:any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-      
+      email: email
     });
     console.log(headers);
-    console.log(body);
-    return this.http.post<User>(this.getUserByIdUrl, body, {'headers': headers});
+    return this.http.post<User>(this.getUserByEmailUrl, body, {'headers': headers});
+  }
+
+  public getUserList(filter_organization_id: any, filter_email: any): Observable<any> {
+    this.getCurrentUser();
+ 
+    let listUserUrl = this.listUserUrl + '?name=&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email + "&size=1000";
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<User[]>(listUserUrl, {headers}).pipe();
   }
 
   // Error handling

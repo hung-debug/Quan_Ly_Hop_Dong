@@ -29,7 +29,9 @@ import { ConfirmInforContractBatchComponent } from './shared-batch/model/confirm
 import { InforContractBatchComponent } from './shared-batch/model/infor-contract-batch/infor-contract-batch.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
-// import {NotificationService} from "../../service/notification/notification.service";
+import {DropdownModule} from 'primeng/dropdown';
+import {CalendarModule} from 'primeng/calendar';
+import {MultiSelectModule} from 'primeng/multiselect';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -78,6 +80,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MatSelectModule,
     PerfectScrollbarModule,
     NgxSpinnerModule,
+    DropdownModule,
+    CalendarModule,
+    MultiSelectModule,
   ],
   entryComponents: [
     ConfirmInforContractComponent,

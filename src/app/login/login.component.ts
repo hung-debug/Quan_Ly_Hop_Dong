@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {AuthenticationService} from '../service/authentication.service';
 import {HttpErrorResponse} from "@angular/common/http";
+import {DeviceDetectorService} from "ngx-device-detector";
 
 @Component({
   selector: 'app-login',
@@ -17,10 +18,12 @@ export class LoginComponent implements OnInit {
   fieldTextType: boolean = false;
   private sub: any;
   type: any = 0;
+  deviceInfo: any;
 
   constructor(
     private authService: AuthenticationService,
     private router: Router,
+    private deviceService: DeviceDetectorService,
     public translate: TranslateService,
     private route: ActivatedRoute,
   ) {
@@ -73,7 +76,10 @@ export class LoginComponent implements OnInit {
                         queryParams: {'recipientId': isRecipientId}
                       });
                   } else if (urlLink.includes('secretary')) {
-                    this.router.navigate(['main/contract-signature/secretary/' + isContractId]);
+                    this.router.navigate(['main/contract-signature/secretary/' + isContractId],
+                      {
+                        queryParams: {'recipientId': isRecipientId}
+                      });
                   } else {
                     this.router.navigate(['/main/contract-signature/signatures/' + isContractId],
                       {
@@ -121,7 +127,7 @@ export class LoginComponent implements OnInit {
       this.sub = this.route.params.subscribe(params => {
         this.type = params['loginType'];
       });
-      
+
     }
     // this.type = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
     // if (this.type) {

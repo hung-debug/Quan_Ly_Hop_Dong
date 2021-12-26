@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {environment} from '../../environments/environment';
-
+import {Observable} from 'rxjs';
 
 export interface Unit {
   id: number,
@@ -11,6 +11,7 @@ export interface Unit {
   phone: string,
   fax: string,
   path: string,
+  status: string,
   short_name: string,
   parent_id: string,
 }
@@ -19,7 +20,9 @@ export interface Unit {
 })
 export class UnitService {
 
+  listUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
   addUnitUrl: any = `${environment.apiUrl}/api/v1/organizations`;
+  updateUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
   getUnitByIdUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
 
   token:any;
@@ -36,6 +39,15 @@ export class UnitService {
 
   constructor(private http: HttpClient,) { }
 
+  public getUnitList(filter_code: any, filter_name: any): Observable<any> {
+    this.getCurrentUser();
+
+    let listUnitUrl = this.listUnitUrl + '?code=' + filter_code + '&name=' + filter_name + "&size=1000";
+    console.log(listUnitUrl);
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<Unit[]>(listUnitUrl, {headers}).pipe();
+  }
+
   addUnit(datas: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -48,12 +60,33 @@ export class UnitService {
       email: datas.email,
       phone: datas.phone,
       fax: datas.fax,
-      status: 1,
+      status: datas.status,
       parent_id: datas.parent_id,
     });
     console.log(headers);
     console.log(body);
     return this.http.post<Unit>(this.addUnitUrl, body, {'headers': headers});
+  }
+
+  updateUnit(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: datas.name,
+      short_name: datas.short_name,
+      code: datas.code,
+      email: datas.email,
+      phone: datas.phone,
+      fax: datas.fax,
+      status: datas.status,
+      parent_id: datas.parent_id,
+      path: null
+    });
+    console.log(headers);
+    console.log(body);
+    return this.http.put<Unit>(this.updateUnitUrl + datas.id, body, {'headers': headers});
   }
 
   getUnitById(id: any) {

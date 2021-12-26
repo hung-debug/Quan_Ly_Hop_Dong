@@ -3,20 +3,18 @@
   <div class="row">
     <div class="col-md-3">
       <div>{{'createdate.start' | translate}}</div>
-      <div class="input-line">
-        <ngx-datepicker [(ngModel)]="filter_from_date" [options]="options" class="date-picker"></ngx-datepicker>
-        <img src="assets/img/db_calendar.svg" class="input-img">
+      <div>
+        <p-calendar [(ngModel)]="filter_from_date" [showIcon]="true" dateFormat="dd/mm/yy" ></p-calendar>
       </div>
     </div>
     <div class="col-md-3">
       <div>{{'createdate.end' | translate}}</div>
-      <div class="input-line">
-        <ngx-datepicker [(ngModel)]="filter_to_date" [options]="options" class="date-picker"></ngx-datepicker>
-        <img src="assets/img/db_calendar.svg" class="input-img">
+      <div>
+        <p-calendar [(ngModel)]="filter_to_date" [showIcon]="true" dateFormat="dd/mm/yy" ></p-calendar>
       </div>
     </div>
     <div class="col-md-3 btn_search">
-      <button class="btn btn-lg btn-block">{{'btn.search' | translate }}</button>
+      <button class="btn btn-lg btn-block" (click)="search()">{{'btn.search' | translate }}</button>
     </div>
   </div>
   <div class="row" style="padding-top: 20px;">

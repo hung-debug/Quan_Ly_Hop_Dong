@@ -1,16 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
 import { NodeService } from 'src/app/service/node.service';
+import { UnitService } from 'src/app/service/unit.service';
+import { UserService } from 'src/app/service/user.service';
 import { AddUnitComponent } from './add-unit/add-unit.component';
+import { DetailUnitComponent } from './detail-unit/detail-unit.component';
 
-// export interface TreeNode {
-//   data?: any;
-//   children?: TreeNode[];
-//   leaf?: boolean;
-//   expanded?: boolean;
-//   }
+export class TreeNode {
+  data:{
+    name:any;
+  }
+  constructor(name:any) {
+    this.data.name = name;
+  }
+}
 @Component({
   selector: 'app-unit',
   templateUrl: './unit.component.html',
@@ -18,36 +22,101 @@ import { AddUnitComponent } from './add-unit/add-unit.component';
 })
 export class UnitComponent implements OnInit {
 
-  p:number = 1;
-  page:number = 5; 
-  pageStart:number = 0;
-  pageEnd:number = 0;
-  pageTotal:number = 0;
-
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private nodeService: NodeService) { }
+    private unitService: UnitService,
+    private nodeService: NodeService,
+    private userService: UserService) { }
 
-  code:any;
-  name:any;
-  files: TreeNode[];
+  code:any = "";
+  name:any = "";
+  list: any[];
+  listData:any[];
   cols: any[];
+  files:any[];
+  test:any;
+  total:any;
 
   ngOnInit(): void {
     this.appService.setTitle("DANH SÁCH TỔ CHỨC");
-    this.nodeService.list().subscribe(response => {
-      console.log(response);
-      this.files = response.data;
-      this.pageTotal = this.files.length;
-      this.setPage();
-    });
-    
-    console.log(this.files);
-      this.cols = [
-      { field: 'name', header: 'Name' },
-      { field: 'size', header: 'Size' },
-      { field: 'type', header: 'Type' }
+    this.searchUnit();
+
+    this.cols = [
+      { field: 'name', header: 'Tên tổ chức', style:'text-align: left;' },
+      { field: 'short_name', header: 'Tên viết tắt', style:'text-align: left;' },
+      { field: 'code', header: 'Mã tổ chức', style:'text-align: left;' },
+      { field: 'status', header: 'Trạng thái', style:'text-align: left;' },
+      { field: 'parent_id', header: 'Loại tổ chức', style:'text-align: left;' },
+      { field: 'id', header: 'Quản lý', style:'text-align: center;' },
       ];
+
+      // this.nodeService.list().subscribe(response => {
+        
+      //   this.files = response;
+      //   console.log(this.files);
+      // });
+
+      
+  }  
+
+  array_empty: any = [];
+  searchUnit(){
+    //lay id to chuc nguoi truy cap
+    //let orgId = this.userService.getInforUser().organization_id;
+
+    this.unitService.getUnitList(this.code, this.name).subscribe(response => {
+      this.listData = response.entities;
+      console.log(this.listData);
+      this.total = this.listData.length;
+
+      //let arrCha = this.listData.filter((p: any) => p.id == orgId);
+      let data:any="";
+
+      this.array_empty=[];
+      this.listData.forEach((element: any, index: number) => {
+        let dataChildren;
+        dataChildren = this.findChildren(element);
+        data = {
+          data:
+          {
+            id: element.id, 
+            name: element.name, 
+            short_name: element.short_name,
+            code: element.code,
+            status: element.status,
+            parent_id: element.parent_id,
+          },
+          expanded: true,
+          children: dataChildren
+        };
+        
+        this.array_empty.push(data);
+      })
+      this.list = this.array_empty;
+      console.log(this.list);
+    });
+  }
+
+  findChildren(element:any){
+    let dataChildren:any[]=[];
+    let arrCon = this.listData.filter((p: any) => p.parent_id == element.id);
+    arrCon.forEach((elementCon: any, indexCOn: number) => {
+      dataChildren.push(
+      {
+        data:
+        {
+          id: elementCon.id, 
+          name: elementCon.name, 
+          short_name: elementCon.short_name,
+          code: elementCon.code,
+          status: elementCon.status,
+          parent_id: elementCon.parent_id,
+        },
+        expanded: true,
+        children: this.findChildren(elementCon)
+      });
+    })
+    return dataChildren;
   }
 
   addUnit() {
@@ -66,12 +135,40 @@ export class UnitComponent implements OnInit {
       let is_data = result
     })
   }
-  setPage(){
-    this.pageStart = (this.p-1)*this.page+1;
-    this.pageEnd = (this.p)*this.page;
-    if(this.pageTotal < this.pageEnd){
-      this.pageEnd = this.pageTotal;
-    }
+
+  editUnit(id:any) {
+    const data = {
+      title: 'CẬP NHẬT THÔNG TIN TỔ CHỨC',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AddUnitComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
+  detailUnit(id:any) {
+    const data = {
+      title: 'THÔNG TIN TỔ CHỨC',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DetailUnitComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
 }

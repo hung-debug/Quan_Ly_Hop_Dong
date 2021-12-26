@@ -37,8 +37,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   objPdfProperties: any = {
     pages: [],
   };
-  confirmConsider = 1;
-  confirmSignature = 1;
+  confirmConsider = null;
+  confirmSignature = null;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;

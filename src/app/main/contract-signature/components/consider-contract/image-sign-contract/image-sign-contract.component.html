@@ -1,13 +1,13 @@
 <div *ngIf="sign.sign_unit == 'chu_ky_so' || sign.sign_unit == 'chu_ky_anh'" class="content">
-  <div class="skeleton-sign" (click)="doSign()" *ngIf="!checkShowEdit && !sign.value">
+  <div class="skeleton-sign" (click)="doSign()" *ngIf="!checkShowEdit && !sign.valueSign">
     <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" alt="mobifone.contract">
     <span style="color: #106DB6;">{{sign.sign_unit == 'chu_ky_anh' ? 'Chữ ký ảnh' : 'Chữ ký số'}}</span>
   </div>
-  <div class="skeleton-sign" (click)="doSign()" *ngIf="checkShowEdit && !sign.value">
+  <div class="skeleton-sign" (click)="doSign()" *ngIf="checkShowEdit && !sign.valueSign">
     <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" alt="mobifone.contract">
   </div>
-  <div *ngIf="sign.value" (click)="doSign()">
-    <img [src]="sign.value" alt="mobifone.contract" width="100px" height="54px">
+  <div *ngIf="sign.valueSign" (click)="doSign()">
+    <img [src]="sign.valueSign" alt="mobifone.contract" width="100px" height="54px">
   </div>
 
 </div>
@@ -15,9 +15,9 @@
 <div class="text-sign" *ngIf="sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu'">
   <!--  <input id="input-text" type="text" [placeholder]="sign.sign_unit == 'text' ? 'Nhập text' : 'Nhập số tài liệu'">-->
   <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit">
-    <span id="input-text" [ngbTooltip]="sign.value ? sign.value : ''">{{sign.value ? sign.value : ((sign.sign_unit == 'text') ? 'Text' : 'Số hợp đồng')}}</span>
+    <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{sign.valueSign ? sign.valueSign : ((sign.sign_unit == 'text') ? 'Text' : 'Số hợp đồng')}}</span>
   </div>
   <div class="skeleton-sign" *ngIf="checkShowEdit">
-    <input type="text" class="input-edit-text" [(ngModel)]="sign.value" (blur)="doneEditTextSign()" #inputEditText>
+    <input type="text" class="input-edit-text" [(ngModel)]="sign.valueSign" (blur)="doneEditTextSign()" #inputEditText>
   </div>
 </div>

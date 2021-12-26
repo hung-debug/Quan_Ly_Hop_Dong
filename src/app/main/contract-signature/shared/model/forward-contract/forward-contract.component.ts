@@ -37,6 +37,10 @@ export class ForwardContractComponent implements OnInit {
   }
 
   onSubmit() {
+    if (!this.checkCanSwitchContract()) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email ngoài luồng hợp đồng', '', 1000);
+      return;
+    }
     if (this.currentUser) {
       const dataAuthorize = {
         email: this.myForm.value.email,
@@ -60,6 +64,23 @@ export class ForwardContractComponent implements OnInit {
 
   getCurrentUser(): any {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '');
+  }
+
+  checkCanSwitchContract() {
+    if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
+      for (const participant of this.datas.dataContract.is_data_contract.participants) {
+        for (const recipient of participant.recipients) {
+          if (this.myForm.value.email == recipient.email) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  t() {
+    console.log(this);
   }
 
 }

@@ -23,7 +23,11 @@
           </span>
         </div>
         <div>
-          <span class="title-contract">Hợp đồng liên quan:</span>
+          <span class="title-contract">Hợp đồng liên quan:
+          </span>
+          <span *ngFor="let d of datas?.is_data_contract?.refs;let i = index">
+            <a style="color: #106DB6;" [style.margin-left]="i != 0 ? '8px' : ''" rel="stylesheet" [href]="'/main/form-contract/detail/' + d.ref_id" target="_blank">{{d.ref_id}}</a>
+          </span>
         </div>
 
       </div>
@@ -33,8 +37,8 @@
     <div class="location-change" [ngStyle]="changeDisplay()">
       <div class="sample-contract__information&#45;&#45;user-sign" style="line-height: 25px">
         <div style="text-align: center; font-weight: bold" class="label">CÁC BÊN LIÊN QUAN</div>
-        <div *ngFor="let d of this.datas.contract_related">
-          <span>{{d.name_company}}</span>
+        <div *ngFor="let d of this.datas?.is_data_contract?.participants">
+          <p>{{d.name}}</p>
         </div>
 
       </div>
@@ -49,7 +53,7 @@
   <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
        style="background-color: #F2F2F2; position: relative;">
     <div id="pdf-viewer-step-3">
-      <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+      <!--<div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
         <div class="resize-drag not-out-drop"
              [id]="d.id"
              style="z-index: -1;"
@@ -58,9 +62,9 @@
              [ngClass]="changeColorDrag(null, d, true)"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
-          <app-image-sign-contract-detail [datas]="datas"  [sign]="d"></app-image-sign-contract-detail>
+          <app-image-sign-contract-detail *ngIf="!d.value" [datas]="datas" [sign]="d"></app-image-sign-contract-detail>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </div>

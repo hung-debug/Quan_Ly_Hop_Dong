@@ -1,58 +1,49 @@
 <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-3">
-        <div>Mã tổ chức</div>
-        <div class="input-line">
-            <input type="text" [(ngModel)]="code" class="input_text"/>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div>Tên tổ chức</div>
-        <div class="input-line">
-            <input type="text" [(ngModel)]="name" class="input_text"/>
-        </div>
-      </div>
-      <div class="col-md-6 btn_search">
-        <button class="btn btn-lg btn-block btn_submit">{{'btn.search' | translate }}</button>
-        <button class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
+  <div class="row">
+    <div class="col-md-3">
+      <div>Mã tổ chức</div>
+      <div class="input-line">
+        <input type="text" [(ngModel)]="code" class="input_text"/>
       </div>
     </div>
-    <div class="row" style="padding-top: 20px;">
-      <p-treeTable [value]="files | paginate:{itemsPerPage: page, currentPage:p}" id="table">
-        <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th *ngFor="let col of cols" [ttSortableColumn]="col.field">
-            {{col.header}}
-            <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
-          </th>
-        </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
-          <!-- <tr>
-            <td *ngFor="let col of cols; let i = index">
-              <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-              {{rowData[col.field]}}
-            </td>
-          </tr> -->
-          <tr>
-            <td>
-                <p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler>
-                <a style="color: #106DB6;">{{rowData.name}}</a>
-            </td>
-            <td>{{rowData.size}}</td>
-            <td>{{rowData.type}}</td>
-          </tr>
-        </ng-template>
-      </p-treeTable>
-
-      <div class="contract_footer">
-        <div class="footer_title"></div>
-        <div class="footer_pagination">
-          <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
-        </div>
-        <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
+    <div class="col-md-3">
+      <div>Tên tổ chức</div>
+      <div class="input-line">
+        <input type="text" [(ngModel)]="name" class="input_text"/>
       </div>
+    </div>
+    <div class="col-md-6 btn_search">
+      <button class="btn btn-lg btn-block btn_submit" (click)="searchUnit()">{{'btn.search' | translate }}</button>
+      <button class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
     </div>
   </div>
+  <div class="row" style="padding-top: 20px;">
+    <p-treeTable [value]="list" id="table" [autoLayout]="true">
+      <ng-template pTemplate="header" let-columns>
+      <tr> 
+        <th *ngFor="let col of cols" [style]='col.style'>
+          {{col.header}}
+        </th>
+      </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+        <tr>
+          <td><p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler><a (click)="detailUnit(rowData.id)" style="color: #0160AE; cursor: pointer;">{{rowData.name}}</a></td>
+          <td>{{rowData.short_name}}</td>
+          <td>{{rowData.code}}</td>
+          <td>{{rowData.status==1?'Hoạt động':'Không hoạt động'}}</td>
+          <td>{{rowData.parent_id==null?'Tổ chức cha':'Tổ chức con'}}</td>
+          <td style="text-align: center">
+            <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUnit(rowData.id)" style="cursor: pointer;"/>
+          </td>
+        </tr>
+      </ng-template>
+      
+    </p-treeTable>
+    <div class="footer_page_number">
+      {{'chart.number' | translate}}: {{total}}
+    </div> 
+  </div>
+</div>
  
   

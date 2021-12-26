@@ -6,6 +6,7 @@ import {map, catchError, retry} from 'rxjs/operators';
 import {Helper} from "../core/Helper";
 import {DatePipe} from '@angular/common';
 import {forkJoin} from "rxjs";
+import axios from 'axios';
 
 
 export interface Contract {
@@ -191,42 +192,62 @@ export class ContractService {
 
   getAllAccountsDigital() {
     this.getCurrentUser();
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json; charset=utf-8')
-      .append('Sec-Fetch-Mode', 'cors')
-      .append('Connection', 'keep-alive')
-      .append('Sec-Fetch-Site', 'cross-site');
-    return this.http.get<any>(this.getAccountSignDigital, {'headers': headers});
-  }
-
-  postSignDigitalMobi(signCertDigital: any) {
-    this.getCurrentUser();
-    let datePost = {
-      certSerial: signCertDigital.Serial,
-      fieldName: "",
-      fileData: signCertDigital.valueBase64,
-      imageData: this.imageMobiBase64,
-      page: signCertDigital.page.toString(),
-      ph: Math.floor(signCertDigital.height).toString(),
-      pw: Math.floor(signCertDigital.width).toString(),
-      px: Math.floor(signCertDigital.coordinate_x).toString(),
-      py: Math.floor(signCertDigital.coordinate_y).toString(),
-      signDate: "11-05-2019 09:55:55",
-      typeSign: "4"
+    let config = {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Sec-Fetch-Mode': 'cors',
+        'Connection': 'keep-alive',
+        'Sec-Fetch-Site': 'cross-site'
+      }
     }
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json; charset=utf-8')
       .append('Sec-Fetch-Mode', 'cors')
       .append('Connection', 'keep-alive')
       .append('Sec-Fetch-Site', 'cross-site');
-    console.log(datePost);
-    return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
+    // return this.http.get<any>(this.getAccountSignDigital, {'headers': headers});
+    return axios.get(this.getAccountSignDigital, config);
+  }
+
+  postSignDigitalMobi(signCertDigital: any) {
+    this.getCurrentUser();
+    let config = {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Sec-Fetch-Mode': 'cors',
+        'Connection': 'keep-alive',
+        'Sec-Fetch-Site': 'cross-site'
+      }
+    };
+    let dataPost = {
+      certSerial: signCertDigital.Serial,
+      fieldName: "",
+      fileData: signCertDigital.valueSignBase64,
+      imageData: this.imageMobiBase64,
+      page: signCertDigital.page.toString(),
+      ph: Math.floor(signCertDigital.signDigitalHeight ? signCertDigital.signDigitalHeight : signCertDigital.height).toString(),
+      pw: Math.floor(signCertDigital.signDigitalWidth ? signCertDigital.signDigitalWidth : signCertDigital.width).toString(),
+      px: Math.floor(signCertDigital.signDigitalX ? signCertDigital.signDigitalX : signCertDigital.coordinate_x).toString(),
+      py: Math.floor(signCertDigital.signDigitalY ? signCertDigital.signDigitalY : signCertDigital.coordinate_y).toString(),
+      signDate: "11-05-2019 09:55:55",
+      typeSign: "4"
+    };
+    return axios.post(this.postSignDigital, dataPost, config);
+    // console.log(datePost);
+    // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
+
   }
 
   getDataFileUrl(url: any) {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/arraybuffer');
     return this.http.get(url, { responseType: 'arraybuffer', headers });
+  }
+
+  getDataFileUrlPromise(url: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/arraybuffer');
+    return this.http.get(url, { responseType: 'arraybuffer', headers }).toPromise();
   }
 
   getDataNotifyOriganzation() {
@@ -348,6 +369,14 @@ export class ContractService {
     return this.http.get<File>(this.addGetFileContract + idContract, {headers}).pipe();
   }
 
+  getFileContractPromise(idContract: any) : Promise<any> {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<File>(this.addGetFileContract + idContract, {headers}).toPromise();
+  }
+
   getDetermineCoordination(idCoordination: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -398,7 +427,7 @@ export class ContractService {
       content: "data:application/pdf," + base64
     };
     console.log(headers);
-    return this.http.put<any>(this.signDigitalMobi + id, body,{'headers': headers});
+    return this.http.put<any>(this.signDigitalMobi + id, body,{'headers': headers}).toPromise();
   }
 
   updateInfoContractSignature(datas: any) {
