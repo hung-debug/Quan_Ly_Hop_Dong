@@ -71,12 +71,16 @@ export class ForwardContractComponent implements OnInit {
       for (const participant of this.datas.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
           if (this.myForm.value.email == recipient.email) {
-            return true;
+            return false;
           }
         }
       }
     }
-    return false;
+    return true;
+  }
+
+  t() {
+    console.log(this);
   }
 
 }
