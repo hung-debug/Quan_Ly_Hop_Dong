@@ -150,7 +150,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
 
-    console.log(this.datas.contract_user_sign)
+    // console.log(this.datas.contract_user_sign)
     this.scale = 1;
 
     // this.list_sign_name.forEach((item: any) => {
@@ -196,7 +196,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     // convert base64 file pdf to url
-    this.pdfSrc = this.datas.i_data_file_contract[0].path;
+    let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
+    let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
+    if (fileContract_2) {
+      this.pdfSrc = fileContract_2.path;
+    } else {
+      this.pdfSrc = fileContract_1.path;
+    }
+
     // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
     // render pdf to canvas
     this.getPage();

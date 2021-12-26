@@ -112,7 +112,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     private modalService: NgbModal,
     private dialog: MatDialog,
     private activeRoute: ActivatedRoute,
-    private toastService : ToastService,
+    private toastService: ToastService,
     private router: Router,
     private contractSignatureService: ContractSignatureService,
     private appService: AppService
@@ -139,85 +139,92 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       );
     // this.contractService.getDetailContract(this.idContract).subscribe(rs => {
     //   console.log(rs);
-      // this.isDataContract = rs[0];
-      // this.isDataFileContract = rs[1];
-      // this.isDataObjectSignature = rs[2];
-      if (this.datas.is_data_contract &&
-        this.datas.i_data_file_contract[1] &&
-        this.datas.i_data_file_contract[1].length &&
-        this.datas.is_data_object_signature[2] &&
-        this.datas.is_data_object_signature[2].length) {
-        this.valid = true;
+    // this.isDataContract = rs[0];
+    // this.isDataFileContract = rs[1];
+    // this.isDataObjectSignature = rs[2];
+    if (this.datas.is_data_contract &&
+      this.datas.i_data_file_contract[1] &&
+      this.datas.i_data_file_contract[1].length &&
+      this.datas.is_data_object_signature[2] &&
+      this.datas.is_data_object_signature[2].length) {
+      this.valid = true;
+    }
+
+    this.datas.is_data_object_signature.forEach((element: any) => {
+      // 1: van ban, 2: ky anh, 3: ky so
+      // tam thoi de 1: ky anh, 2: ky so
+      if (element.type == 1) {
+        element['sign_unit'] = 'text'
       }
-
-      this.datas.is_data_object_signature.forEach((element: any) => {
-        // 1: van ban, 2: ky anh, 3: ky so
-        // tam thoi de 1: ky anh, 2: ky so
-        if (element.type == 1) {
-          element['sign_unit'] = 'text'
-        }
-        if (element.type == 2) {
-          element['sign_unit'] = 'chu_ky_anh'
-        }
-        if (element.type == 3) {
-          element['sign_unit'] = 'chu_ky_so'
-        }
-        if (element.type == 4) {
-          element['sign_unit'] = 'so_tai_lieu'
-        }
-      })
-
-      let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
-      let data_sign_config_cka = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-      let data_sign_config_text = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
-      let data_sign_config_so_tai_lieu = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'so_tai_lieu');
-
-      this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
-
-      this.datas.contract_user_sign.forEach((element: any) => {
-        if (element.sign_unit == 'chu_ky_so') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
-        } else if (element.sign_unit == 'chu_ky_anh') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
-        } else if (element.sign_unit == 'text') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_text);
-        } else if (element.sign_unit == 'so_tai_lieu') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
-        }
-      })
-      // }
-
-      // this.datas = this.datas.concat(this.data_contract.contract_information);
-
-      // this.datas.action_title = 'Xác nhận';
-      this.activeRoute.url.subscribe(params => {
-        console.log(params);
-        if (params && params.length > 0) {
-          params.forEach(item => {
-            if (item.path == 'consider-contract') {
-              this.datas.roleContractReceived = 2;
-            } else if (item.path == 'personal-signature-contract') {
-              this.datas.roleContractReceived = 3;
-            }
-          })
-        }
-      });
-
-
-      this.scale = 1;
-
-      if (!this.signCurent) {
-        this.signCurent = {
-          offsetWidth: 0,
-          offsetHeight: 0
-        }
+      if (element.type == 2) {
+        element['sign_unit'] = 'chu_ky_anh'
       }
+      if (element.type == 3) {
+        element['sign_unit'] = 'chu_ky_so'
+      }
+      if (element.type == 4) {
+        element['sign_unit'] = 'so_tai_lieu'
+      }
+    })
 
-      // convert base64 file pdf to url
-      this.pdfSrc = this.datas.i_data_file_contract[0].path;
-      // render pdf to canvas
-      this.getPage();
-      this.loaded = true;
+    let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
+    let data_sign_config_cka = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+    let data_sign_config_text = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
+    let data_sign_config_so_tai_lieu = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+
+    this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+
+    this.datas.contract_user_sign.forEach((element: any) => {
+      if (element.sign_unit == 'chu_ky_so') {
+        Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
+      } else if (element.sign_unit == 'chu_ky_anh') {
+        Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+      } else if (element.sign_unit == 'text') {
+        Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+      } else if (element.sign_unit == 'so_tai_lieu') {
+        Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+      }
+    })
+    // }
+
+    // this.datas = this.datas.concat(this.data_contract.contract_information);
+
+    // this.datas.action_title = 'Xác nhận';
+    this.activeRoute.url.subscribe(params => {
+      // console.log(params);
+      if (params && params.length > 0) {
+        params.forEach(item => {
+          if (item.path == 'consider-contract') {
+            this.datas.roleContractReceived = 2;
+          } else if (item.path == 'personal-signature-contract') {
+            this.datas.roleContractReceived = 3;
+          }
+        })
+      }
+    });
+
+
+    this.scale = 1;
+
+    if (!this.signCurent) {
+      this.signCurent = {
+        offsetWidth: 0,
+        offsetHeight: 0
+      }
+    }
+
+    // convert base64 file pdf to url
+    // this.pdfSrc = this.datas.i_data_file_contract[0].path;
+    let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
+    let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
+    if (fileContract_2) {
+      this.pdfSrc = fileContract_2.path;
+    } else {
+      this.pdfSrc = fileContract_1.path;
+    }
+    // render pdf to canvas
+    this.getPage();
+    this.loaded = true;
     // }, (res: any) => {
     //   // @ts-ignore
     //   this.handleError();
@@ -471,7 +478,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datas.is_data_object_signature];
     cloneUserSign.forEach(element => {
-      if ((element.recipient && ![2,3].includes(element.recipient.status)) || (!element.recipient && ![2,3].includes(element.status))) {
+      if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
         arrSignConfig = arrSignConfig.concat(element);
       }
     })
@@ -533,6 +540,11 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
   dieuphoi() {
     this.datas.step = variable.stepSampleContract.step_confirm_coordination;
+  }
+
+  getFileAttach() {
+    let file_attach = this.datas.i_data_file_contract.filter((p: any) => p.type == 3);
+    return file_attach;
   }
 
 

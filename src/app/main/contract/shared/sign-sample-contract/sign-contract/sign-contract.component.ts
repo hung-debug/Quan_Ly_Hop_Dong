@@ -8,9 +8,22 @@ import {Component, OnInit, Input, AfterViewInit} from '@angular/core';
 export class SignContractComponent implements OnInit, AfterViewInit {
   @Input() datas: any;
   @Input() sign: any;
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit(): void {
+  }
+
+  getText(sign: any) {
+    // ? 'Text' : 'Số hợp đồng'
+    if (sign.sign_unit == 'text') {
+      return 'Text';
+    } else {
+      if (this.datas.code)
+        return this.datas.code
+      else return 'Số hợp đồng';
+    }
   }
 
   ngAfterViewInit() {
