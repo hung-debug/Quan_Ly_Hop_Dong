@@ -33,9 +33,14 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.appService.setTitle("menu.dashboard");
-    this.dashboardService.countContractCreate(this.filter_from_date, this.filter_to_date).subscribe(data => {          
+    this.search();
+  }
+
+  search(){
+    this.dashboardService.countContractCreate(this.filter_from_date, this.filter_to_date).subscribe(data => {     
+      console.log(data);     
         this.chartCreated = new Chart({
-          colors: ['#058DC7', '#58A55C', '#ED1C24', '#FF710B'],
+          colors: ['#407EF9', '#58A55C', '#ED1C24', '#FF710B'],
           chart: {
             type: 'pie',
             style: {
@@ -80,8 +85,9 @@ export class DashboardComponent implements OnInit {
     });
 
     this.dashboardService.countContractReceived(this.filter_from_date, this.filter_to_date).subscribe(data => { 
+      console.log(data);     
       this.chartReceived = new Chart({
-        colors: ['#058DC7', '#58A55C', '#ED1C24', '#FF710B'],
+        colors: ['#407EF9', '#58A55C', '#ED1C24', '#FF710B'],
         chart: {
           type: 'column',
           style: {
@@ -126,14 +132,14 @@ export class DashboardComponent implements OnInit {
           type: 'column',
           name: 'Số hợp đồng',
           data: [
-              ['Chưa xử lý', 45],
+              ['Chưa xử lý', data.total_process],
           ]
         },
         {
           type: 'column',
           name: 'Số hợp đồng',
           data: [
-            ['Đã xử lý', 26]
+            ['Đã xử lý', data.total_signed]
           ]
         }]
       });

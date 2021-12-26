@@ -118,7 +118,6 @@ export class InforUserComponent implements OnInit {
       return;
     }
     const data = {
-      id: "",
       name: this.addInforForm.value.name,
       email: this.addInforForm.value.email,
       birthday: this.addInforForm.value.birthday,
@@ -149,22 +148,10 @@ export class InforUserComponent implements OnInit {
       return;
     }
     const data = {
-      id: "",
-      name: this.addInforForm.value.name,
-      email: this.addInforForm.value.email,
-      birthday: this.addInforForm.value.birthday,
-      phone: this.addInforForm.value.phone,
-      organizationId: this.addInforForm.value.organizationId,
-      role: this.addInforForm.value.role,
-      status: this.addInforForm.value.status,
-      phoneKpi: this.addInforForm.value.phoneKpi,
-      networkKpi: this.addInforForm.value.networkKpi,
-      nameHsm: this.addInforForm.value.nameHsm,
       fileImage: this.attachFile,
       sign_image: []
     }
     console.log(data);
-    
     
     if(data.fileImage != null){
       this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
@@ -177,9 +164,9 @@ export class InforUserComponent implements OnInit {
 
         this.userService.updateUser(data).subscribe(
           data => {
-            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 1000);
+            this.toastService.showSuccessHTMLWithTimeout("no.update.sign.file.image.success", "", 10000);
             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-              this.router.navigate(['/main/user']);
+              this.router.navigate(['/main/user-infor']);
             });
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
@@ -191,9 +178,6 @@ export class InforUserComponent implements OnInit {
         return false;
       });
     }
-    this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 10000);
-  
-    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.file.image.success", "", 10000);
   }
 
   updateSignKpiUser(){
