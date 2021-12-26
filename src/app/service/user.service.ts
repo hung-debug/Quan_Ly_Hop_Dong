@@ -5,6 +5,7 @@ import { map, catchError, retry } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { DatePipe } from '@angular/common';
+import { isPdfFile } from 'pdfjs-dist';
 export interface User {
   id: any,
   name: any,
@@ -161,25 +162,49 @@ export class UserService {
     if(datas.birthday != null){
         datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
     }
-    const body = JSON.stringify({
-      name: datas.name,
-      email: datas.email,
-      phone: datas.phone,
-      organization_id: datas.organizationId,
-      birthday: datas.birthday,
-      status: datas.status,
-      type_id: datas.role,
+    console.log(datas.sign_image);
+    if(datas.sign_image != null && datas.sign_image.length > 0){
+      const body = JSON.stringify({
+        name: datas.name,
+        email: datas.email,
+        phone: datas.phone,
+        organization_id: datas.organizationId,
+        birthday: datas.birthday,
+        status: datas.status,
+        type_id: datas.role,
+  
+        sign_image: datas.sign_image,
+  
+        phone_sign: datas.phoneKpi,
+        phone_tel: datas.networkKpi,
+  
+        hsm_name: datas.nameHsm
+      });
+      console.log(headers);
+      console.log(body);
+      return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
+    }else{
+      const body = JSON.stringify({
+        name: datas.name,
+        email: datas.email,
+        phone: datas.phone,
+        organization_id: datas.organizationId,
+        birthday: datas.birthday,
+        status: datas.status,
+        type_id: datas.role,
+  
+        sign_image: datas.sign_image,
 
-      sign_image: datas.sign_image,
-
-      phone_sign: datas.phoneKpi,
-      phone_tel: datas.networkKpi,
-
-      hsm_name: datas.nameHsm
-    });
-    console.log(headers);
-    console.log(body);
-    return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
+        phone_sign: datas.phoneKpi,
+        phone_tel: datas.networkKpi,
+  
+        hsm_name: datas.nameHsm
+      });console.log(headers);
+      console.log(body);
+      return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
+    }
+    
+    
   }
 
   updateUserByType(datas: any, type:any) {

@@ -109,7 +109,7 @@ export class InforUserComponent implements OnInit {
           nameHsm: dataByEmail.hsm_name
         });
         console.log(dataByEmail);
-        this.imgSignPCSelect = dataByEmail.sign_image.length>0?dataByEmail.sign_image[0].path:null;
+        this.imgSignPCSelect = dataByEmail.sign_image != null && dataByEmail.sign_image.length>0?dataByEmail.sign_image[0].path:null;
         console.log("aaa");
         console.log(this.imgSignPCSelect);
       }, error => {
@@ -132,7 +132,16 @@ export class InforUserComponent implements OnInit {
       phone: this.addInforForm.value.phone,
       organizationId: this.addInforForm.value.organizationId,
       role: this.addInforForm.value.role,
-      status: this.addInforForm.value.status
+      status: this.addInforForm.value.status,
+
+      fileImage: this.attachFile,
+      sign_image: [],
+
+      phoneKpi: this.addKpiForm.value.phoneKpi,
+      networkKpi: this.addKpiForm.value.networkKpi,
+
+      nameHsm: this.addHsmForm.value.nameHsm
+
     }
     console.log(data);
     
@@ -157,8 +166,21 @@ export class InforUserComponent implements OnInit {
     }
     const data = {
       id: this.id,
+      name: this.addInforForm.value.name,
+      email: this.addInforForm.value.email,
+      birthday: this.addInforForm.value.birthday,
+      phone: this.addInforForm.value.phone,
+      organizationId: this.addInforForm.value.organizationId,
+      role: this.addInforForm.value.role,
+      status: this.addInforForm.value.status,
+
       fileImage: this.attachFile,
-      sign_image: []
+      sign_image: [],
+
+      phoneKpi: this.addKpiForm.value.phoneKpi,
+      networkKpi: this.addKpiForm.value.networkKpi,
+
+      nameHsm: this.addHsmForm.value.nameHsm
     }
     console.log(data);
     
@@ -197,8 +219,21 @@ export class InforUserComponent implements OnInit {
     }
     const data = {
       id: this.id,
+      name: this.addInforForm.value.name,
+      email: this.addInforForm.value.email,
+      birthday: this.addInforForm.value.birthday,
+      phone: this.addInforForm.value.phone,
+      organizationId: this.addInforForm.value.organizationId,
+      role: this.addInforForm.value.role,
+      status: this.addInforForm.value.status,
+
+      fileImage: this.attachFile,
+      sign_image: [],
+
       phoneKpi: this.addKpiForm.value.phoneKpi,
-      networkKpi: this.addKpiForm.value.networkKpi
+      networkKpi: this.addKpiForm.value.networkKpi,
+
+      nameHsm: this.addHsmForm.value.nameHsm
     }
     console.log(data);
 
@@ -222,6 +257,20 @@ export class InforUserComponent implements OnInit {
     }
     const data = {
       id: this.id,
+      name: this.addInforForm.value.name,
+      email: this.addInforForm.value.email,
+      birthday: this.addInforForm.value.birthday,
+      phone: this.addInforForm.value.phone,
+      organizationId: this.addInforForm.value.organizationId,
+      role: this.addInforForm.value.role,
+      status: this.addInforForm.value.status,
+
+      fileImage: this.attachFile,
+      sign_image: [],
+
+      phoneKpi: this.addKpiForm.value.phoneKpi,
+      networkKpi: this.addKpiForm.value.networkKpi,
+
       nameHsm: this.addHsmForm.value.nameHsm
     }
     console.log(data);
