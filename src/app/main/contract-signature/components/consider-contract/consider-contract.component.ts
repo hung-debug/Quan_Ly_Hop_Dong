@@ -879,7 +879,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }});
     this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId).subscribe(
       async (result) => {
-        await this.signDigitalDocument();
+        const signD = this.isDataObjectSignature.find((item: any) => item.type == 3 && item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived);
+        if (signD) {
+          await this.signDigitalDocument();
+        }
         this.toastService.showSuccessHTMLWithTimeout(
           [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
           , '', 1000);
