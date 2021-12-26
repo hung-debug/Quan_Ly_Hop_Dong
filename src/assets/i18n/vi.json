@@ -137,7 +137,7 @@
 
   "sign.information" : "Thông tin chữ ký",
   "sign.file-image" : "File ảnh chữ ký",
-  "sign.kpi" : "Chữ ký KPI",
+  "sign.kpi" : "Chữ ký PKI",
   "sign.hsm" : "Chữ ký HSM",
 
   "error.server": "Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý",

@@ -85,7 +85,8 @@ export class InforUserComponent implements OnInit {
     this.user = this.userService.getInforUser();
     this.appService.setTitle('THÔNG TIN TÀI KHOẢN');
 
-    this.userService.getUserByEmail(this.user.email).subscribe(
+    this.id = this.user.customer_id;
+    this.userService.getUserById(this.id).subscribe(
       dataByEmail => {
         this.addInforForm = this.fbd.group({
           name: this.fbd.control(dataByEmail.name, [Validators.required]),
@@ -118,6 +119,7 @@ export class InforUserComponent implements OnInit {
       return;
     }
     const data = {
+      id: this.id,
       name: this.addInforForm.value.name,
       email: this.addInforForm.value.email,
       birthday: this.addInforForm.value.birthday,
@@ -128,7 +130,7 @@ export class InforUserComponent implements OnInit {
     }
     console.log(data);
     
-    this.userService.updateUser(data).subscribe(
+    this.userService.updateUserByType(data, "infor").subscribe(
       data => {
         console.log(data);
         this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 10000);
@@ -148,6 +150,7 @@ export class InforUserComponent implements OnInit {
       return;
     }
     const data = {
+      id: this.id,
       fileImage: this.attachFile,
       sign_image: []
     }
@@ -162,7 +165,7 @@ export class InforUserComponent implements OnInit {
         data.sign_image = sign_image;
         console.log(data);
 
-        this.userService.updateUser(data).subscribe(
+        this.userService.updateUserByType(data, "file-image").subscribe(
           data => {
             this.toastService.showSuccessHTMLWithTimeout("no.update.sign.file.image.success", "", 10000);
             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
@@ -187,12 +190,13 @@ export class InforUserComponent implements OnInit {
       return;
     }
     const data = {
+      id: this.id,
       phoneKpi: this.addKpiForm.value.phoneKpi,
       networkKpi: this.addKpiForm.value.networkKpi
     }
     console.log(data);
 
-    this.userService.updateUser(data).subscribe(
+    this.userService.updateUserByType(data, "kpi").subscribe(
       data => {
         this.toastService.showSuccessHTMLWithTimeout("no.update.sign.kpi.success", "", 10000);
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
@@ -211,11 +215,12 @@ export class InforUserComponent implements OnInit {
       return;
     }
     const data = {
+      id: this.id,
       nameHsm: this.addHsmForm.value.nameHsm
     }
     console.log(data);
     
-    this.userService.updateUser(data).subscribe(
+    this.userService.updateUserByType(data, "hsm").subscribe(
       data => {
         this.toastService.showSuccessHTMLWithTimeout("no.update.sign.hsm.success", "", 10000);
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
