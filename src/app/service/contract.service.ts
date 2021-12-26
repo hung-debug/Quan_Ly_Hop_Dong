@@ -218,20 +218,20 @@ export class ContractService {
         'Connection': 'keep-alive',
         'Sec-Fetch-Site': 'cross-site'
       }
-    }
+    };
     let dataPost = {
       certSerial: signCertDigital.Serial,
       fieldName: "",
       fileData: signCertDigital.valueSignBase64,
       imageData: this.imageMobiBase64,
       page: signCertDigital.page.toString(),
-      ph: Math.floor(signCertDigital.height).toString(),
-      pw: Math.floor(signCertDigital.width).toString(),
-      px: Math.floor(signCertDigital.coordinate_x).toString(),
-      py: Math.floor(signCertDigital.coordinate_y).toString(),
+      ph: Math.floor(signCertDigital.signDigitalHeight ? signCertDigital.signDigitalHeight : signCertDigital.height).toString(),
+      pw: Math.floor(signCertDigital.signDigitalWidth ? signCertDigital.signDigitalWidth : signCertDigital.width).toString(),
+      px: Math.floor(signCertDigital.signDigitalX ? signCertDigital.signDigitalX : signCertDigital.coordinate_x).toString(),
+      py: Math.floor(signCertDigital.signDigitalY ? signCertDigital.signDigitalY : signCertDigital.coordinate_y).toString(),
       signDate: "11-05-2019 09:55:55",
       typeSign: "4"
-    }
+    };
     return axios.post(this.postSignDigital, dataPost, config);
     // console.log(datePost);
     // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
