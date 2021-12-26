@@ -25,7 +25,7 @@
         <div>
           <span class="title-contract">Hợp đồng liên quan:</span>
           <span *ngFor="let d of allRelateToContract;let i = index">
-            <a style="color: #106DB6;" [style.margin-left]="i != 0 ? '8px' : ''" rel="stylesheet" [href]="'/main/form-contract/detail/' + d.ref_id" target="_blank">{{d.ref_id}}</a>
+            <a style="color: #106DB6;" [style.margin-left]="i != 0 ? '8px' : ''" rel="stylesheet" [href]="'/main/form-contract/detail/' + d.ref_id" target="_blank">{{d.ref_name}}</a>
           </span>
         </div>
 
