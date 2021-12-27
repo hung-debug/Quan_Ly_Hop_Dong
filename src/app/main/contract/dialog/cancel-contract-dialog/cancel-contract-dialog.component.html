@@ -1,0 +1,27 @@
+<div class="container-fluid">
+    <div style="text-align: center; font-weight: bold">
+      <h3 style="color: #106DB6; font-family: inherit;">{{this.data.title}}</h3>
+    </div>
+    <div style="font-weight: bold">
+        <h3 style="font-family: inherit;">Bạn có chắc chắn muốn hủy hợp đồng này không?</h3>
+      </div>
+    <form [formGroup]="addForm" class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="label text-color">Lý do hủy hợp đồng <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <input type="text" formControlName="reason">
+                </div>
+                <div *ngIf="submitted && f.reason.errors" class="invalid">
+                    <div *ngIf="f.reason.errors.required">Lý do hủy không được để trống</div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row" style="justify-content: center;padding-top: 10px;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">Thoát</button>
+            <button class="save-button" (click)="onSubmit()">Đồng ý</button>
+        </div>
+    </form>
+  </div>
+  

@@ -10,6 +10,8 @@ import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import { ToastService } from 'src/app/service/toast.service';
 import { HttpClient } from '@angular/common/http';
+import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -67,6 +69,7 @@ export class ContractComponent implements OnInit {
               private toastService : ToastService,
               private http: HttpClient,
               private uploadService: UploadService,
+              private dialog: MatDialog,
     ) {}
 
   open(content:any) {
@@ -250,26 +253,22 @@ export class ContractComponent implements OnInit {
     this.notificationPopup = "Xóa hợp đồng thành công";
   }
 
-  getDataContractCancel(id:any){
-    this.id=id;
-    this.notification="Bạn có chắc chắn muốn hủy hợp đồng không?";
-  }
-
-  changeStatus(id:any, status:any){
-    this.contractService.changeStatusContract(id, status).subscribe((data) => {
-
-      console.log(JSON.stringify(data));
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/contract/create/cancel']);
-      });
-      //this.router.navigate(['/main/contract/create/cancel']);
-      this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thành công!", "", 10000);
-    },
-    error => {
-      this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thất bại!", "", 10000);
-      return false;
-    }
-    );
+  cancelContract(id:any) {
+    const data = {
+      title: 'XÁC NHẬN HỦY HỢP ĐỒNG',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(CancelContractDialogComponent, {
+      width: '500px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
   downloadContract(id:any){

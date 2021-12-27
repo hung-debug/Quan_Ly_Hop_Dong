@@ -68,7 +68,7 @@
             <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" />
           </div>
           <div class="div_icon" *ngIf="status == 'processing' || status == 'expire' || status == 'complete'">
-            <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="getDataContractCancel(item.id); open(modalConfirmChangeStatus)"/>
+            <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);"/>
           </div>
           <div class="div_icon" *ngIf="status == 'complete'">
             <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
@@ -79,6 +79,9 @@
         </div>
       </div>
     </div>
+    <!-- <div class="row" *ngIf="status == 'cancel' || status == 'fail'">
+      <div class="col-md-12 item_contract_infor">Lý do: {{item.reason_reject}}</div>
+    </div> -->
   </div>
 
   <div class="contract_footer">
@@ -167,38 +170,6 @@
           <div class="form-group" style="text-align: center; padding-top: 30px;width: 100px;margin: 10px auto;">
             <button (click)="modal.dismiss('Cross click');" class="btn btn-lg btn-block" style="background-color: #106DB6; color: white;">Đồng ý</button>
           </div>
-      </div>
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #modalConfirmChangeStatus let-modal >
-  <div class="popup_content">
-    <div class="row">
-      <div class="col-md-10">
-        <h4 class="popup_title">XÁC NHẬN</h4>
-      </div>
-      <div class="col-md-2 popup_close">
-        <span (click)="modal.dismiss('Cross click')">×</span>
-      </div>
-    </div>
-    <hr>
-    <div class="row">
-      <div class="col-md-12">
-          <div class="form-group">
-            <div class="input-group">
-              <p class="alert alert-primary" role="alert" style="text-align: center; width: 100%;">
-              {{notification}}
-            </p>
-            </div>
-          </div>
-      </div>
-    </div>
-
-    <div class="row" style="text-align: center; padding-top: 10px;">
-      <div class="col-md-12">
-        <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">{{'btn.cancel' | translate}}</button>
-        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.dismiss('Cross click'); changeStatus(id, 32)">{{'btn.accept' | translate}}</button>
       </div>
     </div>
   </div>

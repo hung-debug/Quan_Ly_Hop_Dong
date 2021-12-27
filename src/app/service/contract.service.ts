@@ -406,12 +406,14 @@ export class ContractService {
     return this.http.get<File>(this.isDataDetermine + idCoordination, {headers}).pipe();
   }
 
-  changeStatusContract(id: any, statusNew:any) {
+  changeStatusContract(id: any, statusNew:any, reason:any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = "";
+    const body = {
+      reason: reason
+    };
     console.log(headers);
     return this.http.post<Contract>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, {'headers': headers});
   }
