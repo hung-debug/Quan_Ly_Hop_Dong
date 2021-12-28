@@ -35,6 +35,8 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
 
+import {NgxInputSearchModule} from "ngx-input-search";
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -87,6 +89,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DropdownModule,
     CalendarModule,
     MultiSelectModule,
+    NgxInputSearchModule
   ],
   entryComponents: [
     ConfirmInforContractComponent,

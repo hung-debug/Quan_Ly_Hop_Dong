@@ -246,5 +246,6 @@
   "valid_nhap_ten_dt_tc": "Vui lòng nhập tên của đối tác tổ chức!",
   "of_doi_tac": " của đối tác!",
   "of_doi_tac_ca_nhan": "của đối tác cá nhân!",
-  "doi_tac_ca_nhan_ko_hop_le": " đối tác cá nhân không hợp lệ!"
+  "doi_tac_ca_nhan_ko_hop_le": " đối tác cá nhân không hợp lệ!",
+  "note_email_doi_tac": "Lưu ý: email người điều phối có thể trùng với email người ký!"
 }

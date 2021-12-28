@@ -9,6 +9,7 @@ import {elements} from "@interactjs/snappers/all";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../../../service/toast.service";
 import {Router} from "@angular/router";
+import {NgxInputSearchModule} from "ngx-input-search";
 
 @Component({
   selector: 'app-determine-signer',
@@ -42,11 +43,14 @@ export class DetermineSignerComponent implements OnInit {
 
   is_determine_clone: any;
   toppings = new FormControl();
+  arrSearch: any = [];
 
   //dropdown
   signTypeList: Array<any> = type_signature;
   dropdownSignTypeSettings: any = {};
   getNameIndividual: string = "";
+
+  arrSearchName: any = [];
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -378,16 +382,33 @@ export class DetermineSignerComponent implements OnInit {
 
   getCheckDuplicateEmail(isParty: string, dataValid?: any) {
     let arrCheckEmail = [];
+    // valid email đối tác và các bên tham gia
     if (isParty != 'only_party_origanzation') {
+      let arrEmail = [];
       for (let i = 0; i < dataValid.length; i++) {
         const element = dataValid[i].recipients;
         for (let j = 0; j < element.length; j++) {
           if (element[j].email) {
-            arrCheckEmail.push(element[j].email);
+            let items = {
+              email: element[j].email,
+              role: element[j].role
+            }
+            // arrCheckEmail.push(element[j].email);
+            arrEmail.push(items);
           }
         }
       }
+
+      if (arrEmail.some((p: any) => p.role == 1) && arrEmail.some((p: any) => p.role == 3)) {
+        arrEmail = arrEmail.filter((p: any) => p.role != 1);
+      }
+
+      arrEmail.forEach((items: any) => {
+        arrCheckEmail.push(items.email)
+      })
+
     } else {
+      // valid email tổ chức của tôi
       for (let i = 0; i < dataValid.length; i++) {
         if (dataValid[i].email) {
           arrCheckEmail.push(dataValid[i].email);
@@ -778,6 +799,30 @@ export class DetermineSignerComponent implements OnInit {
         'width': '40%'
       }
     } else return {'width': '90%'}
+  }
+
+  doTheSearch($event: Event, index: number): void {
+    const stringEmitted = ($event.target as HTMLInputElement).value;
+    console.log(stringEmitted);
+    this.arrSearch.push(false)
+    this.contractService.getNameOrganization("", stringEmitted).subscribe((res) => {
+      this.arrSearch[index]
+      let data = res.entities.map((p: any) => p.name);
+      this.arrSearchName = data;
+      console.log(data, res);
+    }, () => {
+      this.getNotificationValid('có lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!')
+    })
+  }
+
+  onFocusOut(e: any) {
+    console.log(e)
+    this.arrSearchName = [];
+  }
+
+  onSelectName(tData: any, dData: any) {
+    dData.name = tData;
+    this.arrSearchName = [];
   }
 
 }

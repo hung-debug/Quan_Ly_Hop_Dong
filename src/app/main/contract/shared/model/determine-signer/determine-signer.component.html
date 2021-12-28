@@ -20,8 +20,13 @@
                 <div class="label text-color">{{'user.name' | translate}}: <span class="required-title">*</span></div>
                 <div class="input-data">
                   <img src="assets/img/icon_name.svg" class="input-img">
-                  <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" autofocus>
+<!--                  <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" autofocus>-->
+                  <input type="text" (ngxInputSearch)="doTheSearch($event, index)" [value]="d.name" (focusout)="onFocusOut($event)">
                 </div>
+                <div class="search-name" *ngIf="arrSearch[index] && this.arrSearchName && arrSearchName.length > 0">
+                  <span class="search-name-items" *ngFor="let t of this.arrSearchName" (click)="onSelectName(t, d)">{{t}}</span>
+                </div>
+
               </div>
 <!--              <div *ngIf="getOtp(d)" class="participants-otp" style="z-index: -1">-->
 <!--                <input type="checkbox">-->
@@ -223,6 +228,7 @@
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
                   </div>
+                  <div class="required-title notify">{{'note_email_doi_tac' | translate}}</div>
                 </div>
               </div>
               <div class="col-md-1 delete-element" (click)="deletePartnerCoordination(index, item, id)">
