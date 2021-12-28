@@ -379,8 +379,6 @@ export class DetermineSignerComponent implements OnInit {
   getCheckDuplicateEmail(isParty: string, dataValid?: any) {
     let arrCheckEmail = [];
     if (isParty != 'only_party_origanzation') {
-      // for (let i = 0; i < this.is_determine_clone.length; i++) {
-      //   const element = this.is_determine_clone[i].recipients;
       for (let i = 0; i < dataValid.length; i++) {
         const element = dataValid[i].recipients;
         for (let j = 0; j < element.length; j++) {
