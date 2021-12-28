@@ -68,6 +68,7 @@ import { DetailContractTypeComponent } from './main/contract-type/detail-contrac
 import { RoleComponent } from './main/role/role.component';
 import { AddRoleComponent } from './main/role/add-role/add-role.component';
 import { DetailRoleComponent } from './main/role/detail-role/detail-role.component';
+import { ResetPasswordDialogComponent } from './main/dialog/reset-password-dialog/reset-password-dialog.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -109,6 +110,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     RoleComponent,
     AddRoleComponent,
     DetailRoleComponent,
+    ResetPasswordDialogComponent,
   ],
   imports: [
     BrowserModule,
