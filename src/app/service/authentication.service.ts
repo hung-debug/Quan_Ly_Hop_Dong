@@ -45,7 +45,7 @@ export class AuthenticationService {
             return null;
           }
         }),
-        catchError(this.handleError)
+        catchError(this.loginError)
       );
   }
 
@@ -57,6 +57,7 @@ export class AuthenticationService {
   }
 
   private handleError(error: HttpErrorResponse) {
+    console.log(error);
     if (error.error instanceof ErrorEvent) {
       console.error('An error occurred:', error.error.message);
     } else {
@@ -68,6 +69,15 @@ export class AuthenticationService {
       errorTitle: 'Oops! Request for document failed',
       errorDesc: 'Something bad happened. Please try again later.'
     };
+    return throwError(this.errorData);
+  }
+
+  private loginError(error: HttpErrorResponse) {
+    //console.log(error);
+    
+    if (JSON.parse(JSON.stringify(error)).access_token == null) {
+      localStorage.setItem('checkUser', "error");
+    } 
     return throwError(this.errorData);
   }
 

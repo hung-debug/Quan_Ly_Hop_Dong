@@ -44,55 +44,42 @@ export class LoginComponent implements OnInit {
       this.error = true;
       this.errorDetail = "error.password.required";
     } else {
-      if (this.loginForm.value.username == 'admin' && this.loginForm.value.password == '123') {
-        localStorage.setItem('currentUser', '{"username":"admin","email": "phamvanlambvo@gmail.com"}');
-        this.error = false;
-        this.router.navigate(['/main/dashboard']);
-      } else {
-        if (sessionStorage.getItem('urlLoginType')) {
-          this.type = 1;
-        } else this.type = 0;
-        this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
-            if (this.authService.isLoggedInSuccess() == true) {
-              if (sessionStorage.getItem("url")) {
-                let urlLink = sessionStorage.getItem("url");
-                if (urlLink) {
-                  let url_check = urlLink.split("/")[urlLink.split("/").length - 1];
-                  let isContractId = url_check.split("?")[0];
-                  let isRecipientId = "";
-                  if (url_check.includes("&")) {
-                    let data_contractId = url_check.split("&")[0];
-                    let is_check_contractId = data_contractId.split("?")[url_check.split("?").length - 1];
-                    isRecipientId = is_check_contractId.split("=")[is_check_contractId.split("=").length - 1];
-                  } else {
-                    let is_RecipientId = url_check.split("?")[url_check.split("?").length - 1];
-                    isRecipientId = is_RecipientId.split("=")[is_RecipientId.split("=").length - 1];
-                  }
-                  if (urlLink.includes('coordinates')) {
-                    this.router.navigate(['main/contract-signature/coordinates/' + isContractId]);
-                  } else if (urlLink.includes('consider')) {
-                    this.router.navigate(['/main/contract-signature/consider/' + isContractId],
-                      {
-                        queryParams: {'recipientId': isRecipientId}
-                      });
-                  } else if (urlLink.includes('secretary')) {
-                    this.router.navigate(['main/contract-signature/secretary/' + isContractId],
-                      {
-                        queryParams: {'recipientId': isRecipientId}
-                      });
-                  } else {
-                    this.router.navigate(['/main/contract-signature/signatures/' + isContractId],
-                      {
-                        queryParams: {'recipientId': isRecipientId}
-                      });
-                  }
+      if (sessionStorage.getItem('urlLoginType')) {
+        this.type = 1;
+      } else this.type = 0;
+      this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
+          if (this.authService.isLoggedInSuccess() == true) {
+            if (sessionStorage.getItem("url")) {
+              let urlLink = sessionStorage.getItem("url");
+              if (urlLink) {
+                let url_check = urlLink.split("/")[urlLink.split("/").length - 1];
+                let isContractId = url_check.split("?")[0];
+                let isRecipientId = "";
+                if (url_check.includes("&")) {
+                  let data_contractId = url_check.split("&")[0];
+                  let is_check_contractId = data_contractId.split("?")[url_check.split("?").length - 1];
+                  isRecipientId = is_check_contractId.split("=")[is_check_contractId.split("=").length - 1];
                 } else {
-                  this.error = false;
-                  if (this.type == 0) {
-                    this.router.navigate(['/main/dashboard']);
-                  } else {
-                    this.router.navigate([localStorage.getItem('url')]);
-                  }
+                  let is_RecipientId = url_check.split("?")[url_check.split("?").length - 1];
+                  isRecipientId = is_RecipientId.split("=")[is_RecipientId.split("=").length - 1];
+                }
+                if (urlLink.includes('coordinates')) {
+                  this.router.navigate(['main/contract-signature/coordinates/' + isContractId]);
+                } else if (urlLink.includes('consider')) {
+                  this.router.navigate(['/main/contract-signature/consider/' + isContractId],
+                    {
+                      queryParams: {'recipientId': isRecipientId}
+                    });
+                } else if (urlLink.includes('secretary')) {
+                  this.router.navigate(['main/contract-signature/secretary/' + isContractId],
+                    {
+                      queryParams: {'recipientId': isRecipientId}
+                    });
+                } else {
+                  this.router.navigate(['/main/contract-signature/signatures/' + isContractId],
+                    {
+                      queryParams: {'recipientId': isRecipientId}
+                    });
                 }
               } else {
                 this.error = false;
@@ -103,16 +90,29 @@ export class LoginComponent implements OnInit {
                 }
               }
             } else {
-              this.error = true;
-              this.errorDetail = "error.username.password";
+              this.error = false;
+              if (this.type == 0) {
+                this.router.navigate(['/main/dashboard']);
+              } else {
+                this.router.navigate([localStorage.getItem('url')]);
+              }
             }
-          },
-          error => {
+          } else {
+            this.error = true;
+            this.errorDetail = "error.username.password";
+          }
+        },
+        error => {
+          console.log(localStorage.getItem('checkUser'));
+          if(localStorage.getItem('checkUser') == 'error'){
+            this.error = true;
+            this.errorDetail = "error.username.password";
+          }else{
             this.error = true;
             this.errorDetail = "error.server";
           }
-        );
-      }
+        }
+      );
     }
 
   }
