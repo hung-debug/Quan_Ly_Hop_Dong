@@ -40,6 +40,11 @@ import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialo
 import {AngularSignaturePadModule} from "@almothafar/angular-signature-pad";
 import {ChooseTypeSignComponent} from "./components/consider-contract/choose-type-sign/choose-type-sign.component";
 import {NgxSpinnerModule} from "ngx-spinner";
+import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
+
+import {DropdownModule} from 'primeng/dropdown';
+import {CalendarModule} from 'primeng/calendar';
+import {MultiSelectModule} from 'primeng/multiselect';
 
 export const contractSignatureRoutes: Routes = [
   { path: 'consider/:id', component: ConsiderContractComponent },
@@ -77,6 +82,7 @@ export const contractSignatureRoutes: Routes = [
     ChooseTypeSignComponent,
     ImageDialogSignComponent,
     HsmDialogSignComponent,
+    FilterListDialogComponent,
     // AddContractComponent
   ],
   imports: [
@@ -96,7 +102,10 @@ export const contractSignatureRoutes: Routes = [
     AngularSignaturePadModule,
     TranslateModule,
     NgxSpinnerModule,
-    // ContractModule
+    // ContractModule,
+    DropdownModule,
+    CalendarModule,
+    MultiSelectModule
   ],
   providers: [NoAuthGuard]
 })
