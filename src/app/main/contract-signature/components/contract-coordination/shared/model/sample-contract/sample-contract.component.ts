@@ -481,7 +481,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               element.is_disable = false;
             } else element.is_disable = true;
           } else if (name_accept_signature == 'chu_ky_so') {
-            if (element.sign_type.some((p: any) => p.id == 2) && element.role != 2) {
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2) {
               element.is_disable = false;
             } else element.is_disable = true;
           } else element.is_disable = false;
@@ -828,7 +828,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             item.is_disable = false;
           } else item.is_disable = true;
         } else if (d.sign_unit == 'chu_ky_so') {
-          if (item.sign_type.some((p: any) => p.id == 2) && item.role != 2) {
+          if (item.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && item.role != 2) {
             item.is_disable = false;
           } else item.is_disable = true;
         } else item.is_disable = false;
