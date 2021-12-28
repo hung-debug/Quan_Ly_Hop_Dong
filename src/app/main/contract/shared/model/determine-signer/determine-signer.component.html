@@ -230,7 +230,7 @@
                 <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
               </div>
             </div>
-            <div class="participants--add">
+            <div *ngIf="getPartnerCoordination(item).length < 1" class="participants--add">
               <u class="label text-color" (click)="addPartnerCoordination(item, id)">{{'btn.add.user.lead' | translate}}</u>
             </div>
           </div>
@@ -326,11 +326,11 @@
 <!--                  </div>-->
                 </div>
               </div>
-              <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
+              <div *ngIf="getPartnerSignature(item).length > 1 || this.getPartnerCoordination(item).length > 0" class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn">
                 <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
               </div>
-              <div *ngIf="getPartnerSignature(item).length == 1" class="col-md-1 delete-element"></div>
+              <div *ngIf="getPartnerSignature(item).length == 1 && this.getPartnerCoordination(item).length == 0" class="col-md-1 delete-element"></div>
             </div>
             <div class="participants--add">
               <u class="label text-color" style="color: #106DB6" (click)="addPartnerSignature(item, id)">{{'btn.add.user.sign' | translate}}</u>

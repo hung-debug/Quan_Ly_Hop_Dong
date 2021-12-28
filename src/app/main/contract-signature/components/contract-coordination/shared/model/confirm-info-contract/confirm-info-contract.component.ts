@@ -129,9 +129,8 @@ export class ConfirmInfoContractComponent implements OnInit {
       }
       delete item.id;
     })
-
     // this.contractService.addConfirmContract(this.datas).subscribe((data) => {
-    this.contractService.coordinationContract(this.datas.determine_contract.id , this.datas.determine_contract.recipients).subscribe((data) => {
+    this.contractService.coordinationContract(this.datas.determine_contract.id , this.datas.determine_contract.recipients, this.datas.recipient_id_coordition).subscribe((data) => {
         console.log(JSON.stringify(data));
         setTimeout(() => {
           this.datas.step = variable.stepSampleContract.step_coordination;
