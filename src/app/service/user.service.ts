@@ -163,58 +163,7 @@ export class UserService {
         datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
     }
     console.log(datas.sign_image);
-    if(datas.sign_image != null && datas.sign_image.length > 0){
-      const body = JSON.stringify({
-        name: datas.name,
-        email: datas.email,
-        phone: datas.phone,
-        organization_id: datas.organizationId,
-        birthday: datas.birthday,
-        status: datas.status,
-        type_id: datas.role,
-  
-        sign_image: datas.sign_image,
-  
-        phone_sign: datas.phoneKpi,
-        phone_tel: datas.networkKpi,
-  
-        hsm_name: datas.nameHsm
-      });
-      console.log(headers);
-      console.log(body);
-      return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
-    }else{
-      const body = JSON.stringify({
-        name: datas.name,
-        email: datas.email,
-        phone: datas.phone,
-        organization_id: datas.organizationId,
-        birthday: datas.birthday,
-        status: datas.status,
-        type_id: datas.role,
-  
-        sign_image: datas.sign_image,
-
-        phone_sign: datas.phoneKpi,
-        phone_tel: datas.networkKpi,
-  
-        hsm_name: datas.nameHsm
-      });console.log(headers);
-      console.log(body);
-      return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
-    }
     
-    
-  }
-
-  updateUserByType(datas: any, type:any) {
-    this.getCurrentUser();
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
-    if(datas.birthday != null){
-        datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
-    }
     const body = JSON.stringify({
       name: datas.name,
       email: datas.email,
@@ -223,40 +172,14 @@ export class UserService {
       birthday: datas.birthday,
       status: datas.status,
       type_id: datas.role,
-      
+
       sign_image: datas.sign_image,
 
       phone_sign: datas.phoneKpi,
       phone_tel: datas.networkKpi,
 
       hsm_name: datas.nameHsm
-    });
-    // if(type == 'infor'){
-    //   body = JSON.stringify({
-    //     name: datas.name,
-    //     email: datas.email,
-    //     phone: datas.phone,
-    //     organization_id: datas.organizationId,
-    //     birthday: datas.birthday,
-    //     status: datas.status,
-    //     type_id: datas.role
-    //   });
-    // }else if(type == 'file-image'){
-    //   body = JSON.stringify({
-    //     sign_image: datas.sign_image
-    //   });
-    // }else if(type == 'kpi'){
-    //   body = JSON.stringify({
-    //     phone_sign: datas.phoneKpi,
-    //     phone_tel: datas.networkKpi
-    //   });
-    // }else if(type == 'hsm'){
-    //   body = JSON.stringify({
-    //     hsm_name: datas.nameHsm
-    //   });
-    // }
-    
-    console.log(headers);
+    });console.log(headers);
     console.log(body);
     return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
   }

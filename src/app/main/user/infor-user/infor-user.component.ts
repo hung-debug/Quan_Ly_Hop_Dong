@@ -37,6 +37,8 @@ export class InforUserComponent implements OnInit {
   addHsmForm: FormGroup;
   datas: any;
   attachFile:any;
+  imgSignBucket:any;
+  imgSignPath:any;
 
   constructor(private appService: AppService,
     private toastService : ToastService,
@@ -89,36 +91,36 @@ export class InforUserComponent implements OnInit {
 
     this.id = this.user.customer_id;
     this.userService.getUserById(this.id).subscribe(
-      dataByEmail => {
+      data => {
         this.addInforForm = this.fbd.group({
-          name: this.fbd.control(dataByEmail.name, [Validators.required]),
-          email: this.fbd.control(dataByEmail.email, [Validators.required, Validators.email]),
-          birthday: dataByEmail.birthday==null?null:new Date(dataByEmail.birthday),
-          phone: this.fbd.control(dataByEmail.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-          organizationId: this.fbd.control(dataByEmail.organization_id, [Validators.required]),
-          role: this.fbd.control(dataByEmail.type_id, [Validators.required]),
-          status: dataByEmail.status
+          name: this.fbd.control(data.name, [Validators.required]),
+          email: this.fbd.control(data.email, [Validators.required, Validators.email]),
+          birthday: data.birthday==null?null:new Date(data.birthday),
+          phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+          organizationId: this.fbd.control(data.organization_id, [Validators.required]),
+          role: this.fbd.control(data.type_id, [Validators.required]),
+          status: data.status
         });
 
         this.addKpiForm = this.fbd.group({
-          phoneKpi: this.fbd.control(dataByEmail.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
-          networkKpi: dataByEmail.phone_tel
+          phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
+          networkKpi: data.phone_tel
         });
 
         this.addHsmForm = this.fbd.group({
-          nameHsm: dataByEmail.hsm_name
+          nameHsm: data.hsm_name
         });
-        console.log(dataByEmail);
-        this.imgSignPCSelect = dataByEmail.sign_image != null && dataByEmail.sign_image.length>0?dataByEmail.sign_image[0].path:null;
-        console.log("aaa");
-        console.log(this.imgSignPCSelect);
+        console.log(data);
+        this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
+        this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
+        this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
       }
     )
   }
 
-  updateInforUser(){
+  updateUser(){
     this.submitted = true;
     // stop here if form is invalid
     if (this.addInforForm.invalid) {
@@ -144,46 +146,7 @@ export class InforUserComponent implements OnInit {
 
     }
     console.log(data);
-    
-    this.userService.updateUserByType(data, "infor").subscribe(
-      data => {
-        console.log(data);
-        this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 10000);
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-          this.router.navigate(['/main/user-infor']);
-        });
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
-      }
-    )
-  }
 
-  updateSignFileImageUser(){
-    this.submitted = true;
-    // stop here if form is invalid
-    if (this.addInforForm.invalid) {
-      return;
-    }
-    const data = {
-      id: this.id,
-      name: this.addInforForm.value.name,
-      email: this.addInforForm.value.email,
-      birthday: this.addInforForm.value.birthday,
-      phone: this.addInforForm.value.phone,
-      organizationId: this.addInforForm.value.organizationId,
-      role: this.addInforForm.value.role,
-      status: this.addInforForm.value.status,
-
-      fileImage: this.attachFile,
-      sign_image: [],
-
-      phoneKpi: this.addKpiForm.value.phoneKpi,
-      networkKpi: this.addKpiForm.value.networkKpi,
-
-      nameHsm: this.addHsmForm.value.nameHsm
-    }
-    console.log(data);
-    
     if(data.fileImage != null){
       this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
         console.log(JSON.stringify(dataFile));
@@ -193,9 +156,9 @@ export class InforUserComponent implements OnInit {
         data.sign_image = sign_image;
         console.log(data);
 
-        this.userService.updateUserByType(data, "file-image").subscribe(
+        this.userService.updateUser(data).subscribe(
           data => {
-            this.toastService.showSuccessHTMLWithTimeout("no.update.sign.file.image.success", "", 10000);
+            this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 10000);
             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
               this.router.navigate(['/main/user-infor']);
             });
@@ -208,83 +171,25 @@ export class InforUserComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 10000);
         return false;
       });
-    }
-  }
-
-  updateSignKpiUser(){
-    this.submitted = true;
-    // stop here if form is invalid
-    if (this.addKpiForm.invalid) {
-      return;
-    }
-    const data = {
-      id: this.id,
-      name: this.addInforForm.value.name,
-      email: this.addInforForm.value.email,
-      birthday: this.addInforForm.value.birthday,
-      phone: this.addInforForm.value.phone,
-      organizationId: this.addInforForm.value.organizationId,
-      role: this.addInforForm.value.role,
-      status: this.addInforForm.value.status,
-
-      fileImage: this.attachFile,
-      sign_image: [],
-
-      phoneKpi: this.addKpiForm.value.phoneKpi,
-      networkKpi: this.addKpiForm.value.networkKpi,
-
-      nameHsm: this.addHsmForm.value.nameHsm
-    }
-    console.log(data);
-
-    this.userService.updateUserByType(data, "kpi").subscribe(
-      data => {
-        this.toastService.showSuccessHTMLWithTimeout("no.update.sign.kpi.success", "", 10000);
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-          this.router.navigate(['/main/user-infor']);
-        });
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
+    }else{
+      if(this.imgSignBucket != null && this.imgSignPath != null){
+        const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
+        const sign_image:never[]=[];
+        (sign_image as string[]).push(sign_image_content);
+        data.sign_image = sign_image;
       }
-    )
-  }
-
-  updateSignHsmUser(){
-    this.submitted = true;
-    // stop here if form is invalid
-    if (this.addHsmForm.invalid) {
-      return;
+      this.userService.updateUser(data).subscribe(
+        data => {
+          console.log(data);
+          this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 10000);
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/user-infor']);
+          });
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
+        }
+      )
     }
-    const data = {
-      id: this.id,
-      name: this.addInforForm.value.name,
-      email: this.addInforForm.value.email,
-      birthday: this.addInforForm.value.birthday,
-      phone: this.addInforForm.value.phone,
-      organizationId: this.addInforForm.value.organizationId,
-      role: this.addInforForm.value.role,
-      status: this.addInforForm.value.status,
-
-      fileImage: this.attachFile,
-      sign_image: [],
-
-      phoneKpi: this.addKpiForm.value.phoneKpi,
-      networkKpi: this.addKpiForm.value.networkKpi,
-
-      nameHsm: this.addHsmForm.value.nameHsm
-    }
-    console.log(data);
-    
-    this.userService.updateUserByType(data, "hsm").subscribe(
-      data => {
-        this.toastService.showSuccessHTMLWithTimeout("no.update.sign.hsm.success", "", 10000);
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-          this.router.navigate(['/main/user-infor']);
-        });
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
-      }
-    )
   }
 
   fileChangedAttach(e: any) {
@@ -315,7 +220,7 @@ export class InforUserComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      console.log(reader.result);
+      //console.log(reader.result);
       this.imgSignPCSelect = reader.result? reader.result.toString() : '';
     };
   }

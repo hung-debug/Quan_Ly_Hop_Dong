@@ -36,6 +36,8 @@ export class AddUserComponent implements OnInit {
   datas: any;
   attachFile:any;
   sign_image:null;
+  imgSignBucket:null;
+  imgSignPath:null;
 
   constructor(private appService: AppService,
     private toastService : ToastService,
@@ -126,8 +128,9 @@ export class AddUserComponent implements OnInit {
 
               fileImage:null
             });
-            this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
-            console.log("aaa");
+            this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
+            this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
+            this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
             console.log(this.addForm);
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
@@ -209,6 +212,12 @@ export class AddUserComponent implements OnInit {
           return false;
         });
       }else{
+        if(this.imgSignBucket != null && this.imgSignPath != null){
+          const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
+          const sign_image:never[]=[];
+          (sign_image as string[]).push(sign_image_content);
+          data.sign_image = sign_image;
+        }
         console.log(data);
         this.userService.updateUser(data).subscribe(
           data => {
