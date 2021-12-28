@@ -25,7 +25,6 @@ export class UnitComponent implements OnInit {
   constructor(private appService: AppService,
     private dialog: MatDialog,
     private unitService: UnitService,
-    private nodeService: NodeService,
     private userService: UserService) { }
 
   code:any = "";
@@ -38,25 +37,17 @@ export class UnitComponent implements OnInit {
   total:any;
 
   ngOnInit(): void {
-    this.appService.setTitle("DANH SÁCH TỔ CHỨC");
+    this.appService.setTitle("unit.list");
     this.searchUnit();
 
     this.cols = [
-      { field: 'name', header: 'Tên tổ chức', style:'text-align: left;' },
-      { field: 'short_name', header: 'Tên viết tắt', style:'text-align: left;' },
-      { field: 'code', header: 'Mã tổ chức', style:'text-align: left;' },
-      { field: 'status', header: 'Trạng thái', style:'text-align: left;' },
-      { field: 'parent_id', header: 'Loại tổ chức', style:'text-align: left;' },
-      { field: 'id', header: 'Quản lý', style:'text-align: center;' },
-      ];
-
-      // this.nodeService.list().subscribe(response => {
-        
-      //   this.files = response;
-      //   console.log(this.files);
-      // });
-
-      
+      { field: 'name', header: 'unit.name', style:'text-align: left;' },
+      { field: 'short_name', header: 'unit.short-name', style:'text-align: left;' },
+      { field: 'code', header: 'unit.code', style:'text-align: left;' },
+      { field: 'status', header: 'unit.status', style:'text-align: left;' },
+      { field: 'parent_id', header: 'unit.type', style:'text-align: left;' },
+      { field: 'id', header: 'unit.manage', style:'text-align: center;' },
+      ]; 
   }  
 
   array_empty: any = [];
@@ -121,7 +112,7 @@ export class UnitComponent implements OnInit {
 
   addUnit() {
     const data = {
-      title: 'THÊM MỚI TỔ CHỨC'
+      title: 'unit.add'
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AddUnitComponent, {
@@ -138,7 +129,7 @@ export class UnitComponent implements OnInit {
 
   editUnit(id:any) {
     const data = {
-      title: 'CẬP NHẬT THÔNG TIN TỔ CHỨC',
+      title: 'unit.update',
       id: id,
     };
     // @ts-ignore
@@ -156,7 +147,7 @@ export class UnitComponent implements OnInit {
 
   detailUnit(id:any) {
     const data = {
-      title: 'THÔNG TIN TỔ CHỨC',
+      title: 'unit.information',
       id: id,
     };
     // @ts-ignore
