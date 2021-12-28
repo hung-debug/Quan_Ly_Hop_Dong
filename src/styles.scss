@@ -26,6 +26,9 @@ body { margin: 0; font-family: font_lexend_deca , Roboto, "Helvetica Neue", sans
 .p-dropdown-filter, .p-multiselect-filter-container .p-inputtext {
   padding: 5px !important;
 }
+.p-datepicker table td {
+  padding: 0 !important;
+}
 /* For desktop: */
 .col-1 {width: 8.33%;}
 .col-2 {width: 16.66%;}

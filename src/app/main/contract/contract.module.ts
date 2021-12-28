@@ -33,6 +33,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import {CalendarModule} from 'primeng/calendar';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
+import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -51,7 +52,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ConfirmInforContractBatchComponent,
     InforContractBatchComponent,
     ImageSignContractComponent,
-    CancelContractDialogComponent
+    CancelContractDialogComponent,
+    FilterListDialogComponent
   ],
   exports: [
     ContractHeaderComponent,

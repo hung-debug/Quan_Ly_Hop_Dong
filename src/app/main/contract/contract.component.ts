@@ -12,6 +12,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { HttpClient } from '@angular/common/http';
 import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -91,6 +92,28 @@ export class ContractComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+        if(typeof params.filter_type != 'undefined' && params.filter_type){
+          this.filter_type = params.filter_type;
+        }else{
+          this.filter_type = "";
+        }
+        if(typeof params.filter_contract_no != 'undefined' && params.filter_contract_no){
+          this.filter_contract_no = params.filter_contract_no;
+        }else{
+          this.filter_contract_no = "";
+        }
+        if(typeof params.filter_from_date != 'undefined' && params.filter_from_date){
+          this.filter_from_date = params.filter_from_date;
+        }else{
+          this.filter_from_date = "";
+        }
+        if(typeof params.filter_to_date != 'undefined' && params.filter_to_date){
+          this.filter_to_date = params.filter_to_date;
+        }else{
+          this.filter_to_date = "";
+        }
+    });
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
       this.status = params['status'];
@@ -190,9 +213,7 @@ export class ContractComponent implements OnInit {
     }
   }
 
-  search(){
-    this.getContractList();
-  }
+  
 
   autoSearch(event:any){
     this.p = 1;
@@ -251,6 +272,28 @@ export class ContractComponent implements OnInit {
   deleteItem(id:number){
     this.statusPopup = 1;
     this.notificationPopup = "Xóa hợp đồng thành công";
+  }
+
+  searchContract(){
+    const data = {
+      title: 'TÌM KIẾM HỢP ĐỒNG',
+      filter_type: this.filter_type,
+      filter_contract_no: this.filter_contract_no,
+      filter_from_date: this.filter_from_date,
+      filter_to_date: this.filter_to_date,
+      status: this.status
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(FilterListDialogComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
   cancelContract(id:any) {

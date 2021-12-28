@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" style="padding-top: 10px;">
 
   <!-- <mdb-tabs [fill]="true" >
     <mdb-tab title="{{'contract.me' | translate}}" value='mine' [ngClass]="{ 'active':type==='mine'}" *ngIf="action=='create'"></mdb-tab>
@@ -12,7 +12,7 @@
       <img src="../../assets/img/icon_search.svg" class="input-img" />
       <input type="text" id="search" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}"
       (keyup)="autoSearch($event)" />
-      <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="open(modal_filter)"/>
+      <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="searchContract()"/>
     </div>
   </div>
 
@@ -140,7 +140,7 @@
     <div class="row" style="text-align: center; padding-top: 10px;">
       <div class="col-md-12">
         <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">Hủy bỏ</button>
-        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.close('Save click'); search()">Tìm kiếm</button>
+        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.close('Save click'); searchContract()">Tìm kiếm</button>
       </div>
     </div>
   </div>
