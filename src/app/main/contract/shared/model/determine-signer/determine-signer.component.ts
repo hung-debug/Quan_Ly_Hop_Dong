@@ -137,6 +137,7 @@ export class DetermineSignerComponent implements OnInit {
         this.is_determine_clone[index].recipients = data;
       }
     })
+    this.spinner.show();
     this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res: any) => {
         // this.datas.id = data?.id;
         if (!this.saveDraftStep) {
@@ -156,6 +157,8 @@ export class DetermineSignerComponent implements OnInit {
       (res: any) => {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout(res.error, "", 10000);
+      }, () => {
+        this.spinner.hide();
       }
     );
   }
@@ -806,14 +809,14 @@ export class DetermineSignerComponent implements OnInit {
 
   doTheSearch($event: Event, indexs: number, action: string): void {
     const stringEmitted = ($event.target as HTMLInputElement).value;
-    // console.log(stringEmitted);
+    console.log(stringEmitted);
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
     setTimeout(() => {
       this.contractService.getNameOrganization("", stringEmitted).subscribe((res) => {
         let arr_all = res.entities.filter((p: any) => p.organization_id == 1);
-        let data = arr_all.map((p: any) => p.name);
+        let data = arr_all.map((p: any) => ({name: p.name, email: p.email}));
         if (action == 'view') {
           this.arrSearchNameView = data;
         } else if (action == 'signature') {
@@ -853,9 +856,10 @@ export class DetermineSignerComponent implements OnInit {
     }
   }
 
-  onFocusOut(e: any) {
-    console.log(e)
+  onFocusOut(e: any, dItem: any) {
+    // console.log(e)
     if (!e.relatedTarget || (e.relatedTarget && e.relatedTarget.className && !e.relatedTarget.className.includes('search-name-items'))) {
+      if (!dItem.name) dItem.email = '';
       this.arrSearchNameView = [];
       this.arrSearchNameSignature = [];
       this.arrSearchNameDoc = [];
@@ -863,7 +867,8 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onSelectName(tData: any, dData: any) {
-    dData.name = tData;
+    dData.name = tData.name;
+    dData.email = tData.email;
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];

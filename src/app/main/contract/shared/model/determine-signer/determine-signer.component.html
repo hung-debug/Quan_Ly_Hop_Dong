@@ -22,10 +22,10 @@
                   <img src="assets/img/icon_name.svg" class="input-img">
 <!--                  <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" autofocus>-->
 <!--                  (focusout)="onFocusOut($event)"-->
-                  <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" (focusin)="onFocusIn($event, index, 'view')" (ngxInputSearch)="doTheSearch($event, index, 'view')" [(ngModel)]="d.name" (focusout)="onFocusOut($event)">
+                  <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" (focusin)="onFocusIn($event, index, 'view')" (ngxInputSearch)="doTheSearch($event, index, 'view')" [(ngModel)]="d.name" (focusout)="onFocusOut($event, d)">
                 </div>
                 <div class="search-name" *ngIf="this.arrSearch[index] && this.arrSearchNameView && arrSearchNameView.length > 0">
-                  <button class="search-name-items" *ngFor="let t of this.arrSearchNameView" (click)="onSelectName(t, d)">{{t}}</button>
+                  <button class="search-name-items" *ngFor="let t of this.arrSearchNameView" (click)="onSelectName(t, d)">{{t.name}} ({{t.email}})</button>
                 </div>
 
               </div>
@@ -62,10 +62,10 @@
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
 <!--                    <input [id]="'signature-origanzation-' + d.ordering" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">-->
-                    <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" (focusin)="onFocusIn($event, index, 'signature')" (ngxInputSearch)="doTheSearch($event, index, 'signature')" [(ngModel)]="d.name" (focusout)="onFocusOut($event)">
+                    <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" (focusin)="onFocusIn($event, index, 'signature')" (ngxInputSearch)="doTheSearch($event, index, 'signature')" [(ngModel)]="d.name" (focusout)="onFocusOut($event, d)">
                   </div>
                   <div class="search-name" *ngIf="this.arrSearch[index] && this.arrSearchNameSignature && arrSearchNameSignature.length > 0">
-                    <button class="search-name-items" *ngFor="let t of this.arrSearchNameSignature" (click)="onSelectName(t, d)">{{t}}</button>
+                    <button class="search-name-items" *ngFor="let t of this.arrSearchNameSignature" (click)="onSelectName(t, d)">{{t.name}} ({{t.email}})</button>
                   </div>
                 </div>
 <!--                <div *ngIf="getOtp(d)" class="participants-otp" style="z-index: -1">-->
@@ -132,10 +132,10 @@
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
 <!--                    <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">-->
-                    <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" (focusin)="onFocusIn($event, index, 'doc')" (ngxInputSearch)="doTheSearch($event, index, 'doc')" [(ngModel)]="d.name" (focusout)="onFocusOut($event)">
+                    <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" (focusin)="onFocusIn($event, index, 'doc')" (ngxInputSearch)="doTheSearch($event, index, 'doc')" [(ngModel)]="d.name" (focusout)="onFocusOut($event, d)">
                   </div>
                   <div class="search-name" *ngIf="this.arrSearch[index] && this.arrSearchNameDoc && arrSearchNameDoc.length > 0">
-                    <button class="search-name-items" *ngFor="let t of this.arrSearchNameDoc" (click)="onSelectName(t, d)">{{t}}</button>
+                    <button class="search-name-items" *ngFor="let t of this.arrSearchNameDoc" (click)="onSelectName(t, d)">{{t.name}} ({{t.email}})</button>
                   </div>
                 </div>
 <!--                <div class="participants-otp" style="z-index: -1">-->
