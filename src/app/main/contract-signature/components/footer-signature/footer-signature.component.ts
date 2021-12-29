@@ -35,8 +35,8 @@ export class FooterSignatureComponent implements OnInit {
 
   action() {
     if (this.datas.action_title == 'dieu_phoi') {
-      let data_coordination = this.datas.is_data_contract.participants;
       let recipient_data = {};
+      let data_coordination = this.datas.is_data_contract.participants;
       let emailCurrent = this.contractService.getAuthCurrentUser().email;
       for (let i = 0; i < data_coordination.length; i++) {
         for (let j = 0; j < data_coordination[i].recipients.length; j++) {
@@ -57,10 +57,10 @@ export class FooterSignatureComponent implements OnInit {
             this.datas.recipient_id_coordition = dataCoordination.id;
           }
           console.log(this.datas.recipient_id_coordition);
-          //@ts-ignore
-          let data = recipient_data['recipients'].filter((p: any) => p.role != 1);
-          //@ts-ignore
-          recipient_data['recipients'] = data;
+          // //@ts-ignore
+          // let data = recipient_data['recipients'].filter((p: any) => p.role != 1);
+          // //@ts-ignore
+          // recipient_data['recipients'] = data;
           // recipient_data['recipients'].forEach((element: any, index: number) => {
           //   if (element.role == 1) {
           //     // @ts-ignore
@@ -78,17 +78,61 @@ export class FooterSignatureComponent implements OnInit {
     }
   }
 
+  // getDataCoordination(recipient_data: any) {
+  //   let data_coordination = this.datas.is_data_contract.participants;
+  //   let emailCurrent = this.contractService.getAuthCurrentUser().email;
+  //   for (let i = 0; i < data_coordination.length; i++) {
+  //     for (let j = 0; j < data_coordination[i].recipients.length; j++) {
+  //       if (data_coordination[i].recipients[j].email == emailCurrent) {
+  //         recipient_data = data_coordination[i];
+  //         break;
+  //       }
+  //     }
+  //   }
+  // }
+
   downloadFilePDF() {
     this.submitChanges.emit(2);
   }
 
+
+  getCoordination() {
+    if (this.datas.action_title == 'dieu_phoi') {
+      let recipient_data = {};
+      let data_coordination = this.datas.is_data_contract.participants;
+      let emailCurrent = this.contractService.getAuthCurrentUser().email;
+      for (let i = 0; i < data_coordination.length; i++) {
+        for (let j = 0; j < data_coordination[i].recipients.length; j++) {
+          if (data_coordination[i].recipients[j].email == emailCurrent) {
+            recipient_data = data_coordination[i];
+            break;
+          }
+        }
+      }
+      // @ts-ignore
+      if (recipient_data && recipient_data['recipients']) {
+        // @ts-ignore
+        let dataCoordination = recipient_data['recipients'].filter((p: any) => p.role == 1)[0];
+        if (dataCoordination) {
+          this.recipientId = dataCoordination.id;
+        }
+      }
+    }
+  }
+
+
   processingAuthorization() {
+    this.getCoordination();
     const data = {
       title: 'ỦY QUYỀN XỬ LÝ',
       is_content: 'processing_author',
       dataContract: this.datas,
       recipientId: this.recipientId
     };
+    if (this.datas.action_title == 'dieu_phoi') {
+      // @ts-ignore
+      data['role_coordination'] = 1;
+    }
     // @ts-ignore
     const dialogRef = this.dialog.open(ForwardContractComponent, {
       width: '450px',
@@ -103,12 +147,17 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   forWardContract() {
+    this.getCoordination();
     const data = {
       title: 'CHUYỂN TIẾP',
       is_content: 'forward_contract',
       dataContract: this.datas,
       recipientId: this.recipientId
     };
+    if (this.datas.action_title == 'dieu_phoi') {
+      // @ts-ignore
+      data['role_coordination'] = 1;
+    }
     // @ts-ignore
     const dialogRef = this.dialog.open(ForwardContractComponent, {
       width: '450px',

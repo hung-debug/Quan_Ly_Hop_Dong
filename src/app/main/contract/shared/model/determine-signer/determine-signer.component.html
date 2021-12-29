@@ -1,10 +1,10 @@
 <!--begin template-->
 <div class="container-fluid">
   <div class="contract-determine">
-    <div class="col-md-1">
+    <div style="margin-right: 50px">
       <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="data_organization.ordering">
     </div>
-    <div class="col-md-11 contract--content">
+    <div class="contract--content">
       <div class="contract__content--title">
         <div>{{'organization.me' | translate | uppercase}} -</div>
         <input type="text" [(ngModel)]="data_organization.name" disabled>
@@ -187,10 +187,10 @@
 
   <div class="contract-determine" *ngFor="let item of dataParnterOrganization(); let id = index"
        style="display: flex">
-    <div class="col-md-1">
+    <div style="margin-right: 50px">
       <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="item.ordering">
     </div>
-    <div class="col-md-11 contract--content">
+    <div class="contract--content">
       <div class="contract__content--title">
         <div style="width: 72px">{{'doi_tac' | translate | uppercase}} -</div>
         <input type="text" placeholder="{{(item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate}}" [(ngModel)]="item.name" [disabled]="item.type == 3">
@@ -482,8 +482,8 @@
 </div>
 
 <div style="display: flex">
-  <div class="col-md-1"></div>
-  <div class="col-md-10" style="display: inline-block; cursor: pointer">
+  <div style="margin-right: 80px"></div>
+  <div style="display: inline-block; cursor: pointer">
     <u class="label text-color" (click)="addPartner()" style="background-color: #FFFFFF">{{'them_doi_tac' | translate}}</u>
   </div>
 </div>
@@ -501,3 +501,11 @@
             class="next action-button pull-right">{{'btn.next' | translate }}</button>
   </div>
 </div>
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-spin-clockwise"
+>
+  <p style="font-size: 18px; color: white">Đang xử lý...</p>
+</ngx-spinner>

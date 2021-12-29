@@ -1032,6 +1032,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
 
       console.log(data_sample_contract);
+      this.spinner.show();
       this.contractService.getContractSample(data_sample_contract).subscribe((data: any) => {
           console.log(JSON.stringify(data));
           this.datas.is_data_object_signature.forEach((p: any) => {
@@ -1046,11 +1047,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.step = variable.stepSampleContract.step4;
           this.datas.stepLast = this.step
           this.nextOrPreviousStep(this.step);
-
         },
         error => {
+          this.spinner.hide();
           console.log("false connect file");
           return false;
+        }, () => {
+          this.spinner.hide();
         }
       );
       // Đây là dữ liệu mảng request truyền lên cho server
