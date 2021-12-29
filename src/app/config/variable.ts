@@ -28,7 +28,7 @@ export const type_signature = [
   },
   {
     id: 3,
-    name: "Ký số bằng sim KPI",
+    name: "Ký số bằng sim PKI",
     is_otp: false
   },
   {

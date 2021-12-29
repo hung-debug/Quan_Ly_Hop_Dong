@@ -51,6 +51,9 @@ export class DetermineSignerComponent implements OnInit {
   getNameIndividual: string = "";
 
   arrSearchName: any = [];
+  arrSearchNameDoc: any = [];
+  arrSearchNameSignature: any = [];
+  arrSearchNameView: any = [];
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -801,28 +804,69 @@ export class DetermineSignerComponent implements OnInit {
     } else return {'width': '90%'}
   }
 
-  doTheSearch($event: Event, index: number): void {
+  doTheSearch($event: Event, indexs: number, action: string): void {
     const stringEmitted = ($event.target as HTMLInputElement).value;
-    console.log(stringEmitted);
-    this.arrSearch.push(false)
-    this.contractService.getNameOrganization("", stringEmitted).subscribe((res) => {
-      this.arrSearch[index]
-      let data = res.entities.map((p: any) => p.name);
-      this.arrSearchName = data;
-      console.log(data, res);
-    }, () => {
-      this.getNotificationValid('có lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!')
-    })
+    // console.log(stringEmitted);
+    this.arrSearchNameView = [];
+    this.arrSearchNameSignature = [];
+    this.arrSearchNameDoc = [];
+    setTimeout(() => {
+      this.contractService.getNameOrganization("", stringEmitted).subscribe((res) => {
+        let arr_all = res.entities.filter((p: any) => p.organization_id == 1);
+        let data = arr_all.map((p: any) => p.name);
+        if (action == 'view') {
+          this.arrSearchNameView = data;
+        } else if (action == 'signature') {
+          this.arrSearchNameSignature = data;
+        } else {
+          this.arrSearchNameDoc = data;
+        }
+        // console.log(data, res);
+      }, () => {
+        this.getNotificationValid('có lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!')
+      })
+    }, 100)
+
+  }
+
+  onFocusIn(e: any, is_index: number, action: string) {
+    // console.log(e);
+    if (e.type == "focusin") {
+      this.arrSearch = [];
+      let arrData = [];
+      if (action == 'view') {
+        arrData = this.data_organization.recipients.filter((p: any) => p.role == 2);
+      } else if (action == 'signature') {
+        arrData = this.data_organization.recipients.filter((p: any) => p.role == 3);
+      } else if (action == 'doc') {
+        arrData = this.data_organization.recipients.filter((p: any) => p.role == 4);
+      }
+      if (arrData.length > 0) {
+        arrData.forEach((res: any, index: number) => {
+          this.arrSearch.push(false);
+          if (is_index == index) {
+            this.arrSearch[index] = true;
+          } else this.arrSearch[index] = false;
+        })
+      }
+
+    }
   }
 
   onFocusOut(e: any) {
     console.log(e)
-    this.arrSearchName = [];
+    if (!e.relatedTarget || (e.relatedTarget && e.relatedTarget.className && !e.relatedTarget.className.includes('search-name-items'))) {
+      this.arrSearchNameView = [];
+      this.arrSearchNameSignature = [];
+      this.arrSearchNameDoc = [];
+    }
   }
 
   onSelectName(tData: any, dData: any) {
     dData.name = tData;
-    this.arrSearchName = [];
+    this.arrSearchNameView = [];
+    this.arrSearchNameSignature = [];
+    this.arrSearchNameDoc = [];
   }
 
 }

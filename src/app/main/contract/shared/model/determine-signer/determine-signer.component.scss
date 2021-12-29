@@ -322,9 +322,19 @@ input[type=number] {
             overflow: auto;
             cursor: pointer;
 
-            span:hover {
-              background-color: #dddddd94;
+            .search-name-items {
+              border: none;
+              background-color: white;
+              text-align: left;
+              z-index: 1;
+              &:hover {
+                background-color: #e9eceff7;
+              }
             }
+
+            //span:hover {
+            //  background-color: #dddddd94;
+            //}
           }
 
         }

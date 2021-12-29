@@ -73,7 +73,7 @@ export const data_signature_contract = {
           },
           {
             "item_id": 3,
-            "item_text": "Ký số bằng sim KPI"
+            "item_text": "Ký số bằng sim PKI"
           }
         ],
         "isOtp": true,
@@ -130,7 +130,7 @@ export const data_signature_contract = {
               },
               {
                 "item_id": 3,
-                "item_text": "Ký số bằng sim KPI"
+                "item_text": "Ký số bằng sim PKI"
               }
             ],
             "isOtp": true,
