@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
+import { ContractConnectDialogComponent } from './dialog/contract-connect-dialog/contract-connect-dialog.component';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -307,6 +308,25 @@ export class ContractComponent implements OnInit {
       backdrop: 'static',
       keyboard: false,
       data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  contractConnect(id:any){
+    const data = {
+      title: 'XEM HỢP ĐỒNG LIÊN QUAN',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ContractConnectDialogComponent, {
+      width: '500px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');

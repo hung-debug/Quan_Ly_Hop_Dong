@@ -34,6 +34,7 @@ import {CalendarModule} from 'primeng/calendar';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
+import { ContractConnectDialogComponent } from './dialog/contract-connect-dialog/contract-connect-dialog.component';
 
 import {NgxInputSearchModule} from "ngx-input-search";
 
@@ -55,7 +56,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     InforContractBatchComponent,
     ImageSignContractComponent,
     CancelContractDialogComponent,
-    FilterListDialogComponent
+    FilterListDialogComponent,
+    ContractConnectDialogComponent
   ],
   exports: [
     ContractHeaderComponent,
