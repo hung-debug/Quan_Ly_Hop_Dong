@@ -507,6 +507,15 @@ export class ContractService {
     return forkJoin(arrApi);
   }
 
+  getDetailInforContract(idContract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    
+    return this.http.get<any>(this.addGetDataContract + idContract, {headers});
+  }
+
 
   objDefaultSampleContract() {
     return {
