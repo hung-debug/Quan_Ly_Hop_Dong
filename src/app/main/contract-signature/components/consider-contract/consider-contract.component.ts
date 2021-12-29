@@ -659,7 +659,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }).then(async (result) => {
         if (result.isConfirmed) {
           if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-            this.signContractSubmit();
+            // this.signContractSubmit();
+            const signD = this.isDataObjectSignature.find((item: any) => item.type == 3 && item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived);
+            if (signD) {
+              await this.signDigitalDocument();
+            }
           }
         }
       });
@@ -787,38 +791,68 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   }
 
   async signDigitalDocument() {
-    const res: any = await this.contractService.getAllAccountsDigital();
-    if (res) {
-      this.signCertDigital = res.data;
-      for(const signUpdate of this.isDataObjectSignature) {
-        if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
-          && signUpdate?.recipient?.email === this.currentUser.email
-          && signUpdate?.recipient?.role === this.datas?.roleContractReceived
-        ) {
-          let fileC = await this.contractService.getFileContractPromise(this.idContract);
-          const pdfC2 = fileC.find((p: any) => p.type == 2);
-          const pdfC1 = fileC.find((p: any) => p.type == 1);
-          if (pdfC2) {
-            fileC = pdfC2.path;
-          } else if (pdfC1) {
-            fileC = pdfC1.path;
-          } else {
-            return;
-          }
-
-          const signDigital = JSON.parse(JSON.stringify(signUpdate));
-          signDigital.Serial = this.signCertDigital.Serial;
-          const base64String = await this.contractService.getDataFileUrlPromise(fileC);
-          signDigital.valueSignBase64 = encode(base64String);
-          console.log(signDigital.valueSignBase64);
-
-          const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital);
-          await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
-        }
-      }
+    let fileC = await this.contractService.getFileContractPromise(this.idContract);
+    const pdfC2 = fileC.find((p: any) => p.type == 2);
+    const pdfC1 = fileC.find((p: any) => p.type == 1);
+    let typeSignDigital = 0;
+    if (pdfC2) {
+      fileC = pdfC2.path;
+    } else if (pdfC1) {
+      fileC = pdfC1.path;
     } else {
       return;
     }
+    for(const signUpdate of this.isDataObjectSignature) {
+      if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+        && signUpdate?.recipient?.email === this.currentUser.email
+        && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+      ) {
+        if (signUpdate.recipient?.sign_type) {
+          const typeSD = signUpdate.recipient?.sign_type.find((t: any) => t.id != 1);
+          if (typeSD) {
+            typeSignDigital = typeSD.id;
+          }
+        }
+
+        break;
+      }
+    }
+    if (typeSignDigital == 2) {
+      const res: any = await this.contractService.getAllAccountsDigital();
+      if (res) {
+        this.signCertDigital = res.data;
+        for(const signUpdate of this.isDataObjectSignature) {
+          if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+            && signUpdate?.recipient?.email === this.currentUser.email
+            && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+          ) {
+            const signDigital = JSON.parse(JSON.stringify(signUpdate));
+            signDigital.Serial = this.signCertDigital.Serial;
+            const base64String = await this.contractService.getDataFileUrlPromise(fileC);
+            signDigital.valueSignBase64 = encode(base64String);
+            console.log(signDigital.valueSignBase64);
+
+            const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital);
+            await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
+          }
+        }
+      } else {
+        return;
+      }
+    } else if (typeSignDigital == 3) {
+      const objSign = this.isDataObjectSignature.filter((signUpdate: any) => (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+        && signUpdate?.recipient?.email === this.currentUser.email
+        && signUpdate?.recipient?.role === this.datas?.roleContractReceived));
+      if (fileC && objSign.length) {
+        const arrBuffFile = await this.contractService.getDataBinaryFileUrlPromise(fileC);
+        const fileSignedId = await this.contractService.uploadFileSimPKI(arrBuffFile);
+        const fileSignedArr = await this.contractService.getDataFileSIMPKIUrlPromise(fileSignedId.id);
+        const valueSignBase64 = encode(fileSignedArr);
+        await this.contractService.updateDigitalSignatured(objSign[0].id, valueSignBase64);
+      }
+
+    }
+
   }
 
   signContractSubmit() {
