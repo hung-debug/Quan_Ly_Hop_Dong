@@ -9,6 +9,7 @@ import {elements} from "@interactjs/snappers/all";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../../../service/toast.service";
 import {Router} from "@angular/router";
+import {NgxInputSearchModule} from "ngx-input-search";
 
 @Component({
   selector: 'app-determine-signer',
@@ -42,11 +43,17 @@ export class DetermineSignerComponent implements OnInit {
 
   is_determine_clone: any;
   toppings = new FormControl();
+  arrSearch: any = [];
 
   //dropdown
   signTypeList: Array<any> = type_signature;
   dropdownSignTypeSettings: any = {};
   getNameIndividual: string = "";
+
+  arrSearchName: any = [];
+  arrSearchNameDoc: any = [];
+  arrSearchNameSignature: any = [];
+  arrSearchNameView: any = [];
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -378,16 +385,33 @@ export class DetermineSignerComponent implements OnInit {
 
   getCheckDuplicateEmail(isParty: string, dataValid?: any) {
     let arrCheckEmail = [];
+    // valid email đối tác và các bên tham gia
     if (isParty != 'only_party_origanzation') {
+      let arrEmail = [];
       for (let i = 0; i < dataValid.length; i++) {
         const element = dataValid[i].recipients;
         for (let j = 0; j < element.length; j++) {
           if (element[j].email) {
-            arrCheckEmail.push(element[j].email);
+            let items = {
+              email: element[j].email,
+              role: element[j].role
+            }
+            // arrCheckEmail.push(element[j].email);
+            arrEmail.push(items);
           }
         }
       }
+
+      if (arrEmail.some((p: any) => p.role == 1) && arrEmail.some((p: any) => p.role == 3)) {
+        arrEmail = arrEmail.filter((p: any) => p.role != 1);
+      }
+
+      arrEmail.forEach((items: any) => {
+        arrCheckEmail.push(items.email)
+      })
+
     } else {
+      // valid email tổ chức của tôi
       for (let i = 0; i < dataValid.length; i++) {
         if (dataValid[i].email) {
           arrCheckEmail.push(dataValid[i].email);
@@ -778,6 +802,71 @@ export class DetermineSignerComponent implements OnInit {
         'width': '40%'
       }
     } else return {'width': '90%'}
+  }
+
+  doTheSearch($event: Event, indexs: number, action: string): void {
+    const stringEmitted = ($event.target as HTMLInputElement).value;
+    // console.log(stringEmitted);
+    this.arrSearchNameView = [];
+    this.arrSearchNameSignature = [];
+    this.arrSearchNameDoc = [];
+    setTimeout(() => {
+      this.contractService.getNameOrganization("", stringEmitted).subscribe((res) => {
+        let arr_all = res.entities.filter((p: any) => p.organization_id == 1);
+        let data = arr_all.map((p: any) => p.name);
+        if (action == 'view') {
+          this.arrSearchNameView = data;
+        } else if (action == 'signature') {
+          this.arrSearchNameSignature = data;
+        } else {
+          this.arrSearchNameDoc = data;
+        }
+        // console.log(data, res);
+      }, () => {
+        this.getNotificationValid('có lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!')
+      })
+    }, 100)
+
+  }
+
+  onFocusIn(e: any, is_index: number, action: string) {
+    // console.log(e);
+    if (e.type == "focusin") {
+      this.arrSearch = [];
+      let arrData = [];
+      if (action == 'view') {
+        arrData = this.data_organization.recipients.filter((p: any) => p.role == 2);
+      } else if (action == 'signature') {
+        arrData = this.data_organization.recipients.filter((p: any) => p.role == 3);
+      } else if (action == 'doc') {
+        arrData = this.data_organization.recipients.filter((p: any) => p.role == 4);
+      }
+      if (arrData.length > 0) {
+        arrData.forEach((res: any, index: number) => {
+          this.arrSearch.push(false);
+          if (is_index == index) {
+            this.arrSearch[index] = true;
+          } else this.arrSearch[index] = false;
+        })
+      }
+
+    }
+  }
+
+  onFocusOut(e: any) {
+    console.log(e)
+    if (!e.relatedTarget || (e.relatedTarget && e.relatedTarget.className && !e.relatedTarget.className.includes('search-name-items'))) {
+      this.arrSearchNameView = [];
+      this.arrSearchNameSignature = [];
+      this.arrSearchNameDoc = [];
+    }
+  }
+
+  onSelectName(tData: any, dData: any) {
+    dData.name = tData;
+    this.arrSearchNameView = [];
+    this.arrSearchNameSignature = [];
+    this.arrSearchNameDoc = [];
   }
 
 }

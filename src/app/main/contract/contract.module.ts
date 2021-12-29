@@ -36,6 +36,8 @@ import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/c
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
 import { ContractConnectDialogComponent } from './dialog/contract-connect-dialog/contract-connect-dialog.component';
 
+import {NgxInputSearchModule} from "ngx-input-search";
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -89,6 +91,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DropdownModule,
     CalendarModule,
     MultiSelectModule,
+    NgxInputSearchModule
   ],
   entryComponents: [
     ConfirmInforContractComponent,

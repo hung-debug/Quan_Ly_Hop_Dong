@@ -7,6 +7,7 @@ import {Helper} from "../core/Helper";
 import {DatePipe} from '@angular/common';
 import {forkJoin} from "rxjs";
 import axios from 'axios';
+import {User} from "./user.service";
 
 
 export interface Contract {
@@ -61,6 +62,7 @@ export class ContractService {
   getAccountSignDigital: any = `http://localhost:6704/api/mobi/getcert?mst=`;
   postSignDigital: any = `http://localhost:6704/api/mobi/signpdf`;
   imageMobiBase64: any;
+  getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
 
   token:any;
   customer_id:any;
@@ -296,6 +298,13 @@ export class ContractService {
         }),
         catchError(this.handleError)
       );
+  }
+
+  public getNameOrganization(filter_organization_id: any, filter_name: any): Observable<any> {
+    this.getCurrentUser();
+    let listUserUrl = this.getNameSearch + '?name=' + filter_name + '&organization_id=' + filter_organization_id + "&size=1000";
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<User[]>(listUserUrl, {headers}).pipe();
   }
 
 
