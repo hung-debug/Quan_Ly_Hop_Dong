@@ -321,12 +321,13 @@ input[type=number] {
             max-height: 190px;
             overflow: auto;
             cursor: pointer;
+            z-index: 1;
 
             .search-name-items {
               border: none;
               background-color: white;
               text-align: left;
-              z-index: 1;
+
               &:hover {
                 background-color: #e9eceff7;
               }
