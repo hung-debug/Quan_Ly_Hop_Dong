@@ -1089,6 +1089,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         for (const recipient of participant.recipients) {
           if (this.recipientId == recipient.id) {
             this.recipient = recipient;
+            if (this.currentUser?.email != this.recipient?.email) {
+              this.router.navigate(['main/form-contract/detail/' + this.idContract]);
+            }
             return;
           }
         }
