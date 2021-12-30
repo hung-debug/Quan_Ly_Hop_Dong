@@ -15,6 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
 import { ContractConnectDialogComponent } from './dialog/contract-connect-dialog/contract-connect-dialog.component';
 import { AddConnectDialogComponent } from './dialog/add-connect-dialog/add-connect-dialog.component';
+import { ShareContractDialogComponent } from './dialog/share-contract-dialog/share-contract-dialog.component';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -347,6 +348,24 @@ export class ContractComponent implements OnInit {
       keyboard: false,
       data,
       autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  shareContract(id:any){
+    const data = {
+      title: 'CHIA SẺ HỢP ĐỒNG',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ShareContractDialogComponent, {
+      width: '520px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');

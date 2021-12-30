@@ -39,6 +39,7 @@ import { ContractConnectDialogComponent } from './dialog/contract-connect-dialog
 
 import {NgxInputSearchModule} from "ngx-input-search";
 import { AddConnectDialogComponent } from './dialog/add-connect-dialog/add-connect-dialog.component';
+import { ShareContractDialogComponent } from './dialog/share-contract-dialog/share-contract-dialog.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -61,6 +62,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FilterListDialogComponent,
     ContractConnectDialogComponent,
     AddConnectDialogComponent,
+    ShareContractDialogComponent,
   ],
   exports: [
     ContractHeaderComponent,
