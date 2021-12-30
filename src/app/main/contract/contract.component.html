@@ -65,7 +65,7 @@
             <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)"/>
           </div>
           <div class="div_icon" *ngIf="status == 'processing' || status == 'expire' || status == 'complete'">
-            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" />
+            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnect(item.id)"/>
           </div>
           <div class="div_icon" *ngIf="status == 'processing' || status == 'expire' || status == 'complete'">
             <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);"/>
@@ -74,7 +74,7 @@
             <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
           </div>
           <div class="div_icon" *ngIf="status == 'complete'">
-            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" />
+            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);"/>
           </div>
         </div>
       </div>

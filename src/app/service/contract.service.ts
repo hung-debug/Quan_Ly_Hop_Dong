@@ -61,6 +61,8 @@ export class ContractService {
   signDigitalMobi: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
   getAccountSignDigital: any = `http://localhost:6704/api/mobi/getcert?mst=`;
   postSignDigital: any = `http://localhost:6704/api/mobi/signpdf`;
+  postSignDigitalSimPKI: any = `https://econtract.mobifone.vn/SignService/v2/sign-document`;
+  getFileSignSimPKI: any = `https://econtract.mobifone.vn/SignService/download-signed-document?signed_doc_id=`;
   imageMobiBase64: any;
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
 
@@ -250,6 +252,35 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/arraybuffer');
     return this.http.get(url, { responseType: 'arraybuffer', headers }).toPromise();
+  }
+
+  getDataBinaryFileUrlPromise(url: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/x-binary');
+    return this.http.get(url, { responseType: 'blob', headers }).toPromise();
+  }
+
+  getDataFileSIMPKIUrlPromise(idPdf: any) {
+    const headers = new HttpHeaders()
+      .append('TenantCode', 'mobifone.vn')
+      .append('Content-Type', 'application/arraybuffer');
+    return this.http.get(this.getFileSignSimPKI + idPdf, { responseType: 'arraybuffer', headers }).toPromise();
+  }
+
+  uploadFileSimPKI(file: any) {
+    this.getCurrentUser();
+    let formData = new FormData();
+    formData.append('file', file);
+    formData.append('msisdn', '84901764011');
+    formData.append('networkCode', 'mobifone');
+    formData.append('prompt', 'Ký số file data');
+    formData.append('reason', 'ký luôn');
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('TenantCode', 'mobifone.vn');
+
+    return this.http.post<any>(this.postSignDigitalSimPKI, formData, {'headers':headers}).toPromise();
   }
 
   getDataNotifyOriganzation() {
@@ -480,6 +511,16 @@ export class ContractService {
     console.log(headers);
 
     return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, {'headers': headers});
+
+  }
+
+  updateInfoContractConsiderToPromise(datas: any, recipient_id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, {'headers': headers}).toPromise();
 
   }
 
