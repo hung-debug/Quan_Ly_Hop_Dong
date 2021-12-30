@@ -130,6 +130,7 @@ export class DetermineSignerComponent implements OnInit {
         this.is_determine_clone[index].recipients = data;
       }
     })
+    this.spinner.show();
     this.contractService.getContractDetermineCoordination(this.is_determine_clone[0], this.datas.determine_contract.id).subscribe((res: any) => {
         // this.datas.id = data?.id;
         // if (!this.saveDraftStep) {
@@ -150,6 +151,8 @@ export class DetermineSignerComponent implements OnInit {
       (res: any) => {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout(res.error, "", 10000);
+      }, () => {
+        this.spinner.hide();
       }
     );
   }

@@ -4,6 +4,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog
 import {Router} from "@angular/router";
 import {ContractService} from "../../../../../service/contract.service";
 import {ToastService} from "../../../../../service/toast.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-forward-contract',
@@ -22,7 +23,8 @@ export class ForwardContractComponent implements OnInit {
     private contractService: ContractService,
     public dialogRef: MatDialogRef<ForwardContractComponent>,
     private toastService : ToastService,
-    private el: ElementRef
+    private el: ElementRef,
+    private spinner: NgxSpinnerService,
   ) { }
 
 
@@ -45,10 +47,11 @@ export class ForwardContractComponent implements OnInit {
       const dataAuthorize = {
         email: this.myForm.value.email,
         full_name: this.myForm.value.name,
-        role: this.datas.dataContract.roleContractReceived,
+        role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
         recipient_id: this.datas.recipientId,
         is_replace: false/*this.datas.is_content != 'forward_contract'*/
       }
+      this.spinner.show();
       this.contractService.processAuthorizeContract(dataAuthorize).subscribe(
         data => {
           this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền') + ' thành công!'
@@ -56,7 +59,10 @@ export class ForwardContractComponent implements OnInit {
           this.dialogRef.close();
           this.router.navigate(['/main/contract-signature/receive/wait-processing']);
         }, error => {
+          this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+        }, () => {
+          this.spinner.hide();
         }
       )
     }
