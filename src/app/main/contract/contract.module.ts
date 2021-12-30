@@ -9,7 +9,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DatepickerModule } from 'ng2-datepicker';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NgxSpinnerModule } from "ngx-spinner";
-
+import { NgxPaginationModule } from 'ngx-pagination';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
@@ -32,11 +32,13 @@ import {MatSelectModule} from "@angular/material/select";
 import {DropdownModule} from 'primeng/dropdown';
 import {CalendarModule} from 'primeng/calendar';
 import {MultiSelectModule} from 'primeng/multiselect';
+import { CheckboxModule } from 'primeng/checkbox';
 import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
 import { ContractConnectDialogComponent } from './dialog/contract-connect-dialog/contract-connect-dialog.component';
 
 import {NgxInputSearchModule} from "ngx-input-search";
+import { AddConnectDialogComponent } from './dialog/add-connect-dialog/add-connect-dialog.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -57,7 +59,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ImageSignContractComponent,
     CancelContractDialogComponent,
     FilterListDialogComponent,
-    ContractConnectDialogComponent
+    ContractConnectDialogComponent,
+    AddConnectDialogComponent,
   ],
   exports: [
     ContractHeaderComponent,
@@ -91,7 +94,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DropdownModule,
     CalendarModule,
     MultiSelectModule,
-    NgxInputSearchModule
+    NgxInputSearchModule,
+    CheckboxModule,
+    NgxPaginationModule,
   ],
   entryComponents: [
     ConfirmInforContractComponent,
