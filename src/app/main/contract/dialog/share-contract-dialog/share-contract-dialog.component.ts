@@ -20,6 +20,7 @@ export class ShareContractDialogComponent implements OnInit {
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
+  userList: Array<any> = [];
   submitted = false;
   submittedUser = false;
   get f() { return this.addForm.controls; }
@@ -74,14 +75,29 @@ export class ShareContractDialogComponent implements OnInit {
     }
   }
 
+  getUserByOrg(orgId:any){
+    console.log(orgId);
+    this.userService.getUserList(orgId, "").subscribe(data => {
+      console.log(data);
+      this.userList = data.entities;
+
+      this.addFormUser = this.fbd.group({
+        orgId: orgId,
+        email: this.fbd.control("", [Validators.required])
+      });
+    });
+  }
+
   onSubmit() {
     if(this.type == 1){
+      console.log(this.addForm.value.email);
       this.submitted = true;
       // stop here if form is invalid
       if (this.addForm.invalid) {
         return;
       }
     }else{
+      console.log(this.addFormUser.value.email);
       this.submittedUser = true;
       // stop here if form is invalid
       if (this.addFormUser.invalid) {

@@ -33,6 +33,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import {CalendarModule} from 'primeng/calendar';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
+import {ChipsModule} from 'primeng/chips';
 import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
 import { ContractConnectDialogComponent } from './dialog/contract-connect-dialog/contract-connect-dialog.component';
@@ -99,6 +100,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgxInputSearchModule,
     CheckboxModule,
     NgxPaginationModule,
+    ChipsModule,
   ],
   entryComponents: [
     ConfirmInforContractComponent,
