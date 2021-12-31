@@ -366,6 +366,7 @@ export class ContractComponent implements OnInit {
       backdrop: 'static',
       keyboard: false,
       data,
+      autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
