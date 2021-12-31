@@ -59,7 +59,7 @@
             <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
           </div>
           <div class="div_icon" *ngIf="status == 'draft'">
-            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteItem(item.id); open(modalNotifi)" />
+            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteContract(item.id)" />
           </div>
           <div class="div_icon" *ngIf="status == 'processing' || status == 'expire' || status == 'complete'">
             <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)"/>
