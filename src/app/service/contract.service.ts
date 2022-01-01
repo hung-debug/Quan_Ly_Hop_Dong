@@ -557,12 +557,21 @@ export class ContractService {
     return forkJoin(arrApi);
   }
 
+  getDataCoordination(idContract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.addGetDataContract + idContract, {headers});
+    // addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
+  }
+
   getDetailInforContract(idContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    
+
     return this.http.get<any>(this.addGetDataContract + idContract, {headers});
   }
 

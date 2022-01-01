@@ -129,37 +129,35 @@ export class ConfirmInfoContractComponent implements OnInit {
     // this.contractService.addConfirmContract(this.datas).subscribe((data) => {
     this.spinner.show();
     this.contractService.coordinationContract(this.datas.determine_contract.id, this.datas.determine_contract.recipients, this.datas.recipient_id_coordition).subscribe((data) => {
-        console.log(JSON.stringify(data));
-        let emailCurrent = this.contractService.getAuthCurrentUser().email;
-        let status_new_coordination = '';
-        //@ts-ignore
-        for (let i = 0; i < data['recipients'].length; i++) {
-          //@ts-ignore
-          let element = data['recipients'][i];
-          if (element.email == emailCurrent) {
-            if (element.status != 1) {
-              status_new_coordination = element.status;
-            } else status_new_coordination = element.status;
-            break;
-          }
-        }
+        // console.log(JSON.stringify(data));
+        // let emailCurrent = this.contractService.getAuthCurrentUser().email;
+        // let status_new_coordination = '';
+        // //@ts-ignore
+        // for (let i = 0; i < data['recipients'].length; i++) {
+        //   //@ts-ignore
+        //   let element = data['recipients'][i];
+        //   if (element.email == emailCurrent) {
+        //     if (element.status != 1) {
+        //       status_new_coordination = element.status;
+        //     } else status_new_coordination = element.status;
+        //     break;
+        //   }
+        // }
 
-        setTimeout(() => {
-          this.datas.is_data_contract.participants.forEach((res: any) => {
-            res.recipients.forEach((item: any) => {
-              if (item.email == emailCurrent) {
-                item.status = status_new_coordination;
-              }
-            })
-          })
-          this.datas.step = variable.stepSampleContract.step_coordination;
-          // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
-          localStorage.setItem('coordination_complete', JSON.stringify(true));
-          this.datas.coordination_complete = true;
-          // this.datas.view = true;
-          this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.data_contract_document_id.contract_id]);
-          this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 10000);
-        }, 100)
+        this.contractService.getDataCoordination(this.datas.determine_contract.id).subscribe((res: any) => {
+          if (res) {
+            setTimeout(() => {
+              this.datas.step = variable.stepSampleContract.step_coordination;
+              // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
+              localStorage.setItem('coordination_complete', JSON.stringify(true));
+              this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.data_contract_document_id.contract_id]);
+              this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 10000);
+              this.spinner.hide();
+            }, 100)
+          }
+        }, () => {
+          this.spinner.hide();
+        })
       },
       error => {
         this.spinner.hide();
