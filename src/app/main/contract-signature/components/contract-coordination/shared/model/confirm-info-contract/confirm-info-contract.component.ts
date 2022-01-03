@@ -144,15 +144,18 @@ export class ConfirmInfoContractComponent implements OnInit {
         //   }
         // }
 
-        this.contractService.getDataCoordination(this.datas.determine_contract.id).subscribe((res: any) => {
+        this.contractService.getDataCoordination(this.datas.determine_contract.contract_id).subscribe((res: any) => {
           if (res) {
+            this.datas.is_data_contract = res;
+            this.datas.step = variable.stepSampleContract.step_coordination;
+            // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
+            localStorage.setItem('coordination_complete', JSON.stringify(true));
+            this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 10000);
+            this.spinner.hide();
             setTimeout(() => {
-              this.datas.step = variable.stepSampleContract.step_coordination;
-              // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
-              localStorage.setItem('coordination_complete', JSON.stringify(true));
-              this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.data_contract_document_id.contract_id]);
-              this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 10000);
-              this.spinner.hide();
+              // this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.data_contract_document_id.contract_id]);
+              // this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 10000);
+              // this.spinner.hide();
             }, 100)
           }
         }, () => {
