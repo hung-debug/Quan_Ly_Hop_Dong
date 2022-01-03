@@ -57,7 +57,12 @@ export class ForwardContractComponent implements OnInit {
           this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền') + ' thành công!'
             , "", 1000);
           this.dialogRef.close();
-          this.router.navigate(['/main/contract-signature/receive/wait-processing']);
+          if (this.datas.action_title == 'dieu_phoi') {
+            this.router.navigate(['/main/contract-signature/receive/processed'])
+            // main/contract-signature/receive/processed
+          } else {
+            this.router.navigate(['/main/contract-signature/receive/wait-processing']);
+          }
         }, error => {
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
