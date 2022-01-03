@@ -1,1 +1,22 @@
-<p>display-digital-signature works!</p>
+<div class="container-fluid">
+
+  <div class="signature-container" id="export-html" style="width: 395px; height: 72px; border: 1px solid #ddd; display: flex">
+    <img style="z-index: 1; opacity: 0.4" src="assets/img/chu_e.svg" alt="duongdt.vn">
+    <table style="z-index: 2; color: #4FC123">
+      <tr style="display: flex">
+        <td id="ky-boi" style="padding-right: 5px">Ký bởi:</td>
+        <td id="ten-nguoi-ky" style="width: 250px">Công ty cổ phần phần mềm công nghệ cao Việt Nam</td>
+      </tr>
+      <tr style="display: flex">
+        <td style="padding-right: 5px">Ngày ký:</td>
+        <td id="date-time-signature" style="width: 250px">{{this.isDateTime | date: 'dd/MM/YYYY HH:mm'}}</td>
+      </tr>
+    </table>
+    <img style="z-index: 2;" src="assets/img/tick_signature.svg" alt="duongdt.vn">
+  </div>
+
+  <div style="margin-top: 26px; display: flex; justify-content: flex-end">
+    <button (click)="convertImage()" style="border: 1px solid #47A920">convert image</button>
+  </div>
+
+</div>

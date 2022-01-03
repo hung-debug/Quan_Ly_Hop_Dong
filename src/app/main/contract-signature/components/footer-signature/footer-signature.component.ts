@@ -6,6 +6,7 @@ import {
 import {MatDialog} from "@angular/material/dialog";
 import {ForwardContractComponent} from "../../shared/model/forward-contract/forward-contract.component";
 import {ContractService} from "../../../../service/contract.service";
+import {DisplayDigitalSignatureComponent} from "../../display-digital-signature/display-digital-signature.component";
 
 @Component({
   selector: 'app-footer-signature',
@@ -104,6 +105,22 @@ export class FooterSignatureComponent implements OnInit {
     } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
       this.submitChanges.emit(1);
     }
+  }
+
+  showSignature() {
+    const data = {
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DisplayDigitalSignatureComponent, {
+      width: '550px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
   // getDataCoordination(recipient_data: any) {
