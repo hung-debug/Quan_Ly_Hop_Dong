@@ -15,13 +15,13 @@ export class DisplayDigitalSignatureComponent implements OnInit {
   }
 
   convertImage() {
-    const imageRender = <HTMLElement>document.getElementById('export-html');
-    console.log(imageRender);
-    if (imageRender) {
-      domtoimage.toPng(imageRender).then((res: any) => {
-        console.log(res.split(",")[1]);
-      })
-    }
+    // const imageRender = <HTMLElement>document.getElementById('export-html');
+    // console.log(imageRender);
+    // if (imageRender) {
+    //   domtoimage.toPng(imageRender).then((res: any) => {
+    //     console.log(res.split(",")[1]);
+    //   })
+    // }
   }
 
 }
