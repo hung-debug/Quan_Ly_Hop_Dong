@@ -13,14 +13,18 @@ import { UserService } from 'src/app/service/user.service';
 })
 export class ShareContractDialogComponent implements OnInit {
 
+  type:any;
   addForm: FormGroup;
   addFormUser: FormGroup;
   datas: any;
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
+  userList: Array<any> = [];
   submitted = false;
+  submittedUser = false;
   get f() { return this.addForm.controls; }
+  get fUser() { return this.addFormUser.controls; }
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -35,6 +39,11 @@ export class ShareContractDialogComponent implements OnInit {
       this.addForm = this.fbd.group({
         email: this.fbd.control("", [Validators.required])
       });
+
+      this.addFormUser = this.fbd.group({
+        orgId: "",
+        email: this.fbd.control("", [Validators.required])
+      });
     }
 
   ngOnInit(): void {
@@ -46,19 +55,57 @@ export class ShareContractDialogComponent implements OnInit {
     });
 
     this.datas = this.data;
-
+    this.type = 1;
+    
     this.addForm = this.fbd.group({
+      email: this.fbd.control("", [Validators.required])
+    });
+    this.addFormUser = this.fbd.group({
+      orgId: "",
       email: this.fbd.control("", [Validators.required])
     });
 
   }
 
-  onSubmit() {
-    this.submitted = true;
-    // stop here if form is invalid
-    if (this.addForm.invalid) {
-      return;
+  changeType() {
+    if(this.type == 1){
+      this.submitted = false;
+    }else{
+      this.submittedUser = false;
     }
+  }
+
+  getUserByOrg(orgId:any){
+    console.log(orgId);
+    this.userService.getUserList(orgId, "").subscribe(data => {
+      console.log(data);
+      this.userList = data.entities;
+
+      this.addFormUser = this.fbd.group({
+        orgId: orgId,
+        email: this.fbd.control("", [Validators.required])
+      });
+    });
+  }
+
+  onSubmit() {
+    if(this.type == 1){
+      console.log(this.addForm.value.email);
+      this.submitted = true;
+      // stop here if form is invalid
+      if (this.addForm.invalid) {
+        return;
+      }
+    }else{
+      console.log(this.addFormUser.value.email);
+      this.submittedUser = true;
+      // stop here if form is invalid
+      if (this.addFormUser.invalid) {
+        return;
+      }
+    }
+    this.dialogRef.close();
+    this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 1000);
   }
 
 }

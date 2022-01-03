@@ -1,6 +1,9 @@
 .required-title {
   color: red;
 }
+.content{
+  padding-top: 10px;
+}
 
 .input-data {
   border: 1px solid #106DB6;
@@ -45,7 +48,7 @@
   margin-bottom: 0;
 }
 :host ::ng-deep {
-  .p-dropdown {
+  .p-dropdown, .p-multiselect {
       border: 1px solid #106DB6;
       border-radius: 5px;
       height: 33px;
@@ -53,8 +56,22 @@
       outline: 0;
       color: black !important;
   }
-  .p-dropdown-label {
+  .p-dropdown-label, .p-multiselect-label {
       padding: 5px 5px 5px 15px;
+  }
+  .p-chips{
+    width: 100%;
+  }
+  .p-chips .p-chips-multiple-container{
+    width: 100%;
+    border: 1px solid #106DB6;
+    outline: none !important;
+    outline-offset: 0;
+    box-shadow: none !important;
+    padding: 2px 0.25rem;
+  }
+  .p-chips-token{
+    margin: 2px 0;
   }
 }
 .invalid{
