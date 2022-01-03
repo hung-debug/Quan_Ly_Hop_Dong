@@ -71,6 +71,7 @@ export class FooterSignatureComponent implements OnInit {
       } else {
         this.is_show_coordination = false;
       }
+
     }
   }
 

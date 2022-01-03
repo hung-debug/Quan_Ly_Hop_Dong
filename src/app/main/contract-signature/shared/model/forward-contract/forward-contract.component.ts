@@ -15,6 +15,7 @@ export class ForwardContractComponent implements OnInit {
   myForm: FormGroup;
   datas: any;
   currentUser: any;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -22,11 +23,11 @@ export class ForwardContractComponent implements OnInit {
     private fbd: FormBuilder,
     private contractService: ContractService,
     public dialogRef: MatDialogRef<ForwardContractComponent>,
-    private toastService : ToastService,
+    private toastService: ToastService,
     private el: ElementRef,
     private spinner: NgxSpinnerService,
-  ) { }
-
+  ) {
+  }
 
 
   ngOnInit(): void {
@@ -57,12 +58,11 @@ export class ForwardContractComponent implements OnInit {
           this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền') + ' thành công!'
             , "", 1000);
           this.dialogRef.close();
-          if (this.datas.action_title == 'dieu_phoi') {
-            this.router.navigate(['/main/contract-signature/receive/processed'])
-            // main/contract-signature/receive/processed
-          } else {
-            this.router.navigate(['/main/contract-signature/receive/wait-processing']);
-          }
+          // if (this.data.role_coordination == 1) {
+          this.router.navigate(['/main/contract-signature/receive/processed'])
+          // } else {
+          //   this.router.navigate(['/main/contract-signature/receive/wait-processing']);
+          // }
         }, error => {
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
