@@ -54,9 +54,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   fileChangedAttach(e: any) {
     console.log(e.target.files)
     let files = e.target.files;
-    let valid = [
-      "pdf", "tif", "tiff", "jpg", "jpeg", "gif", "png"
-    ];
+    let valid = ["jpg", "jpeg", "png"];
     for(let i = 0; i < files.length; i++){
 
       const file = e.target.files[i];
@@ -75,7 +73,12 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
-          alert('Yêu cầu file nhỏ hơn 50MB');
+          Swal.fire({
+            title: 'Yêu cầu file nhỏ hơn 50MB!',
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Xác nhận',
+          });
           break;
         }
       }
