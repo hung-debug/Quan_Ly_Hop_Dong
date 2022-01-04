@@ -27,7 +27,9 @@ export class LoginComponent implements OnInit {
     public translate: TranslateService,
     private route: ActivatedRoute,
   ) {
-
+    translate.addLangs(['en', 'vi']);
+    translate.setDefaultLang('vi');
+    localStorage.setItem('lang', 'vi');
   }
 
   loginForm = new FormGroup({
@@ -141,6 +143,8 @@ export class LoginComponent implements OnInit {
   switchLang(lang: string) {
     this.translate.use(lang);
     this.translate.currentLang = lang;
+
+    localStorage.setItem('lang', lang);
   }
 
 }

@@ -22,6 +22,9 @@
 
   "logout": "Logout",
 
+  "document": "Document",
+  "document.user.use": "Document use",
+
   "menu.dashboard": "Dashboard",
   "menu.contract.add": "Add contract",
   "menu.contract.create.list": "Contract created",

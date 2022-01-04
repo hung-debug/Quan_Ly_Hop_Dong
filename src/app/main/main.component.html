@@ -13,6 +13,26 @@
               <div class="label">{{'notification' | translate }}</div>
             </div>
           </div>
+
+          <div ngbDropdown class="d-inline-block">
+            <div class="social-icons" ngbDropdownToggle>
+              <span class="document"></span>
+              <div class="label">{{'document' | translate }}</div>
+            </div>
+
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
+              <button ngbDropdownItem class="drop">
+                <a href="/assets/upload/eContract_Web_Manual.docx" style="color: inherit; text-decoration: none;"> 
+                <div style="display: flex; align-items: center;">
+                  <div class="db_user">
+                    <div class="db_document_use"></div> 
+                  </div>
+                  <div>{{'document.user.use' | translate }}</div></div>
+                </a>
+              </button>
+            </div>
+          </div>
+
           <div ngbDropdown class="d-inline-block">
             <div class="social-icons" ngbDropdownToggle>
                 <span class="user_login"></span>
@@ -37,36 +57,15 @@
               </button>
               <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
                 <div style="display: flex; align-items: center;">
-                  <div class="db_user"><div class="db_log_out"></div>
+                  <div class="db_user">
+                    <div class="db_log_out"></div>
                 </div>
                 <div>{{'logout' | translate }}</div>
               </div>
               </button>
             </div>
           </div>
-          <div ngbDropdown class="d-inline-block">
-              <div class="social-icons" ngbDropdownToggle>
-                <span class="{{'language_icon' | translate }}"></span>
-                <div class="label">{{'language' | translate }}</div>
-              </div>
-
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-                <button ngbDropdownItem class="drop" (click)="switchLang('en')">
-                  <div style="display: flex; align-items: center;">
-                    <div class="db_user">
-                      <div class="db_icon_english"></div>
-                    </div>
-                    <div>{{'language_en' | translate }}</div></div>
-                </button>
-                <button ngbDropdownItem class="drop" (click)="switchLang('vi')">
-                  <div style="display: flex; align-items: center;">
-                    <div class="db_user">
-                      <div class="db_icon_vietnam"></div>
-                    </div>
-                    <div>{{'language_vi' | translate }}</div></div>
-                </button>
-              </div>
-            </div>
+          
           </div>
       </header>
 

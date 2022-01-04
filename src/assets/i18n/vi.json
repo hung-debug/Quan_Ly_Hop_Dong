@@ -22,6 +22,9 @@
 
   "logout": "Đăng xuất",
 
+  "document": "Tài liệu",
+  "document.user.use": "Hướng dẫn sử dụng",
+
   "menu.dashboard": "Trang chủ",
   "menu.contract.add": "Tạo mới HĐ",
   "menu.contract.create.list": "Hợp đồng đã tạo",

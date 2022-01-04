@@ -47,7 +47,7 @@ export class MainComponent implements OnInit {
               private dialog: MatDialog,) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
-    translate.setDefaultLang('vi');
+    translate.setDefaultLang(localStorage.getItem('lang') || 'vi');
   }
 
   //open popup reset password
@@ -190,5 +190,9 @@ export class MainComponent implements OnInit {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/main/user-infor']);
     });
+  }
+
+  downloadDocUse(){
+    this.router.navigate(['/assets/upload/eContract_Web_Manual.docx']);
   }
 }
