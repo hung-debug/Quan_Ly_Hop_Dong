@@ -21,37 +21,18 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   @Input() view: any;
   @ViewChild('inputEditText') inputEditText: ElementRef;
   checkShowEdit = false;
-  unsubscribe$: Subject<string> = new Subject();
-  imageSignConfirm: string;
   currentUser: any;
   value: string;
   constructor(
     private dialog: MatDialog,
-    private contractSignatureService: ContractSignatureService,
 
   ) { }
 
   ngOnInit(): void {
-    console.log(this.sign);
     const currentUserC = JSON.parse(localStorage.getItem('currentUser') || '');
     if (currentUserC != null && currentUserC.customer?.info) {
       this.currentUser = currentUserC.customer?.info;
     }
-    /*this.contractSignatureService.getProfileObs()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(imageStr => {
-        const currentUser = localStorage.getItem('currentUser');
-        if (currentUser != null) {
-          const cu = JSON.parse(currentUser);
-          console.log(localStorage.getItem('currentUser'));
-          // const isShowImage = this.datas.userForm.userSigns.some((userE: any) => { return cu.email === this.sign.email});
-          console.log('okok', imageStr);
-          // if (isShowImage) {
-          //   this.imageSignConfirm = imageStr;
-          // }
-          return true;
-        }
-      });*/
   }
 
   ngAfterViewInit() {
@@ -61,18 +42,6 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
         document.getElementById("input-text").focus();
       }, 0)
     }
-  }
-
-  doSign1() {
-    /*console.log(this.datas.roleContractReceived);
-    if ([2].includes(this.datas.roleContractReceived)) {
-      this.checkShowEdit = !this.checkShowEdit;
-      const isOtp = this.datas.userForm.userSigns.some((userE: any) => { return userE.email === this.sign.email});
-      if (isOtp) {
-        this.forWardContract();
-      }
-
-    }*/
   }
 
   doSign() {
@@ -156,23 +125,6 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       console.log('the close dialog');
       let is_data = result
     })
-  }
-
-  getTextAlertConfirm() {
-    /*if (this.datas.roleContractReceived == 2) {
-      if (this.confirmConsider == 1) {
-        return 'Bạn có chắc chắn xác nhận hợp đồng này?';
-      } else if (this.confirmConsider == 2) {
-        return 'Bạn có chắc chắn từ chối hợp đồng này?';
-      }
-    } else if (this.datas.roleContractReceived == 3) {
-      if (this.confirmSignature == 1) {
-        return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?';
-      } else if (this.confirmSignature == 2) {
-        return 'Bạn không đồng ý với nội dung của hợp đồng và không xác nhận ký?';
-      }
-    }*/
-    return ""
   }
 
   doneEditTextSign() {

@@ -659,7 +659,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }).then(async (result) => {
         if (result.isConfirmed) {
           if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-            this.signContractSubmit();
+            await this.signContractSubmit();
           }
         }
       });
@@ -814,9 +814,27 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }
     }
     if (typeSignDigital == 2) {
-      const res: any = await this.contractService.getAllAccountsDigital();
-      if (res) {
-        this.signCertDigital = res.data;
+      /*let checkSetupTool = false;
+      this.contractService.getAllAccountsDigital().then((data) => {
+        this.signCertDigital = data.data;
+      }, err => {
+        Swal.fire({
+          html: "Vui lòng tải và cài đặt phần mềm ký Mobifone PKI Sign" + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view'>Tại đây</a>`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#b0bec5',
+          confirmButtonText: 'Xác nhận',
+          cancelButtonText: 'Hủy'
+        }).then((result) => {
+
+        });
+      })
+      if (!checkSetupTool) {
+        return;
+      }*/
+      if (this.signCertDigital) {
+        // this.signCertDigital = resSignDigital.data;
         for(const signUpdate of this.isDataObjectSignature) {
           if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
             && signUpdate?.recipient?.email === this.currentUser.email
@@ -852,8 +870,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
   }
 
-  signContractSubmit() {
-    this.spinner.show();
+  async signContractSubmit() {
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
     let iu = 0;
@@ -875,7 +892,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       iu++;
     }
 
-    forkJoin(signUploadObs$).subscribe(results => {
+    forkJoin(signUploadObs$).subscribe(async results => {
       let ir = 0;
       for (const resE of results) {
         this.datas.filePath = resE?.file_object?.file_path;
@@ -886,17 +903,17 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         }
         ir++;
       }
-      this.signContract();
+      await this.signContract();
     }, error => {
       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
     });
     if (signUploadObs$.length == 0) {
-      this.signContract();
+      await this.signContract();
     }
 
   }
 
-  signContract() {
+  async signContract() {
     const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
     const signUpdatePayload = signUpdateTemp.filter(
       (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
@@ -908,6 +925,59 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         font: item.font,
         font_size: item.font_size
       }});
+    let typeSignDigital = null;
+    for(const signUpdate of this.isDataObjectSignature) {
+      if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+        && signUpdate?.recipient?.email === this.currentUser.email
+        && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+      ) {
+        if (signUpdate.recipient?.sign_type) {
+          const typeSD = signUpdate.recipient?.sign_type.find((t: any) => t.id != 1);
+          if (typeSD) {
+            typeSignDigital = typeSD.id;
+          }
+        }
+        break;
+      }
+    }
+    if (typeSignDigital && typeSignDigital == 2) {
+      let checkSetupTool = false;
+      this.contractService.getAllAccountsDigital().then((data) => {
+        if (data.data.Serial) {
+          this.signCertDigital = data.data;
+          checkSetupTool = true;
+          if (!checkSetupTool) {
+            return;
+          } else {
+            this.signImageC(signUpdatePayload);
+          }
+        } else {
+          Swal.fire({
+            title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#b0bec5',
+            confirmButtonText: 'Xác nhận'
+          });
+        }
+      }, err => {
+        Swal.fire({
+          html: "Vui lòng tải và cài đặt phần mềm ký Mobifone PKI Sign " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>`,
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#b0bec5',
+          confirmButtonText: 'Xác nhận'
+        });
+      })
+
+    } else {
+      this.signImageC(signUpdatePayload);
+    }
+
+  }
+
+  signImageC(signUpdatePayload: any) {
+    this.spinner.show();
     this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId).subscribe(
       async (result) => {
         await this.signDigitalDocument();
