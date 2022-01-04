@@ -1066,19 +1066,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       })
 
-      console.log(data_sample_contract);
+      // console.log(data_sample_contract);
+      this.spinner.show();
       this.contractService.getContractSample(data_sample_contract).subscribe((data) => {
-          console.log(JSON.stringify(data));
-
-
+          // console.log(JSON.stringify(data));
           this.step = variable.stepSampleContract.step4;
           this.datas.stepLast = this.step
           this.nextOrPreviousStep(this.step);
-
         },
         error => {
+          this.spinner.hide();
           console.log("false connect file");
           return false;
+        }, () => {
+          this.spinner.hide();
         }
       );
       // Đây là dữ liệu mảng request truyền lên cho server

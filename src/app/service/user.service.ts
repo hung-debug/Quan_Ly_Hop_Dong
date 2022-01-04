@@ -5,6 +5,7 @@ import { map, catchError, retry } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { DatePipe } from '@angular/common';
+import { isPdfFile } from 'pdfjs-dist';
 export interface User {
   id: any,
   name: any,
@@ -161,6 +162,8 @@ export class UserService {
     if(datas.birthday != null){
         datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
     }
+    console.log(datas.sign_image);
+    
     const body = JSON.stringify({
       name: datas.name,
       email: datas.email,
@@ -176,47 +179,7 @@ export class UserService {
       phone_tel: datas.networkKpi,
 
       hsm_name: datas.nameHsm
-    });
-    console.log(headers);
-    console.log(body);
-    return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
-  }
-
-  updateUserByType(datas: any, type:any) {
-    this.getCurrentUser();
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
-    if(datas.birthday != null){
-        datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
-    }
-    let body:any = "";
-    if(type == 'infor'){
-      body = JSON.stringify({
-        name: datas.name,
-        email: datas.email,
-        phone: datas.phone,
-        organization_id: datas.organizationId,
-        birthday: datas.birthday,
-        status: datas.status,
-        type_id: datas.role
-      });
-    }else if(type == 'file-image'){
-      body = JSON.stringify({
-        sign_image: datas.sign_image
-      });
-    }else if(type == 'kpi'){
-      body = JSON.stringify({
-        phone_sign: datas.phoneKpi,
-        phone_tel: datas.networkKpi
-      });
-    }else if(type == 'hsm'){
-      body = JSON.stringify({
-        hsm_name: datas.nameHsm
-      });
-    }
-    
-    console.log(headers);
+    });console.log(headers);
     console.log(body);
     return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
   }

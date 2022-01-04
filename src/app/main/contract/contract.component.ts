@@ -10,6 +10,13 @@ import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
 import { ToastService } from 'src/app/service/toast.service';
 import { HttpClient } from '@angular/common/http';
+import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
+import { ContractConnectDialogComponent } from './dialog/contract-connect-dialog/contract-connect-dialog.component';
+import { AddConnectDialogComponent } from './dialog/add-connect-dialog/add-connect-dialog.component';
+import { ShareContractDialogComponent } from './dialog/share-contract-dialog/share-contract-dialog.component';
+import {DeleteContractDialogComponent} from './dialog/delete-contract-dialog/delete-contract-dialog.component';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -67,6 +74,7 @@ export class ContractComponent implements OnInit {
               private toastService : ToastService,
               private http: HttpClient,
               private uploadService: UploadService,
+              private dialog: MatDialog,
     ) {}
 
   open(content:any) {
@@ -88,6 +96,28 @@ export class ContractComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+        if(typeof params.filter_type != 'undefined' && params.filter_type){
+          this.filter_type = params.filter_type;
+        }else{
+          this.filter_type = "";
+        }
+        if(typeof params.filter_contract_no != 'undefined' && params.filter_contract_no){
+          this.filter_contract_no = params.filter_contract_no;
+        }else{
+          this.filter_contract_no = "";
+        }
+        if(typeof params.filter_from_date != 'undefined' && params.filter_from_date){
+          this.filter_from_date = params.filter_from_date;
+        }else{
+          this.filter_from_date = "";
+        }
+        if(typeof params.filter_to_date != 'undefined' && params.filter_to_date){
+          this.filter_to_date = params.filter_to_date;
+        }else{
+          this.filter_to_date = "";
+        }
+    });
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
       this.status = params['status'];
@@ -187,9 +217,7 @@ export class ContractComponent implements OnInit {
     }
   }
 
-  search(){
-    this.getContractList();
-  }
+  
 
   autoSearch(event:any){
     this.p = 1;
@@ -250,26 +278,120 @@ export class ContractComponent implements OnInit {
     this.notificationPopup = "Xóa hợp đồng thành công";
   }
 
-  getDataContractCancel(id:any){
-    this.id=id;
-    this.notification="Bạn có chắc chắn muốn hủy hợp đồng không?";
+  searchContract(){
+    const data = {
+      title: 'TÌM KIẾM HỢP ĐỒNG',
+      filter_type: this.filter_type,
+      filter_contract_no: this.filter_contract_no,
+      filter_from_date: this.filter_from_date,
+      filter_to_date: this.filter_to_date,
+      status: this.status
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(FilterListDialogComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
-  changeStatus(id:any, status:any){
-    this.contractService.changeStatusContract(id, status).subscribe((data) => {
+  cancelContract(id:any) {
+    const data = {
+      title: 'XÁC NHẬN HỦY HỢP ĐỒNG',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(CancelContractDialogComponent, {
+      width: '500px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
 
-      console.log(JSON.stringify(data));
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/contract/create/cancel']);
-      });
-      //this.router.navigate(['/main/contract/create/cancel']);
-      this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thành công!", "", 10000);
-    },
-    error => {
-      this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thất bại!", "", 10000);
-      return false;
-    }
-    );
+  contractConnect(id:any){
+    const data = {
+      title: 'XEM HỢP ĐỒNG LIÊN QUAN',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ContractConnectDialogComponent, {
+      width: '500px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  addContractConnect(id:any){
+    const data = {
+      title: 'THÊM HỢP ĐỒNG LIÊN QUAN',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AddConnectDialogComponent, {
+      width: '720px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  shareContract(id:any){
+    const data = {
+      title: 'CHIA SẺ HỢP ĐỒNG',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ShareContractDialogComponent, {
+      width: '520px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  deleteContract(id:any){
+    const data = {
+      title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DeleteContractDialogComponent, {
+      width: '480px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
   downloadContract(id:any){

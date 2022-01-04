@@ -1,18 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import {DatepickerOptions} from 'ng2-datepicker';
 import {AppService} from 'src/app/service/app.service';
 import * as contractModel from './model/contract-model';
 
-import {getYear} from 'date-fns';
-import locale from 'date-fns/locale/en-US';
 import {ContractSignatureService} from "../../service/contract-signature.service";
 import {CONTRACT_RECEIVE_COORDINATOR} from "./model/contract-model";
 import {variable} from "../../config/variable";
 import {HttpClient} from "@angular/common/http";
 import {ContractService} from "../../service/contract.service";
-
+import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract-signature.component.html',
@@ -20,42 +18,7 @@ import {ContractService} from "../../service/contract.service";
 })
 export class ContractSignatureComponent implements OnInit {
   constantModel: any;
-  // action:string;
-  // status: string;
-  // type:string;
-  // private sub: any;
-  // searchText:string;
-  // closeResult:string= '';
-  // public contracts: any[] = [];
-  // p:number = 1;
-  // page:number = 3;
-  // pageStart:number = 0;
-  // pageEnd:number = 0;
-  // pageTotal:number = 0;
 
-  // //filter contract
-  // contractType:any;
-  // contractNumber:any;
-  // startCreateDate:any;
-  // endCreateDate:any;
-
-  // // options sample with default values
-  // options: DatepickerOptions = {
-  //   minYear: getYear(new Date()) - 30, // minimum available and selectable year
-  //   maxYear: getYear(new Date()) + 30, // maximum available and selectable year
-  //   placeholder: '', // placeholder in case date model is null | undefined, example: 'Please pick a date'
-  //   format: 'dd/MM/yyyy', // date format to display in input
-  //   formatTitle: 'MM/yyyy',
-  //   formatDays: 'EEEEE',
-  //   firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
-  //   locale: locale, // date-fns locale
-  //   position: 'bottom',
-  //   inputClass: '', // custom input CSS class to be applied
-  //   calendarClass: 'datepicker-default', // custom datepicker calendar CSS class to be applied
-  //   scrollBarColor: '#dfe3e9', // in case you customize you theme, here you define scroll bar color
-  //   // keyboardEvents: true // enable keyboard events
-  // };
-  // //
   datas: any = {
     step: variable.stepSampleContract.step_coordination,
     contract: {},
@@ -86,29 +49,13 @@ export class ContractSignatureComponent implements OnInit {
   filter_to_date: any = "";
   filter_status: any = "";
 
-  // options sample with default values
-  options: DatepickerOptions = {
-    minYear: getYear(new Date()) - 30, // minimum available and selectable year
-    maxYear: getYear(new Date()) + 30, // maximum available and selectable year
-    placeholder: '', // placeholder in case date model is null | undefined, example: 'Please pick a date'
-    format: 'dd/MM/yyyy', // date format to display in input
-    formatTitle: 'MM/yyyy',
-    formatDays: 'EEEEE',
-    firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
-    locale: locale, // date-fns locale
-    position: 'bottom',
-    inputClass: '', // custom input CSS class to be applied
-    calendarClass: 'datepicker-default', // custom datepicker calendar CSS class to be applied
-    scrollBarColor: '#dfe3e9', // in case you customize you theme, here you define scroll bar color
-    // keyboardEvents: true // enable keyboard events
-  };
-
   constructor(private modalService: NgbModal,
               private appService: AppService,
               private contractService: ContractSignatureService,
               public isContractService: ContractService,
               private route: ActivatedRoute,
-              private router: Router
+              private router: Router,
+              private dialog: MatDialog,
   ) {
     this.constantModel = contractModel;
   }
@@ -132,6 +79,28 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if(typeof params.filter_type != 'undefined' && params.filter_type){
+        this.filter_type = params.filter_type;
+      }else{
+        this.filter_type = "";
+      }
+      if(typeof params.filter_contract_no != 'undefined' && params.filter_contract_no){
+        this.filter_contract_no = params.filter_contract_no;
+      }else{
+        this.filter_contract_no = "";
+      }
+      if(typeof params.filter_from_date != 'undefined' && params.filter_from_date){
+        this.filter_from_date = params.filter_from_date;
+      }else{
+        this.filter_from_date = "";
+      }
+      if(typeof params.filter_to_date != 'undefined' && params.filter_to_date){
+        this.filter_to_date = params.filter_to_date;
+      }else{
+        this.filter_to_date = "";
+      }
+    });
     this.sub = this.route.params.subscribe(params => {
       // this.action = params['action'];
       // this.status = params['status'];
@@ -140,6 +109,8 @@ export class ContractSignatureComponent implements OnInit {
         this.status = 'processed';
       } else if (this.router.url.includes('contract-signature/receive/wait-processing')) {
         this.status = 'wait-processing';
+      } else if (this.router.url.includes('contract-signature/receive/share')) {
+        this.status = 'share';
       }
       console.log(this.router.url);
       console.log(this.status);
@@ -213,33 +184,15 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   private convertStatusStr() {
-    if (this.status == 'draft') {
-      this.filter_status = 0;
-      this.title = 'contract.status.draft';
-    } else if (this.status == 'wait-processing') {
+    if (this.status == 'wait-processing') {
       this.filter_status = 0;
       this.title = 'contract.status.wait-processing';
-    } else if (this.status == 'processing') {
-      this.filter_status = 20;
-      this.title = 'contract.status.processing';
     } else if (this.status == 'processed') {
       this.filter_status = 1;
       this.title = 'contract.status.processed';
-    } else if (this.status == 'expire') {
+    } else if (this.status == 'share') {
       this.filter_status = -1;
-      this.title = 'contract.status.expire';
-    } else if (this.status == 'overdue') {
-      this.filter_status = -1;
-      this.title = 'contract.status.overdue';
-    } else if (this.status == 'fail') {
-      this.filter_status = 31;
-      this.title = 'contract.status.fail';
-    } else if (this.status == 'cancel') {
-      this.filter_status = 32;
-      this.title = 'contract.status.cancel';
-    } else if (this.status == 'complete') {
-      this.filter_status = 30;
-      this.title = 'contract.status.complete';
+      this.title = 'contract.status.share';
     } else {
       this.title = '';
     }
@@ -251,10 +204,6 @@ export class ContractSignatureComponent implements OnInit {
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
-  }
-
-  search() {
-    this.getContractList();
   }
 
   autoSearch(event: any) {
@@ -309,6 +258,28 @@ export class ContractSignatureComponent implements OnInit {
     return contracts.filter((it: any) => {
       return it.participant.contract.name.toLocaleLowerCase().includes(searchText);
     });
+  }
+
+  searchContract(){
+    const data = {
+      title: 'TÌM KIẾM HỢP ĐỒNG',
+      filter_type: this.filter_type,
+      filter_contract_no: this.filter_contract_no,
+      filter_from_date: this.filter_from_date,
+      filter_to_date: this.filter_to_date,
+      status: this.status
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(FilterListDialogComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
   openConsiderContract(item: any) {

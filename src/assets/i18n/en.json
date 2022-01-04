@@ -22,6 +22,9 @@
 
   "logout": "Logout",
 
+  "document": "Document",
+  "document.user.use": "Document use",
+
   "menu.dashboard": "Dashboard",
   "menu.contract.add": "Add contract",
   "menu.contract.create.list": "Contract created",
@@ -44,6 +47,7 @@
   "contract.status.complete": "Complete",
   "contract.status.wait-processing": "Wait processing",
   "contract.status.processed": "Processed",
+  "contract.status.share": "Shared",
   "contract.status.create.complete": "Complete creating",
   "contract.status.undefined": "Undefined",
   "contract.me": "My contract",
@@ -135,6 +139,23 @@
   "user.information": "Account information",
   "user.name.v2": "Username",
 
+  "unit.list": "Organizations list",
+  "unit.add": "Add organizations",
+  "unit.update": "Update organizations",
+  "unit.information": "Organizations information",
+  "unit.code": "Organization code",
+  "unit.name": "Organization name",
+  "unit.short-name": "Abbreviations",
+  "unit.status": "Status",
+  "unit.type": "Organization type",
+  "unit.email": "Email",
+  "unit.parent": "Organization parent",
+  "unit.phone": "Phone",
+  "unit.fax": "Fax",
+  "unit.active": "Active",
+  "unit.inactive": "Inactive",
+  "unit.manage": "Manage",
+
   "sign.information" : "Signature information",
   "sign.file-image" : "Image signature file",
   "sign.kpi" : "PKI signature",
@@ -173,6 +194,7 @@
   "btn.add": "Add",
   "btn.next": "Next",
   "btn.previous": "Previous",
+  "btn.save": "Save",
   "btn.save-draff": "Save draff",
   "btn.update": "Update",
   "btn.close": "Close",
@@ -228,5 +250,6 @@
   "valid_nhap_ten_dt_tc": "Vui lòng nhập tên của đối tác tổ chức!",
   "of_doi_tac": " của đối tác!",
   "of_doi_tac_ca_nhan": "của đối tác cá nhân!",
-  "doi_tac_ca_nhan_ko_hop_le": " đối tác cá nhân không hợp lệ!"
+  "doi_tac_ca_nhan_ko_hop_le": " đối tác cá nhân không hợp lệ!",
+  "note_email_doi_tac": "Lưu ý: email người điều phối có thể trùng với email người ký!"
 }

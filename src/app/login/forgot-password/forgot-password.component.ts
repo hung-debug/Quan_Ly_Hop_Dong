@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { UserService } from 'src/app/service/user.service';
+import { SendPasswordDialogComponent } from '../dialog/send-password-dialog/send-password-dialog.component';
 
 @Component({
   selector: 'app-forgot-password',
@@ -14,14 +16,14 @@ export class ForgotPasswordComponent implements OnInit {
   forgotPasswordForm:any =  FormGroup;
   closeResult:string= '';
   status:number = 1;
-  notification:string = '';
   error:boolean = false;
   errorDetail:string = '';
   constructor(private fb: FormBuilder,
               private router: Router,
               private modalService: NgbModal,
               private userService: UserService,
-              public translate: TranslateService,) {
+              public translate: TranslateService,
+              private dialog: MatDialog,) {
 
   }
 
@@ -55,43 +57,34 @@ export class ForgotPasswordComponent implements OnInit {
         this.userService.sendForgotPassword(email).subscribe((data) => {
 
           if(data != null){
-            this.status = 1;
+            this.sendPassword('Chúng tôi đã gửi thông tin về địa chỉ email '+ email +'<br>Vui lòng truy cập email để tiếp tục!');
           }else{
-            this.status = 0;
-          }
-          if(this.status == 0){
-            this.notification = 'Gửi email thất bại. Vui lòng kiểm tra lại thông tin và thử lại!';
-          }else{
-            this.notification = 'Chúng tôi đã gửi thông tin về địa chỉ email '+ email +'. Vui lòng truy cập email để tiếp tục!';
+            this.sendPassword('Gửi email thất bại<br>Vui lòng kiểm tra lại thông tin và thử lại!');
           }
         },
         (error:any) => {
-          this.status = 0;
-          this.notification = 'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý';
+          this.sendPassword('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý');
         }
         );
       }
     }
   }
 
-  //open popup reset password
-  open(content:any) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  sendPassword(message:any) {
+    const data = {
+      title: 'notification',
+      message: message,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(SendPasswordDialogComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
-
-  //close popup reset password
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
-    }
-  }
-
 }

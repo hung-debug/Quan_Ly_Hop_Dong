@@ -1,6 +1,7 @@
 <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
   <app-sidebar *ngIf="getShowHideSideBar()" (evenSelectSidebar)="getName($event)"></app-sidebar>
-  <main class="page-content" [ngStyle]="getStyleWithSideBar()" style="padding-bottom: 25px;">
+  <main class="page-content" [ngStyle]="getStyleWithSideBar()" [style.padding-bottom]="this.isShowCopyRight && this.isRouterContractNew ? '25px' : ''">
+<!--    style="padding-bottom: 25px;"-->
       <header [ngStyle]="getStyleSideBar()">
         <div class="search-wrapper">
           <h3>{{title | translate}}</h3>
@@ -12,6 +13,26 @@
               <div class="label">{{'notification' | translate }}</div>
             </div>
           </div>
+
+          <div ngbDropdown class="d-inline-block">
+            <div class="social-icons" ngbDropdownToggle>
+              <span class="document"></span>
+              <div class="label">{{'document' | translate }}</div>
+            </div>
+
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
+              <button ngbDropdownItem class="drop">
+                <a href="/assets/upload/eContract_Web_Manual.docx" style="color: inherit; text-decoration: none;"> 
+                <div style="display: flex; align-items: center;">
+                  <div class="db_user">
+                    <div class="db_document_use"></div> 
+                  </div>
+                  <div>{{'document.user.use' | translate }}</div></div>
+                </a>
+              </button>
+            </div>
+          </div>
+
           <div ngbDropdown class="d-inline-block">
             <div class="social-icons" ngbDropdownToggle>
                 <span class="user_login"></span>
@@ -26,7 +47,7 @@
                   </div>
                   <div>{{'user.information' | translate }}</div></div>
               </button>
-              <button ngbDropdownItem class="drop" (click)="open(modalResetPassword)">
+              <button ngbDropdownItem class="drop" (click)="resetPassword()">
                 <div style="display: flex; align-items: center;">
                   <div class="db_user">
                     <div class="db_password"></div>
@@ -36,36 +57,15 @@
               </button>
               <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
                 <div style="display: flex; align-items: center;">
-                  <div class="db_user"><div class="db_log_out"></div>
+                  <div class="db_user">
+                    <div class="db_log_out"></div>
                 </div>
                 <div>{{'logout' | translate }}</div>
               </div>
               </button>
             </div>
           </div>
-          <div ngbDropdown class="d-inline-block">
-              <div class="social-icons" ngbDropdownToggle>
-                <span class="{{'language_icon' | translate }}"></span>
-                <div class="label">{{'language' | translate }}</div>
-              </div>
-
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-                <button ngbDropdownItem class="drop" (click)="switchLang('en')">
-                  <div style="display: flex; align-items: center;">
-                    <div class="db_user">
-                      <div class="db_icon_english"></div>
-                    </div>
-                    <div>{{'language_en' | translate }}</div></div>
-                </button>
-                <button ngbDropdownItem class="drop" (click)="switchLang('vi')">
-                  <div style="display: flex; align-items: center;">
-                    <div class="db_user">
-                      <div class="db_icon_vietnam"></div>
-                    </div>
-                    <div>{{'language_vi' | translate }}</div></div>
-                </button>
-              </div>
-            </div>
+          
           </div>
       </header>
 
@@ -73,125 +73,18 @@
         <div class="row">
           <div class="form-group col-md-12">
             <router-outlet></router-outlet>
+            
           </div>
         </div>
+        
       </div>
-      
+      <div *ngIf="this.isShowCopyRight && this.isRouterContractNew" class="content_footer">
+        <div>@Copyright 2021 - MobiFone</div>
+      </div>
+
   </main>
-  <div *ngIf="this.isShowCopyRight && this.isRouterContractNew" class="content_footer">
-    <div>@Copyright 2021 - MobiFone</div>
-  </div>
+  
 </div>
 
-<!-- Popup reset password -->
-<ng-template #modalResetPassword let-modal >
-  <div class="popup_content">
-    <div class="row">
-      <div class="col-md-10">
-        <h4 class="popup_title">{{'login.reset_password_new' | translate }}</h4>
-      </div>
-      <div class="col-md-2 popup_close">
-        <span (click)="modal.dismiss('Cross click')">×</span>
-      </div>
-    </div>
 
-    <hr>
-    <div>
-      <form [formGroup]="resetPasswordForm" class="mx-auto">
-        <div class="row">
-          <div class="col-md-1"></div>
-          <div class="col-md-10">
-            <div class="label_item">{{'login.password_old' | translate }}</div>
-            <div class="form-input-line">
-              <img src="../../assets/img/login_password.svg" class="form-input-img">
-              <input
-                [type]="fieldTextTypeOld ? 'text' : 'password'"
-                class="form-input-text"
-                formControlName="passwordOld"
-              />
-              <div class="form-icon-password">
-                  <i
-                    class="fa"
-                    [ngClass]="{
-                      'fa-eye-slash': !fieldTextTypeOld,
-                      'fa-eye': fieldTextTypeOld
-                    }"
-                    (click)="toggleFieldTextTypeOld()"
-                  ></i>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-1"></div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-1"></div>
-          <div class="col-md-10">
-            <div class="label_item">{{'login.password_new' | translate }}</div>
-            <div class="form-input-line">
-              <img src="../../assets/img/login_password.svg" class="form-input-img">
-              <input
-                [type]="fieldTextTypeNew ? 'text' : 'password'"
-                class="form-input-text"
-                formControlName="passwordNew"
-              />
-              <div class="form-icon-password">
-                <i
-                  class="fa"
-                  [ngClass]="{
-                    'fa-eye-slash': !fieldTextTypeNew,
-                    'fa-eye': fieldTextTypeNew
-                  }"
-                  (click)="toggleFieldTextTypeNew()"
-                ></i>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-1"></div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-1"></div>
-          <div class="col-md-10">
-            <div class="label_item">{{'login.password_new.confirm' | translate }}</div>
-            <div class="form-input-line">
-              <img src="../../assets/img/login_password.svg" class="form-input-img">
-              <input
-                [type]="repeatFieldTextTypeNew ? 'text' : 'password'"
-                class="form-input-text"
-                formControlName="confirmPasswordNew"
-              />
-              <div class="form-icon-password">
-                <i
-                  class="fa"
-                  [ngClass]="{
-                    'fa-eye-slash': !repeatFieldTextTypeNew,
-                    'fa-eye': repeatFieldTextTypeNew
-                  }"
-                  (click)="toggleRepeatFieldTextTypeNew()"
-                ></i>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-1"></div>
-        </div>
-        <div class="row" style="padding-top: 10px;">
-          <div class="col-md-1"></div>
-          <div class="col-md-10">
-            <p class="alert alert-danger" role="alert" *ngIf="error" style="text-align: center; font-size: 15px;">
-              <strong>{{errorDetail}}</strong>
-            </p>
-          </div>
-          <div class="col-md-1"></div>
-        </div>
-        <div class="row" style="text-align: center; padding-top: 10px;">
-          <div class="col-md-12">
-            <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">{{'btn.cancel' | translate }}</button>
-            <button type="button" class="btn btn-outline-dark btn_submit" (click)="sendResetPassword(); status==0 ? modal.close('Save click'):0">{{'btn.sendRequest' | translate }}</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</ng-template>
 

@@ -1,11 +1,11 @@
 <div class="container-fluid">
     <div style="text-align: center; font-weight: bold">
-      <h3 style="color: #106DB6; font-family: inherit;">{{this.datas.title}}</h3>
+      <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{this.datas.title | translate}}</h3>
     </div>
     <form [formGroup]="addForm" class="content">
         <div class="row">
             <div class="col-md-6">
-                <div class="label text-color">Tên tổ chức <span class="required-title">*</span></div>
+                <div class="label text-color">{{'unit.name' | translate }} <span class="required-title">*</span></div>
                 <div class="input-data">
                     <input type="text" formControlName="nameOrg">
                 </div>
@@ -15,7 +15,7 @@
             </div>
         
             <div class="col-md-6">
-                <div class="label text-color">Tên viết tắt <span class="required-title">*</span></div>
+                <div class="label text-color">{{'unit.short-name' | translate }} <span class="required-title">*</span></div>
                 <div class="input-data">
                     <input type="text" formControlName="short_name">
                 </div>
@@ -27,7 +27,7 @@
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label text-color">Mã tổ chức <span class="required-title">*</span></div>
+                <div class="label text-color">{{'unit.code' | translate }} <span class="required-title">*</span></div>
                 <div class="input-data">
                     <input type="text" formControlName="code">
                 </div>
@@ -37,7 +37,7 @@
             </div>
         
             <div class="col-md-6">
-                <div class="label text-color">Địa chỉ email <span class="required-title">*</span></div>
+                <div class="label text-color">{{'unit.email' | translate }} <span class="required-title">*</span></div>
                 <div class="input-data">
                     <input type="text" formControlName="email">
                 </div>
@@ -50,7 +50,7 @@
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label text-color">Tổ chức cấp trên <span class="required-title">*</span></div>
+                <div class="label text-color">{{'unit.parent' | translate }} <span class="required-title">*</span></div>
                 <div>
                     <p-dropdown 
                         panelStyleClass="font"
@@ -71,19 +71,20 @@
             </div>
         
             <div class="col-md-6">
-                <div class="label text-color">Số điện thoại <span class="required-title">*</span></div>
+                <div class="label text-color">{{'unit.phone' | translate }} <span class="required-title">*</span></div>
                 <div class="input-data">
                     <input type="text" formControlName="phone">
                 </div>
                 <div *ngIf="submitted && f.phone.errors" class="invalid">
                     <div *ngIf="f.phone.errors.required">Số điện thoại không được để trống</div>
+                    <div *ngIf="f.phone.errors.pattern">Số điện thoại sai định dạng</div>
                 </div>
             </div>
         </div>
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label text-color">Fax</div>
+                <div class="label text-color">{{'unit.fax' | translate }}</div>
                 <div class="input-data">
                     <input type="text" formControlName="fax">
                 </div>
@@ -93,19 +94,19 @@
                 <div class="row">
                     <div class="col-md-5">
                         <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
-                        <span> Hoạt động</span>
+                        <span> {{'unit.active' | translate }}</span>
                     </div>
                     <div class="col-md-7">
                         <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
-                        <span> Không hoạt động</span>
+                        <span> {{'unit.inactive' | translate }}</span>
                     </div>
                 </div>
             </div>
         </div>
     
         <div class="row" style="justify-content: center;padding-top: 10px;">
-            <button class="cancel-button" (click)="dialog.closeAll()" type="button">Hủy</button>
-            <button class="save-button" (click)="onSubmit()">Lưu lại</button>
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
+            <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>
         </div>
     </form>
   </div>

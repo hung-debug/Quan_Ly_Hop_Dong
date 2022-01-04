@@ -10,7 +10,7 @@ import {environment} from '../../environments/environment';
 export class DashboardService {
 
   countContractCreateUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-contract`;
-  countContractReceivedUrl: any = `${environment.apiUrl}/api/v1/dashboard//my-process`;
+  countContractReceivedUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-process`;
 
   token:any;
   customer_id:any;

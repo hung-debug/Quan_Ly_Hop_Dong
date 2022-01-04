@@ -7,7 +7,8 @@ import {UserService} from '../service/user.service';
 import {SidebarService} from './sidebar/sidebar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ToastService} from '../service/toast.service';
-
+import{ ResetPasswordDialogComponent } from '../../app/main/dialog/reset-password-dialog/reset-password-dialog.component'
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -17,9 +18,7 @@ export class MainComponent implements OnInit {
   title: string;
   closeResult: string = '';
   resetPasswordForm: any = FormGroup;
-  fieldTextTypeOld: boolean = false;
-  fieldTextTypeNew: boolean = false;
-  repeatFieldTextTypeNew: boolean = false;
+  
   isShowCopyRight: boolean = true;
   isRouterContractNew: boolean = true;
   error: boolean = false;
@@ -44,10 +43,11 @@ export class MainComponent implements OnInit {
               private userService: UserService,
               private changeDetectorRef: ChangeDetectorRef,
               public translate: TranslateService,
-              private toastService: ToastService) {
+              private toastService: ToastService,
+              private dialog: MatDialog,) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
-    translate.setDefaultLang('vi');
+    translate.setDefaultLang(localStorage.getItem('lang') || 'vi');
   }
 
   //open popup reset password
@@ -70,29 +70,7 @@ export class MainComponent implements OnInit {
     }
   }
 
-  //form reset password
-  initResetPasswordForm() {
-    this.resetPasswordForm = this.fb.group({
-      passwordOld: ["", [Validators.required]],
-      passwordNew: ["", Validators.required],
-      confirmPasswordNew: ["", Validators.required]
-    });
-  }
-
-  //hien thi password dang text, dang ma
-  toggleFieldTextTypeOld() {
-    this.fieldTextTypeOld = !this.fieldTextTypeOld;
-  }
-
-  //hien thi password dang text, dang ma
-  toggleFieldTextTypeNew() {
-    this.fieldTextTypeNew = !this.fieldTextTypeNew;
-  }
-
-  //hien thi password dang text, dang ma
-  toggleRepeatFieldTextTypeNew() {
-    this.repeatFieldTextTypeNew = !this.repeatFieldTextTypeNew;
-  }
+  
 
   ngOnInit(): void {
     //update title by component
@@ -107,7 +85,6 @@ export class MainComponent implements OnInit {
       this.isRouterContractNew = false;
     } else this.isRouterContractNew = true;
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
-    this.initResetPasswordForm();
   }
 
   //apply change title
@@ -124,46 +101,21 @@ export class MainComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  //click reset password
-  sendResetPassword() {
-    let passwordOld = this.resetPasswordForm.value.passwordOld;
-    let passwordNew = this.resetPasswordForm.value.passwordNew;
-    let confirmPasswordNew = this.resetPasswordForm.value.confirmPasswordNew;
-    if (passwordOld == '') {
-      this.error = true;
-      this.errorDetail = 'Mật khẩu cũ không được để trống!';
-    } else if (passwordNew == '') {
-      this.error = true;
-      this.errorDetail = 'Mật khẩu mới không được để trống!';
-    } else if (confirmPasswordNew == '') {
-      this.error = true;
-      this.errorDetail = 'Xác nhận mật khẩu mới không được để trống!';
-    } else {
-      if (passwordNew != confirmPasswordNew) {
-        this.error = true;
-        this.errorDetail = 'Xác nhận mật khẩu mới không khớp!';
-      } else {
-        this.userService.sendResetPasswordToken(passwordOld, passwordNew).subscribe((data) => {
-            this.error = false;
-            if (data != null) {
-              this.status = 1;
-            } else {
-              this.status = 0;
-            }
-            if (this.status == 0) {
-              this.toastService.showErrorHTMLWithTimeout("Đổi mật khẩu mới thất bại!", "", 10000);
-            } else {
-              this.toastService.showSuccessHTMLWithTimeout("Đổi mật khẩu mới thành công. Vui lòng đăng nhập để tiếp tục!", "", 10000);
-              this.logout();
-            }
-          },
-          (error: any) => {
-            this.status = 0;
-            this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để được xử lý", "", 10000);
-          }
-        );
-      }
-    }
+  resetPassword(){
+    const data = {
+      title: 'ĐỔI MẬT KHẨU'
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
+      width: '400px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
   //side bar menu
@@ -238,5 +190,9 @@ export class MainComponent implements OnInit {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/main/user-infor']);
     });
+  }
+
+  downloadDocUse(){
+    this.router.navigate(['/assets/upload/eContract_Web_Manual.docx']);
   }
 }
