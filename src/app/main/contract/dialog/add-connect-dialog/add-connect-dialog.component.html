@@ -34,7 +34,7 @@
 
         
         <div *ngFor="let contract of contracts | paginate:{itemsPerPage: page, currentPage:p}" class="p-field-checkbox" style="display: flex;">
-            <p-checkbox value="contract" [value]="contract"  [(ngModel)]="idList" [inputId]="contract.id"></p-checkbox>
+            <p-checkbox value="contract.id" [value]="contract.id" [(ngModel)]="idList" [inputId]="contract.id"></p-checkbox>
             <div class="item_contract">
                 <div class="row">
                     <div class="col-md-12 item_contract_name">{{contract.name}}</div>

@@ -38,7 +38,16 @@ export class AddConnectDialogComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    
+    this.contractService.getDetailInforContract(this.data.id).subscribe(
+      data => {
+        data.refs.forEach((key : any, val: any) => {
+          this.idList.push(key.ref_id);
+        })
+        console.log(this.idList);
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+      }
+    )
     this.getContractList();
   }
 
