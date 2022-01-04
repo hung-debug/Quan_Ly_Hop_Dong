@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {NgSignaturePadOptions, SignaturePadComponent} from "@almothafar/angular-signature-pad";
 import {ContractSignatureService} from "../../../../../service/contract-signature.service";
 import {INgxSelectOption} from "ngx-select-ex/ngx-select/ngx-select.interfaces";
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-image-dialog-sign',
@@ -53,20 +54,24 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   fileChangedAttach(e: any) {
     console.log(e.target.files)
     let files = e.target.files;
+    let valid = [
+      "pdf", "tif", "tiff", "jpg", "jpeg", "gif", "png"
+    ];
     for(let i = 0; i < files.length; i++){
 
       const file = e.target.files[i];
       if (file) {
         // giới hạn file upload lên là 5mb
-        if (e.target.files[0].size <= 50000000) {
-          const file_name = file.name;
-          const extension = file.name.split('.').pop();
+        if (e.target.files[0].size <= 50000000 && valid.includes(file.name.split('.').pop().toLowerCase())) {
           this.handleUpload(e);
-          // this.datas.file_name_attach = file_name;
-          //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
-          // this.datas.attachFile = file;
-          //this.datas.attachFile = e.target.files;
-          console.log(this.datas.attachFile);
+        } else if (!valid.includes(file.name.split('.').pop().toLowerCase())) {
+          Swal.fire({
+            title: 'File upload là file ảnh!',
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Xác nhận',
+          });
+          break;
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
@@ -109,7 +114,6 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   initListSignatureAccountUser() {
     this.contractSignatureService.getSignatureListUser().subscribe(
       (res) => {
-        console.log(res);
         this.optionsFileSignAccount = res.sign_account_register;
       }
     )
@@ -117,7 +121,6 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
   chooseImageSignAcc(e: INgxSelectOption[]) {
     this.imgSignAccountSelect = e[0].data.data;
-    console.log(e[0].data.data);
   }
 
   uploadImage() {
