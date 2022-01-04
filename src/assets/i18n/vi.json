@@ -44,6 +44,7 @@
   "contract.status.complete": "Hoàn thành",
   "contract.status.wait-processing": "Chờ xử lý",
   "contract.status.processed": "Đã xử lý",
+  "contract.status.share": "Được chia sẻ",
   "contract.status.create.complete": "Hoàn thành tạo hợp đồng",
   "contract.status.undefined": "Chưa xác định",
   "contract.me": "Hợp đồng của tôi",

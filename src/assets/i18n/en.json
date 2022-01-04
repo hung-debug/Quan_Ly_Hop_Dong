@@ -44,6 +44,7 @@
   "contract.status.complete": "Complete",
   "contract.status.wait-processing": "Wait processing",
   "contract.status.processed": "Processed",
+  "contract.status.share": "Shared",
   "contract.status.create.complete": "Complete creating",
   "contract.status.undefined": "Undefined",
   "contract.me": "My contract",

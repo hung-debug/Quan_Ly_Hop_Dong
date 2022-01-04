@@ -109,6 +109,8 @@ export class ContractSignatureComponent implements OnInit {
         this.status = 'processed';
       } else if (this.router.url.includes('contract-signature/receive/wait-processing')) {
         this.status = 'wait-processing';
+      } else if (this.router.url.includes('contract-signature/receive/share')) {
+        this.status = 'share';
       }
       console.log(this.router.url);
       console.log(this.status);
@@ -182,33 +184,15 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   private convertStatusStr() {
-    if (this.status == 'draft') {
-      this.filter_status = 0;
-      this.title = 'contract.status.draft';
-    } else if (this.status == 'wait-processing') {
+    if (this.status == 'wait-processing') {
       this.filter_status = 0;
       this.title = 'contract.status.wait-processing';
-    } else if (this.status == 'processing') {
-      this.filter_status = 20;
-      this.title = 'contract.status.processing';
     } else if (this.status == 'processed') {
       this.filter_status = 1;
       this.title = 'contract.status.processed';
-    } else if (this.status == 'expire') {
+    } else if (this.status == 'share') {
       this.filter_status = -1;
-      this.title = 'contract.status.expire';
-    } else if (this.status == 'overdue') {
-      this.filter_status = -1;
-      this.title = 'contract.status.overdue';
-    } else if (this.status == 'fail') {
-      this.filter_status = 31;
-      this.title = 'contract.status.fail';
-    } else if (this.status == 'cancel') {
-      this.filter_status = 32;
-      this.title = 'contract.status.cancel';
-    } else if (this.status == 'complete') {
-      this.filter_status = 30;
-      this.title = 'contract.status.complete';
+      this.title = 'contract.status.share';
     } else {
       this.title = '';
     }

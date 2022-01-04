@@ -82,6 +82,11 @@ export class SidebarService {
           active: false,
           href: '/main/contract-signature/receive/processed'
           // href: '/main/contract/receive/processed'
+        },
+        {
+          title: 'contract.status.share',
+          active: false,
+          href: '/main/contract-signature/receive/share'
         }
       ]
     },
