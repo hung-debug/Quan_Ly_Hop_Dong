@@ -38,13 +38,13 @@ export class UserComponent implements OnInit {
     });
 
     this.cols = [
-      { field: 'name', header: 'Họ và tên', style:'text-align: left;' },
-      { field: 'email', header: 'Email', style:'text-align: left;' },
-      { field: 'phone', header: 'Số điện thoại', style:'text-align: left;' },
-      { field: 'organization.name', header: 'Tổ chức', style:'text-align: left;' },
-      { field: 'status', header: 'Trạng thái', style:'text-align: left;' },
-      { field: 'type.name', header: 'Vai trò', style:'text-align: left;' },
-      { field: 'id', header: 'Quản lý', style:'text-align: center;' },
+      {header: 'user.name', style:'text-align: left;' },
+      {header: 'user.email', style:'text-align: left;' },
+      {header: 'user.phone', style:'text-align: left;' },
+      {header: 'unit.name', style:'text-align: left;' },
+      {header: 'unit.status', style:'text-align: left;' },
+      {header: 'menu.role.list', style:'text-align: left;' },
+      {header: 'unit.manage', style:'text-align: center;' },
       ];
   }
 

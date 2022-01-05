@@ -87,7 +87,7 @@ export class AddUserComponent implements OnInit {
 
       //set title
       if (this.action == 'add') {
-        this.appService.setTitle('THÊM MỚI NGƯỜI DÙNG');
+        this.appService.setTitle('user.add');
 
         this.addForm = this.fbd.group({
           name: this.fbd.control("", [Validators.required]),
@@ -107,7 +107,7 @@ export class AddUserComponent implements OnInit {
         });
       } else if (this.action == 'edit') {
         this.id = params['id'];
-        this.appService.setTitle('CẬP NHẬT THÔNG TIN NGƯỜI DÙNG');
+        this.appService.setTitle('user.update');
 
         this.userService.getUserById(this.id).subscribe(
           data => {
