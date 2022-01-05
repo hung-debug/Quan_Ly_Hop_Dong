@@ -83,14 +83,14 @@
      <div class="row">
       <div class="col-md-2">
           <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
-          <span> Hoạt động</span>
+          <span> {{'unit.active' | translate}}</span>
       </div>
       <div class="col-md-2">
           <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
-          <span> Không hoạt động</span>
+          <span> {{'unit.inactive' | translate}}</span>
       </div>
       <div class="col-md-2">
-        <button class="save-button" (click)="updateUser()">Cập nhật</button>
+        <button class="save-button" (click)="updateUser()">{{'btn.update' | translate}}</button>
       </div>
   </div>
    </div>
@@ -121,7 +121,7 @@
             <img class="hidden_img" (click)="addFileAttach()" src="assets/img/img-icon.svg" width="30" height="30" />
           </div>
           <div class="row" style="justify-content: center;padding-top: 10px;">
-            <button class="save-button" (click)="updateUser()">Lưu lại</button>
+            <button class="save-button" (click)="updateUser()">{{'btn.update' | translate}}</button>
           </div>
         </div>
         
@@ -163,7 +163,7 @@
              </div>
            </div>
            <div class="row" style="justify-content: center;padding-top: 10px;">
-            <button class="save-button" (click)="updateUser()">Lưu lại</button>
+            <button class="save-button" (click)="updateUser()">{{'btn.update' | translate}}</button>
           </div>
          </div>
          </form>
@@ -184,7 +184,7 @@
              </div>
            </div>
            <div class="row" style="justify-content: center;padding-top: 10px;">
-            <button class="save-button" (click)="updateUser()">Lưu lại</button>
+            <button class="save-button" (click)="updateUser()">{{'btn.update' | translate}}</button>
           </div>
          </div>
          </form>

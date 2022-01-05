@@ -22,6 +22,10 @@
 
   "logout": "Đăng xuất",
 
+  "document": "Tài liệu",
+  "document.user.use": "Hướng dẫn sử dụng",
+  "document.plugin.pki": "Plugin ký số PKI",
+
   "menu.dashboard": "Trang chủ",
   "menu.contract.add": "Tạo mới HĐ",
   "menu.contract.create.list": "Hợp đồng đã tạo",
@@ -44,6 +48,7 @@
   "contract.status.complete": "Hoàn thành",
   "contract.status.wait-processing": "Chờ xử lý",
   "contract.status.processed": "Đã xử lý",
+  "contract.status.share": "Được chia sẻ",
   "contract.status.create.complete": "Hoàn thành tạo hợp đồng",
   "contract.status.undefined": "Chưa xác định",
   "contract.me": "Hợp đồng của tôi",
@@ -134,7 +139,11 @@
   "user.information.individual": "Thông tin cá nhân",
   "user.information": "Thông tin tài khoản",
   "user.name.v2": "Tên người dùng",
-
+  "user.list": "Danh sách người dùng",
+  "user.add": "Thêm mới người dùng",
+  "user.update": "Cập nhật thông tin người dùng",
+  "user.information.v2": "Thông tin người dùng",
+ 
   "unit.list": "Danh sách tổ chức",
   "unit.add": "Thêm mới tổ chức",
   "unit.update": "Cập nhật thông tin tổ chức",
@@ -151,6 +160,23 @@
   "unit.active": "Hoạt động",
   "unit.inactive": "Không hoạt động",
   "unit.manage": "Quản lý",
+
+  "role.list": "Danh sách vai trò",
+  "role.add": "Thêm mới vai trò",
+  "role.update": "Cập nhật thông tin vai trò",
+  "role.information": "Thông tin vai trò",
+  "role.name": "Tên vai trò",
+  "role.code" : "Mã vai trò",
+  "role.function": "Chức năng vai trò",
+  "role.manage": "Quản lý",
+
+  "contract-type.list": "Danh sách loại hợp đồng",
+  "contract-type.add": "Thêm mới loại hợp đồng",
+  "contract-type.update": "Cập nhật thông tin loại hợp đồng",
+  "contract-type.information": "Thông tin loại hợp đồng",
+  "contract-type.name": "Tên loại hợp đồng",
+  "contract-type.code": "Mã loại hợp đồng",
+  "contract-type.manage": "Quản lý",
 
   "sign.information" : "Thông tin chữ ký",
   "sign.file-image" : "File ảnh chữ ký",
@@ -246,5 +272,6 @@
   "valid_nhap_ten_dt_tc": "Vui lòng nhập tên của đối tác tổ chức!",
   "of_doi_tac": " của đối tác!",
   "of_doi_tac_ca_nhan": "của đối tác cá nhân!",
-  "doi_tac_ca_nhan_ko_hop_le": " đối tác cá nhân không hợp lệ!"
+  "doi_tac_ca_nhan_ko_hop_le": " đối tác cá nhân không hợp lệ!",
+  "note_email_doi_tac": "Lưu ý: email người điều phối có thể trùng với email người ký!"
 }

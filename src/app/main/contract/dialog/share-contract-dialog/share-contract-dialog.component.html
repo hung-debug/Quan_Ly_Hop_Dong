@@ -1,0 +1,89 @@
+<div class="container-fluid">
+    <div style="text-align: center; font-weight: bold">
+      <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{this.datas.title | translate}}</h3>
+    </div>
+
+    <div class="row">
+        <div class="radio col-md-6 label_type">
+          <label><input type="radio" name="type" [value]="1" [(ngModel)]="type"
+            (change)="changeType()">
+            <span> Chia sẻ qua email</span></label>
+        </div>
+        <div class="radio col-md-6 label_type">
+          <label><input type="radio" name="type" [value]="2" [(ngModel)]="type"
+            (change)="changeType()">
+            <span> Tìm người dùng trong hệ thống</span></label>
+        </div>
+    </div>
+
+    <form *ngIf="type==1" [formGroup]="addForm" class="content" >
+        <div class="row">
+            <div class="col-md-12">
+                <div class="label text-color">Email <span class="required-title">*</span></div>
+                <div>
+                    <p-chips styleClass="font" type="text" formControlName="email" separator="," placeholder="Email ngăn cách và kết thúc bởi dấu ,"></p-chips>
+                </div>
+                <div *ngIf="submitted && f.email.errors" class="invalid">
+                    <div *ngIf="f.email.errors.required">Email không được để trống</div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row" style="justify-content: center;padding-top: 10px;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
+            <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>
+        </div>
+    </form>
+
+    <form *ngIf="type==2" [formGroup]="addFormUser" class="content" >
+        <div class="row">
+            <div class="col-md-12">
+                <div class="label text-color">Tổ chức</div>
+                <div>
+                    <p-dropdown 
+                        panelStyleClass="font"
+                        appendTo="body"
+                        [options]="orgList" 
+                        formControlName="orgId" 
+                        optionLabel="name" 
+                        optionValue="id" 
+                        placeholder="Chọn tổ chức" 
+                        [filter]="true" 
+                        filterBy="name" 
+                        [showClear]="true"  
+                        (onChange)="getUserByOrg(orgId.value)"
+                        #orgId
+                        ></p-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-12">
+                <div class="label text-color">Email <span class="required-title">*</span></div>
+                <div>
+                    <p-multiSelect 
+                        panelStyleClass="font"
+                        appendTo="body"
+                        [options]="userList" 
+                        formControlName="email" 
+                        optionLabel="email" 
+                        optionValue="email" 
+                        placeholder="Chọn email" 
+                        [filter]="true" 
+                        filterBy="email" 
+                        [showClear]="true"  
+                        ></p-multiSelect>
+                </div>
+                <div *ngIf="submittedUser && fUser.email.errors" class="invalid">
+                    <div *ngIf="fUser.email.errors.required">Email không được để trống</div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row" style="justify-content: center;padding-top: 10px;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
+            <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>
+        </div>
+    </form>
+  </div>
+  

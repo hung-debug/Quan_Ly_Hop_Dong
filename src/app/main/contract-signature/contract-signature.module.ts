@@ -45,6 +45,7 @@ import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-li
 import {DropdownModule} from 'primeng/dropdown';
 import {CalendarModule} from 'primeng/calendar';
 import {MultiSelectModule} from 'primeng/multiselect';
+import { DisplayDigitalSignatureComponent } from './display-digital-signature/display-digital-signature.component';
 
 export const contractSignatureRoutes: Routes = [
   { path: 'consider/:id', component: ConsiderContractComponent },
@@ -53,7 +54,8 @@ export const contractSignatureRoutes: Routes = [
   { path: 'coordinates/:id', component: IndexComponent },
   { path: 'secretary/:id', component: ConsiderContractComponent },
   { path: 'receive/wait-processing', component: ContractSignatureComponent },
-  { path: 'receive/processed', component: ContractSignatureComponent }
+  { path: 'receive/processed', component: ContractSignatureComponent },
+  { path: 'receive/share', component: ContractSignatureComponent }
 ];
 
 @NgModule({
@@ -83,6 +85,7 @@ export const contractSignatureRoutes: Routes = [
     ImageDialogSignComponent,
     HsmDialogSignComponent,
     FilterListDialogComponent,
+    DisplayDigitalSignatureComponent,
     // AddContractComponent
   ],
   imports: [

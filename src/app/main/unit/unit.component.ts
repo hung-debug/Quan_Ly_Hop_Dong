@@ -82,6 +82,7 @@ export class UnitComponent implements OnInit {
         };
         
         this.array_empty.push(data);
+        this.removeElementFromStringArray(element.id);
       })
       this.list = this.array_empty;
       console.log(this.list);
@@ -106,8 +107,15 @@ export class UnitComponent implements OnInit {
         expanded: true,
         children: this.findChildren(elementCon)
       });
+      this.removeElementFromStringArray(elementCon.id);
     })
     return dataChildren;
+  }
+
+  removeElementFromStringArray(element: string) {
+    this.listData.forEach((value,index)=>{
+        if(value.id==element) this.listData.splice(index,1);
+    });
   }
 
   addUnit() {

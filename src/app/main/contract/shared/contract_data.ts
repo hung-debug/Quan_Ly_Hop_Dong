@@ -27,7 +27,7 @@ export const data_create_contract_determine =
             },
             {
               id: 3,
-              name: "Ký số bằng sim KPI"
+              name: "Ký số bằng sim PKI"
             },
             {
               id: 4,
@@ -57,7 +57,7 @@ export const data_create_contract_determine =
             },
             {
               id: 3,
-              name: "Ký số bằng sim KPI"
+              name: "Ký số bằng sim PKI"
             },
             {
               id: 4,
@@ -87,7 +87,7 @@ export const data_create_contract_determine =
             },
             {
               id: 3,
-              name: "Ký số bằng sim KPI"
+              name: "Ký số bằng sim PKI"
             },
             {
               id: 4,
@@ -126,7 +126,7 @@ export const data_create_contract_determine =
             },
             {
               id: 3,
-              name: "Ký số bằng sim KPI"
+              name: "Ký số bằng sim PKI"
             },
             {
               id: 4,
@@ -156,7 +156,7 @@ export const data_create_contract_determine =
             },
             {
               id: 3,
-              name: "Ký số bằng sim KPI"
+              name: "Ký số bằng sim PKI"
             },
             {
               id: 4,
@@ -186,7 +186,7 @@ export const data_create_contract_determine =
             },
             {
               id: 3,
-              name: "Ký số bằng sim KPI"
+              name: "Ký số bằng sim PKI"
             },
             {
               id: 4,
@@ -216,7 +216,7 @@ export const data_create_contract_determine =
             },
             {
               id: 3,
-              name: "Ký số bằng sim KPI"
+              name: "Ký số bằng sim PKI"
             },
             {
               id: 4,
@@ -253,7 +253,7 @@ export const data_create_contract_determine =
             },
             {
               id: 3,
-              name: "Ký số bằng sim KPI"
+              name: "Ký số bằng sim PKI"
             },
             {
               id: 4,
@@ -283,7 +283,7 @@ export const data_create_contract_determine =
             },
             {
               id: 3,
-              name: "Ký số bằng sim KPI"
+              name: "Ký số bằng sim PKI"
             },
             {
               id: 4,
@@ -313,7 +313,7 @@ export const data_create_contract_determine =
             },
             {
               id: 3,
-              name: "Ký số bằng sim KPI"
+              name: "Ký số bằng sim PKI"
             },
             {
               id: 4,
@@ -343,7 +343,7 @@ export const data_create_contract_determine =
             },
             {
               id: 3,
-              name: "Ký số bằng sim KPI"
+              name: "Ký số bằng sim PKI"
             },
             {
               id: 4,

@@ -7,6 +7,7 @@ import {Helper} from "../core/Helper";
 import {DatePipe} from '@angular/common';
 import {forkJoin} from "rxjs";
 import axios from 'axios';
+import {User} from "./user.service";
 
 
 export interface Contract {
@@ -63,6 +64,7 @@ export class ContractService {
   postSignDigitalSimPKI: any = `https://econtract.mobifone.vn/SignService/v2/sign-document`;
   getFileSignSimPKI: any = `https://econtract.mobifone.vn/SignService/download-signed-document?signed_doc_id=`;
   imageMobiBase64: any;
+  getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
 
   token:any;
   customer_id:any;
@@ -329,6 +331,13 @@ export class ContractService {
       );
   }
 
+  public getNameOrganization(filter_organization_id: any, filter_name: any): Observable<any> {
+    this.getCurrentUser();
+    let listUserUrl = this.getNameSearch + '?name=' + filter_name + '&organization_id=' + filter_organization_id + "&size=1000";
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<User[]>(listUserUrl, {headers}).pipe();
+  }
+
 
   getListDataCoordination(id: any) {
     this.getCurrentUser();
@@ -505,6 +514,16 @@ export class ContractService {
 
   }
 
+  updateInfoContractConsiderToPromise(datas: any, recipient_id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, {'headers': headers}).toPromise();
+
+  }
+
   uploadFileImageSignature(formData: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -538,12 +557,21 @@ export class ContractService {
     return forkJoin(arrApi);
   }
 
+  getDataCoordination(idContract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.addGetDataContract + idContract, {headers});
+    // addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
+  }
+
   getDetailInforContract(idContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    
+
     return this.http.get<any>(this.addGetDataContract + idContract, {headers});
   }
 

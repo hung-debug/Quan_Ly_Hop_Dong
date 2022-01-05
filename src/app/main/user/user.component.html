@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-3">
-      <div>Tổ chức</div>
+      <div>{{'unit.name' | translate}}</div>
       <div>
         <p-dropdown 
           panelStyleClass="font"
@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div>Email</div>
+      <div>{{'unit.email' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="email" class="input_text"/>
       </div>
@@ -32,7 +32,7 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of cols" [style]='col.style'>
-              {{col.header}}
+              {{col.header | translate}}
             </th>
         </tr>
       </ng-template>

@@ -56,6 +56,9 @@
     .p-dropdown-label {
         padding: 5px 5px 5px 15px;
     }
+    .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
+        color: #6c757d !important;
+    }
 }
 .invalid{
     color: red;

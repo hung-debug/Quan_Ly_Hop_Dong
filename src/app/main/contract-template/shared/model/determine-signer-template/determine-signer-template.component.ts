@@ -117,7 +117,7 @@ export class DetermineSignerTemplateComponent implements OnInit {
       },
       {
         item_id: 3,
-        item_text: "Ký số bằng sim KPI",
+        item_text: "Ký số bằng sim PKI",
       },
       {
         item_id: 4,

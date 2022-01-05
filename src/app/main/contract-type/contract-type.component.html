@@ -1,13 +1,13 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-3">
-      <div>Mã loại hợp đồng</div>
+      <div>{{'contract-type.code' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="code" class="input_text"/>
       </div>
     </div>
     <div class="col-md-3">
-      <div>Tên loại hợp đồng</div>
+      <div>{{'contract-type.name' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="name" class="input_text"/>
       </div>
@@ -22,7 +22,7 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of cols" [style]='col.style'>
-              {{col.header}}
+              {{col.header | translate}}
             </th>
         </tr>
       </ng-template>

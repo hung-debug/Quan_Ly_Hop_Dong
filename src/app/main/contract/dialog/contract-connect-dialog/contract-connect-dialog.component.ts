@@ -12,7 +12,7 @@ import { ToastService } from 'src/app/service/toast.service';
 })
 export class ContractConnectDialogComponent implements OnInit {
 
-  datas: any;
+  datas: any [] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,

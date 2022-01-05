@@ -659,11 +659,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }).then(async (result) => {
         if (result.isConfirmed) {
           if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-            // this.signContractSubmit();
-            const signD = this.isDataObjectSignature.find((item: any) => item.type == 3 && item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived);
-            if (signD) {
-              await this.signDigitalDocument();
-            }
+            await this.signContractSubmit();
           }
         }
       });
@@ -818,9 +814,27 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }
     }
     if (typeSignDigital == 2) {
-      const res: any = await this.contractService.getAllAccountsDigital();
-      if (res) {
-        this.signCertDigital = res.data;
+      /*let checkSetupTool = false;
+      this.contractService.getAllAccountsDigital().then((data) => {
+        this.signCertDigital = data.data;
+      }, err => {
+        Swal.fire({
+          html: "Vui lòng tải và cài đặt phần mềm ký Mobifone PKI Sign" + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view'>Tại đây</a>`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#b0bec5',
+          confirmButtonText: 'Xác nhận',
+          cancelButtonText: 'Hủy'
+        }).then((result) => {
+
+        });
+      })
+      if (!checkSetupTool) {
+        return;
+      }*/
+      if (this.signCertDigital) {
+        // this.signCertDigital = resSignDigital.data;
         for(const signUpdate of this.isDataObjectSignature) {
           if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
             && signUpdate?.recipient?.email === this.currentUser.email
@@ -844,19 +858,19 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived));
       if (fileC && objSign.length) {
-        const arrBuffFile = await this.contractService.getDataBinaryFileUrlPromise(fileC);
+        /*const arrBuffFile = await this.contractService.getDataBinaryFileUrlPromise(fileC);
         const fileSignedId = await this.contractService.uploadFileSimPKI(arrBuffFile);
         const fileSignedArr = await this.contractService.getDataFileSIMPKIUrlPromise(fileSignedId.id);
         const valueSignBase64 = encode(fileSignedArr);
-        await this.contractService.updateDigitalSignatured(objSign[0].id, valueSignBase64);
+        await this.contractService.updateDigitalSignatured(objSign[0].id, valueSignBase64);*/
+        await this.signContractSimKPI();
       }
 
     }
 
   }
 
-  signContractSubmit() {
-    this.spinner.show();
+  async signContractSubmit() {
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
     let iu = 0;
@@ -878,7 +892,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       iu++;
     }
 
-    forkJoin(signUploadObs$).subscribe(results => {
+    forkJoin(signUploadObs$).subscribe(async results => {
       let ir = 0;
       for (const resE of results) {
         this.datas.filePath = resE?.file_object?.file_path;
@@ -889,17 +903,17 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         }
         ir++;
       }
-      this.signContract();
+      await this.signContract();
     }, error => {
       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
     });
     if (signUploadObs$.length == 0) {
-      this.signContract();
+      await this.signContract();
     }
 
   }
 
-  signContract() {
+  async signContract() {
     const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
     const signUpdatePayload = signUpdateTemp.filter(
       (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
@@ -911,12 +925,62 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         font: item.font,
         font_size: item.font_size
       }});
+    let typeSignDigital = null;
+    for(const signUpdate of this.isDataObjectSignature) {
+      if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+        && signUpdate?.recipient?.email === this.currentUser.email
+        && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+      ) {
+        if (signUpdate.recipient?.sign_type) {
+          const typeSD = signUpdate.recipient?.sign_type.find((t: any) => t.id != 1);
+          if (typeSD) {
+            typeSignDigital = typeSD.id;
+          }
+        }
+        break;
+      }
+    }
+    if (typeSignDigital && typeSignDigital == 2) {
+      let checkSetupTool = false;
+      this.contractService.getAllAccountsDigital().then((data) => {
+        if (data.data.Serial) {
+          this.signCertDigital = data.data;
+          checkSetupTool = true;
+          if (!checkSetupTool) {
+            return;
+          } else {
+            this.signImageC(signUpdatePayload);
+          }
+        } else {
+          Swal.fire({
+            title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#b0bec5',
+            confirmButtonText: 'Xác nhận'
+          });
+        }
+      }, err => {
+        Swal.fire({
+          html: "Vui lòng tải và cài đặt phần mềm ký Mobifone PKI Sign " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>`,
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#b0bec5',
+          confirmButtonText: 'Xác nhận'
+        });
+      })
+
+    } else {
+      this.signImageC(signUpdatePayload);
+    }
+
+  }
+
+  signImageC(signUpdatePayload: any) {
+    this.spinner.show();
     this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId).subscribe(
       async (result) => {
-        const signD = this.isDataObjectSignature.find((item: any) => item.type == 3 && item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived);
-        if (signD) {
-          await this.signDigitalDocument();
-        }
+        await this.signDigitalDocument();
         this.toastService.showSuccessHTMLWithTimeout(
           [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
           , '', 1000);
@@ -926,6 +990,78 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
       }
     )
+  }
+
+  async signContractSimKPI() {
+    const signUploadObs$ = [];
+    let indexSignUpload: any[] = [];
+    let iu = 0;
+    for(const signUpdate of this.isDataObjectSignature) {
+      if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+        && signUpdate?.recipient?.email === this.currentUser.email
+        && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+      ) {
+
+        const formData = {
+          "name": "image_" + new Date().getTime() + ".jpg",
+          "content": "data:image/png;base64," + this.contractService.imageMobiBase64,
+          organizationId: this.data_contract?.is_data_contract?.organization_id
+        }
+        signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData).toPromise());
+        indexSignUpload.push(iu);
+      }
+      iu++;
+    }
+
+    let ir = 0;
+    for (const signLinkP of signUploadObs$) {
+      const imgLinksRes = await signLinkP;
+      console.log(imgLinksRes);
+      this.datas.filePath = imgLinksRes?.file_object?.file_path;
+
+
+      if (this.datas.filePath) {
+        this.isDataObjectSignature[indexSignUpload[ir]].value = this.datas.filePath;
+      }
+      ir++;
+    }
+    const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
+    const signUpdatePayload = signUpdateTemp.filter(
+      (item: any) => item?.recipient?.email === this.currentUser.email && item.type == 3 &&
+        item?.recipient?.role === this.datas?.roleContractReceived)
+      .map((item: any) =>  {
+        return {
+          id: item.id,
+          name: item.name,
+          value: item.value,
+          font: item.font,
+          font_size: item.font_size
+        }});
+    const signRes = await this.contractService.updateInfoContractConsiderToPromise(signUpdatePayload, this.recipientId);
+    /*let ir = 0;
+    for (const resE of imgLinksRes) {
+      this.datas.filePath = resE?.file_object?.file_path;
+
+
+      if (this.datas.filePath) {
+        this.isDataObjectSignature[indexSignUpload[ir]].value = this.datas.filePath;
+      }
+      ir++;
+    }
+    const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
+    const signUpdatePayload = signUpdateTemp.filter(
+      (item: any) => item?.recipient?.email === this.currentUser.email && item.type == 3 &&
+        item?.recipient?.role === this.datas?.roleContractReceived)
+      .map((item: any) =>  {
+        return {
+          id: item.id,
+          name: item.name,
+          value: this.contractService.imageMobiBase64,
+          font: item.font,
+          font_size: item.font_size
+        }});
+    const signRes = this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId);
+    console.log(signRes);*/
   }
 
   async rejectContract() {
@@ -1023,6 +1159,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         for (const recipient of participant.recipients) {
           if (this.recipientId == recipient.id) {
             this.recipient = recipient;
+            if (this.currentUser?.email != this.recipient?.email) {
+              this.router.navigate(['main/form-contract/detail/' + this.idContract]);
+            }
             return;
           }
         }

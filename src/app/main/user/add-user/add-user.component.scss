@@ -117,6 +117,9 @@ hr{
     outline: 0 !important;
     box-shadow: none !important;
   }
+  .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
+    color: #6c757d !important;
+  }
 }
 
 .image-div {

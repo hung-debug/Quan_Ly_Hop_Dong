@@ -99,6 +99,14 @@ header {
   background-image: url(../../assets/img/user_login.svg);
   //border-radius: 50%;
 }
+.social-icons .document {
+  height: 20px;
+  width: 20px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(../../assets/img/db_processing.svg);
+  //border-radius: 50%;
+}
 .social-icons .label{
   color: #106DB6;
   margin-left: 10px;
@@ -147,7 +155,7 @@ h3{
   text-align: center;
   color:#0160AE;
   font-weight: 500;
-  width: 100%;
+  width: calc(100% - 220px);
   height: 25px;
   padding: 3px;
   bottom: 0;
@@ -241,4 +249,11 @@ h3{
   background-size: cover;
   background-repeat: no-repeat;
   background-image: url(../../assets/img/icon_vietnam.svg);
+}
+.db_document_use{
+  height: 18px;
+  width: 18px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(../../assets/img/db_processing.svg);
 }
