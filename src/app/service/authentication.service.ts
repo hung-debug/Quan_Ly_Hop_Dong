@@ -73,11 +73,12 @@ export class AuthenticationService {
   }
 
   private loginError(error: HttpErrorResponse) {
-    //console.log(error);
-    
-    if (JSON.parse(JSON.stringify(error)).access_token == null) {
+    console.log(error);
+    if (JSON.parse(JSON.stringify(error)).status == 400 && JSON.parse(JSON.stringify(error)).access_token == null) {
       localStorage.setItem('checkUser', "error");
-    } 
+    }else{
+      localStorage.setItem('checkUser', "");
+    }
     return throwError(this.errorData);
   }
 

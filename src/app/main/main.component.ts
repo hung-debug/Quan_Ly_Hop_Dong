@@ -187,12 +187,9 @@ export class MainComponent implements OnInit {
   }
 
   infoUserDetail() {
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(['/main/user-infor']);
-    });
-  }
-
-  downloadDocUse(){
-    this.router.navigate(['/assets/upload/eContract_Web_Manual.docx']);
+    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+    //   this.router.navigate(['/main/user-infor']);
+    // });
+    this.router.navigate(['/main/user-infor']);
   }
 }

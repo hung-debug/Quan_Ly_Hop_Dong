@@ -29,7 +29,7 @@ export class UserComponent implements OnInit {
   orgList: Array<any> = [];
 
   ngOnInit(): void {
-    this.appService.setTitle("DANH SÁCH NGƯỜI DÙNG");
+    this.appService.setTitle("user.list");
     this.searchUser();
 
     this.unitService.getUnitList('', '').subscribe(data => {
