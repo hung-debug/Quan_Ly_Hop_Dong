@@ -4,6 +4,7 @@ import { Chart } from 'angular-highcharts';
 import { TranslateService } from '@ngx-translate/core';
 import { ContractService } from 'src/app/service/contract.service';
 import { DashboardService } from 'src/app/service/dashboard.service';
+import { UserService } from 'src/app/service/user.service';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -23,9 +24,12 @@ export class DashboardComponent implements OnInit {
   filter_from_date:any = "";
   filter_to_date:any = "";
 
+  user:any;
+
   constructor(
     private appService: AppService,
     private dashboardService: DashboardService,
+    private userService: UserService,
   ) {
 
   }
@@ -34,6 +38,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.appService.setTitle("menu.dashboard");
     this.search();
+
+    this.user = this.userService.getInforUser();
   }
 
   search(){

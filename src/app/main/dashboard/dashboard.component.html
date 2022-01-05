@@ -1,12 +1,25 @@
 
 <div class="container-fluid">
   <div class="row">
+    <div class="header" style="height: 100px; border-radius: 10px">
+      <div class="row">
+        <div style="padding: 17px 30px;color: white;">
+          Xin chào {{user.name}}
+        </div>
+        <div>
+          <button class="save-button" style="width: 170px;">Hợp đồng tạo</button>
+          <button class="save-button" style="width: 170px;">Hợp đồng cần xử lý</button>
+        </div>
+    </div>
+    </div>
+  </div>
+  <div class="row" style="padding-top: 10px;">
     <div class="col-md-3">
       <div>{{'createdate.start' | translate}}</div>
       <div>
         <p-calendar [(ngModel)]="filter_from_date" [showIcon]="true" dateFormat="dd/mm/yy" ></p-calendar>
       </div>
-    </div>
+    </div> 
     <div class="col-md-3">
       <div>{{'createdate.end' | translate}}</div>
       <div>
@@ -15,9 +28,9 @@
     </div>
     <div class="col-md-3 btn_search">
       <button class="btn btn-lg btn-block" (click)="search()">{{'btn.search' | translate }}</button>
-    </div>
+    </div>   
   </div>
-  <div class="row" style="padding-top: 60px;">
+  <div class="row" style="padding-top: 20px;">
     <div class="col-md-1"></div>
     <div class="col-md-5">
       <div class="row">
