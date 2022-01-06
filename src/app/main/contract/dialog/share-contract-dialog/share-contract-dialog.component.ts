@@ -2,6 +2,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ContractSignatureComponent } from 'src/app/main/contract-signature/contract-signature.component';
+import { ContractSignatureService } from 'src/app/service/contract-signature.service';
+import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
@@ -34,7 +37,8 @@ export class ShareContractDialogComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
     private unitService: UnitService, 
-    private userService: UserService) { 
+    private userService: UserService,
+    private contractService: ContractSignatureService) { 
 
       this.addForm = this.fbd.group({
         email: this.fbd.control("", [Validators.required])
@@ -103,9 +107,17 @@ export class ShareContractDialogComponent implements OnInit {
       if (this.addFormUser.invalid) {
         return;
       }
+      this.contractService.shareContract(this.addFormUser.value.email[0], this.data.id).subscribe(data => {
+        console.log(data);
+        if(data.id != null){
+          this.dialogRef.close();
+          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 1000);
+        }else{
+          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 1000);
+        }
+      });
     }
-    this.dialogRef.close();
-    this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 1000);
+    
   }
 
 }

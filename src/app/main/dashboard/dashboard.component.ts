@@ -49,7 +49,7 @@ export class DashboardComponent implements OnInit {
       console.log(data);     
       this.numberCreate = data.total_process;
         this.chartCreated = new Chart({
-          colors: ['#407EF9', '#58A55C', '#ED1C24', '#FF710B'],
+          colors: ['#407EF9', '#58A55C', '#ED1C24', '#FF710B', '#717070'],
           chart: {
             type: 'pie',
             style: {
@@ -87,7 +87,8 @@ export class DashboardComponent implements OnInit {
               ['Đang xử lý', data.total_process],
               ['Hoàn thành', data.total_signed],
               ['Từ chối', data.total_rejected],
-              ['Quá hạn', data.total_expires]
+              ['Quá hạn', data.total_expires],
+              ['Hủy bỏ', data.total_cancel]
             ],
           }]
         });
