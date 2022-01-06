@@ -25,6 +25,8 @@ export class DashboardComponent implements OnInit {
   filter_to_date:any = "";
 
   user:any;
+  numberCreate:any=0;
+  numberReceive:any=0;
 
   constructor(
     private appService: AppService,
@@ -45,6 +47,7 @@ export class DashboardComponent implements OnInit {
   search(){
     this.dashboardService.countContractCreate(this.filter_from_date, this.filter_to_date).subscribe(data => {     
       console.log(data);     
+      this.numberCreate = data.total_process;
         this.chartCreated = new Chart({
           colors: ['#407EF9', '#58A55C', '#ED1C24', '#FF710B'],
           chart: {
@@ -91,7 +94,8 @@ export class DashboardComponent implements OnInit {
     });
 
     this.dashboardService.countContractReceived(this.filter_from_date, this.filter_to_date).subscribe(data => { 
-      console.log(data);     
+      console.log(data);    
+      this.numberReceive = data.processing; 
       this.chartReceived = new Chart({
         colors: ['#407EF9', '#58A55C', '#ED1C24', '#FF710B'],
         chart: {
