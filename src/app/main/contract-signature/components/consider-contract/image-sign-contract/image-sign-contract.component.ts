@@ -45,8 +45,20 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doSign() {
+    let typeSignDigital = null;
+    if (this.sign?.recipient?.sign_type) {
+      const typeSD = this.sign?.recipient?.sign_type.find((t: any) => t.id != 1);
+      if (typeSD) {
+        typeSignDigital = typeSD.id;
+      }
+    }
     if (this.sign.sign_unit == 'chu_ky_anh' && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.openPopupSignContract(1);
+    } else if (this.sign.sign_unit == 'chu_ky_so'
+      && this.sign?.recipient?.email == this.currentUser.email && !this.view
+      && typeSignDigital && typeSignDigital == 3
+    ) {
+      this.openPopupSignContract(3);
     }
   }
 
@@ -96,7 +108,9 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   pkiDialogSignOpen() {
     const data = {
       title: 'CHỮ KÝ PKI',
-      is_content: 'forward_contract'
+      type: 3,
+      sign: this.sign,
+      data: this.datas
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -105,8 +119,10 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
+      if (result && result.phone && result.networkCode) {
+        this.sign.phone = result.phone;
+        this.sign.networkCode = result.networkCode;
+      }
     })
   }
 

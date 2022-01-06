@@ -129,6 +129,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   isDataObjectSignature: any;
   valid: boolean = false;
   signCertDigital: any;
+  dataNetworkPKI: any;
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -645,6 +646,37 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
       return;
+    } else if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
+      (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
+      let typeSignDigital = null;
+      if (this.recipient?.sign_type) {
+        const typeSD = this.recipient?.sign_type.find((t: any) => t.id != 1);
+        if (typeSD) {
+          typeSignDigital = typeSD.id;
+        }
+      }
+      if (typeSignDigital && typeSignDigital == 3) {
+        let findDataNetwork = false;
+        for(const signUpdate of this.isDataObjectSignature) {
+          if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+            && signUpdate?.recipient?.email === this.currentUser.email
+            && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+          ) {
+            if (signUpdate && signUpdate.networkCode && signUpdate.phone) {
+              findDataNetwork = true;
+              this.dataNetworkPKI = {
+                networkCode: signUpdate.networkCode,
+                phone: signUpdate.phone
+              }
+              break;
+            }
+          }
+        }
+        if (!findDataNetwork) {
+          this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn nhà mạng và nhập số điện thoại kí sim PKI', '', 1500);
+          return;
+        }
+      }
     }
     if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
@@ -814,26 +846,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }
     }
     if (typeSignDigital == 2) {
-      /*let checkSetupTool = false;
-      this.contractService.getAllAccountsDigital().then((data) => {
-        this.signCertDigital = data.data;
-      }, err => {
-        Swal.fire({
-          html: "Vui lòng tải và cài đặt phần mềm ký Mobifone PKI Sign" + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view'>Tại đây</a>`,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#b0bec5',
-          confirmButtonText: 'Xác nhận',
-          cancelButtonText: 'Hủy'
-        }).then((result) => {
-
-        });
-      })
-      if (!checkSetupTool) {
-        return;
-      }*/
-      if (this.signCertDigital) {
+      if (this.signCertDigital && this.signCertDigital.Serial) {
         // this.signCertDigital = resSignDigital.data;
         for(const signUpdate of this.isDataObjectSignature) {
           if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
@@ -863,7 +876,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         const fileSignedArr = await this.contractService.getDataFileSIMPKIUrlPromise(fileSignedId.id);
         const valueSignBase64 = encode(fileSignedArr);
         await this.contractService.updateDigitalSignatured(objSign[0].id, valueSignBase64);*/
-        await this.signContractSimKPI();
+        // await this.signContractSimKPI();
+        console.log('pki info', this.dataNetworkPKI);
+        for (const signSimPki of objSign) {
+          await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode, signSimPki.id);
+        }
       }
 
     }

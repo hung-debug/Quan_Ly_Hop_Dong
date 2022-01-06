@@ -1,6 +1,5 @@
-import {Component, ElementRef, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 
 @Component({
@@ -9,48 +8,32 @@ import {Router} from "@angular/router";
   styleUrls: ['./pki-dialog-sign.component.scss']
 })
 export class PkiDialogSignComponent implements OnInit {
-  myForm: FormGroup;
   datas: any;
   optionsNetworkCompany: any = [
-    {item_id: 1, item_text: 'Mobiphone'},
-    {item_id: 2, item_text: 'Vietel'}
+    {item_id: 'mobifone', item_text: 'mobifone'},
+    {item_id: 'vietel', item_text: 'vietel'}
   ];
   networkCompany: any = 0;
+  phoneNum: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {},
     public router: Router,
-    public dialog: MatDialog,
-    private fbd: FormBuilder,
-    private el: ElementRef
+    public dialogRef: MatDialogRef<PkiDialogSignComponent>
   ) { }
 
 
 
   ngOnInit(): void {
     this.datas = this.data;
-    this.myForm = this.fbd.group({
-      name: this.fbd.control("", [Validators.required]),
-      email: this.fbd.control("", [Validators.required]),
-    });
   }
 
   onSubmit() {
-    let isSub = false;
-    const keyObj = [
-      {code: "name", name: 'Họ và tên'},
-      {code: "email", name: 'Email'},
-    ];
-    for (const key of Object.keys(this.myForm.controls)) {
-      if (this.myForm.controls[key].invalid) {
-        const keyError = keyObj.filter((item) => item.code === key)[0];
-        const invalidControl = this.el.nativeElement.querySelector('[formcontrolname="' + key + '"]');
-        alert(keyError.name + " " + 'không được để trống')
-        // Library.notify(keyError.name + " " + 'không được để trống', sEnum.statusApi.error);
-        invalidControl.focus();
-        isSub = true;
-        break;
-      }
-    }
+    const resDialog = {
+      phone: this.phoneNum,
+      networkCode: this.networkCompany
+    };
+    console.log(resDialog);
+    this.dialogRef.close(resDialog);
   }
 
 }
