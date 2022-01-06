@@ -392,18 +392,19 @@ export class ContractService {
     return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
   }
 
-  signPkiDigital(phone: any, networkCode: any, idField: any) {
+  signPkiDigital(phone: any, networkCode: any, recipientId: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
+      .append('Authorization', 'Bearer ' + this.token)
+      .append('Connection', 'Keep-Alive');
     const body = {
       "mobile": phone,
       "network_code": networkCode,
       "prompt": "prompt",
       "reason": "reason"
     };
-    return this.http.post<any>(this.signFilePKI + idField, body, {'headers': headers}).toPromise();
+    return this.http.post<any>(this.signFilePKI + recipientId, body, {'headers': headers}).toPromise();
   }
 
   addDocumentAttach(datas: any) {

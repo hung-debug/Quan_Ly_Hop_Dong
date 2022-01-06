@@ -876,10 +876,15 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         const fileSignedArr = await this.contractService.getDataFileSIMPKIUrlPromise(fileSignedId.id);
         const valueSignBase64 = encode(fileSignedArr);
         await this.contractService.updateDigitalSignatured(objSign[0].id, valueSignBase64);*/
-        // await this.signContractSimKPI();
         console.log('pki info', this.dataNetworkPKI);
-        for (const signSimPki of objSign) {
+        /*for (const signSimPki of objSign) {
           await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode, signSimPki.id);
+        }*/
+        const checkSign = await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode, this.recipientId);
+        console.log(checkSign);
+        // await this.signContractSimKPI();
+        if (!checkSign || (checkSign && !checkSign.success)) {
+          this.toastService.showErrorHTMLWithTimeout('Lỗi ký sim PKI', '', 1000);
         }
       }
 
@@ -959,14 +964,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     }
     if (typeSignDigital && typeSignDigital == 2) {
       let checkSetupTool = false;
-      this.contractService.getAllAccountsDigital().then((data) => {
+      this.contractService.getAllAccountsDigital().then(async (data) => {
         if (data.data.Serial) {
           this.signCertDigital = data.data;
           checkSetupTool = true;
           if (!checkSetupTool) {
             return;
           } else {
-            this.signImageC(signUpdatePayload);
+            await this.signImageC(signUpdatePayload);
           }
         } else {
           Swal.fire({
@@ -979,7 +984,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         }
       }, err => {
         Swal.fire({
-          html: "Vui lòng tải và cài đặt phần mềm ký Mobifone PKI Sign " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>`,
+          html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>  và cài đặt`,
           icon: 'warning',
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#b0bec5',
@@ -988,16 +993,17 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       })
 
     } else {
-      this.signImageC(signUpdatePayload);
+      await this.signImageC(signUpdatePayload);
     }
 
   }
 
-  signImageC(signUpdatePayload: any) {
+  async signImageC(signUpdatePayload: any) {
     this.spinner.show();
-    this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId).subscribe(
+    await this.signDigitalDocument();
+    /*this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId).subscribe(
       async (result) => {
-        await this.signDigitalDocument();
+
         this.toastService.showSuccessHTMLWithTimeout(
           [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
           , '', 1000);
@@ -1006,7 +1012,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
       }
-    )
+    )*/
   }
 
   async signContractSimKPI() {
