@@ -77,7 +77,9 @@ export class InforContractCopyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    if (this.datas.sign_time) {
+      this.datas.sign_time = moment(this.datas.sign_time).add(30, 'day').toDate()
+    }
     this.name = this.datas.name ? this.datas.name : null;
     this.code = this.datas.code ? this.datas.code : null;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;

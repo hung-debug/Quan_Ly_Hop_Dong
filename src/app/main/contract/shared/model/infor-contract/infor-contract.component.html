@@ -61,16 +61,16 @@
       <div class="form-group">
         <div class="label_item">{{'contract.type' | translate}}</div>
         <div>
-          <p-dropdown 
+          <p-dropdown
             panelStyleClass="font"
-            [options]="typeList" 
-            [(ngModel)]="type_id" 
-            optionLabel="name" 
-            optionValue="id" 
-            placeholder="Chọn loại hợp đồng" 
-            [filter]="true" 
-            filterBy="name" 
-            [showClear]="true"  
+            [options]="typeList"
+            [(ngModel)]="type_id"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Chọn loại hợp đồng"
+            [filter]="true"
+            filterBy="name"
+            [showClear]="true"
             ></p-dropdown>
         </div>
       </div>
@@ -137,7 +137,7 @@
         <div class="invalid" *ngIf="errorSignTime!=''">
           {{errorSignTime}}
         </div>
-      </div> 
+      </div>
     </div>
   </div>
 </div>

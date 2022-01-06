@@ -77,7 +77,9 @@ export class InforContractComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    if (this.datas.sign_time) {
+      this.datas.sign_time = moment(this.datas.sign_time).add(30, 'day').toDate();
+    }
     this.name = this.datas.name ? this.datas.name : null;
     this.code = this.datas.code ? this.datas.code : null;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
@@ -224,14 +226,14 @@ export class InforContractComponent implements OnInit {
             this.datas.fileBucket = data.file_object.bucket;
             this.contractService.addDocument(this.datas).subscribe((data) => {
                 console.log(JSON.stringify(data));
-                
+
 
                 //upload file hop dong lan 2
                 this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
                   this.datas.filePathDone = data.file_object.file_path;
                   this.datas.fileNameDone = data.file_object.filename;
                   this.datas.fileBucketDone = data.file_object.bucket;
-  
+
                   this.contractService.addDocumentDone(this.datas).subscribe((data) => {
                     this.datas.document_id = data?.id;
                     console.log(data);
@@ -239,7 +241,7 @@ export class InforContractComponent implements OnInit {
                     this.contractService.getDataNotifyOriganzation().subscribe((data: any) => {
                       console.log(JSON.stringify(data));
                       this.datas.name_origanzation = data.name;
-    
+
                       if (this.datas.attachFile != null) {
                         this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
                             console.log(JSON.stringify(data));
@@ -271,7 +273,7 @@ export class InforContractComponent implements OnInit {
                           }
                         );
                       } else {
-    
+
                         //next step
                         this.step = variable.stepSampleContract.step2;
                         this.datas.stepLast = this.step;
@@ -286,7 +288,7 @@ export class InforContractComponent implements OnInit {
                       return false;
                     })
                   },
-              
+
                   error => {
                     this.spinner.hide();
                     this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
@@ -294,7 +296,7 @@ export class InforContractComponent implements OnInit {
                   }
                   );
                 },
-              
+
                 error => {
                   this.spinner.hide();
                   this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
@@ -339,14 +341,24 @@ export class InforContractComponent implements OnInit {
       this.defineData(this.datas);
 
       const fileReader = new FileReader();
-      fileReader.readAsDataURL(this.datas.contractFile);
-      fileReader.onload = (e) => {
-        //@ts-ignore
-        const base64result = fileReader.result.toString().split(',')[1];
-        this.datas.file_content = base64result;
-      };
+      if (this.datas.is_copy) {
+        this.datas.file_content = this.datas.contractFile;
+      } else {
+        fileReader.readAsDataURL(this.datas.contractFile);
+        fileReader.onload = (e) => {
+          //@ts-ignore
+          const base64result = fileReader.result.toString().split(',')[1];
+          this.datas.file_content = base64result;
+        };
+      }
 
-      this.callAPI();
+      // this.callAPI();
+
+      this.step = variable.stepSampleContract.step2;
+      this.datas.stepLast = this.step;
+      // this.datas.document_id = '1';
+      this.nextOrPreviousStep(this.step);
+      this.spinner.hide();
     }
 
   }
@@ -433,7 +445,7 @@ export class InforContractComponent implements OnInit {
 
                   this.contractService.addDocumentDone(this.datas).subscribe((data) => {
                     this.datas.document_id = data?.id;
-                    
+
                     if(this.datas.attachFile != null){
                       this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
                         console.log(JSON.stringify(data));
@@ -443,11 +455,11 @@ export class InforContractComponent implements OnInit {
                         this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
                           console.log(JSON.stringify(data));
                           this.datas.document_attach_id = data?.id;
-    
+
                           //next step
                           this.router.navigate(['/main/contract/create/draff']);
                           this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 10000);
-    
+
                           this.spinner.hide();
                           },
                           error => {
@@ -470,7 +482,7 @@ export class InforContractComponent implements OnInit {
                       this.spinner.hide();
                     }
                   },
-              
+
                   error => {
                     this.spinner.hide();
                     this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
@@ -478,7 +490,7 @@ export class InforContractComponent implements OnInit {
                   }
                   );
                 },
-              
+
                 error => {
                   this.spinner.hide();
                   this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
@@ -486,7 +498,7 @@ export class InforContractComponent implements OnInit {
                 }
               );
               },
-              
+
               error => {
                 this.spinner.hide();
                 this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);

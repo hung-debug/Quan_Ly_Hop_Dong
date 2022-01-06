@@ -1,5 +1,5 @@
 import { UploadService } from 'src/app/service/upload.service';
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DatepickerOptions } from 'ng2-datepicker';
@@ -17,12 +17,14 @@ import { ContractConnectDialogComponent } from './dialog/contract-connect-dialog
 import { AddConnectDialogComponent } from './dialog/add-connect-dialog/add-connect-dialog.component';
 import { ShareContractDialogComponent } from './dialog/share-contract-dialog/share-contract-dialog.component';
 import {DeleteContractDialogComponent} from './dialog/delete-contract-dialog/delete-contract-dialog.component';
+import {NgxSpinnerService} from "ngx-spinner";
+import {Subscription} from "rxjs";
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
   styleUrls: ['./contract.component.scss']
 })
-export class ContractComponent implements OnInit {
+export class ContractComponent implements OnInit, OnDestroy {
   action:string;
   status: string;
   type:string;
@@ -48,6 +50,8 @@ export class ContractComponent implements OnInit {
   filter_from_date:any = "";
   filter_to_date:any = "";
   filter_status:any="";
+  message: any;
+  subscription: Subscription;
 
   // options sample with default values
   options: DatepickerOptions = {
@@ -75,6 +79,7 @@ export class ContractComponent implements OnInit {
               private http: HttpClient,
               private uploadService: UploadService,
               private dialog: MatDialog,
+              private spinner: NgxSpinnerService,
     ) {}
 
   open(content:any) {
@@ -129,9 +134,11 @@ export class ContractComponent implements OnInit {
 
       this.getContractList();
     });
+    this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
+  }
 
-
-
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   private getContractList(){
@@ -267,14 +274,35 @@ export class ContractComponent implements OnInit {
 
   openCopy(data: any, id:number){
     // this.router.navigate(['main/form-contract/copy/' + id]);
-    console.log(this.contracts, id);
+    console.log(this.contracts, id, this.status);
     if (this.status != 'complete') {
-
+      this.spinner.show();
+      this.contractService.getDetailContract(id).subscribe((rs: any) => {
+        let data_api = {
+          is_data_contract: rs[0],
+          i_data_file_contract: rs[1],
+          is_data_object_signature: rs[2]
+        }
+        this.contractService.changeMessage(data_api);
+        localStorage.setItem('is_copy', 'true');
+        setTimeout(() => {
+          void this.router.navigate(['/main/form-contract/add']);
+        }, 100)
+      }, () => {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+      }, () => {
+        this.spinner.hide();
+      })
     }
   }
 
   openEdit(id:number){
     this.router.navigate(['main/form-contract/edit/' + id]);
+    //@ts-ignore
+    if (JSON.parse(localStorage.getItem('is_copy'))) {
+      localStorage.removeItem('is_copy');
+    }
   }
 
   deleteItem(id:number){

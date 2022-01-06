@@ -79,6 +79,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   isEnableSelect: boolean = true;
   isEnableText: boolean = false;
   isChangeText: boolean = false;
+  dataSignPosition: any;
 
   data_api_step3: any = [
     {
@@ -145,6 +146,47 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     console.log(this.datas);
+    if (this.datas.is_copy) {
+      // cập nhật defind dữ liệu
+      let dataPosition: any[] = [];
+      let dataNotPosition: any[] = [];
+      // this.datas.determine_contract.forEach((res: any) => {
+      this.datas.determine_contract.forEach((res: any) => {
+        res.recipients.forEach((element: any) => {
+          let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == element.id)[0];
+          if (data_duplicate) {
+            // lấy ra dữ liệu bị trùng và update lại với dữ liệu mới;
+            data_duplicate.name = element.name;
+            data_duplicate.email = element.email;
+            data_duplicate.phoneNumber = element.phoneNumber;
+            data_duplicate.sign_type = element.sign_type;
+            data_duplicate.is_otp = element.is_otp;
+            data_duplicate['is_type_party'] = this.datas.determine_contract.type;
+            data_duplicate['role'] = data_duplicate.recipient.role;
+            dataPosition.push(data_duplicate)
+          } else {
+            element['is_type_party'] = this.datas.determine_contract.type;
+            element['role'] = element.role;
+            dataNotPosition.push(element)
+          }
+        })
+      })
+
+
+      // })
+
+      console.log(dataNotPosition, dataPosition);
+
+      let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
+      let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
+      this.dataSignPosition = [...data_sign_position, ...dataNotSignPosition];
+
+      this.dataSignPosition.forEach((res: any) => {
+        if (res.sign_unit == 'text') {
+          res['text_attribute_name'] = res.name;
+        }
+      })
+    }
 
     if (!this.data_api_step3) {
       this.datas.contract_user_sign = this.contractService.objDefaultSampleContract().contract_user_sign;
@@ -153,19 +195,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       let data_sign_config_cks = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
       let data_sign_config_cka = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-      // let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
-      // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+
+      let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
+      let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
 
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
       this.datas.contract_user_sign.forEach((element: any) => {
         console.log(element.sign_unit, element.sign_config);
         if (element.sign_unit == 'so_tai_lieu') {
-          // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+          Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
         } else if (element.sign_unit == 'chu_ky_so') {
           Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
         } else if (element.sign_unit == 'text') {
-          // Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+          Array.prototype.push.apply(element.sign_config, data_sign_config_text);
         } else if (element.sign_unit == 'chu_ky_anh') {
           Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
         }
@@ -218,7 +261,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     // convert base64 file pdf to url
-    this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+
+    if (this.datas.is_copy) {
+      let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
+      let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
+      if (fileContract_2) {
+        this.pdfSrc = fileContract_2.path;
+      } else {
+        this.pdfSrc = fileContract_1.path;
+      }
+    } else {
+      this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+    }
     // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
     // render pdf to canvas
     this.getPage();
