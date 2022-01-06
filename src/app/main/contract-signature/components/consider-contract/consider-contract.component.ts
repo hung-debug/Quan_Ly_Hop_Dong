@@ -1000,10 +1000,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
   async signImageC(signUpdatePayload: any) {
     this.spinner.show();
-    await this.signDigitalDocument();
-    /*this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId).subscribe(
+    this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId).subscribe(
       async (result) => {
-
+        await this.signDigitalDocument();
         this.toastService.showSuccessHTMLWithTimeout(
           [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
           , '', 1000);
@@ -1012,7 +1011,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
       }
-    )*/
+    )
   }
 
   async signContractSimKPI() {
