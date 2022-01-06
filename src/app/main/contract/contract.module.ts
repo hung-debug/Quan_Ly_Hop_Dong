@@ -42,6 +42,11 @@ import {NgxInputSearchModule} from "ngx-input-search";
 import { AddConnectDialogComponent } from './dialog/add-connect-dialog/add-connect-dialog.component';
 import { ShareContractDialogComponent } from './dialog/share-contract-dialog/share-contract-dialog.component';
 import { DeleteContractDialogComponent } from './dialog/delete-contract-dialog/delete-contract-dialog.component';
+import {InforContractCopyComponent} from "./copy-contract/model/infor-contract/infor-contract.component";
+import {SampleContractCopyComponent} from "./copy-contract/model/sample-contract/sample-contract.component";
+import {DetermineSignerCopyComponent} from "./copy-contract/model/determine-signer/determine-signer.component"
+import {ContractHeaderCopyComponent} from "./copy-contract/model/contract-header/contract-header.component";
+import {ConfirmInforContractCopyComponent} from "./copy-contract/model/confirm-infor-contract/confirm-infor-contract.component";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -66,13 +71,25 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AddConnectDialogComponent,
     ShareContractDialogComponent,
     DeleteContractDialogComponent,
+    //
+    InforContractCopyComponent,
+    SampleContractCopyComponent,
+    DetermineSignerCopyComponent,
+    ContractHeaderCopyComponent,
+    ConfirmInforContractCopyComponent
   ],
   exports: [
     ContractHeaderComponent,
     InforContractComponent,
     SampleContractComponent,
     ConfirmInforContractComponent,
-    DetermineSignerComponent
+    DetermineSignerComponent,
+    //
+    InforContractCopyComponent,
+    SampleContractCopyComponent,
+    DetermineSignerCopyComponent,
+    ContractHeaderCopyComponent,
+    ConfirmInforContractCopyComponent
   ],
   imports: [
     CommonModule,
@@ -110,7 +127,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     InforContractComponent,
     SampleContractComponent,
     DetermineSignerComponent,
-    SignContractComponent
+    SignContractComponent,
+    //
+    InforContractCopyComponent,
+    SampleContractCopyComponent,
+    DetermineSignerCopyComponent,
+    ContractHeaderCopyComponent,
+    ConfirmInforContractCopyComponent
   ],
   providers: [
     {

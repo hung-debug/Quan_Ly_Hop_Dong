@@ -217,7 +217,7 @@ export class ContractComponent implements OnInit {
     }
   }
 
-  
+
 
   autoSearch(event:any){
     this.p = 1;
@@ -265,8 +265,12 @@ export class ContractComponent implements OnInit {
     this.router.navigate(['main/form-contract/detail/' + id]);
   }
 
-  openCopy(id:number){
-    this.router.navigate(['main/form-contract/copy/' + id]);
+  openCopy(data: any, id:number){
+    // this.router.navigate(['main/form-contract/copy/' + id]);
+    console.log(this.contracts, id);
+    if (this.status != 'complete') {
+
+    }
   }
 
   openEdit(id:number){
