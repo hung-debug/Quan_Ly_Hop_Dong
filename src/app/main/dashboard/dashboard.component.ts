@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ContractService } from 'src/app/service/contract.service';
 import { DashboardService } from 'src/app/service/dashboard.service';
 import { UserService } from 'src/app/service/user.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -30,6 +31,9 @@ export class DashboardComponent implements OnInit {
   numberComplete:any=0;
   numberWaitComplete:any=0;
 
+  value1: string = 'off';
+  stateOptions: any[];
+
   contracts: any[] = [];
 
   constructor(
@@ -37,8 +41,12 @@ export class DashboardComponent implements OnInit {
     private dashboardService: DashboardService,
     private userService: UserService,
     private contractService:ContractService,
+    private router: Router,
   ) {
-
+    this.stateOptions = [
+      { label: 'HĐ của tôi', value: 'off' },
+      { label: 'HĐ của tổ chức', value: 'on' },
+    ];
   }
 
   ngOnInit(): void {
@@ -46,6 +54,12 @@ export class DashboardComponent implements OnInit {
     this.search();
 
     this.user = this.userService.getInforUser();
+  }
+
+  openLink(link:any) {
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate([link]);
+    });
   }
 
   search(){
@@ -130,7 +144,7 @@ export class DashboardComponent implements OnInit {
       });
     });
 
-    this.dashboardService.countContractReceived(this.filter_from_date, this.filter_to_date).subscribe(data => { 
+    this.dashboardService.countContractReceived("", "").subscribe(data => { 
       console.log(data);    
       this.numberWaitProcess = data.processing; 
       this.numberComplete = data.processed;

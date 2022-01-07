@@ -7,13 +7,13 @@
   </div>
   <div class="row">
     <div class="col-md-3">
-      <div style="background-color: #99E6FC;border-radius: 10px; color: white;">
+      <div class="header_card header_card_1" (click)="openLink('/main/contract-signature/receive/wait-processing')">
         <div class="row">
-          <div class="col-md-6" style="padding: 27px;text-align: center;">
+          <div class="col-md-6 text_header_card">
               <div>Cần xử lý</div>
-              <div style="font-size: 30px;padding-top: 10px;">{{numberWaitProcess}}</div>
+              <div class="number_header_card">{{numberWaitProcess}}</div>
           </div>
-          <div class="col-md-6" style="padding: 15px;text-align: center;">
+          <div class="col-md-6 img_header_card">
             <img
               src="../../../assets/img/db_header_1.svg"
               width="80px"
@@ -23,13 +23,13 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div style="background-color: #EF854B;border-radius: 10px; color: white;">
+      <div class="header_card header_card_2">
         <div class="row">
-          <div class="col-md-6" style="padding: 27px;text-align: center;">
+          <div class="col-md-6 text_header_card">
               <div>Sắp hết hạn</div>
-              <div style="font-size: 30px;padding-top: 10px;">{{numberExpire}}</div>
+              <div class="number_header_card">{{numberExpire}}</div>
           </div>
-          <div class="col-md-6" style="padding: 15px;text-align: center;">
+          <div class="col-md-6 img_header_card">
             <img
               src="../../../assets/img/db_header_2.svg"
               width="80px"
@@ -39,13 +39,13 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div style="background-color: #4B71F0;border-radius: 10px; color: white;">
+      <div class="header_card header_card_3">
         <div class="row">
-          <div class="col-md-6" style="padding: 27px;text-align: center;">
+          <div class="col-md-6 text_header_card">
               <div>Chờ phản hồi</div>
-              <div style="font-size: 30px;padding-top: 10px;">{{numberWaitComplete}}</div>
+              <div class="number_header_card">{{numberWaitComplete}}</div>
           </div>
-          <div class="col-md-6" style="padding: 15px;text-align: center;">
+          <div class="col-md-6 img_header_card">
             <img
               src="../../../assets/img/db_header_1.svg"
               width="80px"
@@ -55,13 +55,13 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div style="background-color: #00D0C2;border-radius: 10px; color: white;">
+      <div class="header_card header_card_4" (click)="openLink('/main/contract-signature/receive/processed')">
         <div class="row">
-          <div class="col-md-6" style="padding: 27px;text-align: center;">
+          <div class="col-md-6 text_header_card">
               <div>Hoàn thành</div>
-              <div style="font-size: 30px;padding-top: 10px;">{{numberComplete}}</div>
+              <div class="number_header_card">{{numberComplete}}</div>
           </div>
-          <div class="col-md-6" style="padding: 15px;text-align: center;">
+          <div class="col-md-6 img_header_card">
             <img
               src="../../../assets/img/db_header_3.svg"
               width="80px"
@@ -79,9 +79,11 @@
           <h3 style="color: #106DB6;">HỢP ĐỒNG TẠO</h3>
         </div>
       </div>
-      <div style="padding: 10px; background-color: white;border-radius: 10px;border: 1px solid #C7D0E9;">
+      <div class="body">
         <div class="row">
-          <div class="col-md-6"></div>
+          <div class="col-md-6" style="text-align: center;">
+            <p-selectButton [options]="stateOptions" [(ngModel)]="value1" optionLabel="label" optionValue="value"></p-selectButton>
+          </div>
           <div class="col-md-6">
             <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="filter_from_date" [showIcon]="true" dateFormat="dd/mm/yy" (onSelect)="search()"></p-calendar>
           </div>
@@ -100,7 +102,7 @@
           <h3 style="color: #106DB6;">THÔNG BÁO MỚI</h3>
         </div>
       </div>
-      <div style="padding: 10px; background-color: white;border-radius: 10px;border: 1px solid #C7D0E9;">
+      <div class="body">
         <div *ngIf="contracts.length == 0">Danh sách trống!</div>
         <div *ngIf="contracts.length > 0" style="height: 453px;"> 
           <div *ngFor="let item of contracts; let i = index" [style.border-bottom]="i != contracts.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px;">
