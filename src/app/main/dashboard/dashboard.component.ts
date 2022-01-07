@@ -28,15 +28,18 @@ export class DashboardComponent implements OnInit {
   numberWaitProcess:any=0;
   numberExpire:any=0;
   numberComplete:any=0;
+  numberWaitComplete:any=0;
+
+  contracts: any[] = [];
 
   constructor(
     private appService: AppService,
     private dashboardService: DashboardService,
     private userService: UserService,
+    private contractService:ContractService,
   ) {
 
   }
-
 
   ngOnInit(): void {
     this.appService.setTitle("menu.dashboard");
@@ -48,59 +51,8 @@ export class DashboardComponent implements OnInit {
   search(){
     this.dashboardService.countContractCreate(this.filter_from_date, this.filter_to_date).subscribe(data => {     
       console.log(data);     
-      this.numberComplete = data.total_signed;
-      this.numberExpire = data.total_expires;
-        this.chartCreated = new Chart({
-          colors: ['#407EF9', '#58A55C', '#ED1C24', '#FF710B', '#717070'],
-          chart: {
-            type: 'pie',
-            style: {
-              fontFamily: 'inherit',
-            }
-          },
-          title: {
-            text: this.chartContractCreated,
-            style: {
-              fontSize: '16px',
-              fontWeight: '500',
-            },
-            verticalAlign: 'bottom',
-          },
-          credits: {
-            enabled: false
-          },
-          plotOptions : {
-            pie: {
-              dataLabels: {
-                enabled: false,
-
-            },
-            showInLegend: true,
-                shadow: false,
-                center: ['50%', '50%'],
-                innerSize: '60%'
-            },
-          },
-
-          series : [{
-            type: 'pie',
-            name: 'Số hợp đồng',
-            data: [
-              ['Đang xử lý', data.total_process],
-              ['Hoàn thành', data.total_signed],
-              ['Từ chối', data.total_rejected],
-              ['Quá hạn', data.total_expires],
-              ['Hủy bỏ', data.total_cancel]
-            ],
-          }]
-        });
-    });
-
-    this.dashboardService.countContractReceived(this.filter_from_date, this.filter_to_date).subscribe(data => { 
-      console.log(data);    
-      this.numberWaitProcess = data.processing; 
-      this.chartReceived = new Chart({
-        colors: ['#407EF9', '#58A55C', '#ED1C24', '#FF710B'],
+      this.chartCreated = new Chart({
+        colors: ['#407EF9', '#58A55C', '#ED1C24', '#FF710B', '#717070'],
         chart: {
           type: 'column',
           style: {
@@ -108,11 +60,10 @@ export class DashboardComponent implements OnInit {
           }
         },
         title: {
-          text: this.chartContractReceived,
+          text: this.chartContractCreated,
           style: {
             fontSize: '16px',
             fontWeight: '500',
-
           },
           verticalAlign: 'bottom',
         },
@@ -120,7 +71,7 @@ export class DashboardComponent implements OnInit {
           enabled: false
         },
         legend: {
-          enabled: false
+          enabled: true
         },
         xAxis: {
           categories: [
@@ -143,19 +94,66 @@ export class DashboardComponent implements OnInit {
         series : [
         {
           type: 'column',
-          name: 'Số hợp đồng',
+          name: 'Đang xử lý',
           data: [
-              ['Chưa xử lý', data.processing],
+            ['Số hợp đồng', data.total_process],
           ]
         },
         {
           type: 'column',
-          name: 'Số hợp đồng',
+          name: 'Hoàn thành',
           data: [
-            ['Đã xử lý', data.processed]
+            ['Số hợp đồng', data.total_signed],
+          ]
+        },
+        {
+          type: 'column',
+          name: 'Từ chối',
+          data: [
+            ['Số hợp đồng', data.total_rejected],
+          ]
+        },
+        {
+          type: 'column',
+          name: 'Quá hạn',
+          data: [
+            ['Số hợp đồng', data.total_expires],
+          ]
+        },
+        {
+          type: 'column',
+          name: 'Hủy bỏ',
+          data: [
+            ['Số hợp đồng', data.total_cancel]
           ]
         }]
       });
+    });
+
+    this.dashboardService.countContractReceived(this.filter_from_date, this.filter_to_date).subscribe(data => { 
+      console.log(data);    
+      this.numberWaitProcess = data.processing; 
+      this.numberComplete = data.processed;
+      this.numberExpire = 0;
+      this.numberWaitComplete = 0;
+    });
+
+    this.dashboardService.getContractList().subscribe(data => {
+      this.contracts = data.entities;
+      console.log(this.contracts);
+      
+      this.contracts.forEach((key : any, v: any) => {
+        let participants = key.participants;
+        participants.forEach((key : any, val: any) => {
+          if (key.type == 1) {
+            this.contracts[v].sideA = key.name;
+          }else{
+            this.contracts[v].sideB = key.name;
+          }
+          console.log(this.contracts[v].sideA);
+        })
+      });
+      console.log(this.contracts);
     });
   }
 }

@@ -1,14 +1,19 @@
 
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-4">
-      <div style="background-color: #4B71F0;border-radius: 10px; color: white;">
+    <div class="col-md-12">
+      <h3 style="color: #106DB6;">HỢP ĐỒNG NHẬN</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div style="background-color: #99E6FC;border-radius: 10px; color: white;">
         <div class="row">
           <div class="col-md-6" style="padding: 27px;text-align: center;">
               <div>Cần xử lý</div>
               <div style="font-size: 30px;padding-top: 10px;">{{numberWaitProcess}}</div>
           </div>
-          <div class="col-md-6" style="padding: 15px;">
+          <div class="col-md-6" style="padding: 15px;text-align: center;">
             <img
               src="../../../assets/img/db_header_1.svg"
               width="80px"
@@ -17,14 +22,14 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div style="background-color: #EF854B;border-radius: 10px; color: white;">
         <div class="row">
           <div class="col-md-6" style="padding: 27px;text-align: center;">
               <div>Sắp hết hạn</div>
               <div style="font-size: 30px;padding-top: 10px;">{{numberExpire}}</div>
           </div>
-          <div class="col-md-6" style="padding: 15px;">
+          <div class="col-md-6" style="padding: 15px;text-align: center;">
             <img
               src="../../../assets/img/db_header_2.svg"
               width="80px"
@@ -33,14 +38,30 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
+      <div style="background-color: #4B71F0;border-radius: 10px; color: white;">
+        <div class="row">
+          <div class="col-md-6" style="padding: 27px;text-align: center;">
+              <div>Chờ phản hồi</div>
+              <div style="font-size: 30px;padding-top: 10px;">{{numberWaitComplete}}</div>
+          </div>
+          <div class="col-md-6" style="padding: 15px;text-align: center;">
+            <img
+              src="../../../assets/img/db_header_1.svg"
+              width="80px"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
       <div style="background-color: #00D0C2;border-radius: 10px; color: white;">
         <div class="row">
           <div class="col-md-6" style="padding: 27px;text-align: center;">
               <div>Hoàn thành</div>
               <div style="font-size: 30px;padding-top: 10px;">{{numberComplete}}</div>
           </div>
-          <div class="col-md-6" style="padding: 15px;">
+          <div class="col-md-6" style="padding: 15px;text-align: center;">
             <img
               src="../../../assets/img/db_header_3.svg"
               width="80px"
@@ -50,64 +71,63 @@
       </div>
     </div>
   </div>
+  <div class="row" style="padding: 20px 0;">
+    
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <h3 style="color: #106DB6;">HỢP ĐỒNG TẠO</h3>
+        </div>
+      </div>
+      <div style="padding: 10px; background-color: white;border-radius: 10px;border: 1px solid #C7D0E9;">
+        <div class="row">
+          <div class="col-md-6"></div>
+          <div class="col-md-6">
+            <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="filter_from_date" [showIcon]="true" dateFormat="dd/mm/yy" (onSelect)="search()"></p-calendar>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div [chart]="chartCreated"></div>
+            <div style="text-align: center;">{{'chart.contract.received' | translate}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <h3 style="color: #106DB6;">THÔNG BÁO MỚI</h3>
+        </div>
+      </div>
+      <div style="padding: 10px; background-color: white;border-radius: 10px;border: 1px solid #C7D0E9;">
+        <div *ngIf="contracts.length == 0">Danh sách trống!</div>
+        <div *ngIf="contracts.length > 0" style="height: 453px;"> 
+          <div *ngFor="let item of contracts; let i = index" [style.border-bottom]="i != contracts.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px;">
+            <div class="row">
+              <div class="col-md-12 item_contract_name">{{item.name}}</div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 item_contract_infor">{{'contract.side.a' | translate}}: {{item.sideA}}</div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 item_contract_infor">{{'contract.side.b' | translate}}: {{item.sideB}}</div>
+            </div>
+            <div class="row">
+              
+              <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
+                <span class="status_blue">{{item.status | pipe | translate}}</span>
+              </div>
+                
+              <div class="col-md-6 calendar_create">
+                <i class="fa fa-calendar fa_icon"></i><span class="item_date"> {{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
+              </div>
+          
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<!-- <div class="container-fluid">
-  <div class="row">
-    <div class="header" style="height: 150px;">
-      <div >
-        <div style="padding: 15px;color: white; font-size: 16px;">
-          Xin chào {{user.name}}
-        </div>
-        <div>
-          <button class="save-button" style="width: 170px;">Cần xử lý ({{numberCreate}})</button>
-          <button class="receive-button" style="width: 170px;">Hợp đồng cần xử lý ({{numberReceive}})</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row" style="padding-top: 10px;">
-    <div class="col-md-3">
-      <div>{{'createdate.start' | translate}}</div>
-      <div>
-        <p-calendar [(ngModel)]="filter_from_date" [showIcon]="true" dateFormat="dd/mm/yy" ></p-calendar>
-      </div>
-    </div> 
-    <div class="col-md-3">
-      <div>{{'createdate.end' | translate}}</div>
-      <div>
-        <p-calendar [(ngModel)]="filter_to_date" [showIcon]="true" dateFormat="dd/mm/yy" ></p-calendar>
-      </div>
-    </div>
-    <div class="col-md-3 btn_search">
-      <button class="btn btn-lg btn-block" (click)="search()">{{'btn.search' | translate }}</button>
-    </div>   
-  </div>
-  <div class="row" style="padding-top: 20px;">
-    <div class="col-md-1"></div>
-    <div class="col-md-5">
-      <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-          <div [chart]="chartCreated"></div>
-        </div>
-        <div class="col-md-2"></div>
-        <div class="col-md-12" style="text-align: center;">{{'chart.contract.created' | translate}}</div>
-      </div>
-    </div>
-
-    <div class="col-md-1"></div>
-
-    <div class="col-md-4">
-      <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-          <div [chart]="chartReceived"></div>
-        </div>
-        <div class="col-md-2"></div>
-        <div class="col-md-12" style="text-align: center;">{{'chart.contract.received' | translate}}</div>
-      </div>
-    </div>
-    <div class="col-md-1"></div>
-  </div>
-</div> -->
 

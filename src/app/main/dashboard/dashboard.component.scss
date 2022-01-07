@@ -40,7 +40,7 @@
     height: 33px;
   }
   .p-calendar-w-btn .p-inputtext{
-    border: 1px solid #106DB6 !important;
+    //border: 1px solid #106DB6 !important;
     outline: 0 !important;
     box-shadow: none !important;
   }
@@ -74,4 +74,25 @@
 }
 .header_1{
   background-image: url(../../../assets/img/banner_header.svg);
+}
+.item_contract_name {
+  font-weight: 500;
+  font-size: 16px;
+  color: #106DB6;
+  cursor: pointer;
+}
+
+.item_contract_infor{
+  color: #666666;
+}
+
+.status_blue{
+  color: #027e21;
+}
+
+.list_header{
+  color:#898989;
+  text-align: center;
+  padding: 12px 12px 0;
+  font-weight: 500;
 }
