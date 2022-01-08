@@ -44,6 +44,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     this.typeImageSignatureRadio = 2;
     this.datas = this.data;
     this.initListSignatureAccountUser();
+    this.imgSignAccountSelect = 'data:image/png;base64,' + this.datas.imgSignAcc;
   }
 
   addFileAttach() {

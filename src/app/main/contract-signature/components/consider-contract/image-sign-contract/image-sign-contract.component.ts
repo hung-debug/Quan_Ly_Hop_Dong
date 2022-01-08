@@ -9,6 +9,8 @@ import Swal from "sweetalert2";
 import {ImageDialogSignComponent} from "../image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "../hsm-dialog-sign/hsm-dialog-sign.component";
+import {UserService} from "../../../../../service/user.service";
+import {networkList} from "../../../../../data/data";
 
 @Component({
   selector: 'app-image-sign-contract',
@@ -23,8 +25,10 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   checkShowEdit = false;
   currentUser: any;
   value: string;
+  typeSignDigital: any;
   constructor(
     private dialog: MatDialog,
+    private userService: UserService,
 
   ) { }
 
@@ -32,6 +36,18 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     const currentUserC = JSON.parse(localStorage.getItem('currentUser') || '');
     if (currentUserC != null && currentUserC.customer?.info) {
       this.currentUser = currentUserC.customer?.info;
+    }
+    if (this.sign?.recipient?.sign_type) {
+      const typeSD = this.sign?.recipient?.sign_type.find((t: any) => t.id != 1);
+      if (typeSD) {
+        this.typeSignDigital = typeSD.id;
+      }
+    }
+    if (this.sign.sign_unit == 'chu_ky_so'
+      && this.sign?.recipient?.email == this.currentUser.email && !this.view
+      && this.typeSignDigital && this.typeSignDigital == 3
+    ) {
+      this.fetchDataUserSimPki();
     }
   }
 
@@ -45,18 +61,11 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doSign() {
-    let typeSignDigital = null;
-    if (this.sign?.recipient?.sign_type) {
-      const typeSD = this.sign?.recipient?.sign_type.find((t: any) => t.id != 1);
-      if (typeSD) {
-        typeSignDigital = typeSD.id;
-      }
-    }
     if (this.sign.sign_unit == 'chu_ky_anh' && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.openPopupSignContract(1);
     } else if (this.sign.sign_unit == 'chu_ky_so'
       && this.sign?.recipient?.email == this.currentUser.email && !this.view
-      && typeSignDigital && typeSignDigital == 3
+      && this.typeSignDigital && this.typeSignDigital == 3
     ) {
       this.openPopupSignContract(3);
     }
@@ -65,7 +74,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   confirmOtpSignContract() {
     const data = {
       title: 'Xác nhận otp',
-      is_content: 'forward_contract'
+      is_content: 'forward_contract',
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -91,7 +100,8 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   imageDialogSignOpen() {
     const data = {
       title: 'KÝ HỢP ĐỒNG ',
-      is_content: 'forward_contract'
+      is_content: 'forward_contract',
+      imgSignAcc: this.datas.imgSignAcc
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -115,12 +125,14 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '497px';
+    dialogConfig.height = '330px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result && result.phone && result.networkCode) {
         this.sign.phone = result.phone;
+        this.sign.phone_tel = result.phone_tel;
         this.sign.networkCode = result.networkCode;
       }
     })
@@ -147,7 +159,18 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.checkShowEdit = false;
   }
 
-
+  fetchDataUserSimPki() {
+    const nl = networkList;
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    this.userService.getUserById(this.currentUser.id).subscribe(
+      (data) => {
+        const itemNameNetwork = nl.find((nc: any) => nc.id = data.phone_tel);
+        this.sign.phone = data.phone_sign;
+        this.sign.phone_tel = data.phone_tel;
+        this.sign.networkCode = (itemNameNetwork && itemNameNetwork.name) ? itemNameNetwork.name.toLowerCase() : null;
+      }
+    )
+  }
 
   forWardContract() {
     const data = {
