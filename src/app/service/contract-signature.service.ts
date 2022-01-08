@@ -19,6 +19,8 @@ export class ContractSignatureService {
 
   token: any;
   addContractUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
+  shareContractUrl: any = `${environment.apiUrl}/api/v1/shares`;
+  shareListContractUrl: any = `${environment.apiUrl}/api/v1/shares`;
 
   errorData:any = {};
   redirectUrl: string = '';
@@ -55,6 +57,26 @@ export class ContractSignatureService {
 
   public getContractList(): Observable<any> {
     return this.http.get("/assets/data-contract-received.json");
+  }
+
+  shareContract(email: any, id:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      email: email,
+      contract_id: id
+    });
+    console.log(body);
+    return this.http.post<any>(this.shareContractUrl, body, {'headers': headers}).pipe();
+  }
+
+  public getContractShareList(): Observable<any> {
+    this.getCurrentUser();
+    let shareListContractUrl = this.shareListContractUrl + "?size=1000";
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<any[]>(shareListContractUrl, {headers}).pipe();
   }
 
   getProfileObs(): Observable<string> {

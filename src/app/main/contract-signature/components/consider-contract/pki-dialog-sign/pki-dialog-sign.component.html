@@ -2,11 +2,11 @@
   <div style="text-align: center; font-weight: bold">
     <h3 style="color: #106DB6; font-weight: bold">{{this.datas.title}}</h3>
   </div>
-  <form (ngSubmit)="onSubmit()" [formGroup]="myForm" class="content">
+  <div class="content">
     <div class="name-item">
       <div class="label_item">Số điện thoại: <span class="require_star">*</span></div>
       <div class="form-control input-line">
-        <input autocomplete="off" type="text" formControlName="name" class="input-text" placeholder="Nhập số điện thoại" autofocus>
+        <input autocomplete="off" type="text" [(ngModel)]="phoneNum" class="input-text" placeholder="Nhập số điện thoại" autofocus>
       </div>
     </div>
 
@@ -18,13 +18,13 @@
     <div class="select-option">
       <button
         class="dx-button-form dx-button-close dx-button-90"
-        (click)="dialog.closeAll()"
+        (click)="dialogRef.close()"
         type="button">Thoát
       </button>
       <button
-        class="dx-button-form dx-button-submit dx-button-90"
+        class="dx-button-form dx-button-submit dx-button-90" (click)="onSubmit()"
         type="default">Xác nhận
       </button>
     </div>
-  </form>
+  </div>
 </div>

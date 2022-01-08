@@ -20,8 +20,11 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="label text-color">Email <span class="required-title">*</span></div>
-                <div>
+                <!-- <div>
                     <p-chips styleClass="font" type="text" formControlName="email" separator="," placeholder="Email ngăn cách và kết thúc bởi dấu ,"></p-chips>
+                </div> -->
+                <div class="input-data">
+                    <input type="text" formControlName="email" placeholder="Email ngăn cách nhau bởi dấu ,">
                 </div>
                 <div *ngIf="submitted && f.email.errors" class="invalid">
                     <div *ngIf="f.email.errors.required">Email không được để trống</div>
