@@ -1,4 +1,4 @@
-.required-title {
+.required-title, .invalid {
     color: red;
 }
 
@@ -41,4 +41,9 @@
     background-color: #106DB6;
     font-size: 13px;
     margin: 0 10px;
+}
+:host ::ng-deep {
+    .p-listbox {
+        border: 1px solid #106DB6;
+    }
 }
