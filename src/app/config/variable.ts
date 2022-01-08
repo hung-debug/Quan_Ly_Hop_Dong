@@ -16,6 +16,29 @@ export const variable = {
 }
 
 export const type_signature = [
+  // {
+  //   id: 1,
+  //   name: "Ký ảnh",
+  //   is_otp: false
+  // },
+  {
+    id: 2,
+    name: "Ký số bằng USB token",
+    is_otp: false
+  },
+  {
+    id: 3,
+    name: "Ký số bằng sim PKI",
+    is_otp: false
+  },
+  {
+    id: 4,
+    name: "Ký số bằng HSM",
+    is_otp: false
+  }
+];
+
+export const type_signature_personal_party = [
   {
     id: 1,
     name: "Ký ảnh",
@@ -37,3 +60,9 @@ export const type_signature = [
     is_otp: false
   }
 ]
+
+export const type_signature_doc = [{
+  id: 2,
+  name: "Ký số bằng USB token",
+  is_otp: false
+}]

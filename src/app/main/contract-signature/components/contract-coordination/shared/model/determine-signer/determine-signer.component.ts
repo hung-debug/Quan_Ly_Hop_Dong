@@ -1,6 +1,11 @@
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {type_signature, variable} from "../../../../../../../config/variable";
+import {
+  type_signature,
+  type_signature_doc,
+  type_signature_personal_party,
+  variable
+} from "../../../../../../../config/variable";
 import {Helper} from "../../../../../../../core/Helper";
 import {ContractService} from "../../../../../../../service/contract.service";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -39,8 +44,12 @@ export class DetermineSignerComponent implements OnInit {
 
   //dropdown
   signTypeList: Array<any> = type_signature;
+  signTypeList_personal_partner: Array<any> =  type_signature_personal_party;
+  signType_doc: Array<any> = type_signature_doc;
+
   dropdownSignTypeSettings: any = {};
   getNameIndividual: string = "";
+  is_change_party: boolean = false;
 
 
   //dropdown
@@ -94,6 +103,8 @@ export class DetermineSignerComponent implements OnInit {
       limitSelection: 2,
       disabledField: 'item_disable',
     };
+
+    if (this.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
   }
 
   // ngOnChanges(changes: SimpleChanges) {
@@ -735,7 +746,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeType(e: any, item: any, index: number) {
-    console.log(item, e);
+    // console.log(item, e);
     item.name = "";
     let newArr: any[] = [];
     for (let i = 0; i < item.recipients.length; i++) {
@@ -760,6 +771,16 @@ export class DetermineSignerComponent implements OnInit {
       })
     }
     this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
+
+    if (item.type == 3) {
+      this.data_organization.ordering = 2;
+      item.ordering = 1;
+      this.is_change_party = true;
+    } else {
+      this.data_organization.ordering = 1;
+      item.ordering = 2;
+      this.is_change_party = false;
+    }
   }
 
 }
