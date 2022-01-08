@@ -575,6 +575,13 @@ export class ContractService {
   }
 
 
+  convertUrltoBinary(res: any) {
+    const headers = new HttpHeaders().append('Content-Type', 'application/binary');
+    // @ts-ignore
+    return this.http.get(res, { responseType: 'binary', headers })
+  }
+
+
   objDefaultSampleContract() {
     return {
       file_content: "base64",

@@ -77,17 +77,22 @@ export class AddContractComponent implements OnInit, OnDestroy, AfterViewInit {
       this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
       if (this.message) {
         let fileName = this.message.i_data_file_contract.filter((p: any) => p.type == 1)[0];
+        let fileNameAttach = this.message.i_data_file_contract.filter((p: any) => p.type == 3)[0];
         if (fileName) {
           this.message.is_data_contract['file_name'] = fileName.filename;
           this.message.is_data_contract['contractFile'] = fileName.path;
-          this.message.is_data_contract['is_copy'] = true;
         }
+        if (fileNameAttach) {
+          this.message.is_data_contract['file_name_attach'] = fileNameAttach.filename;
+          this.message.is_data_contract['attachFile'] = fileNameAttach.path;
+        }
+        this.message.is_data_contract['is_copy'] = true;
         this.datas.determine_contract = this.message.is_data_contract.participants;
         this.datas['is_data_object_signature'] = this.message.is_data_object_signature;
         this.datas = Object.assign(this.datas, this.message.is_data_contract);
         console.log(this.datas, this.message);
       }
-    }
+    } else this.message = undefined;
 
   }
 

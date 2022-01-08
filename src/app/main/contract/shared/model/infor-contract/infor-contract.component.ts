@@ -77,14 +77,11 @@ export class InforContractComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.datas.sign_time) {
-      this.datas.sign_time = moment(this.datas.sign_time).add(30, 'day').toDate();
-    }
     this.name = this.datas.name ? this.datas.name : null;
     this.code = this.datas.code ? this.datas.code : null;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
-    this.sign_time = this.datas.sign_time ? this.datas.sign_time : moment(new Date()).add(30, 'day').toDate() ;
+    this.sign_time = this.datas.sign_time ? moment(this.datas.sign_time).add(30, 'day').toDate() : moment(new Date()).add(30, 'day').toDate() ;
     this.notes = this.datas.notes ? this.datas.notes : null;
 
     this.convertData(this.datas);
@@ -226,14 +223,11 @@ export class InforContractComponent implements OnInit {
             this.datas.fileBucket = data.file_object.bucket;
             this.contractService.addDocument(this.datas).subscribe((data) => {
                 console.log(JSON.stringify(data));
-
-
                 //upload file hop dong lan 2
                 this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
                   this.datas.filePathDone = data.file_object.file_path;
                   this.datas.fileNameDone = data.file_object.filename;
                   this.datas.fileBucketDone = data.file_object.bucket;
-
                   this.contractService.addDocumentDone(this.datas).subscribe((data) => {
                     this.datas.document_id = data?.id;
                     console.log(data);
@@ -327,10 +321,10 @@ export class InforContractComponent implements OnInit {
   }
 
   // --next step 2
-  next() {
+  async next() {
     this.spinner.show();
     if (!this.validData()) {
-      this.spinner.hide();
+      return;
     } else {
       // gán value step 1 vào datas
       this.datas.name = this.name;
@@ -339,10 +333,12 @@ export class InforContractComponent implements OnInit {
       this.datas.notes = this.notes;
 
       this.defineData(this.datas);
-
       const fileReader = new FileReader();
       if (this.datas.is_copy) {
-        this.datas.file_content = this.datas.contractFile;
+        // this.datas.file_content = this.datas.contractFile;
+        await this.getConvertToFileBinary(this.datas.contractFile, 'contractFile');
+        if (this.datas.attachFile)
+        await this.getConvertToFileBinary(this.datas.attachFile, 'attachFile');
       } else {
         fileReader.readAsDataURL(this.datas.contractFile);
         fileReader.onload = (e) => {
@@ -351,16 +347,22 @@ export class InforContractComponent implements OnInit {
           this.datas.file_content = base64result;
         };
       }
-
-      // this.callAPI();
-
       this.step = variable.stepSampleContract.step2;
       this.datas.stepLast = this.step;
       // this.datas.document_id = '1';
       this.nextOrPreviousStep(this.step);
+      console.log(this.datas);
       this.spinner.hide();
+      // await this.callAPI();
     }
+  }
 
+  async getConvertToFileBinary(res: any, file_type: string) {
+    await this.contractService.convertUrltoBinary(res).toPromise().then((res) => {
+      this.datas[file_type] = res;
+    }, () => {
+      this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra!', "", 1000);
+    })
   }
 
   convertData(datas:any){
