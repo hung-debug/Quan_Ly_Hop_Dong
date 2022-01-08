@@ -26,14 +26,14 @@ export class RoleComponent implements OnInit {
   files:any[];
 
   ngOnInit(): void {
-    this.appService.setTitle("DANH SÁCH VAI TRÒ");
+    this.appService.setTitle("role.list");
     this.searchRole();
 
     this.cols = [
-      { field: 'name', header: 'Tên vai trò', style:'text-align: left;' },
-      { field: 'code', header: 'Mã vai trò', style:'text-align: left;' },
-      { field: 'role', header: 'Chức năng vai trò', style:'text-align: left;' },
-      { field: 'id', header: 'Quản lý', style:'text-align: center;' },
+      {header: 'role.name', style:'text-align: left;' },
+      {header: 'role.code', style:'text-align: left;' },
+      {header: 'role.function', style:'text-align: left;' },
+      {header: 'role.manage', style:'text-align: center;' },
       ];
    
   }
@@ -49,7 +49,7 @@ export class RoleComponent implements OnInit {
 
   addRole() {
     const data = {
-      title: 'THÊM MỚI VAI TRÒ'
+      title: 'role.add'
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AddRoleComponent, {
@@ -66,7 +66,7 @@ export class RoleComponent implements OnInit {
 
   editRole(id:any) {
     const data = {
-      title: 'CẬP NHẬT THÔNG TIN VAI TRÒ',
+      title: 'role.update',
       id: id,
     };
     // @ts-ignore
@@ -84,7 +84,7 @@ export class RoleComponent implements OnInit {
 
   detailRole(id:any) {
     const data = {
-      title: 'THÔNG TIN VAI TRÒ',
+      title: 'role.information',
       id: id,
     };
     // @ts-ignore

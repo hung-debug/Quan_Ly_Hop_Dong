@@ -24,13 +24,13 @@ export class ContractTypeComponent implements OnInit {
   cols: any[];
 
   ngOnInit(): void {
-    this.appService.setTitle("DANH SÁCH LOẠI HỢP ĐỒNG");
+    this.appService.setTitle("contract-type.list");
     this.searchContractType();
 
     this.cols = [
-      { field: 'name', header: 'Tên loại hợp đồng', style:'text-align: left;' },
-      { field: 'code', header: 'Mã loại hợp đồng', style:'text-align: left;' },
-      { field: 'id', header: 'Quản lý', style:'text-align: center;' },
+      {header: 'contract-type.name', style:'text-align: left;' },
+      {header: 'contract-type.code', style:'text-align: left;' },
+      {header: 'contract-type.manage', style:'text-align: center;' },
       ];
   }
 
@@ -44,7 +44,7 @@ export class ContractTypeComponent implements OnInit {
 
   addContractType() {
     const data = {
-      title: 'THÊM MỚI LOẠI HỢP ĐỒNG'
+      title: 'contract-type.add'
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AddContractTypeComponent, {
@@ -61,7 +61,7 @@ export class ContractTypeComponent implements OnInit {
 
   editContractType(id:any) {
     const data = {
-      title: 'CẬP NHẬT THÔNG TIN LOẠI HỢP ĐỒNG',
+      title: 'contract-type.update',
       id: id,
     };
     // @ts-ignore
@@ -79,7 +79,7 @@ export class ContractTypeComponent implements OnInit {
 
   detailContractType(id:any) {
     const data = {
-      title: 'THÔNG TIN LOẠI HỢP ĐỒNG',
+      title: 'contract-type.information',
       id: id,
     };
     // @ts-ignore

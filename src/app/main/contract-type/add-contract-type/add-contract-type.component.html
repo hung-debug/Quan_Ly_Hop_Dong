@@ -1,11 +1,11 @@
 <div class="container-fluid">
     <div style="text-align: center; font-weight: bold">
-      <h3 style="color: #106DB6; font-family: inherit;">{{this.datas.title}}</h3>
+      <h3 style="color: #106DB6; font-family: inherit; text-transform: uppercase;">{{this.datas.title | translate}}</h3>
     </div>
     <form (ngSubmit)="onSubmit()" [formGroup]="addForm" class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="label text-color">Mã loại hợp đồng <span class="required-title">*</span></div>
+                <div class="label text-color">{{'contract-type.code' | translate}} <span class="required-title">*</span></div>
                 <div class="input-data">
                     <input type="text" formControlName="code" autofocus>
                 </div>
@@ -17,7 +17,7 @@
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-12">
-                <div class="label text-color">Tên loại hợp đồng <span class="required-title">*</span></div>
+                <div class="label text-color">{{'contract-type.name' | translate}} <span class="required-title">*</span></div>
                 <div class="input-data">
                     <input type="text" formControlName="name">
                 </div>
@@ -28,8 +28,8 @@
         </div>
     
         <div class="row" style="justify-content: center;padding-top: 10px;">
-            <button class="cancel-button" (click)="dialog.closeAll()" type="button">Hủy</button>
-            <button class="save-button">Lưu lại</button>
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
+            <button class="save-button">{{'btn.update' | translate}}</button>
         </div>
     </form>
   </div>

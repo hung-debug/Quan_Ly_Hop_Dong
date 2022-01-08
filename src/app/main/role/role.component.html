@@ -1,21 +1,19 @@
 <div class="container-fluid">
     <div class="row">
-      <div class="col-md-5">
-        <div>Tên vai trò</div>
+      <div class="col-md-3">
+        <div>{{'role.name' | translate}}</div>
         <div class="input-line">
             <input type="text" [(ngModel)]="name" class="input_text"/>
         </div>
       </div>
-      <div class="col-md-5">
-        <div>Mã vai trò</div>
+      <div class="col-md-3">
+        <div>{{'role.code' | translate}}</div>
         <div class="input-line">
             <input type="text" [(ngModel)]="code" class="input_text"/>
         </div>
       </div>
-      <div class="col-md-2 btn_search" style="text-align: end; padding: 0;">
+      <div class="col-md-6 btn_search">
         <button class="btn btn-lg btn-block btn_submit" (click)="searchRole()">{{'btn.search' | translate }}</button>
-      </div>
-      <div class="col-md-2 btn_search" style="text-align: left; padding: 0; margin-top: 10px;">
         <button class="btn btn-lg btn-block btn_submit" (click)="addRole()">{{'btn.add' | translate }}</button>
       </div>
     </div>
@@ -24,7 +22,7 @@
         <ng-template pTemplate="header" let-columns>
           <tr>
               <th *ngFor="let col of cols" [style]='col.style'>
-                {{col.header}}
+                {{col.header | translate}}
               </th>
           </tr>
         </ng-template>

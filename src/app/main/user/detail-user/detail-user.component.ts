@@ -47,7 +47,7 @@ export class DetailUserComponent implements OnInit {
      }
 
   ngOnInit(): void {
-    this.appService.setTitle('THÔNG TIN NGƯỜI DÙNG');
+    this.appService.setTitle('user.information.v2');
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];
       this.userService.getUserById(this.id).subscribe(

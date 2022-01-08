@@ -11,6 +11,7 @@ export class DashboardService {
 
   countContractCreateUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-contract`;
   countContractReceivedUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-process`;
+  listContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
 
   token:any;
   customer_id:any;
@@ -51,6 +52,14 @@ export class DashboardService {
     let countContractReceivedUrl = this.countContractReceivedUrl + '?from_date=' + from_date + '&to_date=' + to_date;
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(countContractReceivedUrl, {headers}).pipe();
+  }
+
+  public getContractList(): Observable<any> {
+    this.getCurrentUser();
+    let listContractUrl = this.listContractUrl + '?size=5';
+    console.log(listContractUrl);
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<any[]>(listContractUrl, {headers}).pipe();
   }
 
 }
