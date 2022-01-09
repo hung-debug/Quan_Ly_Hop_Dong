@@ -272,37 +272,43 @@ export class ContractComponent implements OnInit, OnDestroy {
     this.router.navigate(['main/form-contract/detail/' + id]);
   }
 
-  openCopy(data: any, id:number){
+  openCopy(id:number){
     // this.router.navigate(['main/form-contract/copy/' + id]);
-    console.log(this.contracts, id, this.status);
+    // console.log(this.contracts, id, this.status);
     if (this.status != 'complete') {
-      this.spinner.show();
-      this.contractService.getDetailContract(id).subscribe((rs: any) => {
-        let data_api = {
-          is_data_contract: rs[0],
-          i_data_file_contract: rs[1],
-          is_data_object_signature: rs[2]
-        }
-        this.contractService.changeMessage(data_api);
-        localStorage.setItem('is_copy', 'true');
-        setTimeout(() => {
-          void this.router.navigate(['/main/form-contract/add']);
-        }, 100)
-      }, () => {
-        this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
-      }, () => {
-        this.spinner.hide();
-      })
+      this.getDataContract(id, 'copy');
     }
   }
 
   openEdit(id:number){
-    this.router.navigate(['main/form-contract/edit/' + id]);
-    //@ts-ignore
-    if (JSON.parse(localStorage.getItem('is_copy'))) {
-      localStorage.removeItem('is_copy');
-    }
+    // //@ts-ignore
+    // if (JSON.parse(localStorage.getItem('is_copy'))) {
+    //   localStorage.removeItem('is_copy');
+    // }
+    this.getDataContract(id, 'edit')
+  }
+
+  getDataContract(id: number, action: string) {
+    this.spinner.show();
+    this.contractService.getDetailContract(id).subscribe((rs: any) => {
+      let data_api = {
+        is_data_contract: rs[0],
+        i_data_file_contract: rs[1],
+        is_data_object_signature: rs[2]
+      }
+      this.contractService.changeMessage(data_api);
+      localStorage.setItem('is_copy', 'true');
+      setTimeout(() => {
+        if (action == 'copy')
+        void this.router.navigate(['main/form-contract/copy/' + id]);
+        else void this.router.navigate(['main/form-contract/edit/' + id]);
+      }, 100)
+    }, () => {
+      this.spinner.hide();
+      this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+    }, () => {
+      this.spinner.hide();
+    })
   }
 
   deleteItem(id:number){

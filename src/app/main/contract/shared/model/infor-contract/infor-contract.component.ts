@@ -231,7 +231,6 @@ export class InforContractComponent implements OnInit {
                   this.contractService.addDocumentDone(this.datas).subscribe((data) => {
                     this.datas.document_id = data?.id;
                     console.log(data);
-
                     this.contractService.getDataNotifyOriganzation().subscribe((data: any) => {
                       console.log(JSON.stringify(data));
                       this.datas.name_origanzation = data.name;
@@ -333,26 +332,26 @@ export class InforContractComponent implements OnInit {
       this.datas.notes = this.notes;
 
       this.defineData(this.datas);
-      const fileReader = new FileReader();
-      if (this.datas.is_copy) {
-        // this.datas.file_content = this.datas.contractFile;
-        await this.getConvertToFileBinary(this.datas.contractFile, 'contractFile');
-        if (this.datas.attachFile)
-        await this.getConvertToFileBinary(this.datas.attachFile, 'attachFile');
-      } else {
-        fileReader.readAsDataURL(this.datas.contractFile);
-        fileReader.onload = (e) => {
-          //@ts-ignore
-          const base64result = fileReader.result.toString().split(',')[1];
-          this.datas.file_content = base64result;
-        };
-      }
+
       this.step = variable.stepSampleContract.step2;
       this.datas.stepLast = this.step;
       // this.datas.document_id = '1';
       this.nextOrPreviousStep(this.step);
-      console.log(this.datas);
-      this.spinner.hide();
+      // console.log(this.datas);
+
+      // const fileReader = new FileReader();
+      // if (this.datas.is_copy) {
+      //   await this.getConvertToFileBinary(this.datas.contractFile, 'contractFile');
+      //   if (this.datas.attachFile)
+      //   await this.getConvertToFileBinary(this.datas.attachFile, 'attachFile');
+      // } else {
+      //   fileReader.readAsDataURL(this.datas.contractFile);
+      //   fileReader.onload = (e) => {
+      //     if (fileReader.result)
+      //     this.datas.file_content = fileReader.result.toString().split(',')[1];
+      //   };
+      // }
+
       // await this.callAPI();
     }
   }
