@@ -498,14 +498,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         });
         this.list_sign_name.forEach((element: any) => {
           if (name_accept_signature == 'chu_ky_anh') {
-            if (element.sign_type.some((p: any) => p.id == 1) && element.role != 2) {
-              element.is_disable = false;
-            } else element.is_disable = true;
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
           } else if (name_accept_signature == 'chu_ky_so') {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2) {
-              element.is_disable = false;
-            } else element.is_disable = true;
-          } else element.is_disable = false;
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
+          } else element.is_disable = element.role != 4;
           // else if (name_accept_signature == 'so_tai_lieu' && this.datas.code) {
           //   element.is_disable = true;
           // }
@@ -851,20 +847,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.list_sign_name.forEach((item: any) => {
           // if (item.id == d.id) {
           if (d.sign_unit == 'chu_ky_anh') {
-            if (item.sign_type.some((p: any) => p.id == 1) && item.role != 2) {
-              item.is_disable = false;
-            } else item.is_disable = true;
+            item.is_disable = !(item.sign_type.some((p: any) => p.id == 1) && item.role != 2);
           } else if (d.sign_unit == 'chu_ky_so') {
-            if (item.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && item.role != 2) {
-              item.is_disable = false;
-            } else item.is_disable = true;
-          } else item.is_disable = false;
+            item.is_disable = !(item.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && item.role != 2);
+          } else item.is_disable = item.role != 4;
           // else if (d.sign_unit == 'so_tai_lieu' && this.datas.code) {
           //   item.is_disable = true;
           // }
-          if (d.name && item.name == d.name) {
-            item.selected = true;
-          } else item.selected = false;
+          item.selected = d.name && item.name == d.name;
         })
 
         if (!d.name) //@ts-ignore
