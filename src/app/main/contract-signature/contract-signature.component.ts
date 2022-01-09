@@ -11,6 +11,8 @@ import {HttpClient} from "@angular/common/http";
 import {ContractService} from "../../service/contract.service";
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { UploadService } from 'src/app/service/upload.service';
+import { ToastService } from 'src/app/service/toast.service';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract-signature.component.html',
@@ -56,26 +58,10 @@ export class ContractSignatureComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private dialog: MatDialog,
+              private uploadService: UploadService,
+              private toastService: ToastService,
   ) {
     this.constantModel = contractModel;
-  }
-
-  open(content: any) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   ngOnInit(): void {
@@ -123,78 +109,125 @@ export class ContractSignatureComponent implements OnInit {
 
       this.getContractList();
     });
-
-
   }
 
   private getContractList() {
     this.p = 1;
-    //get list contract
-    this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
-      if (this.filter_status == 0) {
-        this.contracts = data.entities.filter((i: any) => i.status == 1)
-      } else {
-        this.contracts = data.entities.filter((i: any) => (i.status == 2 || i.status == 3))
-      }
-
-
-      //   this.contracts.forEach((element,index)=>{
-      //     if(element.status==0) delete this.contracts[index];
-      //  });
-
-      this.pageTotal = this.contracts.length;
-      console.log(this.contracts);
-      if (this.pageTotal == 0) {
-        this.p = 0;
-        this.pageStart = 0;
-        this.pageEnd = 0;
-      } else {
-        this.setPage();
-      }
-      this.contracts.forEach((key: any, v: any) => {
-        let contractId = key.participant.contract.id;
-        let contractName = key.participant.contract.name;
-        let contractNumber = key.participant.contract.code;
-        let contractSignTime = key.participant.contract.sign_time;
-        let contractCreateTime = key.participant.contract.created_time;
-        this.contracts[v].contractId = contractId;
-        this.contracts[v].contractName = contractName;
-        this.contracts[v].contractNumber = contractNumber;
-        this.contracts[v].contractSignTime = contractSignTime;
-        this.contracts[v].contractCreateTime = contractCreateTime;
-        // participant.forEach((key : any, val: any) => {
-        //   if (key.type == 1) {
-        //     this.contracts[v].sideA = key.name;
-        //   }else{
-        //     this.contracts[v].sideB = key.name;
-        //   }
-        //   console.log(this.contracts[v].sideA);
-        // })
+    //get list contract share
+    if(this.filter_status == -1){
+      this.contractService.getContractShareList().subscribe(data => {
+        this.contracts = data.entities;
+        this.pageTotal = this.contracts.length;
+        if (this.pageTotal == 0) {
+          this.p = 0;
+          this.pageStart = 0;
+          this.pageEnd = 0;
+        } else {
+          this.setPage();
+        }
+        this.contracts.forEach((key : any, v: any) => {
+          let participants = key.participants;
+          participants.forEach((key : any, val: any) => {
+            if (key.type == 1) {
+              this.contracts[v].sideA = key.name;
+            }else{
+              this.contracts[v].sideB = key.name;
+            }
+          })
+        });
       });
-      console.log(this.contracts);
-      console.log(this.pageTotal);
-    });
+    }else{
+      this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
+        if (this.filter_status == 0) {
+          this.contracts = data.entities.filter((i: any) => i.status == 1)
+        } else {
+          this.contracts = data.entities.filter((i: any) => (i.status == 2 || i.status == 3))
+        }
+  
+        this.pageTotal = this.contracts.length;
+        if (this.pageTotal == 0) {
+          this.p = 0;
+          this.pageStart = 0;
+          this.pageEnd = 0;
+        } else {
+          this.setPage();
+        }
+        this.contracts.forEach((key: any, v: any) => {
+          this.contracts[v].contractId = key.participant.contract.id;
+          this.contracts[v].contractName = key.participant.contract.name;
+          this.contracts[v].contractNumber = key.participant.contract.code;
+          this.contracts[v].contractSignTime = key.participant.contract.sign_time;
+          this.contracts[v].contractCreateTime = key.participant.contract.created_time;
+        });
+      });
+    }
+  }
+
+  //auto search
+  autoSearch(event: any) {
+    this.p = 1;
+    //get list contract share
+    if(this.filter_status == -1){
+      this.contractService.getContractShareList().subscribe(data => {
+        this.contracts = this.transform(data.entities, event);
+        this.pageTotal = this.contracts.length;
+        if (this.pageTotal == 0) {
+          this.p = 0;
+          this.pageStart = 0;
+          this.pageEnd = 0;
+        } else {
+          this.setPage();
+        }
+  
+        this.contracts.forEach((key : any, v: any) => {
+          let participants = key.participants;
+          participants.forEach((key : any, val: any) => {
+            if (key.type == 1) {
+              this.contracts[v].sideA = key.name;
+            }else{
+              this.contracts[v].sideB = key.name;
+            }
+          })
+        });
+      });
+    }else{
+      this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
+        if (this.filter_status == 0) {
+          this.contracts = this.transform(data.entities.filter((i: any) => i.status == 1), event);
+        } else {
+          this.contracts = this.transform(data.entities.filter((i: any) => (i.status == 2 || i.status == 3)), event);
+        }
+        this.pageTotal = this.contracts.length;
+        if (this.pageTotal == 0) {
+          this.p = 0;
+          this.pageStart = 0;
+          this.pageEnd = 0;
+        } else {
+          this.setPage();
+        }
+  
+        this.contracts.forEach((key: any, v: any) => {
+          this.contracts[v].contractId = key.participant.contract.id;
+          this.contracts[v].contractName = key.participant.contract.name;
+          this.contracts[v].contractNumber = key.participant.contract.code;
+          this.contracts[v].contractSignTime = key.participant.contract.sign_time;
+          this.contracts[v].contractCreateTime = key.participant.contract.created_time;
+        });
+      });
+    }
   }
 
   private convertActionStr(): string {
-
-
     return 'contract.list.received';
-
   }
 
   private convertStatusStr() {
     if (this.status == 'wait-processing') {
       this.filter_status = 0;
-      this.title = 'contract.status.wait-processing';
     } else if (this.status == 'processed') {
       this.filter_status = 1;
-      this.title = 'contract.status.processed';
     } else if (this.status == 'share') {
       this.filter_status = -1;
-      this.title = 'contract.status.share';
-    } else {
-      this.title = '';
     }
   }
 
@@ -204,46 +237,6 @@ export class ContractSignatureComponent implements OnInit {
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
-  }
-
-  autoSearch(event: any) {
-    this.p = 1;
-    this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
-      if (this.filter_status == 0) {
-        this.contracts = this.transform(data.entities.filter((i: any) => i.status == 1), event);
-      } else {
-        this.contracts = this.transform(data.entities.filter((i: any) => (i.status == 2 || i.status == 3)), event);
-      }
-      this.pageTotal = this.contracts.length;
-      if (this.pageTotal == 0) {
-        this.p = 0;
-        this.pageStart = 0;
-        this.pageEnd = 0;
-      } else {
-        this.setPage();
-      }
-
-      this.contracts.forEach((key: any, v: any) => {
-        let contractId = key.participant.contract.id;
-        let contractName = key.participant.contract.name;
-        let contractNumber = key.participant.contract.code;
-        let contractSignTime = key.participant.contract.sign_time;
-        let contractCreateTime = key.participant.contract.created_time;
-        this.contracts[v].contractId = contractId;
-        this.contracts[v].contractName = contractName;
-        this.contracts[v].contractNumber = contractNumber;
-        this.contracts[v].contractSignTime = contractSignTime;
-        this.contracts[v].contractCreateTime = contractCreateTime;
-        // participant.forEach((key : any, val: any) => {
-        //   if (key.type == 1) {
-        //     this.contracts[v].sideA = key.name;
-        //   }else{
-        //     this.contracts[v].sideB = key.name;
-        //   }
-        //   console.log(this.contracts[v].sideA);
-        // })
-      });
-    });
   }
 
   transform(contracts: any, event: any): any[] {
@@ -280,6 +273,31 @@ export class ContractSignatureComponent implements OnInit {
       console.log('the close dialog');
       let is_data = result
     })
+  }
+
+  downloadContract(id:any){
+    this.isContractService.getFileContract(id).subscribe((data) => {
+      //console.log(data);
+      this.uploadService.downloadFile(data[0].path).subscribe((response: any) => {
+        //console.log(response);
+
+        let url = window.URL.createObjectURL(response);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = url;
+        a.download = data[0].name;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+
+        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 10000);
+      }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 10000);
+    },
+    error => {
+      this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 10000);
+    }
+     );
   }
 
   openConsiderContract(item: any) {

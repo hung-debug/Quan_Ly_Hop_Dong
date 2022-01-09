@@ -62,6 +62,7 @@ export class ContractService {
   postSignDigital: any = `http://localhost:6704/api/mobi/signpdf`;
   postSignDigitalSimPKI: any = `https://econtract.mobifone.vn/SignService/v2/sign-document`;
   getFileSignSimPKI: any = `https://econtract.mobifone.vn/SignService/download-signed-document?signed_doc_id=`;
+  signFilePKI: any = `${environment.apiUrl}/api/v1/sign/sim-pki/`;
   imageMobiBase64: any;
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
 
@@ -388,6 +389,21 @@ export class ContractService {
     console.log(headers);
     console.log(body);
     return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
+  }
+
+  signPkiDigital(phone: any, networkCode: any, recipientId: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token)
+      .append('Connection', 'Keep-Alive');
+    const body = {
+      "mobile": phone,
+      "network_code": networkCode,
+      "prompt": "prompt",
+      "reason": "reason"
+    };
+    return this.http.post<any>(this.signFilePKI + recipientId, body, {'headers': headers}).toPromise();
   }
 
   addDocumentAttach(datas: any) {
