@@ -297,7 +297,6 @@ export class ContractComponent implements OnInit, OnDestroy {
         is_data_object_signature: rs[2]
       }
       this.contractService.changeMessage(data_api);
-      localStorage.setItem('is_copy', 'true');
       setTimeout(() => {
         if (action == 'copy')
         void this.router.navigate(['main/form-contract/copy/' + id]);

@@ -135,10 +135,6 @@ export class SidebarComponent implements OnInit {
     if (JSON.parse(localStorage.getItem('data_coordinates_contract_id'))) {
       localStorage.removeItem('data_coordinates_contract_id');
     }
-    //@ts-ignore
-    if (JSON.parse(localStorage.getItem('is_copy'))) {
-      localStorage.removeItem('is_copy')
-    }
   }
 
 }
