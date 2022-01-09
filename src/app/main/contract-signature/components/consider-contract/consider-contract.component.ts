@@ -33,6 +33,7 @@ import {UploadService} from "../../../../service/upload.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {DigitalSignatureService} from "../service/digital-sign.service";
 import {encode} from "base64-arraybuffer";
+import {UserService} from "../../../../service/user.service";
 
 @Component({
   selector: 'app-consider-contract',
@@ -143,6 +144,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     private uploadService : UploadService,
     private spinner: NgxSpinnerService,
     private digitalSignatureService: DigitalSignatureService,
+    private userService: UserService,
     private dialog: MatDialog
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
@@ -180,6 +182,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         this.datas = Object.assign(this.datas, this.data_contract);
       }*/
       this.datas = this.data_contract;
+      if (this.data_contract?.is_data_contract?.status == 31 || this.data_contract?.is_data_contract?.status == 30) {
+        this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+      }
       this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
       this.allRelateToContract = this.datas.is_data_contract.refs;
       this.checkIsViewContract();
@@ -236,6 +241,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
           offsetHeight: 0
         }
       }
+
+      this.userService.getSignatureUserById(this.currentUser.id).subscribe((res) => {
+        if (res) {
+          this.datas.imgSignAcc = res;
+        }
+      })
 
       // convert base64 file pdf to url
       if (this.datas?.i_data_file_contract) {
@@ -893,6 +904,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   }
 
   async signContractSubmit() {
+    this.spinner.show();
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
     let iu = 0;
@@ -969,11 +981,13 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
           this.signCertDigital = data.data;
           checkSetupTool = true;
           if (!checkSetupTool) {
+            this.spinner.hide();
             return;
           } else {
             await this.signImageC(signUpdatePayload);
           }
         } else {
+          this.spinner.hide();
           Swal.fire({
             title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
             icon: 'warning',
@@ -983,6 +997,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
           });
         }
       }, err => {
+        this.spinner.hide();
         Swal.fire({
           html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>  và cài đặt`,
           icon: 'warning',
@@ -999,7 +1014,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   }
 
   async signImageC(signUpdatePayload: any) {
-    this.spinner.show();
     this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId).subscribe(
       async (result) => {
         await this.signDigitalDocument();

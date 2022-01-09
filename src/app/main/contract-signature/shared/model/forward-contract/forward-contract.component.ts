@@ -40,6 +40,14 @@ export class ForwardContractComponent implements OnInit {
   }
 
   onSubmit() {
+    if (!String(this.myForm.value.email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng email', '', 1000);
+      return;
+    }
     if (!this.checkCanSwitchContract()) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email ngoài luồng hợp đồng', '', 1000);
       return;
@@ -51,7 +59,7 @@ export class ForwardContractComponent implements OnInit {
         role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
         recipient_id: this.datas.recipientId,
         is_replace: false/*this.datas.is_content != 'forward_contract'*/
-      }
+      };
       this.spinner.show();
       this.contractService.processAuthorizeContract(dataAuthorize).subscribe(
         data => {
