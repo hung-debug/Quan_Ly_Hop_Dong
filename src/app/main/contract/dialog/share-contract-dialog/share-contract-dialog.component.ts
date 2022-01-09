@@ -130,9 +130,9 @@ export class ShareContractDialogComponent implements OnInit {
       if (this.addFormUser.invalid) {
         return;
       }
-      this.email = this.addForm.value.email[0];
-      console.log(this.addForm.value.email[0]);
-      this.contractService.shareContract(this.addForm.value.email[0], this.data.id).subscribe(data => {
+      this.email = this.addFormUser.value.email[0];
+      console.log("email=" + this.addFormUser.value.email[0]);
+      this.contractService.shareContract(this.addFormUser.value.email[0], this.data.id).subscribe(data => {
         console.log(data);
         if(data.id != null){
           this.dialogRef.close();
