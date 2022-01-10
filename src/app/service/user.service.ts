@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { throwError, Observable } from 'rxjs';
-import { map, catchError, retry } from 'rxjs/operators';
+import {throwError, Observable, of} from 'rxjs';
+import {map, catchError, retry, concatMap} from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { DatePipe } from '@angular/common';
 import { isPdfFile } from 'pdfjs-dist';
+import {encode} from "base64-arraybuffer";
 export interface User {
   id: any,
   name: any,
@@ -48,7 +49,7 @@ export class UserService {
     public datepipe: DatePipe,) { }
 
   getCurrentUser(){
-    
+
     this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
     this.customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id;
     this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
@@ -132,7 +133,7 @@ export class UserService {
     if(datas.birthday != null){
       datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
     }
-    
+
     const body = JSON.stringify({
       name: datas.name,
       email: datas.email,
@@ -163,7 +164,7 @@ export class UserService {
         datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
     }
     console.log(datas.sign_image);
-    
+
     const body = JSON.stringify({
       name: datas.name,
       email: datas.email,
@@ -189,7 +190,7 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    
+
     console.log(headers);
     return this.http.get<User>(this.getUserByIdUrl + id, {'headers': headers});
   }
@@ -208,10 +209,37 @@ export class UserService {
 
   public getUserList(filter_organization_id: any, filter_email: any): Observable<any> {
     this.getCurrentUser();
- 
+
     let listUserUrl = this.listUserUrl + '?name=&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email + "&size=1000";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<User[]>(listUserUrl, {headers}).pipe();
+  }
+
+  getSignatureUserById(id:any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getUserByIdUrl + id, {'headers': headers}).pipe(
+      map((res) => {
+        if (res?.sign_image?.length) {
+          return res?.sign_image[0].presigned_url;
+        }
+      }),
+      concatMap((res: any) => {
+        if (res) {
+          const headers = new HttpHeaders()
+            .append('Content-Type', 'application/arraybuffer');
+          return this.http.get(res, { responseType: 'arraybuffer', headers }).pipe(
+            map((res) => {
+              return encode(res);
+            })
+          );
+        } else {
+          return of(null)
+        }
+      })
+    );
   }
 
   // Error handling

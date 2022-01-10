@@ -45,7 +45,7 @@ export class AddContractTypeComponent implements OnInit {
             code: this.fbd.control(data.code, [Validators.required])
           });
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         }
       )
     }else{
@@ -69,7 +69,7 @@ export class AddContractTypeComponent implements OnInit {
     }
     if(this.data.id !=null){
       
-      this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 1000);
+      this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
       this.dialogRef.close();
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate(['/main/contract-type']);
@@ -77,13 +77,13 @@ export class AddContractTypeComponent implements OnInit {
     }else{
       this.contractTypeService.addContractType(data).subscribe(
         data => {
-          this.toastService.showSuccessHTMLWithTimeout('Thêm mới loại hợp đồng thành công!', "", 1000);
+          this.toastService.showSuccessHTMLWithTimeout('Thêm mới loại hợp đồng thành công!', "", 3000);
           this.dialogRef.close();
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
             this.router.navigate(['/main/contract-type']);
           });
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         }
       )
     }

@@ -40,8 +40,16 @@ export class ForwardContractComponent implements OnInit {
   }
 
   onSubmit() {
+    if (!String(this.myForm.value.email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng email', '', 3000);
+      return;
+    }
     if (!this.checkCanSwitchContract()) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email ngoài luồng hợp đồng', '', 1000);
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email ngoài luồng hợp đồng', '', 3000);
       return;
     }
     if (this.currentUser) {
@@ -51,12 +59,12 @@ export class ForwardContractComponent implements OnInit {
         role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
         recipient_id: this.datas.recipientId,
         is_replace: false/*this.datas.is_content != 'forward_contract'*/
-      }
+      };
       this.spinner.show();
       this.contractService.processAuthorizeContract(dataAuthorize).subscribe(
         data => {
           this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền') + ' thành công!'
-            , "", 1000);
+            , "", 3000);
           this.dialogRef.close();
           // if (this.data.role_coordination == 1) {
           this.router.navigate(['/main/contract-signature/receive/processed'])
@@ -65,7 +73,7 @@ export class ForwardContractComponent implements OnInit {
           // }
         }, error => {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         }, () => {
           this.spinner.hide();
         }

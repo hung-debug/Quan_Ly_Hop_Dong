@@ -33,7 +33,7 @@ export const data_signature_contract = {
   sign_time: 'Wed Nov 17 2021 00:49:23 GMT+0700 (Indochina Time)',
   "dateDeadline": "2021-11-15T13:43:28.476Z",
   notes: "hợp đồng lao động",
-  "file_content": environment.base64_file_content_demo,
+  // "file_content": environment.base64_file_content_demo,
   "userForm": {
     "order": 1,
     "name": "CÔNG TY PHẦN MỀM CÔNG NGHỆ CAO",

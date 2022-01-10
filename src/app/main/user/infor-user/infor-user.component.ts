@@ -115,7 +115,7 @@ export class InforUserComponent implements OnInit {
         this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
         this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
       }
     )
   }
@@ -158,17 +158,17 @@ export class InforUserComponent implements OnInit {
 
         this.userService.updateUser(data).subscribe(
           data => {
-            this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 10000);
+            this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
               this.router.navigate(['/main/user-infor']);
             });
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
+            this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
           }
         )
       },
       error => {
-        this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 10000);
+        this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
         return false;
       });
     }else{
@@ -181,12 +181,12 @@ export class InforUserComponent implements OnInit {
       this.userService.updateUser(data).subscribe(
         data => {
           console.log(data);
-          this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 10000);
+          this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
             this.router.navigate(['/main/user-infor']);
           });
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
+          this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
         }
       )
     }
@@ -203,12 +203,17 @@ export class InforUserComponent implements OnInit {
         if (e.target.files[0].size <= 50000000) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
-          this.handleUpload(e);
-          this.attachFile = file;
-          console.log(this.attachFile);
+          if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpge') {
+            this.handleUpload(e);
+            this.attachFile = file;
+            console.log(this.attachFile);
+          }else{
+            this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
+          }
+
         } else {
           this.attachFile = null;
-          alert('Yêu cầu file nhỏ hơn 50MB');
+          this.toastService.showErrorHTMLWithTimeout("Yêu cầu file nhỏ hơn 50MB", "", 3000);
           break;
         }
       }

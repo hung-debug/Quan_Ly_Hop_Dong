@@ -57,7 +57,7 @@ export class SignupComponent implements OnInit {
   }
 
   sendSignup(){
-    this.toastService.showSuccessHTMLWithTimeout("no.signup.success", "", 10000);
+    this.toastService.showSuccessHTMLWithTimeout("no.signup.success", "", 3000);
   }
 
   //return login

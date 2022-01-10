@@ -19,20 +19,10 @@ export class AuthGuard implements CanActivate {
     // @ts-ignore
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     let role;
-    // return this.authService.isAuthorized;
-    console.log(next.url);
-    // let url = next.url.filter((p: any) => (p.path == 'main'))[0];
-    // @ts-ignore
-    this.route.data.subscribe((res: any) => {
-      console.log(res);
-    }, (error: HttpErrorResponse) =>{
-      console.log(error)
-    })
+    console.log(next);
+    console.log(state);
     //@ts-ignore
-    // let url = next.url.includes('/main/contract-signature/signatures/');
-
-    if (next.queryParams.loginType && next.queryParams.loginType== 1 && next._urlSegment.segments.some((p: any) => p.path == 'contract-signature')) {
-
+    if (state.url.search('loginType') > 0 && next._urlSegment.segments.some((p: any) => p.path == 'contract-signature')) {
       if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
         const urlQ = state.url;
         const urlQ1 =  urlQ.split('contract-signature/')[1];
@@ -65,10 +55,22 @@ export class AuthGuard implements CanActivate {
             sessionStorage.setItem('urlLoginType', JSON.stringify({loginType: true}));
           }
         }
-        this.router.navigate(['/login'],
-          {
-            queryParams: { 'loginType': 1 }
-          });
+        const urlC = sessionStorage.getItem('url');
+        const lt = sessionStorage.getItem('urlLoginType');
+        sessionStorage.clear();
+        sessionStorage.setItem('url', urlC ? urlC : '');
+        sessionStorage.setItem('urlLoginType', lt ? lt : '');
+        if (next.queryParams.loginType && next.queryParams.loginType == 1) {
+          this.router.navigate(['/login'],
+            {
+              queryParams: { 'loginType': 1 }
+            });
+        } else {
+          this.router.navigate(['/login'],
+            {
+              queryParams: { 'loginType': 0 }
+            });
+        }
         return false;
       } else return true;
     } else {
@@ -81,9 +83,6 @@ export class AuthGuard implements CanActivate {
         return false;
       }
     }
-
-    // console.log(sessionStorage.getItem('url'));
-    // console.log(localStorage.getItem('currentUser'));
   }
 
 }

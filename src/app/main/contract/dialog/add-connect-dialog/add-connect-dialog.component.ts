@@ -45,7 +45,7 @@ export class AddConnectDialogComponent implements OnInit {
         })
         console.log(this.idList);
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
       }
     )
     this.getContractList();
@@ -54,11 +54,11 @@ export class AddConnectDialogComponent implements OnInit {
   onSubmit() {
     console.log(this.idList);
     if(this.idList.length == 0){
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn hợp đồng liên quan', "", 1000);
+      this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn hợp đồng liên quan', "", 3000);
     }else{
       this.dialogRef.close();
       this.router.navigate([this.router.url])
-      this.toastService.showSuccessHTMLWithTimeout('Thêm hợp đồng liên quan thành công', "", 1000);
+      this.toastService.showSuccessHTMLWithTimeout('Thêm hợp đồng liên quan thành công', "", 3000);
     }
   }
 

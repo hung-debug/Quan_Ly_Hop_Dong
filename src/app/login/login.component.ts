@@ -131,13 +131,6 @@ export class LoginComponent implements OnInit {
       });
 
     }
-    // this.type = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
-    // if (this.type) {
-    //   this.type = 1;
-    // } else {
-    //   this.type = 0;
-    // }
-    console.log(this.type);
   }
 
   switchLang(lang: string) {

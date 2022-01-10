@@ -102,13 +102,24 @@ export class ShareContractDialogComponent implements OnInit {
       if (this.addForm.invalid) {
         return;
       }
-      this.email = this.addForm.value.email.split(',');
+      //this.email = this.addForm.value.email.split(',');
+      this.email = this.addForm.value.email;
       console.log(this.email);
-      this.email.forEach((key: any, v: any) => {
-        console.log(key);
-        if(this.isValidEmail(key.trim())== false){
-          this.toastService.showErrorHTMLWithTimeout('Tồn tại email ' + key.trim() + ' sai định dạng', "", 1000);
-          return;
+      // this.email.forEach((key: any, v: any) => {
+      //   console.log(key);
+      //   if(this.isValidEmail(key.trim())== false){
+      //     this.toastService.showErrorHTMLWithTimeout('Tồn tại email ' + key.trim() + ' sai định dạng', "", 1000);
+      //     return;
+      //   }
+      // });
+
+      this.contractService.shareContract(this.email, this.data.id).subscribe(data => {
+        console.log(data);
+        if(data.id != null){
+          this.dialogRef.close();
+          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 3000);
+        }else{
+          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 3000);
         }
       });
       
@@ -119,18 +130,20 @@ export class ShareContractDialogComponent implements OnInit {
       if (this.addFormUser.invalid) {
         return;
       }
-      this.email = this.addForm.value.email[0];
+      this.email = this.addFormUser.value.email[0];
+      console.log("email=" + this.addFormUser.value.email[0]);
+      this.contractService.shareContract(this.addFormUser.value.email[0], this.data.id).subscribe(data => {
+        console.log(data);
+        if(data.id != null){
+          this.dialogRef.close();
+          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 3000);
+        }else{
+          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 3000);
+        }
+      });
     }
+    console.log(this.email);
     
-    this.contractService.shareContract(this.email, this.data.id).subscribe(data => {
-      console.log(data);
-      if(data.id != null){
-        this.dialogRef.close();
-        this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 1000);
-      }else{
-        this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 1000);
-      }
-    });
   }
 
   isValidEmail(emailString: any) {

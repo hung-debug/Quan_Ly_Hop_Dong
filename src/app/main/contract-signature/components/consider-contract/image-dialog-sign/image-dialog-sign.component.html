@@ -5,10 +5,10 @@
   <div class="content">
     <div class="name-item">
       <div class="confirm-radio d-flex justify-content-between mx-4">
-        <!--<div class="radio-confirm">
+        <div class="radio-confirm">
           <input id="radio-file-account" type="radio" name="choose-radio-signature" [value]="1" [(ngModel)]='typeImageSignatureRadio' (change)="t(1)">
           <label for="radio-file-account" class="ms-2">File chữ ký từ tài khoản</label>
-        </div>-->
+        </div>
         <div class="radio-confirm">
           <input id="radio-file-com" type="radio" name='choose-radio-signature' [value]="2" [(ngModel)]='typeImageSignatureRadio' (change)="t(2)">
           <label for="radio-file-com" class="ms-2">Tải file ảnh chữ ký</label>
@@ -23,14 +23,14 @@
     <div class="image-sign" style="min-height: 50vh">
 
       <div *ngIf="typeImageSignatureRadio == 1">
-        <label class="align-select">Chọn chữ ký đã tạo trên hệ thống:</label>
-        <div class="select-signature-acc align-select mt-2">
+        <label class="align-select">Chữ ký đã tạo trên hệ thống:</label>
+        <!--<div class="select-signature-acc align-select mt-2">
           <ngx-select [items]="optionsFileSignAccount" [placeholder]="'Chọn file ký đã upload'"
                       optionValueField="id" optionTextField="name"
                       (selectionChanges)="chooseImageSignAcc($event)"
 
           ></ngx-select>
-        </div>
+        </div>-->
 
         <div class="image-sign-acc mt-4">
           <img *ngIf="imgSignAccountSelect" [src]="imgSignAccountSelect" alt="">
@@ -42,7 +42,7 @@
             <div class="file-approve">
               <div class="label_item">File đính kèm:</div>
               <input id="attachFileSignature" type="file" accept=".jpg, .png, .jpge"
-                     (change)="fileChangedAttach($event)" style="display: none;"/>
+                     (change)="fileChangedAttach($event)" style="display: none;">
               <div class="select-contract container-img-file" (click)="addFileAttach()">
                 <div class="upload-image-region d-flex flex-column container-img-file-1">
                   <img src="assets/img/img-icon.svg" alt="#" width="50px">

@@ -24,7 +24,7 @@ export class DeleteContractDialogComponent implements OnInit {
 
   onSubmit(){
     this.dialogRef.close();
-    this.toastService.showSuccessHTMLWithTimeout("Xóa hợp đồng thành công!", "", 10000);
+    this.toastService.showSuccessHTMLWithTimeout("Xóa hợp đồng thành công!", "", 3000);
   }
 
 }
