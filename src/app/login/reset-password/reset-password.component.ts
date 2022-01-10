@@ -109,10 +109,10 @@ export class ResetPasswordComponent implements OnInit {
           }
           if(this.status == 0){
             this.error = false;
-            this.toastService.showErrorHTMLWithTimeout("no.reset.password.error", "", 10000);
+            this.toastService.showErrorHTMLWithTimeout("no.reset.password.error", "", 3000);
           }else{
             this.error = false;
-            this.toastService.showSuccessHTMLWithTimeout("no.reset-password.login.success", "", 10000);
+            this.toastService.showSuccessHTMLWithTimeout("no.reset-password.login.success", "", 3000);
             this.router.navigate(['/login']);
           }
         },

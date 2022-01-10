@@ -16,7 +16,7 @@ export class AddRoleComponent implements OnInit {
   addForm: FormGroup;
   datas: any;
 
-  groupedCities: SelectItemGroup[];
+  groupedRole: SelectItemGroup[];
   selectedCountries: any[];
 
   submitted = false;
@@ -47,35 +47,24 @@ export class AddRoleComponent implements OnInit {
       selectedCountries: this.fbd.control([], [Validators.required]),
     });
 
-    this.groupedCities = [
+    this.groupedRole = [
       {
-        label: "Germany",
-        value: "de",
+        label: "Nhóm chức năng hợp đồng",
+        value: "HD",
         items: [
-          { label: "Berlin", value: "Berlin" },
-          { label: "Frankfurt", value: "Frankfurt" },
-          { label: "Hamburg", value: "Hamburg" },
-          { label: "Munich", value: "Munich" }
+          { label: "Xem hợp đồng", value: "HD_01" },
+          { label: "Thêm mới hợp đồng", value: "HD_02" },
+          { label: "Sửa hợp đồng", value: "HD_03" },
+          { label: "Từ chối hợp đồng", value: "HD_04" }
         ]
       },
       {
-        label: "USA",
-        value: "us",
+        label: "Nhóm chức năng mẫu hợp đồng",
+        value: "MHD",
         items: [
-          { label: "Chicago", value: "Chicago" },
-          { label: "Los Angeles", value: "Los Angeles" },
-          { label: "New York", value: "New York" },
-          { label: "San Francisco", value: "San Francisco" }
-        ]
-      },
-      {
-        label: "Japan",
-        value: "jp",
-        items: [
-          { label: "Kyoto", value: "Kyoto" },
-          { label: "Osaka", value: "Osaka" },
-          { label: "Tokyo", value: "Tokyo" },
-          { label: "Yokohama", value: "Yokohama" }
+          { label: "Xem mẫu hợp đồng", value: "MHD_01" },
+          { label: "Thêm mới mẫu hợp đồng", value: "MHD_02" },
+          { label: "Sửa mẫu hợp đồng", value: "MHD_03" }
         ]
       }
     ];
@@ -97,11 +86,11 @@ export class AddRoleComponent implements OnInit {
     }
     this.unitService.addUnit(data).subscribe(
       data => {
-        this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò thành công!', "", 1000);
+        this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò thành công!', "", 3000);
         this.dialogRef.close();
         this.router.navigate(['/main/unit']);
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
       }
     )
   }

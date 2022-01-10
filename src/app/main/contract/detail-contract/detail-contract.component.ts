@@ -621,7 +621,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   submitEvents(e: any) {
     if (e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2))) {
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
+      this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 3000);
       return;
     }
     if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
@@ -783,7 +783,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             signUpdate.value = this.datas.filePath;
           }
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
         });
       }
     }
@@ -811,7 +811,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           , '', 1000);
         this.router.navigate(['/main/contract-signature/receive/processed']);
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
       }
     )
   }
@@ -839,14 +839,14 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     if (textRefuse) {
       this.contractService.considerRejectContract(this.recipientId, textRefuse).subscribe(
         (result) => {
-          this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công', '', 1000);
+          this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công', '', 3000);
           this.router.navigate(['/main/contract-signature/receive/processed']);
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
         }
       )
     } else {
-      // this.toastService.showWarningHTMLWithTimeout('Bạn cần nhập lý do hủy hợp đồng', '', 1000)
+      // this.toastService.showWarningHTMLWithTimeout('Bạn cần nhập lý do hủy hợp đồng', '', 3000)
     }
 
   }
@@ -895,11 +895,11 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           window.URL.revokeObjectURL(url);
           a.remove();
 
-          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 10000);
-        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 10000);
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
       },
       error => {
-        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 10000);
+        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
       }
     );
   }

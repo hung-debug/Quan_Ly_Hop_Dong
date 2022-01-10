@@ -66,14 +66,14 @@ export class ResetPasswordDialogComponent implements OnInit {
       this.userService.sendResetPasswordToken(data.passwordOld, data.passwordNew).subscribe((data) => {
           if (data != null) {
             this.dialogRef.close();
-            this.toastService.showSuccessHTMLWithTimeout("Đổi mật khẩu mới thành công.<br>Vui lòng đăng nhập để tiếp tục!", "", 10000);
+            this.toastService.showSuccessHTMLWithTimeout("Đổi mật khẩu mới thành công.<br>Vui lòng đăng nhập để tiếp tục!", "", 3000);
             this.logout();
           } else {
-            this.toastService.showErrorHTMLWithTimeout("Đổi mật khẩu mới thất bại!", "", 10000);
+            this.toastService.showErrorHTMLWithTimeout("Đổi mật khẩu mới thất bại!", "", 3000);
           }
         },
         (error: any) => {
-          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để được xử lý", "", 10000);
+          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để được xử lý", "", 3000);
         }
       );
     }

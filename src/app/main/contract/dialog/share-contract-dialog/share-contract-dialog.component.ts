@@ -117,9 +117,9 @@ export class ShareContractDialogComponent implements OnInit {
         console.log(data);
         if(data.id != null){
           this.dialogRef.close();
-          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 1000);
+          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 3000);
         }else{
-          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 1000);
+          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 3000);
         }
       });
       
@@ -136,9 +136,9 @@ export class ShareContractDialogComponent implements OnInit {
         console.log(data);
         if(data.id != null){
           this.dialogRef.close();
-          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 1000);
+          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 3000);
         }else{
-          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 1000);
+          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 3000);
         }
       });
     }

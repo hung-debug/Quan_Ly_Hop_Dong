@@ -53,7 +53,7 @@ export class RoleComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AddRoleComponent, {
-      width: '580px',
+      width: '700px',
       backdrop: 'static',
       keyboard: false,
       data

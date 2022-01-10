@@ -81,14 +81,14 @@ export class ContractTemplateComponent implements OnInit {
   }
   sendChangeStatus(statusContract:string){
     if(statusContract == 'Đang phát hành'){
-      this.toastService.showSuccessHTMLWithTimeout("Ngừng phát hành thành công", "", 10000);
+      this.toastService.showSuccessHTMLWithTimeout("Ngừng phát hành thành công", "", 3000);
     }else{
-      this.toastService.showSuccessHTMLWithTimeout("Mở phát hành thành công", "", 10000);
+      this.toastService.showSuccessHTMLWithTimeout("Mở phát hành thành công", "", 3000);
     }
   }
 
   deleteItem(id:number){
-    this.toastService.showSuccessHTMLWithTimeout("Xóa mẫu hợp đồng thành công", "", 10000);
+    this.toastService.showSuccessHTMLWithTimeout("Xóa mẫu hợp đồng thành công", "", 3000);
   }
 
   addContractTemplate(){
@@ -171,6 +171,6 @@ export class ContractTemplateComponent implements OnInit {
   }
 
   sendShare(){
-    this.toastService.showSuccessHTMLWithTimeout("Chia sẻ mẫu hợp đồng thành công", "", 10000);
+    this.toastService.showSuccessHTMLWithTimeout("Chia sẻ mẫu hợp đồng thành công", "", 3000);
   }
 }

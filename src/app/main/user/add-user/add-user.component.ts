@@ -133,7 +133,7 @@ export class AddUserComponent implements OnInit {
             this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
             console.log(this.addForm);
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
           }
         )
       }
@@ -141,19 +141,19 @@ export class AddUserComponent implements OnInit {
   }
 
   updateInforUser(){
-    this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 10000);
+    this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
   }
 
   updateSignFileImageUser(){
-    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.file.image.success", "", 10000);
+    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.file.image.success", "", 3000);
   }
 
   updateSignKpiUser(){
-    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.kpi.success", "", 10000);
+    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.kpi.success", "", 3000);
   }
 
   updateSignHsmUser(){
-    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.hsm.success", "", 10000);
+    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.hsm.success", "", 3000);
   }
 
   onCancel(){
@@ -198,17 +198,17 @@ export class AddUserComponent implements OnInit {
 
           this.userService.updateUser(data).subscribe(
             data => {
-              this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 1000);
+              this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
               this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                 this.router.navigate(['/main/user']);
               });
             }, error => {
-              this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
+              this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
             }
           )
         },
         error => {
-          this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 10000);
+          this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
           return false;
         });
       }else{
@@ -221,12 +221,12 @@ export class AddUserComponent implements OnInit {
         console.log(data);
         this.userService.updateUser(data).subscribe(
           data => {
-            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 1000);
+            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
               this.router.navigate(['/main/user']);
             });
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 1000);
+            this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
           }
         )
       }
@@ -248,17 +248,17 @@ export class AddUserComponent implements OnInit {
                 //call api them moi
                 this.userService.addUser(data).subscribe(
                   data => {
-                    this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 1000);
+                    this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
                     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                       this.router.navigate(['/main/user']);
                     });
                   }, error => {
-                    this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 1000);
+                    this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
                   }
                 )
               },
               error => {
-                this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 10000);
+                this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
                 return false;
               });
             }else{
@@ -266,20 +266,20 @@ export class AddUserComponent implements OnInit {
               //call api them moi
               this.userService.addUser(data).subscribe(
                 data => {
-                  this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 1000);
+                  this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
                   this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                     this.router.navigate(['/main/user']);
                   });
                 }, error => {
-                  this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 1000);
+                  this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
                 }
               )
             }
           }else{
-            this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 1000);
+            this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
           }
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 1000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         }
       )
     }
@@ -296,12 +296,17 @@ export class AddUserComponent implements OnInit {
         if (e.target.files[0].size <= 50000000) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
-          this.handleUpload(e);
-          this.attachFile = file;
-          console.log(this.attachFile);
+          if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpge') {
+            this.handleUpload(e);
+            this.attachFile = file;
+            console.log(this.attachFile);
+          }else{
+            this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
+          }
+
         } else {
           this.attachFile = null;
-          alert('Yêu cầu file nhỏ hơn 50MB');
+          this.toastService.showErrorHTMLWithTimeout("Yêu cầu file nhỏ hơn 50MB", "", 3000);
           break;
         }
       }

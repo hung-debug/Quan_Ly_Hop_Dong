@@ -206,10 +206,10 @@ export class ConfirmInforContractComponent implements OnInit {
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate(['/main/contract/create/processing']);
       });
-      this.toastService.showSuccessHTMLWithTimeout("Tạo hợp đồng thành công!", "", 10000);
+      this.toastService.showSuccessHTMLWithTimeout("Tạo hợp đồng thành công!", "", 3000);
     },
     error => {
-      this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 10000);
+      this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 3000);
       return false;
     }
     );
