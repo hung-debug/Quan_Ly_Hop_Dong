@@ -40,17 +40,17 @@
             <div class="col-md-6">
                 <div class="label text-color">Phân quyền <span class="required-title">*</span></div>
                 <div>
-                    <p-listbox [options]="groupedRole" [group]="true" formControlName="selectedCountries" [metaKeySelection]="false"
-                        [checkbox]="true" [filter]="true" [multiple]="true" [listStyle]="{'max-height':'250px'}" [style]="{'width':'100%'}">
+                    <p-listbox [options]="groupedRole" [group]="true" formControlName="selectedRole" [metaKeySelection]="false"
+                        [checkbox]="true" [filter]="true" [multiple]="true" [listStyle]="{'max-height':'300px'}" [style]="{'width':'100%'}">
                         <ng-template let-group pTemplate="group">
                             <div class="p-d-flex p-ai-center">
-                            <span>{{group.label}}</span>
+                                <span>{{group.label}}</span>
                             </div>
                         </ng-template>
                     </p-listbox>
                 </div>
-                <div *ngIf="submitted && f.selectedCountries.errors" class="invalid">
-                    <div *ngIf="f.selectedCountries.errors.required">Phân quyền không được để trống</div>
+                <div *ngIf="submitted && f.selectedRole.errors" class="invalid">
+                    <div *ngIf="f.selectedRole.errors.required">Phân quyền không được để trống</div>
                 </div>
             </div>
         </div>

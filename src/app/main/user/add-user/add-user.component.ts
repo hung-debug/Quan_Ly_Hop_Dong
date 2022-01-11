@@ -77,7 +77,7 @@ export class AddUserComponent implements OnInit {
     //lay danh sach vai tro
     this.roleService.getRoleList('', '').subscribe(data => {
       console.log(data);
-      this.roleList = data;
+      this.roleList = data.entities;
     });
 
     this.networkList = networkList;

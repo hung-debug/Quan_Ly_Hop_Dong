@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
-import { NodeService } from 'src/app/service/node.service';
 import { RoleService } from 'src/app/service/role.service';
 import { AddRoleComponent } from './add-role/add-role.component';
 import {DetailRoleComponent} from './detail-role/detail-role.component';
@@ -16,8 +15,7 @@ export class RoleComponent implements OnInit {
 
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private roleService: RoleService,
-    private nodeService: NodeService) { }
+    private roleService: RoleService) { }
 
   code:any = "";
   name:any = "";
@@ -32,7 +30,6 @@ export class RoleComponent implements OnInit {
     this.cols = [
       {header: 'role.name', style:'text-align: left;' },
       {header: 'role.code', style:'text-align: left;' },
-      {header: 'role.function', style:'text-align: left;' },
       {header: 'role.manage', style:'text-align: center;' },
       ];
    
@@ -42,7 +39,7 @@ export class RoleComponent implements OnInit {
   searchRole(){
     this.roleService.getRoleList(this.code, this.name).subscribe(response => {
       console.log(response);
-      this.list = response;
+      this.list = response.entities;
       console.log(this.list);
     });
   }
@@ -71,7 +68,7 @@ export class RoleComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AddRoleComponent, {
-      width: '580px',
+      width: '700px',
       backdrop: 'static',
       keyboard: false,
       data
@@ -89,10 +86,11 @@ export class RoleComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(DetailRoleComponent, {
-      width: '580px',
+      width: '700px',
       backdrop: 'static',
       keyboard: false,
-      data
+      data,
+      autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');

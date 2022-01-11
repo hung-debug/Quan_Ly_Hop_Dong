@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppService } from 'src/app/service/app.service';
-import { NodeService } from 'src/app/service/node.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { AddUnitComponent } from './add-unit/add-unit.component';
@@ -65,6 +64,8 @@ export class UnitComponent implements OnInit {
 
       this.array_empty=[];
       this.listData.forEach((element: any, index: number) => {
+        console.log(this.listData.length);
+        console.log(element);
         let dataChildren;
         dataChildren = this.findChildren(element);
         data = {
@@ -82,7 +83,8 @@ export class UnitComponent implements OnInit {
         };
         
         this.array_empty.push(data);
-        this.removeElementFromStringArray(element.id);
+        console.log(element.id);
+        //this.removeElementFromStringArray(element.id);
       })
       this.list = this.array_empty;
       console.log(this.list);
@@ -92,6 +94,7 @@ export class UnitComponent implements OnInit {
   findChildren(element:any){
     let dataChildren:any[]=[];
     let arrCon = this.listData.filter((p: any) => p.parent_id == element.id);
+    console.log(arrCon);
     arrCon.forEach((elementCon: any, indexCOn: number) => {
       dataChildren.push(
       {
@@ -114,8 +117,14 @@ export class UnitComponent implements OnInit {
 
   removeElementFromStringArray(element: string) {
     this.listData.forEach((value,index)=>{
-        if(value.id==element) this.listData.splice(index,1);
+      console.log(value.id);
+        if(value.id==element){
+          console.log(element);
+          this.listData.splice(index,1);
+        }
+        
     });
+    console.log("A" + this.listData.length);
   }
 
   addUnit() {

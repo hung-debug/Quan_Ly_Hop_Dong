@@ -15,3 +15,15 @@
     border-radius: 5px;
     min-height: 40px;
   }
+  :host ::ng-deep {
+    .p-listbox, .p-listbox .p-listbox-list .p-listbox-item-group {
+        border: none;
+        background: #EFF2F5; 
+    }
+    .p-listbox .p-listbox-list{
+       pointer-events: none;
+    }
+    .p-listbox .p-listbox-header{
+        display: none;
+    }
+}

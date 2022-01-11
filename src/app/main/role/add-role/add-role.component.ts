@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SelectItemGroup } from 'primeng/api';
+import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 
@@ -17,7 +18,7 @@ export class AddRoleComponent implements OnInit {
   datas: any;
 
   groupedRole: SelectItemGroup[];
-  selectedCountries: any[];
+  selectedRoleConvert: any = [];
 
   submitted = false;
   get f() { return this.addForm.controls; }
@@ -25,7 +26,7 @@ export class AddRoleComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
-    private unitService : UnitService,
+    private roleService : RoleService,
     private toastService : ToastService,
     public dialogRef: MatDialogRef<AddRoleComponent>,
     public router: Router,
@@ -34,49 +35,129 @@ export class AddRoleComponent implements OnInit {
         name: this.fbd.control("", [Validators.required]),
         code: this.fbd.control("", [Validators.required]),
         note: "",
-        selectedCountries: this.fbd.control([], [Validators.required]),
+        selectedRole: this.fbd.control([], [Validators.required]),
       });
     }
 
   ngOnInit(): void {
     this.datas = this.data;
-    this.addForm = this.fbd.group({
-      name: this.fbd.control("", [Validators.required]),
-      code: this.fbd.control("", [Validators.required]),
-      note: "",
-      selectedCountries: this.fbd.control([], [Validators.required]),
-    });
+    if(this.data.id != null){
+      this.roleService.getRoleById(this.data.id).subscribe(
+        data => {
+          console.log(data);
+          this.addForm = this.fbd.group({
+            name: this.fbd.control(data.name, [Validators.required]),
+            code: this.fbd.control(data.code, [Validators.required]),
+            note: data.description,
+            selectedRole: this.fbd.control(this.convertRoleArr(data.permissions), [Validators.required]),
+          });
+        });
+    }else{
+      this.addForm = this.fbd.group({
+        name: this.fbd.control("", [Validators.required]),
+        code: this.fbd.control("", [Validators.required]),
+        note: "",
+        selectedRole: this.fbd.control([], [Validators.required]),
+      });
+    }
 
     this.groupedRole = [
       {
-        label: "Nhóm chức năng hợp đồng",
-        value: "HD",
+        label: "Nhóm chức năng quản lý hợp đồng",
+        value: "QLHD",
         items: [
-          { label: "Xem hợp đồng", value: "HD_01" },
-          { label: "Thêm mới hợp đồng", value: "HD_02" },
-          { label: "Sửa hợp đồng", value: "HD_03" },
-          { label: "Từ chối hợp đồng", value: "HD_04" }
+          { label: "Thêm mới hợp đồng đơn lẻ", value: "QLHD_01" },
+          { label: "Sửa hợp đồng", value: "QLHD_02" },
+          { label: "Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con", value: "QLHD_03" },
+          { label: "Xem danh sách hợp đồng của tổ chức của tôi", value: "QLHD_04" },
+          { label: "Xem danh sách hợp đồng của tôi", value: "QLHD_05" },
+          { label: "Tìm kiếm hợp đồng", value: "QLHD_06" },
+          { label: "Xem thông tin chi tiết hợp đồng", value: "QLHD_07" },
+          { label: "Sao chép hợp đồng", value: "QLHD_08" },
+          { label: "Huỷ hợp đồng", value: "QLHD_09" },
+          { label: "Xem lịch sử hợp đồng", value: "QLHD_10" },
+          { label: "Tạo hợp đồng liên quan", value: "QLHD_11" },
+          { label: "Xem hợp đồng liên quan", value: "QLHD_12" },
+          { label: "Chia sẻ hợp đồng", value: "QLHD_13" }
         ]
       },
       {
-        label: "Nhóm chức năng mẫu hợp đồng",
-        value: "MHD",
+        label: "Nhóm chức năng quản lý mẫu hợp đồng",
+        value: "QLMHD",
         items: [
-          { label: "Xem mẫu hợp đồng", value: "MHD_01" },
-          { label: "Thêm mới mẫu hợp đồng", value: "MHD_02" },
-          { label: "Sửa mẫu hợp đồng", value: "MHD_03" }
+          { label: "Thêm mới mẫu hợp đồng", value: "QLMHD_01" },
+          { label: "Sửa mẫu hợp đồng", value: "QLMHD_02" },
+          { label: "Tạo hợp đồng đơn lẻ theo mẫu", value: "QLMHD_03" },
+          { label: "Tạo hợp đồng theo lô", value: "QLMHD_04" },
+          { label: "Ngừng phát hành mẫu hợp đồng", value: "QLMHD_05" },
+          { label: "Phát hành mẫu hợp đồng", value: "QLMHD_06" },
+          { label: "Chia sẻ mẫu hợp đồng", value: "QLMHD_07" },
+          { label: "Tìm kiếm mẫu hợp đồng", value: "QLMHD_08" },
+          { label: "Xóa mẫu hợp đồng", value: "QLMHD_09" },
+          { label: "Xem thông tin chi tiết mẫu hợp đồng", value: "QLMHD_10" }
+        ]
+      },
+      {
+        label: "Nhóm chức năng quản lý tổ chức",
+        value: "QLTC",
+        items: [
+          { label: "Thêm mới tổ chức", value: "QLTC_01" },
+          { label: "Sửa tổ chức", value: "QLTC_02" },
+          { label: "Tìm kiếm tổ chức", value: "QLTC_03" },
+          { label: "Xem thông tin chi tiết tổ chức", value: "QLTC_04" }
+        ]
+      },
+      {
+        label: "Nhóm chức năng quản lý người dùng",
+        value: "QLND",
+        items: [
+          { label: "Thêm mới người dùng", value: "QLND_01" },
+          { label: "Sửa người dùng", value: "QLND_02" },
+          { label: "Tìm kiếm người dùng", value: "QLND_03" },
+          { label: "Xem thông tin chi tiết người dùng", value: "QLND_04" }
+        ]
+      },
+      {
+        label: "Nhóm chức năng quản lý vai trò",
+        value: "QLVT",
+        items: [
+          { label: "Thêm mới vai trò", value: "QLVT_01" },
+          { label: "Sửa vai trò", value: "QLVT_02" },
+          { label: "Xóa vai trò", value: "QLVT_03" },
+          { label: "Tìm kiếm vai trò", value: "QLVT_04" },
+          { label: "Xem thông tin chi tiết vai trò", value: "QLVT_05" }
+        ]
+      },
+      {
+        label: "Nhóm chức năng quản lý loại hợp đồng",
+        value: "QLLHD",
+        items: [
+          { label: "Thêm mới loại hợp đồng", value: "QLLHD_01" },
+          { label: "Sửa loại hợp đồng", value: "QLLHD_02" },
+          { label: "Xóa loại hợp đồng", value: "QLLHD_03" },
+          { label: "Tìm kiếm loại hợp đồng", value: "QLLHD_04" },
+          { label: "Xem thông tin chi tiết loại hợp đồng", value: "QLLHD_05" }
         ]
       }
     ];
   }
 
+  convertRoleArr(roleArr:[]){
+    let roleArrConvert: any = [];
+    roleArr.forEach((key: any, v: any) => {
+      roleArrConvert.push(key.code);
+    });
+    return roleArrConvert;
+  }
+
   onSubmit() {
     this.submitted = true;
     const data = {
+      id: this.data.id,
       name: this.addForm.value.name,
       code: this.addForm.value.code,
       note: this.addForm.value.note,
-      selectedCountries: this.addForm.value.selectedCountries,
+      selectedRole: this.addForm.value.selectedRole,
     }
     console.log(data);
     console.log(this.addForm.invalid);
@@ -84,15 +165,40 @@ export class AddRoleComponent implements OnInit {
       console.log(this.addForm.invalid);
       return;
     }
-    this.unitService.addUnit(data).subscribe(
-      data => {
-        this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò thành công!', "", 3000);
-        this.dialogRef.close();
-        this.router.navigate(['/main/unit']);
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-      }
-    )
+    this.selectedRoleConvert = [];
+    data.selectedRole.forEach((key: any, v: any) => {
+      console.log(key);
+      let jsonData = {code: key, status: 1};
+      this.selectedRoleConvert.push(jsonData);
+    });
+    data.selectedRole = this.selectedRoleConvert;
+
+    if(this.data.id != null){
+      this.roleService.updateRole(data).subscribe(
+        data => {
+          this.toastService.showSuccessHTMLWithTimeout('Cập nhật vai trò thành công!', "", 3000);
+          this.dialogRef.close();
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/role']);
+          });
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+        }
+      )
+    }else{
+      this.roleService.addRole(data).subscribe(
+        data => {
+          this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò thành công!', "", 3000);
+          this.dialogRef.close();
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/role']);
+          });
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+        }
+      )
+    }
+    
   }
 
 }

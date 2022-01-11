@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
-import { NodeService } from 'src/app/service/node.service';
 import { DetailContractComponent } from '../contract/detail-contract/detail-contract.component';
 import {AddContractTypeComponent} from './add-contract-type/add-contract-type.component'
 import { DetailContractTypeComponent } from './detail-contract-type/detail-contract-type.component';
