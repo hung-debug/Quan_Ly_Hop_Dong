@@ -10,6 +10,7 @@ import {AppService} from 'src/app/service/app.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from "rxjs";
 import {ContractService} from "../../../service/contract.service";
+import {UploadService} from "../../../service/upload.service";
 // import * as from moment;
 
 @Component({
@@ -53,7 +54,8 @@ export class AddContractComponent implements OnInit, OnDestroy {
               private appService: AppService,
               private route: ActivatedRoute,
               private contractService: ContractService,
-              private router: Router
+              private router: Router,
+              private uploadService: UploadService
   ) {
   }
 
@@ -86,12 +88,13 @@ export class AddContractComponent implements OnInit, OnDestroy {
           this.message.is_data_contract['file_name_attach'] = fileNameAttach.filename;
           this.message.is_data_contract['attachFile'] = fileNameAttach.path;
         }
-        this.message.is_data_contract['is_copy'] = true;
+        this.datas.contractConnect = this.message.is_data_contract.refs;
+        this.message.is_data_contract['is_action_contract_created'] = true;
         this.datas.determine_contract = this.message.is_data_contract.participants;
         this.datas.i_data_file_contract = this.message.i_data_file_contract;
         this.datas['is_data_object_signature'] = this.message.is_data_object_signature;
         this.datas = Object.assign(this.datas, this.message.is_data_contract);
-        console.log(this.datas, this.message);
+        // console.log(this.datas, this.message);
       }
     } else this.message = undefined
   }

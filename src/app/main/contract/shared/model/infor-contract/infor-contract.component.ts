@@ -1,8 +1,7 @@
 import {ContractService} from 'src/app/service/contract.service';
 import {UploadService} from './../../../../../service/upload.service';
-import {HttpErrorResponse, HttpEventType, HttpResponse} from '@angular/common/http';
-import {Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder} from "@angular/forms";
 import {variable} from "../../../../../config/variable";
 import {Observable} from 'rxjs';
 import {AddContractComponent} from "../../../add-contract/add-contract.component";
@@ -63,6 +62,9 @@ export class InforContractComponent implements OnInit {
   errorContractFile: any = '';
   errorSignTime: any = '';
 
+  uploadFileContractAgain: boolean = false;
+  uploadFileAttachAgain: boolean = false;
+
   minDate: Date = moment().toDate();
 
   constructor(
@@ -84,16 +86,15 @@ export class InforContractComponent implements OnInit {
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
     this.sign_time = this.datas.sign_time ? moment(this.datas.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
     this.notes = this.datas.notes ? this.datas.notes : null;
-
     this.convertData(this.datas);
 
     this.contractService.getContractTypeList().subscribe(data => {
-      console.log(data);
+      // console.log(data);
       this.typeList = data
     });
 
     this.contractService.getContractList('', '', '', '', 30).subscribe(data => {
-      console.log(data.entities);
+      // console.log(data.entities);
       this.contractConnectList = data.entities;
     });
   }
@@ -125,7 +126,10 @@ export class InforContractComponent implements OnInit {
           fileInput.value = '';
           this.datas.file_name = file_name;
           this.datas.contractFile = file;
-          console.log(this.datas);
+          if (this.datas.is_action_contract_created) {
+            this.uploadFileContractAgain = true;
+          }
+          // console.log(this.datas);
         } else if (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx') {
           this.toastService.showErrorHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 10000);
         } else {
@@ -156,6 +160,9 @@ export class InforContractComponent implements OnInit {
           this.datas.file_name_attach = file_name;
           //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
           this.datas.attachFile = file;
+          if (this.datas.is_action_contract_created) {
+            this.uploadFileAttachAgain = true;
+          }
           //this.datas.attachFile = e.target.files;
         } else {
           this.datas.file_name_attach = '';
@@ -165,6 +172,10 @@ export class InforContractComponent implements OnInit {
         }
       }
     }
+  }
+
+  onChange(e: any) {
+    console.log(e, this.contractConnect)
   }
 
   addFileAttach() {
@@ -327,48 +338,44 @@ export class InforContractComponent implements OnInit {
     if (!this.validData()) {
       return;
     } else {
-      // gán value step 1 vào datas
+      // set value to datas
       this.datas.name = this.name;
       this.datas.code = this.code;
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
-
       this.defineData(this.datas);
-
-      if (this.datas.is_copy) {
-        this.step = variable.stepSampleContract.step2;
-        this.datas.stepLast = this.step;
-        // this.datas.document_id = '1';
-        this.nextOrPreviousStep(this.step);
-        console.log(this.datas);
-        this.spinner.hide();
+      const fileReader = new FileReader();
+      if (this.datas.is_action_contract_created) {
+        if (!this.uploadFileContractAgain && this.datas.contractFile) {
+          await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
+            if (res)
+              this.datas.contractFile = res;
+          })
+        }
+        if (!this.uploadFileAttachAgain && this.datas.attachFile) {
+          await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile).toPromise().then((data: any) => {
+            if (data)
+              this.datas.attachFile = data;
+          })
+        }
       } else {
-        const fileReader = new FileReader();
-        // if (this.datas.is_copy) {
-        //   await this.getConvertToFileBinary(this.datas.contractFile, 'contractFile');
-        //   if (this.datas.attachFile)
-        //     await this.getConvertToFileBinary(this.datas.attachFile, 'attachFile');
-        // } else {
-          fileReader.readAsDataURL(this.datas.contractFile);
-          fileReader.onload = (e) => {
-            if (fileReader.result)
-              this.datas.file_content = fileReader.result.toString().split(',')[1];
-          };
-        // }
-
-        await this.callAPI();
+        fileReader.readAsDataURL(this.datas.contractFile);
+        fileReader.onload = (e) => {
+          if (fileReader.result)
+            this.datas.file_content = fileReader.result.toString().split(',')[1];
+        };
       }
-
+      await this.callAPI();
     }
   }
 
-  async getConvertToFileBinary(res: any, file_type: string) {
-    await this.contractService.convertUrltoBinary(res).toPromise().then((res) => {
-      this.datas[file_type] = res;
-    }, () => {
-      this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra!', "", 1000);
-    })
-  }
+  // async getConvertToFileBinary(res: any, file_type: string) {
+  //   await this.contractService.convertUrltoBinary(res).toPromise().then((res) => {
+  //     this.datas[file_type] = res;
+  //   }, () => {
+  //     this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra!', "", 1000);
+  //   })
+  // }
 
   convertData(datas: any) {
     console.log(this.datas.contractConnect);
@@ -409,23 +416,37 @@ export class InforContractComponent implements OnInit {
     }
   }
 
-  saveDraft() {
+  async saveDraft() {
     this.spinner.show();
     if (!this.validData()) return;
     else {
-      // gán value step 1 vào datas
+      // set value to datas
       this.datas.name = this.name;
       this.datas.code = this.code;
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
-
       this.defineData(this.datas);
       const fileReader = new FileReader();
-      fileReader.readAsDataURL(this.datas.contractFile);
-      fileReader.onload = (e) => {
-        if (fileReader.result)
-        this.datas.file_content = fileReader.result.toString().split(',')[1];
-      };
+      if (this.datas.is_action_contract_created) {
+        if (!this.uploadFileContractAgain && this.datas.contractFile) {
+          await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
+            if (res)
+              this.datas.contractFile = res;
+          })
+        }
+        if (!this.uploadFileAttachAgain && this.datas.attachFile) {
+          await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile).toPromise().then((data: any) => {
+            if (data)
+              this.datas.attachFile = data;
+          })
+        }
+      } else {
+        fileReader.readAsDataURL(this.datas.contractFile);
+        fileReader.onload = (e) => {
+          if (fileReader.result)
+            this.datas.file_content = fileReader.result.toString().split(',')[1];
+        };
+      }
 
       this.callAPI_Draft();
     }

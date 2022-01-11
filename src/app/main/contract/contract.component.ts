@@ -282,10 +282,10 @@ export class ContractComponent implements OnInit, OnDestroy {
 
   openEdit(id:number){
     // //@ts-ignore
-    // if (JSON.parse(localStorage.getItem('is_copy'))) {
-    //   localStorage.removeItem('is_copy');
+    // if (JSON.parse(localStorage.getItem('is_action_contract_created'))) {
+    //   localStorage.removeItem('is_action_contract_created');
     // }
-    this.getDataContract(id, 'edit')
+    // this.getDataContract(id, 'edit')
   }
 
   getDataContract(id: number, action: string) {

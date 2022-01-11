@@ -92,7 +92,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     console.log(this.datas);
-    if (this.datas.is_copy) { // data defind copy/edit contract
+    if (this.datas.is_action_contract_created) { // data defind copy/edit contract
       let dataPosition: any[] = [];
       let dataNotPosition: any[] = [];
       this.datas.determine_contract.forEach((res: any) => {
@@ -105,11 +105,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             data_duplicate.phoneNumber = element.phoneNumber;
             data_duplicate.sign_type = element.sign_type;
             data_duplicate.is_otp = element.is_otp;
-            data_duplicate['is_type_party'] = this.datas.determine_contract.type;
+            data_duplicate['is_type_party'] = res.type;
             data_duplicate['role'] = data_duplicate.recipient.role;
             dataPosition.push(data_duplicate)
           } else {
-            element['is_type_party'] = this.datas.determine_contract.type;
+            element['is_type_party'] = res.type;
             element['role'] = element.role;
             dataNotPosition.push(element)
           }
@@ -122,7 +122,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     let data_sign = [];
-    if (this.datas.is_copy) {
+    if (this.datas.is_action_contract_created) {
       data_sign = this.datas.is_data_object_signature;
       data_sign.forEach((res: any) => {
         if (res.sign_unit == 'text') {
@@ -141,7 +141,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
     this.datas.contract_user_sign.forEach((element: any) => {
-      console.log(element.sign_unit, element.sign_config);
+      // console.log(element.sign_unit, element.sign_config);
       if (element.sign_unit == 'so_tai_lieu') {
         Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
       } else if (element.sign_unit == 'chu_ky_so') {
@@ -157,7 +157,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     // if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
     if (data_sign && data_sign.length > 0) {
-      if (this.datas.is_copy) {
+      if (this.datas.is_action_contract_created) {
         let data_user_sign_action = [...this.dataSignPosition];
         this.getListNameSignAction(data_user_sign_action);
       } else {
@@ -175,7 +175,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     // convert base64 file pdf to url
 
-    if (this.datas.is_copy) {
+    if (this.datas.is_action_contract_created) {
       let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
       let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
       if (fileContract_2) {
@@ -300,6 +300,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // })
       }
     })
+    console.log(this.list_sign_name);
   }
 
   getListSignName(listSignForm: any = []) {
@@ -923,7 +924,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let arrSignConfig: any = [];
     let cloneUserSign = [...this.datas.contract_user_sign];
     cloneUserSign.forEach(element => {
-      if (this.datas.is_copy) {
+      if (this.datas.is_action_contract_created) {
         if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
           arrSignConfig = arrSignConfig.concat(element.sign_config);
         }
@@ -1038,8 +1039,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             item['font'] = 'Arial';
             item['font_size'] = 14;
             // item['contract_id'] = this.datas.contract_id;
-            item['contract_id'] = (this.datas.is_copy ? item.contract_id : this.datas.contract_id);
-            item['document_id'] = (this.datas.is_copy ? item.document_id : this.datas.document_id);
+            // item['contract_id'] = (this.datas.is_action_contract_created ? item.contract_id : this.datas.contract_id);
+            // item['document_id'] = (this.datas.is_action_contract_created ? item.document_id : this.datas.document_id);
+            item['contract_id'] = this.datas.contract_id;
+            item['document_id'] = this.datas.document_id;
             if (item.text_attribute_name) {
               item.name = item.text_attribute_name;
             }

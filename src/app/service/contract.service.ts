@@ -260,6 +260,12 @@ export class ContractService {
     return this.http.get(url, { responseType: 'blob', headers }).toPromise();
   }
 
+  getDataBinaryFileUrlConvert(url: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/x-binary');
+    return this.http.get(url, { responseType: 'blob', headers });
+  }
+
   getDataFileSIMPKIUrlPromise(idPdf: any) {
     const headers = new HttpHeaders()
       .append('TenantCode', 'mobifone.vn')

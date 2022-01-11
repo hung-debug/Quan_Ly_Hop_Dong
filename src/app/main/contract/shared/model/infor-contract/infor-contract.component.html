@@ -93,7 +93,7 @@
               </div>
             </ng-template>
           </ng-multiselect-dropdown> -->
-          <p-multiSelect styleClass="font" [options]="contractConnectList" [(ngModel)]="contractConnect" optionLabel="name" optionValue="id" display="chip" placeholder="Chọn hợp đồng" ></p-multiSelect>
+          <p-multiSelect styleClass="font" [options]="contractConnectList" [(ngModel)]="contractConnect" optionLabel="name" optionValue="id" display="chip" placeholder="Chọn hợp đồng" (onChange)="onChange($event)"></p-multiSelect>
         </div>
       </div>
     </div>
