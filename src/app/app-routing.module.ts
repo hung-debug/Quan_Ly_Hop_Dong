@@ -10,7 +10,6 @@ import { ContractComponent } from './main/contract/contract.component';
 import { DashboardComponent } from './main/dashboard/dashboard.component';
 import { MainComponent } from './main/main.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { UserGroupComponent } from './main/user-group/user-group.component';
 import { UserComponent } from './main/user/user.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -79,10 +78,6 @@ const routes: Routes = [
         component: InforUserComponent,
       },
       {
-        path: 'user-group',
-        component: UserGroupComponent,
-      },
-      {
         path: 'contract/:action/:status',
         component: ContractComponent,
       },
@@ -121,10 +116,6 @@ const routes: Routes = [
       {
         path: 'unit',
         component: UnitComponent,
-      },
-      {
-        path: 'form-contract/:action',
-        component: AddContractComponent,
       },
       {
         path: 'contract-type',

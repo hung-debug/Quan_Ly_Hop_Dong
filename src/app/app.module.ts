@@ -26,7 +26,6 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { UserComponent } from './main/user/user.component';
-import { UserGroupComponent } from './main/user-group/user-group.component';
 import { ContractComponent } from './main/contract/contract.component';
 import { ReportComponent } from './main/report/report.component';
 import { UnitComponent } from './main/unit/unit.component';
@@ -82,7 +81,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     LoginComponent,
     MainComponent,
     UserComponent,
-    UserGroupComponent,
     ContractComponent,
     ReportComponent,
     UnitComponent,
