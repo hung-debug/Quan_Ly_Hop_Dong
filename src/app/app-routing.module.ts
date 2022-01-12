@@ -91,16 +91,16 @@ const routes: Routes = [
         loadChildren: () => import('./main/contract-signature/contract-signature.module').then(m => m.ContractSignatureModule)
       },
       {
+        path: 'form-contract/detail/:id',
+        component: DetailContractComponent,
+      },
+      {
         path: 'form-contract/:action',
         component: AddContractComponent,
       },
       {
         path: 'form-contract/:action/:id',
         component: AddContractComponent,
-      },
-      {
-        path: 'form-contract/detail/:id',
-        component: DetailContractComponent,
       },
       {
         path: 'form-contract-batch/:action',
