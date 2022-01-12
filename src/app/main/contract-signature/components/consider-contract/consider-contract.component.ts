@@ -860,7 +860,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       if (this.signCertDigital && this.signCertDigital.Serial) {
         // this.signCertDigital = resSignDigital.data;
         for(const signUpdate of this.isDataObjectSignature) {
-          if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 1) && [3,4].includes(this.datas.roleContractReceived)
             && signUpdate?.recipient?.email === this.currentUser.email
             && signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
@@ -1207,7 +1207,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
   prepareInfoSignUsbToken(page: any, heightPage: any) {
     this.isDataObjectSignature.map((sign: any) => {
-      if (sign.type == 3
+      if ((sign.type == 3 || sign.type == 1)
         && sign?.recipient?.email === this.currentUser.email
         && sign?.recipient?.role === this.datas?.roleContractReceived
         && sign?.page == page) {

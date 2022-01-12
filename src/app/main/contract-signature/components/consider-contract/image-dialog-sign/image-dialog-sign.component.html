@@ -1,4 +1,4 @@
-<div class="container-fluid" style="min-height: 60vh">
+<div class="container-fluid" style="min-height: 60vh;max-height: 80vh;">
   <div style="text-align: center; font-weight: bold">
     <h3 style="color: #106DB6; font-weight: bold">{{this.datas.title}}</h3>
   </div>
@@ -32,7 +32,7 @@
           ></ngx-select>
         </div>-->
 
-        <div class="image-sign-acc mt-4">
+        <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center">
           <img *ngIf="imgSignAccountSelect" [src]="imgSignAccountSelect" alt="">
         </div>
       </div>
@@ -68,7 +68,7 @@
 
     <div class="select-option">
       <button
-        class="dx-button-form dx-button-close dx-button-90"
+        class="dx-button-form dx-button-close dx-button-90 mb-4"
         type="button" (click)="uploadImage()">OK
       </button>
     </div>
