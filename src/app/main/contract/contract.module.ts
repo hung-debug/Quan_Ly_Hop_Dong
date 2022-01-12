@@ -65,7 +65,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ContractConnectDialogComponent,
     AddConnectDialogComponent,
     ShareContractDialogComponent,
-    DeleteContractDialogComponent,
+    DeleteContractDialogComponent
   ],
   exports: [
     ContractHeaderComponent,

@@ -30,19 +30,19 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.menus.forEach((element:any) => {
+    this.menus.forEach((element: any) => {
       element.active = false;
-      if(element.href != '#'){
+      if (element.href != '#') {
         if (this.router.url.includes(element.href)) {
           element.active = true;
         }
-      }else{
+      } else {
         this.subMenus = element.submenus
         this.subMenus.forEach((elementSub: any) => {
           if (this.router.url.includes(elementSub.href)) {
             element.active = true;
             elementSub.active = true;
-          }else{
+          } else {
             elementSub.active = false;
           }
         });
@@ -81,14 +81,7 @@ export class SidebarComponent implements OnInit {
       this.evenSelectSidebar.emit(nameFeature)
     } else this.evenSelectSidebar.emit(undefined)
     this.router.navigate(['/' + currentMenu.href]);
-    //@ts-ignore
-    if (JSON.parse(localStorage.getItem('coordination_complete'))) {
-      localStorage.removeItem('coordination_complete')
-    }
-    //@ts-ignore
-    if (JSON.parse(localStorage.getItem('data_coordinates_contract_id'))) {
-      localStorage.removeItem('data_coordinates_contract_id');
-    }
+    this.getRemoveLocal();
   }
 
   //set active link child
@@ -117,14 +110,7 @@ export class SidebarComponent implements OnInit {
     currentMenu.active = true;
     this.getState(currentMenu);
     this.router.navigate(['/' + currentSubMenu.href]);
-    //@ts-ignore
-    if (JSON.parse(localStorage.getItem('coordination_complete'))) {
-      localStorage.removeItem('coordination_complete')
-    }
-    //@ts-ignore
-    if (JSON.parse(localStorage.getItem('data_coordinates_contract_id'))) {
-      localStorage.removeItem('data_coordinates_contract_id');
-    }
+    this.getRemoveLocal();
   }
 
   //set state dropdown
@@ -138,6 +124,17 @@ export class SidebarComponent implements OnInit {
 
   hasBackgroundImage() {
     return this.sidebarservice.hasBackgroundImage;
+  }
+
+  getRemoveLocal() {
+    //@ts-ignore
+    if (JSON.parse(localStorage.getItem('coordination_complete'))) {
+      localStorage.removeItem('coordination_complete')
+    }
+    //@ts-ignore
+    if (JSON.parse(localStorage.getItem('data_coordinates_contract_id'))) {
+      localStorage.removeItem('data_coordinates_contract_id');
+    }
   }
 
 }

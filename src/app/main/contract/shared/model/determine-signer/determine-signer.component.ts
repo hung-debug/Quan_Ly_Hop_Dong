@@ -81,11 +81,12 @@ export class DetermineSignerComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (this.datas.determine_contract)
-      this.is_determine_clone = this.datas.determine_contract
-    else
-      // this.is_determine_clone = [...this.contractService.getDataDetermine()];
+    if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
+      this.is_determine_clone = this.datas.determine_contract;
+    }
+    else {
       this.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
+    }
 
     // data Tổ chức của tôi
     this.data_organization = this.is_determine_clone.filter((p: any) => p.type == 1)[0];

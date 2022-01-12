@@ -5,10 +5,9 @@ import {environment} from '../../environments/environment';
 import {map, catchError, retry} from 'rxjs/operators';
 import {Helper} from "../core/Helper";
 import {DatePipe} from '@angular/common';
-import {forkJoin} from "rxjs";
+import {forkJoin, BehaviorSubject} from "rxjs";
 import axios from 'axios';
 import {User} from "./user.service";
-
 
 export interface Contract {
   id: number,
@@ -31,8 +30,8 @@ export interface File {
 })
 export class ContractService {
 
-  // private messageShareData = new BehaviorSubject('default message');
-  // currentMessage = this.messageShareData.asObservable();
+  private messageShareData = new BehaviorSubject<unknown>('');
+  currentMessage = this.messageShareData.asObservable();
 
 
   listContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
@@ -82,9 +81,9 @@ export class ContractService {
     })
   }
 
-  // changeMessage(message: string) {
-  //   this.messageShareData.next(message);
-  // }
+  changeMessage(message: any) {
+    this.messageShareData.next(message);
+  }
 
   getCurrentUser(){
     this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
@@ -259,6 +258,12 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/x-binary');
     return this.http.get(url, { responseType: 'blob', headers }).toPromise();
+  }
+
+  getDataBinaryFileUrlConvert(url: any) {
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/x-binary');
+    return this.http.get(url, { responseType: 'blob', headers });
   }
 
   getDataFileSIMPKIUrlPromise(idPdf: any) {
@@ -589,6 +594,13 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
 
     return this.http.get<any>(this.addGetDataContract + idContract, {headers});
+  }
+
+
+  convertUrltoBinary(res: any) {
+    const headers = new HttpHeaders().append('Content-Type', 'application/binary');
+    // @ts-ignore
+    return this.http.get(res, { responseType: 'binary', headers })
   }
 
 

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ConfirmInforContractComponent} from "../shared/model/confirm-infor-contract/confirm-infor-contract.component";
 import {ContractHeaderComponent} from "../shared/model/contract-header/contract-header.component";
@@ -7,14 +7,18 @@ import {InforContractComponent} from "../shared/model/infor-contract/infor-contr
 import {SampleContractComponent} from "../shared/model/sample-contract/sample-contract.component";
 import {variable} from "../../../config/variable";
 import {AppService} from 'src/app/service/app.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Subscription} from "rxjs";
+import {ContractService} from "../../../service/contract.service";
+import {UploadService} from "../../../service/upload.service";
+// import * as from moment;
 
 @Component({
   selector: 'app-add-contract',
   templateUrl: './add-contract.component.html',
   styleUrls: ['./add-contract.component.scss', '../../main.component.scss']
 })
-export class AddContractComponent implements OnInit {
+export class AddContractComponent implements OnInit, OnDestroy {
   @ViewChild('contractHeader') ContractHeaderComponent: ContractHeaderComponent | unknown;
   @ViewChild('determineSigner') DetermineSignerComponent: DetermineSignerComponent | unknown;
   @ViewChild('sampleContract') SampleContractComponent: SampleContractComponent | unknown;
@@ -43,17 +47,22 @@ export class AddContractComponent implements OnInit {
   confirm_step = false;
   // step = 1;
   step = variable.stepSampleContract.step1;
+  message: any;
+  subscription: Subscription;
 
   constructor(private formBuilder: FormBuilder,
               private appService: AppService,
-              private route: ActivatedRoute,) {
+              private route: ActivatedRoute,
+              private contractService: ContractService,
+              private router: Router,
+              private uploadService: UploadService
+  ) {
   }
 
   ngOnInit() {
     //title
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
-
       //set title
       if (this.action == 'add') {
         this.appService.setTitle('contract.add');
@@ -66,6 +75,34 @@ export class AddContractComponent implements OnInit {
       }
     });
 
+    if (this.action == 'copy' || this.action == 'edit') {
+      this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
+      if (this.message) {
+        let fileName = this.message.i_data_file_contract.filter((p: any) => p.type == 1)[0];
+        let fileNameAttach = this.message.i_data_file_contract.filter((p: any) => p.type == 3)[0];
+        if (fileName) {
+          this.message.is_data_contract['file_name'] = fileName.filename;
+          this.message.is_data_contract['contractFile'] = fileName.path;
+        }
+        if (fileNameAttach) {
+          this.message.is_data_contract['file_name_attach'] = fileNameAttach.filename;
+          this.message.is_data_contract['attachFile'] = fileNameAttach.path;
+        }
+        this.datas.contractConnect = this.message.is_data_contract.refs;
+        this.message.is_data_contract['is_action_contract_created'] = true;
+        this.datas.determine_contract = this.message.is_data_contract.participants;
+        this.datas.i_data_file_contract = this.message.i_data_file_contract;
+        this.datas['is_data_object_signature'] = this.message.is_data_object_signature;
+        this.datas = Object.assign(this.datas, this.message.is_data_contract);
+        // console.log(this.datas, this.message);
+      }
+    } else this.message = undefined
+  }
+
+  ngOnDestroy() {
+    if (this.action == 'copy' || this.action == 'edit') {
+      this.subscription.unsubscribe();
+    }
   }
 
   next() {
