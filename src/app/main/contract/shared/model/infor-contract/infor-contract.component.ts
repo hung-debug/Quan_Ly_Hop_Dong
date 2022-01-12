@@ -351,6 +351,13 @@ export class InforContractComponent implements OnInit {
             if (res)
               this.datas.contractFile = res;
           })
+        } else if (this.uploadFileContractAgain && this.datas.contractFile) {
+            fileReader.readAsDataURL(this.datas.contractFile);
+            fileReader.onload = (e) => {
+              if (fileReader.result)
+                this.datas.file_content = fileReader.result.toString().split(',')[1];
+                this.datas.uploadFileContractAgain = true;
+            };
         }
         if (!this.uploadFileAttachAgain && this.datas.attachFile) {
           await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile).toPromise().then((data: any) => {
