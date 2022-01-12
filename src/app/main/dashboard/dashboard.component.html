@@ -103,7 +103,13 @@
         </div>
       </div>
       <div class="body">
-        <div *ngIf="contracts.length == 0">Danh sách trống!</div>
+        <div *ngIf="contracts.length == 0" 
+        style="height: 453px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
+        <div style="display: table-cell;vertical-align: middle;">
+          <img src="../../../assets/img/empty_data.svg"/>
+          <div>Danh sách trống!</div>
+        </div>
+      </div>
         <div *ngIf="contracts.length > 0" style="height: 453px;"> 
           <div *ngFor="let item of contracts; let i = index" [style.border-bottom]="i != contracts.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px;">
             <div class="row">

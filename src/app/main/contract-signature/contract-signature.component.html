@@ -110,10 +110,13 @@
     </div>
   </div>
 
-  <div style="margin-top: 20px;
-  padding: 10px;
-  background-color: #eaeef3;
-  border-radius: 5px;" *ngIf="contracts.length == 0;">Danh sách trống!</div>
+  <div *ngIf="contracts.length == 0" 
+  style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+    <div style="display: table-cell;vertical-align: middle;">
+      <img src="../../../assets/img/empty_data.svg"/>
+      <div>Danh sách trống!</div>
+    </div>
+  </div>
 
   <div class="contract_footer">
     <div class="footer_title"></div>
