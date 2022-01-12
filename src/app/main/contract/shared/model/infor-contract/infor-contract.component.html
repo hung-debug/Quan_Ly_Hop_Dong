@@ -1,6 +1,6 @@
 <!-- form step 1 -->
 <div>
-  <div class="row">
+  <!-- <div class="row">
     <div class="radio col-md-4 label_type">
       <label><input type="radio" name="type" checked (change)="changeAddContract('/main/form-contract/add')"> {{'contract.not-by-template' | translate}}</label>
     </div>
@@ -10,7 +10,7 @@
     <div class="radio col-md-4 label_type">
       <label><input type="radio" name="type" (change)="changeAddContract('/main/form-contract-batch/add')"> {{'contract.by-batch' | translate}}</label>
     </div>
-  </div>
+  </div> -->
 
   <div class="row">
     <div class="col-md-12">
@@ -32,7 +32,7 @@
     <div class="col-md-12">
       <div class="form-group">
         <div class="label_item">{{'contract.file' | translate}} <span class="require_star">*</span></div>
-        <input id="file-input" type="file" accept=".pdf, .doc, .docx" (change)="fileChanged($event)" style="display: none;"/>
+        <input id="file-input" type="file" accept=".pdf" (change)="fileChanged($event)" style="display: none;"/>
         <div class="file-contract" (click)="addFile()">
           <img src="assets/img/upload_file.svg" alt="mobifone.contract">
           <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="this.datas.file_name==null">{{'choose.contract.file' | translate }}</span>{{this.datas.file_name}}</div>

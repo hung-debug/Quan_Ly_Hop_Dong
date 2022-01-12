@@ -36,10 +36,10 @@
           </tr>
       </ng-template>
       <ng-template pTemplate="paginatorleft" let-state>
-        <span style="color: white !important;">{{'chart.number' | translate}}: {{state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
       </ng-template>
       <ng-template pTemplate="paginatorright" let-state>
-        <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.first+1}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
       </ng-template> 
     </p-table>
   </div>
@@ -48,7 +48,7 @@
   style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
     <div style="display: table-cell;vertical-align: middle;">
       <img src="../../../assets/img/empty_data.svg"/>
-      <div>Danh sách trống!</div>
+      <div style="color: #94A7C6">Không có dữ liệu!</div>
     </div>
   </div>
 </div>

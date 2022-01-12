@@ -90,13 +90,13 @@ export class SidebarService {
         }
       ]
     },
-    {
-      title: 'menu.contract.template.list',
-      icon: '/assets/img/db_processing.svg',
-      active: false,
-      type: 'simple',
-      href: '/main/contract-template'
-    },
+    // {
+    //   title: 'menu.contract.template.list',
+    //   icon: '/assets/img/db_processing.svg',
+    //   active: false,
+    //   type: 'simple',
+    //   href: '/main/contract-template'
+    // },
     {
       title: 'menu.user.list',
       icon: '/assets/img/db_user.svg',

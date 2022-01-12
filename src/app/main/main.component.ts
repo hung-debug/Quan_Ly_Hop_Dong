@@ -72,6 +72,7 @@ export class MainComponent implements OnInit {
 
   
 
+  nameCurrentUser:any;
   ngOnInit(): void {
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('urlLoginType')));
@@ -85,6 +86,8 @@ export class MainComponent implements OnInit {
       this.isRouterContractNew = false;
     } else this.isRouterContractNew = true;
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
+
+    this.nameCurrentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.name;
   }
 
   //apply change title

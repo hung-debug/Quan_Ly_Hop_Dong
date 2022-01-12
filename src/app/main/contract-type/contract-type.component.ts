@@ -19,7 +19,7 @@ export class ContractTypeComponent implements OnInit {
 
   code:any = "";
   name:any = "";
-  list: any[];
+  list: any[] = [];
   cols: any[];
 
   ngOnInit(): void {
