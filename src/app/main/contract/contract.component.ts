@@ -24,7 +24,7 @@ import {Subscription} from "rxjs";
   templateUrl: './contract.component.html',
   styleUrls: ['./contract.component.scss']
 })
-export class ContractComponent implements OnInit, OnDestroy {
+export class ContractComponent implements OnInit {
   action:string;
   status: string;
   type:string;
@@ -135,12 +135,12 @@ export class ContractComponent implements OnInit, OnDestroy {
 
       this.getContractList();
     });
-    this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
+    // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+  // ngOnDestroy() {
+  //   this.subscription.unsubscribe();
+  // }
 
   private getContractList(){
     this.p = 1;
@@ -292,25 +292,31 @@ export class ContractComponent implements OnInit, OnDestroy {
   }
 
   getDataContract(id: number, action: string) {
-    this.spinner.show();
-    this.contractService.getDetailContract(id).subscribe((rs: any) => {
-      let data_api = {
-        is_data_contract: rs[0],
-        i_data_file_contract: rs[1],
-        is_data_object_signature: rs[2]
-      }
-      this.contractService.changeMessage(data_api);
-      setTimeout(() => {
-        if (action == 'copy')
+    setTimeout(() => {
+      if (action == 'copy')
         void this.router.navigate(['main/form-contract/copy/' + id]);
-        else void this.router.navigate(['main/form-contract/edit/' + id]);
-      }, 100)
-    }, () => {
-      this.spinner.hide();
-      this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
-    }, () => {
-      this.spinner.hide();
-    })
+      else void this.router.navigate(['main/form-contract/edit/' + id]);
+    }, 100)
+
+    // this.spinner.show();
+    // this.contractService.getDetailContract(id).subscribe((rs: any) => {
+    //   let data_api = {
+    //     is_data_contract: rs[0],
+    //     i_data_file_contract: rs[1],
+    //     is_data_object_signature: rs[2]
+    //   }
+    //   this.contractService.changeMessage(data_api);
+    //   setTimeout(() => {
+    //     if (action == 'copy')
+    //     void this.router.navigate(['main/form-contract/copy/' + id]);
+    //     else void this.router.navigate(['main/form-contract/edit/' + id]);
+    //   }, 100)
+    // }, () => {
+    //   this.spinner.hide();
+    //   this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+    // }, () => {
+    //   this.spinner.hide();
+    // })
   }
 
   deleteItem(id:number){
