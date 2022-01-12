@@ -480,6 +480,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
           } else if (name_accept_signature == 'chu_ky_so') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
+          } else if (name_accept_signature == 'text') {
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4);
           } else element.is_disable = element.role != 4;
         })
       }
@@ -823,6 +825,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           item.is_disable = !(item.sign_type.some((p: any) => p.id == 1) && item.role != 2);
         } else if (d.sign_unit == 'chu_ky_so') {
           item.is_disable = !(item.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && item.role != 2);
+        } else if (d.sign_unit == 'chu_ky_so') {
+          item.is_disable = !(item.sign_type.some((p: any) => p.id == 2) || item.role == 4);
         } else item.is_disable = item.role != 4;
         item.selected = d.name && item.name == d.name;
       })
