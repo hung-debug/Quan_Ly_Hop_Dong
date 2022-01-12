@@ -50,6 +50,7 @@ export class ContractComponent implements OnInit, OnDestroy {
   filter_from_date:any = "";
   filter_to_date:any = "";
   filter_status:any="";
+  filter_remain_day:any="";
   message: any;
   subscription: Subscription;
 
@@ -156,6 +157,7 @@ export class ContractComponent implements OnInit, OnDestroy {
         this.setPage();
       }
       this.contracts.forEach((key : any, v: any) => {
+        this.contracts[v].status = this.filter_status;
         let participants = key.participants;
         //console.log(participants);
         participants.forEach((key : any, val: any) => {
@@ -197,10 +199,10 @@ export class ContractComponent implements OnInit, OnDestroy {
     }else if(this.status == 'processed'){
       this.title = 'contract.status.processed';
     }else if(this.status == 'expire'){
-      this.filter_status = -1;
+      this.filter_status = 33;
       this.title = 'contract.status.expire';
     }else if(this.status == 'overdue'){
-      this.filter_status = -1;
+      this.filter_status = 34;
       this.title = 'contract.status.overdue';
     }else if(this.status == 'fail'){
       this.filter_status = 31;
@@ -240,6 +242,7 @@ export class ContractComponent implements OnInit, OnDestroy {
       }
 
       this.contracts.forEach((key : any, v: any) => {
+        this.contracts[v].status = this.filter_status;
         let participants = key.participants;
         console.log(participants);
         participants.forEach((key : any, val: any) => {

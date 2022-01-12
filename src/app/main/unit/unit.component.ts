@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppService } from 'src/app/service/app.service';
+import { RoleService } from 'src/app/service/role.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { AddUnitComponent } from './add-unit/add-unit.component';
@@ -24,7 +25,8 @@ export class UnitComponent implements OnInit {
   constructor(private appService: AppService,
     private dialog: MatDialog,
     private unitService: UnitService,
-    private userService: UserService) { }
+    private userService: UserService,
+    private roleService: RoleService) { }
 
   code:any = "";
   name:any = "";
@@ -34,6 +36,11 @@ export class UnitComponent implements OnInit {
   files:any[];
   test:any;
   total:any;
+
+  isQLTC_01:any;
+  isQLTC_02:any;
+  isQLTC_03:any;
+  isQLTC_04:any;
 
   ngOnInit(): void {
     this.appService.setTitle("unit.list");
@@ -47,6 +54,17 @@ export class UnitComponent implements OnInit {
       { field: 'parent_id', header: 'unit.type', style:'text-align: left;' },
       { field: 'id', header: 'unit.manage', style:'text-align: center;' },
       ]; 
+
+      // let roleId = this.userService.getAuthCurrentUser().typeId;
+      // this.roleService.getRoleList(this.code, this.name).subscribe(response => {
+      //   let listRole: any[];
+      //   listRole = response.entities;
+      //   this.isQLTC_01 = listRole.some(element => element == 'QLTC_01');
+      //   this.isQLTC_02 = listRole.some(element => element == 'QLTC_02');
+      //   this.isQLTC_03 = listRole.some(element => element == 'QLTC_03');
+      //   this.isQLTC_04 = listRole.some(element => element == 'QLTC_04');
+      // });
+
   }  
 
   array_empty: any = [];

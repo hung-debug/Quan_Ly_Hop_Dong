@@ -20,6 +20,10 @@ export class PipeTrs implements PipeTransform {
       return 'contract.status.fail';
     }else if(value == 32){
       return 'contract.status.cancel';
+    }else if(value == 33){
+      return 'contract.status.expire';
+    }else if(value == 34){
+      return 'contract.status.overdue';
     }
     return 'contract.status.undefined';
   }

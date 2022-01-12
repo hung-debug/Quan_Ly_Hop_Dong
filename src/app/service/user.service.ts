@@ -59,6 +59,10 @@ export class UserService {
     this.phone = JSON.parse(localStorage.getItem('currentUser')||'').customer.info.phone;
   }
 
+  getAuthCurrentUser() {
+    return JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+  }
+
   getInforUser(){
     this.getCurrentUser();
     return {
