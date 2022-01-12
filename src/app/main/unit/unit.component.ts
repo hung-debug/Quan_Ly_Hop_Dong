@@ -52,7 +52,8 @@ export class UnitComponent implements OnInit {
   array_empty: any = [];
   searchUnit(){
     //lay id to chuc nguoi truy cap
-    //let orgId = this.userService.getInforUser().organization_id;
+    let orgId = this.userService.getInforUser().organization_id;
+    let is_edit = false;
 
     this.unitService.getUnitList(this.code, this.name).subscribe(response => {
       this.listData = response.entities;
@@ -60,14 +61,18 @@ export class UnitComponent implements OnInit {
       this.total = this.listData.length;
 
       //let arrCha = this.listData.filter((p: any) => p.id == orgId);
+      this.listData.sort((a,b) => a.id.toString().localeCompare(b.id));
       let data:any="";
 
       this.array_empty=[];
       this.listData.forEach((element: any, index: number) => {
-        console.log(this.listData.length);
-        console.log(element);
         let dataChildren;
-        dataChildren = this.findChildren(element);
+        if(element.id == orgId){
+          dataChildren = this.findChildren(element, true);
+        }else{
+          dataChildren = this.findChildren(element, false);
+        }
+        
         data = {
           data:
           {
@@ -77,24 +82,23 @@ export class UnitComponent implements OnInit {
             code: element.code,
             status: element.status,
             parent_id: element.parent_id,
+            is_edit: is_edit
           },
           expanded: true,
           children: dataChildren
         };
         
         this.array_empty.push(data);
-        console.log(element.id);
         //this.removeElementFromStringArray(element.id);
       })
       this.list = this.array_empty;
-      console.log(this.list);
+      console
     });
   }
 
-  findChildren(element:any){
+  findChildren(element:any, is_edit:any){
     let dataChildren:any[]=[];
     let arrCon = this.listData.filter((p: any) => p.parent_id == element.id);
-    console.log(arrCon);
     arrCon.forEach((elementCon: any, indexCOn: number) => {
       dataChildren.push(
       {
@@ -106,9 +110,10 @@ export class UnitComponent implements OnInit {
           code: elementCon.code,
           status: elementCon.status,
           parent_id: elementCon.parent_id,
+          is_edit: is_edit
         },
         expanded: true,
-        children: this.findChildren(elementCon)
+        children: this.findChildren(elementCon, is_edit)
       });
       this.removeElementFromStringArray(elementCon.id);
     })
@@ -117,14 +122,11 @@ export class UnitComponent implements OnInit {
 
   removeElementFromStringArray(element: string) {
     this.listData.forEach((value,index)=>{
-      console.log(value.id);
         if(value.id==element){
-          console.log(element);
           this.listData.splice(index,1);
         }
         
     });
-    console.log("A" + this.listData.length);
   }
 
   addUnit() {

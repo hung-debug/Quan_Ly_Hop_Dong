@@ -33,7 +33,7 @@
           <td>{{rowData.code}}</td>
           <td>{{rowData.status==1?'Hoạt động':'Không hoạt động'}}</td>
           <td>{{rowData.parent_id==null?'Tổ chức cha':'Tổ chức con'}}</td>
-          <td style="text-align: center">
+          <td style="text-align: center" *ngIf="rowData.is_edit">
             <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUnit(rowData.id)" style="cursor: pointer;"/>
           </td>
         </tr>

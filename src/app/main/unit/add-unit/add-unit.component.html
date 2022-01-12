@@ -63,6 +63,8 @@
                         [filter]="true" 
                         filterBy="name" 
                         [showClear]="true"  
+                        [showClear]="this.data.id != null?false:true"
+                        [readonly]="this.data.id != null"  
                         ></p-dropdown>
                 </div>
                 <div *ngIf="submitted && f.parent_id.errors" class="invalid">
