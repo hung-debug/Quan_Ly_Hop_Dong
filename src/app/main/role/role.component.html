@@ -1,57 +1,59 @@
-<div class="container-fluid">
-    <div class="row">
-      <div class="col-md-3">
-        <div>{{'role.name' | translate}}</div>
-        <div class="input-line">
-            <input type="text" [(ngModel)]="name" class="input_text"/>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div>{{'role.code' | translate}}</div>
-        <div class="input-line">
-            <input type="text" [(ngModel)]="code" class="input_text"/>
-        </div>
-      </div>
-      <div class="col-md-6 btn_search">
-        <button class="btn btn-lg btn-block btn_submit" (click)="searchRole()">{{'btn.search' | translate }}</button>
-        <button class="btn btn-lg btn-block btn_submit" (click)="addRole()">{{'btn.add' | translate }}</button>
+<div *ngIf="isQLVT_04" class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div>{{'role.name' | translate}}</div>
+      <div class="input-line">
+          <input type="text" [(ngModel)]="name" class="input_text"/>
       </div>
     </div>
-    <div class="row" style="padding-top: 20px;">
-      <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
-        <ng-template pTemplate="header" let-columns>
-          <tr>
-              <th *ngFor="let col of cols" [style]='col.style'>
-                {{col.header | translate}}
-              </th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-list>
-            <tr>
-                <td><a (click)="detailRole(list.id)" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
-                <td>{{list.code}}</td>
-                <td style="text-align: center">
-                  <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editRole(list.id)" style="cursor: pointer;"/>&nbsp;&nbsp;
-                  <img src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteRole(list.id)" style="cursor: pointer;"/>
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="paginatorleft" let-state>
-          <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-        </ng-template>
-        <ng-template pTemplate="paginatorright" let-state>
-          <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-        </ng-template> 
-      </p-table>
-    </div>
-
-    <div *ngIf="list.length == 0" 
-    style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
-      <div style="display: table-cell;vertical-align: middle;">
-        <img src="../../../assets/img/empty_data.svg"/>
-        <div style="color: #94A7C6">Không có dữ liệu!</div>
+    <div class="col-md-3">
+      <div>{{'role.code' | translate}}</div>
+      <div class="input-line">
+          <input type="text" [(ngModel)]="code" class="input_text"/>
       </div>
+    </div>
+    <div class="col-md-6 btn_search">
+      <button *ngIf="isQLVT_04" class="btn btn-lg btn-block btn_submit" (click)="searchRole()">{{'btn.search' | translate }}</button>
+      <button *ngIf="isQLVT_01" class="btn btn-lg btn-block btn_submit" (click)="addRole()">{{'btn.add' | translate }}</button>
     </div>
   </div>
- 
+  <div class="row" style="padding-top: 20px;">
+    <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of cols" [style]='col.style'>
+              {{col.header | translate}}
+            </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-list>
+          <tr>
+              <td><a (click)="isQLVT_05?detailRole(list.id):null" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
+              <td>{{list.code}}</td>
+              <td style="text-align: center">
+                <img *ngIf="isQLVT_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editRole(list.id)" style="cursor: pointer;"/>&nbsp;&nbsp;
+                <img *ngIf="isQLVT_03" src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteRole(list.id)" style="cursor: pointer;"/>
+              </td>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+      </ng-template>
+      <ng-template pTemplate="paginatorright" let-state>
+        <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+      </ng-template> 
+    </p-table>
+  </div>
+
+  <div *ngIf="list.length == 0" 
+  style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+    <div style="display: table-cell;vertical-align: middle;">
+      <img src="../../../assets/img/empty_data.svg"/>
+      <div style="color: #94A7C6">Không có dữ liệu!</div>
+    </div>
+  </div>
+</div>
+<div *ngIf="!isQLVT_04">
+  Bạn không có quyền thực hiện tác vụ này!
+</div>
   

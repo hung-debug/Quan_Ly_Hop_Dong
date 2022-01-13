@@ -2,12 +2,9 @@ import { UploadService } from 'src/app/service/upload.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { DatepickerOptions } from 'ng2-datepicker';
 import { AppService } from 'src/app/service/app.service';
 import { ContractService } from 'src/app/service/contract.service';
 
-import { getYear } from 'date-fns';
-import locale from 'date-fns/locale/en-US';
 import { ToastService } from 'src/app/service/toast.service';
 import { HttpClient } from '@angular/common/http';
 import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
@@ -19,6 +16,7 @@ import { ShareContractDialogComponent } from './dialog/share-contract-dialog/sha
 import {DeleteContractDialogComponent} from './dialog/delete-contract-dialog/delete-contract-dialog.component';
 import {NgxSpinnerService} from "ngx-spinner";
 import {Subscription} from "rxjs";
+import { TreeMapModule } from '@swimlane/ngx-charts';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -54,22 +52,20 @@ export class ContractComponent implements OnInit {
   message: any;
   subscription: Subscription;
 
-  // options sample with default values
-  options: DatepickerOptions = {
-    minYear: getYear(new Date()) - 30, // minimum available and selectable year
-    maxYear: getYear(new Date()) + 30, // maximum available and selectable year
-    placeholder: '', // placeholder in case date model is null | undefined, example: 'Please pick a date'
-    format: 'dd/MM/yyyy', // date format to display in input
-    formatTitle: 'MM/yyyy',
-    formatDays: 'EEEEE',
-    firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
-    locale: locale, // date-fns locale
-    position: 'bottom',
-    inputClass: '', // custom input CSS class to be applied
-    calendarClass: 'datepicker-default', // custom datepicker calendar CSS class to be applied
-    scrollBarColor: '#dfe3e9', // in case you customize you theme, here you define scroll bar color
-    // keyboardEvents: true // enable keyboard events
-  };
+  //phan quyen
+  isQLHD_01:boolean=true;  //them moi hop dong
+  isQLHD_02:boolean=true;  //sua hop dong
+  isQLHD_03:boolean=true;  //xem danh sach hop dong cua to chuc toi va to chuc con
+  isQLHD_04:boolean=true;  //xem danh sach hop dong cua to chuc toi
+  isQLHD_05:boolean=true;  //Xem danh sach hop dong cua toi
+  isQLHD_06:boolean=true;  //tim kiem hop dong
+  isQLHD_07:boolean=true;  //xem thong tin chi tiet hop dong
+  isQLHD_08:boolean=true;  //sao chep hop dong
+  isQLHD_09:boolean=true;  //huy hop hong
+  isQLHD_10:boolean=true;  //xem lich su hop dong
+  isQLHD_11:boolean=true;  //tao hop dong lien quan
+  isQLHD_12:boolean=true;  //xem hop dong lien quan
+  isQLHD_13:boolean=true;  //chia se hop dong
 
   constructor(private modalService: NgbModal,
               private appService: AppService,

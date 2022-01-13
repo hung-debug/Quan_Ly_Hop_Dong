@@ -1,4 +1,4 @@
-<div class="label-header">{{'user.information.individual' | translate}}</div>
+<div *ngIf="isQLND_04" class="label-header">{{'user.information.individual' | translate}}</div>
 <div class="content">
    <div class="content-body">
      <div class="row">
@@ -122,4 +122,6 @@
         <button class="cancel-button" (click)="onCancel()"  type="button">{{'btn.cancel' | translate}}</button>
     </div>
 </div>
-   
+<div *ngIf="!isQLND_04">
+  Bạn không có quyền thực hiện tác vụ này!
+</div>

@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div *ngIf="isQLLHD_04" class="container-fluid">
   <div class="row">
     <div class="col-md-3">
       <div>{{'contract-type.code' | translate}}</div>
@@ -13,8 +13,8 @@
       </div>
     </div>
     <div class="col-md-6 btn_search">
-      <button class="btn btn-lg btn-block btn_submit" (click)="searchContractType()">{{'btn.search' | translate }}</button>
-      <button class="btn btn-lg btn-block btn_submit" (click)="addContractType()">{{'btn.add' | translate }}</button>
+      <button *ngIf="isQLLHD_04" class="btn btn-lg btn-block btn_submit" (click)="searchContractType()">{{'btn.search' | translate }}</button>
+      <button *ngIf="isQLLHD_01" class="btn btn-lg btn-block btn_submit" (click)="addContractType()">{{'btn.add' | translate }}</button>
     </div>
   </div>
   <div class="row" style="padding-top: 20px;">
@@ -28,11 +28,11 @@
       </ng-template>
       <ng-template pTemplate="body" let-list>
           <tr>
-              <td><a (click)="detailContractType(list.id)" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
+              <td><a (click)="isQLLHD_05?detailContractType(list.id):null" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
               <td>{{list.code}}</td>
               <td style="text-align: center">
-                <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editContractType(list.id)" style="cursor: pointer;"/>&nbsp;&nbsp;
-                <img src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteContractType(list.id)" style="cursor: pointer;"/>
+                <img *ngIf="isQLLHD_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editContractType(list.id)" style="cursor: pointer;"/>&nbsp;&nbsp;
+                <img *ngIf="isQLLHD_03" src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteContractType(list.id)" style="cursor: pointer;"/>
               </td>
           </tr>
       </ng-template>
@@ -52,6 +52,9 @@
       <div style="color: #94A7C6">Không có dữ liệu!</div>
     </div>
   </div>
+</div>
+<div *ngIf="!isQLLHD_04">
+  Bạn không có quyền thực hiện tác vụ này!
 </div>
  
   

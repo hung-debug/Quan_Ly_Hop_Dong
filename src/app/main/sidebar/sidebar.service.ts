@@ -4,6 +4,16 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SidebarService {
+
+  //phan quyen
+  isQLHD_01:boolean=true;   //them moi hop dong
+  isQLHD_06:boolean=true;   //tim kiem hop dong
+  isQLMHD_08:boolean=true;  //tim kiem mau hop dong
+  isQLTC_03:boolean=true;   //tim kiem to chuc
+  isQLND_03:boolean=true;   //tim kiem nguoi dung
+  isQLVT_04:boolean=true;   //tim kiem vai tro
+  isQLLHD_04:boolean=true;  //tim kiem loai hop dong
+
   toggled = false;
   _hasBackgroundImage = true;
   menus = [
@@ -75,13 +85,11 @@ export class SidebarService {
           title: 'contract.status.wait-processing',
           active: false,
           href: '/main/contract-signature/receive/wait-processing'
-          // href: '/main/contract/receive/wait-processing'
         },
         {
           title: 'contract.status.processed',
           active: false,
           href: '/main/contract-signature/receive/processed'
-          // href: '/main/contract/receive/processed'
         },
         {
           title: 'contract.status.share',

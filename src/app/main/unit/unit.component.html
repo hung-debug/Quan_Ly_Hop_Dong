@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div *ngIf="isQLTC_03" class="container-fluid">
   <div class="row">
     <div class="col-md-3">
       <div>{{'unit.code' | translate}}</div>
@@ -44,6 +44,9 @@
       {{'chart.number' | translate}}: {{total}}
     </div> 
   </div>
+</div>
+<div *ngIf="!isQLTC_03">
+  Bạn không có quyền thực hiện tác vụ này!
 </div>
  
   

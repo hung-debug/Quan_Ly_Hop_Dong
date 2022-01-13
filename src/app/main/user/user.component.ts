@@ -27,6 +27,7 @@ export class UserComponent implements OnInit {
   cols: any[];
   orgList: Array<any> = [];
 
+  //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
   isQLND_03:boolean=true;  //tim kiem nguoi dung

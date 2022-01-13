@@ -39,6 +39,7 @@ export class AddUserComponent implements OnInit {
   imgSignBucket:null;
   imgSignPath:null;
 
+  //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
 

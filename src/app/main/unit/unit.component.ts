@@ -37,6 +37,7 @@ export class UnitComponent implements OnInit {
   test:any;
   total:any;
 
+  //phan quyen
   isQLTC_01:boolean=true;  //them moi to chuc
   isQLTC_02:boolean=true;  //sua to chuc
   isQLTC_03:boolean=true;  //tim kiem to chuc

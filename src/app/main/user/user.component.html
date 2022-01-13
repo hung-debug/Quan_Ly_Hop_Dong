@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div *ngIf="isQLND_03" class="container-fluid">
   <div class="row">
     <div class="col-md-3">
       <div>{{'unit.name' | translate}}</div>
@@ -57,6 +57,9 @@
       </ng-template> 
     </p-table>
   </div>
+</div>
+<div *ngIf="!isQLND_03">
+  Bạn không có quyền thực hiện tác vụ này!
 </div>
  
   
