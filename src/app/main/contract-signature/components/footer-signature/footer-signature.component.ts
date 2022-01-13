@@ -57,21 +57,24 @@ export class FooterSignatureComponent implements OnInit {
         //@ts-ignore
         let element = this.is_data_coordination.recipients[i];
         if (element.role == 1) {
-          // tạm thời do call api 7.7 điều phối truyền lên obj role ==1 đang sinh ra 2 obj điều phối
           if (element.status != 1) {
-            count_coordinated++;
+            // count_coordinated++;
+            this.is_show_coordination = true;
+            this.view = true;
+            break;
           } else {
-            count_uncoordinated++;
+            this.is_show_coordination = false;
+            break;
           }
         }
       }
 
-      if (count_coordinated > 0) {
-        this.is_show_coordination = true;
-        this.view = true;
-      } else {
-        this.is_show_coordination = false;
-      }
+      // if (count_coordinated > 0) {
+      //   this.is_show_coordination = true;
+      //   this.view = true;
+      // } else {
+      //   this.is_show_coordination = false;
+      // }
 
     }
   }
