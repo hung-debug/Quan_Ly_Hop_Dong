@@ -5,6 +5,7 @@ import { AppService } from 'src/app/service/app.service';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { DetailContractComponent } from '../contract/detail-contract/detail-contract.component';
 import {AddContractTypeComponent} from './add-contract-type/add-contract-type.component'
+import { DeleteContractTypeComponent } from './delete-contract-type/delete-contract-type.component';
 import { DetailContractTypeComponent } from './detail-contract-type/detail-contract-type.component';
 @Component({
   selector: 'app-contract-type',
@@ -86,7 +87,27 @@ export class ContractTypeComponent implements OnInit {
       width: '480px',
       backdrop: 'static',
       keyboard: false,
-      data
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  deleteContractType(id:any) {
+    const data = {
+      title: 'contract-type.delete',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DeleteContractTypeComponent, {
+      width: '500px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');

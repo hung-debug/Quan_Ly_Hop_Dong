@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   menuDashboard:string;
   chartContractCreated:string;
   chartContractReceived:string
+  totalCreate:any=0;
 
   //filter
   filter_from_date:any = "";
@@ -62,9 +63,10 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  search(){
+  search(){    
     this.dashboardService.countContractCreate(this.filter_from_date, this.filter_to_date).subscribe(data => {     
-      console.log(data);     
+      console.log(data);    
+      this.totalCreate = data.total_process + data.total_signed + data.total_rejected + data.total_cancel + data.total_expires;
       this.chartCreated = new Chart({
         colors: ['#4B71F0', '#58A55C', '#ED1C24', '#717070', '#FF710B'],
         chart: {

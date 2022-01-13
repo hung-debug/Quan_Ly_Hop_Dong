@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { isPdfFile } from 'pdfjs-dist';
 import { Observable } from 'rxjs';
 import {environment} from '../../environments/environment';
 
@@ -30,12 +31,17 @@ export class DashboardService {
 
   public countContractCreate(from_date: any, to_date: any): Observable<any> {
     this.getCurrentUser();
-    if (from_date != "") {
-      from_date = this.datepipe.transform(from_date, 'yyyy-MM-dd');
+    console.log(from_date);
+    if (from_date != "" && from_date[0] != 0) {
+      from_date.forEach((key: any, v: any) => {
+        if(v == 0 && key){
+          from_date = this.datepipe.transform(key, 'yyyy-MM-dd');
+        }else if(v == 1 && key){
+          to_date = this.datepipe.transform(key, 'yyyy-MM-dd');
+        }
+      });
     }
-    if (to_date != "") {
-      to_date = this.datepipe.transform(to_date, 'yyyy-MM-dd');
-    }
+    
     let countContractCreateUrl = this.countContractCreateUrl + '?from_date=' + from_date + '&to_date=' + to_date;
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(countContractCreateUrl, {headers}).pipe();

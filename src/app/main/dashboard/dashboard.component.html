@@ -90,8 +90,17 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div [chart]="chartCreated"></div>
-            <div style="text-align: center;">{{'chart.contract.received' | translate}}</div>
+            <div *ngIf="totalCreate == 0" 
+              style="height: 421px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
+              <div style="display: table-cell;vertical-align: middle;">
+                <img src="../../../assets/img/empty_data.svg"/>
+                <div style="color: #94A7C6">Không có dữ liệu!</div>
+              </div>
+            </div>
+            <div *ngIf="totalCreate > 0" >
+              <div [chart]="chartCreated"></div>
+              <div style="text-align: center;">{{'chart.contract.received' | translate}}</div>
+            </div>
           </div>
         </div>
       </div>

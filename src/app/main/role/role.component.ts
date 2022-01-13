@@ -4,6 +4,7 @@ import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
 import { RoleService } from 'src/app/service/role.service';
 import { AddRoleComponent } from './add-role/add-role.component';
+import { DeleteRoleComponent } from './delete-role/delete-role.component';
 import {DetailRoleComponent} from './detail-role/detail-role.component';
 
 @Component({
@@ -87,6 +88,25 @@ export class RoleComponent implements OnInit {
     // @ts-ignore
     const dialogRef = this.dialog.open(DetailRoleComponent, {
       width: '700px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  deleteRole(id:any) {
+    const data = {
+      title: 'role.delete',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DeleteRoleComponent, {
+      width: '450px',
       backdrop: 'static',
       keyboard: false,
       data,
