@@ -163,7 +163,7 @@ export class DetermineSignerComponent implements OnInit {
       },
       (res: any) => {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout(res.error, "", 10000);
+        this.toastService.showErrorHTMLWithTimeout(res.error, "", 3000);
       }, () => {
         this.spinner.hide();
       }
@@ -413,7 +413,7 @@ export class DetermineSignerComponent implements OnInit {
 
   getNotificationValid(is_notify: string) {
     this.spinner.hide();
-    this.toastService.showErrorHTMLWithTimeout(is_notify, "", 10000);
+    this.toastService.showErrorHTMLWithTimeout(is_notify, "", 3000);
   }
 
   getNameObject(role_numer: number) {

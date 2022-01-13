@@ -650,12 +650,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
 
   async submitEvents(e: any) {
     if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng', '', 1000);
+      this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng', '', 3000);
       return;
     }
     if (e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 1000);
+      this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 3000);
       return;
     } else if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
@@ -684,7 +684,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
           }
         }
         if (!findDataNetwork) {
-          this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn nhà mạng và nhập số điện thoại kí sim PKI', '', 1500);
+          this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn nhà mạng và nhập số điện thoại kí sim PKI', '', 3000);
           return;
         }
       }
@@ -895,7 +895,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         console.log(checkSign);
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi ký sim PKI', '', 1000);
+          this.toastService.showErrorHTMLWithTimeout('Lỗi ký sim PKI', '', 3000);
         }
       }
 
@@ -939,7 +939,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       }
       await this.signContract();
     }, error => {
-      this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+      this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
     });
     if (signUploadObs$.length == 0) {
       await this.signContract();
@@ -1023,7 +1023,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         this.spinner.hide();
         this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
       }
     )
   }
@@ -1123,15 +1123,15 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
     if (textRefuse) {
       this.contractService.considerRejectContract(this.recipientId, textRefuse).subscribe(
         (result) => {
-          this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công', '', 1000);
+          this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công', '', 3000);
           this.spinner.hide();
           this.router.navigate(['/main/contract-signature/receive/processed']);
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
         }
       )
     } else {
-      // this.toastService.showWarningHTMLWithTimeout('Bạn cần nhập lý do hủy hợp đồng', '', 1000)
+      // this.toastService.showWarningHTMLWithTimeout('Bạn cần nhập lý do hủy hợp đồng', '', 3000)
     }
 
   }
@@ -1180,11 +1180,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
           window.URL.revokeObjectURL(url);
           a.remove();
 
-          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 10000);
-        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 10000);
+          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
       },
       error => {
-        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 10000);
+        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
       }
     );
   }

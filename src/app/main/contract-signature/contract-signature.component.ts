@@ -291,11 +291,11 @@ export class ContractSignatureComponent implements OnInit {
         window.URL.revokeObjectURL(url);
         a.remove();
 
-        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 10000);
-      }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 10000);
+        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+      }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
     },
     error => {
-      this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 10000);
+      this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
     }
      );
   }

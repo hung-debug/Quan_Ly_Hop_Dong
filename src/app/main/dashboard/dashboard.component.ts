@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.countContractCreate(this.filter_from_date, this.filter_to_date).subscribe(data => {     
       console.log(data);     
       this.chartCreated = new Chart({
-        colors: ['#407EF9', '#58A55C', '#ED1C24', '#FF710B', '#717070'],
+        colors: ['#4B71F0', '#58A55C', '#ED1C24', '#717070', '#FF710B'],
         chart: {
           type: 'column',
           style: {
@@ -85,12 +85,17 @@ export class DashboardComponent implements OnInit {
           enabled: false
         },
         legend: {
-          enabled: true
+          enabled: false
         },
         xAxis: {
           categories: [
-              ''
+            'Đang xử lý', 'Hoàn thành', 'Từ chối',  'Hủy bỏ', 'Quá hạn'
           ],
+          labels: {
+            style: {
+              fontSize: '13px'
+            }
+          }
         },
         yAxis: [{
           title: {
@@ -102,43 +107,21 @@ export class DashboardComponent implements OnInit {
               borderWidth: 0,
               dataLabels: {
                   enabled: true,
-              }
+              },
+              
           }
         },
         series : [
         {
           type: 'column',
-          name: 'Đang xử lý',
+          colorByPoint: true,
+          name: 'Số hợp đồng',
           data: [
-            ['Số hợp đồng', data.total_process],
-          ]
-        },
-        {
-          type: 'column',
-          name: 'Hoàn thành',
-          data: [
-            ['Số hợp đồng', data.total_signed],
-          ]
-        },
-        {
-          type: 'column',
-          name: 'Từ chối',
-          data: [
-            ['Số hợp đồng', data.total_rejected],
-          ]
-        },
-        {
-          type: 'column',
-          name: 'Quá hạn',
-          data: [
-            ['Số hợp đồng', data.total_expires],
-          ]
-        },
-        {
-          type: 'column',
-          name: 'Hủy bỏ',
-          data: [
-            ['Số hợp đồng', data.total_cancel]
+            ['Đang xử lý', data.total_process],
+            ['Hoàn thành', data.total_signed],
+            ['Từ chối', data.total_rejected],
+            ['Hủy bỏ', data.total_cancel],
+            ['Quá hạn', data.total_expires]
           ]
         }]
       });

@@ -131,12 +131,12 @@ export class InforContractComponent implements OnInit {
           }
           // console.log(this.datas);
         } else if (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx') {
-          this.toastService.showErrorHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 10000);
+          this.toastService.showErrorHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 3000);
         } else {
-          this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF", "", 10000);
+          this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF", "", 3000);
         }
       } else {
-        this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu nhỏ hơn 5MB", "", 10000);
+        this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu nhỏ hơn 5MB", "", 3000);
       }
     }
   }
@@ -167,7 +167,7 @@ export class InforContractComponent implements OnInit {
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
-          this.toastService.showErrorHTMLWithTimeout("File đính kèm yêu cầu nhỏ hơn 5MB", "", 10000);
+          this.toastService.showErrorHTMLWithTimeout("File đính kèm yêu cầu nhỏ hơn 5MB", "", 3000);
           break;
         }
       }
@@ -267,14 +267,14 @@ export class InforContractComponent implements OnInit {
                                   },
                                   error => {
                                     this.spinner.hide();
-                                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 10000);
+                                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
                                     return false;
                                   }
                                 );
                               },
                               error => {
                                 this.spinner.hide();
-                                this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 10000);
+                                this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
                                 return false;
                               }
                             );
@@ -290,14 +290,14 @@ export class InforContractComponent implements OnInit {
                           }
                         }, error => {
                           this.spinner.hide();
-                          this.toastService.showErrorHTMLWithTimeout("no.get.information.organization.error", "", 10000);
+                          this.toastService.showErrorHTMLWithTimeout("no.get.information.organization.error", "", 3000);
                           return false;
                         })
                       },
 
                       error => {
                         this.spinner.hide();
-                        this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
+                        this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
                         return false;
                       }
                     );
@@ -305,28 +305,28 @@ export class InforContractComponent implements OnInit {
 
                   error => {
                     this.spinner.hide();
-                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
+                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
                     return false;
                   }
                 );
               },
               error => {
                 this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
+                this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
                 return false;
               }
             );
           },
           error => {
             this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 10000);
+            this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
             return false;
           }
         );
       },
       error => {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 10000);
+        this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 3000);
         return false;
       }
     );
@@ -380,7 +380,7 @@ export class InforContractComponent implements OnInit {
   //   await this.contractService.convertUrltoBinary(res).toPromise().then((res) => {
   //     this.datas[file_type] = res;
   //   }, () => {
-  //     this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra!', "", 1000);
+  //     this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra!', "", 3000);
   //   })
   // }
 
@@ -493,34 +493,34 @@ export class InforContractComponent implements OnInit {
 
                                   //next step
                                   this.router.navigate(['/main/contract/create/draff']);
-                                  this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 10000);
+                                  this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
 
                                   this.spinner.hide();
                                 },
                                 error => {
                                   this.spinner.hide();
-                                  this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 10000);
+                                  this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
                                   return false;
                                 }
                               );
                             },
                             error => {
                               this.spinner.hide();
-                              this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 10000);
+                              this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
                               return false;
                             }
                           );
                         } else {
                           //next step
                           this.router.navigate(['/main/contract/create/draff']);
-                          this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 10000);
+                          this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
                           this.spinner.hide();
                         }
                       },
 
                       error => {
                         this.spinner.hide();
-                        this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
+                        this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
                         return false;
                       }
                     );
@@ -528,7 +528,7 @@ export class InforContractComponent implements OnInit {
 
                   error => {
                     this.spinner.hide();
-                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
+                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
                     return false;
                   }
                 );
@@ -536,21 +536,21 @@ export class InforContractComponent implements OnInit {
 
               error => {
                 this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 10000);
+                this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
                 return false;
               }
             );
           },
           error => {
             this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 10000);
+            this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
             return false;
           }
         );
       },
       error => {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 10000);
+        this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 3000);
         return false;
       }
     );

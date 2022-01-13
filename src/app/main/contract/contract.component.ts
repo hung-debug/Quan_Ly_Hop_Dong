@@ -313,7 +313,7 @@ export class ContractComponent implements OnInit {
     //   }, 100)
     // }, () => {
     //   this.spinner.hide();
-    //   this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 1000);
+    //   this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
     // }, () => {
     //   this.spinner.hide();
     // })
@@ -456,11 +456,11 @@ export class ContractComponent implements OnInit {
         window.URL.revokeObjectURL(url);
         a.remove();
 
-        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 10000);
-      }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 10000);
+        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+      }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
     },
     error => {
-      this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 10000);
+      this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
     }
      );
   }

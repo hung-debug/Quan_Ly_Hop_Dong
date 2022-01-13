@@ -108,7 +108,7 @@ export class ShareContractDialogComponent implements OnInit {
       // this.email.forEach((key: any, v: any) => {
       //   console.log(key);
       //   if(this.isValidEmail(key.trim())== false){
-      //     this.toastService.showErrorHTMLWithTimeout('Tồn tại email ' + key.trim() + ' sai định dạng', "", 1000);
+      //     this.toastService.showErrorHTMLWithTimeout('Tồn tại email ' + key.trim() + ' sai định dạng', "", 3000);
       //     return;
       //   }
       // });
