@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -27,20 +28,24 @@ import {ConfirmSignOtpComponent} from "./confirm-sign-otp/confirm-sign-otp.compo
 import {ImageDialogSignComponent} from "./image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "./pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "./hsm-dialog-sign/hsm-dialog-sign.component";
-import {forkJoin, throwError} from "rxjs";
+import {forkJoin, throwError, timer} from "rxjs";
 import {ToastService} from "../../../../service/toast.service";
 import {UploadService} from "../../../../service/upload.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {DigitalSignatureService} from "../service/digital-sign.service";
 import {encode} from "base64-arraybuffer";
 import {UserService} from "../../../../service/user.service";
+// @ts-ignore
+import domtoimage from 'dom-to-image';
+import { delay } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-consider-contract',
   templateUrl: './consider-contract.component.html',
   styleUrls: ['./consider-contract.component.scss']
 })
-export class ConsiderContractComponent implements OnInit, OnDestroy {
+export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewInit {
   datas: any;
   data_contract: any;
   data_coordinates: any;
@@ -131,6 +136,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   valid: boolean = false;
   signCertDigital: any;
   dataNetworkPKI: any;
+  nameCompany: any;
+  base64GenCompany: any;
+  textSign: any;
+  textSignBase64Gen: any;
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -346,6 +355,13 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       // document.getElementById('input-location-x').focus();
       let width_drag_element = document.getElementById('width-element-info');
       this.widthDrag = width_drag_element ? ((width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left) - 15) : '';
+
+      const imageRender = <HTMLElement>document.getElementById('export-html');
+      if (imageRender) {
+        domtoimage.toPng(imageRender).then((res: any) => {
+          this.base64GenCompany = res.split(",")[1];
+        })
+      }
     }, 100)
     this.setPosition();
     this.eventMouseover();
@@ -830,17 +846,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
   }
 
   async signDigitalDocument() {
-    let fileC = await this.contractService.getFileContractPromise(this.idContract);
-    const pdfC2 = fileC.find((p: any) => p.type == 2);
-    const pdfC1 = fileC.find((p: any) => p.type == 1);
     let typeSignDigital = 0;
-    if (pdfC2) {
-      fileC = pdfC2.path;
-    } else if (pdfC1) {
-      fileC = pdfC1.path;
-    } else {
-      return;
-    }
+
     for(const signUpdate of this.isDataObjectSignature) {
       if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
@@ -864,30 +871,69 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
             && signUpdate?.recipient?.email === this.currentUser.email
             && signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
+            let fileC = await this.contractService.getFileContractPromise(this.idContract);
+            const pdfC2 = fileC.find((p: any) => p.type == 2);
+            const pdfC1 = fileC.find((p: any) => p.type == 1);
+            if (pdfC2) {
+              fileC = pdfC2.path;
+            } else if (pdfC1) {
+              fileC = pdfC1.path;
+            } else {
+              return;
+            }
+            let signI = null;
+            if (signUpdate.type == 1) {
+              this.textSign = signUpdate.valueSign;
+              await of(null).pipe(delay(100)).toPromise();
+              const imageRender = <HTMLElement>document.getElementById('text-sign');
+              if (imageRender) {
+                const textSignB = await domtoimage.toPng(imageRender);
+                signI = this.textSignBase64Gen = textSignB.split(",")[1];
+              }
+            } else if (signUpdate.type == 3) {
+              signI = this.base64GenCompany
+            }
+
             const signDigital = JSON.parse(JSON.stringify(signUpdate));
             signDigital.Serial = this.signCertDigital.Serial;
             const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
-            console.log(signDigital.valueSignBase64);
 
-            const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital);
-            await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
+            console.log('signI', signI);
+            const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+            const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
+            if (!sign.recipient_id) {
+              this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+              return false;
+            }
           }
         }
+        return true;
       } else {
-        return;
+        this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+        return false;
       }
     } else if (typeSignDigital == 3) {
       const objSign = this.isDataObjectSignature.filter((signUpdate: any) => (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived));
+      let fileC = await this.contractService.getFileContractPromise(this.idContract);
+      const pdfC2 = fileC.find((p: any) => p.type == 2);
+      const pdfC1 = fileC.find((p: any) => p.type == 1);
+      if (pdfC2) {
+        fileC = pdfC2.path;
+      } else if (pdfC1) {
+        fileC = pdfC1.path;
+      } else {
+        return;
+      }
       if (fileC && objSign.length) {
         /*const arrBuffFile = await this.contractService.getDataBinaryFileUrlPromise(fileC);
         const fileSignedId = await this.contractService.uploadFileSimPKI(arrBuffFile);
         const fileSignedArr = await this.contractService.getDataFileSIMPKIUrlPromise(fileSignedId.id);
         const valueSignBase64 = encode(fileSignedArr);
         await this.contractService.updateDigitalSignatured(objSign[0].id, valueSignBase64);*/
-        console.log('pki info', this.dataNetworkPKI);
+        // console.log('pki info', this.dataNetworkPKI);
         /*for (const signSimPki of objSign) {
           await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode, signSimPki.id);
         }*/
@@ -896,6 +942,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
           this.toastService.showErrorHTMLWithTimeout('Lỗi ký sim PKI', '', 3000);
+          return false;
+        } else {
+          return true;
         }
       }
 
@@ -937,17 +986,17 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         }
         ir++;
       }
-      await this.signContract();
+      await this.signContract(false);
     }, error => {
       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
     });
     if (signUploadObs$.length == 0) {
-      await this.signContract();
+      await this.signContract(true);
     }
 
   }
 
-  async signContract() {
+  async signContract(notContainSignImage?: boolean) {
     const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
     const signUpdatePayload = signUpdateTemp.filter(
       (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
@@ -984,7 +1033,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
             this.spinner.hide();
             return;
           } else {
-            await this.signImageC(signUpdatePayload);
+            await this.signImageC(signUpdatePayload, notContainSignImage);
           }
         } else {
           this.spinner.hide();
@@ -1008,15 +1057,36 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
       })
 
     } else {
-      await this.signImageC(signUpdatePayload);
+      await this.signImageC(signUpdatePayload, notContainSignImage);
     }
 
   }
 
-  async signImageC(signUpdatePayload: any) {
-    this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId).subscribe(
+  async signImageC(signUpdatePayload: any, notContainSignImage: any) {
+    let signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
+    let signDigitalStatus = null;
+    if (notContainSignImage) {
+      signDigitalStatus = await this.signDigitalDocument();
+      signUpdateTempN = signUpdateTempN.filter(
+        (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+        .map((item: any) =>  {
+          return {
+            id: item.id,
+            name: item.name,
+            value: null,
+            font: item.font,
+            font_size: item.font_size
+          }});
+    }
+    if (!signDigitalStatus) {
+      this.spinner.hide();
+      return;
+    }
+    this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
       async (result) => {
-        await this.signDigitalDocument();
+        if (!notContainSignImage) {
+          await this.signDigitalDocument();
+        }
         this.toastService.showSuccessHTMLWithTimeout(
           [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
           , '', 1000);
@@ -1195,6 +1265,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy {
         for (const recipient of participant.recipients) {
           if (this.recipientId == recipient.id) {
             this.recipient = recipient;
+            this.nameCompany = participant.name;
             if (this.currentUser?.email != this.recipient?.email) {
               this.router.navigate(['main/form-contract/detail/' + this.idContract]);
             }

@@ -217,7 +217,7 @@ export class ContractService {
     return axios.get(this.getAccountSignDigital, config);
   }
 
-  postSignDigitalMobi(signCertDigital: any) {
+  postSignDigitalMobi(signCertDigital: any, imgSignGen: any) {
     this.getCurrentUser();
     let config = {
       headers: {
@@ -231,7 +231,7 @@ export class ContractService {
       certSerial: signCertDigital.Serial,
       fieldName: "",
       fileData: signCertDigital.valueSignBase64,
-      imageData: this.imageMobiBase64,
+      imageData: imgSignGen ? imgSignGen : this.imageMobiBase64,
       page: signCertDigital.page.toString(),
       ph: Math.floor(signCertDigital.signDigitalHeight ? signCertDigital.signDigitalHeight : signCertDigital.height).toString(),
       pw: Math.floor(signCertDigital.signDigitalWidth ? signCertDigital.signDigitalWidth : signCertDigital.width).toString(),

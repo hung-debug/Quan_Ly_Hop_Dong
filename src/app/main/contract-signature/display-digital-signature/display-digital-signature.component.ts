@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 //@ts-ignore
 import domtoimage from 'dom-to-image';
 
@@ -10,6 +10,7 @@ import domtoimage from 'dom-to-image';
 export class DisplayDigitalSignatureComponent implements OnInit {
   isDateTime: any = new Date();
   isNameSignature: string = 'Công ty cổ phần phần mềm công nghệ cao Việt Nam';
+  @Input() nameCompany: string | undefined | null;
 
   constructor() { }
 
