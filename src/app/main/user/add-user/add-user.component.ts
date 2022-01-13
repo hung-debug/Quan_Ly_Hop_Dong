@@ -39,6 +39,9 @@ export class AddUserComponent implements OnInit {
   imgSignBucket:null;
   imgSignPath:null;
 
+  isQLND_01:boolean=true;  //them moi nguoi dung
+  isQLND_02:boolean=true;  //sua nguoi dung
+
   constructor(private appService: AppService,
     private toastService : ToastService,
     private userService : UserService,
@@ -68,19 +71,23 @@ export class AddUserComponent implements OnInit {
      }
 
   ngOnInit(): void {
-    //lay danh sach to chuc
-    this.unitService.getUnitList('', '').subscribe(data => {
-      console.log(data.entities);
-      this.orgList = data.entities;
-    });
 
-    //lay danh sach vai tro
-    this.roleService.getRoleList('', '').subscribe(data => {
-      console.log(data);
-      this.roleList = data.entities;
-    });
 
-    this.networkList = networkList;
+    if(this.isQLND_01 || this.isQLND_02){
+      //lay danh sach to chuc
+      this.unitService.getUnitList('', '').subscribe(data => {
+        console.log(data.entities);
+        this.orgList = data.entities;
+      });
+
+      //lay danh sach vai tro
+      this.roleService.getRoleList('', '').subscribe(data => {
+        console.log(data);
+        this.roleList = data.entities;
+      });
+
+      this.networkList = networkList;
+    }
 
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
@@ -89,55 +96,59 @@ export class AddUserComponent implements OnInit {
       if (this.action == 'add') {
         this.appService.setTitle('user.add');
 
-        this.addForm = this.fbd.group({
-          name: this.fbd.control("", [Validators.required]),
-          email: this.fbd.control("", [Validators.required, Validators.email]),
-          birthday: null,
-          phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-          organizationId: this.fbd.control("", [Validators.required]),
-          role: this.fbd.control("", [Validators.required]),
-          status: 1,
+        if(this.isQLND_01){
+          this.addForm = this.fbd.group({
+            name: this.fbd.control("", [Validators.required]),
+            email: this.fbd.control("", [Validators.required, Validators.email]),
+            birthday: null,
+            phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+            organizationId: this.fbd.control("", [Validators.required]),
+            role: this.fbd.control("", [Validators.required]),
+            status: 1,
 
-          phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
-          networkKpi: null,
+            phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
+            networkKpi: null,
 
-          nameHsm: null,
+            nameHsm: null,
 
-          fileImage:null
-        });
+            fileImage:null
+          });
+        }
       } else if (this.action == 'edit') {
         this.id = params['id'];
         this.appService.setTitle('user.update');
 
-        this.userService.getUserById(this.id).subscribe(
-          data => {
-            console.log(data);
-            this.addForm = this.fbd.group({
-              name: this.fbd.control(data.name, [Validators.required]),
-              email: this.fbd.control(data.email, [Validators.required, Validators.email]),
-              birthday: data.birthday==null?null:new Date(data.birthday),
-              phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-              organizationId: this.fbd.control(data.organization_id, [Validators.required]),
-              role: this.fbd.control(data.type_id, [Validators.required]),
-              status: data.status,
+        if(this.isQLND_02){
+          this.userService.getUserById(this.id).subscribe(
+            data => {
+              console.log(data);
+              this.addForm = this.fbd.group({
+                name: this.fbd.control(data.name, [Validators.required]),
+                email: this.fbd.control(data.email, [Validators.required, Validators.email]),
+                birthday: data.birthday==null?null:new Date(data.birthday),
+                phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+                organizationId: this.fbd.control(data.organization_id, [Validators.required]),
+                role: this.fbd.control(data.type_id, [Validators.required]),
+                status: data.status,
 
-              phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
-              networkKpi: data.phone_tel,
+                phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
+                networkKpi: data.phone_tel,
 
-              nameHsm: data.hsm_name,
+                nameHsm: data.hsm_name,
 
-              fileImage:null
-            });
-            this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
-            this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
-            this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
-            console.log(this.addForm);
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-          }
-        )
+                fileImage:null
+              });
+              this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
+              this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
+              this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
+              console.log(this.addForm);
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+            }
+          )
+        }
       }
-    });    
+    });  
   }
 
   updateInforUser(){

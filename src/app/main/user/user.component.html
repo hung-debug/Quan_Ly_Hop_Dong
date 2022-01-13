@@ -23,8 +23,8 @@
       </div>
     </div>
     <div class="col-md-6 btn_search">
-      <button class="btn btn-lg btn-block btn_submit" (click)="searchUser()">{{'btn.search' | translate }}</button>
-      <button class="btn btn-lg btn-block btn_submit" (click)="addUser()">{{'btn.add' | translate }}</button>
+      <button *ngIf="isQLND_03" class="btn btn-lg btn-block btn_submit" (click)="searchUser()">{{'btn.search' | translate }}</button>
+      <button *ngIf="isQLND_01" class="btn btn-lg btn-block btn_submit" (click)="addUser()">{{'btn.add' | translate }}</button>
     </div>
   </div>
   <div class="row" style="padding-top: 20px;">
@@ -38,14 +38,14 @@
       </ng-template>
       <ng-template pTemplate="body" let-list>
           <tr>
-              <td><a (click)="detailUser(list.id)" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
+              <td><a (click)="isQLND_04?detailUser(list.id):null" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
               <td>{{list.email}}</td>
               <td>{{list.phone}}</td>
               <td>{{list.organization.name}}</td>
               <td>{{list.status==1?'Hoạt động':'Không hoạt động'}}</td>
               <td>{{list.type.name}}</td>
               <td style="text-align: center">
-                <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
+                <img *ngIf="isQLND_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
               </td>
           </tr>
       </ng-template>

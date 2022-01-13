@@ -1,182 +1,186 @@
-<div class="label-header">{{'user.information.individual' | translate}}</div>
-<form [formGroup]="addForm" class="content">
-   <div class="content-body">
-     <div class="row">
-       <div class="col-md-4">
-          <div class="label text-color">{{'user.name' | translate}} <span class="required-title">*</span></div>
-          <div class="input-data">
-              <input type="text" formControlName="name">
-          </div>
-          <div *ngIf="submitted && f.name.errors" class="invalid">
-            <div *ngIf="f.name.errors.required">Họ tên không được để trống</div>
-          </div>
-       </div>
-       <div class="col-md-4">
-          <div class="label text-color">{{'user.email' | translate}} <span class="required-title">*</span></div>
-          <div class="input-data">
-              <input type="text" formControlName="email" [readonly]="id != null">
-          </div>
-          <div *ngIf="submitted && f.email.errors" class="invalid">
-            <div *ngIf="f.email.errors.required">Email không được để trống</div>
-            <div *ngIf="f.email.errors.email">Email không đúng định dạng</div>
-          </div>
-       </div>
-       <div class="col-md-4">
-        <div class="label text-color">{{'user.birthday' | translate}}</div>
-        <div>
-          <p-calendar formControlName="birthday" [showIcon]="true" dateFormat="dd/mm/yy" ></p-calendar>
+<div *ngIf="isQLND_01 || isQLND_02">
+  <div class="label-header">{{'user.information.individual' | translate}}</div>
+  <form [formGroup]="addForm" class="content">
+    <div class="content-body">
+      <div class="row">
+        <div class="col-md-4">
+            <div class="label text-color">{{'user.name' | translate}} <span class="required-title">*</span></div>
+            <div class="input-data">
+                <input type="text" formControlName="name">
+            </div>
+            <div *ngIf="submitted && f.name.errors" class="invalid">
+              <div *ngIf="f.name.errors.required">Họ tên không được để trống</div>
+            </div>
         </div>
-       </div>
-     </div>
-   
-     <div class="row">
-       <div class="col-md-4">
-          <div class="label text-color">{{'user.phone' | translate}} <span class="required-title">*</span></div>
-          <div class="input-data">
-              <input type="text" formControlName="phone">
+        <div class="col-md-4">
+            <div class="label text-color">{{'user.email' | translate}} <span class="required-title">*</span></div>
+            <div class="input-data">
+                <input type="text" formControlName="email" [readonly]="id != null">
+            </div>
+            <div *ngIf="submitted && f.email.errors" class="invalid">
+              <div *ngIf="f.email.errors.required">Email không được để trống</div>
+              <div *ngIf="f.email.errors.email">Email không đúng định dạng</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+          <div class="label text-color">{{'user.birthday' | translate}}</div>
+          <div>
+            <p-calendar formControlName="birthday" [showIcon]="true" dateFormat="dd/mm/yy" ></p-calendar>
           </div>
-          <div *ngIf="submitted && f.phone.errors" class="invalid">
-            <div *ngIf="f.phone.errors.required">Số điện thoại không được để trống</div>
-            <div *ngIf="f.phone.errors.pattern">Số điện thoại sai định dạng</div>
+        </div>
+      </div>
+    
+      <div class="row">
+        <div class="col-md-4">
+            <div class="label text-color">{{'user.phone' | translate}} <span class="required-title">*</span></div>
+            <div class="input-data">
+                <input type="text" formControlName="phone">
+            </div>
+            <div *ngIf="submitted && f.phone.errors" class="invalid">
+              <div *ngIf="f.phone.errors.required">Số điện thoại không được để trống</div>
+              <div *ngIf="f.phone.errors.pattern">Số điện thoại sai định dạng</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+          <div class="label text-color">{{'organization' | translate}} <span class="required-title">*</span></div>
+          <div>
+            <p-dropdown 
+              panelStyleClass="font"
+              [options]="orgList" 
+              formControlName="organizationId" 
+              optionLabel="name" 
+              optionValue="id" 
+              placeholder="Chọn tổ chức" 
+              [filter]="true" 
+              filterBy="name" 
+              [showClear]="id != null?false:true"
+              [readonly]="id != null"  
+              ></p-dropdown>
           </div>
-       </div>
-       <div class="col-md-4">
-         <div class="label text-color">{{'organization' | translate}} <span class="required-title">*</span></div>
-         <div>
+            <div *ngIf="submitted && f.organizationId.errors" class="invalid">
+              <div *ngIf="f.organizationId.errors.required">Tổ chức không được để trống</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+          <div class="label text-color">{{'menu.role.list' | translate}} <span class="required-title">*</span></div>
+          <div>
           <p-dropdown 
-            panelStyleClass="font"
-            [options]="orgList" 
-            formControlName="organizationId" 
-            optionLabel="name" 
-            optionValue="id" 
-            placeholder="Chọn tổ chức" 
-            [filter]="true" 
-            filterBy="name" 
-            [showClear]="id != null?false:true"
-            [readonly]="id != null"  
-            ></p-dropdown>
-         </div>
-          <div *ngIf="submitted && f.organizationId.errors" class="invalid">
-            <div *ngIf="f.organizationId.errors.required">Tổ chức không được để trống</div>
+          panelStyleClass="font"
+          [options]="roleList" 
+          formControlName="role" 
+          optionLabel="name" 
+          optionValue="id" 
+          placeholder="Chọn vai trò" 
+          [filter]="true" 
+          filterBy="name" 
+          [showClear]="true"  
+          ></p-dropdown>
           </div>
-       </div>
-       <div class="col-md-4">
-        <div class="label text-color">{{'menu.role.list' | translate}} <span class="required-title">*</span></div>
-        <div>
-         <p-dropdown 
-         panelStyleClass="font"
-         [options]="roleList" 
-         formControlName="role" 
-         optionLabel="name" 
-         optionValue="id" 
-         placeholder="Chọn vai trò" 
-         [filter]="true" 
-         filterBy="name" 
-         [showClear]="true"  
-         ></p-dropdown>
-        </div>
-        <div *ngIf="submitted && f.role.errors" class="invalid">
-          <div *ngIf="f.role.errors.required">Vai trò không được để trống</div>
+          <div *ngIf="submitted && f.role.errors" class="invalid">
+            <div *ngIf="f.role.errors.required">Vai trò không được để trống</div>
+          </div>
         </div>
       </div>
-     </div>
-     <div class="row">
-      <div class="col-md-2">
-          <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
-          <span> {{'unit.active' | translate}}</span>
-      </div>
-      <div class="col-md-2">
-          <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
-          <span> {{'unit.inactive' | translate}}</span>
-      </div>
-  </div>
-   </div>
-   
-   <br>
-   <div class="label-header">{{'sign.information' | translate}}</div>
-   <div class="content-body">
-     <div class="row">
-       <div class="col-md-4">
-         <div class="label-header">
-           {{'sign.file-image' | translate}}
-         </div>
-        <div class="content-body">
-           <div [hidden]="imgSignPCSelect">
-            <input id="attachFileSignature" type="file" accept=".jpg, .png, .jpge"
-            (change)="fileChangedAttach($event)" style="display: none;"/>
-            <div class="select-contract container-img-file" (click)="addFileAttach()">
-              <div class="upload-image-region d-flex flex-column container-img-file-1">
-                <img src="assets/img/img-icon.svg" alt="#" width="50px">
-                <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
-                <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
+      <div class="row">
+        <div class="col-md-2">
+            <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
+            <span> {{'unit.active' | translate}}</span>
+        </div>
+        <div class="col-md-2">
+            <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
+            <span> {{'unit.inactive' | translate}}</span>
+        </div>
+    </div>
+    </div>
+    
+    <br>
+    <div class="label-header">{{'sign.information' | translate}}</div>
+    <div class="content-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="label-header">
+            {{'sign.file-image' | translate}}
+          </div>
+          <div class="content-body">
+            <div [hidden]="imgSignPCSelect">
+              <input id="attachFileSignature" type="file" accept=".jpg, .png, .jpge"
+              (change)="fileChangedAttach($event)" style="display: none;"/>
+              <div class="select-contract container-img-file" (click)="addFileAttach()">
+                <div class="upload-image-region d-flex flex-column container-img-file-1">
+                  <img src="assets/img/img-icon.svg" alt="#" width="50px">
+                  <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
+                  <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="image-div">
+              <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
+              <img class="hidden_img" (click)="addFileAttach()" src="assets/img/img-icon.svg" width="30" height="30" />
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-md-4">
+          <div class="label-header">
+            {{'sign.kpi' | translate}}
+          </div>
+          <div class="content-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div>{{'user.phone' | translate}}</div>
+                <div class="input-data">
+                    <input type="text" formControlName="phoneKpi">
+                </div>
+                <div *ngIf="submitted && f.phoneKpi.errors" class="invalid">
+                  <div *ngIf="f.phoneKpi.errors.pattern">Số điện thoại sai định dạng</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div>{{'user.network' | translate}}</div>
+                <div>
+                  <p-dropdown 
+                    panelStyleClass="font"
+                    [options]="networkList" 
+                    formControlName="networkKpi" 
+                    optionLabel="name" 
+                    optionValue="id" 
+                    placeholder="Chọn nhà mạng" 
+                    [filter]="true" 
+                    filterBy="name" 
+                    [showClear]="true"  
+                    ></p-dropdown>
+                </div>
               </div>
             </div>
           </div>
-          <div class="image-div">
-            <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
-            <img class="hidden_img" (click)="addFileAttach()" src="assets/img/img-icon.svg" width="30" height="30" />
+        </div>
+    
+        <div class="col-md-4">
+          <div class="label-header">
+            {{'sign.hsm' | translate}}
+          </div>
+          <div class="content-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div>{{'user.name.v2' | translate}}</div>
+                <div class="input-data">
+                  <input type="text" formControlName="nameHsm">
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-       </div>
-   
-       <div class="col-md-4">
-         <div class="label-header">
-           {{'sign.kpi' | translate}}
-         </div>
-         <div class="content-body">
-           <div class="row">
-             <div class="col-md-12">
-               <div>{{'user.phone' | translate}}</div>
-               <div class="input-data">
-                  <input type="text" formControlName="phoneKpi">
-               </div>
-               <div *ngIf="submitted && f.phoneKpi.errors" class="invalid">
-                <div *ngIf="f.phoneKpi.errors.pattern">Số điện thoại sai định dạng</div>
-              </div>
-             </div>
-           </div>
-           <div class="row">
-             <div class="col-md-12">
-               <div>{{'user.network' | translate}}</div>
-               <div>
-                <p-dropdown 
-                  panelStyleClass="font"
-                  [options]="networkList" 
-                  formControlName="networkKpi" 
-                  optionLabel="name" 
-                  optionValue="id" 
-                  placeholder="Chọn nhà mạng" 
-                  [filter]="true" 
-                  filterBy="name" 
-                  [showClear]="true"  
-                  ></p-dropdown>
-               </div>
-             </div>
-           </div>
-         </div>
-       </div>
-   
-       <div class="col-md-4">
-         <div class="label-header">
-           {{'sign.hsm' | translate}}
-         </div>
-         <div class="content-body">
-           <div class="row">
-             <div class="col-md-12">
-               <div>{{'user.name.v2' | translate}}</div>
-               <div class="input-data">
-                <input type="text" formControlName="nameHsm">
-               </div>
-             </div>
-           </div>
-         </div>
-       </div>
-     </div>
-   </div>
+      </div>
+    </div>
 
-   <div class="row" style="justify-content: center;padding-top: 10px;">
-    <button class="cancel-button" (click)="onCancel()" type="button">{{'btn.cancel' | translate}}</button>
-    <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>
-  </div>
+    <div class="row" style="justify-content: center;padding-top: 10px;">
+      <button class="cancel-button" (click)="onCancel()" type="button">{{'btn.cancel' | translate}}</button>
+      <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>
+    </div>
   </form>
-   
+</div>
+<div *ngIf="!isQLND_01 && !isQLND_02">
+  Bạn không có quyền thực hiện tác vụ này!
+</div>

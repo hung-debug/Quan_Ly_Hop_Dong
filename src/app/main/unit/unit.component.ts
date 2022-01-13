@@ -37,10 +37,10 @@ export class UnitComponent implements OnInit {
   test:any;
   total:any;
 
-  isQLTC_01:any;
-  isQLTC_02:any;
-  isQLTC_03:any;
-  isQLTC_04:any;
+  isQLTC_01:boolean=true;  //them moi to chuc
+  isQLTC_02:boolean=true;  //sua to chuc
+  isQLTC_03:boolean=true;  //tim kiem to chuc
+  isQLTC_04:boolean=true;  //xem thong tin chi tiet to chuc
 
   ngOnInit(): void {
     this.appService.setTitle("unit.list");

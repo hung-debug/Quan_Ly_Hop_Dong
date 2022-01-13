@@ -27,6 +27,11 @@ export class UserComponent implements OnInit {
   cols: any[];
   orgList: Array<any> = [];
 
+  isQLND_01:boolean=true;  //them moi nguoi dung
+  isQLND_02:boolean=true;  //sua nguoi dung
+  isQLND_03:boolean=true;  //tim kiem nguoi dung
+  isQLND_04:boolean=true;  //xem thong tin chi tiet nguoi dung
+
   ngOnInit(): void {
     this.appService.setTitle("user.list");
     this.searchUser();
