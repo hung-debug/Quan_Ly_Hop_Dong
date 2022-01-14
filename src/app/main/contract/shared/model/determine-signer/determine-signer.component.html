@@ -252,7 +252,7 @@
           <div class="participants-border">
             <div class="label">{{'user.lead' | translate}}</div>
             <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
-              <input [id]="'ordering-lead' + index" (focusout)="onChangeValue($event,'ordering-lead' + index)" class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+              <input [id]="'ordering-lead-' + index" (focusout)="onChangeValue($event,'ordering-lead-' + index)" class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
                      [(ngModel)]="d.ordering"
                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
               <div class="col-md-10 participants--input" style="display: flex; margin-bottom: 14px">
@@ -465,7 +465,7 @@
           <div class="participants-border">
             <div class="label">{{'user.sign' | translate}}</div>
             <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
-              <input class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+              <input [id]="'ordering-sign-partner-' + index" (focusout)="onChangeValue($event, 'ordering-sign-partner-' + index)" class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
                      [(ngModel)]="d.ordering">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
