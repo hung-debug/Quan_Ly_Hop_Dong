@@ -101,6 +101,12 @@
           <app-image-sign-contract *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
         </div>
       </div>
+      <div class="skeleton-sign position-absolute opacity-0">
+        <app-display-digital-signature [nameCompany]="nameCompany"></app-display-digital-signature>
+      </div>
+      <div class="skeleton-sign position-absolute opacity-0">
+        <app-text-signature-image [textSign]="textSign"></app-text-signature-image>
+      </div>
     </div>
   </div>
 </div>

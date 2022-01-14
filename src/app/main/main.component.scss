@@ -137,6 +137,17 @@ h3{
   color:#106DB6;
   min-height: 45px;
 }
+.drop_notification{
+  padding: 10px;
+  color:#106DB6;
+  min-height: 45px;
+  width: 500px;
+  border-bottom: 1px solid rgb(223, 220, 220);
+}
+.drop_notification:hover{
+  background-color: #e6e7ec;
+  cursor: pointer;
+}
 .drop_red{
   padding: 10px;
   color: #ED1C24;
@@ -255,4 +266,31 @@ h3{
   background-size: cover;
   background-repeat: no-repeat;
   background-image: url(../../assets/img/db_processing.svg);
+}
+.item_contract_name {
+  font-weight: 500;
+  font-size: 14px;
+  color: #106DB6;
+}
+
+.item_contract_infor, .item_date{
+  color: #666666;
+}
+
+.status_blue{
+  color: #027e21;
+}
+.title_notification{
+  color:#106DB6;
+  padding: 10px;
+  border-bottom: 1px solid rgb(223, 220, 220);
+}
+.view_all{
+  color:#106DB6;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+.view_all:hover{
+  background-color: #e6e7ec;
 }

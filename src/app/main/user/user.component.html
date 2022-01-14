@@ -1,6 +1,6 @@
-<div *ngIf="isQLND_03" class="container-fluid">
+<div *ngIf="isQLND_01 || isQLND_02 || isQLND_03 || isQLND_04" class="container-fluid">
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3" *ngIf="isQLND_03">
       <div>{{'unit.name' | translate}}</div>
       <div>
         <p-dropdown 
@@ -16,7 +16,7 @@
           ></p-dropdown>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3" *ngIf="isQLND_03">
       <div>{{'unit.email' | translate}}</div>
       <div class="input-line">
         <input type="text" [(ngModel)]="email" class="input_text"/>
@@ -58,7 +58,7 @@
     </p-table>
   </div>
 </div>
-<div *ngIf="!isQLND_03">
+<div *ngIf="!isQLND_01 && !isQLND_02 && !isQLND_03 && !isQLND_04">
   Bạn không có quyền thực hiện tác vụ này!
 </div>
  

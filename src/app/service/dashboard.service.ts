@@ -62,7 +62,7 @@ export class DashboardService {
 
   public getContractList(): Observable<any> {
     this.getCurrentUser();
-    let listContractUrl = this.listContractUrl + '?size=5';
+    let listContractUrl = this.listContractUrl + '?status=20&size=5';
     console.log(listContractUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(listContractUrl, {headers}).pipe();

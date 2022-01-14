@@ -3,12 +3,12 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AppService} from '../service/app.service';
-import {UserService} from '../service/user.service';
 import {SidebarService} from './sidebar/sidebar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ToastService} from '../service/toast.service';
 import{ ResetPasswordDialogComponent } from '../../app/main/dialog/reset-password-dialog/reset-password-dialog.component'
 import { MatDialog } from '@angular/material/dialog';
+import { DashboardService } from '../service/dashboard.service';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -40,7 +40,7 @@ export class MainComponent implements OnInit {
               private fb: FormBuilder,
               private appService: AppService,
               public sidebarservice: SidebarService,
-              private userService: UserService,
+              private dashboardService: DashboardService,
               private changeDetectorRef: ChangeDetectorRef,
               public translate: TranslateService,
               private toastService: ToastService,
@@ -73,6 +73,8 @@ export class MainComponent implements OnInit {
   
 
   nameCurrentUser:any;
+  contracts: any[] = [];
+
   ngOnInit(): void {
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('urlLoginType')));
@@ -88,6 +90,24 @@ export class MainComponent implements OnInit {
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
 
     this.nameCurrentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.name;
+
+    this.dashboardService.getContractList().subscribe(data => {
+      this.contracts = data.entities;
+      console.log(this.contracts);
+      
+      this.contracts.forEach((key : any, v: any) => {
+        let participants = key.participants;
+        participants.forEach((key : any, val: any) => {
+          if (key.type == 1) {
+            this.contracts[v].sideA = key.name;
+          }else{
+            this.contracts[v].sideB = key.name;
+          }
+          console.log(this.contracts[v].sideA);
+        })
+      });
+      console.log(this.contracts);
+    });
   }
 
   //apply change title

@@ -21,14 +21,14 @@
 }
 
 #table {
-border-collapse: collapse;
-width: 100%;
-font-size: 13px;
-font-family: font_lexend_deca;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+  font-family: font_lexend_deca;
 }
 #table td, #table th {
-//border: 1px solid #ddd;
-padding: 8px;
+  //border: 1px solid #ddd;
+  padding: 8px;
 }
 
 #table tr:nth-child(even){background-color: #f2f2f2;}
@@ -36,22 +36,22 @@ padding: 8px;
 #table tr:hover {background-color: #ddd;}
 
 #table th {
-//text-align: center;
-background-color: #E2ECF6;
-color: #106DB6;
+  //text-align: center;
+  background-color: #E2ECF6;
+  color: #106DB6;
 }
 
 #table tr:last-child th:first-child {
-border-top-left-radius: 10px;
+  border-top-left-radius: 10px;
 }
 #table tr:last-child th:last-child {
-border-top-right-radius: 10px;
+  border-top-right-radius: 10px;
 }
 #table tr:last-child td:first-child {
-border-bottom-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 #table tr:last-child td:last-child {
-border-bottom-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 :host ::ng-deep {

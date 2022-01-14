@@ -46,6 +46,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import {CalendarModule} from 'primeng/calendar';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { DisplayDigitalSignatureComponent } from './display-digital-signature/display-digital-signature.component';
+import {TextSignatureImageComponent} from './components/text-signature-image/text-signature-image.component';
 
 export const contractSignatureRoutes: Routes = [
   { path: 'consider/:id', component: ConsiderContractComponent },
@@ -86,6 +87,7 @@ export const contractSignatureRoutes: Routes = [
     HsmDialogSignComponent,
     FilterListDialogComponent,
     DisplayDigitalSignatureComponent,
+    TextSignatureImageComponent
     // AddContractComponent
   ],
   imports: [
