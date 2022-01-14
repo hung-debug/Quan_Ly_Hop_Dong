@@ -118,6 +118,7 @@ export class ConfirmInfoContractComponent implements OnInit {
     this.stepChangeSampleContract.emit(step);
   }
 
+
   next() {
     //call API step confirm
     this.datas.determine_contract.recipients.forEach((item: any) => {
@@ -126,9 +127,10 @@ export class ConfirmInfoContractComponent implements OnInit {
       }
       delete item.id;
     })
+    let data_determine = this.datas.determine_contract.recipients.filter((p: any) => p.role != 1);
     // this.contractService.addConfirmContract(this.datas).subscribe((data) => {
     this.spinner.show();
-    this.contractService.coordinationContract(this.datas.determine_contract.id, this.datas.determine_contract.recipients, this.datas.recipient_id_coordition).subscribe((data) => {
+    this.contractService.coordinationContract(this.datas.determine_contract.id, data_determine, this.datas.recipient_id_coordition).subscribe((data) => {
         // console.log(JSON.stringify(data));
         // let emailCurrent = this.contractService.getAuthCurrentUser().email;
         // let status_new_coordination = '';

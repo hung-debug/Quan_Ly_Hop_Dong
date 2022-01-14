@@ -40,7 +40,15 @@ export class ForwardContractComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!String(this.myForm.value.email)
+    if (!String(this.myForm.value.name)) {
+      // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập tên người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+      return;
+    }
+    if (!String(this.myForm.value.email)) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+      return;
+    } else if (!String(this.myForm.value.email)
       .toLowerCase()
       .match(
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
