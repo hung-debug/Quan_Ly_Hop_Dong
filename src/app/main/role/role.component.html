@@ -1,12 +1,12 @@
-<div *ngIf="isQLVT_04" class="container-fluid">
+<div *ngIf="isQLVT_01 || isQLVT_02 || isQLVT_03 || isQLVT_04 || isQLVT_05" class="container-fluid">
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3" *ngIf="isQLVT_04">
       <div>{{'role.name' | translate}}</div>
       <div class="input-line">
           <input type="text" [(ngModel)]="name" class="input_text"/>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3" *ngIf="isQLVT_04">
       <div>{{'role.code' | translate}}</div>
       <div class="input-line">
           <input type="text" [(ngModel)]="code" class="input_text"/>
@@ -53,7 +53,7 @@
     </div>
   </div>
 </div>
-<div *ngIf="!isQLVT_04">
+<div *ngIf="!isQLVT_01 && !isQLVT_02 && !isQLVT_03 && !isQLVT_04 && !isQLVT_05">
   Bạn không có quyền thực hiện tác vụ này!
 </div>
   
