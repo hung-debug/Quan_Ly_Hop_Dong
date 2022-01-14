@@ -1,5 +1,5 @@
 import {ContractService} from 'src/app/service/contract.service';
-import {Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges, ElementRef} from '@angular/core';
 import {
   type_signature,
   type_signature_doc,
@@ -893,6 +893,16 @@ export class DetermineSignerComponent implements OnInit {
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
+  }
+
+  onChangeValue(e: any, orering_data: string) {
+    // console.log(e.target.value);
+    if (!e.target.value) {
+      let data_ordering = document.getElementById(orering_data);
+      if (data_ordering)
+        data_ordering.focus();
+      this.toastService.showErrorHTMLWithTimeout("Bạn chưa nhập dữ liệu!", "", 3000);
+    }
   }
 
 }

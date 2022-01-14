@@ -186,18 +186,18 @@
         <u class="label text-color" (click)="deletePartner(id)" style="background-color: #FFFFFF; cursor: pointer">{{(item.type == 2 ? 'xoa_doi_tac_to_chuc' : 'xoa_doi_tac_ca_nhan') | translate}}</u>
       </div>
       <div class="contract__content--participants">
-        <div class="row">
-          <div class="radio col-md-6 label_type">
-            <label><input type="radio" name="type_{{id}}" [value]="2" [(ngModel)]="item.type"
-                          (change)="changeType($event, item, id)">
-              <span> {{'organization' | translate}}</span></label>
-          </div>
-          <div class="radio col-md-6 label_type">
-            <label><input type="radio" name="type_{{id}}" [value]="3" [(ngModel)]="item.type"
-                          (change)="changeType($event, item, id)">
-              <span> {{'personal' | translate}}</span></label>
-          </div>
-        </div>
+<!--        <div class="row">-->
+<!--          <div class="radio col-md-6 label_type">-->
+<!--            <label><input type="radio" name="type_{{id}}" [value]="2" [(ngModel)]="item.type"-->
+<!--                          (change)="changeType($event, item, id)">-->
+<!--              <span> {{'organization' | translate}}</span></label>-->
+<!--          </div>-->
+<!--          <div class="radio col-md-6 label_type">-->
+<!--            <label><input type="radio" name="type_{{id}}" [value]="3" [(ngModel)]="item.type"-->
+<!--                          (change)="changeType($event, item, id)">-->
+<!--              <span> {{'personal' | translate}}</span></label>-->
+<!--          </div>-->
+<!--        </div>-->
         <div *ngIf="item.type == 2">
 <!--          <div class="participants-border">-->
 <!--            <div class="label">{{'user.lead' | translate}}</div>-->
