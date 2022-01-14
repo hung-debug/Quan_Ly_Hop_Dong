@@ -1078,7 +1078,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             font_size: item.font_size
           }});
     }
-    if (!signDigitalStatus) {
+    if (notContainSignImage && !signDigitalStatus) {
       this.spinner.hide();
       return;
     }
