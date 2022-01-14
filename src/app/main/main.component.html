@@ -12,6 +12,35 @@
               <span class="notification_login"></span>
               <div class="label">{{'notification' | translate }}</div>
             </div>
+
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
+              <div class="title_notification">DANH SÁCH THÔNG BÁO</div>
+              <div class="drop_notification" *ngFor="let item of contracts; let i = index">
+                <div class="row">
+                  <div class="col-md-12 item_contract_name">{{item.name}}</div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 item_contract_infor">{{'contract.side.a' | translate}}: {{item.sideA}}</div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 item_contract_infor">{{'contract.side.b' | translate}}: {{item.sideB}}</div>
+                </div>
+                <div class="row">
+                  
+                  <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
+                    <span class="status_blue">{{item.status | pipe | translate}}</span>
+                  </div>
+                    
+                  <div class="col-md-6 calendar_create">
+                    <i class="fa fa-calendar fa_icon"></i><span class="item_date"> {{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
+                  </div>
+              
+                </div>
+              </div>
+              <div *ngIf="contracts.length > 3;" class="view_all"> 
+                Xem thêm
+              </div>
+            </div>
           </div>
 
           <div ngbDropdown class="d-inline-block">
