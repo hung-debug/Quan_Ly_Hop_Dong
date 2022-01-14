@@ -8,6 +8,8 @@ import domtoimage from 'dom-to-image';
 })
 export class TextSignatureImageComponent implements OnInit {
   @Input() textSign: string | undefined | null;
+  @Input() width: any;
+  @Input() height: any;
 
   constructor() { }
 

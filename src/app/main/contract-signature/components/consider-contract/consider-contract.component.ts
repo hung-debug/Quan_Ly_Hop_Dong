@@ -140,6 +140,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   base64GenCompany: any;
   textSign: any;
   textSignBase64Gen: any;
+  heightText: any = 200;
+  widthText: any = 200;
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -884,6 +886,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             let signI = null;
             if (signUpdate.type == 1) {
               this.textSign = signUpdate.valueSign;
+              /*this.heightText = signUpdate.width;
+              this.widthText = signUpdate.height;*/
+              this.heightText = 150;
+              this.widthText = 150;
               await of(null).pipe(delay(100)).toPromise();
               const imageRender = <HTMLElement>document.getElementById('text-sign');
               if (imageRender) {
@@ -937,7 +943,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         /*for (const signSimPki of objSign) {
           await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode, signSimPki.id);
         }*/
-        const checkSign = await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode, this.recipientId);
+        const checkSign = await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode, this.recipientId, this.datas.is_data_contract.name);
         console.log(checkSign);
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
