@@ -401,7 +401,7 @@ export class ContractService {
     return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
   }
 
-  signPkiDigital(phone: any, networkCode: any, recipientId: any) {
+  signPkiDigital(phone: any, networkCode: any, recipientId: any, nameContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -410,7 +410,7 @@ export class ContractService {
     const body = {
       "mobile": phone,
       "network_code": networkCode,
-      "prompt": "prompt",
+      "prompt": `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
       "reason": "reason"
     };
     return this.http.post<any>(this.signFilePKI + recipientId, body, {'headers': headers}).toPromise();
