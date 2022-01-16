@@ -220,7 +220,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
       let data_sign_config_cka = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
       let data_sign_config_text = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
-      // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+      let data_sign_config_so_tai_lieu = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'so_tai_lieu');
 
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
@@ -233,7 +233,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         } else if (element.sign_unit == 'text') {
           Array.prototype.push.apply(element.sign_config, data_sign_config_text);
         } else if (element.sign_unit == 'so_tai_lieu') {
-          // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+          Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
         }
       })
       // }
@@ -869,7 +869,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       if (this.signCertDigital && this.signCertDigital.Serial) {
         // this.signCertDigital = resSignDigital.data;
         for(const signUpdate of this.isDataObjectSignature) {
-          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 1) && [3,4].includes(this.datas.roleContractReceived)
+          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 1 || signUpdate.type == 4) && [3,4].includes(this.datas.roleContractReceived)
             && signUpdate?.recipient?.email === this.currentUser.email
             && signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
@@ -884,7 +884,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               return;
             }
             let signI = null;
-            if (signUpdate.type == 1) {
+            if (signUpdate.type == 1 || signUpdate.type == 4) {
               this.textSign = signUpdate.valueSign;
               /*this.heightText = signUpdate.width;
               this.widthText = signUpdate.height;*/
@@ -1010,7 +1010,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       return {
         id: item.id,
         name: item.name,
-        value: item.type == 1 ? item.valueSign : item.value,
+        value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
         font: item.font,
         font_size: item.font_size
       }});
@@ -1284,7 +1284,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   prepareInfoSignUsbToken(page: any, heightPage: any) {
     this.isDataObjectSignature.map((sign: any) => {
-      if ((sign.type == 3 || sign.type == 1)
+      if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
         && sign?.recipient?.email === this.currentUser.email
         && sign?.recipient?.role === this.datas?.roleContractReceived
         && sign?.page == page) {
