@@ -82,7 +82,7 @@
       <div class="body">
         <div class="row">
           <div class="col-md-6" style="text-align: center;">
-            <p-selectButton [options]="stateOptions" [(ngModel)]="value1" optionLabel="label" optionValue="value"></p-selectButton>
+            <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="search()"></p-selectButton>
           </div>
           <div class="col-md-6">
             <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="filter_from_date" [showIcon]="true" dateFormat="dd/mm/yy" (onSelect)="search()"></p-calendar>
@@ -122,22 +122,19 @@
         <div *ngIf="contracts.length > 0" style="height: 453px;"> 
           <div *ngFor="let item of contracts; let i = index" [style.border-bottom]="i != contracts.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px;">
             <div class="row">
-              <div class="col-md-12 item_contract_name">{{item.name}}</div>
+              <div class="col-md-12 item_contract_name">{{item.notice_name}}</div>
             </div>
             <div class="row">
-              <div class="col-md-12 item_contract_infor">{{'contract.side.a' | translate}}: {{item.sideA}}</div>
-            </div>
-            <div class="row">
-              <div class="col-md-12 item_contract_infor">{{'contract.side.b' | translate}}: {{item.sideB}}</div>
+              <div class="col-md-12 item_contract_infor">Tên: {{item.notice_content}}</div>
             </div>
             <div class="row">
               
               <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
-                <span class="status_blue">{{item.status | pipe | translate}}</span>
+                <span class="status_blue">{{item.message_code | pipe | translate}}</span>
               </div>
                 
               <div class="col-md-6 calendar_create">
-                <i class="fa fa-calendar fa_icon"></i><span class="item_date"> {{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
+                <i class="fa fa-calendar fa_icon"></i><span class="item_date"> {{item.notice_date | date: 'dd/MM/yyyy HH:mm'}}</span>
               </div>
           
             </div>

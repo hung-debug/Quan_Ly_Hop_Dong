@@ -11,6 +11,7 @@ import {environment} from '../../environments/environment';
 export class DashboardService {
 
   countContractCreateUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-contract`;
+  countContractOrgCreateUrl: any = `${environment.apiUrl}/api/v1/dashboard/organization-contract`;
   countContractReceivedUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-process`;
   listNotificationUrl: any = `${environment.apiUrl}/api/v1/notification/my-notice`;
   updateViewNotificationUrl:any = `${environment.apiUrl}/api/v1/notification/viewed/`;
@@ -30,7 +31,7 @@ export class DashboardService {
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
 
-  public countContractCreate(from_date: any, to_date: any): Observable<any> {
+  public countContractCreate(isOrg:any, from_date: any, to_date: any): Observable<any> {
     this.getCurrentUser();
     console.log(from_date);
     if (from_date != "" && from_date[0] != 0) {
@@ -42,8 +43,14 @@ export class DashboardService {
         }
       });
     }
-    
-    let countContractCreateUrl = this.countContractCreateUrl + '?from_date=' + from_date + '&to_date=' + to_date;
+    let countContractCreateUrl = '';
+    console.log(isOrg);
+    if(isOrg != 'off'){
+      countContractCreateUrl = this.countContractOrgCreateUrl + '?organization_id=' + this.organization_id + '&from_date=' + from_date + '&to_date=' + to_date;
+    }else{
+      countContractCreateUrl = this.countContractCreateUrl + '?from_date=' + from_date + '&to_date=' + to_date;
+    }
+    console.log(countContractCreateUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(countContractCreateUrl, {headers}).pipe();
   }
