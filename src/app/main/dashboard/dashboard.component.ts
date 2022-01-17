@@ -103,6 +103,7 @@ export class DashboardComponent implements OnInit {
           title: {
               text: 'Số lượng'
           },
+          allowDecimals: false,
         }],
         plotOptions: {
           series: {
