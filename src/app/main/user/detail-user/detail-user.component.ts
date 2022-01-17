@@ -61,7 +61,7 @@ export class DetailUserComponent implements OnInit {
           this.birthday = data.birthday;
           this.phone = data.phone;
           this.organizationId = data.organization_id;
-          this.role = data.type_id;
+          this.role = data.role_id;
           this.status = data.status;
 
           this.phoneKpi = data.phone_sign; 
@@ -80,9 +80,9 @@ export class DetailUserComponent implements OnInit {
               }
             )
           }
-          if(data.type_id != null){
+          if(data.role_id != null){
             //lay danh sach vai tro
-            this.roleService.getRoleById(data.type_id).subscribe(data => {
+            this.roleService.getRoleById(data.role_id).subscribe(data => {
               console.log(data);
               this.role = data.name;
             });

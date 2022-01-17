@@ -18,7 +18,7 @@ export interface User {
   phone_tel: any,
   sign_image: any,
   hsm_name: any,
-  type_id: any,
+  role_id: any,
   organization_id: any,
   organization:any,
   type:any,
@@ -145,7 +145,7 @@ export class UserService {
       organization_id: datas.organizationId,
       birthday: datas.birthday,
       status: datas.status,
-      type_id: datas.role,
+      role_id: datas.role,
 
       sign_image: datas.sign_image,
 
@@ -176,7 +176,7 @@ export class UserService {
       organization_id: datas.organizationId,
       birthday: datas.birthday,
       status: datas.status,
-      type_id: datas.role,
+      role_id: datas.role,
 
       sign_image: datas.sign_image,
 

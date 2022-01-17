@@ -91,7 +91,7 @@ export class MainComponent implements OnInit {
 
     this.nameCurrentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.name;
 
-    this.dashboardService.getContractList().subscribe(data => {
+    this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       this.contracts = data.entities;
       console.log(this.contracts);
       

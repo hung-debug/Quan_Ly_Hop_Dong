@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
   numberComplete:any=0;
   numberWaitComplete:any=0;
 
-  value1: string = 'off';
+  isOrg: string = 'off';
   stateOptions: any[];
 
   contracts: any[] = [];
@@ -64,9 +64,10 @@ export class DashboardComponent implements OnInit {
   }
 
   search(){    
-    this.dashboardService.countContractCreate(this.filter_from_date, this.filter_to_date).subscribe(data => {     
+    console.log(this.isOrg);
+    this.dashboardService.countContractCreate(this.isOrg, this.filter_from_date, this.filter_to_date).subscribe(data => {     
       console.log(data);    
-      this.totalCreate = data.total_process + data.total_signed + data.total_rejected + data.total_cancel + data.total_expires;
+      this.totalCreate = data.total_process + data.total_signed + data.total_reject + data.total_cancel + data.total_expires;
       this.chartCreated = new Chart({
         colors: ['#4B71F0', '#58A55C', '#ED1C24', '#717070', '#FF710B'],
         chart: {
@@ -122,7 +123,7 @@ export class DashboardComponent implements OnInit {
           data: [
             ['Đang xử lý', data.total_process],
             ['Hoàn thành', data.total_signed],
-            ['Từ chối', data.total_rejected],
+            ['Từ chối', data.total_reject],
             ['Hủy bỏ', data.total_cancel],
             ['Quá hạn', data.total_expires]
           ]
@@ -134,11 +135,11 @@ export class DashboardComponent implements OnInit {
       console.log(data);    
       this.numberWaitProcess = data.processing; 
       this.numberComplete = data.processed;
-      this.numberExpire = 0;
-      this.numberWaitComplete = 0;
+      this.numberExpire = data.prepare_expires;
+      this.numberWaitComplete = data.waiting;
     });
 
-    this.dashboardService.getContractList().subscribe(data => {
+    this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       this.contracts = data.entities;
       console.log(this.contracts);
       

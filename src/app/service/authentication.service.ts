@@ -14,7 +14,7 @@ export interface User {
     phone:string,
     status:string,
     organization_id:string,
-    type_id:string,
+    role_id:string,
   }
 }
 

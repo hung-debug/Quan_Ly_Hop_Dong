@@ -43,7 +43,7 @@
               <td>{{list.phone}}</td>
               <td>{{list.organization.name}}</td>
               <td>{{list.status==1?'Hoạt động':'Không hoạt động'}}</td>
-              <td>{{list.type.name}}</td>
+              <td>{{list.role?.name}}</td>
               <td style="text-align: center">
                 <img *ngIf="isQLND_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
               </td>

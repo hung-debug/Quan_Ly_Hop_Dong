@@ -98,7 +98,7 @@ export class InforUserComponent implements OnInit {
           birthday: data.birthday==null?null:new Date(data.birthday),
           phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
           organizationId: this.fbd.control(data.organization_id, [Validators.required]),
-          role: this.fbd.control(data.type_id, [Validators.required]),
+          role: this.fbd.control(data.role_id, [Validators.required]),
           status: data.status
         });
 
