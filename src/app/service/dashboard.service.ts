@@ -12,7 +12,8 @@ export class DashboardService {
 
   countContractCreateUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-contract`;
   countContractReceivedUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-process`;
-  listContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
+  listNotificationUrl: any = `${environment.apiUrl}/api/v1/notification/my-notice`;
+  updateViewNotificationUrl:any = `${environment.apiUrl}/api/v1/notification/viewed/`;
 
   token:any;
   customer_id:any;
@@ -60,12 +61,20 @@ export class DashboardService {
     return this.http.get<any[]>(countContractReceivedUrl, {headers}).pipe();
   }
 
-  public getContractList(): Observable<any> {
+  public getNotification(status:any, from_date:any, to_date:any, size:any, page:any): Observable<any> {
     this.getCurrentUser();
-    let listContractUrl = this.listContractUrl + '?status=20&size=5';
-    console.log(listContractUrl);
+    let listNotificationUrl = this.listNotificationUrl + '?status=' + status + '&from_date=' + from_date + '&to_date=' + to_date + '&size=' + size + '&page=' + page;
+    console.log(listNotificationUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<any[]>(listContractUrl, {headers}).pipe();
+    return this.http.get<any[]>(listNotificationUrl, {headers}).pipe();
+  }
+
+  updateViewNotification(data: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.post<any>(this.updateViewNotificationUrl + data.id, {headers}).pipe();
   }
 
 }

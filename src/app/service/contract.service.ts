@@ -148,7 +148,7 @@ export class ContractService {
       //sign_order: 1,
       sign_time: this.datepipe.transform(datas.sign_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
       notes: datas.notes,
-      type_id: datas.type_id,
+      role_id: datas.role_id,
       //customer_id: this.customer_id,
       //is_template: false,
       //status: 1,

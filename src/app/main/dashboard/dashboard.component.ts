@@ -138,7 +138,7 @@ export class DashboardComponent implements OnInit {
       this.numberWaitComplete = 0;
     });
 
-    this.dashboardService.getContractList().subscribe(data => {
+    this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       this.contracts = data.entities;
       console.log(this.contracts);
       
