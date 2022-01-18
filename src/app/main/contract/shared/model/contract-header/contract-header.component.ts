@@ -46,6 +46,9 @@ export class ContractHeaderComponent implements OnInit {
     if (this.datas.stepLast == 'determine-contract') {
       this.datas.save_draft.determine_signer = true;
       this.datas['close_modal'] = modal;
+    } else if (this.datas.stepLast == 'sample-contract') {
+      this.datas.save_draft.sample_contract = true;
+      this.datas['close_modal'] = modal;
     }
   }
 

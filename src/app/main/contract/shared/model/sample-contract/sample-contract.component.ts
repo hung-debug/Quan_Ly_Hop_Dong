@@ -7,7 +7,7 @@ import {
   QueryList,
   ElementRef,
   OnDestroy,
-  AfterViewInit, Output, EventEmitter
+  AfterViewInit, Output, EventEmitter, OnChanges, SimpleChanges
 } from '@angular/core';
 import {variable} from "../../../../../config/variable";
 import {Helper} from "../../../../../core/Helper";
@@ -18,17 +18,19 @@ import interact from 'interactjs'
 import {ContractService} from "../../../../../service/contract.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../../../service/toast.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-sample-contract',
   templateUrl: './sample-contract.component.html',
   styleUrls: ['./sample-contract.component.scss']
 })
-export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit {
+export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   @Input() datas: any;
   @Input() step: any;
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
   @Output() stepChangeSampleContract = new EventEmitter<string>();
+  @Input() saveDraftStep: any;
   pdfSrc: any;
   thePDF = null;
   pageNumber = 1;
@@ -86,6 +88,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
+    private router: Router
   ) {
     this.step = variable.stepSampleContract.step3
   }
@@ -115,8 +118,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.scale = 1;
 
     if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
-        let data_user_sign = [...this.datas.determine_contract];
-        this.getListNameSign(data_user_sign);
+      let data_user_sign = [...this.datas.determine_contract];
+      this.getListNameSign(data_user_sign);
     }
 
     if (!this.signCurent) {
@@ -207,6 +210,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
     interact.addDocument(document)
 
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // console.log(changes);
+    if (this.saveDraftStep) {
+      this.next('save_draft');
+      // this.saveDraftStep = !this.saveDraftStep;
+      // if (this.datas.save_draft)
+      //   this.datas.save_draft.sample_contract = !this.saveDraftStep;
+    }
   }
 
   getListNameSign(data_user_sign: any) {
@@ -977,7 +990,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.nextOrPreviousStep(step);
   }
 
-  next() {
+  next(action: string) {
     if (!this.validData()) return;
     else {
       let data_sample_contract: string | any[] = [];
@@ -987,9 +1000,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           element.sign_config.forEach((item: any) => {
             item['font'] = 'Arial';
             item['font_size'] = 14;
-            // item['contract_id'] = this.datas.contract_id;
-            // item['contract_id'] = (this.datas.is_action_contract_created ? item.contract_id : this.datas.contract_id);
-            // item['document_id'] = (this.datas.is_action_contract_created ? item.document_id : this.datas.document_id);
             item['contract_id'] = this.datas.contract_id;
             item['document_id'] = this.datas.document_id;
             if (item.text_attribute_name) {
@@ -1004,14 +1014,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             } else {
               item['type'] = 1;
             }
-            // delete item.id;
-            // delete item.sign_unit;
-            // delete item.position;
-            // delete item.left;
-            // delete item.top;
-            // delete item.position;
-            // delete item.text_attribute_name;
-            // delete item.signature_party;
             data_remove_arr_request.forEach((item_remove: any) => {
               delete item[item_remove]
             })
@@ -1022,9 +1024,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       this.spinner.show();
       this.contractService.getContractSample(data_sample_contract).subscribe((data) => {
-          this.step = variable.stepSampleContract.step4;
-          this.datas.stepLast = this.step
-          this.nextOrPreviousStep(this.step);
+          if (action == 'next_step') {
+            this.step = variable.stepSampleContract.step4;
+            this.datas.stepLast = this.step
+            this.nextOrPreviousStep(this.step);
+          } else if (action == 'save_draft') {
+            this.router.navigate(['/main/contract/create/draff']);
+            this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+          }
         },
         error => {
           this.spinner.hide();
