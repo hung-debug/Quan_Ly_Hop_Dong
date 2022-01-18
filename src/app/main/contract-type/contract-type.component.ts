@@ -3,6 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
+import { RoleService } from 'src/app/service/role.service';
+import { ToastService } from 'src/app/service/toast.service';
+import { UserService } from 'src/app/service/user.service';
 import { DetailContractComponent } from '../contract/detail-contract/detail-contract.component';
 import {AddContractTypeComponent} from './add-contract-type/add-contract-type.component'
 import { DeleteContractTypeComponent } from './delete-contract-type/delete-contract-type.component';
@@ -16,7 +19,10 @@ export class ContractTypeComponent implements OnInit {
 
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private contractTypeService: ContractTypeService) { }
+    private contractTypeService: ContractTypeService,
+    private userService:UserService,
+    private roleService:RoleService,
+    private toastService:ToastService) { }
 
   code:any = "";
   name:any = "";
@@ -39,6 +45,31 @@ export class ContractTypeComponent implements OnInit {
       {header: 'contract-type.code', style:'text-align: left;' },
       {header: 'contract-type.manage', style:'text-align: center;' },
       ];
+
+    //lay id user
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data.role_id).subscribe(
+          data => {
+            console.log(data);
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLLHD_01 = listRole.some(element => element.code == 'QLLHD_01');
+            this.isQLLHD_02 = listRole.some(element => element.code == 'QLLHD_02');
+            this.isQLLHD_03 = listRole.some(element => element.code == 'QLLHD_03');
+            this.isQLLHD_04 = listRole.some(element => element.code == 'QLLHD_04');
+            this.isQLLHD_05 = listRole.some(element => element.code == 'QLLHD_05');
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+          }
+        ); 
+      
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+      }
+    )
   }
 
   searchContractType(){

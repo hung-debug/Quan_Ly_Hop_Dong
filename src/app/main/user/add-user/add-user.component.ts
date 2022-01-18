@@ -72,7 +72,27 @@ export class AddUserComponent implements OnInit {
      }
 
   ngOnInit(): void {
-
+    //lay id user
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data.role_id).subscribe(
+          data => {
+            console.log(data);
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
+            this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+          }
+        ); 
+      
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+      }
+    )
 
     if(this.isQLND_01 || this.isQLND_02){
       //lay danh sach to chuc

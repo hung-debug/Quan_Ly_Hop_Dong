@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AppService } from 'src/app/service/app.service';
 import { RoleService } from 'src/app/service/role.service';
+import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { AddUnitComponent } from './add-unit/add-unit.component';
@@ -26,7 +27,8 @@ export class UnitComponent implements OnInit {
     private dialog: MatDialog,
     private unitService: UnitService,
     private userService: UserService,
-    private roleService: RoleService) { }
+    private roleService: RoleService,
+    private toastService: ToastService) { }
 
   code:any = "";
   name:any = "";
@@ -56,15 +58,29 @@ export class UnitComponent implements OnInit {
       { field: 'id', header: 'unit.manage', style:'text-align: center;' },
       ]; 
 
-      // let roleId = this.userService.getAuthCurrentUser().typeId;
-      // this.roleService.getRoleList(this.code, this.name).subscribe(response => {
-      //   let listRole: any[];
-      //   listRole = response.entities;
-      //   this.isQLTC_01 = listRole.some(element => element == 'QLTC_01');
-      //   this.isQLTC_02 = listRole.some(element => element == 'QLTC_02');
-      //   this.isQLTC_03 = listRole.some(element => element == 'QLTC_03');
-      //   this.isQLTC_04 = listRole.some(element => element == 'QLTC_04');
-      // });
+      //lay id user
+      let userId = this.userService.getAuthCurrentUser().id;
+      this.userService.getUserById(userId).subscribe(
+        data => {
+          //lay id role
+          this.roleService.getRoleById(data.role_id).subscribe(
+            data => {
+              console.log(data);
+              let listRole: any[];
+              listRole = data.permissions;
+              this.isQLTC_01 = listRole.some(element => element.code == 'QLTC_01');
+              this.isQLTC_02 = listRole.some(element => element.code == 'QLTC_02');
+              this.isQLTC_03 = listRole.some(element => element.code == 'QLTC_03');
+              this.isQLTC_04 = listRole.some(element => element.code == 'QLTC_04');
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+            }
+          ); 
+        
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+        }
+      )
 
   }  
 

@@ -223,40 +223,42 @@ export class SidebarService {
         href: '/main/contract/create/complete'
       });
 
-      let submenusReceive:any[]=[];
-      submenusReceive.push({
-        title: 'contract.status.wait-processing',
-        active: false,
-        href: '/main/contract-signature/receive/wait-processing'
-      },
-      {
-        title: 'contract.status.processed',
-        active: false,
-        href: '/main/contract-signature/receive/processed'
-      },
-      {
-        title: 'contract.status.share',
-        active: false,
-        href: '/main/contract-signature/receive/share'
-      });
-      
       this.menus.push({
-          title: 'menu.contract.create.list',
-          icon: '/assets/img/db_processing.svg',
-          active: false,
-          type: 'dropdown',
-          href: '#',
-          submenus: submenusCreate
-        },
-        {
-        title: 'menu.contract.receive.list',
+        title: 'menu.contract.create.list',
         icon: '/assets/img/db_processing.svg',
         active: false,
         type: 'dropdown',
         href: '#',
-        submenus: submenusReceive
+        submenus: submenusCreate
       });
     }
+
+    let submenusReceive:any[]=[];
+    submenusReceive.push({
+      title: 'contract.status.wait-processing',
+      active: false,
+      href: '/main/contract-signature/receive/wait-processing'
+    },
+    {
+      title: 'contract.status.processed',
+      active: false,
+      href: '/main/contract-signature/receive/processed'
+    },
+    {
+      title: 'contract.status.share',
+      active: false,
+      href: '/main/contract-signature/receive/share'
+    });
+    
+    this.menus.push(
+      {
+      title: 'menu.contract.receive.list',
+      icon: '/assets/img/db_processing.svg',
+      active: false,
+      type: 'dropdown',
+      href: '#',
+      submenus: submenusReceive
+    });
 
     if(this.isQLTC_01 || this.isQLTC_02 || this.isQLTC_03 || this.isQLTC_04){
       this.menus.push({

@@ -17,6 +17,8 @@ import {DeleteContractDialogComponent} from './dialog/delete-contract-dialog/del
 import {NgxSpinnerService} from "ngx-spinner";
 import {Subscription} from "rxjs";
 import { TreeMapModule } from '@swimlane/ngx-charts';
+import { UserService } from 'src/app/service/user.service';
+import { RoleService } from 'src/app/service/role.service';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -77,6 +79,8 @@ export class ContractComponent implements OnInit {
               private uploadService: UploadService,
               private dialog: MatDialog,
               private spinner: NgxSpinnerService,
+              private userService:UserService,
+              private roleService: RoleService,
     ) {}
 
   open(content:any) {
@@ -131,6 +135,40 @@ export class ContractComponent implements OnInit {
 
       this.getContractList();
     });
+
+    //lay id user
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data.role_id).subscribe(
+          data => {
+            console.log(data);
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
+            this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
+            this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
+            this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
+            this.isQLHD_05 = listRole.some(element => element.code == 'QLHD_05');
+            this.isQLHD_06 = listRole.some(element => element.code == 'QLHD_06');
+            this.isQLHD_07 = listRole.some(element => element.code == 'QLHD_07');
+            this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
+            this.isQLHD_09 = listRole.some(element => element.code == 'QLHD_09');
+            this.isQLHD_10 = listRole.some(element => element.code == 'QLHD_10');
+            this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
+            this.isQLHD_12 = listRole.some(element => element.code == 'QLHD_12');
+            this.isQLHD_13 = listRole.some(element => element.code == 'QLHD_13');
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+          }
+        ); 
+      
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+      }
+    )
+
     // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
   }
 

@@ -67,36 +67,36 @@ export class AddRoleComponent implements OnInit {
         value: "QLHD",
         items: [
           { label: "Thêm mới hợp đồng đơn lẻ", value: "QLHD_01" },
-          { label: "Sửa hợp đồng", value: "QLHD_02" },
-          { label: "Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con", value: "QLHD_03" },
-          { label: "Xem danh sách hợp đồng của tổ chức của tôi", value: "QLHD_04" },
-          { label: "Xem danh sách hợp đồng của tôi", value: "QLHD_05" },
+          // { label: "Sửa hợp đồng", value: "QLHD_02" },
+          // { label: "Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con", value: "QLHD_03" },
+          // { label: "Xem danh sách hợp đồng của tổ chức của tôi", value: "QLHD_04" },
+          // { label: "Xem danh sách hợp đồng của tôi", value: "QLHD_05" },
           { label: "Tìm kiếm hợp đồng", value: "QLHD_06" },
           { label: "Xem thông tin chi tiết hợp đồng", value: "QLHD_07" },
-          { label: "Sao chép hợp đồng", value: "QLHD_08" },
+          // { label: "Sao chép hợp đồng", value: "QLHD_08" },
           { label: "Huỷ hợp đồng", value: "QLHD_09" },
           { label: "Xem lịch sử hợp đồng", value: "QLHD_10" },
-          { label: "Tạo hợp đồng liên quan", value: "QLHD_11" },
+          //{ label: "Tạo hợp đồng liên quan", value: "QLHD_11" },
           { label: "Xem hợp đồng liên quan", value: "QLHD_12" },
           { label: "Chia sẻ hợp đồng", value: "QLHD_13" }
         ]
       },
-      {
-        label: "Nhóm chức năng quản lý mẫu hợp đồng",
-        value: "QLMHD",
-        items: [
-          { label: "Thêm mới mẫu hợp đồng", value: "QLMHD_01" },
-          { label: "Sửa mẫu hợp đồng", value: "QLMHD_02" },
-          { label: "Tạo hợp đồng đơn lẻ theo mẫu", value: "QLMHD_03" },
-          { label: "Tạo hợp đồng theo lô", value: "QLMHD_04" },
-          { label: "Ngừng phát hành mẫu hợp đồng", value: "QLMHD_05" },
-          { label: "Phát hành mẫu hợp đồng", value: "QLMHD_06" },
-          { label: "Chia sẻ mẫu hợp đồng", value: "QLMHD_07" },
-          { label: "Tìm kiếm mẫu hợp đồng", value: "QLMHD_08" },
-          { label: "Xóa mẫu hợp đồng", value: "QLMHD_09" },
-          { label: "Xem thông tin chi tiết mẫu hợp đồng", value: "QLMHD_10" }
-        ]
-      },
+      // {
+      //   label: "Nhóm chức năng quản lý mẫu hợp đồng",
+      //   value: "QLMHD",
+      //   items: [
+      //     { label: "Thêm mới mẫu hợp đồng", value: "QLMHD_01" },
+      //     { label: "Sửa mẫu hợp đồng", value: "QLMHD_02" },
+      //     { label: "Tạo hợp đồng đơn lẻ theo mẫu", value: "QLMHD_03" },
+      //     { label: "Tạo hợp đồng theo lô", value: "QLMHD_04" },
+      //     { label: "Ngừng phát hành mẫu hợp đồng", value: "QLMHD_05" },
+      //     { label: "Phát hành mẫu hợp đồng", value: "QLMHD_06" },
+      //     { label: "Chia sẻ mẫu hợp đồng", value: "QLMHD_07" },
+      //     { label: "Tìm kiếm mẫu hợp đồng", value: "QLMHD_08" },
+      //     { label: "Xóa mẫu hợp đồng", value: "QLMHD_09" },
+      //     { label: "Xem thông tin chi tiết mẫu hợp đồng", value: "QLMHD_10" }
+      //   ]
+      // },
       {
         label: "Nhóm chức năng quản lý tổ chức",
         value: "QLTC",

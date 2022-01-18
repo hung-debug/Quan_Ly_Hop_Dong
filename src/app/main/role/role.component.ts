@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
 import { RoleService } from 'src/app/service/role.service';
+import { ToastService } from 'src/app/service/toast.service';
+import { UserService } from 'src/app/service/user.service';
 import { AddRoleComponent } from './add-role/add-role.component';
 import { DeleteRoleComponent } from './delete-role/delete-role.component';
 import {DetailRoleComponent} from './detail-role/detail-role.component';
@@ -16,7 +18,9 @@ export class RoleComponent implements OnInit {
 
   constructor(private appService: AppService,
     private dialog: MatDialog,
-    private roleService: RoleService) { }
+    private roleService: RoleService,
+    private userService: UserService,
+    private toastService: ToastService) { }
 
   code:any = "";
   name:any = "";
@@ -41,6 +45,30 @@ export class RoleComponent implements OnInit {
       {header: 'role.manage', style:'text-align: center;' },
       ];
    
+    //lay id user
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data.role_id).subscribe(
+          data => {
+            console.log(data);
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLVT_01 = listRole.some(element => element.code == 'QLVT_01');
+            this.isQLVT_02 = listRole.some(element => element.code == 'QLVT_02');
+            this.isQLVT_03 = listRole.some(element => element.code == 'QLVT_03');
+            this.isQLVT_04 = listRole.some(element => element.code == 'QLVT_04');
+            this.isQLVT_05 = listRole.some(element => element.code == 'QLVT_05');
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+          }
+        ); 
+      
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+      }
+    )
   }
   
 

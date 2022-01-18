@@ -50,6 +50,27 @@ export class DetailUserComponent implements OnInit {
      }
 
   ngOnInit(): void {
+    //lay id user
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data.role_id).subscribe(
+          data => {
+            console.log(data);
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLND_04 = listRole.some(element => element.code == 'QLND_04');
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+          }
+        ); 
+      
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+      }
+    )
+
     this.appService.setTitle('user.information.v2');
     this.sub = this.route.params.subscribe(params => {
       this.id = params['id'];

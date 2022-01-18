@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
+import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
@@ -19,7 +20,9 @@ export class UserComponent implements OnInit {
     private dialog: MatDialog,
     private userService: UserService,
     private unitService: UnitService,
-    private router : Router,) { }
+    private router : Router,
+    private roleService: RoleService,
+    private toastService: ToastService) { }
 
   organization_id:any = "";
   email:any = "";
@@ -51,6 +54,30 @@ export class UserComponent implements OnInit {
       {header: 'menu.role.list', style:'text-align: left;' },
       {header: 'unit.manage', style:'text-align: center;' },
       ];
+
+    //lay id user
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data.role_id).subscribe(
+          data => {
+            console.log(data);
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
+            this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
+            this.isQLND_03 = listRole.some(element => element.code == 'QLND_03');
+            this.isQLND_04 = listRole.some(element => element.code == 'QLND_04');
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+          }
+        ); 
+      
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+      }
+    )
   }
 
   searchUser(){

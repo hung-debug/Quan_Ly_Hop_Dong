@@ -13,6 +13,8 @@ import {ContractService} from "../../../service/contract.service";
 import {UploadService} from "../../../service/upload.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../service/toast.service";
+import { UserService } from 'src/app/service/user.service';
+import { RoleService } from 'src/app/service/role.service';
 // import * as from moment;
 
 @Component({
@@ -60,13 +62,42 @@ export class AddContractComponent implements OnInit {
               private uploadService: UploadService,
               private spinner: NgxSpinnerService,
               private toastService : ToastService,
+              private userService: UserService,
+              private roleService: RoleService,
   ) {
   }
+
+  isQLHD_01:boolean=true;
+  isQLHD_02:boolean=true;
+  isQLHD_08:boolean=true;
 
   ngOnInit() {
     //title
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
+      
+      //lay id user
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data.role_id).subscribe(
+          data => {
+            console.log(data);
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
+            // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
+            // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+          }
+        ); 
+      
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+      })
+
       //set title
       if (this.action == 'add') {
         this.appService.setTitle('contract.add');
