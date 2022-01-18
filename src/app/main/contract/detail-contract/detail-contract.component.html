@@ -74,7 +74,7 @@
     <div class="label">
     </div>
     <div class="label">
-      <button type="button" name="next" class="next action-button" *ngIf="view" (click)="downloadContract(idContract)">Tải file</button>
+      <button type="button" name="next" class="next action-button" *ngIf="view && loaded" (click)="downloadContract(idContract)">{{checkStatusUser(recipient.status, recipient.role)}}</button>
     </div>
   </div>
 </div>

@@ -37,18 +37,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     if (currentUserC != null && currentUserC.customer?.info) {
       this.currentUser = currentUserC.customer?.info;
     }
-    if (this.sign?.recipient?.sign_type) {
-      const typeSD = this.sign?.recipient?.sign_type.find((t: any) => t.id != 1);
-      if (typeSD) {
-        this.typeSignDigital = typeSD.id;
-      }
-    }
-    if (this.sign.sign_unit == 'chu_ky_so'
-      && this.sign?.recipient?.email == this.currentUser.email && !this.view
-      && this.typeSignDigital && this.typeSignDigital == 3
-    ) {
-      this.fetchDataUserSimPki();
-    }
+    // this.fetchDataUserSimPki();
   }
 
   ngAfterViewInit() {
@@ -67,7 +56,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       && this.sign?.recipient?.email == this.currentUser.email && !this.view
       && this.typeSignDigital && this.typeSignDigital == 3
     ) {
-      this.openPopupSignContract(3);
+      // this.openPopupSignContract(3);
     }
   }
 
@@ -159,18 +148,29 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.checkShowEdit = false;
   }
 
-  fetchDataUserSimPki() {
-    const nl = networkList;
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    this.userService.getUserById(this.currentUser.id).subscribe(
-      (data) => {
-        const itemNameNetwork = nl.find((nc: any) => nc.id = data.phone_tel);
-        this.sign.phone = data.phone_sign;
-        this.sign.phone_tel = data.phone_tel;
-        this.sign.networkCode = (itemNameNetwork && itemNameNetwork.name) ? itemNameNetwork.name.toLowerCase() : null;
+  /*fetchDataUserSimPki() {
+    if (this.sign?.recipient?.sign_type) {
+      const typeSD = this.sign?.recipient?.sign_type.find((t: any) => t.id != 1);
+      if (typeSD) {
+        this.typeSignDigital = typeSD.id;
       }
-    )
-  }
+    }
+    if (this.sign.sign_unit == 'chu_ky_so'
+      && this.sign?.recipient?.email == this.currentUser.email && !this.view
+      && this.typeSignDigital && this.typeSignDigital == 3
+    ) {
+      const nl = networkList;
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+      this.userService.getUserById(this.currentUser.id).subscribe(
+        (data) => {
+          const itemNameNetwork = nl.find((nc: any) => nc.id = data.phone_tel);
+          this.sign.phone = data.phone_sign;
+          this.sign.phone_tel = data.phone_tel;
+          this.sign.networkCode = (itemNameNetwork && itemNameNetwork.name) ? itemNameNetwork.name.toLowerCase() : null;
+        }
+      )
+    }
+  }*/
 
   forWardContract() {
     const data = {
