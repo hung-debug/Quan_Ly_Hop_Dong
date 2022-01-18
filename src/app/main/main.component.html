@@ -17,18 +17,21 @@
               <div class="title_notification">DANH SÁCH THÔNG BÁO</div>
               <div class="drop_notification" *ngFor="let item of contracts; let i = index">
                 <div class="row">
-                  <div class="col-md-12 item_contract_name">{{item.name}}</div>
+                  <div class="col-md-12 item_contract_name">{{item.notice_name}}</div>
                 </div>
                 <div class="row">
-                  <div class="col-md-12 item_contract_infor">{{'contract.side.a' | translate}}: {{item.sideA}}</div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12 item_contract_infor">{{'contract.side.b' | translate}}: {{item.sideB}}</div>
+                  <div class="col-md-12 item_contract_infor">Đơn vị: {{item.notice_content}}</div>
                 </div>
                 <div class="row">
                   
                   <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
-                    <span class="status_blue">{{item.status | pipe | translate}}</span>
+                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">Điều phối</span>
+                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject'">Từ chối</span>
+                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_review'">Xem xét</span>
+                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign'">Ký</span>
+                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">Ban hành</span>
+                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">Hoàn thành</span>
+                    <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">Hủy</span>
                   </div>
                     
                   <div class="col-md-6 calendar_create">
@@ -37,7 +40,7 @@
               
                 </div>
               </div>
-              <div *ngIf="contracts.length > 3;" class="view_all"> 
+              <div  class="view_all"> 
                 Xem thêm
               </div>
             </div>

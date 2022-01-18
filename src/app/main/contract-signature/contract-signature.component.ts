@@ -138,6 +138,7 @@ export class ContractSignatureComponent implements OnInit {
       });
     }else{
       this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
+        console.log(data.entities);
         if (this.filter_status == 0) {
           this.contracts = data.entities.filter((i: any) => i.status == 1)
         } else {
@@ -192,6 +193,7 @@ export class ContractSignatureComponent implements OnInit {
       });
     }else{
       this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
+        
         if (this.filter_status == 0) {
           this.contracts = this.transform(data.entities.filter((i: any) => i.status == 1), event);
         } else {

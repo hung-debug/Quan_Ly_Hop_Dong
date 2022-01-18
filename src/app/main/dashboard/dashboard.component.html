@@ -125,12 +125,18 @@
               <div class="col-md-12 item_contract_name">{{item.notice_name}}</div>
             </div>
             <div class="row">
-              <div class="col-md-12 item_contract_infor">Tên: {{item.notice_content}}</div>
+              <div class="col-md-12 item_contract_infor">Đơn vị: {{item.notice_content}}</div>
             </div>
             <div class="row">
               
               <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
-                <span class="status_blue">{{item.message_code | pipe | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">Điều phối</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject'">Từ chối</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_review'">Xem xét</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign'">Ký</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">Ban hành</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish'">Hoàn thành</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">Hủy</span>
               </div>
                 
               <div class="col-md-6 calendar_create">

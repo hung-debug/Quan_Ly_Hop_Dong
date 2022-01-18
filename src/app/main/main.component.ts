@@ -94,19 +94,6 @@ export class MainComponent implements OnInit {
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
       this.contracts = data.entities;
       console.log(this.contracts);
-      
-      this.contracts.forEach((key : any, v: any) => {
-        let participants = key.participants;
-        participants.forEach((key : any, val: any) => {
-          if (key.type == 1) {
-            this.contracts[v].sideA = key.name;
-          }else{
-            this.contracts[v].sideB = key.name;
-          }
-          console.log(this.contracts[v].sideA);
-        })
-      });
-      console.log(this.contracts);
     });
   }
 
