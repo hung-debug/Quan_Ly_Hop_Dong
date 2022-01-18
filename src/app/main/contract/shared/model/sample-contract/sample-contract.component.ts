@@ -91,52 +91,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    console.log(this.datas);
-    if (this.datas.is_action_contract_created) { // data defind copy/edit contract
-      let dataPosition: any[] = [];
-      let dataNotPosition: any[] = [];
-      this.datas.determine_contract.forEach((res: any) => {
-        res.recipients.forEach((element: any) => {
-          let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == element.id)[0];
-          if (data_duplicate) {
-            // get data duplicate and update new data;
-            data_duplicate.name = element.name;
-            data_duplicate.email = element.email;
-            data_duplicate.phoneNumber = element.phoneNumber;
-            data_duplicate.sign_type = element.sign_type;
-            data_duplicate.is_otp = element.is_otp;
-            data_duplicate['is_type_party'] = res.type;
-            data_duplicate['role'] = data_duplicate.recipient.role;
-            dataPosition.push(data_duplicate)
-          } else {
-            element['is_type_party'] = res.type;
-            element['role'] = element.role;
-            dataNotPosition.push(element)
-          }
-        })
-      })
-      let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
-      let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
-      this.dataSignPosition = [...data_sign_position, ...dataNotSignPosition];
-      this.getAddSignUnit();
-    }
-
-    let data_sign = [];
-    if (this.datas.is_action_contract_created) {
-      data_sign = this.datas.is_data_object_signature;
-      data_sign.forEach((res: any) => {
-        if (res.sign_unit == 'text') {
-          res['text_attribute_name'] = res.name;
-        }
-      })
-    } else {
-      data_sign = this.datas.determine_contract
-    }
-
-    let data_sign_config_cks = data_sign.filter((p: any) => p.sign_unit == 'chu_ky_so');
-    let data_sign_config_cka = data_sign.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-    let data_sign_config_text = data_sign.filter((p: any) => p.sign_unit == 'text');
-    let data_sign_config_so_tai_lieu = data_sign.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+    // console.log(this.datas);
+    let data_sign_config_cks = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
+    let data_sign_config_cka = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+    let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
+    let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
 
     this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
@@ -155,15 +114,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     this.scale = 1;
 
-    // if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
-    if (data_sign && data_sign.length > 0) {
-      if (this.datas.is_action_contract_created) {
-        let data_user_sign_action = [...this.dataSignPosition];
-        this.getListNameSignAction(data_user_sign_action);
-      } else {
+    if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
         let data_user_sign = [...this.datas.determine_contract];
         this.getListNameSign(data_user_sign);
-      }
     }
 
     if (!this.signCurent) {
@@ -279,32 +232,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
-  }
-
-  getListNameSignAction(data_user_sign: any) {
-    data_user_sign.forEach((element: any) => {
-      if (element.is_type_party == 1) {
-        // element.recipients.forEach((item: any) => {
-        if (element.role == 3 || element.role == 4 || element.role == 2) {
-          element['type_unit'] = 'organization';
-          element['selected'] = false;
-          element['is_disable'] = false;
-          this.list_sign_name.push(element);
-        }
-        // })
-      } else if (element.is_type_party == 2 || element.is_type_party == 3) {
-        // element.recipients.forEach((item: any) => {
-        if (element.role == 3 || element.role == 4 || element.role == 2) {
-          element['type_unit'] = 'partner'
-          element['selected'] = false;
-          element['is_disable'] = false;
-          // item['type'] = element.type;
-          this.list_sign_name.push(element);
-        }
-        // })
-      }
-    })
-    console.log(this.list_sign_name);
   }
 
   getListSignName(listSignForm: any = []) {
