@@ -24,6 +24,7 @@ import { ContractTypeComponent } from './main/contract-type/contract-type.compon
 import { RoleComponent } from './main/role/role.component';
 import { AddUserComponent } from './main/user/add-user/add-user.component';
 import { DetailUserComponent } from './main/user/detail-user/detail-user.component';
+import { CheckSignDigitalComponent } from './main/check-sign-digital/check-sign-digital.component';
 
 const routes: Routes = [
   {
@@ -128,6 +129,10 @@ const routes: Routes = [
       {
         path: 'role',
         component: RoleComponent,
+      },
+      {
+        path: 'check-sign-digital',
+        component: CheckSignDigitalComponent,
       },
     ],
   },

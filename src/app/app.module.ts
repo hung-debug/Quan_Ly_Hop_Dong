@@ -73,6 +73,7 @@ import { ResetPasswordDialogComponent } from './main/dialog/reset-password-dialo
 import { SendPasswordDialogComponent } from './login/dialog/send-password-dialog/send-password-dialog.component';
 import { DeleteRoleComponent } from './main/role/delete-role/delete-role.component';
 import { DeleteContractTypeComponent } from './main/contract-type/delete-contract-type/delete-contract-type.component';
+import { CheckSignDigitalComponent } from './main/check-sign-digital/check-sign-digital.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -117,6 +118,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SendPasswordDialogComponent,
     DeleteRoleComponent,
     DeleteContractTypeComponent,
+    CheckSignDigitalComponent,
   ],
   imports: [
     BrowserModule,

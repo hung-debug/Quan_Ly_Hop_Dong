@@ -1,0 +1,35 @@
+<div class="container-fluid">
+    <div class="row" class="col-md-3">
+        <input id="attachFileSignature" type="file" accept=".pdf"
+                style="display: none;"/>
+        <button class="btn btn-lg btn-block btn_submit" (click)="addFileAttach()"><span class="fa fa-upload icon_add"></span> {{'Tải lên file ký số' | translate }}</button>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+        <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of cols" [style]='col.style'>
+                {{col.header | translate}}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-list>
+            <tr>
+                <td>{{list.signer}}</td>
+                <td>{{list.signOn}}</td>
+                <td>{{list.durationValidCertificate}}</td>
+                <td>{{list.deptGrantCert}}</td>
+                <td>{{list.signOnValidTime}}</td>
+            </tr>  
+        </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+            <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template>
+        <ng-template pTemplate="paginatorright" let-state>
+            <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template> 
+        </p-table>
+    </div>
+</div>
+   
+    

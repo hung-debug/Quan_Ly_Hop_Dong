@@ -202,4 +202,8 @@ export class MainComponent implements OnInit {
     // });
     this.router.navigate(['/main/user-infor']);
   }
+
+  openLinkNotification(link:any) {
+    window.open(link.replace('&loginType=', '').replace('&loginType=1', ''), "_blank");
+  }
 }

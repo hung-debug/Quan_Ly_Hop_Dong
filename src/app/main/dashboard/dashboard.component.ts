@@ -63,6 +63,10 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  openLinkNotification(link:any) {
+    window.open(link.replace('&loginType=', '').replace('&loginType=1', ''), "_blank");
+  }
+
   search(){    
     console.log(this.isOrg);
     this.dashboardService.countContractCreate(this.isOrg, this.filter_from_date, this.filter_to_date).subscribe(data => {     

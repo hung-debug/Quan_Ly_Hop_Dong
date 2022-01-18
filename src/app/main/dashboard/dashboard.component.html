@@ -122,12 +122,20 @@
         <div *ngIf="contracts.length > 0" style="height: 453px;"> 
           <div *ngFor="let item of contracts; let i = index" [style.border-bottom]="i != contracts.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px;">
             <div class="row">
-              <div class="col-md-12 item_contract_name">{{item.notice_name}}</div>
+              <div class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url)">{{item.notice_name}}</div>
             </div>
             <div class="row">
-              <div class="col-md-12 item_contract_infor">Đơn vị: {{item.notice_content}}</div>
+              <div class="col-md-12 item_contract_infor">
+                <img src="../../../assets/img/user_icon.svg" width="12px"/>
+                <span> {{item.notice_content}}</span>
+              </div>
             </div>
-            <div class="row">
+            <div class="row item_contract_infor">
+
+              <div class="col-md-6 calendar_create">
+                <img src="../../../assets/img/calendar_icon.svg" width="15px"/>
+                <span class="item_date"> {{item.notice_date | date: 'dd/MM/yyyy HH:mm'}}</span>
+              </div>
               
               <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
                 <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">Điều phối</span>
@@ -137,10 +145,6 @@
                 <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">Ban hành</span>
                 <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish'">Hoàn thành</span>
                 <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">Hủy</span>
-              </div>
-                
-              <div class="col-md-6 calendar_create">
-                <i class="fa fa-calendar fa_icon"></i><span class="item_date"> {{item.notice_date | date: 'dd/MM/yyyy HH:mm'}}</span>
               </div>
           
             </div>
