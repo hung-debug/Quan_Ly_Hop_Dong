@@ -299,7 +299,7 @@ export class SidebarService {
 
     this.menus.push({
       title: 'menu.check.sign.digital',
-      icon: '/assets/img/db_home.svg',
+      icon: '/assets/img/check_sign_digital.svg',
       active: false,
       type: 'simple',
       href: '/main/check-sign-digital'

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IndexComponent } from './components/index/index.component';
 // import {routing} from "./contract-signature.routing";
-import { ContractSignatureComponent } from "./contract-signature.component";
 import { DatepickerModule } from "ng2-datepicker";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import {NgxPaginationModule} from "ngx-pagination";
@@ -47,6 +46,7 @@ import {CalendarModule} from 'primeng/calendar';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { DisplayDigitalSignatureComponent } from './display-digital-signature/display-digital-signature.component';
 import {TextSignatureImageComponent} from './components/text-signature-image/text-signature-image.component';
+import { ContractSignatureComponent } from './contract-signature.component';
 
 export const contractSignatureRoutes: Routes = [
   { path: 'consider/:id', component: ConsiderContractComponent },
@@ -72,7 +72,6 @@ export const contractSignatureRoutes: Routes = [
     HeaderContractComponent,
     FooterSignatureComponent,
     ProcessingHandleEcontractComponent,
-    ContractSignatureComponent,
     ConsiderContractComponent,
     SignaturePersonalContractComponent,
     CoordinatesContractComponent,

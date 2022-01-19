@@ -159,6 +159,7 @@ export class ContractSignatureComponent implements OnInit {
           this.contracts[v].contractNumber = key.participant.contract.code;
           this.contracts[v].contractSignTime = key.participant.contract.sign_time;
           this.contracts[v].contractCreateTime = key.participant.contract.created_time;
+          this.contracts[v].contractStatus = key.participant.contract.status;
         });
       });
     }
