@@ -1347,7 +1347,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
       if (result && result.phone && result.networkCode) {
-        this.loadingText = 'Yêu cầu ký đã được gửi tới số điện thoại của bạn. Vui lòng Xác nhận để thực hiện dịch vụ';
+        this.loadingText = 'Yêu cầu ký đã được gửi tới số điện thoại của bạn.\n Vui lòng Xác nhận để thực hiện dịch vụ';
         this.signInfoPKIU.phone = result.phone;
         this.signInfoPKIU.phone_tel = result.phone_tel;
         this.signInfoPKIU.networkCode = result.networkCode;

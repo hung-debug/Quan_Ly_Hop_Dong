@@ -43,15 +43,16 @@ export class PkiDialogSignComponent implements OnInit {
       return;
     }
     const firstChar = this.phoneNum.charAt(0);
+    let resPhone = this.phoneNum;
     if(this.phoneNum && firstChar && firstChar == '0') {
-      this.phoneNum = '84' + this.phoneNum.substring(1);
+      resPhone = '84' + this.phoneNum.substring(1);
     }
     const itemNameNetwork = this.nl.find((nc: any) => nc.id == this.networkCode);
     if (itemNameNetwork) {
       this.networkCompany = itemNameNetwork.name ? itemNameNetwork.name.toLowerCase() : null;
     }
     const resDialog = {
-      phone: this.phoneNum,
+      phone: resPhone,
       networkCode: this.networkCompany,
       phone_tel: this.networkCode,
     };
