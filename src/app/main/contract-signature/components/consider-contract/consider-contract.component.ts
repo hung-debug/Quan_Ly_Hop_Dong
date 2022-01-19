@@ -831,8 +831,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         return 'Bạn có chắc chắn từ chối hợp đồng này?';
       }
     } else if ([3,4].includes(this.datas.roleContractReceived)) {
-      if (this.confirmSignature == 1) {
+      if (this.confirmSignature == 1 && this.datas.roleContractReceived == 3) {
         return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?';
+      } else if (this.confirmSignature == 1 && this.datas.roleContractReceived == 4) {
+        return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận đóng dấu?';
       } else if (this.confirmSignature == 2) {
         return 'Bạn không đồng ý với nội dung của hợp đồng và không xác nhận ký?';
       }
@@ -963,7 +965,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         console.log(checkSign);
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi ký sim PKI', '', 3000);
+          this.toastService.showErrorHTMLWithTimeout('Yêu cầu kí đã hết hạn. Vui lòng thực hiện ký lại!', '', 3000);
           return false;
         } else {
           return true;
