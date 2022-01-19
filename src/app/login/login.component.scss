@@ -160,3 +160,7 @@ body {
   background-repeat: no-repeat;
   background-image: url(../../assets/img/icon_vietnam.svg);
 }
+
+::ng-deep.mat-dialog-container {
+  padding: 5px 12px 30px 12px !important;
+}

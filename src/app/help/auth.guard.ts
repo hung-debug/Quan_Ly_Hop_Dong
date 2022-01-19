@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute} from '@angular/router';
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 import {Location} from "@angular/common";
 import {HttpErrorResponse} from "@angular/common/http";
 import {DeviceDetectorService} from "ngx-device-detector";
@@ -13,7 +13,9 @@ export class AuthGuard implements CanActivate {
     private router: Router,
     private deviceService: DeviceDetectorService,
     private route: ActivatedRoute,
-  ) { }
+  ) {
+  }
+
   canActivate(
     next: ActivatedRouteSnapshot,
     // @ts-ignore
@@ -25,8 +27,8 @@ export class AuthGuard implements CanActivate {
     if (state.url.search('loginType') > 0 && next._urlSegment.segments.some((p: any) => p.path == 'contract-signature')) {
       if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
         const urlQ = state.url;
-        const urlQ1 =  urlQ.split('contract-signature/')[1];
-        const urlQ2 =  urlQ1.split('/');
+        const urlQ1 = urlQ.split('contract-signature/')[1];
+        const urlQ2 = urlQ1.split('/');
         const urlRole = urlQ2[0];
         const matchesNum = urlQ.match(/\d+/g);
         if (urlRole.includes('coordinates')) {
@@ -63,20 +65,17 @@ export class AuthGuard implements CanActivate {
         if (next.queryParams.loginType && next.queryParams.loginType == 1) {
           this.router.navigate(['/login'],
             {
-              queryParams: { 'loginType': 1 }
+              queryParams: {'loginType': 1}
             });
         } else {
           this.router.navigate(['/login'],
             {
-              queryParams: { 'loginType': 0 }
+              queryParams: {'loginType': 0}
             });
         }
         return false;
       } else return true;
     } else {
-      if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
-        console.log(this.deviceService.isMobile(), this.deviceService.deviceType);
-      }
       if (localStorage.getItem('currentUser') != null) {
         //console.log(localStorage.getItem('currentUser'));
         return true;

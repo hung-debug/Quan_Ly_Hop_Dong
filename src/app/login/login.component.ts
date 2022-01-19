@@ -5,6 +5,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {AuthenticationService} from '../service/authentication.service';
 import {HttpErrorResponse} from "@angular/common/http";
 import {DeviceDetectorService} from "ngx-device-detector";
+import {FilterListDialogComponent} from "../main/contract/dialog/filter-list-dialog/filter-list-dialog.component";
+import {ActionDeviceComponent} from "../action-device/action-device.component";
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -26,6 +29,7 @@ export class LoginComponent implements OnInit {
     private deviceService: DeviceDetectorService,
     public translate: TranslateService,
     private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang('vi');
@@ -124,20 +128,43 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.router.url);
-    if (!this.router.url.endsWith('login')) {
-      this.sub = this.route.params.subscribe(params => {
-        this.type = params['loginType'];
-      });
-
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+      this.getDeviceApp();
+    } else {
+      if (!this.router.url.endsWith('login')) {
+        this.sub = this.route.params.subscribe(params => {
+          this.type = params['loginType'];
+        });
+      }
     }
   }
 
   switchLang(lang: string) {
     this.translate.use(lang);
     this.translate.currentLang = lang;
-
     localStorage.setItem('lang', lang);
+  }
+
+  getDeviceApp() {
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+      console.log(this.deviceService.isMobile(), this.deviceService.deviceType);
+      // @ts-ignore
+      const dialogRef = this.dialog.open(ActionDeviceComponent, {
+        width: '580px',
+        backdrop: 'static',
+        keyboard: false,
+        panelClass: 'custom-modalbox'
+      })
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog');
+        if (!this.router.url.endsWith('login')) {
+          this.sub = this.route.params.subscribe(params => {
+            this.type = params['loginType'];
+          });
+        }
+        // let is_data = result
+      })
+    }
   }
 
 }

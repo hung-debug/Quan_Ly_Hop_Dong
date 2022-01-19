@@ -28,6 +28,7 @@ import {AddUserComponent} from './main/user/add-user/add-user.component';
 import {DetailUserComponent} from './main/user/detail-user/detail-user.component';
 import {CheckSignDigitalComponent} from './main/check-sign-digital/check-sign-digital.component';
 import * as path from "path";
+import {ActionDeviceComponent} from "./action-device/action-device.component";
 
 const routes: Routes = [
   {
@@ -149,10 +150,8 @@ const routes: Routes = [
   // },
   {
     path: '',
-    // redirectTo: 'login',
+    redirectTo: 'login',
     pathMatch: 'full',
-    canActivate: [AuthGuard],
-    component: LoginComponent
   },
   {path: '**', component: PageNotFoundComponent}
 ];
