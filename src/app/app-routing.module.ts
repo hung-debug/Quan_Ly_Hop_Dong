@@ -1,39 +1,42 @@
-import { DetailContractComponent } from './main/contract/detail-contract/detail-contract.component';
-import { AddContractBatchComponent } from './main/contract/add-contract-batch/add-contract-batch.component';
-import { AddContractTemplateComponent } from './main/contract-template/add-contract-template/add-contract-template.component';
-import { SignupComponent } from './login/signup/signup.component';
-import { ContractTemplateComponent } from './main/contract-template/contract-template.component';
-import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
-import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
-import { AddContractComponent } from './main/contract/add-contract/add-contract.component';
-import { ContractComponent } from './main/contract/contract.component';
-import { DashboardComponent } from './main/dashboard/dashboard.component';
-import { MainComponent } from './main/main.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { UserComponent } from './main/user/user.component';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { AuthGuard } from './help/auth.guard';
+import {DetailContractComponent} from './main/contract/detail-contract/detail-contract.component';
+import {AddContractBatchComponent} from './main/contract/add-contract-batch/add-contract-batch.component';
+import {
+  AddContractTemplateComponent
+} from './main/contract-template/add-contract-template/add-contract-template.component';
+import {SignupComponent} from './login/signup/signup.component';
+import {ContractTemplateComponent} from './main/contract-template/contract-template.component';
+import {ResetPasswordComponent} from './login/reset-password/reset-password.component';
+import {ForgotPasswordComponent} from './login/forgot-password/forgot-password.component';
+import {AddContractComponent} from './main/contract/add-contract/add-contract.component';
+import {ContractComponent} from './main/contract/contract.component';
+import {DashboardComponent} from './main/dashboard/dashboard.component';
+import {MainComponent} from './main/main.component';
+import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {UserComponent} from './main/user/user.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {LoginComponent} from './login/login.component';
+import {AuthGuard} from './help/auth.guard';
 import {NoAuthGuard} from "./main/contract-signature/shared/no-auth.guard";
 import {IndexComponent} from "./main/contract-signature/components/index/index.component";
 import {ContractSignatureComponent} from "./main/contract-signature/contract-signature.component";
-import { UnitComponent } from './main/unit/unit.component';
-import { InforUserComponent } from './main/user/infor-user/infor-user.component';
-import { ContractTypeComponent } from './main/contract-type/contract-type.component';
-import { RoleComponent } from './main/role/role.component';
-import { AddUserComponent } from './main/user/add-user/add-user.component';
-import { DetailUserComponent } from './main/user/detail-user/detail-user.component';
-import { CheckSignDigitalComponent } from './main/check-sign-digital/check-sign-digital.component';
+import {UnitComponent} from './main/unit/unit.component';
+import {InforUserComponent} from './main/user/infor-user/infor-user.component';
+import {ContractTypeComponent} from './main/contract-type/contract-type.component';
+import {RoleComponent} from './main/role/role.component';
+import {AddUserComponent} from './main/user/add-user/add-user.component';
+import {DetailUserComponent} from './main/user/detail-user/detail-user.component';
+import {CheckSignDigitalComponent} from './main/check-sign-digital/check-sign-digital.component';
+import * as path from "path";
 
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent,
+    component: LoginComponent
   },
   {
     path: 'contract-signature/signatures/:data',
-    data: { type: 'notAccess'},
+    data: {type: 'notAccess'},
     component: LoginComponent,
     canActivate: [AuthGuard]
   },
@@ -146,14 +149,17 @@ const routes: Routes = [
   // },
   {
     path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
+    // redirectTo: 'login',
+    pathMatch: 'full',
+    canActivate: [AuthGuard],
+    component: LoginComponent
   },
-  { path: '**', component: PageNotFoundComponent }
+  {path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

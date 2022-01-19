@@ -144,9 +144,14 @@ export class DetermineSignerComponent implements OnInit {
   getApiDetermine() {
     this.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3) {
-        let data = items.recipients.filter((p: any) => p.role == 3);
-        this.is_determine_clone[index].recipients = data;
+        this.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
       }
+      if (items.id) delete items.id;
+      if (items.contract_id) delete items.contract_id;
+      items.recipients.forEach((element: any) => {
+        if (element.id) delete element.id;
+        if (element.process_at) delete element.process_at;
+      })
     })
     this.spinner.show();
     this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res: any) => {

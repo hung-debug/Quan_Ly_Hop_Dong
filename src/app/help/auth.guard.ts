@@ -12,7 +12,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
     private deviceService: DeviceDetectorService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) { }
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -74,6 +74,9 @@ export class AuthGuard implements CanActivate {
         return false;
       } else return true;
     } else {
+      if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+        console.log(this.deviceService.isMobile(), this.deviceService.deviceType);
+      }
       if (localStorage.getItem('currentUser') != null) {
         //console.log(localStorage.getItem('currentUser'));
         return true;
