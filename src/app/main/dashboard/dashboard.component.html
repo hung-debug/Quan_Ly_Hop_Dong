@@ -119,15 +119,15 @@
           <div style="color: #94A7C6">Không có dữ liệu!</div>
         </div>
       </div>
-        <div *ngIf="listNotification.length > 0" style="height: 453px;"> 
+        <div *ngIf="listNotification.length > 0" style="min-height: 453px;"> 
           <div *ngFor="let item of listNotification; let i = index" [style.border-bottom]="i != listNotification.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px;">
             <div class="row">
               <div class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url)">{{item.notice_name}}</div>
             </div>
-            <div class="row">
+            <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
               <div class="col-md-12 item_contract_infor">
                 <img src="../../../assets/img/user_icon.svg" width="12px"/>
-                <span> {{item.notice_content}}</span>
+                <span> {{s}}</span>
               </div>
             </div>
             <div class="row item_contract_infor">

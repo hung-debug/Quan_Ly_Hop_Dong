@@ -195,10 +195,12 @@ export class InforContractComponent implements OnInit {
   validData() {
     this.clearError();
     if (!this.name) {
+      this.spinner.hide();
       this.errorContractName = 'error.contract.name.required';
       return false;
     }
     if (!this.datas.contractFile) {
+      this.spinner.hide();
       this.errorContractFile = 'error.contract.file.required';
       return false;
     }
