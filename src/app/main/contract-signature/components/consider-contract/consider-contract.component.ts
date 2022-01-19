@@ -144,6 +144,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   signInfoPKIU: any = {};
   heightText: any = 200;
   widthText: any = 200;
+  loadingText: string = 'Đang xử lý...';
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -925,6 +926,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
             console.log('signI', signI);
             const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+            if (!dataSignMobi.FileDataSigned) {
+              this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+              return false;
+            }
             const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
             if (!sign.recipient_id) {
               this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
@@ -965,7 +970,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         console.log(checkSign);
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
-          this.toastService.showErrorHTMLWithTimeout('Yêu cầu kí đã hết hạn. Vui lòng thực hiện ký lại!', '', 3000);
+          this.toastService.showErrorHTMLWithTimeout('Ký số không thành công!', '', 3000);
           return false;
         } else {
           return true;
@@ -1342,6 +1347,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
       if (result && result.phone && result.networkCode) {
+        this.loadingText = 'Yêu cầu ký đã được gửi tới số điện thoại của bạn. Vui lòng Xác nhận để thực hiện dịch vụ';
         this.signInfoPKIU.phone = result.phone;
         this.signInfoPKIU.phone_tel = result.phone_tel;
         this.signInfoPKIU.networkCode = result.networkCode;

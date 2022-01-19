@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import { networkList } from 'src/app/data/data';
+import {ToastService} from "../../../../../service/toast.service";
 
 @Component({
   selector: 'app-pki-dialog-sign',
@@ -22,7 +23,8 @@ export class PkiDialogSignComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {},
     public router: Router,
-    public dialogRef: MatDialogRef<PkiDialogSignComponent>
+    public dialogRef: MatDialogRef<PkiDialogSignComponent>,
+    private toastService : ToastService
   ) {
   }
 
@@ -34,6 +36,16 @@ export class PkiDialogSignComponent implements OnInit {
   }
 
   onSubmit() {
+    const pattern = /^[0-9]*$/;
+
+    if (!this.phoneNum || (this.phoneNum && this.phoneNum.length < 9 || this.phoneNum.length > 11) || (this.phoneNum && !pattern.test(this.phoneNum))) {
+      this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập đúng định dạng số điện thoại', '', 3000);
+      return;
+    }
+    const firstChar = this.phoneNum.charAt(0);
+    if(this.phoneNum && firstChar && firstChar == '0') {
+      this.phoneNum = '84' + this.phoneNum.substring(1);
+    }
     const itemNameNetwork = this.nl.find((nc: any) => nc.id == this.networkCode);
     if (itemNameNetwork) {
       this.networkCompany = itemNameNetwork.name ? itemNameNetwork.name.toLowerCase() : null;
