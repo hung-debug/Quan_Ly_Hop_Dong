@@ -1346,6 +1346,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         this.signInfoPKIU.phone_tel = result.phone_tel;
         this.signInfoPKIU.networkCode = result.networkCode;
         if (result.phone && result.phone_tel && result.networkCode) {
+          this.dataNetworkPKI = {
+            networkCode: this.signInfoPKIU.networkCode,
+            phone: this.signInfoPKIU.phone
+          }
           await this.signContractSubmit();
         } else {
           this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập số điện thoại và chọn nhà mạng", "", 3000);
