@@ -76,12 +76,14 @@ export class DashboardService {
     return this.http.get<any[]>(listNotificationUrl, {headers}).pipe();
   }
 
-  updateViewNotification(data: any) {
+  updateViewNotification(id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.post<any>(this.updateViewNotificationUrl + data.id, {headers}).pipe();
+      console.log(headers);
+    const body ="";
+    return this.http.post<any>(this.updateViewNotificationUrl + id, body, {headers}).pipe();
   }
 
 }

@@ -8,14 +8,15 @@
         </div>
         <div *ngIf="getShowHideSideBar()">
           <div ngbDropdown class="d-inline-block">
-            <div class="social-icons" ngbDropdownToggle>
+            <div class="social-icons" ngbDropdownToggle (click)="loadDataNotification()">
               <span class="notification_login"></span>
               <div class="label">{{'notification' | translate }}</div>
             </div>
 
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu" style="width: 500px;">
               <div class="title_notification">DANH SÁCH THÔNG BÁO</div>
-              <div class="drop_notification" *ngFor="let item of contracts; let i = index"  (click)="openLinkNotification(item.notice_url)">
+              <div class="drop_notification" *ngFor="let item of listNotification; let i = index"  (click)="openLinkNotification(item.notice_url, item.id)"
+              [style.background-color]="item.status==0 ? '#eaf4ff' : ''">
                 <div class="row">
                   <div class="col-md-12 item_contract_name">{{item.notice_name}}</div>
                 </div>
@@ -44,7 +45,7 @@
               
                 </div>
               </div>
-              <div  class="view_all"> 
+              <div  class="view_all" (click)="viewAllNotification()"> 
                 Xem thêm
               </div>
             </div>

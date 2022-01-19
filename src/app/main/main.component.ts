@@ -73,7 +73,7 @@ export class MainComponent implements OnInit {
   
 
   nameCurrentUser:any;
-  contracts: any[] = [];
+  listNotification: any[] = [];
 
   ngOnInit(): void {
     //update title by component
@@ -91,10 +91,6 @@ export class MainComponent implements OnInit {
 
     this.nameCurrentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.name;
 
-    this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
-      this.contracts = data.entities;
-      console.log(this.contracts);
-    });
   }
 
   //apply change title
@@ -203,7 +199,24 @@ export class MainComponent implements OnInit {
     this.router.navigate(['/main/user-infor']);
   }
 
-  openLinkNotification(link:any) {
-    window.open(link.replace('&loginType=', '').replace('&loginType=1', ''), "_blank");
+  openLinkNotification(link:any, id:any) {
+    window.location.href = link.replace('&loginType=', '').replace('&loginType=1', '');
+    this.dashboardService.updateViewNotification(id).subscribe(data => {
+      console.log(data);
+    });
+  }
+
+  loadDataNotification(){
+    this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
+      this.listNotification = data.entities;
+      console.log(this.listNotification);
+    });
+  }
+
+  viewAllNotification(){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/notification']);
+    });
+    //this.router.navigate(['/main/notification']);
   }
 }

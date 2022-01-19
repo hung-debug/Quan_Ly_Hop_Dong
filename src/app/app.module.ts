@@ -75,6 +75,7 @@ import { DeleteRoleComponent } from './main/role/delete-role/delete-role.compone
 import { DeleteContractTypeComponent } from './main/contract-type/delete-contract-type/delete-contract-type.component';
 import { CheckSignDigitalComponent } from './main/check-sign-digital/check-sign-digital.component';
 import { ContractSignatureComponent } from './main/contract-signature/contract-signature.component';
+import { NotificationComponent } from './main/notification/notification.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -121,6 +122,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DeleteRoleComponent,
     DeleteContractTypeComponent,
     CheckSignDigitalComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,

@@ -28,6 +28,7 @@ import {AddUserComponent} from './main/user/add-user/add-user.component';
 import {DetailUserComponent} from './main/user/detail-user/detail-user.component';
 import {CheckSignDigitalComponent} from './main/check-sign-digital/check-sign-digital.component';
 import * as path from "path";
+import { NotificationComponent } from './main/notification/notification.component';
 
 const routes: Routes = [
   {
@@ -136,6 +137,10 @@ const routes: Routes = [
       {
         path: 'check-sign-digital',
         component: CheckSignDigitalComponent,
+      },
+      {
+        path: 'notification',
+        component: NotificationComponent,
       },
     ],
   },

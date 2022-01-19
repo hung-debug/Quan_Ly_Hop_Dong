@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
   isOrg: string = 'off';
   stateOptions: any[];
 
-  contracts: any[] = [];
+  listNotification: any[] = [];
 
   constructor(
     private appService: AppService,
@@ -64,10 +64,10 @@ export class DashboardComponent implements OnInit {
   }
 
   openLinkNotification(link:any) {
-    window.open(link.replace('&loginType=', '').replace('&loginType=1', ''), "_blank");
+    window.location.href = link.replace('&loginType=', '').replace('&loginType=1', '');
   }
 
-  search(){    
+  searchCountCreate(){
     console.log(this.isOrg);
     this.dashboardService.countContractCreate(this.isOrg, this.filter_from_date, this.filter_to_date).subscribe(data => {     
       console.log(data);    
@@ -134,6 +134,10 @@ export class DashboardComponent implements OnInit {
         }]
       });
     });
+  }
+
+  search(){    
+    this.searchCountCreate();
 
     this.dashboardService.countContractReceived("", "").subscribe(data => { 
       console.log(data);    
@@ -144,8 +148,8 @@ export class DashboardComponent implements OnInit {
     });
 
     this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
-      this.contracts = data.entities;
-      console.log(this.contracts);
+      this.listNotification = data.entities;
+      console.log(this.listNotification);
     });
   }
 }
