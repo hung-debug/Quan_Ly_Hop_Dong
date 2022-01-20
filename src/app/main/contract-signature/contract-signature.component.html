@@ -21,12 +21,12 @@
       <div class="row">
         <div class="col-md-12 item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
       </div>
-      <!-- <div class="row">
-        <div class="col-md-12 item_contract_infor">{{'Bên A' | translate}}: {{item.contractNumber}}</div>
+      <div class="row">
+        <div class="col-md-12 item_contract_infor">{{'Bên A' | translate}}: {{item.sideA}}</div>
       </div>
       <div class="row">
-        <div class="col-md-12 item_contract_infor">{{'Bên B' | translate}}: {{item.name}} - {{item.email}}</div>
-      </div> -->
+        <div class="col-md-12 item_contract_infor">{{'Bên B' | translate}}: {{item.sideB}}</div>
+      </div>
       <div class="row">
         <div class="col-md-12 item_contract_infor">{{'Trạng thái hợp đồng' | translate}}:
           <span class="status_blue">{{item.contractStatus | pipe | translate}}</span>

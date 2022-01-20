@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <div class="header-img">
+    <img src="assets/img/Group 5473_1.svg" alt="eContract.vn">
+    <i class="fa fa-times" (click)="dialog.closeAll()"></i>
+  </div>
+  <div class="content">
+    <h3>THÔNG BÁO</h3>
+    <div class="content-text">
+      <span>Đã có phiên bản trên điện thoại di động.</span><br>
+      <span>Vui lòng truy cập hoặc tải ứng dụng để tiếp tục sử dụng dịch vụ.</span>
+    </div>
+    <div class="footer">
+      <button class="footer-btn" [routerLink]="['econtract://app/login']">
+        <img src="assets/img/Group 5478.svg" alt="eContract">Mở app
+      </button>
+      <button class="footer-btn"><img src="assets/img/download_app.svg" alt="eContract">Tải app</button>
+    </div>
+  </div>
+</div>

@@ -16,7 +16,7 @@ export class DeleteContractDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<DeleteContractDialogComponent>,
     public router: Router,
     public dialog: MatDialog,
-    ) { 
+    ) {
     }
 
   ngOnInit(): void {
