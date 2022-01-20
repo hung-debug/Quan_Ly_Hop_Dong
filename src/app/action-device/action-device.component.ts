@@ -16,4 +16,8 @@ export class ActionDeviceComponent implements OnInit {
 
   }
 
+  nextApp() {
+    window.location.href = `econtract://app/login`;
+  }
+
 }

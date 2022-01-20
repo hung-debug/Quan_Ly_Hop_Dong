@@ -10,7 +10,7 @@
       <span>Vui lòng truy cập hoặc tải ứng dụng để tiếp tục sử dụng dịch vụ.</span>
     </div>
     <div class="footer">
-      <button class="footer-btn" [routerLink]="['econtract://app/login']">
+      <button class="footer-btn" (click)="nextApp()">
         <img src="assets/img/Group 5478.svg" alt="eContract">Mở app
       </button>
       <button class="footer-btn"><img src="assets/img/download_app.svg" alt="eContract">Tải app</button>
