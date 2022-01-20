@@ -924,9 +924,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
 
-            console.log('signI', signI);
             const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
-            if (!dataSignMobi.FileDataSigned) {
+            if (!dataSignMobi.data.FileDataSigned) {
               this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
               return false;
             }

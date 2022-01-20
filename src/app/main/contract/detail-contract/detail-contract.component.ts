@@ -13,6 +13,7 @@ import {variable} from "../../../config/variable";
 import Swal from 'sweetalert2';
 import * as $ from "jquery";
 import {ProcessingHandleEcontractComponent} from "../../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component"
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 @Component({
   selector: 'app-detail-contract',
@@ -105,6 +106,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   isDataObjectSignature: any;
   valid: boolean = false;
   allFileAttachment: any[];
+  role:any;
+  status:any;
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -196,8 +199,21 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
       // this.datas = this.datas.concat(this.data_contract.contract_information);
 
+      
       this.datas.action_title = 'Xác nhận';
-      this.datas.roleContractReceived = this.recipient.role;
+      //neu nguoi truy cap khong o trong luong ky
+      if(!this.recipient?.role){
+        this.role = '';
+        this.status = this.datas.is_data_contract.status;
+      
+      //neu nguoi truy cap o trong luong ky
+      }else{
+        this.role = this.recipient.role;
+        this.status = this.recipient.status;
+        this.datas.roleContractReceived = this.recipient.role;
+      }
+
+      
 
 
       this.scale = 1;
