@@ -139,11 +139,7 @@ export class ContractSignatureComponent implements OnInit {
     }else{
       this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
         console.log(data.entities);
-        if (this.filter_status == 0) {
-          this.contracts = data.entities.filter((i: any) => i.status == 1)
-        } else {
-          this.contracts = data.entities.filter((i: any) => (i.status == 2 || i.status == 3))
-        }
+        this.contracts = data.entities
   
         this.pageTotal = this.contracts.length;
         if (this.pageTotal == 0) {
@@ -196,12 +192,12 @@ export class ContractSignatureComponent implements OnInit {
       });
     }else{
       this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
-        
-        if (this.filter_status == 0) {
-          this.contracts = this.transform(data.entities.filter((i: any) => i.status == 1), event);
-        } else {
-          this.contracts = this.transform(data.entities.filter((i: any) => (i.status == 2 || i.status == 3)), event);
-        }
+        this.contracts = this.transform(data.entities, event);
+        // if (this.filter_status == 0) {
+        //   this.contracts = this.transform(data.entities.filter((i: any) => i.status == 1), event);
+        // } else {
+        //   this.contracts = this.transform(data.entities.filter((i: any) => (i.status == 2 || i.status == 3)), event);
+        // }
         this.pageTotal = this.contracts.length;
         if (this.pageTotal == 0) {
           this.p = 0;
@@ -228,9 +224,9 @@ export class ContractSignatureComponent implements OnInit {
 
   private convertStatusStr() {
     if (this.status == 'wait-processing') {
-      this.filter_status = 0;
-    } else if (this.status == 'processed') {
       this.filter_status = 1;
+    } else if (this.status == 'processed') {
+      this.filter_status = 4;
     } else if (this.status == 'share') {
       this.filter_status = -1;
     }

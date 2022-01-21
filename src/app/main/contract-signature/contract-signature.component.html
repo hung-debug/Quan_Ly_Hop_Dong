@@ -17,7 +17,7 @@
   </div>
 
   <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}">
-    <div *ngIf="filter_status == 0 || filter_status == 1">
+    <div *ngIf="filter_status == 1 || filter_status == 4">
       <div class="row">
         <div class="col-md-12 item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
       </div>

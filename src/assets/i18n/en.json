@@ -35,6 +35,7 @@
   "menu.organization.list": "Organization",
   "menu.role.list": "Role",
   "menu.contract.type.list": "Type of contract",
+  "menu.check.sign.digital": "Check sign digital",
 
   "contract.list": "Contract list",
   "contract.list.created": "List of contracts created",
@@ -224,6 +225,7 @@
   "btn.close": "Close",
   "btn.cancel": "Cancel",
   "btn.accept": "Accept",
+  "btn.share": "Share",
   "btn.add.user.view": "Add viewer",
   "btn.add.user.sign": "Add signer",
   "btn.add.user.lead": "Add leader",

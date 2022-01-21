@@ -96,7 +96,7 @@ export class UnitComponent implements OnInit {
       this.total = this.listData.length;
 
       //let arrCha = this.listData.filter((p: any) => p.id == orgId);
-      this.listData = this.listData.sort((a,b) => a.id - b.id && a.parent_id - b.parent_id);
+      this.listData = this.listData.sort((a,b) => a.parent_id - b.parent_id || a.name.toString().localeCompare(b.name.toString()));
       //console.log(this.listData);
       let data:any="";
 

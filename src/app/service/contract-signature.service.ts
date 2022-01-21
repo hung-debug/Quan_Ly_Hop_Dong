@@ -41,7 +41,7 @@ export class ContractSignatureService {
     if (filter_to_date != "") {
       filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
     }
-    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&size=15";
+    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&size=1";
     console.log(listContractMyProcessUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
