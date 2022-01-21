@@ -52,7 +52,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //dropdown
   signTypeList: Array<any> = type_signature;
-  signTypeList_personal_partner: Array<any> =  type_signature_personal_party;
+  signTypeList_personal_partner: Array<any> = type_signature_personal_party;
   signType_doc: Array<any> = type_signature_doc;
 
   dropdownSignTypeSettings: any = {};
@@ -83,8 +83,7 @@ export class DetermineSignerComponent implements OnInit {
   ngOnInit(): void {
     if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
       this.is_determine_clone = this.datas.determine_contract;
-    }
-    else {
+    } else {
       this.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
     }
 
@@ -142,6 +141,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getApiDetermine() {
+    let data_arr = ['id', 'due_at', 'empty', 'fields', 'from_at', 'is_disable', 'notify_type', 'password', 'process_at', 'reason_reject', 'remind', 'remind_date', 'remind_message', 'selected', 'sign_at', 'type_unit', 'username'];
     this.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3) {
         this.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
@@ -149,8 +149,9 @@ export class DetermineSignerComponent implements OnInit {
       if (items.id) delete items.id;
       if (items.contract_id) delete items.contract_id;
       items.recipients.forEach((element: any) => {
-        if (element.id) delete element.id;
-        if (element.process_at) delete element.process_at;
+        data_arr.forEach((res: any) => {
+          delete element[res];
+        })
       })
     })
     this.spinner.show();
