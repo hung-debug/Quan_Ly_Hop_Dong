@@ -25,6 +25,7 @@ export class MainComponent implements OnInit {
   errorDetail: string = '';
   status: number = 1;
   notification: string = '';
+  numberNotification:any=0;
 
   //user detail
   currentUserForm: any = FormGroup;
@@ -91,6 +92,9 @@ export class MainComponent implements OnInit {
 
     this.nameCurrentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.name;
 
+    this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
+      this.numberNotification = data.total_elements;
+    });
   }
 
   //apply change title
@@ -207,9 +211,10 @@ export class MainComponent implements OnInit {
   }
 
   loadDataNotification(){
-    this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
+    this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
+      this.numberNotification = data.total_elements;
       this.listNotification = data.entities;
-      console.log(this.listNotification);
+      console.log(data);
     });
   }
 
