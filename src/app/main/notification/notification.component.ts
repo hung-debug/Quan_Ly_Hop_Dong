@@ -19,7 +19,7 @@ export class NotificationComponent implements OnInit {
     private appService: AppService) { }
 
   ngOnInit(): void {
-    this.appService.setTitle("DANH SÁCH THÔNG BÁO");
+    this.appService.setTitle("no.list");
     this.dashboardService.getNotification('', '', '', 1000, '').subscribe(data => {
       this.listNotification = data.entities;
       console.log(this.listNotification);

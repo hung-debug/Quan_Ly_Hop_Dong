@@ -22,13 +22,13 @@
         <div class="col-md-12 item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
       </div>
       <div class="row">
-        <div class="col-md-12 item_contract_infor">{{'Bên A' | translate}}: {{item.sideA}}</div>
+        <div class="col-md-12 item_contract_infor">{{'contract.side.a' | translate}}: {{item.sideA}}</div>
       </div>
       <div class="row">
-        <div class="col-md-12 item_contract_infor">{{'Bên B' | translate}}: {{item.sideB}}</div>
+        <div class="col-md-12 item_contract_infor">{{'contract.side.b' | translate}}: {{item.sideB}}</div>
       </div>
       <div class="row">
-        <div class="col-md-12 item_contract_infor">{{'Trạng thái hợp đồng' | translate}}:
+        <div class="col-md-12 item_contract_infor">{{'contract.status.v2' | translate}}:
           <span class="status_blue">{{item.contractStatus | pipe | translate}}</span>
         </div>
       </div>
@@ -119,7 +119,7 @@
   style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
     <div style="display: table-cell;vertical-align: middle;">
       <img src="../../../assets/img/empty_data.svg"/>
-      <div style="color: #94A7C6">Không có dữ liệu!</div>
+      <div style="color: #94A7C6">{{'no.data' | translate}}</div>
     </div>
   </div>
 

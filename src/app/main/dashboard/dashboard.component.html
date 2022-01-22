@@ -2,7 +2,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <h3 style="color: #106DB6;">HỢP ĐỒNG NHẬN</h3>
+      <h3>{{'dashboard.contract.received' | translate}}</h3>
     </div>
   </div>
   <div class="row">
@@ -10,14 +10,11 @@
       <div class="header_card header_card_1" (click)="openLink('/main/contract-signature/receive/wait-processing')">
         <div class="row">
           <div class="col-md-7 text_header_card">
-              <div>Chờ xử lý</div>
+              <div>{{'contract.status.wait-processing' | translate}}</div>
               <div class="number_header_card">{{numberWaitProcess}}</div>
           </div>
           <div class="col-md-5 img_header_card">
-            <img
-              src="../../../assets/img/db_header_1.svg"
-              width="60px"
-            />
+            <img src="../../../assets/img/db_header_1.svg" width="60px"/>
           </div>
         </div>
       </div>
@@ -26,14 +23,11 @@
       <div class="header_card header_card_2">
         <div class="row">
           <div class="col-md-7 text_header_card">
-              <div>Sắp hết hạn</div>
+              <div>{{'contract.status.expire' | translate}}</div>
               <div class="number_header_card">{{numberExpire}}</div>
           </div>
           <div class="col-md-5 img_header_card">
-            <img
-              src="../../../assets/img/db_header_2.svg"
-              width="60px"
-            />
+            <img src="../../../assets/img/db_header_2.svg" width="60px" />
           </div>
         </div>
       </div>
@@ -42,14 +36,11 @@
       <div class="header_card header_card_3">
         <div class="row">
           <div class="col-md-7 text_header_card">
-              <div>Chờ phản hồi</div>
+              <div>{{'contract.status.wait-response' | translate}}</div>
               <div class="number_header_card">{{numberWaitComplete}}</div>
           </div>
           <div class="col-md-5 img_header_card">
-            <img
-              src="../../../assets/img/db_header_1.svg"
-              width="60px"
-            />
+            <img src="../../../assets/img/db_header_1.svg" width="60px" />
           </div>
         </div>
       </div>
@@ -58,14 +49,11 @@
       <div class="header_card header_card_4">
         <div class="row">
           <div class="col-md-7 text_header_card">
-              <div>Hoàn thành</div>
+              <div>{{'contract.status.complete' | translate}}</div>
               <div class="number_header_card">{{numberComplete}}</div>
           </div>
           <div class="col-md-5 img_header_card">
-            <img
-              src="../../../assets/img/db_header_3.svg"
-              width="60px"
-            />
+            <img src="../../../assets/img/db_header_3.svg" width="60px" />
           </div>
         </div>
       </div>
@@ -76,7 +64,7 @@
     <div class="col-md-6">
       <div class="row">
         <div class="col-md-12">
-          <h3 style="color: #106DB6;">HỢP ĐỒNG TẠO</h3>
+          <h3>{{'dashboard.contract.created' | translate}}</h3>
         </div>
       </div>
       <div class="body">
@@ -94,7 +82,7 @@
               style="height: 421px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
               <div style="display: table-cell;vertical-align: middle;">
                 <img src="../../../assets/img/empty_data.svg"/>
-                <div style="color: #94A7C6">Không có dữ liệu!</div>
+                <div style="color: #94A7C6">{{'no.data' | translate}}</div>
               </div>
             </div>
             <div *ngIf="totalCreate > 0" >
@@ -108,7 +96,7 @@
     <div class="col-md-6">
       <div class="row">
         <div class="col-md-12">
-          <h3 style="color: #106DB6;">THÔNG BÁO MỚI</h3>
+          <h3>{{'dashboard.notification' | translate}}</h3>
         </div>
       </div>
       <div class="body">
@@ -116,7 +104,7 @@
         style="height: 453px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
         <div style="display: table-cell;vertical-align: middle;">
           <img src="../../../assets/img/empty_data.svg"/>
-          <div style="color: #94A7C6">Không có dữ liệu!</div>
+          <div style="color: #94A7C6">{{'no.data' | translate}}</div>
         </div>
       </div>
         <div *ngIf="listNotification.length > 0" style="min-height: 453px;"> 
@@ -138,13 +126,13 @@
               </div>
               
               <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
-                <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">Điều phối</span>
-                <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject'">Từ chối</span>
-                <span class="status_blue" *ngIf="item.message_code=='sign_flow_review'">Xem xét</span>
-                <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign'">Ký</span>
-                <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">Ban hành</span>
-                <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish'">Hoàn thành</span>
-                <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">Hủy</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">{{'contract.lead' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject'">{{'contract.status.fail' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_review'">{{'contract.view' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign'">{{'contract.sign' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">{{'contract.document' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish'">{{'contract.status.complete' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">{{'contract.status.cancel' | translate}}</span>
               </div>
           
             </div>

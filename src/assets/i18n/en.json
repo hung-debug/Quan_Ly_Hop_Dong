@@ -37,6 +37,11 @@
   "menu.contract.type.list": "Type of contract",
   "menu.check.sign.digital": "Check sign digital",
 
+  "no.data": "No data!",
+  "dashboard.contract.received" : "Contracts created",
+  "dashboard.contract.created" : "Contracts received",
+  "dashboard.notification" : "Notification",
+
   "contract.list": "Contract list",
   "contract.list.created": "List of contracts created",
   "contract.list.received": "List of contracts received",
@@ -51,6 +56,7 @@
   "contract.status.processed": "Processed",
   "contract.status.share": "Shared",
   "contract.status.create.complete": "Complete creating",
+  "contract.status.wait-response": "Wait response",
   "contract.status.undefined": "Undefined",
   "contract.me": "My contract",
   "contract.organization": "Organizational contract",
@@ -76,6 +82,7 @@
   "contract.side.a": "Side A",
   "contract.side.b": "Side B",
   "contract.status": "Status",
+  "contract.status.v2": "Contract status",
   "contract.person-process": "Handler",
   "contract.delete": "Delete contract",
   "contract.connect.view": "View related contract",
@@ -232,6 +239,8 @@
   "btn.add.user.doc": "Add document maker",
   "btn.add.partner": "Add partner",
 
+  "view.all": "View all",
+  "no.list" : "List notification",
   "no.contract.add.close": "The contract has not been completed. Do you want to save the draft?",
   "no.update.information.success": "Updated successfully",
   "no.update.sign.file.image.success": "Updated file sign image successfully",

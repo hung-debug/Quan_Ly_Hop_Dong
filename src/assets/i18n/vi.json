@@ -37,6 +37,11 @@
   "menu.contract.type.list": "Loại hợp đồng",
   "menu.check.sign.digital": "Kiểm tra chữ ký số",
 
+  "no.data": "Không có dữ liệu!",
+  "dashboard.contract.received" : "Hợp đồng nhận",
+  "dashboard.contract.created" : "Hợp đồng tạo",
+  "dashboard.notification" : "Thông báo mới",
+
   "contract.list": "Danh sách hợp đồng",
   "contract.list.created": "Danh sách hợp đồng đã tạo",
   "contract.list.received": "Danh sách hợp đồng đã nhận",
@@ -50,6 +55,7 @@
   "contract.status.wait-processing": "Chờ xử lý",
   "contract.status.processed": "Đã xử lý",
   "contract.status.share": "Được chia sẻ",
+  "contract.status.wait-response": "Chờ phản hồi",
   "contract.status.create.complete": "Hoàn thành tạo hợp đồng",
   "contract.status.undefined": "Chưa xác định",
   "contract.me": "Hợp đồng của tôi",
@@ -76,6 +82,7 @@
   "contract.side.a": "Bên A",
   "contract.side.b": "Bên B",
   "contract.status": "Trạng thái",
+  "contract.status.v2": "Trạng thái hợp đồng",
   "contract.person-process": "Người xử lý",
   "contract.delete": "Xóa hợp đồng",
   "contract.connect.view": "Xem hợp đồng liên quan",
@@ -232,6 +239,8 @@
   "btn.add.user.doc": "Thêm văn thư",
   "btn.add.partner": "Thêm đối tác",
 
+  "view.all": "Xem thêm",
+  "no.list" : "Danh sách thông báo",
   "no.contract.add.close": "Hợp đồng chưa hoàn thành. Bạn có muốn lưu bản nháp không?",
   "no.update.information.success": "Cập nhật thông tin thành công",
   "no.update.sign.file.image.success": "Cập nhật file chữ ký ảnh thành công",
