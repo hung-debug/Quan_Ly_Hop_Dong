@@ -294,3 +294,8 @@ h3{
 .view_all:hover{
   background-color: #e6e7ec;
 }
+:host ::ng-deep {
+  .p-badge {
+    background: red;
+  }
+}

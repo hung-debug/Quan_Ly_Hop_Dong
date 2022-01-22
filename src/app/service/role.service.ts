@@ -20,6 +20,7 @@ export class RoleService {
   listRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles/search`;
   addRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles`;
   updateRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles/`;
+  deleteRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles`;
 
   token:any;
   customer_id:any;
@@ -76,10 +77,27 @@ export class RoleService {
     return this.http.put<any>(this.updateRoleUrl + data.id, body, {headers}).pipe();
   }
 
+  deleteRole(data: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: data.name,
+      code: data.code,
+      organization_id: this.organization_id,
+      status: 1,
+      permissions: data.selectedRole,
+      description: data.note
+    });
+    console.log(body);
+    return this.http.post<any>(this.deleteRoleUrl, body, {headers}).pipe();
+  }
+
   public getRoleList(code:any, name:any): Observable<any> {
     this.getCurrentUser();
     const headers = {'Authorization': 'Bearer ' + this.token}
-    let listRoleUrl = this.listRoleUrl + "?name=" + name + "&code=" + code + "&size=1000"
+    let listRoleUrl = this.listRoleUrl + "?name=" + name + "&code=" + code + "&size=10000"
     return this.http.get<any[]>(listRoleUrl, {headers}).pipe();
   }
 }

@@ -214,7 +214,7 @@ export class UserService {
   public getUserList(filter_organization_id: any, filter_email: any): Observable<any> {
     this.getCurrentUser();
 
-    let listUserUrl = this.listUserUrl + '?name=&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email + "&size=1000";
+    let listUserUrl = this.listUserUrl + '?name=&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email + "&size=10000";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<User[]>(listUserUrl, {headers}).pipe();
   }

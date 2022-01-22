@@ -116,7 +116,7 @@ export class ContractService {
     if(filter_status != "" && filter_status == 33){
       remain_day = "5";
     }
-    let listContractUrl = this.listContractUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&size=1000";
+    let listContractUrl = this.listContractUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&size=10000";
     console.log(listContractUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();
@@ -343,7 +343,7 @@ export class ContractService {
 
   public getNameOrganization(filter_organization_id: any, filter_name: any): Observable<any> {
     this.getCurrentUser();
-    let listUserUrl = this.getNameSearch + '?name=' + filter_name + '&organization_id=' + filter_organization_id + "&size=1000";
+    let listUserUrl = this.getNameSearch + '?name=' + filter_name + '&organization_id=' + filter_organization_id + "&size=10000";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<User[]>(listUserUrl, {headers}).pipe();
   }
