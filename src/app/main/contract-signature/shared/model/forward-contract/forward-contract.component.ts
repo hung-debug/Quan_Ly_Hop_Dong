@@ -75,7 +75,7 @@ export class ForwardContractComponent implements OnInit {
             , "", 3000);
           this.dialogRef.close();
           // if (this.data.role_coordination == 1) {
-          this.router.navigate(['/main/contract-signature/receive/processed'])
+          this.router.navigate(['/main/form-contract/detail/' + this.datas?.dataContract?.is_data_contract?.id]);
           // } else {
           //   this.router.navigate(['/main/contract-signature/receive/wait-processing']);
           // }

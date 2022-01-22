@@ -1241,7 +1241,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         (result) => {
           this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công', '', 3000);
           this.spinner.hide();
-          this.router.navigate(['/main/contract-signature/receive/processed']);
+          this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
         }, error => {
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
