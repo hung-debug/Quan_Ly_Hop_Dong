@@ -57,11 +57,14 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   checkStatusUser(status: any, role: any) {
     let res = '';
+    if (status == 3) {
+      return 'Đã từ chối';
+    }
     if (status == 0) {
       res += 'Chưa ';
     } else if (status == 1) {
       res += 'Đang ';
-    } else if (status == 2 || status == 3) {
+    } else if (status == 2) {
       res += 'Đã ';
     }
     if (role == 1) {
