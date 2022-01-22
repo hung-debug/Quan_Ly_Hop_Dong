@@ -199,13 +199,13 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
       // this.datas = this.datas.concat(this.data_contract.contract_information);
 
-      
+
       this.datas.action_title = 'Xác nhận';
       //neu nguoi truy cap khong o trong luong ky
       if(!this.recipient?.role){
         this.role = '';
         this.status = this.datas.is_data_contract.status;
-      
+
       //neu nguoi truy cap o trong luong ky
       }else{
         this.role = this.recipient.role;
@@ -213,7 +213,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.datas.roleContractReceived = this.recipient.role;
       }
 
-      
+
 
 
       this.scale = 1;
@@ -928,6 +928,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   checkStatusUser(status: any, role: any) {
     if (this.isDataContract.status == 30) {
       return 'Tải xuống';
+    }
+
+    if (status == 3) {
+      return 'Đã từ chối';
     }
     let res = '';
     if (status == 0) {

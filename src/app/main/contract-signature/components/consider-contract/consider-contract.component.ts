@@ -28,7 +28,7 @@ import {ConfirmSignOtpComponent} from "./confirm-sign-otp/confirm-sign-otp.compo
 import {ImageDialogSignComponent} from "./image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "./pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "./hsm-dialog-sign/hsm-dialog-sign.component";
-import {forkJoin, throwError, timer} from "rxjs";
+import {forkJoin, from, throwError, timer} from "rxjs";
 import {ToastService} from "../../../../service/toast.service";
 import {UploadService} from "../../../../service/upload.service";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -37,7 +37,7 @@ import {encode} from "base64-arraybuffer";
 import {UserService} from "../../../../service/user.service";
 // @ts-ignore
 import domtoimage from 'dom-to-image';
-import { delay } from 'rxjs/operators';
+import {concatMap, delay, map, tap} from 'rxjs/operators';
 import { of } from 'rxjs';
 import {networkList} from "../../../../data/data";
 
@@ -166,7 +166,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngOnInit(): void {
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
-    this.digitalSignatureService.getJson();
     this.getDataContractSignature();
   }
 
@@ -201,6 +200,22 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       }
       this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
       this.allRelateToContract = this.datas.is_data_contract.refs;
+      from(this.datas.is_data_contract.refs).pipe(
+        concatMap((rcE: any) => {
+          return this.contractService.getFileContract(rcE.ref_id);
+        }),
+        tap((res) => {
+          for (const eR of res) {
+            if (eR.type == 2) {
+              for (const re of this.datas.is_data_contract.refs)  {
+                if (re.ref_id == eR.contract_id) {
+                  re.path = eR.path;
+                }
+              }
+            }
+          }
+        })
+      ).subscribe();
       this.checkIsViewContract();
 
       this.datas.is_data_object_signature.forEach((element: any) => {
@@ -1228,6 +1243,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           this.spinner.hide();
           this.router.navigate(['/main/contract-signature/receive/processed']);
         }, error => {
+          this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
         }
       )
