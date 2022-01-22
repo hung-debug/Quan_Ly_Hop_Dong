@@ -10,7 +10,7 @@
       <div class="header_card header_card_1" (click)="openLink('/main/contract-signature/receive/wait-processing')">
         <div class="row">
           <div class="col-md-7 text_header_card">
-              <div>Cần xử lý</div>
+              <div>Chờ xử lý</div>
               <div class="number_header_card">{{numberWaitProcess}}</div>
           </div>
           <div class="col-md-5 img_header_card">
@@ -134,7 +134,7 @@
 
               <div class="col-md-6 calendar_create">
                 <img src="../../../assets/img/calendar_icon.svg" width="15px"/>
-                <span class="item_date"> {{item.notice_date | date: 'dd/MM/yyyy HH:mm'}}</span>
+                <span class="item_date"> {{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
               </div>
               
               <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
