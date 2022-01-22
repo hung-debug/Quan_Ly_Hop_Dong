@@ -8,7 +8,7 @@
     </div>
   </div>
 
-  <div class="row list_header" *ngIf="contracts.length > 0;">
+  <div class="row list_header" *ngIf="pageTotal > 0;">
 
     <div class="col-md-5"></div>
     <div class="col-md-2">{{'create-date' | translate}}</div>
@@ -16,7 +16,7 @@
     <div class="col-md-3">{{'action' | translate}}</div>
   </div>
 
-  <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}">
+  <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
     <div *ngIf="filter_status == 1 || filter_status == 4">
       <div class="row">
         <div class="col-md-12 item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
@@ -115,7 +115,7 @@
     </div>
   </div>
 
-  <div *ngIf="contracts.length == 0" 
+  <div *ngIf="pageTotal == 0" 
   style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
     <div style="display: table-cell;vertical-align: middle;">
       <img src="../../../assets/img/empty_data.svg"/>
@@ -126,7 +126,7 @@
   <div class="contract_footer">
     <div class="footer_title"></div>
     <div class="footer_pagination">
-      <pagination-controls *ngIf="contracts.length > 0;" (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
+      <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
     </div>
     <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
   </div>

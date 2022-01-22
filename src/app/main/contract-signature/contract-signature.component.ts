@@ -111,13 +111,12 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
-  private getContractList() {
-    this.p = 1;
+  getContractList() {
     //get list contract share
     if(this.filter_status == -1){
-      this.contractService.getContractShareList().subscribe(data => {
+      this.contractService.getContractShareList(this.p, this.page).subscribe(data => {
         this.contracts = data.entities;
-        this.pageTotal = this.contracts.length;
+        this.pageTotal = data.total_elements;
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
@@ -137,11 +136,11 @@ export class ContractSignatureComponent implements OnInit {
         });
       });
     }else{
-      this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
+      this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
         console.log(data.entities);
         this.contracts = data.entities
   
-        this.pageTotal = this.contracts.length;
+        this.pageTotal = data.total_elements;
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
@@ -168,9 +167,9 @@ export class ContractSignatureComponent implements OnInit {
     this.p = 1;
     //get list contract share
     if(this.filter_status == -1){
-      this.contractService.getContractShareList().subscribe(data => {
+      this.contractService.getContractShareList(this.p, this.page).subscribe(data => {
         this.contracts = this.transform(data.entities, event);
-        this.pageTotal = this.contracts.length;
+        this.pageTotal = data.total_elements;
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
@@ -191,14 +190,9 @@ export class ContractSignatureComponent implements OnInit {
         });
       });
     }else{
-      this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
+      this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
         this.contracts = this.transform(data.entities, event);
-        // if (this.filter_status == 0) {
-        //   this.contracts = this.transform(data.entities.filter((i: any) => i.status == 1), event);
-        // } else {
-        //   this.contracts = this.transform(data.entities.filter((i: any) => (i.status == 2 || i.status == 3)), event);
-        // }
-        this.pageTotal = this.contracts.length;
+        this.pageTotal = data.total_elements;
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
