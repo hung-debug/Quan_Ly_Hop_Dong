@@ -146,38 +146,58 @@ export class DetermineSignerComponent implements OnInit {
       if (items.type == 3) {
         this.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
       }
-      if (items.id) delete items.id;
-      if (items.contract_id) delete items.contract_id;
-      items.recipients.forEach((element: any) => {
-        data_arr.forEach((res: any) => {
-          delete element[res];
-        })
-      })
+      if (this.datas.is_action_contract_created) {
+        if (this.router.url.includes("copy")) {
+          if (items.id) delete items.id;
+          if (items.contract_id) delete items.contract_id;
+          items.recipients.forEach((element: any) => {
+            data_arr.forEach((res: any) => {
+              delete element[res];
+            })
+          })
+        }
+      }
     })
     this.spinner.show();
-    this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res: any) => {
-        // this.datas.id = data?.id;
-        if (!this.saveDraftStep) {
-          this.datas.determine_contract = res ? res : this.is_determine_clone;
-          this.step = variable.stepSampleContract.step3;
-          this.datas.stepLast = this.step
-          this.nextOrPreviousStep(this.step);
-        } else {
-          this.datas.save_draft.determine_signer = false;
-          this.saveDraftDetermineSigner.emit('save_draft_determine_contract');
-          if (this.datas['close_modal']) {
-            this.datas.close_modal.close('Save click');
-          }
-          void this.router.navigate(['/main/dashboard']);
-        }
-      },
-      (res: any) => {
+
+    if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
+      this.contractService.getContractDetermineCoordination(this.is_determine_clone, this.datas.contract_id_action).subscribe((res: any) => {
+        this.getDataApiDetermine(res)
+      }, (res: any) => {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout(res.error, "", 3000);
       }, () => {
         this.spinner.hide();
+      })
+    } else {
+      this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res: any) => {
+          this.getDataApiDetermine(res)
+        },
+        (res: any) => {
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout(res.error, "", 3000);
+        }, () => {
+          this.spinner.hide();
+        }
+      );
+    }
+  }
+
+  getDataApiDetermine(res: any) {
+    // this.datas.id = data?.id;
+    if (!this.saveDraftStep) {
+      this.datas.determine_contract = res ? res : this.is_determine_clone;
+      this.step = variable.stepSampleContract.step3;
+      this.datas.stepLast = this.step
+      this.nextOrPreviousStep(this.step);
+    } else {
+      this.datas.save_draft.determine_signer = false;
+      this.saveDraftDetermineSigner.emit('save_draft_determine_contract');
+      if (this.datas['close_modal']) {
+        this.datas.close_modal.close('Save click');
       }
-    );
+      void this.router.navigate(['/main/dashboard']);
+    }
   }
 
   // forward data component

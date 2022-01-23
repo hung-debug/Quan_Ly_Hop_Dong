@@ -427,7 +427,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 if (!this.objDrag[this.signCurent['id']].count) {
                   // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                   if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-                    if (res.sign == 'so_tai_lieu' && this.datas.code) {
+                    if (res.sign_unit == 'so_tai_lieu' && this.datas.code) {
                       element['width'] = '';
                       element['height'] = '';
                     } else {
@@ -1067,7 +1067,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datas.contract_user_sign[i].sign_config[j];
-            if (!element.name) {
+            if (!element.name && element.sign_unit != 'so_tai_lieu') {
+              count++;
+              break
+            } else if (element.sign_unit == 'so_tai_lieu' && !this.datas.code) {
               count++;
               break
             } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
