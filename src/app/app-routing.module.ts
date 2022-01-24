@@ -17,9 +17,6 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './login/login.component';
 import {AuthGuard} from './help/auth.guard';
-import {NoAuthGuard} from "./main/contract-signature/shared/no-auth.guard";
-import {IndexComponent} from "./main/contract-signature/components/index/index.component";
-import {ContractSignatureComponent} from "./main/contract-signature/contract-signature.component";
 import {UnitComponent} from './main/unit/unit.component';
 import {InforUserComponent} from './main/user/infor-user/infor-user.component';
 import {ContractTypeComponent} from './main/contract-type/contract-type.component';
@@ -27,10 +24,8 @@ import {RoleComponent} from './main/role/role.component';
 import {AddUserComponent} from './main/user/add-user/add-user.component';
 import {DetailUserComponent} from './main/user/detail-user/detail-user.component';
 import {CheckSignDigitalComponent} from './main/check-sign-digital/check-sign-digital.component';
-import * as path from "path";
 
 import { NotificationComponent } from './main/notification/notification.component';
-import {ActionDeviceComponent} from "./action-device/action-device.component";
 
 const routes: Routes = [
   {
@@ -146,14 +141,6 @@ const routes: Routes = [
       },
     ],
   },
-  // {
-  //   path: 'contract-signature',
-  //   // loadChildren: () => import('./main/contract-signature/contract-signature.module').then(m => m.ContractSignatureModule),
-  //   // component: ContractSignatureComponent,
-  //   component: IndexComponent,
-  //   data: {type: 'notAccess'},
-  //   canActivate: [NoAuthGuard]
-  // },
   {
     path: '',
     redirectTo: 'login',
