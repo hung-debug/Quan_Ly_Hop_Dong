@@ -7,6 +7,8 @@ import { AppService } from 'src/app/service/app.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { DeleteContractTemplateDialogComponent } from './dialog/delete-contract-template-dialog/delete-contract-template-dialog.component';
+import { ReleaseContractTemplateDialogComponent } from './dialog/release-contract-template-dialog/release-contract-template-dialog.component';
+import { StopContractTemplateDialogComponent } from './dialog/stop-contract-template-dialog/stop-contract-template-dialog.component';
 @Component({
   selector: 'app-contract-template',
   templateUrl: './contract-template.component.html',
@@ -45,7 +47,7 @@ export class ContractTemplateComponent implements OnInit {
     this.contractTemplateService.getContractTemplateList().subscribe(response => {
       this.contractsTemplate = response.items;
       this.pageTotal = this.contractsTemplate.length;
-      this.setPage();
+      this.setPage();  
     });
   }
 
@@ -74,22 +76,6 @@ export class ContractTemplateComponent implements OnInit {
       return 'by clicking on a backdrop';
     } else {
       return  `with: ${reason}`;
-    }
-  }
-
-  confirmChangeStatus(statusContract:string){
-    this.statusContract = statusContract;
-    if(statusContract == 'Đang phát hành'){
-      this.notification = "Bạn có muốn ngừng phát hành mẫu hợp đồng này không?";
-    }else{
-      this.notification = "Bạn có muốn mở phát hành mẫu hợp đồng này không?";
-    }
-  }
-  sendChangeStatus(statusContract:string){
-    if(statusContract == 'Đang phát hành'){
-      this.toastService.showSuccessHTMLWithTimeout("Ngừng phát hành thành công", "", 3000);
-    }else{
-      this.toastService.showSuccessHTMLWithTimeout("Mở phát hành thành công", "", 3000);
     }
   }
 
@@ -185,6 +171,44 @@ export class ContractTemplateComponent implements OnInit {
     // @ts-ignore
     const dialogRef = this.dialog.open(DeleteContractTemplateDialogComponent, {
       width: '520px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  stopContractTemplate(id:any){
+    const data = {
+      title: 'XÁC NHẬN DỪNG PHÁT HÀNH MẪU HỢP ĐỒNG',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(StopContractTemplateDialogComponent, {
+      width: '600px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  releaseContractTemplate(id:any){
+    const data = {
+      title: 'XÁC NHẬN PHÁT HÀNH MẪU HỢP ĐỒNG',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ReleaseContractTemplateDialogComponent, {
+      width: '560px',
       backdrop: 'static',
       keyboard: false,
       data,

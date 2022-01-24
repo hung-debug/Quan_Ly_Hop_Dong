@@ -54,8 +54,8 @@
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
           <div class="div_icon">
-            <img *ngIf="item.status == 'Đang phát hành'" src="../../assets/img/icon_stop_release.svg" class="img_icon" ngbTooltip="Ngừng phát hành" (click)="confirmChangeStatus(item.status); open(modalConfirmChangeStatus)"/>
-            <img *ngIf="item.status == 'Ngừng phát hành'" src="../../assets/img/icon_open_release.svg" class="img_icon" ngbTooltip="Mở phát hành" (click)="confirmChangeStatus(item.status); open(modalConfirmChangeStatus)"/>
+            <img *ngIf="item.status == 'Đang phát hành'" src="../../assets/img/icon_stop_release.svg" class="img_icon" ngbTooltip="Ngừng phát hành" (click)="stopContractTemplate(item.id)"/>
+            <img *ngIf="item.status == 'Ngừng phát hành'" src="../../assets/img/icon_open_release.svg" class="img_icon" ngbTooltip="Mở phát hành" (click)="releaseContractTemplate(item.id)"/>
           </div>
 
           <div class="div_icon">
@@ -116,39 +116,7 @@
     </div>
   </div>
 </ng-template>
-
-<!-- Popup confirm change status (xac nhan ngung, mo phat hanh)-->
-<ng-template #modalConfirmChangeStatus let-modal >
-  <div class="popup_content">
-    <div class="row">
-      <div class="col-md-10">
-        <h4 class="popup_title">XÁC NHẬN</h4>
-      </div>
-      <div class="col-md-2 popup_close">
-        <span (click)="modal.dismiss('Cross click')">×</span>
-      </div>
-    </div>
-    <hr>
-    <div class="row">
-      <div class="col-md-12">
-          <div class="form-group">
-            <div class="input-group">
-              <p class="alert alert-primary" role="alert" style="text-align: center; width: 100%;">
-              {{notification}}
-            </p>
-            </div>
-          </div>
-      </div>
-    </div>
-
-    <div class="row" style="text-align: center; padding-top: 10px;">
-      <div class="col-md-12">
-        <button type="button" class="btn btn-outline-dark btn_close" (click)="modal.close('Save click')">{{'btn.cancel' | translate}}</button>
-        <button type="button" class="btn btn-outline-dark btn_submit" (click)="modal.dismiss('Cross click'); sendChangeStatus(statusContract)">{{'btn.accept' | translate}}</button>
-      </div>
-    </div>
-  </div>
-</ng-template>  
+ 
 
 <!-- Popup share -->
 <ng-template #modalShare let-modal >
