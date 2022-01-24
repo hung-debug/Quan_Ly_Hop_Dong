@@ -10,7 +10,7 @@ import {ImageDialogSignComponent} from "../image-dialog-sign/image-dialog-sign.c
 import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "../hsm-dialog-sign/hsm-dialog-sign.component";
 import {UserService} from "../../../../../service/user.service";
-import {networkList} from "../../../../../data/data";
+import {networkList} from "../../../../../config/variable";
 
 @Component({
   selector: 'app-image-sign-contract',

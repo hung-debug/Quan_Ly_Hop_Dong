@@ -39,7 +39,7 @@ import {UserService} from "../../../../service/user.service";
 import domtoimage from 'dom-to-image';
 import {concatMap, delay, map, tap} from 'rxjs/operators';
 import { of } from 'rxjs';
-import {networkList} from "../../../../data/data";
+import {networkList} from "../../../../config/variable";
 
 @Component({
   selector: 'app-consider-contract',

@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { SelectItemGroup } from 'primeng/api';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
-import {roleList} from "../../../data/data";
+import {roleList} from "../../../config/variable";
 
 @Component({
   selector: 'app-detail-role',

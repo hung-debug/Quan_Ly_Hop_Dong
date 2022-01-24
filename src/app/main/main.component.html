@@ -9,17 +9,8 @@
         <div ngbDropdown class="d-inline-block">
           <div class="social-icons" ngbDropdownToggle (click)="loadDataNotification()">
             <!-- <span class="notification_login"></span> -->
-            <i *ngIf="numberNotification == 0"
-                class="pi pi-bell p-mr-4 p-text-secondary"
-                style="font-size: 20px;color:#106db6"
-            ></i>
-            <i *ngIf="numberNotification > 0"
-              class="pi pi-bell p-mr-4 p-text-secondary"
-              pBadge
-              style="font-size: 20px;color:#106db6"
-              value="{{numberNotification}}"
-            ></i>
-
+            <i *ngIf="numberNotification == 0" class="pi pi-bell p-mr-4 p-text-secondary"></i>
+            <i *ngIf="numberNotification > 0" class="pi pi-bell p-mr-4 p-text-secondary" pBadge value="{{numberNotification}}"></i>
             <div class="label">{{'notification' | translate }}</div>
           </div>
 
@@ -116,21 +107,20 @@
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
                   <div class="db_log_out"></div>
+                </div>
+                <div>{{'logout' | translate }}</div>
               </div>
-              <div>{{'logout' | translate }}</div>
-            </div>
             </button>
           </div>
         </div>
         
-        </div>
+      </div>
     </header>
 
     <div class="container-fluid" [ngStyle]="getStyle()">
       <div class="row">
         <div class="form-group col-md-12">
           <router-outlet></router-outlet>
-          
         </div>
       </div>
       

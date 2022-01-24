@@ -8,7 +8,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UploadService } from 'src/app/service/upload.service';
 import { UserService } from 'src/app/service/user.service';
-import { networkList } from "../../../data/data";
+import { networkList } from "../../../config/variable";
 
 @Component({
   selector: 'app-infor-user',

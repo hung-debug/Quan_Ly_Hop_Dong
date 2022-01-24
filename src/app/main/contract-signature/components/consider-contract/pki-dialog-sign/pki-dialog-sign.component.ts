@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";
-import { networkList } from 'src/app/data/data';
+import { networkList } from 'src/app/config/variable';
 import {ToastService} from "../../../../../service/toast.service";
 
 @Component({
