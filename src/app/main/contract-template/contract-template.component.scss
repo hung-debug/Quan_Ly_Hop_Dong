@@ -1,5 +1,5 @@
 .item_contract {
-  border: 1px solid #1487E1;
+  border: 1px solid #106DB6;
   border-radius: 10px;
   padding: 8px;
   margin-top: 10px;
@@ -32,29 +32,6 @@
   padding: 12px 12px 0;
   font-weight: 500;
 }
-
-.pagination {
-  display: inline-block;
-}
-
-.pagination a {
-  color: black;
-  float: left;
-  padding: 8px 16px;
-  text-decoration: none;
-  transition: background-color .3s;
-  border: 1px solid #ddd;
-  margin: 0 4px;
-}
-
-.pagination a.active {
-  background-color: #106DB6;
-  color: white;
-  border: 1px solid #106DB6;
-}
-
-.pagination a:hover:not(.active) {background-color: #ddd;}
-
 
 .input-group-text{
   padding: 8.5px;
@@ -176,29 +153,7 @@
 .footer_page_number{
   color: #0160AE
 }
-.col-md-100-1{
-  width: 100%;
-}
-.col-md-100-3{
-  width: 33.3%;
-}
-.col-md-100-5{
-  width: 20%;
-}
 
-.btn-block {
-  background-color: #106DB6;
-  color: white;
-  height: 35px;
-  font-size: 14px;
-  width: 100%;
-  border-radius: 5px;
-}
-.form-input-readonly{
-  background: #EFF2F5;
-  padding: 10px;
-  border-radius: 5px;
-}
 ::ng-deep .multiselect-dropdown {
   .selected-item {
     max-width: 95% !important;
@@ -217,3 +172,26 @@
   width: 30px;
 }
 
+
+
+.input_text {
+  padding-left: 10px;
+  outline: none;
+  height: 33px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #106DB6;
+}
+.btn_submit{
+  border: 0px;
+  border-radius: 5px;
+  height: 33px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #106DB6;
+  font-size: 13px;
+  margin: 0 10px;
+}
+.btn_search{
+  align-self: flex-end;
+}

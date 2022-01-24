@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { DeleteContractTemplateDialogComponent } from './dialog/delete-contract-template-dialog/delete-contract-template-dialog.component';
 @Component({
   selector: 'app-contract-template',
   templateUrl: './contract-template.component.html',
@@ -26,12 +28,16 @@ export class ContractTemplateComponent implements OnInit {
   shareForm: any = FormGroup;
   statusContract:string= '';
 
+  name:any="";
+  type:any="";
+
   constructor(private modalService: NgbModal,
               private appService: AppService,
               private contractTemplateService: ContractTemplateService,
               private router: Router,
               private fb: FormBuilder,
-              private toastService : ToastService) { }
+              private toastService : ToastService,
+              private dialog: MatDialog,) { }
 
   ngOnInit(): void {
     this.appService.setTitle('contract-template.list');
@@ -85,10 +91,6 @@ export class ContractTemplateComponent implements OnInit {
     }else{
       this.toastService.showSuccessHTMLWithTimeout("Mở phát hành thành công", "", 3000);
     }
-  }
-
-  deleteItem(id:number){
-    this.toastService.showSuccessHTMLWithTimeout("Xóa mẫu hợp đồng thành công", "", 3000);
   }
 
   addContractTemplate(){
@@ -172,5 +174,25 @@ export class ContractTemplateComponent implements OnInit {
 
   sendShare(){
     this.toastService.showSuccessHTMLWithTimeout("Chia sẻ mẫu hợp đồng thành công", "", 3000);
+  }
+
+
+  deleteContractTemplate(id:any){
+    const data = {
+      title: 'XÁC NHẬN XÓA MẪU HỢP ĐỒNG',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DeleteContractTemplateDialogComponent, {
+      width: '520px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 }

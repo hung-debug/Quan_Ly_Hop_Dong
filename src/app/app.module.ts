@@ -38,14 +38,7 @@ import { SidebarComponent } from './main/sidebar/sidebar.component';
 import {ContractModule} from "./main/contract/contract.module";
 import {AppService} from './service/app.service';
 import {ContractTemplateComponent} from './main/contract-template/contract-template.component';
-import {AddContractTemplateComponent} from './main/contract-template/add-contract-template/add-contract-template.component';
-import {ConfirmInforContractTemplateComponent} from './main/contract-template/shared/model/confirm-infor-contract-template/confirm-infor-contract-template.component';
-import {ContractTemplateHeaderComponent} from './main/contract-template/shared/model/contract-template-header/contract-template-header.component';
-import {DetermineSignerTemplateComponent} from './main/contract-template/shared/model/determine-signer-template/determine-signer-template.component';
-import {InforContractTemplateComponent} from './main/contract-template/shared/model/infor-contract-template/infor-contract-template.component';
-import {SampleContractTemplateComponent} from './main/contract-template/shared/model/sample-contract-template/sample-contract-template.component';
 import {SignupComponent} from './login/signup/signup.component';
-import { SignContractTemplateComponent } from './main/contract-template/shared/sign-sample-contract-template/sign-contract-template/sign-contract-template.component';
 import {ContractSignatureModule} from "./main/contract-signature/contract-signature.module";
 import {MatDialogModule} from "@angular/material/dialog";
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
@@ -79,7 +72,7 @@ import { CheckSignDigitalComponent } from './main/check-sign-digital/check-sign-
 import { ContractSignatureComponent } from './main/contract-signature/contract-signature.component';
 import { NotificationComponent } from './main/notification/notification.component';
 import { ActionDeviceComponent } from './action-device/action-device.component';
-
+import { ContractTemplateModule } from './main/contract-template/contract-template.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -101,14 +94,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ResetPasswordComponent,
     SidebarComponent,
     ContractTemplateComponent,
-    AddContractTemplateComponent,
-    ConfirmInforContractTemplateComponent,
-    ContractTemplateHeaderComponent,
-    DetermineSignerTemplateComponent,
-    InforContractTemplateComponent,
-    SampleContractTemplateComponent,
     SignupComponent,
-    SignContractTemplateComponent,
     PipeTrs,
     AddUnitComponent,
     AddUserComponent,
@@ -177,6 +163,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SelectButtonModule,
     ListboxModule,
     BadgeModule,
+    ContractTemplateModule,
   ],
   providers: [ AppService, DatePipe,
     {

@@ -5,16 +5,21 @@
   </mdb-tabs>
 
   <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-3">
       <div>{{'contract-template.name' | translate}}</div>
-      <input type="text" id="contractTemplateName" class="form-control input-search"/>
+      <div class="input-line">
+        <input type="text" [(ngModel)]="name" class="input_text"/>
+      </div>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-3">
       <div>{{'contract-template.type' | translate}}</div>
-      <input type="text" id="contractTemplateType" class="form-control input-search"/>
+      <div class="input-line">
+        <input type="text" [(ngModel)]="type" class="input_text"/>
+      </div>
     </div>
-    <div class="col-md-2 btn_add">
-      <button type="button" class="btn btn-outline-dark btn_submit" (click)="addContractTemplate()">Thêm mới</button>
+    <div class="col-md-6 btn_search">
+      <button class="btn btn-lg btn-block btn_submit">{{'btn.search' | translate }}</button>
+      <button class="btn btn-lg btn-block btn_submit">{{'btn.add' | translate }}</button>
     </div>
   </div>
 
@@ -63,7 +68,7 @@
             <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" (click)="getDataShare(item.contractName, item.contractCode); open(modalShare)"/>
           </div>
           <div class="div_icon">
-            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="Xóa hợp đồng" (click)="deleteItem(item.id);" />
+            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="Xóa hợp đồng" (click)="deleteContractTemplate(item.id);" />
           </div>
         </div>
       </div>
@@ -143,7 +148,7 @@
       </div>
     </div>
   </div>
-</ng-template>
+</ng-template>  
 
 <!-- Popup share -->
 <ng-template #modalShare let-modal >
