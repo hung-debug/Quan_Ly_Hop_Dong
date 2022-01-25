@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {MatDialog} from "@angular/material/dialog";
+import {DeviceDetectorService} from "ngx-device-detector";
 
 @Component({
   selector: 'app-action-device',
@@ -10,7 +11,8 @@ import {MatDialog} from "@angular/material/dialog";
 export class ActionDeviceComponent implements OnInit {
 
   constructor(private modalService: NgbModal,
-              public dialog: MatDialog) { }
+              public dialog: MatDialog,
+              private deviceService: DeviceDetectorService,) { }
 
   ngOnInit(): void {
 
@@ -18,6 +20,12 @@ export class ActionDeviceComponent implements OnInit {
 
   nextApp() {
     window.location.href = `econtract://app/login`;
+  }
+
+  downloadApp() {
+    // if (this.deviceService.) {
+    //
+    // }
   }
 
 }

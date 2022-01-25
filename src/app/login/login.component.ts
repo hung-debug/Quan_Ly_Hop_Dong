@@ -147,7 +147,7 @@ export class LoginComponent implements OnInit {
 
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
-      console.log(this.deviceService.isMobile(), this.deviceService.deviceType);
+      console.log(this.deviceService.isMobile(), this.deviceService.deviceType, this.deviceService);
       // @ts-ignore
       const dialogRef = this.dialog.open(ActionDeviceComponent, {
         width: '580px',
