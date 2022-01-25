@@ -23,9 +23,11 @@ export class ActionDeviceComponent implements OnInit {
   }
 
   downloadApp() {
-    // if (this.deviceService.) {
-    //
-    // }
+    if (this.deviceService.os == "iOS") {
+
+    } else if (this.deviceService.os == "Android") {
+
+    }
   }
 
 }
