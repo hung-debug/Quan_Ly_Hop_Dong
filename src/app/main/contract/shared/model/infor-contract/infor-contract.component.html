@@ -17,7 +17,7 @@
       <div class="form-group">
         <div class="label_item">{{'contract.name' | translate}} <span class="require_star">*</span></div>
         <div class="input-group">
-          <input type="text" [(ngModel)]="name" class="input_text" autofocus/>
+          <input #nameContract type="text" [(ngModel)]="name" class="input_text" />
         </div>
       </div>
       <div class="form-group">
@@ -143,12 +143,8 @@
 </div>
 
 <div class="footer-infor-contract">
-  <div style="width: 200px;"></div>
-  <div class="content_footer">@Copyright 2021 - MobiFone</div>
-  <div>
     <button (click)="saveDraft()" type="button" name="next" class="next draft-button">{{'btn.save-draff' | translate }}</button>
     <button (click)="next()" type="button" name="next" class="next action-button pull-right">{{'btn.next' | translate }}</button>
-  </div>
 </div>
 
 <ngx-spinner

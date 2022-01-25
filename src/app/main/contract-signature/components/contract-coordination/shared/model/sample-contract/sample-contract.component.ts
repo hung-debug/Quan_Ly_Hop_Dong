@@ -1058,8 +1058,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // forward data component
   nextOrPreviousStep(step: string) {
+    this.getRemoveCopyRight();
     this.datas.stepLast = step;
     this.stepChangeSampleContract.emit(step);
+  }
+
+  getRemoveCopyRight() {
+    let is_var_copyRight = sessionStorage.getItem('copy_right_show');
+    if (is_var_copyRight)
+      sessionStorage.removeItem('copy_right_show')
   }
 
   validData() {

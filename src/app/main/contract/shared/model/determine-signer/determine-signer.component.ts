@@ -133,14 +133,19 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   // next step event
-  next() {
+  next(action: string) {
     // this.submitted = true;
     if (!this.validData()) return;
-    else
-      this.getApiDetermine();
+    else {
+      let is_save = false;
+      if (action == 'save-step') {
+        is_save = true;
+      }
+      this.getApiDetermine(is_save);
+    }
   }
 
-  getApiDetermine() {
+  getApiDetermine(is_save?: boolean) {
     let data_arr = ['id', 'due_at', 'empty', 'fields', 'from_at', 'is_disable', 'notify_type', 'password', 'process_at', 'reason_reject', 'remind', 'remind_date', 'remind_message', 'selected', 'sign_at', 'type_unit', 'username'];
     this.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3) {
@@ -171,7 +176,7 @@ export class DetermineSignerComponent implements OnInit {
       })
     } else {
       this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res: any) => {
-          this.getDataApiDetermine(res)
+          this.getDataApiDetermine(res, is_save)
         },
         (res: any) => {
           this.spinner.hide();
@@ -183,12 +188,13 @@ export class DetermineSignerComponent implements OnInit {
     }
   }
 
-  getDataApiDetermine(res: any) {
+  getDataApiDetermine(res: any, is_save?: boolean) {
     // this.datas.id = data?.id;
-    if (!this.saveDraftStep) {
+    if (!this.saveDraftStep || is_save) {
       this.datas.determine_contract = res ? res : this.is_determine_clone;
       this.step = variable.stepSampleContract.step3;
       this.datas.stepLast = this.step
+      sessionStorage.setItem('copy_right_show', 'true');
       this.nextOrPreviousStep(this.step);
     } else {
       this.datas.save_draft.determine_signer = false;

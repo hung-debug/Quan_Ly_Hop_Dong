@@ -150,6 +150,7 @@ export class DetermineSignerComponent implements OnInit {
         this.datas.determine_contract = res ? res : this.is_determine_clone;
         this.step = variable.stepSampleContract.step3;
         this.datas.stepLast = this.step
+        sessionStorage.setItem('copy_right_show', 'true');
         // this.datas.step = this.step
         this.nextOrPreviousStep(this.step);
         // } else {

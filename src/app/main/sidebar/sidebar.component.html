@@ -23,7 +23,7 @@
               <span style="margin-left: 8px;">{{menu.title | translate}}</span>
               <span *ngIf="menu.badge" class="badge badge-pill" [ngClass]="menu.badge.class">{{menu.badge.text}}</span>
             </a>
-            <span *ngIf="menu.type === 'button'" (click)="clickLink(menu, 'create-contract-new')" class="sub_title_add">
+            <span *ngIf="menu.type === 'button'" (click)="clickLink(menu)" class="sub_title_add">
               <button class="btn_add_contract">
                 <span class="fa fa-plus icon_add"></span>{{menu.title | translate}}
               </button>

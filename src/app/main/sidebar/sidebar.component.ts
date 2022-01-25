@@ -68,7 +68,7 @@ export class SidebarComponent implements OnInit {
   }
 
   //set active link
-  clickLink(currentMenu: any, nameFeature?: string) {
+  clickLink(currentMenu: any) {
     this.menus.forEach((element: any) => {
       if (element === currentMenu) {
         //currentMenu.active = !currentMenu.active;
@@ -77,9 +77,13 @@ export class SidebarComponent implements OnInit {
         element.active = false;
       }
     });
-    if (nameFeature && nameFeature == "create-contract-new") {
-      this.evenSelectSidebar.emit(nameFeature)
-    } else this.evenSelectSidebar.emit(undefined)
+    if (sessionStorage.getItem('copy_right_show')) {
+      sessionStorage.removeItem('copy_right_show');
+    }
+    // if (nameFeature && nameFeature == "create-contract-new") {
+    //   this.evenSelectSidebar.emit(nameFeature)
+    // } else
+    //   this.evenSelectSidebar.emit(undefined)
     this.router.navigate(['/' + currentMenu.href]);
     this.getRemoveLocal();
   }

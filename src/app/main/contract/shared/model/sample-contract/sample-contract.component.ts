@@ -642,6 +642,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.eventMouseover();
   }
 
+  getRemoveCopyRight() {
+    let is_var_copyRight = sessionStorage.getItem('copy_right_show');
+    if (is_var_copyRight)
+      sessionStorage.removeItem('copy_right_show')
+  }
+
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
   setPosition() {
     if (this.convertToSignConfig().length > 0) {
@@ -986,7 +992,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // }
 
   back(e: any, step?: any) {
-    // if (!this.datas.isView) {
     this.nextOrPreviousStep(step);
   }
 
@@ -1029,6 +1034,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             this.datas.stepLast = this.step
             this.nextOrPreviousStep(this.step);
           } else if (action == 'save_draft') {
+            this.getRemoveCopyRight();
             this.router.navigate(['/main/contract/create/draff']);
             this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
           }
@@ -1046,6 +1052,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // forward data component
   nextOrPreviousStep(step: string) {
+    this.getRemoveCopyRight();
     this.datas.stepLast = step;
     this.stepChangeSampleContract.emit(step);
   }

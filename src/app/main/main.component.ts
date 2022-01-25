@@ -6,9 +6,10 @@ import {AppService} from '../service/app.service';
 import {SidebarService} from './sidebar/sidebar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ToastService} from '../service/toast.service';
-import{ ResetPasswordDialogComponent } from '../../app/main/dialog/reset-password-dialog/reset-password-dialog.component'
-import { MatDialog } from '@angular/material/dialog';
-import { DashboardService } from '../service/dashboard.service';
+import {ResetPasswordDialogComponent} from '../../app/main/dialog/reset-password-dialog/reset-password-dialog.component'
+import {MatDialog} from '@angular/material/dialog';
+import {DashboardService} from '../service/dashboard.service';
+
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -18,7 +19,7 @@ export class MainComponent implements OnInit {
   title: string;
   closeResult: string = '';
   resetPasswordForm: any = FormGroup;
-  
+
   isShowCopyRight: boolean = true;
   isRouterContractNew: boolean = true;
   error: boolean = false;
@@ -70,16 +71,14 @@ export class MainComponent implements OnInit {
     }
   }
 
-  
 
-  nameCurrentUser:any;
+  nameCurrentUser: any;
   contracts: any[] = [];
 
   ngOnInit(): void {
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('urlLoginType')));
-    if (this.router.url.includes('/main/form-contract/add') ||
-      this.router.url.includes('/coordinates') ||
+    if (this.router.url.includes('/coordinates') ||
       this.router.url.includes('/consider') ||
       this.router.url.includes('/signature') ||
       this.router.url.includes('/secretary') ||
@@ -111,7 +110,7 @@ export class MainComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  resetPassword(){
+  resetPassword() {
     const data = {
       title: 'ĐỔI MẬT KHẨU'
     };
@@ -177,7 +176,8 @@ export class MainComponent implements OnInit {
   }
 
   getName(e: any) {
-    if (e && e == "create-contract-new" || e == "contract-signature") {
+    // if (e && e == "create-contract-new" || e == "contract-signature") {
+    if (e && e == "contract-signature") {
       this.isShowCopyRight = false;
       this.isRouterContractNew = false
     } else {
@@ -187,7 +187,8 @@ export class MainComponent implements OnInit {
   }
 
   getStyle() {
-    if (this.isShowCopyRight && this.isRouterContractNew) {
+    // if (this.isShowCopyRight && this.isRouterContractNew) {
+    if (this.getCheckCopyRight()) {
       return {
         'margin-top': '60px'
       }
@@ -203,7 +204,11 @@ export class MainComponent implements OnInit {
     this.router.navigate(['/main/user-infor']);
   }
 
-  openLinkNotification(link:any) {
+  getCheckCopyRight() {
+    return !sessionStorage.getItem('copy_right_show');
+  }
+
+  openLinkNotification(link: any) {
     window.open(link.replace('&loginType=', '').replace('&loginType=1', ''), "_blank");
   }
 }

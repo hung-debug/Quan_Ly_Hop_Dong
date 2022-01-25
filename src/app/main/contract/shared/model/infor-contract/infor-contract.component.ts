@@ -1,6 +1,6 @@
 import {ContractService} from 'src/app/service/contract.service';
 import {UploadService} from './../../../../../service/upload.service';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {variable} from "../../../../../config/variable";
 import {Observable} from 'rxjs';
@@ -24,12 +24,13 @@ export class ContractConnectArr {
   templateUrl: './infor-contract.component.html',
   styleUrls: ['./infor-contract.component.scss']
 })
-export class InforContractComponent implements OnInit {
+export class InforContractComponent implements OnInit, AfterViewInit {
   @Input() AddComponent: AddContractComponent | unknown;
   @Input() datas: any;
   @Input() step: any;
 
   @Output() stepChangeInfoContract = new EventEmitter<string>();
+  @ViewChild('nameContract') nameContract: ElementRef;
 
   //upload file
   selectedFiles?: FileList;
@@ -97,6 +98,12 @@ export class InforContractComponent implements OnInit {
       // console.log(data.entities);
       this.contractConnectList = data.entities;
     });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.nameContract.nativeElement.focus();
+    }, 0)
   }
 
   fileChanged(e: any) {
