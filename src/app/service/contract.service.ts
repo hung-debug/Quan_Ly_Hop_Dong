@@ -157,6 +157,7 @@ export class ContractService {
       //status: 1,
       alias_url: "",
       refs: datas.contractConnect,
+      type_id: datas.type_id,
       //refs:[]
     });
     console.log(headers);
