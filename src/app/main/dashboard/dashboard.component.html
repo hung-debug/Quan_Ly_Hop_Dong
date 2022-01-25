@@ -7,7 +7,7 @@
   </div>
   <div class="row">
     <div class="col-md-3">
-      <div class="header_card header_card_1" (click)="openLink('/main/contract-signature/receive/wait-processing')">
+      <div class="header_card header_card_1" (click)="openLink('/main/contract-signature/receive/dashboard-wait-processing')">
         <div class="row">
           <div class="col-md-7 text_header_card">
               <div>{{'contract.status.wait-processing' | translate}}</div>
@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div class="header_card header_card_2">
+      <div class="header_card header_card_2" (click)="openLink('/main/contract-signature/receive/dashboard-prepare-expires')">
         <div class="row">
           <div class="col-md-7 text_header_card">
               <div>{{'contract.status.expire' | translate}}</div>
@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div class="header_card header_card_3">
+      <div class="header_card header_card_3" (click)="openLink('/main/contract-signature/receive/dashboard-waiting')">
         <div class="row">
           <div class="col-md-7 text_header_card">
               <div>{{'contract.status.wait-response' | translate}}</div>
@@ -46,7 +46,7 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div class="header_card header_card_4">
+      <div class="header_card header_card_4" (click)="openLink('/main/contract-signature/receive/dashboard-complete')">
         <div class="row">
           <div class="col-md-7 text_header_card">
               <div>{{'contract.status.complete' | translate}}</div>

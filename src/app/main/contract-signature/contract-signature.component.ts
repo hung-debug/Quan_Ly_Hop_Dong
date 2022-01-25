@@ -89,17 +89,7 @@ export class ContractSignatureComponent implements OnInit {
     });
     this.sub = this.route.params.subscribe(params => {
       // this.action = params['action'];
-      // this.status = params['status'];
-
-      if (this.router.url.includes('contract-signature/receive/processed')) {
-        this.status = 'processed';
-      } else if (this.router.url.includes('contract-signature/receive/wait-processing')) {
-        this.status = 'wait-processing';
-      } else if (this.router.url.includes('contract-signature/receive/share')) {
-        this.status = 'share';
-      }
-      console.log(this.router.url);
-      console.log(this.status);
+      this.status = params['status'];
 
       //set title
       this.convertStatusStr();
@@ -135,7 +125,7 @@ export class ContractSignatureComponent implements OnInit {
           })
         });
       });
-    }else{
+    }else if(this.filter_status == 1 || this.filter_status == 4){
       this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
         console.log(data.entities);
         this.contracts = data.entities
@@ -157,6 +147,31 @@ export class ContractSignatureComponent implements OnInit {
           this.contracts[v].contractStatus = key.participant.contract.status;
           this.contracts[v].sideA = key.participant.contract.participants[0]?.name;
           this.contracts[v].sideB = key.participant.contract.participants[1]?.name;
+        });
+      });
+    }else {
+      console.log(this.filter_status%10);
+      this.contractService.getContractMyProcessDashboard(this.filter_status%10, this.p, this.page).subscribe(data => {
+        console.log(data.entities);
+        this.contracts = data.entities
+  
+        this.pageTotal = data.total_elements;
+        if (this.pageTotal == 0) {
+          this.p = 0;
+          this.pageStart = 0;
+          this.pageEnd = 0;
+        } else {
+          this.setPage();
+        }
+        this.contracts.forEach((key : any, v: any) => {
+          key.participants.forEach((key : any, val: any) => {
+            if (key.type == 1) {
+              this.contracts[v].sideA = key.name;
+            }else{
+              this.contracts[v].sideB = key.name;
+            }
+            console.log(this.contracts[v].sideA);
+          })
         });
       });
     }
@@ -189,7 +204,7 @@ export class ContractSignatureComponent implements OnInit {
           })
         });
       });
-    }else{
+    }else if(this.filter_status == 1 || this.filter_status == 4){
       this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
         this.contracts = this.transform(data.entities, event);
         this.pageTotal = data.total_elements;
@@ -209,6 +224,30 @@ export class ContractSignatureComponent implements OnInit {
           this.contracts[v].contractCreateTime = key.participant.contract.created_time;
         });
       });
+    }else{
+      this.contractService.getContractMyProcessDashboard(this.filter_status%10, this.p, this.page).subscribe(data => {
+        console.log(data.entities);
+        this.contracts = data.entities
+  
+        this.pageTotal = data.total_elements;
+        if (this.pageTotal == 0) {
+          this.p = 0;
+          this.pageStart = 0;
+          this.pageEnd = 0;
+        } else {
+          this.setPage();
+        }
+        this.contracts.forEach((key: any, v: any) => {
+          this.contracts[v].contractId = key.participant.contract.id;
+          this.contracts[v].contractName = key.participant.contract.name;
+          this.contracts[v].contractNumber = key.participant.contract.code;
+          this.contracts[v].contractSignTime = key.participant.contract.sign_time;
+          this.contracts[v].contractCreateTime = key.participant.contract.created_time;
+          this.contracts[v].contractStatus = key.participant.contract.status;
+          this.contracts[v].sideA = key.participant.contract.participants[0]?.name;
+          this.contracts[v].sideB = key.participant.contract.participants[1]?.name;
+        });
+      });
     }
   }
 
@@ -223,6 +262,14 @@ export class ContractSignatureComponent implements OnInit {
       this.filter_status = 4;
     } else if (this.status == 'share') {
       this.filter_status = -1;
+    } else if (this.status == 'dashboard-wait-processing') {
+      this.filter_status = 11;
+    } else if (this.status == 'dashboard-prepare-expires') {
+      this.filter_status = 12;
+    } else if (this.status == 'dashboard-waiting') {
+      this.filter_status = 13;
+    } else if (this.status == 'dashboard-complete') {
+      this.filter_status = 14;
     }
   }
 

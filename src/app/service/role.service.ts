@@ -20,7 +20,7 @@ export class RoleService {
   listRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles/search`;
   addRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles`;
   updateRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles/`;
-  deleteRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles`;
+  deleteRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles/`;
 
   token:any;
   customer_id:any;
@@ -77,21 +77,13 @@ export class RoleService {
     return this.http.put<any>(this.updateRoleUrl + data.id, body, {headers}).pipe();
   }
 
-  deleteRole(data: any) {
+  deleteRole(id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = JSON.stringify({
-      name: data.name,
-      code: data.code,
-      organization_id: this.organization_id,
-      status: 1,
-      permissions: data.selectedRole,
-      description: data.note
-    });
-    console.log(body);
-    return this.http.post<any>(this.deleteRoleUrl, body, {headers}).pipe();
+    
+    return this.http.delete<any>(this.deleteRoleUrl + id, {headers}).pipe();
   }
 
   public getRoleList(code:any, name:any): Observable<any> {

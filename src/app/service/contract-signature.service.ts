@@ -21,6 +21,7 @@ export class ContractSignatureService {
   addContractUrl:any = `${environment.apiUrl}/api/v1/auth/login`;
   shareContractUrl: any = `${environment.apiUrl}/api/v1/shares`;
   shareListContractUrl: any = `${environment.apiUrl}/api/v1/shares`;
+  dashboardContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-process-by-status/`;
 
   errorData:any = {};
   redirectUrl: string = '';
@@ -83,6 +84,16 @@ export class ContractSignatureService {
     let shareListContractUrl = this.shareListContractUrl + "?page=" + page + "&size=" + size;
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(shareListContractUrl, {headers}).pipe();
+  }
+
+  public getContractMyProcessDashboard(filter_status:any, page:any, size:any): Observable<any> {
+    this.getCurrentUser();
+    if(page != ""){
+      page = page - 1;
+    }
+    let dashboardContractMyProcessUrl = this.dashboardContractMyProcessUrl + filter_status + "?page=" + page + "&size=" + size;
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<Contract[]>(dashboardContractMyProcessUrl, {headers}).pipe();
   }
 
   getProfileObs(): Observable<string> {

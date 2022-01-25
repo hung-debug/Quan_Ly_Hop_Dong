@@ -24,11 +24,21 @@ export class DeleteRoleComponent implements OnInit {
   onSubmit(){
     this.roleService.deleteRole(this.data.id).subscribe(
       data => {
-        this.toastService.showSuccessHTMLWithTimeout("Xóa vai trò thành công!", "", 3000);
+        if(data.code == '00'){
+          this.toastService.showSuccessHTMLWithTimeout("Xóa vai trò thành công!", "", 3000);
+        }else if(data.code == '10'){
+          this.toastService.showErrorHTMLWithTimeout("Vai trò đã được gán cho người dùng!", "", 3000);
+        }else if(data.code == '20'){
+          this.toastService.showErrorHTMLWithTimeout("Vai trò không tông tại trên hệ thống!", "", 3000);
+        }else {
+          this.toastService.showErrorHTMLWithTimeout("Lỗi hệ thống!", "", 3000);
+        }
+        
         this.dialogRef.close();
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/role']);
-        });    
+        });
+            
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
       }

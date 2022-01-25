@@ -54,9 +54,7 @@ export const contractSignatureRoutes: Routes = [
   // { path: 'receive/wait-processing/coordinates-contract/:id', component: CoordinatesContractComponent },
   { path: 'coordinates/:id', component: IndexComponent },
   { path: 'secretary/:id', component: ConsiderContractComponent },
-  { path: 'receive/wait-processing', component: ContractSignatureComponent },
-  { path: 'receive/processed', component: ContractSignatureComponent },
-  { path: 'receive/share', component: ContractSignatureComponent }
+  { path: 'receive/:status', component: ContractSignatureComponent }
 ];
 
 @NgModule({

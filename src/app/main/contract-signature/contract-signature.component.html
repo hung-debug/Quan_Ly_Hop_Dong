@@ -1,5 +1,5 @@
-<div class="container-fluid" style="padding-top: 10px;">
-  <div class="col-md-12">
+<div class="container-fluid">
+  <div class="col-md-12" style="padding-top: 10px;" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1">
     <div class="input-line search">
       <img src="../../assets/img/icon_search.svg" class="input-img" />
       <input type="text" id="search" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}"
@@ -110,6 +110,38 @@
               <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="filter_status == 11 || filter_status == 12 || filter_status == 13 || filter_status == 14">
+      <div class="row">
+        <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 item_contract_infor">{{'contract.side.a' | translate}}: {{item.sideA}}</div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 item_contract_infor">{{'contract.side.b' | translate}}: {{item.sideB}}</div>
+      </div>
+      <div class="row">
+        <div class="col-md-5">
+          <div class="row">
+            <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
+              <span class="status_blue">{{item.status | pipe | translate}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 calendar_create">
+          <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+  
+        <div class="col-md-2 calendar_deadline">
+          <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span>
+        </div>
+
+        <div class="col-md-3 item_icon">
+          
         </div>
       </div>
     </div>
