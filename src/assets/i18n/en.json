@@ -129,7 +129,6 @@
   "createdate.end": "To date (create date)",
 
   "chart.contract.created": "Statistical chart of the number of contracts created",
-  "chart.contract.received": "Statistical chart of the number of assigned contracts",
   "chart.number": "Quantity",
 
   "action": "Action",

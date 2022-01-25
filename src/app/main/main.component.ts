@@ -211,10 +211,14 @@ export class MainComponent implements OnInit {
   }
 
   loadDataNotification(){
-    this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
-      this.numberNotification = data.total_elements;
+    this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
+      //this.numberNotification = data.total_elements;
       this.listNotification = data.entities;
       console.log(data);
+    });
+    this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
+      this.numberNotification = data.total_elements;
+      //this.listNotification = data.entities;
     });
   }
 
