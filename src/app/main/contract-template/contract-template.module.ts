@@ -8,6 +8,15 @@ import { StopContractTemplateDialogComponent } from './dialog/stop-contract-temp
 import { ReleaseContractTemplateDialogComponent } from './dialog/release-contract-template-dialog/release-contract-template-dialog.component';
 import { DeleteContractTemplateDialogComponent } from './dialog/delete-contract-template-dialog/delete-contract-template-dialog.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BrowserModule } from '@angular/platform-browser';
+import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { CheckboxModule } from 'primeng/checkbox';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { ChipsModule } from 'primeng/chips';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
   };
@@ -17,9 +26,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     StopContractTemplateDialogComponent,
     ReleaseContractTemplateDialogComponent,
     DeleteContractTemplateDialogComponent
-  ],
+  ],  
   imports: [  
     CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    NgbModule,
+    BrowserModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -27,6 +40,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         deps: [HttpClient]
       }
     }),
+    DropdownModule,
+    CalendarModule,
+    MultiSelectModule,
+    CheckboxModule,
+    NgxPaginationModule,
+    ChipsModule,
   ],
   providers: [
     {

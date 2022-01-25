@@ -79,10 +79,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ReactiveFormsModule,
     FormsModule,
     NgbModule,
-    ReactiveFormsModule,
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
     NgMultiSelectDropDownModule.forRoot(),
     DatepickerModule,
     TranslateModule.forRoot({
