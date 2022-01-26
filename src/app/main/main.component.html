@@ -1,18 +1,6 @@
 <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
   <app-sidebar *ngIf="getShowHideSideBar()" (evenSelectSidebar)="getName($event)"></app-sidebar>
   <main class="page-content" [ngStyle]="getStyleWithSideBar()" [style.padding-bottom]="this.getCheckCopyRight() ? '25px' : ''">
-<!--    style="padding-bottom: 25px;"-->
-      <header [ngStyle]="getStyleSideBar()">
-        <div class="search-wrapper">
-          <h3>{{title | translate}}</h3>
-        </div>
-        <div *ngIf="getShowHideSideBar()">
-          <div ngbDropdown class="d-inline-block">
-            <div class="social-icons" ngbDropdownToggle>
-              <span class="notification_login"></span>
-              <div class="label">{{'notification' | translate }}</div>
-            </div>
-  <main class="page-content" [ngStyle]="getStyleWithSideBar()" [style.padding-bottom]="this.isShowCopyRight && this.isRouterContractNew ? '25px' : ''">
     <header [ngStyle]="getStyleSideBar()">
       <div class="search-wrapper">
         <h3>{{title | translate}}</h3>

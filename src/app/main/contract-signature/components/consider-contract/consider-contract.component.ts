@@ -195,6 +195,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         this.datas = Object.assign(this.datas, this.data_contract);
       }*/
       this.datas = this.data_contract;
+      this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe(data => {
+        if (this.datas?.is_data_contract) {
+          this.datas.is_data_contract.type_name = data;
+        }
+      })
       if (this.data_contract?.is_data_contract?.status == 31 || this.data_contract?.is_data_contract?.status == 30) {
         this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
       }
