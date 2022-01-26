@@ -1,55 +1,56 @@
-body {
-  height: 100%;
-  background: #f7f7f7;
-}
-.container{
-  background: white;
-}
-.content_header{
-  height: 50px;
-}
-.content_body{
-  height: calc(100vh - 214px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.content_footer{
-  height: 164px;
-}
+// body {
+//   height: 100%;
+//   background: #f7f7f7;
+// }
+// .container{
+//   background: white;
+// }
+// .content_header{
+//   height: 50px;
+// }
+// .content_body{
+//   height: calc(100vh - 214px);
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
+// .content_footer{
+//   height: 164px;
+// }
 .header_language {
-  float: right;
+  position: absolute;
+  right: 0px;
   padding: 5px;
 }
 .form-signin {
-  width: 60%;
+  max-width: 480px;
   margin: 0 auto;
 }
-.bg {
-  background-image: url("../../assets/img/digital_sign.svg");
-  height: 100vh;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
+// .bg {
+//   background-image: url("../../assets/img/digital_sign.svg");
+//   height: 100vh;
+//   background-position: center;
+//   background-repeat: no-repeat;
+//   background-size: cover;
+// }
 .form-group{
   margin: 20px;
 }
-.col-md-6 {
-  padding: 0px;
-}
-.bg-header{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.bg-header-login{
-  background-image: url(../../assets/img/logo_eContract_21.svg);
-  height: 100px;
-  width: 300px;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
+// .col-md-6 {
+//   padding: 0px;
+// }
+// .bg-header{
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
+// .bg-header-login{
+//   background-image: url(../../assets/img/logo_eContract_21.svg);
+//   height: 100px;
+//   width: 300px;
+//   background-repeat: no-repeat;
+//   background-size: cover;
+// }
 .bg-footer-login {
   background-image: url(../../assets/img/foot_login.svg);
   height: 100%;
@@ -161,6 +162,63 @@ body {
   background-image: url(../../assets/img/icon_vietnam.svg);
 }
 
-::ng-deep.mat-dialog-container {
-  padding: 5px 12px 30px 12px !important;
+// ::ng-deep.mat-dialog-container {
+//   padding: 5px 12px 30px 12px !important;
+// }
+.full-height {
+  background: #fff;
+  // max-width: 1280px;
+  margin: auto;
+}
+.full-height {
+  min-height: 100vh;
+}
+.flex-row {
+  flex-direction: row!important;
+}
+.d-flex {
+  display: flex!important;
+}
+.left-background {
+  position: relative;
+  background: url("../../assets/img/digital_sign.svg") center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  width: 50%;
+  height: calc(100vh);
+  display: block;
+}
+.right-panel {
+  width: 50%;
+  height: calc(100vh);
+  position: relative;
+}
+
+.small-logo {
+  height: calc(25vh);
+  text-align: center;
+}
+.justify-content-center {
+  justify-content: center!important;
+}
+.flex-column {
+  flex-direction: column!important;
+}
+.input-form {
+  position: relative;
+  max-width: 480px;
+  margin: auto;
+}
+.slogan {
+  width: 100%;
+  height: 25%;
+  max-height: 250px;
+  position: absolute;
+  bottom: 0%;
+  font-weight: 800;
+  font-size: 40px;
+  line-height: 48px;
+  color: #fff;
 }

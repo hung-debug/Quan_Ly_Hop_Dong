@@ -20,7 +20,12 @@ export class SignupComponent implements OnInit {
   constructor(private modalService: NgbModal,
               private router: Router,
               public translate: TranslateService,
-              private toastService: ToastService,) { }
+              private toastService: ToastService,) {
+    translate.addLangs(['en', 'vi']);
+    translate.setDefaultLang('vi');
+    //localStorage.setItem('lang', 'vi');
+
+  }
 
   switchLang(lang: string) {
     this.translate.use(lang);

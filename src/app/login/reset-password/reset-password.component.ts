@@ -29,6 +29,9 @@ export class ResetPasswordComponent implements OnInit {
               private userService: UserService,
               public translate: TranslateService,
               private toastService: ToastService,) {
+    translate.addLangs(['en', 'vi']);
+    translate.setDefaultLang('vi');
+    //localStorage.setItem('lang', 'vi');
 
   }
 
