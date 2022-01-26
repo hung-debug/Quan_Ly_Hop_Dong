@@ -195,6 +195,12 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
         }
       })
+      this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe(data => {
+        if (this.datas?.is_data_contract) {
+          this.datas.is_data_contract.type_name = data;
+        }
+      })
+
       // }
 
       // this.datas = this.datas.concat(this.data_contract.contract_information);
