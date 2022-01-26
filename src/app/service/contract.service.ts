@@ -63,6 +63,7 @@ export class ContractService {
   postSignDigitalSimPKI: any = `https://econtract.mobifone.vn/SignService/v2/sign-document`;
   getFileSignSimPKI: any = `https://econtract.mobifone.vn/SignService/download-signed-document?signed_doc_id=`;
   signFilePKI: any = `${environment.apiUrl}/api/v1/sign/sim-pki/`;
+  getAllContractTypesUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
   imageMobiBase64: any;
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
 
@@ -320,6 +321,20 @@ export class ContractService {
           } else {
             return null;
           }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getContractTypes(idTypeContract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getAllContractTypesUrl + idTypeContract, {'headers': headers})
+      .pipe(
+        map((typesContract) => {
+          return typesContract.name ? typesContract.name : '';
         }),
         catchError(this.handleError)
       );
