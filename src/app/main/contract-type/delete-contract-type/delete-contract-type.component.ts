@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
@@ -14,14 +15,25 @@ export class DeleteContractTypeComponent implements OnInit {
   private toastService : ToastService,
   public dialogRef: MatDialogRef<DeleteContractTypeComponent>,
   public router: Router,
-  public dialog: MatDialog,) { }
+  public dialog: MatDialog,
+  private contractTypeService:ContractTypeService) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(){
-    this.dialogRef.close();
-    this.toastService.showSuccessHTMLWithTimeout("Xóa loại hợp đồng thành công!", "", 3000);
+
+    this.contractTypeService.deleteContractType(this.data.id).subscribe(
+      data => {
+        this.toastService.showSuccessHTMLWithTimeout("Xóa loại hợp đồng thành công!", "", 3000);
+        this.dialogRef.close();
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/contract-type']);
+        });    
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+      }
+    )
   }
 
 }

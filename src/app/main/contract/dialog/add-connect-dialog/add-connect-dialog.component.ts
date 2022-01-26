@@ -65,7 +65,7 @@ export class AddConnectDialogComponent implements OnInit {
   private getContractList(){
     this.p = 1;
     //get list contract
-    this.contractService.getContractList("", "", "", "", 30).subscribe(data => {
+    this.contractService.getContractList("", "", "", "", 30, "", "").subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = this.contracts.length;
       console.log(this.contracts);
@@ -103,7 +103,7 @@ export class AddConnectDialogComponent implements OnInit {
 
   autoSearch(name:any, sideA:any, sideB:any, create_at:any){
     this.p = 1;
-    this.contractService.getContractList("", "", "", "", 30).subscribe(data => {
+    this.contractService.getContractList("", "", "", "", 30, "", "").subscribe(data => {
       this.contracts = data.entities;
 
       this.contracts.forEach((key : any, v: any) => {

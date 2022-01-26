@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { TreeNode } from 'primeng/api';
 import { AppService } from 'src/app/service/app.service';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
-import { AddUserComponent } from './add-user/add-user.component';
-import { DetailUserComponent } from './detail-user/detail-user.component';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -17,7 +14,6 @@ import { DetailUserComponent } from './detail-user/detail-user.component';
 export class UserComponent implements OnInit {
 
   constructor(private appService: AppService,
-    private dialog: MatDialog,
     private userService: UserService,
     private unitService: UnitService,
     private router : Router,
@@ -28,7 +24,7 @@ export class UserComponent implements OnInit {
   email:any = "";
   list: any[];
   cols: any[];
-  orgList: Array<any> = [];
+  orgList: any[] = [];
 
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
@@ -42,7 +38,10 @@ export class UserComponent implements OnInit {
 
     this.unitService.getUnitList('', '').subscribe(data => {
       console.log(data.entities);
-      this.orgList = data.entities;
+      this.orgList.push({name: "Tất cả", id:""});
+      for(var i = 0; i < data.entities.length; i++){
+        this.orgList.push(data.entities[i]);
+      }
     });
 
     this.cols = [
@@ -53,7 +52,7 @@ export class UserComponent implements OnInit {
       {header: 'unit.status', style:'text-align: left;' },
       {header: 'menu.role.list', style:'text-align: left;' },
       {header: 'unit.manage', style:'text-align: center;' },
-      ];
+    ];
 
     //lay id user
     let userId = this.userService.getAuthCurrentUser().id;

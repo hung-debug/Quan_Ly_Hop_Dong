@@ -25,7 +25,10 @@
         <div>
           <span class="title-contract">Hợp đồng liên quan:</span>
           <span *ngFor="let d of allRelateToContract;let i = index">
-            <a style="color: #106DB6;" [style.margin-left]="i != 0 ? '8px' : ''" rel="stylesheet" [href]="'/main/form-contract/detail/' + d.ref_id" target="_blank">{{d.ref_name}}</a>
+            <a style="color: #106DB6;" [style.margin-left]="i != 0 ? '8px' : ''" rel="stylesheet" *ngIf="currentUser?.id != datas?.is_data_contract?.created_by"
+               [href]="d.path" download target="_blank">{{d.ref_name}}</a>
+            <a style="color: #106DB6;" [style.margin-left]="i != 0 ? '8px' : ''"  *ngIf="currentUser?.id == datas?.is_data_contract?.created_by" target="_blank"
+               rel="stylesheet" [href]="'/main/form-contract/detail/' + d.ref_id">{{d.ref_name}}</a>
           </span>
         </div>
 
@@ -117,5 +120,5 @@
   color="#fff"
   type="ball-spin-clockwise"
 >
-  <p style="font-size: 18px; color: white">Đang xử lý...</p>
+  <p style="font-size: 18px; color: white; text-align: center;white-space: pre-line;">{{loadingText}}</p>
 </ngx-spinner>

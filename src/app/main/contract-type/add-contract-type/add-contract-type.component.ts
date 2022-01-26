@@ -69,11 +69,18 @@ export class AddContractTypeComponent implements OnInit {
     }
     if(this.data.id !=null){
       
-      this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
-      this.dialogRef.close();
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/contract-type']);
-      });    
+      this.contractTypeService.updateContractType(data).subscribe(
+        data => {
+          this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
+          this.dialogRef.close();
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/contract-type']);
+          });    
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+        }
+      )
+      
     }else{
       this.contractTypeService.addContractType(data).subscribe(
         data => {

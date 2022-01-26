@@ -133,6 +133,7 @@ export class ContractComponent implements OnInit {
 
       this.appService.setTitle(this.convertActionStr());
 
+      this.p = 1;
       this.getContractList();
     });
 
@@ -176,12 +177,11 @@ export class ContractComponent implements OnInit {
   //   this.subscription.unsubscribe();
   // }
 
-  private getContractList(){
-    this.p = 1;
+  getContractList(){
     //get list contract
-    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
+    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
       this.contracts = data.entities;
-      this.pageTotal = this.contracts.length;
+      this.pageTotal = data.total_elements;
       console.log(this.contracts);
       if(this.pageTotal == 0){
         this.p = 0;
@@ -264,9 +264,9 @@ export class ContractComponent implements OnInit {
 
   autoSearch(event:any){
     this.p = 1;
-    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status).subscribe(data => {
+    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
       this.contracts = this.transform(data.entities, event);
-      this.pageTotal = this.contracts.length;
+      this.pageTotal = data.total_elements;
       if(this.pageTotal == 0){
         this.p = 0;
         this.pageStart = 0;

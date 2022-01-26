@@ -32,8 +32,8 @@
           ></ngx-select>
         </div>-->
 
-        <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center">
-          <img *ngIf="imgSignAccountSelect" [src]="imgSignAccountSelect" alt="">
+        <div class="image-sign-acc-2 mt-4 d-flex justify-content-center align-items-center" style="max-height: 600px;">
+          <img *ngIf="imgSignAccountSelect" [src]="imgSignAccountSelect" alt="" style="max-height: 600px;">
         </div>
       </div>
       <div *ngIf="typeImageSignatureRadio == 2">
@@ -53,8 +53,8 @@
             </div>
           </div>
         </div>
-        <div class="image-sign-acc-2 mt-4">
-          <img *ngIf="imgSignPCSelect" (click)="addFileAttach()" [src]="imgSignPCSelect" alt="" style="display: block;margin: 0 auto;width: 40vw;">
+        <div class="image-sign-acc-2 mt-4" style="max-height: 600px;">
+          <img *ngIf="imgSignPCSelect" (click)="addFileAttach()" [src]="imgSignPCSelect" alt="" style="display: block;margin: 0 auto;max-height: 600px;">
         </div>
       </div>
       <div>

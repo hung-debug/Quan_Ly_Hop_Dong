@@ -9,10 +9,9 @@
           [(ngModel)]="organization_id" 
           optionLabel="name" 
           optionValue="id" 
-          placeholder="Chọn tổ chức" 
+          placeholder="Tất cả" 
           [filter]="true" 
           filterBy="name" 
-          [showClear]="true"  
           ></p-dropdown>
       </div>
     </div>
@@ -59,7 +58,7 @@
   </div>
 </div>
 <div *ngIf="!isQLND_01 && !isQLND_02 && !isQLND_03 && !isQLND_04">
-  Bạn không có quyền thực hiện tác vụ này!
+  {{'no.role' | translate}}
 </div>
  
   

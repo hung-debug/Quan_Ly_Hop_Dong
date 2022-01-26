@@ -73,8 +73,8 @@
   <div class="btn_footer">
     <div class="label">
     </div>
-    <div class="label">
-      <button type="button" name="next" class="next action-button" *ngIf="view" (click)="downloadContract(idContract)">Tải file</button>
+    <div class="label" *ngIf="role || this.status == 30">
+      <button  type="button" name="next" class="next action-button" *ngIf="view && loaded" (click)="downloadContract(idContract)">{{checkStatusUser(status, role)}}</button>
     </div>
   </div>
 </div>

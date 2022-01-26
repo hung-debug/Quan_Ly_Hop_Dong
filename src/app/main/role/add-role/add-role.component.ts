@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { SelectItemGroup } from 'primeng/api';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
-import { UnitService } from 'src/app/service/unit.service';
+import {roleList} from "../../../config/variable";
 
 @Component({
   selector: 'app-add-role',
@@ -61,85 +61,7 @@ export class AddRoleComponent implements OnInit {
       });
     }
 
-    this.groupedRole = [
-      {
-        label: "Nhóm chức năng quản lý hợp đồng",
-        value: "QLHD",
-        items: [
-          { label: "Thêm mới hợp đồng đơn lẻ", value: "QLHD_01" },
-          // { label: "Sửa hợp đồng", value: "QLHD_02" },
-          // { label: "Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con", value: "QLHD_03" },
-          // { label: "Xem danh sách hợp đồng của tổ chức của tôi", value: "QLHD_04" },
-          // { label: "Xem danh sách hợp đồng của tôi", value: "QLHD_05" },
-          { label: "Tìm kiếm hợp đồng", value: "QLHD_06" },
-          { label: "Xem thông tin chi tiết hợp đồng", value: "QLHD_07" },
-          // { label: "Sao chép hợp đồng", value: "QLHD_08" },
-          { label: "Huỷ hợp đồng", value: "QLHD_09" },
-          { label: "Xem lịch sử hợp đồng", value: "QLHD_10" },
-          //{ label: "Tạo hợp đồng liên quan", value: "QLHD_11" },
-          { label: "Xem hợp đồng liên quan", value: "QLHD_12" },
-          { label: "Chia sẻ hợp đồng", value: "QLHD_13" }
-        ]
-      },
-      // {
-      //   label: "Nhóm chức năng quản lý mẫu hợp đồng",
-      //   value: "QLMHD",
-      //   items: [
-      //     { label: "Thêm mới mẫu hợp đồng", value: "QLMHD_01" },
-      //     { label: "Sửa mẫu hợp đồng", value: "QLMHD_02" },
-      //     { label: "Tạo hợp đồng đơn lẻ theo mẫu", value: "QLMHD_03" },
-      //     { label: "Tạo hợp đồng theo lô", value: "QLMHD_04" },
-      //     { label: "Ngừng phát hành mẫu hợp đồng", value: "QLMHD_05" },
-      //     { label: "Phát hành mẫu hợp đồng", value: "QLMHD_06" },
-      //     { label: "Chia sẻ mẫu hợp đồng", value: "QLMHD_07" },
-      //     { label: "Tìm kiếm mẫu hợp đồng", value: "QLMHD_08" },
-      //     { label: "Xóa mẫu hợp đồng", value: "QLMHD_09" },
-      //     { label: "Xem thông tin chi tiết mẫu hợp đồng", value: "QLMHD_10" }
-      //   ]
-      // },
-      {
-        label: "Nhóm chức năng quản lý tổ chức",
-        value: "QLTC",
-        items: [
-          { label: "Thêm mới tổ chức", value: "QLTC_01" },
-          { label: "Sửa tổ chức", value: "QLTC_02" },
-          { label: "Tìm kiếm tổ chức", value: "QLTC_03" },
-          { label: "Xem thông tin chi tiết tổ chức", value: "QLTC_04" }
-        ]
-      },
-      {
-        label: "Nhóm chức năng quản lý người dùng",
-        value: "QLND",
-        items: [
-          { label: "Thêm mới người dùng", value: "QLND_01" },
-          { label: "Sửa người dùng", value: "QLND_02" },
-          { label: "Tìm kiếm người dùng", value: "QLND_03" },
-          { label: "Xem thông tin chi tiết người dùng", value: "QLND_04" }
-        ]
-      },
-      {
-        label: "Nhóm chức năng quản lý vai trò",
-        value: "QLVT",
-        items: [
-          { label: "Thêm mới vai trò", value: "QLVT_01" },
-          { label: "Sửa vai trò", value: "QLVT_02" },
-          { label: "Xóa vai trò", value: "QLVT_03" },
-          { label: "Tìm kiếm vai trò", value: "QLVT_04" },
-          { label: "Xem thông tin chi tiết vai trò", value: "QLVT_05" }
-        ]
-      },
-      {
-        label: "Nhóm chức năng quản lý loại hợp đồng",
-        value: "QLLHD",
-        items: [
-          { label: "Thêm mới loại hợp đồng", value: "QLLHD_01" },
-          { label: "Sửa loại hợp đồng", value: "QLLHD_02" },
-          { label: "Xóa loại hợp đồng", value: "QLLHD_03" },
-          { label: "Tìm kiếm loại hợp đồng", value: "QLLHD_04" },
-          { label: "Xem thông tin chi tiết loại hợp đồng", value: "QLLHD_05" }
-        ]
-      }
-    ];
+    this.groupedRole = roleList;
   }
 
   convertRoleArr(roleArr:[]){

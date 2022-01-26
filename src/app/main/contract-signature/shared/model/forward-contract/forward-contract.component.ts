@@ -66,7 +66,7 @@ export class ForwardContractComponent implements OnInit {
         full_name: this.myForm.value.name,
         role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
         recipient_id: this.datas.recipientId,
-        is_replace: false/*this.datas.is_content != 'forward_contract'*/
+        is_replace: true/*this.datas.is_content != 'forward_contract'*/
       };
       this.spinner.show();
       this.contractService.processAuthorizeContract(dataAuthorize).subscribe(
@@ -75,7 +75,7 @@ export class ForwardContractComponent implements OnInit {
             , "", 3000);
           this.dialogRef.close();
           // if (this.data.role_coordination == 1) {
-          this.router.navigate(['/main/contract-signature/receive/processed'])
+          this.router.navigate(['/main/form-contract/detail/' + this.datas?.dataContract?.is_data_contract?.id]);
           // } else {
           //   this.router.navigate(['/main/contract-signature/receive/wait-processing']);
           // }

@@ -1,8 +1,5 @@
 import {DetailContractComponent} from './main/contract/detail-contract/detail-contract.component';
 import {AddContractBatchComponent} from './main/contract/add-contract-batch/add-contract-batch.component';
-import {
-  AddContractTemplateComponent
-} from './main/contract-template/add-contract-template/add-contract-template.component';
 import {SignupComponent} from './login/signup/signup.component';
 import {ContractTemplateComponent} from './main/contract-template/contract-template.component';
 import {ResetPasswordComponent} from './login/reset-password/reset-password.component';
@@ -17,9 +14,6 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './login/login.component';
 import {AuthGuard} from './help/auth.guard';
-import {NoAuthGuard} from "./main/contract-signature/shared/no-auth.guard";
-import {IndexComponent} from "./main/contract-signature/components/index/index.component";
-import {ContractSignatureComponent} from "./main/contract-signature/contract-signature.component";
 import {UnitComponent} from './main/unit/unit.component';
 import {InforUserComponent} from './main/user/infor-user/infor-user.component';
 import {ContractTypeComponent} from './main/contract-type/contract-type.component';
@@ -27,8 +21,8 @@ import {RoleComponent} from './main/role/role.component';
 import {AddUserComponent} from './main/user/add-user/add-user.component';
 import {DetailUserComponent} from './main/user/detail-user/detail-user.component';
 import {CheckSignDigitalComponent} from './main/check-sign-digital/check-sign-digital.component';
-import * as path from "path";
-import {ActionDeviceComponent} from "./action-device/action-device.component";
+
+import { NotificationComponent } from './main/notification/notification.component';
 
 const routes: Routes = [
   {
@@ -115,14 +109,6 @@ const routes: Routes = [
         component: ContractTemplateComponent,
       },
       {
-        path: 'form-contract-template/:action',
-        component: AddContractTemplateComponent,
-      },
-      {
-        path: 'form-contract-template/:action/:id',
-        component: AddContractTemplateComponent,
-      },
-      {
         path: 'unit',
         component: UnitComponent,
       },
@@ -138,16 +124,12 @@ const routes: Routes = [
         path: 'check-sign-digital',
         component: CheckSignDigitalComponent,
       },
+      {
+        path: 'notification',
+        component: NotificationComponent,
+      },
     ],
   },
-  // {
-  //   path: 'contract-signature',
-  //   // loadChildren: () => import('./main/contract-signature/contract-signature.module').then(m => m.ContractSignatureModule),
-  //   // component: ContractSignatureComponent,
-  //   component: IndexComponent,
-  //   data: {type: 'notAccess'},
-  //   canActivate: [NoAuthGuard]
-  // },
   {
     path: '',
     redirectTo: 'login',

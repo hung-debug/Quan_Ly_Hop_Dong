@@ -17,6 +17,8 @@ export interface ContractType {
 export class ContractTypeService {
 
   addContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types`;
+  updateContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types`;
+  deleteContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types`;
   getContractTypeByIdUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
   listContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/organizations/`;
 
@@ -47,6 +49,36 @@ export class ContractTypeService {
       organization_id: this.organization_id,
     });
     return this.http.post<ContractType>(this.addContractTypeUrl, body, {'headers': headers});
+  }
+
+  updateContractType(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: datas.name,
+      code: datas.code,
+      ordering: 1,
+      status: 1,
+      organization_id: this.organization_id,
+    });
+    return this.http.post<ContractType>(this.updateContractTypeUrl, body, {'headers': headers});
+  }
+
+  deleteContractType(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: datas.name,
+      code: datas.code,
+      ordering: 1,
+      status: 1,
+      organization_id: this.organization_id,
+    });
+    return this.http.post<ContractType>(this.deleteContractTypeUrl, body, {'headers': headers});
   }
 
   getContractTypeById(id: any) {

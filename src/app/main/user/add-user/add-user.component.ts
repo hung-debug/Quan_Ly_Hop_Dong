@@ -10,7 +10,7 @@ import { DatepickerOptions } from 'ng2-datepicker';
 import { AppService } from 'src/app/service/app.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { RoleService } from 'src/app/service/role.service';
-import { networkList } from "../../../data/data";
+import { networkList } from "../../../config/variable";
 import * as moment from "moment";
 import { UploadService } from 'src/app/service/upload.service';
 @Component({

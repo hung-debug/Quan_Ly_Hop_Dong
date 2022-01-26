@@ -28,7 +28,7 @@ import {ConfirmSignOtpComponent} from "./confirm-sign-otp/confirm-sign-otp.compo
 import {ImageDialogSignComponent} from "./image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "./pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "./hsm-dialog-sign/hsm-dialog-sign.component";
-import {forkJoin, throwError, timer} from "rxjs";
+import {forkJoin, from, throwError, timer} from "rxjs";
 import {ToastService} from "../../../../service/toast.service";
 import {UploadService} from "../../../../service/upload.service";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -37,8 +37,9 @@ import {encode} from "base64-arraybuffer";
 import {UserService} from "../../../../service/user.service";
 // @ts-ignore
 import domtoimage from 'dom-to-image';
-import { delay } from 'rxjs/operators';
+import {concatMap, delay, map, tap} from 'rxjs/operators';
 import { of } from 'rxjs';
+import {networkList} from "../../../../config/variable";
 
 @Component({
   selector: 'app-consider-contract',
@@ -140,8 +141,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   base64GenCompany: any;
   textSign: any;
   textSignBase64Gen: any;
+  signInfoPKIU: any = {};
   heightText: any = 200;
   widthText: any = 200;
+  loadingText: string = 'Đang xử lý...';
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -163,7 +166,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngOnInit(): void {
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
-    this.digitalSignatureService.getJson();
     this.getDataContractSignature();
   }
 
@@ -198,6 +200,22 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       }
       this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
       this.allRelateToContract = this.datas.is_data_contract.refs;
+      from(this.datas.is_data_contract.refs).pipe(
+        concatMap((rcE: any) => {
+          return this.contractService.getFileContract(rcE.ref_id);
+        }),
+        tap((res) => {
+          for (const eR of res) {
+            if (eR.type == 2) {
+              for (const re of this.datas.is_data_contract.refs)  {
+                if (re.ref_id == eR.contract_id) {
+                  re.path = eR.path;
+                }
+              }
+            }
+          }
+        })
+      ).subscribe();
       this.checkIsViewContract();
 
       this.datas.is_data_object_signature.forEach((element: any) => {
@@ -252,6 +270,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           offsetHeight: 0
         }
       }
+      this.fetchDataUserSimPki();
 
       this.userService.getSignatureUserById(this.currentUser.id).subscribe((res) => {
         if (res) {
@@ -667,6 +686,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   async submitEvents(e: any) {
+    let haveSignPKI = false;
     if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng', '', 3000);
       return;
@@ -685,7 +705,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         }
       }
       if (typeSignDigital && typeSignDigital == 3) {
-        let findDataNetwork = false;
+        haveSignPKI = true;
+        this.dataNetworkPKI = {
+          networkCode: this.signInfoPKIU.networkCode,
+          phone: this.signInfoPKIU.phone
+        }
+        /*let findDataNetwork = false;
         for(const signUpdate of this.isDataObjectSignature) {
           if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
             && signUpdate?.recipient?.email === this.currentUser.email
@@ -694,8 +719,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             if (signUpdate && signUpdate.networkCode && signUpdate.phone) {
               findDataNetwork = true;
               this.dataNetworkPKI = {
-                networkCode: signUpdate.networkCode,
-                phone: signUpdate.phone
+                networkCode: this.signInfoPKIU.networkCode,
+                phone: this.signInfoPKIU.phone
               }
               break;
             }
@@ -704,7 +729,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         if (!findDataNetwork) {
           this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn nhà mạng và nhập số điện thoại kí sim PKI', '', 3000);
           return;
-        }
+        }*/
       }
     }
     if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
@@ -719,7 +744,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         cancelButtonText: 'Hủy'
       }).then(async (result) => {
         if (result.isConfirmed) {
-          if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
+          if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
+            this.pkiDialogSignOpen();
+          } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
             await this.signContractSubmit();
           }
         }
@@ -755,7 +782,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     if (typeSign == 1) {
       this.imageDialogSignOpen();
     } else if (typeSign == 3) {
-      this.pkiDialogSignOpen();
+      // this.pkiDialogSignOpen();
     } else if (typeSign == 4) {
       this.hsmDialogSignOpen();
     }
@@ -778,7 +805,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     })
   }
 
-  pkiDialogSignOpen() {
+  /*pkiDialogSignOpen() {
     const data = {
       title: 'CHỮ KÝ PKI',
       is_content: 'forward_contract'
@@ -793,7 +820,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       console.log('the close dialog');
       let is_data = result
     })
-  }
+  }*/
 
   hsmDialogSignOpen() {
     const data = {
@@ -820,8 +847,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         return 'Bạn có chắc chắn từ chối hợp đồng này?';
       }
     } else if ([3,4].includes(this.datas.roleContractReceived)) {
-      if (this.confirmSignature == 1) {
+      if (this.confirmSignature == 1 && this.datas.roleContractReceived == 3) {
         return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?';
+      } else if (this.confirmSignature == 1 && this.datas.roleContractReceived == 4) {
+        return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận đóng dấu?';
       } else if (this.confirmSignature == 2) {
         return 'Bạn không đồng ý với nội dung của hợp đồng và không xác nhận ký?';
       }
@@ -897,7 +926,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                 signI = this.textSignBase64Gen = textSignB.split(",")[1];
               }
             } else if (signUpdate.type == 3) {
-              signI = this.base64GenCompany
+              await of(null).pipe(delay(100)).toPromise();
+              const imageRender = <HTMLElement>document.getElementById('export-html');
+              if (imageRender) {
+                const textSignB = await domtoimage.toPng(imageRender);
+                signI = textSignB.split(",")[1];
+              }
             }
 
             const signDigital = JSON.parse(JSON.stringify(signUpdate));
@@ -905,8 +939,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
 
-            console.log('signI', signI);
             const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+            if (!dataSignMobi.data.FileDataSigned) {
+              this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+              return false;
+            }
             const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
             if (!sign.recipient_id) {
               this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
@@ -947,7 +984,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         console.log(checkSign);
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi ký sim PKI', '', 3000);
+          this.toastService.showErrorHTMLWithTimeout('Ký số không thành công!', '', 3000);
           return false;
         } else {
           return true;
@@ -1034,6 +1071,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       this.contractService.getAllAccountsDigital().then(async (data) => {
         if (data.data.Serial) {
           this.signCertDigital = data.data;
+          this.nameCompany = data.data.CN;
           checkSetupTool = true;
           if (!checkSetupTool) {
             this.spinner.hide();
@@ -1093,11 +1131,13 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         if (!notContainSignImage) {
           await this.signDigitalDocument();
         }
-        this.toastService.showSuccessHTMLWithTimeout(
-          [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-          , '', 1000);
-        this.spinner.hide();
-        this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+        setTimeout(() => {
+          this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+          this.toastService.showSuccessHTMLWithTimeout(
+            [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+            , '', 3000);
+          this.spinner.hide();
+        }, 1000);
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
       }
@@ -1201,8 +1241,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         (result) => {
           this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công', '', 3000);
           this.spinner.hide();
-          this.router.navigate(['/main/contract-signature/receive/processed']);
+          this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
         }, error => {
+          this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
         }
       )
@@ -1271,7 +1312,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         for (const recipient of participant.recipients) {
           if (this.recipientId == recipient.id) {
             this.recipient = recipient;
-            this.nameCompany = participant.name;
             if (this.currentUser?.email != this.recipient?.email) {
               this.router.navigate(['main/form-contract/detail/' + this.idContract]);
             }
@@ -1280,6 +1320,63 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         }
       }
     }
+  }
+
+  fetchDataUserSimPki() {
+    let typeSignDigital = null
+    if (this.recipient?.sign_type) {
+      const typeSD = this.recipient?.sign_type.find((t: any) => t.id != 1);
+      if (typeSD) {
+        typeSignDigital = typeSD.id;
+      }
+    }
+    if (this.recipient?.email == this.currentUser.email
+      && typeSignDigital && typeSignDigital == 3
+    ) {
+      const nl = networkList;
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+      this.userService.getUserById(this.currentUser.id).subscribe(
+        (data) => {
+          const itemNameNetwork = nl.find((nc: any) => nc.id == data.phone_tel);
+          this.signInfoPKIU.phone = data.phone_sign;
+          this.signInfoPKIU.phone_tel = data.phone_tel;
+          this.signInfoPKIU.networkCode = (itemNameNetwork && itemNameNetwork.name) ? itemNameNetwork.name.toLowerCase() : null;
+        }
+      )
+    }
+  }
+
+  pkiDialogSignOpen() {
+    const data = {
+      title: 'CHỮ KÝ PKI',
+      type: 3,
+      sign: this.signInfoPKIU,
+      data: this.datas
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '497px';
+    dialogConfig.height = '330px';
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.data = data;
+    const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(async (result: any) => {
+      if (result && result.phone && result.networkCode) {
+        this.loadingText = 'Yêu cầu ký đã được gửi tới số điện thoại của bạn.\n Vui lòng Xác nhận để thực hiện dịch vụ';
+        this.signInfoPKIU.phone = result.phone;
+        this.signInfoPKIU.phone_tel = result.phone_tel;
+        this.signInfoPKIU.networkCode = result.networkCode;
+        if (result.phone && result.phone_tel && result.networkCode) {
+          this.dataNetworkPKI = {
+            networkCode: this.signInfoPKIU.networkCode,
+            phone: this.signInfoPKIU.phone
+          }
+          await this.signContractSubmit();
+        } else {
+          this.toastService.showErrorHTMLWithTimeout("Vui lòng nhập số điện thoại và chọn nhà mạng", "", 3000);
+        }
+      }
+    })
   }
 
   prepareInfoSignUsbToken(page: any, heightPage: any) {

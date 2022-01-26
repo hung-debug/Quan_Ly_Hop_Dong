@@ -62,6 +62,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   errorContractName: any = '';
   errorContractFile: any = '';
   errorSignTime: any = '';
+  errorContractNumber:any = '';
 
   uploadFileContractAgain: boolean = false;
   uploadFileAttachAgain: boolean = false;
@@ -94,7 +95,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
       this.typeList = data
     });
 
-    this.contractService.getContractList('', '', '', '', 30).subscribe(data => {
+    this.contractService.getContractList('', '', '', '', 30, "", "").subscribe(data => {
       // console.log(data.entities);
       this.contractConnectList = data.entities;
     });
@@ -133,6 +134,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
           fileInput.value = '';
           this.datas.file_name = file_name;
           this.datas.contractFile = file;
+          this.contractFileRequired();
           if (this.datas.is_action_contract_created) {
             this.uploadFileContractAgain = true;
           }
@@ -201,20 +203,10 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   //--valid data step 1
   validData() {
     this.clearError();
-    if (!this.name) {
-      this.errorContractName = 'error.contract.name.required';
+    if(!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberCounter()){
+      this.spinner.hide();
       return false;
     }
-    if (!this.datas.contractFile) {
-      this.errorContractFile = 'error.contract.file.required';
-      return false;
-    }
-    // console.log(Math.floor((this.sign_time.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24));
-    // if(Math.floor((this.sign_time.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24) < 0){
-    //   this.errorSignTime = 'Thời gian ký không được nhỏ hơn ngày hôm nay!';
-    //   return false;
-    // }
-
     return true
   }
 
@@ -573,6 +565,49 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   changeAddContract(link: any) {
     console.log(link);
     this.router.navigate([link]);
+  }
+
+  characterCounter(str:any) {
+    var character = str.length;
+    return character;
+  }
+
+  contractNameCounter(){
+    if(this.name){
+      this.errorContractName = "";
+      if(this.characterCounter(this.name) > 200){
+        this.errorContractName = "Tên hợp đồng không được vượt quá 200 ký tự";
+        return false;
+      }
+      return true;
+    }
+  }
+
+  contractNumberCounter(){
+    this.errorContractNumber = "";
+    if(this.code && this.characterCounter(this.code) > 32){
+      this.errorContractNumber = "Số hợp đồng không được vượt quá 32 ký tự";
+      return false;
+    }
+    return true;
+  }
+
+  contractNameRequired(){
+    this.errorContractName = "";
+    if(!this.name){
+      this.errorContractName = "error.contract.name.required";
+      return false;
+    }
+    return true;
+  }
+
+  contractFileRequired(){
+    this.errorContractFile = "";
+    if(!this.datas.contractFile){
+      this.errorContractFile = "error.contract.file.required";
+      return false;
+    }
+    return true;
   }
 
 }

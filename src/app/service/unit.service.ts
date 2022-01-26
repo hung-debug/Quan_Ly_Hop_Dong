@@ -42,7 +42,7 @@ export class UnitService {
   public getUnitList(filter_code: any, filter_name: any): Observable<any> {
     this.getCurrentUser();
 
-    let listUnitUrl = this.listUnitUrl + '?code=' + filter_code + '&name=' + filter_name + "&size=1000";
+    let listUnitUrl = this.listUnitUrl + '?code=' + filter_code + '&name=' + filter_name + "&size=10000";
     console.log(listUnitUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Unit[]>(listUnitUrl, {headers}).pipe();

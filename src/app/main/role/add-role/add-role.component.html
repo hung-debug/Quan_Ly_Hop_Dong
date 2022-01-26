@@ -7,29 +7,29 @@
             <div class="col-md-6">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="label text-color">Tên vai trò <span class="required-title">*</span></div>
+                        <div class="label text-color">{{'role.name' | translate}} <span class="required-title">*</span></div>
                         <div class="input-data">
                             <input type="text" formControlName="name" autofocus>
                         </div>
                         <div *ngIf="submitted && f.name.errors" class="invalid">
-                            <div *ngIf="f.name.errors.required">Tên vai trò không được để trống</div>
+                            <div *ngIf="f.name.errors.required">{{'error.role.name.required' | translate}}</div>
                         </div>
                     </div>
                 </div>
                 <div class="row" style="padding-top: 10px;">
                     <div class="col-md-12">
-                        <div class="label text-color">Mã vai trò <span class="required-title">*</span></div>
+                        <div class="label text-color">{{'role.code' | translate}} <span class="required-title">*</span></div>
                         <div class="input-data">
                             <input type="text" formControlName="code" autofocus>
                         </div>
                         <div *ngIf="submitted && f.code.errors" class="invalid">
-                            <div *ngIf="f.code.errors.required">Mã vai trò không được để trống</div>
+                            <div *ngIf="f.code.errors.required">{{'error.role.code.required' | translate}}</div>
                         </div>
                     </div>
                 </div>
                 <div class="row" style="padding-top: 10px;">
                     <div class="col-md-12">
-                        <div class="label text-color">Ghi chú</div>
+                        <div class="label text-color">{{'role.note' | translate}}</div>
                         <div class="input-data">
                             <input type="text" formControlName="note" autofocus>
                         </div>
@@ -38,26 +38,31 @@
             </div>
         
             <div class="col-md-6">
-                <div class="label text-color">Phân quyền <span class="required-title">*</span></div>
+                <div class="label text-color">{{'role.permission' | translate}} <span class="required-title">*</span></div>
                 <div>
                     <p-listbox [options]="groupedRole" [group]="true" formControlName="selectedRole" [metaKeySelection]="false"
                         [checkbox]="true" [filter]="true" [multiple]="true" [listStyle]="{'max-height':'300px'}" [style]="{'width':'100%'}">
                         <ng-template let-group pTemplate="group">
                             <div class="p-d-flex p-ai-center">
-                                <span>{{group.label}}</span>
+                                <span>{{group.label | translate}}</span>
+                            </div>
+                        </ng-template>
+                        <ng-template let-group pTemplate="item">
+                            <div class="p-d-flex p-ai-center">
+                                <span>{{group.label | translate}}</span>
                             </div>
                         </ng-template>
                     </p-listbox>
                 </div>
                 <div *ngIf="submitted && f.selectedRole.errors" class="invalid">
-                    <div *ngIf="f.selectedRole.errors.required">Phân quyền không được để trống</div>
+                    <div *ngIf="f.selectedRole.errors.required">{{'error.role.permission.required' | translate}}</div>
                 </div>
             </div>
         </div>
     
         <div class="row" style="justify-content: center;padding-top: 10px;">
-            <button class="cancel-button" (click)="dialog.closeAll()" type="button">Hủy</button>
-            <button class="save-button" (click)="onSubmit()">Lưu lại</button>
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
+            <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>
         </div>
     </form>
   </div>

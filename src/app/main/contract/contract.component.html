@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  <div class="row list_header" *ngIf="contracts.length > 0;">
+  <div class="row list_header" *ngIf="pageTotal > 0;">
 
     <div class="col-md-5"></div>
     <div class="col-md-2">{{'create-date' | translate}}</div>
@@ -24,7 +24,7 @@
     <div class="col-md-3">{{'action' | translate}}</div>
   </div>
 
-  <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p}">
+  <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
     <div class="row">
       <div class="col-md-12 item_contract_name" (click)="status != 'draft'&& isQLHD_07?openDetail(item.id):null">{{item.name}}</div>
     </div>
@@ -84,52 +84,23 @@
     </div> -->
   </div>
 
-  <div *ngIf="contracts.length == 0" 
+  <div *ngIf="pageTotal == 0" 
   style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
-    <div style="display: table-cell;vertical-align: middle;">
+    <div style="display: table-cell;vertical-align: middle;"> 
       <img src="../../../assets/img/empty_data.svg"/>
-      <div style="color: #94A7C6">Không có dữ liệu!</div>
+      <div style="color: #94A7C6">{{'no.data' | translate}}</div>
     </div>
   </div>
 
   <div class="contract_footer">
     <div class="footer_title"></div>
     <div class="footer_pagination">
-      <pagination-controls *ngIf="contracts.length > 0;" (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
+      <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
     </div>
     <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
   </div>
-
 </div>
 
-<!-- Popup notification signup -->
-<ng-template #modalNotifi let-modal >
-  <div class="popup_content">
-    <div class="row">
-      <div class="col-md-10">
-        <h4 class="popup_title">THÔNG BÁO</h4>
-      </div>
-      <div class="col-md-2 popup_close">
-        <span (click)="modal.dismiss('Cross click')">×</span>
-      </div>
-    </div>
-    <hr>
-    <div class="row">
-      <div class="col-md-12">
-          <div class="form-group">
-            <div class="input-group">
-              <p class="alert" role="alert"  [ngClass]="{'alert-danger' : statusPopup==0, 'alert-primary' : statusPopup==1}" style="text-align: center;    width: 100%;">
-              {{notificationPopup}}
-            </p>
-            </div>
-          </div>
-          <div class="form-group" style="text-align: center; padding-top: 30px;width: 100px;margin: 10px auto;">
-            <button (click)="modal.dismiss('Cross click');" class="btn btn-lg btn-block" style="background-color: #106DB6; color: white;">Đồng ý</button>
-          </div>
-      </div>
-    </div>
-  </div>
-</ng-template>
 <ngx-spinner
   bdColor="rgba(51,51,51,0.8)"
   size="medium"

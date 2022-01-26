@@ -96,11 +96,14 @@ export class UnitComponent implements OnInit {
       this.total = this.listData.length;
 
       //let arrCha = this.listData.filter((p: any) => p.id == orgId);
-      this.listData.sort((a,b) => a.id.toString().localeCompare(b.id));
+      this.listData = this.listData.sort((a,b) => a.parent_id - b.parent_id || a.name.toString().localeCompare(b.name.toString()));
+      //console.log(this.listData);
       let data:any="";
 
       this.array_empty=[];
       this.listData.forEach((element: any, index: number) => {
+        console.log(index);
+        console.log(element);
         let dataChildren;
         if(element.id == orgId){
           dataChildren = this.findChildren(element, true);

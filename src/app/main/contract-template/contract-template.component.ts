@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { DeleteContractTemplateDialogComponent } from './dialog/delete-contract-template-dialog/delete-contract-template-dialog.component';
+import { ReleaseContractTemplateDialogComponent } from './dialog/release-contract-template-dialog/release-contract-template-dialog.component';
+import { ShareContractTemplateDialogComponent } from './dialog/share-contract-template-dialog/share-contract-template-dialog.component';
+import { StopContractTemplateDialogComponent } from './dialog/stop-contract-template-dialog/stop-contract-template-dialog.component';
 @Component({
   selector: 'app-contract-template',
   templateUrl: './contract-template.component.html',
@@ -18,20 +23,16 @@ export class ContractTemplateComponent implements OnInit {
   pageEnd:number = 0;
   pageTotal:number = 0;
 
-  status:number = 1;
-  notification:string = '';
-  closeResult:string= '';
-  error:boolean = false;
-  errorDetail:string = '';
-  shareForm: any = FormGroup;
-  statusContract:string= '';
+  name:any="";
+  type:any="";
 
   constructor(private modalService: NgbModal,
               private appService: AppService,
               private contractTemplateService: ContractTemplateService,
               private router: Router,
               private fb: FormBuilder,
-              private toastService : ToastService) { }
+              private toastService : ToastService,
+              private dialog: MatDialog,) { }
 
   ngOnInit(): void {
     this.appService.setTitle('contract-template.list');
@@ -39,7 +40,7 @@ export class ContractTemplateComponent implements OnInit {
     this.contractTemplateService.getContractTemplateList().subscribe(response => {
       this.contractsTemplate = response.items;
       this.pageTotal = this.contractsTemplate.length;
-      this.setPage();
+      this.setPage();  
     });
   }
 
@@ -51,126 +52,79 @@ export class ContractTemplateComponent implements OnInit {
     }
   }
 
-  //open popup
-  open(content:any) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  //close popup
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
-    }
-  }
-
-  confirmChangeStatus(statusContract:string){
-    this.statusContract = statusContract;
-    if(statusContract == 'Đang phát hành'){
-      this.notification = "Bạn có muốn ngừng phát hành mẫu hợp đồng này không?";
-    }else{
-      this.notification = "Bạn có muốn mở phát hành mẫu hợp đồng này không?";
-    }
-  }
-  sendChangeStatus(statusContract:string){
-    if(statusContract == 'Đang phát hành'){
-      this.toastService.showSuccessHTMLWithTimeout("Ngừng phát hành thành công", "", 3000);
-    }else{
-      this.toastService.showSuccessHTMLWithTimeout("Mở phát hành thành công", "", 3000);
-    }
-  }
-
-  deleteItem(id:number){
-    this.toastService.showSuccessHTMLWithTimeout("Xóa mẫu hợp đồng thành công", "", 3000);
-  }
-
-  addContractTemplate(){
-    this.router.navigate(['/main/form-contract-template/add']);
-  }
-
-  organizationList: Array<any> = [];
-  emailList: Array<any> = [];
-  dropdownOrganizationSettings: any = {};
-  dropdownEmailSettings: any = {};
-  organizationSelectedItems:any =[];
-  //form share
-  getDataShare(name:string, code:string){
-
-    this.organizationSelectedItems = [
-      {
-        item_id: 1,
-        item_text: "Công ty cổ phần phần mềm công nghệ",
-      }
-    ];
-    this.shareForm = this.fb.group({
-      name : name,
-      code: code,
-      organization: [this.organizationSelectedItems],
-      email: "",
-    });
-    this.organizationList = [
-      {
-        item_id: 1,
-        item_text: "Công ty cổ phần phần mềm công nghệ cao VHCSOFT 1111111111",
-      },
-      {
-        item_id: 2,
-        item_text: "Công ty B",
-      }
-    ];
-
-    this.emailList = [
-      {
-        item_id: "doainh@vhc.com.vn",
-        item_text: "Đoài NH (doainh@vhc.com.vn)",
-      },
-      {
-        item_id: "doainguyen@vhc.com.vn",
-        item_text: "Đoài Nguyễn (doainguyen@vhc.com.vn)",
-      }
-    ];
-
-    this.dropdownOrganizationSettings = {
-      singleSelection: true,
-      idField: "item_id",
-      textField: "item_text",
-      selectAllText: "Chọn tất cả",
-      unSelectAllText: "Bỏ chọn tất cả",
-      allowSearchFilter: true
+  deleteContractTemplate(id:any){
+    const data = {
+      title: 'XÁC NHẬN XÓA MẪU HỢP ĐỒNG',
+      id: id
     };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(DeleteContractTemplateDialogComponent, {
+      width: '520px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
 
-    this.dropdownEmailSettings = {
-      singleSelection: false,
-      idField: "item_id",
-      textField: "item_text",
-      selectAllText: "Chọn tất cả",
-      unSelectAllText: "Bỏ chọn tất cả",
-      itemsShowLimit: 1,
-      allowSearchFilter: true
+  stopContractTemplate(id:any){
+    const data = {
+      title: 'XÁC NHẬN DỪNG PHÁT HÀNH MẪU HỢP ĐỒNG',
+      id: id
     };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(StopContractTemplateDialogComponent, {
+      width: '600px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
-  get getOrganizationItems() {
-    return this.organizationList.reduce((acc, curr) => {
-      acc[curr.item_id] = curr;
-      return acc;
-    }, {});
-  }
-  get getEmailItems() {
-    return this.organizationList.reduce((acc, curr) => {
-      acc[curr.item_id] = curr;
-      return acc;
-    }, {});
+  releaseContractTemplate(id:any){
+    const data = {
+      title: 'XÁC NHẬN PHÁT HÀNH MẪU HỢP ĐỒNG',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ReleaseContractTemplateDialogComponent, {
+      width: '560px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
-  sendShare(){
-    this.toastService.showSuccessHTMLWithTimeout("Chia sẻ mẫu hợp đồng thành công", "", 3000);
+  shareContractTemplate(id:any){
+    const data = {
+      title: 'CHIA SẺ MẪU HỢP ĐỒNG',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ShareContractTemplateDialogComponent , {
+      width: '600px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 }

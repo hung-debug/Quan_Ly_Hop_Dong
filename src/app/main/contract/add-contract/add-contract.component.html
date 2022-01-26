@@ -11,5 +11,5 @@
   </ng-container>
 </div>
 <div *ngIf="!(action=='add' && isQLHD_01) && !(action=='edit' && isQLHD_02) && !(action=='copy' && isQLHD_08)">
-  Bạn không có quyền thực hiện tác vụ này
+  {{'no.role' | translate}}
 </div>

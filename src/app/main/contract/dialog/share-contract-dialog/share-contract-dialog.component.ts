@@ -2,9 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { ContractSignatureComponent } from 'src/app/main/contract-signature/contract-signature.component';
 import { ContractSignatureService } from 'src/app/service/contract-signature.service';
-import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
@@ -92,9 +90,11 @@ export class ShareContractDialogComponent implements OnInit {
     });
   }
 
-  email:any;
-  emailArr:any;
+  //email:any;
+  emailArr:any[] = [];
+  checkEmailError:boolean;
   onSubmit() {
+    this.emailArr = [];
     if(this.type == 1){
       console.log(this.addForm.value.email);
       this.submitted = true;
@@ -102,26 +102,31 @@ export class ShareContractDialogComponent implements OnInit {
       if (this.addForm.invalid) {
         return;
       }
-      //this.email = this.addForm.value.email.split(',');
-      this.email = this.addForm.value.email;
-      console.log(this.email);
-      // this.email.forEach((key: any, v: any) => {
-      //   console.log(key);
-      //   if(this.isValidEmail(key.trim())== false){
-      //     this.toastService.showErrorHTMLWithTimeout('Tồn tại email ' + key.trim() + ' sai định dạng', "", 3000);
-      //     return;
-      //   }
-      // });
-
-      this.contractService.shareContract(this.email, this.data.id).subscribe(data => {
-        console.log(data);
-        if(data.id != null){
-          this.dialogRef.close();
-          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 3000);
+      this.checkEmailError=false;
+      // this.email = this.addForm.value.email;
+      console.log(this.addForm.value.email);
+      this.addForm.value.email.split(',').forEach((key: any, v: any) => {
+        console.log(key);
+        if(this.isValidEmail(key.trim())== false){
+          this.toastService.showErrorHTMLWithTimeout('Tồn tại email ' + key.trim() + ' sai định dạng', "", 3000);
+          this.checkEmailError=true;
         }else{
-          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 3000);
+          this.emailArr.push(key.trim());
         }
       });
+
+      if(!this.checkEmailError){
+        this.contractService.shareContract(this.emailArr, this.data.id).subscribe(data => {
+          console.log(data);
+          if(data.contract_id != null){
+            this.dialogRef.close();
+            this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 3000);
+          }else{
+            this.toastService.showErrorHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 3000);
+          }
+        });
+      }
+      
       
     }else{
       console.log(this.addFormUser.value.email);
@@ -130,20 +135,17 @@ export class ShareContractDialogComponent implements OnInit {
       if (this.addFormUser.invalid) {
         return;
       }
-      this.email = this.addFormUser.value.email[0];
-      console.log("email=" + this.addFormUser.value.email[0]);
-      this.contractService.shareContract(this.addFormUser.value.email[0], this.data.id).subscribe(data => {
+      console.log("email=" + this.addFormUser.value.email);
+      this.contractService.shareContract(this.addFormUser.value.email, this.data.id).subscribe(data => {
         console.log(data);
-        if(data.id != null){
+        if(data.contract_id != null){
           this.dialogRef.close();
           this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 3000);
         }else{
-          this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 3000);
+          this.toastService.showErrorHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 3000);
         }
       });
-    }
-    console.log(this.email);
-    
+    }    
   }
 
   isValidEmail(emailString: any) {
@@ -155,6 +157,4 @@ export class ShareContractDialogComponent implements OnInit {
       return false;
     }
   }
-  
-
 }

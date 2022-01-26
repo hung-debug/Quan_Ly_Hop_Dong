@@ -13,6 +13,7 @@ import {variable} from "../../../config/variable";
 import Swal from 'sweetalert2';
 import * as $ from "jquery";
 import {ProcessingHandleEcontractComponent} from "../../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component"
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 @Component({
   selector: 'app-detail-contract',
@@ -105,6 +106,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   isDataObjectSignature: any;
   valid: boolean = false;
   allFileAttachment: any[];
+  role:any;
+  status:any;
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -196,19 +199,21 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
       // this.datas = this.datas.concat(this.data_contract.contract_information);
 
+
       this.datas.action_title = 'Xác nhận';
-      this.activeRoute.url.subscribe(params => {
-        console.log(params);
-        if (params && params.length > 0) {
-          params.forEach(item => {
-            if (item.path == 'consider-contract') {
-              this.datas.roleContractReceived = 2;
-            } else if (item.path == 'personal-signature-contract') {
-              this.datas.roleContractReceived = 3;
-            }
-          })
-        }
-      });
+      //neu nguoi truy cap khong o trong luong ky
+      if(!this.recipient?.role){
+        this.role = '';
+        this.status = this.datas.is_data_contract.status;
+
+      //neu nguoi truy cap o trong luong ky
+      }else{
+        this.role = this.recipient.role;
+        this.status = this.recipient.status;
+        this.datas.roleContractReceived = this.recipient.role;
+      }
+
+
 
 
       this.scale = 1;
@@ -863,58 +868,89 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   downloadContract(id:any){
-    this.contractService.getFileContract(id).subscribe((data) => {
-        //console.log(data);
-        let fileC: any = null;
+    if (this.isDataContract.status == 30) {
+      this.contractService.getFileContract(id).subscribe((data) => {
+          //console.log(data);
+          let fileC: any = null;
 
-        if (this.datas?.i_data_file_contract) {
-          const pdfC2 = this.datas.i_data_file_contract.find((p: any) => p.type == 2);
-          const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
-          if (pdfC2) {
-            fileC = pdfC2.path;
-          } else if (pdfC1) {
-            fileC = pdfC1.path;
-          } else {
+          if (this.datas?.i_data_file_contract) {
+            const pdfC2 = this.datas.i_data_file_contract.find((p: any) => p.type == 2);
+            const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
+            if (pdfC2) {
+              fileC = pdfC2.path;
+            } else if (pdfC1) {
+              fileC = pdfC1.path;
+            } else {
+              return;
+            }
+            this.pdfSrc = fileC;
+          }
+          if (!fileC) {
             return;
           }
-          this.pdfSrc = fileC;
-        }
-        if (!fileC) {
-          return;
-        }
-        this.uploadService.downloadFile(fileC).subscribe((response: any) => {
-          //console.log(response);
+          this.uploadService.downloadFile(fileC).subscribe((response: any) => {
+            //console.log(response);
 
-          let url = window.URL.createObjectURL(response);
-          let a = document.createElement('a');
-          document.body.appendChild(a);
-          a.setAttribute('style', 'display: none');
-          a.href = url;
-          a.download = data[0].name;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          a.remove();
+            let url = window.URL.createObjectURL(response);
+            let a = document.createElement('a');
+            document.body.appendChild(a);
+            a.setAttribute('style', 'display: none');
+            a.href = url;
+            a.download = data[0].name;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
 
-          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
-        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
-      },
-      error => {
-        this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
-      }
-    );
+            this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+          }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
+        },
+        error => {
+          this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
+        }
+      );
+    }
+
   }
 
   checkIsViewContract() {
     if (this.datas?.is_data_contract?.participants?.length) {
       for (const participant of this.datas.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
-          if (this.recipientId == recipient.id) {
+          if (this.currentUser.email == recipient.email) {
             this.recipient = recipient;
             return;
           }
         }
       }
     }
+  }
+
+  checkStatusUser(status: any, role: any) {
+    if (this.isDataContract.status == 30) {
+      return 'Tải xuống';
+    }
+
+    if (status == 3) {
+      return 'Đã từ chối';
+    }
+    let res = '';
+    if (status == 0) {
+      res += 'Chưa ';
+    } else if (status == 1) {
+      res += 'Đang ';
+    } else if (status == 2 || status == 3) {
+      res += 'Đã ';
+    }
+    if (role == 1) {
+      res +=  'điều phối';
+    } else if (role == 2) {
+      res +=  'xem xét';
+    } else if (role == 3) {
+      res +=  'ký';
+    } else if (role == 4) {
+      res =  res + ' đóng dấu';
+    }
+    return res;
   }
 
 }

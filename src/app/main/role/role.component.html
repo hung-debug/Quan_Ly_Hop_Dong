@@ -32,7 +32,7 @@
               <td>{{list.code}}</td>
               <td style="text-align: center">
                 <img *ngIf="isQLVT_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editRole(list.id)" style="cursor: pointer;"/>&nbsp;&nbsp;
-                <!-- <img *ngIf="isQLVT_03" src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteRole(list.id)" style="cursor: pointer;"/> -->
+                <img *ngIf="isQLVT_03" src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteRole(list.id)" style="cursor: pointer;"/>
               </td>
           </tr>
       </ng-template>
@@ -49,11 +49,11 @@
   style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
     <div style="display: table-cell;vertical-align: middle;">
       <img src="../../../assets/img/empty_data.svg"/>
-      <div style="color: #94A7C6">Không có dữ liệu!</div>
+      <div style="color: #94A7C6">{{'no.data' | translate}}</div>
     </div>
   </div>
 </div>
 <div *ngIf="!isQLVT_01 && !isQLVT_02 && !isQLVT_03 && !isQLVT_04 && !isQLVT_05">
-  Bạn không có quyền thực hiện tác vụ này!
+  {{'no.role' | translate}}
 </div>
   
