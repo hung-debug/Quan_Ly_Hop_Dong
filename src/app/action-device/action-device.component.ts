@@ -26,7 +26,7 @@ export class ActionDeviceComponent implements OnInit {
     if (this.deviceService.os == "iOS") {
         window.location.href = `https://testflight.apple.com/join/qWAmyels`;
     } else if (this.deviceService.os == "Android") {
-
+        window.location.href = `https://drive.google.com/file/d/1Oo-VMe0vnK5UuZN7bdTBLABubmD9Nxns/view?usp=sharing`;
     }
   }
 
