@@ -58,6 +58,9 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   notes: any;
   filePath: any;
 
+  attachFileArr:any[] = [];
+  attachFileNameArr:any[] = [];
+
   //error
   errorContractName: any = '';
   errorContractFile: any = '';
@@ -166,9 +169,12 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         if (e.target.files[0].size <= 5000000) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
-          this.datas.file_name_attach = file_name;
+          //this.datas.file_name_attach = file_name;
           //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
-          this.datas.attachFile = file;
+          this.attachFileArr.push(file);
+          this.datas.attachFileArr = this.attachFileArr;
+          this.attachFileNameArr.push(file.name);
+          this.datas.attachFileNameArr = this.attachFileNameArr;
           if (this.datas.is_action_contract_created) {
             this.uploadFileAttachAgain = true;
           }
@@ -247,36 +253,44 @@ export class InforContractComponent implements OnInit, AfterViewInit {
                           console.log(JSON.stringify(data));
                           this.datas.name_origanzation = data.name;
 
-                          if (this.datas.attachFile != null) {
-                            this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
-                                console.log(JSON.stringify(data));
-                                this.datas.filePathAttach = data.file_object.file_path;
-                                this.datas.fileNameAttach = data.file_object.filename;
-                                this.datas.fileBucketAttach = data.file_object.bucket;
-                                this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
-                                    console.log(JSON.stringify(data));
-                                    this.datas.document_attach_id = data?.id;
-                                    //next step
-                                    this.step = variable.stepSampleContract.step2;
-                                    this.datas.stepLast = this.step;
-                                    // this.datas.document_id = '1';
-                                    this.nextOrPreviousStep(this.step);
-                                    console.log(this.datas);
-                                    this.spinner.hide();
-                                  },
-                                  error => {
-                                    this.spinner.hide();
-                                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
-                                    return false;
-                                  }
-                                );
-                              },
-                              error => {
-                                this.spinner.hide();
-                                this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
-                                return false;
-                              }
-                            );
+                          if (this.datas.attachFileArr != null) {
+                            for(var i = 0; i < this.datas.attachFileArr.length; i++){
+                            
+                              console.log(this.datas.attachFileArr[i])
+                              this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
+                                  console.log(JSON.stringify(data));
+                                  this.datas.filePathAttach = data.file_object.file_path;
+                                  this.datas.fileNameAttach = data.file_object.filename;
+                                  this.datas.fileBucketAttach = data.file_object.bucket;
+                                  this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
+                                      console.log(JSON.stringify(data));
+                                      this.datas.document_attach_id = data?.id;
+                                      
+                                    },
+                                    error => {
+                                      this.spinner.hide();
+                                      this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
+                                      return false;
+                                    }
+                                  );
+                                },
+                                error => {
+                                  this.spinner.hide();
+                                  this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
+                                  return false;
+                                }
+                              );
+                            }
+
+                            //next step
+                            console.log("next step");
+                            this.step = variable.stepSampleContract.step2;
+                            this.datas.stepLast = this.step;
+                            // this.datas.document_id = '1';
+                            this.nextOrPreviousStep(this.step);
+                            console.log(this.datas);
+                            this.spinner.hide();
+                            
                           } else {
 
                             //next step

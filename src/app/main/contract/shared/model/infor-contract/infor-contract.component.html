@@ -112,7 +112,10 @@
             <input id="attachFile" type="file" accept=".pdf, .doc, .docx"
                   (change)="fileChangedAttach($event)" style="display: none;" multiple/>
             <div class="select-contract" (click)="addFileAttach()">
-              <input type="text" placeholder="{{'choose.contract.file.attach' | translate }}" readonly [ngModel]="this.datas.file_name_attach">
+              <div class="div_file_attach">
+                <div *ngIf="this.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' | translate }}</div>
+                <div *ngFor="let item of this.datas.attachFileNameArr">{{item}}</div>
+              </div>
               <img src="assets/img/attachment.svg" alt="mobifone.contract">
             </div>
           </div>
@@ -135,8 +138,7 @@
       <div class="form-group">
         <div class="label_item">{{'expiration-date' | translate}} <span class="require_star">*</span></div>
         <div>
-<!--          dateFormat="dd/mm/yy"-->
-          <p-calendar [(ngModel)]="sign_time" [minDate]="minDate" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+          <p-calendar [(ngModel)]="sign_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="dd/mm/yy"></p-calendar>
         </div>
       </div>
       <div class="form-group">

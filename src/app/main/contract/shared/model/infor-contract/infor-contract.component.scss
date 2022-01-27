@@ -69,6 +69,15 @@ input[type="file"] {
         padding-left: 10px;
         cursor: pointer;
       }
+      .div_file_attach {
+        outline: none;
+        width: 100%;
+        min-height: 38px;
+        border-radius: 5px;
+        border: 1px solid #106DB6;
+        padding: 7px 10px;
+        cursor: pointer;
+      }
       img {
         cursor: pointer;
         position: absolute;
