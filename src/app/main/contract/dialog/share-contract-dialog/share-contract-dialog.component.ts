@@ -53,7 +53,7 @@ export class ShareContractDialogComponent implements OnInit {
     //lay danh sach to chuc
     this.unitService.getUnitList('', '').subscribe(data => {
       console.log(data.entities);
-      this.orgList = data.entities.filter((i: any) => (i.id == orgId || i.parent_id == orgId));
+      this.orgList = data.entities;
     });
 
     this.datas = this.data;

@@ -38,6 +38,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       this.currentUser = currentUserC.customer?.info;
     }
     // this.fetchDataUserSimPki();
+    console.log(this.sign);
   }
 
   ngAfterViewInit() {
