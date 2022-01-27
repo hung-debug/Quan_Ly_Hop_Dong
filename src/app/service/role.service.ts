@@ -21,6 +21,7 @@ export class RoleService {
   addRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles`;
   updateRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles/`;
   deleteRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles/`;
+  checkCodeRoleUrl:any = ``;
 
   token:any;
   customer_id:any;
@@ -91,5 +92,12 @@ export class RoleService {
     const headers = {'Authorization': 'Bearer ' + this.token}
     let listRoleUrl = this.listRoleUrl + "?name=" + name + "&code=" + code + "&size=10000"
     return this.http.get<any[]>(listRoleUrl, {headers}).pipe();
+  }
+
+  checkCodeRole(code:any){
+    this.getCurrentUser();
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    let checkCodeRoleUrl = this.checkCodeRoleUrl + "?code=" + code;
+    return this.http.get<any[]>(checkCodeRoleUrl, {headers}).pipe();
   }
 }

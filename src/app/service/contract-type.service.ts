@@ -21,6 +21,8 @@ export class ContractTypeService {
   deleteContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types`;
   getContractTypeByIdUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
   listContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/organizations/`;
+  checkCodeContractTypeUrl:any = ``;
+  checkNameContractTypeUrl:any = ``;
 
   token:any;
   customer_id:any;
@@ -95,5 +97,19 @@ export class ContractTypeService {
     console.log(listContractTypeUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<ContractType[]>(listContractTypeUrl, {headers}).pipe();
+  }
+
+  checkCodeContractType(code:any){
+    this.getCurrentUser();
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    let checkCodeContractTypeUrl = this.checkCodeContractTypeUrl + "?code=" + code;
+    return this.http.get<any[]>(checkCodeContractTypeUrl, {headers}).pipe();
+  }
+
+  checkNameContractType(name:any){
+    this.getCurrentUser();
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    let checkNameContractTypeUrl = this.checkNameContractTypeUrl + "?name=" + name;
+    return this.http.get<any[]>(checkNameContractTypeUrl, {headers}).pipe();
   }
 }

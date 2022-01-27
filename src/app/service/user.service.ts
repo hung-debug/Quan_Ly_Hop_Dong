@@ -37,6 +37,7 @@ export class UserService {
   getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   listUserUrl:any = `${environment.apiUrl}/api/v1/customers/search`;
   getUserByEmailUrl:any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
+  checkPhoneUserUrl:any = ``;
 
   token:any;
   customer_id:any;
@@ -244,6 +245,13 @@ export class UserService {
         }
       })
     );
+  }
+
+  checkPhoneUser(phone:any){
+    this.getCurrentUser();
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    let checkPhoneUserUrl = this.checkPhoneUserUrl + "?phone=" + phone;
+    return this.http.get<any[]>(checkPhoneUserUrl, {headers}).pipe();
   }
 
   // Error handling
