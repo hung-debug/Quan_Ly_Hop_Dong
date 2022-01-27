@@ -290,7 +290,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
                             this.nextOrPreviousStep(this.step);
                             console.log(this.datas);
                             this.spinner.hide();
-                            
+
                           } else {
 
                             //next step
@@ -494,35 +494,39 @@ export class InforContractComponent implements OnInit, AfterViewInit {
                     this.contractService.addDocumentDone(this.datas).subscribe((data) => {
                         this.datas.document_id = data?.id;
 
-                        if (this.datas.attachFile != null) {
-                          this.uploadService.uploadFile(this.datas.attachFile).subscribe((data) => {
-                              console.log(JSON.stringify(data));
-                              this.datas.filePathAttach = data.file_object.file_path;
-                              this.datas.fileNameAttach = data.file_object.filename;
-                              this.datas.fileBucketAttach = data.file_object.bucket;
-                              this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
-                                  console.log(JSON.stringify(data));
-                                  this.datas.document_attach_id = data?.id;
+                        if (this.datas.attachFileArr != null) {
+                          for(var i = 0; i < this.datas.attachFileArr.length; i++){
+                          
+                            console.log(this.datas.attachFileArr[i])
+                            this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
+                                console.log(JSON.stringify(data));
+                                this.datas.filePathAttach = data.file_object.file_path;
+                                this.datas.fileNameAttach = data.file_object.filename;
+                                this.datas.fileBucketAttach = data.file_object.bucket;
+                                this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
+                                    console.log(JSON.stringify(data));
+                                    this.datas.document_attach_id = data?.id;
+                                    
+                                  },
+                                  error => {
+                                    this.spinner.hide();
+                                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
+                                    return false;
+                                  }
+                                );
+                              },
+                              error => {
+                                this.spinner.hide();
+                                this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
+                                return false;
+                              }
+                            );
+                          }
+                          //next step
+                          this.router.navigate(['/main/contract/create/draff']);
+                          this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
 
-                                  //next step
-                                  this.router.navigate(['/main/contract/create/draff']);
-                                  this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-
-                                  this.spinner.hide();
-                                },
-                                error => {
-                                  this.spinner.hide();
-                                  this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
-                                  return false;
-                                }
-                              );
-                            },
-                            error => {
-                              this.spinner.hide();
-                              this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
-                              return false;
-                            }
-                          );
+                          this.spinner.hide();
                         } else {
                           //next step
                           this.router.navigate(['/main/contract/create/draff']);
