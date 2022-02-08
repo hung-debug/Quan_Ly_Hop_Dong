@@ -209,7 +209,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   //--valid data step 1
   validData() {
     this.clearError();
-    if(!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberCounter()){
+    if(!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid()){
       this.spinner.hide();
       return false;
     }
@@ -602,10 +602,24 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   }
 
   contractNumberCounter(){
-    this.errorContractNumber = "";
-    if(this.code && this.characterCounter(this.code) > 32){
+    if(this.characterCounter(this.code) > 32){
       this.errorContractNumber = "Số hợp đồng không được vượt quá 32 ký tự";
       return false;
+    }
+    return true;
+  }
+
+  contractNumberValid(){
+    this.errorContractNumber = "";
+    if(this.code){
+      var regex = /^[0-9]\d*$/;
+      var matches = this.code.match(regex);
+      if (matches){
+        return this.contractNumberCounter();
+      }else{
+        this.errorContractNumber = "Số hợp đồng chỉ được nhập số";
+        return false;
+      }
     }
     return true;
   }

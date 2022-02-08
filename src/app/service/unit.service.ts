@@ -1,7 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {environment} from '../../environments/environment';
-import {Observable} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { SysService } from './sys.service';
+import { Router } from '@angular/router';
 
 export interface Unit {
   id: number,
@@ -39,7 +42,9 @@ export class UnitService {
     this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
   }
 
-  constructor(private http: HttpClient,) { }
+  constructor(private http: HttpClient,
+    private sysService: SysService,
+    public router: Router,) { }
 
   public getUnitList(filter_code: any, filter_name: any): Observable<any> {
     this.getCurrentUser();
@@ -47,8 +52,8 @@ export class UnitService {
     let listUnitUrl = this.listUnitUrl + '?code=' + filter_code + '&name=' + filter_name + "&size=10000";
     console.log(listUnitUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<Unit[]>(listUnitUrl, {headers}).pipe();
-  }
+    return this.http.get<Unit[]>(listUnitUrl, {headers}).pipe(catchError(this.handleError));
+  }  
 
   addUnit(datas: any) {
     this.getCurrentUser();
@@ -112,4 +117,13 @@ export class UnitService {
     let checkCodeUnitUrl = this.checkCodeUnitUrl + "?code=" + code;
     return this.http.get<any[]>(checkCodeUnitUrl, {headers}).pipe();
   }
+
+  handleError(error: HttpErrorResponse) {
+    if (error.status === 0 && error.error instanceof ProgressEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.log('Client side error:', error.error)
+      this.router.navigateByUrl("/login");
+    }
+    return throwError(this.errorData);
+  };
 }

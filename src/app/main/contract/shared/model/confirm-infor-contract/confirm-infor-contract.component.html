@@ -77,7 +77,7 @@
     <div class="partner_contact">
       <div class="label">ĐỐI TÁC</div>
       <div class="content_determine">
-        <div class="row">
+        <div class="row" *ngIf="isOrg">
           <div class="col-md-5">
             <div class="form-group">
               <div class="label_item">Người điều phối</div>
@@ -107,7 +107,7 @@
             </div>
           </div>
           <div class="col-md-2"></div>
-          <div class="col-md-5">
+          <div class="col-md-5" *ngIf="isOrg">
             <div class="form-group">
               <div class="label_item">Văn thư</div>
               <div>
