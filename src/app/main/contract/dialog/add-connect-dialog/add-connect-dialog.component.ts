@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -12,19 +12,18 @@ import { ToastService } from 'src/app/service/toast.service';
 })
 export class AddConnectDialogComponent implements OnInit {
 
-  contracts: any[] = [];
+  contractsD: any[] = [];
   name:any;
-  sideA:any;
   sideB:any;
   created_at:any;
 
   idList:any[]=[];
 
-  p:number = 1;
-  page:number = 3;
-  pageStart:number = 0;
-  pageEnd:number = 0;
-  pageTotal:number = 0;
+  pD:number = 1;
+  pageD:number = 3;
+  pageStartD:number = 0;
+  pageEndD:number = 0;
+  pageTotalD:number = 0;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -33,11 +32,17 @@ export class AddConnectDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<AddConnectDialogComponent>,
     public router: Router,
     public dialog: MatDialog,
-    private contractService : ContractService) { 
-
+    private contractService : ContractService,
+    private changeDetector : ChangeDetectorRef) { 
+      
     }
-
-  ngOnInit(): void {
+    
+    ngOnInit(): void {
+    this.pD = 1;
+    this.pageD = 3;
+    this.pageStartD = 0;
+    this.pageEndD = 0;
+    this.pageTotalD = 0;
     this.contractService.getDetailInforContract(this.data.id).subscribe(
       data => {
         data.refs.forEach((key : any, val: any) => {
@@ -62,95 +67,41 @@ export class AddConnectDialogComponent implements OnInit {
     }
   }
 
-  private getContractList(){
-    this.p = 1;
+  getContractList(){
     //get list contract
-    this.contractService.getContractList("", "", "", "", 30, "", "").subscribe(data => {
-      this.contracts = data.entities;
-      this.pageTotal = this.contracts.length;
-      console.log(this.contracts);
-      if(this.pageTotal == 0){
-        this.p = 0;
-        this.pageStart = 0;
-        this.pageEnd = 0;
+    this.contractService.getContractList("", "", "", "", 30, this.pD, this.pageD).subscribe(data => {
+      this.contractsD = data.entities;
+      this.pageTotalD = data.total_elements;
+      console.log(this.contractsD);
+      if(this.pageTotalD == 0){
+        this.pD = 0;
+        this.pageStartD = 0;
+        this.pageEndD = 0;
       }else{
         this.setPage();
       }
-      this.contracts.forEach((key : any, v: any) => {
+      this.contractsD.forEach((key : any, v: any) => {
         let participants = key.participants;
         //console.log(participants);
         participants.forEach((key : any, val: any) => {
           if (key.type == 1) {
-            this.contracts[v].sideA = key.name;
+            this.contractsD[v].sideA = key.name;
           }else{
-            this.contracts[v].sideB = key.name;
+            this.contractsD[v].sideB = key.name;
           }
-          console.log(this.contracts[v].sideA);
+          console.log(this.contractsD[v].sideA);
         })
       });
-      console.log(this.contracts);
-      console.log(this.pageTotal);
+      console.log(this.contractsD);
+      console.log(this.pageTotalD);
     });
   }
 
   setPage(){
-    this.pageStart = (this.p-1)*this.page+1;
-    this.pageEnd = (this.p)*this.page;
-    if(this.pageTotal < this.pageEnd){
-      this.pageEnd = this.pageTotal;
+    this.pageStartD = (this.pD-1)*this.pageD+1;
+    this.pageEndD = (this.pD)*this.pageD;
+    if(this.pageTotalD < this.pageEndD){
+      this.pageEndD = this.pageTotalD;
     }
   }
-
-  autoSearch(name:any, sideA:any, sideB:any, create_at:any){
-    this.p = 1;
-    this.contractService.getContractList("", "", "", "", 30, "", "").subscribe(data => {
-      this.contracts = data.entities;
-
-      this.contracts.forEach((key : any, v: any) => {
-        let participants = key.participants;
-        console.log(participants);
-        participants.forEach((key : any, val: any) => {
-          if (key.type == 1) {
-            this.contracts[v].sideA = key.name;
-          }else{
-            this.contracts[v].sideB = key.name;
-          }
-          console.log(this.contracts[v].sideA);
-        })
-      });
-
-      this.contracts = this.transform(this.contracts, name, sideA, sideB, create_at);
-      this.pageTotal = this.contracts.length;
-      if(this.pageTotal == 0){
-        this.p = 0;
-        this.pageStart = 0;
-        this.pageEnd = 0;
-      }else{
-        this.setPage();
-      }
-
-    });
-  }
-
-  transform(contracts:any, name:any, sideA:any, sideB:any, create_at:any):any[]  {
-    if (!contracts) {
-      return [];
-    }
-    if (!name && !sideA && !sideB && !create_at) {
-      return contracts;
-    }
-    console.log("name:" + name);
-    console.log("sideA:" + sideA);
-    console.log("create_at:" + create_at);
-    return contracts.filter((it:any) => {
-      console.log(it);
-      console.log(it.sideA);
-      return (
-        (name != ''?it.name.toLocaleLowerCase().includes(name.toLocaleLowerCase()):it)
-      && (sideA!=''?it.sideA.toLocaleLowerCase().includes(sideA.toLocaleLowerCase()):it)
-      && (sideB!=''?it.sideB.toLocaleLowerCase().includes(sideB.toLocaleLowerCase()):it)
-      );
-    });
-  }
-
 }

@@ -3,37 +3,30 @@
       <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{this.data.title | translate}}</h3>
     </div>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="label text-color">Tên hợp đồng</div>
                 <div class="input-data">
-                    <input type="text" id="name" #name (keyup)="autoSearch($any($event.target).value, sideA.value, sideB.value, created_at.value)">
-                </div>
-            </div>
-        
-            <div class="col-md-3">
-                <div class="label text-color">Tên tổ chức của tôi</div>
-                <div class="input-data">
-                    <input type="text" id="sideA" #sideA (keyup)="autoSearch(name.value, $any($event.target).value, sideB.value, created_at.value)">
+                    <input type="text" id="name" #name (keyup)="getContractList()">
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="label text-color">Tên đối tác</div>
                 <div class="input-data">
-                    <input type="text" id="sideB" #sideB (keyup)="autoSearch(name.value, sideA.value, $any($event.target).value, created_at.value)">
+                    <input type="text" id="sideB" #sideB (keyup)="getContractList()">
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="label text-color">Ngày tạo</div>
-                <div class="input-data">
-                    <p-calendar appendTo="body" id="created_at" [showIcon]="true" dateFormat="dd/mm/yy" #created_at (change)="autoSearch(name.value, sideA.value, sideB.value, $any($event.target).value)"></p-calendar>
+                <div>
+                    <p-calendar appendTo="body" id="created_at" [showIcon]="true" dateFormat="dd/mm/yy" #created_at (change)="getContractList()"></p-calendar>
                 </div>
             </div>
         </div>
 
         
-        <div *ngFor="let contract of contracts | paginate:{itemsPerPage: page, currentPage:p}" class="p-field-checkbox" style="display: flex;">
+        <div *ngFor="let contract of contractsD | paginate:{itemsPerPage: pageD, currentPage:pD, totalItems: pageTotalD}" class="p-field-checkbox" style="display: flex;">
             <p-checkbox value="contract.id" [value]="contract.id" [(ngModel)]="idList" [inputId]="contract.id"></p-checkbox>
             <div class="item_contract">
                 <div class="row">
@@ -49,7 +42,7 @@
                     <div class="col-md-6">
                         <div class="row">
                         <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
-                            <span class="status_blue">{{contract.status | translate}}</span>
+                            <span class="status_blue">{{'contract.status.complete' | translate}}</span>
                         </div>
                         </div>
                     </div>
@@ -66,9 +59,9 @@
         <div class="contract_footer">
             <div class="footer_title"></div>
             <div class="footer_pagination">
-              <pagination-controls *ngIf="contracts.length > 0;" (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
+              <pagination-controls *ngIf="pageTotalD > 0;" (pageChange)="pD=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
             </div>
-            <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
+            <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStartD}} - {{pageEndD}} / {{pageTotalD}}</div>
         </div>
         
         <div class="row" style="justify-content: center;">
