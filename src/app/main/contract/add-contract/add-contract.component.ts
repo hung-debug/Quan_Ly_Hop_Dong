@@ -101,6 +101,12 @@ export class AddContractComponent implements OnInit {
       //set title
       if (this.action == 'add') {
         this.appService.setTitle('contract.add');
+      } else if (this.action == 'add-contract-connect') {
+        this.appService.setTitle('contract.add');
+        const array_empty: any [] = [];
+        array_empty.push({ref_id: Number(params['id'])});
+        this.datas.contractConnect = array_empty;
+        console.log(this.datas.contractConnect);
       } else if (this.action == 'edit') {
         this.id = params['id'];
         this.appService.setTitle('contract.edit');

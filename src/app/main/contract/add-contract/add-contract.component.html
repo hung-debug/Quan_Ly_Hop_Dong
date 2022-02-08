@@ -1,5 +1,5 @@
 <!--xử lý gọi các component trong các step theo từng điều kiện-->
-<div *ngIf="(action=='add' && isQLHD_01) || (action=='edit' && isQLHD_02) || (action=='copy' && isQLHD_08)" class="container-fluid">
+<div *ngIf="((action=='add' || action=='add-contract-connect') && isQLHD_01) || (action=='edit' && isQLHD_02) || (action=='copy' && isQLHD_08)" class="container-fluid">
 <!--  <p (click)="t()">ducanh</p>-->
 <!--  <app-contract-header #contractHeader [AddComponent]="this" [datas]="datas" [step]="step" (stepChange)="getStep()"></app-contract-header>-->
   <app-contract-header #contractHeader [AddComponent]="this" [datas]="datas" [step]="step"></app-contract-header>
@@ -10,6 +10,6 @@
     <app-confirm-infor-contract #confirmInforContract *ngIf="step == 'confirm-contract'" [datas]="datas" [step]="step" (stepChangeConfirmInforContract)="getStep($event)"></app-confirm-infor-contract>
   </ng-container>
 </div>
-<div *ngIf="!(action=='add' && isQLHD_01) && !(action=='edit' && isQLHD_02) && !(action=='copy' && isQLHD_08)">
+<div *ngIf="!((action=='add' || action=='add-contract-connect') && isQLHD_01) && !(action=='edit' && isQLHD_02) && !(action=='copy' && isQLHD_08)">
   {{'no.role' | translate}}
 </div>

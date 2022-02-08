@@ -198,10 +198,10 @@ export class MainComponent implements OnInit {
   }
 
   infoUserDetail() {
-    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-    //   this.router.navigate(['/main/user-infor']);
-    // });
-    this.router.navigate(['/main/user-infor']);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/user-infor']);
+    });
+    //this.router.navigate(['/main/user-infor']);
   }
 
   openLinkNotification(link:any, id:any) {

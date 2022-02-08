@@ -325,6 +325,10 @@ export class ContractComponent implements OnInit {
     this.getDataContract(id, 'edit')
   }
 
+  addContractConnectNew(id:number){
+    this.router.navigate(['main/form-contract/add-contract-connect/' + id]);
+  }
+
   getDataContract(id: number, action: string) {
     setTimeout(() => {
       if (action == 'copy')
