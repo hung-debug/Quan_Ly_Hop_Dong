@@ -933,7 +933,7 @@ export class DetermineSignerComponent implements OnInit {
       let data_ordering = document.getElementById(orering_data);
       if (data_ordering)
         data_ordering.focus();
-      this.toastService.showErrorHTMLWithTimeout("Bạn chưa nhập dữ liệu!", "", 3000);
+      this.toastService.showErrorHTMLWithTimeout("Bạn chưa nhập thứ tự ký!", "", 3000);
     }
   }
 
