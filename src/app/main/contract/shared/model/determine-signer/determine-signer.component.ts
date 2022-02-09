@@ -164,7 +164,6 @@ export class DetermineSignerComponent implements OnInit {
       }
     })
     this.spinner.show();
-
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
       this.contractService.getContractDetermineCoordination(this.is_determine_clone, this.datas.contract_id_action).subscribe((res: any) => {
         this.getDataApiDetermine(res)
@@ -190,19 +189,19 @@ export class DetermineSignerComponent implements OnInit {
 
   getDataApiDetermine(res: any, is_save?: boolean) {
     // this.datas.id = data?.id;
-    if (!this.saveDraftStep || is_save) {
-      this.datas.determine_contract = res ? res : this.is_determine_clone;
-      this.step = variable.stepSampleContract.step3;
-      this.datas.stepLast = this.step
-      sessionStorage.setItem('copy_right_show', 'true');
-      this.nextOrPreviousStep(this.step);
-    } else {
+    if (!is_save) {
       this.datas.save_draft.determine_signer = false;
       this.saveDraftDetermineSigner.emit('save_draft_determine_contract');
       if (this.datas['close_modal']) {
         this.datas.close_modal.close('Save click');
       }
       void this.router.navigate(['/main/dashboard']);
+    } else if (!this.saveDraftStep || is_save) {
+      this.datas.determine_contract = res ? res : this.is_determine_clone;
+      this.step = variable.stepSampleContract.step3;
+      this.datas.stepLast = this.step
+      sessionStorage.setItem('copy_right_show', 'true');
+      this.nextOrPreviousStep(this.step);
     }
   }
 
