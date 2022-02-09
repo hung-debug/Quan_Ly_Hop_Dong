@@ -192,13 +192,13 @@ export class ContractSignatureComponent implements OnInit {
       this.filter_status = 4;
     } else if (this.status == 'share') {
       this.filter_status = -1;
-    } else if (this.status == 'dashboard-wait-processing') {
+    } else if (this.status == 'wait-processing-dashboard') {
       this.filter_status = 11;
-    } else if (this.status == 'dashboard-prepare-expires') {
+    } else if (this.status == 'wait-processing-prepare-expires-dashboard') {
       this.filter_status = 12;
-    } else if (this.status == 'dashboard-waiting') {
+    } else if (this.status == 'processed-waiting-dashboard') {
       this.filter_status = 13;
-    } else if (this.status == 'dashboard-complete') {
+    } else if (this.status == 'processed-complete-dashboard') {
       this.filter_status = 14;
     }
   }
@@ -248,9 +248,9 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   downloadContract(id:any){
-    this.isContractService.getFileContract(id).subscribe((data) => {
+    this.isContractService.getFileZipContract(id).subscribe((data) => {
       //console.log(data);
-      this.uploadService.downloadFile(data[0].path).subscribe((response: any) => {
+      this.uploadService.downloadFile(data.path).subscribe((response: any) => {
         //console.log(response);
 
         let url = window.URL.createObjectURL(response);
@@ -258,7 +258,7 @@ export class ContractSignatureComponent implements OnInit {
         document.body.appendChild(a);
         a.setAttribute('style', 'display: none');
         a.href = url;
-        a.download = data[0].name;
+        a.download = data.name;
         a.click();
         window.URL.revokeObjectURL(url);
         a.remove();

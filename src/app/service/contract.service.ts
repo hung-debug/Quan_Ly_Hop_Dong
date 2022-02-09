@@ -66,6 +66,7 @@ export class ContractService {
   getAllContractTypesUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
   imageMobiBase64: any;
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
+  addGetFileZipContract:any = `${environment.apiUrl}/api/v1/documents/compress/`;
 
   token:any;
   customer_id:any;
@@ -362,7 +363,7 @@ export class ContractService {
 
   public getNameOrganization(filter_organization_id: any, filter_name: any): Observable<any> {
     this.getCurrentUser();
-    let listUserUrl = this.getNameSearch + '?name=' + filter_name + '&organization_id=' + filter_organization_id + "&size=10000";
+    let listUserUrl = this.getNameSearch + '?name=' + filter_name + "&size=10000";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<User[]>(listUserUrl, {headers}).pipe();
   }
@@ -472,6 +473,14 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.get<File>(this.addGetFileContract + idContract, {headers}).pipe();
+  }
+
+  getFileZipContract(idContract: any) : Observable<any> {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<File>(this.addGetFileZipContract + idContract, {headers}).pipe();
   }
 
   getFileContractPromise(idContract: any) : Promise<any> {

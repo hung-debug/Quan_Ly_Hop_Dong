@@ -7,7 +7,7 @@
   </div>
   <div class="row">
     <div class="col-md-3">
-      <div class="header_card header_card_1" (click)="openLink('/main/contract-signature/receive/dashboard-wait-processing')">
+      <div class="header_card header_card_1" (click)="openLink('/main/contract-signature/receive/wait-processing-dashboard')">
         <div class="row">
           <div class="col-md-7 text_header_card">
               <div>{{'contract.status.wait-processing' | translate}}</div>
@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div class="header_card header_card_2" (click)="openLink('/main/contract-signature/receive/dashboard-prepare-expires')">
+      <div class="header_card header_card_2" (click)="openLink('/main/contract-signature/receive/wait-processing-prepare-expires-dashboard')">
         <div class="row">
           <div class="col-md-7 text_header_card">
               <div>{{'contract.status.expire' | translate}}</div>
@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div class="header_card header_card_3" (click)="openLink('/main/contract-signature/receive/dashboard-waiting')">
+      <div class="header_card header_card_3" (click)="openLink('/main/contract-signature/receive/processed-waiting-dashboard')">
         <div class="row">
           <div class="col-md-7 text_header_card">
               <div>{{'contract.status.wait-response' | translate}}</div>
@@ -46,7 +46,7 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div class="header_card header_card_4" (click)="openLink('/main/contract-signature/receive/dashboard-complete')">
+      <div class="header_card header_card_4" (click)="openLink('/main/contract-signature/receive/processed-complete-dashboard')">
         <div class="row">
           <div class="col-md-7 text_header_card">
               <div>{{'contract.status.complete' | translate}}</div>
@@ -110,7 +110,7 @@
         <div *ngIf="listNotification.length > 0" style="min-height: 453px;"> 
           <div *ngFor="let item of listNotification; let i = index" [style.border-bottom]="i != listNotification.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px;">
             <div class="row">
-              <div class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url)">{{item.notice_name}}</div>
+              <div class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name}}</div>
             </div>
             <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
               <div class="col-md-12 item_contract_infor">

@@ -70,6 +70,7 @@ export class AddContractComponent implements OnInit {
   isQLHD_01:boolean=true;
   isQLHD_02:boolean=true;
   isQLHD_08:boolean=true;
+  isQLHD_11:boolean=true;
 
   ngOnInit() {
     //title
@@ -89,6 +90,7 @@ export class AddContractComponent implements OnInit {
             this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
             // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
             // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
+            this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
           }

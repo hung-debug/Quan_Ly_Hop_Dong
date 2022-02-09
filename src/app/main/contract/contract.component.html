@@ -67,7 +67,7 @@
           <!-- <div class="div_icon" *ngIf="status == 'processing' || status == 'expire'">
             <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnect(item.id)"/>
           </div> -->
-          <div class="div_icon" *ngIf="status == 'complete'">
+          <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11">
             <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnectNew(item.id)"/>
           </div>
           <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09">

@@ -227,6 +227,7 @@ export class SidebarService {
         title: 'menu.contract.create.list',
         icon: '/assets/img/db_processing.svg',
         active: false,
+        activeDrop: false,
         type: 'dropdown',
         href: '#',
         submenus: submenusCreate
@@ -255,6 +256,7 @@ export class SidebarService {
       title: 'menu.contract.receive.list',
       icon: '/assets/img/db_processing.svg',
       active: false,
+      activeDrop: false,
       type: 'dropdown',
       href: '#',
       submenus: submenusReceive

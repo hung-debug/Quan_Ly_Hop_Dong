@@ -58,14 +58,17 @@ export class DashboardComponent implements OnInit {
   }
 
   openLink(link:any) {
-    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-    //   this.router.navigate([link]);
-    // });
-    this.router.navigate([link]);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate([link]);
+    });
+    //this.router.navigate([link]);
   }
 
-  openLinkNotification(link:any) {
+  openLinkNotification(link:any, id:any) {
     window.location.href = link.replace('&loginType=', '').replace('&loginType=1', '');
+    this.dashboardService.updateViewNotification(id).subscribe(data => {
+      console.log(data);
+    });
   }
 
   searchCountCreate(){
@@ -102,7 +105,23 @@ export class DashboardComponent implements OnInit {
           labels: {
             style: {
               fontSize: '13px'
-            }
+            },
+            formatter: function() {
+              var link = "";
+              if(this.value == 'Đang xử lý'){
+                link = "/main/contract/create/processing"
+              }else if(this.value == 'Hoàn thành'){
+                link = "/main/contract/create/complete"
+              }else if(this.value == 'Từ chối'){
+                link = "/main/contract/create/fail"
+              }else if(this.value == 'Hủy bỏ'){
+                link = "/main/contract/create/cancel"
+              }else if(this.value == 'Quá hạn'){
+                link = "/main/contract/create/overdue"
+              }
+              return '<a style="cursor: pointer; color: #106db6; text-decoration: none" href="'+ link + '">' + this.value + '</a>';
+            },
+            useHTML: true
           }
         },
         yAxis: [{
@@ -111,14 +130,36 @@ export class DashboardComponent implements OnInit {
           },
           allowDecimals: false,
         }],
+        
         plotOptions: {
           series: {
               borderWidth: 0,
               dataLabels: {
                   enabled: true,
               },
-              
-          }
+          },
+          column: {
+            cursor: 'pointer',
+            point: {
+                events: {
+                    click: function() {
+                      var link = "";
+                      if(this.x == 0){
+                        link = "/main/contract/create/processing"
+                      }else if(this.x == 1){
+                        link = "/main/contract/create/complete"
+                      }else if(this.x == 2){
+                        link = "/main/contract/create/fail"
+                      }else if(this.x == 3){
+                        link = "/main/contract/create/cancel"
+                      }else if(this.x == 4){
+                        link = "/main/contract/create/overdue"
+                      }
+                      window.location.href= link;
+                    }
+                }
+            },
+        }
         },
         series : [
         {
