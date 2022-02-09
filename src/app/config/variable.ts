@@ -87,7 +87,7 @@ export var roleList = [
       // { label: "role.contract.copy", value: "QLHD_08", mean: "Sao chép hợp đồng"},
       { label: "role.contract.cancel", value: "QLHD_09", mean: "Huỷ hợp đồng"},
       { label: "role.contract.view.history", value: "QLHD_10", mean: "Xem lịch sử hợp đồng"},
-      // { label: "role.contract.create.connect", value: "QLHD_11", mean: "Tạo hợp đồng liên quan"},
+      { label: "role.contract.create.connect", value: "QLHD_11", mean: "Tạo hợp đồng liên quan"},
       { label: "role.contract.view.connect", value: "QLHD_12", mean: "Xem hợp đồng liên quan"},
       { label: "role.contract.share", value: "QLHD_13", mean: "Chia sẻ hợp đồng"},
     ]

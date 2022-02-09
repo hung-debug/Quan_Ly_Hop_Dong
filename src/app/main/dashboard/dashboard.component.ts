@@ -130,14 +130,36 @@ export class DashboardComponent implements OnInit {
           },
           allowDecimals: false,
         }],
+        
         plotOptions: {
           series: {
               borderWidth: 0,
               dataLabels: {
                   enabled: true,
               },
-              
-          }
+          },
+          column: {
+            cursor: 'pointer',
+            point: {
+                events: {
+                    click: function() {
+                      var link = "";
+                      if(this.x == 0){
+                        link = "/main/contract/create/processing"
+                      }else if(this.x == 1){
+                        link = "/main/contract/create/complete"
+                      }else if(this.x == 2){
+                        link = "/main/contract/create/fail"
+                      }else if(this.x == 3){
+                        link = "/main/contract/create/cancel"
+                      }else if(this.x == 4){
+                        link = "/main/contract/create/overdue"
+                      }
+                      window.location.href= link;
+                    }
+                }
+            },
+        }
         },
         series : [
         {
