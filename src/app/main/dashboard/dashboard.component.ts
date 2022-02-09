@@ -71,20 +71,11 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  categoryLinks:any;
   searchCountCreate(){
     console.log(this.isOrg);
     this.dashboardService.countContractCreate(this.isOrg, this.filter_from_date, this.filter_to_date).subscribe(data => {     
       console.log(data);    
       this.totalCreate = data.total_process + data.total_signed + data.total_reject + data.total_cancel + data.total_expires;
-      this.categoryLinks = {
-        'Đang xử lý': 'http://www.google.com',
-        'Hoàn thành': 'http://www.facebook.com',
-        'Từ chối': 'http://www.stackoverflow.com',
-        'Hủy bỏ': 'http://www.google.com',
-        'Quá hạn': 'http://www.facebook.com'
-      };
-      console.log(this.categoryLinks['Đang xử lý'])
       this.chartCreated = new Chart({
         colors: ['#4B71F0', '#58A55C', '#ED1C24', '#717070', '#FF710B'],
         chart: {

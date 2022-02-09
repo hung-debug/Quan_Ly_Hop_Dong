@@ -1270,26 +1270,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   downloadContract(id:any){
-    this.contractService.getFileContract(id).subscribe((data) => {
-        //console.log(data);
-        let fileC: any = null;
-
-        if (this.datas?.i_data_file_contract) {
-          const pdfC2 = this.datas.i_data_file_contract.find((p: any) => p.type == 2);
-          const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
-          if (pdfC2) {
-            fileC = pdfC2.path;
-          } else if (pdfC1) {
-            fileC = pdfC1.path;
-          } else {
-            return;
-          }
-          this.pdfSrc = fileC;
-        }
-        if (!fileC) {
-          return;
-        }
-        this.uploadService.downloadFile(fileC).subscribe((response: any) => {
+    this.contractService.getFileZipContract(id).subscribe((data) => {
+        
+        this.uploadService.downloadFile(data.path).subscribe((response: any) => {
           //console.log(response);
 
           let url = window.URL.createObjectURL(response);
@@ -1297,7 +1280,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           document.body.appendChild(a);
           a.setAttribute('style', 'display: none');
           a.href = url;
-          a.download = data[0].name;
+          a.download = data.name;
           a.click();
           window.URL.revokeObjectURL(url);
           a.remove();
