@@ -58,21 +58,33 @@ export class DashboardComponent implements OnInit {
   }
 
   openLink(link:any) {
-    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-    //   this.router.navigate([link]);
-    // });
-    this.router.navigate([link]);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate([link]);
+    });
+    //this.router.navigate([link]);
   }
 
-  openLinkNotification(link:any) {
+  openLinkNotification(link:any, id:any) {
     window.location.href = link.replace('&loginType=', '').replace('&loginType=1', '');
+    this.dashboardService.updateViewNotification(id).subscribe(data => {
+      console.log(data);
+    });
   }
 
+  categoryLinks:any;
   searchCountCreate(){
     console.log(this.isOrg);
     this.dashboardService.countContractCreate(this.isOrg, this.filter_from_date, this.filter_to_date).subscribe(data => {     
       console.log(data);    
       this.totalCreate = data.total_process + data.total_signed + data.total_reject + data.total_cancel + data.total_expires;
+      this.categoryLinks = {
+        'Đang xử lý': 'http://www.google.com',
+        'Hoàn thành': 'http://www.facebook.com',
+        'Từ chối': 'http://www.stackoverflow.com',
+        'Hủy bỏ': 'http://www.google.com',
+        'Quá hạn': 'http://www.facebook.com'
+      };
+      console.log(this.categoryLinks['Đang xử lý'])
       this.chartCreated = new Chart({
         colors: ['#4B71F0', '#58A55C', '#ED1C24', '#717070', '#FF710B'],
         chart: {
@@ -102,7 +114,23 @@ export class DashboardComponent implements OnInit {
           labels: {
             style: {
               fontSize: '13px'
-            }
+            },
+            formatter: function() {
+              var link = "";
+              if(this.value == 'Đang xử lý'){
+                link = "/main/contract/create/processing"
+              }else if(this.value == 'Hoàn thành'){
+                link = "/main/contract/create/complete"
+              }else if(this.value == 'Từ chối'){
+                link = "/main/contract/create/fail"
+              }else if(this.value == 'Hủy bỏ'){
+                link = "/main/contract/create/cancel"
+              }else if(this.value == 'Quá hạn'){
+                link = "/main/contract/create/overdue"
+              }
+              return '<a style="cursor: pointer; color: #106db6; text-decoration: none" href="'+ link + '">' + this.value + '</a>';
+            },
+            useHTML: true
           }
         },
         yAxis: [{

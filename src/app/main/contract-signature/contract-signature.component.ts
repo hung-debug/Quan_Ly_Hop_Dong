@@ -192,13 +192,13 @@ export class ContractSignatureComponent implements OnInit {
       this.filter_status = 4;
     } else if (this.status == 'share') {
       this.filter_status = -1;
-    } else if (this.status == 'dashboard-wait-processing') {
+    } else if (this.status == 'wait-processing-dashboard') {
       this.filter_status = 11;
-    } else if (this.status == 'dashboard-prepare-expires') {
+    } else if (this.status == 'wait-processing-prepare-expires-dashboard') {
       this.filter_status = 12;
-    } else if (this.status == 'dashboard-waiting') {
+    } else if (this.status == 'processed-waiting-dashboard') {
       this.filter_status = 13;
-    } else if (this.status == 'dashboard-complete') {
+    } else if (this.status == 'processed-complete-dashboard') {
       this.filter_status = 14;
     }
   }

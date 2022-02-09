@@ -54,14 +54,18 @@ export class SidebarComponent implements OnInit {
     return this.sidebarservice.getSidebarState();
   }
 
+
   // set active dropdown
   toggle(currentMenu: any) {
+    console.log(currentMenu);
     if (currentMenu.type === 'dropdown') {
+      currentMenu.activeDrop = true;
       this.menus.forEach((element: any) => {
         if (element === currentMenu) {
           currentMenu.active = !currentMenu.active;
         } else {
           element.active = false;
+          element.activeDrop = false;
         }
       });
     }
@@ -69,12 +73,14 @@ export class SidebarComponent implements OnInit {
 
   //set active link
   clickLink(currentMenu: any) {
+    
     this.menus.forEach((element: any) => {
       if (element === currentMenu) {
         //currentMenu.active = !currentMenu.active;
         element.active = true;
       } else {
         element.active = false;
+        element.activeDrop = false;
       }
     });
     if (sessionStorage.getItem('copy_right_show')) {
@@ -139,6 +145,12 @@ export class SidebarComponent implements OnInit {
     if (JSON.parse(localStorage.getItem('data_coordinates_contract_id'))) {
       localStorage.removeItem('data_coordinates_contract_id');
     }
+  }
+
+  openDashboard(){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/dashboard']);
+    });
   }
 
 }
