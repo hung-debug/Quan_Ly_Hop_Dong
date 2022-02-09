@@ -868,7 +868,7 @@ export class DetermineSignerComponent implements OnInit {
     this.arrSearchNameDoc = [];
     setTimeout(() => {
       this.contractService.getNameOrganization("", stringEmitted).subscribe((res) => {
-        let arr_all = res.entities.filter((p: any) => p.organization_id == 1);
+        let arr_all = res.entities;
         let data = arr_all.map((p: any) => ({name: p.name, email: p.email}));
         if (action == 'view') {
           this.arrSearchNameView = data;

@@ -362,7 +362,7 @@ export class ContractService {
 
   public getNameOrganization(filter_organization_id: any, filter_name: any): Observable<any> {
     this.getCurrentUser();
-    let listUserUrl = this.getNameSearch + '?name=' + filter_name + '&organization_id=' + filter_organization_id + "&size=10000";
+    let listUserUrl = this.getNameSearch + '?name=' + filter_name + "&size=10000";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<User[]>(listUserUrl, {headers}).pipe();
   }
