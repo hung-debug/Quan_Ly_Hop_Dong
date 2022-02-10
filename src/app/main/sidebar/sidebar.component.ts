@@ -148,9 +148,9 @@ export class SidebarComponent implements OnInit {
   }
 
   openDashboard(){
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(['/main/dashboard']);
-    });
+    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+    //   this.router.navigate(['/main/dashboard']);
+    // });
   }
 
 }

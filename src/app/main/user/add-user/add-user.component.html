@@ -81,12 +81,12 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-2">
+      <div class="row" style="justify-content: center;padding-top: 10px;">
+        <div class="col-md-2" style="text-align: center;">
             <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
             <span> {{'unit.active' | translate}}</span>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2" style="text-align: center;">
             <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
             <span> {{'unit.inactive' | translate}}</span>
         </div>
@@ -122,9 +122,13 @@
     
         <div class="col-md-4">
           <div class="label-header">
-            {{'sign.kpi' | translate}}
+            <div class="row" style="padding: 0 10px;">
+              <div class="col-md-12">
+                {{'sign.kpi' | translate}}
+              </div>
+            </div>
           </div>
-          <div class="content-body">
+          <div>
             <div class="row">
               <div class="col-md-12">
                 <div>{{'user.phone' | translate}}</div>
@@ -159,9 +163,13 @@
     
         <div class="col-md-4">
           <div class="label-header">
-            {{'sign.hsm' | translate}}
+            <div class="row" style="padding: 0 10px;">
+              <div class="col-md-12">
+                {{'sign.hsm' | translate}}
+              </div>
+            </div>
           </div>
-          <div class="content-body">
+          <div>
             <div class="row">
               <div class="col-md-12">
                 <div>{{'user.name.v2' | translate}}</div>

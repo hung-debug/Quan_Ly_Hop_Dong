@@ -13,8 +13,8 @@
       </div>
       <div class="col-md-4">
         <div class="label text-color">{{'user.email' | translate}} <span class="required-title">*</span></div>
-        <div class="input-data">
-            <input type="text" formControlName="email" [readonly]="true">
+        <div class="input-data hidden-color">
+            <input type="text" formControlName="email" [readonly]="true" class="hidden-color">
         </div>
         <div *ngIf="submitted && f.email.errors" class="invalid">
           <div *ngIf="f.email.errors.required">Email không được để trống</div>
@@ -45,6 +45,7 @@
         <div>
         <p-dropdown 
           panelStyleClass="font"
+          class="hidden-color"
           [options]="orgList" 
           formControlName="organizationId" 
           optionLabel="name" 
@@ -72,7 +73,7 @@
         placeholder="Chọn vai trò" 
         [filter]="true" 
         filterBy="name" 
-        [showClear]="true"  
+        [readonly]="true"
         ></p-dropdown>
       </div>
       <div *ngIf="submitted && f.role.errors" class="invalid">

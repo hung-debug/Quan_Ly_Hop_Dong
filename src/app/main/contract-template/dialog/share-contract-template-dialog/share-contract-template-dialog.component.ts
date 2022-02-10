@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
@@ -31,7 +32,8 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
     private unitService: UnitService, 
-    private userService: UserService) { 
+    private userService: UserService,
+    private contractTemplateService: ContractTemplateService) { 
 
       this.addFormUser = this.fbd.group({
         orgId: "",
@@ -82,15 +84,15 @@ export class ShareContractTemplateDialogComponent implements OnInit {
       return;
     }
     console.log("email=" + this.addFormUser.value.email);
-    // this.contractTemplateService.shareContract(this.addFormUser.value.email, this.data.id).subscribe(data => {
-    //   console.log(data);
-    //   if(data.contract_id != null){
-    //     this.dialogRef.close();
-    //     this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 3000);
-    //   }else{
-    //     this.toastService.showErrorHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 3000);
-    //   }
-    // });
+    this.contractTemplateService.shareContract(this.addFormUser.value.email, this.data.id).subscribe(data => {
+      console.log(data);
+      if(data.contract_id != null){
+        this.dialogRef.close();
+        this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 3000);
+      }else{
+        this.toastService.showErrorHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 3000);
+      }
+    });
   }
 
   isValidEmail(emailString: any) {
