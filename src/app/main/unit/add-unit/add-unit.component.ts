@@ -129,7 +129,9 @@ export class AddUnitComponent implements OnInit {
             //them to chuc
             this.unitService.addUnit(data).subscribe(
               dataUnit => {
+                this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
                 console.log(dataUnit);
+
                 //them vai tro
                 let roleArrConvert: any = [];
                 roleList.forEach((key: any, v: any) => {
@@ -148,6 +150,7 @@ export class AddUnitComponent implements OnInit {
                 
                 this.roleService.addRoleByOrg(dataRoleIn).subscribe(
                   dataRole => {
+                    this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
                     console.log(dataRole);
                     //them nguoi dung
                     const dataUserIn = {
@@ -161,21 +164,21 @@ export class AddUnitComponent implements OnInit {
                     this.userService.addUser(dataUserIn).subscribe(
                       dataUser => {
                         console.log(dataUser);
-                        this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
+                        this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
                         this.dialogRef.close();
                         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                           this.router.navigate(['/main/unit']);
                         });
                       }, error => {
-                        this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
+                        this.toastService.showErrorHTMLWithTimeout('Thêm mới người dùng admin thất bại', "", 3000);
                       }
                     )
                   }, error => {
-                    this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                    this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
                   }
                 )
               }, error => {
-                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                this.toastService.showErrorHTMLWithTimeout('Thêm mới tổ chức thất bại', "", 3000);
               }
             )
             
