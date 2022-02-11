@@ -25,27 +25,7 @@ export class AuthGuard implements CanActivate {
     console.log(state);
     //@ts-ignore
     if (state.url.search('loginType') > 0 && next._urlSegment.segments.some((p: any) => p.path == 'contract-signature')) {
-      if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
-        const urlQ = state.url;
-        const urlQ1 = urlQ.split('contract-signature/')[1];
-        const urlQ2 = urlQ1.split('/');
-        const urlRole = urlQ2[0];
-        const matchesNum = urlQ.match(/\d+/g);
-        if (urlRole.includes('coordinates')) {
-          role = 1;
-        } else if (urlRole.includes('consider')) {
-          role = 2;
-        } else if (urlRole.includes('signatures')) {
-          role = 3;
-        } else if (urlRole.includes('secretary')) {
-          role = 4;
-        }
-        if (matchesNum && matchesNum.length == 3) {
-          window.location.href = `econtract://app/login/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}`;
-          console.log(`econtract://app/login/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}`)
-        }
-      } else if (!sessionStorage.getItem('url')) {
-
+      if (!sessionStorage.getItem('url')) {
         sessionStorage.setItem('url', state.url);
         let is_local = sessionStorage.getItem('url');
         if (is_local?.includes('loginType')) {

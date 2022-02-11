@@ -83,6 +83,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   isChangeText: boolean = false;
   dataSignPosition: any;
 
+  listSignNameClone: any = [];
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -245,6 +247,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
+    this.listSignNameClone = JSON.parse(JSON.stringify(this.list_sign_name));
   }
 
   getListSignName(listSignForm: any = []) {
@@ -491,7 +494,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
-    this.list_sign_name.forEach((element: any) => {
+    let listSignClone = JSON.parse(JSON.stringify(this.list_sign_name));
+    listSignClone.forEach((element: any) => {
       if (this.convertToSignConfig().some((p: any) => p.recipient_id == element.id && p.sign_unit == isSignType)) {
         element.is_disable = true;
       } else {
@@ -507,6 +511,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         element.selected = listSelect && element.name == listSelect;
       }
     })
+    this.list_sign_name = listSignClone.filter((p: any) => !p.is_disable);
+    if (this.list_sign_name.length == 0) {
+      this.isEnableSelect = true;
+    } else this.isEnableSelect = false;
   }
 
   // Hàm tính tọa độ ký
@@ -883,6 +891,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     });
+    console.log(this.listSignNameClone, data, e);
+    // push lại dữ liệu đã xóa vào mảng danh sách
+    if (data.recipient_id) {
+      let is_push_data = this.listSignNameClone.filter((p: any) => p.id == data.recipient_id)[0];
+      if (is_push_data) {
+        this.list_sign_name.push(is_push_data);
+      }
+    }
     this.eventMouseover();
     this.cdRef.detectChanges();
   }
@@ -946,7 +962,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
-          if (data_name) {
+          if (data_name && !isObjSign.name) {
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
 
@@ -961,6 +977,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.type = data_name.type;
             signElement.setAttribute("type", isObjSign.type);
+          } else {
+            // tránh trường hợp chọn người ký khác sau khi đã kéo thả sẽ bị mất dữ liệu người ký cũ trước khi thay đổi
+            this.toastService.showErrorHTMLWithTimeout("Người ký đã được chỉ định vị trí. Vui lòng kéo thả hình thức ký mới!", "", 3000);
+            return false;
           }
         }
         // console.log(this.signCurent)
