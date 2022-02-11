@@ -61,6 +61,7 @@ export class AddUserComponent implements OnInit {
         organizationId: this.fbd.control("", [Validators.required]),
         role: this.fbd.control("", [Validators.required]),
         status: 1,
+        organizationName:'',
 
         phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
         networkKpi: null,
@@ -163,6 +164,18 @@ export class AddUserComponent implements OnInit {
               this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
               this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
               console.log(this.addForm);
+
+              //set name
+              if(data.organization_id != null){
+                this.unitService.getUnitById(data.organization_id).subscribe(
+                  data => {
+                    console.log(data.name);
+                    this.addForm.addControl('organizationName', this.fbd.control(data.name));
+                  }, error => {
+                    this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                  }
+                )
+              }
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
             }
