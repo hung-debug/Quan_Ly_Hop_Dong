@@ -154,7 +154,7 @@ export class AddUnitComponent implements OnInit {
                     console.log(dataRole);
                     //them nguoi dung
                     const dataUserIn = {
-                      name: data.email,
+                      name: "Admin",
                       email: data.email,
                       phone: data.phone,
                       organizationId: dataUnit.id,
