@@ -146,22 +146,22 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getApiDetermine(is_save?: boolean) {
-    let data_arr = ['id', 'due_at', 'empty', 'fields', 'from_at', 'is_disable', 'notify_type', 'password', 'process_at', 'reason_reject', 'remind', 'remind_date', 'remind_message', 'selected', 'sign_at', 'type_unit', 'username'];
+    // let data_arr = ['id', 'due_at', 'empty', 'fields', 'from_at', 'is_disable', 'notify_type', 'password', 'process_at', 'reason_reject', 'remind', 'remind_date', 'remind_message', 'selected', 'sign_at', 'type_unit', 'username'];
     this.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3) {
         this.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
       }
-      if (this.datas.is_action_contract_created) {
-        if (this.router.url.includes("copy")) {
-          if (items.id) delete items.id;
-          if (items.contract_id) delete items.contract_id;
-          items.recipients.forEach((element: any) => {
-            data_arr.forEach((res: any) => {
-              delete element[res];
-            })
-          })
-        }
-      }
+      // if (this.datas.is_action_contract_created) {
+      //   if (this.router.url.includes("copy")) {
+      //     if (items.id) delete items.id;
+      //     if (items.contract_id) delete items.contract_id;
+      //     items.recipients.forEach((element: any) => {
+      //       data_arr.forEach((res: any) => {
+      //         delete element[res];
+      //       })
+      //     })
+      //   }
+      // }
     })
     this.spinner.show();
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {

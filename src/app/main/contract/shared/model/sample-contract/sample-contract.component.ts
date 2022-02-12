@@ -247,7 +247,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
-    this.listSignNameClone = JSON.parse(JSON.stringify(this.list_sign_name));
+    // this.listSignNameClone = JSON.parse(JSON.stringify(this.list_sign_name));
   }
 
   getListSignName(listSignForm: any = []) {
@@ -494,8 +494,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
-    let listSignClone = JSON.parse(JSON.stringify(this.list_sign_name));
-    listSignClone.forEach((element: any) => {
+    // let listSignClone = JSON.parse(JSON.stringify(this.list_sign_name));
+    this.list_sign_name.forEach((element: any) => {
       if (this.convertToSignConfig().some((p: any) => p.recipient_id == element.id && p.sign_unit == isSignType)) {
         element.is_disable = true;
       } else {
@@ -511,10 +511,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         element.selected = listSelect && element.name == listSelect;
       }
     })
-    this.list_sign_name = listSignClone.filter((p: any) => !p.is_disable);
-    if (this.list_sign_name.length == 0) {
-      this.isEnableSelect = true;
-    } else this.isEnableSelect = false;
+    // this.list_sign_name = listSignClone.filter((p: any) => !p.is_disable);
+    // if (this.list_sign_name.length == 0) {
+    //   this.isEnableSelect = true;
+    // } else this.isEnableSelect = false;
   }
 
   // Hàm tính tọa độ ký
@@ -891,14 +891,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     });
-    console.log(this.listSignNameClone, data, e);
-    // push lại dữ liệu đã xóa vào mảng danh sách
-    if (data.recipient_id) {
-      let is_push_data = this.listSignNameClone.filter((p: any) => p.id == data.recipient_id)[0];
-      if (is_push_data) {
-        this.list_sign_name.push(is_push_data);
-      }
-    }
+    // console.log(this.listSignNameClone, data, e);
+    // // push lại dữ liệu đã xóa vào mảng danh sách
+    // if (data.recipient_id) {
+    //   let is_push_data = this.listSignNameClone.filter((p: any) => p.id == data.recipient_id)[0];
+    //   if (is_push_data) {
+    //     this.list_sign_name.push(is_push_data);
+    //   }
+    // }
     this.eventMouseover();
     this.cdRef.detectChanges();
   }
