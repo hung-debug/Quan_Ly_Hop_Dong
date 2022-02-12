@@ -79,24 +79,23 @@ export class DetermineSignerComponent implements OnInit {
     //this.datas.determineDetails = this.determineDetails;
   }
 
-
   ngOnInit(): void {
-    if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
-      this.is_determine_clone = this.datas.determine_contract;
-    } else {
-      this.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
+    if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
+      // this.datas.is_determine_clone = null;
+      // this.datas.is_determine_clone = this.datas.determine_contract;
+      this.datas.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
     }
 
     // data Tổ chức của tôi
-    this.data_organization = this.is_determine_clone.filter((p: any) => p.type == 1)[0];
+    this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];
     this.data_organization.name = this.datas.name_origanzation ? this.datas.name_origanzation : '';
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
     // data đối tác
-    this.data_parnter_organization = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-    // this.data_parnter_individual = this.is_determine_clone.filter((p: any) => p.type == 3);
+    this.data_parnter_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+    // this.data_parnter_individual = this.datas.is_determine_clone.filter((p: any) => p.type == 3);
 
     this.dropdownSignTypeSettings = {
       singleSelection: false,
@@ -109,7 +108,7 @@ export class DetermineSignerComponent implements OnInit {
       disabledField: 'item_disable',
     };
 
-    if (this.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
+    if (this.datas.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -135,37 +134,25 @@ export class DetermineSignerComponent implements OnInit {
   // next step event
   next(action: string) {
     // this.submitted = true;
-    if (!this.validData()) return;
-    else {
+    // if (!this.validData()) return;
+    // else {
       let is_save = false;
       if (action == 'save-step') {
         is_save = true;
       }
       this.getApiDetermine(is_save);
-    }
+    // }
   }
 
   getApiDetermine(is_save?: boolean) {
-    // let data_arr = ['id', 'due_at', 'empty', 'fields', 'from_at', 'is_disable', 'notify_type', 'password', 'process_at', 'reason_reject', 'remind', 'remind_date', 'remind_message', 'selected', 'sign_at', 'type_unit', 'username'];
-    this.is_determine_clone.forEach((items: any, index: number) => {
+    this.datas.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3) {
-        this.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
+        this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
       }
-      // if (this.datas.is_action_contract_created) {
-      //   if (this.router.url.includes("copy")) {
-      //     if (items.id) delete items.id;
-      //     if (items.contract_id) delete items.contract_id;
-      //     items.recipients.forEach((element: any) => {
-      //       data_arr.forEach((res: any) => {
-      //         delete element[res];
-      //       })
-      //     })
-      //   }
-      // }
     })
     this.spinner.show();
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
-      this.contractService.getContractDetermineCoordination(this.is_determine_clone, this.datas.contract_id_action).subscribe((res: any) => {
+      this.contractService.getContractDetermineCoordination(this.datas.is_determine_clone, this.datas.contract_id_action).subscribe((res: any) => {
         this.getDataApiDetermine(res)
       }, (res: any) => {
         this.spinner.hide();
@@ -174,7 +161,7 @@ export class DetermineSignerComponent implements OnInit {
         this.spinner.hide();
       })
     } else {
-      this.contractService.getContractDetermine(this.is_determine_clone, this.datas.id).subscribe((res: any) => {
+      this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
           this.getDataApiDetermine(res, is_save)
         },
         (res: any) => {
@@ -197,9 +184,10 @@ export class DetermineSignerComponent implements OnInit {
       }
       void this.router.navigate(['/main/dashboard']);
     } else if (!this.saveDraftStep || is_save) {
-      this.datas.determine_contract = res ? res : this.is_determine_clone;
+      // this.datas.determine_contract = res ? res : this.datas.is_determine_clone;
+      this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;
       this.step = variable.stepSampleContract.step3;
-      this.datas.stepLast = this.step
+      this.datas.stepLast = this.step;
       sessionStorage.setItem('copy_right_show', 'true');
       this.nextOrPreviousStep(this.step);
     }
@@ -305,7 +293,7 @@ export class DetermineSignerComponent implements OnInit {
 
 
     let dataArrPartner = [];
-    dataArrPartner = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+    dataArrPartner = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
     if (count == 0) {
       // validate phía đối tác
       for (let j = 0; j < dataArrPartner.length; j++) {
@@ -408,7 +396,7 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     if (count == 0) {
-      // dataArrPartyCheckEmail = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+      // dataArrPartyCheckEmail = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
       if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
         this.getNotificationValid("Email đối tác không được trùng nhau!");
         return false
@@ -416,7 +404,7 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     if (count == 0) {
-      if (this.getCheckDuplicateEmail('allCheckEmail', this.is_determine_clone)) {
+      if (this.getCheckDuplicateEmail('allCheckEmail', this.datas.is_determine_clone)) {
         this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
         return false
       }
@@ -526,7 +514,7 @@ export class DetermineSignerComponent implements OnInit {
 
 // tạo mảng đối tác
   getDataPartner(number_type?: number, name?: string) {
-    let data = [...this.is_determine_clone];
+    let data = [...this.datas.is_determine_clone];
     return data.filter((p: any) => (p.type == 2 || p.type == 3));
   }
 
@@ -603,7 +591,7 @@ export class DetermineSignerComponent implements OnInit {
     let count_data = item.recipients.filter((p: any) => p.role == 2);
     data.ordering = count_data.length + 1;
     // this.data_parnter_organization[index].recipients.push(data);
-    (this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
+    (this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
 
   // thêm đối tượng người điều phối (done)
@@ -615,7 +603,7 @@ export class DetermineSignerComponent implements OnInit {
     let count_data = item.recipients.filter((p: any) => p.role == 1);
     data.ordering = count_data.length + 1;
     // this.data_parnter_organization[index].recipients.push(data);
-    (this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
+    (this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
 
   // thêm đối tượng ký đối tác (done)
@@ -627,7 +615,7 @@ export class DetermineSignerComponent implements OnInit {
     let count_data = item.recipients.filter((p: any) => p.role == 3);
     data.ordering = count_data.length + 1;
     // this.data_parnter_organization[index].recipients.push(data);
-    (this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
+    (this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
 
   // thêm đối tượng văn thư đối tác (done)
@@ -639,7 +627,7 @@ export class DetermineSignerComponent implements OnInit {
     let count_data = item.recipients.filter((p: any) => p.role == 4);
     data.ordering = count_data.length + 1;
     // this.data_parnter_organization[index].recipients.push(data);
-    (this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
+    (this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
 
   // tạo mảng đối tượng người xem xét tổ chức của tôi
@@ -778,7 +766,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   dataParnterOrganization() {
-    return this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+    return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
   // thêm đối tác
@@ -787,8 +775,8 @@ export class DetermineSignerComponent implements OnInit {
     // let data = [...this.contractService.getDataDetermine()];
     let data = [...this.contractService.getDataDetermineInitialization()];
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];
-    this.is_determine_clone.push(data_partner_add);
-    this.is_determine_clone.forEach((res: any, index: number) => {
+    this.datas.is_determine_clone.push(data_partner_add);
+    this.datas.is_determine_clone.forEach((res: any, index: number) => {
       res.ordering = index + 1;
     })
 
@@ -797,8 +785,8 @@ export class DetermineSignerComponent implements OnInit {
 
   // xóa đối tham gia bên đối tác
   deletePartner(index: any) {
-    this.is_determine_clone.splice(index + 1, 1);
-    this.is_determine_clone.forEach((res: any, index: number) => {
+    this.datas.is_determine_clone.splice(index + 1, 1);
+    this.datas.is_determine_clone.forEach((res: any, index: number) => {
       res.ordering = index + 1;
     })
   }
@@ -836,7 +824,7 @@ export class DetermineSignerComponent implements OnInit {
         }
       })
     }
-    this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
+    this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
 
     if (item.type == 3) {
       this.data_organization.ordering = 2;

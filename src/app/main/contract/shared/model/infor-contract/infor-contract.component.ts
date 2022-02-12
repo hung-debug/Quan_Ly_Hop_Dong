@@ -231,7 +231,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   async callAPI() {
     //call API step 1
     this.contractService.addContractStep1(this.datas).subscribe((data) => {
-        console.log(JSON.stringify(data));
+        // console.log(JSON.stringify(data));
         this.datas.id = data?.id;
         this.datas.contract_id = data?.id;
         this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
@@ -255,7 +255,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
 
                           if (this.datas.attachFileArr != null) {
                             for(var i = 0; i < this.datas.attachFileArr.length; i++){
-                            
+
                               console.log(this.datas.attachFileArr[i])
                               this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
                                   console.log(JSON.stringify(data));
@@ -265,7 +265,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
                                   this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
                                       console.log(JSON.stringify(data));
                                       this.datas.document_attach_id = data?.id;
-                                      
+
                                     },
                                     error => {
                                       this.spinner.hide();
@@ -496,7 +496,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
 
                         if (this.datas.attachFileArr != null) {
                           for(var i = 0; i < this.datas.attachFileArr.length; i++){
-                          
+
                             console.log(this.datas.attachFileArr[i])
                             this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
                                 console.log(JSON.stringify(data));
@@ -506,7 +506,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
                                 this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
                                     console.log(JSON.stringify(data));
                                     this.datas.document_attach_id = data?.id;
-                                    
+
                                   },
                                   error => {
                                     this.spinner.hide();

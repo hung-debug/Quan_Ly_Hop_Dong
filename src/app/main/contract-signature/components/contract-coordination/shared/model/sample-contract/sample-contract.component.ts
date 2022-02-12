@@ -119,7 +119,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
     // })
 
-    console.log(dataNotPosition, dataPosition);
+    // console.log(dataNotPosition, dataPosition);
 
     let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
     let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);

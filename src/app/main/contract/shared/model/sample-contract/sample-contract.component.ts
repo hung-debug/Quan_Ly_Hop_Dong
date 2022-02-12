@@ -96,18 +96,75 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    // console.log(this.datas);
-    let data_sign_config_cks = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_so');
-    let data_sign_config_cka = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-    let data_sign_config_text = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'text');
-    let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+    if (this.datas.is_action_contract_created && (this.router.url.includes("edit") || this.router.url.includes("copy"))) {
+      let dataPosition: any[] = [];
+      let dataNotPosition: any[] = [];
+      this.datas.is_determine_clone.forEach((element: any) => {
+        element.recipients.forEach((item: any) => {
+          let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == item.id)[0];
+          if (data_duplicate) {
+            // lấy ra dữ liệu bị trùng và update lại với dữ liệu mới;
+            // data_duplicate.name = item.name;
+            // data_duplicate.email = item.item;
+            // data_duplicate.phoneNumber = item.phoneNumber;
+            // data_duplicate.sign_type = item.sign_type;
+            // data_duplicate.is_otp = item.is_otp;
+            // data_duplicate['is_type_party'] = this.datas.is_determine_clone.type;
+            // data_duplicate['role'] = data_duplicate.recipient.role;
+            // dataPosition.push(data_duplicate)
+            item.coordinate_x = data_duplicate.coordinate_x;
+            item.coordinate_y=data_duplicate.coordinate_y;
+            item.height=data_duplicate.height;
+            item.id=data_duplicate.id;
+            // item.left = data_duplicate.;
+            item.name = data_duplicate.name;
+            item.page = data_duplicate.page;
+            item.position = data_duplicate.recipient_id;
+            item.recipient_id = data_duplicate.recipient_id;
+            item.required = data_duplicate.required;
+            item.sign_unit = data_duplicate.sign_unit;
+            // item.signature_party = data_duplicate.;
+            item.status = data_duplicate.status;
+            item.text_attribute_name = data_duplicate.name;
+            // item.top = data_duplicate.;
+            item.type = data_duplicate.type;
+            item.width = data_duplicate.width;
+          }
+          // else {
+          //   item['is_type_party'] = this.datas.is_determine_clone.type;
+          //   item['role'] = item.role;
+          //   dataNotPosition.push(item)
+          // }
+        })
 
-    this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+      })
+
+      // let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
+      // let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
+      // this.dataSignPosition = [...dataPosition, ...dataNotPosition];
+      //
+      // this.dataSignPosition.forEach((res: any) => {
+      //   if (res.sign_unit == 'text') {
+      //     res['text_attribute_name'] = res.name;
+      //   }
+      // })
+      // this.datas.is_determine_clone = this.dataSignPosition;
+    }
+
+    // console.log(this.datas);
+    let data_sign_config_cks = this.datas.is_determine_clone.filter((p: any) => p.sign_unit == 'chu_ky_so');
+    let data_sign_config_cka = this.datas.is_determine_clone.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+    let data_sign_config_text = this.datas.is_determine_clone.filter((p: any) => p.sign_unit == 'text');
+    let data_sign_config_num_document = this.datas.is_determine_clone.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+
+    if (!this.datas.contract_user_sign) {
+      this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+    } else this.isEnableSelect = false;
 
     this.datas.contract_user_sign.forEach((element: any) => {
       // console.log(element.sign_unit, element.sign_config);
       if (element.sign_unit == 'so_tai_lieu') {
-        Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+        Array.prototype.push.apply(element.sign_config, data_sign_config_num_document);
       } else if (element.sign_unit == 'chu_ky_so') {
         Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
       } else if (element.sign_unit == 'text') {
@@ -119,8 +176,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     this.scale = 1;
 
-    if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
-      let data_user_sign = [...this.datas.determine_contract];
+    if (this.datas.is_determine_clone && this.datas.is_determine_clone.length > 0) {
+      let data_user_sign = [...this.datas.is_determine_clone];
       this.getListNameSign(data_user_sign);
     }
 
@@ -964,7 +1021,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
-          if (data_name && !isObjSign.name) {
+          // if (data_name && !isObjSign.name) {
+          if (data_name) {
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
 
@@ -979,11 +1037,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.type = data_name.type;
             signElement.setAttribute("type", isObjSign.type);
-          } else {
-            // tránh trường hợp chọn người ký khác sau khi đã kéo thả sẽ bị mất dữ liệu người ký cũ trước khi thay đổi
-            this.toastService.showErrorHTMLWithTimeout("Người ký đã được chỉ định vị trí. Vui lòng kéo thả hình thức ký mới!", "", 3000);
-            return false;
           }
+          // else {
+          //   // tránh trường hợp chọn người ký khác sau khi đã kéo thả sẽ bị mất dữ liệu người ký cũ trước khi thay đổi
+          //   this.toastService.showErrorHTMLWithTimeout("Người ký đã được chỉ định vị trí. Vui lòng kéo thả hình thức ký mới!", "", 3000);
+          //   return false;
+          // }
         }
         // console.log(this.signCurent)
         // console.log(this.objSignInfo)
@@ -1022,7 +1081,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     else {
       let data_sample_contract: string | any[] = [];
       let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
-      this.datas.contract_user_sign.forEach((element: any) => {
+      let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
+      isContractUserSign_clone.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {
             item['font'] = 'Arial';
