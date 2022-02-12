@@ -210,16 +210,16 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.stepLast = step;
     this.stepChangeDetermineSigner.emit(step);
   }
-
-  getData(item: any) {
-    console.log(item)
-  }
+  //
+  // getData(item: any) {
+  //   console.log(item)
+  // }
 
   getOtp(data: any) {
-    let checkSignType = data.sign_type.filter((p: any) => p.id == 1);
-    if (checkSignType.length > 0) {
-      return true
-    } else return false;
+    // let checkSignType = data.sign_type.filter((p: any) => p.id == 1);
+    // if (checkSignType.length > 0) {
+    //   return true
+    // } else return false;
   }
 
   selectWithOtp(e: any, data: any) {

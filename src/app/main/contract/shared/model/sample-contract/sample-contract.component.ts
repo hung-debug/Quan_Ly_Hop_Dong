@@ -212,6 +212,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
     interact.addDocument(document)
 
+    console.log(this.datas)
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
