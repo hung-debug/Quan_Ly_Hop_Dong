@@ -62,6 +62,23 @@ export class RoleService {
     return this.http.post<any>(this.addRoleUrl, body, {headers}).pipe();
   }
 
+  addRoleByOrg(data: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: data.name,
+      code: data.code,
+      organization_id: data.organization_id,
+      status: 1,
+      permissions: data.selectedRole,
+      description: data.note
+    });
+    console.log(body);
+    return this.http.post<any>(this.addRoleUrl, body, {headers}).pipe();
+  }
+
   updateRole(data: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()

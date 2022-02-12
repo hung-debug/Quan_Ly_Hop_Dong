@@ -38,8 +38,8 @@
         
             <div class="col-md-6">
                 <div class="label text-color">{{'unit.email' | translate }} <span class="required-title">*</span></div>
-                <div class="input-data">
-                    <input type="text" formControlName="email">
+                <div class="input-data" [ngClass]="{'hidden-color' : this.data.id != null}">
+                    <input type="text" formControlName="email" [readonly]="this.data.id != null" [ngClass]="{'hidden-color' : this.data.id != null}">
                 </div>
                 <div *ngIf="submitted && f.email.errors" class="invalid">
                     <div *ngIf="f.email.errors.required">Email không được để trống</div>
@@ -51,8 +51,8 @@
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
                 <div class="label text-color">{{'unit.parent' | translate }} <span class="required-title">*</span></div>
-                <div>
-                    <p-dropdown 
+                <div [ngClass]="{'input-data hidden-color' : this.data.id != null}">
+                    <p-dropdown *ngIf="!this.data.id"
                         panelStyleClass="font"
                         appendTo="body"
                         [options]="orgList" 
@@ -64,8 +64,10 @@
                         filterBy="name" 
                         [showClear]="true"  
                         [showClear]="this.data.id != null?false:true"
-                        [readonly]="this.data.id != null"  
-                        ></p-dropdown>
+                        [readonly]="this.data.id != null" 
+                        dropdownIcon="pi pi-chevron-down" 
+                    ></p-dropdown>
+                    <input *ngIf="this.data.id" type="text" formControlName="parentName" [readonly]="true" class="hidden-color">
                 </div>
                 <div *ngIf="submitted && f.parent_id.errors" class="invalid">
                     <div *ngIf="f.parent_id.errors.required">Tổ chức cấp trên không được để trống</div>
@@ -74,8 +76,8 @@
         
             <div class="col-md-6">
                 <div class="label text-color">{{'unit.phone' | translate }} <span class="required-title">*</span></div>
-                <div class="input-data">
-                    <input type="text" formControlName="phone">
+                <div class="input-data" [ngClass]="{'hidden-color' : this.data.id != null}">
+                    <input type="text" formControlName="phone" [readonly]="this.data.id != null" [ngClass]="{'hidden-color' : this.data.id != null}">
                 </div>
                 <div *ngIf="submitted && f.phone.errors" class="invalid">
                     <div *ngIf="f.phone.errors.required">Số điện thoại không được để trống</div>

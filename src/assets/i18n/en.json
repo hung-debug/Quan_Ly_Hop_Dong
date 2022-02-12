@@ -288,6 +288,7 @@
   "btn.cancel": "Cancel",
   "btn.accept": "Accept",
   "btn.share": "Share",
+  "btn.delete": "Delete",
   "btn.add.user.view": "Add viewer",
   "btn.add.user.sign": "Add signer",
   "btn.add.user.lead": "Add leader",

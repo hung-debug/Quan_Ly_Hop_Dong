@@ -14,8 +14,8 @@
         </div>
         <div class="col-md-4">
             <div class="label text-color">{{'user.email' | translate}} <span class="required-title">*</span></div>
-            <div class="input-data">
-                <input type="text" formControlName="email" [readonly]="id != null">
+            <div class="input-data" [ngClass]="{'hidden-color' : id != null}">
+                <input type="text" formControlName="email" [readonly]="id != null" [ngClass]="{'hidden-color' : id != null}">
             </div>
             <div *ngIf="submitted && f.email.errors" class="invalid">
               <div *ngIf="f.email.errors.required">Email không được để trống</div>
@@ -43,8 +43,8 @@
         </div>
         <div class="col-md-4">
           <div class="label text-color">{{'organization' | translate}} <span class="required-title">*</span></div>
-          <div>
-            <p-dropdown 
+          <div [ngClass]="{'input-data hidden-color' : id != null}">
+            <p-dropdown *ngIf="!id"
               panelStyleClass="font"
               [options]="orgList" 
               formControlName="organizationId" 
@@ -53,9 +53,9 @@
               placeholder="Chọn tổ chức" 
               [filter]="true" 
               filterBy="name" 
-              [showClear]="id != null?false:true"
-              [readonly]="id != null"  
+              [showClear]="true"
               ></p-dropdown>
+              <input *ngIf="id" type="text" formControlName="organizationName" [readonly]="true" class="hidden-color">
           </div>
             <div *ngIf="submitted && f.organizationId.errors" class="invalid">
               <div *ngIf="f.organizationId.errors.required">Tổ chức không được để trống</div>
@@ -81,12 +81,12 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-2">
+      <div class="row" style="justify-content: center;padding-top: 10px;">
+        <div class="col-md-2" style="text-align: center;">
             <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
             <span> {{'unit.active' | translate}}</span>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2" style="text-align: center;">
             <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
             <span> {{'unit.inactive' | translate}}</span>
         </div>
@@ -122,9 +122,13 @@
     
         <div class="col-md-4">
           <div class="label-header">
-            {{'sign.kpi' | translate}}
+            <div class="row" style="padding: 0 10px;">
+              <div class="col-md-12">
+                {{'sign.kpi' | translate}}
+              </div>
+            </div>
           </div>
-          <div class="content-body">
+          <div>
             <div class="row">
               <div class="col-md-12">
                 <div>{{'user.phone' | translate}}</div>
@@ -159,9 +163,13 @@
     
         <div class="col-md-4">
           <div class="label-header">
-            {{'sign.hsm' | translate}}
+            <div class="row" style="padding: 0 10px;">
+              <div class="col-md-12">
+                {{'sign.hsm' | translate}}
+              </div>
+            </div>
           </div>
-          <div class="content-body">
+          <div>
             <div class="row">
               <div class="col-md-12">
                 <div>{{'user.name.v2' | translate}}</div>

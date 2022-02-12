@@ -20,6 +20,7 @@ export class UserComponent implements OnInit {
     private roleService: RoleService,
     private toastService: ToastService) { }
 
+  organization_id_user_login:any;
   organization_id:any = "";
   email:any = "";
   list: any[];
@@ -55,6 +56,8 @@ export class UserComponent implements OnInit {
     ];
 
     //lay id user
+    this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
+    console.log(this.organization_id_user_login);
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {

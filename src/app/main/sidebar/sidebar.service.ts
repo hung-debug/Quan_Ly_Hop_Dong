@@ -262,6 +262,17 @@ export class SidebarService {
       submenus: submenusReceive
     });
 
+    if(this.isQLMHD_01 || this.isQLMHD_02 || this.isQLMHD_03 || this.isQLMHD_04 || this.isQLMHD_05 
+      || this.isQLMHD_06 || this.isQLMHD_07 || this.isQLMHD_08 || this.isQLMHD_09 || this.isQLMHD_10){
+      this.menus.push({
+        title: 'menu.contract.template.list',
+        icon: '/assets/img/db_processing.svg',
+        active: false,
+        type: 'simple',
+        href: '/main/contract-template'
+      });
+    }
+
     if(this.isQLTC_01 || this.isQLTC_02 || this.isQLTC_03 || this.isQLTC_04){
       this.menus.push({
         title: 'menu.organization.list',

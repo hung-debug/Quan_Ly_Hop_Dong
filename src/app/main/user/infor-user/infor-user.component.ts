@@ -57,7 +57,9 @@ export class InforUserComponent implements OnInit {
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
         organizationId: this.fbd.control("", [Validators.required]),
         role: this.fbd.control("", [Validators.required]),
-        status: 1
+        status: 1,
+        organizationName:'',
+        roleName: ''
       });
      
       this.addKpiForm = this.fbd.group({
@@ -99,8 +101,27 @@ export class InforUserComponent implements OnInit {
           phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
           organizationId: this.fbd.control(data.organization_id, [Validators.required]),
           role: this.fbd.control(data.role_id, [Validators.required]),
-          status: data.status
+          status: data.status,
         });
+
+        //set name
+        if(data.organization_id != null){
+          this.unitService.getUnitById(data.organization_id).subscribe(
+            data => {
+              console.log(data.name);
+              this.addInforForm.addControl('organizationName', this.fbd.control(data.name));
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+            }
+          )
+        }
+        if(data.role_id != null){
+          //lay danh sach vai tro
+          this.roleService.getRoleById(data.role_id).subscribe(data => {
+            console.log(data);
+            this.addInforForm.addControl('roleName', this.fbd.control(data.name));
+          });
+        }
 
         this.addKpiForm = this.fbd.group({
           phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),

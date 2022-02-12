@@ -13,8 +13,8 @@
       </div>
       <div class="col-md-4">
         <div class="label text-color">{{'user.email' | translate}} <span class="required-title">*</span></div>
-        <div class="input-data">
-            <input type="text" formControlName="email" [readonly]="true">
+        <div class="input-data hidden-color">
+            <input type="text" formControlName="email" [readonly]="true" class="hidden-color">
         </div>
         <div *ngIf="submitted && f.email.errors" class="invalid">
           <div *ngIf="f.email.errors.required">Email không được để trống</div>
@@ -42,9 +42,11 @@
       </div>
       <div class="col-md-4">
         <div class="label text-color">{{'organization' | translate}} <span class="required-title">*</span></div>
-        <div>
-        <p-dropdown 
+        <div class="input-data hidden-color">
+          <input type="text" formControlName="organizationName" [readonly]="true" class="hidden-color">
+        <!-- <p-dropdown 
           panelStyleClass="font"
+          class="hidden-color"
           [options]="orgList" 
           formControlName="organizationId" 
           optionLabel="name" 
@@ -54,16 +56,17 @@
           filterBy="name" 
           [showClear]="false"
           [readonly]="true"
-          ></p-dropdown>
+          ></p-dropdown> -->
         </div>
         <div *ngIf="submitted && f.organizationId.errors" class="invalid">
           <div *ngIf="f.organizationId.errors.required">Tổ chức không được để trống</div>
-        </div>
+        </div> 
       </div>
       <div class="col-md-4">
       <div class="label text-color">Vai trò <span class="required-title">*</span></div>
-      <div>
-        <p-dropdown 
+      <div class="input-data hidden-color">
+        <input type="text" formControlName="roleName" [readonly]="true" class="hidden-color">
+        <!-- <p-dropdown 
         panelStyleClass="font"
         [options]="roleList" 
         formControlName="role" 
@@ -72,8 +75,8 @@
         placeholder="Chọn vai trò" 
         [filter]="true" 
         filterBy="name" 
-        [showClear]="true"  
-        ></p-dropdown>
+        [readonly]="true"
+        ></p-dropdown> -->
       </div>
       <div *ngIf="submitted && f.role.errors" class="invalid">
         <div *ngIf="f.role.errors.required">Vai trò không được để trống</div>
