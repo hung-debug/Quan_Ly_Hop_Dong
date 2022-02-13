@@ -133,15 +133,15 @@ export class DetermineSignerComponent implements OnInit {
 
   // next step event
   next(action: string) {
-    // this.submitted = true;
-    // if (!this.validData()) return;
-    // else {
+    this.submitted = true;
+    if (!this.validData()) return;
+    else {
       let is_save = false;
       if (action == 'save-step') {
         is_save = true;
       }
       this.getApiDetermine(is_save);
-    // }
+    }
   }
 
   getApiDetermine(is_save?: boolean) {
