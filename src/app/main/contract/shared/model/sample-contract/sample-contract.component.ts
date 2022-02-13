@@ -96,83 +96,34 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    if (this.datas.is_action_contract_created && (this.router.url.includes("edit") || this.router.url.includes("copy"))) {
-      let dataPosition: any[] = [];
-      let dataNotPosition: any[] = [];
-      this.datas.is_determine_clone.forEach((element: any) => {
-        element.recipients.forEach((item: any) => {
-          let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == item.id)[0];
-          if (data_duplicate) {
-            // lấy ra dữ liệu bị trùng và update lại với dữ liệu mới;
-            // data_duplicate.name = item.name;
-            // data_duplicate.email = item.item;
-            // data_duplicate.phoneNumber = item.phoneNumber;
-            // data_duplicate.sign_type = item.sign_type;
-            // data_duplicate.is_otp = item.is_otp;
-            // data_duplicate['is_type_party'] = this.datas.is_determine_clone.type;
-            // data_duplicate['role'] = data_duplicate.recipient.role;
-            // dataPosition.push(data_duplicate)
-            item.coordinate_x = data_duplicate.coordinate_x;
-            item.coordinate_y=data_duplicate.coordinate_y;
-            item.height=data_duplicate.height;
-            item.id=data_duplicate.id;
-            // item.left = data_duplicate.;
-            item.name = data_duplicate.name;
-            item.page = data_duplicate.page;
-            item.position = data_duplicate.recipient_id;
-            item.recipient_id = data_duplicate.recipient_id;
-            item.required = data_duplicate.required;
-            item.sign_unit = data_duplicate.sign_unit;
-            // item.signature_party = data_duplicate.;
-            item.status = data_duplicate.status;
-            item.text_attribute_name = data_duplicate.name;
-            // item.top = data_duplicate.;
-            item.type = data_duplicate.type;
-            item.width = data_duplicate.width;
-          }
-          // else {
-          //   item['is_type_party'] = this.datas.is_determine_clone.type;
-          //   item['role'] = item.role;
-          //   dataNotPosition.push(item)
-          // }
-        })
-
-      })
-
-      // let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
-      // let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
-      // this.dataSignPosition = [...dataPosition, ...dataNotPosition];
-      //
-      // this.dataSignPosition.forEach((res: any) => {
-      //   if (res.sign_unit == 'text') {
-      //     res['text_attribute_name'] = res.name;
-      //   }
-      // })
-      // this.datas.is_determine_clone = this.dataSignPosition;
-    }
-
-    // console.log(this.datas);
-    let data_sign_config_cks = this.datas.is_determine_clone.filter((p: any) => p.sign_unit == 'chu_ky_so');
-    let data_sign_config_cka = this.datas.is_determine_clone.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-    let data_sign_config_text = this.datas.is_determine_clone.filter((p: any) => p.sign_unit == 'text');
-    let data_sign_config_num_document = this.datas.is_determine_clone.filter((p: any) => p.sign_unit == 'so_tai_lieu');
-
     if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
     } else this.isEnableSelect = false;
 
-    this.datas.contract_user_sign.forEach((element: any) => {
-      // console.log(element.sign_unit, element.sign_config);
-      if (element.sign_unit == 'so_tai_lieu') {
-        Array.prototype.push.apply(element.sign_config, data_sign_config_num_document);
-      } else if (element.sign_unit == 'chu_ky_so') {
-        Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
-      } else if (element.sign_unit == 'text') {
-        Array.prototype.push.apply(element.sign_config, data_sign_config_text);
-      } else if (element.sign_unit == 'chu_ky_anh') {
-        Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
-      }
-    })
+    if (this.datas.is_action_contract_created && (this.router.url.includes("edit") || this.router.url.includes("copy"))) {
+      this.getAddSignUnit();
+      this.getDataSignUpdateAction();
+      // let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == item.id)[0];
+      let data_sign_config_cks = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_so');
+      let data_sign_config_cka = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+      let data_sign_config_text = this.dataSignPosition.filter((p: any) => p.sign_unit == 'text');
+      var data_sign_config_num_document = this.dataSignPosition.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+
+      this.datas.contract_user_sign.forEach((element: any) => {
+        // console.log(element.sign_unit, element.sign_config);
+        if (element.sign_unit == 'so_tai_lieu') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_num_document);
+        } else if (element.sign_unit == 'chu_ky_so') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
+        } else if (element.sign_unit == 'text') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+        } else if (element.sign_unit == 'chu_ky_anh') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+        }
+      })
+    }
+    // console.log(this.datas)
+
 
     this.scale = 1;
 
@@ -271,6 +222,63 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     console.log(this.datas)
 
+  }
+
+  getDataSignUpdateAction() {
+    let dataPosition: any[] = [];
+    let dataNotPosition: any[] = [];
+    this.datas.is_determine_clone.forEach((element: any) => {
+      element.recipients.forEach((item: any) => {
+        let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == item.id)[0];
+        if (data_duplicate) {
+          // lấy ra dữ liệu bị trùng và update lại với dữ liệu mới;
+          data_duplicate.name = item.name;
+          data_duplicate.email = item.item;
+          data_duplicate.phoneNumber = item.phoneNumber;
+          data_duplicate.sign_type = item.sign_type;
+          data_duplicate.is_otp = item.is_otp;
+          data_duplicate['is_type_party'] = this.datas.is_determine_clone.type;
+          data_duplicate['role'] = data_duplicate.recipient.role;
+          dataPosition.push(data_duplicate)
+
+          // item['coordinate_x'] = data_duplicate.coordinate_x;
+          // item['coordinate_y'] = data_duplicate.coordinate_y;
+          // item['height'] = data_duplicate.height;
+          // item.id = data_duplicate.id;
+          // item['name'] = data_duplicate.name;
+          // item['page'] = data_duplicate.page;
+          // item['position'] = data_duplicate.position;
+          // item['recipient_id'] = data_duplicate.recipient_id;
+          // item['required'] = data_duplicate.required;
+          // element['sign_unit'] = data_duplicate.sign_unit;
+          // // item.signature_party = data_duplicate.;
+          // item['status'] = data_duplicate.status;
+          // item['text_attribute_name'] = data_duplicate.name;
+          // // item.top = data_duplicate.;
+          // item['type'] = data_duplicate.type;
+          // item['width'] = data_duplicate.width;
+          // dataPosition.push()
+        }
+        else {
+          item['is_type_party'] = this.datas.is_determine_clone.type;
+          item['role'] = item.role;
+          dataNotPosition.push(item)
+        }
+      })
+      console.log(this.datas.is_determine_clone);
+
+    })
+
+    // let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
+    // let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
+    this.dataSignPosition = [...dataPosition, ...dataNotPosition];
+
+    this.dataSignPosition.forEach((res: any) => {
+      if (res.sign_unit == 'text') {
+        res['text_attribute_name'] = res.name;
+      }
+    })
+    // this.datas.is_determine_clone = this.dataSignPosition;
   }
 
   ngOnChanges(changes: SimpleChanges) {
