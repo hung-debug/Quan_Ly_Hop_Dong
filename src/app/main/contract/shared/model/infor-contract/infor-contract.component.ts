@@ -385,7 +385,25 @@ export class InforContractComponent implements OnInit, AfterViewInit {
             this.datas.file_content = fileReader.result.toString().split(',')[1];
         };
       }
-      await this.callAPI();
+      if(this.datas.code != null && this.datas.code != ''){
+        //check so hop dong da ton tai hay chua
+        this.contractService.checkCodeUnique(this.datas.code).subscribe(
+          dataCode => {
+            if(dataCode.success){
+              this.callAPI();
+            }else{
+              this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+              this.spinner.hide();
+            }
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+            this.spinner.hide();
+          }
+        )
+      }else{
+        await this.callAPI();
+      }
+      
     }
   }
 
@@ -468,7 +486,25 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         };
       }
 
-      this.callAPI_Draft();
+      if(this.datas.code != null && this.datas.code != ''){
+        //check so hop dong da ton tai hay chua
+        this.contractService.checkCodeUnique(this.datas.code).subscribe(
+          dataCode => {
+            if(dataCode.success){
+              this.callAPI_Draft();
+            }else{
+              this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+              this.spinner.hide();
+            }
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+            this.spinner.hide();
+          }
+        )
+      }else{
+        this.callAPI_Draft();
+      }
+      
     }
   }
 

@@ -67,6 +67,7 @@ export class ContractService {
   imageMobiBase64: any;
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
   addGetFileZipContract:any = `${environment.apiUrl}/api/v1/documents/compress/`;
+  checkCodeUniqueUrl:any = `${environment.apiUrl}/api/v1/contracts/check-code-unique`;
 
   token:any;
   customer_id:any;
@@ -635,6 +636,16 @@ export class ContractService {
     return this.http.get(res, { responseType: 'binary', headers })
   }
 
+  checkCodeUnique(code:any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+        code: code
+      });
+    return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
+  }
 
   objDefaultSampleContract() {
     return {

@@ -50,12 +50,12 @@ export class ConfirmInforContractComponent implements OnInit {
   ngOnInit(): void {
     console.log("step4" + this.datas.contract_user_sign);
 
-    this.contractFileName = this.datas.file_name;
+    this.contractFileName = this.datas.file_name; 
     this.dateDeadline = this.datepipe.transform(this.datas.sign_time, 'dd/MM/yyyy') || '';
     this.comment = this.datas.notes;
 
-    if (this.datas.determine_contract && this.datas.determine_contract.length > 0) {
-      let data_user_sign = [...this.datas.determine_contract];
+    if (this.datas.is_determine_clone && this.datas.is_determine_clone.length > 0) {
+      let data_user_sign = [...this.datas.is_determine_clone];
       console.log(data_user_sign);
       data_user_sign.forEach((element: any) => {
         if (element.type == 1) {

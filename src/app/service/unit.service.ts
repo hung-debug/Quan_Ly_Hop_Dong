@@ -28,6 +28,7 @@ export class UnitService {
   updateUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
   getUnitByIdUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
   checkNameUniqueUrl:any = `${environment.apiUrl}/api/v1/organizations/check-name-unique`;
+  checkCodeUniqueUrl:any = `${environment.apiUrl}/api/v1/organizations/check-code-unique`;
 
   token:any;
   customer_id:any;
@@ -105,17 +106,24 @@ export class UnitService {
 
   checkNameUnique(name:any){
     this.getCurrentUser();
-    const headers = {'Authorization': 'Bearer ' + this.token}
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       name: name
     });
     return this.http.post<any>(this.checkNameUniqueUrl, body, {headers}).pipe();
   }
   
-  checkCodeUnit(code:any){
+  checkCodeUnique(code:any){
     this.getCurrentUser();
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<any[]>(this.checkNameUniqueUrl, {headers}).pipe();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+        code: code
+      });
+    return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
   }
 
   handleError(error: HttpErrorResponse) {

@@ -37,7 +37,7 @@ export class UserService {
   getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   listUserUrl:any = `${environment.apiUrl}/api/v1/customers/search`;
   getUserByEmailUrl:any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
-  checkPhoneUserUrl:any = ``;
+  checkPhoneUrl:any = `${environment.apiUrl}/api/v1/customers/check-phone-unique`;
 
   token:any;
   customer_id:any;
@@ -249,9 +249,13 @@ export class UserService {
 
   checkPhoneUser(phone:any){
     this.getCurrentUser();
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    let checkPhoneUserUrl = this.checkPhoneUserUrl + "?phone=" + phone;
-    return this.http.get<any[]>(checkPhoneUserUrl, {headers}).pipe();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      phone_tel: phone
+    });
+    return this.http.post<any>(this.checkPhoneUrl, body, {headers}).pipe();
   }
 
   // Error handling

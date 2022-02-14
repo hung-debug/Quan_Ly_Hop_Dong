@@ -230,57 +230,11 @@ export class AddUserComponent implements OnInit {
     }
     console.log(data);
     
-    if(this.id !=null){
-      data.id = this.id;
-      if(data.fileImage != null){
-        this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
-          console.log(JSON.stringify(dataFile));
-          const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
-          const sign_image:never[]=[];
-          (sign_image as string[]).push(sign_image_content);
-          data.sign_image = sign_image;
-          console.log(data);
-
-          this.userService.updateUser(data).subscribe(
-            data => {
-              this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
-              this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                this.router.navigate(['/main/user']);
-              });
-            }, error => {
-              this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
-            }
-          )
-        },
-        error => {
-          this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
-          return false;
-        });
-      }else{
-        if(this.imgSignBucket != null && this.imgSignPath != null){
-          const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
-          const sign_image:never[]=[];
-          (sign_image as string[]).push(sign_image_content);
-          data.sign_image = sign_image;
-        }
-        console.log(data);
-        this.userService.updateUser(data).subscribe(
-          data => {
-            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
-            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-              this.router.navigate(['/main/user']);
-            });
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
-          }
-        )
-      }
-    }else{
-      //kiem tra email da ton tai trong he thong hay chua
-      this.userService.getUserByEmail(data.email).subscribe(
-        dataByEmail => {
-          if(dataByEmail.id == 0){
-
+    this.userService.checkPhoneUser(data.phone).subscribe(
+      dataByPhone => {
+        if(dataByPhone.code == '00'){
+          if(this.id !=null){
+            data.id = this.id;
             if(data.fileImage != null){
               this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
                 console.log(JSON.stringify(dataFile));
@@ -290,15 +244,14 @@ export class AddUserComponent implements OnInit {
                 data.sign_image = sign_image;
                 console.log(data);
       
-                //call api them moi
-                this.userService.addUser(data).subscribe(
+                this.userService.updateUser(data).subscribe(
                   data => {
-                    this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
+                    this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
                     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                       this.router.navigate(['/main/user']);
                     });
                   }, error => {
-                    this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
+                    this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
                   }
                 )
               },
@@ -307,27 +260,85 @@ export class AddUserComponent implements OnInit {
                 return false;
               });
             }else{
-
-              //call api them moi
-              this.userService.addUser(data).subscribe(
+              if(this.imgSignBucket != null && this.imgSignPath != null){
+                const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
+                const sign_image:never[]=[];
+                (sign_image as string[]).push(sign_image_content);
+                data.sign_image = sign_image;
+              }
+              console.log(data);
+              this.userService.updateUser(data).subscribe(
                 data => {
-                  this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
+                  this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
                   this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                     this.router.navigate(['/main/user']);
                   });
                 }, error => {
-                  this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
+                  this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
                 }
               )
             }
           }else{
-            this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
+            //kiem tra email da ton tai trong he thong hay chua
+            this.userService.getUserByEmail(data.email).subscribe(
+              dataByEmail => {
+                if(dataByEmail.id == 0){
+      
+                  if(data.fileImage != null){
+                    this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
+                      console.log(JSON.stringify(dataFile));
+                      const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
+                      const sign_image:never[]=[];
+                      (sign_image as string[]).push(sign_image_content);
+                      data.sign_image = sign_image;
+                      console.log(data);
+            
+                      //call api them moi
+                      this.userService.addUser(data).subscribe(
+                        data => {
+                          this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
+                          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                            this.router.navigate(['/main/user']);
+                          });
+                        }, error => {
+                          this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
+                        }
+                      )
+                    },
+                    error => {
+                      this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+                      return false;
+                    });
+                  }else{
+      
+                    //call api them moi
+                    this.userService.addUser(data).subscribe(
+                      data => {
+                        this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
+                        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                          this.router.navigate(['/main/user']);
+                        });
+                      }, error => {
+                        this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
+                      }
+                    )
+                  }
+                }else{
+                  this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
+                }
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+              }
+            )
           }
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+        }else if(dataByPhone.code == '01'){
+          this.toastService.showErrorHTMLWithTimeout('Số điện thoại đã tồn tại trong hệ thống', "", 3000);
         }
-      )
-    }
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+      }
+    )
+    
   }
 
   fileChangedAttach(e: any) {
