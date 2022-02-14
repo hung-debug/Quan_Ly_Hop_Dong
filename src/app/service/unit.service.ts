@@ -27,8 +27,7 @@ export class UnitService {
   addUnitUrl: any = `${environment.apiUrl}/api/v1/organizations`;
   updateUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
   getUnitByIdUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
-  checkNameUnitUrl:any = ``;
-  checkCodeUnitUrl:any = ``;
+  checkNameUniqueUrl:any = `${environment.apiUrl}/api/v1/organizations/check-name-unique`;
 
   token:any;
   customer_id:any;
@@ -104,18 +103,19 @@ export class UnitService {
     return this.http.get<Unit>(this.getUnitByIdUrl + id, {headers}).pipe();
   }
 
-  checkNameUnit(name:any){
+  checkNameUnique(name:any){
     this.getCurrentUser();
     const headers = {'Authorization': 'Bearer ' + this.token}
-    let checkNameUnitUrl = this.checkNameUnitUrl + "?name=" + name;
-    return this.http.get<any[]>(checkNameUnitUrl, {headers}).pipe();
+    const body = JSON.stringify({
+      name: name
+    });
+    return this.http.post<any>(this.checkNameUniqueUrl, body, {headers}).pipe();
   }
   
   checkCodeUnit(code:any){
     this.getCurrentUser();
     const headers = {'Authorization': 'Bearer ' + this.token}
-    let checkCodeUnitUrl = this.checkCodeUnitUrl + "?code=" + code;
-    return this.http.get<any[]>(checkCodeUnitUrl, {headers}).pipe();
+    return this.http.get<any[]>(this.checkNameUniqueUrl, {headers}).pipe();
   }
 
   handleError(error: HttpErrorResponse) {

@@ -64,6 +64,7 @@ export class AddContractTypeComponent implements OnInit {
       return;
     }
     const data = {
+      id: this.data.id,
       name: this.addForm.value.name,
       code: this.addForm.value.code,
     }

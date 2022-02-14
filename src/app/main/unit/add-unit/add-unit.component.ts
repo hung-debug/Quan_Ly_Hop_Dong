@@ -133,74 +133,88 @@ export class AddUnitComponent implements OnInit {
         }
       )
     }else{
-      //kiem tra email da ton tai trong he thong hay chua
-      this.userService.getUserByEmail(data.email).subscribe(
-        dataByEmail => {
-          if(dataByEmail.id == 0){
+      //kiem tra ten to chuc da ton tai trong he thong hay chua
+      
+      this.unitService.checkNameUnique(data.name).subscribe(
+        dataByName => {
+          if(dataByName.code == '00'){
+            //kiem tra email da ton tai trong he thong hay chua
+            this.userService.getUserByEmail(data.email).subscribe(
+              dataByEmail => {
+                if(dataByEmail.id == 0){
 
-            //them to chuc
-            this.unitService.addUnit(data).subscribe(
-              dataUnit => {
-                this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
-                console.log(dataUnit);
+                  //them to chuc
+                  this.unitService.addUnit(data).subscribe(
+                    dataUnit => {
+                      this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
+                      console.log(dataUnit);
 
-                //them vai tro
-                let roleArrConvert: any = [];
-                roleList.forEach((key: any, v: any) => {
-                  key.items.forEach((keyItem: any, vItem: any) => {
-                    let jsonData = {code: keyItem.value, status: 1};
-                    roleArrConvert.push(jsonData);
-                  });
-                });
-                const dataRoleIn = {
-                  name: 'Admin',
-                  code: 'ADMIN',
-                  selectedRole: roleArrConvert,
-                  organization_id: dataUnit.id
-                }
-                console.log(dataRoleIn);
-                
-                this.roleService.addRoleByOrg(dataRoleIn).subscribe(
-                  dataRole => {
-                    this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
-                    console.log(dataRole);
-                    //them nguoi dung
-                    const dataUserIn = {
-                      name: "Admin",
-                      email: data.email,
-                      phone: data.phone,
-                      organizationId: dataUnit.id,
-                      role: dataRole.id,
-                      status: 1
-                    }
-                    this.userService.addUser(dataUserIn).subscribe(
-                      dataUser => {
-                        console.log(dataUser);
-                        this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
-                        this.dialogRef.close();
-                        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                          this.router.navigate(['/main/unit']);
+                      //them vai tro
+                      let roleArrConvert: any = [];
+                      roleList.forEach((key: any, v: any) => {
+                        key.items.forEach((keyItem: any, vItem: any) => {
+                          let jsonData = {code: keyItem.value, status: 1};
+                          roleArrConvert.push(jsonData);
                         });
-                      }, error => {
-                        this.toastService.showErrorHTMLWithTimeout('Thêm mới người dùng admin thất bại', "", 3000);
+                      });
+                      const dataRoleIn = {
+                        name: 'Admin',
+                        code: 'ADMIN',
+                        selectedRole: roleArrConvert,
+                        organization_id: dataUnit.id
                       }
-                    )
-                  }, error => {
-                    this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
-                  }
-                )
+                      console.log(dataRoleIn);
+                      
+                      this.roleService.addRoleByOrg(dataRoleIn).subscribe(
+                        dataRole => {
+                          this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
+                          console.log(dataRole);
+                          //them nguoi dung
+                          const dataUserIn = {
+                            name: "Admin",
+                            email: data.email,
+                            phone: data.phone,
+                            organizationId: dataUnit.id,
+                            role: dataRole.id,
+                            status: 1
+                          }
+                          this.userService.addUser(dataUserIn).subscribe(
+                            dataUser => {
+                              console.log(dataUser);
+                              this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
+                              this.dialogRef.close();
+                              this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                                this.router.navigate(['/main/unit']);
+                              });
+                            }, error => {
+                              this.toastService.showErrorHTMLWithTimeout('Thêm mới người dùng admin thất bại', "", 3000);
+                            }
+                          )
+                        }, error => {
+                          this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
+                        }
+                      )
+                    }, error => {
+                      this.toastService.showErrorHTMLWithTimeout('Thêm mới tổ chức thất bại', "", 3000);
+                    }
+                  )
+                  
+                }else{
+                  this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
+                }
               }, error => {
-                this.toastService.showErrorHTMLWithTimeout('Thêm mới tổ chức thất bại', "", 3000);
+                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
               }
             )
-            
-          }else{
-            this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
+          }else if(dataByName.code == '01'){
+            this.toastService.showErrorHTMLWithTimeout('Tên tổ chức đã tồn tại trong hệ thống', "", 3000);
           }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         }
       )
+
+      
     }
   }
 
