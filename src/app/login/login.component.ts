@@ -54,6 +54,7 @@ export class LoginComponent implements OnInit {
         this.type = 1;
       } else this.type = 0;
       this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
+        if(data?.code == '00'){
           if (this.authService.isLoggedInSuccess() == true) {
             if (sessionStorage.getItem("url")) {
               let urlLink = sessionStorage.getItem("url");
@@ -107,6 +108,14 @@ export class LoginComponent implements OnInit {
             this.error = true;
             this.errorDetail = "error.username.password";
           }
+        }else if(data?.code == '01'){
+          this.error = true;
+          this.errorDetail = "Tài khoản không hoạt động";
+        }else if(data?.code == '02'){
+          this.error = true;
+          this.errorDetail = "Tổ chức không hoạt động";
+        }
+          
         },
         error => {
           console.log(localStorage.getItem('checkUser'));

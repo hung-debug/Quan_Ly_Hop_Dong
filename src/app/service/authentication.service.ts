@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 export interface User {
   type: string,
   access_token: string,
+  code: string,
   customer:{
     id:number,
     name:string,
@@ -37,7 +38,7 @@ export class AuthenticationService {
     return this.http.post<User>(this.loginUrl, body, {'headers':headers})
       .pipe(
         map((user) => {
-          if (JSON.parse(JSON.stringify(user)).access_token != '') {
+          if (JSON.parse(JSON.stringify(user)).code != null) {
             localStorage.setItem('currentUser', JSON.stringify(user));
             return user;
           }else{

@@ -63,18 +63,19 @@
         </div>
         <div class="col-md-4">
           <div class="label text-color">{{'menu.role.list' | translate}} <span class="required-title">*</span></div>
-          <div>
-          <p-dropdown 
-          panelStyleClass="font"
-          [options]="roleList" 
-          formControlName="role" 
-          optionLabel="name" 
-          optionValue="id" 
-          placeholder="Chọn vai trò" 
-          [filter]="true" 
-          filterBy="name" 
-          [showClear]="true"  
-          ></p-dropdown>
+          <div [ngClass]="{'input-data hidden-color' : !isEditRole}">
+            <p-dropdown *ngIf="isEditRole"
+              panelStyleClass="font"
+              [options]="roleList" 
+              formControlName="role" 
+              optionLabel="name" 
+              optionValue="id" 
+              placeholder="Chọn vai trò" 
+              [filter]="true" 
+              filterBy="name" 
+              [showClear]="true"  
+              ></p-dropdown>
+            <input *ngIf="!isEditRole" type="text" formControlName="roleName" [readonly]="true" class="hidden-color">
           </div>
           <div *ngIf="submitted && f.role.errors" class="invalid">
             <div *ngIf="f.role.errors.required">Vai trò không được để trống</div>
