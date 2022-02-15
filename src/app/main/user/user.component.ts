@@ -26,6 +26,7 @@ export class UserComponent implements OnInit {
   list: any[];
   cols: any[];
   orgList: any[] = [];
+  orgListTmp: any[] = [];
 
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
@@ -35,14 +36,20 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.appService.setTitle("user.list");
+    //lay id user
+    this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
+    //mac dinh se search theo ma to chuc minh
+    this.organization_id = this.organization_id_user_login;
+
     this.searchUser();
 
     this.unitService.getUnitList('', '').subscribe(data => {
       console.log(data.entities);
-      this.orgList.push({name: "Tất cả", id:""});
+      this.orgListTmp.push({name: "Tất cả", id:""});
       for(var i = 0; i < data.entities.length; i++){
-        this.orgList.push(data.entities[i]);
+        this.orgListTmp.push(data.entities[i]);
       }
+      this.orgList = this.orgListTmp;
     });
 
     this.cols = [
@@ -55,8 +62,7 @@ export class UserComponent implements OnInit {
       {header: 'unit.manage', style:'text-align: center;' },
     ];
 
-    //lay id user
-    this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
+    
     console.log(this.organization_id_user_login);
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
@@ -83,6 +89,7 @@ export class UserComponent implements OnInit {
   }
 
   searchUser(){
+    console.log(this.organization_id);
     this.userService.getUserList(this.organization_id==null?"":this.organization_id, this.email).subscribe(response => {
       console.log(response);
       this.list = response.entities;
