@@ -114,6 +114,9 @@ export class LoginComponent implements OnInit {
         }else if(data?.code == '02'){
           this.error = true;
           this.errorDetail = "Tổ chức không hoạt động";
+        }else {
+          this.error = true;
+          this.errorDetail = "error.username.password";
         }
           
         },

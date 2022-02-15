@@ -38,7 +38,7 @@ export class AuthenticationService {
     return this.http.post<User>(this.loginUrl, body, {'headers':headers})
       .pipe(
         map((user) => {
-          if (JSON.parse(JSON.stringify(user)).code != null) {
+          if (JSON.parse(JSON.stringify(user)) != null) {
             localStorage.setItem('currentUser', JSON.stringify(user));
             return user;
           }else{
