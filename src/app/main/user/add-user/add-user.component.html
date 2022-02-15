@@ -17,6 +17,9 @@
             <div class="input-data" [ngClass]="{'hidden-color' : id != null}">
                 <input type="text" formControlName="email" [readonly]="id != null" [ngClass]="{'hidden-color' : id != null}">
             </div>
+            <div class="input-data" [ngClass]="{'hidden-color' : id != null}">
+              <div formControlName="email" [ngClass]="{'hidden-color' : id != null}"></div>
+            </div>
             <div *ngIf="submitted && f.email.errors" class="invalid">
               <div *ngIf="f.email.errors.required">Email không được để trống</div>
               <div *ngIf="f.email.errors.email">Email không đúng định dạng</div>

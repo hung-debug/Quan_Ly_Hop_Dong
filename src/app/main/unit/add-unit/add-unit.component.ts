@@ -119,33 +119,55 @@ export class AddUnitComponent implements OnInit {
       parent_id: this.addForm.value.parent_id,
     }
     console.log(data);
-    if(this.data.id !=null){
-      data.id = this.data.id;
-      this.unitService.updateUnit(data).subscribe(
-        data => {
-          this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
-          this.dialogRef.close();
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-            this.router.navigate(['/main/unit']);
-          });
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-        }
-      )
-    }else{
-      //kiem tra ten to chuc da ton tai trong he thong hay chua
-      this.unitService.checkNameUnique(data.name).subscribe(
-        dataByName => {
-          console.log(dataByName);
-          if(dataByName.code == '00'){
 
-            //kiem tra ma to chuc da ton tai trong he thong hay chua
-            this.unitService.checkCodeUnique(data.code).subscribe(
-              dataByCode => {
+    //kiem tra ten to chuc da ton tai trong he thong hay chua
+    this.unitService.checkNameUnique(data.name).subscribe(
+      dataByName => {
+        console.log(dataByName);
+        if(dataByName.code == '00'){
 
-                if(dataByCode.code == '00'){
+          //kiem tra ma to chuc da ton tai trong he thong hay chua
+          this.unitService.checkCodeUnique(data.code).subscribe(
+            dataByCode => {
 
-                //kiem tra email da ton tai trong he thong hay chua
+              if(dataByCode.code == '00'){
+
+                //truong hop sua ban ghi
+                if(this.data.id !=null){
+
+                  //kiem tra email da ton tai trong he thong hay chua
+                  this.userService.getUserByEmail(data.email).subscribe(
+                    dataByEmail => {
+                      //neu user chua co => them moi user va gan vai tro admin
+                      if(dataByEmail.id == 0){
+      
+                        
+                        
+                      //neu da co user => sua user co vai tro la admin
+                      }else{
+                        
+                      }
+                      data.id = this.data.id;
+                      this.unitService.updateUnit(data).subscribe(
+                        data => {
+                          this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
+                          this.dialogRef.close();
+                          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                            this.router.navigate(['/main/unit']);
+                          });
+                        }, error => {
+                          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                        }
+                      )
+                    }, error => {
+                      this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                    }
+                  )
+
+                //truong hop them moi ban ghi
+                }else{
+                  
+                  //kiem tra email da ton tai trong he thong hay chua
                   this.userService.getUserByEmail(data.email).subscribe(
                     dataByEmail => {
                       if(dataByEmail.id == 0){
@@ -213,24 +235,23 @@ export class AddUnitComponent implements OnInit {
                       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
                     }
                   )
-                }else if(dataByCode.code == '01'){
-                  this.toastService.showErrorHTMLWithTimeout('Mã tổ chức đã tồn tại trong hệ thống', "", 3000);
                 }
-              }, error => {
-                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+              }else if(dataByCode.code == '01'){
+                this.toastService.showErrorHTMLWithTimeout('Mã tổ chức đã tồn tại trong hệ thống', "", 3000);
               }
-            )
-            
-          }else if(dataByName.code == '01'){
-            this.toastService.showErrorHTMLWithTimeout('Tên tổ chức đã tồn tại trong hệ thống', "", 3000);
-          }
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+            }
+          )
+          
+        }else if(dataByName.code == '01'){
+          this.toastService.showErrorHTMLWithTimeout('Tên tổ chức đã tồn tại trong hệ thống', "", 3000);
         }
-      )
-
-      
-    }
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+      }
+    )
+    
   }
 
 }

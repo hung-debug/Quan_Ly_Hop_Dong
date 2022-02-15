@@ -119,7 +119,7 @@ export class AddUserComponent implements OnInit {
       //set title
       if (this.action == 'add') {
         this.appService.setTitle('user.add');
-
+        this.isEditRole = true;
         if(this.isQLND_01){
           this.addForm = this.fbd.group({
             name: this.fbd.control("", [Validators.required]),
@@ -183,6 +183,7 @@ export class AddUserComponent implements OnInit {
                 this.roleService.getRoleById(data.role_id).subscribe(data => {
                   if(data.code.toUpperCase() == 'ADMIN'){
                     this.isEditRole = true;
+                  }else{
                     this.addForm.addControl('roleName', this.fbd.control(data.name));
                   }
                 });
