@@ -31,6 +31,7 @@ export class AddUserComponent implements OnInit {
   orgList: Array<any> = [];
   networkList: Array<any> = [];
   roleList: Array<any> = [];
+  phoneOld:any;
 
   addForm: FormGroup;
   datas: any;
@@ -74,30 +75,11 @@ export class AddUserComponent implements OnInit {
       });
      }
 
-  ngOnInit(): void {
-    //lay id user
-    let userId = this.userService.getAuthCurrentUser().id;
-    let orgId = this.userService.getAuthCurrentUser().organizationId;
-    this.userService.getUserById(userId).subscribe(
-      data => {
-        //lay id role
-        this.roleService.getRoleById(data.role_id).subscribe(
-          data => {
-            console.log(data);
-            let listRole: any[];
-            listRole = data.permissions;
-            this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
-            this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-          }
-        ); 
-      
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-      }
-    )
 
+  userRoleCode:string='';
+
+  getDataOnInit(){
+    let orgId = this.userService.getAuthCurrentUser().organizationId;
     if(this.isQLND_01 || this.isQLND_02){
       //lay danh sach to chuc
       this.unitService.getUnitList('', '').subscribe(data => {
@@ -164,6 +146,7 @@ export class AddUserComponent implements OnInit {
 
                 fileImage:null
               });
+              this.phoneOld = data.phone;
               this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
               this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
               this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
@@ -180,23 +163,55 @@ export class AddUserComponent implements OnInit {
                   }
                 )
               }
-              if(data.role_id != null){
-                //lay danh sach vai tro
-                this.roleService.getRoleById(data.role_id).subscribe(data => {
-                  if(data.code.toUpperCase() == 'ADMIN'){
-                    this.isEditRole = true;
-                  }else{
+              //neu nguoi truy cap co ma vai tro la ADMIN thi duoc quyen sua
+              if(this.userRoleCode.toUpperCase() == 'ADMIN'){
+                this.isEditRole = true;
+              }else{
+                if(data.role_id != null){
+                  //lay danh sach vai tro
+                  this.roleService.getRoleById(data.role_id).subscribe(data => {
                     this.addForm.addControl('roleName', this.fbd.control(data.name));
-                  }
-                });
+                  });
+                }
               }
+              
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
             }
           )
         }
       }
-    });  
+    });
+  }
+
+  ngOnInit(): void {
+    //lay id user
+    let userId = this.userService.getAuthCurrentUser().id;
+    
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data.role_id).subscribe(
+          data => {
+            this.userRoleCode = data.code;
+            console.log(data);
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
+            this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
+
+            this.getDataOnInit();
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+          }
+        );
+      
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+      }
+    )
+
+      
   }
 
   updateInforUser(){
@@ -219,6 +234,53 @@ export class AddUserComponent implements OnInit {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/main/user']);
     });
+  }
+
+  update(data:any){
+    data.id = this.id;
+    if(data.fileImage != null){
+      this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
+        console.log(JSON.stringify(dataFile));
+        const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
+        const sign_image:never[]=[];
+        (sign_image as string[]).push(sign_image_content);
+        data.sign_image = sign_image;
+        console.log(data);
+
+        this.userService.updateUser(data).subscribe(
+          data => {
+            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
+            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+              this.router.navigate(['/main/user']);
+            });
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+          }
+        )
+      },
+      error => {
+        this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+        return false;
+      });
+    }else{
+      if(this.imgSignBucket != null && this.imgSignPath != null){
+        const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
+        const sign_image:never[]=[];
+        (sign_image as string[]).push(sign_image_content);
+        data.sign_image = sign_image;
+      }
+      console.log(data);
+      this.userService.updateUser(data).subscribe(
+        data => {
+          this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/user']);
+          });
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+        }
+      )
+    }
   }
 
   onSubmit() {
@@ -245,50 +307,25 @@ export class AddUserComponent implements OnInit {
     console.log(data);
     
     if(this.id !=null){
-      data.id = this.id;
-      if(data.fileImage != null){
-        this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
-          console.log(JSON.stringify(dataFile));
-          const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
-          const sign_image:never[]=[];
-          (sign_image as string[]).push(sign_image_content);
-          data.sign_image = sign_image;
-          console.log(data);
-
-          this.userService.updateUser(data).subscribe(
-            data => {
-              this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
-              this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                this.router.navigate(['/main/user']);
-              });
-            }, error => {
-              this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+      //neu thay doi so dien thoai thi can check lai
+      if(data.phone != this.phoneOld){
+        this.userService.checkPhoneUser(data.phone).subscribe(
+          dataByPhone => {
+            if(dataByPhone.code == '00'){
+              //ham update
+              this.update(data);
+            }else if(dataByPhone.code == '01'){
+              this.toastService.showErrorHTMLWithTimeout('Số điện thoại đã tồn tại trong hệ thống', "", 3000);
             }
-          )
-        },
-        error => {
-          this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
-          return false;
-        });
-      }else{
-        if(this.imgSignBucket != null && this.imgSignPath != null){
-          const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
-          const sign_image:never[]=[];
-          (sign_image as string[]).push(sign_image_content);
-          data.sign_image = sign_image;
-        }
-        console.log(data);
-        this.userService.updateUser(data).subscribe(
-          data => {
-            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
-            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-              this.router.navigate(['/main/user']);
-            });
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
           }
         )
+      }else{
+        //ham update
+        this.update(data);
       }
+      
     }else{
       this.userService.checkPhoneUser(data.phone).subscribe(
         dataByPhone => {

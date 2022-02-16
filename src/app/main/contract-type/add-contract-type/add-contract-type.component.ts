@@ -15,6 +15,8 @@ export class AddContractTypeComponent implements OnInit {
 
   addForm: FormGroup;
   datas: any;
+  nameOld:any;
+  codeOld:any;
 
   submitted = false;
   get f() { return this.addForm.controls; }
@@ -44,6 +46,8 @@ export class AddContractTypeComponent implements OnInit {
             name: this.fbd.control(data.name, [Validators.required]),
             code: this.fbd.control(data.code, [Validators.required])
           });
+          this.nameOld = data.name;
+          this.codeOld = data.code;
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         }
@@ -54,7 +58,48 @@ export class AddContractTypeComponent implements OnInit {
         code: this.fbd.control("", [Validators.required])
       });
     }
-    
+  }
+
+  checkName(data:any){
+    //neu thay doi ten thi can check lai
+    if(data.name != this.nameOld){
+      //kiem tra ten
+      this.contractTypeService.checkNameContractType(data.name).subscribe(
+        dataByName => {
+          //neu ten loai hop dong chua ton tai
+          if(dataByName.success){
+            
+            //call update
+            this.update(data);
+
+          //neu ten loai hop dong da ton tai
+          }else{
+            this.toastService.showErrorHTMLWithTimeout('Tên loại hợp đồng đã tồn tại', "", 3000);
+          }
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+        }
+      )
+
+    //neu khong thay doi ten thi bo qua check ten
+    }else{
+      //call update
+      this.update(data);
+    }
+  }
+
+  update(data:any){
+    this.contractTypeService.updateContractType(data).subscribe(
+      data => {
+        this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
+        this.dialogRef.close();
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/contract-type']);
+        });    
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+      }
+    )
   }
 
   onSubmit() {
@@ -68,20 +113,34 @@ export class AddContractTypeComponent implements OnInit {
       name: this.addForm.value.name,
       code: this.addForm.value.code,
     }
+    //ham sua
     if(this.data.id !=null){
-      
-      this.contractTypeService.updateContractType(data).subscribe(
-        data => {
-          this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
-          this.dialogRef.close();
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-            this.router.navigate(['/main/contract-type']);
-          });    
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-        }
-      )
-      
+
+      //neu thay doi ma thi can check lai
+      if(data.code != this.codeOld){
+        this.contractTypeService.checkCodeContractType(data.code).subscribe(
+          dataByCode => {
+            //neu ma loai hop dong chua ton tai
+            if(dataByCode.success){
+              
+              //call ham check ten
+              this.checkName(data);
+
+            //neu ma loai hop dong da ton tai
+            }else{
+              this.toastService.showErrorHTMLWithTimeout('Mã loại hợp đồng đã tồn tại', "", 3000);
+            }
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+          }
+        )
+      //neu khong thay doi ma thi bo qua check ma
+      }else{
+        //ham check ten
+        this.checkName(data);
+      }
+    
+    //ham them moi
     }else{
       //kiem tra ma loai hop dong
       this.contractTypeService.checkCodeContractType(data.code).subscribe(
