@@ -38,6 +38,8 @@ export class UnitComponent implements OnInit {
   files:any[];
   test:any;
   total:any;
+  orgId:any;
+  isAdmin:boolean=false;
 
   //phan quyen
   isQLTC_01:boolean=true;  //them moi to chuc
@@ -87,9 +89,32 @@ export class UnitComponent implements OnInit {
   array_empty: any = [];
   searchUnit(){
     //lay id to chuc nguoi truy cap
-    let orgId = this.userService.getInforUser().organization_id;
-    let is_edit = false;
+    this.orgId = this.userService.getInforUser().organization_id;
+    let userId = this.userService.getInforUser().customer_id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data.role_id).subscribe(
+          data => {
+            //admin cua to chuc thi dc quyen sua thong tin to chuc
+            if(data.code.toUpperCase() == 'ADMIN'){
+              this.isAdmin = true;
+            }else{
+              this.isAdmin = false;
+            }
+            this.getData();
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+          }
+        ); 
+      
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+      }
+    )
+  }
 
+  getData(){
     this.unitService.getUnitList(this.code, this.name).subscribe(response => {
       this.listData = response.entities;
       console.log(this.listData);
@@ -102,13 +127,12 @@ export class UnitComponent implements OnInit {
 
       this.array_empty=[];
       this.listData.forEach((element: any, index: number) => {
-        console.log(index);
-        console.log(element);
-        let dataChildren;
-        if(element.id == orgId){
-          dataChildren = this.findChildren(element, true);
-        }else{
-          dataChildren = this.findChildren(element, false);
+
+        let is_edit = false;
+        let dataChildren = this.findChildren(element);
+        //neu la to chuc con hoac co quyen admin thi dc phep sua
+        if(element.id != this.orgId || this.isAdmin){
+          is_edit = true;
         }
         
         data = {
@@ -130,14 +154,18 @@ export class UnitComponent implements OnInit {
         //this.removeElementFromStringArray(element.id);
       })
       this.list = this.array_empty;
-      console
     });
   }
 
-  findChildren(element:any, is_edit:any){
+  findChildren(element:any){
     let dataChildren:any[]=[];
     let arrCon = this.listData.filter((p: any) => p.parent_id == element.id);
+    
     arrCon.forEach((elementCon: any, indexCOn: number) => {
+      let is_edit = false;
+      if(elementCon.id != this.orgId || this.isAdmin){
+        is_edit = true;
+      }
       dataChildren.push(
       {
         data:
@@ -151,7 +179,7 @@ export class UnitComponent implements OnInit {
           is_edit: is_edit
         },
         expanded: true,
-        children: this.findChildren(elementCon, is_edit)
+        children: this.findChildren(elementCon)
       });
       this.removeElementFromStringArray(elementCon.id);
     })

@@ -69,6 +69,22 @@
                     ></p-dropdown>
                     <input *ngIf="this.data.id" type="text" formControlName="parentName" [readonly]="true" class="hidden-color">
                 </div>
+                <!-- <div>
+                    <p-dropdown
+                        panelStyleClass="font"
+                        appendTo="body"
+                        [options]="orgList" 
+                        formControlName="parent_id" 
+                        optionLabel="name" 
+                        optionValue="id" 
+                        placeholder="Chọn tổ chức" 
+                        [filter]="true" 
+                        filterBy="name" 
+                        [showClear]="true"  
+                        [showClear]="true"
+                        dropdownIcon="pi pi-chevron-down" 
+                    ></p-dropdown>
+                </div> -->
                 <div *ngIf="submitted && f.parent_id.errors" class="invalid">
                     <div *ngIf="f.parent_id.errors.required">Tổ chức cấp trên không được để trống</div>
                 </div>

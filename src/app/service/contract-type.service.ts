@@ -21,8 +21,8 @@ export class ContractTypeService {
   deleteContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
   getContractTypeByIdUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
   listContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/organizations/`;
-  checkCodeContractTypeUrl:any = ``;
-  checkNameContractTypeUrl:any = ``;
+  checkCodeContractTypeUrl:any = `${environment.apiUrl}/api/v1/contract-types/check-code-unique`;
+  checkNameContractTypeUrl:any = `${environment.apiUrl}/api/v1/contract-types/check-name-unique`;
 
   token:any;
   customer_id:any;
@@ -87,7 +87,7 @@ export class ContractTypeService {
 
   public getContractTypeList(code:any, name:any): Observable<any> {
     this.getCurrentUser();
-    let listContractTypeUrl = this.listContractTypeUrl + this.organization_id;
+    let listContractTypeUrl = this.listContractTypeUrl + this.organization_id + "?name=" + name + "&code=" + code;
     console.log(listContractTypeUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<ContractType[]>(listContractTypeUrl, {headers}).pipe();
@@ -95,15 +95,25 @@ export class ContractTypeService {
 
   checkCodeContractType(code:any){
     this.getCurrentUser();
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    let checkCodeContractTypeUrl = this.checkCodeContractTypeUrl + "?code=" + code;
-    return this.http.get<any[]>(checkCodeContractTypeUrl, {headers}).pipe();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      code: code,
+      organization_id: this.organization_id,
+    });
+    return this.http.post<any>(this.checkCodeContractTypeUrl, body, {headers}).pipe();
   }
 
   checkNameContractType(name:any){
     this.getCurrentUser();
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    let checkNameContractTypeUrl = this.checkNameContractTypeUrl + "?name=" + name;
-    return this.http.get<any[]>(checkNameContractTypeUrl, {headers}).pipe();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: name,
+      organization_id: this.organization_id,
+    });
+    return this.http.post<any>(this.checkNameContractTypeUrl, body, {headers}).pipe();
   }
 }

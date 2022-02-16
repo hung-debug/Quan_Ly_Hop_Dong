@@ -21,7 +21,8 @@ export class RoleService {
   addRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles`;
   updateRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles/`;
   deleteRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles/`;
-  checkCodeRoleUrl:any = ``;
+  checkCodeRoleUrl:any = `${environment.apiUrl}/api/v1/customers/roles/check-code-unique`;
+  checkNameRoleUrl:any = `${environment.apiUrl}/api/v1/customers/roles/check-name-unique`;
 
   token:any;
   customer_id:any;
@@ -113,8 +114,23 @@ export class RoleService {
 
   checkCodeRole(code:any){
     this.getCurrentUser();
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    let checkCodeRoleUrl = this.checkCodeRoleUrl + "?code=" + code;
-    return this.http.get<any[]>(checkCodeRoleUrl, {headers}).pipe();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      code: code
+    });
+    return this.http.post<any>(this.checkCodeRoleUrl, body, {headers}).pipe();
+  }
+
+  checkNameRole(name:any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: name
+    });
+    return this.http.post<any>(this.checkNameRoleUrl, body, {headers}).pipe();
   }
 }

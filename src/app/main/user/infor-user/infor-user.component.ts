@@ -39,6 +39,7 @@ export class InforUserComponent implements OnInit {
   attachFile:any;
   imgSignBucket:any;
   imgSignPath:any;
+  phoneOld:any;
 
   constructor(private appService: AppService,
     private toastService : ToastService,
@@ -103,6 +104,7 @@ export class InforUserComponent implements OnInit {
           role: this.fbd.control(data.role_id, [Validators.required]),
           status: data.status,
         });
+        this.phoneOld = data.phone;
 
         //set name
         if(data.organization_id != null){
@@ -141,33 +143,7 @@ export class InforUserComponent implements OnInit {
     )
   }
 
-  updateUser(){
-    this.submitted = true;
-    // stop here if form is invalid
-    if (this.addInforForm.invalid) {
-      return;
-    }
-    const data = {
-      id: this.id,
-      name: this.addInforForm.value.name,
-      email: this.addInforForm.value.email,
-      birthday: this.addInforForm.value.birthday,
-      phone: this.addInforForm.value.phone,
-      organizationId: this.addInforForm.value.organizationId,
-      role: this.addInforForm.value.role,
-      status: this.addInforForm.value.status,
-
-      fileImage: this.attachFile,
-      sign_image: [],
-
-      phoneKpi: this.addKpiForm.value.phoneKpi,
-      networkKpi: this.addKpiForm.value.networkKpi,
-
-      nameHsm: this.addHsmForm.value.nameHsm
-
-    }
-    console.log(data);
-
+  update(data:any){
     if(data.fileImage != null){
       this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
         console.log(JSON.stringify(dataFile));
@@ -211,6 +187,53 @@ export class InforUserComponent implements OnInit {
         }
       )
     }
+  }
+
+  updateUser(){
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.addInforForm.invalid) {
+      return;
+    }
+    const data = {
+      id: this.id,
+      name: this.addInforForm.value.name,
+      email: this.addInforForm.value.email,
+      birthday: this.addInforForm.value.birthday,
+      phone: this.addInforForm.value.phone,
+      organizationId: this.addInforForm.value.organizationId,
+      role: this.addInforForm.value.role,
+      status: this.addInforForm.value.status,
+
+      fileImage: this.attachFile,
+      sign_image: [],
+
+      phoneKpi: this.addKpiForm.value.phoneKpi,
+      networkKpi: this.addKpiForm.value.networkKpi,
+
+      nameHsm: this.addHsmForm.value.nameHsm
+
+    }
+    console.log(data);
+    //neu thay doi so dien thoai thi can check lai
+    if(data.phone != this.phoneOld){
+      this.userService.checkPhoneUser(data.phone).subscribe(
+        dataByPhone => {
+          if(dataByPhone.code == '00'){
+            this.update(data);
+          }else if(dataByPhone.code == '01'){
+            this.toastService.showErrorHTMLWithTimeout('Số điện thoại đã tồn tại trong hệ thống', "", 3000);
+          }
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+        }
+      )
+    }else{
+      //ham update
+      this.update(data);
+    }
+
+    
   }
 
   fileChangedAttach(e: any) {

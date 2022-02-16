@@ -94,7 +94,7 @@ export var networkList = [
 //       { label: "role.contract.view.detail", value: "QLHD_07"},
 //       //Sao chép hợp đồng
 //       // { label: "role.contract.copy", value: "QLHD_08"},
-//       //Huỷ hợp đồng
+//       //Hủy hợp đồng
 //       { label: "role.contract.cancel", value: "QLHD_09"},
 //       //Xem lịch sử hợp đồng
 //       { label: "role.contract.view.history", value: "QLHD_10"},
@@ -215,8 +215,8 @@ export var roleList = [
       { label: "Xem thông tin chi tiết hợp đồng", value: "QLHD_07"},
       //Sao chép hợp đồng
       // { label: "Sao chép hợp đồng", value: "QLHD_08"},
-      //Huỷ hợp đồng
-      { label: "Huỷ hợp đồng", value: "QLHD_09"},
+      //Hủy hợp đồng
+      { label: "Hủy hợp đồng", value: "QLHD_09"},
       //Xem lịch sử hợp đồng
       { label: "Xem lịch sử hợp đồng", value: "QLHD_10"},
       //Tạo hợp đồng liên quan
