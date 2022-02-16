@@ -108,13 +108,40 @@ export class AddRoleComponent implements OnInit {
         }
       )
     }else{
-      this.roleService.addRole(data).subscribe(
-        data => {
-          this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò thành công!', "", 3000);
-          this.dialogRef.close();
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-            this.router.navigate(['/main/role']);
-          });
+      //kiem tra ma vai tro ton tai chua
+      this.roleService.checkCodeRole(data.code).subscribe(
+        dataByCode => {
+          //neu chua ton tai
+          if(dataByCode.code == '00'){
+            //kiem tra ten vai tro da ton tai chua
+            this.roleService.checkNameRole(data.name).subscribe(
+              dataByName => {
+                //neu chua ton tai
+                if(dataByName.code == '00'){
+                  
+                  this.roleService.addRole(data).subscribe(
+                    data => {
+                      this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò thành công!', "", 3000);
+                      this.dialogRef.close();
+                      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                        this.router.navigate(['/main/role']);
+                      });
+                    }, error => {
+                      this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                    }
+                  )
+                //neu da ton tai ten
+                }else{
+                  this.toastService.showErrorHTMLWithTimeout('Tên vai trò đã tồn tại', "", 3000);
+                }
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+              }
+            )
+          //neu da ton tai ma
+          }else{
+            this.toastService.showErrorHTMLWithTimeout('Mã vai trò đã tồn tại', "", 3000);
+          }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         }

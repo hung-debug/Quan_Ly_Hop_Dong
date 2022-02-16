@@ -83,13 +83,39 @@ export class AddContractTypeComponent implements OnInit {
       )
       
     }else{
-      this.contractTypeService.addContractType(data).subscribe(
-        data => {
-          this.toastService.showSuccessHTMLWithTimeout('Thêm mới loại hợp đồng thành công!', "", 3000);
-          this.dialogRef.close();
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-            this.router.navigate(['/main/contract-type']);
-          });
+      //kiem tra ma loai hop dong
+      this.contractTypeService.checkCodeContractType(data.code).subscribe(
+        dataByCode => {
+          //neu ma loai hop dong chua ton tai
+          if(dataByCode.success){
+            //kiem tra ten loai hop dong
+            this.contractTypeService.checkNameContractType(data.name).subscribe(
+              dataByName => {
+                //neu ten loai hop dong chua ton tai
+                if(dataByName.success){
+                  this.contractTypeService.addContractType(data).subscribe(
+                    data => {
+                      this.toastService.showSuccessHTMLWithTimeout('Thêm mới loại hợp đồng thành công!', "", 3000);
+                      this.dialogRef.close();
+                      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                        this.router.navigate(['/main/contract-type']);
+                      });
+                    }, error => {
+                      this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                    }
+                  )
+                //neu ten loai hop dong da ton tai
+                }else{
+                  this.toastService.showErrorHTMLWithTimeout('Tên loại hợp đồng đã tồn tại', "", 3000);
+                }
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+              }
+            )
+          //neu ma loai hop dong da ton tai
+          }else{
+            this.toastService.showErrorHTMLWithTimeout('Mã loại hợp đồng đã tồn tại', "", 3000);
+          }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         }
