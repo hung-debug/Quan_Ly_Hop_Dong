@@ -87,7 +87,7 @@ export class ContractTypeService {
 
   public getContractTypeList(code:any, name:any): Observable<any> {
     this.getCurrentUser();
-    let listContractTypeUrl = this.listContractTypeUrl + this.organization_id;
+    let listContractTypeUrl = this.listContractTypeUrl + this.organization_id + "?name=" + name + "&code=" + code;
     console.log(listContractTypeUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<ContractType[]>(listContractTypeUrl, {headers}).pipe();
