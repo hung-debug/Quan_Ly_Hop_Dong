@@ -15,6 +15,9 @@
   display: flex;
   align-items: center;
   height: 46px;
+  //add css 16022022
+  float: right;
+  width: 75%;
   .content_footer {
     color:#0160AE;
     font-size: 13px;
@@ -25,7 +28,8 @@
   .btn_footer {
     display: flex;
     justify-content: space-between;
-    width: 75.64%;
+    //width: 75.64%;
+    width: 100%;
     button {
       outline: none;
     }
