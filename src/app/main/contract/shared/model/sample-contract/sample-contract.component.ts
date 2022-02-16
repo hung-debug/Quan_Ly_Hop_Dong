@@ -98,7 +98,29 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
-    } else this.isEnableSelect = false;
+    } else {
+      let dataDetermine: { id: any; sign_type: any; }[] = [];
+      this.datas.is_determine_clone.forEach((res: any) => {
+        res.recipients.forEach((element: any) => {
+          let isObj = {
+            id: element.id,
+            sign_type: element.sign_type
+          }
+          dataDetermine.push(isObj);
+        })
+      })
+
+      this.datas.contract_user_sign.forEach((res: any) => {
+        res.sign_config = res.sign_config.filter((p: any) =>
+          dataDetermine.some((pt:any) =>
+            pt.id == p.recipient_id &&
+            (p.sign_unit == "chu_ky_so" && pt.sign_type.filter((s: any) => s.id == 2 || s.id == 3 || s.id == 4)) ||
+            (p.sign_unit == "chu_ky_anh" && pt.sign_type.filter((s: any) => s.id == 1)) ||
+            (p.sign_unit == "text") || (p.sign_unit == "so_tai_lieu")));
+      })
+
+      // this.isEnableSelect = false;
+    }
 
     if (this.datas.is_action_contract_created && (this.router.url.includes("edit") || this.router.url.includes("copy"))) {
       this.getAddSignUnit();
