@@ -8,8 +8,11 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="label text-color">{{'role.name' | translate}} <span class="required-title">*</span></div>
-                        <div class="input-data" [ngClass]="{'hidden-color' : this.data.id != null}">
-                            <input type="text" formControlName="name" autofocus [readonly]="this.data.id != null" [ngClass]="{'hidden-color' : this.data.id != null}">
+                        <div *ngIf="this.data.id == null" class="input-data">
+                            <input type="text" formControlName="name">
+                        </div>
+                        <div *ngIf="this.data.id != null" class="input-data hidden-color">
+                            <div formControlName="name" class="hidden-color">{{addForm.controls.name.value}}</div>
                         </div>
                         <div *ngIf="submitted && f.name.errors" class="invalid">
                             <div *ngIf="f.name.errors.required">{{'error.role.name.required' | translate}}</div>
@@ -19,8 +22,11 @@
                 <div class="row" style="padding-top: 10px;">
                     <div class="col-md-12">
                         <div class="label text-color">{{'role.code' | translate}} <span class="required-title">*</span></div>
-                        <div class="input-data" [ngClass]="{'hidden-color' : this.data.id != null}">
-                            <input type="text" formControlName="code" autofocus [readonly]="this.data.id != null" [ngClass]="{'hidden-color' : this.data.id != null}">
+                        <div *ngIf="this.data.id == null" class="input-data">
+                            <input type="text" formControlName="code">
+                        </div>
+                        <div *ngIf="this.data.id != null" class="input-data hidden-color">
+                            <div formControlName="code" class="hidden-color">{{addForm.controls.code.value}}</div>
                         </div>
                         <div *ngIf="submitted && f.code.errors" class="invalid">
                             <div *ngIf="f.code.errors.required">{{'error.role.code.required' | translate}}</div>

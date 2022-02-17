@@ -5,7 +5,7 @@
 .input-data {
     border: 1px solid #106DB6;
     border-radius: 5px;
-    height: 33px;
+    min-height: 33px;
     display: flex;
     align-items: center;
 
@@ -13,11 +13,15 @@
         padding-left: 14px;
     }
 
-    > input {
+    > input, div {
         border: none;
         outline: none;
-        padding-left: 19px;
+        padding-left: 15px;
         width: 100%;
+        border-radius: 5px;
+    }
+    > div{
+        padding: 5px 15px;
     }
 }  
 .cancel-button{

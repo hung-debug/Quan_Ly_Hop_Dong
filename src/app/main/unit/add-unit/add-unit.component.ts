@@ -266,7 +266,7 @@ export class AddUnitComponent implements OnInit {
                                     
                                     this.roleService.addRoleByOrg(dataRoleIn).subscribe(
                                       dataRole => {
-                                        this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
+                                        //this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
                                         console.log(dataRole);
                                         //them nguoi dung
                                         const dataUserIn = {
@@ -280,7 +280,7 @@ export class AddUnitComponent implements OnInit {
                                         this.userService.addUser(dataUserIn).subscribe(
                                           dataUser => {
                                             console.log(dataUser);
-                                            this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
+                                            //this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
                                             this.dialogRef.close();
                                             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                                               this.router.navigate(['/main/unit']);
