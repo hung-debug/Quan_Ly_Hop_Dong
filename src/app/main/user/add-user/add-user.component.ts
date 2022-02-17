@@ -314,8 +314,37 @@ export class AddUserComponent implements OnInit {
             if(dataByPhone.code == '00'){
               //kiem tra xem email dang sua co phai email cua admin to chuc khong
               //lay thong tin to chuc cua user (email) check voi email, neu trung => cap nhat so dien thoai cho to chuc do
+              this.unitService.getUnitById(data.organizationId).subscribe(
+                dataUnit => {
+                  if(dataUnit.email == data.email){
+                    const dataUpdateUnit = {
+                      id: data.organizationId,
+                      phone: data.phone,
+                      name: dataUnit.name,
+                      short_name: dataUnit.short_name,
+                      code: dataUnit.code,
+                      email: dataUnit.email,
+                      fax: dataUnit.fax,
+                      status: dataUnit.status,
+                      parent_id: dataUnit.parent_id,
+                    }
+                    //update thong tin to chuc
+                    this.unitService.updateUnit(dataUpdateUnit).subscribe(
+                      data => {
+                        //this.toastService.showSuccessHTMLWithTimeout('Cập nhật số điện thoại tổ chức thành công!', "", 3000);
+                        
+                      }, error => {
+                        this.toastService.showErrorHTMLWithTimeout('Có lỗi cập nhật số điện thoại tổ chức', "", 3000);
+                      }
+                    )
+                  }
+                  
+                }, error => {
+                  this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                }
+              )
 
-              //ham update
+              //ham update nguoi dung
               this.update(data);
             }else if(dataByPhone.code == '01'){
               this.toastService.showErrorHTMLWithTimeout('Số điện thoại đã tồn tại trong hệ thống', "", 3000);

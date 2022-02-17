@@ -89,7 +89,7 @@ export class UnitService {
       fax: datas.fax,
       status: datas.status,
       parent_id: datas.parent_id,
-      path: null
+      //path: null
     });
     console.log(headers);
     console.log(body);
