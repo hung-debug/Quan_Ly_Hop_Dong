@@ -312,6 +312,9 @@ export class AddUserComponent implements OnInit {
         this.userService.checkPhoneUser(data.phone).subscribe(
           dataByPhone => {
             if(dataByPhone.code == '00'){
+              //kiem tra xem email dang sua co phai email cua admin to chuc khong
+              //lay thong tin to chuc cua user (email) check voi email, neu trung => cap nhat so dien thoai cho to chuc do
+
               //ham update
               this.update(data);
             }else if(dataByPhone.code == '01'){

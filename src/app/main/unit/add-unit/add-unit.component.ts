@@ -130,13 +130,26 @@ export class AddUnitComponent implements OnInit {
     //kiem tra email da ton tai trong he thong hay chua
     this.userService.getUserByEmail(data.email).subscribe(
       dataByEmail => {
+
+        //lay id vai tro admin theo id to chuc
+
+
         //neu user chua co => them moi user va gan vai tro admin
         if(dataByEmail.id == 0){
 
+          //tao nguoi dung co vai tro admin
+
+          //update thong tin to chuc
           this.update(data);
           
         //neu da co user => sua user co vai tro la admin
         }else{
+
+          //lay id nguoi dung theo email
+
+          //update nguoi dung co vai tro admin theo id
+
+          //update thong tin to chuc
           this.update(data);
         }
         
