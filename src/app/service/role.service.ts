@@ -108,7 +108,7 @@ export class RoleService {
   public getRoleList(code:any, name:any): Observable<any> {
     this.getCurrentUser();
     const headers = {'Authorization': 'Bearer ' + this.token}
-    let listRoleUrl = this.listRoleUrl + "?name=" + name + "&code=" + code + "&size=10000"
+    let listRoleUrl = this.listRoleUrl + "?name=" + name.trim() + "&code=" + code.trim() + "&size=10000"
     return this.http.get<any[]>(listRoleUrl, {headers}).pipe();
   }
 
