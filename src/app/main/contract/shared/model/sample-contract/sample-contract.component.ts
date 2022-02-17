@@ -99,28 +99,62 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
     } else {
-      let dataDetermine: { id: any; sign_type: any; }[] = [];
+      let dataDetermine: { id: any; sign_type: any; name: string}[] = [];
       this.datas.is_determine_clone.forEach((res: any) => {
         res.recipients.forEach((element: any) => {
           let isObj = {
             id: element.id,
-            sign_type: element.sign_type
+            sign_type: element.sign_type,
+            name: element.name
           }
           dataDetermine.push(isObj);
         })
       })
 
-      this.datas.contract_user_sign.forEach((res: any) => {
-        res.sign_config = res.sign_config.filter((p: any) =>
-          dataDetermine.some((pt:any) =>
-            pt.id == p.recipient_id &&
-            (p.sign_unit == "chu_ky_so" && pt.sign_type.filter((s: any) => s.id == 2 || s.id == 3 || s.id == 4)) ||
-            (p.sign_unit == "chu_ky_anh" && pt.sign_type.filter((s: any) => s.id == 1)) ||
-            (p.sign_unit == "text") || (p.sign_unit == "so_tai_lieu")));
+      let dataContractUserSign: any[] = [];
+      this.datas.contract_user_sign.forEach((res: any, index: number) => {
+        if (res.sign_config.length !== 0) {
+          res.sign_config.forEach((element: any) => {
+            dataContractUserSign.push(element)
+          })
+        }
       })
+
+      let dataDiffirent: any[] = [];
+      if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
+        dataDetermine.forEach((res: any) => {
+          dataContractUserSign.forEach((items: any) => {
+            if (res.id == items.recipient_id) {
+              if ((items.sign_unit == "chu_ky_anh" && !res.sign_type.some((p: any) => p.id == 1)) ||
+                (items.sign_unit == "chu_ky_so" && !res.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4)) ||
+                items.name !== res.name) {
+                dataDiffirent.push(items);
+              }
+            }
+          })
+        })
+      }
+
+      console.log(dataDiffirent)
+      if (dataDiffirent.length > 0) {
+        this.datas.contract_user_sign.forEach((res: any) => {
+          dataDiffirent.forEach((items: any) => {
+            if (res.sign_unit == res.sign_unit && res.sign_config.length > 0) {
+              res.sign_config.forEach((element: any, index: number) => {
+                if (element.recipient_id == items.recipient_id) {
+                  delete res.sign_config[index];
+                }
+              })
+            }
+          })
+        })
+      }
+
+      console.log(this.datas.contract_user_sign);
 
       // this.isEnableSelect = false;
     }
+
 
     if (this.datas.is_action_contract_created && (this.router.url.includes("edit") || this.router.url.includes("copy"))) {
       this.getAddSignUnit();
@@ -280,8 +314,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           // item['type'] = data_duplicate.type;
           // item['width'] = data_duplicate.width;
           // dataPosition.push()
-        }
-        else {
+        } else {
           item['is_type_party'] = this.datas.is_determine_clone.type;
           item['role'] = item.role;
           dataNotPosition.push(item)
