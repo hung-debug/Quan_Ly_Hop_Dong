@@ -166,19 +166,24 @@ export class InforContractComponent implements OnInit, AfterViewInit {
       const file = e.target.files[i];
       if (file) {
         // giới hạn file upload lên là 5mb
-        if (e.target.files[0].size <= 5000000) {
+        if (file.size <= 5000000) {
           const file_name = file.name;
-          const extension = file.name.split('.').pop();
-          //this.datas.file_name_attach = file_name;
-          //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
-          this.attachFileArr.push(file);
-          this.datas.attachFileArr = this.attachFileArr;
-          this.attachFileNameArr.push(file.name);
-          this.datas.attachFileNameArr = this.attachFileNameArr;
-          if (this.datas.is_action_contract_created) {
-            this.uploadFileAttachAgain = true;
+          if(this.attachFileNameArr.filter((p:any) => p == file_name).length == 0){
+            const extension = file.name.split('.').pop();
+            //this.datas.file_name_attach = file_name;
+            //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
+            this.attachFileArr.push(file);
+            this.datas.attachFileArr = this.attachFileArr;
+            this.attachFileNameArr.push(file.name);
+            this.datas.attachFileNameArr = this.attachFileNameArr;
+            if (this.datas.is_action_contract_created) {
+              this.uploadFileAttachAgain = true;
+            }
+            //this.datas.attachFile = e.target.files;
+          }else{
+            this.toastService.showErrorHTMLWithTimeout("Trùng file đính kèm", "", 3000);
           }
-          //this.datas.attachFile = e.target.files;
+          
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
