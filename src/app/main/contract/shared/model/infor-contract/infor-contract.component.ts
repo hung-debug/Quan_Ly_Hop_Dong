@@ -683,4 +683,17 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     return true;
   }
 
+  deleteFileAttach(item:any){
+    this.attachFileNameArr.forEach((element,index)=>{
+      if(element==item) this.attachFileNameArr.splice(index,1);
+    });
+    this.datas.attachFileNameArr = this.attachFileNameArr;
+    this.attachFileArr.forEach((element,index)=>{
+      console.log(element.name);
+      if(element.name==item) this.attachFileArr.splice(index,1);
+    });
+    this.datas.attachFileArr = this.attachFileArr;
+    console.log(this.datas.attachFileArr);
+  }
+
 }
