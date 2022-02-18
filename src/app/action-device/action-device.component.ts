@@ -52,9 +52,9 @@ export class ActionDeviceComponent implements OnInit {
 
   downloadApp() {
     if (this.deviceService.os == "iOS") {
-        window.location.href = `https://testflight.apple.com/join/qWAmyels`;
+        window.location.href = `https://apps.apple.com/vn/app/mobifonecontract/id1604753922`;
     } else if (this.deviceService.os == "Android") {
-        window.location.href = `https://drive.google.com/file/d/1Oo-VMe0vnK5UuZN7bdTBLABubmD9Nxns/view?usp=sharing`;
+        window.location.href = `https://play.google.com/store/apps/details?id=vn.mobifone.econtract`;
     }
   }
 
