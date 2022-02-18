@@ -162,6 +162,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.datas.contract_user_sign.forEach((res: any) => {
           if (res.sign_config.length > 0) {
             res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some(({recipient_id}) => (val.recipient_id as any) === (recipient_id as any)));
+            res.sign_config.forEach((items: any) => {
+              items.id = items.id + '1';
+            })
           }
         })
 
