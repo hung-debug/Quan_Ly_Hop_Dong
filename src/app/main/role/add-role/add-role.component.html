@@ -12,7 +12,7 @@
                             <input type="text" formControlName="name">
                         </div>
                         <div *ngIf="this.data.id != null" class="input-data hidden-color">
-                            <div formControlName="name" class="hidden-color">{{addForm.controls.name.value}}</div>
+                            <div class="hidden-color">{{name}}</div>
                         </div>
                         <div *ngIf="submitted && f.name.errors" class="invalid">
                             <div *ngIf="f.name.errors.required">{{'error.role.name.required' | translate}}</div>
@@ -26,7 +26,7 @@
                             <input type="text" formControlName="code">
                         </div>
                         <div *ngIf="this.data.id != null" class="input-data hidden-color">
-                            <div formControlName="code" class="hidden-color">{{addForm.controls.code.value}}</div>
+                            <div class="hidden-color">{{code}}</div>
                         </div>
                         <div *ngIf="submitted && f.code.errors" class="invalid">
                             <div *ngIf="f.code.errors.required">{{'error.role.code.required' | translate}}</div>

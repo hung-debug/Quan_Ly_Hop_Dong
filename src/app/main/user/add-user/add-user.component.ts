@@ -41,6 +41,9 @@ export class AddUserComponent implements OnInit {
   imgSignPath:null;
   isEditRole:boolean=false;
 
+  organizationName:any;
+  roleName:any;
+
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
@@ -63,8 +66,6 @@ export class AddUserComponent implements OnInit {
         organizationId: this.fbd.control("", [Validators.required]),
         role: this.fbd.control("", [Validators.required]),
         status: 1,
-        organizationName:'',
-        roleName:'',
 
         phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
         networkKpi: null,
@@ -156,8 +157,7 @@ export class AddUserComponent implements OnInit {
               if(data.organization_id != null){
                 this.unitService.getUnitById(data.organization_id).subscribe(
                   data => {
-                    console.log(data.name);
-                    this.addForm.addControl('organizationName', this.fbd.control(data.name));
+                    this.organizationName = data.name
                   }, error => {
                     this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
                   }
@@ -170,7 +170,7 @@ export class AddUserComponent implements OnInit {
                 if(data.role_id != null){
                   //lay danh sach vai tro
                   this.roleService.getRoleById(data.role_id).subscribe(data => {
-                    this.addForm.addControl('roleName', this.fbd.control(data.name));
+                    this.roleName = data.name;
                   });
                 }
               }

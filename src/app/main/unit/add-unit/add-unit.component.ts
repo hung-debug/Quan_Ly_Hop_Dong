@@ -19,6 +19,8 @@ export class AddUnitComponent implements OnInit {
   codeOld:any;
   nameOld:any
 
+  parentName:any;
+
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
   submitted = false;
@@ -44,7 +46,6 @@ export class AddUnitComponent implements OnInit {
         fax: null,
         status: 1,
         parent_id: this.fbd.control("", [Validators.required]),
-        parentName:''
       });
     }
 
@@ -79,8 +80,7 @@ export class AddUnitComponent implements OnInit {
           if(data.parent_id != null){
             this.unitService.getUnitById(data.parent_id).subscribe(
               data => {
-                console.log(data.name);
-                this.addForm.addControl('parentName', this.fbd.control(data.name));
+                this.parentName = data.name;
               }, error => {
                 this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
               }

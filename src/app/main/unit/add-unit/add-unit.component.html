@@ -68,7 +68,7 @@
                     ></p-dropdown>
                 </div>
                 <div *ngIf="this.data.id != null" class="input-data hidden-color">
-                    <div formControlName="parent_id" class="hidden-color">{{addForm.controls.parentName.value}}</div>
+                    <div class="hidden-color">{{parentName}}</div>
                   </div>
                 <div *ngIf="submitted && f.parent_id.errors" class="invalid">
                     <div *ngIf="f.parent_id.errors.required">Tổ chức cấp trên không được để trống</div>
