@@ -24,7 +24,8 @@ export class ActionDeviceComponent implements OnInit {
     // if (sessionStorage.getItem('url')) {
       // let isUrl = sessionStorage.getItem('url');
       const urlQ = sessionStorage.getItem('url');
-      if (urlQ) {
+      const urlEmail = sessionStorage.getItem('recipientEmail');
+      if (urlQ && urlEmail) {
         let role;
         const urlQ1 = urlQ.split('contract-signature/')[1];
         const urlQ2 = urlQ1.split('/');
@@ -39,9 +40,13 @@ export class ActionDeviceComponent implements OnInit {
         } else if (urlRole.includes('secretary')) {
           role = 4;
         }
-        if (matchesNum && matchesNum.length == 3) {
-          console.log(`econtract://app/login/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}`);
-          window.location.href = `econtract://app/login/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}`;
+        // if (matchesNum && matchesNum.length == 3) {
+        if (matchesNum) {
+          if (!matchesNum[2]) {
+            matchesNum[2] = "0";
+          }
+          console.log(`econtract://app/login/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}`);
+          window.location.href = `econtract://app/login/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}`;
         }
       } else {
         window.location.href = `econtract://app/login`;

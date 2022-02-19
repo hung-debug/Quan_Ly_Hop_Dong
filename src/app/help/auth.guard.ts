@@ -21,12 +21,15 @@ export class AuthGuard implements CanActivate {
     // @ts-ignore
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     let role;
-    console.log(next);
-    console.log(state);
+    // console.log(next);
+    // console.log(state);
     //@ts-ignore
     if (state.url.search('loginType') > 0 && next._urlSegment.segments.some((p: any) => p.path == 'contract-signature')) {
-      if (!sessionStorage.getItem('url')) {
-        sessionStorage.setItem('url', state.url);
+      if (!sessionStorage.getItem('url') && state.url.includes("recipientEmail")) {
+        let isCheckUrl = state.url.split("&recipientEmail=");
+        // sessionStorage.setItem('url', state.url);
+        sessionStorage.setItem('url', isCheckUrl[0]);
+        sessionStorage.setItem('recipientEmail', isCheckUrl[isCheckUrl.length - 1]);
         let is_local = sessionStorage.getItem('url');
         if (is_local?.includes('loginType')) {
           let dataLoginType = is_local.split("loginType")[is_local.split("loginType").length - 1];
@@ -39,9 +42,11 @@ export class AuthGuard implements CanActivate {
         }
         const urlC = sessionStorage.getItem('url');
         const lt = sessionStorage.getItem('urlLoginType');
+        const isEmail = sessionStorage.getItem('recipientEmail');
         sessionStorage.clear();
         sessionStorage.setItem('url', urlC ? urlC : '');
         sessionStorage.setItem('urlLoginType', lt ? lt : '');
+        sessionStorage.setItem('recipientEmail', isEmail ? isEmail : '');
         if (next.queryParams.loginType && next.queryParams.loginType == 1) {
           this.router.navigate(['/login'],
             {
