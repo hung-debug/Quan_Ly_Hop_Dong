@@ -133,6 +133,8 @@
                 <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">{{'contract.document' | translate}}</span>
                 <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish'">{{'contract.status.complete' | translate}}</span>
                 <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">{{'contract.status.cancel' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='contract_exprire'">{{'contract.status.overdue' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire'">{{'contract.status.expire' | translate}}</span>
               </div>
           
             </div>

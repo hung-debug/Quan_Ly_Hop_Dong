@@ -185,6 +185,7 @@ export class ContractSignatureComponent implements OnInit {
 
   //auto search
   autoSearch(event: any) {
+    this.p = 1;
     this.filter_name = event.target.value;
     this.getContractList();
   }
