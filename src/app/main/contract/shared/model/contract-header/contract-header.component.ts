@@ -48,7 +48,10 @@ export class ContractHeaderComponent implements OnInit {
       this.datas['close_modal'] = modal;
     } else if (this.datas.stepLast == 'sample-contract') {
       this.datas.save_draft.sample_contract = true;
-      this.datas['close_modal'] = modal;
+      setTimeout(() => {
+        this.datas['close_modal'] = modal;
+      }, 100)
+    
     }
   }
 
