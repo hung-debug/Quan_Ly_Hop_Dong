@@ -128,11 +128,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       // loc du lieu khong trung nhau
       dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) => (val.recipient_id as any) == (data.id as any) &&
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) ||
-          (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4)))
+          (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) && (val.name == data.name)
       ));
 
 
-      // lay nhung du lieu da bi thay doi du lieu
+      // lay nhung du lieu da bi thay doi
       let dataDiffirent: any[] = [];
       if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
         dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
