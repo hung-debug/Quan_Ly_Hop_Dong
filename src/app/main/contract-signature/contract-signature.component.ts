@@ -45,6 +45,7 @@ export class ContractSignatureComponent implements OnInit {
   title: any = "";
 
   //filter contract
+  filter_name:any = "";
   filter_type: any = "";
   filter_contract_no: any = "";
   filter_from_date: any = "";
@@ -66,6 +67,11 @@ export class ContractSignatureComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
+      if(typeof params.filter_name != 'undefined' && params.filter_name){
+        this.filter_name = params.filter_name;
+      }else{
+        this.filter_name = "";
+      }
       if(typeof params.filter_type != 'undefined' && params.filter_type){
         this.filter_type = params.filter_type;
       }else{
@@ -104,7 +110,7 @@ export class ContractSignatureComponent implements OnInit {
   getContractList() {
     //get list contract share
     if(this.filter_status == -1){
-      this.contractService.getContractShareList(this.p, this.page).subscribe(data => {
+      this.contractService.getContractShareList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
         if (this.pageTotal == 0) {
@@ -126,7 +132,7 @@ export class ContractSignatureComponent implements OnInit {
         });
       });
     }else if(this.filter_status == 1 || this.filter_status == 4){
-      this.contractService.getContractMyProcessList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+      this.contractService.getContractMyProcessList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
         console.log(data.entities);
         this.contracts = data.entities
   
@@ -179,6 +185,8 @@ export class ContractSignatureComponent implements OnInit {
 
   //auto search
   autoSearch(event: any) {
+    this.filter_name = event.target.value;
+    this.getContractList();
   }
 
   private convertActionStr(): string {
@@ -228,6 +236,7 @@ export class ContractSignatureComponent implements OnInit {
   searchContract(){
     const data = {
       title: 'TÌM KIẾM HỢP ĐỒNG',
+      filter_name: this.filter_name,
       filter_type: this.filter_type,
       filter_contract_no: this.filter_contract_no,
       filter_from_date: this.filter_from_date,

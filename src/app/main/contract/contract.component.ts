@@ -45,6 +45,7 @@ export class ContractComponent implements OnInit {
   notification:any="";
 
   //filter contract
+  filter_name:any = "";
   filter_type:any = "";
   filter_contract_no:any = "";
   filter_from_date:any = "";
@@ -103,6 +104,11 @@ export class ContractComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
+        if(typeof params.filter_name != 'undefined' && params.filter_name){
+          this.filter_name = params.filter_name;
+        }else{
+          this.filter_name = "";
+        }
         if(typeof params.filter_type != 'undefined' && params.filter_type){
           this.filter_type = params.filter_type;
         }else{
@@ -179,7 +185,7 @@ export class ContractComponent implements OnInit {
 
   getContractList(){
     //get list contract
-    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+    this.contractService.getContractList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
       console.log(this.contracts);
@@ -260,50 +266,12 @@ export class ContractComponent implements OnInit {
     }
   }
 
-
-
   autoSearch(event:any){
-    this.p = 1;
-    this.contractService.getContractList(this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
-      this.contracts = this.transform(data.entities, event);
-      this.pageTotal = data.total_elements;
-      if(this.pageTotal == 0){
-        this.p = 0;
-        this.pageStart = 0;
-        this.pageEnd = 0;
-      }else{
-        this.setPage();
-      }
-
-      this.contracts.forEach((key : any, v: any) => {
-        this.contracts[v].status = this.filter_status;
-        let participants = key.participants;
-        console.log(participants);
-        participants.forEach((key : any, val: any) => {
-          if (key.type == 1) {
-            this.contracts[v].sideA = key.name;
-          }else{
-            this.contracts[v].sideB = key.name;
-          }
-          console.log(this.contracts[v].sideA);
-        })
-      });
-    });
+    this.filter_name = event.target.value;
+    this.getContractList();
   }
 
-  transform(contracts:any, event:any):any[]  {
-    let searchText = event.target.value;
-    if (!contracts) {
-      return [];
-    }
-    if (!searchText) {
-      return contracts;
-    }
-    searchText = searchText.toLocaleLowerCase();
-    return contracts.filter((it:any) => {
-      return it.name.toLocaleLowerCase().includes(searchText);
-    });
-  }
+  
 
   openDetail(id:number){
     this.router.navigate(['main/form-contract/detail/' + id]);
