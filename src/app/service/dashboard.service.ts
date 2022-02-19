@@ -70,6 +70,9 @@ export class DashboardService {
 
   public getNotification(status:any, from_date:any, to_date:any, size:any, page:any): Observable<any> {
     this.getCurrentUser();
+    if(page != ""){
+      page = page - 1;
+    }
     let listNotificationUrl = this.listNotificationUrl + '?status=' + status + '&from_date=' + from_date + '&to_date=' + to_date + '&size=' + size + '&page=' + page;
     console.log(listNotificationUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
