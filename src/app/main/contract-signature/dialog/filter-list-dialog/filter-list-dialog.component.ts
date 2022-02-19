@@ -74,6 +74,7 @@ export class FilterListDialogComponent implements OnInit {
       this.router.navigate(['main/contract-signature/receive/' + data.status],
       {
         queryParams: {
+          'filter_name': this.data.filter_name,
           'filter_type': data.filter_type, 
           'filter_contract_no': data.filter_contract_no,
           'filter_from_date': data.filter_from_date,
