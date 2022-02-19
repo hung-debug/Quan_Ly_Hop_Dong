@@ -48,16 +48,14 @@ export class ContractHeaderComponent implements OnInit {
       this.datas['close_modal'] = modal;
     } else if (this.datas.stepLast == 'sample-contract') {
       this.datas.save_draft.sample_contract = true;
-      setTimeout(() => {
-        this.datas['close_modal'] = modal;
-      }, 100)
-    
+      this.datas['close_modal'] = modal;
     }
   }
 
   closeCreateContract(modal: any) {
     modal.close('Save click');
-    void this.router.navigate(['/main/dashboard']);
+    // void this.router.navigate(['/main/dashboard']);
+    void this.router.navigate(['/main/contract/create/draft']);
   }
 
   private getDismissReason(reason: any): string {
