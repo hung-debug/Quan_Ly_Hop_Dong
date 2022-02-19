@@ -52,7 +52,7 @@
         <div class="label_item">{{'contract.number' | translate}}</div>
         <div class="input-group">
           <input type="text" [(ngModel)]="code" class="input_text" (keyup)="contractNumberValid()"/>
-        </div>  
+        </div>
       </div>
       <div class="form-group">
         <div class="invalid" *ngIf="errorContractNumber!=''">
@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="col-md-2"></div>
     <div class="col-md-5">
       <div class="form-group">
@@ -159,7 +159,6 @@
   bdColor="rgba(51,51,51,0.8)"
   size="medium"
   color="#fff"
-  type="ball-spin-clockwise"
->
+  type="ball-spin-clockwise">
   <p style="font-size: 18px; color: white">Đang xử lý...</p>
 </ngx-spinner>
