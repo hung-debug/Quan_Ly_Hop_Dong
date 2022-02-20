@@ -54,7 +54,8 @@ export class ContractHeaderComponent implements OnInit {
 
   closeCreateContract(modal: any) {
     modal.close('Save click');
-    void this.router.navigate(['/main/dashboard']);
+    // void this.router.navigate(['/main/dashboard']);
+    void this.router.navigate(['/main/contract/create/draft']);
   }
 
   private getDismissReason(reason: any): string {

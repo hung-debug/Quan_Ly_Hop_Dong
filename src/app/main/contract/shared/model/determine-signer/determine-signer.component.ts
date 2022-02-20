@@ -15,6 +15,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../../../service/toast.service";
 import {Router} from "@angular/router";
 import {NgxInputSearchModule} from "ngx-input-search";
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-determine-signer',
@@ -163,10 +164,9 @@ export class DetermineSignerComponent implements OnInit {
     } else {
       this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
           this.getDataApiDetermine(res, is_save)
-        },
-        (res: any) => {
+        }, (error: HttpErrorResponse) => {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout(res.error, "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
         }, () => {
           this.spinner.hide();
         }
@@ -182,7 +182,8 @@ export class DetermineSignerComponent implements OnInit {
       if (this.datas['close_modal']) {
         this.datas.close_modal.close('Save click');
       }
-      void this.router.navigate(['/main/dashboard']);
+      // void this.router.navigate(['/main/dashboard']);
+      void this.router.navigate(['/main/contract/create/draft']);
     } else if (!this.saveDraftStep || is_save) {
       // this.datas.determine_contract = res ? res : this.datas.is_determine_clone;
       this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;

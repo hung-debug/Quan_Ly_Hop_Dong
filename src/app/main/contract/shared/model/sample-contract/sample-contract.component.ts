@@ -1166,6 +1166,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.datas.stepLast = this.step
           this.nextOrPreviousStep(this.step);
         } else if (action == 'save_draft') {
+          this.datas.save_draft.sample_contract = false;
+          this.stepChangeSampleContract.emit('save_draft_sample_contract')
+          if (this.datas['close_modal']) {
+            this.datas.close_modal.close('Save click');
+          }
           this.getRemoveCopyRight();
           this.router.navigate(['/main/contract/create/draff']);
           this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
