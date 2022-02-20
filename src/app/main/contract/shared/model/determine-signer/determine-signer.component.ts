@@ -182,7 +182,8 @@ export class DetermineSignerComponent implements OnInit {
       if (this.datas['close_modal']) {
         this.datas.close_modal.close('Save click');
       }
-      void this.router.navigate(['/main/dashboard']);
+      // void this.router.navigate(['/main/dashboard']);
+      void this.router.navigate(['/main/contract/create/draft']);
     } else if (!this.saveDraftStep || is_save) {
       // this.datas.determine_contract = res ? res : this.datas.is_determine_clone;
       this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;
