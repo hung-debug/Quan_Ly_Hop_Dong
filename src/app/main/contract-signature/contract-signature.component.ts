@@ -151,8 +151,14 @@ export class ContractSignatureComponent implements OnInit {
           this.contracts[v].contractSignTime = key.participant.contract.sign_time;
           this.contracts[v].contractCreateTime = key.participant.contract.created_time;
           this.contracts[v].contractStatus = key.participant.contract.status;
-          this.contracts[v].sideA = key.participant.contract.participants[0]?.name;
-          this.contracts[v].sideB = key.participant.contract.participants[1]?.name;
+
+          key.participant.contract.participants.forEach((key : any, val: any) => {
+            if (key.type == 1) {
+              this.contracts[v].sideA = key.name;
+            }else{
+              this.contracts[v].sideB = key.name;
+            }
+          })
         });
       });
     }else {
