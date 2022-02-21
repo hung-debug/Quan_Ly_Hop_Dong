@@ -79,15 +79,15 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('urlLoginType')));
-    if (this.router.url.includes('/main/form-contract/add') ||
-      this.router.url.includes('/coordinates') ||
-      this.router.url.includes('/consider') ||
-      this.router.url.includes('/signature') ||
-      this.router.url.includes('/secretary') ||
-      this.router.url.includes('/form-contract/detail')
-    ) {
-      this.isRouterContractNew = false;
-    } else this.isRouterContractNew = true;
+    // if (this.router.url.includes('/main/form-contract/add') ||
+    //   this.router.url.includes('/coordinates') ||
+    //   this.router.url.includes('/consider') ||
+    //   this.router.url.includes('/signature') ||
+    //   this.router.url.includes('/secretary') ||
+    //   this.router.url.includes('/form-contract/detail')
+    // ) {
+    //   this.isRouterContractNew = false;
+    // } else this.isRouterContractNew = true;
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
 
     this.nameCurrentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.name;
@@ -177,23 +177,22 @@ export class MainComponent implements OnInit {
   }
 
   getName(e: any) {
-    if (e && e == "create-contract-new" || e == "contract-signature") {
-      this.isShowCopyRight = false;
-      this.isRouterContractNew = false
-    } else {
-      this.isShowCopyRight = true;
-      this.isRouterContractNew = true;
-    }
+    // if (e && e == "create-contract-new" || e == "contract-signature") {
+    //   this.isShowCopyRight = false;
+    //   this.isRouterContractNew = false
+    // } else {
+    //   this.isShowCopyRight = true;
+    //   this.isRouterContractNew = true;
+    // }
   }
 
   getStyle() {
-    // if (this.isShowCopyRight && this.isRouterContractNew) {
-    if (this.getCheckCopyRight()) {
+    if (this.router.url.includes("contract-signature")) {
       return {
-        'margin-top': '60px'
+        'margin-top': '40px'
       }
     } else return {
-      'margin-top': '40px'
+      'margin-top': '60px'
     }
   }
 
@@ -223,9 +222,9 @@ export class MainComponent implements OnInit {
     });
   }
 
-  getCheckCopyRight() {
-    return !sessionStorage.getItem('copy_right_show');
-  }
+  // getCheckCopyRight() {
+  //   return !sessionStorage.getItem('copy_right_show');
+  // }
 
 
   viewAllNotification(){

@@ -1,6 +1,5 @@
 .sample-contract {
-    // height: calc(100vh - 201px);
-    height: calc(100vh - 223px);
+    height: calc(100vh - 246px);
     &__file {
         //position: relative;
         .sig-img-daky {
@@ -25,8 +24,7 @@
         overflow-x: hidden;
     }
     .viewer-pdf.isDrag {
-        //height: calc(100vh - 221px);
-        height: calc(100vh - 223px);
+        height: calc(100vh - 246px);
         overflow-x: auto;
         text-align: center;
         background-color: rgba(239, 239, 239, 1);

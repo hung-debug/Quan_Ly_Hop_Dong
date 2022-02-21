@@ -495,10 +495,15 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
   // @ts-ignore
   changeDisplay() {
-    if (window.innerHeight < 670) {
+    if (window.innerHeight < 670 && window.innerHeight > 634) {
       return {
         "overflow": "auto",
         "height": "calc(50vh - 113px)"
+      }
+    } else if (window.innerHeight <= 634) {
+      return {
+        "overflow": "auto",
+        "height": "calc(50vh - 170px)"
       }
     } else return {}
   }
