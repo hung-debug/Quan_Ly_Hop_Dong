@@ -145,22 +145,35 @@ export class DetermineSignerComponent implements OnInit {
     }
   }
 
-  getApiDetermine(is_save?: boolean) {
+  async getApiDetermine(is_save?: boolean) {
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
-      if (items.type == 3) {
+      if (items.type == 3) 
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
-      }
     })
     this.spinner.show();
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
-      this.contractService.getContractDetermineCoordination(this.datas.is_determine_clone, this.datas.contract_id_action).subscribe((res: any) => {
-        this.getDataApiDetermine(res)
-      }, (res: any) => {
-        this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout(res.error, "", 3000);
-      }, () => {
-        this.spinner.hide();
-      })
+      let isBody: any[] = [];
+      let count = 0;
+      let is_error = '';
+      for (let i = 0; i < this.datas.is_determine_clone.length; i++) {
+        this.datas.is_determine_clone[i].recipients.forEach((element: any) => {
+          if (!element.id) element.id = 0;
+        })
+        await this.contractService.getContractDetermineCoordination(this.datas.is_determine_clone[i], this.datas.contract_id_action).toPromise().then((res: any) => {
+              isBody.push(res);
+        }, (res: any) => {
+          is_error = res.error;
+          count++
+        })
+        if (count > 0) {
+          break;
+        }
+      }
+      if (isBody.length == this.datas.is_determine_clone.length) {
+        this.getDataApiDetermine(isBody, is_save)
+      } else this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
+      this.spinner.hide()
+
     } else {
       this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
           this.getDataApiDetermine(res, is_save)
@@ -182,14 +195,12 @@ export class DetermineSignerComponent implements OnInit {
       if (this.datas['close_modal']) {
         this.datas.close_modal.close('Save click');
       }
-      // void this.router.navigate(['/main/dashboard']);
       void this.router.navigate(['/main/contract/create/draft']);
     } else if (!this.saveDraftStep || is_save) {
-      // this.datas.determine_contract = res ? res : this.datas.is_determine_clone;
       this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;
       this.step = variable.stepSampleContract.step3;
       this.datas.stepLast = this.step;
-      sessionStorage.setItem('copy_right_show', 'true');
+      // sessionStorage.setItem('copy_right_show', 'true');
       this.nextOrPreviousStep(this.step);
     }
   }
@@ -198,17 +209,6 @@ export class DetermineSignerComponent implements OnInit {
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
     this.stepChangeDetermineSigner.emit(step);
-  }
-  //
-  // getData(item: any) {
-  //   console.log(item)
-  // }
-
-  getOtp(data: any) {
-    // let checkSignType = data.sign_type.filter((p: any) => p.id == 1);
-    // if (checkSignType.length > 0) {
-    //   return true
-    // } else return false;
   }
 
   selectWithOtp(e: any, data: any) {
@@ -226,7 +226,6 @@ export class DetermineSignerComponent implements OnInit {
         res.is_otp = false;
       })
     }
-    // console.log(data);
   }
 
   // valid data step 2

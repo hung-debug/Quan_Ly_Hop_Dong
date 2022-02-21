@@ -1,67 +1,67 @@
 <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
+
   <app-sidebar *ngIf="getShowHideSideBar()" (evenSelectSidebar)="getName($event)"></app-sidebar>
-  <main class="page-content" [ngStyle]="getStyleWithSideBar()" [style.padding-bottom]="this.getCheckCopyRight() ? '25px' : ''">
-    <header [ngStyle]="getStyleSideBar()">
-      <div class="search-wrapper">
-        <h3>{{title | translate}}</h3>
-      </div>
-      <div *ngIf="getShowHideSideBar()">
-        <div ngbDropdown class="d-inline-block">
-          <div class="social-icons" ngbDropdownToggle (click)="loadDataNotification()">
-            <!-- <span class="notification_login"></span> -->
-            <i *ngIf="numberNotification == 0" class="pi pi-bell p-mr-4 p-text-secondary"></i>
-            <i *ngIf="numberNotification > 0" class="pi pi-bell p-mr-4 p-text-secondary" pBadge value="{{numberNotification}}"></i>
-            <div class="label">{{'notification' | translate }}</div>
-          </div>
-
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu" style="width: 500px;">
-            <div class="title_notification">{{'no.list' | translate}}</div>
-            <div class="drop_notification" *ngFor="let item of listNotification; let i = index"  (click)="openLinkNotification(item.notice_url, item.id)"
-            [style.background-color]="item.status==0 ? '#eaf4ff' : ''">
-              <div class="row">
-                <div class="col-md-12 item_contract_name">{{item.notice_name}}</div>
-              </div>
-              <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
-                <div class="col-md-12 item_contract_infor">
-                  <img src="../../../assets/img/user_icon.svg" width="12px"/>
-                  <span> {{s}}</span>
-                </div>
-              </div>
-              <div class="row item_contract_infor">
-
-                <div class="col-md-6 calendar_create">
-                  <img src="../../../assets/img/calendar_icon.svg" width="15px"/>
-                  <span class="item_date"> {{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
-                </div>
-
-                <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
-                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">{{'contract.lead' | translate}}</span>
-                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject'">{{'contract.status.fail' | translate}}</span>
-                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_review'">{{'contract.view' | translate}}</span>
-                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign'">{{'contract.sign' | translate}}</span>
-                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">{{'contract.document' | translate}}</span>
-                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish'">{{'contract.status.complete' | translate}}</span>
-                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">{{'contract.status.cancel' | translate}}</span>
-                  <span class="status_blue" *ngIf="item.message_code=='contract_exprire'">{{'contract.status.overdue' | translate}}</span>
-                  <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire'">{{'contract.status.expire' | translate}}</span>
-                </div>
-
-              </div>
+    <main class="page-content" [ngStyle]="getStyleWithSideBar()" [style.padding-bottom]="this.getCheckCopyRight() ? '25px' : ''">
+        <header [ngStyle]="getStyleSideBar()">
+            <div class="search-wrapper">
+                <h3>{{title | translate}}</h3>
             </div>
-            <div class="view_all" (click)="viewAllNotification()">
-              {{'view.all' | translate}}
-            </div>
-          </div>
-        </div>
+            <div *ngIf="getShowHideSideBar()">
+              <div ngbDropdown class="d-inline-block">
+                  <div class="social-icons" ngbDropdownToggle (click)="loadDataNotification()">
+                      <!-- <span class="notification_login"></span> -->
+                      <i *ngIf="numberNotification == 0" class="pi pi-bell p-mr-4 p-text-secondary"></i>
+                      <i *ngIf="numberNotification > 0" class="pi pi-bell p-mr-4 p-text-secondary" pBadge value="{{numberNotification}}"></i>
+                      <div class="label">{{'notification' | translate }}</div>
+                  </div>
 
-        <div ngbDropdown class="d-inline-block">
-          <div class="social-icons" ngbDropdownToggle>
-            <span class="document"></span>
-            <div class="label">{{'document' | translate }}</div>
-          </div>
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu" style="width: 500px;">
+                      <div class="title_notification">{{'no.list' | translate}}</div>
+                      <div class="drop_notification" *ngFor="let item of listNotification; let i = index" (click)="openLinkNotification(item.notice_url, item.id)" [style.background-color]="item.status==0 ? '#eaf4ff' : ''">
+                          <div class="row">
+                              <div class="col-md-12 item_contract_name">{{item.notice_name}}</div>
+                          </div>
+                          <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
+                              <div class="col-md-12 item_contract_infor">
+                                  <img src="../../../assets/img/user_icon.svg" width="12px" />
+                                  <span> {{s}}</span>
+                              </div>
+                          </div>
+                          <div class="row item_contract_infor">
 
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-            <button ngbDropdownItem class="drop">
+                              <div class="col-md-6 calendar_create">
+                                  <img src="../../../assets/img/calendar_icon.svg" width="15px" />
+                                  <span class="item_date"> {{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
+                              </div>
+
+                              <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
+                                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">{{'contract.lead' | translate}}</span>
+                                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject'">{{'contract.status.fail' | translate}}</span>
+                                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_review'">{{'contract.view' | translate}}</span>
+                                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign'">{{'contract.sign' | translate}}</span>
+                                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">{{'contract.document' | translate}}</span>
+                                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish'">{{'contract.status.complete' | translate}}</span>
+                                  <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">{{'contract.status.cancel' | translate}}</span>
+                                  <span class="status_blue" *ngIf="item.message_code=='contract_exprire'">{{'contract.status.overdue' | translate}}</span>
+                                  <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire'">{{'contract.status.expire' | translate}}</span>
+                              </div>
+
+                          </div>
+                      </div>
+                      <div class="view_all" (click)="viewAllNotification()">
+                          {{'view.all' | translate}}
+                      </div>
+                  </div>
+              </div>
+
+                <div ngbDropdown class="d-inline-block">
+                    <div class="social-icons" ngbDropdownToggle>
+                        <span class="document"></span>
+                        <div class="label">{{'document' | translate }}</div>
+                    </div>
+
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
+                        <button ngbDropdownItem class="drop">
               <a href="/assets/upload/eContract_Web_Manual.docx" style="color: inherit; text-decoration: none;">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
@@ -71,7 +71,7 @@
               </a>
             </button>
 
-            <button ngbDropdownItem class="drop">
+                        <button ngbDropdownItem class="drop">
               <a href="/assets/upload/mobi_pki_sign_setup.zip" style="color: inherit; text-decoration: none;">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
@@ -80,24 +80,24 @@
                 <div>{{'document.plugin.pki' | translate }}</div></div>
               </a>
             </button>
-          </div>
-        </div>
+                    </div>
+                </div>
 
-        <div ngbDropdown class="d-inline-block">
-          <div class="social-icons" ngbDropdownToggle>
-              <span class="user_login"></span>
-              <div class="label">{{nameCurrentUser}}</div>
-          </div>
+                <div ngbDropdown class="d-inline-block">
+                    <div class="social-icons" ngbDropdownToggle>
+                        <span class="user_login"></span>
+                        <div class="label">{{nameCurrentUser}}</div>
+                    </div>
 
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-            <button ngbDropdownItem class="drop" (click)="infoUserDetail()">
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
+                        <button ngbDropdownItem class="drop" (click)="infoUserDetail()">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
                   <div class="db_user_detail"></div>
                 </div>
                 <div>{{'user.information' | translate }}</div></div>
             </button>
-            <button ngbDropdownItem class="drop" (click)="resetPassword()">
+                        <button ngbDropdownItem class="drop" (click)="resetPassword()">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
                   <div class="db_password"></div>
@@ -105,7 +105,7 @@
                 <div>{{'login.reset_password_new' | translate }}</div>
               </div>
             </button>
-            <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
+                        <button ngbDropdownItem class="drop_red" routerLink="/login" (click)="logout()">
               <div style="display: flex; align-items: center;">
                 <div class="db_user">
                   <div class="db_log_out"></div>
@@ -113,27 +113,25 @@
                 <div>{{'logout' | translate }}</div>
               </div>
             </button>
-          </div>
+                    </div>
+                </div>
+
+            </div>
+        </header>
+
+        <div class="container-fluid" style="margin-top: 40px;">
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <router-outlet></router-outlet>
+
+                </div>
+            </div>
+
         </div>
-
-      </div>
-    </header>
-
-      <div class="container-fluid" [ngStyle]="getStyle()">
-        <div class="row">
-          <div class="form-group col-md-12">
-            <router-outlet></router-outlet>
-
-          </div>
+        <!--    *ngIf="this.isShowCopyRight && this.isRouterContractNew"-->
+        <!-- <div *ngIf="getCheckCopyRight()" class="content_footer"> -->
+        <div class="content_footer">
+            <div>@Copyright 2021 - MobiFone</div>
         </div>
-
-      </div>
-<!--    *ngIf="this.isShowCopyRight && this.isRouterContractNew"-->
-      <div *ngIf="getCheckCopyRight()" class="content_footer">
-        <div>@Copyright 2021 - MobiFone</div>
-      </div>
-  </main>
+    </main>
 </div>
-
-
-

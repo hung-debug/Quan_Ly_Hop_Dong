@@ -197,6 +197,25 @@ export class ContractService {
       );
   }
 
+  getContractSampleEdit(data_sample_contract: any, id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify(data_sample_contract);
+    return this.http.put<Contract>(this.addSampleCntractUrl + `/${id}`, body, {'headers': headers})
+      .pipe(
+        map((contract) => {
+          if (JSON.parse(JSON.stringify(contract)).id != 0) {
+            return contract;
+          } else {
+            return null;
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   processAuthorizeContract(infoAuthorize: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
