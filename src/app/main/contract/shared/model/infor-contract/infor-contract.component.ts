@@ -180,9 +180,10 @@ export class InforContractComponent implements OnInit, AfterViewInit {
               this.uploadFileAttachAgain = true;
             }
             //this.datas.attachFile = e.target.files;
-          }else{
-            this.toastService.showErrorHTMLWithTimeout("Trùng file đính kèm", "", 3000);
           }
+          // else{
+          //   this.toastService.showErrorHTMLWithTimeout("Trùng file đính kèm", "", 3000);
+          // }
           
         } else {
           this.datas.file_name_attach = '';
