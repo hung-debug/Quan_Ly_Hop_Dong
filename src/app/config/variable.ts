@@ -202,7 +202,7 @@ export var roleList = [
       //Thêm mới hợp đồng đơn lẻ
       { label: "Thêm mới hợp đồng đơn lẻ", value: "QLHD_01"},
       //Sửa hợp đồng
-      // { label: "Sửa hợp đồng", value: "QLHD_02"},
+      { label: "Sửa hợp đồng", value: "QLHD_02"},
       //Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con
       // { label: "Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con", value: "QLHD_03"},
       //Xem danh sách hợp đồng của tổ chức của tôi
@@ -214,7 +214,7 @@ export var roleList = [
       //Xem thông tin chi tiết hợp đồng
       { label: "Xem thông tin chi tiết hợp đồng", value: "QLHD_07"},
       //Sao chép hợp đồng
-      // { label: "Sao chép hợp đồng", value: "QLHD_08"},
+      { label: "Sao chép hợp đồng", value: "QLHD_08"},
       //Hủy hợp đồng
       { label: "Hủy hợp đồng", value: "QLHD_09"},
       //Xem lịch sử hợp đồng

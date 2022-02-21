@@ -146,7 +146,7 @@ export class AddUserComponent implements OnInit {
                 nameHsm: data.hsm_name,
 
                 fileImage:null
-              });
+              }); 
               this.phoneOld = data.phone;
               this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
               this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;

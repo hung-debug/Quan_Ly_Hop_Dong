@@ -46,9 +46,11 @@ export class UserComponent implements OnInit {
     this.unitService.getUnitList('', '').subscribe(data => {
       console.log(data.entities);
       this.orgListTmp.push({name: "Tất cả", id:""});
-      for(var i = 0; i < data.entities.length; i++){
-        this.orgListTmp.push(data.entities[i]);
+      let dataUnit = data.entities.sort((a:any,b:any) => a.name.toString().localeCompare(b.name.toString()));
+      for(var i = 0; i < dataUnit.length; i++){
+        this.orgListTmp.push(dataUnit[i]);
       }
+      
       this.orgList = this.orgListTmp;
     });
 

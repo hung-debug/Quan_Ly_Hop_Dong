@@ -90,6 +90,7 @@ export class DetailUserComponent implements OnInit {
 
           this.nameHsm = data.hsm_name;
 
+          this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
           //set name
           if(data.organization_id != null){
             this.unitService.getUnitById(data.organization_id).subscribe(
