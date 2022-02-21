@@ -26,7 +26,6 @@
 
   <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
     <div class="row">
-      <!-- status != 'draft'&&  -->
       <div class="col-md-12 item_contract_name" (click)="isQLHD_07?openDetail(item.id):null">{{item.name}}</div>
     </div>
     <div class="row">
