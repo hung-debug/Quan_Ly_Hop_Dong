@@ -145,13 +145,9 @@ export class DetermineSignerComponent implements OnInit {
     })
     this.spinner.show();
     this.contractService.getContractDetermineCoordination(this.is_determine_clone[0], this.datas.determine_contract.id).subscribe((res: any) => {
-        // this.datas.id = data?.id;
-        // if (!this.saveDraftStep) {
         this.datas.determine_contract = res ? res : this.is_determine_clone;
         this.step = variable.stepSampleContract.step3;
         this.datas.stepLast = this.step
-        // sessionStorage.setItem('copy_right_show', 'true');
-        // this.datas.step = this.step
         this.nextOrPreviousStep(this.step);
         // } else {
         //   this.datas.save_draft.determine_signer = false;

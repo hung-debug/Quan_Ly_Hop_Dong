@@ -817,10 +817,9 @@ export class DetermineSignerComponent implements OnInit {
           item.role = 3; // người ký
           item.ordering = 1;
           item.status = 0;
-          // item.username = "";
-          // item.password = "";
           item.is_otp = 0;
           item.sign_type = [];
+          if (item.id) delete item.id; 
         }
       })
     }
