@@ -7,25 +7,22 @@
       <ul id="progressbar">
         <li [ngClass]="(step == 'infor-contract' || step == 'determine-contract' ||
                         step == 'sample-contract' || step == 'confirm-contract') ? 'active ' : 'inactive'">
-          <div [ngClass]="{'current_active' : step == 'infor-contract'}">{{'contract.information' | translate}}</div>
+          <div [ngClass]="{'current_active' : step == 'infor-contract'}">{{'contract-template.information' | translate}}</div>
         </li>
   
         <li [ngClass]="(step == 'determine-contract' || step == 'sample-contract' ||
                        step == 'confirm-contract') ? 'active' : 'inactive'">
-          <div [ngClass]="{'current_active' : step == 'determine-contract'}">{{'contract.identify-signer' | translate}}</div>
+          <div [ngClass]="{'current_active' : step == 'determine-contract'}">{{'contract-template.identify-signer' | translate}}</div>
         </li>
   
         <li [ngClass]="(step == 'sample-contract' || step == 'confirm-contract') ? 'active' : 'inactive'">
-          <div [ngClass]="{'current_active' : step == 'sample-contract'}">{{'contract.design' | translate}}</div>
+          <div [ngClass]="{'current_active' : step == 'sample-contract'}">{{'contract-template.design' | translate}}</div>
         </li>
   
         <li [ngClass]="step == 'confirm-contract' ? 'active' : 'inactive'">
-          <div [ngClass]="{'current_active' : step == 'confirm-contract'}">{{'contract.confirm' | translate}}</div>
+          <div [ngClass]="{'current_active' : step == 'confirm-contract'}">{{'contract-template.confirm' | translate}}</div>
         </li>
       </ul>
-    </div>
-    <div>
-      <img src="assets/img/icon_close.svg" width="24px" class="icon_close" ngbTooltip="{{'btn.close' | translate}}" (click)="open(modalNotifi)"/>
     </div>
   </div>
   

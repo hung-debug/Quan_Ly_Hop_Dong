@@ -102,7 +102,7 @@ export class AddContractTemplateComponent implements OnInit {
 
       //set title
       if (this.action == 'add') {
-        this.appService.setTitle('contract.add');
+        this.appService.setTitle('contract-template.add');
       } else if (this.action == 'add-contract-connect') {
         this.appService.setTitle('contract.add');
         const array_empty: any [] = [];

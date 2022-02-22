@@ -111,8 +111,15 @@
     "contract-template.create": "Mẫu hợp đồng tạo",
     "contract-template.share": "Mẫu hợp đồng được chia sẻ",
     "contract-template.name": "Tên mẫu hợp đồng",
+    "contract-template.file": "File mẫu hợp đồng",
     "contract-template.type": "Loại mẫu hợp đồng",
-    "contract-template.code": "Mã mẫu",
+    "contract-template.code": "Mã mẫu hợp đồng",
+
+    "contract-template.information": "Thông tin mẫu hợp đồng",
+    "contract-template.identify-signer": "Xác định người ký",
+    "contract-template.design": "Thiết kế mẫu hợp đồng",
+    "contract-template.confirm": "Xác nhận và hoàn tất",
+    "contract-template.add": "Thêm mới mẫu hợp đồng",
 
     "file.document": "File tài liệu",
     "choose": "Chọn",

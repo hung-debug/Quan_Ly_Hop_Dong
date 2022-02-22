@@ -35,6 +35,7 @@
       </div>
       <div class="input-form ng-touched ng-pristine ng-invalid">
         <form class="form-signin" [formGroup]="loginForm">
+          <div *ngIf="type==1" class="form-group" style="color: #bf6b03;">Vui lòng đăng nhập bằng tài khoản và mật khẩu đã được cấp trong email của bạn</div>
           <div class="form-group">
             <div class="input-line">
               <img src="../../assets/img/login_user.svg" class="input-img">
