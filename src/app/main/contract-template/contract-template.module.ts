@@ -22,10 +22,11 @@ import { DetermineSignerComponent } from './shared/model/determine-signer/determ
 import { SampleContractComponent } from './shared/model/sample-contract/sample-contract.component';
 import { ConfirmInforContractComponent } from './shared/model/confirm-infor-contract/confirm-infor-contract.component';
 import { SignContractComponent } from './shared/sign-sample-contract/sign-contract/sign-contract.component';
-import { AddContractComponent } from './add-contract/add-contract.component';
+import { ContractHeaderComponent } from './shared/model/contract-header/contract-header.component';
+import { AddContractTemplateComponent } from './add-contract-template/add-contract-template.component';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
-  };
+  };  
 @NgModule({
   declarations: [
     ShareContractTemplateDialogComponent,
@@ -37,10 +38,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SampleContractComponent,
     ConfirmInforContractComponent,
     SignContractComponent,
-    AddContractComponent
+    ContractHeaderComponent,
+    AddContractTemplateComponent
   ],  
   imports: [  
-    CommonModule,
+    CommonModule,  
     ReactiveFormsModule,
     FormsModule,
     NgbModule,
