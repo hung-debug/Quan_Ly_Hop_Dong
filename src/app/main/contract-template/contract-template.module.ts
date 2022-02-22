@@ -17,6 +17,12 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ChipsModule } from 'primeng/chips';
+import { InforContractComponent } from './shared/model/infor-contract/infor-contract.component';
+import { DetermineSignerComponent } from './shared/model/determine-signer/determine-signer.component';
+import { SampleContractComponent } from './shared/model/sample-contract/sample-contract.component';
+import { ConfirmInforContractComponent } from './shared/model/confirm-infor-contract/confirm-infor-contract.component';
+import { SignContractComponent } from './shared/sign-sample-contract/sign-contract/sign-contract.component';
+import { AddContractComponent } from './add-contract/add-contract.component';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
   };
@@ -25,7 +31,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ShareContractTemplateDialogComponent,
     StopContractTemplateDialogComponent,
     ReleaseContractTemplateDialogComponent,
-    DeleteContractTemplateDialogComponent
+    DeleteContractTemplateDialogComponent,
+    InforContractComponent,
+    DetermineSignerComponent,
+    SampleContractComponent,
+    ConfirmInforContractComponent,
+    SignContractComponent,
+    AddContractComponent
   ],  
   imports: [  
     CommonModule,
