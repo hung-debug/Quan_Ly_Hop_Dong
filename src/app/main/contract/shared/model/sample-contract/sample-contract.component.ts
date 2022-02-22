@@ -155,14 +155,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
 
       // loc du lieu khong trung nhau
+      // bo sung them email - && (val.email == data.email)
       dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) => (val.recipient_id as any) == (data.id as any) &&
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) ||
           (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-        (val.name == data.name) && (val.email == data.email)
+        (val.name == data.name)
       ));
 
 
       // lay nhung du lieu da bi thay doi
+      // bo sung them email - || (val.email == data.email)
       let dataDiffirent: any[] = [];
       if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
         dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
@@ -890,10 +892,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
   // @ts-ignore
   changeDisplay() {
-    if (window.innerHeight < 670) {
+    if (window.innerHeight < 670 && window.innerHeight > 643) {
       return {
         "overflow": "auto",
-        "height": "calc(50vh - 113px)"
+        "height": "calc(50vh - 118px)"
+      }
+    } else if (window.innerHeight <= 643) {
+      return {
+        "overflow": "auto",
+        "height": "calc(50vh - 170px)"
       }
     } else return {}
   }

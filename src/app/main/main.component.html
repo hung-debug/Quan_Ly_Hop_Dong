@@ -1,7 +1,6 @@
 <div class="page-wrapper" [ngClass]="{'toggled' : getSideBarState()}">
-
   <app-sidebar *ngIf="getShowHideSideBar()" (evenSelectSidebar)="getName($event)"></app-sidebar>
-    <main class="page-content" [ngStyle]="getStyleWithSideBar()" [style.padding-bottom]="this.getCheckCopyRight() ? '25px' : ''">
+  <main class="page-content" [ngStyle]="getStyleWithSideBar()" style="padding-bottom: 25px;">
         <header [ngStyle]="getStyleSideBar()">
             <div class="search-wrapper">
                 <h3>{{title | translate}}</h3>
@@ -119,7 +118,7 @@
             </div>
         </header>
 
-        <div class="container-fluid" style="margin-top: 40px;">
+        <div class="container-fluid" [ngStyle]="getStyle()">
             <div class="row">
                 <div class="form-group col-md-12">
                     <router-outlet></router-outlet>

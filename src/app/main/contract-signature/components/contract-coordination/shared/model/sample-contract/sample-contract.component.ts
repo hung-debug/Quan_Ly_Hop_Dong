@@ -1064,9 +1064,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getRemoveCopyRight() {
-    let is_var_copyRight = sessionStorage.getItem('copy_right_show');
-    if (is_var_copyRight)
-      sessionStorage.removeItem('copy_right_show')
+    // let is_var_copyRight = sessionStorage.getItem('copy_right_show');
+    // if (is_var_copyRight)
+    //   sessionStorage.removeItem('copy_right_show')
   }
 
   validData() {
