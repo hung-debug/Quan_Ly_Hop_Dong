@@ -1228,6 +1228,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
         },
           error => {
+            if (action == 'save_draft') {
+              this.datas.save_draft.sample_contract = false;
+              this.stepChangeSampleContract.emit('save_draft_sample_contract')
+              if (this.datas['close_modal']) {
+                this.datas.close_modal.close('Save click');
+              }
+            }
             this.spinner.hide();
             console.log("false connect file");
             return false;
