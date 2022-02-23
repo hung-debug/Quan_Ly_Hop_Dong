@@ -5,7 +5,7 @@
         <div class="form-group">
           <div class="label_item">{{'contract-template.name' | translate}} <span class="require_star">*</span></div>
           <div class="input-group">
-            <input #nameContract type="text" [(ngModel)]="name" class="input_text" (keyup)="contractNameRequired(); contractNameCounter()"/>
+            <input #nameContract type="text" [(ngModel)]="name" class="input_text" (keyup)="contractNameValid();"/>
           </div>
         </div>
         <div class="form-group">
@@ -96,28 +96,28 @@
           <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <div class="label_item">{{'expiration-date' | translate}} <span class="require_star">*</span></div>
+              <div class="label_item">{{'effective-start-date' | translate}} <span class="require_star">*</span></div>
               <div>
-                <p-calendar [(ngModel)]="sign_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="dd/mm/yy"></p-calendar>
+                <p-calendar [(ngModel)]="start_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="dd/mm/yy" (keyup)="startTimeRequired();"></p-calendar>
               </div>
             </div>
             <div class="form-group">
-              <div class="invalid" *ngIf="errorSignTime!=''">
-                {{errorSignTime}}
+              <div class="invalid" *ngIf="errorStartTime!=''">
+                {{errorStartTime}}
               </div>
             </div>
           </div>
 
           <div class="col-md-6">
             <div class="form-group">
-              <div class="label_item">{{'expiration-date' | translate}} <span class="require_star">*</span></div>
+              <div class="label_item">{{'effective-end-date' | translate}} <span class="require_star">*</span></div>
               <div>
-                <p-calendar [(ngModel)]="sign_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="dd/mm/yy"></p-calendar>
+                <p-calendar [(ngModel)]="end_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="dd/mm/yy" (keyup)="endTimeRequired();"></p-calendar>
               </div>
             </div>
             <div class="form-group">
-              <div class="invalid" *ngIf="errorSignTime!=''">
-                {{errorSignTime}}
+              <div class="invalid" *ngIf="errorEndTime!=''">
+                {{errorEndTime}}
               </div>
             </div>
           </div>

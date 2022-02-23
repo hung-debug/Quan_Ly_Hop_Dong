@@ -107,6 +107,7 @@
     "contract.sign-refused": "Đã từ chối ký",
     "contract.document-refused": "Đã từ chối đóng dấu",
 
+    "contract-template": "Mẫu hợp đồng",
     "contract-template.list": "Danh sách mẫu hợp đồng",
     "contract-template.create": "Mẫu hợp đồng tạo",
     "contract-template.share": "Mẫu hợp đồng được chia sẻ",
@@ -114,7 +115,9 @@
     "contract-template.file": "File mẫu hợp đồng",
     "contract-template.type": "Loại mẫu hợp đồng",
     "contract-template.code": "Mã mẫu hợp đồng",
-
+    "effective-date": "Thời gian hiệu lực",
+    "effective-start-date": "Hiệu lực từ ngày",
+    "effective-end-date": "Hiệu lực đến ngày",
     "contract-template.information": "Thông tin mẫu hợp đồng",
     "contract-template.identify-signer": "Xác định người ký",
     "contract-template.design": "Thiết kế mẫu hợp đồng",

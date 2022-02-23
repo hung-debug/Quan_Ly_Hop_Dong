@@ -46,7 +46,8 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   type_id: any;
   attachFile: any;
   filePath: any;
-  sign_time: Date;
+  start_time: any;
+  end_time: any;
 
   minDate: Date = moment().toDate();
 
@@ -56,8 +57,9 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   //error
   errorContractName: any = '';
   errorContractFile: any = '';
-  errorSignTime: any = '';
   errorContractNumber:any = '';
+  errorStartTime:any='';
+  errorEndTime:any='';
 
   uploadFileContractAgain: boolean = false;
   uploadFileAttachAgain: boolean = false;
@@ -78,7 +80,8 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     this.name = this.datas.name ? this.datas.name : null;
     this.code = this.datas.code ? this.datas.code : null;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
-    this.sign_time = this.datas.sign_time ? moment(this.datas.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
+    this.start_time = this.datas.start_time ? moment(this.datas.start_time).toDate() : '';
+    this.end_time = this.datas.end_time ? moment(this.datas.end_time).toDate() : '';
 
     this.contractService.getContractTypeList().subscribe(data => {
       // console.log(data);
@@ -105,7 +108,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
           fileInput.value = '';
           this.datas.file_name = file_name;
           this.datas.contractFile = file;
-          this.contractFileRequired();
+          this.contractFileValid();
           if (this.datas.is_action_contract_created) {
             this.uploadFileContractAgain = true;
           }
@@ -174,21 +177,12 @@ export class InforContractComponent implements OnInit, AfterViewInit {
 
   //--valid data step 1
   validData() {
-    this.clearError();
-    if(!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid()){
+    if(!this.contractNameValid() || !this.contractFileValid() 
+      || !this.contractNumberValid() || !this.startTimeRequired() || !this.endTimeRequired()){
       this.spinner.hide();
       return false;
     }
     return true
-  }
-
-  clearError() {
-    if (this.name) {
-      this.errorContractName = '';
-    }
-    if (this.datas.contractFile) {
-      this.errorContractFile = '';
-    }
   }
 
   async callAPI() {
@@ -313,58 +307,68 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     if (!this.validData()) {
       return;
-    } else {
-      // set value to datas
-      this.datas.name = this.name;
-      this.datas.code = this.code;
-      this.defineData(this.datas);
-      const fileReader = new FileReader();
-      if (this.datas.is_action_contract_created) {
-        if (!this.uploadFileContractAgain && this.datas.contractFile) {
-          await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
-            if (res)
-              this.datas.contractFile = res;
-          })
-        } else if (this.uploadFileContractAgain && this.datas.contractFile) {
-            fileReader.readAsDataURL(this.datas.contractFile);
-            fileReader.onload = (e) => {
-              if (fileReader.result)
-                this.datas.file_content = fileReader.result.toString().split(',')[1];
-                this.datas.uploadFileContractAgain = true;
-            };
-        }
-        if (!this.uploadFileAttachAgain && this.datas.attachFile) {
-          await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile).toPromise().then((data: any) => {
-            if (data)
-              this.datas.attachFile = data;
-          })
-        }
-      } else {
-        fileReader.readAsDataURL(this.datas.contractFile);
-        fileReader.onload = (e) => {
-          if (fileReader.result)
-            this.datas.file_content = fileReader.result.toString().split(',')[1];
-        };
-      }
-      if(this.datas.code != null && this.datas.code != ''){
-        //check so hop dong da ton tai hay chua
-        this.contractService.checkCodeUnique(this.datas.code).subscribe(
-          dataCode => {
-            if(dataCode.success){
-              this.callAPI();
-            }else{
-              this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
-              this.spinner.hide();
-            }
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
-            this.spinner.hide();
-          }
-        )
-      }else{
-        await this.callAPI();
-      }
+    } 
+    // else {
+    //   // set value to datas
+    //   this.datas.name = this.name;
+    //   this.datas.code = this.code;
+    //   this.defineData(this.datas);
+    //   const fileReader = new FileReader();
+    //   if (this.datas.is_action_contract_created) {
+    //     if (!this.uploadFileContractAgain && this.datas.contractFile) {
+    //       await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
+    //         if (res)
+    //           this.datas.contractFile = res;
+    //       })
+    //     } else if (this.uploadFileContractAgain && this.datas.contractFile) {
+    //         fileReader.readAsDataURL(this.datas.contractFile);
+    //         fileReader.onload = (e) => {
+    //           if (fileReader.result)
+    //             this.datas.file_content = fileReader.result.toString().split(',')[1];
+    //             this.datas.uploadFileContractAgain = true;
+    //         };
+    //     }
+    //     if (!this.uploadFileAttachAgain && this.datas.attachFile) {
+    //       await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile).toPromise().then((data: any) => {
+    //         if (data)
+    //           this.datas.attachFile = data;
+    //       })
+    //     }
+    //   } else {
+    //     fileReader.readAsDataURL(this.datas.contractFile);
+    //     fileReader.onload = (e) => {
+    //       if (fileReader.result)
+    //         this.datas.file_content = fileReader.result.toString().split(',')[1];
+    //     };
+    //   }
+    //   if(this.datas.code != null && this.datas.code != ''){
+    //     //check so hop dong da ton tai hay chua
+    //     this.contractService.checkCodeUnique(this.datas.code).subscribe(
+    //       dataCode => {
+    //         if(dataCode.success){
+    //           this.callAPI();
+    //         }else{
+    //           this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+    //           this.spinner.hide();
+    //         }
+    //       }, error => {
+    //         this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+    //         this.spinner.hide();
+    //       }
+    //     )
+    //   }else{
+    //     await this.callAPI();
+    //   }
       
+    // }
+    else{
+      //next step
+      this.step = variable.stepSampleContract.step4;
+      this.datas.stepLast = this.step;
+      // this.datas.document_id = '1';
+      this.nextOrPreviousStep(this.step);
+      console.log(this.datas);
+      this.spinner.hide();
     }
   }
 
@@ -396,38 +400,11 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     return character;
   }
 
-  contractNameCounter(){
-    if(this.name){
-      this.errorContractName = "";
-      if(this.characterCounter(this.name) > 200){
-        this.errorContractName = "Tên hợp đồng không được vượt quá 200 ký tự";
-        return false;
-      }
-      return true;
+  contractNameValid(){
+    if(this.contractNameRequired()){
+      return this.contractNameCounter();
     }
-  }
-
-  contractNumberCounter(){
-    if(this.characterCounter(this.code) > 32){
-      this.errorContractNumber = "Số hợp đồng không được vượt quá 32 ký tự";
-      return false;
-    }
-    return true;
-  }
-
-  contractNumberValid(){
-    this.errorContractNumber = "";
-    if(this.code){
-      var regex = /^[0-9]\d*$/;
-      var matches = this.code.match(regex);
-      if (matches){
-        return this.contractNumberCounter();
-      }else{
-        this.errorContractNumber = "Số hợp đồng chỉ được nhập số";
-        return false;
-      }
-    }
-    return true;
+    return this.contractNameRequired();
   }
 
   contractNameRequired(){
@@ -439,10 +416,64 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     return true;
   }
 
+  contractNameCounter(){
+    if(this.characterCounter(this.name) > 200){
+      this.errorContractName = "Tên hợp đồng không được vượt quá 200 ký tự";
+      return false;
+    }
+    return true;
+  }
+
+  contractFileValid(){
+    return this.contractFileRequired();
+  }
+
   contractFileRequired(){
     this.errorContractFile = "";
     if(!this.datas.contractFile){
       this.errorContractFile = "error.contract.file.required";
+      return false;
+    }
+    return true;
+  }
+
+  contractNumberValid(){
+    if(this.contractNumberRequired()){
+      return this.contractNumberCounter();
+    }
+    return this.contractNumberRequired();
+  }
+
+  contractNumberRequired(){
+    this.errorContractNumber = "";
+    if(!this.code){
+      this.errorContractNumber = "Mã mẫu hợp đồng không được để trống";
+      return false;
+    }
+    return true;
+  }
+
+  contractNumberCounter(){
+    if(this.characterCounter(this.code) > 32){
+      this.errorContractNumber = "Mã mẫu hợp đồng không được vượt quá 32 ký tự";
+      return false;
+    }
+    return true;
+  }
+
+  startTimeRequired(){
+    this.errorStartTime = "";
+    if(!this.start_time){
+      this.errorStartTime = "Hiệu lực từ ngày không được để trống";
+      return false;
+    }
+    return true;
+  }
+
+  endTimeRequired(){
+    this.errorEndTime = "";
+    if(!this.end_time){
+      this.errorEndTime = "Hiệu lực đến ngày không được để trống";
       return false;
     }
     return true;
