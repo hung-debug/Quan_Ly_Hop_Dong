@@ -245,7 +245,7 @@
     "sign.kpi": "Chữ ký PKI",
     "sign.hsm": "Chữ ký HSM",
 
-    "error.server": "Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý",
+    "error.server": "Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý.",
     "error.username.required": "Tên đăng nhập không được để trống",
     "error.password.required": "Mật khẩu không được để trống",
     "error.username.password": "Tên đăng nhập hoặc mật khẩu không đúng",
@@ -338,10 +338,13 @@
     "name": "Tên",
     "email_of": "Email của",
     "sdt_of": "Số điện thoại của",
+    "email_origanzation_note_duplicate": "Email tổ chức của tôi không được trùng nhau!",
     "to_chuc_of_me_ko_hop_le": "tổ chức của tôi không hợp lệ!",
     "valid_nhap_ten_dt_tc": "Vui lòng nhập tên của đối tác tổ chức!",
     "of_doi_tac": " của đối tác!",
     "of_doi_tac_ca_nhan": "của đối tác cá nhân!",
     "doi_tac_ca_nhan_ko_hop_le": " đối tác cá nhân không hợp lệ!",
-    "note_email_doi_tac": "Lưu ý: email người điều phối có thể trùng với email người ký!"
+    "doi_tac_ko_hop_le": " đối tác không hợp lệ!",
+    "note_email_doi_tac": "Lưu ý: email người điều phối có thể trùng với email người ký!",
+    "email_partern_not_duplicate": "Email đối tác không được trùng nhau!"
 }
