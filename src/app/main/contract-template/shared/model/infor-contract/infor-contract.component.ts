@@ -1,11 +1,9 @@
 import {ContractService} from 'src/app/service/contract.service';
 import {UploadService} from './../../../../../service/upload.service';
 import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
 import {variable} from "../../../../../config/variable";
 import {Observable} from 'rxjs';
 import {DatePipe} from '@angular/common';
-import {Router} from '@angular/router';
 import {ToastService} from 'src/app/service/toast.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import * as moment from "moment";
@@ -65,11 +63,9 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   uploadFileAttachAgain: boolean = false;
 
   constructor(
-    private formBuilder: FormBuilder,
     private uploadService: UploadService,
     private contractService: ContractService,
     public datepipe: DatePipe,
-    private router: Router,
     private toastService: ToastService,
     private spinner: NgxSpinnerService
   ) {
@@ -178,7 +174,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   //--valid data step 1
   validData() {
     if(!this.contractNameValid() || !this.contractFileValid() 
-      || !this.contractNumberValid() || !this.startTimeRequired() || !this.endTimeRequired()){
+      || !this.contractNumberValid() || !this.startTimeRequired() || !this.endTimeValid()){
       this.spinner.hide();
       return false;
     }
@@ -390,11 +386,6 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     this.stepChangeInfoContract.emit(step);
   }
 
-  changeAddContract(link: any) {
-    console.log(link);
-    this.router.navigate([link]);
-  }
-
   characterCounter(str:any) {
     var character = str.length;
     return character;
@@ -410,7 +401,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   contractNameRequired(){
     this.errorContractName = "";
     if(!this.name){
-      this.errorContractName = "error.contract.name.required";
+      this.errorContractName = "error.contract-template.name.required";
       return false;
     }
     return true;
@@ -418,7 +409,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
 
   contractNameCounter(){
     if(this.characterCounter(this.name) > 200){
-      this.errorContractName = "Tên hợp đồng không được vượt quá 200 ký tự";
+      this.errorContractName = "Tên mẫu hợp đồng không được vượt quá 200 ký tự";
       return false;
     }
     return true;
@@ -447,7 +438,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   contractNumberRequired(){
     this.errorContractNumber = "";
     if(!this.code){
-      this.errorContractNumber = "Mã mẫu hợp đồng không được để trống";
+      this.errorContractNumber = "error.contract-template.code.required";
       return false;
     }
     return true;
@@ -464,16 +455,31 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   startTimeRequired(){
     this.errorStartTime = "";
     if(!this.start_time){
-      this.errorStartTime = "Hiệu lực từ ngày không được để trống";
+      this.errorStartTime = "error.contract-template.effective-start-date";
       return false;
     }
     return true;
   }
 
+  endTimeValid(){
+    if(this.endTimeRequired()){
+      return this.endTimeCompare();
+    }
+    return this.endTimeRequired();
+  }
+
   endTimeRequired(){
     this.errorEndTime = "";
     if(!this.end_time){
-      this.errorEndTime = "Hiệu lực đến ngày không được để trống";
+      this.errorEndTime = "error.contract-template.effective-end-date";
+      return false;
+    }
+    return true;
+  }
+
+  endTimeCompare(){
+    if(this.start_time && this.end_time && new Date(this.start_time) > new Date(this.end_time)){
+      this.errorEndTime = "error.contract-template.effective-end-date.compare";
       return false;
     }
     return true;

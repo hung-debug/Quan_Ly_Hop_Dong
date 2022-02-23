@@ -24,8 +24,11 @@ export class ConfirmInforContractComponent implements OnInit {
     this.step = variable.stepSampleContract.step4
   }
 
+  contractName:any='';
+  contractCode:any='';
   contractFileName:string = '';
-  dateDeadline:string = '';
+  startTime:string = '';
+  endTime:string = '';
   comment:string = '';
   userViews:string = '';
   userSigns:string = '';
@@ -51,7 +54,8 @@ export class ConfirmInforContractComponent implements OnInit {
     console.log("step4" + this.datas.contract_user_sign);
 
     this.contractFileName = this.datas.file_name; 
-    this.dateDeadline = this.datepipe.transform(this.datas.sign_time, 'dd/MM/yyyy') || '';
+    this.startTime = this.datepipe.transform(this.datas.startTime, 'dd/MM/yyyy') || '';
+    this.endTime = this.datepipe.transform(this.datas.endTime, 'dd/MM/yyyy') || '';
     this.comment = this.datas.notes;
 
     if (this.datas.is_determine_clone && this.datas.is_determine_clone.length > 0) {
