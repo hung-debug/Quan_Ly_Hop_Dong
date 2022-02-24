@@ -137,7 +137,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'main/dashboard',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {path: '**', component: PageNotFoundComponent}

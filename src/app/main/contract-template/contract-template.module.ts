@@ -24,6 +24,16 @@ import { ConfirmInforContractComponent } from './shared/model/confirm-infor-cont
 import { SignContractComponent } from './shared/sign-sample-contract/sign-contract/sign-contract.component';
 import { ContractHeaderComponent } from './shared/model/contract-header/contract-header.component';
 import { AddContractTemplateComponent } from './add-contract-template/add-contract-template.component';
+
+// @ts-ignore
+import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
+import { DatepickerModule } from 'ng2-datepicker';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatSelectModule} from "@angular/material/select";
+import {NgxInputSearchModule} from "ngx-input-search";
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
   };  
@@ -60,6 +70,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CheckboxModule,
     NgxPaginationModule,
     ChipsModule,
+    NgMultiSelectDropDownModule,
+    DatepickerModule,
+    NgxSpinnerModule,
+    PerfectScrollbarModule,
+    MatFormFieldModule,
+    NgxInputSearchModule,
+    MatSelectModule,
   ],
   providers: [
     {

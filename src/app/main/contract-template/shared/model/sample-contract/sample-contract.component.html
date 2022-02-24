@@ -1,1 +1,96 @@
-<p>sample-contract works!</p>
+<!--<link rel="stylesheet" href="sample-contract.component.scss">-->
+<div class="sample-contract row">
+    <!--  information contract-->
+    <div class="col-md-3 sample-contract__information" style="background-color: white; z-index: 10">
+        <div class="sample-contract__information--drag" id="width-element-info" style="position: relative">
+            <div style="padding-bottom: 10px" class="label">CÁC THÀNH PHẦN (<span style="color: red">KÉO THẢ</span>)</div>
+            <!--      <div>-->
+            <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class" style="display: inline-block; margin-bottom: 15px">
+                <div *ngIf="!d.sign_config.position" class="resize-drag" (click)="showThumbnail()" [id]=getIdSignChuaKeo(d.id)>
+                    <div class="signature-sample-drag" style="position: relative">
+                        <div *ngIf="d.sign_unit == 'so_tai_lieu' || d.sign_unit == 'text'" [ngStyle]="setWidth(d)" class="content-drag" id="element-drag-text">{{d.sign_unit == 'so_tai_lieu' ? 'Số hợp đồng' : 'Text'}}</div>
+                        <div *ngIf="d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh'" class="content-drag" id="element-drag" style="height: 102px; flex-direction: column" [ngStyle]="setWidth(d)">
+                            <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
+                            <span *ngIf="d.sign_unit == 'chu_ky_anh' || d.sign_unit == 'chu_ky_so'">{{d.sign_unit == 'chu_ky_anh' ? 'Chữ ký ảnh' : 'Chữ ký số'}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--      </div>-->
+        </div>
+        <hr>
+
+        <div class="location-change" [ngStyle]="changeDisplay()">
+            <div class="sample-contract__information--user-sign">
+                <label class="label">THUỘC TÍNH</label>
+                <div class="name-text" *ngIf="isEnableText">
+                    <label class="label-require">Tên trường: *</label>
+                    <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
+                </div>
+                <div class="sign-unit-select">
+                    <label class="label-require">{{isEnableText || isChangeText ? "Người nhập" : "Người ký"}}: *</label>
+                    <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
+            <option value="" hidden>{{isEnableText || isChangeText ? "Chọn người nhập" : "Chọn người ký"}}</option>
+            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
+          </select>
+                </div>
+
+            </div>
+            <hr>
+            <div class="flex-column">
+                <label class="label-require">Vị trí</label>
+                <div class="location">
+                    <div class="location-drag">
+                        <div class="label" style="text-align: center">X:</div>
+                        <input type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')" [ngModel]="getTrafX()" [readOnly]="false">
+                    </div>
+                    <div class="location-drag">
+                        <div class="label" style="text-align: center">Y:</div>
+                        <input type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')" [ngModel]="getTrafY()" [readOnly]="false">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="flex-column">
+                <label class="label-require">Kích thước</label>
+                <div class="location">
+                    <div class="location-drag">
+                        <div class="label">Chiều dài</div>
+                        <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')" [ngModel]="objSignInfo.width" [readOnly]="false">
+                    </div>
+                    <div class="location-drag">
+                        <div class="label">Chiều rộng</div>
+                        <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')" [ngModel]="objSignInfo.height" [readOnly]="false">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  file content-->
+    <div class="col-md-9 sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
+        <div id="pdf-viewer-step-3">
+            <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+                <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
+                    <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
+                    <div class="sig-img-daky" (click)="onCancel($event, d)">
+                        <img src="assets/img/clear.svg" alt="">
+                        <img src="assets/img/border-clear.svg" alt="">
+                    </div>
+                    <app-sign-contract [datas]="datas" [sign]="d"></app-sign-contract>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer-sample-contract">
+    <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
+    <!-- <div class="content_footer">@Copyright 2021 - MobiFone</div> -->
+    <div>
+        <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button" style="background-color: #FCAF17">Lưu nháp</button>
+        <button (click)="next('next_step')" type="button" name="next" class="next action-button">Tiếp theo</button>
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+    <p style="font-size: 18px; color: white">Đang xử lý...</p>
+</ngx-spinner>

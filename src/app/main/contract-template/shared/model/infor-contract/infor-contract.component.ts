@@ -356,15 +356,46 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     //     await this.callAPI();
     //   }
       
-    // }
-    else{
-      //next step
-      this.step = variable.stepSampleContract.step4;
+    else {
+      // set value to datas
+      this.datas.name = this.name;
+      this.datas.code = this.code;
+      this.defineData(this.datas);
+      const fileReader = new FileReader();
+      if (this.datas.is_action_contract_created) {
+        if (!this.uploadFileContractAgain && this.datas.contractFile) {
+          await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
+            if (res)
+              this.datas.contractFile = res;
+          })
+        } else if (this.uploadFileContractAgain && this.datas.contractFile) {
+            fileReader.readAsDataURL(this.datas.contractFile);
+            fileReader.onload = (e) => {
+              if (fileReader.result)
+                this.datas.file_content = fileReader.result.toString().split(',')[1];
+                this.datas.uploadFileContractAgain = true;
+            };
+        }
+        if (!this.uploadFileAttachAgain && this.datas.attachFile) {
+          await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile).toPromise().then((data: any) => {
+            if (data)
+              this.datas.attachFile = data;
+          })
+        }
+      } else {
+        fileReader.readAsDataURL(this.datas.contractFile);
+        fileReader.onload = (e) => {
+          if (fileReader.result)
+            this.datas.file_content = fileReader.result.toString().split(',')[1];
+        };
+      }
+      this.step = variable.stepSampleContract.step2;
       this.datas.stepLast = this.step;
       // this.datas.document_id = '1';
       this.nextOrPreviousStep(this.step);
       console.log(this.datas);
       this.spinner.hide();
+      
     }
   }
 
@@ -491,11 +522,9 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     });
     this.datas.attachFileNameArr = this.attachFileNameArr;
     this.attachFileArr.forEach((element,index)=>{
-      console.log(element.name);
       if(element.name==item) this.attachFileArr.splice(index,1);
     });
     this.datas.attachFileArr = this.attachFileArr;
-    console.log(this.datas.attachFileArr);
   }
 
 }
