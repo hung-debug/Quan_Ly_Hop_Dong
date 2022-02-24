@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { variable } from 'src/app/config/variable';
@@ -11,10 +11,11 @@ import { ToastService } from 'src/app/service/toast.service';
   templateUrl: './confirm-infor-contract.component.html',
   styleUrls: ['./confirm-infor-contract.component.scss']
 })
-export class ConfirmInforContractComponent implements OnInit {
+export class ConfirmInforContractComponent implements OnInit, OnChanges {
   @Input() datas: any;
   @Input() step: any;
   @Output() stepChangeConfirmInforContract = new EventEmitter<string>();
+  @Input() saveDraftStep: any;
 
   constructor(private formBuilder: FormBuilder,
               public datepipe: DatePipe,
@@ -106,6 +107,12 @@ export class ConfirmInforContractComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.saveDraftStep) {
+      this.saveDraft()
+    }
+  }
+
   back(e: any, step?: any) {
     this.nextOrPreviousStep(step);
   }
@@ -119,6 +126,11 @@ export class ConfirmInforContractComponent implements OnInit {
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
     this.stepChangeConfirmInforContract.emit(step);
+  }
+
+  saveDraft() {
+    this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000);
+    void this.router.navigate(['/main/contract/create/draft']);
   }
 
   callAPI() {

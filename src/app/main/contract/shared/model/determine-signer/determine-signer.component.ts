@@ -155,11 +155,12 @@ export class DetermineSignerComponent implements OnInit {
       let isBody: any[] = [];
       let count = 0;
       let is_error = '';
+      // this.datas.contract_id_action
       for (let i = 0; i < this.datas.is_determine_clone.length; i++) {
         this.datas.is_determine_clone[i].recipients.forEach((element: any) => {
           if (!element.id) element.id = 0;
         })
-        await this.contractService.getContractDetermineCoordination(this.datas.is_determine_clone[i], this.datas.contract_id_action).toPromise().then((res: any) => {
+        await this.contractService.getContractDetermineCoordination(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
               isBody.push(res);
         }, (res: any) => {
           is_error = res.error;
@@ -171,15 +172,17 @@ export class DetermineSignerComponent implements OnInit {
       }
       if (isBody.length == this.datas.is_determine_clone.length) {
         this.getDataApiDetermine(isBody, is_save)
-      } else this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
+      } else 
+        this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
       this.spinner.hide()
-
     } else {
       this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
           this.getDataApiDetermine(res, is_save)
         }, (error: HttpErrorResponse) => {
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+          this.datas.save_draft.determine_signer = false;
+          this.datas.close_modal.close('Save click');
         }, () => {
           this.spinner.hide();
         }
