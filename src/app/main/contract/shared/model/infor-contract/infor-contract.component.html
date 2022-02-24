@@ -111,12 +111,12 @@
             <div class="label_item">{{'file.attach' | translate}}</div>
             <input id="attachFile" type="file" accept=".pdf, .doc, .docx"
                   (change)="fileChangedAttach($event)" style="display: none;" multiple/>
-            <div class="select-contract" (click)="addFileAttach()">
+            <div class="select-contract" >
               <div class="div_file_attach">
                 <div *ngIf="this.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' | translate }}</div>
-                <div *ngFor="let item of this.datas.attachFileNameArr">{{item}}</div>
+                <div *ngFor="let item of this.datas.attachFileNameArr" style="width: 80%;">{{item}} <img *ngIf="item" style="cursor: pointer;" (click)="deleteFileAttach(item)" src="../../../../../../assets/img/icon_close.svg"></div>
               </div>
-              <img src="assets/img/attachment.svg" alt="mobifone.contract">
+              <img src="assets/img/attachment.svg" alt="mobifone.contract" (click)="addFileAttach()">
             </div>
           </div>
         </div>

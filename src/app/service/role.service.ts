@@ -23,6 +23,7 @@ export class RoleService {
   deleteRoleUrl: any = `${environment.apiUrl}/api/v1/customers/roles/`;
   checkCodeRoleUrl:any = `${environment.apiUrl}/api/v1/customers/roles/check-code-unique`;
   checkNameRoleUrl:any = `${environment.apiUrl}/api/v1/customers/roles/check-name-unique`;
+  getRoleByOrgIdUrl: any = `${environment.apiUrl}/api/v1/customers/roles/get-by-organization/`;
 
   token:any;
   customer_id:any;
@@ -108,8 +109,16 @@ export class RoleService {
   public getRoleList(code:any, name:any): Observable<any> {
     this.getCurrentUser();
     const headers = {'Authorization': 'Bearer ' + this.token}
-    let listRoleUrl = this.listRoleUrl + "?name=" + name + "&code=" + code + "&size=10000"
+    let listRoleUrl = this.listRoleUrl + "?name=" + name.trim() + "&code=" + code.trim() + "&size=10000"
     return this.http.get<any[]>(listRoleUrl, {headers}).pipe();
+  }
+
+  getRoleByOrgId(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getRoleByOrgIdUrl + id, {headers}).pipe();
   }
 
   checkCodeRole(code:any){

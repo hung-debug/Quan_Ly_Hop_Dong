@@ -17,6 +17,9 @@ export class AddRoleComponent implements OnInit {
   addForm: FormGroup;
   datas: any;
 
+  name:any;
+  code:any;
+
   groupedRole: SelectItemGroup[];
   selectedRoleConvert: any = [];
 
@@ -51,6 +54,8 @@ export class AddRoleComponent implements OnInit {
             note: data.description,
             selectedRole: this.fbd.control(this.convertRoleArr(data.permissions), [Validators.required]),
           });
+          this.name = data.name;
+          this.code = data.code;
         });
     }else{
       this.addForm = this.fbd.group({

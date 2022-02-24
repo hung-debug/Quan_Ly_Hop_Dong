@@ -1,0 +1,154 @@
+<!-- form step 4 -->
+<div class="labelOrg">{{'contract-template' | translate}}</div>
+<div class="infor_contact">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="label_item">{{'contract-template.name' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="contractFileName" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="label_item">{{'contract-template.file' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="startTime" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="label_item">{{'effective-date' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="startTime" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="label_item">{{'contract-template.code' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="contractFileName" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="label_item">{{'contract-template.type' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="contractFileName" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="labelOrg">{{'side.sign' | translate}}</div>
+<div class="determine_contact">
+    <div class="user_contact">
+        <div class="label">{{'organization.me'  | translate}}</div>
+        <div class="content_determine">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="label_item">{{'user.view' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="userViews" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="label_item">{{'user.sign' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="userSigns" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="label_item">{{'user.doc' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="userDocs" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="partner_contact">
+        <div class="label">{{'organization.partner'  | translate}}</div>
+        <div class="content_determine">
+            <div class="row" *ngIf="isOrg">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="label_item">{{'user.lead' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="partnerLeads" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="label_item">{{'user.view' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="partnerViews" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="label_item">{{'user.sign' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="partnerSigns" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-5" *ngIf="isOrg">
+                    <div class="form-group">
+                        <div class="label_item">{{'user.doc' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="partnerDocs" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer-infor-contract">
+    <div style="width: 200px;">
+        <button (click)="back($event, 'sample-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
+    </div>
+    <div class="content_footer"></div>
+    <div>
+        <button (click)="next()" type="button" name="next" class="next action-button pull-right">{{'btn.done' | translate}}</button>
+    </div>
+</div>

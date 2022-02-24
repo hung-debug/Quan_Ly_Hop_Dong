@@ -18,6 +18,9 @@ export class AddUnitComponent implements OnInit {
   datas: any;
   codeOld:any;
   nameOld:any
+  parentName:any;
+  emailOld:any;
+  phoneOld:any
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
@@ -44,7 +47,6 @@ export class AddUnitComponent implements OnInit {
         fax: null,
         status: 1,
         parent_id: this.fbd.control("", [Validators.required]),
-        parentName:''
       });
     }
 
@@ -74,13 +76,14 @@ export class AddUnitComponent implements OnInit {
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
+          this.emailOld = data.email;
+          this.phoneOld = data.phone;
       
           //set name
           if(data.parent_id != null){
             this.unitService.getUnitById(data.parent_id).subscribe(
               data => {
-                console.log(data.name);
-                this.addForm.addControl('parentName', this.fbd.control(data.name));
+                this.parentName = data.name;
               }, error => {
                 this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
               }
@@ -112,7 +115,6 @@ export class AddUnitComponent implements OnInit {
   }
 
   update(data:any){
-    data.id = this.data.id;
     this.unitService.updateUnit(data).subscribe(
       data => {
         this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
@@ -127,23 +129,90 @@ export class AddUnitComponent implements OnInit {
   }
 
   updateEmailAndPhone(data:any){
-    //kiem tra email da ton tai trong he thong hay chua
-    this.userService.getUserByEmail(data.email).subscribe(
-      dataByEmail => {
-        //neu user chua co => them moi user va gan vai tro admin
-        if(dataByEmail.id == 0){
+    if(data.email != this.emailOld || data.phone != this.phoneOld){
+      //kiem tra email da ton tai trong he thong hay chua
+      this.userService.getUserByEmail(data.email).subscribe(
+        dataByEmail => {
 
-          this.update(data);
+          //lay id vai tro admin theo id to chuc
+          this.roleService.getRoleByOrgId(data.id).subscribe(
+            dataRoleByOrgId => {
+              console.log(dataRoleByOrgId);
+              let roleAdmin = dataRoleByOrgId.entities.filter((p:any) => p.code == 'ADMIN');
+              if(roleAdmin.length > 0){
+
+                //neu user chua co => them moi user va gan vai tro admin
+                if(dataByEmail.id == 0){
+
+                  //tao nguoi dung co vai tro admin
+                  const dataUpdateUser = {
+                    name: 'Admin',
+                    email: data.email,
+                    phone: data.phone,
+                    organizationId: data.id,
+                    role: roleAdmin[0].id,
+                    status: 1,
+                    phoneKpi: null,
+                    networkKpi: null,
+                    nameHsm: null,
+                    sign_image: []
+                  }
+
+                  this.userService.addUser(dataUpdateUser).subscribe(
+                    dataUser => {
+                      //this.toastService.showSuccessHTMLWithTimeout('Thêm mới admin tổ chức thành công!', "", 3000);
+
+                      //update thong tin to chuc
+                      this.update(data);
+                    }, error => {
+                      this.toastService.showErrorHTMLWithTimeout('Thêm mới admin tổ chức thất bại', "", 3000);
+                    }
+                  )
+                
+                //neu da co user => sua user co vai tro la admin
+                }else{
+                  //tao nguoi dung co vai tro admin
+                  const dataUpdateUser = {
+                    id: dataByEmail.id,
+                    name: 'Admin',
+                    email: data.email,
+                    phone: data.phone,
+                    organizationId: data.id,
+                    role: roleAdmin[0].id,
+                    status: dataByEmail.status,
+                    phoneKpi: dataByEmail.phone_sign,
+                    networkKpi: dataByEmail.phone_tel,
+                    nameHsm: dataByEmail.hsm_name,
+                    sign_image: dataByEmail.sign_image
+                  }
+
+                  //update nguoi dung co vai tro admin theo id
+                  this.userService.updateUser(dataUpdateUser).subscribe(
+                    dataUser => {
+                      //this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin admin tổ chức thành công!', "", 3000);
+                      
+                      //update thong tin to chuc
+                      this.update(data);
+                    }, error => {
+                      this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin admin tổ chức thất bại', "", 3000);
+                    }
+                  )
+                  
+                }
+              }
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin vai trò tổ chức', "", 3000);
+            }
+          ); 
           
-        //neu da co user => sua user co vai tro la admin
-        }else{
-          this.update(data);
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         }
-        
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-      }
-    )
+      )
+    }else{
+      //update thong tin to chuc
+      this.update(data);
+    }
   }
 
   checkCode(data:any){
@@ -193,6 +262,7 @@ export class AddUnitComponent implements OnInit {
 
     //truong hop sua ban ghi
     if(this.data.id !=null){
+      data.id = this.data.id;
       //neu thay doi ten thi can check lai
       if(data.name != this.nameOld){
         //kiem tra ten to chuc da ton tai trong he thong hay chua
@@ -266,7 +336,7 @@ export class AddUnitComponent implements OnInit {
                                     
                                     this.roleService.addRoleByOrg(dataRoleIn).subscribe(
                                       dataRole => {
-                                        this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
+                                        //this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
                                         console.log(dataRole);
                                         //them nguoi dung
                                         const dataUserIn = {
@@ -280,7 +350,7 @@ export class AddUnitComponent implements OnInit {
                                         this.userService.addUser(dataUserIn).subscribe(
                                           dataUser => {
                                             console.log(dataUser);
-                                            this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
+                                            //this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
                                             this.dialogRef.close();
                                             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                                               this.router.navigate(['/main/unit']);

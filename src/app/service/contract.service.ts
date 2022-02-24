@@ -106,7 +106,7 @@ export class ContractService {
     return this.http.get<Contract[]>(listContractTypeUrl, {headers}).pipe();
   }
 
-  public getContractList(filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any): Observable<any> {
+  public getContractList(filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any): Observable<any> {
     this.getCurrentUser();
 
     if (filter_from_date != "") {
@@ -122,7 +122,7 @@ export class ContractService {
     if(page != ""){
       page = page - 1;
     }
-    let listContractUrl = this.listContractUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
+    let listContractUrl = this.listContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
     console.log(listContractUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();

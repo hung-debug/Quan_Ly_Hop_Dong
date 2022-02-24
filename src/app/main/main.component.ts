@@ -9,6 +9,7 @@ import {ToastService} from '../service/toast.service';
 import{ ResetPasswordDialogComponent } from '../../app/main/dialog/reset-password-dialog/reset-password-dialog.component'
 import { MatDialog } from '@angular/material/dialog';
 import { DashboardService } from '../service/dashboard.service';
+import { UserService } from '../service/user.service';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -45,7 +46,8 @@ export class MainComponent implements OnInit {
               private changeDetectorRef: ChangeDetectorRef,
               public translate: TranslateService,
               private toastService: ToastService,
-              private dialog: MatDialog,) {
+              private dialog: MatDialog,
+              private userService: UserService) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang(localStorage.getItem('lang') || 'vi');
@@ -90,8 +92,10 @@ export class MainComponent implements OnInit {
     // } else this.isRouterContractNew = true;
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
 
-    this.nameCurrentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.name;
-
+    this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
+      data => {
+        this.nameCurrentUser = data.name;
+      });
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;
     });

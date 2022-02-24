@@ -17,18 +17,42 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ChipsModule } from 'primeng/chips';
+import { InforContractComponent } from './shared/model/infor-contract/infor-contract.component';
+import { DetermineSignerComponent } from './shared/model/determine-signer/determine-signer.component';
+import { SampleContractComponent } from './shared/model/sample-contract/sample-contract.component';
+import { ConfirmInforContractComponent } from './shared/model/confirm-infor-contract/confirm-infor-contract.component';
+import { SignContractComponent } from './shared/sign-sample-contract/sign-contract/sign-contract.component';
+import { ContractHeaderComponent } from './shared/model/contract-header/contract-header.component';
+import { AddContractTemplateComponent } from './add-contract-template/add-contract-template.component';
+
+// @ts-ignore
+import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
+import { DatepickerModule } from 'ng2-datepicker';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatSelectModule} from "@angular/material/select";
+import {NgxInputSearchModule} from "ngx-input-search";
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
-  };
+  };  
 @NgModule({
   declarations: [
     ShareContractTemplateDialogComponent,
     StopContractTemplateDialogComponent,
     ReleaseContractTemplateDialogComponent,
-    DeleteContractTemplateDialogComponent
+    DeleteContractTemplateDialogComponent,
+    InforContractComponent,
+    DetermineSignerComponent,
+    SampleContractComponent,
+    ConfirmInforContractComponent,
+    SignContractComponent,
+    ContractHeaderComponent,
+    AddContractTemplateComponent
   ],  
   imports: [  
-    CommonModule,
+    CommonModule,  
     ReactiveFormsModule,
     FormsModule,
     NgbModule,
@@ -46,6 +70,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CheckboxModule,
     NgxPaginationModule,
     ChipsModule,
+    NgMultiSelectDropDownModule,
+    DatepickerModule,
+    NgxSpinnerModule,
+    PerfectScrollbarModule,
+    MatFormFieldModule,
+    NgxInputSearchModule,
+    MatSelectModule,
   ],
   providers: [
     {

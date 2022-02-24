@@ -143,11 +143,14 @@ export class LoginComponent implements OnInit {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
       this.getDeviceApp();
     } else {
-      if (!this.router.url.endsWith('login')) {
-        this.sub = this.route.params.subscribe(params => {
-          this.type = params['loginType'];
-        });
-      }
+      // if (!this.router.url.endsWith('login')) {
+      //   this.sub = this.route.params.subscribe(params => {
+      //     this.type = params['loginType'];
+      //   });
+      // }
+      if (sessionStorage.getItem('urlLoginType')) {
+        this.type = 1;
+      } else this.type = 0;
     }
   }
 

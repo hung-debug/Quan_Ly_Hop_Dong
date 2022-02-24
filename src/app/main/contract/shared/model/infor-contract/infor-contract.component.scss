@@ -60,6 +60,7 @@ input[type="file"] {
     .select-contract {
       position: relative;
       width: 100%;
+      border-radius: 5px;
       input {
         outline: none;
         width: 100%;
@@ -76,13 +77,18 @@ input[type="file"] {
         border-radius: 5px;
         border: 1px solid #106DB6;
         padding: 7px 10px;
-        cursor: pointer;
+        //cursor: pointer;
+        max-height: 113px;
+        overflow: auto;
       }
-      img {
+      >img {
         cursor: pointer;
         position: absolute;
         top: 10px;
         right: 25px;
+      }
+      >img:hover{
+        cursor: pointer;
       }
     }
   }

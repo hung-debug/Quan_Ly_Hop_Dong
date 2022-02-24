@@ -33,7 +33,7 @@ export class AuthenticationService {
 
   loginAuthencation(username: string, password: string, type: number) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
-    const body = JSON.stringify({email: username, password: password, type: type});
+    const body = JSON.stringify({email: username.trim(), password: password, type: type});
 
     return this.http.post<User>(this.loginUrl, body, {'headers':headers})
       .pipe(

@@ -79,18 +79,8 @@ export class UserService {
   sendForgotPassword(email:string) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
     const body = JSON.stringify({email: email});
-    return this.http.post<User>(this.forgotPasswordUrl, body, {'headers':headers})
-    .pipe(
-      map((user) => {
-        console.log(user);
-        if (JSON.parse(JSON.stringify(user)).status == 0) {
-          return user;
-        }else{
-          return null;
-        }
-     }),
-     catchError(this.handleError)
-   )
+    return this.http.post<any>(this.forgotPasswordUrl, body, {'headers':headers})
+    .pipe()
   }
 
   sendResetPassword(token:string, password:string) {
@@ -215,7 +205,7 @@ export class UserService {
   public getUserList(filter_organization_id: any, filter_email: any): Observable<any> {
     this.getCurrentUser();
 
-    let listUserUrl = this.listUserUrl + '?name=&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email + "&size=10000";
+    let listUserUrl = this.listUserUrl + '?name=&phone=&organization_id=' + filter_organization_id + '&email=' + filter_email.trim() + "&size=10000";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<User[]>(listUserUrl, {headers}).pipe();
   }

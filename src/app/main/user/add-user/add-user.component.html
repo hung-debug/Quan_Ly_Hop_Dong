@@ -14,12 +14,12 @@
         </div>
         <div class="col-md-4">
             <div class="label text-color">{{'user.email' | translate}} <span class="required-title">*</span></div>
-            <div class="input-data" [ngClass]="{'hidden-color' : id != null}">
-                <input type="text" formControlName="email" [readonly]="id != null" [ngClass]="{'hidden-color' : id != null}">
+            <div *ngIf="id == null" class="input-data">
+                <input type="text" formControlName="email">
             </div>
-            <!-- <div class="input-data" [ngClass]="{'hidden-color' : id != null}">
-              <div formControlName="email" [ngClass]="{'hidden-color' : id != null}"></div>
-            </div> -->
+            <div *ngIf="id != null" class="input-data hidden-color">
+              <input type="text" formControlName="email" readonly class="hidden-color">
+            </div>
             <div *ngIf="submitted && f.email.errors" class="invalid">
               <div *ngIf="f.email.errors.required">Email không được để trống</div>
               <div *ngIf="f.email.errors.email">Email không đúng định dạng</div>
@@ -46,8 +46,8 @@
         </div>
         <div class="col-md-4">
           <div class="label text-color">{{'organization' | translate}} <span class="required-title">*</span></div>
-          <div [ngClass]="{'input-data hidden-color' : id != null}">
-            <p-dropdown *ngIf="!id"
+          <div *ngIf="id == null">
+            <p-dropdown
               panelStyleClass="font"
               [options]="orgList" 
               formControlName="organizationId" 
@@ -58,7 +58,9 @@
               filterBy="name" 
               [showClear]="true"
               ></p-dropdown>
-              <input *ngIf="id" type="text" formControlName="organizationName" [readonly]="true" class="hidden-color">
+          </div>
+          <div *ngIf="id != null" class="input-data hidden-color">
+            <div class="hidden-color">{{organizationName}}</div>
           </div>
             <div *ngIf="submitted && f.organizationId.errors" class="invalid">
               <div *ngIf="f.organizationId.errors.required">Tổ chức không được để trống</div>
@@ -66,8 +68,8 @@
         </div>
         <div class="col-md-4">
           <div class="label text-color">{{'menu.role.list' | translate}} <span class="required-title">*</span></div>
-          <div [ngClass]="{'input-data hidden-color' : !isEditRole}">
-            <p-dropdown *ngIf="isEditRole"
+          <div *ngIf="isEditRole">
+            <p-dropdown
               panelStyleClass="font"
               [options]="roleList" 
               formControlName="role" 
@@ -78,7 +80,9 @@
               filterBy="name" 
               [showClear]="true"  
               ></p-dropdown>
-            <input *ngIf="!isEditRole" type="text" formControlName="roleName" [readonly]="true" class="hidden-color">
+          </div>
+          <div *ngIf="!isEditRole" class="input-data hidden-color">
+            <div class="hidden-color">{{roleName}}</div>
           </div>
           <div *ngIf="submitted && f.role.errors" class="invalid">
             <div *ngIf="f.role.errors.required">Vai trò không được để trống</div>

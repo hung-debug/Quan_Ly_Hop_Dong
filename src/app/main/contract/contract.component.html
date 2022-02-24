@@ -10,7 +10,7 @@
   <div class="col-md-12" *ngIf="isQLHD_06">
     <div class="input-line search">
       <img src="../../assets/img/icon_search.svg" class="input-img" />
-      <input type="text" id="search" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}"
+      <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}"
       (keyup)="autoSearch($event)" />
       <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="searchContract()"/>
     </div>
@@ -26,7 +26,7 @@
 
   <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
     <div class="row">
-      <div class="col-md-12 item_contract_name" (click)="status != 'draft'&& isQLHD_07?openDetail(item.id):null">{{item.name}}</div>
+      <div class="col-md-12 item_contract_name" (click)="isQLHD_07?openDetail(item.id):null">{{item.name}}</div>
     </div>
     <div class="row">
       <div class="col-md-12 item_contract_infor">{{'contract.side.a' | translate}}: {{item.sideA}}</div>

@@ -1,0 +1,223 @@
+::ng-deep .multiselect-dropdown {
+    .dropdown-btn {
+      border: 1px solid #106DB6 !important;
+      min-height: 38px;
+      height: auto;
+    }
+  }
+  .input_text {
+    padding-left: 10px;
+    outline: none;
+    height: 37px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #106DB6;
+  }
+  //upload file
+  input[type="file"] {
+    display: none;
+  }
+  .custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    color: #106DB6;
+    width: 100%;
+    border-radius: 20px;
+  }
+  
+  //label type contract
+  .label_type{
+    text-align: center;
+    font-weight: 500;
+    padding: 10px;
+  }
+  
+  //label item form
+  .label_item{
+    padding: 12px 0px 3px;
+    font-weight: 500;
+    color: #0160AE;
+  }
+  
+  .require_star{
+    color: red;
+  }
+  
+  :host ::ng-deep {
+    .selected-item {
+      max-width: 100% !important;
+    }
+  }
+  
+  .select-file-contract {
+    display: flex;
+    justify-content: space-between;
+    width : 100%;
+    .file-approve {
+      width : 100%;
+      .select-contract {
+        position: relative;
+        width: 100%;
+        border-radius: 5px;
+        input {
+          outline: none;
+          width: 100%;
+          height: 38px;
+          border-radius: 5px;
+          border: 1px solid #106DB6;
+          padding-left: 10px;
+          cursor: pointer;
+        }
+        .div_file_attach {
+          outline: none;
+          width: 100%;
+          min-height: 38px;
+          border-radius: 5px;
+          border: 1px solid #106DB6;
+          padding: 7px 10px;
+          //cursor: pointer;
+          max-height: 113px;
+          overflow: auto;
+        }
+        >img {
+          cursor: pointer;
+          position: absolute;
+          top: 10px;
+          right: 25px;
+        }
+        >img:hover{
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  
+  .file-contract{
+    height: 80px;
+    border: 1px solid #106DB6;
+    cursor: pointer;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+  }
+  
+  .form-control{
+    border: 1px solid #106DB6;
+  }
+  
+  button {
+    //padding: 15px;
+    border: 0px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    width: 120px;
+    height: 40px;
+    box-sizing: border-box;
+    color: white;
+    background-color: #106DB6;
+    font-size: 13px;
+  }
+  
+  //style button
+  .action-button {
+    width: 100px;
+    background: #106DB6;
+    //font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+  }
+  
+  .draft-button {
+    width: 100px;
+    background: #FCAF17;
+    //font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+  }
+  
+  .footer-infor-contract {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .content_footer{
+      //text-align: center;
+      //margin: 10px;
+      color:#0160AE;
+      font-size: 13px;
+      font-weight: 500;
+    }
+  }
+  
+  :host ::ng-deep {
+    .p-calendar {
+      font-size: 13px !important;
+      font-family: 'font_lexend_deca';
+      width: 100%;
+    }
+    .p-datepicker table td {
+      padding: 0;
+    }
+    .p-calendar-w-btn, .p-calendar-w-btn .p-inputtext {
+      height: 38px;
+    }
+    .p-calendar-w-btn .p-inputtext{
+      border: 1px solid #106DB6 !important;
+      outline: 0 !important;
+      box-shadow: none !important;
+    }
+  }
+  
+  
+  .error-detail{
+    font-size: inherit;
+    padding: 7px;
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+  
+  
+  .input-line {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+  .input-img {
+    top: 10px;
+    right: 25px;
+    position: absolute;
+  }
+  .input-text {
+    border: 0;
+    width: 100%;
+    outline:0px;
+  }
+  :host ::ng-deep {
+    .p-dropdown, .p-multiselect {
+        border: 1px solid #106DB6;
+        border-radius: 5px;
+        height: 38px;
+        width: 100%;
+        outline: 0;
+        color: black !important;
+    }
+    .p-dropdown-label, .p-multiselect-label {
+        padding: 7px 7px 5px 10px;
+    }
+    .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
+      color: #6c757d !important;
+    }
+  }
+  .invalid{
+    color: red;
+  }
+  

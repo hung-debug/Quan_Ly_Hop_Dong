@@ -41,6 +41,9 @@ export class AddUserComponent implements OnInit {
   imgSignPath:null;
   isEditRole:boolean=false;
 
+  organizationName:any;
+  roleName:any;
+
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
@@ -63,8 +66,6 @@ export class AddUserComponent implements OnInit {
         organizationId: this.fbd.control("", [Validators.required]),
         role: this.fbd.control("", [Validators.required]),
         status: 1,
-        organizationName:'',
-        roleName:'',
 
         phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
         networkKpi: null,
@@ -145,7 +146,7 @@ export class AddUserComponent implements OnInit {
                 nameHsm: data.hsm_name,
 
                 fileImage:null
-              });
+              }); 
               this.phoneOld = data.phone;
               this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
               this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
@@ -156,8 +157,7 @@ export class AddUserComponent implements OnInit {
               if(data.organization_id != null){
                 this.unitService.getUnitById(data.organization_id).subscribe(
                   data => {
-                    console.log(data.name);
-                    this.addForm.addControl('organizationName', this.fbd.control(data.name));
+                    this.organizationName = data.name
                   }, error => {
                     this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
                   }
@@ -170,7 +170,7 @@ export class AddUserComponent implements OnInit {
                 if(data.role_id != null){
                   //lay danh sach vai tro
                   this.roleService.getRoleById(data.role_id).subscribe(data => {
-                    this.addForm.addControl('roleName', this.fbd.control(data.name));
+                    this.roleName = data.name;
                   });
                 }
               }
@@ -312,7 +312,39 @@ export class AddUserComponent implements OnInit {
         this.userService.checkPhoneUser(data.phone).subscribe(
           dataByPhone => {
             if(dataByPhone.code == '00'){
-              //ham update
+              //kiem tra xem email dang sua co phai email cua admin to chuc khong
+              //lay thong tin to chuc cua user (email) check voi email, neu trung => cap nhat so dien thoai cho to chuc do
+              this.unitService.getUnitById(data.organizationId).subscribe(
+                dataUnit => {
+                  if(dataUnit.email == data.email){
+                    const dataUpdateUnit = {
+                      id: data.organizationId,
+                      phone: data.phone,
+                      name: dataUnit.name,
+                      short_name: dataUnit.short_name,
+                      code: dataUnit.code,
+                      email: dataUnit.email,
+                      fax: dataUnit.fax,
+                      status: dataUnit.status,
+                      parent_id: dataUnit.parent_id,
+                    }
+                    //update thong tin to chuc
+                    this.unitService.updateUnit(dataUpdateUnit).subscribe(
+                      data => {
+                        //this.toastService.showSuccessHTMLWithTimeout('Cập nhật số điện thoại tổ chức thành công!', "", 3000);
+                        
+                      }, error => {
+                        this.toastService.showErrorHTMLWithTimeout('Có lỗi cập nhật số điện thoại tổ chức', "", 3000);
+                      }
+                    )
+                  }
+                  
+                }, error => {
+                  this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                }
+              )
+
+              //ham update nguoi dung
               this.update(data);
             }else if(dataByPhone.code == '01'){
               this.toastService.showErrorHTMLWithTimeout('Số điện thoại đã tồn tại trong hệ thống', "", 3000);

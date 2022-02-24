@@ -20,10 +20,14 @@ export class NotificationComponent implements OnInit {
 
   ngOnInit(): void {
     this.appService.setTitle("no.list");
-    this.dashboardService.getNotification('', '', '', 1000, '').subscribe(data => {
+    this.getNotification();
+  }
+
+  getNotification(){
+    this.dashboardService.getNotification('', '', '', this.page, this.p).subscribe(data => {
       this.listNotification = data.entities;
       console.log(this.listNotification);
-      this.pageTotal = this.listNotification.length;
+      this.pageTotal = data.total_elements;
       if(this.pageTotal == 0){
         this.p = 0;
         this.pageStart = 0;
