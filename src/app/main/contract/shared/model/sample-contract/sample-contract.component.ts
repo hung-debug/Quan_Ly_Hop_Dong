@@ -138,7 +138,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           let isObj = {
             id: element.id,
             sign_type: element.sign_type,
-            name: element.name
+            name: element.name,
+            email: element.email
           }
           dataDetermine.push(isObj);
         })
@@ -155,11 +156,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
 
       // loc du lieu khong trung nhau
-      // bo sung them email - && (val.email == data.email)
-      dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) => (val.recipient_id as any) == (data.id as any) &&
+      // (val.recipient_id as any) == (data.id as any) &&
+      dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) => 
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) ||
           (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-        (val.name == data.name)
+        val.name == data.name && val.email == data.email
       ));
 
 
@@ -170,15 +171,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
           (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1)) ||
           (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4))) ||
-          val.name == data.name));
+          val.name == data.name || val.email == data.email));
       }
 
       // console.log(dataDiffirent)
       // xoa nhung du lieu doi tuong bi thay doi
+      // recipient_id
       if (dataDiffirent.length > 0) {
         this.datas.contract_user_sign.forEach((res: any) => {
           if (res.sign_config.length > 0) {
-            res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some(({ recipient_id }) => (val.recipient_id as any) === (recipient_id as any)));
+            res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some(({ email }) => (val.email as any) === (email as any)));
             res.sign_config.forEach((items: any) => {
               items.id = items.id + '1';
             })
@@ -188,6 +190,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
 
       // console.log(this.datas.contract_user_sign);
+
       // this.isEnableSelect = false;
     }
 
@@ -296,7 +299,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataNotPosition: any[] = [];
     this.datas.is_determine_clone.forEach((element: any) => {
       element.recipients.forEach((item: any) => {
-        let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == item.id)[0];
+        // p.recipient_id == item.id
+        let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient.email == item.email)[0];
         if (data_duplicate) {
           // lấy ra dữ liệu bị trùng và update lại với dữ liệu mới;
           data_duplicate.name = item.name;
@@ -307,7 +311,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           data_duplicate.is_otp = item.is_otp;
           data_duplicate['is_type_party'] = element.type;
           data_duplicate['role'] = data_duplicate.recipient.role;
-          delete data_duplicate.recipient;
+          // delete data_duplicate.recipient;
           dataPosition.push(data_duplicate);
         } else {
           item['is_type_party'] = this.datas.is_determine_clone.type;
@@ -613,8 +617,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
+    // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
-      if (this.convertToSignConfig().some((p: any) => p.recipient_id == element.id && p.sign_unit == isSignType)) {
+      if (this.convertToSignConfig().some((p: any) => p.email == element.email && p.sign_unit == isSignType)) {
         element.is_disable = true;
       } else {
         if (isSignType == 'chu_ky_anh') {
@@ -1097,6 +1102,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.type = data_name.type;
             signElement.setAttribute("type", isObjSign.type);
+
+            isObjSign.email = data_name.email;
+            signElement.setAttribute("type", isObjSign.email);
+
           }
           // else {
           //   // tránh trường hợp chọn người ký khác sau khi đã kéo thả sẽ bị mất dữ liệu người ký cũ trước khi thay đổi

@@ -176,6 +176,17 @@ export class DetermineSignerComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
       this.spinner.hide()
     } else {
+      this.datas.is_determine_clone.forEach((res: any) => {
+        if (this.datas.is_action_contract_created && this.router.url.includes("copy")) {
+          delete res.contract_id;
+          delete res.id;
+        } 
+        res.recipients.forEach((element: any) => {
+          if (element.id) 
+          delete element.id;
+        })
+      })
+
       this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
           this.getDataApiDetermine(res, is_save)
         }, (error: HttpErrorResponse) => {
