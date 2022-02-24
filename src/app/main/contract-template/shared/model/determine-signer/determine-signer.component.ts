@@ -16,6 +16,7 @@ import {ToastService} from "../../../../../service/toast.service";
 import {Router} from "@angular/router";
 import {NgxInputSearchModule} from "ngx-input-search";
 import { HttpErrorResponse } from '@angular/common/http';
+import { ContractTemplateService } from 'src/app/service/contract-template.service';
 
 @Component({
   selector: 'app-determine-signer',
@@ -72,6 +73,7 @@ export class DetermineSignerComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private contractService: ContractService,
+    private contractTemplateService: ContractTemplateService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private router: Router
@@ -85,7 +87,7 @@ export class DetermineSignerComponent implements OnInit {
       // this.datas.is_determine_clone = null;
       // this.datas.is_determine_clone = this.datas.determine_contract;
       console.log("1")
-      this.datas.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
+      this.datas.is_determine_clone = [...this.contractTemplateService.getDataDetermineInitialization()];
       console.log(this.datas.is_determine_clone)
     }
 
@@ -141,14 +143,18 @@ export class DetermineSignerComponent implements OnInit {
   // next step event
   next(action: string) {
     this.submitted = true;
-    if (!this.validData()) return;
-    else {
-      let is_save = false;
-      if (action == 'save-step') {
-        is_save = true;
-      }
-      this.getApiDetermine(is_save);
-    }
+    // if (!this.validData()) return;
+    // else {
+    //   let is_save = false;
+    //   if (action == 'save-step') {
+    //     is_save = true;
+    //   }
+    //   this.getApiDetermine(is_save);
+    // }
+    this.step = variable.stepSampleContract.step3;
+      this.datas.stepLast = this.step;
+      // sessionStorage.setItem('copy_right_show', 'true');
+      this.nextOrPreviousStep(this.step);
   }
 
   async getApiDetermine(is_save?: boolean) {
@@ -565,7 +571,7 @@ export class DetermineSignerComponent implements OnInit {
   // thêm đối tượng người xem xét tổ chức của tôi
   addOriganzationReviewer() {
     let data_determine_add = [];
-    data_determine_add = [...this.contractService.getDataDetermine()];
+    data_determine_add = [...this.contractTemplateService.getDataDetermine()];
     let data_organization = data_determine_add.filter((p: any) => p.type == 1)[0];
     let data = (data_organization.recipients.filter((p: any) => p.role == 2))[0];
     data.ordering = this.getOriganzationReviewer().length + 1;
@@ -575,7 +581,7 @@ export class DetermineSignerComponent implements OnInit {
   // thêm đối tượng ký tổ chức của tôi
   addOriganzationSignature() {
     let data_determine_add = [];
-    data_determine_add = [...this.contractService.getDataDetermine()];
+    data_determine_add = [...this.contractTemplateService.getDataDetermine()];
     let data_organization = data_determine_add.filter((p: any) => p.type == 1)[0];
     let data = (data_organization.recipients.filter((p: any) => p.role == 3))[0];
     data.ordering = this.getOriganzationSignature().length + 1;
@@ -584,7 +590,7 @@ export class DetermineSignerComponent implements OnInit {
 
   addOriganzationDocument() {
     let data_determine_add = [];
-    data_determine_add = [...this.contractService.getDataDetermine()];
+    data_determine_add = [...this.contractTemplateService.getDataDetermine()];
     let data_organization = data_determine_add.filter((p: any) => p.type == 1)[0];
     let data = (data_organization.recipients.filter((p: any) => p.role == 4))[0];
     data.ordering = this.getOriganzationDocument().length + 1;
@@ -594,11 +600,12 @@ export class DetermineSignerComponent implements OnInit {
   // thêm đối tượng người xem xét đối tác (done)
   addPartnerReviewer(item: any, index: number) {
     let data_determine_add = [];
-    data_determine_add = [...this.contractService.getDataDetermine()];
+    data_determine_add = [...this.contractTemplateService.getDataDetermine()];
     let data_partner = data_determine_add.filter((p: any) => p.type == 2)[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 2))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 2);
     data.ordering = count_data.length + 1;
+    data.name = "Người xem xét " + data.ordering;
     // this.data_parnter_organization[index].recipients.push(data);
     (this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
@@ -606,7 +613,7 @@ export class DetermineSignerComponent implements OnInit {
   // thêm đối tượng người điều phối (done)
   addPartnerCoordination(item: any, index: number) {
     let data_determine_add = [];
-    data_determine_add = [...this.contractService.getDataDetermine()];
+    data_determine_add = [...this.contractTemplateService.getDataDetermine()];
     let data_partner = data_determine_add.filter((p: any) => p.type == 2)[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 1))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 1);
@@ -618,11 +625,12 @@ export class DetermineSignerComponent implements OnInit {
   // thêm đối tượng ký đối tác (done)
   addPartnerSignature(item: any, index: number) {
     let data_determine_add = [];
-    data_determine_add = [...this.contractService.getDataDetermine()];
+    data_determine_add = [...this.contractTemplateService.getDataDetermine()];
     let data_partner = data_determine_add.filter((p: any) => (p.type == 2))[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 3))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 3);
     data.ordering = count_data.length + 1;
+    data.name = "Người ký " + data.ordering;
     // this.data_parnter_organization[index].recipients.push(data);
     (this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
@@ -630,7 +638,7 @@ export class DetermineSignerComponent implements OnInit {
   // thêm đối tượng văn thư đối tác (done)
   addPartnerDocument(item: any, index: number) {
     let data_determine_add = [];
-    data_determine_add = [...this.contractService.getDataDetermine()];
+    data_determine_add = [...this.contractTemplateService.getDataDetermine()];
     let data_partner = data_determine_add.filter((p: any) => (p.type == 2))[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 4))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 4);
@@ -734,6 +742,7 @@ export class DetermineSignerComponent implements OnInit {
     })
     array_empty.forEach((item: any, index: number) => {
       item.ordering = index + 1;
+      item.name = "Người xem xét " + item.ordering;
     })
     new_arr = arr_clone_different.concat(array_empty);
     item.recipients = new_arr;
@@ -752,6 +761,7 @@ export class DetermineSignerComponent implements OnInit {
     })
     array_empty.forEach((item: any, index: number) => {
       item.ordering = index + 1;
+      item.name = "Người ký " + item.ordering;
     })
     new_arr = arr_clone_different.concat(array_empty);
     item.recipients = new_arr;
@@ -782,7 +792,7 @@ export class DetermineSignerComponent implements OnInit {
   addPartner() {
     let data_partner_add = {};
     // let data = [...this.contractService.getDataDetermine()];
-    let data = [...this.contractService.getDataDetermineInitialization()];
+    let data = [...this.contractTemplateService.getDataDetermineInitialization()];
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];
     this.datas.is_determine_clone.push(data_partner_add);
     this.datas.is_determine_clone.forEach((res: any, index: number) => {
