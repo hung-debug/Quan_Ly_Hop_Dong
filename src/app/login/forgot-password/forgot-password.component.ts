@@ -58,11 +58,18 @@ export class ForgotPasswordComponent implements OnInit {
 
         this.userService.sendForgotPassword(email).subscribe((data) => {
 
-          if(data != null){
+          if(data.status == 0){
             this.sendPassword('Chúng tôi đã gửi thông tin về địa chỉ email '+ email +'<br>Vui lòng truy cập email để tiếp tục!');
           }else{
-            this.sendPassword('Gửi email thất bại<br>Vui lòng kiểm tra lại thông tin và thử lại!');
+            if(data.code == '01'){
+              this.sendPassword('Địa chỉ email '+ email +' không tồn tại trên hệ thống!');
+            }else if(data.code == '02'){
+              this.sendPassword('Địa chỉ email '+ email +' có tài khoản không hoạt động!');
+            }else if(data.code == '03'){
+              this.sendPassword('Địa chỉ email '+ email +' có tổ chức không hoạt động!');
+            }
           }
+          
         },
         (error:any) => {
           this.sendPassword('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý');
