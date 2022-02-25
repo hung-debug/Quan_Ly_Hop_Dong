@@ -143,18 +143,20 @@ export class DetermineSignerComponent implements OnInit {
   // next step event
   next(action: string) {
     this.submitted = true;
-    // if (!this.validData()) return;
-    // else {
-    //   let is_save = false;
-    //   if (action == 'save-step') {
-    //     is_save = true;
-    //   }
-    //   this.getApiDetermine(is_save);
-    // }
-    this.step = variable.stepSampleContract.step3;
+    if (!this.validData()) return;
+    else {
+      let is_save = false;
+      if (action == 'save-step') {
+        is_save = true;
+      }
+      //this.getApiDetermine(is_save);
+      console.log(this.datas.is_determine_clone);
+      this.step = variable.stepSampleContract.step3;
       this.datas.stepLast = this.step;
       // sessionStorage.setItem('copy_right_show', 'true');
       this.nextOrPreviousStep(this.step);
+    }
+    
   }
 
   async getApiDetermine(is_save?: boolean) {
@@ -325,11 +327,11 @@ export class DetermineSignerComponent implements OnInit {
               count++;
               break;
             }
-            if (!dataArrPartner[j].recipients[k].email) {
-              this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
-              count++;
-              break;
-            }
+            // if (!dataArrPartner[j].recipients[k].email) {
+            //   this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
+            //   count++;
+            //   break;
+            // }
 
             if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role)) {
               this.getNotificationValid("Vui lòng chọn loại ký" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!")
@@ -346,11 +348,11 @@ export class DetermineSignerComponent implements OnInit {
               isPartnerOriganzationDuplicate = [];
             }
 
-            if (!dataArrPartner[j].recipients[k].phone && dataArrPartner[j].recipients[k].role == 3 && (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
-              this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "của đối tác!")
-              count++;
-              break;
-            }
+            // if (!dataArrPartner[j].recipients[k].phone && dataArrPartner[j].recipients[k].role == 3 && (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
+            //   this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "của đối tác!")
+            //   count++;
+            //   break;
+            // }
 
           } else if (dataArrPartner[j].type == 3) {
             if (!dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3) {
@@ -358,11 +360,11 @@ export class DetermineSignerComponent implements OnInit {
               count++;
               break;
             }
-            if (!dataArrPartner[j].recipients[k].email && dataArrPartner[j].recipients[k].role == 3) {
-              this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
-              count++;
-              break;
-            }
+            // if (!dataArrPartner[j].recipients[k].email && dataArrPartner[j].recipients[k].role == 3) {
+            //   this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
+            //   count++;
+            //   break;
+            // }
 
             if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role) && dataArrPartner[j].recipients[k].role == 3) {
               this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!")
@@ -379,32 +381,32 @@ export class DetermineSignerComponent implements OnInit {
               isPartnerCaNhanDuplicate = [];
             }
 
-            if (!dataArrPartner[j].recipients[k].phone &&
-              dataArrPartner[j].recipients[k].role == 3 &&
-              (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
-              this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(3) + "của đối tác!")
-              count++;
-              break;
-            }
+            // if (!dataArrPartner[j].recipients[k].phone &&
+            //   dataArrPartner[j].recipients[k].role == 3 &&
+            //   (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
+            //   this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(3) + "của đối tác!")
+            //   count++;
+            //   break;
+            // }
 
-            //@ts-ignore
-            if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
-              this.getNotificationValid("Tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " đối tác cá nhân không hợp lệ!");
-              count++;
-              break;
-            }
-            //@ts-ignore
-            if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email) && dataArrPartner[j].recipients[k].role == 3) {
-              this.getNotificationValid("Email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân không hợp lệ!")
-              count++;
-              break;
-            }
-            //@ts-ignore
-            if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
-              this.getNotificationValid("Số điện thoại" + this.getNameObject(3) + "của đối tác không hợp lệ!")
-              count++;
-              break;
-            }
+            // //@ts-ignore
+            // if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
+            //   this.getNotificationValid("Tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " đối tác cá nhân không hợp lệ!");
+            //   count++;
+            //   break;
+            // }
+            // //@ts-ignore
+            // if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email) && dataArrPartner[j].recipients[k].role == 3) {
+            //   this.getNotificationValid("Email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân không hợp lệ!")
+            //   count++;
+            //   break;
+            // }
+            // //@ts-ignore
+            // if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
+            //   this.getNotificationValid("Số điện thoại" + this.getNameObject(3) + "của đối tác không hợp lệ!")
+            //   count++;
+            //   break;
+            // }
           }
         }
       }

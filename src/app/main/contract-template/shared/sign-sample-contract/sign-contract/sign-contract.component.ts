@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, AfterViewInit} from '@angular/core';
 
 @Component({
-  selector: 'app-sign-contract',
+  selector: 'app-sign-contract-template',
   templateUrl: './sign-contract.component.html',
   styleUrls: ['./sign-contract.component.scss']
 })
@@ -15,14 +15,15 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
   }
 
-  getText(sign: any) {
+  getText(sign: any) {    
     // ? 'Text' : 'Số hợp đồng'
     if (sign.sign_unit == 'text') {
       return 'Text';
     } else {
-      if (this.datas.code)
-        return this.datas.code
-      else return 'Số hợp đồng';
+      // if (this.datas.code)
+      //   return this.datas.code
+      // else return 'Số hợp đồng';
+      return 'Số hợp đồng';
     }
   }
 
