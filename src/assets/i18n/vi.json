@@ -9,6 +9,7 @@
     "login": "Đăng nhập",
     "login.username": "Tên đăng nhập",
     "login.password": "Mật khẩu",
+    "login.note.user": "Vui lòng đăng nhập bằng tài khoản và mật khẩu đã được cấp trong email của bạn",
     "login.forgot_password": "Quên mật khẩu",
     "login.forgot_password.note": "Nhập địa chỉ email bạn đã sử dụng đăng ký trên MobiFone eContract",
     "signup": "Đăng ký",
@@ -255,6 +256,7 @@
     "sign.file-image": "File ảnh chữ ký",
     "sign.kpi": "Chữ ký PKI",
     "sign.hsm": "Chữ ký HSM",
+    "image.empty": "Không có ảnh",
 
     "error.server": "Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý.",
     "error.username.required": "Tên đăng nhập không được để trống",
@@ -271,9 +273,15 @@
     "error.user.sign-type.required": "Loại ký không được để trống",
     "error.user.phone.required": "Số điện thoại không được để trống",
     "error.user.phone.format": "Số điện thoại sai định dạng",
+    "error.unit.name.required": "Tên tổ chức không được để trống",
+    "error.unit.short-code.required": "Tên viết tắt không được để trống",
+    "error.unit.code.required": "Mã tổ chức không được để trống",
+    "error.unit.parent.required": "Tổ chức cấp trên không được để trống",
     "error.role.name.required": "Tên vai trò không được để trống",
     "error.role.code.required": "Mã vai trò không được để trống",
     "error.role.permission.required": "Phân quyền không được để trống",
+    "error.contract-type.code.required": "Mã loại hợp đồng không được để trống",
+    "error.contract-type.name.required": "Tên loại hợp đồng không được để trống",
     "error.contract-template.name.required": "Tên mẫu hợp đồng không được để trống",
     "error.contract-template.code.required": "Mã mẫu hợp đồng không được để trống",
     "error.contract-template.effective-start-date": "Ngày bắt đầu hiệu lực không được để trống",
@@ -281,6 +289,9 @@
     "error.contract-template.effective-end-date.compare": "Ngày kết thúc không được nhỏ hơn ngày bắt đầu",
 
     "error.partner.name.required": "Tên đối tác không được để trống",
+    
+    "confirm.role.delete": "Bạn có chắc chắn muốn xóa vai trò này không?",
+    "confirm.contract-type.delete": "Bạn có chắc chắn muốn xóa loại hợp đồng này không?",
 
     "personal": "Cá nhân",
     "organization": "Tổ chức",

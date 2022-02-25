@@ -1,6 +1,6 @@
 <div class="container-fluid">
-    <div style="text-align: center; font-weight: bold">
-      <h3 style="color: #106DB6; font-family: inherit; text-transform: uppercase;">{{this.datas.title | translate}}</h3>
+    <div class="header">
+      <h3 class="label-header">{{this.datas.title | translate}}</h3>
     </div>
     <form (ngSubmit)="onSubmit()" [formGroup]="addForm" class="content">
         <div class="row">
@@ -10,7 +10,7 @@
                     <input type="text" formControlName="code" autofocus>
                 </div>
                 <div *ngIf="submitted && f.code.errors" class="invalid">
-                    <div *ngIf="f.code.errors.required">Mã loại hợp đồng không được để trống</div>
+                    <div *ngIf="f.code.errors.required">{{'error.contract-type.code.required' | translate}}</div>
                 </div>
             </div>
         </div>
@@ -22,7 +22,7 @@
                     <input type="text" formControlName="name">
                 </div>
                 <div *ngIf="submitted && f.name.errors" class="invalid">
-                    <div *ngIf="f.name.errors.required">Tên loại hợp đồng không được để trống</div>
+                    <div *ngIf="f.name.errors.required">{{'error.contract-type.name.required' | translate}}</div>
                 </div>
             </div>
         </div>

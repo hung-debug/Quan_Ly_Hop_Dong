@@ -8,7 +8,7 @@
             <input type="text" formControlName="name">
         </div>
         <div *ngIf="submitted && f.name.errors" class="invalid">
-          <div *ngIf="f.name.errors.required">Họ tên không được để trống</div>
+          <div *ngIf="f.name.errors.required">{{'error.user.name.required' | translate}}</div>
         </div>
       </div>
       <div class="col-md-4">
@@ -17,8 +17,8 @@
             <input type="text" formControlName="email" [readonly]="true" class="hidden-color">
         </div>
         <div *ngIf="submitted && f.email.errors" class="invalid">
-          <div *ngIf="f.email.errors.required">Email không được để trống</div>
-          <div *ngIf="f.email.errors.email">Email không đúng định dạng</div>
+          <div *ngIf="f.email.errors.required">{{'error.user.email.required' | translate}}</div>
+          <div *ngIf="f.email.errors.email">{{'error.user.email.format' | translate}}</div>
         </div>
       </div>
       <div class="col-md-4">
@@ -36,8 +36,8 @@
             <input type="text" formControlName="phone">
         </div>
         <div *ngIf="submitted && f.phone.errors" class="invalid">
-          <div *ngIf="f.phone.errors.required">Số điện thoại không được để trống</div>
-          <div *ngIf="f.phone.errors.pattern">Số điện thoại sai định dạng</div>
+          <div *ngIf="f.phone.errors.required">{{'error.user.phone.required' | translate}}</div>
+          <div *ngIf="f.phone.errors.pattern">{{'error.user.phone.format' | translate}}</div>
         </div>
       </div>
       <div class="col-md-4">
@@ -46,7 +46,7 @@
           <div class="hidden-color">{{organizationName}}</div>
         </div>
         <div *ngIf="submitted && f.organizationId.errors" class="invalid">
-          <div *ngIf="f.organizationId.errors.required">Tổ chức không được để trống</div>
+          <div *ngIf="f.organizationId.errors.required">{{'error.unit.name.required' | translate}}</div>
         </div> 
       </div>
       <div class="col-md-4">
@@ -55,7 +55,7 @@
         <div class="hidden-color">{{roleName}}</div>
       </div>
       <div *ngIf="submitted && f.role.errors" class="invalid">
-        <div *ngIf="f.role.errors.required">Vai trò không được để trống</div>
+        <div *ngIf="f.role.errors.required">{{'error.role.name.required' | translate}}</div>
       </div>
     </div>
     </div>
@@ -84,88 +84,87 @@
         <div class="label-header">
           {{'sign.file-image' | translate}}
         </div>
-      <div class="content-body">
-          <div [hidden]="imgSignPCSelect">
-          <input id="attachFileSignature" type="file" accept=".jpg, .png, .jpge"
-          (change)="fileChangedAttach($event)" style="display: none;"/>
-          <div class="select-contract container-img-file" (click)="addFileAttach()">
-            <div class="upload-image-region d-flex flex-column container-img-file-1">
-              <img src="assets/img/img-icon.svg" alt="#" width="50px">
-              <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
-              <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
+        <div class="content-body">
+            <div [hidden]="imgSignPCSelect">
+            <input id="attachFileSignature" type="file" accept=".jpg, .png, .jpge"
+            (change)="fileChangedAttach($event)" style="display: none;"/>
+            <div class="select-contract container-img-file" (click)="addFileAttach()">
+              <div class="upload-image-region d-flex flex-column container-img-file-1">
+                <img src="assets/img/img-icon.svg" alt="#" width="50px">
+                <div class="text-choose-file">{{'choose.sign.file.image' | translate}}</div>
+                <div class="text-support-extension">{{'support.format.PNG.JPG.JPGE' | translate}}</div>
+              </div>
             </div>
           </div>
+          <div class="image-div">
+            <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
+            <img class="hidden_img" (click)="addFileAttach()" src="assets/img/img-icon.svg" width="30" height="30" />
+          </div>
         </div>
-        <div class="image-div">
-          <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
-          <img class="hidden_img" (click)="addFileAttach()" src="assets/img/img-icon.svg" width="30" height="30" />
-        </div>
-      </div>
-      
       </div>
   
       <div class="col-md-4">
-      <form [formGroup]="addKpiForm">
-        <div class="label-header">
-          <div class="row" style="padding: 0 10px;">
-            <div class="col-md-12">
-              {{'sign.kpi' | translate}}
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="row">
-            <div class="col-md-12">
-              <div>{{'user.phone' | translate}}</div>
-              <div class="input-data">
-                <input type="text" formControlName="phoneKpi">
-              </div>
-              <div *ngIf="submitted && fKpi.phoneKpi.errors" class="invalid">
-              <div *ngIf="fKpi.phoneKpi.errors.pattern">Số điện thoại sai định dạng</div>
-            </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div>{{'user.network' | translate}}</div>
-              <div>
-              <p-dropdown 
-                panelStyleClass="font"
-                [options]="networkList" 
-                formControlName="networkKpi" 
-                optionLabel="name" 
-                optionValue="id" 
-                placeholder="Chọn nhà mạng" 
-                [filter]="true" 
-                filterBy="name" 
-                [showClear]="true"  
-                ></p-dropdown>
+        <form [formGroup]="addKpiForm">
+          <div class="label-header">
+            <div class="row" style="padding: 0 10px;">
+              <div class="col-md-12">
+                {{'sign.kpi' | translate}}
               </div>
             </div>
           </div>
-        </div>
+          <div>
+            <div class="row">
+              <div class="col-md-12">
+                <div>{{'user.phone' | translate}}</div>
+                <div class="input-data">
+                  <input type="text" formControlName="phoneKpi">
+                </div>
+                <div *ngIf="submitted && fKpi.phoneKpi.errors" class="invalid">
+                <div *ngIf="fKpi.phoneKpi.errors.pattern">{{'error.user.phone.format' | translate}}</div>
+              </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div>{{'user.network' | translate}}</div>
+                <div>
+                <p-dropdown 
+                  panelStyleClass="font"
+                  [options]="networkList" 
+                  formControlName="networkKpi" 
+                  optionLabel="name" 
+                  optionValue="id" 
+                  placeholder="Chọn nhà mạng" 
+                  [filter]="true" 
+                  filterBy="name" 
+                  [showClear]="true"  
+                  ></p-dropdown>
+                </div>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
   
       <div class="col-md-4">
-      <form [formGroup]="addHsmForm">
-        <div class="label-header">
-          <div class="row" style="padding: 0 10px;">
-            <div class="col-md-12">
-              {{'sign.hsm' | translate}}
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="row">
-            <div class="col-md-12">
-              <div>{{'user.name.v2' | translate}}</div>
-              <div class="input-data">
-              <input type="text" formControlName="nameHsm">
+        <form [formGroup]="addHsmForm">
+          <div class="label-header">
+            <div class="row" style="padding: 0 10px;">
+              <div class="col-md-12">
+                {{'sign.hsm' | translate}}
               </div>
             </div>
           </div>
-        </div>
+          <div>
+            <div class="row">
+              <div class="col-md-12">
+                <div>{{'user.name.v2' | translate}}</div>
+                <div class="input-data">
+                <input type="text" formControlName="nameHsm">
+                </div>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
     </div>

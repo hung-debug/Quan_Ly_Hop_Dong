@@ -1,6 +1,6 @@
 <div class="container-fluid">
-    <div style="text-align: center; font-weight: bold">
-      <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{this.datas.title | translate}}</h3>
+    <div class="header">
+      <h3 class="label-header">{{this.datas.title | translate}}</h3>
     </div>
     <form [formGroup]="addForm" class="content">
         <div class="row">
@@ -10,7 +10,7 @@
                     <input type="text" formControlName="nameOrg">
                 </div>
                 <div *ngIf="submitted && f.nameOrg.errors" class="invalid">
-                    <div *ngIf="f.nameOrg.errors.required">Tên tổ chức không được để trống</div>
+                    <div *ngIf="f.nameOrg.errors.required">{{'error.unit.name.required' | translate}}</div>
                 </div>
             </div>
         
@@ -20,7 +20,7 @@
                     <input type="text" formControlName="short_name">
                 </div>
                 <div *ngIf="submitted && f.short_name.errors" class="invalid">
-                    <div *ngIf="f.short_name.errors.required">Tên viết tắt không được để trống</div>
+                    <div *ngIf="f.short_name.errors.required">{{'error.unit.short-code.required' | translate}}</div>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
                     <input type="text" formControlName="code">
                 </div>
                 <div *ngIf="submitted && f.code.errors" class="invalid">
-                    <div *ngIf="f.code.errors.required">Mã tổ chức không được để trống</div>
+                    <div *ngIf="f.code.errors.required">{{'error.unit.code.required' | translate}}</div>
                 </div>
             </div>
         
@@ -42,8 +42,8 @@
                     <input type="text" formControlName="email">
                 </div>
                 <div *ngIf="submitted && f.email.errors" class="invalid">
-                    <div *ngIf="f.email.errors.required">Email không được để trống</div>
-                    <div *ngIf="f.email.errors.email">Email không đúng định dạng</div>
+                    <div *ngIf="f.email.errors.required">{{'error.user.email.required' | translate}}</div>
+                    <div *ngIf="f.email.errors.email">{{'error.user.email.format' | translate}}</div>
                 </div>
             </div>
         </div>
@@ -70,8 +70,8 @@
                 <div *ngIf="this.data.id != null" class="input-data hidden-color">
                     <div class="hidden-color">{{parentName}}</div>
                   </div>
-                <div *ngIf="submitted && f.parent_id.errors" class="invalid">
-                    <div *ngIf="f.parent_id.errors.required">Tổ chức cấp trên không được để trống</div>
+                <div *ngIf="this.data.id == null && submitted && f.parent_id.errors" class="invalid">
+                    <div *ngIf="f.parent_id.errors.required">{{'error.unit.parent.required' | translate}}</div>
                 </div>
             </div>
         
@@ -81,8 +81,8 @@
                     <input type="text" formControlName="phone">
                 </div>
                 <div *ngIf="submitted && f.phone.errors" class="invalid">
-                    <div *ngIf="f.phone.errors.required">Số điện thoại không được để trống</div>
-                    <div *ngIf="f.phone.errors.pattern">Số điện thoại sai định dạng</div>
+                    <div *ngIf="f.phone.errors.required">{{'error.user.phone.required' | translate}}</div>
+                    <div *ngIf="f.phone.errors.pattern">{{'error.user.phone.format' | translate}}</div>
                 </div>
             </div>
         </div>

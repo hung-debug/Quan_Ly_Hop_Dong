@@ -1,22 +1,6 @@
-// body {
-//   height: 100%;
-//   background: #f7f7f7;
-// }
-// .container{
-//   background: white;
-// }
-// .content_header{
-//   height: 50px;
-// }
-// .content_body{
-//   height: calc(100vh - 214px);
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// }
-// .content_footer{
-//   height: 164px;
-// }
+.all{
+  background-color: #f9f9f9;
+}
 .header_language {
   position: absolute;
   right: 0px;
@@ -26,31 +10,9 @@
   max-width: 480px;
   margin: 0 auto;
 }
-// .bg {
-//   background-image: url("../../assets/img/digital_sign.svg");
-//   height: 100vh;
-//   background-position: center;
-//   background-repeat: no-repeat;
-//   background-size: cover;
-// }
 .form-group{
   margin: 20px;
 }
-// .col-md-6 {
-//   padding: 0px;
-// }
-// .bg-header{
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// }
-// .bg-header-login{
-//   background-image: url(../../assets/img/logo_eContract_21.svg);
-//   height: 100px;
-//   width: 300px;
-//   background-repeat: no-repeat;
-//   background-size: cover;
-// }
 .bg-footer-login {
   background-image: url(../../assets/img/foot_login.svg);
   height: 100%;
@@ -64,6 +26,9 @@
   font-size: 14px;
   width: 100%;
   border-radius: 5px;
+}
+.note{
+  color: #bf6b03;
 }
 .input-line {
   display: flex;

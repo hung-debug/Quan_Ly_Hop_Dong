@@ -9,6 +9,7 @@
     "login": "Login",
     "login.username": "Username",
     "login.password": "Password",
+    "login.note.user": "Please login with the account and password provided in your email",
     "login.forgot_password": "Forgot password",
     "login.forgot_password.note": "Enter the email address you used to register on MobiFone eContract",
     "signup": "Signup",
@@ -255,6 +256,7 @@
     "sign.file-image": "Image signature file",
     "sign.kpi": "PKI signature",
     "sign.hsm": "HSM signature",
+    "image.empty": "No photo",
 
     "error.server": "Error! Please contact the developer for processing",
   "error.username.required": "Username is required",
@@ -271,9 +273,15 @@
   "error.user.sign-type.required": "Sign type is required",
   "error.user.phone.required": "Phone number is required",
   "error.user.phone.format": "Invalid phone number",
+  "error.unit.name.required": "Organization name is required",
+  "error.unit.short-code.required": "Organization name is required",
+  "error.unit.code.required": "Organization name is required",
+  "error.unit.parent.required": "Organization parent is required",
   "error.role.name.required": "Role name is required",
   "error.role.code.required": "Role code is required",
   "error.role.permission.required": "Permission is required",
+  "error.contract-type.code.required": "Contract type code is required",
+  "error.contract-type.name.required": "Contract type name is required",
   "error.contract-template.name.required": "Contract template name is required",
   "error.contract-template.code.required": "Contract template code is required",
   "error.contract-template.effective-start-date": "Effective start date is required",
@@ -281,6 +289,9 @@
   "error.contract-template.effective-end-date.compare": "End date must not be less than start date",
 
   "error.partner.name.required": "Partner is required",
+
+  "confirm.role.delete": "Are you sure you want to delete this role?",
+  "confirm.contract-type.delete": "Are you sure you want to delete this type of contract?",
 
   "personal": "Personal",
   "organization" : "Organization",
