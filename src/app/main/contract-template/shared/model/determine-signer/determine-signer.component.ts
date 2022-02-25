@@ -643,6 +643,7 @@ export class DetermineSignerComponent implements OnInit {
     let data = (data_partner.recipients.filter((p: any) => p.role == 4))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 4);
     data.ordering = count_data.length + 1;
+    data.name = "Văn thư " + data.ordering;
     // this.data_parnter_organization[index].recipients.push(data);
     (this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
@@ -779,6 +780,7 @@ export class DetermineSignerComponent implements OnInit {
     })
     array_empty.forEach((item: any, index: number) => {
       item.ordering = index + 1;
+      item.name = "Văn thư " + item.ordering;
     })
     new_arr = arr_clone_different.concat(array_empty);
     item.recipients = new_arr;
@@ -830,7 +832,7 @@ export class DetermineSignerComponent implements OnInit {
     if (newArr.length) {
       newArr.forEach((item: any) => {
         if (item.role == 3) {
-          item.name = "";
+          item.name = "Người ký 1";
           item.email = "";
           item.phone = "";
           item.role = 3; // người ký
