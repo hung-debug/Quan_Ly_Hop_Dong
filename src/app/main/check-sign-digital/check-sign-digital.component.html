@@ -1,8 +1,9 @@
 <div class="container-fluid">
     <div class="row" class="col-md-3">
-        <input id="attachFileSignature" type="file" accept=".pdf"
+        <input id="attachFileSignature" (change)="fileChangedAttach($event)" type="file" accept=".pdf"
                 style="display: none;"/>
         <button class="btn btn-lg btn-block btn_submit" (click)="addFileAttach()"><span class="fa fa-upload icon_add"></span> {{'Tải lên file ký số' | translate }}</button>
+        <button class="btn btn-lg btn-block btn_label" *ngIf="this.fileName">{{fileName}}</button>
     </div>
     <div class="row" style="padding-top: 20px;">
         <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">

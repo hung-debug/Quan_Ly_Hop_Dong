@@ -389,7 +389,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
             this.datas.file_content = fileReader.result.toString().split(',')[1];
         };
       }
-      this.step = variable.stepSampleContract.step2;
+      this.step = variable.stepSampleContract.step4;
       this.datas.stepLast = this.step;
       // this.datas.document_id = '1';
       this.nextOrPreviousStep(this.step);

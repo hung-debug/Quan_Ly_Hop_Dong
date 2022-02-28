@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/service/app.service';
+import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
 
 @Component({
   selector: 'app-check-sign-digital',
@@ -10,9 +11,11 @@ export class CheckSignDigitalComponent implements OnInit {
 
   cols: any[];
   list: any[];
+  fileName:any='';
 
   constructor(
-    private appService: AppService
+    private appService: AppService,
+    private checkSignDigitalService: CheckSignDigitalService
   ) { }
 
   ngOnInit(): void {
@@ -25,10 +28,27 @@ export class CheckSignDigitalComponent implements OnInit {
       {header: 'Đơn vị cấp chứng thư số', style:'text-align: left;' },
       {header: 'Ký trong thời gian hợp lệ', style:'text-align: left;' }
       ];
+
+      this.checkSignDigitalService.getList().subscribe(response => {
+        this.list = response.items;
+      });
   }
 
   addFileAttach() {
     // @ts-ignore
     document.getElementById('attachFileSignature').click();
   }
+
+  fileChangedAttach(e: any) {
+    console.log(e.target.files)
+    let files = e.target.files;
+    for (let i = 0; i < files.length; i++) {
+
+      const file = e.target.files[i];
+      if (file) {
+        this.fileName = file.name;
+      }
+    }
+  }
 }
+  

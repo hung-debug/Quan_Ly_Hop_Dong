@@ -16,6 +16,7 @@
                         </div>
                         <div *ngIf="submitted && f.name.errors" class="invalid">
                             <div *ngIf="f.name.errors.required">{{'error.role.name.required' | translate}}</div>
+                            <div *ngIf="f.name.errors.pattern">{{'Tên vai trò không được chứa ký tự đặc biệt' | translate}}</div>
                         </div>
                     </div>
                 </div>
@@ -30,6 +31,7 @@
                         </div>
                         <div *ngIf="submitted && f.code.errors" class="invalid">
                             <div *ngIf="f.code.errors.required">{{'error.role.code.required' | translate}}</div>
+                            <div *ngIf="f.code.errors.pattern">{{'Mã vai trò không được chứa ký tự đặc biệt' | translate}}</div>
                         </div>
                     </div>
                 </div>
@@ -38,6 +40,9 @@
                         <div class="label text-color">{{'role.note' | translate}}</div>
                         <div class="input-data">
                             <input type="text" formControlName="note" autofocus>
+                        </div>
+                        <div *ngIf="submitted && f.note.errors" class="invalid">
+                            <div *ngIf="f.note.errors.pattern">{{'Ghi chú không được chứa ký tự đặc biệt' | translate}}</div>
                         </div>
                     </div>
                 </div>

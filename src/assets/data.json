@@ -1,39 +1,44 @@
 {
   "items": [{
           "id": 1,
-          "contractName": "Hợp đồng nguyên tắc mua bán vật liệu xây dựng",
-          "userName": "Công ty A",
-          "partnerName": "Nhà phân phối B, Nhà phân phối C",
-          "status": "Đang thực hiện",
-          "createDate": "20/10/2021",
-          "deadLine": "20/10/2021"
+          "signer": "DoaiNH",
+          "signOn": "28/02/2022 10:00:00",
+          "durationValidCertificate": "01/01/2021 - 12/12/2022",
+          "deptGrantCert": "Công ty cổ phần phần mềm công nghệ cao Việt Nam",
+          "signOnValidTime": "Hợp lệ"
       },
       {
-        "id": 2,
-        "contractName": "Hợp đồng nguyên tắc mua bán vật liệu xây dựng B",
-        "userName": "Công ty B",
-        "partnerName": "Nhà phân phối AB, Nhà phân phối C",
-        "status": "Đang thực hiện B",
-        "createDate": "20/10/2022",
-        "deadLine": "20/10/2022"
-      },
-      {
-        "id": 2,
-        "contractName": "Hợp đồng nguyên tắc mua bán vật liệu xây dựng B",
-        "userName": "Công ty B",
-        "partnerName": "Nhà phân phối AB, Nhà phân phối C",
-        "status": "Đang thực hiện B",
-        "createDate": "20/10/2022",
-        "deadLine": "20/10/2022"
-      },
-      {
-        "id": 2,
-        "contractName": "Hợp đồng nguyên tắc mua bán vật liệu xây dựng B",
-        "userName": "Công ty B",
-        "partnerName": "Nhà phân phối AB, Nhà phân phối C",
-        "status": "Đang thực hiện B",
-        "createDate": "20/10/2022",
-        "deadLine": "20/10/2022"
-      }
+        "id": 1,
+        "signer": "HaPTT",
+        "signOn": "28/02/2022 10:02:00",
+        "durationValidCertificate": "01/01/2021 - 12/12/2022",
+        "deptGrantCert": "Công ty cổ phần phần mềm công nghệ cao Việt Nam",
+        "signOnValidTime": "Hợp lệ"
+    },
+    {
+      "id": 1,
+      "signer": "AnhNT",
+      "signOn": "28/02/2022 10:00:00",
+      "durationValidCertificate": "01/01/2021 - 12/12/2022",
+      "deptGrantCert": "Công ty cổ phần phần mềm công nghệ cao Việt Nam",
+      "signOnValidTime": "Hợp lệ"
+  },
+  {
+    "id": 1,
+    "signer": "Quyền Nguyễn Hữu",
+    "signOn": "28/02/2022 11:00:00",
+    "durationValidCertificate": "03/11/2021 - 09/09/2022",
+    "deptGrantCert": "Trung tâm CNTT - Mobifone",
+    "signOnValidTime": "Hợp lệ"
+},
+{
+  "id": 1,
+    "signer": "Phạm Thu Hồng",
+    "signOn": "28/02/2022 11:00:00",
+    "durationValidCertificate": "03/11/2021 - 09/09/2022",
+    "deptGrantCert": "Trung tâm CNTT - Mobifone",
+    "signOnValidTime": "Hợp lệ"
+}
+      
   ]
 }
