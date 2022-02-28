@@ -11,6 +11,7 @@
                 </div>
                 <div *ngIf="submitted && f.nameOrg.errors" class="invalid">
                     <div *ngIf="f.nameOrg.errors.required">{{'error.unit.name.required' | translate}}</div>
+                    <div *ngIf="f.nameOrg.errors.pattern">{{'Tên tổ chức không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
             </div>
         
@@ -21,6 +22,7 @@
                 </div>
                 <div *ngIf="submitted && f.short_name.errors" class="invalid">
                     <div *ngIf="f.short_name.errors.required">{{'error.unit.short-code.required' | translate}}</div>
+                    <div *ngIf="f.short_name.errors.pattern">{{'Tên viết tắt không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
             </div>
         </div>
@@ -33,6 +35,7 @@
                 </div>
                 <div *ngIf="submitted && f.code.errors" class="invalid">
                     <div *ngIf="f.code.errors.required">{{'error.unit.code.required' | translate}}</div>
+                    <div *ngIf="f.code.errors.pattern">{{'Mã tổ chức không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
             </div>
         
@@ -92,6 +95,9 @@
                 <div class="label text-color">{{'unit.fax' | translate }}</div>
                 <div class="input-data">
                     <input type="text" formControlName="fax">
+                </div>
+                <div *ngIf="submitted && f.fax.errors" class="invalid">
+                    <div *ngIf="f.fax.errors.pattern">{{'Fax không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
             </div>
         

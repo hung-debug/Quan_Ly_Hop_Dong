@@ -7,6 +7,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import {roleList} from "../../../config/variable";
+import {parttern_input} from "../../../config/parttern"
 
 @Component({
   selector: 'app-add-unit',
@@ -39,12 +40,12 @@ export class AddUnitComponent implements OnInit {
     private roleService: RoleService,) { 
 
       this.addForm = this.fbd.group({
-        nameOrg: this.fbd.control("", [Validators.required]),
-        short_name: this.fbd.control("", [Validators.required]),
-        code: this.fbd.control("", [Validators.required]),
+        nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        short_name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         email: this.fbd.control("", [Validators.required, Validators.email]),
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-        fax: null,
+        fax: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
         status: 1,
         parent_id: this.fbd.control("", [Validators.required]),
       });
@@ -65,12 +66,12 @@ export class AddUnitComponent implements OnInit {
       this.unitService.getUnitById(this.data.id).subscribe(
         data => {
           this.addForm = this.fbd.group({
-            nameOrg: this.fbd.control(data.name, [Validators.required]),
-            short_name: this.fbd.control(data.short_name, [Validators.required]),
-            code: this.fbd.control(data.code, [Validators.required]),
+            nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            short_name: this.fbd.control(data.short_name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             email: this.fbd.control(data.email, [Validators.required, Validators.email]),
             phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-            fax: this.fbd.control(data.fax),
+            fax: this.fbd.control(data.fax, Validators.pattern(parttern_input.input_form)),
             status: this.fbd.control(data.status),
             parent_id: this.fbd.control(data.parent_id, [Validators.required]),
           });
@@ -102,12 +103,12 @@ export class AddUnitComponent implements OnInit {
         this.orgList = data.entities;
       });
       this.addForm = this.fbd.group({
-        nameOrg: this.fbd.control("", [Validators.required]),
-        short_name: this.fbd.control("", [Validators.required]),
-        code: this.fbd.control("", [Validators.required]),
+        nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        short_name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         email: this.fbd.control("", [Validators.required, Validators.email]),
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-        fax: null,
+        fax: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
         status: 1,
         parent_id: this.fbd.control(orgId, [Validators.required]),
       });

@@ -8,6 +8,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import { RoleService } from 'src/app/service/role.service';
 import { networkList } from "../../../config/variable";
 import { UploadService } from 'src/app/service/upload.service';
+import {parttern_input} from "../../../config/parttern";
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -55,7 +56,7 @@ export class AddUserComponent implements OnInit {
               private uploadService:UploadService
     ) {
     this.addForm = this.fbd.group({
-      name: this.fbd.control("", [Validators.required]),
+      name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       email: this.fbd.control("", [Validators.required, Validators.email]),
       birthday: null,
       phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -66,7 +67,7 @@ export class AddUserComponent implements OnInit {
       phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
       networkKpi: null,
 
-      nameHsm: null,
+      nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
 
       fileImage:null
     });
@@ -100,7 +101,7 @@ export class AddUserComponent implements OnInit {
         this.isEditRole = true;
         if(this.isQLND_01){
           this.addForm = this.fbd.group({
-            name: this.fbd.control("", [Validators.required]),
+            name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
             email: this.fbd.control("", [Validators.required, Validators.email]),
             birthday: null,
             phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -111,7 +112,7 @@ export class AddUserComponent implements OnInit {
             phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
             networkKpi: null,
 
-            nameHsm: null,
+            nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
 
             fileImage:null
           });
@@ -125,7 +126,7 @@ export class AddUserComponent implements OnInit {
             data => {
               console.log(data);
               this.addForm = this.fbd.group({
-                name: this.fbd.control(data.name, [Validators.required]),
+                name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
                 email: this.fbd.control(data.email, [Validators.required, Validators.email]),
                 birthday: data.birthday==null?null:new Date(data.birthday),
                 phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -136,7 +137,7 @@ export class AddUserComponent implements OnInit {
                 phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
                 networkKpi: data.phone_tel,
 
-                nameHsm: data.hsm_name,
+                nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.input_form)),
 
                 fileImage:null
               }); 

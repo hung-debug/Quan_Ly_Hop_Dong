@@ -24,6 +24,8 @@ export class RoleComponent implements OnInit {
 
   code:any = "";
   name:any = "";
+  codeError:any="";
+  nameError:any="";
   list: any[] = [];
   cols: any[];
   files:any[];
