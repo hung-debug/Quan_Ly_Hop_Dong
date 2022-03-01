@@ -30,8 +30,6 @@ import { NgMultiSelectDropDownModule } from "ng-multiselect-dropdown";
 import { DatepickerModule } from 'ng2-datepicker';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatSelectModule} from "@angular/material/select";
 import {NgxInputSearchModule} from "ngx-input-search";
 import { DetailContractTemplateComponent } from './detail-contract-template/detail-contract-template.component';
 import { ImageSignContractComponent } from './detail-contract-template/image-sign-contract/image-sign-contract.component';
@@ -80,9 +78,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DatepickerModule,
     NgxSpinnerModule,
     PerfectScrollbarModule,
-    MatFormFieldModule,
     NgxInputSearchModule,
-    MatSelectModule,
   ],
   providers: [
     {

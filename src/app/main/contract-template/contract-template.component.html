@@ -1,10 +1,7 @@
 <div class="container-fluid">
-  <mdb-tabs [fill]="true">
-    <mdb-tab title="{{'contract-template.create' | translate}}"></mdb-tab>
-    <mdb-tab title="{{'contract-template.share' | translate}}"></mdb-tab>
-  </mdb-tabs>
+  <p-selectButton [options]="stateOptions" [(ngModel)]="isShare" optionLabel="label" optionValue="value"></p-selectButton>
 
-  <div class="row">
+  <div class="row" style="padding-top: 10px;">
     <div class="col-md-3">
       <div>{{'contract-template.name' | translate}}</div>
       <div class="input-line">
@@ -12,9 +9,19 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div>{{'contract-template.type' | translate}}</div>
-      <div class="input-line">
-        <input type="text" [(ngModel)]="type" class="input_text"/>
+      <div>{{'contract.type' | translate}}</div>
+      <div>
+        <p-dropdown 
+          panelStyleClass="font"
+          [options]="contractTypeList" 
+          [(ngModel)]="type" 
+          optionLabel="name" 
+          optionValue="id" 
+          [filter]="true" 
+          filterBy="name" 
+          [showClear]="type?true:false"
+          placeholder="Tất cả"
+          ></p-dropdown>
       </div>
     </div>
     <div class="col-md-6 btn_search">
@@ -30,7 +37,7 @@
     <div class="col-md-3">{{'action' | translate}}</div>
   </div>
 
-  <div class="item_contract" *ngFor="let item of contractsTemplate  | paginate:{itemsPerPage: page, currentPage:p}">
+  <div class="item_contract" *ngFor="let item of contractsTemplate  | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
     <div class="row">
       <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.contractName}}</div>
     </div>
@@ -78,7 +85,7 @@
   <div class="contract_footer">
     <div class="footer_title"></div>
     <div class="footer_pagination">
-      <pagination-controls (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
+      <pagination-controls (pageChange)="p=$event; getContractTemplateList()" previousLabel="" nextLabel=""></pagination-controls>
     </div>
     <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
   </div>

@@ -10,6 +10,7 @@ export class ContractTemplateService {
 
   token: any;
   shareContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
+  listContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
 
   constructor(private http: HttpClient) { }
 
@@ -17,9 +18,20 @@ export class ContractTemplateService {
     this.token = JSON.parse(localStorage.getItem('currentUser')||'').access_token;
   }
 
-  public getContractTemplateList(): Observable<any> {
+  public getContractTemplateList(isShare:any, filter_name:any, filter_type: any, page:any, size:any): Observable<any> {
     return this.http.get("/assets/data-contract-template.json");
   }
+
+  // public getContractTemplateList(isShare:any, filter_name:any, filter_type: any, page:any, size:any): Observable<any> {
+  //   this.getCurrentUser();
+
+  //   if(page != ""){
+  //     page = page - 1;
+  //   }
+  //   let listContractTemplateUrl = this.listContractTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&page=" + page + "&size=" + size;
+  //   const headers = {'Authorization': 'Bearer ' + this.token}
+  //   return this.http.get<any[]>(listContractTemplateUrl, {headers}).pipe();
+  // }
 
   shareContract(email:any, id: any){
     this.getCurrentUser();

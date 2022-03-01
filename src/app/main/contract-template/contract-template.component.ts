@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
+import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { DeleteContractTemplateDialogComponent } from './dialog/delete-contract-template-dialog/delete-contract-template-dialog.component';
 import { ReleaseContractTemplateDialogComponent } from './dialog/release-contract-template-dialog/release-contract-template-dialog.component';
@@ -18,10 +19,14 @@ import { StopContractTemplateDialogComponent } from './dialog/stop-contract-temp
 export class ContractTemplateComponent implements OnInit {
   public contractsTemplate: any[] = [];
   p:number = 1;
-  page:number = 5;
+  page:number = 3;
   pageStart:number = 0;
   pageEnd:number = 0;
   pageTotal:number = 0;
+
+  isShare: string = 'off';
+  stateOptions: any[];
+  contractTypeList: any[] = [];
 
   name:any="";
   type:any="";
@@ -32,15 +37,38 @@ export class ContractTemplateComponent implements OnInit {
               private router: Router,
               private fb: FormBuilder,
               private toastService : ToastService,
-              private dialog: MatDialog,) { }
+              private dialog: MatDialog,
+              private contractTypeService: ContractTypeService) { 
+
+    this.stateOptions = [
+      { label: 'Mẫu hợp đồng tạo', value: 'off' },
+      { label: 'Mẫu hợp đồng được chia sẻ', value: 'on' },
+    ];
+  }
 
   ngOnInit(): void {
     this.appService.setTitle('contract-template.list');
-    //get list contract
-    this.contractTemplateService.getContractTemplateList().subscribe(response => {
+    this.getContractTemplateList();
+
+    this.contractTypeService.getContractTypeList("", "").subscribe(response => {
+      console.log(response);
+      this.contractTypeList = response;
+    });
+  }
+
+  getContractTemplateList(){
+    //get list contract template
+    this.contractTemplateService.getContractTemplateList(this.isShare, this.name, this.type, this.p, this.page).subscribe(response => {
       this.contractsTemplate = response.items;
+      //this.pageTotal = response.total_elements;
       this.pageTotal = this.contractsTemplate.length;
-      this.setPage();  
+      if(this.pageTotal == 0){
+        this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      }else{
+        this.setPage();
+      }
     });
   }
 
