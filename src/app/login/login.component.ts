@@ -157,6 +157,13 @@ export class LoginComponent implements OnInit {
       if (sessionStorage.getItem('urlLoginType')) {
         this.type = 1;
       } else this.type = 0;
+
+      //neu dang nhap bang user co tai khoan va da dang nhap thanh cong truoc do thi khong phai dang nhap lai nua
+      if(this.type == 0 && JSON.parse(localStorage.getItem('currentUser') || '')?.code == '00'){
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/dashboard']);
+        });
+      }
     }
   }
 

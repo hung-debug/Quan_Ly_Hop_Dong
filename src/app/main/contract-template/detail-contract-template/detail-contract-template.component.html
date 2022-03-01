@@ -1,4 +1,4 @@
-<div class="sample-contract row" *ngIf="loaded">
+<div class="sample-contract row">
     <!--  information contract-->
     <div class="col-md-3 sample-contract__information" style="background-color: white;">
       <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
@@ -9,11 +9,11 @@
             <span>{{datas?.is_data_contract?.type_name}}</span>
           </div>
           <div>
-            <span class="title-contract">Tên hợp đồng:</span>
+            <span class="title-contract">Tên mẫu hợp đồng:</span>
             <span>{{datas.is_data_contract.name}}</span>
           </div>
           <div>
-            <span class="title-contract">Số hợp đồng:</span>
+            <span class="title-contract">Mã mẫu hợp đồng:</span>
             <span>{{datas.is_data_contract.code}}</span>
           </div>
           <div>
@@ -24,12 +24,8 @@
             </span>
           </div>
           <div>
-            <span class="title-contract">Hợp đồng liên quan:
-            </span>
-            <span *ngFor="let d of datas?.is_data_contract?.refs;let i = index">
-              <span *ngIf="i != 0">, </span>
-              <a style="color: #106DB6;" rel="stylesheet" [href]="'/main/form-contract/detail/' + d.ref_id" target="_blank">{{d.ref_name}}</a>
-            </span>
+            <span class="title-contract">Thời gian hiệu lực:</span>
+            <span>{{datas.is_data_contract.start_time}}</span>
           </div>
   
         </div>
@@ -55,7 +51,7 @@
     <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
          style="background-color: #F2F2F2; position: relative;">
       <div id="pdf-viewer-step-3">
-        <!--<div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+        <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
           <div class="resize-drag not-out-drop"
                [id]="d.id"
                style="z-index: -1;"
@@ -64,19 +60,9 @@
                [ngClass]="changeColorDrag(null, d, true)"
                [ngStyle]="changePosition(d)">
             <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
-            <app-image-sign-contract-detail *ngIf="!d.value" [datas]="datas" [sign]="d"></app-image-sign-contract-detail>
+            <app-image-sign-contract-template-detail *ngIf="!d.value" [datas]="datas" [sign]="d"></app-image-sign-contract-template-detail>
           </div>
-        </div>-->
-      </div>
-    </div>
-  </div>
-  <div class="footer-contract">
-  <!--  <div class="content_footer">@Copyright 2021 - MobiFone</div>-->
-    <div class="btn_footer">
-      <div class="label">
-      </div>
-      <div class="label" *ngIf="role || this.status == 30">
-        <button  type="button" name="next" class="next action-button" *ngIf="view && loaded" (click)="downloadContract(idContract)">{{checkStatusUser(status, role)}}</button>
+        </div>
       </div>
     </div>
   </div>

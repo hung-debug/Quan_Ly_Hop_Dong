@@ -12,8 +12,8 @@ import interact from "interactjs";
 import {variable} from "../../../config/variable";
 import Swal from 'sweetalert2';
 import * as $ from "jquery";
-import {ProcessingHandleEcontractComponent} from "../../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component"
 import { analyzeAndValidateNgModules } from '@angular/compiler';
+import { ProcessingHandleComponent } from './processing-handle/processing-handle.component';
 
 @Component({
   selector: 'app-detail-contract-template',
@@ -198,18 +198,6 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
       })
     }
 
-      this.datas.action_title = 'Xác nhận';
-      //neu nguoi truy cap khong o trong luong ky
-      if(!this.recipient?.role){
-        this.role = '';
-        this.status = this.datas.is_data_contract.status;
-
-      //neu nguoi truy cap o trong luong ky
-      }else{
-        this.role = this.recipient.role;
-        this.status = this.recipient.status;
-        this.datas.roleContractReceived = this.recipient.role;
-      }
       this.scale = 1;
 
       if (!this.signCurent) {
@@ -517,7 +505,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     // alert('Luồng xử lý hợp đồng!');
     const data = this.datas;
     // @ts-ignore
-    const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
+    const dialogRef = this.dialog.open(ProcessingHandleComponent, {
       width: '800px',
       backdrop: 'static',
       keyboard: true,
@@ -611,14 +599,6 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     this.stepChangeSampleContract.emit(step);
   }
 
-  dieuphoi() {
-    this.datas.step = variable.stepSampleContract.step_confirm_coordination;
-  }
-
-  getNameContract(data: any) {
-    return (' ' + data.file_name + ',').replace(/,\s*$/, "");
-  }
-
   getNameCoordination() {
     let nameFile = [];
     for (let i = 0; i < this.datas.contract_information.file_related_contract; i++) {
@@ -628,34 +608,6 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
 
   t() {
     console.log(this);
-  }
-
-  downloadContract(id:any){
-    if (this.isDataContract.status == 30) {
-      this.contractService.getFileZipContract(id).subscribe((data) => {
-          
-          this.uploadService.downloadFile(data.path).subscribe((response: any) => {
-            //console.log(response);
-
-            let url = window.URL.createObjectURL(response);
-            let a = document.createElement('a');
-            document.body.appendChild(a);
-            a.setAttribute('style', 'display: none');
-            a.href = url;
-            a.download = data.name;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            a.remove();
-
-            this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
-          }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
-        },
-        error => {
-          this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
-        }
-      );
-    }
-
   }
 
   checkIsViewContract() {
@@ -670,34 +622,4 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
       }
     }
   }
-
-  checkStatusUser(status: any, role: any) {
-    if (this.isDataContract.status == 30) {
-      return 'Tải xuống';
-    }
-
-    if (status == 3) {
-      return 'Đã từ chối';
-    }
-    let res = '';
-    if (status == 0) {
-      res += 'Chưa ';
-    } else if (status == 1) {
-      res += 'Đang ';
-    } else if (status == 2 || status == 3) {
-      res += 'Đã ';
-    }
-    if (role == 1) {
-      res +=  'điều phối';
-    } else if (role == 2) {
-      res +=  'xem xét';
-    } else if (role == 3) {
-      res +=  'ký';
-    } else if (role == 4) {
-      res =  res + ' đóng dấu';
-    }
-    return res;
-  }
-
-
 }
