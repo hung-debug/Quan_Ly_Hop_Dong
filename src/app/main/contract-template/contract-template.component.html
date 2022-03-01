@@ -32,7 +32,7 @@
 
   <div class="item_contract" *ngFor="let item of contractsTemplate  | paginate:{itemsPerPage: page, currentPage:p}">
     <div class="row">
-      <div class="col-md-12 item_contract_name">{{item.contractName}}</div>
+      <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.contractName}}</div>
     </div>
     <div class="row">
       <div class="col-md-12 item_contract_infor">Bên A: {{item.userName}}</div>

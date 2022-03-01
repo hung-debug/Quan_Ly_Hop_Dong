@@ -33,6 +33,7 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {NgxInputSearchModule} from "ngx-input-search";
+import { DetailContractTemplateComponent } from './detail-contract-template/detail-contract-template.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -49,7 +50,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ConfirmInforContractComponent,
     SignContractComponent,
     ContractHeaderComponent,
-    AddContractTemplateComponent
+    AddContractTemplateComponent,
+    DetailContractTemplateComponent
   ],  
   imports: [  
     CommonModule,  

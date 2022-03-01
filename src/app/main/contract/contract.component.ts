@@ -29,8 +29,6 @@ export class ContractComponent implements OnInit {
   status: string;
   type:string;
   private sub: any;
-  searchText:string;
-  closeResult:string= '';
   public contracts: any[] = [];
   p:number = 1;
   page:number = 5;
@@ -83,24 +81,6 @@ export class ContractComponent implements OnInit {
               private userService:UserService,
               private roleService: RoleService,
     ) {}
-
-  open(content:any) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
-    }
-  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -271,8 +251,6 @@ export class ContractComponent implements OnInit {
     this.filter_name = event.target.value;
     this.getContractList();
   }
-
-  
 
   openDetail(id:number){
     this.router.navigate(['main/form-contract/detail/' + id]);

@@ -56,6 +56,10 @@ export class ContractTemplateComponent implements OnInit {
     this.router.navigate(['/main/contract-template/form/add']);
   }
 
+  openDetail(id:number){
+    this.router.navigate(['main/contract-template/form/detail/' + id]);
+  }
+
   deleteContractTemplate(id:any){
     const data = {
       title: 'XÁC NHẬN XÓA MẪU HỢP ĐỒNG',

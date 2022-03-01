@@ -24,6 +24,7 @@ import {CheckSignDigitalComponent} from './main/check-sign-digital/check-sign-di
 
 import { NotificationComponent } from './main/notification/notification.component';
 import { AddContractTemplateComponent } from './main/contract-template/add-contract-template/add-contract-template.component';
+import { DetailContractTemplateComponent } from './main/contract-template/detail-contract-template/detail-contract-template.component';
 
 const routes: Routes = [
   {
@@ -112,6 +113,10 @@ const routes: Routes = [
       {
         path: 'contract-template/form/:action',
         component: AddContractTemplateComponent,
+      },
+      {
+        path: 'contract-template/form/detail/:id',
+        component: DetailContractTemplateComponent,
       },
       {
         path: 'unit',

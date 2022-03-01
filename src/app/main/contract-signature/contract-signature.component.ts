@@ -226,20 +226,6 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
-  transform(contracts: any, event: any): any[] {
-    let searchText = event.target.value;
-    if (!contracts) {
-      return [];
-    }
-    if (!searchText) {
-      return contracts;
-    }
-    searchText = searchText.toLocaleLowerCase();
-    return contracts.filter((it: any) => {
-      return it.participant.contract.name.toLocaleLowerCase().includes(searchText);
-    });
-  }
-
   searchContract(){
     const data = {
       title: 'TÌM KIẾM HỢP ĐỒNG',
