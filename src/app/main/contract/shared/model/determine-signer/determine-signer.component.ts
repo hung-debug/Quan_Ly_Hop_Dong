@@ -696,7 +696,7 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 4);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
-    if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'người văn thư tổ chức')) {
+    if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'văn thư tổ chức')) {
       return;
     }
     arr_clone.forEach((element: any, index: number) => {
@@ -756,7 +756,7 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 3);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
-    if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'người ký tổ chức')) {
+    if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'người ký đối tác')) {
       return;
     }
     arr_clone.forEach((element: any, index: number) => {
