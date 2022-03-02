@@ -29,9 +29,6 @@ export class CheckSignDigitalComponent implements OnInit {
       {header: 'Ký trong thời gian hợp lệ', style:'text-align: left;' }
       ];
 
-      this.checkSignDigitalService.getList().subscribe(response => {
-        this.list = response.items;
-      });
   }
 
   addFileAttach() {
@@ -47,6 +44,9 @@ export class CheckSignDigitalComponent implements OnInit {
       const file = e.target.files[i];
       if (file) {
         this.fileName = file.name;
+        this.checkSignDigitalService.getList(file).subscribe(response => {
+          this.list = response.items;
+        });
       }
     }
   }
