@@ -68,6 +68,7 @@ export class ContractService {
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
   addGetFileZipContract:any = `${environment.apiUrl}/api/v1/documents/compress/`;
   checkCodeUniqueUrl:any = `${environment.apiUrl}/api/v1/contracts/check-code-unique`;
+  getCopyContract: any = `${environment.apiUrl}/api/v1/contracts/clone/`;
 
   token:any;
   customer_id:any;
@@ -576,6 +577,16 @@ export class ContractService {
     return this.http.put<any>(this.updateInfoContractUrl + datas.id, datas, {'headers': headers});
   }
 
+  deleteInfoContractSignature(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = "";
+    console.log(headers);
+    return this.http.delete<any>(this.updateInfoContractUrl + id, {headers});
+  }
+
   updateInfoContractConsider(datas: any, recipient_id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -647,7 +658,14 @@ export class ContractService {
 
     return this.http.get<any>(this.addGetDataContract + idContract, {headers});
   }
-
+  
+  getContractCopy(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getCopyContract + id, {headers});
+  }
 
   convertUrltoBinary(res: any) {
     const headers = new HttpHeaders().append('Content-Type', 'application/binary');
@@ -980,7 +998,4 @@ export class ContractService {
       },
     ]
   }
-
-
-
 }
