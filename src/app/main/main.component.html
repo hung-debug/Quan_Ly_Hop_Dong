@@ -14,7 +14,7 @@
                       <div class="label">{{'notification' | translate }}</div>
                   </div>
 
-                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu" style="width: 500px;">
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu" style="width: 500px;overflow: hidden auto;max-height: 315px;">
                       <div class="title_notification">{{'no.list' | translate}}</div>
                       <div class="drop_notification" *ngFor="let item of listNotification; let i = index" (click)="openLinkNotification(item.notice_url, item.id)" [style.background-color]="item.status==0 ? '#eaf4ff' : ''">
                           <div class="row">

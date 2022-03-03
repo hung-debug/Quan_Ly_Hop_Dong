@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {Helper} from "../core/Helper";
 import { environment } from '../../environments/environment';
+import { DatePipe } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,8 +12,10 @@ export class ContractTemplateService {
   token: any;
   shareContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
   listContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
+  addInforContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              public datepipe: DatePipe,) { }
 
   getCurrentUser(){
     this.token = JSON.parse(localStorage.getItem('currentUser')||'').access_token;
@@ -32,6 +35,21 @@ export class ContractTemplateService {
   //   const headers = {'Authorization': 'Bearer ' + this.token}
   //   return this.http.get<any[]>(listContractTemplateUrl, {headers}).pipe();
   // }
+
+  addInforContractTemplate(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: datas.name,
+      code: datas.code,
+      start_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+      end_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+      type_id: datas.type_id
+    });
+    return this.http.post<any>(this.addInforContractTemplateUrl, body, {'headers': headers}).pipe();
+  }
 
   shareContract(email:any, id: any){
     this.getCurrentUser();

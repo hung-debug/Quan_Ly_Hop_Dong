@@ -52,7 +52,7 @@
 
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
-          <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue' || status == 'complete') && isQLHD_08">
+          <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08">
             <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
           </div>
           <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02">

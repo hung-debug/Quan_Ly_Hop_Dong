@@ -20,7 +20,7 @@
                 <td>{{list.signOn}}</td>
                 <td>{{list.durationValidCertificate}}</td>
                 <td>{{list.deptGrantCert}}</td>
-                <td>{{list.signOnValidTime}}</td>
+                <td>{{list.signOnValidTime?'Hợp lệ':'Không hợp lệ'}}</td>
             </tr>  
         </ng-template>
         <ng-template pTemplate="paginatorleft" let-state>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from 'src/app/service/app.service';
 import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
+import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
   selector: 'app-check-sign-digital',
@@ -15,7 +16,8 @@ export class CheckSignDigitalComponent implements OnInit {
 
   constructor(
     private appService: AppService,
-    private checkSignDigitalService: CheckSignDigitalService
+    private checkSignDigitalService: CheckSignDigitalService,
+    private toastService: ToastService,
   ) { }
 
   ngOnInit(): void {
@@ -39,14 +41,21 @@ export class CheckSignDigitalComponent implements OnInit {
   fileChangedAttach(e: any) {
     console.log(e.target.files)
     let files = e.target.files;
+    this.fileName = '';
     for (let i = 0; i < files.length; i++) {
 
       const file = e.target.files[i];
       if (file) {
-        this.fileName = file.name;
-        this.checkSignDigitalService.getList(file).subscribe(response => {
-          this.list = response.items;
-        });
+        const extension = file.name.split('.').pop();
+        if (extension.toLowerCase() == 'pdf') {
+          this.fileName = file.name;
+          this.checkSignDigitalService.getList(file).subscribe(response => {
+            this.list = response;
+            console.log(response);
+          });
+        }else{
+          this.toastService.showErrorHTMLWithTimeout("File yêu cầu định dạng PDF", "", 3000);
+        }
       }
     }
   }
