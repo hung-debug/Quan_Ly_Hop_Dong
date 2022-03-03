@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { AppService } from 'src/app/service/app.service';
 import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
 import { ToastService } from 'src/app/service/toast.service';
@@ -18,6 +19,7 @@ export class CheckSignDigitalComponent implements OnInit {
     private appService: AppService,
     private checkSignDigitalService: CheckSignDigitalService,
     private toastService: ToastService,
+    private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit(): void {
@@ -39,6 +41,7 @@ export class CheckSignDigitalComponent implements OnInit {
   }
 
   fileChangedAttach(e: any) {
+    
     console.log(e.target.files)
     let files = e.target.files;
     this.fileName = '';
@@ -48,16 +51,18 @@ export class CheckSignDigitalComponent implements OnInit {
       if (file) {
         const extension = file.name.split('.').pop();
         if (extension.toLowerCase() == 'pdf') {
+          this.spinner.show();
           this.fileName = file.name;
           this.checkSignDigitalService.getList(file).subscribe(response => {
             this.list = response;
-            console.log(response);
+            this.spinner.hide();
           });
         }else{
           this.toastService.showErrorHTMLWithTimeout("File yêu cầu định dạng PDF", "", 3000);
         }
       }
     }
+    
   }
 }
   
