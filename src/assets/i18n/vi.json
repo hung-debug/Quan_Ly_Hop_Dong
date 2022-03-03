@@ -375,5 +375,9 @@
     "doi_tac_ca_nhan_ko_hop_le": " đối tác cá nhân không hợp lệ!",
     "doi_tac_ko_hop_le": " đối tác không hợp lệ!",
     "note_email_doi_tac": "Lưu ý: email người điều phối có thể trùng với email người ký!",
-    "email_partern_not_duplicate": "Email đối tác không được trùng nhau!"
+    "email_partern_not_duplicate": "Email đối tác không được trùng nhau!",
+    "have_version_app_mobile": "Đã có phiên bản trên điện thoại di động.",
+    "please_openApp_or_download": "Vui lòng truy cập hoặc tải ứng dụng để tiếp tục sử dụng dịch vụ.",
+    "open_app": "Mở app",
+    "download_app": "Tải app"
 }

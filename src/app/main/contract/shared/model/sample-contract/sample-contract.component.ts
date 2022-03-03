@@ -86,6 +86,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   dataSignPosition: any;
 
   listSignNameClone: any = [];
+  data_sample_contract: any = [];
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -99,12 +100,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
-    if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit") || this.router.url.includes("copy"))) {
+    if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
+      // ham chuyen doi hinh thuc ky type => sign_unit
       this.getAddSignUnit();
+      // ham update du lieu hop dong sua
       this.getDataSignUpdateAction();
+
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
 
-      console.log(this.dataSignPosition);
+      // console.log(this.dataSignPosition);
 
       // let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == item.id)[0];
       let data_sign_config_cks = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_so');
@@ -138,7 +142,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           let isObj = {
             id: element.id,
             sign_type: element.sign_type,
-            name: element.name
+            name: element.name,
+            email: element.email
           }
           dataDetermine.push(isObj);
         })
@@ -155,11 +160,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
 
       // loc du lieu khong trung nhau
-      // bo sung them email - && (val.email == data.email)
-      dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) => (val.recipient_id as any) == (data.id as any) &&
+      // (val.recipient_id as any) == (data.id as any) &&
+      dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) ||
           (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-        (val.name == data.name)
+        val.name == data.name && val.email == data.email
       ));
 
 
@@ -170,15 +175,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
           (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1)) ||
           (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4))) ||
-          val.name == data.name));
+          val.name == data.name || val.email == data.email));
       }
 
       // console.log(dataDiffirent)
       // xoa nhung du lieu doi tuong bi thay doi
+      // recipient_id
       if (dataDiffirent.length > 0) {
         this.datas.contract_user_sign.forEach((res: any) => {
           if (res.sign_config.length > 0) {
-            res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some(({ recipient_id }) => (val.recipient_id as any) === (recipient_id as any)));
+            res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some(({ email }) => (val.email as any) === (email as any)));
             res.sign_config.forEach((items: any) => {
               items.id = items.id + '1';
             })
@@ -188,6 +194,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
 
       // console.log(this.datas.contract_user_sign);
+
       // this.isEnableSelect = false;
     }
 
@@ -296,7 +303,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataNotPosition: any[] = [];
     this.datas.is_determine_clone.forEach((element: any) => {
       element.recipients.forEach((item: any) => {
-        let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == item.id)[0];
+        // p.recipient_id == item.id
+        let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient.email == item.email)[0];
         if (data_duplicate) {
           // lấy ra dữ liệu bị trùng và update lại với dữ liệu mới;
           data_duplicate.name = item.name;
@@ -305,9 +313,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           data_duplicate.sign_type = item.sign_type;
           data_duplicate.sign_unit = item.sign_type.some((data: any) => data.id == 1) ? 'chu_ky_anh' : 'chu_ky_so';
           data_duplicate.is_otp = item.is_otp;
+          data_duplicate['id_have_data'] = data_duplicate.id;
           data_duplicate['is_type_party'] = element.type;
           data_duplicate['role'] = data_duplicate.recipient.role;
-          delete data_duplicate.recipient;
+          // delete data_duplicate.recipient;
           dataPosition.push(data_duplicate);
         } else {
           item['is_type_party'] = this.datas.is_determine_clone.type;
@@ -613,8 +622,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
+    // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
-      if (this.convertToSignConfig().some((p: any) => p.recipient_id == element.id && p.sign_unit == isSignType)) {
+      if (this.convertToSignConfig().some((p: any) => p.email == element.email && p.sign_unit == isSignType)) {
         element.is_disable = true;
       } else {
         if (isSignType == 'chu_ky_anh') {
@@ -1097,6 +1107,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.type = data_name.type;
             signElement.setAttribute("type", isObjSign.type);
+
+            isObjSign.email = data_name.email;
+            signElement.setAttribute("type", isObjSign.email);
+
           }
           // else {
           //   // tránh trường hợp chọn người ký khác sau khi đã kéo thả sẽ bị mất dữ liệu người ký cũ trước khi thay đổi
@@ -1139,79 +1153,51 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   async next(action: string) {
     if (!this.validData()) return;
     else {
-      let data_sample_contract: string | any[] = [];
-      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
-      let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
-      isContractUserSign_clone.forEach((element: any) => {
-        if (element.sign_config.length > 0) {
-          element.sign_config.forEach((item: any) => {
-            item['font'] = 'Arial';
-            item['font_size'] = 14;
-            item['contract_id'] = this.datas.contract_id;
-            item['document_id'] = this.datas.document_id;
-            if (item.text_attribute_name) {
-              // if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
-              //   item.name = 'text_attribute_name';
-              //   item.value = item.text_attribute_name;
-              // } else 
-              item.name = item.text_attribute_name;
-            } 
-            // else item.value = null;
-            if (item.sign_unit == 'chu_ky_anh') {
-              item['type'] = 2;
-            } else if (item.sign_unit == 'chu_ky_so') {
-              item['type'] = 3;
-            } else if (item.sign_unit == 'so_tai_lieu') {
-              item['type'] = 4;
-            } else {
-              item['type'] = 1;
-            }
-            data_remove_arr_request.forEach((item_remove: any) => {
-              // if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
-              //   if (item_remove != 'value') {
-                  delete item[item_remove]
-              //   }
-              // } else delete item[item_remove]
-            })
-          })
-          Array.prototype.push.apply(data_sample_contract, element.sign_config);
-        }
-      })
-
-      this.spinner.show();
-
       if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
-        let dataSample_contract: any[] = [];
-        let count = 0;
-        // this.datas.contract_id_action
-        for (let i = 0; i < data_sample_contract.length; i++) {
-          await this.contractService.getContractSampleEdit(data_sample_contract[i], this.datas.contract_id_action).toPromise().then((data: any) => {
-            dataSample_contract.push(data);
-          }, (error: HttpErrorResponse) => {
-            count++;
+        let isHaveFieldId: any[] = [];
+        let isNotFieldId: any[] = [];
+        // console.log(this.datas.contract_user_sign);
+        this.datas.contract_user_sign.forEach((res: any) => {
+          res.sign_config.forEach((element: any) => {
+            if (element.id) {
+              isHaveFieldId.push(element)
+            } else isNotFieldId.push(element);
           })
-          if (count > 0) break; 
-        }
-
-        if (dataSample_contract.length == data_sample_contract.length) {
-          if (action == 'next_step') {
-            this.step = variable.stepSampleContract.step4;
-            this.datas.stepLast = this.step
-            this.nextOrPreviousStep(this.step);
-          } else if (action == 'save_draft') {
-            this.datas.save_draft.sample_contract = false;
-            this.stepChangeSampleContract.emit('save_draft_sample_contract')
-            if (this.datas['close_modal']) {
-              this.datas.close_modal.close('Save click');
-            }
-            // this.getRemoveCopyRight();
-            this.router.navigate(['/main/contract/create/draff']);
-            this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-          }
-          this.spinner.hide();
-        } else this.spinner.hide();
+        })
+        this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
       } else {
-        this.contractService.getContractSample(data_sample_contract).subscribe((data) => {
+        this.data_sample_contract = [];
+        let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
+        let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
+        isContractUserSign_clone.forEach((element: any) => {
+          if (element.sign_config.length > 0) {
+            element.sign_config.forEach((item: any) => {
+              item['font'] = 'Arial';
+              item['font_size'] = 14;
+              item['contract_id'] = this.datas.contract_id;
+              item['document_id'] = this.datas.document_id;
+              if (item.text_attribute_name) {
+                item.name = item.text_attribute_name;
+              }
+              if (item.sign_unit == 'chu_ky_anh') {
+                item['type'] = 2;
+              } else if (item.sign_unit == 'chu_ky_so') {
+                item['type'] = 3;
+              } else if (item.sign_unit == 'so_tai_lieu') {
+                item['type'] = 4;
+              } else {
+                item['type'] = 1;
+              }
+
+              data_remove_arr_request.forEach((item_remove: any) => {
+                delete item[item_remove]
+              })
+            })
+            Array.prototype.push.apply(this.data_sample_contract, element.sign_config);
+          }
+        })
+
+        this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
           if (action == 'next_step') {
             this.step = variable.stepSampleContract.step4;
             this.datas.stepLast = this.step
@@ -1243,8 +1229,102 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
         );
       }
+
+      // this.spinner.show();
+    }
+  }
+
+  async getDefindDataSignEdit(dataSignId: any, dataSignNotId: any, action: any) {
+    let dataSample_contract: any[] = [];
+    if (dataSignId.length > 0) {
+      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit'];
+      dataSignId.forEach((res: any) => {
+        data_remove_arr_signId.forEach((itemRemove: any) => {
+          delete res[itemRemove];
+        })
+      })
+
+      let countIsSignId = 0;
+      for (let i = 0; i < dataSignId.length; i++) {
+        let id = dataSignId[i].id_have_data;
+        delete dataSignId[i].id_have_data;
+        await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then((data: any) => {
+          dataSample_contract.push(data);
+        }, (error: HttpErrorResponse) => {
+          countIsSignId++;
+        })
+        if (countIsSignId > 0) break;
+      }
     }
 
+    if (dataSignNotId.length > 0) {
+      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'value'];
+      dataSignNotId.forEach((item: any) => {
+        item['font'] = 'Arial';
+        item['font_size'] = 14;
+        item['contract_id'] = this.datas.contract_id;
+        item['document_id'] = this.datas.document_id;
+        if (item.text_attribute_name) {
+          item.name = item.text_attribute_name;
+        }
+        if (item.sign_unit == 'chu_ky_anh') {
+          item['type'] = 2;
+        } else if (item.sign_unit == 'chu_ky_so') {
+          item['type'] = 3;
+        } else if (item.sign_unit == 'so_tai_lieu') {
+          item['type'] = 4;
+        } else {
+          item['type'] = 1;
+        }
+
+        data_remove_arr_request.forEach((item_remove: any) => {
+          delete item[item_remove]
+        })
+      })
+      // Array.prototype.push.apply(this.data_sample_contract, dataSignNotId);
+      let dataSignId = false;
+      await this.contractService.getContractSample(dataSignNotId).toPromise().then((data) => {
+        dataSignId = true;
+        this.spinner.hide();
+      }, error => {
+        if (action == 'save_draft') {
+          this.datas.save_draft.sample_contract = false;
+          this.stepChangeSampleContract.emit('save_draft_sample_contract')
+          if (this.datas['close_modal']) {
+            this.datas.close_modal.close('Save click');
+          }
+        }
+        this.spinner.hide();
+        console.log("false connect file");
+        return false;
+      });
+    }
+
+    let isSuccess = 0;
+    if (dataSignId.length > 0 && dataSample_contract.length != dataSignId.length) {
+      isSuccess += 1;
+    }
+
+    if (dataSignNotId.length > 0 && !dataSignId) {
+      isSuccess += 1;
+    }
+
+    if (isSuccess == 0) {
+      if (action == 'next_step') {
+        this.step = variable.stepSampleContract.step4;
+        this.datas.stepLast = this.step
+        this.nextOrPreviousStep(this.step);
+      } else if (action == 'save_draft') {
+        this.datas.save_draft.sample_contract = false;
+        this.stepChangeSampleContract.emit('save_draft_sample_contract')
+        if (this.datas['close_modal']) {
+          this.datas.close_modal.close('Save click');
+        }
+        // this.getRemoveCopyRight();
+        this.router.navigate(['/main/contract/create/draff']);
+        this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+      }
+    }
   }
 
   // forward data component
