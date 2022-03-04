@@ -347,11 +347,14 @@
     "no.push.file.connect.attach.error": "Liên kết file đính kèm thất bại",
     "no.get.information.organization.error": "Lấy thông tin tổ chức thất bại",
 
+    "sign.upload-file": "Tải lên file ký số",
     "sign.username": "Tên người ký",
     "sign.time": "Thời gian ký",
     "sign.efective-time": "Thời gian hiệu lực của chứng thư số",
     "sign.organization": "Đơn vị cấp chứng thư số",
     "sign.time.valid": "Ký trong thời gian hợp lệ",
+
+    "sys.processing": "Đang xử lý",
 
     "nhap_sdt": "Nhập số điện thoại",
     "to_chuc_cua_toi": "TỔ CHỨC CỦA TÔI",

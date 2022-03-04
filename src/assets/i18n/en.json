@@ -347,11 +347,14 @@
     "no.push.file.connect.attach.error": "Push file attachment connect failed",
     "no.get.information.organization.error": "Get information organization failed",
 
+    "sign.upload-file": "Upload file",
     "sign.username": "Signer",
     "sign.time": "Sign time",
     "sign.efective-time": "Sign efective time",
     "sign.organization": "Organization",
     "sign.time.valid": "Sign time valid",
+
+    "sys.processing": "Processing",
 
     "nhap_sdt": "Nhập số điện thoại",
     "to_chuc_cua_toi": "TỔ CHỨC CỦA TÔI",

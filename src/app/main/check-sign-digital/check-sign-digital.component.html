@@ -2,7 +2,7 @@
     <div class="row" class="col-md-12">
         <input id="attachFileSignature" (change)="fileChangedAttach($event)" type="file" accept=".pdf"
                 style="display: none;"/>
-        <button class="btn btn-lg btn-block btn_submit" (click)="addFileAttach()"><span class="fa fa-upload icon_add"></span> {{'Tải lên file ký số' | translate }}</button>
+        <button class="btn btn-lg btn-block btn_submit" (click)="addFileAttach()"><span class="fa fa-upload icon_add"></span> {{'sign.upload-file' | translate }}</button>
         <button class="btn btn-lg btn-block btn_label" *ngIf="this.fileName">{{fileName}}</button>
     </div>
     <div class="row" style="padding-top: 20px;">
@@ -39,6 +39,6 @@
   size="medium"
   color="#fff"
   type="ball-spin-clockwise">
-  <p style="font-size: 18px; color: white">Đang xử lý...</p>
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
 </ngx-spinner>
     
