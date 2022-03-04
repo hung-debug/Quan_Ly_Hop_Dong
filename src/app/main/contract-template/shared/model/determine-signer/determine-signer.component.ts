@@ -316,12 +316,7 @@ export class DetermineSignerComponent implements OnInit {
       for (let j = 0; j < dataArrPartner.length; j++) {
         for (let k = 0; k < dataArrPartner[j].recipients.length; k++) {
           if (dataArrPartner[j].type != 3) {
-            if (!dataArrPartner[j].name) {
-              this.getNotificationValid("Vui lòng nhập tên của đối tác tổ chức!")
-              count++;
-              break;
-            }
-
+            
             if (!dataArrPartner[j].recipients[k].name) {
               this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
               count++;

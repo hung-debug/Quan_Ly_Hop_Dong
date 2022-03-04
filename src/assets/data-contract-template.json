@@ -2,7 +2,7 @@
     "items": [{
             "id": 1,
             "contractName": "Hợp đồng thuê khoán chuyên môn",
-            "userName": "Công ty cổ phần phần mềm công nghệ cao Việt Nam",
+            "userName": "Người ký (1)",
             "partnerName": "Người ký (1)",
             "status": "Đang phát hành",
             "createDate": "28/02/2022",
@@ -11,7 +11,7 @@
         {
           "id": 1,
           "contractName": "Hợp đồng thanh lý",
-          "userName": "Công ty cổ phần phần mềm công nghệ cao Việt Nam",
+          "userName": "Người ký (1)",
           "partnerName": "Người ký (2), Văn thư (1)",
           "status": "Đang phát hành",
           "createDate": "28/02/2022",
@@ -20,7 +20,7 @@
       {
         "id": 1,
         "contractName": "Hợp đồng bảo dưỡng thiết bị",
-        "userName": "Công ty cổ phần phần mềm công nghệ cao Việt Nam",
+        "userName": "Người ký (1)",
         "partnerName": "Người ký (2)",
         "status": "Đang phát hành",
         "createDate": "28/02/2022",
@@ -29,7 +29,7 @@
     {
       "id": 1,
       "contractName": "Hợp đồng thay thế thiết bị",
-      "userName": "Công ty cổ phần phần mềm công nghệ cao Việt Nam",
+      "userName": "Người ký (1)",
       "partnerName": "Người ký (1)",
       "status": "Đang phát hành",
       "createDate": "28/02/2022",
@@ -38,7 +38,7 @@
   {
     "id": 1,
     "contractName": "Hợp đồng phát triển dịch vụ",
-    "userName": "Công ty cổ phần phần mềm công nghệ cao Việt Nam",
+    "userName": "Người ký (1)",
     "partnerName": "Người xem xét (1), Người ký (1)",
     "status": "Đang phát hành",
     "createDate": "28/02/2022",

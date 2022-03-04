@@ -347,6 +347,12 @@
     "no.push.file.connect.attach.error": "Push file attachment connect failed",
     "no.get.information.organization.error": "Get information organization failed",
 
+    "sign.username": "Signer",
+    "sign.time": "Sign time",
+    "sign.efective-time": "Sign efective time",
+    "sign.organization": "Organization",
+    "sign.time.valid": "Sign time valid",
+
     "nhap_sdt": "Nhập số điện thoại",
     "to_chuc_cua_toi": "TỔ CHỨC CỦA TÔI",
     "note_chon_loai_ki_so": "Lưu ý: bạn chỉ được phép chọn 1 kiểu ký số!",

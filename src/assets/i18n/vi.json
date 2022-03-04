@@ -347,6 +347,12 @@
     "no.push.file.connect.attach.error": "Liên kết file đính kèm thất bại",
     "no.get.information.organization.error": "Lấy thông tin tổ chức thất bại",
 
+    "sign.username": "Tên người ký",
+    "sign.time": "Thời gian ký",
+    "sign.efective-time": "Thời gian hiệu lực của chứng thư số",
+    "sign.organization": "Đơn vị cấp chứng thư số",
+    "sign.time.valid": "Ký trong thời gian hợp lệ",
+
     "nhap_sdt": "Nhập số điện thoại",
     "to_chuc_cua_toi": "TỔ CHỨC CỦA TÔI",
     "note_chon_loai_ki_so": "Lưu ý: bạn chỉ được phép chọn 1 kiểu ký số!",

@@ -26,11 +26,11 @@ export class CheckSignDigitalComponent implements OnInit {
     this.appService.setTitle("menu.check.sign.digital");
 
     this.cols = [
-      {header: 'Tên người ký', style:'text-align: left;' },
-      {header: 'Thời gian ký', style:'text-align: left;' },
-      {header: 'Thời gian hiệu lực của chứng thư số', style:'text-align: left;' },
-      {header: 'Đơn vị cấp chứng thư số', style:'text-align: left;' },
-      {header: 'Ký trong thời gian hợp lệ', style:'text-align: left;' }
+      {header: 'sign.username', style:'text-align: left;' },
+      {header: 'sign.time', style:'text-align: left;' },
+      {header: 'sign.efective-time', style:'text-align: left;' },
+      {header: 'sign.organization', style:'text-align: left;' },
+      {header: 'sign.time.valid', style:'text-align: left;' }
       ];
 
   }
