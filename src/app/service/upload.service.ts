@@ -32,7 +32,7 @@ export class UploadService {
     this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
   }
 
-  uploadFile(file: any) {
+  uploadFile(file: any, actionEdit?: string) {
     this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', file);
@@ -44,7 +44,8 @@ export class UploadService {
     console.log(this.uploadFileUrl);
     console.log(headers);
     console.log(formData);
-    return this.http.post<File>(this.uploadFileUrl + this.organization_id + `/single`, formData, {'headers':headers});
+    if (actionEdit) return this.http.put<File>(this.uploadFileUrl + this.organization_id + `/simple`, formData, {'headers':headers});
+    else return this.http.post<File>(this.uploadFileUrl + this.organization_id + `/single`, formData, {'headers':headers});
   }
 
   downloadFile(path:any): any {

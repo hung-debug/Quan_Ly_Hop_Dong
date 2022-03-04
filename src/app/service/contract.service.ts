@@ -143,7 +143,7 @@ export class ContractService {
     return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
   }
 
-  addContractStep1(datas: any) {
+  addContractStep1(datas: any, id?: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -166,7 +166,8 @@ export class ContractService {
     });
     console.log(headers);
     console.log(body);
-    return this.http.post<Contract>(this.addContractUrl, body, {'headers': headers})
+    if (id) {
+      return this.http.put<Contract>(this.addGetDataContract + id, body, {'headers': headers})
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -177,6 +178,20 @@ export class ContractService {
         }),
         catchError(this.handleError)
       );
+    } else {
+      return this.http.post<Contract>(this.addContractUrl, body, {'headers': headers})
+      .pipe(
+        map((contract) => {
+          if (JSON.parse(JSON.stringify(contract)).id != 0) {
+            return contract;
+          } else {
+            return null;
+          }
+        }),
+        catchError(this.handleError)
+      );
+    }
+    
   }
 
   getContractSample(data_sample_contract: any) {
