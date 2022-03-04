@@ -14,6 +14,7 @@ export class CheckSignDigitalComponent implements OnInit {
   cols: any[];
   list: any[];
   fileName:any='';
+  totalRecord:number;
 
   constructor(
     private appService: AppService,
@@ -48,21 +49,32 @@ export class CheckSignDigitalComponent implements OnInit {
     for (let i = 0; i < files.length; i++) {
 
       const file = e.target.files[i];
-      if (file) {
-        const extension = file.name.split('.').pop();
-        if (extension.toLowerCase() == 'pdf') {
-          this.spinner.show();
-          this.fileName = file.name;
-          this.checkSignDigitalService.getList(file).subscribe(response => {
-            this.list = response;
-            this.spinner.hide();
-          });
-        }else{
-          this.toastService.showErrorHTMLWithTimeout("File yêu cầu định dạng PDF", "", 3000);
+      if (file.size <= 5000000) {
+        if (file) {
+          const extension = file.name.split('.').pop();
+          if (extension.toLowerCase() == 'pdf') {
+            this.spinner.show();
+            this.fileName = file.name;
+            this.checkSignDigitalService.getList(file).subscribe(response => {
+              this.list = response;
+              this.totalRecord = this.list.length;
+              this.spinner.hide();
+            },
+            error => {
+              this.totalRecord = -1;
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ nhà phát triển", "", 3000);
+            })
+          }else{
+            this.totalRecord = -1;
+            this.toastService.showErrorHTMLWithTimeout("File yêu cầu định dạng PDF", "", 3000);
+          }
         }
+      } else {
+        this.totalRecord = -1;
+        this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu nhỏ hơn 5MB", "", 3000);
       }
     }
-    
   }
 }
   

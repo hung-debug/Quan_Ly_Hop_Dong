@@ -17,8 +17,6 @@ import { UserService } from '../service/user.service';
 })
 export class MainComponent implements OnInit {
   title: string;
-  closeResult: string = '';
-  resetPasswordForm: any = FormGroup;
 
   isShowCopyRight: boolean = true;
   isRouterContractNew: boolean = true;
@@ -28,14 +26,9 @@ export class MainComponent implements OnInit {
   notification: string = '';
   numberNotification:any=0;
 
-  //user detail
-  currentUserForm: any = FormGroup;
   urlLoginType: any;
-
-  switchLang(lang: string) {
-    this.translate.use(lang);
-    this.translate.currentLang = lang;
-  }
+  nameCurrentUser:any;
+  listNotification: any[] = [];
 
   constructor(private router: Router,
               private modalService: NgbModal,
@@ -52,31 +45,6 @@ export class MainComponent implements OnInit {
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang(localStorage.getItem('lang') || 'vi');
   }
-
-  //open popup reset password
-  open(content: any) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  //close popup reset password
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-
-
-
-  nameCurrentUser:any;
-  listNotification: any[] = [];
 
   ngOnInit(): void {
     //update title by component
@@ -226,11 +194,6 @@ export class MainComponent implements OnInit {
       //this.listNotification = data.entities;
     });
   }
-
-  // getCheckCopyRight() {
-  //   return !sessionStorage.getItem('copy_right_show');
-  // }
-
 
   viewAllNotification(){
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
