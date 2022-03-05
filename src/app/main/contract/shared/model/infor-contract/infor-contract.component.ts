@@ -246,20 +246,23 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         this.datas.id = res?.id;
         this.datas.contract_id = res?.id;
       }, (error: HttpErrorResponse) => {
-        countSuccess++;
+        // countSuccess++;
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 3000);
+        return;
       })
 
       if (countSuccess == 0) {
-        await this.uploadService.uploadFile(this.datas.contractFile, 'editContract').toPromise().then((data: any) => {
+        console.log(this.datas.contractFile);
+        await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
           this.datas.filePath = data.file_object.file_path;
           this.datas.fileName = data.file_object.filename;
           this.datas.fileBucket = data.file_object.bucket;
         }, (error: HttpErrorResponse) => {
-          countSuccess++;
+          // countSuccess++;
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+          return;
         })
       }
 
@@ -267,9 +270,10 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         await this.contractService.addDocument(this.datas).toPromise().then((respon: any) => {
           this.datas.document_id = respon?.id;
         }, (error: HttpErrorResponse) => {
-          countSuccess++
+          // countSuccess++
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
+          return;
         })
       }
 
