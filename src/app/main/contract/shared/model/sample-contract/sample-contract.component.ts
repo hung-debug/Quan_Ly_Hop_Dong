@@ -180,7 +180,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       // console.log(dataDiffirent)
       // xoa nhung du lieu doi tuong bi thay doi
-      // recipient_id
       if (dataDiffirent.length > 0) {
         this.datas.contract_user_sign.forEach((res: any) => {
           if (res.sign_config.length > 0) {
@@ -192,10 +191,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
 
       }
-
-      // console.log(this.datas.contract_user_sign);
-
-      // this.isEnableSelect = false;
     }
 
 

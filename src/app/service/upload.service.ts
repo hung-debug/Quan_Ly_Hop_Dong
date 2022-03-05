@@ -41,10 +41,9 @@ export class UploadService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
 
-    console.log(this.uploadFileUrl);
-    console.log(headers);
-    console.log(formData);
-    // if (actionEdit) return this.http.put<File>(this.uploadFileUrl + this.organization_id + `/simple`, formData, {'headers':headers});
+    // console.log(this.uploadFileUrl);
+    // console.log(headers);
+    // console.log(formData);
     return this.http.post<File>(this.uploadFileUrl + this.organization_id + `/single`, formData, {'headers':headers});
   }
 

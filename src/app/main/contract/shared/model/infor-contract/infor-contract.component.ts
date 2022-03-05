@@ -242,14 +242,15 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     //call API step 1
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
+      // sua hop dong
       await this.contractService.addContractStep1(this.datas, this.datas.contract_id_action).toPromise().then((res: any) => {
         this.datas.id = res?.id;
         this.datas.contract_id = res?.id;
       }, (error: HttpErrorResponse) => {
-        // countSuccess++;
+        countSuccess++;
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 3000);
-        return;
+        // return;
       })
 
       if (countSuccess == 0) {
@@ -259,10 +260,10 @@ export class InforContractComponent implements OnInit, AfterViewInit {
           this.datas.fileName = data.file_object.filename;
           this.datas.fileBucket = data.file_object.bucket;
         }, (error: HttpErrorResponse) => {
-          // countSuccess++;
+          countSuccess++;
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
-          return;
+          // return;
         })
       }
 
@@ -270,10 +271,10 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         await this.contractService.addDocument(this.datas).toPromise().then((respon: any) => {
           this.datas.document_id = respon?.id;
         }, (error: HttpErrorResponse) => {
-          // countSuccess++
+          countSuccess++
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
-          return;
+          // return;
         })
       }
 
