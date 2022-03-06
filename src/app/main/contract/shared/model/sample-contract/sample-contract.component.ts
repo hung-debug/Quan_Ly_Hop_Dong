@@ -985,46 +985,52 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // }
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
-  onCancel(e: any, data: any) {
-    data.coordinate_x = 0;
-    data.coordinate_y = 0;
-    // data.number = 0;
-    data.page = 0;
-    data.width = 0;
-    data.height = 0;
-    data.position = "";
-    if (data.sign_unit == 'text') {
-      this.isEnableText = false;
+  async onCancel(e: any, data: any) {
+    let dataHaveId = true;
+    if (data.id_have_data) {
+      this.spinner.show();
+      await this.contractService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
+        this.toastService.showSuccessHTMLWithTimeout(`Bạn đã xóa đối tượng ký trong hợp đồng!`, "", "3000");
+        this.spinner.hide();
+      }, (error: HttpErrorResponse) => {
+        this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+        this.spinner.hide();
+        dataHaveId = false;
+      })
     }
-    let signElement = document.getElementById(data.id);
-    if (signElement) {
-      this.objSignInfo.traf_x = 0;
-      this.objSignInfo.traf_y = 0;
-      this.objSignInfo.height = 0;
-      this.objSignInfo.width = 0;
-      //@ts-ignore
-      document.getElementById('select-dropdown').value = "";
-      // this.signCurent.width = 0;
-      // this.signCurent.height = 0;
-    }
-    this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
-      if (element.sign_config.length > 0) {
-        element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
-        element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
-          itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.id;
-        })
+    if (dataHaveId) {
+      data.coordinate_x = 0;
+      data.coordinate_y = 0;
+      // data.number = 0;
+      data.page = 0;
+      data.width = 0;
+      data.height = 0;
+      data.position = "";
+      if (data.sign_unit == 'text') {
+        this.isEnableText = false;
       }
-    });
-    // console.log(this.listSignNameClone, data, e);
-    // // push lại dữ liệu đã xóa vào mảng danh sách
-    // if (data.recipient_id) {
-    //   let is_push_data = this.listSignNameClone.filter((p: any) => p.id == data.recipient_id)[0];
-    //   if (is_push_data) {
-    //     this.list_sign_name.push(is_push_data);
-    //   }
-    // }
-    this.eventMouseover();
-    this.cdRef.detectChanges();
+      let signElement = document.getElementById(data.id);
+      if (signElement) {
+        this.objSignInfo.traf_x = 0;
+        this.objSignInfo.traf_y = 0;
+        this.objSignInfo.height = 0;
+        this.objSignInfo.width = 0;
+        //@ts-ignore
+        document.getElementById('select-dropdown').value = "";
+        // this.signCurent.width = 0;
+        // this.signCurent.height = 0;
+      }
+      this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
+        if (element.sign_config.length > 0) {
+          element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
+          element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
+            itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.id;
+          })
+        }
+      });
+      this.eventMouseover();
+      this.cdRef.detectChanges();
+    }
   }
 
   // Hàm tạo các đối tượng kéo thả
@@ -1154,7 +1160,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // console.log(this.datas.contract_user_sign);
         this.datas.contract_user_sign.forEach((res: any) => {
           res.sign_config.forEach((element: any) => {
-            if (element.id) {
+            if (element.id_have_data) {
               isHaveFieldId.push(element)
             } else isNotFieldId.push(element);
           })
