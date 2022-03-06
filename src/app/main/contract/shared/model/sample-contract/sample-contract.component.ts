@@ -105,111 +105,26 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.getAddSignUnit();
       // ham update du lieu hop dong sua
       this.getDataSignUpdateAction();
-
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
-
-      // console.log(this.dataSignPosition);
-
-      // let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == item.id)[0];
-      let data_sign_config_cks = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_so');
-      let data_sign_config_cka = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-      let data_sign_config_text = this.dataSignPosition.filter((p: any) => p.sign_unit == 'text');
-      var data_sign_config_num_document = this.dataSignPosition.filter((p: any) => p.sign_unit == 'so_tai_lieu');
-
-      this.datas.contract_user_sign.forEach((element: any) => {
-        if (element.sign_unit == 'so_tai_lieu') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_num_document);
-        } else if (element.sign_unit == 'chu_ky_so') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
-        } else if (element.sign_unit == 'text') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_text);
-        } else if (element.sign_unit == 'chu_ky_anh') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
-        }
-      })
-
-      // set lai du lieu contract_user_signg
+      this.setDataSignContract();
     }
-
-
     if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
     } else {
       // Lay du lieu doi tuong ky cua buoc 2
-      let dataDetermine: { id: any; sign_type: any; name: string }[] = [];
-      this.datas.is_determine_clone.forEach((res: any) => {
-        res.recipients.forEach((element: any) => {
-          let isObj = {
-            id: element.id,
-            sign_type: element.sign_type,
-            name: element.name,
-            email: element.email
-          }
-          dataDetermine.push(isObj);
-        })
-      })
-
-      // lay du lieu vi tri va toa do ky cua buoc 3 da thao tac
-      let dataContractUserSign: any[] = [];
-      this.datas.contract_user_sign.forEach((res: any, index: number) => {
-        if (res.sign_config.length !== 0) {
-          res.sign_config.forEach((element: any) => {
-            dataContractUserSign.push(element)
-          })
-        }
-      })
-
-      // loc du lieu khong trung nhau
-      // (val.recipient_id as any) == (data.id as any) &&
-      dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
-        ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) ||
-          (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-        val.name == data.name && val.email == data.email
-      ));
-
-
-      // lay nhung du lieu da bi thay doi
-      // bo sung them email - || (val.email == data.email)
-      let dataDiffirent: any[] = [];
-      if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
-        dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
-          (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1)) ||
-          (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4))) ||
-          val.name == data.name || val.email == data.email));
-      }
-
-      // console.log(dataDiffirent)
-      // xoa nhung du lieu doi tuong bi thay doi
-      if (dataDiffirent.length > 0) {
-        this.datas.contract_user_sign.forEach((res: any) => {
-          if (res.sign_config.length > 0) {
-            res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some(({ email }) => (val.email as any) === (email as any)));
-            res.sign_config.forEach((items: any) => {
-              items.id = items.id + '1';
-            })
-          }
-        })
-
-      }
+      this.defindDataContract();
     }
-
-
     this.scale = 1;
-
     if (this.datas.is_determine_clone && this.datas.is_determine_clone.length > 0) {
       let data_user_sign = [...this.datas.is_determine_clone];
       this.getListNameSign(data_user_sign);
     }
-
     if (!this.signCurent) {
       this.signCurent = {
         width: 0,
         height: 0
       }
     }
-
-    // convert base64 file pdf to url
-
     if (this.datas.is_action_contract_created) {
       if (this.datas.uploadFileContractAgain) {
         this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
@@ -225,10 +140,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     } else {
       this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
     }
-    // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
-    // render pdf to canvas
     this.getPage();
-
     // event drag and drop
     interact('.dropzone').dropzone({
       // only accept elements matching this CSS selector
@@ -333,6 +245,82 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
     // this.datas.is_determine_clone = this.dataSignPosition;
+  }
+
+  setDataSignContract() {
+    let data_sign_config_cks = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_so');
+      let data_sign_config_cka = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+      let data_sign_config_text = this.dataSignPosition.filter((p: any) => p.sign_unit == 'text');
+      var data_sign_config_num_document = this.dataSignPosition.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+
+      this.datas.contract_user_sign.forEach((element: any) => {
+        if (element.sign_unit == 'so_tai_lieu') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_num_document);
+        } else if (element.sign_unit == 'chu_ky_so') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
+        } else if (element.sign_unit == 'text') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+        } else if (element.sign_unit == 'chu_ky_anh') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+        }
+      })
+  }
+
+  defindDataContract() {
+    let dataDetermine: { id: any; sign_type: any; name: string }[] = [];
+      this.datas.is_determine_clone.forEach((res: any) => {
+        res.recipients.forEach((element: any) => {
+          let isObj = {
+            id: element.id,
+            sign_type: element.sign_type,
+            name: element.name,
+            email: element.email
+          }
+          dataDetermine.push(isObj);
+        })
+      })
+
+      // lay du lieu vi tri va toa do ky cua buoc 3 da thao tac
+      let dataContractUserSign: any[] = [];
+      this.datas.contract_user_sign.forEach((res: any, index: number) => {
+        if (res.sign_config.length !== 0) {
+          res.sign_config.forEach((element: any) => {
+            dataContractUserSign.push(element)
+          })
+        }
+      })
+
+      // loc du lieu khong trung nhau
+      // (val.recipient_id as any) == (data.id as any) &&
+      dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
+        ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) ||
+          (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
+        val.name == data.name && val.email == data.email
+      ));
+
+
+      // lay nhung du lieu da bi thay doi
+      // bo sung them email - || (val.email == data.email)
+      let dataDiffirent: any[] = [];
+      if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
+        dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
+          (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1)) ||
+          (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4))) ||
+          val.name == data.name || val.email == data.email));
+      }
+
+      // console.log(dataDiffirent)
+      // xoa nhung du lieu doi tuong bi thay doi
+      if (dataDiffirent.length > 0) {
+        this.datas.contract_user_sign.forEach((res: any) => {
+          if (res.sign_config.length > 0) {
+            res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some(({ email }) => (val.email as any) === (email as any)));
+            res.sign_config.forEach((items: any) => {
+              items.id = items.id + '1';
+            })
+          }
+        })
+      }
   }
 
   ngOnChanges(changes: SimpleChanges) {

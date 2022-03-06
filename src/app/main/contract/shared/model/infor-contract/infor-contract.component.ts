@@ -88,8 +88,8 @@ export class InforContractComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.name = this.datas.name ? this.datas.name : null;
-    // this.code = this.datas.code ? this.datas.code : null;
-    this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.code;
+    // this.code = this.datas.contract_no ? this.datas.contract_no : null;
+    this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.contract_no;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
     this.sign_time = this.datas.sign_time ? moment(this.datas.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
@@ -482,9 +482,9 @@ export class InforContractComponent implements OnInit, AfterViewInit {
             this.datas.file_content = fileReader.result.toString().split(',')[1];
         };
       }
-      if (this.datas.code != null && this.datas.code != '') {
+      if (this.datas.contract_no != null && this.datas.contract_no != '') {
         //check so hop dong da ton tai hay chua
-        this.contractService.checkCodeUnique(this.datas.code).subscribe(
+        this.contractService.checkCodeUnique(this.datas.contract_no).subscribe(
           dataCode => {
             if (dataCode.success) {
               this.callAPI();
@@ -529,8 +529,8 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   defineData(datas: any) {
     this.datas.name = this.name;
     this.datas.sign_time = this.sign_time;
-    if (this.datas.code == '') {
-      this.datas.code = null;
+    if (this.datas.contract_no == '') {
+      this.datas.contract_no = null;
     }
     if (this.datas.notes == '') {
       this.datas.notes = null;
@@ -583,9 +583,9 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         };
       }
 
-      if (this.datas.code != null && this.datas.code != '') {
+      if (this.datas.contract_no != null && this.datas.contract_no != '') {
         //check so hop dong da ton tai hay chua
-        this.contractService.checkCodeUnique(this.datas.code).subscribe(
+        this.contractService.checkCodeUnique(this.datas.contract_no).subscribe(
           dataCode => {
             if (dataCode.success) {
               if (this.datas.is_action_contract_created && this.router.url.includes("edit"))
