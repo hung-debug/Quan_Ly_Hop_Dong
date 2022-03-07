@@ -12,7 +12,8 @@ export class ContractTemplateService {
   token: any;
   shareContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
   listContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
-  addInforContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
+  addInforContractTemplateUrl:any = `http://192.168.1.12:8762/api/v1/contracts/template`;
+  documentUrl: any = `http://192.168.1.12:8762/api/v1/documents/template`;
 
   constructor(private http: HttpClient,
               public datepipe: DatePipe,) { }
@@ -48,7 +49,46 @@ export class ContractTemplateService {
       end_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
       type_id: datas.type_id
     });
+    console.log(body);
     return this.http.post<any>(this.addInforContractTemplateUrl, body, {'headers': headers}).pipe();
+  }
+
+  addDocument(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: datas.name,
+      type: 1,
+      path: datas.filePath,
+      filename: datas.fileName,
+      bucket: datas.fileBucket,
+      internal: 1,
+      ordering: 1,
+      status: 1,
+      contract_id: datas.id,
+    });
+    return this.http.post<any>(this.documentUrl, body, {'headers': headers});
+  }
+
+  addDocumentAttach(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: datas.name,
+      type: 3,
+      path: datas.filePathAttach,
+      filename: datas.fileNameAttach,
+      bucket: datas.fileBucketAttach,
+      internal: 1,
+      ordering: 1,
+      status: 1,
+      contract_id: datas.id,
+    });
+    return this.http.post<any>(this.documentUrl, body, {'headers': headers});
   }
 
   shareContract(email:any, id: any){
