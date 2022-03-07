@@ -443,7 +443,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   }
 
   // --next step 2
-  next() {
+  async next() {
     this.spinner.show();
     if (!this.validData()) {
       return;
@@ -457,7 +457,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
       const fileReader = new FileReader();
       if (this.datas.is_action_contract_created) {
         if (!this.uploadFileContractAgain && this.datas.contractFile) {
-          this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).subscribe((res: any) => {
+          await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
             if (res)
               this.datas.contractFile = res;
           })
@@ -470,7 +470,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
           };
         }
         if (!this.uploadFileAttachAgain && this.datas.attachFile) {
-          this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile).subscribe((data: any) => {
+          await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile).toPromise().then((data: any) => {
             if (data)
               this.datas.attachFile = data;
           })
