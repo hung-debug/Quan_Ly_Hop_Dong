@@ -61,6 +61,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
 
   attachFileArr: any[] = [];
   attachFileNameArr: any[] = [];
+  contract_no: any;
 
   //error
   errorContractName: any = '';
@@ -87,7 +88,8 @@ export class InforContractComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.name = this.datas.name ? this.datas.name : null;
-    this.code = this.datas.code ? this.datas.code : null;
+    // this.code = this.datas.contract_no ? this.datas.contract_no : null;
+    this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.contract_no;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
     this.sign_time = this.datas.sign_time ? moment(this.datas.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
@@ -242,6 +244,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     //call API step 1
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
+      // sua hop dong
       await this.contractService.addContractStep1(this.datas, this.datas.contract_id_action).toPromise().then((res: any) => {
         this.datas.id = res?.id;
         this.datas.contract_id = res?.id;
@@ -249,10 +252,12 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         countSuccess++;
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 3000);
+        // return;
       })
 
       if (countSuccess == 0) {
-        await this.uploadService.uploadFile(this.datas.contractFile, 'editContract').toPromise().then((data: any) => {
+        console.log(this.datas.contractFile);
+        await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
           this.datas.filePath = data.file_object.file_path;
           this.datas.fileName = data.file_object.filename;
           this.datas.fileBucket = data.file_object.bucket;
@@ -260,6 +265,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
           countSuccess++;
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+          // return;
         })
       }
 
@@ -270,6 +276,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
           countSuccess++
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
+          // return;
         })
       }
 
@@ -443,7 +450,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     } else {
       // set value to datas
       this.datas.name = this.name;
-      this.datas.code = this.code;
+      this.datas.contract_no = this.contract_no;
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
       this.defineData(this.datas);
@@ -475,9 +482,9 @@ export class InforContractComponent implements OnInit, AfterViewInit {
             this.datas.file_content = fileReader.result.toString().split(',')[1];
         };
       }
-      if (this.datas.code != null && this.datas.code != '') {
+      if (this.datas.contract_no != null && this.datas.contract_no != '') {
         //check so hop dong da ton tai hay chua
-        this.contractService.checkCodeUnique(this.datas.code).subscribe(
+        this.contractService.checkCodeUnique(this.datas.contract_no).subscribe(
           dataCode => {
             if (dataCode.success) {
               this.callAPI();
@@ -522,8 +529,8 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   defineData(datas: any) {
     this.datas.name = this.name;
     this.datas.sign_time = this.sign_time;
-    if (this.datas.code == '') {
-      this.datas.code = null;
+    if (this.datas.contract_no == '') {
+      this.datas.contract_no = null;
     }
     if (this.datas.notes == '') {
       this.datas.notes = null;
@@ -550,7 +557,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     else {
       // set value to datas
       this.datas.name = this.name;
-      this.datas.code = this.code;
+      this.datas.contract_no = this.contract_no;
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
       this.defineData(this.datas);
@@ -576,12 +583,15 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         };
       }
 
-      if (this.datas.code != null && this.datas.code != '') {
+      if (this.datas.contract_no != null && this.datas.contract_no != '') {
         //check so hop dong da ton tai hay chua
-        this.contractService.checkCodeUnique(this.datas.code).subscribe(
+        this.contractService.checkCodeUnique(this.datas.contract_no).subscribe(
           dataCode => {
             if (dataCode.success) {
-              this.callAPI_Draft();
+              if (this.datas.is_action_contract_created && this.router.url.includes("edit"))
+                this.callAPI();
+              else
+                this.callAPI_Draft();
             } else {
               this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
               this.spinner.hide();
@@ -592,7 +602,10 @@ export class InforContractComponent implements OnInit, AfterViewInit {
           }
         )
       } else {
-        this.callAPI_Draft();
+        if (this.datas.is_action_contract_created && this.router.url.includes("edit"))
+          this.callAPI();
+        else
+          this.callAPI_Draft();
       }
 
     }
@@ -728,7 +741,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   }
 
   contractNumberCounter() {
-    if (this.characterCounter(this.code) > 32) {
+    if (this.characterCounter(this.contract_no) > 32) {
       this.errorContractNumber = "Số hợp đồng không được vượt quá 32 ký tự";
       return false;
     }
@@ -737,9 +750,9 @@ export class InforContractComponent implements OnInit, AfterViewInit {
 
   contractNumberValid() {
     this.errorContractNumber = "";
-    if (this.code) {
+    if (this.contract_no) {
       var regex = /^[0-9]\d*$/;
-      var matches = this.code.match(regex);
+      var matches = this.contract_no.match(regex);
       if (matches) {
         return this.contractNumberCounter();
       } else {

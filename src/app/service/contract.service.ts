@@ -150,8 +150,8 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       name: datas.name,
-      code: datas.code,
-      contract_no: datas.code,
+      code: datas.contract_no,
+      contract_no: datas.contract_no,
       //sign_order: 1,
       sign_time: this.datepipe.transform(datas.sign_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
       notes: datas.notes,
