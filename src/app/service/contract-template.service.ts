@@ -14,6 +14,7 @@ export class ContractTemplateService {
   listContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
   addInforContractTemplateUrl:any = `http://192.168.1.12:8762/api/v1/contracts/template`;
   documentUrl: any = `http://192.168.1.12:8762/api/v1/documents/template`;
+  addDetermineUrl: any = `http://192.168.1.12:8762/api/v1/participants/template/contract/`;
 
   constructor(private http: HttpClient,
               public datepipe: DatePipe,) { }
@@ -89,6 +90,16 @@ export class ContractTemplateService {
       contract_id: datas.id,
     });
     return this.http.post<any>(this.documentUrl, body, {'headers': headers});
+  }
+
+  getContractDetermine(data_determine: any, id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify(data_determine);
+    console.log(body);
+    return this.http.post<any>(this.addDetermineUrl + id, body, {'headers': headers}).pipe();
   }
 
   shareContract(email:any, id: any){

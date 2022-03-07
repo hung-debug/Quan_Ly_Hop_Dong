@@ -149,12 +149,7 @@ export class DetermineSignerComponent implements OnInit {
       if (action == 'save-step') {
         is_save = true;
       }
-      //this.getApiDetermine(is_save);
-      console.log(this.datas.is_determine_clone);
-      this.step = variable.stepSampleContract.step3;
-      this.datas.stepLast = this.step;
-      // sessionStorage.setItem('copy_right_show', 'true');
-      this.nextOrPreviousStep(this.step);
+      this.getApiDetermine(is_save);
     }
     
   }
@@ -166,31 +161,9 @@ export class DetermineSignerComponent implements OnInit {
     })
     this.spinner.show();
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
-      let isBody: any[] = [];
-      let count = 0;
-      let is_error = '';
-      // this.datas.contract_id_action
-      for (let i = 0; i < this.datas.is_determine_clone.length; i++) {
-        this.datas.is_determine_clone[i].recipients.forEach((element: any) => {
-          if (!element.id) element.id = 0;
-        })
-        await this.contractService.getContractDetermineCoordination(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
-              isBody.push(res);
-        }, (res: any) => {
-          is_error = res.error;
-          count++
-        })
-        if (count > 0) {
-          break;
-        }
-      }
-      if (isBody.length == this.datas.is_determine_clone.length) {
-        this.getDataApiDetermine(isBody, is_save)
-      } else 
-        this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
-      this.spinner.hide()
+     
     } else {
-      this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
+      this.contractTemplateService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
           this.getDataApiDetermine(res, is_save)
         }, (error: HttpErrorResponse) => {
           this.spinner.hide();
@@ -812,7 +785,7 @@ export class DetermineSignerComponent implements OnInit {
   changeData(item: any, index: any) {
     // this.checkedChange[index]['name'] = name;
     let data_partner_add = {};
-    let data = [...this.contractService.getDataDetermine()];
+    let data = [...this.contractTemplateService.getDataDetermine()];
     data_partner_add = data.filter((p: any) => p.type == item.type)[0];
     this.data_parnter_organization[index] = data_partner_add;
   }
