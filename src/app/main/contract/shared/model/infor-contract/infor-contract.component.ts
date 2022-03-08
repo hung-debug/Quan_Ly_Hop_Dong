@@ -122,7 +122,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         const file_name = file.name;
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
-        if (extension.toLowerCase() == 'pdf') {
+        if (extension && extension.toLowerCase() == 'pdf') {
           // const fileReader = new FileReader();
           // fileReader.readAsDataURL(file);
           // fileReader.onload = (e) => {
@@ -145,7 +145,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
             this.uploadFileContractAgain = true;
           }
           // console.log(this.datas);
-        } else if (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx') {
+        } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {
           this.toastService.showErrorHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 3000);
         } else {
           this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF", "", 3000);
@@ -281,15 +281,15 @@ export class InforContractComponent implements OnInit, AfterViewInit {
       }
 
       if (countSuccess == 0) {
-        await this.contractService.getDataNotifyOriganzation().toPromise().then((res: any) => {
+        this.contractService.getDataNotifyOriganzation().subscribe(async (res: any) => {
           this.datas.name_origanzation = res.name;
           if (this.datas.attachFileArr != null) {
             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
-              this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
+              await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then((data) => {
                 this.datas.filePathAttach = data.file_object.file_path;
                 this.datas.fileNameAttach = data.file_object.filename;
                 this.datas.fileBucketAttach = data.file_object.bucket;
-                this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
+                this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
                   this.datas.document_attach_id = data?.id;
                 },
                   error => {
@@ -482,7 +482,8 @@ export class InforContractComponent implements OnInit, AfterViewInit {
             this.datas.file_content = fileReader.result.toString().split(',')[1];
         };
       }
-      if (this.datas.contract_no != null && this.datas.contract_no != '') {
+
+      if (this.datas.contract_no) {
         //check so hop dong da ton tai hay chua
         this.contractService.checkCodeUnique(this.datas.contract_no).subscribe(
           dataCode => {
@@ -498,7 +499,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
           }
         )
       } else {
-        await this.callAPI();
+        this.callAPI();
       }
 
     }
@@ -538,7 +539,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     this.datas.type_id = this.type_id;
 
     console.log(this.contractConnect);
-    if (this.contractConnect != null && this.contractConnect != '') {
+    if (this.contractConnect && this.contractConnect.length && this.contractConnect.length > 0) {
       const array_empty: ContractConnectArr[] = [];
       this.contractConnect.forEach((element: any, index: number) => {
         const data = new ContractConnectArr(element);
