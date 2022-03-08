@@ -151,11 +151,13 @@ export class DetermineSignerComponent implements OnInit {
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
     })
     this.spinner.show();
-    if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
+    let isCheckId = this.datas.is_determine_clone.filter((p: any) => p.id);
+    if (this.datas.is_action_contract_created && this.router.url.includes("edit") && (isCheckId && isCheckId.length == this.datas.is_determine_clone.length)) {
       let isBody: any[] = [];
       let count = 0;
       let is_error = '';
       // this.datas.contract_id_action
+      
       for (let i = 0; i < this.datas.is_determine_clone.length; i++) {
         this.datas.is_determine_clone[i].recipients.forEach((element: any) => {
           if (!element.id) element.id = 0;
