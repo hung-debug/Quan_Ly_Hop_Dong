@@ -19,7 +19,7 @@ import { StopContractTemplateDialogComponent } from './dialog/stop-contract-temp
 export class ContractTemplateComponent implements OnInit {
   public contractsTemplate: any[] = [];
   p:number = 1;
-  page:number = 3;
+  page:number = 5;
   pageStart:number = 0;
   pageEnd:number = 0;
   pageTotal:number = 0;
@@ -59,9 +59,10 @@ export class ContractTemplateComponent implements OnInit {
   getContractTemplateList(){
     //get list contract template
     this.contractTemplateService.getContractTemplateList(this.isShare, this.name, this.type, this.p, this.page).subscribe(response => {
-      this.contractsTemplate = response.items;
+      console.log(response);
+      this.contractsTemplate = response.entities;
       //this.pageTotal = response.total_elements;
-      this.pageTotal = this.contractsTemplate.length;
+      this.pageTotal = response.total_elements;
       if(this.pageTotal == 0){
         this.p = 0;
         this.pageStart = 0;
@@ -69,7 +70,82 @@ export class ContractTemplateComponent implements OnInit {
       }else{
         this.setPage();
       }
+
+      this.contractsTemplate.forEach((key: any, v: any) => {
+        let userView = 0;
+        let userSign = 0;
+        let userDoc = 0;
+        let partnerLead = 0;
+        let partnerView = 0;
+        let partnerSign = 0;
+        let partnerDoc = 0;
+
+        key.participants.forEach((key: any, val: any) => {
+          if (key.type == 1) {
+            key.recipients.forEach((key: any, val: any) => {
+              if (key.role == 2) {
+                userView++;
+              } else if (key.role == 3) {
+                userSign++;
+              } else if (key.role == 4) {
+                userDoc++;
+              }
+            })
+          } else {
+            key.recipients.forEach((key: any, val: any) => {
+              if (key.role == 1) {
+                partnerLead++;
+              } else if (key.role == 2) {
+                partnerView++;
+              } else if (key.role == 3) {
+                partnerSign++;
+              } else if (key.role == 4) {
+                partnerDoc++;
+              }
+            })
+          }
+        })
+        let sideA = "";
+        let connA = "";
+        if(userView > 0){
+          sideA += connA + "Người xem xét (" + userView + ")";
+          connA = ", ";
+        }
+        if(userSign > 0){
+          sideA += connA + "Người ký (" + userSign + ")";
+          connA = ", ";
+        }
+        if(userDoc > 0){
+          sideA += connA + "Văn thư (" + userDoc + ")";
+          connA = ", ";
+        }
+        this.contractsTemplate[v].sideA = sideA;
+
+        let sideB = "";
+        let connB = "";
+        if(partnerLead > 0){
+          sideB += connB + "Người điều phối (" + partnerLead + ")";
+          connB = ", ";
+        }
+        if(partnerView > 0){
+          sideB += connB + "Người xem xét (" + partnerView + ")";
+          connB = ", ";
+        }
+        if(partnerSign > 0){
+          sideB += connB + "Người ký (" + partnerSign + ")";
+          connB = ", ";
+        }
+        if(partnerDoc > 0){
+          sideB += connB + "Văn thư (" + partnerDoc + ")";
+          connB = ", ";
+        }
+        this.contractsTemplate[v].sideB = sideB;
+      });
     });
+  }
+
+  searchContract(){
+    this.getContractTemplateList();
   }
 
   setPage(){

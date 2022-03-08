@@ -49,7 +49,7 @@ export class CheckSignDigitalComponent implements OnInit {
     for (let i = 0; i < files.length; i++) {
 
       const file = e.target.files[i];
-      if (file.size <= 5000000) {
+      if (file.size <= 50000000) {
         if (file) {
           const extension = file.name.split('.').pop();
           if (extension.toLowerCase() == 'pdf') {
@@ -72,7 +72,7 @@ export class CheckSignDigitalComponent implements OnInit {
         }
       } else {
         this.totalRecord = -1;
-        this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu nhỏ hơn 5MB", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu nhỏ hơn 50MB", "", 3000);
       }
     }
   }

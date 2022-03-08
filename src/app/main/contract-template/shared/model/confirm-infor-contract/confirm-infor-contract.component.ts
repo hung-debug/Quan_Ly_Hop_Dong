@@ -3,8 +3,8 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { variable } from 'src/app/config/variable';
+import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
-import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
@@ -19,7 +19,7 @@ export class ConfirmInforContractComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               public datepipe: DatePipe,
-              private contractService: ContractService,
+              private contractTemplateService: ContractTemplateService,
               private router: Router,
               private toastService : ToastService,
               private contractTypeService: ContractTypeService) {
@@ -58,7 +58,7 @@ export class ConfirmInforContractComponent implements OnInit {
     this.startTime = this.datepipe.transform(this.datas.start_time, 'dd/MM/yyyy') || '';
     this.endTime = this.datepipe.transform(this.datas.end_time, 'dd/MM/yyyy') || '';
     this.time = this.startTime + " - " + this.endTime;
-    if(!this.datas.type_id){
+    if(this.datas.type_id){
       this.contractTypeService.getContractTypeById(this.datas.type_id).subscribe(data => {
         this.contractType = data.name;
       })
@@ -128,18 +128,16 @@ export class ConfirmInforContractComponent implements OnInit {
 
   callAPI() {
     //call API step confirm
-    //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
-    this.contractService.changeStatusContract(this.datas.id, 10, "").subscribe((data) => {
+    this.contractTemplateService.changeStatusContract(this.datas.id, 10).subscribe((data) => {
 
-      console.log(JSON.stringify(data));
-      //this.router.navigate(['/main/contract/create/processing']);
+      console.log(data);
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/contract/create/processing']);
+        this.router.navigate(['/main/contract-template']);
       });
-      this.toastService.showSuccessHTMLWithTimeout("Tạo hợp đồng thành công!", "", 3000);
+      this.toastService.showSuccessHTMLWithTimeout("Tạo mẫu hợp đồng thành công!", "", 3000);
     },
     error => {
-      this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 3000);
+      this.toastService.showErrorHTMLWithTimeout("Tạo mẫu hợp đồng thất bại", "", 3000);
       return false;
     }
     );

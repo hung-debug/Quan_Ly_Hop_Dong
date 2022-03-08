@@ -15,12 +15,12 @@ import { environment } from "../../../../../../environments/environment";
 import * as $ from 'jquery';
 
 import interact from 'interactjs'
-import { ContractService } from "../../../../../service/contract.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "../../../../../service/toast.service";
 import { Router } from "@angular/router";
 import { HttpErrorResponse } from '@angular/common/http';
 import { count } from 'console';
+import { ContractTemplateService } from 'src/app/service/contract-template.service';
 
 @Component({
   selector: 'app-sample-contract',
@@ -89,7 +89,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   constructor(
     private cdRef: ChangeDetectorRef,
-    private contractService: ContractService,
+    private contractTemplateService : ContractTemplateService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private router: Router
@@ -102,7 +102,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit") || this.router.url.includes("copy"))) {
       this.getAddSignUnit();
       this.getDataSignUpdateAction();
-      this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+      this.datas.contract_user_sign = this.contractTemplateService.getDataFormatContractUserSign();
 
       console.log(this.dataSignPosition);
 
@@ -129,7 +129,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 
     if (!this.datas.contract_user_sign) {
-      this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+      this.datas.contract_user_sign = this.contractTemplateService.getDataFormatContractUserSign();
     } else {
       // Lay du lieu doi tuong ky cua buoc 2
       let dataDetermine: { id: any; sign_type: any; name: string }[] = [];
@@ -1181,60 +1181,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.spinner.show();
 
       if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
-        let dataSample_contract: any[] = [];
-        let count = 0;
-        // this.datas.contract_id_action
-        for (let i = 0; i < data_sample_contract.length; i++) {
-          await this.contractService.getContractSampleEdit(data_sample_contract[i], this.datas.contract_id_action).toPromise().then((data: any) => {
-            dataSample_contract.push(data);
-          }, (error: HttpErrorResponse) => {
-            count++;
-          })
-          if (count > 0) break; 
-        }
 
-        if (dataSample_contract.length == data_sample_contract.length) {
-          if (action == 'next_step') {
-            this.step = variable.stepSampleContract.step4;
-            this.datas.stepLast = this.step
-            this.nextOrPreviousStep(this.step);
-          } else if (action == 'save_draft') {
-            this.datas.save_draft.sample_contract = false;
-            this.stepChangeSampleContract.emit('save_draft_sample_contract')
-            if (this.datas['close_modal']) {
-              this.datas.close_modal.close('Save click');
-            }
-            // this.getRemoveCopyRight();
-            this.router.navigate(['/main/contract/create/draff']);
-            this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-          }
-          this.spinner.hide();
-        } else this.spinner.hide();
       } else {
-        this.contractService.getContractSample(data_sample_contract).subscribe((data) => {
-          if (action == 'next_step') {
-            this.step = variable.stepSampleContract.step4;
-            this.datas.stepLast = this.step
-            this.nextOrPreviousStep(this.step);
-          } else if (action == 'save_draft') {
-            this.datas.save_draft.sample_contract = false;
-            this.stepChangeSampleContract.emit('save_draft_sample_contract')
-            if (this.datas['close_modal']) {
-              this.datas.close_modal.close('Save click');
-            }
-            // this.getRemoveCopyRight();
-            this.router.navigate(['/main/contract/create/draff']);
-            this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-          }
+        this.contractTemplateService.getContractSample(data_sample_contract).subscribe((data) => {
+          this.step = variable.stepSampleContract.step4;
+          this.datas.stepLast = this.step
+          this.nextOrPreviousStep(this.step);
         },
           error => {
-            if (action == 'save_draft') {
-              this.datas.save_draft.sample_contract = false;
-              this.stepChangeSampleContract.emit('save_draft_sample_contract')
-              if (this.datas['close_modal']) {
-                this.datas.close_modal.close('Save click');
-              }
-            }
             this.spinner.hide();
             console.log("false connect file");
             return false;

@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import * as $ from "jquery";
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { ProcessingHandleComponent } from './processing-handle/processing-handle.component';
+import { ContractTemplateService } from 'src/app/service/contract-template.service';
 
 @Component({
   selector: 'app-detail-contract-template',
@@ -110,7 +111,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   status:any;
 
   constructor(
-    private contractSignatureService: ContractSignatureService,
+    private contractTemplateService: ContractTemplateService,
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
     private modalService: NgbModal,
@@ -137,7 +138,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
           console.log(this.recipientId);
         }
       );
-    this.contractService.getDetailContract(this.idContract).subscribe(rs => {
+    this.contractTemplateService.getDetailContract(this.idContract).subscribe(rs => {
       console.log(rs);
       this.isDataContract = rs[0];
       this.isDataFileContract = rs[1];

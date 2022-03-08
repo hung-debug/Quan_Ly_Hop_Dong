@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import {Helper} from "../core/Helper";
 import { environment } from '../../environments/environment';
 import { DatePipe } from '@angular/common';
@@ -11,10 +11,15 @@ export class ContractTemplateService {
 
   token: any;
   shareContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
-  listContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
+  listContractTemplateUrl:any = `http://192.168.1.12:8762/api/v1/contracts/template/my-contract`;
   addInforContractTemplateUrl:any = `http://192.168.1.12:8762/api/v1/contracts/template`;
   documentUrl: any = `http://192.168.1.12:8762/api/v1/documents/template`;
   addDetermineUrl: any = `http://192.168.1.12:8762/api/v1/participants/template/contract/`;
+  addSampleContractUrl: any = `http://192.168.1.12:8762/api/v1/fields/template`;
+  changeStatusContractUrl: any = `http://192.168.1.12:8762/api/v1/contracts/template/`;
+  getDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
+  getFileContract:any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
+  getObjectSignature:any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
 
   constructor(private http: HttpClient,
               public datepipe: DatePipe,) { }
@@ -23,20 +28,23 @@ export class ContractTemplateService {
     this.token = JSON.parse(localStorage.getItem('currentUser')||'').access_token;
   }
 
-  public getContractTemplateList(isShare:any, filter_name:any, filter_type: any, page:any, size:any): Observable<any> {
-    return this.http.get("/assets/data-contract-template.json");
-  }
-
   // public getContractTemplateList(isShare:any, filter_name:any, filter_type: any, page:any, size:any): Observable<any> {
-  //   this.getCurrentUser();
-
-  //   if(page != ""){
-  //     page = page - 1;
-  //   }
-  //   let listContractTemplateUrl = this.listContractTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&page=" + page + "&size=" + size;
-  //   const headers = {'Authorization': 'Bearer ' + this.token}
-  //   return this.http.get<any[]>(listContractTemplateUrl, {headers}).pipe();
+  //   return this.http.get("/assets/data-contract-template.json");
   // }
+
+  public getContractTemplateList(isShare:any, filter_name:any, filter_type: any, page:any, size:any): Observable<any> {
+    this.getCurrentUser();
+
+    if(page != ""){
+      page = page - 1;
+    }
+    if(!filter_type){
+      filter_type="";
+    }
+    let listContractTemplateUrl = this.listContractTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&page=" + page + "&size=" + size;
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<any[]>(listContractTemplateUrl, {headers}).pipe();
+  }
 
   addInforContractTemplate(datas: any) {
     this.getCurrentUser();
@@ -100,6 +108,40 @@ export class ContractTemplateService {
     const body = JSON.stringify(data_determine);
     console.log(body);
     return this.http.post<any>(this.addDetermineUrl + id, body, {'headers': headers}).pipe();
+  }
+
+  getContractSample(data_sample_contract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify(data_sample_contract);
+    console.log(body);
+    return this.http.post<any>(this.addSampleContractUrl, body, {'headers': headers}).pipe();
+  }
+
+  changeStatusContract(id: any, statusNew:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    console.log(headers);
+    const body = {};
+    return this.http.post<any>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, {'headers': headers});
+  }
+
+  getDetailContract(idContract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let arrApi = [];
+    arrApi = [
+      this.http.get<any>(this.getDataContract + idContract, {headers}),
+      this.http.get<any>(this.getFileContract + idContract, {headers}),
+      this.http.get<any>(this.getObjectSignature + idContract, {headers}),
+    ];
+    return forkJoin(arrApi);
   }
 
   shareContract(email:any, id: any){
@@ -292,6 +334,31 @@ export class ContractTemplateService {
             "sign_type": []
           }
         ],
+      },
+    ]
+  }
+
+  getDataFormatContractUserSign() {
+    return [
+      {
+        id: Helper._ranDomNumberText(10),
+        sign_unit: 'so_tai_lieu',
+        sign_config: []
+      },
+      {
+        id: Helper._ranDomNumberText(10),
+        sign_unit: 'text',
+        sign_config: []
+      },
+      {
+        id: Helper._ranDomNumberText(10),
+        sign_unit: 'chu_ky_anh',
+        sign_config: []
+      },
+      {
+        id: Helper._ranDomNumberText(10),
+        sign_unit: 'chu_ky_so',
+        sign_config: []
       },
     ]
   }
