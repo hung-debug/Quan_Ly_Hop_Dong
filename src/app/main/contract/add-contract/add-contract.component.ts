@@ -141,14 +141,14 @@ export class AddContractComponent implements OnInit {
     // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
     if (data) {
       let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1)[0];
-      let fileNameAttach = data.i_data_file_contract.filter((p: any) => p.type == 3)[0];
+      let fileNameAttach = data.i_data_file_contract.filter((p: any) => p.type == 3);
       if (fileName) {
         data.is_data_contract['file_name'] = fileName.filename;
         data.is_data_contract['contractFile'] = fileName.path;
       }
       if (fileNameAttach) {
-        data.is_data_contract['file_name_attach'] = fileNameAttach.filename;
-        data.is_data_contract['attachFile'] = fileNameAttach.path;
+        data.is_data_contract['file_name_attach'] = fileNameAttach.map((p: any) => p.filename);
+        data.is_data_contract['attachFile'] = fileNameAttach.map((p: any) => p.path);
       }
       this.datas.contractConnect = data.is_data_contract.refs;
       data.is_data_contract['is_action_contract_created'] = true;

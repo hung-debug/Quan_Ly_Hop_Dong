@@ -99,6 +99,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
+    this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
       // ham chuyen doi hinh thuc ky type => sign_unit
@@ -1197,7 +1198,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         let isHaveFieldId: any[] = [];
         let isNotFieldId: any[] = [];
         // console.log(this.datas.contract_user_sign);
-        this.datas.contract_user_sign.forEach((res: any) => {
+        let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
+        isUserSign_clone.forEach((res: any) => {
           res.sign_config.forEach((element: any) => {
             if (element.id_have_data) {
               isHaveFieldId.push(element)
@@ -1237,6 +1239,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
         })
 
+        this.spinner.show();
         this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
           if (action == 'next_step') {
             this.step = variable.stepSampleContract.step4;
@@ -1285,6 +1288,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
 
       let countIsSignId = 0;
+      this.spinner.show();
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
@@ -1293,8 +1297,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }, (error: HttpErrorResponse) => {
           countIsSignId++;
         })
-        if (countIsSignId > 0) break;
+        if (countIsSignId > 0) {
+          this.spinner.hide();
+          break;
+        } 
       }
+      // this.spinner.hide();
     }
 
     if (dataSignNotId.length > 0) {
