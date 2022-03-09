@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
+import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { DeleteContractTemplateDialogComponent } from './dialog/delete-contract-template-dialog/delete-contract-template-dialog.component';
 import { ReleaseContractTemplateDialogComponent } from './dialog/release-contract-template-dialog/release-contract-template-dialog.component';
@@ -18,30 +19,130 @@ import { StopContractTemplateDialogComponent } from './dialog/stop-contract-temp
 export class ContractTemplateComponent implements OnInit {
   public contractsTemplate: any[] = [];
   p:number = 1;
-  page:number = 3;
+  page:number = 5;
   pageStart:number = 0;
   pageEnd:number = 0;
   pageTotal:number = 0;
 
+  isShare: string = 'off';
+  stateOptions: any[];
+  contractTypeList: any[] = [];
+
   name:any="";
   type:any="";
 
-  constructor(private modalService: NgbModal,
-              private appService: AppService,
+  constructor(private appService: AppService,
               private contractTemplateService: ContractTemplateService,
               private router: Router,
-              private fb: FormBuilder,
-              private toastService : ToastService,
-              private dialog: MatDialog,) { }
+              private dialog: MatDialog,
+              private contractTypeService: ContractTypeService) { 
+
+    this.stateOptions = [
+      { label: 'Mẫu hợp đồng tạo', value: 'off' },
+      { label: 'Mẫu hợp đồng được chia sẻ', value: 'on' },
+    ];
+  }
 
   ngOnInit(): void {
     this.appService.setTitle('contract-template.list');
-    //get list contract
-    this.contractTemplateService.getContractTemplateList().subscribe(response => {
-      this.contractsTemplate = response.items;
-      this.pageTotal = this.contractsTemplate.length;
-      this.setPage();  
+    this.getContractTemplateList();
+
+    this.contractTypeService.getContractTypeList("", "").subscribe(response => {
+      console.log(response);
+      this.contractTypeList = response;
     });
+  }
+
+  getContractTemplateList(){
+    //get list contract template
+    this.contractTemplateService.getContractTemplateList(this.isShare, this.name, this.type, this.p, this.page).subscribe(response => {
+      console.log(response);
+      this.contractsTemplate = response.entities;
+      //this.pageTotal = response.total_elements;
+      this.pageTotal = response.total_elements;
+      if(this.pageTotal == 0){
+        this.p = 0;
+        this.pageStart = 0;
+        this.pageEnd = 0;
+      }else{
+        this.setPage();
+      }
+
+      this.contractsTemplate.forEach((key: any, v: any) => {
+        let userView = 0;
+        let userSign = 0;
+        let userDoc = 0;
+        let partnerLead = 0;
+        let partnerView = 0;
+        let partnerSign = 0;
+        let partnerDoc = 0;
+
+        key.participants.forEach((key: any, val: any) => {
+          if (key.type == 1) {
+            key.recipients.forEach((key: any, val: any) => {
+              if (key.role == 2) {
+                userView++;
+              } else if (key.role == 3) {
+                userSign++;
+              } else if (key.role == 4) {
+                userDoc++;
+              }
+            })
+          } else {
+            key.recipients.forEach((key: any, val: any) => {
+              if (key.role == 1) {
+                partnerLead++;
+              } else if (key.role == 2) {
+                partnerView++;
+              } else if (key.role == 3) {
+                partnerSign++;
+              } else if (key.role == 4) {
+                partnerDoc++;
+              }
+            })
+          }
+        })
+        let sideA = "";
+        let connA = "";
+        if(userView > 0){
+          sideA += connA + "Người xem xét (" + userView + ")";
+          connA = ", ";
+        }
+        if(userSign > 0){
+          sideA += connA + "Người ký (" + userSign + ")";
+          connA = ", ";
+        }
+        if(userDoc > 0){
+          sideA += connA + "Văn thư (" + userDoc + ")";
+          connA = ", ";
+        }
+        this.contractsTemplate[v].sideA = sideA;
+
+        let sideB = "";
+        let connB = "";
+        if(partnerLead > 0){
+          sideB += connB + "Người điều phối (" + partnerLead + ")";
+          connB = ", ";
+        }
+        if(partnerView > 0){
+          sideB += connB + "Người xem xét (" + partnerView + ")";
+          connB = ", ";
+        }
+        if(partnerSign > 0){
+          sideB += connB + "Người ký (" + partnerSign + ")";
+          connB = ", ";
+        }
+        if(partnerDoc > 0){
+          sideB += connB + "Văn thư (" + partnerDoc + ")";
+          connB = ", ";
+        }
+        this.contractsTemplate[v].sideB = sideB;
+      });
+    });
+  }
+
+  searchContract(){
+    this.getContractTemplateList();
   }
 
   setPage(){
@@ -54,6 +155,10 @@ export class ContractTemplateComponent implements OnInit {
 
   add(){
     this.router.navigate(['/main/contract-template/form/add']);
+  }
+
+  openDetail(id:number){
+    this.router.navigate(['main/contract-template/form/detail/' + id]);
   }
 
   deleteContractTemplate(id:any){

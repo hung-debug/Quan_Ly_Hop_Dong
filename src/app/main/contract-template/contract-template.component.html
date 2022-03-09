@@ -1,10 +1,7 @@
 <div class="container-fluid">
-  <mdb-tabs [fill]="true">
-    <mdb-tab title="{{'contract-template.create' | translate}}"></mdb-tab>
-    <mdb-tab title="{{'contract-template.share' | translate}}"></mdb-tab>
-  </mdb-tabs>
+  <p-selectButton [options]="stateOptions" [(ngModel)]="isShare" optionLabel="label" optionValue="value"></p-selectButton>
 
-  <div class="row">
+  <div class="row" style="padding-top: 10px;">
     <div class="col-md-3">
       <div>{{'contract-template.name' | translate}}</div>
       <div class="input-line">
@@ -12,62 +9,72 @@
       </div>
     </div>
     <div class="col-md-3">
-      <div>{{'contract-template.type' | translate}}</div>
-      <div class="input-line">
-        <input type="text" [(ngModel)]="type" class="input_text"/>
+      <div>{{'contract.type' | translate}}</div>
+      <div>
+        <p-dropdown 
+          panelStyleClass="font"
+          [options]="contractTypeList" 
+          [(ngModel)]="type" 
+          optionLabel="name" 
+          optionValue="id" 
+          [filter]="true" 
+          filterBy="name" 
+          [showClear]="type?true:false"
+          placeholder="Tất cả"
+          ></p-dropdown>
       </div>
     </div>
     <div class="col-md-6 btn_search">
-      <button class="btn btn-lg btn-block btn_submit">{{'btn.search' | translate }}</button>
+      <button class="btn btn-lg btn-block btn_submit" (click)="searchContract()">{{'btn.search' | translate }}</button>
       <button class="btn btn-lg btn-block btn_submit" (click)="add()">{{'btn.add' | translate }}</button>
     </div>
   </div>
 
-  <div class="row list_header">
+  <div class="row list_header" *ngIf="pageTotal > 0;">
     <div class="col-md-5"></div>
     <div class="col-md-2">{{'create-date' | translate}}</div>
     <div class="col-md-2">{{'contract-template.code' | translate}}</div>
     <div class="col-md-3">{{'action' | translate}}</div>
   </div>
 
-  <div class="item_contract" *ngFor="let item of contractsTemplate  | paginate:{itemsPerPage: page, currentPage:p}">
+  <div class="item_contract" *ngFor="let item of contractsTemplate  | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
     <div class="row">
-      <div class="col-md-12 item_contract_name">{{item.contractName}}</div>
+      <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
     </div>
     <div class="row">
-      <div class="col-md-12 item_contract_infor">Bên A: {{item.userName}}</div>
+      <div class="col-md-12 item_contract_infor">Bên A: {{item.sideA}}</div>
     </div>
     <div class="row">
       <div class="col-md-5">
         <div class="row">
-          <div class="col-md-12 item_contract_infor">Bên B: {{item.partnerName}}</div>
+          <div class="col-md-12 item_contract_infor">Bên B: {{item.sideB}}</div>
         </div>
       </div>
       <div class="col-md-2 calendar_create">
-        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.createDate}}</span>
+        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
       </div>
 
       <div class="col-md-2 contract_code">
-        <span class="item_date">{{item.contractCode}}</span>
+        <span class="item_date">{{item.code}}</span>
       </div>
 
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
-          <div class="div_icon">
-            <img *ngIf="item.status == 'Đang phát hành'" src="../../assets/img/icon_stop_release.svg" class="img_icon" ngbTooltip="Ngừng phát hành" (click)="stopContractTemplate(item.id)"/>
-            <img *ngIf="item.status == 'Ngừng phát hành'" src="../../assets/img/icon_open_release.svg" class="img_icon" ngbTooltip="Mở phát hành" (click)="releaseContractTemplate(item.id)"/>
+          <div class="div_icon" *ngIf="isShare=='off'">
+            <img *ngIf="item.status == 10" src="../../assets/img/icon_stop_release.svg" class="img_icon" ngbTooltip="Ngừng phát hành" (click)="stopContractTemplate(item.id)"/>
+            <img *ngIf="item.status == 32" src="../../assets/img/icon_open_release.svg" class="img_icon" ngbTooltip="Mở phát hành" (click)="releaseContractTemplate(item.id)"/>
           </div>
 
           <div class="div_icon">
-            <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="Tạo hợp đồng đơn lẻ" (click)="shareContractTemplate(item.id)"/>
+            <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="Tạo hợp đồng đơn lẻ"/>
           </div>
           <div class="div_icon">
-            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="Tạo hợp đồng theo lô" (click)="shareContractTemplate(item.id)"/>
+            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="Tạo hợp đồng theo lô"/>
           </div>
-          <div class="div_icon">
+          <div class="div_icon" *ngIf="isShare=='off'">
             <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" (click)="shareContractTemplate(item.id)"/>
           </div>
-          <div class="div_icon">
+          <div class="div_icon" *ngIf="isShare=='off'">
             <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="Xóa hợp đồng" (click)="deleteContractTemplate(item.id);" />
           </div>
         </div>
@@ -75,10 +82,18 @@
     </div>
   </div>
 
+  <div *ngIf="pageTotal == 0" 
+  style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+    <div style="display: table-cell;vertical-align: middle;"> 
+      <img src="../../../assets/img/empty_data.svg"/>
+      <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+    </div>
+  </div>
+
   <div class="contract_footer">
     <div class="footer_title"></div>
     <div class="footer_pagination">
-      <pagination-controls (pageChange)="p=$event; setPage()" previousLabel="" nextLabel=""></pagination-controls>
+      <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractTemplateList()" previousLabel="" nextLabel=""></pagination-controls>
     </div>
     <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
   </div>

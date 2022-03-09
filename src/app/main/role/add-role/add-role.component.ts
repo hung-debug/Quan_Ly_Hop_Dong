@@ -6,6 +6,7 @@ import { SelectItemGroup } from 'primeng/api';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import {roleList} from "../../../config/variable";
+import {parttern_input} from "../../../config/parttern"
 
 @Component({
   selector: 'app-add-role',
@@ -35,9 +36,9 @@ export class AddRoleComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,) { 
       this.addForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required]),
-        code: this.fbd.control("", [Validators.required]),
-        note: "",
+        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        note: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
         selectedRole: this.fbd.control([], [Validators.required]),
       });
     }
@@ -49,9 +50,9 @@ export class AddRoleComponent implements OnInit {
         data => {
           console.log(data);
           this.addForm = this.fbd.group({
-            name: this.fbd.control(data.name, [Validators.required]),
-            code: this.fbd.control(data.code, [Validators.required]),
-            note: data.description,
+            name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            note: this.fbd.control(data.description, Validators.pattern(parttern_input.input_form)),
             selectedRole: this.fbd.control(this.convertRoleArr(data.permissions), [Validators.required]),
           });
           this.name = data.name;
@@ -59,9 +60,9 @@ export class AddRoleComponent implements OnInit {
         });
     }else{
       this.addForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required]),
-        code: this.fbd.control("", [Validators.required]),
-        note: "",
+        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        note: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
         selectedRole: this.fbd.control([], [Validators.required]),
       });
     }

@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from 'src/app/service/app.service';
-import { ContractService } from 'src/app/service/contract.service';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UploadService } from 'src/app/service/upload.service';
 import { UserService } from 'src/app/service/user.service';
 import { networkList } from "../../../config/variable";
+import {parttern_input} from "../../../config/parttern"
 
 @Component({
   selector: 'app-infor-user',
@@ -55,7 +55,7 @@ export class InforUserComponent implements OnInit {
     private uploadService:UploadService
     ) {
       this.addInforForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required]),
+        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         email: this.fbd.control("", [Validators.required, Validators.email]),
         birthday: null,
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -69,11 +69,9 @@ export class InforUserComponent implements OnInit {
       networkKpi: null
       });
    
-    this.addHsmForm = this.fbd.group({
-      nameHsm: null
-    });
-
-    
+      this.addHsmForm = this.fbd.group({
+        nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form))
+      });
  }
 
   ngOnInit(): void {
@@ -97,7 +95,7 @@ export class InforUserComponent implements OnInit {
     this.userService.getUserById(this.id).subscribe(
       data => {
         this.addInforForm = this.fbd.group({
-          name: this.fbd.control(data.name, [Validators.required]),
+          name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
           email: this.fbd.control(data.email, [Validators.required, Validators.email]),
           birthday: data.birthday==null?null:new Date(data.birthday),
           phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -130,7 +128,7 @@ export class InforUserComponent implements OnInit {
         });
 
         this.addHsmForm = this.fbd.group({
-          nameHsm: data.hsm_name
+          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form))
         });
         console.log(data);
         this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
@@ -191,7 +189,7 @@ export class InforUserComponent implements OnInit {
   updateUser(){
     this.submitted = true;
     // stop here if form is invalid
-    if (this.addInforForm.invalid) {
+    if (this.addInforForm.invalid || this.addKpiForm.invalid || this.addHsmForm.invalid) {
       return;
     }
     const data = {

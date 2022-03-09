@@ -27,7 +27,6 @@ import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { UserComponent } from './main/user/user.component';
 import { ContractComponent } from './main/contract/contract.component';
-import { ReportComponent } from './main/report/report.component';
 import { UnitComponent } from './main/unit/unit.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { DashboardComponent } from './main/dashboard/dashboard.component';
@@ -85,7 +84,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     UserComponent,
     ContractComponent,
     ContractSignatureComponent,
-    ReportComponent,
     UnitComponent,
     PageNotFoundComponent,
     DashboardComponent,

@@ -1,18 +1,14 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
-import { getYear } from 'date-fns';
-import locale from 'date-fns/locale/en-US';
-import { DatepickerOptions } from 'ng2-datepicker';
 import { AppService } from 'src/app/service/app.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { RoleService } from 'src/app/service/role.service';
 import { networkList } from "../../../config/variable";
-import * as moment from "moment";
 import { UploadService } from 'src/app/service/upload.service';
+import {parttern_input} from "../../../config/parttern";
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -43,42 +39,40 @@ export class AddUserComponent implements OnInit {
 
   organizationName:any;
   roleName:any;
+  userRoleCode:string='';
 
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
 
   constructor(private appService: AppService,
-    private toastService : ToastService,
-    private userService : UserService,
-    private unitService : UnitService,
-    private route: ActivatedRoute,
-    private fbd: FormBuilder,
-    public router: Router,
-    private roleService: RoleService,
-    private uploadService:UploadService
+              private toastService : ToastService,
+              private userService : UserService,
+              private unitService : UnitService,
+              private route: ActivatedRoute,
+              private fbd: FormBuilder,
+              public router: Router,
+              private roleService: RoleService,
+              private uploadService:UploadService
     ) {
-      this.addForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required]),
-        email: this.fbd.control("", [Validators.required, Validators.email]),
-        birthday: null,
-        phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-        organizationId: this.fbd.control("", [Validators.required]),
-        role: this.fbd.control("", [Validators.required]),
-        status: 1,
+    this.addForm = this.fbd.group({
+      name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      email: this.fbd.control("", [Validators.required, Validators.email]),
+      birthday: null,
+      phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+      organizationId: this.fbd.control("", [Validators.required]),
+      role: this.fbd.control("", [Validators.required]),
+      status: 1,
 
-        phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
-        networkKpi: null,
+      phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
+      networkKpi: null,
 
-        nameHsm: null,
+      nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
 
-        fileImage:null
-      });
-     }
-
-
-  userRoleCode:string='';
-
+      fileImage:null
+    });
+  }
+  
   getDataOnInit(){
     let orgId = this.userService.getAuthCurrentUser().organizationId;
     if(this.isQLND_01 || this.isQLND_02){
@@ -107,7 +101,7 @@ export class AddUserComponent implements OnInit {
         this.isEditRole = true;
         if(this.isQLND_01){
           this.addForm = this.fbd.group({
-            name: this.fbd.control("", [Validators.required]),
+            name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
             email: this.fbd.control("", [Validators.required, Validators.email]),
             birthday: null,
             phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -118,7 +112,7 @@ export class AddUserComponent implements OnInit {
             phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
             networkKpi: null,
 
-            nameHsm: null,
+            nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
 
             fileImage:null
           });
@@ -132,7 +126,7 @@ export class AddUserComponent implements OnInit {
             data => {
               console.log(data);
               this.addForm = this.fbd.group({
-                name: this.fbd.control(data.name, [Validators.required]),
+                name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
                 email: this.fbd.control(data.email, [Validators.required, Validators.email]),
                 birthday: data.birthday==null?null:new Date(data.birthday),
                 phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -143,7 +137,7 @@ export class AddUserComponent implements OnInit {
                 phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
                 networkKpi: data.phone_tel,
 
-                nameHsm: data.hsm_name,
+                nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.input_form)),
 
                 fileImage:null
               }); 
@@ -159,7 +153,7 @@ export class AddUserComponent implements OnInit {
                   data => {
                     this.organizationName = data.name
                   }, error => {
-                    this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
                   }
                 )
               }
@@ -176,7 +170,7 @@ export class AddUserComponent implements OnInit {
               }
               
             }, error => {
-              this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
             }
           )
         }
@@ -202,32 +196,14 @@ export class AddUserComponent implements OnInit {
 
             this.getDataOnInit();
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Lấy thông tin phân quyền', "", 3000);
           }
         );
       
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
       }
     )
-
-      
-  }
-
-  updateInforUser(){
-    this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
-  }
-
-  updateSignFileImageUser(){
-    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.file.image.success", "", 3000);
-  }
-
-  updateSignKpiUser(){
-    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.kpi.success", "", 3000);
-  }
-
-  updateSignHsmUser(){
-    this.toastService.showSuccessHTMLWithTimeout("no.update.sign.hsm.success", "", 3000);
   }
 
   onCancel(){
@@ -249,12 +225,12 @@ export class AddUserComponent implements OnInit {
 
         this.userService.updateUser(data).subscribe(
           data => {
-            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
+            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
               this.router.navigate(['/main/user']);
             });
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
           }
         )
       },
@@ -272,12 +248,12 @@ export class AddUserComponent implements OnInit {
       console.log(data);
       this.userService.updateUser(data).subscribe(
         data => {
-          this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
+          this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
             this.router.navigate(['/main/user']);
           });
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+          this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
         }
       )
     }
@@ -334,7 +310,7 @@ export class AddUserComponent implements OnInit {
                         //this.toastService.showSuccessHTMLWithTimeout('Cập nhật số điện thoại tổ chức thành công!', "", 3000);
                         
                       }, error => {
-                        this.toastService.showErrorHTMLWithTimeout('Có lỗi cập nhật số điện thoại tổ chức', "", 3000);
+                        this.toastService.showErrorHTMLWithTimeout('Lỗi cập nhật số điện thoại tổ chức', "", 3000);
                       }
                     )
                   }

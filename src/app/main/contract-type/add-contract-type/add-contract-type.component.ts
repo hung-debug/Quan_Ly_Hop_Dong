@@ -4,7 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Router } from '@angular/router';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ToastService } from 'src/app/service/toast.service';
-import { UserService } from 'src/app/service/user.service';
+import {parttern_input} from "../../../config/parttern"
 
 @Component({
   selector: 'app-add-contract-type',
@@ -30,8 +30,8 @@ export class AddContractTypeComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,) {
       this.addForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required]),
-        code: this.fbd.control("", [Validators.required])
+        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)])
       });
     }
 
@@ -43,8 +43,8 @@ export class AddContractTypeComponent implements OnInit {
         data => {
           console.log(data);
           this.addForm = this.fbd.group({
-            name: this.fbd.control(data.name, [Validators.required]),
-            code: this.fbd.control(data.code, [Validators.required])
+            name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)])
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
@@ -54,8 +54,8 @@ export class AddContractTypeComponent implements OnInit {
       )
     }else{
       this.addForm = this.fbd.group({
-        name: this.fbd.control("", [Validators.required]),
-        code: this.fbd.control("", [Validators.required])
+        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)])
       });
     }
   }

@@ -7,15 +7,6 @@ import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { AddUnitComponent } from './add-unit/add-unit.component';
 import { DetailUnitComponent } from './detail-unit/detail-unit.component';
-
-export class TreeNode {
-  data:{
-    name:any;
-  }
-  constructor(name:any) {
-    this.data.name = name;
-  }
-}
 @Component({
   selector: 'app-unit',
   templateUrl: './unit.component.html',

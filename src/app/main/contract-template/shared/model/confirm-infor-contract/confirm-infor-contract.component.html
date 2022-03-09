@@ -8,7 +8,7 @@
                     <div class="form-group">
                         <div class="label_item">{{'contract-template.name' | translate}}</div>
                         <div>
-                            <div [innerHTML]="contractFileName" class="input_text"></div>
+                            <div [innerHTML]="contractName" class="input_text"></div>
                         </div>
                     </div>
                 </div>
@@ -18,7 +18,7 @@
                     <div class="form-group">
                         <div class="label_item">{{'contract-template.file' | translate}}</div>
                         <div>
-                            <div [innerHTML]="startTime" class="input_text"></div>
+                            <div [innerHTML]="contractFileName" class="input_text"></div>
                         </div>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <div class="label_item">{{'effective-date' | translate}}</div>
                         <div>
-                            <div [innerHTML]="startTime" class="input_text"></div>
+                            <div [innerHTML]="time" class="input_text"></div>
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <div class="label_item">{{'contract-template.code' | translate}}</div>
                         <div>
-                            <div [innerHTML]="contractFileName" class="input_text"></div>
+                            <div [innerHTML]="contractCode" class="input_text"></div>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                     <div class="form-group">
                         <div class="label_item">{{'contract-template.type' | translate}}</div>
                         <div>
-                            <div [innerHTML]="contractFileName" class="input_text"></div>
+                            <div [innerHTML]="contractType" class="input_text"></div>
                         </div>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                     <div class="form-group">
                         <div class="label_item">{{'user.lead' | translate}}</div>
                         <div>
-                            <div [innerHTML]="partnerLeads" class="input_text"></div>
+                            <div [innerHTML]="countPartnerLeads" class="input_text"></div>
                         </div>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                     <div class="form-group">
                         <div class="label_item">{{'user.view' | translate}}</div>
                         <div>
-                            <div [innerHTML]="partnerViews" class="input_text"></div>
+                            <div [innerHTML]="countPartnerViews" class="input_text"></div>
                         </div>
                     </div>
                 </div>
@@ -126,7 +126,7 @@
                     <div class="form-group">
                         <div class="label_item">{{'user.sign' | translate}}</div>
                         <div>
-                            <div [innerHTML]="partnerSigns" class="input_text"></div>
+                            <div [innerHTML]="countPartnerSigns" class="input_text"></div>
                         </div>
                     </div>
                 </div>
@@ -135,7 +135,7 @@
                     <div class="form-group">
                         <div class="label_item">{{'user.doc' | translate}}</div>
                         <div>
-                            <div [innerHTML]="partnerDocs" class="input_text"></div>
+                            <div [innerHTML]="countPartnerDocs" class="input_text"></div>
                         </div>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
     </div>
 </div>
 <div class="footer-infor-contract">
-    <div style="width: 200px;">
+    <div>
         <button (click)="back($event, 'sample-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
     </div>
     <div class="content_footer"></div>

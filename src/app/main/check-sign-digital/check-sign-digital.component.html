@@ -1,11 +1,12 @@
 <div class="container-fluid">
-    <div class="row" class="col-md-3">
-        <input id="attachFileSignature" type="file" accept=".pdf"
+    <div class="row" class="col-md-12">
+        <input id="attachFileSignature" (change)="fileChangedAttach($event)" type="file" accept=".pdf"
                 style="display: none;"/>
-        <button class="btn btn-lg btn-block btn_submit" (click)="addFileAttach()"><span class="fa fa-upload icon_add"></span> {{'Tải lên file ký số' | translate }}</button>
+        <button class="btn btn-lg btn-block btn_submit" (click)="addFileAttach()"><span class="fa fa-upload icon_add"></span> {{'sign.upload-file' | translate }}</button>
+        <button class="btn btn-lg btn-block btn_label" *ngIf="this.fileName">{{fileName}}</button>
     </div>
     <div class="row" style="padding-top: 20px;">
-        <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+        <p-table *ngIf="totalRecord > 0"  [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of cols" [style]='col.style'>
@@ -19,7 +20,8 @@
                 <td>{{list.signOn}}</td>
                 <td>{{list.durationValidCertificate}}</td>
                 <td>{{list.deptGrantCert}}</td>
-                <td>{{list.signOnValidTime}}</td>
+                <td><img *ngIf="list.signOnValidTime" src="../../../assets/img/icon_valid.svg" width="16px" height="16px">
+                    <img *ngIf="!list.signOnValidTime" src="../../../assets/img/icon_close.svg" width="16px" height="16px"> {{list.signOnValidTime?'Hợp lệ':'Không hợp lệ'}}</td>
             </tr>  
         </ng-template>
         <ng-template pTemplate="paginatorleft" let-state>
@@ -31,5 +33,20 @@
         </p-table>
     </div>
 </div>
-   
+
+<div *ngIf="totalRecord == 0" 
+  style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+    <div style="display: table-cell;vertical-align: middle;"> 
+      <img src="../../../assets/img/empty_data.svg"/>
+      <div style="color: #94A7C6">{{'sign.file.no' | translate}}</div>
+    </div>
+  </div>
+
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
+</ngx-spinner>
     

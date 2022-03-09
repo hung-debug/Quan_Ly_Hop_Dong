@@ -9,8 +9,7 @@
       </div>
       <div class="contract--content">
         <div class="contract__content--title">
-          <div>{{'organization.me' | translate | uppercase}} -</div>
-          <input type="text" [(ngModel)]="data_organization.name" disabled>
+          <div>{{'organization.me' | translate | uppercase}}</div>
         </div>
         <div class="contract__content--participants">
           <div class="participants-border">
@@ -226,10 +225,7 @@
       </div>
       <div class="contract--content">
         <div class="contract__content--title">
-          <div style="width: 72px">{{'doi_tac' | translate | uppercase}} -</div>
-          <input type="text" placeholder="{{(item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate}}"
-                 [(ngModel)]="item.name" [disabled]="item.type == 3">
-          <!--        <input *ngIf="item.type == 3" type="text" [ngModel]="this.getNameIndividual" disabled>-->
+          <div style="width: 72px">{{'doi_tac' | translate | uppercase}}</div>
         </div>
         <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
           <u class="label text-color" (click)="deletePartner(id)"
@@ -294,22 +290,11 @@
                        [(ngModel)]="d.ordering" [disabled]="getPartnerReviewer(item).length == 1"
                        oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                 <div class="col-md-10 participants--input">
-                  <div class="participants__name">
+                  <div class="participants__name" style="width: 90%;">
                     <div class="label text-color">{{'user.name' | translate}}: <span class="required-title">*</span></div>
-                    <div class="input-data">
+                    <div class="input-data" style="background-color: #f6f6f6;"> 
                       <img src="assets/img/icon_name.svg" class="input-img">
-                      <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">
-                    </div>
-                  </div>
-                  <!--                <div *ngIf="getOtp(d)" class="participants-otp" style="z-index: -1">-->
-                  <!--                  <input type="checkbox">-->
-                  <!--                  <span class="label text-color">OTP</span>-->
-                  <!--                </div>-->
-                  <div class="participants__name">
-                    <div class="label text-color">Email: <span class="required-title">*</span></div>
-                    <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" disabled>
                     </div>
                   </div>
                 </div>
@@ -334,28 +319,15 @@
                     <div class="participants__name">
                       <div class="label text-color">{{'user.name' | translate}}: <span class="required-title">*</span>
                       </div>
-                      <div class="input-data">
+                      <div class="input-data" style="background-color: #f6f6f6;">
                         <img src="assets/img/icon_name.svg" class="input-img">
                         <input [id]="'signature-partner-' + d.ordering" type="text"
                                placeholder="{{'nhap_ho_va_ten' | translate}}"
-                               [(ngModel)]="d.name">
+                               [(ngModel)]="d.name" disabled>
                       </div>
                     </div>
-                    <!--                  <div *ngIf="getOtp(d)" class="participants-otp" style="z-index: -1">-->
-                    <!--                    <input type="checkbox">-->
-                    <!--                    <span class="label text-color">OTP</span>-->
-                    <!--                  </div>-->
+                
                     <div class="participants__name">
-                      <div class="label text-color">Email: <span class="required-title">*</span></div>
-                      <div class="input-data">
-                        <img src="assets/img/login_email.svg" class="input-img">
-                        <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="participants--input select-text-input" style="display: flex">
-                    <!--                  [ngStyle]="getStyleSignature(d)"-->
-                    <div class="participants__name" style="width: 90%">
                       <div class="label text-color">{{'user.sign-type' | translate}}: <span
                         class="required-title">*</span></div>
   
@@ -374,14 +346,7 @@
                       </ng-multiselect-dropdown>
                       <div class="required-title notify">{{'note_chon_loai_ki_so' | translate}}</div>
                     </div>
-                    <!--                  <div  *ngIf="getOtp(d)" class="participants-otp">-->
-                    <!--                    <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp" (ngModelChange)="changeOtp(d)">-->
-                    <!--                    <span class="label text-color">OTP</span>-->
-                    <!--                  </div>-->
-                    <!--                  <div *ngIf="getOtp(d)" class="participants__name">-->
-                    <!--                    <div class="label text-color">{{'user.phone' | translate}}: <span *ngIf="d.is_otp" class="required-title">*</span></div>-->
-                    <!--                    <input type="number" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">-->
-                    <!--                  </div>-->
+
                   </div>
                 </div>
                 <div *ngIf="getPartnerSignature(item).length > 1 || this.getPartnerCoordination(item).length > 0"
@@ -409,26 +374,13 @@
                     <div class="participants__name">
                       <div class="label text-color">{{'user.name' | translate}}: <span class="required-title"> *</span>
                       </div>
-                      <div class="input-data">
+                      <div class="input-data" style="background-color: #f6f6f6;">
                         <img src="assets/img/icon_name.svg" class="input-img">
-                        <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">
+                        <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name" disabled>
                       </div>
                     </div>
-                    <!--                  <div class="participants-otp" style="z-index: -1">-->
-                    <!--                    <input type="checkbox">-->
-                    <!--                    <span class="label text-color">OTP</span>-->
-                    <!--                  </div>-->
+                    
                     <div class="participants__name">
-                      <div class="label text-color">Email: <span class="required-title">*</span></div>
-                      <div class="input-data">
-                        <img src="assets/img/login_email.svg" class="input-img">
-                        <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div class="participants-information">
-                    <div class="participants-signature-type" style="width: 90%">
                       <div class="label text-color">{{'user.sign-type' | translate}}: <span
                         class="required-title">*</span></div>
                       <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
@@ -447,6 +399,7 @@
                       <div class="required-title notify">{{'note_chon_loai_ki_so' | translate}}</div>
                     </div>
                   </div>
+
                 </div>
                 <div class="col-md-1 delete-element" (click)="deletePartnerDocument(index, item)">
                   <img src="assets/img/border_close.svg" alt="close.vn">
@@ -461,7 +414,6 @@
           </div>
   
           <div *ngIf="item.type == 3">
-            <!--          <div class="contract__content&#45;&#45;participants">-->
             <div class="participants-border">
               <div class="label">{{'user.sign' | translate}}</div>
               <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
@@ -473,28 +425,15 @@
                     <div class="participants__name">
                       <div class="label text-color">{{'user.name' | translate}}: <span class="required-title">*</span>
                       </div>
-                      <div class="input-data">
+                      <div class="input-data" style="background-color: #f6f6f6;">
                         <img src="assets/img/icon_name.svg" class="input-img">
                         <input [id]="'signature-partner-' + d.ordering" type="text"
                                placeholder="{{'nhap_ho_va_ten' | translate}}"
-                               [(ngModel)]="d.name" (change)="getName($event, item)">
+                               [(ngModel)]="d.name" disabled>
                       </div>
                     </div>
-                    <!--                    <div *ngIf="getOtp(d)" class="participants-otp" style="z-index: -1">-->
-                    <!--                      <input type="checkbox">-->
-                    <!--                      <span class="label text-color">OTP</span>-->
-                    <!--                    </div>-->
+            
                     <div class="participants__name">
-                      <div class="label text-color">Email: <span class="required-title">*</span></div>
-                      <div class="input-data">
-                        <img src="assets/img/login_email.svg" class="input-img">
-                        <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="participants--input select-text-input" style="display: flex">
-                    <!--                    [ngStyle]="getStyleSignature(d)"-->
-                    <div class="participants__name" style="width: 90%">
                       <div class="label text-color">{{'user.sign-type' | translate}}: <span
                         class="required-title">*</span></div>
                       <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
@@ -513,15 +452,8 @@
                       </ng-multiselect-dropdown>
                       <div class="required-title notify">{{'note_chon_loai_ki_so' | translate}}</div>
                     </div>
-                    <!--                    <div *ngIf="getOtp(d)" class="participants-otp">-->
-                    <!--                      <input type="checkbox" [value]="1" [(ngModel)]="d.is_otp" (ngModelChange)="changeOtp(d)">-->
-                    <!--                      <span class="label text-color">OTP</span>-->
-                    <!--                    </div>-->
-                    <!--                    <div *ngIf="getOtp(d)" class="participants__name">-->
-                    <!--                      <div class="label text-color">{{'user.phone' | translate}}: <span *ngIf="d.is_otp" class="required-title">*</span></div>-->
-                    <!--                      <input type="number" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">-->
-                    <!--                    </div>-->
                   </div>
+            
                 </div>
                 <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element"
                      (click)="deletePartnerSignature(index, item)">
@@ -535,7 +467,6 @@
                    (click)="addPartnerSignature(item, id)">{{'btn.add.user.sign' | translate}}</u>
               </div>
             </div>
-            <!--          </div>-->
           </div>
         </div>
       </div>
@@ -551,13 +482,12 @@
   <!--</div>-->
   
   <div class="footer-determine" style="display: flex; justify-content: space-between">
-    <div style="width: 200px;">
+    <div>
       <button (click)="back($event, 'infor-contract')" type="button" name="next" class="next action-button"
               style="background-color: #8B8B8B">{{'btn.previous' | translate}}
       </button>
     </div>
     <div>
-      <button type="button" name="next" class="next draft-button" (click)="next('save-draft')">{{'btn.save-draff' | translate }}</button>
       <button (click)="next('save-step')" type="button" name="next"
               class="next action-button pull-right">{{'btn.next' | translate }}</button>
     </div>

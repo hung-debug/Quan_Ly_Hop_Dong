@@ -30,8 +30,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
   status: string;
   type: string;
   private sub: any;
-  searchText: string;
-  closeResult: string = '';
   public contracts: any[] = [];
   p: number = 1;
   page: number = 5;
@@ -72,36 +70,19 @@ export class ContractComponent implements OnInit, AfterViewInit {
   isQLHD_13: boolean = true;  //chia se hop dong
 
   constructor(private modalService: NgbModal,
-    private appService: AppService,
-    private contractService: ContractService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private toastService: ToastService,
-    private http: HttpClient,
-    private uploadService: UploadService,
-    private dialog: MatDialog,
-    private spinner: NgxSpinnerService,
-    private userService: UserService,
-    private roleService: RoleService,
-  ) { }
+              private appService: AppService,
+              private contractService: ContractService,
+              private route: ActivatedRoute,
+              private router: Router,
+              private toastService : ToastService,
+              private http: HttpClient,
+              private uploadService: UploadService,
+              private dialog: MatDialog,
+              private spinner: NgxSpinnerService,
+              private userService:UserService,
+              private roleService: RoleService,
+    ) {}
 
-  open(content: any) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -276,8 +257,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.filter_name = event.target.value;
     this.getContractList();
   }
-
-
 
   openDetail(id: number) {
     this.router.navigate(['main/form-contract/detail/' + id]);

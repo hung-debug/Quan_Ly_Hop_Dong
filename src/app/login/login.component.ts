@@ -91,15 +91,21 @@ export class LoginComponent implements OnInit {
               } else {
                 this.error = false;
                 if (this.type == 0) {
-                  this.router.navigate(['/main/dashboard']);
+                  //this.router.navigate(['/main/dashboard']);
+                  this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                    this.router.navigate(['/main/dashboard']);
+                  });
                 } else {
                   this.router.navigate([localStorage.getItem('url')]);
                 }
               }
-            } else {
+            } else { 
               this.error = false;
               if (this.type == 0) {
-                this.router.navigate(['/main/dashboard']);
+                //this.router.navigate(['/main/dashboard']);
+                this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                  this.router.navigate(['/main/dashboard']);
+                });
               } else {
                 this.router.navigate([localStorage.getItem('url')]);
               }
@@ -151,6 +157,14 @@ export class LoginComponent implements OnInit {
       if (sessionStorage.getItem('urlLoginType')) {
         this.type = 1;
       } else this.type = 0;
+
+      //neu dang nhap bang user co tai khoan va da dang nhap thanh cong truoc do thi khong phai dang nhap lai nua
+      //comment do chua check token het han
+      // if(this.type == 0 && JSON.parse(localStorage.getItem('currentUser') || '')?.code == '00'){
+      //   this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      //     this.router.navigate(['/main/dashboard']);
+      //   });
+      // }
     }
   }
 

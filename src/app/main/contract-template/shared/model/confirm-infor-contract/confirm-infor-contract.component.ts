@@ -3,7 +3,8 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { variable } from 'src/app/config/variable';
-import { ContractService } from 'src/app/service/contract.service';
+import { ContractTemplateService } from 'src/app/service/contract-template.service';
+import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
@@ -18,45 +19,50 @@ export class ConfirmInforContractComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               public datepipe: DatePipe,
-              private contractService: ContractService,
+              private contractTemplateService: ContractTemplateService,
               private router: Router,
-              private toastService : ToastService,) {
+              private toastService : ToastService,
+              private contractTypeService: ContractTypeService) {
     this.step = variable.stepSampleContract.step4
   }
 
   contractName:any='';
   contractCode:any='';
   contractFileName:string = '';
+  contractType:string = '';
   startTime:string = '';
   endTime:string = '';
+  time:string = '';
   comment:string = '';
   userViews:string = '';
   userSigns:string = '';
   userDocs:string = '';
-  partnerLeads:string = '';
-  partnerViews:string = '';
-  partnerSigns:string = '';
-  partnerDocs:string = '';
-  partnerUsers:string = '';
+  countPartnerLeads:number = 0;
+  countPartnerViews:number = 0;
+  countPartnerSigns:number = 0;
+  countPartnerDocs:number = 0;
+  countPartnerUsers:number = 0;
 
   connUserViews:string = '';
   connUserSigns:string = '';
   connUserDocs:string = '';
-  connPartnerLeads:string = '';
-  connPartnerViews:string = '';
-  connPartnerSigns:string = '';
-  connPartnerDocs:string = '';
-  connPartnerUsers:string = '';
   isOrg:boolean = true;
 
   conn:string;
   ngOnInit(): void {
     console.log("step4" + this.datas.contract_user_sign);
 
+    this.contractName = this.datas.name; 
+    this.contractCode = this.datas.code;
     this.contractFileName = this.datas.file_name; 
-    this.startTime = this.datepipe.transform(this.datas.startTime, 'dd/MM/yyyy') || '';
-    this.endTime = this.datepipe.transform(this.datas.endTime, 'dd/MM/yyyy') || '';
-    this.comment = this.datas.notes;
+    this.startTime = this.datepipe.transform(this.datas.start_time, 'dd/MM/yyyy') || '';
+    this.endTime = this.datepipe.transform(this.datas.end_time, 'dd/MM/yyyy') || '';
+    this.time = this.startTime + " - " + this.endTime;
+    if(this.datas.type_id){
+      this.contractTypeService.getContractTypeById(this.datas.type_id).subscribe(data => {
+        this.contractType = data.name;
+      })
+    }
 
     if (this.datas.is_determine_clone && this.datas.is_determine_clone.length > 0) {
       let data_user_sign = [...this.datas.is_determine_clone];
@@ -81,28 +87,23 @@ export class ConfirmInforContractComponent implements OnInit {
           this.isOrg = true;
           element.recipients.forEach((item: any) => {
             if (item.role == 1 && item.name) {
-              this.partnerLeads += this.connPartnerLeads + item.name + " - " + item.email;
-              this.connPartnerLeads = "<br>";
+              this.countPartnerLeads++;
             }
             else if (item.role == 2 && item.name) {
-              this.partnerViews += this.connPartnerViews + item.name + " - " + item.email;
-              this.connPartnerViews = "<br>";
+              this.countPartnerViews++;
             }
             else if (item.role == 3 && item.name) {
-              this.partnerSigns += this.connPartnerSigns + item.name + " - " + item.email;
-              this.connPartnerSigns = "<br>";
+              this.countPartnerSigns++;
             }
             else if (item.role == 4 && item.name) {
-              this.partnerDocs += this.connPartnerDocs + item.name + " - " + item.email;
-              this.connPartnerDocs = "<br>";
+              this.countPartnerDocs++;
             }
           })
         } else if (element.type == 3) {
           this.isOrg = false;
           element.recipients.forEach((item: any) => {
             if (item.role == 3 && item.name) {
-              this.partnerSigns += this.connPartnerSigns + item.name + " - " + item.email;
-              this.connPartnerSigns = "<br>";
+              this.countPartnerSigns++;
             }
           })
         }
@@ -127,18 +128,16 @@ export class ConfirmInforContractComponent implements OnInit {
 
   callAPI() {
     //call API step confirm
-    //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
-    this.contractService.changeStatusContract(this.datas.id, 10, "").subscribe((data) => {
+    this.contractTemplateService.changeStatusContract(this.datas.id, 10).subscribe((data) => {
 
-      console.log(JSON.stringify(data));
-      //this.router.navigate(['/main/contract/create/processing']);
+      console.log(data);
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/contract/create/processing']);
+        this.router.navigate(['/main/contract-template']);
       });
-      this.toastService.showSuccessHTMLWithTimeout("Tạo hợp đồng thành công!", "", 3000);
+      this.toastService.showSuccessHTMLWithTimeout("Tạo mẫu hợp đồng thành công!", "", 3000);
     },
     error => {
-      this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 3000);
+      this.toastService.showErrorHTMLWithTimeout("Tạo mẫu hợp đồng thất bại", "", 3000);
       return false;
     }
     );
