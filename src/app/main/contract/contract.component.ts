@@ -1,5 +1,5 @@
 import { UploadService } from 'src/app/service/upload.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
@@ -25,7 +25,7 @@ import { RoleService } from 'src/app/service/role.service';
   templateUrl: './contract.component.html',
   styleUrls: ['./contract.component.scss']
 })
-export class ContractComponent implements OnInit {
+export class ContractComponent implements OnInit, AfterViewInit {
   action: string;
   status: string;
   type: string;
@@ -178,6 +178,10 @@ export class ContractComponent implements OnInit {
     )
 
     // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
+  }
+
+  ngAfterViewInit(): void {
+    this.spinner.hide();
   }
 
   // ngOnDestroy() {

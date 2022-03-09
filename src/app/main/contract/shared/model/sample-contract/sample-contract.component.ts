@@ -1252,7 +1252,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               this.datas.close_modal.close('Save click');
             }
             // this.getRemoveCopyRight();
-            this.router.navigate(['/main/contract/create/draff']);
+            this.router.navigate(['/main/contract/create/draft']);
             this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
           }
         },
@@ -1369,7 +1369,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.datas.close_modal.close('Save click');
         }
         // this.getRemoveCopyRight();
-        this.router.navigate(['/main/contract/create/draff']);
+        this.router.navigate(['/main/contract/create/draft']);
         this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
       }
     }

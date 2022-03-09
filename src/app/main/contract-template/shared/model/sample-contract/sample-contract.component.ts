@@ -1136,7 +1136,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.nextOrPreviousStep(step);
   }
 
-  async next(action: string) {
+  async next(action: string, isBtnSave?: string) {
     if (!this.validData()) return;
     else {
       let data_sample_contract: string | any[] = [];
@@ -1192,24 +1192,29 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           })
           if (count > 0) break; 
         }
+        this.spinner.hide();
 
         if (dataSample_contract.length == data_sample_contract.length) {
           if (action == 'next_step') {
             this.step = variable.stepSampleContract.step4;
             this.datas.stepLast = this.step
             this.nextOrPreviousStep(this.step);
+            
           } else if (action == 'save_draft') {
-            this.datas.save_draft.sample_contract = false;
-            this.stepChangeSampleContract.emit('save_draft_sample_contract')
-            if (this.datas['close_modal']) {
-              this.datas.close_modal.close('Save click');
+            if (!isBtnSave) {
+              this.datas.save_draft.sample_contract = false;
+              this.stepChangeSampleContract.emit('save_draft_sample_contract')
+              if (this.datas['close_modal']) {
+                this.datas.close_modal.close('Save click');
+              }
             }
             // this.getRemoveCopyRight();
-            this.router.navigate(['/main/contract/create/draff']);
+            void this.router.navigate(['/main/contract/create/draft']);
+            // this.spinner.hide();
             this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
           }
-          this.spinner.hide();
-        } else this.spinner.hide();
+          
+        }
       } else {
         this.contractService.getContractSample(data_sample_contract).subscribe((data) => {
           if (action == 'next_step') {
@@ -1223,7 +1228,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               this.datas.close_modal.close('Save click');
             }
             // this.getRemoveCopyRight();
-            this.router.navigate(['/main/contract/create/draff']);
+            this.router.navigate(['/main/contract/create/draft']);
             this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
           }
         },
