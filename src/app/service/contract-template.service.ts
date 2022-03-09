@@ -11,15 +11,15 @@ export class ContractTemplateService {
 
   token: any;
   shareContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
-  listContractTemplateUrl:any = `http://192.168.1.26:8762/api/v1/contracts/template/my-contract`;
-  addInforContractTemplateUrl:any = `http://192.168.1.26:8762/api/v1/contracts/template`;
-  documentUrl: any = `http://192.168.1.26:8762/api/v1/documents/template`;
-  addDetermineUrl: any = `http://192.168.1.26:8762/api/v1/participants/template/contract/`;
-  addSampleContractUrl: any = `http://192.168.1.26:8762/api/v1/fields/template`;
-  changeStatusContractUrl: any = `http://192.168.1.26:8762/api/v1/contracts/template/`;
-  getDataContract:any = `http://192.168.1.26:8762/api/v1/contracts/template/`;
-  getFileContract:any = `http://192.168.1.26:8762/api/v1/documents/by-contract/template/`;
-  getObjectSignature:any = `http://192.168.1.26:8762/api/v1/fields/by-contract/template/`;
+  listContractTemplateUrl:any = `${environment.apiUrl}/api/v1/contracts/template/my-contract`;
+  addInforContractTemplateUrl:any = `${environment.apiUrl}/api/v1/contracts/template`;
+  documentUrl: any = `${environment.apiUrl}/api/v1/documents/template`;
+  addDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/template/contract/`;
+  addSampleContractUrl: any = `${environment.apiUrl}/api/v1/fields/template`;
+  changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
+  getDataContract:any = `${environment.apiUrl}/api/v1/contracts/template/`;
+  getFileContract:any = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
+  getObjectSignature:any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
 
   constructor(private http: HttpClient,
               public datepipe: DatePipe,) { }
