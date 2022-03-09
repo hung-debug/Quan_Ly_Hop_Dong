@@ -2,7 +2,7 @@
     <!--  information contract-->
     <div class="col-md-3 sample-contract__information" style="background-color: white;">
       <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-        <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
+        <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN CHI TIẾT MẪU HỢP ĐỒNG</div>
         <div style="line-height: 25px">
           <div>
             <span class="title-contract">Loại hợp đồng:</span>
@@ -25,7 +25,7 @@
           </div>
           <div>
             <span class="title-contract">Thời gian hiệu lực:</span>
-            <span>{{datas?.is_data_contract?.start_time}}</span>
+            <span>{{datas?.is_data_contract?.start_time | date: 'dd/MM/yyyy'}} - {{datas?.is_data_contract?.end_time | date: 'dd/MM/yyyy'}}</span>
           </div>
   
         </div>

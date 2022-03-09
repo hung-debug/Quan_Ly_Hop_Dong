@@ -12,6 +12,7 @@ export class ContractTemplateService {
   token: any;
   shareContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
   listContractTemplateUrl:any = `${environment.apiUrl}/api/v1/contracts/template/my-contract`;
+  listContractShareTemplateUrl:any = `${environment.apiUrl}/api/v1/contracts/template/my-contract`;
   addInforContractTemplateUrl:any = `${environment.apiUrl}/api/v1/contracts/template`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents/template`;
   addDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/template/contract/`;
@@ -41,7 +42,13 @@ export class ContractTemplateService {
     if(!filter_type){
       filter_type="";
     }
-    let listContractTemplateUrl = this.listContractTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&page=" + page + "&size=" + size;
+    let listContractTemplateUrl = "";
+    if(isShare=='off'){
+      listContractTemplateUrl = this.listContractTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&page=" + page + "&size=" + size;
+    }else{
+      listContractTemplateUrl = this.listContractShareTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&page=" + page + "&size=" + size;
+    }
+    
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(listContractTemplateUrl, {headers}).pipe();
   }
@@ -151,6 +158,18 @@ export class ContractTemplateService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       email: email,
+      contract_id: id
+    });
+    return this.http.post<any>(this.shareContractTemplateUrl, body, {'headers': headers}).pipe();
+  }
+
+
+  deleteContract(id: any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
       contract_id: id
     });
     return this.http.post<any>(this.shareContractTemplateUrl, body, {'headers': headers}).pipe();

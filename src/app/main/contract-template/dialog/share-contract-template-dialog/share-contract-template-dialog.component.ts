@@ -72,11 +72,8 @@ export class ShareContractTemplateDialogComponent implements OnInit {
   }
 
   //email:any;
-  emailArr:any[] = [];
   checkEmailError:boolean;
-  onSubmit() {
-    this.emailArr = [];
-    
+  onSubmit() {    
     console.log(this.addFormUser.value.email);
     this.submittedUser = true;
     // stop here if form is invalid
@@ -88,20 +85,10 @@ export class ShareContractTemplateDialogComponent implements OnInit {
       console.log(data);
       if(data.contract_id != null){
         this.dialogRef.close();
-        this.toastService.showSuccessHTMLWithTimeout('Chia sẻ hợp đồng thành công', "", 3000);
+        this.toastService.showSuccessHTMLWithTimeout('Chia sẻ mẫu hợp đồng thành công', "", 3000);
       }else{
-        this.toastService.showErrorHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 3000);
+        this.toastService.showErrorHTMLWithTimeout('Chia sẻ mẫu hợp đồng thất bại', "", 3000);
       }
     });
-  }
-
-  isValidEmail(emailString: any) {
-    try {
-      let pattern = new RegExp("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$");
-      let valid = pattern.test(emailString);
-      return valid;
-    } catch (TypeError) {
-      return false;
-    }
   }
 }

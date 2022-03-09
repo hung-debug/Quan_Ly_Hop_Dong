@@ -31,12 +31,9 @@ export class ContractTemplateComponent implements OnInit {
   name:any="";
   type:any="";
 
-  constructor(private modalService: NgbModal,
-              private appService: AppService,
+  constructor(private appService: AppService,
               private contractTemplateService: ContractTemplateService,
               private router: Router,
-              private fb: FormBuilder,
-              private toastService : ToastService,
               private dialog: MatDialog,
               private contractTypeService: ContractTypeService) { 
 
