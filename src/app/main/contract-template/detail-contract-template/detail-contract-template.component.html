@@ -2,7 +2,7 @@
     <!--  information contract-->
     <div class="col-md-3 sample-contract__information" style="background-color: white;">
       <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-        <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN CHI TIẾT MẪU HỢP ĐỒNG</div>
+        <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN MẪU HỢP ĐỒNG</div>
         <div style="line-height: 25px">
           <div>
             <span class="title-contract">Loại hợp đồng:</span>
@@ -34,11 +34,6 @@
   
       <div class="location-change" [ngStyle]="changeDisplay()">
         <div class="sample-contract__information&#45;&#45;user-sign" style="line-height: 25px">
-          <div style="text-align: center; font-weight: bold" class="label">CÁC BÊN LIÊN QUAN</div>
-          <div *ngFor="let d of this.datas?.is_data_contract?.participants">
-            <p>{{d.name}}</p>
-          </div>
-  
         </div>
         <div>
           <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Luồng xử lý hợp đồng</u>

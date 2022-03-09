@@ -312,6 +312,32 @@ export class InforContractComponent implements OnInit, AfterViewInit {
             this.datas.file_content = fileReader.result.toString().split(',')[1];
         };
       }
+
+
+      // if (this.datas.code != null && this.datas.code != '') {
+      //   //check ma mau hop dong da ton tai hay chua
+      //   this.contractTemplateService.checkCodeUnique(this.datas.code).subscribe(
+      //     dataCode => {
+      //       if (dataCode.success) {
+      //         if (this.datas.is_action_contract_created && this.router.url.includes("edit"))
+      //           this.callAPI();
+      //         else
+      //           this.callAPI();
+      //       } else {
+      //         this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại', "", 3000);
+      //         this.spinner.hide();
+      //       }
+      //     }, error => {
+      //       this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra mã mẫu hợp đồng', "", 3000);
+      //       this.spinner.hide();
+      //     }
+      //   )
+      // } else {
+      //   if (this.datas.is_action_contract_created && this.router.url.includes("edit"))
+      //     this.callAPI();
+      //   else
+      //     this.callAPI();
+      // }
       await this.callAPI();
       
     }

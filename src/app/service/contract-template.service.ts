@@ -21,6 +21,7 @@ export class ContractTemplateService {
   getDataContract:any = `${environment.apiUrl}/api/v1/contracts/template/`;
   getFileContract:any = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
   getObjectSignature:any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
+  checkCodeUniqueUrl:any = `${environment.apiUrl}/api/v1/contracts/template/check-code-unique`;
 
   constructor(private http: HttpClient,
               public datepipe: DatePipe,) { }
@@ -163,7 +164,6 @@ export class ContractTemplateService {
     return this.http.post<any>(this.shareContractTemplateUrl, body, {'headers': headers}).pipe();
   }
 
-
   deleteContract(id: any){
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -173,6 +173,17 @@ export class ContractTemplateService {
       contract_id: id
     });
     return this.http.post<any>(this.shareContractTemplateUrl, body, {'headers': headers}).pipe();
+  }
+
+  checkCodeUnique(code:any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+        code: code
+      });
+    return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
   }
 
   getDataDetermine() {
