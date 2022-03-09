@@ -473,7 +473,8 @@ export class InforContractComponent implements OnInit, AfterViewInit {
       this.defineData(this.datas);
       const fileReader = new FileReader();
       if (this.datas.is_action_contract_created) {
-        if (!this.uploadFileContractAgain && this.datas.contractFile) {
+        console.log(typeof this.datas.contractFile)
+        if (!this.uploadFileContractAgain && this.datas.contractFile && (typeof this.datas.contractFile == 'string')) {
           await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
             if (res)
               this.datas.contractFile = res;
@@ -489,13 +490,16 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         if (!this.uploadFileAttachAgain && this.datas.attachFile && this.datas.attachFile.length > 0) {
           let dataArr: any[] = [];
           for (let i = 0; i < this.datas.attachFile.length; i++) {
-            await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile[i]).toPromise().then((data: any) => {
-              if (data) dataArr.push(data)
-            })
+            if (typeof this.datas.attachFile[i] == 'string') {
+              await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile[i]).toPromise().then((data: any) => {
+                if (data) dataArr.push(data)
+              })
+            }
           }
-          if (dataArr.length == this.datas.attachFile.length) {
-            this.datas.attachFile = dataArr;
-          } else return;
+          this.datas.attachFile = dataArr;
+          // if (dataArr.length == this.datas.attachFile.length) {
+          //   this.datas.attachFile = dataArr;
+          // } else return;
         }
       } else {
         fileReader.readAsDataURL(this.datas.contractFile);
