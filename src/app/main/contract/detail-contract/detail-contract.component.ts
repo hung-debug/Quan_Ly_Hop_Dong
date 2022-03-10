@@ -880,7 +880,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   downloadContract(id:any){
     if (this.isDataContract.status == 30) {
       this.contractService.getFileZipContract(id).subscribe((data) => {
-          
+          console.log(data)
           this.uploadService.downloadFile(data.path).subscribe((response: any) => {
             //console.log(response);
 
