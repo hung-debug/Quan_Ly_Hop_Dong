@@ -1136,7 +1136,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.nextOrPreviousStep(step);
   }
 
-  async next(action: string) {
+  async next(action: string, isBtnSave?: string) {
     if (!this.validData()) return;
     else {
       let data_sample_contract: string | any[] = [];
@@ -1181,12 +1181,56 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.spinner.show();
 
       if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
+        let dataSample_contract: any[] = [];
+        let count = 0;
+        // this.datas.contract_id_action
+        for (let i = 0; i < data_sample_contract.length; i++) {
+          await this.contractService.getContractSampleEdit(data_sample_contract[i], this.datas.contract_id_action).toPromise().then((data: any) => {
+            dataSample_contract.push(data);
+          }, (error: HttpErrorResponse) => {
+            count++;
+          })
+          if (count > 0) break; 
+        }
+        this.spinner.hide();
 
+        if (dataSample_contract.length == data_sample_contract.length) {
+          if (action == 'next_step') {
+            this.step = variable.stepSampleContract.step4;
+            this.datas.stepLast = this.step
+            this.nextOrPreviousStep(this.step);
+            
+          } else if (action == 'save_draft') {
+            if (!isBtnSave) {
+              this.datas.save_draft.sample_contract = false;
+              this.stepChangeSampleContract.emit('save_draft_sample_contract')
+              if (this.datas['close_modal']) {
+                this.datas.close_modal.close('Save click');
+              }
+            }
+            // this.getRemoveCopyRight();
+            void this.router.navigate(['/main/contract/create/draft']);
+            // this.spinner.hide();
+            this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+          }
+          
+        }
       } else {
-        this.contractTemplateService.getContractSample(data_sample_contract).subscribe((data) => {
-          this.step = variable.stepSampleContract.step4;
-          this.datas.stepLast = this.step
-          this.nextOrPreviousStep(this.step);
+        this.contractService.getContractSample(data_sample_contract).subscribe((data) => {
+          if (action == 'next_step') {
+            this.step = variable.stepSampleContract.step4;
+            this.datas.stepLast = this.step
+            this.nextOrPreviousStep(this.step);
+          } else if (action == 'save_draft') {
+            this.datas.save_draft.sample_contract = false;
+            this.stepChangeSampleContract.emit('save_draft_sample_contract')
+            if (this.datas['close_modal']) {
+              this.datas.close_modal.close('Save click');
+            }
+            // this.getRemoveCopyRight();
+            this.router.navigate(['/main/contract/create/draft']);
+            this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+          }
         },
           error => {
             this.spinner.hide();
