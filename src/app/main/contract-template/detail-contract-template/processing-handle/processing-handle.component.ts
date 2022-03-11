@@ -32,20 +32,59 @@ export class ProcessingHandleComponent implements OnInit {
   ) {
   }
 
+  userViews:any="";
+  userSigns:any="";
+  userDocs:any="";
+  countPartnerLeads:any=0;
+  countPartnerViews:any=0;
+  countPartnerSigns:any=0;
+  countPartnerDocs:any=0;
+  listPartner:any=[];
+  isOrg:boolean = true;
+
+  connUserView:any="";
+  connUserSign:any="";
+  connUserDoc:any="";
   ngOnInit(): void {
+    console.log(this.data.is_data_contract.participants);
     this.data.is_data_contract.participants.forEach((item: any) => {
-      item.recipients.forEach((element: any) => {
-        let data = {
-          name: element.name,
-          name_company: item.name,
-          emailRecipients: element.email,
-          status: this.checkStatusUser(element.status, element.role),
-          process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").add(7, 'hours').format("YYYY/MM/DD HH:mm:ss") : null
+
+      if(item.type==1){
+        item.recipients.forEach((element: any) => {
+          if(element.role == 2){
+            this.userViews += this.connUserView + element.name + " - " + element.email;
+            this.connUserView = "<br>";
+          }
+          if(element.role == 3){
+            this.userSigns += this.connUserSign + element.name + " - " + element.email;
+            this.connUserSign = "<br>";
+          }
+          if(element.role == 4){
+            this.userDocs += this.connUserDoc + element.name + " - " + element.email;
+            this.connUserDoc = "<br>";
+          }
+        })
+      }else{
+        if(item.type==2){
+          this.isOrg = true;
         }
-        this.is_list_name.push(data);
-      })
+        item.recipients.forEach((element: any) => {
+          if(element.role == 1){
+            this.countPartnerLeads++;
+          }
+          if(element.role == 2){
+            this.countPartnerViews++;
+          }
+          if(element.role == 3){
+            this.countPartnerSigns++;
+          }
+          if(element.role == 4){
+            this.countPartnerDocs ++;
+          }
+        })
+      }
     })
-    // console.log(this.is_list_name)
+    console.log(this.is_list_name)
   }
 
   getStatus(status: any) {

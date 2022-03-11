@@ -1,24 +1,88 @@
 <div class="container-fluid">
-    <h3 style="text-align: center; color: #106DB6">LUỒNG XỬ LÝ HỢP ĐỒNG</h3>
-    <div style="max-height: 405px; overflow: auto;font-size: 14px">
-      <div *ngFor="let d of is_list_name">
-        <div style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
-          <div class="col-md-6" style="display: flex; flex-direction: column;text-align: left;">
-            <span>{{d.name}}</span>
-            <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
-            <span style="color: #8B8B8B" *ngIf="d.name_company">{{d.name_company}}</span>
+    <h3 style="text-align: center; color: #106DB6;font-family: inherit;text-transform: uppercase;">THÔNG TIN KÝ</h3>
+    <div style="max-height: 405px; overflow: auto; overflow-x: hidden;font-size: 14px">
+      <div class="user_contact">
+          <div class="label">{{'organization.me'  | translate}}</div>
+          <div class="content_determine">
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <div class="label_item">{{'user.view' | translate}}</div>
+                          <div>
+                              <div [innerHTML]="userViews" class="input_text"></div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <div class="label_item">{{'user.sign' | translate}}</div>
+                          <div>
+                              <div [innerHTML]="userSigns" class="input_text"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+  
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <div class="label_item">{{'user.doc' | translate}}</div>
+                          <div>
+                              <div [innerHTML]="userDocs" class="input_text"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
           </div>
-          <div class="col-md-6" style="display: flex; flex-direction: column;text-align: center">
-            <span [style.color]="d.status != 0 ? '#106DB6' : '#545252'">{{d.status}}</span>
-            <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
+      </div>
+  
+      <div class="partner_contact">
+          <div class="label">{{'organization.partner'  | translate}}</div>
+          <div class="content_determine">
+              <div class="row" *ngIf="isOrg">
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <div class="label_item">{{'user.lead' | translate}}</div>
+                          <div>
+                              <div [innerHTML]="countPartnerLeads" class="input_text"></div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <div class="label_item">{{'user.view' | translate}}</div>
+                          <div>
+                              <div [innerHTML]="countPartnerViews" class="input_text"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+  
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <div class="label_item">{{'user.sign' | translate}}</div>
+                          <div>
+                              <div [innerHTML]="countPartnerSigns" class="input_text"></div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-6" *ngIf="isOrg">
+                      <div class="form-group">
+                          <div class="label_item">{{'user.doc' | translate}}</div>
+                          <div>
+                              <div [innerHTML]="countPartnerDocs" class="input_text"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
           </div>
-        </div>
       </div>
     </div>
   
   </div>
   
-  <div class="footer-btn" style="text-align: center; margin-top: 20px">
-    <button style="width: 120px; height: 40px; background-color: #8B8B8B; border-radius: 5px; outline: none; color: white; border: 1px solid #8B8B8B" (click)="acceptRequest()">Thoát</button>
+  <div class="row" style="justify-content: center;padding-top: 10px;">
+    <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
   </div>
   
