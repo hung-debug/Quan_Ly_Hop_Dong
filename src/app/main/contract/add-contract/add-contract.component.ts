@@ -220,7 +220,10 @@ export class AddContractComponent implements OnInit {
   }
 
   getStep(e: any) {
-    // this.step = this.datas.stepLast;
+    if (e.isBackStep_4 && e.step) {
+      this.datas['back_step_4'] = e.isBackStep_4;
+      this.step = e.step;
+    } else
     this.step = e;
   }
 

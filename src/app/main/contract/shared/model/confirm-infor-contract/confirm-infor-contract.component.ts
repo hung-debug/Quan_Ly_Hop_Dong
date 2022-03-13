@@ -14,7 +14,7 @@ import { ToastService } from 'src/app/service/toast.service';
 export class ConfirmInforContractComponent implements OnInit, OnChanges {
   @Input() datas: any;
   @Input() step: any;
-  @Output() stepChangeConfirmInforContract = new EventEmitter<string>();
+  @Output() stepChangeConfirmInforContract = new EventEmitter<any>();
   @Input() saveDraftStep: any;
 
   constructor(private formBuilder: FormBuilder,
@@ -125,7 +125,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
-    this.stepChangeConfirmInforContract.emit(step);
+    this.datas['back_step_4'] = true;
+    let data = {
+      step: step,
+      isBackStep_4: true
+    }
+    this.stepChangeConfirmInforContract.emit(data);
   }
 
   saveDraft() {
