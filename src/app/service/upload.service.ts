@@ -40,10 +40,6 @@ export class UploadService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-
-    // console.log(this.uploadFileUrl);
-    // console.log(headers);
-    // console.log(formData);
     return this.http.post<File>(this.uploadFileUrl + this.organization_id + `/single`, formData, {'headers':headers});
   }
 
