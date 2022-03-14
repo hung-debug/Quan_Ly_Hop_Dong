@@ -262,6 +262,13 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
       // sua hop dong
+      // datas.contractConnect
+      if (this.datas.contractConnect && this.datas.contractConnect.length && this.datas.contractConnect > 0) {
+        this.datas.contractConnect.forEach((res: any) => {
+          res['contract_id'] = this.datas.contract_id_action;
+        })
+      }
+
       await this.contractService.addContractStep1(this.datas, this.datas.contract_id_action).toPromise().then((res: any) => {
         this.datas.id = res?.id;
         this.datas.contract_id = res?.id;
@@ -286,7 +293,16 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         })
       }
       if (countSuccess == 0) {
-        await this.contractService.addDocument(this.datas).toPromise().then((respon: any) => {
+        await this.contractService.addDocument(this.datas, 1).toPromise().then((respon: any) => {
+          this.datas.document_id = respon?.id;
+        }, (error: HttpErrorResponse) => {
+          countSuccess++
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
+          // return;
+        })
+
+        await this.contractService.addDocument(this.datas, 2).toPromise().then((respon: any) => {
           this.datas.document_id = respon?.id;
         }, (error: HttpErrorResponse) => {
           countSuccess++
@@ -333,7 +349,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
             if (action == "save_draft") {
               this.router.navigate(['/main/contract/create/draft']);
               this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-              
+
             } else {
               //next step
               this.step = variable.stepSampleContract.step2;
@@ -826,11 +842,12 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     return true;
   }
 
-  deleteFileAttach(item: any) {
-    this.attachFileNameArr.forEach((element, index) => {
-      if (element == item) this.attachFileNameArr.splice(index, 1);
-    });
-    this.datas.attachFileNameArr = this.attachFileNameArr;
+  deleteFileAttach(item: any, index_dlt: number) {
+    // this.attachFileNameArr.forEach((element, index) => {
+    //   if (element == item) this.attachFileNameArr.splice(index, 1);
+    // });
+    this.datas.attachFileNameArr.splice(index_dlt, 1);
+    // this.datas.attachFileNameArr = this.attachFileNameArr;
     this.attachFileArr.forEach((element, index) => {
       console.log(element.name);
       if (element.name == item) this.attachFileArr.splice(index, 1);

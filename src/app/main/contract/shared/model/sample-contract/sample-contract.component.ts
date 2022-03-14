@@ -101,14 +101,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
-    if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
+    if (this.datas.is_action_contract_created && (this.router.url.includes("edit")) && !this.datas.back_step_4) {
       // ham chuyen doi hinh thuc ky type => sign_unit
       // this.getAddSignUnit();
       // ham update du lieu hop dong sua
       this.getDataSignUpdateAction();
-      this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+      // if (!this.datas.contract_user_sign) {
+        this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+        
+      // }
       this.setDataSignContract();
     }
+
+    if (this.datas.back_step_4) {
+      this.datas.back_step_4 = false;
+    }
+
     if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
     } else {
@@ -211,8 +219,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataNotPosition: any[] = [];
     this.datas.is_determine_clone.forEach((element: any) => {
       element.recipients.forEach((item: any) => {
+        // let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient.email == item.email && p.recipient_id == item.id)[0];
         if (item.fields && item.fields.length && item.fields.length > 0) {
-
           item.fields.forEach((res: any) => {
             res['id_have_data'] = res.id;
             res['is_type_party'] = element.type;
@@ -229,6 +237,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (res.type == 4) {
               res['sign_unit'] = 'so_tai_lieu'
             }
+            res.name = res.recipient.name;
+            res.email = res.recipient.email;
             dataPosition.push(res);
           })
 
@@ -346,14 +356,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // console.log(dataDiffirent)
     // xoa nhung du lieu doi tuong bi thay doi
     if (dataDiffirent.length > 0) {
-      this.datas.contract_user_sign.forEach((res: any) => {
-        if (res.sign_config.length > 0) {
-          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some(({ email }) => (val.email as any) === (email as any)));
-          res.sign_config.forEach((items: any) => {
-            items.id = items.id + '1';
-          })
-        }
-      })
+      // this.datas.contract_user_sign.forEach((res: any) => {
+      //   if (res.sign_config.length > 0) {
+      //     res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some(({ email }) => (val.recipient ? val.recipient.email as any : val.email as any) === (email as any)));
+      //     res.sign_config.forEach((items: any) => {
+      //       items.id = items.id + '1';
+      //     })
+      //   }
+      // })
     }
   }
 
@@ -491,7 +501,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
         }
 
-
         let pages = event.relatedTarget.id.split("-");
         let page = Helper._attemptConvertFloat(pages[pages.length - 1]);
         // @ts-ignore
@@ -576,7 +585,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 if (!this.objDrag[this.signCurent['id']].count) {
                   // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                   if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-                    if (res.sign_unit == 'so_tai_lieu' && this.datas.code) {
+                    if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
                       element['width'] = '';
                       element['height'] = '';
                     } else {
@@ -902,7 +911,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (d['height']) {
       style.height = parseInt(d['height']) + "px";
     }
-    if (this.datas.code && d.sign_unit == 'so_tai_lieu') {
+    if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
       style.padding = '6px';
     }
     return style;
@@ -1399,10 +1408,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datas.contract_user_sign[i].sign_config[j];
-            if (!element.name && element.sign_unit != 'so_tai_lieu') {
-              count++;
+            if (!element.name) { // element.sign_unit != 'so_tai_lieu'
+              count++; 
               break
-            }
+            } 
             // else if (element.sign_unit == 'so_tai_lieu' && !this.datas.contract_no) {
             //   count++;
             //   break

@@ -20,8 +20,8 @@ export class SignContractComponent implements OnInit, AfterViewInit {
     if (sign.sign_unit == 'text') {
       return 'Text';
     } else {
-      if (this.datas.code)
-        return this.datas.code
+      if (this.datas.contract_no)
+        return this.datas.contract_no
       else return 'Số hợp đồng';
     }
   }

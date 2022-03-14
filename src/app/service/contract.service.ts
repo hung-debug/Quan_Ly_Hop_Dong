@@ -415,14 +415,14 @@ export class ContractService {
     return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();
   }
 
-  addDocument(datas: any) {
+  addDocument(datas: any, is_type?: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       name: datas.name,
-      type: 1,
+      type: is_type ? is_type : 1,
       path: datas.filePath,
       filename: datas.fileName,
       bucket: datas.fileBucket,
