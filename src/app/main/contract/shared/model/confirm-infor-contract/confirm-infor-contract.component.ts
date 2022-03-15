@@ -125,12 +125,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
-    this.datas['back_step_4'] = true;
-    let data = {
-      step: step,
-      isBackStep_4: true
-    }
-    this.stepChangeConfirmInforContract.emit(data);
+    // this.datas['back_step_4'] = true;
+    // let data = {
+    //   step: step,
+    //   isBackStep_4: true
+    // }
+    this.stepChangeConfirmInforContract.emit(step);
   }
 
   saveDraft() {

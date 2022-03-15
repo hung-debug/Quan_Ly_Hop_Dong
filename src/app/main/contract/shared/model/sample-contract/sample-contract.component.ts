@@ -101,7 +101,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
-    if (this.datas.is_action_contract_created && (this.router.url.includes("edit")) && !this.datas.back_step_4) {
+    if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit")) ) { //&& !this.datas.back_step_4
       // ham chuyen doi hinh thuc ky type => sign_unit
       // this.getAddSignUnit();
       // ham update du lieu hop dong sua
@@ -1311,6 +1311,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then((data: any) => {
           dataSample_contract.push(data);
         }, (error: HttpErrorResponse) => {
+          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
           countIsSignId++;
         })
         if (countIsSignId > 0) {
@@ -1321,6 +1322,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       // this.spinner.hide();
     }
 
+    let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
       let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'value'];
       dataSignNotId.forEach((item: any) => {
@@ -1346,11 +1348,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       })
       // Array.prototype.push.apply(this.data_sample_contract, dataSignNotId);
-      let dataSignId = false;
+      // let dataSignId = false;
       await this.contractService.getContractSample(dataSignNotId).toPromise().then((data) => {
-        dataSignId = true;
+        // dataSignId = true;
         this.spinner.hide();
       }, error => {
+        isErrorNotId = true;
         if (action == 'save_draft') {
           this.datas.save_draft.sample_contract = false;
           this.stepChangeSampleContract.emit('save_draft_sample_contract')
@@ -1359,7 +1362,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
         }
         this.spinner.hide();
-        console.log("false connect file");
+        this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
         return false;
       });
     }
@@ -1369,7 +1372,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       isSuccess += 1;
     }
 
-    if (dataSignNotId.length > 0 && !dataSignId) {
+    if (dataSignNotId.length > 0 && isErrorNotId) {
       isSuccess += 1;
     }
 

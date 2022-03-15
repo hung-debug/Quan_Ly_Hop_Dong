@@ -176,18 +176,18 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         // giới hạn file upload lên là 5mb
         if (file.size <= 5000000) {
           const file_name = file.name;
-          if (this.attachFileNameArr.filter((p: any) => p == file_name).length == 0) {
+          if (this.attachFileNameArr.filter((p: any) => p.filename == file_name).length == 0) {
             const extension = file.name.split('.').pop();
             //this.datas.file_name_attach = file_name;
             //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
             this.attachFileArr.push(file);
             this.datas.attachFileArr = this.attachFileArr;
             console.log(this.datas.attachFileArr);
-            this.attachFileNameArr.push(file.name);
+            this.attachFileNameArr.push({filename: file.name});
             if (!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length && this.datas.attachFileNameArr.length == 0) {
               this.datas.attachFileNameArr = [];
             }
-            this.datas.attachFileNameArr.push(file.name)
+            this.datas.attachFileNameArr.push({filename: file.name})
             // Array.prototype.push.apply(this.datas.attachFileNameArr, this.attachFileNameArr);
 
             if (this.datas.is_action_contract_created) {
@@ -266,7 +266,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
       // sua hop dong
       // datas.contractConnect
-      if (this.datas.contractConnect && this.datas.contractConnect.length && this.datas.contractConnect > 0) {
+      if (this.datas.contractConnect && this.datas.contractConnect.length && this.datas.contractConnect.length > 0) {
         this.datas.contractConnect.forEach((res: any) => {
           res['contract_id'] = this.datas.contract_id_action;
         })
@@ -875,14 +875,28 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     // this.attachFileNameArr.forEach((element, index) => {
     //   if (element == item) this.attachFileNameArr.splice(index, 1);
     // });
-    this.datas.attachFileNameArr.splice(index_dlt, 1);
+    if (item.id) {
+      this.spinner.show();
+      let data = this.datas.i_data_file_contract.filter((p: any) => p.id == item.id)[0];
+      if (data) data.status = 0;
+      this.contractService.updateFileAttach(item.id, data).subscribe((res: any) => {
+        this.datas.attachFileNameArr.splice(index_dlt, 1);
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout("Lỗi xoá file đính kèm!", "", 3000);
+        this.spinner.hide();
+      }, () => {
+        this.spinner.hide();
+      })
+    } else {
+      this.datas.attachFileNameArr.splice(index_dlt, 1);
+    }
     // this.datas.attachFileNameArr = this.attachFileNameArr;
     this.attachFileArr.forEach((element, index) => {
-      console.log(element.name);
+      // console.log(element.name);
       if (element.name == item) this.attachFileArr.splice(index, 1);
     });
     this.datas.attachFileArr = this.attachFileArr;
-    console.log(this.datas.attachFileArr);
+    // console.log(this.datas.attachFileArr);
   }
 
 }
