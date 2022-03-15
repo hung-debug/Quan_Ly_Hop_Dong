@@ -743,11 +743,11 @@ export class ContractService {
 
 
       contract_user_sign: [
-        {
-          recipient_id: Helper._ranDomNumberText(10),
-          sign_unit: 'so_tai_lieu',
-          sign_config: "[]",
-        },
+        // {
+        //   recipient_id: Helper._ranDomNumberText(10),
+        //   sign_unit: 'so_tai_lieu',
+        //   sign_config: "[]",
+        // },
         {
           recipient_id: Helper._ranDomNumberText(10),
           sign_unit: 'text',
@@ -770,11 +770,11 @@ export class ContractService {
 
   getDataFormatContractUserSign() {
     return [
-      {
-        id: Helper._ranDomNumberText(10),
-        sign_unit: 'so_tai_lieu',
-        sign_config: []
-      },
+      // {
+      //   id: Helper._ranDomNumberText(10),
+      //   sign_unit: 'so_tai_lieu',
+      //   sign_config: []
+      // },
       {
         id: Helper._ranDomNumberText(10),
         sign_unit: 'text',
