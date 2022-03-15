@@ -88,7 +88,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-  
+
     this.name = this.datas.name ? this.datas.name : null;
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;
     this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.contract_no;
