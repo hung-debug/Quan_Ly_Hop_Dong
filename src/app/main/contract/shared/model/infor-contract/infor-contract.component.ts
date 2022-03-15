@@ -88,7 +88,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-  
+
     this.name = this.datas.name ? this.datas.name : null;
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;
     this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.contract_no;
@@ -266,7 +266,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
       // sua hop dong
       // datas.contractConnect
-      if (this.datas.contractConnect && this.datas.contractConnect.length && this.datas.contractConnect > 0) {
+      if (this.datas.contractConnect && this.datas.contractConnect.length && this.datas.contractConnect.length > 0) {
         this.datas.contractConnect.forEach((res: any) => {
           res['contract_id'] = this.datas.contract_id_action;
         })
