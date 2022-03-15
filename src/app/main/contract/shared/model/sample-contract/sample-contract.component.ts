@@ -737,6 +737,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  setWidthText(d: any) {
+    return {
+      // 'width.px': (this.widthDrag / 2)
+      'width.px': (this.widthDrag)
+    }
+  }
+
   // view pdf qua canvas
   async getPage() {
     // @ts-ignore
