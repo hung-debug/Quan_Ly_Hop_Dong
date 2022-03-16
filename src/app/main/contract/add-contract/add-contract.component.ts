@@ -147,7 +147,8 @@ export class AddContractComponent implements OnInit {
         data.is_data_contract['contractFile'] = fileName.path;
       }
       if (fileNameAttach) {
-        data.is_data_contract['file_name_attach'] = fileNameAttach.map((p: any) => p.filename);
+        data.is_data_contract['file_name_attach'] = fileNameAttach.map((p: any) => 
+        ({filename :p.filename, id: p.id}));
         data.is_data_contract['attachFile'] = fileNameAttach.map((p: any) => p.path);
       }
       this.datas.contractConnect = data.is_data_contract.refs;
@@ -220,10 +221,13 @@ export class AddContractComponent implements OnInit {
   }
 
   getStep(e: any) {
-    if (e.isBackStep_4 && e.step) {
-      this.datas['back_step_4'] = e.isBackStep_4;
-      this.step = e.step;
-    } else
+    // if (e.isBackStep_4 && e.step) {
+    //   this.datas['back_step_4'] = e.isBackStep_4;
+    //   this.step = e.step;
+    // } else if (e.isBackStep_2 && e.step) {
+    //   this.datas['back_step_2'] = e.isBackStep_2;
+    //   this.step = e.step;
+    // } else
     this.step = e;
   }
 

@@ -436,6 +436,14 @@ export class ContractService {
     return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
   }
 
+  updateFileAttach(id: any, body: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.put<Contract>(this.documentUrl + `/${id}`, body, {'headers': headers});
+  }
+
   addDocumentDone(datas: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
