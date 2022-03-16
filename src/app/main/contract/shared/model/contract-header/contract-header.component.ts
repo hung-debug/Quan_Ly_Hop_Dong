@@ -3,6 +3,7 @@ import {AddContractComponent} from "../../../add-contract/add-contract.component
 import {variable} from "../../../../../config/variable";
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {Router} from "@angular/router";
+import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
   selector: 'app-contract-header',
@@ -26,12 +27,14 @@ export class ContractHeaderComponent implements OnInit {
 
   constructor(
     private modalService: NgbModal,
-    private router: Router
+    private router: Router,
+    private contractService: ContractService
   ) {
     // this.step = variable.stepSampleContract.step4
   }
 
   ngOnInit(): void {
+    
   }
 
   open(content:any) {
@@ -42,17 +45,21 @@ export class ContractHeaderComponent implements OnInit {
     });
   }
 
-  saveContract(modal: any) {
-    if (this.datas.stepLast == 'determine-contract') {
-      this.datas.save_draft.determine_signer = true;
-      this.datas['close_modal'] = modal;
-    } else if (this.datas.stepLast == 'sample-contract') {
-      this.datas.save_draft.sample_contract = true;
-      this.datas['close_modal'] = modal;
-    } else if (this.datas.stepLast == 'confirm-contract') {
-      this.datas.save_draft.confirm_contract = true;
-      this.datas['close_modal'] = modal;
-    }
+  // saveContract(modal: any) {
+  //   if (this.datas.stepLast == 'determine-contract') {
+  //     this.datas.save_draft.determine_signer = true;
+  //     this.datas['close_modal'] = modal;
+  //   } else if (this.datas.stepLast == 'sample-contract') {
+  //     this.datas.save_draft.sample_contract = true;
+  //     this.datas['close_modal'] = modal;
+  //   } else if (this.datas.stepLast == 'confirm-contract') {
+  //     this.datas.save_draft.confirm_contract = true;
+  //     this.datas['close_modal'] = modal;
+  //   }
+  // }
+
+  saveContract(modal: any): void {
+    this.contractService.updateMessage('This Data is Coming From Child to Sibling - via service');
   }
 
   closeCreateContract(modal: any) {

@@ -101,14 +101,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
-    if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit")) ) { //&& !this.datas.back_step_4
+    if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) { //&& !this.datas.back_step_4
       // ham chuyen doi hinh thuc ky type => sign_unit
       // this.getAddSignUnit();
       // ham update du lieu hop dong sua
       this.getDataSignUpdateAction();
       // if (!this.datas.contract_user_sign) {
-        this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
-        
+      this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+
       // }
       this.setDataSignContract();
     }
@@ -615,15 +615,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             })
           }
         });
-        // this.list_sign_name.forEach((element: any) => {
-        //   if (name_accept_signature == 'chu_ky_anh') {
-        //     element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
-        //   } else if (name_accept_signature == 'chu_ky_so') {
-        //     element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
-        //   } else if (name_accept_signature == 'text') {
-        //     element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4);
-        //   } else element.is_disable = element.role != 4;
-        // })
         this.getCheckSignature(name_accept_signature);
       }
     } else {
@@ -658,14 +649,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         else element.is_disable = false;
       } else {
         if (this.convertToSignConfig().some((p: any) => p.email == element.email && p.sign_unit == isSignType)) {
-          element.is_disable = true;
+          if (isSignType != 'text') {
+            element.is_disable = true;
+          }
         } else {
           if (isSignType == 'chu_ky_anh') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
           } else if (isSignType == 'chu_ky_so') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
           } else if (isSignType == 'text') {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4);
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
           } else element.is_disable = element.role != 4;
         }
       }
@@ -1210,84 +1203,92 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   async next(action: string) {
     if (!this.validData()) return;
     else {
-      if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
-        let isHaveFieldId: any[] = [];
-        let isNotFieldId: any[] = [];
-        // console.log(this.datas.contract_user_sign);
-        let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
-        isUserSign_clone.forEach((res: any) => {
-          res.sign_config.forEach((element: any) => {
-            if (element.id_have_data) {
-              isHaveFieldId.push(element)
-            } else isNotFieldId.push(element);
-          })
-        })
-        this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
-      } else {
-        this.data_sample_contract = [];
-        let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
-        let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
-        isContractUserSign_clone.forEach((element: any) => {
-          if (element.sign_config.length > 0) {
-            element.sign_config.forEach((item: any) => {
-              item['font'] = 'Arial';
-              item['font_size'] = 14;
-              item['contract_id'] = this.datas.contract_id;
-              item['document_id'] = this.datas.document_id;
-              if (item.text_attribute_name) {
-                item.name = item.text_attribute_name;
-              }
-              if (item.sign_unit == 'chu_ky_anh') {
-                item['type'] = 2;
-              } else if (item.sign_unit == 'chu_ky_so') {
-                item['type'] = 3;
-              } else if (item.sign_unit == 'so_tai_lieu') {
-                item['type'] = 4;
-              } else {
-                item['type'] = 1;
-              }
-
-              data_remove_arr_request.forEach((item_remove: any) => {
-                delete item[item_remove]
-              })
+      if (action == 'save_draft') {
+        if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
+          let isHaveFieldId: any[] = [];
+          let isNotFieldId: any[] = [];
+          // console.log(this.datas.contract_user_sign);
+          let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
+          isUserSign_clone.forEach((res: any) => {
+            res.sign_config.forEach((element: any) => {
+              if (element.id_have_data) {
+                isHaveFieldId.push(element)
+              } else isNotFieldId.push(element);
             })
-            Array.prototype.push.apply(this.data_sample_contract, element.sign_config);
-          }
-        })
+          })
+          this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
+        } else {
+          this.data_sample_contract = [];
+          let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
+          let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
+          isContractUserSign_clone.forEach((element: any) => {
+            if (element.sign_config.length > 0) {
+              element.sign_config.forEach((item: any) => {
+                item['font'] = 'Arial';
+                item['font_size'] = 14;
+                item['contract_id'] = this.datas.contract_id;
+                item['document_id'] = this.datas.document_id;
+                if (item.text_attribute_name) {
+                  item.name = item.text_attribute_name;
+                }
+                if (item.sign_unit == 'chu_ky_anh') {
+                  item['type'] = 2;
+                } else if (item.sign_unit == 'chu_ky_so') {
+                  item['type'] = 3;
+                } else if (item.sign_unit == 'so_tai_lieu') {
+                  item['type'] = 4;
+                } else {
+                  item['type'] = 1;
+                }
 
-        this.spinner.show();
-        this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
-          if (action == 'next_step') {
-            this.step = variable.stepSampleContract.step4;
-            this.datas.stepLast = this.step
-            this.nextOrPreviousStep(this.step);
-          } else if (action == 'save_draft') {
-            this.datas.save_draft.sample_contract = false;
-            this.stepChangeSampleContract.emit('save_draft_sample_contract')
-            if (this.datas['close_modal']) {
-              this.datas.close_modal.close('Save click');
+                data_remove_arr_request.forEach((item_remove: any) => {
+                  delete item[item_remove]
+                })
+              })
+              Array.prototype.push.apply(this.data_sample_contract, element.sign_config);
             }
-            // this.getRemoveCopyRight();
-            this.router.navigate(['/main/contract/create/draft']);
-            this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-          }
-        },
-          error => {
-            if (action == 'save_draft') {
+          })
+
+          this.spinner.show();
+          this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
+            // if (action == 'next_step') {
+            //   this.step = variable.stepSampleContract.step4;
+            //   this.datas.stepLast = this.step
+            //   this.nextOrPreviousStep(this.step);
+            // } else 
+            // if (action == 'save_draft') {
               this.datas.save_draft.sample_contract = false;
               this.stepChangeSampleContract.emit('save_draft_sample_contract')
               if (this.datas['close_modal']) {
                 this.datas.close_modal.close('Save click');
               }
+              // this.getRemoveCopyRight();
+              this.router.navigate(['/main/contract/create/draft']);
+              this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+            // }
+          },
+            (error: HttpErrorResponse) => {
+              // if (action == 'save_draft') {
+                this.datas.save_draft.sample_contract = false;
+                this.stepChangeSampleContract.emit('save_draft_sample_contract')
+                if (this.datas['close_modal']) {
+                  this.datas.close_modal.close('Save click');
+                }
+              // }
+              this.spinner.hide();
+              console.log("false connect file");
+              return false;
+            }, () => {
+              this.spinner.hide();
             }
-            this.spinner.hide();
-            console.log("false connect file");
-            return false;
-          }, () => {
-            this.spinner.hide();
-          }
-        );
+          );
+        }
+      } else if (action == 'next_step') {
+        this.step = variable.stepSampleContract.step4;
+        this.datas.stepLast = this.step
+        this.nextOrPreviousStep(this.step);
       }
+
 
       // this.spinner.show();
     }
@@ -1317,7 +1318,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (countIsSignId > 0) {
           this.spinner.hide();
           break;
-        } 
+        }
       }
       // this.spinner.hide();
     }
@@ -1354,13 +1355,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.spinner.hide();
       }, error => {
         isErrorNotId = true;
-        if (action == 'save_draft') {
+        // if (action == 'save_draft') {
           this.datas.save_draft.sample_contract = false;
           this.stepChangeSampleContract.emit('save_draft_sample_contract')
           if (this.datas['close_modal']) {
             this.datas.close_modal.close('Save click');
           }
-        }
+        // }
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
         return false;
@@ -1377,11 +1378,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     if (isSuccess == 0) {
-      if (action == 'next_step') {
-        this.step = variable.stepSampleContract.step4;
-        this.datas.stepLast = this.step
-        this.nextOrPreviousStep(this.step);
-      } else if (action == 'save_draft') {
+      // if (action == 'next_step') {
+      //   this.step = variable.stepSampleContract.step4;
+      //   this.datas.stepLast = this.step
+      //   this.nextOrPreviousStep(this.step);
+      // } else 
+      if (action == 'save_draft') {
         this.datas.save_draft.sample_contract = false;
         this.stepChangeSampleContract.emit('save_draft_sample_contract')
         if (this.datas['close_modal']) {
@@ -1419,9 +1421,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datas.contract_user_sign[i].sign_config[j];
             if (!element.name) { // element.sign_unit != 'so_tai_lieu'
-              count++; 
+              count++;
               break
-            } 
+            }
             // else if (element.sign_unit == 'so_tai_lieu' && !this.datas.contract_no) {
             //   count++;
             //   break

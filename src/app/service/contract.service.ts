@@ -5,7 +5,7 @@ import {environment} from '../../environments/environment';
 import {map, catchError, retry} from 'rxjs/operators';
 import {Helper} from "../core/Helper";
 import {DatePipe} from '@angular/common';
-import {forkJoin, BehaviorSubject} from "rxjs";
+import {forkJoin, BehaviorSubject, Subject} from "rxjs";
 import axios from 'axios';
 import {User} from "./user.service";
 
@@ -75,6 +75,22 @@ export class ContractService {
   organization_id:any;
   errorData: any = {};
   redirectUrl: string = '';
+
+  private message = new BehaviorSubject('First Message');
+  sharedMessage = this.message.asObservable();
+  /*
+   * @return {Observable<string>} : siblingMsg
+   */
+  // public getMessage(): Observable<string> {
+  //   return this.siblingMsg.asObservable();
+  // }
+  /*
+   * @param {string} message : siblingMsg
+   */
+  public updateMessage(message: string): void {
+    this.message.next(message);
+  }
+
 
   constructor(private http: HttpClient,
               public datepipe: DatePipe,) {

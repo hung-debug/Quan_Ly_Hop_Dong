@@ -1,9 +1,9 @@
 import { ContractService } from 'src/app/service/contract.service';
 import { UploadService } from './../../../../../service/upload.service';
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder } from "@angular/forms";
 import { variable } from "../../../../../config/variable";
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AddContractComponent } from "../../../add-contract/add-contract.component";
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -72,8 +72,10 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   uploadFileContractAgain: boolean = false;
   uploadFileAttachAgain: boolean = false;
   isFileAttachUploadNewEdit: any;
+  public subscription: Subscription;
 
   minDate: Date = moment().toDate();
+  public messageForSibling: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -88,7 +90,6 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-
     this.name = this.datas.name ? this.datas.name : null;
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;
     this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.contract_no;
@@ -110,7 +111,15 @@ export class InforContractComponent implements OnInit, AfterViewInit {
       // console.log(data.entities);
       this.contractConnectList = data.entities;
     });
+
+    // this.subscription = this.contractService.sharedMessage.subscribe(msg => this.messageForSibling = msg);
+    // console.log(this.messageForSibling)
+    
   }
+
+  // ngOnDestroy(): void {
+  //   this.subscription.unsubscribe(); // onDestroy cancels the subscribe request
+  // }
 
   ngAfterViewInit() {
     setTimeout(() => {
