@@ -68,10 +68,8 @@ export class UnitService {
       phone: datas.phone,
       fax: datas.fax,
       status: datas.status,
-      parent_id: datas.parent_id,
+      parent_id: datas.parent_id
     });
-    console.log(headers);
-    console.log(body);
     return this.http.post<Unit>(this.addUnitUrl, body, {'headers': headers});
   }
 
@@ -89,7 +87,7 @@ export class UnitService {
       fax: datas.fax,
       status: datas.status,
       parent_id: datas.parent_id,
-      //path: null
+      path: datas.path
     });
     console.log(headers);
     console.log(body);

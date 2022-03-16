@@ -87,7 +87,7 @@ export class ContractSignatureService {
     if(page != ""){
       page = page - 1;
     }
-    let shareListContractUrl = this.shareListContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size;
+    let shareListContractUrl = this.shareListContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&status=' + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size;
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(shareListContractUrl, {headers}).pipe();
   }

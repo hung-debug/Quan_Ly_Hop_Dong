@@ -5,16 +5,16 @@
         <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN MẪU HỢP ĐỒNG</div>
         <div style="line-height: 25px">
           <div>
-            <span class="title-contract">Loại hợp đồng:</span>
-            <span>{{datas?.is_data_contract?.type_name}}</span>
-          </div>
-          <div>
             <span class="title-contract">Tên mẫu hợp đồng:</span>
             <span>{{datas?.is_data_contract?.name}}</span>
           </div>
           <div>
             <span class="title-contract">Mã mẫu hợp đồng:</span>
             <span>{{datas?.is_data_contract?.code}}</span>
+          </div>
+          <div>
+            <span class="title-contract">Loại hợp đồng:</span>
+            <span>{{datas?.is_data_contract?.type_name}}</span>
           </div>
           <div>
             <span class="title-contract">File đính kèm:</span>
@@ -24,10 +24,13 @@
             </span>
           </div>
           <div>
+            <span class="title-contract">Thời gian tạo:</span>
+            <span>{{datas?.is_data_contract?.created_at | date: 'dd/MM/yyyy HH:MM'}}</span>
+          </div>
+          <div>
             <span class="title-contract">Thời gian hiệu lực:</span>
             <span>{{datas?.is_data_contract?.start_time | date: 'dd/MM/yyyy'}} - {{datas?.is_data_contract?.end_time | date: 'dd/MM/yyyy'}}</span>
           </div>
-  
         </div>
       </div>
      <hr>
@@ -36,7 +39,7 @@
         <div class="sample-contract__information&#45;&#45;user-sign" style="line-height: 25px">
         </div>
         <div>
-          <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Luồng xử lý hợp đồng</u>
+          <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Thông tin ký</u>
         </div>
       </div>
     </div>

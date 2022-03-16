@@ -10,9 +10,9 @@ import { DatePipe } from '@angular/common';
 export class ContractTemplateService {
 
   token: any;
-  shareContractTemplateUrl:any = `${environment.apiUrl}/api/v1/`;
+  shareContractTemplateUrl:any = `${environment.apiUrl}/api/v1/shares/template`;
   listContractTemplateUrl:any = `${environment.apiUrl}/api/v1/contracts/template/my-contract`;
-  listContractShareTemplateUrl:any = `${environment.apiUrl}/api/v1/contracts/template/my-contract`;
+  listContractShareTemplateUrl:any = `${environment.apiUrl}/api/v1/shares/template`;
   addInforContractTemplateUrl:any = `${environment.apiUrl}/api/v1/contracts/template`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents/template`;
   addDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/template/contract/`;
@@ -49,7 +49,7 @@ export class ContractTemplateService {
     }else{
       listContractTemplateUrl = this.listContractShareTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&page=" + page + "&size=" + size;
     }
-    
+    console.log(listContractTemplateUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(listContractTemplateUrl, {headers}).pipe();
   }
@@ -161,6 +161,8 @@ export class ContractTemplateService {
       email: email,
       contract_id: id
     });
+    console.log(body);
+    console.log(this.shareContractTemplateUrl);
     return this.http.post<any>(this.shareContractTemplateUrl, body, {'headers': headers}).pipe();
   }
 

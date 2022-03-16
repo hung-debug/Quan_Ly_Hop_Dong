@@ -73,7 +73,8 @@ export class AddUnitComponent implements OnInit {
             phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
             fax: this.fbd.control(data.fax, Validators.pattern(parttern_input.input_form)),
             status: this.fbd.control(data.status),
-            parent_id: this.fbd.control(data.parent_id, [Validators.required]),
+            parent_id: this.fbd.control(data.parent_id),
+            path: this.fbd.control(data.path)
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
@@ -138,7 +139,6 @@ export class AddUnitComponent implements OnInit {
           //lay id vai tro admin theo id to chuc
           this.roleService.getRoleByOrgId(data.id).subscribe(
             dataRoleByOrgId => {
-              console.log(dataRoleByOrgId);
               let roleAdmin = dataRoleByOrgId.entities.filter((p:any) => p.code == 'ADMIN');
               if(roleAdmin.length > 0){
 
@@ -170,35 +170,39 @@ export class AddUnitComponent implements OnInit {
                     }
                   )
                 
-                //neu da co user => sua user co vai tro la admin
+                //neu da co user
                 }else{
-                  //tao nguoi dung co vai tro admin
-                  const dataUpdateUser = {
-                    id: dataByEmail.id,
-                    name: 'Admin',
-                    email: data.email,
-                    phone: data.phone,
-                    organizationId: data.id,
-                    role: roleAdmin[0].id,
-                    status: dataByEmail.status,
-                    phoneKpi: dataByEmail.phone_sign,
-                    networkKpi: dataByEmail.phone_tel,
-                    nameHsm: dataByEmail.hsm_name,
-                    sign_image: dataByEmail.sign_image
-                  }
-
-                  //update nguoi dung co vai tro admin theo id
-                  this.userService.updateUser(dataUpdateUser).subscribe(
-                    dataUser => {
-                      //this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin admin tổ chức thành công!', "", 3000);
-                      
-                      //update thong tin to chuc
-                      this.update(data);
-                    }, error => {
-                      this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin admin tổ chức thất bại', "", 3000);
+                  //kiem tra xem user do co thuoc to chuc nay hay khong
+                  if(dataByEmail.organization_id == data.id){
+                    //tao nguoi dung co vai tro admin
+                    const dataUpdateUser = {
+                      id: dataByEmail.id,
+                      name: 'Admin',
+                      email: data.email,
+                      phone: data.phone,
+                      organizationId: data.id,
+                      role: roleAdmin[0].id,
+                      status: dataByEmail.status,
+                      phoneKpi: dataByEmail.phone_sign,
+                      networkKpi: dataByEmail.phone_tel,
+                      nameHsm: dataByEmail.hsm_name,
+                      sign_image: dataByEmail.sign_image
                     }
-                  )
-                  
+
+                    //update nguoi dung co vai tro admin theo id
+                    this.userService.updateUser(dataUpdateUser).subscribe(
+                      dataUser => {
+                        //this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin admin tổ chức thành công!', "", 3000);
+                        
+                        //update thong tin to chuc
+                        this.update(data);
+                      }, error => {
+                        this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin admin tổ chức thất bại', "", 3000);
+                      }
+                    )
+                  }else{
+                    this.toastService.showErrorHTMLWithTimeout('Người dùng đăng ký admin không thuộc tổ chức', "", 3000);
+                  }
                 }
               }
             }, error => {
@@ -258,6 +262,7 @@ export class AddUnitComponent implements OnInit {
       fax: this.addForm.value.fax,
       status: this.addForm.value.status,
       parent_id: this.addForm.value.parent_id,
+      path: this.addForm.value.path
     }
     console.log(data);
 
@@ -346,7 +351,8 @@ export class AddUnitComponent implements OnInit {
                                           phone: data.phone,
                                           organizationId: dataUnit.id,
                                           role: dataRole.id,
-                                          status: 1
+                                          status: 1,
+                                          sign_image: []
                                         }
                                         this.userService.addUser(dataUserIn).subscribe(
                                           dataUser => {
