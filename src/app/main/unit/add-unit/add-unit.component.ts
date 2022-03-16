@@ -351,7 +351,8 @@ export class AddUnitComponent implements OnInit {
                                           phone: data.phone,
                                           organizationId: dataUnit.id,
                                           role: dataRole.id,
-                                          status: 1
+                                          status: 1,
+                                          sign_image: []
                                         }
                                         this.userService.addUser(dataUserIn).subscribe(
                                           dataUser => {
