@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <p-selectButton [options]="stateOptions" [(ngModel)]="isShare" optionLabel="label" optionValue="value"></p-selectButton>
+  <p-selectButton [options]="stateOptions" [(ngModel)]="isShare" optionLabel="label" optionValue="value" (click)="searchContract()"></p-selectButton>
 
   <div class="row" style="padding-top: 10px;">
     <div class="col-md-3">
@@ -65,17 +65,17 @@
             <img *ngIf="item.status == 32" src="../../assets/img/icon_open_release.svg" class="img_icon" ngbTooltip="Mở phát hành" (click)="releaseContractTemplate(item.id)"/>
           </div>
 
-          <div class="div_icon">
+          <div class="div_icon" *ngIf="item.status == 10">
             <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="Tạo hợp đồng đơn lẻ"/>
           </div>
-          <div class="div_icon">
+          <div class="div_icon" *ngIf="item.status == 10">
             <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="Tạo hợp đồng theo lô"/>
           </div>
-          <div class="div_icon" *ngIf="isShare=='off'">
+          <div class="div_icon" *ngIf="isShare=='off' && item.status == 10">
             <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" (click)="shareContractTemplate(item.id)"/>
           </div>
           <div class="div_icon" *ngIf="isShare=='off'">
-            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="Xóa hợp đồng" (click)="deleteContractTemplate(item.id);" />
+            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="Xóa mẫu hợp đồng" (click)="deleteContractTemplate(item.id);" />
           </div>
         </div>
       </div>
