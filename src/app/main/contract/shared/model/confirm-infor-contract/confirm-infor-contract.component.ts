@@ -16,7 +16,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   @Input() datas: any;
   @Input() step: any;
   @Output() stepChangeConfirmInforContract = new EventEmitter<any>();
-  @Input() saveDraftStep: any;
+  @Input() save_draft_infor: any;
 
   constructor(private formBuilder: FormBuilder,
     public datepipe: DatePipe,
@@ -111,8 +111,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.saveDraftStep) {
-      this.saveDraft()
+    if (this.save_draft_infor && this.save_draft_infor.step == 'confirm-contract') {
+      this.SaveContract('saveDraft_contract');
     }
   }
 
@@ -213,12 +213,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
       this.spinner.show();
       this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
-        this.datas.save_draft.sample_contract = false;
-        // this.stepChangeSampleContract.emit('save_draft_sample_contract')
-        // if (this.datas['close_modal']) {
-        //   this.datas.close_modal.close('Save click');
-        // }
-        // this.getRemoveCopyRight();
         if (action == 'finish_contract') {
           this.callAPIFinish();
         } else {
@@ -227,19 +221,15 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         }
       },
         (error) => {
-          // if (action == 'save_draft') {
-          this.datas.save_draft.sample_contract = false;
-          // this.stepChangeSampleContract.emit('save_draft_sample_contract')
-          // if (this.datas['close_modal']) {
-          //   this.datas.close_modal.close('Save click');
-          // }
-          // }
           this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý.", "", 3000);
           this.spinner.hide();
         }, () => {
           this.spinner.hide();
         }
       );
+      if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        this.save_draft_infor.close_modal.close();
+      }
     }
   }
 
@@ -299,17 +289,9 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       })
       // Array.prototype.push.apply(this.data_sample_contract, dataSignNotId);
       await this.contractService.getContractSample(dataSignNotId).toPromise().then((data) => {
-        // dataSignId = true;
         this.spinner.hide();
       }, error => {
         isErrorNotId = true;
-        // if (action == 'save_draft') {
-        // this.datas.save_draft.sample_contract = false;
-        // this.stepChangeSampleContract.emit('save_draft_sample_contract')
-        // if (this.datas['close_modal']) {
-        //   this.datas.close_modal.close('Save click');
-        // }
-        // }
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
         return false;
@@ -326,22 +308,18 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     }
 
     if (isSuccess == 0) {
-      // if (action == 'next_step') {
-      //   this.step = variable.stepSampleContract.step4;
-      //   this.datas.stepLast = this.step
-      //   this.nextOrPreviousStep(this.step);
-      // } else 
-      if (action == 'saveDraft_contract') {
-        // this.datas.save_draft.sample_contract = false;
-        // this.stepChangeSampleContract.emit('save_draft_sample_contract')
-        // if (this.datas['close_modal']) {
-        //   this.datas.close_modal.close('Save click');
-        // }
-        // this.getRemoveCopyRight();
+      if (action != 'saveDraft_contract') {
+        this.callAPIFinish();
+      } else {
+        if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+          this.save_draft_infor.close_modal.close();
+        }
         this.router.navigate(['/main/contract/create/draft']);
         this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-      } else {
-        this.callAPIFinish();
+      }
+    } else {
+      if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        this.save_draft_infor.close_modal.close();
       }
     }
   }

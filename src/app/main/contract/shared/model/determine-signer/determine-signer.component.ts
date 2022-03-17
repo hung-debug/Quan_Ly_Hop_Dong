@@ -27,7 +27,7 @@ export class DetermineSignerComponent implements OnInit {
   @Input() step: any;
   @Input() saveDraftStep: any;
   @Output() stepChangeDetermineSigner = new EventEmitter<string>();
-  @Output() saveDraftDetermineSigner = new EventEmitter<string>();
+  @Input() save_draft_infor: any;
   // @Output('dataStepContract') dataStepContract = new EventEmitter<Array<any>>();
   // @Output('saveDraft') saveDraft = new EventEmitter<string>();
   @ViewChild("abcd") fieldAbcd: any;
@@ -112,10 +112,11 @@ export class DetermineSignerComponent implements OnInit {
     if (this.datas.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     // console.log(changes);
-    if (this.saveDraftStep) {
-      this.getApiDetermine();
+    // console.log(this.save_draft_infor);
+    if (this.save_draft_infor && this.save_draft_infor.step == 'determine-contract') {
+      this.next('save-draft');
     }
   }
 
@@ -135,7 +136,12 @@ export class DetermineSignerComponent implements OnInit {
   // next step event
   next(action: string) {
     this.submitted = true;
-    if (!this.validData()) return;
+    if (!this.validData()) {
+      if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        this.save_draft_infor.close_modal.close();
+      }
+      return;
+    } 
     else {
       let is_save = false;
       if (action == 'save-step') {
@@ -174,19 +180,23 @@ export class DetermineSignerComponent implements OnInit {
       }
       if (isBody.length == this.datas.is_determine_clone.length) {
         this.getDataApiDetermine(isBody, is_save)
-      } else
-        this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
+      } else {
+        if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+          this.save_draft_infor.close_modal.close();
+          this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
+        }
+      }
+        
       this.spinner.hide()
     } else {
-
-
       this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
+        if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+          this.save_draft_infor.close_modal.close();
+        }
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-        this.datas.save_draft.determine_signer = false;
-        this.datas.close_modal.close('Save click');
       }, () => {
         this.spinner.hide();
       }
@@ -197,11 +207,10 @@ export class DetermineSignerComponent implements OnInit {
   getDataApiDetermine(res: any, is_save?: boolean) {
     // this.datas.id = data?.id;
     if (!is_save) {
-      this.datas.save_draft.determine_signer = false;
-      this.saveDraftDetermineSigner.emit('save_draft_determine_contract');
-      if (this.datas['close_modal']) {
-        this.datas.close_modal.close('Save click');
+      if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        this.save_draft_infor.close_modal.close();
       }
+      this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000)
       void this.router.navigate(['/main/contract/create/draft']);
     } else if (!this.saveDraftStep || is_save) {
       this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;

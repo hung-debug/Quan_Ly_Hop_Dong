@@ -12,11 +12,11 @@ import { ContractService } from 'src/app/service/contract.service';
 })
 export class ContractHeaderComponent implements OnInit {
   @Input() AddComponent: AddContractComponent | unknown;
-  @Output() dataStepContract = new EventEmitter<string>();
   @Output('stepChange') stepChange = new EventEmitter<Array<any>>();
   @Input() datas: any;
   @Input() step: any;
   @Input() saveDraft: any;
+  @Output() messageEvent = new EventEmitter<any>();
   stepHeader: any = {
     step_1: false,
     step_2: false,
@@ -59,7 +59,12 @@ export class ContractHeaderComponent implements OnInit {
   // }
 
   saveContract(modal: any): void {
-    this.contractService.updateMessage('This Data is Coming From Child to Sibling - via service');
+    let data = {
+      close_modal: modal,
+      step: this.step,
+      close_header: true
+    }
+    this.messageEvent.emit(data);
   }
 
   closeCreateContract(modal: any) {
