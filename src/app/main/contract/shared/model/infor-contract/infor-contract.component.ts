@@ -130,9 +130,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-    console.log(this.save_draft_infor);
-    if (this.save_draft_infor && this.save_draft_infor.step == 'infor-contract') {
+    if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.step == 'infor-contract') {
       this.saveDraft();
     }
   }
@@ -370,6 +368,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
             } else {
               if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+                this.save_draft_infor.close_header = false;
                 this.save_draft_infor.close_modal.close();
               }
               this.router.navigate(['/main/contract/create/draft']);
@@ -395,7 +394,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.get.information.organization.error", "", 3000);
         })
-      }
+      } 
+      
+      // else {
+      //   this.save_draft_infor.
+      // }
 
     } else {
       this.contractService.addContractStep1(this.datas).subscribe((data) => {
@@ -637,6 +640,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   async saveDraft() {
     if (!this.validData()) {
       if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
       return;
@@ -754,6 +758,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                 }
                 //next step
                 if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+                  this.save_draft_infor.close_header = false;
                   this.save_draft_infor.close_modal.close();
                 }
                 this.router.navigate(['/main/contract/create/draft']);
@@ -763,6 +768,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               } else {
                 //next step
                 if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+                  this.save_draft_infor.close_header = false;
                   this.save_draft_infor.close_modal.close();
                 }
                 this.router.navigate(['/main/contract/create/draft']);
@@ -810,6 +816,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     // case api error => close popup save draft
     if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+      this.save_draft_infor.close_header = false;
       this.save_draft_infor.close_modal.close();
     }
   }

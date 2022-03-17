@@ -113,9 +113,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log(changes);
-    // console.log(this.save_draft_infor);
-    if (this.save_draft_infor && this.save_draft_infor.step == 'determine-contract') {
+    if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.step == 'determine-contract') {
       this.next('save-draft');
     }
   }
@@ -138,6 +136,7 @@ export class DetermineSignerComponent implements OnInit {
     this.submitted = true;
     if (!this.validData()) {
       if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
       return;
@@ -182,9 +181,10 @@ export class DetermineSignerComponent implements OnInit {
         this.getDataApiDetermine(isBody, is_save)
       } else {
         if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+          this.save_draft_infor.close_header = false;
           this.save_draft_infor.close_modal.close();
-          this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
         }
+        this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
       }
         
       this.spinner.hide()
@@ -193,6 +193,7 @@ export class DetermineSignerComponent implements OnInit {
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
         if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+          this.save_draft_infor.close_header = false;
           this.save_draft_infor.close_modal.close();
         }
         this.spinner.hide();
@@ -208,6 +209,7 @@ export class DetermineSignerComponent implements OnInit {
     // this.datas.id = data?.id;
     if (!is_save) {
       if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
       this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000)

@@ -368,7 +368,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.save_draft_infor && this.save_draft_infor.step == 'sample-contract') {
+    if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.step == 'sample-contract') {
       this.next('save_draft');
     }
   }
@@ -1199,6 +1199,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   async next(action: string) {
     if (!this.validData()) {
       if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
       return;
@@ -1263,6 +1264,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             }
           );
           if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+            this.save_draft_infor.close_header = false;
             this.save_draft_infor.close_modal.close();
           }
         }
@@ -1368,6 +1370,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     } else {
       if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
     }

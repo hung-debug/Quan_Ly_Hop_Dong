@@ -111,7 +111,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.save_draft_infor && this.save_draft_infor.step == 'confirm-contract') {
+    if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.step == 'confirm-contract') {
       this.SaveContract('saveDraft_contract');
     }
   }
@@ -216,20 +216,26 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         if (action == 'finish_contract') {
           this.callAPIFinish();
         } else {
+          if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+            this.save_draft_infor.close_header = false;
+            this.save_draft_infor.close_modal.close();
+          }
           this.router.navigate(['/main/contract/create/draft']);
           this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
         }
       },
         (error) => {
+          if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+            this.save_draft_infor.close_header = false;
+            this.save_draft_infor.close_modal.close();
+          }
           this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý.", "", 3000);
           this.spinner.hide();
         }, () => {
           this.spinner.hide();
         }
       );
-      if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
-        this.save_draft_infor.close_modal.close();
-      }
+
     }
   }
 
@@ -312,6 +318,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         this.callAPIFinish();
       } else {
         if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+          this.save_draft_infor.close_header = false;
           this.save_draft_infor.close_modal.close();
         }
         this.router.navigate(['/main/contract/create/draft']);
@@ -319,6 +326,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       }
     } else {
       if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
     }
