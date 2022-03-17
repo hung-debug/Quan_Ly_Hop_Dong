@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class DeleteContractDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<DeleteContractDialogComponent>,
     public router: Router,
     public dialog: MatDialog,
+    private contractService : ContractService
     ) {
     }
 
@@ -23,8 +25,29 @@ export class DeleteContractDialogComponent implements OnInit {
   }
 
   onSubmit(){
-    this.dialogRef.close();
-    this.toastService.showSuccessHTMLWithTimeout("Xóa hợp đồng thành công!", "", 3000);
+    this.contractService.deleteContract(this.data.id).subscribe((data) => {
+
+      if(data.success){
+        this.toastService.showSuccessHTMLWithTimeout("Xóa hợp đồng thành công!", "", 3000);
+        this.dialogRef.close();
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/contract/create/draft']);
+        });  
+      }else{
+        if(data.message == 'E02'){
+          this.toastService.showErrorHTMLWithTimeout("Hợp đồng không phải bản nháp!", "", 3000);
+        }else{
+          this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại!", "", 3000);
+        }
+        
+        this.dialogRef.close();
+      }
+    },
+    error => {
+      this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại", "", 3000);
+      return false;
+    }
+    );
   }
 
 }

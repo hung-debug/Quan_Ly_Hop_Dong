@@ -316,15 +316,16 @@ export class InforContractComponent implements OnInit, AfterViewInit {
 
       // if (this.datas.code != null && this.datas.code != '') {
       //   //check ma mau hop dong da ton tai hay chua
-      //   this.contractTemplateService.checkCodeUnique(this.datas.code).subscribe(
+      //   this.contractTemplateService.checkCodeUnique(this.datas.code, this.datas.start_time, this.datas.end_time).subscribe(
       //     dataCode => {
       //       if (dataCode.success) {
-      //         if (this.datas.is_action_contract_created && this.router.url.includes("edit"))
-      //           this.callAPI();
-      //         else
-      //           this.callAPI();
+      //         this.callAPI();
       //       } else {
-      //         this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại', "", 3000);
+      //         if(dataCode.message == ''){
+      //           this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại với người dùng', "", 3000);
+      //         }else{
+      //           this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra mã mẫu hợp đồng', "", 3000);
+      //         }
       //         this.spinner.hide();
       //       }
       //     }, error => {
@@ -332,14 +333,8 @@ export class InforContractComponent implements OnInit, AfterViewInit {
       //       this.spinner.hide();
       //     }
       //   )
-      // } else {
-      //   if (this.datas.is_action_contract_created && this.router.url.includes("edit"))
-      //     this.callAPI();
-      //   else
-      //     this.callAPI();
-      // }
-      await this.callAPI();
-      
+      // }     
+      this.callAPI(); 
     }
   }
 

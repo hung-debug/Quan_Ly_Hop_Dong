@@ -1220,7 +1220,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   validData() {
-    // console.log(this.datas);
+    console.log(this.datas);
     let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
     if (!data_not_drag) {
       this.spinner.hide();
@@ -1229,6 +1229,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     } else {
       let count = 0;
       let count_text = 0;
+      let count_number = 0;
       let arrSign_organization: { name: any; signature_party: any; }[] = [];
       let arrSign_partner: { name: any; signature_party: any; }[] = [];
 
@@ -1236,12 +1237,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datas.contract_user_sign[i].sign_config[j];
-            if (!element.name && element.sign_unit != 'so_tai_lieu') {
+
+            //neu so tai lieu va text thi khong can chon nguoi xu ly
+            if (!element.name && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') {
               count++;
               break
-            } else if (element.sign_unit == 'so_tai_lieu' && !this.datas.code) {
-              count++;
-              break
+            //dem so luong so hop dong
+            } else if (element.sign_unit == 'so_tai_lieu') {
+              count_number++;
+              if(count_number > 1){
+                break
+              }
             } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
               count_text++;
               break
@@ -1262,6 +1268,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 3000);
+        return false;
+      } else if (count_number > 1) {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("Chỉ được kéo một ô số hợp đồng!", "", 3000);
         return false;
       } else if (count_text > 0) {
         this.spinner.hide();

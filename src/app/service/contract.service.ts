@@ -69,6 +69,7 @@ export class ContractService {
   addGetFileZipContract:any = `${environment.apiUrl}/api/v1/documents/compress/`;
   checkCodeUniqueUrl:any = `${environment.apiUrl}/api/v1/contracts/check-code-unique`;
   getCopyContract: any = `${environment.apiUrl}/api/v1/contracts/clone/`;
+  deleteContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
 
   token:any;
   customer_id:any;
@@ -721,6 +722,14 @@ export class ContractService {
         code: code
       });
     return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
+  }
+
+  deleteContract(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.delete<any>(this.deleteContractUrl + id, {'headers': headers});
   }
 
   objDefaultSampleContract() {

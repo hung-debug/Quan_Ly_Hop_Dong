@@ -10,6 +10,8 @@ import { DatePipe } from '@angular/common';
 export class ContractTemplateService {
 
   token: any;
+  organization_id:any;
+
   shareContractTemplateUrl:any = `${environment.apiUrl}/api/v1/shares/template`;
   listContractTemplateUrl:any = `${environment.apiUrl}/api/v1/contracts/template/my-contract`;
   listContractShareTemplateUrl:any = `${environment.apiUrl}/api/v1/shares/template`;
@@ -22,12 +24,14 @@ export class ContractTemplateService {
   getFileContract:any = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
   getObjectSignature:any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
   checkCodeUniqueUrl:any = `${environment.apiUrl}/api/v1/contracts/template/check-code-unique`;
+  deleteContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
 
   constructor(private http: HttpClient,
               public datepipe: DatePipe,) { }
 
   getCurrentUser(){
     this.token = JSON.parse(localStorage.getItem('currentUser')||'').access_token;
+    this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
   }
 
   // public getContractTemplateList(isShare:any, filter_name:any, filter_type: any, page:any, size:any): Observable<any> {
@@ -166,24 +170,24 @@ export class ContractTemplateService {
     return this.http.post<any>(this.shareContractTemplateUrl, body, {'headers': headers}).pipe();
   }
 
-  deleteContract(id: any){
+  deleteContract(id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = JSON.stringify({
-      contract_id: id
-    });
-    return this.http.post<any>(this.shareContractTemplateUrl, body, {'headers': headers}).pipe();
+    return this.http.delete<any>(this.deleteContractUrl + id, {'headers': headers});
   }
 
-  checkCodeUnique(code:any){
+  checkCodeUnique(code:any, start_time:any, end_time:any){
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-        code: code
+        code: code,
+        start_time: this.datepipe.transform(start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+        end_time: this.datepipe.transform(start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+        organization_id: this.organization_id
       });
     return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
   }
