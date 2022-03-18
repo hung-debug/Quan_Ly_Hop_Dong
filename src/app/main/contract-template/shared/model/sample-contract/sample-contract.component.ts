@@ -145,21 +145,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
 
       // lay du lieu vi tri va toa do ky cua buoc 3 da thao tac
+      // doi voi o so hop dong va text thi khong can phai check co nguoi xu ly hay khong
       let dataContractUserSign: any[] = [];
+      console.log(this.datas.contract_user_sign);
       this.datas.contract_user_sign.forEach((res: any, index: number) => {
-        if (res.sign_config.length !== 0) {
+        if (res.sign_config.length !== 0 && res.sign_unit != 'so_tai_lieu' && res.sign_unit != 'text') {
           res.sign_config.forEach((element: any) => {
             dataContractUserSign.push(element)
           })
         }
       })
+      console.log(dataContractUserSign);
 
       // loc du lieu khong trung nhau
       // bo sung them email - && (val.email == data.email)
       dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) => (val.recipient_id as any) == (data.id as any) &&
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) ||
           (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-        (val.name == data.name)
+        (val.recipient_id == data.id)
       ));
 
 
@@ -170,7 +173,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
           (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1)) ||
           (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4))) ||
-          val.name == data.name));
+          val.recipient_id == data.id));
       }
 
       // console.log(dataDiffirent)
@@ -187,6 +190,23 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       }
 
+      //lay danh sach username co ten thay doi
+      let dataChangeName: any[] = [];
+      dataChangeName = dataContractUserSign.filter(val => dataDetermine.some((data: any) => ((val.recipient_id as any) == (data.id as any) && (val.name as any) != (data.name as any))));
+      console.log("change");
+      console.log(dataChangeName);
+      if(dataChangeName.length > 0){
+        this.datas.contract_user_sign.forEach((res: any) => {
+          res.sign_config.forEach((element: any) => {
+
+            //tim ban ghi thay doi
+            let change = dataDetermine.filter((data: any) => (element.recipient_id as any) == (data.id as any));
+            change.forEach((item: any, index: number) => {
+              element.name = item.name;
+            })
+          })
+        })
+      }
       // console.log(this.datas.contract_user_sign);
       // this.isEnableSelect = false;
     }

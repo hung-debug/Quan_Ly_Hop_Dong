@@ -186,9 +186,10 @@ export class ContractTemplateService {
     const body = JSON.stringify({
         code: code,
         start_time: this.datepipe.transform(start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-        end_time: this.datepipe.transform(start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+        end_time: this.datepipe.transform(end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
         organization_id: this.organization_id
       });
+    console.log(body);
     return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
   }
 

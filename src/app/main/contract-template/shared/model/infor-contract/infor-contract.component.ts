@@ -11,6 +11,7 @@ import { AddContractTemplateComponent } from '../../../add-contract-template/add
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
+import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-infor-contract',
@@ -73,6 +74,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private router: Router,
+    private userService: UserService,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -314,27 +316,27 @@ export class InforContractComponent implements OnInit, AfterViewInit {
       }
 
 
-      // if (this.datas.code != null && this.datas.code != '') {
-      //   //check ma mau hop dong da ton tai hay chua
-      //   this.contractTemplateService.checkCodeUnique(this.datas.code, this.datas.start_time, this.datas.end_time).subscribe(
-      //     dataCode => {
-      //       if (dataCode.success) {
-      //         this.callAPI();
-      //       } else {
-      //         if(dataCode.message == ''){
-      //           this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại với người dùng', "", 3000);
-      //         }else{
-      //           this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra mã mẫu hợp đồng', "", 3000);
-      //         }
-      //         this.spinner.hide();
-      //       }
-      //     }, error => {
-      //       this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra mã mẫu hợp đồng', "", 3000);
-      //       this.spinner.hide();
-      //     }
-      //   )
-      // }     
-      this.callAPI(); 
+      if (this.datas.code != null && this.datas.code != '') {
+        //check ma mau hop dong da ton tai hay chua
+        this.contractTemplateService.checkCodeUnique(this.datas.code, this.datas.start_time, this.datas.end_time).subscribe(
+          dataCode => {
+            if (dataCode.success) {
+              this.callAPI();
+            } else {
+              if(dataCode.message == this.userService.getAuthCurrentUser().email){
+                this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại với mẫu hợp đồng đã tạo trước đó', "", 3000);
+              }else{
+                this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại với người dùng ' + dataCode.message, "", 3000);
+              }
+              this.spinner.hide();
+            }
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra mã mẫu hợp đồng', "", 3000);
+            this.spinner.hide();
+          }
+        )
+      }     
+      //this.callAPI(); 
     }
   }
 

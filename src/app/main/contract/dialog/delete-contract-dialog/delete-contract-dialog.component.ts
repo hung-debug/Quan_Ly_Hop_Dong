@@ -45,7 +45,7 @@ export class DeleteContractDialogComponent implements OnInit {
     },
     error => {
       this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại", "", 3000);
-      return false;
+      this.dialogRef.close();
     }
     );
   }

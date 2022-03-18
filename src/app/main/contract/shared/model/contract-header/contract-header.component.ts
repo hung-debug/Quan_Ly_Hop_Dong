@@ -4,6 +4,9 @@ import {variable} from "../../../../../config/variable";
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {Router} from "@angular/router";
 import { ContractService } from 'src/app/service/contract.service';
+import { ToastService } from 'src/app/service/toast.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteContractDialogComponent } from '../../../dialog/delete-contract-dialog/delete-contract-dialog.component'
 
 @Component({
   selector: 'app-contract-header',
@@ -28,59 +31,14 @@ export class ContractHeaderComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private router: Router,
-    private contractService: ContractService
+    private toastService: ToastService,
+    private dialog: MatDialog,
   ) {
     // this.step = variable.stepSampleContract.step4
   }
 
   ngOnInit(): void {
     
-  }
-
-  open(content:any) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  // saveContract(modal: any) {
-  //   if (this.datas.stepLast == 'determine-contract') {
-  //     this.datas.save_draft.determine_signer = true;
-  //     this.datas['close_modal'] = modal;
-  //   } else if (this.datas.stepLast == 'sample-contract') {
-  //     this.datas.save_draft.sample_contract = true;
-  //     this.datas['close_modal'] = modal;
-  //   } else if (this.datas.stepLast == 'confirm-contract') {
-  //     this.datas.save_draft.confirm_contract = true;
-  //     this.datas['close_modal'] = modal;
-  //   }
-  // }
-
-  saveContract(modal: any): void {
-    let data = {
-      close_modal: modal,
-      step: this.step,
-      close_header: true
-    }
-    this.messageEvent.emit(data);
-  }
-
-  closeCreateContract(modal: any) {
-    modal.close('Save click');
-    // void this.router.navigate(['/main/dashboard']);
-    void this.router.navigate(['/main/contract/create/draft']);
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
-    }
   }
 
   // btn quay lại
@@ -223,4 +181,26 @@ export class ContractHeaderComponent implements OnInit {
 
   //--end
 
+  deleteContract(id: any) {
+    if(id){
+      const data = {
+        title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+        id: id
+      };
+      // @ts-ignore
+      const dialogRef = this.dialog.open(DeleteContractDialogComponent, {
+        width: '480px',
+        backdrop: 'static',
+        keyboard: false,
+        data,
+        autoFocus: false
+      })
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog');
+        let is_data = result
+      })
+    }else{
+      this.toastService.showErrorHTMLWithTimeout("Hợp đồng không tồn tại trên hệ thống", "", 3000);
+    }
+  }
 }
