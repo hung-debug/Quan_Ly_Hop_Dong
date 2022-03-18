@@ -53,6 +53,7 @@ export class AddContractComponent implements OnInit {
   step: any;
   message: any;
   subscription: Subscription;
+  shareData: object;
 
   constructor(private formBuilder: FormBuilder,
               private appService: AppService,
@@ -175,6 +176,11 @@ export class AddContractComponent implements OnInit {
   //     this.subscription.unsubscribe();
   //   }
   // }
+
+  receiveMessage(event: any) {
+    console.log(event)
+    this.shareData = event;
+  }
 
   next() {
     if (this.step == 'infor-contract') {

@@ -1,6 +1,6 @@
 import { ContractService } from 'src/app/service/contract.service';
 import { UploadService } from './../../../../../service/upload.service';
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from "@angular/forms";
 import { variable } from "../../../../../config/variable";
 import { Observable, Subscription } from 'rxjs';
@@ -25,13 +25,15 @@ export class ContractConnectArr {
   templateUrl: './infor-contract.component.html',
   styleUrls: ['./infor-contract.component.scss']
 })
-export class InforContractComponent implements OnInit, AfterViewInit {
+export class InforContractComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() AddComponent: AddContractComponent | unknown;
   @Input() datas: any;
   @Input() step: any;
+  @Input() save_draft_infor: any;
 
   @Output() stepChangeInfoContract = new EventEmitter<string>();
   @ViewChild('nameContract') nameContract: ElementRef;
+
 
   //upload file
   selectedFiles?: FileList;
@@ -114,7 +116,7 @@ export class InforContractComponent implements OnInit, AfterViewInit {
 
     // this.subscription = this.contractService.sharedMessage.subscribe(msg => this.messageForSibling = msg);
     // console.log(this.messageForSibling)
-    
+
   }
 
   // ngOnDestroy(): void {
@@ -125,6 +127,12 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.nameContract.nativeElement.focus();
     }, 0)
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.step == 'infor-contract') {
+      this.saveDraft();
+    }
   }
 
   fileChanged(e: any) {
@@ -192,11 +200,11 @@ export class InforContractComponent implements OnInit, AfterViewInit {
             this.attachFileArr.push(file);
             this.datas.attachFileArr = this.attachFileArr;
             console.log(this.datas.attachFileArr);
-            this.attachFileNameArr.push({filename: file.name});
+            this.attachFileNameArr.push({ filename: file.name });
             if (!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length && this.datas.attachFileNameArr.length == 0) {
               this.datas.attachFileNameArr = [];
             }
-            this.datas.attachFileNameArr.push({filename: file.name})
+            this.datas.attachFileNameArr.push({ filename: file.name })
             // Array.prototype.push.apply(this.datas.attachFileNameArr, this.attachFileNameArr);
 
             if (this.datas.is_action_contract_created) {
@@ -350,20 +358,27 @@ export class InforContractComponent implements OnInit, AfterViewInit {
                 }
               );
             }
-            if (action == "save_draft") {
-              this.router.navigate(['/main/contract/create/draft']);
-              this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-            } else {
+
+            // this.save_draft_infor.close_header
+
+            if (action != "save_draft") {
               this.step = variable.stepSampleContract.step2;
               this.datas.stepLast = this.step;
               this.nextOrPreviousStep(this.step);
+
+            } else {
+              if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+                this.save_draft_infor.close_header = false;
+                this.save_draft_infor.close_modal.close();
+              }
+              this.router.navigate(['/main/contract/create/draft']);
+              this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
             }
             this.spinner.hide();
           } else {
             if (action == "save_draft") {
               this.router.navigate(['/main/contract/create/draft']);
               this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-
             } else {
               //next step
               this.step = variable.stepSampleContract.step2;
@@ -379,7 +394,11 @@ export class InforContractComponent implements OnInit, AfterViewInit {
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.get.information.organization.error", "", 3000);
         })
-      }
+      } 
+      
+      // else {
+      //   this.save_draft_infor.
+      // }
 
     } else {
       this.contractService.addContractStep1(this.datas).subscribe((data) => {
@@ -619,7 +638,13 @@ export class InforContractComponent implements OnInit, AfterViewInit {
   }
 
   async saveDraft() {
-    if (!this.validData()) return;
+    if (!this.validData()) {
+      if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        this.save_draft_infor.close_header = false;
+        this.save_draft_infor.close_modal.close();
+      }
+      return;
+    } 
     else {
       this.spinner.show();
       // set value to datas
@@ -629,35 +654,6 @@ export class InforContractComponent implements OnInit, AfterViewInit {
       this.datas.notes = this.notes;
       this.defineData(this.datas);
       const fileReader = new FileReader();
-      // if (this.datas.is_action_contract_created) {
-      //   if (!this.uploadFileContractAgain && this.datas.contractFile && (typeof this.datas.contractFile == 'string')) {
-      //     await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
-      //       if (res)
-      //         this.datas.contractFile = res;
-      //     })
-      //   }
-      //   if (!this.uploadFileAttachAgain && this.datas.attachFile && this.datas.attachFile.length > 0) {
-      //     let dataArr: any[] = [];
-      //     for (let i = 0; i < this.datas.attachFile.length; i++) {
-      //       if (typeof this.datas.attachFile[i] == 'string') {
-      //         await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile[i]).toPromise().then((data: any) => {
-      //           if (data) dataArr.push(data)
-      //         })
-      //       }
-      //     }
-      //     this.datas.attachFile = dataArr;
-      //     // if (dataArr.length == this.datas.attachFile.length) {
-      //     //   this.datas.attachFile = dataArr;
-      //     // } else return;
-      //   }
-      // } else {
-      //   fileReader.readAsDataURL(this.datas.contractFile);
-      //   fileReader.onload = (e) => {
-      //     if (fileReader.result)
-      //       this.datas.file_content = fileReader.result.toString().split(',')[1];
-      //   };
-      // }
-
       if (this.datas.is_action_contract_created) {
         console.log(typeof this.datas.contractFile)
         // file hợp đồng chính không thay đổi => convert url sang dạng blob
@@ -761,12 +757,20 @@ export class InforContractComponent implements OnInit, AfterViewInit {
                   );
                 }
                 //next step
+                if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+                  this.save_draft_infor.close_header = false;
+                  this.save_draft_infor.close_modal.close();
+                }
                 this.router.navigate(['/main/contract/create/draft']);
                 this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
 
                 this.spinner.hide();
               } else {
                 //next step
+                if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+                  this.save_draft_infor.close_header = false;
+                  this.save_draft_infor.close_modal.close();
+                }
                 this.router.navigate(['/main/contract/create/draft']);
                 this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
                 this.spinner.hide();
@@ -809,6 +813,12 @@ export class InforContractComponent implements OnInit, AfterViewInit {
         return false;
       }
     );
+
+    // case api error => close popup save draft
+    if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+      this.save_draft_infor.close_header = false;
+      this.save_draft_infor.close_modal.close();
+    }
   }
 
   // forward data component
