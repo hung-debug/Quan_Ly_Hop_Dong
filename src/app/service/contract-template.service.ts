@@ -25,6 +25,8 @@ export class ContractTemplateService {
   getObjectSignature:any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
   checkCodeUniqueUrl:any = `${environment.apiUrl}/api/v1/contracts/template/check-code-unique`;
   deleteContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
+  listEmailShareListUrl:any = `${environment.apiUrl}/api/v1/shares/template/by-contract/`;
+  deleteShareUrl:any =  `${environment.apiUrl}/api/v1/shares/template/`;
 
   constructor(private http: HttpClient,
               public datepipe: DatePipe,) { }
@@ -191,6 +193,20 @@ export class ContractTemplateService {
       });
     console.log(body);
     return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
+  }
+
+  public getEmailShareList(id:any): Observable<any> {
+    this.getCurrentUser();
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<any[]>(this.listEmailShareListUrl + id, {headers}).pipe();
+  }
+
+  deleteShare(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.delete<any>(this.deleteShareUrl + id, {'headers': headers});
   }
 
   getDataDetermine() {

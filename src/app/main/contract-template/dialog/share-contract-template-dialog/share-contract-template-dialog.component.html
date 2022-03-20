@@ -3,7 +3,10 @@
       <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{this.datas.title | translate}}</h3>
     </div>
 
-    <form [formGroup]="addFormUser" class="content" >
+    <div>
+    <p-selectButton [options]="stateOptions" [(ngModel)]="isList" optionLabel="label" optionValue="value" (click)="ngOnInit()"></p-selectButton>
+</div>
+    <form *ngIf="isList=='off'" [formGroup]="addFormUser" class="content" >
         <div class="row">
             <div class="col-md-12">
                 <div class="label text-color">Tổ chức</div>
@@ -53,5 +56,44 @@
             <button class="save-button" (click)="onSubmit()">{{'btn.share' | translate}}</button>
         </div>
     </form>
+    <div *ngIf="isList=='on'">
+        <div class="row" style="padding-top: 20px;">
+            <p-table [value]="list" [paginator]="true" [rows]="5" id="table" [autoLayout]="true">
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of cols" [style]='col.style'>
+                      {{col.header | translate}}
+                    </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-list>
+                  <tr>
+                      <td>{{list.email}}</td>
+                      <td style="text-align: center">
+                        <img src="../../../assets/img/icon_delete.svg" width="16px" style="cursor: pointer;" (click)="deleteShare(list.id)"/>
+                      </td>
+                  </tr>
+              </ng-template>
+              <!-- <ng-template pTemplate="paginatorleft" let-state>
+                <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+              </ng-template>
+              <ng-template pTemplate="paginatorright" let-state>
+                <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+              </ng-template>  -->
+            </p-table>
+          </div>
+        
+        <div *ngIf="list.length == 0" 
+          style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+            <div style="display: table-cell;vertical-align: middle;">
+              <img src="../../../assets/img/empty_data.svg"/>
+              <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+            </div>
+        </div>
+
+        <div class="row" style="justify-content: center;padding-top: 10px;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
+        </div>
+    </div>
   </div>
   

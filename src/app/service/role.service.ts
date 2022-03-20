@@ -127,7 +127,8 @@ export class RoleService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-      code: code
+      code: code,
+      organization_id: this.organization_id
     });
     return this.http.post<any>(this.checkCodeRoleUrl, body, {headers}).pipe();
   }
@@ -138,7 +139,8 @@ export class RoleService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-      name: name
+      name: name,
+      organization_id: this.organization_id
     });
     return this.http.post<any>(this.checkNameRoleUrl, body, {headers}).pipe();
   }

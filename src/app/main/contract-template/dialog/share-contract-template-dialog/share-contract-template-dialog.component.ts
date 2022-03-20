@@ -11,7 +11,7 @@ import { UserService } from 'src/app/service/user.service';
   selector: 'app-share-contract-template-dialog',
   templateUrl: './share-contract-template-dialog.component.html',
   styleUrls: ['./share-contract-template-dialog.component.scss']
-})
+})  
 export class ShareContractTemplateDialogComponent implements OnInit {
 
   type:any;
@@ -22,6 +22,12 @@ export class ShareContractTemplateDialogComponent implements OnInit {
   orgList: Array<any> = [];
   userList: Array<any> = [];
   submittedUser = false;
+
+  isList: string = 'off';
+  stateOptions: any[];
+  cols: any[];
+  list: any[] = [];
+
   get fUser() { return this.addFormUser.controls; }
 
   constructor(
@@ -39,23 +45,39 @@ export class ShareContractTemplateDialogComponent implements OnInit {
         orgId: "",
         email: this.fbd.control("", [Validators.required])
       });
+
+      this.stateOptions = [
+        { label: 'Chia sẻ', value: 'off' },
+        { label: 'Danh sách', value: 'on' },
+      ];
     }
 
   ngOnInit(): void {
-    let orgId = this.userService.getInforUser().organization_id;
-    //lay danh sach to chuc
-    this.unitService.getUnitList('', '').subscribe(data => {
-      console.log(data.entities);
-      this.orgList = data.entities;
-    });
+    if(this.isList == 'off'){
+      let orgId = this.userService.getInforUser().organization_id;
+      //lay danh sach to chuc
+      this.unitService.getUnitList('', '').subscribe(data => {
+        console.log(data.entities);
+        this.orgList = data.entities;
+      });
 
-    this.datas = this.data;
-    
-    this.addFormUser = this.fbd.group({
-      orgId: "",
-      email: this.fbd.control("", [Validators.required])
-    });
-
+      this.datas = this.data;
+      
+      this.addFormUser = this.fbd.group({
+        orgId: "",
+        email: this.fbd.control("", [Validators.required])
+      });
+    }else{
+      this.cols = [
+        {header: 'Email đã chia sẻ', style:'text-align: left;' },
+        {header: 'role.manage', style:'text-align: center;' },
+        ];
+      this.contractTemplateService.getEmailShareList(this.data.id).subscribe(response => {
+        console.log(response);
+        this.list = response;
+        console.log(this.list);
+      });
+    }
   }
 
   getUserByOrg(orgId:any){
@@ -90,5 +112,23 @@ export class ShareContractTemplateDialogComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout('Chia sẻ mẫu hợp đồng thất bại', "", 3000);
       }
     });
+  }
+
+
+  deleteShare(id:any){
+    this.contractTemplateService.deleteShare(id).subscribe((data) => {
+
+      if(data.success){
+        this.toastService.showSuccessHTMLWithTimeout("Hủy chia sẻ thành công!", "", 3000);
+        this.ngOnInit();
+      }else{
+        this.toastService.showErrorHTMLWithTimeout("Hủy chia sẻ thất bại!", "", 3000);
+      }
+    },
+    error => {
+      this.toastService.showErrorHTMLWithTimeout("Hủy chia sẻ thất bại", "", 3000);
+      return false;
+    }
+    );
   }
 }

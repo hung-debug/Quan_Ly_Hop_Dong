@@ -31,6 +31,8 @@ import { DatepickerModule } from 'ng2-datepicker';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import {NgxInputSearchModule} from "ngx-input-search";
+import {SelectButtonModule} from 'primeng/selectbutton';
+import {TableModule} from 'primeng/table';
 import { DetailContractTemplateComponent } from './detail-contract-template/detail-contract-template.component';
 import { ImageSignContractComponent } from './detail-contract-template/image-sign-contract/image-sign-contract.component';
 import { ProcessingHandleComponent } from './detail-contract-template/processing-handle/processing-handle.component';
@@ -79,6 +81,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgxSpinnerModule,
     PerfectScrollbarModule,
     NgxInputSearchModule,
+    SelectButtonModule,
+    TableModule,
   ],
   providers: [
     {
