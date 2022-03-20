@@ -119,6 +119,10 @@ const routes: Routes = [
         component: DetailContractTemplateComponent,
       },
       {
+        path: 'contract-template/form/:action/:id',
+        component: AddContractTemplateComponent,
+      },
+      {
         path: 'unit',
         component: UnitComponent,
       },

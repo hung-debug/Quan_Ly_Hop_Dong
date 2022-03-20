@@ -719,7 +719,8 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-        code: code
+        code: code,
+        organization_id: this.organization_id
       });
     return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
   }

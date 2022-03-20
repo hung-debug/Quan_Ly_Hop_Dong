@@ -157,6 +157,16 @@ export class ContractTemplateComponent implements OnInit {
     this.router.navigate(['/main/contract-template/form/add']);
   }
 
+  openEdit(id: number) {
+    this.getDataContract(id, 'edit')
+  }
+
+  getDataContract(id: number, action: string) {
+    setTimeout(() => {
+      void this.router.navigate(['main/contract-template/form/edit/' + id]);
+    }, 100)
+  }
+
   openDetail(id:number){
     this.router.navigate(['main/contract-template/form/detail/' + id]);
   }

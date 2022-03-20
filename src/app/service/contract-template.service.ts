@@ -10,7 +10,7 @@ import { DatePipe } from '@angular/common';
 export class ContractTemplateService {
 
   token: any;
-  organization_id:any;
+  organization_id:any; 
 
   shareContractTemplateUrl:any = `${environment.apiUrl}/api/v1/shares/template`;
   listContractTemplateUrl:any = `${environment.apiUrl}/api/v1/contracts/template/my-contract`;
@@ -27,6 +27,10 @@ export class ContractTemplateService {
   deleteContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
   listEmailShareListUrl:any = `${environment.apiUrl}/api/v1/shares/template/by-contract/`;
   deleteShareUrl:any =  `${environment.apiUrl}/api/v1/shares/template/`;
+  editInforContractTemplateUrl:any =  `${environment.apiUrl}/api/v1/contracts/template/`;
+  editDetermineUrl:any =  `${environment.apiUrl}/api/v1/participants/template/`;
+  editContractSampleUrl:any =  `${environment.apiUrl}/api/v1/fields/template/`;
+  deleteInfoContractUrl:any =  `${environment.apiUrl}/api/v1/fields/template/`;
 
   constructor(private http: HttpClient,
               public datepipe: DatePipe,) { }
@@ -60,7 +64,7 @@ export class ContractTemplateService {
     return this.http.get<any[]>(listContractTemplateUrl, {headers}).pipe();
   }
 
-  addInforContractTemplate(datas: any) {
+  addInforContractTemplate(datas: any, id?: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -73,7 +77,12 @@ export class ContractTemplateService {
       type_id: datas.type_id
     });
     console.log(body);
-    return this.http.post<any>(this.addInforContractTemplateUrl, body, {'headers': headers}).pipe();
+    if(id){
+      return this.http.put<any>(this.editInforContractTemplateUrl + id, body, {'headers': headers}).pipe();
+    }else{
+      return this.http.post<any>(this.addInforContractTemplateUrl, body, {'headers': headers}).pipe();
+    }
+    
   }
 
   addDocument(datas: any) {
@@ -124,6 +133,15 @@ export class ContractTemplateService {
     return this.http.post<any>(this.addDetermineUrl + id, body, {'headers': headers}).pipe();
   }
 
+  editContractDetermine(data_determine: any, id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify(data_determine);
+    return this.http.put<any>(this.editDetermineUrl + id, body, {'headers': headers}).pipe();
+  }
+
   getContractSample(data_sample_contract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -132,6 +150,24 @@ export class ContractTemplateService {
     const body = JSON.stringify(data_sample_contract);
     console.log(body);
     return this.http.post<any>(this.addSampleContractUrl, body, {'headers': headers}).pipe();
+  }
+
+  deleteInfoContractSignature(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    console.log(headers);
+    return this.http.delete<any>(this.deleteInfoContractUrl + id, {headers});
+  }
+
+  editContractSample(data_sample_contract: any, id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify(data_sample_contract);
+    return this.http.put<any>(this.editContractSampleUrl + `/${id}`, body, {'headers': headers}).pipe();
   }
 
   changeStatusContract(id: any, statusNew:any) {

@@ -192,7 +192,83 @@ export class InforContractComponent implements OnInit, AfterViewInit {
     //call API step 1
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
+      // sua mau hop dong 
+      if (this.datas.contractConnect && this.datas.contractConnect.length && this.datas.contractConnect.length > 0) {
+        this.datas.contractConnect.forEach((res: any) => {
+          res['contract_id'] = this.datas.contract_id_action;
+        })
+      }
 
+      await this.contractTemplateService.addInforContractTemplate(this.datas, this.datas.contract_id_action).toPromise().then((res: any) => {
+        this.datas.id = res?.id;
+        this.datas.contract_id = res?.id;
+      }, (error: HttpErrorResponse) => {
+        countSuccess++;
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 3000);
+        // return;
+      })
+
+
+      if (countSuccess == 0 && this.uploadFileContractAgain) {
+        console.log(this.datas.contractFile);
+        await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
+          this.datas.filePath = data.file_object.file_path;
+          this.datas.fileName = data.file_object.filename;
+          this.datas.fileBucket = data.file_object.bucket;
+        }, (error: HttpErrorResponse) => {
+          countSuccess++;
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+          // return;
+        })
+      }
+      if (countSuccess == 0 && this.uploadFileContractAgain) {
+        await this.contractTemplateService.addDocument(this.datas).toPromise().then((respon: any) => {
+          this.datas.document_id = respon?.id;
+        }, (error: HttpErrorResponse) => {
+          countSuccess++
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
+          // return;
+        })
+      }
+
+      if (countSuccess == 0) {
+        if (this.datas.attachFileArr != null) {
+          for (var i = 0; i < this.datas.attachFileArr.length; i++) {
+            await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then((data) => {
+              this.datas.filePathAttach = data.file_object.file_path;
+              this.datas.fileNameAttach = data.file_object.filename;
+              this.datas.fileBucketAttach = data.file_object.bucket;
+            },
+              error => {
+                this.spinner.hide();
+                this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
+              }
+            );
+            if (countSuccess == 0) {
+              //xac dinh moi quan he file dinh kem id va hop dong
+              await this.contractTemplateService.addDocumentAttach(this.datas).toPromise().then((data) => {
+                console.log(data);
+                this.datas.document_attach_id = data?.id;
+              },
+                error => {
+                  countSuccess++
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
+                }
+              );
+            }
+          }
+        }
+      }
+      if (countSuccess == 0) {
+        this.step = variable.stepSampleContract.step2;
+        this.datas.stepLast = this.step;
+        this.nextOrPreviousStep(this.step);
+        this.spinner.hide();
+      } 
     } else {
 
       //day thong tin

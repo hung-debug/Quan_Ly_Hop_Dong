@@ -160,9 +160,32 @@ export class DetermineSignerComponent implements OnInit {
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
     })
     this.spinner.show();
-    if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
-     
-    } else {
+    let isCheckId = this.datas.is_determine_clone.filter((p: any) => p.id);
+    if (this.datas.is_action_contract_created && this.router.url.includes("edit") && (isCheckId && isCheckId.length == this.datas.is_determine_clone.length)) {
+      let isBody: any[] = [];
+      let count = 0;
+      let is_error = '';
+      // this.datas.contract_id_action
+      
+      for (let i = 0; i < this.datas.is_determine_clone.length; i++) {
+        this.datas.is_determine_clone[i].recipients.forEach((element: any) => {
+          if (!element.id) element.id = 0;
+        })
+        await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
+          isBody.push(res);
+        }, (res: any) => {
+          is_error = res.error;
+          count++
+        })
+        if (count > 0) {
+          break;
+        }
+      }
+      if (isBody.length == this.datas.is_determine_clone.length) {
+        this.getDataApiDetermine(isBody, is_save)
+      }
+      this.spinner.hide()
+     } else {
       this.contractTemplateService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
           this.getDataApiDetermine(res, is_save)
         }, (error: HttpErrorResponse) => {
@@ -439,7 +462,7 @@ export class DetermineSignerComponent implements OnInit {
 
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckEmail.length; ++k) {
-      var value = arrCheckEmail[k];
+      var value:any = arrCheckEmail[k];
       if (value in valueSoFar) {
         return true;
       }
