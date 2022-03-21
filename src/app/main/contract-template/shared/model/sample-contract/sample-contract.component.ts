@@ -126,7 +126,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       // set lai du lieu contract_user_signg
     }
-
+    console.log(this.datas);
 
     if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractTemplateService.getDataFormatContractUserSign();
@@ -307,7 +307,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
     interact.addDocument(document)
 
-    console.log(this.datas)
+    
 
   }
 

@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { catchError } from 'rxjs/operators';
 
 export interface File {
+  id:number,
   success:string,
   file_object:{
     filename:string,

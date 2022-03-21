@@ -123,6 +123,15 @@ export class ContractTemplateService {
     return this.http.post<any>(this.documentUrl, body, {'headers': headers});
   }
 
+  updateFileAttach(id: any, body: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    console.log(body);
+    return this.http.put<any>(this.documentUrl + `/${id}`, body, {'headers': headers});
+  }
+
   getContractDetermine(data_determine: any, id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
