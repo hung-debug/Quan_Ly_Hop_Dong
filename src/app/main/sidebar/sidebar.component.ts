@@ -43,11 +43,14 @@ export class SidebarComponent implements OnInit {
             element.active = true;
             elementSub.active = true;
           } else {
+            element.activeDrop = false;
+            element.active = false;
             elementSub.active = false;
           }
         });
       }
     });
+    console.log(this.menus);
   }
 
   getSideBarState() {
