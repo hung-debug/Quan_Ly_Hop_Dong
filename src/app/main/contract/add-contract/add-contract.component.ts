@@ -146,6 +146,7 @@ export class AddContractComponent implements OnInit {
       if (fileName) {
         data.is_data_contract['file_name'] = fileName.filename;
         data.is_data_contract['contractFile'] = fileName.path;
+        data.is_data_contract['document_id'] = fileName.id;
       }
       if (fileNameAttach) {
         data.is_data_contract['file_name_attach'] = fileNameAttach.map((p: any) => 

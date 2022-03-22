@@ -193,12 +193,24 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
             if (item.text_attribute_name) {
               item.name = item.text_attribute_name;
             }
+
             if (item.sign_unit == 'chu_ky_anh') {
               item['type'] = 2;
             } else if (item.sign_unit == 'chu_ky_so') {
               item['type'] = 3;
             } else if (item.sign_unit == 'so_tai_lieu') {
               item['type'] = 4;
+              if (this.datas.contract_no) {
+                if (!item.name) 
+                item.name = null;
+            
+              if (!item.recipient_id) 
+                item.recipient_id = null;
+            
+              if (!item.status) 
+                item.status = 0;
+              }
+
             } else {
               item['type'] = 1;
             }
@@ -216,7 +228,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         if (action == 'finish_contract') {
           this.callAPIFinish();
         } else {
-          if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+          if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
             this.save_draft_infor.close_header = false;
             this.save_draft_infor.close_modal.close();
           }
@@ -225,7 +237,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         }
       },
         (error) => {
-          if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+          if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
             this.save_draft_infor.close_header = false;
             this.save_draft_infor.close_modal.close();
           }
@@ -317,7 +329,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       if (action != 'saveDraft_contract') {
         this.callAPIFinish();
       } else {
-        if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
           this.save_draft_infor.close_header = false;
           this.save_draft_infor.close_modal.close();
         }
@@ -325,7 +337,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
       }
     } else {
-      if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+      if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
         this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
