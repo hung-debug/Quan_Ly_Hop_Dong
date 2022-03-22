@@ -102,7 +102,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
-    if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) { //&& !this.datas.back_step_4
+    if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
       // ham chuyen doi hinh thuc ky type => sign_unit
       // this.getAddSignUnit();
       // ham update du lieu hop dong sua
@@ -114,9 +114,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.setDataSignContract();
     }
 
-    if (this.datas.back_step_4) {
-      this.datas.back_step_4 = false;
-    }
+    // if (this.datas.back_step_4) {
+    //   this.datas.back_step_4 = false;
+    // }
 
     if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
@@ -357,14 +357,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // console.log(dataDiffirent)
     // xoa nhung du lieu doi tuong bi thay doi
     if (dataDiffirent.length > 0) {
-      // this.datas.contract_user_sign.forEach((res: any) => {
-      //   if (res.sign_config.length > 0) {
-      //     res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some(({ email }) => (val.recipient ? val.recipient.email as any : val.email as any) === (email as any)));
-      //     res.sign_config.forEach((items: any) => {
-      //       items.id = items.id + '1';
-      //     })
-      //   }
-      // })
+      this.datas.contract_user_sign.forEach((res: any) => {
+        if (res.sign_config.length > 0) {
+          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) => (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
+          res.sign_config.forEach((items: any) => {
+            items.id = items.id + '1';
+          })
+        }
+      })
     }
   }
 
