@@ -215,7 +215,7 @@
     </div>
   
     <!--  Đối tác-->
-  
+   
     <div class="contract-determine" *ngFor="let item of dataParnterOrganization(); let id = index"
          style="display: flex">
       <div style="margin-right: 50px">
@@ -226,6 +226,7 @@
       <div class="contract--content">
         <div class="contract__content--title">
           <div style="width: 72px">{{'doi_tac' | translate | uppercase}}</div>
+          <input type="text" [(ngModel)]="item.name" disabled>
         </div>
         <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
           <u class="label text-color" (click)="deletePartner(id)"

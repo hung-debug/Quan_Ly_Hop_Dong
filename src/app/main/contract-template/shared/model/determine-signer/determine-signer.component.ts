@@ -792,6 +792,7 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.is_determine_clone.push(data_partner_add);
     this.datas.is_determine_clone.forEach((res: any, index: number) => {
       res.ordering = index + 1;
+      res.name = "Tổ chức " + res.ordering;
     })
 
     console.log(this.data_parnter_organization);
@@ -802,6 +803,7 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.is_determine_clone.splice(index + 1, 1);
     this.datas.is_determine_clone.forEach((res: any, index: number) => {
       res.ordering = index + 1;
+      res.name = "Tổ chức " + res.ordering;
     })
   }
 
@@ -815,7 +817,7 @@ export class DetermineSignerComponent implements OnInit {
 
   changeType(e: any, item: any, index: number) {
     // console.log(item, e);
-    item.name = "";
+    //item.name = "";
     let newArr: any[] = [];
     for (let i = 0; i < item.recipients.length; i++) {
       if (!newArr.some((p: any) => p.role == item.recipients[i].role)) {

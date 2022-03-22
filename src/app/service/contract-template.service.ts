@@ -416,7 +416,7 @@ export class ContractTemplateService {
         ],
       },
       {
-        "name": "",
+        "name": "Tổ chức 1",
         "type": 2,
         "ordering": 2,
         status: 1,
