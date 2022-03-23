@@ -21,6 +21,7 @@ import { ToastService } from "../../../../../service/toast.service";
 import { Router } from "@angular/router";
 import { HttpErrorResponse } from '@angular/common/http';
 import { count } from 'console';
+import { data } from 'jquery';
 
 @Component({
   selector: 'app-sample-contract',
@@ -101,7 +102,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
-    if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) { //&& !this.datas.back_step_4
+    if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
       // ham chuyen doi hinh thuc ky type => sign_unit
       // this.getAddSignUnit();
       // ham update du lieu hop dong sua
@@ -113,9 +114,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.setDataSignContract();
     }
 
-    if (this.datas.back_step_4) {
-      this.datas.back_step_4 = false;
-    }
+    // if (this.datas.back_step_4) {
+    //   this.datas.back_step_4 = false;
+    // }
 
     if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
@@ -356,14 +357,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // console.log(dataDiffirent)
     // xoa nhung du lieu doi tuong bi thay doi
     if (dataDiffirent.length > 0) {
-      // this.datas.contract_user_sign.forEach((res: any) => {
-      //   if (res.sign_config.length > 0) {
-      //     res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some(({ email }) => (val.recipient ? val.recipient.email as any : val.email as any) === (email as any)));
-      //     res.sign_config.forEach((items: any) => {
-      //       items.id = items.id + '1';
-      //     })
-      //   }
-      // })
+      this.datas.contract_user_sign.forEach((res: any) => {
+        if (res.sign_config.length > 0) {
+          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) => (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
+          res.sign_config.forEach((items: any) => {
+            items.id = items.id + '1';
+          })
+        }
+      })
     }
   }
 
@@ -726,12 +727,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  setWidthText(d: any) {
-    return {
-      // 'width.px': (this.widthDrag / 2)
-      'width.px': (this.widthDrag)
-    }
-  }
+  // setWidthText(d: any) {
+  //   return {
+  //     // 'width.px': (this.widthDrag / 2)
+  //     'width.px': (this.widthDrag)
+  //   }
+  // }
 
   // view pdf qua canvas
   async getPage() {
@@ -1393,28 +1394,29 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     } else {
       let count = 0;
       let count_text = 0;
-      let arrSign_organization: { name: any; signature_party: any; }[] = [];
-      let arrSign_partner: { name: any; signature_party: any; }[] = [];
+      let arrSign_organization: any[] = [];
+      let arrSign_partner: any[] = [];
 
       for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datas.contract_user_sign[i].sign_config[j];
-            if (!element.name) { // element.sign_unit != 'so_tai_lieu'
+            if (!element.name && element.sign_unit != 'so_tai_lieu') { // element.sign_unit != 'so_tai_lieu'
               count++;
               break
-            }
-            // else if (element.sign_unit == 'so_tai_lieu' && !this.datas.contract_no) {
-            //   count++;
-            //   break
-            // } 
-            else if (element.sign_unit == 'text' && !element.text_attribute_name) {
+            } else if (element.sign_unit == 'so_tai_lieu' && !this.datas.contract_no) {
+              count++;
+              break
+            } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
               count_text++;
               break
             } else {
               let data_sign = {
                 name: element.name,
-                signature_party: element.signature_party
+                signature_party: element.signature_party,
+                recipient_id: element.recipient_id,
+                email: element.email,
+                sign_unit: element.sign_unit
               }
               if (element.signature_party == "organization" || element.is_type_party == 1)
                 arrSign_organization.push(data_sign);
@@ -1434,27 +1436,68 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
         return false;
       } else {
+        // valid đối tượng ký của tổ chức
         let data_organization = this.list_sign_name.filter((p: any) => p.type_unit == "organization" && p.role != 2);
+        let error_organization = 0;
+        let nameSign_organization = {
+          name: '',
+          sign_type: ''
+        };
+        // valid ký kéo thiếu ô ký cho từng loại ký
+        for (const element of data_organization) {
+          if (element.sign_type.length > 0) {
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && arrSign_organization.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
+              error_organization++;
+              nameSign_organization.name = element.name;
+              nameSign_organization.sign_type = 'chu_ky_so';
+              break
+            }
+          }
+        }
+        if (error_organization > 0) {
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout(`Thiếu đối tượng ký số ${nameSign_organization.name} của tổ chức, vui lòng chọn đủ người ký!`, "", 3000);
+          return false;
+        }
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
-        console.log(arrSign_organization, data_organization);
-
         if (arrSign_organization.length < data_organization.length) {
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!", "", 3000);
           return false;
         }
 
-        // if (!arrSign_organization.some((p: any) => p.role == 3)) {
-        //   this.spinner.hide();
-        //   this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng người ký của tổ chức, vui lòng chọn đối tượng ký!", "", 3000);
-        //   return false;
-        // } else if (!arrSign_organization.some((p: any) => p.role == 4)) {
-        //   this.spinner.hide();
-        //   this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký văn thư của tổ chức, vui lòng chọn đối tượng ký!", "", 3000);
-        //   return false;
-        // }
-
+        // valid đối tượng ký của đối tác
         let data_partner = this.list_sign_name.filter((p: any) => p.type_unit == "partner" && p.role != 2);
+        let countError_partner = 0;
+        let nameSign_partner = {
+          name: '',
+          sign_type: ''
+        };
+         // valid ký kéo thiếu ô ký cho từng loại ký
+        for (const element of data_partner) {
+          if (element.sign_type.length > 0) {
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && arrSign_partner.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
+              countError_partner++;
+              nameSign_partner.name = element.name;
+              nameSign_partner.sign_type = 'chu_ky_so';
+              break
+            }
+            if (element.sign_type.some((p: any) => p.id == 1) && arrSign_partner.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_anh').length == 0) {
+              countError_partner++;
+              nameSign_partner.name = element.name;
+              nameSign_partner.sign_type = 'chu_ky_anh';
+              break
+            }
+          }
+        }
+
+        if (countError_partner > 0) {
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
+          return false;
+        }
+
+
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
         if (arrSign_partner.length < data_partner.length) {
           // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
@@ -1462,17 +1505,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!", "", 3000);
           return false;
         }
-
-        // if (!arrSign_partner.some((p: any) => p.role == 3)) {
-        //   this.spinner.hide();
-        //   this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng người ký của đối tác, vui lòng chọn đối tượng ký!", "", 3000);
-        //   return false;
-        // } else if (!arrSign_partner.some((p: any) => p.role == 4)) {
-        //   this.spinner.hide();
-        //   this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký văn thư của đối tác, vui lòng chọn đối tượng ký!", "", 3000);
-        //   return false;
-        // }
-
       }
     }
     return true;
