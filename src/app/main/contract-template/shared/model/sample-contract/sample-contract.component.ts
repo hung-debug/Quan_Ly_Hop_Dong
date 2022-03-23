@@ -636,14 +636,23 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.list_sign_name.forEach((element: any) => {
       if (this.convertToSignConfig().some((p: any) => p.recipient_id == element.id && p.sign_unit == isSignType)) {
         element.is_disable = true;
+        if (isSignType == 'text') {
+          element.is_disable = false;
+        }
       } else {
-        if (isSignType == 'chu_ky_anh') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
-        } else if (isSignType == 'chu_ky_so') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
-        } else if (isSignType == 'text') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4);
-        } else element.is_disable = element.role != 4;
+        if (this.convertToSignConfig().some((p: any) => p.email == element.email && p.sign_unit == isSignType)) {
+          if (isSignType != 'text') {
+            element.is_disable = true;
+          } else element.is_disable = false;
+        } else {
+          if (isSignType == 'chu_ky_anh') {
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
+          } else if (isSignType == 'chu_ky_so') {
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
+          } else if (isSignType == 'text') {
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4);
+          } else element.is_disable = element.role != 4;
+        }
       }
       if (listSelect) {
         element.selected = listSelect && element.name == listSelect;
@@ -935,7 +944,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   // get select người ký
-  getSignSelect(d: any) {
+  getSignSelect(d: any) { 
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;

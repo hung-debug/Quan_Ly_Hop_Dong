@@ -108,7 +108,8 @@ export class UnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-      name: name
+      name: name,
+      organization_id: this.organization_id
     });
     return this.http.post<any>(this.checkNameUniqueUrl, body, {headers}).pipe();
   }
@@ -119,7 +120,8 @@ export class UnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-        code: code
+        code: code,
+        organization_id: this.organization_id
       });
     return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
   }
