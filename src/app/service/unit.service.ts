@@ -5,6 +5,7 @@ import {Observable, throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { SysService } from './sys.service';
 import { Router } from '@angular/router';
+import { data } from 'jquery';
 
 export interface Unit {
   id: number,
@@ -102,26 +103,28 @@ export class UnitService {
     return this.http.get<Unit>(this.getUnitByIdUrl + id, {headers}).pipe();
   }
 
-  checkNameUnique(name:any){
+  checkNameUnique(data:any, name:any){
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       name: name,
-      organization_id: this.organization_id
+      org_id_cha: data.parent_id,
+      org_id_con: data.id
     });
     return this.http.post<any>(this.checkNameUniqueUrl, body, {headers}).pipe();
   }
   
-  checkCodeUnique(code:any){
+  checkCodeUnique(data:any, code:any){
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
         code: code,
-        organization_id: this.organization_id
+        org_id_cha: data.parent_id,
+        org_id_con: data.id
       });
     return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
   }

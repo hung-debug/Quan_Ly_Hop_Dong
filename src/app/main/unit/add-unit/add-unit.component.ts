@@ -224,7 +224,7 @@ export class AddUnitComponent implements OnInit {
     //neu thay doi ma thi can check lai
     if(data.code != this.codeOld){
       //kiem tra ma to chuc da ton tai trong he thong hay chua
-      this.unitService.checkCodeUnique(data.code).subscribe(
+      this.unitService.checkCodeUnique(data, data.code).subscribe(
         dataByCode => {
 
           if(dataByCode.code == '00'){
@@ -272,7 +272,7 @@ export class AddUnitComponent implements OnInit {
       //neu thay doi ten thi can check lai
       if(data.name != this.nameOld){
         //kiem tra ten to chuc da ton tai trong he thong hay chua
-        this.unitService.checkNameUnique(data.name).subscribe(
+        this.unitService.checkNameUnique(data, data.name).subscribe(
           dataByName => {
             console.log(dataByName);
             if(dataByName.code == '00'){
@@ -297,13 +297,13 @@ export class AddUnitComponent implements OnInit {
     //truong hop them moi ban ghi
     }else{
       //kiem tra ten to chuc da ton tai trong he thong hay chua
-      this.unitService.checkNameUnique(data.name).subscribe(
+      this.unitService.checkNameUnique(data, data.name).subscribe(
         dataByName => {
           console.log(dataByName);
           if(dataByName.code == '00'){
 
             //kiem tra ma to chuc da ton tai trong he thong hay chua
-            this.unitService.checkCodeUnique(data.code).subscribe(
+            this.unitService.checkCodeUnique(data, data.code).subscribe(
               dataByCode => {
 
                 if(dataByCode.code == '00'){
