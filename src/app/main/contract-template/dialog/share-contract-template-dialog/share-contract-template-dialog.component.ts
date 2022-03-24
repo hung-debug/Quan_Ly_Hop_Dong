@@ -52,45 +52,59 @@ export class ShareContractTemplateDialogComponent implements OnInit {
       ];
     }
 
+  organization_id_user_login:any;
   ngOnInit(): void {
-    if(this.isList == 'off'){
-      let orgId = this.userService.getInforUser().organization_id;
-      //lay danh sach to chuc
-      this.unitService.getUnitList('', '').subscribe(data => {
-        console.log(data.entities);
-        this.orgList = data.entities;
-      });
+    //lay danh sach to chuc
+    this.unitService.getUnitList('', '').subscribe(data => {
+      console.log(data.entities);
+      this.orgList = data.entities;
+    });
 
+    if(this.isList == 'off'){
+      //lay id user
+      this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
+      
       this.datas = this.data;
       
+      //mac dinh lay danh sach user to chuc cua ng truy cap
+      this.getUserByOrg(this.organization_id_user_login);
+
       this.addFormUser = this.fbd.group({
-        orgId: "",
+        orgId: this.organization_id_user_login,
         email: this.fbd.control("", [Validators.required])
       });
     }else{
+      this.organization_id_user_login=null;
       this.cols = [
         {header: 'Email đã chia sẻ', style:'text-align: left;' },
+        {header: 'Tổ chức', style:'text-align: left;' },
         {header: 'role.manage', style:'text-align: center;' },
         ];
-      this.contractTemplateService.getEmailShareList(this.data.id).subscribe(response => {
-        console.log(response);
-        this.list = response;
-        console.log(this.list);
-      });
+      this.getDataShareByOrgId(this.organization_id_user_login);
     }
+  }
+
+  getDataShareByOrgId(orgId:any){
+    console.log(orgId);
+    this.contractTemplateService.getEmailShareList(this.data.id).subscribe(response => {
+      console.log(response);
+      this.list = response;
+      console.log(this.list);
+    });
   }
 
   getUserByOrg(orgId:any){
     console.log(orgId);
-    this.userService.getUserList(orgId, "").subscribe(data => {
-      console.log(data);
-      this.userList = data.entities;
-
-      this.addFormUser = this.fbd.group({
-        orgId: orgId,
-        email: this.fbd.control("", [Validators.required])
+    //lay danh sach email da duoc chia se
+    this.contractTemplateService.getEmailShareList(this.data.id).subscribe(listShared => {
+      this.userService.getUserList(orgId, "").subscribe(data => {
+        console.log(data);
+        //chi lay danh sach user chua duoc chia se
+        this.userList = data.entities.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
       });
     });
+
+    
   }
 
   //email:any;
@@ -119,14 +133,14 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     this.contractTemplateService.deleteShare(id).subscribe((data) => {
 
       if(data.success){
-        this.toastService.showSuccessHTMLWithTimeout("Hủy chia sẻ thành công!", "", 3000);
+        this.toastService.showSuccessHTMLWithTimeout("Ngừng chia sẻ thành công!", "", 3000);
         this.ngOnInit();
       }else{
-        this.toastService.showErrorHTMLWithTimeout("Hủy chia sẻ thất bại!", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout("Ngừng chia sẻ thất bại!", "", 3000);
       }
     },
     error => {
-      this.toastService.showErrorHTMLWithTimeout("Hủy chia sẻ thất bại", "", 3000);
+      this.toastService.showErrorHTMLWithTimeout("Ngừng chia sẻ thất bại", "", 3000);
       return false;
     }
     );

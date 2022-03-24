@@ -235,7 +235,7 @@ export class ContractTemplateComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(ShareContractTemplateDialogComponent , {
-      width: '600px',
+      width: '700px',
       backdrop: 'static',
       keyboard: false,
       data,
