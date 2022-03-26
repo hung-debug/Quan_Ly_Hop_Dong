@@ -344,8 +344,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     ));
 
 
-    // lay nhung du lieu da bi thay doi
-    // bo sung them email - || (val.email == data.email)
+    // Get những dữ liệu còn lại khi thay đổi
     let dataDiffirent: any[] = [];
     if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
       dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
@@ -354,17 +353,34 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         val.name == data.name || val.email == data.email));
     }
 
-    // console.log(dataDiffirent)
     // xoa nhung du lieu doi tuong bi thay doi
     if (dataDiffirent.length > 0) {
       this.datas.contract_user_sign.forEach((res: any) => {
         if (res.sign_config.length > 0) {
-          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) => (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
+          /*
+          * begin xóa đối tượng ký đã bị thay đổi dữ liệu
+          */
+          res.sign_config.forEach((element: any) => {
+            if (element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data)) {
+
+            } else {
+              if (element.id_have_data) {
+                this.removeDataSignChange(element.id_have_data);
+              }
+            }
+          })
+          /*
+          end
+          */
+          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) => (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
           res.sign_config.forEach((items: any) => {
             items.id = items.id + '1';
           })
+
+
         }
       })
+
     }
   }
 
@@ -372,6 +388,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.step == 'sample-contract') {
       this.next('save_draft');
     }
+  }
+
+  async removeDataSignChange(data: any) {
+    // this.spinner.show();
+    await this.contractService.deleteInfoContractSignature(data).toPromise().then((res: any) => {
+    }, (error: HttpErrorResponse) => {
+      this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+    })
   }
 
   getListNameSign(data_user_sign: any) {
@@ -1264,7 +1288,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               this.spinner.hide();
             }
           );
-          if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+          if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
             this.save_draft_infor.close_header = false;
             this.save_draft_infor.close_modal.close();
           }
@@ -1473,7 +1497,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           name: '',
           sign_type: ''
         };
-         // valid ký kéo thiếu ô ký cho từng loại ký
+        // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_partner) {
           if (element.sign_type.length > 0) {
             if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && arrSign_partner.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
