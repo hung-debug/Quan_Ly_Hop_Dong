@@ -968,6 +968,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         "overflow": "auto",
         "height": "calc(50vh - 170px)"
       }
+    } else if (window.innerHeight == 768) {
+      return {
+        "overflow": "auto",
+        "height": "285px"
+      }
     } else return {}
   }
 

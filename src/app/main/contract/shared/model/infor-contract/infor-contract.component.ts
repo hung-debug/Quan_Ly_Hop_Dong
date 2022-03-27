@@ -737,7 +737,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   
                     console.log(this.datas.attachFileArr[i])
                     this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
-                      console.log(JSON.stringify(data));
+                      // console.log(JSON.stringify(data));
                       this.datas.filePathAttach = data.file_object.file_path;
                       this.datas.fileNameAttach = data.file_object.filename;
                       this.datas.fileBucketAttach = data.file_object.bucket;
@@ -761,7 +761,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                     );
                   }
                   //next step
-                  if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+                  if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
                     this.save_draft_infor.close_header = false;
                     this.save_draft_infor.close_modal.close();
                   }
@@ -771,7 +771,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                   this.spinner.hide();
                 } else {
                   //next step
-                  if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+                  if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
                     this.save_draft_infor.close_header = false;
                     this.save_draft_infor.close_modal.close();
                   }
