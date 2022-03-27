@@ -134,8 +134,8 @@ export class DetermineSignerComponent implements OnInit {
   // next step event
   next(action: string) {
     this.submitted = true;
-    if (!this.validData()) {
-      if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+    if (action == 'save-step' && !this.validData()) {
+      if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
         this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
@@ -180,7 +180,7 @@ export class DetermineSignerComponent implements OnInit {
       if (isBody.length == this.datas.is_determine_clone.length) {
         this.getDataApiDetermine(isBody, is_save)
       } else {
-        if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
           this.save_draft_infor.close_header = false;
           this.save_draft_infor.close_modal.close();
         }
@@ -192,7 +192,7 @@ export class DetermineSignerComponent implements OnInit {
       this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
-        if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
           this.save_draft_infor.close_header = false;
           this.save_draft_infor.close_modal.close();
         }
@@ -208,7 +208,7 @@ export class DetermineSignerComponent implements OnInit {
   getDataApiDetermine(res: any, is_save?: boolean) {
     // this.datas.id = data?.id;
     if (!is_save) {
-      if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+      if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
         this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
@@ -218,7 +218,6 @@ export class DetermineSignerComponent implements OnInit {
       this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;
       this.step = variable.stepSampleContract.step3;
       this.datas.stepLast = this.step;
-      // sessionStorage.setItem('copy_right_show', 'true');
       this.nextOrPreviousStep(this.step);
     }
   }

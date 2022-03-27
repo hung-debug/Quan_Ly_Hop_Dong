@@ -181,8 +181,8 @@ export class ContractService {
       type_id: datas.type_id,
       //refs:[]
     });
-    console.log(headers);
-    console.log(body);
+    // console.log(headers);
+    // console.log(body);
     if (id) {
       return this.http.put<Contract>(this.addGetDataContract + id, body, {'headers': headers})
       .pipe(

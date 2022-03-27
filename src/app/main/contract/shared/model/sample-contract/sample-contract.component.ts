@@ -1222,8 +1222,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async next(action: string) {
-    if (!this.validData()) {
-      if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+    if (action == 'next_step' && !this.validData()) {
+      if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
         this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
