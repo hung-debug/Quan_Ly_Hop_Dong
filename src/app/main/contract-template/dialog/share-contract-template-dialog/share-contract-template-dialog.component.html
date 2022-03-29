@@ -62,22 +62,21 @@
             <div class="label text-color">Tổ chức</div>
             <div>
                 <p-dropdown 
+                    [(ngModel)]="orgId"
                     panelStyleClass="font"
                     appendTo="body"
                     [options]="orgList" 
                     optionLabel="name" 
-                    optionValue="id" 
+                    optionValue="id"    
                     placeholder="Chọn tổ chức" 
-                    [filter]="true" 
+                    [filter]="true"   
                     filterBy="name" 
-                    [showClear]="true"  
-                    (onChange)="getDataShareByOrgId(organization_id_user_login.value)"
-                    #organization_id_user_login
+                    (onChange)="getDataShareByOrgId()"
                     ></p-dropdown>
             </div>
         </div>
       </div>
-        <div class="row" style="padding-top: 20px;">
+        <div *ngIf="list.length > 0"  class="row" style="padding-top: 20px;">
             <p-table [value]="list" [paginator]="true" [rows]="5" id="table" [autoLayout]="true">
               <ng-template pTemplate="header" let-columns>
                 <tr>
@@ -89,7 +88,7 @@
               <ng-template pTemplate="body" let-list>
                   <tr>
                       <td>{{list.email}}</td>
-                      <td>{{list.orgName}}</td>
+                      <td>{{list.organization_name}}</td>
                       <td style="text-align: center">
                         <img src="../../../assets/img/icon_delete.svg" width="16px" style="cursor: pointer;" (click)="deleteShare(list.id)"/>
                       </td>

@@ -303,6 +303,7 @@ export class AddUserComponent implements OnInit {
                       fax: dataUnit.fax,
                       status: dataUnit.status,
                       parent_id: dataUnit.parent_id,
+                      path: dataUnit.path
                     }
                     //update thong tin to chuc
                     this.unitService.updateUnit(dataUpdateUnit).subscribe(

@@ -1,13 +1,8 @@
-<div class="container-fluid" style="padding-top: 10px;">
+<div class="container-fluid">
 
-  <!-- <mdb-tabs [fill]="true" >
-    <mdb-tab title="{{'contract.me' | translate}}" value='mine' [ngClass]="{ 'active':type==='mine'}" *ngIf="action=='create'"></mdb-tab>
-    <mdb-tab title="{{'contract.organization' | translate}}" value='my-org' [ngClass]="{ 'active':type==='my-org'}" *ngIf="action=='create'"></mdb-tab>
-    <mdb-tab title="{{'contract.wait-for-me' | translate}}" value='wait-for-me' [ngClass]="{ 'active':type==='wait-for-me'}" *ngIf="action=='receive'"></mdb-tab>
-    <mdb-tab title="{{'contract.share-for-me' | translate}}" value='share-for-me' [ngClass]="{ 'active':type==='share-for-me'}" *ngIf="action=='receive'"></mdb-tab>
-  </mdb-tabs> -->
+  <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="getContractList()"></p-selectButton>
 
-  <div class="col-md-12" *ngIf="isQLHD_06">
+  <div class="col-md-12" style="padding-top: 20px;" *ngIf="isQLHD_06">
     <div class="input-line search">
       <img src="../../assets/img/icon_search.svg" class="input-img" />
       <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}"
@@ -51,7 +46,7 @@
       </div>
 
       <div class="col-md-3 item_icon">
-        <div style="display: flex; justify-content: center;">
+        <div *ngIf="isOrg=='off'" style="display: flex; justify-content: center;">
           <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08">
             <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
           </div>

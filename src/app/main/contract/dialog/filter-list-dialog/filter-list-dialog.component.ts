@@ -39,6 +39,7 @@ export class FilterListDialogComponent implements OnInit {
         filter_from_date: this.fbd.control(this.data.filter_from_date),
         filter_to_date: this.fbd.control(this.data.filter_to_date),
         status:this.data.status,
+        isOrg:this.data.isOrg
       });
     }
 
@@ -57,6 +58,7 @@ export class FilterListDialogComponent implements OnInit {
       filter_from_date: this.data.filter_from_date!=""?this.fbd.control(new Date(this.data.filter_from_date)):"",
       filter_to_date: this.data.filter_to_date!=""?this.fbd.control(new Date(this.data.filter_to_date)):"",
       status:this.data.status,
+      isOrg:this.data.isOrg
     });
     console.log(this.addForm);
   }
@@ -72,7 +74,8 @@ export class FilterListDialogComponent implements OnInit {
       filter_contract_no: this.addForm.value.filter_contract_no,
       filter_from_date: this.addForm.value.filter_from_date,
       filter_to_date: this.addForm.value.filter_to_date,
-      status: this.addForm.value.status
+      status: this.addForm.value.status,
+      isOrg: this.addForm.value.isOrg
     }
     this.dialogRef.close();
     console.log(data);
@@ -84,6 +87,7 @@ export class FilterListDialogComponent implements OnInit {
           'filter_contract_no': data.filter_contract_no,
           'filter_from_date': data.filter_from_date,
           'filter_to_date': data.filter_to_date,
+          'isOrg': data.isOrg,
         },
         skipLocationChange: true
       });

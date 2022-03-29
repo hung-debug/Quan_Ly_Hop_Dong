@@ -25,7 +25,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
 
   isList: string = 'off';
   stateOptions: any[];
-  cols: any[];
+  cols: any[]; 
   list: any[] = [];
 
   get fUser() { return this.addFormUser.controls; }
@@ -53,6 +53,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     }
 
   organization_id_user_login:any;
+  orgId:any;
   ngOnInit(): void {
     //lay danh sach to chuc
     this.unitService.getUnitList('', '').subscribe(data => {
@@ -74,29 +75,27 @@ export class ShareContractTemplateDialogComponent implements OnInit {
         email: this.fbd.control("", [Validators.required])
       });
     }else{
-      this.organization_id_user_login=null;
+      this.orgId=this.userService.getAuthCurrentUser().organizationId;
       this.cols = [
         {header: 'Email đã chia sẻ', style:'text-align: left;' },
         {header: 'Tổ chức', style:'text-align: left;' },
         {header: 'role.manage', style:'text-align: center;' },
         ];
-      this.getDataShareByOrgId(this.organization_id_user_login);
+      this.getDataShareByOrgId();
     }
   }
 
-  getDataShareByOrgId(orgId:any){
-    console.log(orgId);
-    this.contractTemplateService.getEmailShareList(this.data.id).subscribe(response => {
+  getDataShareByOrgId(){
+    this.contractTemplateService.getEmailShareList(this.data.id, this.orgId).subscribe(response => {
       console.log(response);
       this.list = response;
-      console.log(this.list);
     });
   }
 
   getUserByOrg(orgId:any){
     console.log(orgId);
     //lay danh sach email da duoc chia se
-    this.contractTemplateService.getEmailShareList(this.data.id).subscribe(listShared => {
+    this.contractTemplateService.getEmailShareList(this.data.id, orgId).subscribe(listShared => {
       this.userService.getUserList(orgId, "").subscribe(data => {
         console.log(data);
         //chi lay danh sach user chua duoc chia se

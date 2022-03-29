@@ -240,10 +240,11 @@ export class ContractTemplateService {
     return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
   }
 
-  public getEmailShareList(id:any): Observable<any> {
+  public getEmailShareList(id:any, organization_id:any): Observable<any> {
     this.getCurrentUser();
     const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<any[]>(this.listEmailShareListUrl + id, {headers}).pipe();
+    let listEmailShareListUrl = this.listEmailShareListUrl + id + "?organization_id=" + organization_id;
+    return this.http.get<any[]>(listEmailShareListUrl, {headers}).pipe();
   }
 
   deleteShare(id: any) {

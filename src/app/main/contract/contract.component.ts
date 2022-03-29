@@ -42,6 +42,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
   title: any = "";
   id: any = "";
   notification: any = "";
+  isOrg: string = 'off';
+  stateOptions: any[];
 
   //filter contract
   filter_name: any = "";
@@ -81,7 +83,13 @@ export class ContractComponent implements OnInit, AfterViewInit {
               private spinner: NgxSpinnerService,
               private userService:UserService,
               private roleService: RoleService,
-    ) {}
+    ) {
+
+      this.stateOptions = [
+        { label: 'Hợp đồng của tôi', value: 'off' },
+        { label: 'Hợp đồng của tổ chức', value: 'on' },
+      ];
+    }
 
 
   ngOnInit(): void {
@@ -111,6 +119,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.filter_to_date = "";
       }
+      if (typeof params.isOrg != 'undefined' && params.isOrg) {
+        this.isOrg = params.isOrg;
+      } else {
+        this.isOrg = "off";
+      }
     });
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
@@ -119,7 +132,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       //set title
       this.convertStatusStr();
 
-      this.appService.setTitle(this.convertActionStr());
+      this.appService.setTitle("contract.list.created");
 
       this.p = 1;
       this.getContractList();
@@ -171,7 +184,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   getContractList() {
     //get list contract
-    this.contractService.getContractList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+    this.contractService.getContractList(this.isOrg, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
       console.log(this.contracts);
@@ -198,19 +211,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
       console.log(this.contracts);
       console.log(this.pageTotal);
     });
-  }
-
-  private convertActionStr(): string {
-    console.log(this.action);
-    if (this.action == 'create') {
-      this.type = 'mine';
-      return 'contract.list.created';
-    } else if (this.action == 'receive') {
-      this.type = 'wait-for-me';
-      return 'contract.list.received';
-    } else {
-      return '';
-    }
   }
 
   private convertStatusStr() {
@@ -301,26 +301,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
         void this.router.navigate(['main/form-contract/copy/' + id]);
       else void this.router.navigate(['main/form-contract/edit/' + id]);
     }, 100)
-
-    // this.spinner.show();
-    // this.contractService.getDetailContract(id).subscribe((rs: any) => {
-    //   let data_api = {
-    //     is_data_contract: rs[0],
-    //     i_data_file_contract: rs[1],
-    //     is_data_object_signature: rs[2]
-    //   }
-    //   this.contractService.changeMessage(data_api);
-    //   setTimeout(() => {
-    //     if (action == 'copy')
-    //     void this.router.navigate(['main/form-contract/copy/' + id]);
-    //     else void this.router.navigate(['main/form-contract/edit/' + id]);
-    //   }, 100)
-    // }, () => {
-    //   this.spinner.hide();
-    //   this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
-    // }, () => {
-    //   this.spinner.hide();
-    // })
   }
 
   deleteItem(id: number) {
@@ -335,7 +315,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
       filter_contract_no: this.filter_contract_no,
       filter_from_date: this.filter_from_date,
       filter_to_date: this.filter_to_date,
-      status: this.status
+      status: this.status,
+      isOrg: this.isOrg
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(FilterListDialogComponent, {
