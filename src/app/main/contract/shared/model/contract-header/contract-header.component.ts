@@ -1,8 +1,8 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {AddContractComponent} from "../../../add-contract/add-contract.component";
-import {variable} from "../../../../../config/variable";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AddContractComponent } from "../../../add-contract/add-contract.component";
+import { variable } from "../../../../../config/variable";
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 
@@ -23,7 +23,7 @@ export class ContractHeaderComponent implements OnInit {
     step_2: false,
     step_3: false
   }
-  closeResult:string= '';
+  closeResult: string = '';
   message: string;
 
   constructor(
@@ -36,11 +36,11 @@ export class ContractHeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
   }
 
-  open(content:any) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+  open(content: any) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -72,34 +72,34 @@ export class ContractHeaderComponent implements OnInit {
 
   closeCreateContract(modal: any) {
     modal.close('Save click');
-    if(this.datas.id){
+    if (this.datas.id) {
       this.contractService.deleteContract(this.datas.id).subscribe((data) => {
 
-        if(data.success){
-          
+        if (data.success) {
+
           this.toastService.showSuccessHTMLWithTimeout("Xóa hợp đồng thành công!", "", 3000);
-          
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+
+          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             void this.router.navigate(['/main/dashboard']);
-          });  
-        }else{
-          if(data.message == 'E02'){
+          });         
+        } else {
+          if (data.message == 'E02') {
             this.toastService.showErrorHTMLWithTimeout("Hợp đồng không phải bản nháp!", "", 3000);
-          }else{
+          } else {
             this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại!", "", 3000);
           }
         }
       },
-      error => {
-        this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại", "", 3000);
-      }
+        error => {
+          this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại", "", 3000);
+        }
       );
-    }else{
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+    } else {
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         void this.router.navigate(['/main/dashboard']);
       });
     }
-    
+
     //void this.router.navigate(['/main/contract/create/draft']);
   }
 
@@ -109,7 +109,7 @@ export class ContractHeaderComponent implements OnInit {
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
       return 'by clicking on a backdrop';
     } else {
-      return  `with: ${reason}`;
+      return `with: ${reason}`;
     }
   }
 
@@ -211,7 +211,7 @@ export class ContractHeaderComponent implements OnInit {
           alert('Vui lòng chọn ít nhất 1 đối tượng kéo thả!')
           return false;
         }
-      break;
+        break;
       case variable.stepSampleContract.step4:
         break;
       default:
@@ -226,7 +226,7 @@ export class ContractHeaderComponent implements OnInit {
     this.datas.stepLast = step;
   }
 
-  previous(){
+  previous() {
     let nextStep = this.step;
     switch (this.step) {
       case variable.stepSampleContract.step2:

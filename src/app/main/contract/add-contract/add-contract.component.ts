@@ -54,6 +54,7 @@ export class AddContractComponent implements OnInit {
   message: any;
   subscription: Subscription;
   shareData: object;
+  type = 1;
 
   constructor(private formBuilder: FormBuilder,
               private appService: AppService,
@@ -177,6 +178,11 @@ export class AddContractComponent implements OnInit {
   //     this.subscription.unsubscribe();
   //   }
   // }
+
+  changeType($event: any) {
+    console.log($event);
+  
+  }
 
   receiveMessage(event: any) {
     console.log(event)
