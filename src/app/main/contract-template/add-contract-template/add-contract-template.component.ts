@@ -15,14 +15,13 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../service/toast.service";
 import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
-import { ContractTemplateService } from 'src/app/service/contract-template.service';
 // import * as from moment;
 
 @Component({
   selector: 'app-add-contract-template',
   templateUrl: './add-contract-template.component.html',
   styleUrls: ['./add-contract-template.component.scss', '../../main.component.scss']
-})  
+})
 export class AddContractTemplateComponent implements OnInit {
   @ViewChild('contractHeader') ContractHeaderComponent: ContractHeaderComponent | unknown;
   @ViewChild('determineSigner') DetermineSignerComponent: DetermineSignerComponent | unknown;
@@ -54,11 +53,12 @@ export class AddContractTemplateComponent implements OnInit {
   step: any;
   message: any;
   subscription: Subscription;
+  shareData: object;
 
   constructor(private formBuilder: FormBuilder,
               private appService: AppService,
               private route: ActivatedRoute,
-              private contractTemplateService: ContractTemplateService,
+              private contractService: ContractService,
               private router: Router,
               private uploadService: UploadService,
               private spinner: NgxSpinnerService,
@@ -103,15 +103,24 @@ export class AddContractTemplateComponent implements OnInit {
 
       //set title
       if (this.action == 'add') {
-        this.appService.setTitle('contract-template.add');
+        this.appService.setTitle('Thêm mới mẫu hợp đồng');
+      } else if (this.action == 'add-contract-connect') {
+        this.appService.setTitle('contract.add');
+        const array_empty: any [] = [];
+        array_empty.push({ref_id: Number(params['id'])});
+        this.datas.contractConnect = array_empty;
+        console.log(this.datas.contractConnect);
       } else if (this.action == 'edit') {
         this.id = params['id'];
-        this.appService.setTitle('Sửa mẫu hợp đồng');
-      } 
+        this.appService.setTitle('contract.edit');
+      } else if (this.action == 'copy') {
+        this.id = params['id'];
+        this.appService.setTitle('contract.copy');
+      }
 
-      if (this.action == 'edit') {
+      if (this.action == 'copy' || this.action == 'edit') {
         this.spinner.show();
-        this.contractTemplateService.getDetailContract(this.id).subscribe((rs: any) => {
+        this.contractService.getDetailContract(this.id).subscribe((rs: any) => {
           let data_api = {
             is_data_contract: rs[0],
             i_data_file_contract: rs[1],
@@ -132,15 +141,17 @@ export class AddContractTemplateComponent implements OnInit {
   getDataContractCreated(data: any) {
     // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
     if (data) {
-      let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1)[0];
-      let fileNameAttach = data.i_data_file_contract.filter((p: any) => p.type == 3)[0];
+      let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1 && p.status == 1)[0];
+      let fileNameAttach = data.i_data_file_contract.filter((p: any) => p.type == 3);
       if (fileName) {
         data.is_data_contract['file_name'] = fileName.filename;
         data.is_data_contract['contractFile'] = fileName.path;
+        data.is_data_contract['document_id'] = fileName.id;
       }
       if (fileNameAttach) {
-        data.is_data_contract['file_name_attach'] = fileNameAttach.filename;
-        data.is_data_contract['attachFile'] = fileNameAttach.path;
+        data.is_data_contract['file_name_attach'] = fileNameAttach.map((p: any) => 
+        ({filename :p.filename, id: p.id}));
+        data.is_data_contract['attachFile'] = fileNameAttach.map((p: any) => p.path);
       }
       this.datas.contractConnect = data.is_data_contract.refs;
       data.is_data_contract['is_action_contract_created'] = true;
@@ -166,6 +177,11 @@ export class AddContractTemplateComponent implements OnInit {
   //     this.subscription.unsubscribe();
   //   }
   // }
+
+  receiveMessage(event: any) {
+    console.log(event)
+    this.shareData = event;
+  }
 
   next() {
     if (this.step == 'infor-contract') {
@@ -212,7 +228,13 @@ export class AddContractTemplateComponent implements OnInit {
   }
 
   getStep(e: any) {
-    // this.step = this.datas.stepLast;
+    // if (e.isBackStep_4 && e.step) {
+    //   this.datas['back_step_4'] = e.isBackStep_4;
+    //   this.step = e.step;
+    // } else if (e.isBackStep_2 && e.step) {
+    //   this.datas['back_step_2'] = e.isBackStep_2;
+    //   this.step = e.step;
+    // } else
     this.step = e;
   }
 

@@ -1,4 +1,3 @@
-<!-- form step 4 -->
 <div class="labelOrg">{{'contract-template' | translate}}</div>
 <div class="infor_contact">
     <div class="row">
@@ -34,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2"></div>
+        <div class="col-md-2"></div>  
         <div class="col-md-5">
             <div class="row">
                 <div class="col-md-12">
@@ -143,12 +142,13 @@
         </div>
     </div>
 </div>
+
 <div class="footer-infor-contract">
-    <div>
-        <button (click)="back($event, 'sample-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
+    <div style="width: 200px;">
+        <button (click)="back($event, 'sample-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">Quay lại</button>
     </div>
     <div class="content_footer"></div>
     <div>
-        <button (click)="next()" type="button" name="next" class="next action-button pull-right">{{'btn.done' | translate}}</button>
+        <button (click)="SaveContract('finish_contract')" type="button" name="next" class="next action-button pull-right">Hoàn thành</button>
     </div>
 </div>

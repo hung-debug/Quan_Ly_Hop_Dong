@@ -71,7 +71,7 @@ export class ContractTemplateService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       name: datas.name,
-      code: datas.code,
+      code: datas.contract_no,
       start_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
       end_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
       type_id: datas.type_id

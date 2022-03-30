@@ -38,6 +38,7 @@ export class UserService {
   listUserUrl:any = `${environment.apiUrl}/api/v1/customers/search`;
   getUserByEmailUrl:any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
   checkPhoneUrl:any = `${environment.apiUrl}/api/v1/customers/check-phone-unique`;
+  getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
 
   token:any;
   customer_id:any;
@@ -246,6 +247,13 @@ export class UserService {
       phone_tel: phone
     });
     return this.http.post<any>(this.checkPhoneUrl, body, {headers}).pipe();
+  }
+
+  public getNameOrganization(filter_organization_id: any, filter_name: any): Observable<any> {
+    this.getCurrentUser();
+    let listUserUrl = this.getNameSearch + '?name=' + filter_name + "&size=10000";
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<User[]>(listUserUrl, {headers}).pipe();
   }
 
   // Error handling
