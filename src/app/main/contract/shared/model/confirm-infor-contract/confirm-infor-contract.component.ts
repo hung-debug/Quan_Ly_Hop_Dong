@@ -18,7 +18,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   @Output() stepChangeConfirmInforContract = new EventEmitter<any>();
   @Input() save_draft_infor: any;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
+    private formBuilder: FormBuilder,
     public datepipe: DatePipe,
     private contractService: ContractService,
     private router: Router,

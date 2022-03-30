@@ -7,6 +7,14 @@ export const variable = {
     step3: "sample-contract",
     step4: "confirm-contract",
   },
+
+  stepSampleContractForm: {
+    step1: "infor-contract-form",
+    step2: "party-contract-form",
+    step3: "sample-contract-form",
+    step4: "confirm-contract-form",
+  },
+
   stepBatchContract: {
     step_confirm_coordination: "confirm-coordination",
     step_coordination: "infor-coordination",

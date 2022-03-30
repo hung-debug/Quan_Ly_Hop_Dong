@@ -8,7 +8,6 @@ import {SampleContractComponent} from "../shared/model/sample-contract/sample-co
 import {variable} from "../../../config/variable";
 import {AppService} from 'src/app/service/app.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Subscription} from "rxjs";
 import {ContractService} from "../../../service/contract.service";
 import {UploadService} from "../../../service/upload.service";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -16,6 +15,11 @@ import {ToastService} from "../../../service/toast.service";
 import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
 // import * as from moment;
+import { ContractFormHeaderComponent } from '../form-contract/contract-form-header/contract-form-header.component';
+import { InforContractFormComponent } from '../form-contract/infor-contract-form/infor-contract-form.component';
+import { PartyContractFormComponent } from '../form-contract/party-contract-form/party-contract-form.component';
+import { SampleContractFormComponent } from '../form-contract/sample-contract-form/sample-contract-form.component';
+import { ConfirmContractFormComponent } from '../form-contract/confirm-contract-form/confirm-contract-form.component';
 
 @Component({
   selector: 'app-add-contract',
@@ -23,15 +27,25 @@ import { RoleService } from 'src/app/service/role.service';
   styleUrls: ['./add-contract.component.scss', '../../main.component.scss']
 })
 export class AddContractComponent implements OnInit {
+  // create contract
   @ViewChild('contractHeader') ContractHeaderComponent: ContractHeaderComponent | unknown;
   @ViewChild('determineSigner') DetermineSignerComponent: DetermineSignerComponent | unknown;
   @ViewChild('sampleContract') SampleContractComponent: SampleContractComponent | unknown;
   @ViewChild('infoContract') InforContractComponent: InforContractComponent | unknown;
   @ViewChild('confirmInforContract') ConfirmInforContractComponent: ConfirmInforContractComponent | unknown;
 
+  // form contract
+  @ViewChild('contractFormHeader') ContractFormHeaderComponent: ContractFormHeaderComponent | unknown;
+  @ViewChild('InforContractForm') InforContractFormComponent: InforContractFormComponent | unknown;
+  @ViewChild('PartyContractForm') PartyContractFormComponent: PartyContractFormComponent | unknown;
+  @ViewChild('SampleContractForm') SampleContractFormComponent: SampleContractFormComponent | unknown;
+  @ViewChild('ConfirmContractForm') ConfirmContractFormComponent: ConfirmContractFormComponent | unknown;
+
+  type = 1;
   action: string;
   id: string;
   private sub: any;
+
   datas: any = {
     stepLast: variable.stepSampleContract.step1,
     save_draft: {
@@ -41,6 +55,18 @@ export class AddContractComponent implements OnInit {
       'confirm_infor_contract': false
     }
   }
+
+  datasForm: any = {
+    stepFormLast: variable.stepSampleContractForm.step1,
+    save_draft_form: {
+      'infor-contract-form': false,
+      'party-contract-form': false,
+      'sample-contract-form': false,
+      'confirm-contract-form': false
+    }
+  }
+
+
   personalDetails!: FormGroup;
   addressDetails!: FormGroup;
   educationalDetails!: FormGroup;
@@ -51,10 +77,10 @@ export class AddContractComponent implements OnInit {
   confirm_step = false;
   // step = 1;
   step: any;
+  stepForm: any;
   message: any;
-  subscription: Subscription;
   shareData: object;
-  type = 1;
+
 
   constructor(private formBuilder: FormBuilder,
               private appService: AppService,
@@ -135,7 +161,15 @@ export class AddContractComponent implements OnInit {
         }, () => {
           this.spinner.hide();
         })
-      } else this.step = variable.stepSampleContract.step1;
+      } else {
+        // if (this.type == 1) {
+          this.step = variable.stepSampleContract.step1;
+        // } else if (this.type == 2) {
+          this.stepForm = variable.stepSampleContractForm.step1;
+        // }
+        
+        
+      } 
     });
   }
 
@@ -241,7 +275,12 @@ export class AddContractComponent implements OnInit {
     //   this.datas['back_step_2'] = e.isBackStep_2;
     //   this.step = e.step;
     // } else
-    this.step = e;
+    if (this.type == 1) {
+      this.step = e;
+    } else if (this.type == 2) {
+      this.stepForm = e;
+    }
+    
   }
 
 

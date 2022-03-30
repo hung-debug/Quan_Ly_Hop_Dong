@@ -15,6 +15,7 @@ import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 import { ContractHeaderComponent } from './shared/model/contract-header/contract-header.component';
+import { ContractFormHeaderComponent } from './form-contract/contract-form-header/contract-form-header.component';
 import {InforContractComponent} from "./shared/model/infor-contract/infor-contract.component";
 import {SampleContractComponent} from "./shared/model/sample-contract/sample-contract.component";
 import {ConfirmInforContractComponent} from "./shared/model/confirm-infor-contract/confirm-infor-contract.component";
@@ -43,12 +44,18 @@ import { AddConnectDialogComponent } from './dialog/add-connect-dialog/add-conne
 import { ShareContractDialogComponent } from './dialog/share-contract-dialog/share-contract-dialog.component';
 import { DeleteContractDialogComponent } from './dialog/delete-contract-dialog/delete-contract-dialog.component';
 
+import { ConfirmContractFormComponent } from './form-contract/confirm-contract-form/confirm-contract-form.component';
+import { InforContractFormComponent } from './form-contract/infor-contract-form/infor-contract-form.component';
+import { PartyContractFormComponent } from './form-contract/party-contract-form/party-contract-form.component';
+import { SampleContractFormComponent } from './form-contract/sample-contract-form/sample-contract-form.component';
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 @NgModule({
   declarations: [
     ContractHeaderComponent,
+    ContractFormHeaderComponent,
     InforContractComponent,
     SampleContractComponent,
     ConfirmInforContractComponent,
@@ -65,14 +72,23 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ContractConnectDialogComponent,
     AddConnectDialogComponent,
     ShareContractDialogComponent,
-    DeleteContractDialogComponent
+    DeleteContractDialogComponent,
+    ConfirmContractFormComponent,
+    InforContractFormComponent,
+    PartyContractFormComponent,
+    SampleContractFormComponent
   ],
   exports: [
     ContractHeaderComponent,
+    ContractFormHeaderComponent,
     InforContractComponent,
     SampleContractComponent,
     ConfirmInforContractComponent,
-    DetermineSignerComponent
+    DetermineSignerComponent,
+    ConfirmContractFormComponent,
+    InforContractFormComponent,
+    PartyContractFormComponent,
+    SampleContractFormComponent
   ],
   imports: [
     CommonModule,
@@ -107,7 +123,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     InforContractComponent,
     SampleContractComponent,
     DetermineSignerComponent,
-    SignContractComponent
+    SignContractComponent,
+    ContractFormHeaderComponent,
+    ConfirmContractFormComponent,
+    InforContractFormComponent,
+    PartyContractFormComponent,
+    SampleContractFormComponent
   ],
   providers: [
     {
