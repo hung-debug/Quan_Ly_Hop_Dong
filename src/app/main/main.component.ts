@@ -89,7 +89,7 @@ export class MainComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {
-      width: '400px',
+      width: '420px',
       backdrop: 'static',
       keyboard: false,
       data
