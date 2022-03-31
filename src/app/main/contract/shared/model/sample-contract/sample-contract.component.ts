@@ -107,16 +107,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       // this.getAddSignUnit();
       // ham update du lieu hop dong sua
       this.getDataSignUpdateAction();
-      // if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
-
-      // }
       this.setDataSignContract();
     }
-
-    // if (this.datas.back_step_4) {
-    //   this.datas.back_step_4 = false;
-    // }
 
     if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
