@@ -15,6 +15,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../service/toast.service";
 import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
+import { ContractTemplateService } from 'src/app/service/contract-template.service';
 // import * as from moment;
 
 @Component({
@@ -58,7 +59,7 @@ export class AddContractTemplateComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private appService: AppService,
               private route: ActivatedRoute,
-              private contractService: ContractService,
+              private contractTemplateService: ContractTemplateService,
               private router: Router,
               private uploadService: UploadService,
               private spinner: NgxSpinnerService,
@@ -120,7 +121,7 @@ export class AddContractTemplateComponent implements OnInit {
 
       if (this.action == 'copy' || this.action == 'edit') {
         this.spinner.show();
-        this.contractService.getDetailContract(this.id).subscribe((rs: any) => {
+        this.contractTemplateService.getDetailContract(this.id).subscribe((rs: any) => {
           let data_api = {
             is_data_contract: rs[0],
             i_data_file_contract: rs[1],

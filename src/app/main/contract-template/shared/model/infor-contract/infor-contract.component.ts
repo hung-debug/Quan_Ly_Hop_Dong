@@ -103,7 +103,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.contract_no;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
-    this.sign_time = this.datas.sign_time ? moment(this.datas.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
+    this.start_time = this.datas.start_time ? moment(this.datas.start_time).toDate() : '';
+    this.end_time = this.datas.end_time ? moment(this.datas.end_time).toDate() : '';
+
     this.notes = this.datas.notes ? this.datas.notes : null;
     if (this.datas.file_name_attach) {
       this.datas.attachFileNameArr = this.datas.file_name_attach;
@@ -492,7 +494,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       // set value to datas
       this.datas.name = this.name;
       this.datas.contract_no = this.contract_no;
-      this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
       this.defineData(this.datas);
       const fileReader = new FileReader();
@@ -540,11 +541,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             if (dataCode.success) {
               this.callAPI();
             } else {
-              this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+              this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại', "", 3000);
               this.spinner.hide();
             }
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra mã mẫu hợp đồng', "", 3000);
             this.spinner.hide(); 
           }
         )
@@ -579,7 +580,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   defineData(datas: any) {
     this.datas.name = this.name;
-    this.datas.sign_time = this.sign_time;
+    this.datas.start_time = this.start_time;
+    this.datas.end_time = this.end_time;
     if (this.datas.contract_no == '') {
       this.datas.contract_no = null;
     }

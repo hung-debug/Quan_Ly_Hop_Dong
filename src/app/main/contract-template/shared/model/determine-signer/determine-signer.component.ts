@@ -247,6 +247,20 @@ export class DetermineSignerComponent implements OnInit {
     }
   }
 
+  changeIsCoordination(e:any, item: any, id:any, index:any) {
+    console.log();
+    console.log(item);
+    console.log(id);
+    console.log(index);
+    if (e.target.checked) {
+      //goi ham them
+      this.addPartnerCoordination(item, id);
+    } else {
+      //goi ham xoa
+      this.deletePartnerCoordination(index, item, id);
+    }
+  }
+
   // valid data step 2
   validData() {
     let count = 0;

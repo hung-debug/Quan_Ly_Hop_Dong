@@ -100,6 +100,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
+    console.log(this.datas);
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
@@ -325,6 +326,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
     })
 
+    console.log(this.datas);
     // lay du lieu vi tri va toa do ky cua buoc 3 da thao tac
     let dataContractUserSign: any[] = [];
     this.datas.contract_user_sign.forEach((res: any, index: number) => {
@@ -336,11 +338,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     // loc du lieu khong trung nhau
+    // lay du lieu trung ten, trung email (doi voi ky so + ky text da gan nguoi xu ly) + trung ten (doi voi ky text chua co nguoi xu ly)
     // (val.recipient_id as any) == (data.id as any) &&
     dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
-      ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
-        (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-      val.name == data.name && val.email == data.email
+      (
+        (val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1) && val.email == data.email) 
+      || (val.sign_unit == 'text' && (!val.email || (val.email && val.email == data.email))) 
+      || (val.sign_unit == 'so_tai_lieu' && (!val.email || (val.email && val.email == data.email)))
+      || (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && val.email == data.email)
+      ) 
+      && val.name == data.name 
     ));
 
 
@@ -354,6 +361,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     // xoa nhung du lieu doi tuong bi thay doi
+    console.log(dataDiffirent);
+    console.log(this.datas.contract_user_sign);
     if (dataDiffirent.length > 0) {
       this.datas.contract_user_sign.forEach((res: any) => {
         if (res.sign_config.length > 0) {
@@ -364,6 +373,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data)) {
 
             } else {
+              console.log(element.id_have_data);
               if (element.id_have_data) {
                 this.removeDataSignChange(element.id_have_data);
               }
@@ -372,7 +382,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           /*
           end
           */
-          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) => (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
+          
+          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) => (!val.name && val.sign_unit == 'so_tai_lieu') || (!val.name && val.sign_unit == 'text' && val.text_attribute_name) || ((val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit)));
           res.sign_config.forEach((items: any) => {
             items.id = items.id + '1';
           })
@@ -382,6 +393,25 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
 
     }
+
+    //lay danh sach username co ten thay doi
+    let dataChangeName: any[] = [];
+    dataChangeName = dataContractUserSign.filter(val => dataDetermine.some((data: any) => ((val.recipient_id as any) == (data.id as any) && (val.name as any) != (data.name as any))));
+    console.log("change");
+    console.log(dataChangeName);
+    if(dataChangeName.length > 0){
+      this.datas.contract_user_sign.forEach((res: any) => {
+        res.sign_config.forEach((element: any) => {
+
+          //tim ban ghi thay doi
+          let change = dataDetermine.filter((data: any) => (element.recipient_id as any) == (data.id as any));
+          change.forEach((item: any, index: number) => {
+            element.name = item.name;
+          })
+        })
+      })
+    }
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -669,7 +699,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           element.is_disable = true;
         else element.is_disable = false;
       } else {
-        if (this.convertToSignConfig().some((p: any) => p.email == element.email && p.sign_unit == isSignType)) {
+        //console.log(this.convertToSignConfig());
+        //console.log(this.list_sign_name);
+        if (this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.name && p.name == element.name)) && p.sign_unit == isSignType)) {
           if (isSignType != 'text') {
             element.is_disable = true;
           }

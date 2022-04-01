@@ -248,43 +248,43 @@
           </div>
         </div>
         <div *ngIf="item.type == 2">
-<!--          <div class="participants-border">-->
-<!--            <div class="label">{{'user.lead' | translate}}</div>-->
-<!--            <div class="participants&#45;&#45;content" *ngFor="let d of getPartnerCoordination(item); let index = index">-->
-<!--              <input [id]="'ordering-lead-' + index" (focusout)="onChangeValue($event,'ordering-lead-' + index)" class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"-->
-<!--                     [(ngModel)]="d.ordering"-->
-<!--                     oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">-->
-<!--              <div class="col-md-10 participants&#45;&#45;input" style="display: flex; margin-bottom: 14px">-->
-<!--                <div class="participants__name">-->
-<!--                  <div class="label text-color">{{'user.name' | translate}}: <span class="required-title">*</span></div>-->
-<!--                  <div class="input-data">-->
-<!--                    <img src="assets/img/icon_name.svg" class="input-img">-->
-<!--                    <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                &lt;!&ndash;                <div *ngIf="getOtp(d)" class="participants-otp" style="z-index: -1">&ndash;&gt;-->
-<!--                &lt;!&ndash;                  <input type="checkbox">&ndash;&gt;-->
-<!--                &lt;!&ndash;                  <span class="label text-color">OTP</span>&ndash;&gt;-->
-<!--                &lt;!&ndash;                </div>&ndash;&gt;-->
-<!--                <div class="participants__name">-->
-<!--                  <div class="label text-color">Email: <span class="required-title">*</span></div>-->
-<!--                  <div class="input-data">-->
-<!--                    <img src="assets/img/login_email.svg" class="input-img">-->
-<!--                    <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">-->
-<!--                  </div>-->
-<!--                  <div class="required-title notify">{{'note_email_doi_tac' | translate}}</div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--              <div class="col-md-1 delete-element" (click)="deletePartnerCoordination(index, item, id)">-->
-<!--                <img src="assets/img/border_close.svg" alt="close.vn">-->
-<!--                <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <div *ngIf="getPartnerCoordination(item).length < 1" class="participants&#45;&#45;add">-->
-<!--              <u class="label text-color"-->
-<!--                 (click)="addPartnerCoordination(item, id)">{{'btn.add.user.lead' | translate}}</u>-->
-<!--            </div>-->
-<!--          </div>-->
+         <div class="participants-border">
+           <div class="label" style="justify-content: space-between;">
+             <div>
+             {{'user.lead' | translate}}
+            </div>
+             <div class="participants-otp" *ngFor="let d of getPartnerCoordination(item); let index = index">
+              <input [id]="'ordering-lead-' + index" (focusout)="onChangeValue($event,'ordering-lead-' + index)" class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                     [(ngModel)]="d.ordering"
+                     oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" disabled>  
+              <input type="checkbox" (ngModelChange)="changeIsCoordination($event, index, item, id)">
+                <span style="padding: 0 10px">Có người điều phối</span>
+              </div>
+            </div>
+           <!-- <div class="participants&#45;&#45;content" *ngFor="let d of getPartnerCoordination(item); let index = index">
+              <input [id]="'ordering-lead-' + index" (focusout)="onChangeValue($event,'ordering-lead-' + index)" class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
+                     [(ngModel)]="d.ordering"
+                     oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+              <div class="col-md-10 participants&#45;&#45;input" style="display: flex; margin-bottom: 14px">
+                <div class="participants__name">
+                  <div class="label text-color">{{'user.name' | translate}}: <span class="required-title">*</span></div>
+                  <div class="input-data">
+                    <img src="assets/img/icon_name.svg" class="input-img">
+                    <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">
+                  </div>
+                </div>
+  
+              </div>
+              <div class="col-md-1 delete-element" (click)="deletePartnerCoordination(index, item, id)">
+                <img src="assets/img/border_close.svg" alt="close.vn">
+                <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
+              </div>
+            </div>
+            <div *ngIf="getPartnerCoordination(item).length < 1" class="participants&#45;&#45;add">
+              <u class="label text-color"
+                 (click)="addPartnerCoordination(item, id)">{{'btn.add.user.lead' | translate}}</u>
+            </div> -->
+         </div>
 
           <div class="participants-border">
             <div class="label">{{'user.view' | translate}}</div>

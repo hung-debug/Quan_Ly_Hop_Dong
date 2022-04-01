@@ -55,7 +55,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
   conn: string;
   ngOnInit(): void {
-    console.log("step4" + this.datas.contract_user_sign);
+    console.log(this.datas);
 
     this.contractName = this.datas.name; 
     this.contractCode = this.datas.contract_no;
