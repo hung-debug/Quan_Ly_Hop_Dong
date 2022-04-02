@@ -42,6 +42,7 @@ export class InforContractFormComponent implements OnInit {
     p: number = 1;
     page: number = 5;
     code: any;
+    id_form: number;
 
     attachFormFileNameArr: any[] = [];
     attachFileArr: any[] = [];
@@ -53,9 +54,7 @@ export class InforContractFormComponent implements OnInit {
         private toastService: ToastService,
         private spinner: NgxSpinnerService,
         private uploadService: UploadService
-    ) {
-
-    }
+    ) { }
 
     ngOnInit(): void {
         this.datasForm.end_time = this.datasForm.end_time ? moment(this.datasForm.timeDateSign).toDate() : moment(new Date()).add(30, 'day').toDate();
@@ -103,6 +102,7 @@ export class InforContractFormComponent implements OnInit {
         this.spinner.show();
         this.contractService.getDetailContractFormInfor(e.value).subscribe((res: any) => {
             console.log(res);
+            this.id_form = e.value;
             let dataContractForm = res.filter((p: any) => p.type == 1 && p.status == 1)[0];
             let dataContractAttachForm = res.filter((p: any) => p.type == 3);
             let isDataInfo = this.typeListForm.filter((data: any) => data.id == e.value)[0];
@@ -250,10 +250,10 @@ export class InforContractFormComponent implements OnInit {
             if (this.datasForm.file_content) {
                 if (this.datasForm.file_content && (typeof this.datasForm.file_content == 'string')) {
                     await this.contractService.getDataBinaryFileUrlConvert(this.datasForm.file_content).toPromise().then((res: any) => {
-                      if (res)
-                      this.datasForm.file_content = res;
+                        if (res)
+                            this.datasForm.file_content = res;
                     })
-                  }
+                }
             }
 
             if (!coutError) {
@@ -342,9 +342,7 @@ export class InforContractFormComponent implements OnInit {
 
                     if (!coutError) {
                         // if (action != "save_draft") {
-                        this.stepForm = variable.stepSampleContractForm.step2;
-                        this.datasForm.stepFormLast = this.stepForm;
-                        this.nextOrPreviousStep(this.stepForm);
+                        this.getDataContractForm();
                         // } else {
                         //     if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
                         //         this.save_draft_infor.close_header = false;
@@ -353,7 +351,7 @@ export class InforContractFormComponent implements OnInit {
                         //     this.router.navigate(['/main/contract/create/draft']);
                         //     this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
                         // }
-                        this.spinner.hide();
+                        // this.spinner.hide();
                     }
 
                 } else {
@@ -362,11 +360,9 @@ export class InforContractFormComponent implements OnInit {
                     //     this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
                     //   } else {
                     //next step
-                    this.stepForm = variable.stepSampleContract.step2;
-                    this.datasForm.stepLast = this.stepForm;
-                    this.nextOrPreviousStep(this.stepForm);
+                    this.getDataContractForm();
                     //   }
-                    this.spinner.hide();
+                    // this.spinner.hide();
                 }
             }
         }
@@ -389,6 +385,23 @@ export class InforContractFormComponent implements OnInit {
     errorData() {
         this.spinner.hide();
         this.toastService.showWarningHTMLWithTimeout("no.push.information.contract.error", "", "3000");
+    }
+
+    async getDataContractForm() {
+        await this.contractTemplateService.addInforContractTemplate(null, this.id_form, 'get-form-data').toPromise().then((res: any) => {
+            this.datasForm.is_determine_clone = res.participants;
+            this.datasForm.contract_id_action = res.id;
+            this.nextForm();
+        }, (error) => {
+            this.errorData();
+        })
+    }
+
+    nextForm() {
+        this.stepForm = variable.stepSampleContractForm.step2;
+        this.datasForm.stepFormLast = this.stepForm;
+        this.nextOrPreviousStep(this.stepForm);
+        this.spinner.hide();
     }
 }
 
