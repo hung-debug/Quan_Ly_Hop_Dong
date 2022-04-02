@@ -41,7 +41,7 @@ export class AddContractComponent implements OnInit {
   @ViewChild('SampleContractForm') SampleContractFormComponent: SampleContractFormComponent | unknown;
   @ViewChild('ConfirmContractForm') ConfirmContractFormComponent: ConfirmContractFormComponent | unknown;
 
-  type = 1;
+  type = 2;
   action: string;
   id: string;
   private sub: any;

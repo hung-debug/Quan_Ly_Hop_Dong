@@ -71,6 +71,8 @@ export class ContractService {
   checkCodeUniqueUrl:any = `${environment.apiUrl}/api/v1/contracts/check-code-unique`;
   getCopyContract: any = `${environment.apiUrl}/api/v1/contracts/clone/`;
   deleteContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+  private getDetailFormContract = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
+  private getSaveContractFormInfo = `${environment.apiUrl}/api/v1/contracts/template`;
 
   token:any;
   customer_id:any;
@@ -117,12 +119,24 @@ export class ContractService {
     return JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
+  getDetailContractFormInfor(id: number) {
+    this.getCurrentUser();
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<Contract[]>(this.getDetailFormContract + `${id}`, {headers}).pipe();
+  }
+
   public getContractTypeList(): Observable<any> {
     this.getCurrentUser();
     let listContractTypeUrl = this.listContractTypeUrl + this.organization_id;
-    console.log(listContractTypeUrl);
+    // console.log(listContractTypeUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractTypeUrl, {headers}).pipe();
+  }
+
+  public saveContractFormInfo(data: any) {
+    this.getCurrentUser();
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.post<any>(this.getSaveContractFormInfo, {data}, {headers}).pipe();
   }
 
   public getContractList(isOrg:any, filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any): Observable<any> {
@@ -177,7 +191,7 @@ export class ContractService {
       code: datas.contract_no,
       contract_no: datas.contract_no,
       //sign_order: 1,
-      sign_time: this.datepipe.transform(datas.sign_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+      sign_time: this.datepipe.transform(datas.sign_time ? datas.sign_time : datas.end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
       notes: datas.notes,
       role_id: datas.role_id,
       //customer_id: this.customer_id,

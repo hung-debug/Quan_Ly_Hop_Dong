@@ -7,7 +7,7 @@
     <app-contract-form-header *ngIf="type == 2" #contractHeader [AddComponent]="this" [datasForm]="datasForm" [stepForm]="stepForm"
         (messageEvent)="receiveMessage($event)"></app-contract-form-header>
 
-    <div class="row" style="margin: 0 18%">
+    <div *ngIf="step == 'infor-contract' || stepForm == 'infor-contract-form'" class="row" style="margin: 0 18%">
         <div class="radio col-md-4 label_type">
             <label><input type="radio" name="contract_create" [value]="1" [(ngModel)]="type"
                     (change)="changeType($event)">
