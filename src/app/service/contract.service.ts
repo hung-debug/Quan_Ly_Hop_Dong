@@ -73,6 +73,7 @@ export class ContractService {
   deleteContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
   private getDetailFormContract = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
   private getSaveContractFormInfo = `${environment.apiUrl}/api/v1/contracts/template`;
+  getObjectSignature: any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
 
   token:any;
   customer_id:any;
@@ -230,6 +231,15 @@ export class ContractService {
       );
     }
     
+  }
+
+
+  getSignPositionCoordinatesForm(id_contract_form: number) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+     return this.http.get<any>(this.getObjectSignature + `/${id_contract_form}`, { headers });
   }
 
   getContractSample(data_sample_contract: any) {

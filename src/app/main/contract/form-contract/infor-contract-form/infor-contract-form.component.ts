@@ -102,12 +102,13 @@ export class InforContractFormComponent implements OnInit {
         this.spinner.show();
         this.contractService.getDetailContractFormInfor(e.value).subscribe((res: any) => {
             console.log(res);
-            this.id_form = e.value;
+            this.datasForm['id_form'] = e.value;
             let dataContractForm = res.filter((p: any) => p.type == 1 && p.status == 1)[0];
             let dataContractAttachForm = res.filter((p: any) => p.type == 3);
             let isDataInfo = this.typeListForm.filter((data: any) => data.id == e.value)[0];
             if (dataContractForm && isDataInfo) {
                 this.datasForm.file_content = dataContractForm.path;
+                this.datasForm.pdfUrl = dataContractForm.path;
                 this.datasForm.contract_no = isDataInfo.code;
                 if (isDataInfo.end_time) {
                     this.datasForm.end_time = moment(isDataInfo.end_time).toDate();
@@ -388,7 +389,7 @@ export class InforContractFormComponent implements OnInit {
     }
 
     async getDataContractForm() {
-        await this.contractTemplateService.addInforContractTemplate(null, this.id_form, 'get-form-data').toPromise().then((res: any) => {
+        await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.id_form, 'get-form-data').toPromise().then((res: any) => {
             this.datasForm.is_determine_clone = res.participants;
             this.datasForm.contract_id_action = res.id;
             this.nextForm();

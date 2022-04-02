@@ -108,493 +108,504 @@ export class PartyContractFormComponent implements OnInit {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'determine-contract') {
-          this.next('save-draft');
+            this.next('save-draft');
         }
-      }
-    
-      //dropdown contract type
-      get getSignTypeItems() {
+    }
+
+    //dropdown contract type
+    get getSignTypeItems() {
         return this.signTypeList.reduce((acc, curr) => {
-          acc[curr.item_id] = curr;
-          return acc;
+            acc[curr.item_id] = curr;
+            return acc;
         }, {});
-      }
-    
-      back(e: any, step?: any) {
+    }
+
+    back(e: any, step?: any) {
         // if (!this.datasForm.isView) {
         this.nextOrPreviousStep(step);
-      }
-    
-      // next step event
-      next(action: string) {
+    }
+
+    // next step event
+    next(action: string) {
         this.submitted = true;
         if (action == 'save-step' && !this.validData()) {
-          if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-            this.save_draft_infor_form.close_header = false;
-            this.save_draft_infor_form.close_modal.close();
-          }
-          return;
-        } 
-        else {
-          let is_save = false;
-          if (action == 'save-step') {
-            is_save = true;
-          }
-          this.getApiDetermine(is_save);
+            if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                this.save_draft_infor_form.close_header = false;
+                this.save_draft_infor_form.close_modal.close();
+            }
+            return;
         }
-      }
-    
-      async getApiDetermine(is_save?: boolean) {
+        else {
+            let is_save = false;
+            if (action == 'save-step') {
+                is_save = true;
+            }
+            this.getApiDetermine(is_save);
+        }
+    }
+
+    async getApiDetermine(is_save?: boolean) {
         this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
-          if (items.type == 3)
-            this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
+            if (items.type == 3)
+                this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
         })
         this.spinner.show();
         let isCheckId = this.datasForm.is_determine_clone.filter((p: any) => p.id);
-        if (this.datasForm.is_action_contract_created && this.router.url.includes("edit") && (isCheckId && isCheckId.length == this.datasForm.is_determine_clone.length)) {
-          let isBody: any[] = [];
-          let count = 0;
-          let is_error = '';
-          // this.datasForm.contract_id_action
-          
-          for (let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
-            this.datasForm.is_determine_clone[i].recipients.forEach((element: any) => {
-              if (!element.id) element.id = 0;
-            })
-            await this.contractService.getContractDetermineCoordination(this.datasForm.is_determine_clone[i], this.datasForm.is_determine_clone[i].id).toPromise().then((res: any) => {
-              isBody.push(res);
-            }, (res: any) => {
-              is_error = res.error;
-              count++
-            })
-            if (count > 0) {
-              break;
+        // this.datasForm.is_action_contract_created && this.router.url.includes("edit")
+        if (isCheckId && isCheckId.length == this.datasForm.is_determine_clone.length) {
+            let isBody: any[] = [];
+            let count = 0;
+            let is_error = '';
+            // this.datasForm.contract_id_action
+
+            for (let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
+                this.datasForm.is_determine_clone[i].recipients.forEach((element: any) => {
+                    if (!element.id) element.id = 0;
+                })
+                await this.contractService.getContractDetermineCoordination(this.datasForm.is_determine_clone[i], this.datasForm.is_determine_clone[i].id).toPromise().then((res: any) => {
+                    isBody.push(res);
+                }, (res: any) => {
+                    is_error = res.error;
+                    count++
+                })
+                if (count > 0) {
+                    break;
+                }
             }
-          }
-          if (isBody.length == this.datasForm.is_determine_clone.length) {
-            this.getDataApiDetermine(isBody, is_save)
-          } else {
-            if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-              this.save_draft_infor_form.close_header = false;
-              this.save_draft_infor_form.close_modal.close();
+            if (isBody.length == this.datasForm.is_determine_clone.length) {
+                this.getDataApiDetermine(isBody, is_save)
+            } else {
+                if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                    this.save_draft_infor_form.close_header = false;
+                    this.save_draft_infor_form.close_modal.close();
+                }
+                this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
             }
-            this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
-          }
-            
-          this.spinner.hide()
-        } else {
-          this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
-            this.getDataApiDetermine(res, is_save)
-          }, (error: HttpErrorResponse) => {
-            if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-              this.save_draft_infor_form.close_header = false;
-              this.save_draft_infor_form.close_modal.close();
-            }
-            this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-          }, () => {
-            this.spinner.hide();
-          }
-          );
-        }
-      }
-    
-      getDataApiDetermine(res: any, is_save?: boolean) {
+            this.spinner.hide()
+        } 
+        
+        // else {
+        //     this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
+        //         this.getDataApiDetermine(res, is_save)
+        //     }, (error: HttpErrorResponse) => {
+        //         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+        //             this.save_draft_infor_form.close_header = false;
+        //             this.save_draft_infor_form.close_modal.close();
+        //         }
+        //         this.spinner.hide();
+        //         this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+        //     }, () => {
+        //         this.spinner.hide();
+        //     }
+        //     );
+        // }
+    }
+
+    getDataApiDetermine(res: any, is_save?: boolean) {
         // this.datasForm.id = data?.id;
         if (!is_save) {
-          if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-            this.save_draft_infor_form.close_header = false;
-            this.save_draft_infor_form.close_modal.close();
-          }
-          this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000)
-          void this.router.navigate(['/main/contract/create/draft']);
+            if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                this.save_draft_infor_form.close_header = false;
+                this.save_draft_infor_form.close_modal.close();
+            }
+            this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000)
+            void this.router.navigate(['/main/contract/create/draft']);
         } else if (!this.saveDraftStepForm || is_save) {
-          this.datasForm.is_determine_clone = res ? res : this.datasForm.is_determine_clone;
-          this.stepForm = variable.stepSampleContract.step3;
-          this.datasForm.stepLast = this.stepForm;
-          this.nextOrPreviousStep(this.stepForm);
+            this.spinner.show();
+            this.contractService.getSignPositionCoordinatesForm(this.datasForm.id_form).subscribe((result: any) => {
+                // this.datasForm.i_data_file_contract = result.i_data_file_contract;
+                this.datasForm['is_data_object_signature'] = result;
+                this.datasForm.is_determine_clone = res ? res : this.datasForm.is_determine_clone;
+                this.stepForm = variable.stepSampleContract.step3;
+                this.datasForm.stepLast = this.stepForm;
+                this.nextOrPreviousStep(this.stepForm);
+            }, () => {
+                this.getNotificationValid('error.server');
+            }, () => {
+                this.spinner.hide()
+            })
         }
-      }
-    
-      // forward data component
-      nextOrPreviousStep(step: string) {
+    }
+
+    // forward data component
+    nextOrPreviousStep(step: string) {
         this.datasForm.stepLast = step;
         this.stepChangePartyContractForm.emit(step);
-      }
-    
-      selectWithOtp(e: any, data: any) {
+    }
+
+    selectWithOtp(e: any, data: any) {
         // this.changeOtp(data);
-      }
-    
-      changeOtp(data: any) {
+    }
+
+    changeOtp(data: any) {
         let data_sign_cka = data.sign_type.filter((p: any) => p.id == 1)[0];
         if (data.is_otp && data_sign_cka) {
-          data.sign_type.forEach((res: any) => {
-            res.is_otp = true;
-          })
+            data.sign_type.forEach((res: any) => {
+                res.is_otp = true;
+            })
         } else {
-          data.sign_type.forEach((res: any) => {
-            res.is_otp = false;
-          })
+            data.sign_type.forEach((res: any) => {
+                res.is_otp = false;
+            })
         }
-      }
-    
-      // valid data step 2
-      validData() {
+    }
+
+    // valid data step 2
+    validData() {
         let count = 0;
         let dataArr = [];
         dataArr = this.data_organization.recipients;
         for (let i = 0; i < dataArr.length; i++) {
-          if (!dataArr[i].name) {
-            this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!");
-            count++;
-            break;
-          }
-          if (!dataArr[i].email) {
-            this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
-            count++;
-            break;
-          }
-          if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
-            this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
-            count++;
-            break;
-          } else if (dataArr[i].sign_type.length > 0 && dataArr[i].role != 2) {
-            let is_duplicate = [];
-            is_duplicate = dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
-            if (is_duplicate.length > 1) {
-              this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
-              count++;
-              break;
+            if (!dataArr[i].name) {
+                this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!");
+                count++;
+                break;
             }
-            is_duplicate = [];
-          }
-    
-          if (!dataArr[i].phone && dataArr[i].role == 3 && (dataArr[i].is_otp || dataArr[i].is_otp == 1)) {
-            this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi!")
-            count++;
-            break;
-          }
-          // @ts-ignore
-          // if (!this.pattern.name.test(dataArr[i].name)) {
-          //   this.getNotificationValid("Tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
-          //   count++;
-          //   break;
-          // }
-          // @ts-ignore
-          if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email)) {
-            this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
-            count++;
-            break;
-          }
-          //@ts-ignore
-          if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
-            this.getNotificationValid("Số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
-            count++;
-            break;
-          }
+            if (!dataArr[i].email) {
+                this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+                count++;
+                break;
+            }
+            if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
+                this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+                count++;
+                break;
+            } else if (dataArr[i].sign_type.length > 0 && dataArr[i].role != 2) {
+                let is_duplicate = [];
+                is_duplicate = dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+                if (is_duplicate.length > 1) {
+                    this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+                    count++;
+                    break;
+                }
+                is_duplicate = [];
+            }
+
+            if (!dataArr[i].phone && dataArr[i].role == 3 && (dataArr[i].is_otp || dataArr[i].is_otp == 1)) {
+                this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi!")
+                count++;
+                break;
+            }
+            // @ts-ignore
+            // if (!this.pattern.name.test(dataArr[i].name)) {
+            //   this.getNotificationValid("Tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+            //   count++;
+            //   break;
+            // }
+            // @ts-ignore
+            if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email)) {
+                this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+                count++;
+                break;
+            }
+            //@ts-ignore
+            if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
+                this.getNotificationValid("Số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+                count++;
+                break;
+            }
         }
-    
+
         if (count == 0) {
-          if (this.getCheckDuplicateEmail('only_party_origanzation', dataArr)) {
-            this.getNotificationValid("Email tổ chức của tôi không được trùng nhau!");
-            return false
-          }
+            if (this.getCheckDuplicateEmail('only_party_origanzation', dataArr)) {
+                this.getNotificationValid("Email tổ chức của tôi không được trùng nhau!");
+                return false
+            }
         }
-    
-    
+
+
         let dataArrPartner = [];
         dataArrPartner = this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
         if (count == 0) {
-          // validate phía đối tác
-          for (let j = 0; j < dataArrPartner.length; j++) {
-            for (let k = 0; k < dataArrPartner[j].recipients.length; k++) {
-              if (dataArrPartner[j].type != 3) {
-                if (!dataArrPartner[j].name) {
-                  this.getNotificationValid("Vui lòng nhập tên của đối tác tổ chức!")
-                  count++;
-                  break;
+            // validate phía đối tác
+            for (let j = 0; j < dataArrPartner.length; j++) {
+                for (let k = 0; k < dataArrPartner[j].recipients.length; k++) {
+                    if (dataArrPartner[j].type != 3) {
+                        if (!dataArrPartner[j].name) {
+                            this.getNotificationValid("Vui lòng nhập tên của đối tác tổ chức!")
+                            count++;
+                            break;
+                        }
+
+                        if (!dataArrPartner[j].recipients[k].name) {
+                            this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
+                            count++;
+                            break;
+                        }
+                        if (!dataArrPartner[j].recipients[k].email) {
+                            this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
+                            count++;
+                            break;
+                        }
+
+                        if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role)) {
+                            this.getNotificationValid("Vui lòng chọn loại ký" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!")
+                            count++;
+                            break;
+                        } else if (dataArrPartner[j].recipients[k].sign_type.length > 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role)) {
+                            let isPartnerOriganzationDuplicate = [];
+                            isPartnerOriganzationDuplicate = dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+                            if (isPartnerOriganzationDuplicate.length > 1) {
+                                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!")
+                                count++;
+                                break;
+                            }
+                            isPartnerOriganzationDuplicate = [];
+                        }
+
+                        if (!dataArrPartner[j].recipients[k].phone && dataArrPartner[j].recipients[k].role == 3 && (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
+                            this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "của đối tác!")
+                            count++;
+                            break;
+                        }
+
+                    } else if (dataArrPartner[j].type == 3) {
+                        if (!dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3) {
+                            this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
+                            count++;
+                            break;
+                        }
+                        if (!dataArrPartner[j].recipients[k].email && dataArrPartner[j].recipients[k].role == 3) {
+                            this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
+                            count++;
+                            break;
+                        }
+
+                        if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role) && dataArrPartner[j].recipients[k].role == 3) {
+                            this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!")
+                            count++;
+                            break;
+                        } else if (dataArrPartner[j].recipients[k].sign_type.length > 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role) && dataArrPartner[j].recipients[k].role == 3) {
+                            let isPartnerCaNhanDuplicate = [];
+                            isPartnerCaNhanDuplicate = dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+                            if (isPartnerCaNhanDuplicate.length > 1) {
+                                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!")
+                                count++;
+                                break;
+                            }
+                            isPartnerCaNhanDuplicate = [];
+                        }
+
+                        if (!dataArrPartner[j].recipients[k].phone &&
+                            dataArrPartner[j].recipients[k].role == 3 &&
+                            (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
+                            this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(3) + "của đối tác!")
+                            count++;
+                            break;
+                        }
+
+                        //@ts-ignore
+                        // if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
+                        //   this.getNotificationValid("Tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " đối tác cá nhân không hợp lệ!");
+                        //   count++;
+                        //   break;
+                        // }
+                        //@ts-ignore
+                        if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email) && dataArrPartner[j].recipients[k].role == 3) {
+                            this.getNotificationValid("Email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân không hợp lệ!")
+                            count++;
+                            break;
+                        }
+                        //@ts-ignore
+                        if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
+                            this.getNotificationValid("Số điện thoại" + this.getNameObject(3) + "của đối tác không hợp lệ!")
+                            count++;
+                            break;
+                        }
+                    }
                 }
-    
-                if (!dataArrPartner[j].recipients[k].name) {
-                  this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
-                  count++;
-                  break;
-                }
-                if (!dataArrPartner[j].recipients[k].email) {
-                  this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
-                  count++;
-                  break;
-                }
-    
-                if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role)) {
-                  this.getNotificationValid("Vui lòng chọn loại ký" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!")
-                  count++;
-                  break;
-                } else if (dataArrPartner[j].recipients[k].sign_type.length > 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role)) {
-                  let isPartnerOriganzationDuplicate = [];
-                  isPartnerOriganzationDuplicate = dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
-                  if (isPartnerOriganzationDuplicate.length > 1) {
-                    this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!")
-                    count++;
-                    break;
-                  }
-                  isPartnerOriganzationDuplicate = [];
-                }
-    
-                if (!dataArrPartner[j].recipients[k].phone && dataArrPartner[j].recipients[k].role == 3 && (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
-                  this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "của đối tác!")
-                  count++;
-                  break;
-                }
-    
-              } else if (dataArrPartner[j].type == 3) {
-                if (!dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3) {
-                  this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
-                  count++;
-                  break;
-                }
-                if (!dataArrPartner[j].recipients[k].email && dataArrPartner[j].recipients[k].role == 3) {
-                  this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
-                  count++;
-                  break;
-                }
-    
-                if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role) && dataArrPartner[j].recipients[k].role == 3) {
-                  this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!")
-                  count++;
-                  break;
-                } else if (dataArrPartner[j].recipients[k].sign_type.length > 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role) && dataArrPartner[j].recipients[k].role == 3) {
-                  let isPartnerCaNhanDuplicate = [];
-                  isPartnerCaNhanDuplicate = dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
-                  if (isPartnerCaNhanDuplicate.length > 1) {
-                    this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!")
-                    count++;
-                    break;
-                  }
-                  isPartnerCaNhanDuplicate = [];
-                }
-    
-                if (!dataArrPartner[j].recipients[k].phone &&
-                  dataArrPartner[j].recipients[k].role == 3 &&
-                  (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
-                  this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(3) + "của đối tác!")
-                  count++;
-                  break;
-                }
-    
-                //@ts-ignore
-                // if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
-                //   this.getNotificationValid("Tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " đối tác cá nhân không hợp lệ!");
-                //   count++;
-                //   break;
-                // }
-                //@ts-ignore
-                if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email) && dataArrPartner[j].recipients[k].role == 3) {
-                  this.getNotificationValid("Email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân không hợp lệ!")
-                  count++;
-                  break;
-                }
-                //@ts-ignore
-                if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
-                  this.getNotificationValid("Số điện thoại" + this.getNameObject(3) + "của đối tác không hợp lệ!")
-                  count++;
-                  break;
-                }
-              }
             }
-          }
         }
-    
+
         if (count == 0) {
-          // dataArrPartyCheckEmail = this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-          if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
-            this.getNotificationValid("Email đối tác không được trùng nhau!");
-            return false
-          }
+            // dataArrPartyCheckEmail = this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+            if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
+                this.getNotificationValid("Email đối tác không được trùng nhau!");
+                return false
+            }
         }
-    
+
         if (count == 0) {
-          if (this.getCheckDuplicateEmail('allCheckEmail', this.datasForm.is_determine_clone)) {
-            this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
-            return false
-          }
+            if (this.getCheckDuplicateEmail('allCheckEmail', this.datasForm.is_determine_clone)) {
+                this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
+                return false
+            }
         }
-    
+
         if (count > 0) {
-          return false;
+            return false;
         }
         return true;
-      }
-    
-      getCheckDuplicateEmail(isParty: string, dataValid?: any) {
+    }
+
+    getCheckDuplicateEmail(isParty: string, dataValid?: any) {
         let arrCheckEmail = [];
         // valid email đối tác và các bên tham gia
         if (isParty != 'only_party_origanzation') {
-          let arrEmail = [];
-          for (let i = 0; i < dataValid.length; i++) {
-            const element = dataValid[i].recipients;
-            for (let j = 0; j < element.length; j++) {
-              if (element[j].email) {
-                let items = {
-                  email: element[j].email,
-                  role: element[j].role
+            let arrEmail = [];
+            for (let i = 0; i < dataValid.length; i++) {
+                const element = dataValid[i].recipients;
+                for (let j = 0; j < element.length; j++) {
+                    if (element[j].email) {
+                        let items = {
+                            email: element[j].email,
+                            role: element[j].role
+                        }
+                        // arrCheckEmail.push(element[j].email);
+                        arrEmail.push(items);
+                    }
                 }
-                // arrCheckEmail.push(element[j].email);
-                arrEmail.push(items);
-              }
             }
-          }
-    
-          if (arrEmail.some((p: any) => p.role == 1) && arrEmail.some((p: any) => p.role == 3)) {
-            arrEmail = arrEmail.filter((p: any) => p.role != 1);
-          }
-    
-          arrEmail.forEach((items: any) => {
-            arrCheckEmail.push(items.email)
-          })
-    
+
+            if (arrEmail.some((p: any) => p.role == 1) && arrEmail.some((p: any) => p.role == 3)) {
+                arrEmail = arrEmail.filter((p: any) => p.role != 1);
+            }
+
+            arrEmail.forEach((items: any) => {
+                arrCheckEmail.push(items.email)
+            })
+
         } else {
-          // valid email tổ chức của tôi
-          for (let i = 0; i < dataValid.length; i++) {
-            if (dataValid[i].email) {
-              arrCheckEmail.push(dataValid[i].email);
+            // valid email tổ chức của tôi
+            for (let i = 0; i < dataValid.length; i++) {
+                if (dataValid[i].email) {
+                    arrCheckEmail.push(dataValid[i].email);
+                }
             }
-          }
         }
-    
+
         var valueSoFar = Object.create(null);
         for (var k = 0; k < arrCheckEmail.length; ++k) {
-          let value = arrCheckEmail[k];
-          if (value in valueSoFar) {
-            return true;
-          }
-          valueSoFar[value] = true;
+            //   let value = arrCheckEmail[k];
+            if (arrCheckEmail[k] in valueSoFar) {
+                return true;
+            }
+            valueSoFar[arrCheckEmail[k]] = true;
         }
         return false;
-      }
-    
-      getNotificationValid(is_notify: string) {
+    }
+
+    getNotificationValid(is_notify: string) {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout(is_notify, "", 3000);
-      }
-    
-      getNameObject(role_numer: number) {
+    }
+
+    getNameObject(role_numer: number) {
         switch (role_numer) {
-          case 1:
-            return ' người điều phối ';
-            break;
-          case 2:
-            return ' người xem xét ';
-            break;
-          case 3:
-            return ' người ký ';
-            break;
-          case 4:
-            return ' văn thư ';
-            break;
-          default:
-            return '';
-            break;
+            case 1:
+                return ' người điều phối ';
+                break;
+            case 2:
+                return ' người xem xét ';
+                break;
+            case 3:
+                return ' người ký ';
+                break;
+            case 4:
+                return ' văn thư ';
+                break;
+            default:
+                return '';
+                break;
         }
-      }
-    
-      // BEGIN DATA
-    
-      get getContractConnectItems() {
+    }
+
+    // BEGIN DATA
+
+    get getContractConnectItems() {
         return this.signTypeList.reduce((acc, curr) => {
-          acc[curr.id] = curr;
-          return acc;
+            acc[curr.id] = curr;
+            return acc;
         }, {});
-      }
-    
-      getdatasFormignature(e: any) {
+    }
+
+    getdatasFormignature(e: any) {
         console.log(e)
-      }
-    
-      getValueData(data: any, index: any) {
+    }
+
+    getValueData(data: any, index: any) {
         return [
-          { id: 1, name: 'Ký ảnh' },
-          { id: 2, name: 'Ký số' }
+            { id: 1, name: 'Ký ảnh' },
+            { id: 2, name: 'Ký số' }
         ]
-      }
-    
-      changePartner(e: any, number_type: number, item: any) {
+    }
+
+    changePartner(e: any, number_type: number, item: any) {
         this.getDataPartner(number_type);
-      }
-    
-      // tạo mảng đối tác
-      getDataPartner(number_type?: number, name?: string) {
+    }
+
+    // tạo mảng đối tác
+    getDataPartner(number_type?: number, name?: string) {
         let data = [...this.datasForm.is_determine_clone];
         return data.filter((p: any) => (p.type == 2 || p.type == 3));
-      }
-    
-      getOriganzationDocument() {
+    }
+
+    getOriganzationDocument() {
         return this.data_organization.recipients.filter((p: any) => p.role == 4)
-      }
-    
-      // tạo đối tượng người điều phối đối tác
-      getPartnerCoordination(item: any) {
+    }
+
+    // tạo đối tượng người điều phối đối tác
+    getPartnerCoordination(item: any) {
         return item.recipients.filter((p: any) => p.role == 1)
-      }
-    
-      // tạo đối tượng đ
-      getPartnerSignatureIndividual() {
-    
-      }
-    
-      // tạo mảng người xem xét đối tác
-      getPartnerReviewer(item: any) {
+    }
+
+    // tạo đối tượng đ
+    getPartnerSignatureIndividual() {
+
+    }
+
+    // tạo mảng người xem xét đối tác
+    getPartnerReviewer(item: any) {
         return item.recipients.filter((p: any) => p.role == 2)
-      }
-    
-      getName(e: any, item: any) {
+    }
+
+    getName(e: any, item: any) {
         this.getNameIndividual = e.target.value;
         item.name = e.target.value;
-    
-      }
-    
-      // tạo mảng người ký đối tác tổ chức
-      getPartnerSignature(item: any) {
+
+    }
+
+    // tạo mảng người ký đối tác tổ chức
+    getPartnerSignature(item: any) {
         return item.recipients.filter((p: any) => p.role == 3)
-      }
-    
-      // tạo mảng đối tượng văn thư tổ chức của tôi
-      getPartnerDocument(item: any) {
+    }
+
+    // tạo mảng đối tượng văn thư tổ chức của tôi
+    getPartnerDocument(item: any) {
         return item.recipients.filter((p: any) => p.role == 4);
-      }
-    
-      // thêm đối tượng người xem xét tổ chức của tôi
-      addOriganzationReviewer() {
+    }
+
+    // thêm đối tượng người xem xét tổ chức của tôi
+    addOriganzationReviewer() {
         let data_determine_add = [];
         data_determine_add = [...this.contractService.getDataDetermine()];
         let data_organization = data_determine_add.filter((p: any) => p.type == 1)[0];
         let data = (data_organization.recipients.filter((p: any) => p.role == 2))[0];
         data.ordering = this.getOriganzationReviewer().length + 1;
         this.data_organization.recipients.push(data)
-      }
-    
-      // thêm đối tượng ký tổ chức của tôi
-      addOriganzationSignature() {
+    }
+
+    // thêm đối tượng ký tổ chức của tôi
+    addOriganzationSignature() {
         let data_determine_add = [];
         data_determine_add = [...this.contractService.getDataDetermine()];
         let data_organization = data_determine_add.filter((p: any) => p.type == 1)[0];
         let data = (data_organization.recipients.filter((p: any) => p.role == 3))[0];
         data.ordering = this.getOriganzationSignature().length + 1;
         this.data_organization.recipients.push(data);
-      }
-    
-      addOriganzationDocument() {
+    }
+
+    addOriganzationDocument() {
         let data_determine_add = [];
         data_determine_add = [...this.contractService.getDataDetermine()];
         let data_organization = data_determine_add.filter((p: any) => p.type == 1)[0];
         let data = (data_organization.recipients.filter((p: any) => p.role == 4))[0];
         data.ordering = this.getOriganzationDocument().length + 1;
         this.data_organization.recipients.push(data);
-      }
-    
-      // thêm đối tượng người xem xét đối tác (done)
-      addPartnerReviewer(item: any, index: number) {
+    }
+
+    // thêm đối tượng người xem xét đối tác (done)
+    addPartnerReviewer(item: any, index: number) {
         let data_determine_add = [];
         data_determine_add = [...this.contractService.getDataDetermine()];
         let data_partner = data_determine_add.filter((p: any) => p.type == 2)[0];
@@ -603,10 +614,10 @@ export class PartyContractFormComponent implements OnInit {
         data.ordering = count_data.length + 1;
         // this.data_parnter_organization[index].recipients.push(data);
         (this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
-      }
-    
-      // thêm đối tượng người điều phối (done)
-      addPartnerCoordination(item: any, index: number) {
+    }
+
+    // thêm đối tượng người điều phối (done)
+    addPartnerCoordination(item: any, index: number) {
         let data_determine_add = [];
         data_determine_add = [...this.contractService.getDataDetermine()];
         let data_partner = data_determine_add.filter((p: any) => p.type == 2)[0];
@@ -615,10 +626,10 @@ export class PartyContractFormComponent implements OnInit {
         data.ordering = count_data.length + 1;
         // this.data_parnter_organization[index].recipients.push(data);
         (this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
-      }
-    
-      // thêm đối tượng ký đối tác (done)
-      addPartnerSignature(item: any, index: number) {
+    }
+
+    // thêm đối tượng ký đối tác (done)
+    addPartnerSignature(item: any, index: number) {
         let data_determine_add = [];
         data_determine_add = [...this.contractService.getDataDetermine()];
         let data_partner = data_determine_add.filter((p: any) => (p.type == 2))[0];
@@ -627,10 +638,10 @@ export class PartyContractFormComponent implements OnInit {
         data.ordering = count_data.length + 1;
         // this.data_parnter_organization[index].recipients.push(data);
         (this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
-      }
-    
-      // thêm đối tượng văn thư đối tác (done)
-      addPartnerDocument(item: any, index: number) {
+    }
+
+    // thêm đối tượng văn thư đối tác (done)
+    addPartnerDocument(item: any, index: number) {
         let data_determine_add = [];
         data_determine_add = [...this.contractService.getDataDetermine()];
         let data_partner = data_determine_add.filter((p: any) => (p.type == 2))[0];
@@ -639,334 +650,334 @@ export class PartyContractFormComponent implements OnInit {
         data.ordering = count_data.length + 1;
         // this.data_parnter_organization[index].recipients.push(data);
         (this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
-      }
-    
-      // tạo mảng đối tượng người xem xét tổ chức của tôi
-      getOriganzationReviewer() {
+    }
+
+    // tạo mảng đối tượng người xem xét tổ chức của tôi
+    getOriganzationReviewer() {
         return this.data_organization.recipients.filter((p: any) => p.role == 2);
-      }
-    
-      // xóa đối tượng người xem xét tổ chức của tôi (done)
-      deleteOriganzationReviewer(i: any) {
+    }
+
+    // xóa đối tượng người xem xét tổ chức của tôi (done)
+    deleteOriganzationReviewer(i: any) {
         let arr_clone = this.data_organization.recipients.filter((p: any) => p.role == 2);
         let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 2);
         const array_empty: any[] = [];
         let new_arr: any[] = [];
         if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'người xem xét tổ chức')) {
-          return;
+            return;
         }
         arr_clone.forEach((element: any, index: number) => {
-          if (index != i) {
-            array_empty.push(element);
-          }
+            if (index != i) {
+                array_empty.push(element);
+            }
         })
         array_empty.forEach((item: any, index: number) => {
-          item.ordering = index + 1;
+            item.ordering = index + 1;
         })
         new_arr = arr_clone_different.concat(array_empty);
         this.data_organization.recipients = new_arr;
-      }
-    
-      // tạo mảng các đối tượng người ký tổ chức của tôi
-      getOriganzationSignature() {
+    }
+
+    // tạo mảng các đối tượng người ký tổ chức của tôi
+    getOriganzationSignature() {
         return this.data_organization.recipients.filter((p: any) => p.role == 3);
-      }
-    
-      // xóa đối tượng người ký tổ chức của tôi (done)
-      deleteOriganzationSignature(i: any) {
+    }
+
+    // xóa đối tượng người ký tổ chức của tôi (done)
+    deleteOriganzationSignature(i: any) {
         let arr_clone = this.data_organization.recipients.filter((p: any) => p.role == 3);
         let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 3);
         const array_empty: any[] = [];
         let new_arr: any[] = [];
-    
+
         if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'người ký tổ chức')) {
-          return;
+            return;
         }
-    
+
         arr_clone.forEach((element: any, index: number) => {
-          if (index != i) {
-            array_empty.push(element);
-          }
+            if (index != i) {
+                array_empty.push(element);
+            }
         })
         array_empty.forEach((item: any, index: number) => {
-          item.ordering = index + 1;
+            item.ordering = index + 1;
         })
         new_arr = arr_clone_different.concat(array_empty);
         this.data_organization.recipients = new_arr;
-    
-      }
-    
-      // xóa văn thư tổ chức của tôi (done)
-      deleteOriganzationDocument(i: any) {
+
+    }
+
+    // xóa văn thư tổ chức của tôi (done)
+    deleteOriganzationDocument(i: any) {
         let arr_clone = this.data_organization.recipients.filter((p: any) => p.role == 4);
         let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 4);
         const array_empty: any[] = [];
         let new_arr: any[] = [];
         if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'văn thư tổ chức')) {
-          return;
+            return;
         }
         arr_clone.forEach((element: any, index: number) => {
-          if (index != i) {
-            array_empty.push(element);
-          }
+            if (index != i) {
+                array_empty.push(element);
+            }
         })
         array_empty.forEach((item: any, index: number) => {
-          item.ordering = index + 1;
+            item.ordering = index + 1;
         })
         new_arr = arr_clone_different.concat(array_empty);
         this.data_organization.recipients = new_arr;
-      }
-    
-      // xóa đối tượng điều phối hợp đồng (done)
-      deletePartnerCoordination(index_item: any, item: any, id: number) {
+    }
+
+    // xóa đối tượng điều phối hợp đồng (done)
+    deletePartnerCoordination(index_item: any, item: any, id: number) {
         let arr_clone = item.recipients.filter((p: any) => p.role == 1);
         let arr_clone_different = item.recipients.filter((p: any) => p.role != 1);
         const array_empty: any[] = [];
         let new_arr: any[] = [];
         arr_clone.forEach((element: any, index: number) => {
-          if (index != index_item) {
-            array_empty.push(element);
-          }
+            if (index != index_item) {
+                array_empty.push(element);
+            }
         })
         array_empty.forEach((item: any, index: number) => {
-          item.ordering = index + 1;
+            item.ordering = index + 1;
         })
         new_arr = arr_clone_different.concat(array_empty);
         item.recipients = new_arr;
-      }
-    
-      // xóa đối tượng người xem xét đối tác
-      deletePartnerReviewer(index_item: any, item: any, id: number) {
+    }
+
+    // xóa đối tượng người xem xét đối tác
+    deletePartnerReviewer(index_item: any, item: any, id: number) {
         let arr_clone = item.recipients.filter((p: any) => p.role == 2);
         let arr_clone_different = item.recipients.filter((p: any) => p.role != 2);
         const array_empty: any[] = [];
         let new_arr: any[] = [];
         if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'người xem xét đối tác')) {
-          return;
+            return;
         }
         arr_clone.forEach((element: any, index: number) => {
-          if (index != index_item) {
-            array_empty.push(element);
-          }
+            if (index != index_item) {
+                array_empty.push(element);
+            }
         })
         array_empty.forEach((item: any, index: number) => {
-          item.ordering = index + 1;
+            item.ordering = index + 1;
         })
         new_arr = arr_clone_different.concat(array_empty);
         item.recipients = new_arr;
-      }
-    
-      // xóa đối tượng người ký đối tác
-      deletePartnerSignature(index_item: any, item: any) {
+    }
+
+    // xóa đối tượng người ký đối tác
+    deletePartnerSignature(index_item: any, item: any) {
         let arr_clone = item.recipients.filter((p: any) => p.role == 3);
         let arr_clone_different = item.recipients.filter((p: any) => p.role != 3);
         const array_empty: any[] = [];
         let new_arr: any[] = [];
         if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'người ký đối tác')) {
-          return;
+            return;
         }
         arr_clone.forEach((element: any, index: number) => {
-          if (index != index_item) {
-            array_empty.push(element);
-          }
+            if (index != index_item) {
+                array_empty.push(element);
+            }
         })
         array_empty.forEach((item: any, index: number) => {
-          item.ordering = index + 1;
+            item.ordering = index + 1;
         })
         new_arr = arr_clone_different.concat(array_empty);
         item.recipients = new_arr;
-      }
-    
-      deletePartnerDocument(index_item: any, item: any) {
+    }
+
+    deletePartnerDocument(index_item: any, item: any) {
         let arr_clone = item.recipients.filter((p: any) => p.role == 4);
         let arr_clone_different = item.recipients.filter((p: any) => p.role != 4);
         const array_empty: any[] = [];
         let new_arr: any[] = [];
         arr_clone.forEach((element: any, index: number) => {
-          if (index != index_item) {
-            array_empty.push(element);
-          }
+            if (index != index_item) {
+                array_empty.push(element);
+            }
         })
         array_empty.forEach((item: any, index: number) => {
-          item.ordering = index + 1;
+            item.ordering = index + 1;
         })
         new_arr = arr_clone_different.concat(array_empty);
         item.recipients = new_arr;
-      }
-    
-      dataParnterOrganization() {
+    }
+
+    dataParnterOrganization() {
         return this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-      }
-    
-      // thêm đối tác
-      addPartner() {
+    }
+
+    // thêm đối tác
+    addPartner() {
         let data_partner_add = {};
         // let data = [...this.contractService.getDataDetermine()];
         let data = [...this.contractService.getDataDetermineInitialization()];
         data_partner_add = data.filter((p: any) => (p.type == 2))[0];
         this.datasForm.is_determine_clone.push(data_partner_add);
         this.datasForm.is_determine_clone.forEach((res: any, index: number) => {
-          res.ordering = index + 1;
+            res.ordering = index + 1;
         })
-    
+
         console.log(this.data_parnter_organization);
-      }
-    
-      // xóa đối tham gia bên đối tác
-      deletePartner(index: any) {
+    }
+
+    // xóa đối tham gia bên đối tác
+    deletePartner(index: any) {
         this.datasForm.is_determine_clone.splice(index + 1, 1);
         this.datasForm.is_determine_clone.forEach((res: any, index: number) => {
-          res.ordering = index + 1;
+            res.ordering = index + 1;
         })
-      }
-    
-      changeData(item: any, index: any) {
+    }
+
+    changeData(item: any, index: any) {
         // this.checkedChange[index]['name'] = name;
         let data_partner_add = {};
         let data = [...this.contractService.getDataDetermine()];
         data_partner_add = data.filter((p: any) => p.type == item.type)[0];
         this.data_parnter_organization[index] = data_partner_add;
-      }
-    
-      changeType(e: any, item: any, index: number) {
+    }
+
+    changeType(e: any, item: any, index: number) {
         // console.log(item, e);
         item.name = "";
         let newArr: any[] = [];
         for (let i = 0; i < item.recipients.length; i++) {
-          if (!newArr.some((p: any) => p.role == item.recipients[i].role)) {
-            newArr.push(item.recipients[i]);
-          }
+            if (!newArr.some((p: any) => p.role == item.recipients[i].role)) {
+                newArr.push(item.recipients[i]);
+            }
         }
         if (newArr.length) {
-          newArr.forEach((item: any) => {
-            if (item.role == 3) {
-              item.name = "";
-              item.email = "";
-              item.phone = "";
-              item.role = 3; // người ký
-              item.ordering = 1;
-              item.status = 0;
-              item.is_otp = 0;
-              item.sign_type = [];
-              if (item.id) delete item.id;
-            }
-          })
+            newArr.forEach((item: any) => {
+                if (item.role == 3) {
+                    item.name = "";
+                    item.email = "";
+                    item.phone = "";
+                    item.role = 3; // người ký
+                    item.ordering = 1;
+                    item.status = 0;
+                    item.is_otp = 0;
+                    item.sign_type = [];
+                    if (item.id) delete item.id;
+                }
+            })
         }
         this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
-    
+
         if (item.type == 3) {
-          this.data_organization.ordering = 2;
-          item.ordering = 1;
-          this.is_change_party = true;
+            this.data_organization.ordering = 2;
+            item.ordering = 1;
+            this.is_change_party = true;
         } else {
-          this.data_organization.ordering = 1;
-          item.ordering = 2;
-          this.is_change_party = false;
+            this.data_organization.ordering = 1;
+            item.ordering = 2;
+            this.is_change_party = false;
         }
-      }
-    
-      // style select otp and phone with signature
-      getStyleSignature(data: any) {
+    }
+
+    // style select otp and phone with signature
+    getStyleSignature(data: any) {
         let dataCheck = data.sign_type.filter((p: any) => p.id == 1);
         if (dataCheck.length > 0) {
-          return {
-            'width': '40%'
-          }
+            return {
+                'width': '40%'
+            }
         } else return { 'width': '90%' }
-      }
-    
-      doTheSearch($event: Event, indexs: number, action: string): void {
+    }
+
+    doTheSearch($event: Event, indexs: number, action: string): void {
         const stringEmitted = ($event.target as HTMLInputElement).value;
         console.log(stringEmitted);
         this.arrSearchNameView = [];
         this.arrSearchNameSignature = [];
         this.arrSearchNameDoc = [];
         setTimeout(() => {
-          this.contractService.getNameOrganization("", stringEmitted).subscribe((res) => {
-            let arr_all = res.entities;
-            let data = arr_all.map((p: any) => ({ name: p.name, email: p.email }));
-            if (action == 'view') {
-              this.arrSearchNameView = data;
-            } else if (action == 'signature') {
-              this.arrSearchNameSignature = data;
-            } else {
-              this.arrSearchNameDoc = data;
-            }
-            // console.log(data, res);
-          }, () => {
-            this.getNotificationValid('có lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!')
-          })
+            this.contractService.getNameOrganization("", stringEmitted).subscribe((res) => {
+                let arr_all = res.entities;
+                let data = arr_all.map((p: any) => ({ name: p.name, email: p.email }));
+                if (action == 'view') {
+                    this.arrSearchNameView = data;
+                } else if (action == 'signature') {
+                    this.arrSearchNameSignature = data;
+                } else {
+                    this.arrSearchNameDoc = data;
+                }
+                // console.log(data, res);
+            }, () => {
+                this.getNotificationValid('có lỗi, vui lòng liên hệ với nhà phát triển để được xử lý!')
+            })
         }, 100)
-    
-      }
-    
-      onFocusIn(e: any, is_index: number, action: string) {
+
+    }
+
+    onFocusIn(e: any, is_index: number, action: string) {
         // console.log(e);
         if (e.type == "focusin") {
-          this.arrSearch = [];
-          let arrData = [];
-          if (action == 'view') {
-            arrData = this.data_organization.recipients.filter((p: any) => p.role == 2);
-          } else if (action == 'signature') {
-            arrData = this.data_organization.recipients.filter((p: any) => p.role == 3);
-          } else if (action == 'doc') {
-            arrData = this.data_organization.recipients.filter((p: any) => p.role == 4);
-          }
-          if (arrData.length > 0) {
-            arrData.forEach((res: any, index: number) => {
-              this.arrSearch.push(false);
-              if (is_index == index) {
-                this.arrSearch[index] = true;
-              } else this.arrSearch[index] = false;
-            })
-          }
-    
+            this.arrSearch = [];
+            let arrData = [];
+            if (action == 'view') {
+                arrData = this.data_organization.recipients.filter((p: any) => p.role == 2);
+            } else if (action == 'signature') {
+                arrData = this.data_organization.recipients.filter((p: any) => p.role == 3);
+            } else if (action == 'doc') {
+                arrData = this.data_organization.recipients.filter((p: any) => p.role == 4);
+            }
+            if (arrData.length > 0) {
+                arrData.forEach((res: any, index: number) => {
+                    this.arrSearch.push(false);
+                    if (is_index == index) {
+                        this.arrSearch[index] = true;
+                    } else this.arrSearch[index] = false;
+                })
+            }
+
         }
-      }
-    
-      onFocusOut(e: any, dItem: any) {
+    }
+
+    onFocusOut(e: any, dItem: any) {
         // console.log(e)
         if (!e.relatedTarget || (e.relatedTarget && e.relatedTarget.className && !e.relatedTarget.className.includes('search-name-items'))) {
-          if (!dItem.name) dItem.email = '';
-          this.arrSearchNameView = [];
-          this.arrSearchNameSignature = [];
-          this.arrSearchNameDoc = [];
+            if (!dItem.name) dItem.email = '';
+            this.arrSearchNameView = [];
+            this.arrSearchNameSignature = [];
+            this.arrSearchNameDoc = [];
         }
-      }
-    
-      onSelectName(tData: any, dData: any) {
+    }
+
+    onSelectName(tData: any, dData: any) {
         dData.name = tData.name;
         dData.email = tData.email;
         this.arrSearchNameView = [];
         this.arrSearchNameSignature = [];
         this.arrSearchNameDoc = [];
-      }
-    
-      onChangeValue(e: any, orering_data: string) {
+    }
+
+    onChangeValue(e: any, orering_data: string) {
         // console.log(e.target.value);
         if (!e.target.value) {
-          let data_ordering = document.getElementById(orering_data);
-          if (data_ordering)
-            data_ordering.focus();
-          this.toastService.showErrorHTMLWithTimeout("Bạn chưa nhập thứ tự ký!", "", 3000);
+            let data_ordering = document.getElementById(orering_data);
+            if (data_ordering)
+                data_ordering.focus();
+            this.toastService.showErrorHTMLWithTimeout("Bạn chưa nhập thứ tự ký!", "", 3000);
         }
-      }
-    
-      deleteElement(dataArrClone: any, assignElement: string) {
+    }
+
+    deleteElement(dataArrClone: any, assignElement: string) {
         this.spinner.show();
         let count = 0;
         this.contractService.deleteInfoContractSignature(dataArrClone.fields[0].id).subscribe((res: any) => {
-          this.toastService.showSuccessHTMLWithTimeout(`Bạn đã xóa ${assignElement} ${dataArrClone.name}!`, "", "3000");
+            this.toastService.showSuccessHTMLWithTimeout(`Bạn đã xóa ${assignElement} ${dataArrClone.name}!`, "", "3000");
         }, (error: HttpErrorResponse) => {
-          this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
-          this.spinner.hide();
-          count = 1;
+            this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+            this.spinner.hide();
+            count = 1;
         }, () => {
-          this.spinner.hide();
+            this.spinner.hide();
         })
-    
+
         if (count == 0)
-          return true
+            return true
         else return false;
-      }
+    }
 }

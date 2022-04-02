@@ -80,6 +80,7 @@ export class AddContractComponent implements OnInit {
   stepForm: any;
   message: any;
   shareData: object;
+  is_disable: boolean = false;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -171,6 +172,10 @@ export class AddContractComponent implements OnInit {
         
       } 
     });
+    setTimeout(() => {
+      console.log(this.is_disable);
+      
+    }, 3000)
   }
 
   getDataContractCreated(data: any) {
@@ -280,7 +285,7 @@ export class AddContractComponent implements OnInit {
     } else if (this.type == 2) {
       this.stepForm = e;
     }
-    
+    this.is_disable = (e != 'infor-contract' || e != 'infor-contract-form');
   }
 
 
