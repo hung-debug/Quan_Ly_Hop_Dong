@@ -216,7 +216,7 @@ export class PartyContractFormComponent implements OnInit {
                 // this.datasForm.i_data_file_contract = result.i_data_file_contract;
                 this.datasForm['is_data_object_signature'] = result;
                 this.datasForm.is_determine_clone = res ? res : this.datasForm.is_determine_clone;
-                this.stepForm = variable.stepSampleContract.step3;
+                this.stepForm = variable.stepSampleContractForm.step3;
                 this.datasForm.stepLast = this.stepForm;
                 this.nextOrPreviousStep(this.stepForm);
             }, () => {

@@ -3,7 +3,7 @@
     <div class="form-group">
       <div class="label_item">Mẫu hợp đồng <span class="require_star">*</span></div>
       <div>
-        <p-dropdown panelStyleClass="font" [options]="typeListForm" [(ngModel)]="form_id" optionLabel="name"
+        <p-dropdown panelStyleClass="font" [options]="typeListForm" [(ngModel)]="this.datasForm.form_id" optionLabel="name"
           optionValue="id" placeholder="Chọn hợp đồng" [filter]="true" filterBy="name" [showClear]="true"
           (onChange)="OnChangeForm($event)">
         </p-dropdown>

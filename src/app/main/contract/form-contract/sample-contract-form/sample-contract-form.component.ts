@@ -35,7 +35,7 @@ export class SampleContractFormComponent implements OnInit {
     @Input() stepForm: any;
     @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
     @Output() stepChangeSampleContractForm = new EventEmitter<string>();
-    @Input() save_draft_infor: any;
+    @Input() save_draft_infor_form: any;
 
     pdfSrc: any;
     thePDF = null;
@@ -104,7 +104,7 @@ export class SampleContractFormComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.spinner.hide();
+        // this.spinner.hide();
         // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
         if (!this.datasForm.contract_user_sign) {
           // ham chuyen doi hinh thuc ky type => sign_unit
@@ -139,23 +139,9 @@ export class SampleContractFormComponent implements OnInit {
             height: 0
           }
         }
-        // if (this.datasForm.is_action_contract_created) {
-        //   if (this.datasForm.uploadFileContractAgain) {
-        //     this.pdfSrc = Helper._getUrlPdf(this.datasForm.file_content);
-        //   } else {
-        //     let fileContract_1 = this.datasForm.i_data_file_contract.filter((p: any) => p.type == 1)[0];
-        //     let fileContract_2 = this.datasForm.i_data_file_contract.filter((p: any) => p.type == 2)[0];
-        //     if (fileContract_2) {
-        //       this.pdfSrc = fileContract_2.path;
-        //     } else {
-        //       this.pdfSrc = fileContract_1.path;
-        //     }
-        //   }
-        // } else {
-        //   this.pdfSrc = Helper._getUrlPdf(this.datasForm.file_content);
-        // }
 
-        this.pdfSrc = Helper._getUrlPdf(this.datasForm.pdfUrl);
+        this.pdfSrc = this.datasForm.pdfUrl;
+
         this.getPage();
         // event drag and drop
         interact('.dropzone').dropzone({
@@ -254,40 +240,13 @@ export class SampleContractFormComponent implements OnInit {
               item['role'] = item.role;
               dataNotPosition.push(item)
             }
-    
-    
-            // p.recipient_id == item.id
-            // let data_duplicate = this.datasForm.is_data_object_signature.filter((p: any) => p.recipient.email == item.email)[0];
-            // if (data_duplicate) {
-            //   // lấy ra dữ liệu bị trùng và update lại với dữ liệu mới;
-            //   data_duplicate.name = item.name;
-            //   data_duplicate.email = item.email;
-            //   data_duplicate.phoneNumber = item.phoneNumber;
-            //   data_duplicate.sign_type = item.sign_type;
-            //   // data_duplicate.sign_unit = item.sign_type.some((data: any) => data.id == 1) ? 'chu_ky_anh' : 'chu_ky_so';
-            //   data_duplicate.is_otp = item.is_otp;
-            //   data_duplicate['id_have_data'] = data_duplicate.id;
-            //   data_duplicate['is_type_party'] = element.type;
-            //   data_duplicate['role'] = data_duplicate.recipient.role;
-            //   if (data_duplicate.sign_unit == 'chu_ky_so' || data_duplicate.sign_unit == 'so_tai_lieu') {
-            //     data_duplicate.sign_unit = item.sign_type.some((data: any) => data.id == 1) ? 'chu_ky_anh' : 'chu_ky_so';
-            //   }
-            //   // delete data_duplicate.recipient;
-            //   dataPosition.push(data_duplicate);
-            // } else {
-            //   item['is_type_party'] = this.datasForm.is_determine_clone.type;
-            //   item['role'] = item.role;
-            //   dataNotPosition.push(item)
-            // }
           })
-          // console.log(this.datasForm.is_determine_clone);
-    
         })
     
         // let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
         // let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
         this.dataSignPosition = [...dataPosition, ...dataNotPosition];
-        console.log(this.dataSignPosition);
+        // console.log(this.dataSignPosition);
     
     
         this.dataSignPosition.forEach((res: any) => {
@@ -295,7 +254,6 @@ export class SampleContractFormComponent implements OnInit {
             res['text_attribute_name'] = res.name;
           }
         })
-        // this.datasForm.is_determine_clone = this.datasFormignPosition;
       }
     
       setDataSignContract() {
@@ -391,7 +349,7 @@ export class SampleContractFormComponent implements OnInit {
       }
     
       ngOnChanges(changes: SimpleChanges): void {
-        if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.step == 'sample-contract') {
+        if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'sample-contract') {
           this.next('save_draft');
         }
       }
@@ -1234,9 +1192,9 @@ export class SampleContractFormComponent implements OnInit {
     
       async next(action: string) {
         if (action == 'next_step' && !this.validData()) {
-          if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
-            this.save_draft_infor.close_header = false;
-            this.save_draft_infor.close_modal.close();
+          if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+            this.save_draft_infor_form.close_header = false;
+            this.save_draft_infor_form.close_modal.close();
           }
           return;
         }
@@ -1299,9 +1257,9 @@ export class SampleContractFormComponent implements OnInit {
                   this.spinner.hide();
                 }
               );
-              if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
-                this.save_draft_infor.close_header = false;
-                this.save_draft_infor.close_modal.close();
+              if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                this.save_draft_infor_form.close_header = false;
+                this.save_draft_infor_form.close_modal.close();
               }
             }
           } else if (action == 'next_step') {
@@ -1405,9 +1363,9 @@ export class SampleContractFormComponent implements OnInit {
             this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
           }
         } else {
-          if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
-            this.save_draft_infor.close_header = false;
-            this.save_draft_infor.close_modal.close();
+          if (this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+            this.save_draft_infor_form.close_header = false;
+            this.save_draft_infor_form.close_modal.close();
           }
         }
       }

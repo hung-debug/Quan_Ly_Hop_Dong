@@ -59,7 +59,7 @@ export class InforContractFormComponent implements OnInit {
     ngOnInit(): void {
         this.datasForm.end_time = this.datasForm.end_time ? moment(this.datasForm.timeDateSign).toDate() : moment(new Date()).add(30, 'day').toDate();
         // this.datasForm.type_id = this.datasForm.type_id ? this.datasForm.type_id : null;
-        this.form_id = this.datasForm.form_id ? this.datasForm.form_id : null;
+        // this.form_id = this.datasForm.form_id ? this.datasForm.form_id : null;
         this.contractConnect = this.datasForm.contractConnect ? this.datasForm.contractConnect : null;
         // if (this.datasForm.attachFormFileNameArr) {
         //     this.attachFormFileNameArr = this.datasForm.attachFormFileNameArr
@@ -98,7 +98,7 @@ export class InforContractFormComponent implements OnInit {
     }
 
     OnChangeForm(e: any) {
-        console.log(e);
+        // console.log(e);
         this.spinner.show();
         this.contractService.getDetailContractFormInfor(e.value).subscribe((res: any) => {
             console.log(res);
@@ -197,10 +197,11 @@ export class InforContractFormComponent implements OnInit {
     deleteFileAttach(item: any, index_dlt: number) {
         if (item.id) {
             this.spinner.show();
-            let data = this.datasForm.i_data_file_contract.filter((p: any) => p.id == item.id)[0];
+            // let data = this.datasForm.i_data_file_contract.filter((p: any) => p.id == item.id)[0];
+            let data = this.datasForm.attachFormFileNameArr.filter((p: any) => p.id == item.id)[0];
             if (data) data.status = 0;
             this.contractService.updateFileAttach(item.id, data).subscribe((res: any) => {
-                this.datasForm.attachFileNameArr.splice(index_dlt, 1);
+                this.datasForm.attachFormFileNameArr.splice(index_dlt, 1);
             }, error => {
                 this.toastService.showErrorHTMLWithTimeout("Lỗi xoá file đính kèm!", "", 3000);
                 this.spinner.hide();
@@ -208,16 +209,17 @@ export class InforContractFormComponent implements OnInit {
                 this.spinner.hide();
             })
         } else {
-            this.datasForm.attachFileNameArr.splice(index_dlt, 1);
+            this.datasForm.attachFormFileNameArr.splice(index_dlt, 1);
         }
-        this.attachFileArr.forEach((element, index) => {
-            if (element.name == item) this.attachFileArr.splice(index, 1);
-        });
-        this.datasForm.attachFileArr = this.attachFileArr;
+        // this.attachFileArr.forEach((element, index) => {
+        //     if (element.name == item) this.attachFileArr.splice(index, 1);
+        // });
+        // this.datasForm.attachFileArr = this.attachFileArr;
+        // this.datasForm.attachFormFileNameArr = this.attachFileArr;
     }
 
     validDataForm() {
-        if (!this.form_id) {
+        if (!this.datasForm.form_id) {
             this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn mẫu hợp đồng!", "", "3000");
             return false;
         }
@@ -233,27 +235,48 @@ export class InforContractFormComponent implements OnInit {
             this.toastService.showErrorHTMLWithTimeout('Ngày hết hạn ký không được nhỏ hơn ngày hiện tại!', "", 3000);
             return false;
         }
+
         return true;
+
     }
 
     async next() {
         if (this.validDataForm()) {
             this.spinner.show();
             let coutError = false;
-            await this.contractService.addContractStep1(this.datasForm).toPromise().then((data) => {
-                this.datasForm.id = data?.id;
-                this.datasForm.contract_id = data?.id;
-            }, (error) => {
-                coutError = true;
-                this.errorData();
-            })
 
-            if (this.datasForm.file_content) {
-                if (this.datasForm.file_content && (typeof this.datasForm.file_content == 'string')) {
-                    await this.contractService.getDataBinaryFileUrlConvert(this.datasForm.file_content).toPromise().then((res: any) => {
-                        if (res)
-                            this.datasForm.file_content = res;
-                    })
+            if (this.datasForm.contract_no) {
+                //check so hop dong da ton tai hay chua
+                await this.contractTemplateService.checkCodeUnique(this.datasForm.contract_no, this.datasForm.start_time, this.datasForm.end_time).toPromise().then(
+                    dataCode => {
+                        if (!dataCode.success) {
+                            this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+                            this.spinner.hide();
+                            coutError = true;
+                        }
+                    }, (error) => {
+                        coutError = true;
+                        this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+                        this.spinner.hide();
+                    });
+            }
+
+            if (!coutError) {
+                await this.contractService.addContractStep1(this.datasForm).toPromise().then((data) => {
+                    this.datasForm.id = data?.id;
+                    this.datasForm.contract_id = data?.id;
+                }, (error) => {
+                    coutError = true;
+                    this.errorData();
+                })
+
+                if (this.datasForm.file_content) {
+                    if (this.datasForm.file_content && (typeof this.datasForm.file_content == 'string')) {
+                        await this.contractService.getDataBinaryFileUrlConvert(this.datasForm.file_content).toPromise().then((res: any) => {
+                            if (res)
+                                this.datasForm.file_content = res;
+                        })
+                    }
                 }
             }
 
@@ -308,8 +331,8 @@ export class InforContractFormComponent implements OnInit {
 
             if (!coutError) {
                 if (this.datasForm.attachFormFileNameArr && this.datasForm.attachFormFileNameArr.length && this.datasForm.attachFormFileNameArr.length > 0) {
-                    for (let i = 0; i < this.datasForm.attachFormFileArr.length; i++) {
-                        await this.uploadService.uploadFile(this.datasForm.attachFormFileArr[i]).toPromise().then((data) => {
+                    for (let i = 0; i < this.datasForm.attachFormFileNameArr.length; i++) {
+                        await this.uploadService.uploadFile(this.datasForm.attachFormFileNameArr[i]).toPromise().then((data) => {
                             this.datasForm.filePathAttach = data.file_object.file_path;
                             this.datasForm.fileNameAttach = data.file_object.filename;
                             this.datasForm.fileBucketAttach = data.file_object.bucket;
