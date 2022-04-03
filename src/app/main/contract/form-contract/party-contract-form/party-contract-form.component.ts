@@ -107,7 +107,7 @@ export class PartyContractFormComponent implements OnInit {
 
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'determine-contract') {
+        if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'party-contract-form') {
             this.next('save-draft');
         }
     }

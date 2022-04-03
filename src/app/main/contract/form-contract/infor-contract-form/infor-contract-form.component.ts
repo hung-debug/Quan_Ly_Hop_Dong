@@ -64,7 +64,8 @@ export class InforContractFormComponent implements OnInit {
         private contractTemplateService: ContractTemplateService,
         private toastService: ToastService,
         private spinner: NgxSpinnerService,
-        private uploadService: UploadService
+        private uploadService: UploadService,
+        private router: Router
     ) { }
 
     ngOnInit(): void {
@@ -85,7 +86,7 @@ export class InforContractFormComponent implements OnInit {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'infor-contract-form') {
-          this.saveDraft();
+          this.next('luu_nhap');
         }
       }
 
@@ -136,6 +137,7 @@ export class InforContractFormComponent implements OnInit {
                 this.datasForm.name = dataContractForm.name;
                 this.datasForm.notes = isDataInfo.notes;
                 this.datasForm.type_id = isDataInfo.type_id;
+                this.datasForm.document_id = dataContractForm.id;
             }
             if (dataContractAttachForm) {
                 console.log(dataContractAttachForm);
@@ -242,10 +244,10 @@ export class InforContractFormComponent implements OnInit {
     }
 
     // Next step two create form contract
-    async next() {
+    async next(action: string) {
         this.spinner.show();
         let coutError = false;
-        if (this.datasForm.contract_no) {
+        if (this.datasForm.contract_no && action != 'luu_nhap') {
             //check trung so hop dong
             await this.contractTemplateService.checkCodeUnique(this.datasForm.contract_no, this.datasForm.start_time, this.datasForm.end_time).toPromise().then(
                 dataCode => {
@@ -261,7 +263,7 @@ export class InforContractFormComponent implements OnInit {
                 });
         }
 
-        if (!coutError && this.validDataForm()) {
+        if (!coutError && (action == 'luu_nhap' || (action == 'chuyen_buoc' && this.validDataForm())) ) {
             // define du lieu hop dong lien quan
             this.defineData(this.datasForm);
             if (!coutError) {
@@ -403,28 +405,28 @@ export class InforContractFormComponent implements OnInit {
                 }
 
                 if (!coutError) {
-                    // if (action != "save_draft") {
-                    this.getDataContractForm();
-                    // } else {
-                    //     if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
-                    //         this.save_draft_infor.close_header = false;
-                    //         this.save_draft_infor.close_modal.close();
-                    //     }
-                    //     this.router.navigate(['/main/contract/create/draft']);
-                    //     this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-                    // }
-                    // this.spinner.hide();
+                    if (action == "chuyen_buoc") {
+                        this.getDataContractForm();
+                    } else {
+                        if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                            this.save_draft_infor_form.close_header = false;
+                            this.save_draft_infor_form.close_modal.close();
+                        }
+                        this.router.navigate(['/main/contract/create/draft']);
+                        this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+                    }
+                    this.spinner.hide();
                 }
 
             } else {
-                // if (action == "save_draft") {
-                //     this.router.navigate(['/main/contract/create/draft']);
-                //     this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-                //   } else {
+                if (action == "luu_nhap") {
+                    this.router.navigate(['/main/contract/create/draft']);
+                    this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+                  } else {
                 //next step
-                this.getDataContractForm();
-                //   }
-                // this.spinner.hide();
+                    this.getDataContractForm();
+                  }
+                this.spinner.hide();
             }
             // }
         } else this.spinner.hide();

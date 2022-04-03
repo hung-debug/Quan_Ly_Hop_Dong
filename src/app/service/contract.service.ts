@@ -239,7 +239,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-     return this.http.get<any>(this.getObjectSignature + `/${id_contract_form}`, { headers });
+     return this.http.get<any>(this.getObjectSignature + `${id_contract_form}`, { headers });
   }
 
   getContractSample(data_sample_contract: any) {

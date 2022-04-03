@@ -110,7 +110,7 @@ export class ConfirmContractFormComponent implements OnInit {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'confirm-contract') {
+        if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'confirm-contract-form') {
             this.SaveContract('saveDraft_contract');
         }
     }
@@ -165,73 +165,73 @@ export class ConfirmContractFormComponent implements OnInit {
             this.getDefinddatasFormignEdit(isHaveFieldId, isNotFieldId, action);
         // } 
         // else {
-        //     this.data_sample_contract = [];
-        //     let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
-        //     let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
-        //     isContractUserSign_clone.forEach((element: any) => {
-        //         if (element.sign_config.length > 0) {
-        //             element.sign_config.forEach((item: any) => {
-        //                 item['font'] = 'Arial';
-        //                 item['font_size'] = 14;
-        //                 item['contract_id'] = this.datasForm.contract_id;
-        //                 item['document_id'] = this.datasForm.document_id;
-        //                 if (item.text_attribute_name) {
-        //                     item.name = item.text_attribute_name;
-        //                 }
+            this.data_sample_contract = [];
+            let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
+            let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
+            isContractUserSign_clone.forEach((element: any) => {
+                if (element.sign_config.length > 0) {
+                    element.sign_config.forEach((item: any) => {
+                        item['font'] = 'Arial';
+                        item['font_size'] = 14;
+                        item['contract_id'] = this.datasForm.contract_id;
+                        item['document_id'] = this.datasForm.document_id;
+                        if (item.text_attribute_name) {
+                            item.name = item.text_attribute_name;
+                        }
 
-        //                 if (item.sign_unit == 'chu_ky_anh') {
-        //                     item['type'] = 2;
-        //                 } else if (item.sign_unit == 'chu_ky_so') {
-        //                     item['type'] = 3;
-        //                 } else if (item.sign_unit == 'so_tai_lieu') {
-        //                     item['type'] = 4;
-        //                     if (this.datasForm.contract_no) {
-        //                         if (!item.name)
-        //                             item.name = null;
+                        if (item.sign_unit == 'chu_ky_anh') {
+                            item['type'] = 2;
+                        } else if (item.sign_unit == 'chu_ky_so') {
+                            item['type'] = 3;
+                        } else if (item.sign_unit == 'so_tai_lieu') {
+                            item['type'] = 4;
+                            if (this.datasForm.contract_no) {
+                                if (!item.name)
+                                    item.name = null;
 
-        //                         if (!item.recipient_id)
-        //                             item.recipient_id = null;
+                                if (!item.recipient_id)
+                                    item.recipient_id = null;
 
-        //                         if (!item.status)
-        //                             item.status = 0;
-        //                     }
+                                if (!item.status)
+                                    item.status = 0;
+                            }
 
-        //                 } else {
-        //                     item['type'] = 1;
-        //                 }
+                        } else {
+                            item['type'] = 1;
+                        }
 
-        //                 data_remove_arr_request.forEach((item_remove: any) => {
-        //                     delete item[item_remove]
-        //                 })
-        //             })
-        //             Array.prototype.push.apply(this.data_sample_contract, element.sign_config);
-        //         }
-        //     })
+                        data_remove_arr_request.forEach((item_remove: any) => {
+                            delete item[item_remove]
+                        })
+                    })
+                    Array.prototype.push.apply(this.data_sample_contract, element.sign_config);
+                }
+            })
 
-        //     this.spinner.show();
-        //     this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
-        //         if (action == 'finish_contract') {
-        //             this.callAPIFinish();
-        //         } else {
-        //             if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-        //                 this.save_draft_infor_form.close_header = false;
-        //                 this.save_draft_infor_form.close_modal.close();
-        //             }
-        //             this.router.navigate(['/main/contract/create/draft']);
-        //             this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-        //         }
-        //     },
-        //         (error) => {
-        //             if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-        //                 this.save_draft_infor_form.close_header = false;
-        //                 this.save_draft_infor_form.close_modal.close();
-        //             }
-        //             this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý.", "", 3000);
-        //             this.spinner.hide();
-        //         }, () => {
-        //             this.spinner.hide();
-        //         }
-        //     );
+            this.spinner.show();
+            this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
+                if (action == 'finish_contract') {
+                    this.callAPIFinish();
+                } else {
+                    if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                        this.save_draft_infor_form.close_header = false;
+                        this.save_draft_infor_form.close_modal.close();
+                    }
+                    this.router.navigate(['/main/contract/create/draft']);
+                    this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+                }
+            },
+                (error) => {
+                    if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                        this.save_draft_infor_form.close_header = false;
+                        this.save_draft_infor_form.close_modal.close();
+                    }
+                    this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý.", "", 3000);
+                    this.spinner.hide();
+                }, () => {
+                    this.spinner.hide();
+                }
+            );
 
         // }
     }

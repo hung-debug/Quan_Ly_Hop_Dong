@@ -331,7 +331,8 @@ export class SampleContractFormComponent implements OnInit {
               id: element.id,
               sign_type: element.sign_type,
               name: element.name,
-              email: element.email
+              email: element.email,
+              is_type_party: res.type
             }
             dataDetermine.push(isObj);
           })
@@ -368,9 +369,19 @@ export class SampleContractFormComponent implements OnInit {
         // dữ liệu ký
         this.datasForm.contract_user_sign.forEach((resForm: any) => {
           if (resForm.sign_config.length > 0) {
-            resForm.sign_config = resForm.sign_config.filter((val: any) => dataDiffirent.some((data: any) => (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
+            resForm.sign_config = resForm.sign_config.filter((val: any) => 
+            dataDiffirent.some((data: any) => 
+            (val.recipient ? val.recipient.name : val.name as any) == (data.name as any) && 
+            (val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email : data.email as any) && 
+            val.sign_unit == data.sign_unit));
             resForm.sign_config.forEach((items: any) => {
                   items.id = items.id + '1';
+                  let data: any = {};
+                  data = dataDetermine.filter((data: any) => data.email == (items.recipient ? items.recipient.email : items.email) && data.name == (items.recipient ? items.recipient.name : items.name))[0];
+                  if (data) {
+                    items.is_type_party = data.is_type_party;
+                  }
+                  
                 })
           }
         })
@@ -407,7 +418,7 @@ export class SampleContractFormComponent implements OnInit {
       }
     
       ngOnChanges(changes: SimpleChanges): void {
-        if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'sample-contract') {
+        if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'sample-contract-form') {
           this.next('save_draft');
         }
       }
@@ -693,7 +704,7 @@ export class SampleContractFormComponent implements OnInit {
               element.is_disable = true;
             else element.is_disable = false;
           } else {
-            if (this.convertToSignConfig().some((p: any) => p.email == element.email && p.sign_unit == isSignType)) {
+            if (this.convertToSignConfig().some((p: any) => (p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType)) {
               if (isSignType != 'text') {
                 element.is_disable = true;
               }
@@ -1127,11 +1138,11 @@ export class SampleContractFormComponent implements OnInit {
         let arrSignConfig: any = [];
         let cloneUserSign = [...this.datasForm.contract_user_sign];
         cloneUserSign.forEach(element => {
-        //   if (this.datasForm.is_action_contract_created) {
+          if (this.datasForm.is_action_contract_created) {
             if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
               arrSignConfig = arrSignConfig.concat(element.sign_config);
             }
-        //   } else arrSignConfig = arrSignConfig.concat(element.sign_config);
+          } else arrSignConfig = arrSignConfig.concat(element.sign_config);
         })
         return arrSignConfig;
       }
@@ -1313,6 +1324,8 @@ export class SampleContractFormComponent implements OnInit {
               }
             }
           } else if (action == 'next_step') {
+            console.log(this.datasForm.contract_user_sign);
+            
             this.stepForm = variable.stepSampleContractForm.step4;
             this.datasForm.stepLast = this.stepForm
             this.nextOrPreviousStep(this.stepForm);
@@ -1462,7 +1475,7 @@ export class SampleContractFormComponent implements OnInit {
                     name: element.name,
                     signature_party: element.signature_party,
                     recipient_id: element.recipient_id,
-                    email: element.email,
+                    email: element.recipient ? element.recipient.email : element.email,
                     sign_unit: element.sign_unit
                   }
                   if (element.signature_party == "organization" || element.is_type_party == 1)
