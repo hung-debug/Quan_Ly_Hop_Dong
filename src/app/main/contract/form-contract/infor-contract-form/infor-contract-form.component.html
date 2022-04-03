@@ -59,7 +59,7 @@
       <div>
         <p-dropdown panelStyleClass="font" [options]="typeList" [(ngModel)]="datasForm.type_id" optionLabel="name"
           optionValue="id" placeholder="Chọn loại hợp đồng" [filter]="true" filterBy="name" [showClear]="true"
-          (onChange)="onChangeType($event)"></p-dropdown>
+          ></p-dropdown>
       </div>
     </div>
 
@@ -67,7 +67,7 @@
       <div class="label_item">{{'contract.connect' | translate}}</div>
       <div>
         <p-multiSelect styleClass="font" [options]="contractConnectList" [(ngModel)]="contractConnect"
-          optionLabel="name" optionValue="id" display="chip" placeholder="Chọn hợp đồng" (onChange)="onChangeContractConnect($event)">
+          optionLabel="name" optionValue="id" display="chip" placeholder="Chọn hợp đồng">
         </p-multiSelect>
       </div>
     </div>

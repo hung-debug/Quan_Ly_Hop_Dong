@@ -106,28 +106,46 @@ export class SampleContractFormComponent implements OnInit {
     ngOnInit() {
         // this.spinner.hide();
         // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
-        if (!this.datasForm.contract_user_sign) {
+        // if (!this.datasForm.contract_user_sign) {
           // ham chuyen doi hinh thuc ky type => sign_unit
           // this.getAddSignUnit();
           // ham update du lieu hop dong sua
-          this.getDataSignUpdateAction();
+          // this.getDataSignUpdateAction();
           // if (!this.datasForm.contract_user_sign) {
-          this.datasForm.contract_user_sign = this.contractTemplateService.getDataFormatContractUserSign();
+          // this.datasForm.contract_user_sign = this.contractTemplateService.getDataFormatContractUserSign();
     
           // }
-          this.setDataSignContract();
-        }
-    
-        // if (this.datasForm.back_step_4) {
-        //   this.datasForm.back_step_4 = false;
+          // this.setDataSignContract();
         // }
     
         if (!this.datasForm.contract_user_sign) {
+          // this.getDataSignUpdateAction();
+          if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
+            this.datasForm.is_data_object_signature.forEach((res: any)=> {
+              if (res.type == 1) {
+                  res['sign_unit'] = 'text';
+                }
+                if (res.type == 2) {
+                  res['sign_unit'] = 'chu_ky_anh'
+                }
+                if (res.type == 3) {
+                  res['sign_unit'] = 'chu_ky_so'
+                }
+                if (res.type == 4) {
+                  res['sign_unit'] = 'so_tai_lieu'
+                }
+            })
+          }
           this.datasForm.contract_user_sign = this.contractTemplateService.getDataFormatContractUserSign();
-        } else {
-          // Lay du lieu doi tuong ky cua buoc 2
-          this.defindDataContract();
-        }
+          this.setDataSignContract();
+        } 
+        // else {
+        //   // Lay du lieu doi tuong ky cua buoc 2
+        //   this.defindDataContract();
+        // }
+
+        this.defindDataContract();
+
         this.scale = 1;
         if (this.datasForm.is_determine_clone && this.datasForm.is_determine_clone.length > 0) {
           let data_user_sign = [...this.datasForm.is_determine_clone];
@@ -207,60 +225,90 @@ export class SampleContractFormComponent implements OnInit {
     
       }
     
-      getDataSignUpdateAction() {
-        let dataPosition: any[] = [];
-        let dataNotPosition: any[] = [];
-        this.datasForm.is_determine_clone.forEach((element: any) => {
-          element.recipients.forEach((item: any) => {
-            // let data_duplicate = this.datasForm.is_data_object_signature.filter((p: any) => p.recipient.email == item.email && p.recipient_id == item.id)[0];
-            if (item.fields && item.fields.length && item.fields.length > 0) {
-              item.fields.forEach((res: any) => {
-                res['id_have_data'] = res.id;
-                res['is_type_party'] = element.type;
-                res['role'] = res.recipient.role;
-                if (res.type == 1) {
-                  res['sign_unit'] = 'text';
-                }
-                if (res.type == 2) {
-                  res['sign_unit'] = 'chu_ky_anh'
-                }
-                if (res.type == 3) {
-                  res['sign_unit'] = 'chu_ky_so'
-                }
-                if (res.type == 4) {
-                  res['sign_unit'] = 'so_tai_lieu'
-                }
-                res.name = res.recipient.name;
-                res.email = res.recipient.email;
-                dataPosition.push(res);
-              })
+      // getDataSignUpdateAction() {
+      //   let dataPosition: any[] = [];
+      //   let dataNotPosition: any[] = [];
+      //   this.datasForm.is_determine_clone.forEach((element: any) => {
+      //     element.recipients.forEach((item: any) => {
+      //       let data_duplicate = this.datasForm.is_data_object_signature.filter((p: any) => p.recipient && p.recipient.email == item.email && p.recipient.name == item.name && p.type)[0];
+      //       // if (item.fields && item.fields.length && item.fields.length > 0) {
+      //       //   item.fields.forEach((res: any) => {
+      //       //     res['id_have_data'] = res.id;
+      //       //     res['is_type_party'] = element.type;
+      //       //     res['role'] = res.recipient.role;
+      //       //     if (res.type == 1) {
+      //       //       res['sign_unit'] = 'text';
+      //       //     }
+      //       //     if (res.type == 2) {
+      //       //       res['sign_unit'] = 'chu_ky_anh'
+      //       //     }
+      //       //     if (res.type == 3) {
+      //       //       res['sign_unit'] = 'chu_ky_so'
+      //       //     }
+      //       //     if (res.type == 4) {
+      //       //       res['sign_unit'] = 'so_tai_lieu'
+      //       //     }
+      //       //     res.name = res.recipient.name;
+      //       //     res.email = res.recipient.email;
+      //       //     dataPosition.push(res);
+      //       //   })
+      //       // } 
+            
+      //       if (data_duplicate) {
+      //         // defind dữ liệu tọa độ chữ ký
+      //         let dataIsSign: any = {};
+      //         if (data_duplicate.type == 1) {
+      //           dataIsSign['sign_unit'] = 'text';
+      //         }
+      //         if (data_duplicate.type == 2) {
+      //           dataIsSign['sign_unit'] = 'chu_ky_anh'
+      //         }
+      //         if (data_duplicate.type == 3) {
+      //           dataIsSign['sign_unit'] = 'chu_ky_so'
+      //         }
+      //         if (data_duplicate.type == 4) {
+      //           dataIsSign['sign_unit'] = 'so_tai_lieu'
+      //         }
+      //         dataIsSign['name'] = data_duplicate.recipient.name;
+      //         dataIsSign['email'] = data_duplicate.recipient.email;
+      //         // dataIsSign['is_type_party'] = element.type;
+      //         // dataIsSign['role'] = item.role;
+      //         // dataIsSign['id_have_data'] = data_duplicate.id;
+      //         dataPosition.push(dataIsSign);
+              
+      //       }
+      //       else {
+      //         // item['is_type_party'] = this.datasForm.is_determine_clone.type;
+      //         // item['role'] = item.role;
+      //         dataNotPosition.push(item)
+      //       }
+      //     })
+      //   })
     
-            } else {
-              item['is_type_party'] = this.datasForm.is_determine_clone.type;
-              item['role'] = item.role;
-              dataNotPosition.push(item)
-            }
-          })
-        })
+      //   this.dataSignPosition = [...dataPosition, ...dataNotPosition]; // dữ liệu đối tượng ký get data api
     
-        // let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
-        // let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
-        this.dataSignPosition = [...dataPosition, ...dataNotPosition];
-        // console.log(this.dataSignPosition);
+      //   this.dataSignPosition.forEach((res: any) => {
+      //     if (res.sign_unit == 'text') {
+      //       res['text_attribute_name'] = res.name;
+      //     }
+      //   })
+      // }
     
-    
-        this.dataSignPosition.forEach((res: any) => {
-          if (res.sign_unit == 'text') {
-            res['text_attribute_name'] = res.name;
-          }
-        })
-      }
-    
+      // config variable contract_user_sign
       setDataSignContract() {
-        let data_sign_config_cks = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_so');
-        let data_sign_config_cka = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-        let data_sign_config_text = this.dataSignPosition.filter((p: any) => p.sign_unit == 'text');
-        var data_sign_config_num_document = this.dataSignPosition.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+        // let data_sign_config_cks = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_so');
+        // let data_sign_config_cka = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+        // let data_sign_config_text = this.dataSignPosition.filter((p: any) => p.sign_unit == 'text');
+        // var data_sign_config_num_document = this.dataSignPosition.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+
+        if (!this.datasForm.is_data_object_signature) {
+          this.datasForm.is_data_object_signature = [];
+        }
+
+        let data_sign_config_cks = this.datasForm.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
+        let data_sign_config_cka = this.datasForm.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+        let data_sign_config_text = this.datasForm.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
+        let data_sign_config_num_document = this.datasForm.is_data_object_signature.filter((p: any) => p.sign_unit == 'so_tai_lieu');
     
         this.datasForm.contract_user_sign.forEach((element: any) => {
           if (element.sign_unit == 'so_tai_lieu') {
@@ -299,53 +347,63 @@ export class SampleContractFormComponent implements OnInit {
           }
         })
     
-        // loc du lieu khong trung nhau
+        // Lọc dữ liệu không thay đổi của đối tượng ký
         // (val.recipient_id as any) == (data.id as any) &&
         dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
           ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
             (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-          val.name == data.name && val.email == data.email
+            (val.recipient && val.recipient.name == data.name && val.recipient.email == data.email)
         ));
     
     
-        // Get những dữ liệu còn lại khi thay đổi
+        // Get những dữ liệu thay đổi 1 trong 3 giá trị name, email, loại ký
         let dataDiffirent: any[] = [];
         if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
           dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
             (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
             (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4))) ||
-            val.name == data.name || val.email == data.email));
+           (val.recipient && val.recipient.name == data.name)  || (val.recipient && val.recipient.email == data.email)));
         }
+
+        // dữ liệu ký
+        this.datasForm.contract_user_sign.forEach((resForm: any) => {
+          if (resForm.sign_config.length > 0) {
+            resForm.sign_config = resForm.sign_config.filter((val: any) => dataDiffirent.some((data: any) => (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
+            resForm.sign_config.forEach((items: any) => {
+                  items.id = items.id + '1';
+                })
+          }
+        })
     
-        // xoa nhung du lieu doi tuong bi thay doi
-        if (dataDiffirent.length > 0) {
-          this.datasForm.contract_user_sign.forEach((res: any) => {
-            if (res.sign_config.length > 0) {
-              /*
-              * begin xóa đối tượng ký đã bị thay đổi dữ liệu
-              */
-              res.sign_config.forEach((element: any) => {
-                if (element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data)) {
+        // xoa nhung du lieu doi tuong bi thay doi khi sua
+        // if (dataDiffirent.length > 0) {
+        //   this.datasForm.contract_user_sign.forEach((res: any) => {
+        //     if (res.sign_config.length > 0) {
+        //       /*
+        //       * begin xóa đối tượng ký đã bị thay đổi dữ liệu
+        //       */
+        //       res.sign_config.forEach((element: any) => {
+        //         if (element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data)) {
     
-                } else {
-                  if (element.id_have_data) {
-                    this.removeDataSignChange(element.id_have_data);
-                  }
-                }
-              })
-              /*
-              end
-              */
-              res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) => (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
-              res.sign_config.forEach((items: any) => {
-                items.id = items.id + '1';
-              })
+        //         } else {
+        //           if (element.id_have_data) {
+        //             this.removeDataSignChange(element.id_have_data);
+        //           }
+        //         }
+        //       })
+        //       /*
+        //       end
+        //       */
+        //       res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) => (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
+        //       res.sign_config.forEach((items: any) => {
+        //         items.id = items.id + '1';
+        //       })
     
     
-            }
-          })
+        //     }
+        //   })
     
-        }
+        // }
       }
     
       ngOnChanges(changes: SimpleChanges): void {
@@ -924,20 +982,10 @@ export class SampleContractFormComponent implements OnInit {
       // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
       // @ts-ignore
       changeDisplay() {
-        if (window.innerHeight < 670 && window.innerHeight > 643) {
+        if (window.innerHeight <= 768) {
           return {
             "overflow": "auto",
-            "height": "calc(50vh - 118px)"
-          }
-        } else if (window.innerHeight <= 643) {
-          return {
-            "overflow": "auto",
-            "height": "calc(50vh - 170px)"
-          }
-        } else if (window.innerHeight == 768) {
-          return {
-            "overflow": "auto",
-            "height": "285px"
+            "height": "210px"
           }
         } else return {}
       }
