@@ -569,19 +569,21 @@ export class SampleContractFormComponent implements OnInit {
                     element['coordinate_y'] = this.signCurent['coordinate_y'];
                     if (!this.objDrag[this.signCurent['id']].count) {
                       // element['width'] = this.datasForm.configs.e_document.format_signature_image.signature_width;
-                      if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-                        if (res.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
-                          element['width'] = '';
-                          element['height'] = '';
+                      if (!element.width && !element.height) {
+                        if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
+                          if (res.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
+                            element['width'] = '';
+                            element['height'] = '';
+                          } else {
+                            element['width'] = '135';
+                            element['height'] = '28';
+                          }
                         } else {
                           element['width'] = '135';
-                          element['height'] = '28';
+                          element['height'] = '85';
                         }
-                      } else {
-                        element['width'] = '135';
-                        element['height'] = '85';
                       }
-    
+                      
                       this.objSignInfo.width = element['width'];
                       this.objSignInfo.height = element['height'];
                       this.objSignInfo.text_attribute_name = '';

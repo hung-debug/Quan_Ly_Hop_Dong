@@ -61,9 +61,10 @@ export class InforContractFormComponent implements OnInit {
         // this.datasForm.type_id = this.datasForm.type_id ? this.datasForm.type_id : null;
         // this.form_id = this.datasForm.form_id ? this.datasForm.form_id : null;
         this.contractConnect = this.datasForm.contractConnect ? this.datasForm.contractConnect : null;
-        // if (this.datasForm.attachFormFileNameArr) {
-        //     this.attachFormFileNameArr = this.datasForm.attachFormFileNameArr
-        // }
+
+        if (this.datasForm.attachFormFileNameArr) {
+            this.attachFormFileNameArr = this.datasForm.attachFormFileNameArr
+        }
 
         this.getListTypeContract(); // ham get loai hop dong
         this.getContractList(); // ham lay danh sach hop dong
@@ -169,20 +170,42 @@ export class InforContractFormComponent implements OnInit {
                 // giới hạn file upload lên là 5mb
                 if (file.size <= 5000000) {
                     const file_name = file.name;
-                    if (this.attachFileArr.filter((p: any) => p.filename == file_name).length == 0) {
+                    // if (this.attachFileArr.filter((p: any) => p.filename == file_name).length == 0) {
+                    //     const extension = file.name.split('.').pop();
+                    //     this.attachFileArr.push(file);
+                    //     this.datasForm.attachFormFileArr = this.attachFileArr;
+                    //     if (!this.datasForm.attachFormFileNameArr || this.datasForm.attachFormFileNameArr.length && this.datasForm.attachFormFileNameArr.length == 0) {
+                    //         this.datasForm.attachFormFileNameArr = [];
+                    //     }
+                    //     this.datasForm.attachFormFileNameArr = this.attachFileArr;
+                    //     // console.log(this.datasForm.attachFileArr);
+                    //     // this.attachFormFileNameArr.push({ filename: file.name });
+                        
+                    //     this.datasForm.attachFormFileNameArr.push({ filename: file.name })
+                    //     // if (this.datasForm.is_action_contract_created) {
+                    //     //     this.uploadFileAttachAgain = true;
+                    //     // }
+                    // }
+
+                    if (this.attachFormFileNameArr.filter((p: any) => p.filename == file_name).length == 0) {
                         const extension = file.name.split('.').pop();
+                        //this.datas.file_name_attach = file_name;
+                        //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
                         this.attachFileArr.push(file);
-                        this.datasForm.attachFormFileArr = this.attachFileArr;
+                        this.datasForm.attachFileArr = this.attachFileArr;
                         console.log(this.datasForm.attachFileArr);
-                        // this.attachFormFileNameArr.push({ filename: file.name });
+                        this.attachFormFileNameArr.push({ filename: file.name });
                         if (!this.datasForm.attachFormFileNameArr || this.datasForm.attachFormFileNameArr.length && this.datasForm.attachFormFileNameArr.length == 0) {
-                            this.datasForm.attachFormFileNameArr = [];
+                          this.datasForm.attachFormFileNameArr = [];
                         }
                         this.datasForm.attachFormFileNameArr.push({ filename: file.name })
+                        // Array.prototype.push.apply(this.datas.attachFileNameArr, this.attachFileNameArr);
+            
                         // if (this.datasForm.is_action_contract_created) {
-                        //     this.uploadFileAttachAgain = true;
+                        //   this.uploadFileAttachAgain = true;
                         // }
-                    }
+                        //this.datas.attachFile = e.target.files;
+                      }
 
                 } else {
                     this.datasForm.file_name_attach = '';
@@ -202,6 +225,8 @@ export class InforContractFormComponent implements OnInit {
             if (data) data.status = 0;
             this.contractService.updateFileAttach(item.id, data).subscribe((res: any) => {
                 this.datasForm.attachFormFileNameArr.splice(index_dlt, 1);
+                this.datasForm.attachFileArr.splice(index_dlt, 1);
+                this.toastService.showSuccessHTMLWithTimeout("Xóa file đính kèm thành công!", "", 3000);
             }, error => {
                 this.toastService.showErrorHTMLWithTimeout("Lỗi xoá file đính kèm!", "", 3000);
                 this.spinner.hide();
@@ -210,6 +235,7 @@ export class InforContractFormComponent implements OnInit {
             })
         } else {
             this.datasForm.attachFormFileNameArr.splice(index_dlt, 1);
+            this.datasForm.attachFileArr.splice(index_dlt, 1);
         }
         // this.attachFileArr.forEach((element, index) => {
         //     if (element.name == item) this.attachFileArr.splice(index, 1);
@@ -330,9 +356,9 @@ export class InforContractFormComponent implements OnInit {
             }
 
             if (!coutError) {
-                if (this.datasForm.attachFormFileNameArr && this.datasForm.attachFormFileNameArr.length && this.datasForm.attachFormFileNameArr.length > 0) {
-                    for (let i = 0; i < this.datasForm.attachFormFileNameArr.length; i++) {
-                        await this.uploadService.uploadFile(this.datasForm.attachFormFileNameArr[i]).toPromise().then((data) => {
+                if (this.datasForm.attachFileArr && this.datasForm.attachFileArr.length && this.datasForm.attachFileArr.length > 0) {
+                    for (let i = 0; i < this.datasForm.attachFileArr.length; i++) {
+                        await this.uploadService.uploadFile(this.datasForm.attachFileArr[i]).toPromise().then((data) => {
                             this.datasForm.filePathAttach = data.file_object.file_path;
                             this.datasForm.fileNameAttach = data.file_object.filename;
                             this.datasForm.fileBucketAttach = data.file_object.bucket;
