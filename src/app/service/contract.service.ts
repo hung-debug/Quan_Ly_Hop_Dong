@@ -544,8 +544,8 @@ export class ContractService {
       status: 1,
       contract_id: datas.id,
     });
-    console.log(headers);
-    console.log(body);
+    // console.log(headers);
+    // console.log(body);
     return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
   }
 
