@@ -151,7 +151,7 @@ export class PartyContractFormComponent implements OnInit {
         })
         this.spinner.show();
         let isCheckId = this.datasForm.is_determine_clone.filter((p: any) => p.id);
-        // this.datasForm.is_action_contract_created && this.router.url.includes("edit")
+        this.datasForm.is_action_contract_created && this.router.url.includes("edit")
         if (isCheckId && isCheckId.length == this.datasForm.is_determine_clone.length) {
             let isBody: any[] = [];
             let count = 0;
@@ -184,21 +184,21 @@ export class PartyContractFormComponent implements OnInit {
             this.spinner.hide()
         } 
         
-        // else {
-        //     this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
-        //         this.getDataApiDetermine(res, is_save)
-        //     }, (error: HttpErrorResponse) => {
-        //         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-        //             this.save_draft_infor_form.close_header = false;
-        //             this.save_draft_infor_form.close_modal.close();
-        //         }
-        //         this.spinner.hide();
-        //         this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-        //     }, () => {
-        //         this.spinner.hide();
-        //     }
-        //     );
-        // }
+        else {
+            this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
+                this.getDataApiDetermine(res, is_save)
+            }, (error: HttpErrorResponse) => {
+                if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                    this.save_draft_infor_form.close_header = false;
+                    this.save_draft_infor_form.close_modal.close();
+                }
+                this.spinner.hide();
+                this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+            }, () => {
+                this.spinner.hide();
+            }
+            );
+        }
     }
 
     getDataApiDetermine(res: any, is_save?: boolean) {

@@ -358,7 +358,7 @@ export class SampleContractFormComponent implements OnInit {
         // this.spinner.show();
         await this.contractTemplateService.deleteInfoContractSignature(data).toPromise().then((res: any) => {
         }, (error: HttpErrorResponse) => {
-          this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+          this.toastService.showErrorHTMLWithTimeout(`Đối tượng không tồn tại. Xóa dữ liệu lỗi!`, "", 3000);
         })
       }
     
@@ -1265,7 +1265,7 @@ export class SampleContractFormComponent implements OnInit {
               }
             }
           } else if (action == 'next_step') {
-            this.stepForm = variable.stepSampleContract.step4;
+            this.stepForm = variable.stepSampleContractForm.step4;
             this.datasForm.stepLast = this.stepForm
             this.nextOrPreviousStep(this.stepForm);
           }

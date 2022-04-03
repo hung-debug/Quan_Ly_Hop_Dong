@@ -13,6 +13,13 @@ import { variable } from 'src/app/config/variable';
 import { AddContractComponent } from '../../add-contract/add-contract.component';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 
+export class ContractConnectArr {
+    ref_id: number;
+  
+    constructor(ref_id: number) {
+      this.ref_id = ref_id;
+    }
+  }
 @Component({
     selector: 'app-infor-contract-form',
     templateUrl: './infor-contract-form.component.html',
@@ -33,6 +40,7 @@ export class InforContractFormComponent implements OnInit {
     dataStepInfo = {
 
     }
+    
     isShare: string = 'off';
 
     contractConnectList: Array<any> = [];
@@ -108,6 +116,7 @@ export class InforContractFormComponent implements OnInit {
             let dataContractAttachForm = res.filter((p: any) => p.type == 3);
             let isDataInfo = this.typeListForm.filter((data: any) => data.id == e.value)[0];
             if (dataContractForm && isDataInfo) {
+                this.datasForm.filename = dataContractForm.filename;
                 this.datasForm.file_content = dataContractForm.path;
                 this.datasForm.pdfUrl = dataContractForm.path;
                 this.datasForm.contract_no = isDataInfo.code;
@@ -144,6 +153,20 @@ export class InforContractFormComponent implements OnInit {
 
     }
 
+    defineData(datas: any) {
+        if (this.contractConnect && this.contractConnect.length && this.contractConnect.length > 0) {
+          const array_empty: ContractConnectArr[] = [];
+          this.contractConnect.forEach((element: any, index: number) => {
+            const data = new ContractConnectArr(element);
+            array_empty.push(data);
+          })
+          this.datasForm.contractConnect = array_empty;
+          console.log(array_empty);
+        } else {
+          this.datasForm.contractConnect = null;
+        }
+      }
+
     convertData() {
         if (this.datasForm.contractConnect && this.datasForm.contractConnect.length && this.datasForm.contractConnect.length > 0) {
             const array_empty: any[] = [];
@@ -170,23 +193,6 @@ export class InforContractFormComponent implements OnInit {
                 // giới hạn file upload lên là 5mb
                 if (file.size <= 5000000) {
                     const file_name = file.name;
-                    // if (this.attachFileArr.filter((p: any) => p.filename == file_name).length == 0) {
-                    //     const extension = file.name.split('.').pop();
-                    //     this.attachFileArr.push(file);
-                    //     this.datasForm.attachFormFileArr = this.attachFileArr;
-                    //     if (!this.datasForm.attachFormFileNameArr || this.datasForm.attachFormFileNameArr.length && this.datasForm.attachFormFileNameArr.length == 0) {
-                    //         this.datasForm.attachFormFileNameArr = [];
-                    //     }
-                    //     this.datasForm.attachFormFileNameArr = this.attachFileArr;
-                    //     // console.log(this.datasForm.attachFileArr);
-                    //     // this.attachFormFileNameArr.push({ filename: file.name });
-                        
-                    //     this.datasForm.attachFormFileNameArr.push({ filename: file.name })
-                    //     // if (this.datasForm.is_action_contract_created) {
-                    //     //     this.uploadFileAttachAgain = true;
-                    //     // }
-                    // }
-
                     if (this.attachFormFileNameArr.filter((p: any) => p.filename == file_name).length == 0) {
                         const extension = file.name.split('.').pop();
                         //this.datas.file_name_attach = file_name;
@@ -196,16 +202,16 @@ export class InforContractFormComponent implements OnInit {
                         console.log(this.datasForm.attachFileArr);
                         this.attachFormFileNameArr.push({ filename: file.name });
                         if (!this.datasForm.attachFormFileNameArr || this.datasForm.attachFormFileNameArr.length && this.datasForm.attachFormFileNameArr.length == 0) {
-                          this.datasForm.attachFormFileNameArr = [];
+                            this.datasForm.attachFormFileNameArr = [];
                         }
                         this.datasForm.attachFormFileNameArr.push({ filename: file.name })
                         // Array.prototype.push.apply(this.datas.attachFileNameArr, this.attachFileNameArr);
-            
+
                         // if (this.datasForm.is_action_contract_created) {
                         //   this.uploadFileAttachAgain = true;
                         // }
                         //this.datas.attachFile = e.target.files;
-                      }
+                    }
 
                 } else {
                     this.datasForm.file_name_attach = '';
@@ -225,7 +231,7 @@ export class InforContractFormComponent implements OnInit {
             if (data) data.status = 0;
             this.contractService.updateFileAttach(item.id, data).subscribe((res: any) => {
                 this.datasForm.attachFormFileNameArr.splice(index_dlt, 1);
-                this.datasForm.attachFileArr.splice(index_dlt, 1);
+                // this.datasForm.attachFileArr.splice(index_dlt, 1);
                 this.toastService.showSuccessHTMLWithTimeout("Xóa file đính kèm thành công!", "", 3000);
             }, error => {
                 this.toastService.showErrorHTMLWithTimeout("Lỗi xoá file đính kèm!", "", 3000);
@@ -235,7 +241,7 @@ export class InforContractFormComponent implements OnInit {
             })
         } else {
             this.datasForm.attachFormFileNameArr.splice(index_dlt, 1);
-            this.datasForm.attachFileArr.splice(index_dlt, 1);
+            // this.datasForm.attachFileArr.splice(index_dlt, 1);
         }
         // this.attachFileArr.forEach((element, index) => {
         //     if (element.name == item) this.attachFileArr.splice(index, 1);
@@ -267,26 +273,26 @@ export class InforContractFormComponent implements OnInit {
     }
 
     async next() {
-        if (this.validDataForm()) {
-            this.spinner.show();
-            let coutError = false;
-
-            if (this.datasForm.contract_no) {
-                //check so hop dong da ton tai hay chua
-                await this.contractTemplateService.checkCodeUnique(this.datasForm.contract_no, this.datasForm.start_time, this.datasForm.end_time).toPromise().then(
-                    dataCode => {
-                        if (!dataCode.success) {
-                            this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
-                            this.spinner.hide();
-                            coutError = true;
-                        }
-                    }, (error) => {
-                        coutError = true;
-                        this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+        this.spinner.show();
+        let coutError = false;
+        if (this.datasForm.contract_no) {
+            //check so hop dong da ton tai hay chua
+            await this.contractTemplateService.checkCodeUnique(this.datasForm.contract_no, this.datasForm.start_time, this.datasForm.end_time).toPromise().then(
+                dataCode => {
+                    if (!dataCode.success) {
+                        this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
                         this.spinner.hide();
-                    });
-            }
+                        coutError = true;
+                    }
+                }, (error) => {
+                    coutError = true;
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+                    this.spinner.hide();
+                });
+        }
 
+        if (!coutError && this.validDataForm()) {
+            this.defineData(this.datasForm);
             if (!coutError) {
                 await this.contractService.addContractStep1(this.datasForm).toPromise().then((data) => {
                     this.datasForm.id = data?.id;
@@ -415,7 +421,7 @@ export class InforContractFormComponent implements OnInit {
                     // this.spinner.hide();
                 }
             }
-        }
+        } else this.spinner.hide();
     }
 
     saveDraft() {
