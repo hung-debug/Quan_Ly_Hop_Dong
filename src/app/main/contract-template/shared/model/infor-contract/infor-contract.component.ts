@@ -67,6 +67,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   attachFileArr: any[] = [];
   attachFileNameArr: any[] = [];
   contract_no: any;
+  contract_no_old: any;
 
   //error
   errorContractName: any = '';
@@ -120,6 +121,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     // this.subscription = this.contractService.sharedMessage.subscribe(msg => this.messageForSibling = msg);
     // console.log(this.messageForSibling)
 
+    this.contract_no_old = this.datas.contract_no;
   }
 
   // ngOnDestroy(): void {
@@ -534,7 +536,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         };
       }
 
-      if (this.datas.contract_no) {
+      if (this.datas.contract_no && this.datas.contract_no != this.contract_no_old) {
         //check so hop dong da ton tai hay chua
         this.contractTemplateService.checkCodeUnique(this.datas.contract_no, this.datas.start_time, this.datas.end_time).subscribe(
           dataCode => {
