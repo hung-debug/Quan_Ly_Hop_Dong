@@ -25,7 +25,7 @@ export class ActionDeviceComponent implements OnInit {
       // let isUrl = sessionStorage.getItem('url');
       const urlQ = sessionStorage.getItem('url');
       const urlEmail = sessionStorage.getItem('recipientEmail');
-      if (urlQ) {
+      if (urlQ && urlQ.includes('contract-signature/')) {
         let role;
         const urlQ1 = urlQ.split('contract-signature/')[1];
         const urlQ2 = urlQ1.split('/');
@@ -42,19 +42,72 @@ export class ActionDeviceComponent implements OnInit {
         }
         // if (matchesNum && matchesNum.length == 3) {
         let isLogin = 'loginNotdefine';
+
         if (matchesNum) {
+
           if (!matchesNum[2]) {
+
             matchesNum[2] = "0";
+
             isLogin = 'login'
+
           }
 
           if (urlEmail) {
+
             window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}`;
-          } else window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}`;
+
+          } else
+          
+          window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}`;
           // console.log(`econtract://app/login/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}`);
           
         }
-      } else {
+
+      } 
+      else if(urlQ && urlQ.includes('contract-template')){
+
+        const matchesNum = urlQ.match(/\d+/g);
+
+        if(matchesNum){
+
+          if (urlEmail) {
+
+            window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}`;
+
+          } else
+
+            window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}`;
+
+        }
+      } else if(urlQ && urlQ.includes('form-contract')){
+
+        const matchesNum = urlQ.match(/\d+/g);
+
+        let isLogin = 'loginNotdefine';
+
+        if(matchesNum){
+
+          if (!matchesNum[2]) {
+
+            matchesNum[2] = "0";
+
+            isLogin = 'login'
+
+          }
+
+          if (urlEmail) {
+
+            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[2]}/${urlEmail}`;
+
+          } else
+
+           window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[2]}`;
+
+        }
+
+      }
+      else {
         window.location.href = `econtract://app/login`;
       }
 

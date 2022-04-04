@@ -38,6 +38,18 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'contract-template/form/detail/:data',
+    data: {type: 'notAccess'},
+    component: LoginComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'form-contract/detail/:data',
+    data: {type: 'notAccess'},
+    component: LoginComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'signup',
     component: SignupComponent,
   },
