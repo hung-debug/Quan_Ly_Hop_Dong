@@ -41,7 +41,7 @@ export class AddContractComponent implements OnInit {
   @ViewChild('SampleContractForm') SampleContractFormComponent: SampleContractFormComponent | unknown;
   @ViewChild('ConfirmContractForm') ConfirmContractFormComponent: ConfirmContractFormComponent | unknown;
 
-  type = 1;
+  type: number = 1;
   action: string;
   id: string;
   private sub: any;
@@ -80,6 +80,7 @@ export class AddContractComponent implements OnInit {
   stepForm: any;
   message: any;
   shareData: object;
+  is_disable: boolean = false;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -146,6 +147,7 @@ export class AddContractComponent implements OnInit {
       }
 
       if (this.action == 'copy' || this.action == 'edit') {
+        
         this.spinner.show();
         this.contractService.getDetailContract(this.id).subscribe((rs: any) => {
           let data_api = {
@@ -168,9 +170,12 @@ export class AddContractComponent implements OnInit {
           this.stepForm = variable.stepSampleContractForm.step1;
         // }
         
-        
       } 
     });
+    setTimeout(() => {
+      console.log(this.is_disable);
+      
+    }, 3000)
   }
 
   getDataContractCreated(data: any) {
@@ -280,7 +285,7 @@ export class AddContractComponent implements OnInit {
     } else if (this.type == 2) {
       this.stepForm = e;
     }
-    
+    this.is_disable = (e != 'infor-contract' || e != 'infor-contract-form');
   }
 
 

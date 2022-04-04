@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin, Observable } from 'rxjs';
-import {Helper} from "../core/Helper";
+import { Helper } from "../core/Helper";
 import { environment } from '../../environments/environment';
 import { DatePipe } from '@angular/common';
 @Injectable({
@@ -10,33 +10,33 @@ import { DatePipe } from '@angular/common';
 export class ContractTemplateService {
 
   token: any;
-  organization_id:any; 
+  organization_id: any;
 
-  shareContractTemplateUrl:any = `${environment.apiUrl}/api/v1/shares/template`;
-  listContractTemplateUrl:any = `${environment.apiUrl}/api/v1/contracts/template/my-contract`;
-  listContractShareTemplateUrl:any = `${environment.apiUrl}/api/v1/shares/template`;
-  addInforContractTemplateUrl:any = `${environment.apiUrl}/api/v1/contracts/template`;
+  shareContractTemplateUrl: any = `${environment.apiUrl}/api/v1/shares/template`;
+  listContractTemplateUrl: any = `${environment.apiUrl}/api/v1/contracts/template/my-contract`;
+  listContractShareTemplateUrl: any = `${environment.apiUrl}/api/v1/shares/template`;
+  addInforContractTemplateUrl: any = `${environment.apiUrl}/api/v1/contracts/template`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents/template`;
   addDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/template/contract/`;
   addSampleContractUrl: any = `${environment.apiUrl}/api/v1/fields/template`;
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
-  getDataContract:any = `${environment.apiUrl}/api/v1/contracts/template/`;
-  getFileContract:any = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
-  getObjectSignature:any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
-  checkCodeUniqueUrl:any = `${environment.apiUrl}/api/v1/contracts/template/check-code-unique`;
+  getDataContract: any = `${environment.apiUrl}/api/v1/contracts/template/`;
+  getFileContract: any = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
+  getObjectSignature: any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
+  checkCodeUniqueUrl: any = `${environment.apiUrl}/api/v1/contracts/template/check-code-unique`;
   deleteContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
-  listEmailShareListUrl:any = `${environment.apiUrl}/api/v1/shares/template/by-contract/`;
-  deleteShareUrl:any =  `${environment.apiUrl}/api/v1/shares/template/`;
-  editInforContractTemplateUrl:any =  `${environment.apiUrl}/api/v1/contracts/template/`;
-  editDetermineUrl:any =  `${environment.apiUrl}/api/v1/participants/template/`;
-  editContractSampleUrl:any =  `${environment.apiUrl}/api/v1/fields/template/`;
-  deleteInfoContractUrl:any =  `${environment.apiUrl}/api/v1/fields/template/`;
+  listEmailShareListUrl: any = `${environment.apiUrl}/api/v1/shares/template/by-contract/`;
+  deleteShareUrl: any = `${environment.apiUrl}/api/v1/shares/template/`;
+  editInforContractTemplateUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
+  editDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/template/`;
+  editContractSampleUrl: any = `${environment.apiUrl}/api/v1/fields/template/`;
+  deleteInfoContractUrl: any = `${environment.apiUrl}/api/v1/fields/template/`;
 
   constructor(private http: HttpClient,
-              public datepipe: DatePipe,) { }
+    public datepipe: DatePipe,) { }
 
-  getCurrentUser(){
-    this.token = JSON.parse(localStorage.getItem('currentUser')||'').access_token;
+  getCurrentUser() {
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
     this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
   }
 
@@ -44,45 +44,49 @@ export class ContractTemplateService {
   //   return this.http.get("/assets/data-contract-template.json");
   // }
 
-  public getContractTemplateList(isShare:any, filter_name:any, filter_type: any, page:any, size:any): Observable<any> {
+  public getContractTemplateList(isShare: any, filter_name: any, filter_type: any, page: any, size: any): Observable<any> {
     this.getCurrentUser();
 
-    if(page != ""){
+    if (page != "") {
       page = page - 1;
     }
-    if(!filter_type){
-      filter_type="";
+    if (!filter_type) {
+      filter_type = "";
     }
     let listContractTemplateUrl = "";
-    if(isShare=='off'){
+    if (isShare == 'off') {
       listContractTemplateUrl = this.listContractTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&page=" + page + "&size=" + size;
-    }else{
+    } else {
       listContractTemplateUrl = this.listContractShareTemplateUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + "&page=" + page + "&size=" + size;
     }
     console.log(listContractTemplateUrl);
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<any[]>(listContractTemplateUrl, {headers}).pipe();
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    return this.http.get<any[]>(listContractTemplateUrl, { headers }).pipe();
   }
 
-  addInforContractTemplate(datas: any, id?: any) {
+  addInforContractTemplate(datas: any, id?: any, actionGet?: string) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = JSON.stringify({
-      name: datas.name,
-      code: datas.contract_no,
-      start_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-      end_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-      type_id: datas.type_id
-    });
-    console.log(body);
-    if(id){
-      return this.http.put<any>(this.editInforContractTemplateUrl + id, body, {'headers': headers}).pipe();
-    }else{
-      return this.http.post<any>(this.addInforContractTemplateUrl, body, {'headers': headers}).pipe();
+      let body = {};
+    if (!actionGet) {
+      body = JSON.stringify({
+        name: datas.name,
+        code: datas.contract_no,
+        start_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+        end_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+        type_id: datas.type_id
+      });
     }
-    
+    // console.log(body);
+    if (id && body && !actionGet) {
+      return this.http.put<any>(this.editInforContractTemplateUrl + id, body, { 'headers': headers }).pipe();
+    } else if (actionGet == 'get-form-data') {
+      return this.http.get<any>(this.addInforContractTemplateUrl + `/${id}`, { 'headers': headers }).pipe();
+    } else {
+      return this.http.post<any>(this.addInforContractTemplateUrl, body, { 'headers': headers }).pipe();
+    }
   }
 
   addDocument(datas: any) {
@@ -101,7 +105,7 @@ export class ContractTemplateService {
       status: 1,
       contract_id: datas.id,
     });
-    return this.http.post<any>(this.documentUrl, body, {'headers': headers});
+    return this.http.post<any>(this.documentUrl, body, { 'headers': headers });
   }
 
   addDocumentAttach(datas: any) {
@@ -120,7 +124,7 @@ export class ContractTemplateService {
       status: 1,
       contract_id: datas.id,
     });
-    return this.http.post<any>(this.documentUrl, body, {'headers': headers});
+    return this.http.post<any>(this.documentUrl, body, { 'headers': headers });
   }
 
   updateFileAttach(id: any, body: any) {
@@ -129,7 +133,7 @@ export class ContractTemplateService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     console.log(body);
-    return this.http.put<any>(this.documentUrl + `/${id}`, body, {'headers': headers});
+    return this.http.put<any>(this.documentUrl + `/${id}`, body, { 'headers': headers });
   }
 
   getContractDetermine(data_determine: any, id: any) {
@@ -139,7 +143,7 @@ export class ContractTemplateService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_determine);
     console.log(body);
-    return this.http.post<any>(this.addDetermineUrl + id, body, {'headers': headers}).pipe();
+    return this.http.post<any>(this.addDetermineUrl + id, body, { 'headers': headers }).pipe();
   }
 
   editContractDetermine(data_determine: any, id: any) {
@@ -148,7 +152,7 @@ export class ContractTemplateService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_determine);
-    return this.http.put<any>(this.editDetermineUrl + id, body, {'headers': headers}).pipe();
+    return this.http.put<any>(this.editDetermineUrl + id, body, { 'headers': headers }).pipe();
   }
 
   getContractSample(data_sample_contract: any) {
@@ -158,7 +162,7 @@ export class ContractTemplateService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_sample_contract);
     console.log(body);
-    return this.http.post<any>(this.addSampleContractUrl, body, {'headers': headers}).pipe();
+    return this.http.post<any>(this.addSampleContractUrl, body, { 'headers': headers }).pipe();
   }
 
   deleteInfoContractSignature(id: any) {
@@ -167,7 +171,7 @@ export class ContractTemplateService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     console.log(headers);
-    return this.http.delete<any>(this.deleteInfoContractUrl + id, {headers});
+    return this.http.delete<any>(this.deleteInfoContractUrl + id, { headers });
   }
 
   editContractSample(data_sample_contract: any, id: any) {
@@ -176,17 +180,17 @@ export class ContractTemplateService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_sample_contract);
-    return this.http.put<any>(this.editContractSampleUrl + `/${id}`, body, {'headers': headers}).pipe();
+    return this.http.put<any>(this.editContractSampleUrl + `/${id}`, body, { 'headers': headers }).pipe();
   }
 
-  changeStatusContract(id: any, statusNew:any) {
+  changeStatusContract(id: any, statusNew: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     console.log(headers);
     const body = {};
-    return this.http.post<any>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, {'headers': headers});
+    return this.http.post<any>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, { 'headers': headers });
   }
 
   getDetailContract(idContract: any) {
@@ -196,14 +200,14 @@ export class ContractTemplateService {
       .append('Authorization', 'Bearer ' + this.token);
     let arrApi = [];
     arrApi = [
-      this.http.get<any>(this.getDataContract + idContract, {headers}),
-      this.http.get<any>(this.getFileContract + idContract, {headers}),
-      this.http.get<any>(this.getObjectSignature + idContract, {headers}),
+      this.http.get<any>(this.getDataContract + idContract, { headers }),
+      this.http.get<any>(this.getFileContract + idContract, { headers }),
+      this.http.get<any>(this.getObjectSignature + idContract, { headers }),
     ];
     return forkJoin(arrApi);
   }
 
-  shareContract(email:any, id: any){
+  shareContract(email: any, id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -214,7 +218,7 @@ export class ContractTemplateService {
     });
     console.log(body);
     console.log(this.shareContractTemplateUrl);
-    return this.http.post<any>(this.shareContractTemplateUrl, body, {'headers': headers}).pipe();
+    return this.http.post<any>(this.shareContractTemplateUrl, body, { 'headers': headers }).pipe();
   }
 
   deleteContract(id: any) {
@@ -222,29 +226,29 @@ export class ContractTemplateService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.delete<any>(this.deleteContractUrl + id, {'headers': headers});
+    return this.http.delete<any>(this.deleteContractUrl + id, { 'headers': headers });
   }
 
-  checkCodeUnique(code:any, start_time:any, end_time:any){
+  checkCodeUnique(code: any, start_time: any, end_time: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-        code: code,
-        start_time: this.datepipe.transform(start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-        end_time: this.datepipe.transform(end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-        organization_id: this.organization_id
-      });
+      code: code,
+      start_time: this.datepipe.transform(start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+      end_time: this.datepipe.transform(end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+      organization_id: this.organization_id
+    });
     console.log(body);
-    return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
+    return this.http.post<any>(this.checkCodeUniqueUrl, body, { headers }).pipe();
   }
 
-  public getEmailShareList(id:any, organization_id:any): Observable<any> {
+  public getEmailShareList(id: any, organization_id: any): Observable<any> {
     this.getCurrentUser();
-    const headers = {'Authorization': 'Bearer ' + this.token}
+    const headers = { 'Authorization': 'Bearer ' + this.token }
     let listEmailShareListUrl = this.listEmailShareListUrl + id + "?organization_id=" + organization_id;
-    return this.http.get<any[]>(listEmailShareListUrl, {headers}).pipe();
+    return this.http.get<any[]>(listEmailShareListUrl, { headers }).pipe();
   }
 
   deleteShare(id: any) {
@@ -252,7 +256,7 @@ export class ContractTemplateService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.delete<any>(this.deleteShareUrl + id, {'headers': headers});
+    return this.http.delete<any>(this.deleteShareUrl + id, { 'headers': headers });
   }
 
   getDataDetermine() {

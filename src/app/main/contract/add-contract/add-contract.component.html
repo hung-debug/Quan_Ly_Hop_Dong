@@ -9,18 +9,20 @@
 
     <div class="row" style="margin: 0 18%">
         <div class="radio col-md-4 label_type">
-            <label><input type="radio" name="contract_create" [value]="1" [(ngModel)]="type"
-                    (change)="changeType($event)">
-                <span> {{'contract.not-by-template' | translate}}</span></label>
+            <label>
+                <input type="radio" name="contract_create" [value]="1" [(ngModel)]="type"
+                    (change)="changeType($event)" [disabled]="is_disable">
+                <span> {{'contract.not-by-template' | translate}}</span>
+            </label>
         </div>
         <div class="radio col-md-4 label_type">
             <label><input type="radio" name="contract_create" [value]="2" [(ngModel)]="type"
-                    (change)="changeType($event)">
+                    (change)="changeType($event)" [disabled]="is_disable">
                 <span> {{'contract.by-template' | translate}}</span></label>
         </div>
         <div class="radio col-md-4 label_type">
             <label><input type="radio" name="contract_create" [value]="3" [(ngModel)]="type"
-                    (change)="changeType($event)">
+                    (change)="changeType($event)" [disabled]="true">
                 <span> {{'contract.by-batch' | translate}}</span></label>
         </div>
     </div>
@@ -40,14 +42,14 @@
 
     <ng-container *ngIf="type == 2">
         <app-infor-contract-form #infoContractForm *ngIf="stepForm == 'infor-contract-form'" [datasForm]="datasForm" [stepForm]="stepForm"
-            [save_draft_infor]="shareData" (stepChangeInfoContractForm)="getStep($event)"></app-infor-contract-form>
+            [save_draft_infor_form]="shareData" (stepChangeInfoContractForm)="getStep($event)"></app-infor-contract-form>
         <app-party-contract-form #partyContractForm ateStep2 *ngIf="stepForm == 'party-contract-form'" [datasForm]="datasForm"
-            [save_draft_infor]="shareData" [stepForm]="stepForm" (stepChangePartyContractForm)="getStep($event)">
+            [save_draft_infor_form]="shareData" [stepForm]="stepForm" (stepChangePartyContractForm)="getStep($event)">
         </app-party-contract-form>
         <app-sample-contract-form #sampleContractForm *ngIf="stepForm == 'sample-contract-form'" [datasForm]="datasForm" [stepForm]="stepForm"
-            [save_draft_infor]="shareData" (stepChangeSampleContractForm)="getStep($event)"></app-sample-contract-form>
+            [save_draft_infor_form]="shareData" (stepChangeSampleContractForm)="getStep($event)"></app-sample-contract-form>
         <app-confirm-contract-form #confirmContractForm *ngIf="stepForm == 'confirm-contract-form'" [datasForm]="datasForm"
-            [save_draft_infor]="shareData" [stepForm]="stepForm" (stepChangeConfirmInforContractform)="getStep($event)">
+            [save_draft_infor_form]="shareData" [stepForm]="stepForm" (stepChangeConfirmInforContractform)="getStep($event)">
         </app-confirm-contract-form>
     </ng-container>
 

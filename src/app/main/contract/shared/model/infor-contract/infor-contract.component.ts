@@ -206,7 +206,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             }
             this.datas.attachFileNameArr.push({ filename: file.name })
             // Array.prototype.push.apply(this.datas.attachFileNameArr, this.attachFileNameArr);
-
+            
             if (this.datas.is_action_contract_created) {
               this.uploadFileAttachAgain = true;
             }
@@ -340,9 +340,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           if (this.datas.attachFileArr != null) {
             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
               await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then((data) => {
-                this.datas.filePathAttach = data.file_object.file_path;
-                this.datas.fileNameAttach = data.file_object.filename;
-                this.datas.fileBucketAttach = data.file_object.bucket;
+                this.datas.attachFileArr[i].file_path = data.file_object.file_path;
+                this.datas.attachFileArr[i].name = data.file_object.filename; 
+
+                // this.datas.filePathAttach = data.file_object.file_path;
+                // this.datas.fileNameAttach = data.file_object.filename;
+                // this.datas.fileBucketAttach = data.file_object.bucket;
                 this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
                   this.datas.document_attach_id = data?.id;
                 },
