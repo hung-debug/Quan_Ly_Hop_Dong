@@ -113,7 +113,7 @@ export class AddContractTemplateComponent implements OnInit {
         console.log(this.datas.contractConnect);
       } else if (this.action == 'edit') {
         this.id = params['id'];
-        this.appService.setTitle('contract.edit');
+        this.appService.setTitle('Sửa mẫu hợp đồng');
       } else if (this.action == 'copy') {
         this.id = params['id'];
         this.appService.setTitle('contract.copy');

@@ -1445,6 +1445,30 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.stepChangeSampleContract.emit(step);
   }
 
+  getCheckDuplicateNameText() {
+    let arrCheckName = [];
+    for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
+      if (this.datas.contract_user_sign[i].sign_config.length > 0) {
+        for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
+          let element = this.datas.contract_user_sign[i].sign_config[j];
+          if (element.sign_unit == 'text' && !element.name) {
+            arrCheckName.push(element.text_attribute_name);
+          }
+        }
+      }
+    }
+    console.log(arrCheckName);
+    var valueSoFar = Object.create(null);
+    for (var k = 0; k < arrCheckName.length; ++k) {
+      var value:any = arrCheckName[k];
+      if (value in valueSoFar) {
+        return true;
+      }
+      valueSoFar[value] = true;
+    }
+    return false;
+  }
+
   validData() {
     // console.log(this.datas);
     let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
@@ -1491,6 +1515,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
 
+      
+
       if (count > 0) {
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
         this.spinner.hide();
@@ -1503,6 +1529,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       } else if (count_text > 0) {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
+        return false;
+      } else if (this.getCheckDuplicateNameText()) {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("Tên trường nhập text không được trùng nhau!", "", 3000);
         return false;
       } else {
         // valid đối tượng ký của tổ chức

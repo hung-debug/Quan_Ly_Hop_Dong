@@ -153,116 +153,116 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
       console.log(isShare);
       if(isShare.length > 0){
         this.roleAccess = true;
-
-        this.contractTemplateService.getDetailContract(this.idContract).subscribe(rs => {
-          console.log(rs);
-          this.isDataContract = rs[0];
-          this.isDataFileContract = rs[1];
-          this.isDataObjectSignature = rs[2];
-          if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
-            this.valid = true;
-          }
-          this.data_contract = {
-            is_data_contract: rs[0],
-            i_data_file_contract: rs[1],
-            is_data_object_signature: rs[2]
-          };
-          this.datas = this.data_contract;
-          console.log(this.datas);
-          this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
-          this.checkIsViewContract();
-    
-          if(this.datas.is_data_contract?.created_by == userLogin.id){
-            this.roleAccess = true;
-          }
-          if(this.datas?.is_data_contract?.status==32){
-            this.roleMess = "Mẫu hợp đồng đã ngừng phát hành";
-          }else if(!this.roleAccess){  
-            this.roleMess = "Mẫu hợp đồng không còn được chia sẻ đến bạn";
-          }else if(!this.datas?.is_data_contract){
-            this.roleMess = "Mẫu hợp đồng không còn tồn tại trên hệ thống";
-          }
-          console.log(this.roleAccess);
-    
-          this.datas.is_data_object_signature.forEach((element: any) => {
-            // 1: van ban, 2: ky anh, 3: ky so
-            // tam thoi de 1: ky anh, 2: ky so
-            if (element.type == 1) {
-              element['sign_unit'] = 'text'
-            }
-            if (element.type == 2) {
-              element['sign_unit'] = 'chu_ky_anh'
-            }
-            if (element.type == 3) {
-              element['sign_unit'] = 'chu_ky_so'
-            }
-            if (element.type == 4) {
-              element['sign_unit'] = 'so_tai_lieu'
-            }
-          })
-    
-          let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
-          let data_sign_config_cka = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-          let data_sign_config_text = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
-          // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
-    
-          this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
-    
-          this.datas.contract_user_sign.forEach((element: any) => {
-            // console.log(element.sign_unit, element.sign_config);
-            if (element.sign_unit == 'chu_ky_so') {
-              Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
-            } else if (element.sign_unit == 'chu_ky_anh') {
-              Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
-            } else if (element.sign_unit == 'text') {
-              Array.prototype.push.apply(element.sign_config, data_sign_config_text);
-            } else if (element.sign_unit == 'so_tai_lieu') {
-              // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
-            }
-          })
-          if(this.datas?.is_data_contract?.type_id){
-            this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe(data => {
-              if (this.datas?.is_data_contract) {
-                this.datas.is_data_contract.type_name = data;
-              }
-            })
-          }
-    
-          this.scale = 1;
-
-          
-    
-          if (!this.signCurent) {
-            this.signCurent = {
-              offsetWidth: 0,
-              offsetHeight: 0
-            }
-          }
-    
-          // convert base64 file pdf to url
-          if (this.datas?.i_data_file_contract) {
-            let fileC = null;
-            const pdfC2 = this.datas.i_data_file_contract.find((p: any) => p.type == 2);
-            const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
-            if (pdfC2) {
-              fileC = pdfC2.path;
-            } else if (pdfC1) {
-              fileC = pdfC1.path;
-            } else {
-              return;
-            }
-            this.pdfSrc = fileC;
-          }
-          // render pdf to canvas
-          this.getPage();
-          this.loaded = true;
-        }, (res: any) => {
-          // @ts-ignore
-          this.handleError();
-        })
-      }else{
-        this.roleMess = "Mẫu hợp đồng không còn được chia sẻ đến bạn";
       }
+      this.contractTemplateService.getDetailContract(this.idContract).subscribe(rs => {
+        console.log(rs);
+        this.isDataContract = rs[0];
+        this.isDataFileContract = rs[1];
+        this.isDataObjectSignature = rs[2];
+        if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
+          this.valid = true;
+        }
+        this.data_contract = {
+          is_data_contract: rs[0],
+          i_data_file_contract: rs[1],
+          is_data_object_signature: rs[2]
+        };
+        this.datas = this.data_contract;
+        console.log(this.datas);
+        this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
+        this.checkIsViewContract();
+  
+        if(this.datas.is_data_contract?.created_by == userLogin.id){
+          this.roleAccess = true;
+        }else{
+          if(!this.roleAccess){  
+            this.roleMess = "Mẫu hợp đồng không còn được chia sẻ đến bạn";
+          }else if(this.datas?.is_data_contract?.status==32){
+            this.roleMess = "Mẫu hợp đồng đã ngừng phát hành";
+          }
+        }
+        
+        if(!this.datas?.is_data_contract){
+          this.roleMess = "Mẫu hợp đồng không còn tồn tại trên hệ thống";
+        }
+        console.log(this.roleAccess);
+  
+        this.datas.is_data_object_signature.forEach((element: any) => {
+          // 1: van ban, 2: ky anh, 3: ky so
+          // tam thoi de 1: ky anh, 2: ky so
+          if (element.type == 1) {
+            element['sign_unit'] = 'text'
+          }
+          if (element.type == 2) {
+            element['sign_unit'] = 'chu_ky_anh'
+          }
+          if (element.type == 3) {
+            element['sign_unit'] = 'chu_ky_so'
+          }
+          if (element.type == 4) {
+            element['sign_unit'] = 'so_tai_lieu'
+          }
+        })
+  
+        let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
+        let data_sign_config_cka = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+        let data_sign_config_text = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
+        // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+  
+        this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+  
+        this.datas.contract_user_sign.forEach((element: any) => {
+          // console.log(element.sign_unit, element.sign_config);
+          if (element.sign_unit == 'chu_ky_so') {
+            Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
+          } else if (element.sign_unit == 'chu_ky_anh') {
+            Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+          } else if (element.sign_unit == 'text') {
+            Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+          } else if (element.sign_unit == 'so_tai_lieu') {
+            // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+          }
+        })
+        if(this.datas?.is_data_contract?.type_id){
+          this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe(data => {
+            if (this.datas?.is_data_contract) {
+              this.datas.is_data_contract.type_name = data;
+            }
+          })
+        }
+  
+        this.scale = 1;
+
+        
+  
+        if (!this.signCurent) {
+          this.signCurent = {
+            offsetWidth: 0,
+            offsetHeight: 0
+          }
+        }
+  
+        // convert base64 file pdf to url
+        if (this.datas?.i_data_file_contract) {
+          let fileC = null;
+          const pdfC2 = this.datas.i_data_file_contract.find((p: any) => p.type == 2);
+          const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
+          if (pdfC2) {
+            fileC = pdfC2.path;
+          } else if (pdfC1) {
+            fileC = pdfC1.path;
+          } else {
+            return;
+          }
+          this.pdfSrc = fileC;
+        }
+        // render pdf to canvas
+        this.getPage();
+        this.loaded = true;
+      }, (res: any) => {
+        // @ts-ignore
+        this.handleError();
+      })
       
     });
   }
