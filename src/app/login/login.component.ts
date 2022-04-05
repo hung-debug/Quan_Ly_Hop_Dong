@@ -82,11 +82,15 @@ export class LoginComponent implements OnInit {
                     {
                       queryParams: {'recipientId': isRecipientId}
                     });
-                } else {
+                } else if (urlLink.includes('signatures')) {
                   this.router.navigate(['/main/contract-signature/signatures/' + isContractId],
                     {
                       queryParams: {'recipientId': isRecipientId}
                     });
+                } else if (urlLink.includes('contract-template')) {
+                  this.router.navigate(['/main/contract-template/form/detail/' + isContractId]);
+                } else if (urlLink.includes('form-contract')) {
+                  this.router.navigate(['/main/form-contract/detail/' + isContractId]);
                 }
               } else {
                 this.error = false;

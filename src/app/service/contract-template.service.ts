@@ -75,7 +75,7 @@ export class ContractTemplateService {
         name: datas.name,
         code: datas.contract_no,
         start_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-        end_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+        end_time: this.datepipe.transform(datas.end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
         type_id: datas.type_id
       });
     }

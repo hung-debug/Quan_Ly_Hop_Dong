@@ -1,5 +1,7 @@
-<div class="sample-contract row">
-    <!--  information contract-->
+
+<ng-template [ngIf]="datas?.is_data_contract?.status!=32 && roleAccess && datas?.is_data_contract">
+  <div class="sample-contract row">
+  <!--  information contract-->
     <div class="col-md-3 sample-contract__information" style="background-color: white;">
       <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
         <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN MẪU HỢP ĐỒNG</div>
@@ -64,4 +66,7 @@
       </div>
     </div>
   </div>
-  
+  </ng-template>
+
+
+  <div>{{roleMess | translate}}</div>

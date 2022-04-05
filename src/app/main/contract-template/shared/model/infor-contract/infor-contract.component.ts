@@ -12,6 +12,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import * as moment from "moment";
 import { HttpErrorResponse } from '@angular/common/http';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
+import { UserService } from 'src/app/service/user.service';
 
 export class ContractConnectArr {
   ref_id: number;
@@ -63,6 +64,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   filePath: any;
   start_time: any;
   end_time: any;
+  start_time_old: any;
+  end_time_old: any;
 
   attachFileArr: any[] = [];
   attachFileNameArr: any[] = [];
@@ -93,7 +96,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     public datepipe: DatePipe,
     private router: Router,
     private toastService: ToastService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private userService: UserService,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -122,6 +126,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     // console.log(this.messageForSibling)
 
     this.contract_no_old = this.datas.contract_no;
+    this.start_time_old = this.datas.start_time;
+    this.end_time_old = this.datas.end_time;
   }
 
   // ngOnDestroy(): void {
@@ -536,14 +542,18 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         };
       }
 
-      if (this.datas.contract_no && this.datas.contract_no != this.contract_no_old) {
+      if (this.datas.contract_no && (this.datas.contract_no != this.contract_no_old || this.datas.start_time != this.start_time_old || this.datas.end_time != this.end_time_old)) {
         //check so hop dong da ton tai hay chua
         this.contractTemplateService.checkCodeUnique(this.datas.contract_no, this.datas.start_time, this.datas.end_time).subscribe(
           dataCode => {
             if (dataCode.success) {
               this.callAPI();
             } else {
-              this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại', "", 3000);
+              if(dataCode.message == this.userService.getAuthCurrentUser().email){
+                this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại với mẫu hợp đồng đã tạo trước đó', "", 3000);
+              }else{
+                this.toastService.showErrorHTMLWithTimeout('Mã mẫu hợp đồng đã tồn tại với người dùng ' + dataCode.message, "", 3000);
+              }
               this.spinner.hide();
             }
           }, error => {
