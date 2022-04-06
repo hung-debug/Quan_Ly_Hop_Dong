@@ -226,7 +226,7 @@
     </div>
     <div class="contract--content">
       <div class="contract__content--title">
-        <div style="width: 72px">{{'doi_tac' | translate | uppercase}} -</div>
+        <div style="width: 80px">{{'doi_tac' | translate | uppercase}} <span style="color: red"> *</span> -</div>
         <input type="text" placeholder="{{(item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate}}"
                [(ngModel)]="item.name" [disabled]="item.type == 3">
         <!--        <input *ngIf="item.type == 3" type="text" [ngModel]="this.getNameIndividual" disabled>-->

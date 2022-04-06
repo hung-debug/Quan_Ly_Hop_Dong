@@ -995,6 +995,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
       if (isObjSign) {
+        if (this.isEnableSelect) {
+          this.isEnableSelect = false;
+        }
+        
         this.objSignInfo.traf_x = d.coordinate_x;
         this.objSignInfo.traf_y = d.coordinate_y;
         // this.signCurent.name = d.name;
