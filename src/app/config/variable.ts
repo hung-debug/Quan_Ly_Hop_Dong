@@ -212,11 +212,11 @@ export var roleList = [
       //Sửa hợp đồng
       { label: "Sửa hợp đồng", value: "QLHD_02"},
       //Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con
-      // { label: "Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con", value: "QLHD_03"},
+      { label: "Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con", value: "QLHD_03"},
       //Xem danh sách hợp đồng của tổ chức của tôi
-      // { label: "Xem danh sách hợp đồng của tổ chức của tôi", value: "QLHD_04"},
+      { label: "Xem danh sách hợp đồng của tổ chức của tôi", value: "QLHD_04"},
       //Xem danh sách hợp đồng của tôi
-      // { label: "Xem danh sách hợp đồng của tôi", value: "QLHD_05"},
+      { label: "Xem danh sách hợp đồng của tôi", value: "QLHD_05"},
       //Tìm kiếm hợp đồng
       { label: "Tìm kiếm hợp đồng", value: "QLHD_06"},
       //Xem thông tin chi tiết hợp đồng

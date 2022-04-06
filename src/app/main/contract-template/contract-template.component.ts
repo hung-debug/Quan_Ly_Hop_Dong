@@ -69,9 +69,6 @@ export class ContractTemplateComponent implements OnInit {
       }
 
       this.contractsTemplate.forEach((key: any, v: any) => {
-        let userView = 0;
-        let userSign = 0;
-        let userDoc = 0;
         let partnerLead = 0;
         let partnerView = 0;
         let partnerSign = 0;
@@ -79,16 +76,8 @@ export class ContractTemplateComponent implements OnInit {
 
         key.participants.forEach((key: any, val: any) => {
           if (key.type == 1) {
-            key.recipients.forEach((key: any, val: any) => {
-              if (key.role == 2) {
-                userView++;
-              } else if (key.role == 3) {
-                userSign++;
-              } else if (key.role == 4) {
-                userDoc++;
-              }
-            })
-          } else {
+            this.contractsTemplate[v].sideA = key.name;
+          }else{
             key.recipients.forEach((key: any, val: any) => {
               if (key.role == 1) {
                 partnerLead++;
@@ -102,21 +91,7 @@ export class ContractTemplateComponent implements OnInit {
             })
           }
         })
-        let sideA = "";
-        let connA = "";
-        if(userView > 0){
-          sideA += connA + "Người xem xét (" + userView + ")";
-          connA = ", ";
-        }
-        if(userSign > 0){
-          sideA += connA + "Người ký (" + userSign + ")";
-          connA = ", ";
-        }
-        if(userDoc > 0){
-          sideA += connA + "Văn thư (" + userDoc + ")";
-          connA = ", ";
-        }
-        this.contractsTemplate[v].sideA = sideA;
+        
 
         let sideB = "";
         let connB = "";

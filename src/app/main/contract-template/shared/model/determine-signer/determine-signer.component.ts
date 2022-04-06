@@ -96,6 +96,9 @@ export class DetermineSignerComponent implements OnInit {
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
+    console.log(this.datas);
+    console.log(this.datas.name_origanzation);
+    console.log(this.data_organization.name);
     // data đối tác
     this.data_parnter_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
     // this.data_parnter_individual = this.datas.is_determine_clone.filter((p: any) => p.type == 3);

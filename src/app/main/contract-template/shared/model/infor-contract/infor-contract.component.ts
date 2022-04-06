@@ -13,6 +13,7 @@ import * as moment from "moment";
 import { HttpErrorResponse } from '@angular/common/http';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { UserService } from 'src/app/service/user.service';
+import { UnitService } from 'src/app/service/unit.service';
 
 export class ContractConnectArr {
   ref_id: number;
@@ -98,6 +99,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private userService: UserService,
+    private unitService: UnitService
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -442,6 +444,16 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         })
       }
 
+      if (countSuccess == 0) {
+        await this.unitService.getDataNotifyOriganzation().toPromise().then((res: any) => {
+          this.datas.name_origanzation = res.name;
+          console.log(this.datas);
+        }, (error: HttpErrorResponse) => {
+          countSuccess++
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout("no.get.information.organization.error", "", 3000);
+        })
+      }
       if (countSuccess == 0) {
       
         //neu co file dinh kem

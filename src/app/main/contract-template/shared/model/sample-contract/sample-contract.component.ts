@@ -383,7 +383,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           end
           */
           
-          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) => (!val.name && val.sign_unit == 'so_tai_lieu') || (!val.name && val.sign_unit == 'text' && val.text_attribute_name) || ((val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit)));
+          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) =>!val.name || (!val.name && val.sign_unit == 'so_tai_lieu') || (!val.name && val.sign_unit == 'text' && val.text_attribute_name) || ((val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit)));
           res.sign_config.forEach((items: any) => {
             items.id = items.id + '1';
           })
@@ -1030,6 +1030,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       signElement = document.getElementById(this.objSignInfo.id);
     } else
       signElement = document.getElementById(this.objSignInfo.id);
+
+    if (this.isEnableSelect) {
+      this.isEnableSelect = false;
+    }
+
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];

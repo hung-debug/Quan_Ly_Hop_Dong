@@ -30,6 +30,8 @@ export class UnitService {
   getUnitByIdUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
   checkNameUniqueUrl:any = `${environment.apiUrl}/api/v1/organizations/check-name-unique`;
   checkCodeUniqueUrl:any = `${environment.apiUrl}/api/v1/organizations/check-code-unique`;
+  isDataDetermine: any = `${environment.apiUrl} /api/v1/participants/byRecipient/`;
+  getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
 
   token:any;
   customer_id:any;
@@ -127,6 +129,15 @@ export class UnitService {
         org_id_con: data.id
       });
     return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
+  }
+
+  getDataNotifyOriganzation() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listUrl = this.getNotifyOriganzation + this.organization_id;
+    return this.http.get<any[]>(listUrl, {headers}).pipe();
   }
 
   handleError(error: HttpErrorResponse) {
