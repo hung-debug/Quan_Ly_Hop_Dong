@@ -309,14 +309,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             //     }
             // }
 
-            if (!coutError) {
-                await this.contractService.addDocument(this.datasForm).toPromise().then((res) => {
+            // if (!coutError) {
+            //     await this.contractService.addDocument(this.datasForm).toPromise().then((res) => {
 
-                }, (error) => {
-                    coutError = true;
-                    this.errorData();
-                })
-            }
+            //     }, (error) => {
+            //         coutError = true;
+            //         this.errorData();
+            //     })
+            // }
 
             // if (!coutError) {
             //     await this.uploadService.uploadFile(this.datasForm.file_content).toPromise().then((data: any) => {
@@ -329,14 +329,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             //     })
             // }
 
-            if (!coutError) {
-                await this.contractService.addDocumentDone(this.datasForm).toPromise().then((res: any) => {
-                    this.datasForm.document_id = res?.id;
-                }, () => {
-                    coutError = true;
-                    this.errorData();
-                })
-            }
+            // if (!coutError) {
+            //     await this.contractService.addDocumentDone(this.datasForm).toPromise().then((res: any) => {
+            //         this.datasForm.document_id = res?.id;
+            //     }, () => {
+            //         coutError = true;
+            //         this.errorData();
+            //     })
+            // }
 
             if (!coutError) {
                 await this.contractService.getDataNotifyOriganzation().toPromise().then((data: any) => {
