@@ -7,7 +7,7 @@
             <div class="col-md-12">
                 <div class="label text-color">{{'contract-type.code' | translate}} <span class="required-title">*</span></div>
                 <div class="input-data">
-                    <input type="text" formControlName="code" autofocus>
+                    <input type="text" formControlName="code" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" autofocus>
                 </div>
                 <div *ngIf="submitted && f.code.errors" class="invalid">
                     <div *ngIf="f.code.errors.required">{{'error.contract-type.code.required' | translate}}</div>

@@ -24,7 +24,7 @@
                     <div class="col-md-12">
                         <div class="label text-color">{{'role.code' | translate}} <span class="required-title">*</span></div>
                         <div *ngIf="this.data.id == null" class="input-data">
-                            <input type="text" formControlName="code">
+                            <input type="text" formControlName="code" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                         </div>
                         <div *ngIf="this.data.id != null" class="input-data hidden-color">
                             <div class="hidden-color">{{code}}</div>
