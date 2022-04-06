@@ -26,17 +26,18 @@ export class ContractConnectArr {
     styleUrls: ['./infor-contract-form.component.scss']
 })
 
-export class InforContractFormComponent implements OnInit {
+export class InforContractFormComponent implements OnInit, AfterViewInit {
     @Input() stepForm: any;
     @Input() datasForm: any;
     @Output() stepChangeInfoContractForm = new EventEmitter<string>();
     @Input() save_draft_infor_form: any;
+    @ViewChild('nameContract') nameContract: ElementRef;
     typeList: Array<any> = [];
     typeListForm: Array<any> = [];
     type_id: any;
     form_id: any;
     // name: any;
-    timeDateSign: Date; // ngay het han ky
+    sign_time: Date; // ngay het han ky
     minDate: Date = moment().toDate();
     dataStepInfo = {
 
@@ -69,7 +70,7 @@ export class InforContractFormComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.datasForm.end_time = this.datasForm.end_time ? moment(this.datasForm.timeDateSign).toDate() : moment(new Date()).add(30, 'day').toDate();
+        this.datasForm.sign_time = this.datasForm.sign_time ? moment(this.datasForm.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
         // this.datasForm.type_id = this.datasForm.type_id ? this.datasForm.type_id : null;
         // this.form_id = this.datasForm.form_id ? this.datasForm.form_id : null;
         this.contractConnect = this.datasForm.contractConnect ? this.datasForm.contractConnect : null;
@@ -83,6 +84,12 @@ export class InforContractFormComponent implements OnInit {
         this.getContractTemplateForm(); // ham lay mau hop dong
         this.convertData();
     }
+
+    ngAfterViewInit() {
+        setTimeout(() => {
+          this.nameContract.nativeElement.focus();
+        }, 0)
+      }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'infor-contract-form') {
@@ -108,8 +115,8 @@ export class InforContractFormComponent implements OnInit {
     }
 
     getContractTemplateForm() {
-        this.contractTemplateService.getContractTemplateList(this.isShare, this.name, this.type, this.p, this.page).subscribe(response => {
-            console.log(response);
+        this.contractTemplateService.getContractTemplateList(this.isShare, this.name, this.type, 0, 0).subscribe(response => {
+            // console.log(response);
             this.typeListForm = response.entities;
             // this.pageTotal = response.total_elements;
         })
@@ -120,7 +127,7 @@ export class InforContractFormComponent implements OnInit {
         // console.log(e);
         this.spinner.show();
         this.contractService.getDetailContractFormInfor(e.value).subscribe((res: any) => {
-            console.log(res);
+            // console.log(res);
             this.datasForm['id_form'] = e.value;
             let dataContractForm = res.filter((p: any) => p.type == 1 && p.status == 1)[0];
             let dataContractAttachForm = res.filter((p: any) => p.type == 3);
@@ -129,12 +136,13 @@ export class InforContractFormComponent implements OnInit {
                 this.datasForm.filename = dataContractForm.filename;
                 this.datasForm.file_content = dataContractForm.path;
                 this.datasForm.pdfUrl = dataContractForm.path;
-                this.datasForm.contract_no = isDataInfo.code;
-                if (isDataInfo.end_time) {
-                    this.datasForm.end_time = moment(isDataInfo.end_time).toDate();
+                // this.datasForm.contract_no = isDataInfo.code;
+                if (isDataInfo.sign_time) {
+                    this.datasForm.sign_time = moment(isDataInfo.sign_time).toDate();
                 }
+                this.datasForm.end_time = isDataInfo.end_time;
                 this.datasForm.start_time = isDataInfo.start_time;
-                this.datasForm.name = dataContractForm.name;
+                // this.datasForm.name = dataContractForm.name;
                 this.datasForm.notes = isDataInfo.notes;
                 this.datasForm.type_id = isDataInfo.type_id;
                 this.datasForm.document_id = dataContractForm.id;
@@ -146,6 +154,9 @@ export class InforContractFormComponent implements OnInit {
             } else {
                 this.datasForm.fileAttachForm = [];
             }
+            setTimeout(() => {
+                this.nameContract.nativeElement.focus();
+              }, 100)
         }, (error) => {
             console.log(error);
             this.spinner.hide();
@@ -231,7 +242,7 @@ export class InforContractFormComponent implements OnInit {
             return false;
         }
 
-        let isDateSign = new Date(moment(this.datasForm.end_time).format('YYYY-MM-DD'));
+        let isDateSign = new Date(moment(this.datasForm.sign_time).format('YYYY-MM-DD'));
         let isDateNow = new Date(moment().format('YYYY-MM-DD'));
 
         if (Number(isDateSign) < Number(isDateNow)) {
@@ -298,14 +309,14 @@ export class InforContractFormComponent implements OnInit {
             //     }
             // }
 
-            // if (!coutError) {
-            //     await this.contractService.addDocument(this.datasForm).toPromise().then((res) => {
+            if (!coutError) {
+                await this.contractService.addDocument(this.datasForm).toPromise().then((res) => {
 
-            //     }, (error) => {
-            //         coutError = true;
-            //         this.errorData();
-            //     })
-            // }
+                }, (error) => {
+                    coutError = true;
+                    this.errorData();
+                })
+            }
 
             // if (!coutError) {
             //     await this.uploadService.uploadFile(this.datasForm.file_content).toPromise().then((data: any) => {
@@ -318,14 +329,14 @@ export class InforContractFormComponent implements OnInit {
             //     })
             // }
 
-            // if (!coutError) {
-            //     await this.contractService.addDocumentDone(this.datasForm).toPromise().then((res: any) => {
-            //         this.datasForm.document_id = res?.id;
-            //     }, () => {
-            //         coutError = true;
-            //         this.errorData();
-            //     })
-            // }
+            if (!coutError) {
+                await this.contractService.addDocumentDone(this.datasForm).toPromise().then((res: any) => {
+                    this.datasForm.document_id = res?.id;
+                }, () => {
+                    coutError = true;
+                    this.errorData();
+                })
+            }
 
             if (!coutError) {
                 await this.contractService.getDataNotifyOriganzation().toPromise().then((data: any) => {
@@ -354,10 +365,10 @@ export class InforContractFormComponent implements OnInit {
                                 coutError = true;
                                 this.spinner.hide();
                                 this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
-    
+
                             }
                         );
-    
+
                         if (coutError) {
                             break;
                         }
@@ -372,7 +383,7 @@ export class InforContractFormComponent implements OnInit {
                                     this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
                                 }
                             );
-        
+
                             if (coutError) {
                                 break;
                             }
@@ -395,12 +406,12 @@ export class InforContractFormComponent implements OnInit {
                                 this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
                             }
                         );
-    
+
                         if (coutError) {
                             break;
                         }
                     }
-                    
+
 
                 }
 

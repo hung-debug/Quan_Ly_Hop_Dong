@@ -255,6 +255,7 @@ export class PartyContractFormComponent implements OnInit {
         let count = 0;
         let dataArr = [];
         dataArr = this.data_organization.recipients;
+        dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
         for (let i = 0; i < dataArr.length; i++) {
             if (!dataArr[i].name) {
                 this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!");
@@ -319,7 +320,8 @@ export class PartyContractFormComponent implements OnInit {
         if (count == 0) {
             // validate phía đối tác
             for (let j = 0; j < dataArrPartner.length; j++) {
-                for (let k = 0; k < dataArrPartner[j].recipients.length; k++) {
+                let isParterSort = (dataArrPartner[j].recipients).sort((beforeItemParter: any, afterItemParter: any) => beforeItemParter.role - afterItemParter.role);
+                for (let k = 0; k < isParterSort.length; k++) {
                     if (dataArrPartner[j].type != 3) {
                         if (!dataArrPartner[j].name) {
                             this.getNotificationValid("Vui lòng nhập tên của đối tác tổ chức!")
@@ -327,68 +329,68 @@ export class PartyContractFormComponent implements OnInit {
                             break;
                         }
 
-                        if (!dataArrPartner[j].recipients[k].name) {
-                            this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
+                        if (!isParterSort[k].name) {
+                            this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(isParterSort[k].role) + " của đối tác!")
                             count++;
                             break;
                         }
-                        if (!dataArrPartner[j].recipients[k].email) {
-                            this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
+                        if (!isParterSort[k].email) {
+                            this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(isParterSort[k].role) + " của đối tác!")
                             count++;
                             break;
                         }
 
-                        if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role)) {
-                            this.getNotificationValid("Vui lòng chọn loại ký" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!")
+                        if (isParterSort[k].sign_type.length == 0 && [3, 4].includes(isParterSort[k].role)) {
+                            this.getNotificationValid("Vui lòng chọn loại ký" + this.getNameObject(isParterSort[k].role) + "của đối tác!")
                             count++;
                             break;
-                        } else if (dataArrPartner[j].recipients[k].sign_type.length > 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role)) {
+                        } else if (isParterSort[k].sign_type.length > 0 && [3, 4].includes(isParterSort[k].role)) {
                             let isPartnerOriganzationDuplicate = [];
-                            isPartnerOriganzationDuplicate = dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+                            isPartnerOriganzationDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
                             if (isPartnerOriganzationDuplicate.length > 1) {
-                                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!")
+                                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(isParterSort[k].role) + "của đối tác!")
                                 count++;
                                 break;
                             }
                             isPartnerOriganzationDuplicate = [];
                         }
 
-                        if (!dataArrPartner[j].recipients[k].phone && dataArrPartner[j].recipients[k].role == 3 && (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
+                        if (!isParterSort[k].phone && isParterSort[k].role == 3 && (isParterSort[k].is_otp || isParterSort[k].is_otp == 1)) {
                             this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "của đối tác!")
                             count++;
                             break;
                         }
 
                     } else if (dataArrPartner[j].type == 3) {
-                        if (!dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3) {
-                            this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
+                        if (!isParterSort[k].name && isParterSort[k].role == 3) {
+                            this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")
                             count++;
                             break;
                         }
-                        if (!dataArrPartner[j].recipients[k].email && dataArrPartner[j].recipients[k].role == 3) {
-                            this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
+                        if (!isParterSort[k].email && isParterSort[k].role == 3) {
+                            this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")
                             count++;
                             break;
                         }
 
-                        if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role) && dataArrPartner[j].recipients[k].role == 3) {
-                            this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!")
+                        if (isParterSort[k].sign_type.length == 0 && [3, 4].includes(isParterSort[k].role) && isParterSort[k].role == 3) {
+                            this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân!")
                             count++;
                             break;
-                        } else if (dataArrPartner[j].recipients[k].sign_type.length > 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role) && dataArrPartner[j].recipients[k].role == 3) {
+                        } else if (isParterSort[k].sign_type.length > 0 && [3, 4].includes(isParterSort[k].role) && isParterSort[k].role == 3) {
                             let isPartnerCaNhanDuplicate = [];
-                            isPartnerCaNhanDuplicate = dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+                            isPartnerCaNhanDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
                             if (isPartnerCaNhanDuplicate.length > 1) {
-                                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!")
+                                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân!")
                                 count++;
                                 break;
                             }
                             isPartnerCaNhanDuplicate = [];
                         }
 
-                        if (!dataArrPartner[j].recipients[k].phone &&
-                            dataArrPartner[j].recipients[k].role == 3 &&
-                            (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
+                        if (!isParterSort[k].phone &&
+                            isParterSort[k].role == 3 &&
+                            (isParterSort[k].is_otp || isParterSort[k].is_otp == 1)) {
                             this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(3) + "của đối tác!")
                             count++;
                             break;
@@ -401,13 +403,13 @@ export class PartyContractFormComponent implements OnInit {
                         //   break;
                         // }
                         //@ts-ignore
-                        if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email) && dataArrPartner[j].recipients[k].role == 3) {
-                            this.getNotificationValid("Email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân không hợp lệ!")
+                        if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email) && isParterSort[k].role == 3) {
+                            this.getNotificationValid("Email" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
                             count++;
                             break;
                         }
                         //@ts-ignore
-                        if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
+                        if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone)) {
                             this.getNotificationValid("Số điện thoại" + this.getNameObject(3) + "của đối tác không hợp lệ!")
                             count++;
                             break;
