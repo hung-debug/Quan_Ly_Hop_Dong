@@ -989,16 +989,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       // this.objSignInfo.width = set_id.width;
       // this.objSignInfo.height = set_id.width;
       signElement = document.getElementById(this.objSignInfo.id);
-    } else
+    } else {
       signElement = document.getElementById(this.objSignInfo.id);
+    }
+
+    if (this.isEnableSelect) {
+        this.isEnableSelect = false;
+      }
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
       if (isObjSign) {
-        if (this.isEnableSelect) {
-          this.isEnableSelect = false;
-        }
-        
         this.objSignInfo.traf_x = d.coordinate_x;
         this.objSignInfo.traf_y = d.coordinate_y;
         // this.signCurent.name = d.name;
@@ -1384,7 +1385,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       //   this.step = variable.stepSampleContract.step4;
       //   this.datas.stepLast = this.step
       //   this.nextOrPreviousStep(this.step);
-      // } else 
+      // } else
       if (action == 'save_draft') {
         this.datas.save_draft.sample_contract = false;
         this.stepChangeSampleContract.emit('save_draft_sample_contract')
