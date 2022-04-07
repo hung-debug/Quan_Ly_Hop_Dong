@@ -471,7 +471,7 @@ export class ContractService {
     const body = JSON.stringify({
       name: datas.name,
       type: is_type ? is_type : 1,
-      path: datas.filePath,
+      path: datas.filePath ? datas.filePath : datas.pdfUrl,
       filename: datas.fileName,
       bucket: datas.fileBucket,
       internal: 1,
@@ -500,9 +500,9 @@ export class ContractService {
     const body = JSON.stringify({
       name: datas.name,
       type: 2,
-      path: datas.filePathDone,
-      filename: datas.fileNameDone,
-      bucket: datas.fileBucketDone,
+      path: datas.filePathDone ? datas.filePathDone : datas.pdfUrl,
+      filename: datas.fileNameDone ? datas.fileNameDone : datas.fileName,
+      bucket: datas.fileBucketDone ? datas.fileBucketDone : datas.fileBucket,
       internal: 1,
       ordering: 1,
       status: 1,

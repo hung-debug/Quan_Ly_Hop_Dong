@@ -133,7 +133,8 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             let dataContractAttachForm = res.filter((p: any) => p.type == 3);
             let isDataInfo = this.typeListForm.filter((data: any) => data.id == e.value)[0];
             if (dataContractForm && isDataInfo) {
-                this.datasForm.filename = dataContractForm.filename;
+                this.datasForm.fileBucket = dataContractForm.bucket;
+                this.datasForm.fileName = dataContractForm.filename;
                 this.datasForm.file_content = dataContractForm.path;
                 this.datasForm.pdfUrl = dataContractForm.path;
                 // this.datasForm.contract_no = isDataInfo.code;
@@ -310,6 +311,16 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             // }
 
             if (!coutError) {
+                await this.contractService.getDataNotifyOriganzation().toPromise().then((data: any) => {
+                    this.datasForm.name_origanzation = data.name;
+                }, () => {
+                    coutError = true;
+                    this.errorData();
+                })
+            }
+
+
+            if (!coutError) {
                 await this.contractService.addDocument(this.datasForm).toPromise().then((res) => {
 
                 }, (error) => {
@@ -317,17 +328,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                     this.errorData();
                 })
             }
-
-            // if (!coutError) {
-            //     await this.uploadService.uploadFile(this.datasForm.file_content).toPromise().then((data: any) => {
-            //         this.datasForm.filePathDone = data.file_object.file_path;
-            //         this.datasForm.fileNameDone = data.file_object.filename;
-            //         this.datasForm.fileBucketDone = data.file_object.bucket;
-            //     }, (error) => {
-            //         coutError = true;
-            //         this.errorData();
-            //     })
-            // }
 
             if (!coutError) {
                 await this.contractService.addDocumentDone(this.datasForm).toPromise().then((res: any) => {
@@ -337,16 +337,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                     this.errorData();
                 })
             }
-
-            if (!coutError) {
-                await this.contractService.getDataNotifyOriganzation().toPromise().then((data: any) => {
-                    this.datasForm.name_origanzation = data.name;
-                }, () => {
-                    coutError = true;
-                    this.errorData();
-                })
-            }
-
+            
             // upload file dinh kem (neu add them file dinh kem)
             if (!coutError && this.datasForm.fileAttachForm && this.datasForm.fileAttachForm.length && this.datasForm.fileAttachForm.length > 0) {
                 for (let i = 0; i < this.datasForm.fileAttachForm.length; i++) {
@@ -429,7 +420,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                     this.spinner.hide();
                 }
 
-            } else {
+            } else if (!coutError) {
                 if (action == "luu_nhap") {
                     this.router.navigate(['/main/contract/create/draft']);
                     this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
