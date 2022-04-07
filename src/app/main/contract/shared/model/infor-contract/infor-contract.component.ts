@@ -101,6 +101,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.notes = this.datas.notes ? this.datas.notes : null;
     if (this.datas.file_name_attach) {
       this.datas.attachFileNameArr = this.datas.file_name_attach;
+      let isAttachFileClone = JSON.parse(JSON.stringify(this.datas.attachFileNameArr));
+      this.attachFileNameArr = isAttachFileClone.map((p: any) => ({filename: p.filename}));
     }
     this.convertData(this.datas);
 
