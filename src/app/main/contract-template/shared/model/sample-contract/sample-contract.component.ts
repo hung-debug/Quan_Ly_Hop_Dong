@@ -100,7 +100,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    console.log(this.datas);
+    
+    console.log("this.datas.contract_user_sign");
+    console.log(this.datas.contract_user_sign);
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {

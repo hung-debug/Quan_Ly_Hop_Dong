@@ -105,9 +105,10 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   ngOnInit(): void {
+    console.log(this.datas);
     this.name = this.datas.name ? this.datas.name : null;
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;
-    this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.contract_no;
+    this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.code;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
     this.start_time = this.datas.start_time ? moment(this.datas.start_time).toDate() : '';
@@ -127,9 +128,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     // this.subscription = this.contractService.sharedMessage.subscribe(msg => this.messageForSibling = msg);
     // console.log(this.messageForSibling)
 
-    this.contract_no_old = this.datas.contract_no;
-    this.start_time_old = this.datas.start_time;
-    this.end_time_old = this.datas.end_time;
+    this.contract_no_old = this.contract_no;
+    this.start_time_old = this.start_time;
+    this.end_time_old = this.end_time;
   }
 
   // ngOnDestroy(): void {
@@ -347,6 +348,17 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       }
 
       if (countSuccess == 0) {
+        await this.unitService.getDataNotifyOriganzation().toPromise().then((res: any) => {
+          this.datas.name_origanzation = res.name;
+          console.log(this.datas);
+        }, (error: HttpErrorResponse) => {
+          countSuccess++
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout("no.get.information.organization.error", "", 3000);
+        })
+      }
+
+      if (countSuccess == 0) {
         if (this.datas.attachFileArr != null) {
           for (var i = 0; i < this.datas.attachFileArr.length; i++) {
             await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then((data) => {
@@ -368,38 +380,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               }
             );
           }
-
-          // this.save_draft_infor.close_header
-
-          if (action != "save_draft") {
-            this.step = variable.stepSampleContract.step2;
-            this.datas.stepLast = this.step;
-            this.nextOrPreviousStep(this.step);
-
-          } else {
-            if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
-              this.save_draft_infor.close_header = false;
-              this.save_draft_infor.close_modal.close();
-            }
-            this.router.navigate(['/main/contract/create/draft']);
-            this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-          }
-          this.spinner.hide();
-        } else {
-          if (action == "save_draft") {
-            this.router.navigate(['/main/contract/create/draft']);
-            this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-          } else {
-            //next step
-            this.step = variable.stepSampleContract.step2;
-            this.datas.stepLast = this.step;
-            // this.datas.document_id = '1';
-            this.nextOrPreviousStep(this.step);
-            // console.log(this.datas);
-
-          }
-          this.spinner.hide();
-        }
+        } 
+        this.step = variable.stepSampleContract.step2;
+        this.datas.stepLast = this.step;
+        this.nextOrPreviousStep(this.step);
+        this.spinner.hide();
       } 
       
       // else {

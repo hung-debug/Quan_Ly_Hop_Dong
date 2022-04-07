@@ -179,6 +179,8 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
             this.roleMess = "Mẫu hợp đồng không còn được chia sẻ đến bạn";
           }else if(this.datas?.is_data_contract?.status==32){
             this.roleMess = "Mẫu hợp đồng đã ngừng phát hành";
+          }else if(this.datas?.is_data_contract?.status==32){
+            this.roleMess = "Mẫu hợp đồng không có hiệu lực";
           }
         }
         
