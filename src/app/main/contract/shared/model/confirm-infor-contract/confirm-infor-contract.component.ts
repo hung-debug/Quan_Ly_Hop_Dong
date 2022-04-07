@@ -203,10 +203,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
               item['type'] = 4;
               if (this.datas.contract_no) {
                 if (!item.name) 
-                item.name = null;
+                // item.name = null;
+                item.name = "";
             
               if (!item.recipient_id) 
-                item.recipient_id = null;
+                // item.recipient_id = null;
+                item.recipient_id = "";
             
               if (!item.status) 
                 item.status = 0;
