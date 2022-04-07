@@ -162,7 +162,7 @@ export class ContractService {
     }else{
       listContractUrl = this.listContractOrgUrl + '?organization_id=' + this.organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
     }
-    
+
     console.log(listContractUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();
@@ -230,7 +230,7 @@ export class ContractService {
         catchError(this.handleError)
       );
     }
-    
+
   }
 
 
@@ -729,7 +729,7 @@ export class ContractService {
 
     return this.http.get<any>(this.addGetDataContract + idContract, {headers});
   }
-  
+
   getContractCopy(id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
