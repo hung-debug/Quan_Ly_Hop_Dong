@@ -951,20 +951,26 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
   // @ts-ignore
   changeDisplay() {
-    if (window.innerHeight < 670 && window.innerHeight > 643) {
+    // if (window.innerHeight < 670 && window.innerHeight > 643) {
+    //   return {
+    //     "overflow": "auto",
+    //     "height": "calc(50vh - 118px)"
+    //   }
+    // } else if (window.innerHeight <= 643) {
+    //   return {
+    //     "overflow": "auto",
+    //     "height": "calc(50vh - 170px)"
+    //   }
+    // } else if (window.innerHeight == 768) {
+    //   return {
+    //     "overflow": "auto",
+    //     "height": "285px"
+    //   }
+    // } else return {}
+    if (window.innerHeight <= 768) {
       return {
         "overflow": "auto",
-        "height": "calc(50vh - 118px)"
-      }
-    } else if (window.innerHeight <= 643) {
-      return {
-        "overflow": "auto",
-        "height": "calc(50vh - 170px)"
-      }
-    } else if (window.innerHeight == 768) {
-      return {
-        "overflow": "auto",
-        "height": "285px"
+        "height": "210px"
       }
     } else return {}
   }
