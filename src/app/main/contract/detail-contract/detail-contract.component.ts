@@ -221,9 +221,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         this.datas.roleContractReceived = this.recipient.role;
       }
 
-
-
-
       this.scale = 1;
 
       if (!this.signCurent) {
@@ -245,7 +242,12 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         } else {
           return;
         }
-        this.pdfSrc = fileC;
+        if (!fileC) {
+          this.toastService.showErrorHTMLWithTimeout("Thiếu dữ liệu file hợp đồng!", "", 3000);
+        } else {
+          this.pdfSrc = fileC;
+        }
+      
       }
       // render pdf to canvas
       this.getPage();

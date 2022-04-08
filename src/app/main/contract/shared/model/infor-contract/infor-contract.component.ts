@@ -101,7 +101,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.notes = this.datas.notes ? this.datas.notes : null;
     if (this.datas.file_name_attach) {
       this.datas.attachFileNameArr = this.datas.file_name_attach;
+      let isAttachFileClone = JSON.parse(JSON.stringify(this.datas.attachFileNameArr));
+      this.attachFileNameArr = isAttachFileClone.map((p: any) => ({filename: p.filename}));
+      // datas.contractFile
     }
+    
     this.convertData(this.datas);
 
     this.contractService.getContractTypeList().subscribe(data => {
@@ -166,6 +170,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           if (this.datas.is_action_contract_created) {
             this.uploadFileContractAgain = true;
           }
+          
           // console.log(this.datas);
         } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {
           this.toastService.showErrorHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 3000);
@@ -340,12 +345,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           if (this.datas.attachFileArr != null) {
             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
               await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then((data) => {
-                this.datas.attachFileArr[i].file_path = data.file_object.file_path;
-                this.datas.attachFileArr[i].name = data.file_object.filename; 
-
-                // this.datas.filePathAttach = data.file_object.file_path;
-                // this.datas.fileNameAttach = data.file_object.filename;
-                // this.datas.fileBucketAttach = data.file_object.bucket;
+                // this.datas.attachFileArr[i].file_path = data.file_object.file_path;
+                // this.datas.attachFileArr[i].name = data.file_object.filename; 
+                this.datas.filePathAttach = data.file_object.file_path;
+                this.datas.fileNameAttach = data.file_object.filename;
+                this.datas.fileBucketAttach = data.file_object.bucket;
                 this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
                   this.datas.document_attach_id = data?.id;
                 },
@@ -370,7 +374,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               this.nextOrPreviousStep(this.step);
 
             } else {
-              if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+              if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
                 this.save_draft_infor.close_header = false;
                 this.save_draft_infor.close_modal.close();
               }
@@ -832,7 +836,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     );
 
     // case api error => close popup save draft
-    if (this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+    if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
       this.save_draft_infor.close_header = false;
       this.save_draft_infor.close_modal.close();
     }
@@ -900,7 +904,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   contractFileRequired() {
     this.errorContractFile = "";
-    if (!this.datas.contractFile) {
+    if (!this.datas.contractFile && !this.datas.file_name) {
       this.errorContractFile = "error.contract.file.required";
       return false;
     }

@@ -662,7 +662,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           element.is_disable = true;
         else element.is_disable = false;
       } else {
-        if (this.convertToSignConfig().some((p: any) => p.email == element.email && p.sign_unit == isSignType)) {
+        if (this.convertToSignConfig().some((p: any) => (p.email == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && p.email && p.sign_unit == 'so_tai_lieu'))) {
           if (isSignType != 'text') {
             element.is_disable = true;
           }
@@ -1431,7 +1431,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (!element.name && element.sign_unit != 'so_tai_lieu') { // element.sign_unit != 'so_tai_lieu'
               count++;
               break
-            } else if (element.sign_unit == 'so_tai_lieu' && !this.datas.contract_no) {
+            } else if (element.sign_unit == 'so_tai_lieu' && !this.datas.contract_no && !element.email) {
               count++;
               break
             } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
