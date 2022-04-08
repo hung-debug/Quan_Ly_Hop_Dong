@@ -331,9 +331,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // loc du lieu khong trung nhau
     // (val.recipient_id as any) == (data.id as any) &&
     dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
-      ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
+      (((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
         (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-      val.name == data.name && val.email == data.email
+      (val.name == data.name) && (val.email == data.email)) || !val.email
     ));
 
 
@@ -343,7 +343,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
         (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
         (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4))) ||
-        val.name == data.name || val.email == data.email));
+        val.name == data.name || val.email == data.email || !val.email));
     }
 
     // xoa nhung du lieu doi tuong bi thay doi
@@ -673,7 +673,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
           } else if (isSignType == 'text') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
-          } else element.is_disable = element.role != 4;
+          } else element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4)); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
         }
       }
 
