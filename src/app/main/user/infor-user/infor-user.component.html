@@ -120,7 +120,7 @@
                 <div class="input-data">
                   <input type="text" formControlName="phoneKpi">
                 </div>
-                <div *ngIf="submitted && fKpi.phoneKpi.errors" class="invalid">
+                <div *ngIf="submittedSign && fKpi.phoneKpi.errors" class="invalid">
                 <div *ngIf="fKpi.phoneKpi.errors.pattern">{{'error.user.phone.format' | translate}}</div>
               </div>
               </div>
@@ -163,7 +163,7 @@
                 <div class="input-data">
                   <input type="text" formControlName="nameHsm">
                 </div>
-                <div *ngIf="submitted && fHsm.nameHsm.errors" class="invalid">
+                <div *ngIf="submittedSign && fHsm.nameHsm.errors" class="invalid">
                   <div *ngIf="fHsm.nameHsm.errors.pattern">{{'Tên người dùng không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
               </div>
@@ -173,7 +173,7 @@
       </div>
     </div>
     <div class="row" style="justify-content: center;padding-top: 0px;">
-    <button class="save-button" (click)="updateUser()">{{'btn.update' | translate}}</button>
+    <button class="save-button" (click)="updateSignUser()">{{'btn.update' | translate}}</button>
   </div>
 </div>
    

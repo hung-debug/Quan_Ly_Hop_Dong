@@ -18,6 +18,7 @@ import {parttern_input} from "../../../config/parttern"
 export class InforUserComponent implements OnInit {
 
   submitted = false;
+  submittedSign = false;
   get f() { return this.addInforForm.controls; }
   get fKpi() { return this.addKpiForm.controls; }
   get fHsm() { return this.addHsmForm.controls; }
@@ -35,6 +36,11 @@ export class InforUserComponent implements OnInit {
   addInforForm: FormGroup;
   addKpiForm: FormGroup;
   addHsmForm: FormGroup;
+
+  addInforFormOld: FormGroup;
+  addKpiFormOld: FormGroup;
+  addHsmFormOld: FormGroup;
+
   datas: any;
   attachFile:any;
   imgSignBucket:any;
@@ -72,6 +78,7 @@ export class InforUserComponent implements OnInit {
       this.addHsmForm = this.fbd.group({
         nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form))
       });
+
  }
 
   ngOnInit(): void {
@@ -134,6 +141,23 @@ export class InforUserComponent implements OnInit {
         this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
         this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
         this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
+
+        this.addInforFormOld = this.fbd.group({
+          name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+          email: this.fbd.control(data.email, [Validators.required, Validators.email]),
+          birthday: data.birthday==null?null:new Date(data.birthday),
+          phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+          organizationId: this.fbd.control(data.organization_id, [Validators.required]),
+          role: this.fbd.control(data.role_id, [Validators.required]),
+          status: data.status,
+        });
+        this.addKpiFormOld = this.fbd.group({
+          phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
+          networkKpi: data.phone_tel
+        });
+        this.addHsmFormOld = this.fbd.group({
+          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form))
+        });
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
       }
@@ -141,6 +165,29 @@ export class InforUserComponent implements OnInit {
   }
 
   update(data:any){
+
+    //lay lai thong tin anh cu truoc do => day lai
+    if(this.imgSignBucket != null && this.imgSignPath != null){
+      const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
+      const sign_image:never[]=[];
+      (sign_image as string[]).push(sign_image_content);
+      data.sign_image = sign_image;
+    }
+    this.userService.updateUser(data).subscribe(
+      data => {
+        console.log(data);
+        this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/user-infor']);
+        });
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+      }
+    )
+  }
+
+  updateSign(data:any){
+    //neu co up anh moi => day lai anh, update lai thong tin
     if(data.fileImage != null){
       this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
         console.log(JSON.stringify(dataFile));
@@ -166,6 +213,7 @@ export class InforUserComponent implements OnInit {
         return false;
       });
     }else{
+      //lay lai thong tin anh cu truoc do => day lai
       if(this.imgSignBucket != null && this.imgSignPath != null){
         const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
         const sign_image:never[]=[];
@@ -189,7 +237,7 @@ export class InforUserComponent implements OnInit {
   updateUser(){
     this.submitted = true;
     // stop here if form is invalid
-    if (this.addInforForm.invalid || this.addKpiForm.invalid || this.addHsmForm.invalid) {
+    if (this.addInforForm.invalid) {
       return;
     }
     const data = {
@@ -205,10 +253,10 @@ export class InforUserComponent implements OnInit {
       fileImage: this.attachFile,
       sign_image: [],
 
-      phoneKpi: this.addKpiForm.value.phoneKpi,
-      networkKpi: this.addKpiForm.value.networkKpi,
+      phoneKpi: this.addKpiFormOld.value.phoneKpi,
+      networkKpi: this.addKpiFormOld.value.networkKpi,
 
-      nameHsm: this.addHsmForm.value.nameHsm
+      nameHsm: this.addHsmFormOld.value.nameHsm
 
     }
     console.log(data);
@@ -264,8 +312,35 @@ export class InforUserComponent implements OnInit {
       //ham update
       this.update(data);
     }
+  }
 
-    
+  updateSignUser(){
+    this.submittedSign = true;
+    // stop here if form is invalid
+    if (this.addKpiForm.invalid || this.addHsmForm.invalid) {
+      return;
+    }
+    const data = {
+      id: this.id,
+      name: this.addInforFormOld.value.name,
+      email: this.addInforFormOld.value.email,
+      birthday: this.addInforFormOld.value.birthday,
+      phone: this.addInforFormOld.value.phone,
+      organizationId: this.addInforFormOld.value.organizationId,
+      role: this.addInforFormOld.value.role,
+      status: this.addInforFormOld.value.status,
+
+      fileImage: this.attachFile,
+      sign_image: [],
+
+      phoneKpi: this.addKpiForm.value.phoneKpi,
+      networkKpi: this.addKpiForm.value.networkKpi,
+
+      nameHsm: this.addHsmForm.value.nameHsm
+
+    }
+    //ham update
+    this.updateSign(data);
   }
 
   fileChangedAttach(e: any) {
