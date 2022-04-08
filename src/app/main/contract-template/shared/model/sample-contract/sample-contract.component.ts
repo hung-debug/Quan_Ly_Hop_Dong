@@ -250,49 +250,46 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           item['is_type_party'] = this.datas.is_determine_clone.type;
           item['role'] = item.role;
           dataNotPosition.push(item)
-        }
-
-
-        // p.recipient_id == item.id
-        // let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient.email == item.email)[0];
-        // if (data_duplicate) {
-        //   // lấy ra dữ liệu bị trùng và update lại với dữ liệu mới;
-        //   data_duplicate.name = item.name;
-        //   data_duplicate.email = item.email;
-        //   data_duplicate.phoneNumber = item.phoneNumber;
-        //   data_duplicate.sign_type = item.sign_type;
-        //   // data_duplicate.sign_unit = item.sign_type.some((data: any) => data.id == 1) ? 'chu_ky_anh' : 'chu_ky_so';
-        //   data_duplicate.is_otp = item.is_otp;
-        //   data_duplicate['id_have_data'] = data_duplicate.id;
-        //   data_duplicate['is_type_party'] = element.type;
-        //   data_duplicate['role'] = data_duplicate.recipient.role;
-        //   if (data_duplicate.sign_unit == 'chu_ky_so' || data_duplicate.sign_unit == 'so_tai_lieu') {
-        //     data_duplicate.sign_unit = item.sign_type.some((data: any) => data.id == 1) ? 'chu_ky_anh' : 'chu_ky_so';
-        //   }
-        //   // delete data_duplicate.recipient;
-        //   dataPosition.push(data_duplicate);
-        // } else {
-        //   item['is_type_party'] = this.datas.is_determine_clone.type;
-        //   item['role'] = item.role;
-        //   dataNotPosition.push(item)
-        // }
+        }  
       })
-      // console.log(this.datas.is_determine_clone);
-
     })
 
+    //add cac o chua duoc assign
+    let dataNotAssign: any[] = [];
+    this.datas.is_data_object_signature.forEach((res: any) => {
+      if(!res.recipient){
+        res['id_have_data'] = res.id;
+        res['is_type_party'] = res.type;
+        //res['role'] = res.recipient.role;
+        if (res.type == 1) {
+          res['sign_unit'] = 'text';
+        }
+        if (res.type == 2) {
+          res['sign_unit'] = 'chu_ky_anh'
+        }
+        if (res.type == 3) {
+          res['sign_unit'] = 'chu_ky_so'
+        }
+        if (res.type == 4) {
+          res['sign_unit'] = 'so_tai_lieu'
+        }
+        res.name = res.name;
+        res.email = res.email;
+        dataNotAssign.push(res);
+      }
+    })
+    
     // let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
     // let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
-    this.dataSignPosition = [...dataPosition, ...dataNotPosition];
+    this.dataSignPosition = [...dataPosition, ...dataNotPosition, ...dataNotAssign];
     console.log(this.dataSignPosition);
 
-
+    
     this.dataSignPosition.forEach((res: any) => {
       if (res.sign_unit == 'text') {
         res['text_attribute_name'] = res.name;
       }
     })
-    // this.datas.is_determine_clone = this.dataSignPosition;
   }
 
   setDataSignContract() {

@@ -61,7 +61,7 @@
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
           <div class="div_icon" *ngIf="isShare=='off'">
-            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
+            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'Sửa mẫu hợp đồng' | translate}}" (click)="openEdit(item.id)" />
           </div>
           <div class="div_icon" *ngIf="isShare=='off'">
             <img *ngIf="item.status == 10" src="../../assets/img/icon_stop_release.svg" class="img_icon" ngbTooltip="Ngừng phát hành" (click)="stopContractTemplate(item.id)"/>

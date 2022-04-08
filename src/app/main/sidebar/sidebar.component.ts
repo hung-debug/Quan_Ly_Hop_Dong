@@ -37,14 +37,15 @@ export class SidebarComponent implements OnInit {
           element.active = true;
         }
       } else {
-        this.subMenus = element.submenus
+        this.subMenus = element.submenus;
+        element.activeDrop = false;
+        element.active = false;
         this.subMenus.forEach((elementSub: any) => {
           if (this.router.url.includes(elementSub.href)) {
-            element.active = true;
+            element.activeDrop = true;
+            element.active = true; 
             elementSub.active = true;
           } else {
-            element.activeDrop = false;
-            element.active = false;
             elementSub.active = false;
           }
         });

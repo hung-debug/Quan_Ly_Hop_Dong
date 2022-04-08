@@ -335,7 +335,16 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
     if (isSuccess == 0) {
       if (action != 'saveDraft_contract') {
-        this.callAPIFinish();
+        //this.callAPIFinish();
+
+        //khong call api update trang thai nua ma chi thong bao
+        this.spinner.show();
+
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/contract-template']);
+        });
+        this.toastService.showSuccessHTMLWithTimeout("Sửa mẫu hợp đồng thành công!", "", 3000);
+        
       } else {
         if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
           this.save_draft_infor.close_header = false;
