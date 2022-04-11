@@ -333,7 +333,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
       (((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
         (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-      (val.name == data.name) && (val.email == data.email)) || !val.email
+        (val.name == data.name) && (val.email == data.email)) || !val.email
     ));
 
 
@@ -734,8 +734,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // // update the posiion attributes
     target.setAttribute('data-x', x)
     target.setAttribute('data-y', y);
-    //this.objSignInfo.traf_x = x;
-    //this.objSignInfo.traf_y = y;
+
   }
 
   setWidth(d: any) {
@@ -823,10 +822,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.eventMouseover();
   }
 
-  getRemoveCopyRight() {
-    // let is_var_copyRight = sessionStorage.getItem('copy_right_show');
-    // if (is_var_copyRight)
-    //   sessionStorage.removeItem('copy_right_show')
+  setClass(dataDrag: any) {
+    if (this.datas.contract_user_sign.some((p: any) => p.sign_unit == 'so_tai_lieu' && p.sign_config.length > 0) && dataDrag.sign_unit == 'so_tai_lieu') {
+      return 'none-drag';
+    } else return 'resize-drag'
   }
 
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
@@ -1004,7 +1003,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (this.isEnableSelect) {
           this.isEnableSelect = false;
         }
-        
+
         this.objSignInfo.traf_x = d.coordinate_x;
         this.objSignInfo.traf_y = d.coordinate_y;
         // this.signCurent.name = d.name;
