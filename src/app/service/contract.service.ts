@@ -188,7 +188,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-      name: datas.name,
+      name: datas.name ? datas.name : "",
       code: datas.contract_no,
       contract_no: datas.contract_no,
       //sign_order: 1,
