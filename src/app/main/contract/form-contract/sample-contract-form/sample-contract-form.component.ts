@@ -368,7 +368,7 @@ export class SampleContractFormComponent implements OnInit {
       dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
         (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
         (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4))) ||
-        !val.recipient || !val.email || 
+        !val.recipient || !val.email ||
         (val.recipient ? (val.recipient.name == data.name || val.recipient.email == data.email) : (val.name == data.name || val.email == data.email))));
     }
 
@@ -377,17 +377,17 @@ export class SampleContractFormComponent implements OnInit {
       if (resForm.sign_config.length > 0) {
         resForm.sign_config = resForm.sign_config.filter((val: any) =>
           dataDiffirent.some((data: any) =>
-          (val.recipient && !val.email) || (!val.recipient && !val.email) ||
+            (val.recipient && !val.email) || (!val.recipient && !val.email) ||
             (val.recipient ? val.recipient.name : val.name as any) == (data.name as any) &&
             (val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email : data.email as any) &&
             val.sign_unit == data.sign_unit));
         resForm.sign_config.forEach((items: any) => {
           items.id = items.id + '1';
           let data: any = {};
-          data = dataDetermine.filter((data: any) => 
-          items.recipient_id == data.id ||
-          data.email == (items.recipient ? items.recipient.email : items.email) && 
-          data.name == (items.recipient ? items.recipient.name : items.name))[0];
+          data = dataDetermine.filter((data: any) =>
+            items.recipient_id == data.id ||
+            data.email == (items.recipient ? items.recipient.email : items.email) &&
+            data.name == (items.recipient ? items.recipient.name : items.name))[0];
           if (data) {
             items.is_type_party = data.is_type_party;
           }
@@ -1200,6 +1200,27 @@ export class SampleContractFormComponent implements OnInit {
     interact.removeDocument(document);
   }
 
+
+  onContentTextEvent() {
+    let arrCheckTextContent = [];
+    let dataTextDuplicate = this.datasForm.contract_user_sign.filter((p: any) => p.sign_unit == "text")[0];
+    for (let i = 0; i < dataTextDuplicate.sign_config.length; i++) {
+      if (dataTextDuplicate.sign_config[i].text_attribute_name) {
+        arrCheckTextContent.push(dataTextDuplicate.sign_config[i].text_attribute_name);
+      }
+    }
+
+    var valueSoFar = Object.create(null);
+    for (var k = 0; k < arrCheckTextContent.length; ++k) {
+      var value = arrCheckTextContent[k];
+      if (value in valueSoFar) {
+        return true;
+      }
+      valueSoFar[value] = true;
+    }
+    return false;
+  }
+
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
     // console.log(e, this.objSignInfo, this.signCurent);
@@ -1271,17 +1292,6 @@ export class SampleContractFormComponent implements OnInit {
   getTrafY() {
     return Math.round(this.objSignInfo.traf_y)
   }
-
-  // edit size doi tuong ky
-  // changeSizeSign(e: any, sizeChange: any) {
-  //   let signElement = document.getElementById(this.objSignInfo.id);
-  //   if (signElement) {
-  //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-  //     if (isObjSign) {
-  //
-  //     }
-  //   }
-  // }
 
   back(e: any, step?: any) {
     this.nextOrPreviousStep(step);
@@ -1531,6 +1541,11 @@ export class SampleContractFormComponent implements OnInit {
             break;
           }
         }
+      }
+
+      if (this.onContentTextEvent()) {
+        this.toastService.showErrorHTMLWithTimeout("Trùng tên trường ô text. Vui lòng kiểm tra lại!", "", 3000);
+        return false;
       }
 
       if (count > 0) {

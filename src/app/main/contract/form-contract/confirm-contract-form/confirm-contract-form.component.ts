@@ -188,10 +188,10 @@ export class ConfirmContractFormComponent implements OnInit {
                             item['type'] = 4;
                             if (this.datasForm.contract_no) {
                                 if (!item.name)
-                                    item.name = null;
+                                    item.name = "";
 
                                 if (!item.recipient_id)
-                                    item.recipient_id = null;
+                                    item.recipient_id = "";
 
                                 if (!item.status)
                                     item.status = 0;

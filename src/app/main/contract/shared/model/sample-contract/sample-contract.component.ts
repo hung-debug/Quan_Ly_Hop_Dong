@@ -1199,6 +1199,26 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  // onContentTextEvent() {
+  //   let arrCheckTextContent = [];
+  //   let dataTextDuplicate = this.datas.contract_user_sign.filter((p: any) => p.sign_unit == "text")[0];
+  //   for (let i = 0; i < dataTextDuplicate.sign_config.length; i++) {
+  //     if (dataTextDuplicate.sign_config[i].text_attribute_name) {
+  //       arrCheckTextContent.push(dataTextDuplicate.sign_config[i].text_attribute_name);
+  //     }
+  //   }
+
+  //   var valueSoFar = Object.create(null);
+  //   for (var k = 0; k < arrCheckTextContent.length; ++k) {
+  //     var value = arrCheckTextContent[k];
+  //     if (value in valueSoFar) {
+  //       return true;
+  //     }
+  //     valueSoFar[value] = true;
+  //   }
+  //   return false;
+  // }
+
   getTrafX() {
     if (Math.round(this.objSignInfo.traf_x) <= 0) {
       return Math.round(this.objSignInfo.traf_x)
@@ -1459,17 +1479,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
 
+      // if (this.onContentTextEvent()) {
+      //   this.toastService.showErrorHTMLWithTimeout("Trùng tên trường ô text. Vui lòng kiểm tra lại!", "", 3000);
+      //   return false;
+      // }
+
       if (count > 0) {
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
-        this.spinner.hide();
+        // this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 3000);
         return false;
       } else if (count_number > 1) {
-        this.spinner.hide();
+        // this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Hợp đồng chỉ được phép có 1 số hợp đồng!", "", 3000);
         return false;
       } else if (count_text > 0) {
-        this.spinner.hide();
+        // this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
         return false;
       } else {
