@@ -147,6 +147,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                 this.datasForm.notes = isDataInfo.notes;
                 this.datasForm.type_id = isDataInfo.type_id;
                 this.datasForm.document_id = dataContractForm.id;
+                if (this.datasForm.is_data_object_signature) {
+                    this.datasForm.is_data_object_signature = "";
+                }
             }
             if (dataContractAttachForm) {
                 console.log(dataContractAttachForm);
@@ -185,12 +188,10 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         if (this.datasForm.contractConnect && this.datasForm.contractConnect.length && this.datasForm.contractConnect.length > 0) {
             const array_empty: any[] = [];
             this.datasForm.contractConnect.forEach((element: any, index: number) => {
-                console.log(element);
                 const data = element.ref_id;
                 array_empty.push(data);
             })
             this.contractConnect = array_empty;
-            console.log(array_empty);
         }
     }
 

@@ -1000,10 +1000,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
       if (isObjSign) {
-        if (this.isEnableSelect) {
-          this.isEnableSelect = false;
-        }
-
+        this.isEnableSelect = false;
         this.objSignInfo.traf_x = d.coordinate_x;
         this.objSignInfo.traf_y = d.coordinate_y;
         // this.signCurent.name = d.name;
@@ -1425,6 +1422,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     } else {
       let count = 0;
       let count_text = 0;
+      let count_number = 0;
       let arrSign_organization: any[] = [];
       let arrSign_partner: any[] = [];
 
@@ -1435,6 +1433,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (!element.name && element.sign_unit != 'so_tai_lieu') { // element.sign_unit != 'so_tai_lieu'
               count++;
               break
+            } else if (element.sign_unit == 'so_tai_lieu' && element.length > 1) {
+              count_number++;
+              break;
             } else if (element.sign_unit == 'so_tai_lieu' && !this.datas.contract_no && !element.email) {
               count++;
               break
@@ -1454,6 +1455,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               else arrSign_partner.push(data_sign);
             }
           }
+          if (count > 0 || count_text > 0) break
         }
       }
 
@@ -1461,6 +1463,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 3000);
+        return false;
+      } else if (count_number > 1) {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("Hợp đồng chỉ được phép có 1 số hợp đồng!", "", 3000);
         return false;
       } else if (count_text > 0) {
         this.spinner.hide();

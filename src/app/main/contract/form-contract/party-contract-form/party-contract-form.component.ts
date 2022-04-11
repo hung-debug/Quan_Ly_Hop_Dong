@@ -211,19 +211,26 @@ export class PartyContractFormComponent implements OnInit {
             this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000)
             void this.router.navigate(['/main/contract/create/draft']);
         } else if (!this.saveDraftStepForm || is_save) {
-            this.spinner.show();
-            this.contractService.getSignPositionCoordinatesForm(this.datasForm.id_form).subscribe((result: any) => {
-                // this.datasForm.i_data_file_contract = result.i_data_file_contract;
-                this.datasForm['is_data_object_signature'] = result;
+            if (this.datasForm.is_data_object_signature) {
                 this.datasForm.is_determine_clone = res ? res : this.datasForm.is_determine_clone;
                 this.stepForm = variable.stepSampleContractForm.step3;
                 this.datasForm.stepLast = this.stepForm;
                 this.nextOrPreviousStep(this.stepForm);
-            }, () => {
-                this.getNotificationValid('error.server');
-            }, () => {
-                this.spinner.hide()
-            })
+            } else {
+                this.spinner.show();
+                this.contractService.getSignPositionCoordinatesForm(this.datasForm.id_form).subscribe((result: any) => {
+                    // this.datasForm.i_data_file_contract = result.i_data_file_contract;
+                    this.datasForm['is_data_object_signature'] = result;
+                    this.datasForm.is_determine_clone = res ? res : this.datasForm.is_determine_clone;
+                    this.stepForm = variable.stepSampleContractForm.step3;
+                    this.datasForm.stepLast = this.stepForm;
+                    this.nextOrPreviousStep(this.stepForm);
+                }, () => {
+                    this.getNotificationValid('error.server');
+                }, () => {
+                    this.spinner.hide()
+                })
+            }
         }
     }
 

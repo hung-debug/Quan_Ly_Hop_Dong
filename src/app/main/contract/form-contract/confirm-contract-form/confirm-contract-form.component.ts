@@ -152,21 +152,22 @@ export class ConfirmContractFormComponent implements OnInit {
 
     async SaveContract(action: string) {
         // if (this.datasForm.is_action_contract_created && this.router.url.includes("edit")) {
-            let isHaveFieldId: any[] = [];
-            let isNotFieldId: any[] = [];
-            let isUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
-            isUserSign_clone.forEach((res: any) => {
-                res.sign_config.forEach((element: any) => {
-                    if (element.id_have_data) {
-                        isHaveFieldId.push(element)
-                    } else isNotFieldId.push(element);
-                })
-            })
-            this.getDefinddatasFormignEdit(isHaveFieldId, isNotFieldId, action);
+            // let isHaveFieldId: any[] = [];
+            // let isNotFieldId: any[] = [];
+            // let isUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
+            // isUserSign_clone.forEach((res: any) => {
+            //     res.sign_config.forEach((element: any) => {
+            //         if (element.id_have_data) {
+            //             isHaveFieldId.push(element)
+            //         } else isNotFieldId.push(element);
+            //     })
+            // })
+            // this.getDefinddatasFormignEdit(isHaveFieldId, isNotFieldId, action);
         // } 
         // else {
             this.data_sample_contract = [];
             let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
+        
             let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
             isContractUserSign_clone.forEach((element: any) => {
                 if (element.sign_config.length > 0) {
