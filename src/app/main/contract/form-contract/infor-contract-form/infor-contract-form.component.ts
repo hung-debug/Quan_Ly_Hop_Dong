@@ -106,7 +106,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
 
     getContractList() {
-        this.contractService.getContractList('off', '', '', '', '', '', 30, "", "").subscribe(data => {
+        this.contractService.getContractList('off', '', '', '', '', '', '', 30, "", "").subscribe(data => {
             // console.log(data.entities);
             this.contractConnectList = data.entities;
         }, (error) => {

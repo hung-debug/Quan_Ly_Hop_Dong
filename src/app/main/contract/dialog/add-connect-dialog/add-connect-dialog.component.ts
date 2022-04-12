@@ -67,9 +67,9 @@ export class AddConnectDialogComponent implements OnInit {
     }
   }
 
-  getContractList(){
+  getContractList(){  
     //get list contract
-    this.contractService.getContractList('off', "", "", "", "", "", 30, this.pD, this.pageD).subscribe(data => {
+    this.contractService.getContractList('off', '', "", "", "", "", "", 30, this.pD, this.pageD).subscribe(data => {
       this.contractsD = data.entities;
       this.pageTotalD = data.total_elements;
       console.log(this.contractsD);

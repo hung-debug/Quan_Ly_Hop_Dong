@@ -43,6 +43,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   id: any = "";
   notification: any = "";
   isOrg: string = 'off';
+  isOrgChildren:any = 'off';
   stateOptions: any[];
 
   //filter contract
@@ -161,6 +162,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
             this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
             this.isQLHD_12 = listRole.some(element => element.code == 'QLHD_12');
             this.isQLHD_13 = listRole.some(element => element.code == 'QLHD_13');
+
+            //neu co quyen xem danh sach hop dong cua to chuc minh va to chuc con
+            if(this.isQLHD_03){
+              this.isOrgChildren = 'on';
+            }
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
           }
@@ -184,7 +190,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   getContractList() {
     //get list contract
-    this.contractService.getContractList(this.isOrg, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+    this.contractService.getContractList(this.isOrg, this.isOrgChildren, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
       console.log(this.contracts);
