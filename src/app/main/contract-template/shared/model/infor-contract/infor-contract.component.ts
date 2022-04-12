@@ -314,9 +314,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       })
 
 
+      console.log(this.uploadFileContractAgain);
       if (countSuccess == 0 && this.uploadFileContractAgain) {
         // console.log(this.datas.contractFile);
         await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
+          console.log(data);
           this.datas.filePath = data.file_object.file_path;
           this.datas.fileName = data.file_object.filename;
           this.datas.fileBucket = data.file_object.bucket;
@@ -328,16 +330,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         })
       }
       if (countSuccess == 0 && this.uploadFileContractAgain) {
-        await this.contractTemplateService.addDocument(this.datas).toPromise().then((respon: any) => {
-          this.datas.document_id = respon?.id;
-        }, (error: HttpErrorResponse) => {
-          countSuccess++
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
-          // return;
-        })
+        //lay id file hop dong cu
+        let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
 
-        await this.contractTemplateService.addDocument(this.datas).toPromise().then((respon: any) => {
+        await this.contractTemplateService.updateFile(fileContract_1.id, this.datas).toPromise().then((respon: any) => {
+          console.log(respon);
           this.datas.document_id = respon?.id;
         }, (error: HttpErrorResponse) => {
           countSuccess++
