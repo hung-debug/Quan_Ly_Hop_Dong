@@ -105,6 +105,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   ngOnInit(): void {
+    this.spinner.hide();
     console.log(this.datas);
     this.name = this.datas.name ? this.datas.name : null;
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;

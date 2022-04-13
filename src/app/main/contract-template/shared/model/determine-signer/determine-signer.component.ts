@@ -872,6 +872,7 @@ export class DetermineSignerComponent implements OnInit {
         newArr.push(item.recipients[i]);
       }
     }
+    console.log(newArr);
     if (newArr.length) {
       newArr.forEach((item: any) => {
         if (item.role == 3) {
@@ -889,6 +890,7 @@ export class DetermineSignerComponent implements OnInit {
     }
     this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
 
+    console.log(item);
     if (item.type == 3) {
       this.data_organization.ordering = 2;
       item.ordering = 1;

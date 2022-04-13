@@ -200,7 +200,7 @@ export class ContractTemplateService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_sample_contract);
-    return this.http.put<any>(this.editContractSampleUrl + `/${id}`, body, { 'headers': headers }).pipe();
+    return this.http.put<any>(this.editContractSampleUrl + id, body, { 'headers': headers }).pipe();
   }
 
   changeStatusContract(id: any, statusNew: any) {

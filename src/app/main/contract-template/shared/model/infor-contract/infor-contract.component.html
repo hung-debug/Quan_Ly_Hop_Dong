@@ -81,7 +81,7 @@
                   (change)="fileChangedAttach($event)" style="display: none;" multiple/>
             <div class="select-contract" >
               <div class="div_file_attach">
-                <div *ngIf="this.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' | translate }}</div>
+                <div *ngIf="!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' | translate }}</div>
                 <div *ngFor="let item of this.datas.attachFileNameArr; let i = index" style="width: 80%;">{{item.filename}} <img *ngIf="item" style="cursor: pointer;" (click)="deleteFileAttach(item, i)" src="../../../../../../assets/img/icon_close.svg"></div>
               </div>
               <img src="assets/img/attachment.svg" alt="mobifone.contract" (click)="addFileAttach()">

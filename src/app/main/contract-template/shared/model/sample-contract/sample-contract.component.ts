@@ -309,6 +309,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
       }
     })
+    console.log("console.log(this.datas.contract_user_sign);");
+    console.log(this.datas.contract_user_sign);
   }
 
   defindDataContract() {
@@ -381,8 +383,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           /*
           end
           */
-          
-          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) =>!val.name || (!val.name && val.sign_unit == 'so_tai_lieu') || (!val.name && val.sign_unit == 'text' && val.text_attribute_name) || ((val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit)));
+          //giu lai cac ban ghi chua gan nguoi xu ly + o so tai lieu chua gan nguoi xu ly + o text da co ten chua gan nguoi xu ly + da gan nguoi xu ly va nguoi xu ly con ton tai
+          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) =>!val.name 
+                                                                                                  || (!val.name && val.sign_unit == 'so_tai_lieu') 
+                                                                                                  || (!val.name && val.sign_unit == 'text' && val.text_attribute_name) 
+                                                                                                  || ((val.name as any) == (data.name as any) && (val.type as any) == (data.type as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit)));
           res.sign_config.forEach((items: any) => {
             items.id = items.id + '1';
           })
@@ -394,22 +399,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     //lay danh sach username co ten thay doi
-    let dataChangeName: any[] = [];
-    dataChangeName = dataContractUserSign.filter(val => dataDetermine.some((data: any) => ((val.recipient_id as any) == (data.id as any) && (val.name as any) != (data.name as any))));
-    console.log("change");
-    console.log(dataChangeName);
-    if(dataChangeName.length > 0){
-      this.datas.contract_user_sign.forEach((res: any) => {
-        res.sign_config.forEach((element: any) => {
+    // let dataChangeName: any[] = [];
+    // dataChangeName = dataContractUserSign.filter(val => dataDetermine.some((data: any) => ((val.recipient_id as any) == (data.id as any) && (val.name as any) != (data.name as any))));
+    // console.log("change");
+    // console.log(dataChangeName);
+    // if(dataChangeName.length > 0){
+    //   this.datas.contract_user_sign.forEach((res: any) => {
+    //     res.sign_config.forEach((element: any) => {
 
-          //tim ban ghi thay doi
-          let change = dataDetermine.filter((data: any) => (element.recipient_id as any) == (data.id as any));
-          change.forEach((item: any, index: number) => {
-            element.name = item.name;
-          })
-        })
-      })
-    }
+    //       //tim ban ghi thay doi
+    //       let change = dataDetermine.filter((data: any) => (element.recipient_id as any) == (data.id as any));
+    //       change.forEach((item: any, index: number) => {
+    //         element.name = item.name;
+    //       })
+    //     })
+    //   })
+    // }
 
   }
 
@@ -423,7 +428,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // this.spinner.show();
     await this.contractTemplateService.deleteInfoContractSignature(data).toPromise().then((res: any) => {
     }, (error: HttpErrorResponse) => {
-      this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+      //this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
     })
   }
 
@@ -1600,7 +1605,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           return false;
         }
 
-
+        console.log(arrSign_partner);
+        console.log(data_partner);
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
         if (arrSign_partner.length < data_partner.length) {
           // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
