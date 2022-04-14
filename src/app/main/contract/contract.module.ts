@@ -24,10 +24,6 @@ import { SignContractComponent } from './shared/sign-sample-contract/sign-contra
 import { DetailContractComponent } from './detail-contract/detail-contract.component';
 import { HttpClient } from "@angular/common/http";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { AddContractBatchComponent } from './add-contract-batch/add-contract-batch.component';
-import { ContractBatchHeaderComponent } from './shared-batch/model/contract-batch-header/contract-batch-header.component';
-import { ConfirmInforContractBatchComponent } from './shared-batch/model/confirm-infor-contract-batch/confirm-infor-contract-batch.component';
-import { InforContractBatchComponent } from './shared-batch/model/infor-contract-batch/infor-contract-batch.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {DropdownModule} from 'primeng/dropdown';
@@ -49,6 +45,10 @@ import { InforContractFormComponent } from './form-contract/infor-contract-form/
 import { PartyContractFormComponent } from './form-contract/party-contract-form/party-contract-form.component';
 import { SampleContractFormComponent } from './form-contract/sample-contract-form/sample-contract-form.component';
 
+import { ContractBatchHeaderComponent } from './batch-contract/contract-batch-header/contract-batch-header.component';
+import { InforContractBatchComponent } from './batch-contract/infor-contract-batch/infor-contract-batch.component';
+import { ConfirmContractBatchComponent } from './batch-contract/confirm-contract-batch/confirm-contract-batch.component';
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -62,9 +62,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DetermineSignerComponent,
     SignContractComponent,
     DetailContractComponent,
-    AddContractBatchComponent,
     ContractBatchHeaderComponent,
-    ConfirmInforContractBatchComponent,
     InforContractBatchComponent,
     ImageSignContractComponent,
     CancelContractDialogComponent,
@@ -76,7 +74,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ConfirmContractFormComponent,
     InforContractFormComponent,
     PartyContractFormComponent,
-    SampleContractFormComponent
+    SampleContractFormComponent,
+    ConfirmContractBatchComponent
   ],
   exports: [
     ContractHeaderComponent,
@@ -88,7 +87,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ConfirmContractFormComponent,
     InforContractFormComponent,
     PartyContractFormComponent,
-    SampleContractFormComponent
+    SampleContractFormComponent,
+    ContractBatchHeaderComponent,
+    InforContractBatchComponent,
+    ConfirmContractBatchComponent,
   ],
   imports: [
     CommonModule,
@@ -128,7 +130,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ConfirmContractFormComponent,
     InforContractFormComponent,
     PartyContractFormComponent,
-    SampleContractFormComponent
+    SampleContractFormComponent,
+    ContractBatchHeaderComponent,
+    InforContractBatchComponent,
+    ConfirmContractBatchComponent,
   ],
   providers: [
     {

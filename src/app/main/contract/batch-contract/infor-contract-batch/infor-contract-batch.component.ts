@@ -1,4 +1,3 @@
-import { AddContractBatchComponent } from './../../../add-contract-batch/add-contract-batch.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
@@ -8,8 +7,9 @@ import { DatePipe } from '@angular/common';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
-import {variable} from "../../../../../config/variable";
+import {variable} from "../../../../config/variable";
 import { Router } from '@angular/router';
+import { AddContractComponent } from '../../add-contract/add-contract.component';
 @Component({
   selector: 'app-infor-contract-batch',
   templateUrl: './infor-contract-batch.component.html',
@@ -17,11 +17,11 @@ import { Router } from '@angular/router';
 })
 export class InforContractBatchComponent implements OnInit {
 
-  @Input() AddComponent: AddContractBatchComponent | unknown;
-  @Input() datas: any;
+  @Input() AddComponent: AddContractComponent | unknown;
+  @Input() datasBatch: any;
   @Input() step: any;
 
-  @Output() stepChangeInfoContract = new EventEmitter<string>();
+  @Output() stepChangeInfoContractBatch = new EventEmitter<string>();
 
   //upload file
   selectedFiles?: FileList;
@@ -49,6 +49,7 @@ export class InforContractBatchComponent implements OnInit {
   contractConnect:any;
   sign_time:any;
   notes:any;
+  file_name:any;
 
   //error
   errorContractName:any = '';
@@ -61,7 +62,7 @@ export class InforContractBatchComponent implements OnInit {
     public datepipe: DatePipe,
     private router: Router,
   ) {
-    this.step = variable.stepBatchContract.step1;
+    this.step = variable.stepSampleContractBatch.step1;
   }
 
   // options sample with default values
@@ -82,12 +83,12 @@ export class InforContractBatchComponent implements OnInit {
   };
   ngOnInit(): void {
 
-    this.name = this.datas.name ? this.datas.name : '';
-    this.code = this.datas.code ? this.datas.code : '';
-    this.type_id = this.datas.type_id ? this.datas.type_id : '';
-    this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : '';
-    this.sign_time = this.datas.sign_time ? this.datas.sign_time : new Date();
-    this.notes = this.datas.notes ? this.datas.notes : '';
+    this.name = this.datasBatch.name ? this.datasBatch.name : '';
+    this.code = this.datasBatch.code ? this.datasBatch.code : '';
+    this.type_id = this.datasBatch.type_id ? this.datasBatch.type_id : '';
+    this.contractConnect = this.datasBatch.contractConnect ? this.datasBatch.contractConnect : '';
+    this.sign_time = this.datasBatch.sign_time ? this.datasBatch.sign_time : new Date();
+    this.notes = this.datasBatch.notes ? this.datasBatch.notes : '';
 
     this.contractTypeList = [
       {
@@ -141,8 +142,8 @@ export class InforContractBatchComponent implements OnInit {
         if (extension.toLowerCase() == 'xls' || extension.toLowerCase() == 'xlsx') {
           const fileInput: any = document.getElementById('file-input');
           fileInput.value = '';
-          this.datas.file_name = file_name;
-          this.datas.contractFile = file;
+          this.datasBatch.file_name = file_name;
+          this.datasBatch.contractFile = file;
         } else {
           alert('Chỉ hỗ trợ file có định dạng XLS, XLSX')
         }
@@ -168,13 +169,13 @@ export class InforContractBatchComponent implements OnInit {
         if (e.target.files[0].size <= 5000000) {
           const file_name = file.name;
           const extension = file.name.split('.').pop();
-          this.datas.file_name_attach = file_name;
-          //this.datas.file_name_attach = this.datas.file_name_attach + "," + file_name;
-          this.datas.attachFile = file;
-          //this.datas.attachFile = e.target.files;
+          this.datasBatch.file_name_attach = file_name;
+          //this.datasBatch.file_name_attach = this.datasBatch.file_name_attach + "," + file_name;
+          this.datasBatch.attachFile = file;
+          //this.datasBatch.attachFile = e.target.files;
         } else {
-          this.datas.file_name_attach = '';
-          this.datas.attachFile = '';
+          this.datasBatch.file_name_attach = '';
+          this.datasBatch.attachFile = '';
           alert('Yêu cầu file nhỏ hơn 5MB');
           break;
         }
@@ -210,7 +211,7 @@ export class InforContractBatchComponent implements OnInit {
     //   this.errorContractName = 'Tên hợp đồng không được để trống!';
     //   return false;
     // }
-    // if (!this.datas.contractFile) {
+    // if (!this.datasBatch.contractFile) {
     //   this.errorContractFile = 'File hợp đồng không được để trống!';
     //   return false;
     // }
@@ -222,26 +223,26 @@ export class InforContractBatchComponent implements OnInit {
     if (this.name) {
       this.errorContractName = '';
     }
-    if (this.datas.contractFile) {
+    if (this.datasBatch.contractFile) {
       this.errorContractFile = '';
     }
   }
 
   callAPI() {
     //call API step 1
-    // this.contractService.addContractStep1(this.datas).subscribe((data) => {
-    //   this.datas.id = data?.id;
+    // this.contractService.addContractStep1(this.datasBatch).subscribe((data) => {
+    //   this.datasBatch.id = data?.id;
     //   console.log(data);
 
     //   //call API upload file
-    //   this.uploadService.uploadFile(this.datas).subscribe((data) => {
+    //   this.uploadService.uploadFile(this.datasBatch).subscribe((data) => {
     //     console.log("File" + data);
 
         //next step
-        this.step = variable.stepBatchContract.step2;
-        this.datas.stepLast = this.step
+        this.step = variable.stepSampleContractBatch.step2;
+        this.datasBatch.stepLast = this.step
         this.nextOrPreviousStep(this.step);
-        console.log(this.datas);
+        console.log(this.datasBatch);
     //   },
     //   error => {
     //     console.log("false file");
@@ -262,20 +263,20 @@ export class InforContractBatchComponent implements OnInit {
   next() {
     if (!this.validData()) return;
     else {
-      // gán value step 1 vào datas
-      this.datas.name = this.name;
-      this.datas.code = this.code;
-      this.datas.type_id = this.type_id;
-      this.datas.contractConnect = this.contractConnect;
-      this.datas.sign_time = this.sign_time;
-      this.datas.notes = this.notes;
+      // gán value step 1 vào datasBatch
+      this.datasBatch.name = this.name;
+      this.datasBatch.code = this.code;
+      this.datasBatch.type_id = this.type_id;
+      this.datasBatch.contractConnect = this.contractConnect;
+      this.datasBatch.sign_time = this.sign_time;
+      this.datasBatch.notes = this.notes;
 
       // const fileReader = new FileReader();
-      // fileReader.readAsDataURL(this.datas.contractFile);
+      // fileReader.readAsDataURL(this.datasBatch.contractFile);
       // fileReader.onload = (e) => {
       //   //@ts-ignore
       //   const base64result = fileReader.result.toString().split(',')[1];
-      //   this.datas.file_content = base64result;
+      //   this.datasBatch.file_content = base64result;
       // };
 
       this.callAPI();
@@ -284,9 +285,9 @@ export class InforContractBatchComponent implements OnInit {
 
   // forward data component
   nextOrPreviousStep(step: string) {
-    // this.datas.documents.document.step = step;
-    this.datas.stepLast = step;
-    this.stepChangeInfoContract.emit(step);
+    // this.datasBatch.documents.document.step = step;
+    this.datasBatch.stepLast = step;
+    this.stepChangeInfoContractBatch.emit(step);
   }
 
 

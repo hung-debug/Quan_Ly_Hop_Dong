@@ -1,7 +1,7 @@
-import { AddContractBatchComponent } from './../../../add-contract-batch/add-contract-batch.component';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {variable} from "../../../../../config/variable";
+import {variable} from "../../../../config/variable";
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AddContractComponent } from '../../add-contract/add-contract.component';
 @Component({
   selector: 'app-contract-batch-header',
   templateUrl: './contract-batch-header.component.html',
@@ -9,10 +9,10 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ContractBatchHeaderComponent implements OnInit {
 
-  @Input() AddComponent: AddContractBatchComponent | unknown;
+  @Input() AddComponent: AddContractComponent | unknown;
   @Output('stepChange') stepChange = new EventEmitter<Array<any>>();
   @Input() datas: any;
-  @Input() step: any;
+  @Input() stepBatch: any;
   stepHeader: any = {
     step_1: false,
     step_2: false,
@@ -24,9 +24,11 @@ export class ContractBatchHeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("console.log(this.stepBatch);");
+    console.log(this.stepBatch);
   }
 
-  open(content:any) {
+  open(content:any) {  
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -51,14 +53,14 @@ export class ContractBatchHeaderComponent implements OnInit {
 
     // cancel active header theo từng step
     switch (step) {
-      case variable.stepBatchContract.step1:
+      case variable.stepSampleContractBatch.step1:
         this.stepHeader = {
           step_1: false,
           step_2: false,
           step_3: false
         }
         break;
-      case variable.stepBatchContract.step2:
+      case variable.stepSampleContractBatch.step2:
         this.stepHeader = {
           step_1: true,
           step_2: false,
@@ -76,12 +78,12 @@ export class ContractBatchHeaderComponent implements OnInit {
   next() {
     let _isValid = true;
     // kiểm tra điều kiện valid dữ liệu các bước.
-    _isValid = this.validData(this.step);
+    _isValid = this.validData(this.stepBatch);
     if (_isValid) {
-      let nextStep = this.step;
-      switch (this.step) {
-        case variable.stepBatchContract.step1:
-          nextStep = variable.stepBatchContract.step2;
+      let nextStep = this.stepBatch;
+      switch (this.stepBatch) {
+        case variable.stepSampleContractBatch.step1:
+          nextStep = variable.stepSampleContractBatch.step2;
           this.stepHeader.step_1 = true; // active header theo từng step
           // this.stepChange.emit(this.step = nextStep);
           break;
@@ -106,7 +108,7 @@ export class ContractBatchHeaderComponent implements OnInit {
   // valid dữ liệu các bước
   validData(step: any) {
     switch (step) {
-      case variable.stepBatchContract.step1:
+      case variable.stepSampleContractBatch.step1:
         // valid data step 1, defind value
         // let dataInfo = JSON.parse(JSON.stringify(this.datas.inforDetails.value));
         // this.datas.inforDetails = dataInfo;
@@ -117,7 +119,7 @@ export class ContractBatchHeaderComponent implements OnInit {
         }
         break;
       // @ts-ignore
-      case variable.stepBatchContract.step2:
+      case variable.stepSampleContractBatch.step2:
         break;
       default:
         return false
@@ -133,10 +135,10 @@ export class ContractBatchHeaderComponent implements OnInit {
   }
 
   previous(){
-    let nextStep = this.step;
-    switch (this.step) {
-      case variable.stepBatchContract.step2:
-        nextStep = variable.stepBatchContract.step1;
+    let nextStep = this.stepBatch;
+    switch (this.stepBatch) {
+      case variable.stepSampleContractBatch.step2:
+        nextStep = variable.stepSampleContractBatch.step1;
         // this.stepChange.emit(nextStep);
         break;
       default:

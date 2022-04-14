@@ -20,6 +20,9 @@ import { InforContractFormComponent } from '../form-contract/infor-contract-form
 import { PartyContractFormComponent } from '../form-contract/party-contract-form/party-contract-form.component';
 import { SampleContractFormComponent } from '../form-contract/sample-contract-form/sample-contract-form.component';
 import { ConfirmContractFormComponent } from '../form-contract/confirm-contract-form/confirm-contract-form.component';
+import { ContractBatchHeaderComponent } from '../batch-contract/contract-batch-header/contract-batch-header.component';
+import { InforContractBatchComponent } from '../batch-contract/infor-contract-batch/infor-contract-batch.component';
+import { ConfirmContractBatchComponent } from '../batch-contract/confirm-contract-batch/confirm-contract-batch.component';
 
 @Component({
   selector: 'app-add-contract',
@@ -40,6 +43,11 @@ export class AddContractComponent implements OnInit {
   @ViewChild('PartyContractForm') PartyContractFormComponent: PartyContractFormComponent | unknown;
   @ViewChild('SampleContractForm') SampleContractFormComponent: SampleContractFormComponent | unknown;
   @ViewChild('ConfirmContractForm') ConfirmContractFormComponent: ConfirmContractFormComponent | unknown;
+
+  // form contract
+  @ViewChild('contractBatchHeader') ContractBatchHeaderComponent: ContractBatchHeaderComponent | unknown;
+  @ViewChild('inforContractBatch') InforContractBatchComponent: InforContractBatchComponent | unknown;
+  @ViewChild('confirmContractBatch') ConfirmContractBatchComponent: ConfirmContractBatchComponent | unknown;
 
   type: number = 1;
   action: string;
@@ -66,6 +74,13 @@ export class AddContractComponent implements OnInit {
     }
   }
 
+  datasBatch: any = {
+    stepBatchLast: variable.stepSampleContractBatch.step1,
+    save_draft_batch: {
+      'infor-contract-batch': false,
+      'confirm-contract-batch': false
+    }
+  }
 
   personalDetails!: FormGroup;
   addressDetails!: FormGroup;
@@ -78,6 +93,7 @@ export class AddContractComponent implements OnInit {
   // step = 1;
   step: any;
   stepForm: any;
+  stepBatch: any;
   message: any;
   shareData: object;
   is_disable: boolean = false;
@@ -169,7 +185,7 @@ export class AddContractComponent implements OnInit {
         // } else if (this.type == 2) {
           this.stepForm = variable.stepSampleContractForm.step1;
         // }
-        
+        this.stepBatch = variable.stepSampleContractBatch.step1;
       } 
     });
     setTimeout(() => {
@@ -284,8 +300,10 @@ export class AddContractComponent implements OnInit {
       this.step = e;
     } else if (this.type == 2) {
       this.stepForm = e;
+    } else if (this.type == 3) {
+      this.stepBatch = e;
     }
-    this.is_disable = (e != 'infor-contract' || e != 'infor-contract-form');
+    this.is_disable = (e != 'infor-contract' || e != 'infor-contract-form' || e != 'infor-contract-batch');
   }
 
 

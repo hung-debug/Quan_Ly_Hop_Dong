@@ -8,17 +8,17 @@ import { Helper } from 'src/app/core/Helper';
 import { ContractService } from 'src/app/service/contract.service';
 import { environment } from 'src/environments/environment';
 @Component({
-  selector: 'app-confirm-infor-contract-batch',
-  templateUrl: './confirm-infor-contract-batch.component.html',
-  styleUrls: ['./confirm-infor-contract-batch.component.scss']
+  selector: 'app-confirm-contract-batch',
+  templateUrl: './confirm-contract-batch.component.html',
+  styleUrls: ['./confirm-contract-batch.component.scss']
 })
-export class ConfirmInforContractBatchComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @Input() datas: any;
   data_coordinates: any;
   @Input() step: any;
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
-  @Output() stepChangeSampleContract = new EventEmitter<string>();
+  @Output() stepChangeConfirmInforContractBatch = new EventEmitter<string>();
   pdfSrc: any;
   thePDF = null;
   pageNumber = 1;
@@ -82,7 +82,7 @@ export class ConfirmInforContractBatchComponent implements OnInit, OnDestroy, Af
     private modalService: NgbModal,
     private dialog: MatDialog
   ) {
-    this.step = variable.stepBatchContract.step2
+    this.step = variable.stepSampleContractBatch.step2
   }
 
   ngOnInit() {
@@ -496,7 +496,7 @@ export class ConfirmInforContractBatchComponent implements OnInit, OnDestroy, Af
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
-    this.stepChangeSampleContract.emit(step);
+    this.stepChangeConfirmInforContractBatch.emit(step);
   }
 
   dieuphoi() {
