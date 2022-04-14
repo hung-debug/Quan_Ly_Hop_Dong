@@ -196,8 +196,11 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
 
     addFileAttach() {
+        console.log(document.getElementById('attachFile'));
+        
         // @ts-ignore
         document.getElementById('attachFile').click();
+        
     }
 
     uploadFileAttachForm(e: any) {
