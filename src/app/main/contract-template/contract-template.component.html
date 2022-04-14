@@ -63,18 +63,18 @@
           <div class="div_icon" *ngIf="isShare=='off'">
             <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'Sửa mẫu hợp đồng' | translate}}" (click)="openEdit(item.id)" />
           </div>
-          <div class="div_icon" *ngIf="isShare=='off'">
+          <div class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC'">
             <img *ngIf="item.status == 10" src="../../assets/img/icon_stop_release.svg" class="img_icon" ngbTooltip="Ngừng phát hành" (click)="stopContractTemplate(item.id)"/>
             <img *ngIf="item.status == 32" src="../../assets/img/icon_open_release.svg" class="img_icon" ngbTooltip="Mở phát hành" (click)="releaseContractTemplate(item.id)"/>
           </div>
 
-          <div class="div_icon" *ngIf="item.status == 10">
+          <div class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC'">
             <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="Tạo hợp đồng đơn lẻ"/>
           </div>
-          <div class="div_icon" *ngIf="item.status == 10">
+          <div class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC'">
             <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="Tạo hợp đồng theo lô"/>
           </div>
-          <div class="div_icon" *ngIf="isShare=='off' && item.status == 10">
+          <div class="div_icon" *ngIf="isShare=='off' && item.status == 10 && item.releaseState=='CON_HIEU_LUC'">
             <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" (click)="shareContractTemplate(item.id)"/>
           </div>
           <div class="div_icon" *ngIf="isShare=='off'">

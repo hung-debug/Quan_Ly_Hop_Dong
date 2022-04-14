@@ -995,7 +995,7 @@ export class DetermineSignerComponent implements OnInit {
     this.contractTemplateService.deleteInfoContractSignature(dataArrClone.fields[0].id).subscribe((res: any) => {
       this.toastService.showSuccessHTMLWithTimeout(`Bạn đã xóa ${assignElement} ${dataArrClone.name}!`, "", "3000");
     }, (error: HttpErrorResponse) => {
-      this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+      //this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
       this.spinner.hide();
       count = 1;
     }, () => {
