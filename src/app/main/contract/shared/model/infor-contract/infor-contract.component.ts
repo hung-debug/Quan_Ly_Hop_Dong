@@ -879,18 +879,19 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   contractNumberValid() {
-    this.errorContractNumber = "";
-    if (this.contract_no) {
-      var regex = /^[0-9]\d*$/;
-      var matches = this.contract_no.match(regex);
-      if (matches) {
-        return this.contractNumberCounter();
-      } else {
-        this.errorContractNumber = "Số hợp đồng chỉ được nhập số";
-        return false;
-      }
-    }
-    return true;
+    // this.errorContractNumber = "";
+    // if (this.contract_no) {
+    //   var regex = /^[0-9]\d*$/;
+    //   var matches = this.contract_no.match(regex);
+    //   if (matches) {
+    //     return this.contractNumberCounter();
+    //   } else {
+    //     this.errorContractNumber = "Số hợp đồng chỉ được nhập số";
+    //     return false;
+    //   }
+    // }
+    // return true;
+    return this.contractNumberCounter();
   }
 
   contractNameRequired() {
