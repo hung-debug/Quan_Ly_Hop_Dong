@@ -10,6 +10,9 @@ import locale from 'date-fns/locale/en-US';
 import {variable} from "../../../../config/variable";
 import { Router } from '@angular/router';
 import { AddContractComponent } from '../../add-contract/add-contract.component';
+import { ContractTemplateService } from 'src/app/service/contract-template.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastService } from 'src/app/service/toast.service';
 @Component({
   selector: 'app-infor-contract-batch',
   templateUrl: './infor-contract-batch.component.html',
@@ -40,6 +43,7 @@ export class InforContractBatchComponent implements OnInit {
   contractConnectList: Array<any> = [];
   dropdownTypeSettings: any = {};
   dropdownConnectSettings: any = {};
+  typeListForm: Array<any> = [];
 
   id:any;
   name:any = '';
@@ -55,80 +59,69 @@ export class InforContractBatchComponent implements OnInit {
   errorContractName:any = '';
   errorContractFile:any = '';
 
+  idContractTemplate:any;
+  filePathExample:any='';
+
   constructor(
     private formBuilder: FormBuilder,
     private uploadService : UploadService,
     private contractService: ContractService,
+    private contractTemplateService: ContractTemplateService,
     public datepipe: DatePipe,
     private router: Router,
+    private spinner: NgxSpinnerService,
+    private toastService: ToastService,
   ) {
     this.step = variable.stepSampleContractBatch.step1;
   }
 
-  // options sample with default values
-  options: DatepickerOptions = {
-    minYear: getYear(new Date()) - 30, // minimum available and selectable year
-    maxYear: getYear(new Date()) + 30, // maximum available and selectable year
-    placeholder: '', // placeholder in case date model is null | undefined, example: 'Please pick a date'
-    format: 'dd/MM/yyyy', // date format to display in input
-    formatTitle: 'MM/yyyy',
-    formatDays: 'EEEEE',
-    firstCalendarDay: 0, // 0 - Sunday, 1 - Monday
-    locale: locale, // date-fns locale
-    position: 'bottom',
-    inputClass: '', // custom input CSS class to be applied
-    calendarClass: 'datepicker-default', // custom datepicker calendar CSS class to be applied
-    scrollBarColor: '#dfe3e9', // in case you customize you theme, here you define scroll bar color
-    // keyboardEvents: true // enable keyboard events
-  };
+  getContractTemplateForm() {
+    this.contractTemplateService.getContractTemplateList('off', '', '', 0, 0).subscribe(response => {
+        // console.log(response);
+        this.typeListForm = response.entities;
+    })
+  }
+
   ngOnInit(): void {
 
+    this.getContractTemplateForm();
+
     this.name = this.datasBatch.name ? this.datasBatch.name : '';
-    this.code = this.datasBatch.code ? this.datasBatch.code : '';
-    this.type_id = this.datasBatch.type_id ? this.datasBatch.type_id : '';
-    this.contractConnect = this.datasBatch.contractConnect ? this.datasBatch.contractConnect : '';
-    this.sign_time = this.datasBatch.sign_time ? this.datasBatch.sign_time : new Date();
     this.notes = this.datasBatch.notes ? this.datasBatch.notes : '';
 
-    this.contractTypeList = [
-      {
-        item_id: 1,
-        item_text: "Loại hợp đồng A",
-      },
-      {
-        item_id: 2,
-        item_text: "Loại hợp đồng B",
-      }
-    ];
+  }
 
-    this.contractConnectList = [
-      {
-        item_id: 1,
-        item_text: "Hợp đồng A",
-      },
-      {
-        item_id: 2,
-        item_text: "Hợp đồng B",
-      }
-    ];
-
-    this.dropdownTypeSettings = {
-      singleSelection: true,
-      idField: "item_id",
-      textField: "item_text",
-      selectAllText: "Chọn tất cả",
-      unSelectAllText: "Bỏ chọn tất cả",
-      allowSearchFilter: true
-    };
-
-    this.dropdownConnectSettings = {
-      singleSelection: false,
-      idField: "item_id",
-      textField: "item_text",
-      selectAllText: "Chọn tất cả",
-      unSelectAllText: "Bỏ chọn tất cả",
-      allowSearchFilter: true
-    };
+  OnChangeForm(e: any) {    
+    this.idContractTemplate = e.value;
+  }
+  downFileExample(){
+    this.spinner.show();
+    this.contractService.getFileContractBatch(this.idContractTemplate).subscribe((res: any) => {
+      console.log(res);
+      this.uploadService.downloadFile(res.path).subscribe((response: any) => {
+        //console.log(response);
+    
+        let url = window.URL.createObjectURL(response);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = url;
+        a.download = "Example";
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+    
+        this.toastService.showSuccessHTMLWithTimeout("Tải file tài liệu mẫu thành công", "", 3000);
+        this.spinner.hide();
+      }), 
+      (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
+  
+    }, (error) => {
+        console.log(error);
+        this.spinner.hide();
+    }, () => {
+        this.spinner.hide();
+    });
   }
 
   fileChanged(e: any) {
@@ -145,10 +138,10 @@ export class InforContractBatchComponent implements OnInit {
           this.datasBatch.file_name = file_name;
           this.datasBatch.contractFile = file;
         } else {
-          alert('Chỉ hỗ trợ file có định dạng XLS, XLSX')
+          this.toastService.showErrorHTMLWithTimeout("Chỉ hỗ trợ file có định dạng XLS, XLSX", "", 3000);
         }
       } else {
-        alert('Yêu cầu file nhỏ hơn 5MB');
+        this.toastService.showErrorHTMLWithTimeout("Yêu cầu file nhỏ hơn 5MB", "", 3000);
       }
     }
   }
@@ -158,63 +151,17 @@ export class InforContractBatchComponent implements OnInit {
     document.getElementById('file-input').click();
   }
 
-  fileChangedAttach(e: any) {
-    console.log(e.target.files)
-    let files = e.target.files;
-    for(let i = 0; i < files.length; i++){
-
-      const file = e.target.files[i];
-      if (file) {
-        // giới hạn file upload lên là 5mb
-        if (e.target.files[0].size <= 5000000) {
-          const file_name = file.name;
-          const extension = file.name.split('.').pop();
-          this.datasBatch.file_name_attach = file_name;
-          //this.datasBatch.file_name_attach = this.datasBatch.file_name_attach + "," + file_name;
-          this.datasBatch.attachFile = file;
-          //this.datasBatch.attachFile = e.target.files;
-        } else {
-          this.datasBatch.file_name_attach = '';
-          this.datasBatch.attachFile = '';
-          alert('Yêu cầu file nhỏ hơn 5MB');
-          break;
-        }
-      }
-    }
-  }
-
-  addFileAttach() {
-    // @ts-ignore
-    document.getElementById('attachFile').click();
-  }
-
-  //dropdown contract type
-  get getContractTypeItems() {
-    return this.contractTypeList.reduce((acc, curr) => {
-      acc[curr.item_id] = curr;
-      return acc;
-    }, {});
-  }
-
-  //dropdown contract connect
-  get getContractConnectItems() {
-    return this.contractConnectList.reduce((acc, curr) => {
-      acc[curr.item_id] = curr;
-      return acc;
-    }, {});
-  }
-
   //--valid data step 1
   validData() {
-    // this.clearError();
-    // if (!this.name) {
-    //   this.errorContractName = 'Tên hợp đồng không được để trống!';
-    //   return false;
-    // }
-    // if (!this.datasBatch.contractFile) {
-    //   this.errorContractFile = 'File hợp đồng không được để trống!';
-    //   return false;
-    // }
+    this.clearError();
+    if (!this.name) {
+      this.errorContractName = 'Tên mẫu hợp đồng không được để trống!';
+      return false;
+    }
+    if (!this.datasBatch.contractFile) {
+      this.errorContractFile = 'File tài liệu không được để trống!';
+      return false;
+    }
 
     return true
   }
@@ -226,37 +173,6 @@ export class InforContractBatchComponent implements OnInit {
     if (this.datasBatch.contractFile) {
       this.errorContractFile = '';
     }
-  }
-
-  callAPI() {
-    //call API step 1
-    // this.contractService.addContractStep1(this.datasBatch).subscribe((data) => {
-    //   this.datasBatch.id = data?.id;
-    //   console.log(data);
-
-    //   //call API upload file
-    //   this.uploadService.uploadFile(this.datasBatch).subscribe((data) => {
-    //     console.log("File" + data);
-
-        //next step
-        this.step = variable.stepSampleContractBatch.step2;
-        this.datasBatch.stepLast = this.step
-        this.nextOrPreviousStep(this.step);
-        console.log(this.datasBatch);
-    //   },
-    //   error => {
-    //     console.log("false file");
-    //     return false;
-    //   }
-    //   );
-
-    // },
-    // error => {
-    //   console.log("false content");
-    //   return false;
-    // }
-    // );
-
   }
 
   // --next step 2
@@ -271,15 +187,20 @@ export class InforContractBatchComponent implements OnInit {
       this.datasBatch.sign_time = this.sign_time;
       this.datasBatch.notes = this.notes;
 
-      // const fileReader = new FileReader();
-      // fileReader.readAsDataURL(this.datasBatch.contractFile);
-      // fileReader.onload = (e) => {
-      //   //@ts-ignore
-      //   const base64result = fileReader.result.toString().split(',')[1];
-      //   this.datasBatch.file_content = base64result;
-      // };
+      this.contractService.uploadFileContractBatch(this.datasBatch.contractFile, this.idContractTemplate).subscribe((response: any) => {
+        console.log(response);
+        if(response.success){
+          //next step
+          this.step = variable.stepSampleContractBatch.step2;
+          this.datasBatch.stepLast = this.step
+          this.nextOrPreviousStep(this.step);
+          console.log(this.datasBatch);
+        }else{
+          this.toastService.showErrorHTMLWithTimeout("File mẫu không hợp lệ", "", 3000);
+        }
+      }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
 
-      this.callAPI();
+      
     }
   }
 
@@ -288,11 +209,5 @@ export class InforContractBatchComponent implements OnInit {
     // this.datasBatch.documents.document.step = step;
     this.datasBatch.stepLast = step;
     this.stepChangeInfoContractBatch.emit(step);
-  }
-
-
-  changeAddContract(link:any){
-    console.log(link);
-    this.router.navigate([link]);
   }
 }
