@@ -12,7 +12,8 @@
     <div class="form-group">
       <div class="label_item">Số hợp đồng </div>
       <div class="input-group">
-        <input type="text" [(ngModel)]="this.datasForm.contract_no" maxlength="32" class="input_text" placeholder="Nhập số hợp đồng" />
+        <input type="text" [(ngModel)]="this.datasForm.contract_no" maxlength="32" class="input_text" placeholder="Nhập số hợp đồng" 
+        oninput="this.value = this.value.replace(/[^a-zA-Z0-9!@#$&()-`.+,_]/g ,'', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"/>
       </div>
     </div>
     <div class="form-group">

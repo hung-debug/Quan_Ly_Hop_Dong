@@ -234,9 +234,29 @@ export class AddContractComponent implements OnInit {
   //   }
   // }
 
-  changeType($event: any) {
-    console.log($event);
-  
+  changeType(e: any) {
+    if (this.type == 1) {
+      this.datas = {
+        stepLast: variable.stepSampleContract.step1,
+        save_draft: {
+          'infor_contract': false,
+          'determine_signer': false,
+          'sample_contract': false,
+          'confirm_infor_contract': false
+        }
+      }
+    
+    } else if (this.type == 2) {
+      this.datasForm = {
+        stepFormLast: variable.stepSampleContractForm.step1,
+        save_draft_form: {
+          'infor-contract-form': false,
+          'party-contract-form': false,
+          'sample-contract-form': false,
+          'confirm-contract-form': false
+        }
+      }
+    }
   }
 
   receiveMessage(event: any) {

@@ -58,7 +58,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     attachFileArr: any[] = [];
     uploadFileAttachAgain: boolean = false;
 
+
     listFileAttach: any[] = [];
+    isChangeForm: boolean = false;
 
     constructor(
         private contractService: ContractService,
@@ -78,8 +80,12 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         if (this.datasForm.attachFormFileNameArr) {
             this.attachFormFileNameArr = this.datasForm.attachFormFileNameArr
         }
+        
+        if (!this.datasForm.isChangeForm) {
+            this.datasForm['isChangeForm'] = false;
+        }
 
-        this.getListTypeContract(); // ham get loai hop dong
+        this.getListTypeContract(); // ham get contract type
         this.getContractList(); // ham lay danh sach hop dong
         this.getContractTemplateForm(); // ham lay mau hop dong
         this.convertData();
@@ -136,25 +142,26 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                 this.datasForm.fileBucket = dataContractForm.bucket;
                 this.datasForm.fileName = dataContractForm.filename;
                 this.datasForm.file_content = dataContractForm.path;
+                this.datasForm.contract_no = "";
+                this.datasForm.code = "";
+                this.datasForm.name = "";
                 this.datasForm.pdfUrl = dataContractForm.path;
-                // this.datasForm.contract_no = isDataInfo.code;
                 if (isDataInfo.sign_time) {
                     this.datasForm.sign_time = moment(isDataInfo.sign_time).toDate();
                 }
                 this.datasForm.end_time = isDataInfo.end_time;
                 this.datasForm.start_time = isDataInfo.start_time;
-                // this.datasForm.name = dataContractForm.name;
                 this.datasForm.notes = isDataInfo.notes;
                 this.datasForm.type_id = isDataInfo.type_id;
                 this.datasForm.document_id = dataContractForm.id;
                 if (this.datasForm.is_data_object_signature) {
                     this.datasForm.is_data_object_signature = "";
                 }
+
+                this.datasForm['isChangeForm'] = true;
             }
             if (dataContractAttachForm) {
-                console.log(dataContractAttachForm);
                 this.datasForm.fileAttachForm = dataContractAttachForm; // du lieu file dinh kem tu mau
-                // this.attachFormFileNameArr = dataContractAttachForm
             } else {
                 this.datasForm.fileAttachForm = [];
             }
@@ -458,16 +465,22 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
 
     async getDataContractForm() {
-        await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.id_form, 'get-form-data').toPromise().then((res: any) => {
-            this.datasForm.is_determine_clone = res.participants;
-            this.datasForm.contract_id_action = res.id;
+        if (this.datasForm.isChangeForm) {
+            await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.id_form, 'get-form-data').toPromise().then((res: any) => {
+                this.datasForm.is_determine_clone = res.participants;
+                this.datasForm.contract_id_action = res.id;
+                this.nextForm();
+            }, (error) => {
+                this.errorData();
+            })
+        } else {
             this.nextForm();
-        }, (error) => {
-            this.errorData();
-        })
+        }
+        
     }
 
     nextForm() {
+        this.datasForm.isChangeForm = false;
         this.stepForm = variable.stepSampleContractForm.step2;
         this.datasForm.stepFormLast = this.stepForm;
         this.nextOrPreviousStep(this.stepForm);
