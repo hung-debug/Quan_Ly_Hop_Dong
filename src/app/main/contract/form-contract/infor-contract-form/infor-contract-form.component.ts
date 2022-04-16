@@ -272,7 +272,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         let coutError = false;
         if (this.datasForm.contract_no && action != 'luu_nhap') {
             //check trung so hop dong
-            await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
+            await this.contractTemplateService.checkCodeUnique(this.datasForm.contract_no, this.datasForm.start_time, this.datasForm.end_time).toPromise().then(
                 dataCode => {
                     if (!dataCode.success) {
                         this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
@@ -299,15 +299,15 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                     this.errorData();
                 })
 
-                if (this.datasForm.file_content) {
-                    // convert url file hop dong
-                    if (this.datasForm.file_content && (typeof this.datasForm.file_content == 'string')) {
-                        await this.contractService.getDataBinaryFileUrlConvert(this.datasForm.file_content).toPromise().then((res: any) => {
-                            if (res)
-                                this.datasForm.file_content = res;
-                        })
-                    }
-                }
+                // if (this.datasForm.file_content) {
+                //     // convert url file hop dong
+                //     if (this.datasForm.file_content && (typeof this.datasForm.file_content == 'string')) {
+                //         await this.contractService.getDataBinaryFileUrlConvert(this.datasForm.file_content).toPromise().then((res: any) => {
+                //             if (res)
+                //                 this.datasForm.file_content = res;
+                //         })
+                //     }
+                // }
             }
 
             // if (!coutError) {
@@ -331,23 +331,23 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             }
 
 
-            if (!coutError) {
-                await this.contractService.addDocument(this.datasForm).toPromise().then((res) => {
+            // if (!coutError) {
+            //     await this.contractService.addDocument(this.datasForm).toPromise().then((res) => {
 
-                }, (error) => {
-                    coutError = true;
-                    this.errorData();
-                })
-            }
+            //     }, (error) => {
+            //         coutError = true;
+            //         this.errorData();
+            //     })
+            // }
 
-            if (!coutError) {
-                await this.contractService.addDocumentDone(this.datasForm).toPromise().then((res: any) => {
-                    this.datasForm.document_id = res?.id;
-                }, () => {
-                    coutError = true;
-                    this.errorData();
-                })
-            }
+            // if (!coutError) {
+            //     await this.contractService.addDocumentDone(this.datasForm).toPromise().then((res: any) => {
+            //         this.datasForm.document_id = res?.id;
+            //     }, () => {
+            //         coutError = true;
+            //         this.errorData();
+            //     })
+            // }
             
             // upload file dinh kem (neu add them file dinh kem)
             if (!coutError && this.datasForm.fileAttachForm && this.datasForm.fileAttachForm.length && this.datasForm.fileAttachForm.length > 0) {
@@ -377,7 +377,8 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
                         if (isFileAttach) {
                             await this.contractService.addDocumentAttach(isFileAttach).toPromise().then((data) => {
-                                this.datasForm.document_attach_id = data?.id;
+                                // this.datasForm.document_attach_id = data?.id;
+                                this.datasForm.fileAttachForm[i].id = data?.id;
                             },
                                 error => {
                                     coutError = true;
@@ -391,27 +392,28 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                             }
                         }
                     } else {
-                        let dataFormAttachFile = {
-                                name: this.datasForm.name,
-                                filePathAttach: this.datasForm.fileAttachForm[i].path,
-                                fileNameAttach: this.datasForm.fileAttachForm[i].filename,
-                                fileBucketAttach: this.datasForm.fileAttachForm[i].bucket,
-                                id: this.datasForm.id
+                        // khong day file da ton tai len
+                        // let dataFormAttachFile = {
+                        //         name: this.datasForm.name,
+                        //         filePathAttach: this.datasForm.fileAttachForm[i].path,
+                        //         fileNameAttach: this.datasForm.fileAttachForm[i].filename,
+                        //         fileBucketAttach: this.datasForm.fileAttachForm[i].bucket,
+                        //         id: this.datasForm.id
 
-                        }
-                        await this.contractService.addDocumentAttach(dataFormAttachFile).toPromise().then((data) => {
-                            this.datasForm.document_attach_id = data?.id;
-                        },
-                            error => {
-                                coutError = true;
-                                this.spinner.hide();
-                                this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
-                            }
-                        );
+                        // }
+                        // await this.contractService.addDocumentAttach(dataFormAttachFile).toPromise().then((data) => {
+                        //     this.datasForm.document_attach_id = data?.id;
+                        // },
+                        //     error => {
+                        //         coutError = true;
+                        //         this.spinner.hide();
+                        //         this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
+                        //     }
+                        // );
 
-                        if (coutError) {
-                            break;
-                        }
+                        // if (coutError) {
+                        //     break;
+                        // }
                     }
 
 
@@ -466,6 +468,8 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
     async getDataContractForm() {
         if (this.datasForm.isChangeForm) {
+            // await this.contractTemplateService.getFileContractFormUrl(, this.datasForm.id_form).toPromise().then((res: any) => {})
+
             await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.id_form, 'get-form-data').toPromise().then((res: any) => {
                 this.datasForm.is_determine_clone = res.participants;
                 this.datasForm.contract_id_action = res.id;

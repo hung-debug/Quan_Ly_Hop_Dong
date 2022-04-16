@@ -318,6 +318,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           // return;
         })
       }
+
       if (countSuccess == 0 && this.uploadFileContractAgain) {
         await this.contractService.addDocument(this.datas, 1).toPromise().then((respon: any) => {
           this.datas.document_id = respon?.id;
@@ -347,17 +348,21 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then((data) => {
                 // this.datas.attachFileArr[i].file_path = data.file_object.file_path;
                 // this.datas.attachFileArr[i].name = data.file_object.filename; 
-                this.datas.filePathAttach = data.file_object.file_path;
-                this.datas.fileNameAttach = data.file_object.filename;
-                this.datas.fileBucketAttach = data.file_object.bucket;
-                this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
-                  this.datas.document_attach_id = data?.id;
-                },
-                  error => {
-                    this.spinner.hide();
-                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
-                  }
-                );
+                if (!this.datas.attachFileArr[i].id) {
+                  this.datas.filePathAttach = data.file_object.file_path;
+                  this.datas.fileNameAttach = data.file_object.filename;
+                  this.datas.fileBucketAttach = data.file_object.bucket;
+                  this.contractService.addDocumentAttach(this.datas).toPromise().then((data) => {
+                    // this.datas.document_attach_id = data?.id;
+                    this.datas.attachFileArr[i].id = data?.id;
+                  },
+                    error => {
+                      this.spinner.hide();
+                      this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
+                    }
+                  );
+                }
+                
               },
                 error => {
                   this.spinner.hide();
@@ -434,7 +439,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                   if (this.datas.attachFileArr != null) {
                     for (var i = 0; i < this.datas.attachFileArr.length; i++) {
 
-                      console.log(this.datas.attachFileArr[i])
+                      // console.log(this.datas.attachFileArr[i])
                       this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
                         console.log(JSON.stringify(data));
                         this.datas.filePathAttach = data.file_object.file_path;
@@ -542,10 +547,10 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         console.log(typeof this.datas.contractFile)
         // file hợp đồng chính không thay đổi => convert url sang dạng blob
         if (!this.uploadFileContractAgain && this.datas.contractFile && (typeof this.datas.contractFile == 'string')) {
-          await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
-            if (res)
-              this.datas.contractFile = res;
-          })
+          // await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
+          //   if (res)
+          //     this.datas.contractFile = res;
+          // })
         } else if (this.uploadFileContractAgain && this.datas.contractFile) { // dữ liệu file hợp đồng chính bị thay đổi
           fileReader.readAsDataURL(this.datas.contractFile);
           fileReader.onload = (e) => {

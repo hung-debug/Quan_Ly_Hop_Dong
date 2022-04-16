@@ -314,12 +314,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         // return;
       })
 
-
-      console.log(this.uploadFileContractAgain);
       if (countSuccess == 0 && this.uploadFileContractAgain) {
         // console.log(this.datas.contractFile);
         await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
-          console.log(data);
           this.datas.filePath = data.file_object.file_path;
           this.datas.fileName = data.file_object.filename;
           this.datas.fileBucket = data.file_object.bucket;
@@ -360,17 +357,21 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         if (this.datas.attachFileArr != null) {
           for (var i = 0; i < this.datas.attachFileArr.length; i++) {
             await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then((data) => {
-              this.datas.filePathAttach = data.file_object.file_path;
-              this.datas.fileNameAttach = data.file_object.filename;
-              this.datas.fileBucketAttach = data.file_object.bucket;
-              this.contractTemplateService.addDocumentAttach(this.datas).toPromise().then((data) => {
-                this.datas.document_attach_id = data?.id;
-              },
-                error => {
-                  this.spinner.hide();
-                  this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
-                }
-              );
+              if (!this.datas.attachFileArr[i].id) {
+                this.datas.filePathAttach = data.file_object.file_path;
+                this.datas.fileNameAttach = data.file_object.filename;
+                this.datas.fileBucketAttach = data.file_object.bucket;
+                this.contractTemplateService.addDocumentAttach(this.datas).toPromise().then((data) => {
+                  // this.datas.document_attach_id = data?.id;
+                  this.datas.attachFileArr[i].id = data?.id;
+                },
+                  error => {
+                    this.spinner.hide();
+                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
+                  }
+                );
+              }
+              
             },
               error => {
                 this.spinner.hide();
@@ -539,6 +540,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
       if (this.datas.contract_no && (this.datas.contract_no != this.contract_no_old || this.datas.start_time != this.start_time_old || this.datas.end_time != this.end_time_old)) {
         //check so hop dong da ton tai hay chua
+        //@ts-ignore
         this.contractTemplateService.checkCodeUnique(this.datas.contract_no, this.datas.start_time, this.datas.end_time, this.datas.id).subscribe(
           dataCode => {
             if (dataCode.success) {

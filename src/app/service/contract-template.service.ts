@@ -31,6 +31,7 @@ export class ContractTemplateService {
   editDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/template/`;
   editContractSampleUrl: any = `${environment.apiUrl}/api/v1/fields/template/`;
   deleteInfoContractUrl: any = `${environment.apiUrl}/api/v1/fields/template/`;
+  copyFileContractFormUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
 
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
@@ -87,6 +88,14 @@ export class ContractTemplateService {
     } else {
       return this.http.post<any>(this.addInforContractTemplateUrl, body, { 'headers': headers }).pipe();
     }
+  }
+
+  getFileContractFormUrl(template_contract_id: any, contract_id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+      return this.http.get<any>(this.getDataContract + `${template_contract_id}/${contract_id}`, { headers })
   }
 
   addDocument(datas: any) {
@@ -249,7 +258,7 @@ export class ContractTemplateService {
     return this.http.delete<any>(this.deleteContractUrl + id, { 'headers': headers });
   }
 
-  checkCodeUnique(code: any, start_time: any, end_time: any, id:any) {
+  checkCodeUnique(code: any, start_time: any, end_time: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -258,8 +267,7 @@ export class ContractTemplateService {
       code: code,
       start_time: this.datepipe.transform(start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
       end_time: this.datepipe.transform(end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-      organization_id: this.organization_id,
-      id : id
+      organization_id: this.organization_id
     });
     console.log(body);
     return this.http.post<any>(this.checkCodeUniqueUrl, body, { headers }).pipe();
