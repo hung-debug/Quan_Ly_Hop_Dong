@@ -1,8 +1,24 @@
 ::ng-deep .multiselect-dropdown {
     .dropdown-btn {
-      border: 1px solid #87CAFF !important;
+      border: 1px solid #106DB6 !important;
       min-height: 38px;
       height: auto;
+    }
+  }
+  :host ::ng-deep {
+    .p-dropdown, .p-multiselect {
+        border: 1px solid #106DB6;
+        border-radius: 5px;
+        height: 38px;
+        width: 100%;
+        outline: 0;
+        color: black !important;
+    }
+    .p-dropdown-label, .p-multiselect-label {
+        padding: 7px 7px 5px 10px;
+    }
+    .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
+      color: #6c757d !important;
     }
   }
   
@@ -30,6 +46,7 @@
   //label item form
   .label_item{
     padding: 12px 0px 3px;
+    color: #0160AE;
   }
   
   .require_star{
@@ -72,7 +89,7 @@
   
   .file-contract{
     height: 120px;
-    border: 1px solid #87CAFF;
+    border: 1px solid #106DB6;
     cursor: pointer;
     padding: 10px;
     text-align: center;
@@ -80,7 +97,7 @@
   }
   
   .form-control{
-    border: 1px solid #87CAFF;
+    border: 1px solid #106DB6;
   }
   
   button {

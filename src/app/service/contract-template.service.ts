@@ -249,7 +249,7 @@ export class ContractTemplateService {
     return this.http.delete<any>(this.deleteContractUrl + id, { 'headers': headers });
   }
 
-  checkCodeUnique(code: any, start_time: any, end_time: any) {
+  checkCodeUnique(code: any, start_time: any, end_time: any, id:any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -258,7 +258,8 @@ export class ContractTemplateService {
       code: code,
       start_time: this.datepipe.transform(start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
       end_time: this.datepipe.transform(end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-      organization_id: this.organization_id
+      organization_id: this.organization_id,
+      id : id
     });
     console.log(body);
     return this.http.post<any>(this.checkCodeUniqueUrl, body, { headers }).pipe();

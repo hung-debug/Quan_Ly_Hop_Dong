@@ -70,6 +70,9 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   isEnableText: boolean = false;
   isChangeText: boolean = false;
 
+  pageNumberCurrent:any = 1;
+  pageNumberTotal:any = 1;
+
   // isPartySignature: any = [
   //   {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
   //   {id: 2, name: 'Công ty newEZ Việt Nam'},
