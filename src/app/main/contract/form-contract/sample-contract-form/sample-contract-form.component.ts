@@ -411,6 +411,8 @@ export class SampleContractFormComponent implements OnInit {
             if (!dataForm.sign_config[i].email && dataObj) {
               dataForm.sign_config[i].email = dataObj.email;
               dataForm.sign_config[i].name = dataObj.name;
+            } else {
+              dataForm.sign_config[i].name = "";
             }
           }
         }
@@ -1353,7 +1355,7 @@ export class SampleContractFormComponent implements OnInit {
           })
 
           this.spinner.show();
-          this.contractTemplateService.getContractSample(this.data_sample_contract).subscribe((data) => {
+          this.contractService.getContractSample(this.data_sample_contract).subscribe((data) => {
             this.router.navigate(['/main/contract/create/draft']);
             this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
           },

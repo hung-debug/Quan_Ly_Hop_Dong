@@ -17,7 +17,8 @@
       <div class="form-group">
         <div class="label_item">{{'contract.name' | translate}} <span class="require_star">*</span></div>
         <div class="input-group">
-          <input #nameContract type="text" [(ngModel)]="name" class="input_text" (keyup)="contractNameRequired(); contractNameCounter()"/>
+          <input #nameContract type="text" [(ngModel)]="name" class="input_text"
+            (keyup)="contractNameRequired(); contractNameCounter()" />
         </div>
       </div>
       <div class="form-group">
@@ -32,10 +33,12 @@
     <div class="col-md-12">
       <div class="form-group">
         <div class="label_item">{{'contract.file' | translate}} <span class="require_star">*</span></div>
-        <input id="file-input" type="file" accept=".pdf" (change)="fileChanged($event)" style="display: none;"/>
+        <input id="file-input" type="file" accept=".pdf" (change)="fileChanged($event)" style="display: none;" />
         <div class="file-contract" (click)="addFile()">
           <img src="assets/img/upload_file.svg" alt="mobifone.contract">
-          <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="this.datas.file_name==null">{{'choose.contract.file' | translate }}</span>{{this.datas.file_name}}</div>
+          <div style="padding-top: 7px;"><span style="color: #798693;"
+              *ngIf="this.datas.file_name==null">{{'choose.contract.file' | translate }}</span>{{this.datas.file_name}}
+          </div>
         </div>
       </div>
       <div class="form-group">
@@ -51,7 +54,8 @@
       <div class="form-group">
         <div class="label_item">{{'contract.number' | translate}}</div>
         <div class="input-group">
-          <input type="text" [(ngModel)]="contract_no" maxlength="32" class="input_text" oninput="this.value = this.value.replace(/[^a-zA-Z0-9!@#$&()-`.+,_]/g ,'', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"/>
+          <input type="text" [(ngModel)]="contract_no" maxlength="32" class="input_text"
+            oninput="this.value = this.value.replace(/[^a-zA-Z0-9!@#$&()-`.+,_]/g ,'', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" />
         </div>
       </div>
       <div class="form-group">
@@ -66,17 +70,9 @@
       <div class="form-group">
         <div class="label_item">{{'contract.type' | translate}}</div>
         <div>
-          <p-dropdown
-            panelStyleClass="font"
-            [options]="typeList"
-            [(ngModel)]="type_id"
-            optionLabel="name"
-            optionValue="id"
-            placeholder="Chọn loại hợp đồng"
-            [filter]="true"
-            filterBy="name"
-            [showClear]="true"
-            ></p-dropdown>
+          <p-dropdown panelStyleClass="font" [options]="typeList" [(ngModel)]="type_id" optionLabel="name"
+            optionValue="id" placeholder="Chọn loại hợp đồng" [filter]="true" filterBy="name" [showClear]="true">
+          </p-dropdown>
         </div>
       </div>
     </div>
@@ -99,18 +95,21 @@
               </div>
             </ng-template>
           </ng-multiselect-dropdown> -->
-          <p-multiSelect styleClass="font" [options]="contractConnectList" [(ngModel)]="contractConnect" optionLabel="name" optionValue="id" display="chip" placeholder="Chọn hợp đồng" (onChange)="onChange($event)"></p-multiSelect>
+          <p-multiSelect styleClass="font" [options]="contractConnectList" [(ngModel)]="contractConnect"
+            optionLabel="name" optionValue="id" display="chip" placeholder="Chọn hợp đồng"
+            ></p-multiSelect>
         </div>
       </div>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5">
       <div class="form-group">
+
         <div class="select-file-contract">
           <div class="file-approve">
             <div class="label_item">{{'file.attach' | translate}}</div>
             <input id="attachFile" type="file" accept=".pdf, .doc, .docx"
-                  (change)="fileChangedAttach($event)" style="display: none;" multiple/>
+                  (change)="fileChangedAttach($event)" multiple/>
             <div class="select-contract" >
               <div class="div_file_attach">
                 <div *ngIf="this.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' | translate }}</div>
@@ -129,7 +128,7 @@
       <div class="form-group">
         <div class="label_item">{{'note' | translate}}</div>
         <div class="input-group">
-          <input type="text" [(ngModel)]="notes" class="input_text"/>
+          <input type="text" [(ngModel)]="notes" class="input_text" />
         </div>
       </div>
     </div>
@@ -138,7 +137,8 @@
       <div class="form-group">
         <div class="label_item">{{'expiration-date' | translate}} <span class="require_star">*</span></div>
         <div>
-          <p-calendar [(ngModel)]="sign_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="dd/mm/yy"></p-calendar>
+          <p-calendar [(ngModel)]="sign_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true"
+            dateFormat="dd/mm/yy"></p-calendar>
         </div>
       </div>
       <div class="form-group">
@@ -151,14 +151,12 @@
 </div>
 
 <div class="footer-infor-contract">
-    <button (click)="saveDraft()" type="button" name="next" class="next draft-button">{{'btn.save-draff' | translate }}</button>
-    <button (click)="next()" type="button" name="next" class="next action-button pull-right">{{'btn.next' | translate }}</button>
+  <button (click)="saveDraft()" type="button" name="next" class="next draft-button">{{'btn.save-draff' | translate
+    }}</button>
+  <button (click)="next()" type="button" name="next" class="next action-button pull-right">{{'btn.next' | translate
+    }}</button>
 </div>
 
-<ngx-spinner
-  bdColor="rgba(51,51,51,0.8)"
-  size="medium"
-  color="#fff"
-  type="ball-spin-clockwise">
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
   <p style="font-size: 18px; color: white">Đang xử lý...</p>
 </ngx-spinner>
