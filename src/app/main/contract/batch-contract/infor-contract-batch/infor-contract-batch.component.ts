@@ -96,32 +96,37 @@ export class InforContractBatchComponent implements OnInit {
   }
   downFileExample(){
     this.spinner.show();
-    this.contractService.getFileContractBatch(this.idContractTemplate).subscribe((res: any) => {
-      console.log(res);
-      this.uploadService.downloadFile(res.path).subscribe((response: any) => {
-        //console.log(response);
+    if(this.idContractTemplate){
+      this.contractService.getFileContractBatch(this.idContractTemplate).subscribe((res: any) => {
+        console.log(res);
+        this.uploadService.downloadFile(res.path).subscribe((response: any) => {
+          //console.log(response);
+      
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = "Example";
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+      
+          this.toastService.showSuccessHTMLWithTimeout("Tải file tài liệu mẫu thành công", "", 3000);
+          this.spinner.hide();
+        }), 
+        (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
     
-        let url = window.URL.createObjectURL(response);
-        let a = document.createElement('a');
-        document.body.appendChild(a);
-        a.setAttribute('style', 'display: none');
-        a.href = url;
-        a.download = "Example";
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
-    
-        this.toastService.showSuccessHTMLWithTimeout("Tải file tài liệu mẫu thành công", "", 3000);
-        this.spinner.hide();
-      }), 
-      (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
-  
-    }, (error) => {
-        console.log(error);
-        this.spinner.hide();
-    }, () => {
-        this.spinner.hide();
-    });
+      }, (error) => {
+          console.log(error);
+          this.spinner.hide();
+      }, () => {
+          this.spinner.hide();
+      });
+    }else{
+      this.spinner.hide();
+      this.toastService.showErrorHTMLWithTimeout("Bạn chưa chọn mẫu hợp đồng", "", 3000);
+    }
   }
 
   fileChanged(e: any) {

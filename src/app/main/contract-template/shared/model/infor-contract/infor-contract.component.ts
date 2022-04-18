@@ -540,7 +540,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
       if (this.datas.contract_no && (this.datas.contract_no != this.contract_no_old || this.datas.start_time != this.start_time_old || this.datas.end_time != this.end_time_old)) {
         //check so hop dong da ton tai hay chua
-        //@ts-ignore
         this.contractTemplateService.checkCodeUnique(this.datas.contract_no, this.datas.start_time, this.datas.end_time, this.datas.id).subscribe(
           dataCode => {
             if (dataCode.success) {
