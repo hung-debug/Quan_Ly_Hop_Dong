@@ -96,24 +96,24 @@
             </ng-template>
           </ng-multiselect-dropdown> -->
           <p-multiSelect styleClass="font" [options]="contractConnectList" [(ngModel)]="contractConnect"
-            optionLabel="name" optionValue="id" display="chip" placeholder="Chọn hợp đồng"
-            ></p-multiSelect>
+            optionLabel="name" optionValue="id" display="chip" placeholder="Chọn hợp đồng"></p-multiSelect>
         </div>
       </div>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5">
       <div class="form-group">
-
         <div class="select-file-contract">
           <div class="file-approve">
             <div class="label_item">{{'file.attach' | translate}}</div>
-            <input id="attachFile" type="file" accept=".pdf, .doc, .docx"
-                  (change)="fileChangedAttach($event)" multiple/>
-            <div class="select-contract" >
+            <input id="attachFile" type="file" accept=".pdf, .doc, .docx"(change)="fileChangedAttach($event)" multiple/>
+            <div class="select-contract">
               <div class="div_file_attach">
-                <div *ngIf="this.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' | translate }}</div>
-                <div *ngFor="let item of this.datas.attachFileNameArr; let i = index" style="width: 80%;">{{item.filename}} <img *ngIf="item" style="cursor: pointer;" (click)="deleteFileAttach(item, i)" src="../../../../../../assets/img/icon_close.svg"></div>
+                <div *ngIf="this.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' |
+                  translate }}</div>
+                <div *ngFor="let item of this.datas.attachFileNameArr; let i = index" style="width: 80%;">
+                  {{item.filename}} <img *ngIf="item" style="cursor: pointer;" (click)="deleteFileAttach(item, i)"
+                    src="../../../../../../assets/img/icon_close.svg"></div>
               </div>
               <img src="assets/img/attachment.svg" alt="mobifone.contract" (click)="addFileAttach()">
             </div>

@@ -189,7 +189,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   fileChangedAttach(e: any) {
-    console.log(e.target.files)
     let files = e.target.files;
     for (let i = 0; i < files.length; i++) {
 
