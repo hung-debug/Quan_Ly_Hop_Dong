@@ -6,7 +6,13 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from 'src/app/config/variable';
 import { Helper } from 'src/app/core/Helper';
 import { ContractService } from 'src/app/service/contract.service';
+import { ToastService } from 'src/app/service/toast.service';
 import { environment } from 'src/environments/environment';
+import { throwError } from 'rxjs';
+import interact from "interactjs";
+import * as $ from "jquery";
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ContractTemplateService } from 'src/app/service/contract-template.service';
 @Component({
   selector: 'app-confirm-contract-batch',
   templateUrl: './confirm-contract-batch.component.html',
@@ -14,7 +20,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @Input() datas: any;
+  @Input() datasBatch: any;
   data_coordinates: any;
   @Input() step: any;
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
@@ -70,8 +76,21 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   isEnableText: boolean = false;
   isChangeText: boolean = false;
 
-  pageNumberCurrent:any = 1;
+  pageNumberCurrent:any = 0;
   pageNumberTotal:any = 1;
+  contractList:any[] = [];
+  isDataContract: any;
+  isDataFileContract: any;
+  isDataObjectSignature: any;
+  data_contract: any;
+  allFileAttachment: any[];
+  loaded = false;
+
+  data_organization:any;
+  is_origanzation_reviewer: any = [];
+  is_origanzation_signature: any = [];
+  is_origanzation_document: any = [];
+  data_parnter_organization: any = [];
 
   // isPartySignature: any = [
   //   {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
@@ -83,13 +102,30 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
     private modalService: NgbModal,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toastService: ToastService,
+    private spinner: NgxSpinnerService,
+    private contractTemplateService: ContractTemplateService
   ) {
     this.step = variable.stepSampleContractBatch.step2
   }
 
   ngOnInit() {
-    console.log(this.datas);
+    console.log(this.datasBatch);
+    this.spinner.show();
+    this.contractService.getContractBatchList(this.datasBatch.contractFile, this.datasBatch.idContractTemplate).subscribe((response: any) => {
+      console.log(response);
+      this.contractList = response;
+
+      this.pageNumberTotal = this.contractList.length;
+      if(this.pageNumberTotal > 0){
+        this.getDataContractSignature(this.pageNumberCurrent);
+      }
+      
+    }), (error: any) => {
+      this.spinner.hide();
+      this.toastService.showErrorHTMLWithTimeout("Lấy thông tin hợp đồng thất bại", "", 3000);  
+    }
 
     this.scale = 1;
 
@@ -99,10 +135,147 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
         offsetHeight: 0
       }
     }
+  }
 
-    // this.pdfSrc = Helper._getUrlPdf(environment.base64_file_content_demo);
-    //this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
-    this.getPage();
+  data:any;
+  getDataContractSignature(page:any) {
+    this.spinner.show();
+      
+    this.data = this.contractList[page];
+    
+    if (!this.datasBatch.is_data_object_signature) {
+      this.datasBatch.is_data_object_signature = [];
+    }
+    this.data.participants.forEach((res: any) => {
+      res.recipients.forEach((element: any) => {
+
+        if (element.fields && element.fields.length && element.fields.length > 0) {
+          element.fields.forEach((res: any) => {
+            // res['coordinate_x'] = res.coordinate_x;
+            // res['coordinate_y'] = res.coordinate_y;
+            // res['font'] = res.font;
+            // res['font_size'] = res.font_size;
+            // res['height'] = res.height;
+            res['name'] = element.name;
+            // res['page'] = res.page;
+            // res['recipient_id'] = res.recipient_id;
+            // res['required'] = res.required;
+            // res['status'] = res.status;
+            // res['type'] = res.type;
+            // res['value'] = res.value;
+            // res['width'] = res.width;
+
+            if (res.type == 1) {
+              res['sign_unit'] = 'text';
+            }
+            if (res.type == 2) {
+              res['sign_unit'] = 'chu_ky_anh'
+            }
+            if (res.type == 3) {
+              res['sign_unit'] = 'chu_ky_so'
+            }
+            if (res.type == 4) {
+              res['sign_unit'] = 'so_tai_lieu'
+            }
+            let obj = res;
+            this.datasBatch.is_data_object_signature.push(obj);
+          })
+
+        }
+        
+      })
+    })
+      let data_sign_config_cks = this.datasBatch.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
+      let data_sign_config_cka = this.datasBatch.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
+      let data_sign_config_text = this.datasBatch.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
+      let data_sign_config_so_tai_lieu = this.datasBatch.is_data_object_signature.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+
+      this.datasBatch.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+
+      this.datasBatch.contract_user_sign.forEach((element: any) => {
+        // console.log(element.sign_unit, element.sign_config);
+        if (element.sign_unit == 'chu_ky_so') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
+        } else if (element.sign_unit == 'chu_ky_anh') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+        } else if (element.sign_unit == 'text') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+        } else if (element.sign_unit == 'so_tai_lieu') {
+          Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+        }
+      })
+      this.scale = 1;
+
+      if (!this.signCurent) {
+        this.signCurent = {
+          offsetWidth: 0,
+          offsetHeight: 0
+        }
+      }
+
+      // data Tổ chức của tôi
+      this.data_organization = this.data?.participants.filter((p: any) => p.type == 1)[0];
+      this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
+      this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
+      this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
+
+      this.data_parnter_organization = this.data?.participants.filter((p: any) => p.type == 2 || p.type == 3);
+
+      console.log(this.datasBatch.contract_user_sign);
+      console.log(this.datasBatch.idContractTemplate);
+      this.contractTemplateService.getDetailContract(this.datasBatch.idContractTemplate).subscribe(rs => {
+        this.datasBatch.i_data_file_contract = rs[1];
+        console.log(this.datasBatch.i_data_file_contract);
+        if (this.datasBatch?.i_data_file_contract) {
+          let fileC = null;
+          const pdfC2 = this.datasBatch.i_data_file_contract.find((p: any) => p.type == 2);
+          const pdfC1 = this.datasBatch.i_data_file_contract.find((p: any) => p.type == 1);
+          if (pdfC2) {
+            fileC = pdfC2.path;
+          } else if (pdfC1) {
+            fileC = pdfC1.path;
+          } else {
+            return;
+          }
+          if (!fileC) {
+            this.toastService.showErrorHTMLWithTimeout("Thiếu dữ liệu file hợp đồng!", "", 3000);
+          } else {
+            this.pdfSrc = fileC;
+            // render pdf to canvas
+            this.getPage();
+          }
+        
+        }
+      });
+      
+      
+      this.loaded = true;
+      this.spinner.hide();
+    
+  }
+
+  getPartnerReviewer(item: any) {
+    return item.recipients.filter((p: any) => p.role == 2)
+  }
+  getPartnerSignature(item: any) {
+    return item.recipients.filter((p: any) => p.role == 3)
+  }
+  getPartnerDocument(item: any) {
+    return item.recipients.filter((p: any) => p.role == 4);
+  }
+
+  // Error handling
+  handleError(error: any) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      // Get client-side error
+      errorMessage = error.error.message;
+    } else {
+      // Get server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    window.alert(errorMessage);
+    return throwError(errorMessage);
   }
 
   getListSignName(listSignForm: any = [], type_unit: string) {
@@ -114,14 +287,6 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
       this.list_sign_name.push(item)
     })
   }
-
-
-  // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
-
-
-  // Hàm tính tọa độ ký
-
-  // Hàm event khi bắt đầu kéo (drag) đối tượng ký
 
   setWidth(d: any) {
     return {
@@ -146,6 +311,9 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
         this.arrPage.push({page: page});
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
+        // canvas.style.paddingLeft = '15px';
+        // canvas.style.border = '9px solid transparent';
+        // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
         let idPdf = 'pdf-viewer-step-3'
         let viewer = document.getElementById(idPdf);
         if (viewer) {
@@ -162,32 +330,15 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   }
 
   eventMouseover() {
-    // if (!this.datas.isView) {
-    //   this.objDrag = {};
-    //   let count_total = 0;
-    //   this.datas.contract_user_sign.forEach((element: any) => {
-    //     if (element.sign_config.length > 0) {
-    //       let arrSignConfigItem = element.sign_config;
-    //       arrSignConfigItem.forEach((item: any) => {
-    //         if (item['position']) {
-    //           this.objDrag[item.id] = {
-    //             count: 2
-    //           }
-    //           count_total++;
-    //         }
-    //       })
-    //     }
-    //   });
-    //   if (count_total == 0) {
-    //     this.isEnableSelect = true;
-    //     this.isEnableText = false;
-    //     //@ts-ignore
-    //     document.getElementById('select-dropdown').value = "";
-    //   }
-    // }
   }
 
   ngAfterViewInit() {
+    setTimeout(() => {
+      // @ts-ignore
+      // document.getElementById('input-location-x').focus();
+      let width_drag_element = document.getElementById('width-element-info');
+      this.widthDrag = width_drag_element ? ((width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left) - 15) : '';
+    }, 100)
     this.setPosition();
     this.eventMouseover();
   }
@@ -198,13 +349,14 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
       this.convertToSignConfig().forEach((element: any) => {
         let a = document.getElementById(element.id);
         if (a) {
-          if (element['position']) { // @ts-ignore
+          // if (element['position']) { // @ts-ignore
+          if (element['coordinate_x'] && element['coordinate_y']) { // @ts-ignore
             a.style["z-index"] = '1';
           }
           // else
           //   a.style.display = 'none';
-          a.setAttribute("data-x", element['dataset_x']);
-          a.setAttribute("data-y", element['dataset_y']);
+          a.setAttribute("data-x", element['coordinate_x']);
+          a.setAttribute("data-y", element['coordinate_y']);
         }
       });
     }
@@ -251,6 +403,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   }
 
   activeScroll() {
+    if(document.getElementsByClassName('viewer-pdf')[0]){
     document.getElementsByClassName('viewer-pdf')[0].addEventListener('scroll', () => {
       const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
       Imgs.forEach((item: any) => {
@@ -264,28 +417,26 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
           $('.page-canvas').css('border', 'none');
           let selector = '.page-canvas.page' + page;
           $(selector).css('border', '2px solid #ADCFF7');
-          // @ts-ignore
-          // document.getElementById('thumbnail-canvas').scrollTop = $(selector).offset().top - 95;
         }
       });
     });
   }
+  }
 
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
-  changePosition(d?: any, e?: any, sizeChange?: any) {
+  changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
     let style: any = {
-      "transform": 'translate(' + d['dataset_x'] + 'px, ' + d['dataset_y'] + 'px)',
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
     }
-
-    if (d['offsetWidth']) {
-      style.width = parseInt(d['offsetWidth']) + "px";
+    style.backgroundColor = d.value ? '' : '#EBF8FF';
+    if (d['width']) {
+      style.width = parseInt(d['width']) + "px";
     }
-
-    if (d['offsetHeight']) {
-      style.height = parseInt(d['offsetHeight']) + "px";
+    if (d['height']) {
+      style.height = parseInt(d['height']) + "px";
     }
 
     return style;
@@ -296,18 +447,20 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   changeDisplay() {
     if (window.innerHeight < 670) {
       return {
-        "overflow-y": "auto",
-        "height": "calc(100vh - 250px)"
+        "overflow": "auto",
+        "height": "calc(50vh - 113px)"
       }
     } else return {}
   }
 
 // hàm stype đối tượng boder kéo thả
-  changeColorDrag(role: any, isDaKeo?: any) {
-    if (isDaKeo) {
+  changeColorDrag(role: any, valueSign: any, isDaKeo?: any) {
+    if (isDaKeo && !valueSign.value) {
       return 'ck-da-keo';
-    } else {
+    } else if (!valueSign.value) {
       return 'employer-ck';
+    } else {
+      return '';
     }
   }
 
@@ -328,8 +481,8 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
       if (isObjSign) {
-        this.objSignInfo.traf_x = d.dataset_x;
-        this.objSignInfo.traf_y = d.dataset_y;
+        this.objSignInfo.traf_x = d.coordinate_x;
+        this.objSignInfo.traf_y = d.coordinate_y;
         // this.signCurent.name = d.name;
 
         this.objSignInfo.offsetWidth = parseInt(d.offsetWidth);
@@ -368,46 +521,18 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     }
   }
 
-  // getIdSignClick() {
-  //   let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
-  //   return set_id.id;
-  //   // this.datas.contract_user_sign.forEach((element: any, index: any) => {
-  //   //   if (element.id == id) {
-  //   //     if (element.sign_config.length == 0) {
-  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
-  //   //     } else {
-  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-' + (element.sign_config.length) + '_' + element.id;
-  //   //     }
-  //   //     // element['sign_config'].push(_obj);
-  //   //   }
-  //   // })
-  // }
-
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
-    let arrSignConfig: any = [];
-    let cloneUserSign = [...this.datas.contract_user_sign];
-    cloneUserSign.forEach(element => {
-      arrSignConfig = arrSignConfig.concat(element.sign_config);
-    })
-    return arrSignConfig;
-  }
-
-  processHandleContract() {
-    // alert('Luồng xử lý hợp đồng!');
-    const data = this.datas;
-    // @ts-ignore
-    // const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
-    //   width: '497px',
-    //   backdrop: 'static',
-    //   keyboard: true,
-    //   data
-    // })
-    // dialogRef.afterClosed().subscribe((result: any) => {
-    //   console.log('the close dialog');
-    // }, null, () => {
-    // }).unsubscribe();
-
+    if (this.datasBatch && this.isDataObjectSignature && this.isDataObjectSignature.length) {
+    //   let arrSignConfig: any = [];
+    //   arrSignConfig = this.datas.is_data_object_signature;
+      // return this.datas.is_data_object_signature.filter(
+      //   (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived
+      // );
+      return this.datasBatch.is_data_object_signature;
+    } else {
+      return [];
+    }
   }
 
   showThumbnail() {
@@ -420,107 +545,111 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   }
 
   ngOnDestroy() {
-    // interact('.pdf-viewer-step-3').unset();
-    // interact('.drop-zone').unset();
-    // interact('.resize-drag').unset();
-    // interact('.not-out-drop').unset();
-    // interact.removeDocument(document);
+    interact('.pdf-viewer-step-3').unset();
+    interact('.drop-zone').unset();
+    interact('.resize-drag').unset();
+    interact('.not-out-drop').unset();
+    interact.removeDocument(document);
   }
 
   // edit location doi tuong ky
-  // changePositionSign(e: any, locationChange: any, property: any) {
-  //   // console.log(e, this.objSignInfo, this.signCurent);
-  //   let signElement = document.getElementById(this.objSignInfo.id);
-  //   if (signElement) {
-  //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-  //     if (isObjSign) {
-  //       if (property == 'location') {
-  //         if (locationChange == 'x') {
-  //           isObjSign.dataset_x = parseInt(e);
-  //           signElement.setAttribute("data-x", isObjSign.dataset_x);
-  //         } else {
-  //           isObjSign.dataset_y = parseInt(e);
-  //           signElement.setAttribute("data-y", isObjSign.dataset_y);
-  //         }
-  //       } else if (property == 'size') {
-  //         if (locationChange == 'width') {
-  //           isObjSign.offsetWidth = parseInt(e);
-  //           signElement.setAttribute("width", isObjSign.offsetWidth);
-  //         } else {
-  //           isObjSign.offsetHeight = parseInt(e);
-  //           signElement.setAttribute("height", isObjSign.offsetHeight);
-  //         }
-  //       } else if (property == 'text') {
-  //         isObjSign.text_attribute_name = e;
-  //         signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
-  //       } else {
-  //         let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
-  //         if (data_name) {
-  //           isObjSign.name = data_name.name;
-  //           signElement.setAttribute("name", isObjSign.name);
-  //
-  //           isObjSign.signature_party = data_name.sign_unit;
-  //           signElement.setAttribute("signature_party", isObjSign.signature_party);
-  //         }
-  //       }
-  //       // console.log(this.signCurent)
-  //       // console.log(this.objSignInfo)
-  //     }
-  //   }
-  // }
+  changePositionSign(e: any, locationChange: any, property: any) {
+    // console.log(e, this.objSignInfo, this.signCurent);
+    let signElement = document.getElementById(this.objSignInfo.id);
+    if (signElement) {
+      let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+      if (isObjSign) {
+        if (property == 'location') {
+          if (locationChange == 'x') {
+            isObjSign.coordinate_x = parseInt(e);
+            signElement.setAttribute("data-x", isObjSign.coordinate_x);
+          } else {
+            isObjSign.coordinate_y = parseInt(e);
+            signElement.setAttribute("data-y", isObjSign.coordinate_y);
+          }
+        } else if (property == 'size') {
+          if (locationChange == 'width') {
+            isObjSign.width = parseInt(e);
+            signElement.setAttribute("width", isObjSign.width);
+          } else {
+            isObjSign.height = parseInt(e);
+            signElement.setAttribute("height", isObjSign.height);
+          }
+        } else if (property == 'text') {
+          isObjSign.text_attribute_name = e;
+          signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
+        } else {
+          let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
+          if (data_name) {
+            isObjSign.name = data_name.name;
+            signElement.setAttribute("name", isObjSign.name);
 
-  // getTrafX() {
-  //   if (Math.round(this.objSignInfo.traf_x) <= 0) {
-  //     return Math.round(this.objSignInfo.traf_x)
-  //   } else
-  //     return Math.round(this.objSignInfo.traf_x) - 1;
-  // }
-  //
-  // getTrafY() {
-  //   return Math.round(this.objSignInfo.traf_y)
-  // }
+            isObjSign.signature_party = data_name.sign_unit;
+            signElement.setAttribute("signature_party", isObjSign.signature_party);
+          }
+        }
+        // console.log(this.signCurent)
+        // console.log(this.objSignInfo)
+      }
+    }
+  }
 
-  // edit size doi tuong ky
-  // changeSizeSign(e: any, sizeChange: any) {
-  //   let signElement = document.getElementById(this.objSignInfo.id);
-  //   if (signElement) {
-  //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-  //     if (isObjSign) {
-  //
-  //     }
-  //   }
-  // }
+  getTrafX() {
+    if (Math.round(this.objSignInfo.traf_x) <= 0) {
+      return Math.round(this.objSignInfo.traf_x)
+    } else
+      return Math.round(this.objSignInfo.traf_x) - 1;
+  }
 
-  // back(e: any, step?: any) {
-  //   // if (!this.datas.isView) {
-  //   this.nextOrPreviousStep(step);
-  // }
+  getTrafY() {
+    return Math.round(this.objSignInfo.traf_y)
+  }
+
+  back(e: any, step?: any) {
+    // if (!this.datas.isView) {
+    this.nextOrPreviousStep(step);
+  }
 
   // forward data component
   nextOrPreviousStep(step: string) {
-    this.datas.stepLast = step;
+    this.datasBatch.stepLast = step;
     this.stepChangeConfirmInforContractBatch.emit(step);
   }
 
-  dieuphoi() {
-    this.datas.step = variable.stepSampleContract.step_confirm_coordination;
+  getNameContract(data: any) {
+    return (' ' + data.file_name + ',').replace(/,\s*$/, "");
+  }
+  
+
+  dataURIToBlob(dataURI: string) {
+    const splitDataURI = dataURI.split(',')
+    const byteString = splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1])
+    const mimeString = splitDataURI[0].split(':')[1].split(';')[0]
+
+    const ia = new Uint8Array(byteString.length)
+    for (let i = 0; i < byteString.length; i++)
+      ia[i] = byteString.charCodeAt(i)
+
+    return new Blob([ia], { type: mimeString })
   }
 
-  // getNameContract(data: any) {
-  //   return (' ' + data.file_name + ',').replace(/,\s*$/, "");
-  // }
-
-
-
-  // getNameCoordination() {
-  //   let nameFile = [];
-  //   for (let i = 0; i < this.datas.contract_information.file_related_contract; i++) {
-  //
-  //   }
-  // }
-
-  getNameTypeId() {
-
+  nextPage(){
+    this.pageNumberCurrent++;
+    this.getDataContractSignature(this.pageNumberCurrent);
   }
 
+  previousPage(){
+    this.pageNumberCurrent--;
+    this.getDataContractSignature(this.pageNumberCurrent);
+  }
+
+  next(){
+    this.spinner.show();
+    this.contractService.confirmContractBatchList(this.datasBatch.contractFile, this.datasBatch.idContractTemplate).subscribe((response: any) => {
+      console.log(response);
+      this.spinner.hide();
+      this.toastService.showSuccessHTMLWithTimeout("Tạo hợp đồng theo lô thành công", "", 3000);
+    }), (error: any) => this.toastService.showErrorHTMLWithTimeout("Tạo hợp đồng theo lô thất bại", "", 3000);
+
+  }
 }

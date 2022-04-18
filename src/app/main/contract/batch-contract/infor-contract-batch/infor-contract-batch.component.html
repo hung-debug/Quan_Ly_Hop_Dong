@@ -6,15 +6,15 @@
           <div class="label_item">{{'contract-template.name' | translate}} <span class="require_star">*</span></div>
           <div>
             <p-dropdown panelStyleClass="font" [options]="typeListForm" [(ngModel)]="name" 
-              optionLabel="name" optionValue="id" placeholder="Chọn hợp đồng" [filter]="true" filterBy="name"
+              optionLabel="name" optionValue="id" placeholder="Chọn mẫu hợp đồng" [filter]="true" filterBy="name"
               (onChange)="OnChangeForm($event)">
             </p-dropdown>
           </div>
         </div>
         <div class="form-group">
-          <p class="alert alert-danger error-detail" role="alert" *ngIf="errorContractName!=''">
-            {{errorContractName}}
-          </p>
+          <div class="invalid" *ngIf="errorContractName">
+            {{errorContractName | translate}}
+          </div>
         </div>
       </div>
     </div>
@@ -28,12 +28,18 @@
           <div class="file-contract" (click)="addFile()">
             <img src="assets/img/icon_file_excel.svg" alt="mobifone.contract">
             <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="!this.datasBatch.file_name">{{'choose.document.file.excel' | translate }}</span>{{this.datasBatch.file_name}}</div>
+            <div style="padding-top: 7px;" *ngIf="errorDetail.length > 0">
+              <span style="color: red;">Dữ liệu không hợp lệ. Tổng số {{errorDetail.length}} lỗi</span>
+            </div>
+            <div style="padding-top: 7px;" *ngFor="let item of errorDetail; let i = index">
+              <span style="color: red;">{{item}}</span>
+            </div>
           </div>
         </div>
         <div class="form-group">
-          <p class="alert alert-danger error-detail" role="alert" *ngIf="errorContractFile!=''">
-            {{errorContractFile}}
-          </p>
+          <div class="invalid" *ngIf="errorContractFile">
+            {{errorContractFile | translate}}
+          </div>
         </div>
       </div>
     </div>
@@ -56,6 +62,9 @@
       <button (click)="next()" type="button" name="next" class="next action-button pull-right">{{'btn.next' | translate }}</button>
     </div>
   </div>
+  <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+    <p style="font-size: 18px; color: white">Đang xử lý...</p>
+</ngx-spinner>
   
   
   

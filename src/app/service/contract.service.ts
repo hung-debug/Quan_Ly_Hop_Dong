@@ -77,6 +77,8 @@ export class ContractService {
   getObjectSignature: any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
   getFileContractBatchUrl: any = `${environment.apiUrl}/api/v1/batch/`;
   uploadFileContractBatchUrl:any = `${environment.apiUrl}/api/v1/batch/validate/`;
+  getContractBatchListUrl:any = `${environment.apiUrl}/api/v1/batch/parse/`;
+  confirmContractBatchListUrl:any = `${environment.apiUrl}/api/v1/batch/process/`;
 
   token:any;
   customer_id:any;
@@ -789,6 +791,28 @@ export class ContractService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.post<any>(this.uploadFileContractBatchUrl + idContractTemplate, formData, {'headers':headers});
+  }
+
+  getContractBatchList(file:any, idContractTemplate:any){
+    this.getCurrentUser();
+    let formData = new FormData();
+    formData.append('file', file);
+
+    const headers = new HttpHeaders()
+      //.append('Content-Type', 'multipart/form-data')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.post<any>(this.getContractBatchListUrl + idContractTemplate, formData, {'headers':headers});
+  }
+
+  confirmContractBatchList(file:any, idContractTemplate:any){
+    this.getCurrentUser();
+    let formData = new FormData();
+    formData.append('file', file);
+
+    const headers = new HttpHeaders()
+      //.append('Content-Type', 'multipart/form-data')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.post<any>(this.confirmContractBatchListUrl + idContractTemplate, formData, {'headers':headers});
   }
 
   objDefaultSampleContract() {

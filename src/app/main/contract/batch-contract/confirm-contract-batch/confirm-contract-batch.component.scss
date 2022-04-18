@@ -291,7 +291,7 @@
     min-height: 40px;
   }
   .label_item {
-    padding: 10px 0px 5px;
+    padding: 5px 0px;
     color: #5e5e5e;
   }
 
@@ -331,4 +331,59 @@
     }
 }
 
-  
+.resize-drag {
+  //position: absolute; // thuoc tinh absolute de giu nguyen vi tri khi keo sang pdf
+  z-index: 9;
+  //width: 250px;
+  //height: 32px;
+  font-size: 12px;
+  border-radius: 3px;
+  font-family: sans-serif;
+  outline: none;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(27, 51, 91, 1);
+  /* This makes things *much* easier */
+  box-sizing: border-box;
+  //padding: 10px;
+  .name-sig-img-daky {
+      position: absolute;
+      background-color: yellow;
+      border-radius: 5px;
+      top: -15px;
+      left: 6px;
+      padding: 0 4px;
+      border: 1px solid #ddd;
+  }
+  .sig-img-daky {
+      cursor: pointer;
+      >img {
+          width: 16px;
+      }
+      img:nth-last-child(2) {
+          width: 8px;
+          top: 6px;
+          position: absolute;
+          right: 3px;
+      }
+  }
+}
+.employer-ck .signature-sample,
+.employer-ck .signature-sample-drag {
+    border: 1px solid #92bff5;
+    background-color: rgba(255, 233, 178, 1);
+    color: #fe7744;
+    border-radius: 2px;
+}
+
+.employer-ck-da-keo {
+    border: 1px solid #92bff5;
+    color: #fe7744;
+    border-radius: 2px;
+}
+.ck-da-keo {
+  border: 1px solid #106DB6;
+  border-radius: 5px;
+}

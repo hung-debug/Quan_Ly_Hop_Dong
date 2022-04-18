@@ -1,17 +1,17 @@
 <!--<link rel="stylesheet" href="sample-contract.component.scss">-->
-<div class="sample-contract row">
+<div class="sample-contract row" *ngIf="loaded">
     <!--  information contract-->
     <div class="col-md-3 sample-contract__information" style="background-color: white;">
       <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
         <div style="padding-bottom: 10px; text-align: center" class="label">SỐ HỢP ĐỒNG THEO LÔ</div>
         <div style="line-height: 25px; text-align: center;">
-          <img src="/assets/img/icon_previous.svg" style="padding-right: 10px"/>
+          <img src="/assets/img/icon_previous.svg" style="padding-right: 10px; cursor: pointer;" (click)="previousPage()"/>
   
-          <input type="text" value="{{pageNumberCurrent}}" style="width: 30px;text-align: center;border-radius: 3px;border: 1px solid #106DB6;"/> / {{pageNumberTotal}}
-          <img src="/assets/img/icon_next.svg" style="padding-left: 10px"/>
+          <input type="text" value="{{pageNumberCurrent + 1}}" style="width: 30px;text-align: center;border-radius: 3px;border: 1px solid #106DB6;"/> / {{pageNumberTotal}}
+          <img src="/assets/img/icon_next.svg" style="padding-left: 10px; cursor: pointer;" (click)="nextPage()"/>
         </div>
       </div>
-      <hr>
+      <hr style="margin: 10px;">
   
       <div style="max-height: calc(100vh - 400px);
       height: calc(100vh - 400px);
@@ -22,75 +22,38 @@
           <div style="text-align: center;" class="label">THÔNG TIN CÁC BÊN KÝ</div>
         </div>
         <div>
-          <div style="background: #C7D0E9;
-          padding: 8px;
-          margin: 10px 0;">
-            BÊN KÝ 1
+          <div style="background: #C7D0E9;padding: 8px;">
+            TỔ CHỨC CỦA TÔI
           </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <div class="label_item">Người xem xét</div>
-                <div>
-                  <div class="input_text">Nguyễn Văn A - abc@gmail.com.vn</div>
-                </div>
-              </div>
-            </div>
+          <div class="label_item">Người xem xét</div>
+          <div *ngFor="let item of this.is_origanzation_reviewer">
+            <div class="input_text">{{item.name}} - {{item.email}}</div>
           </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <div class="label_item">Người ký</div>
-                <div>
-                  <div class="input_text">Nguyễn Văn A - abc@gmail.com.vn</div>
-                </div>
-              </div>
-            </div>
+          <div class="label_item">Người ký</div>
+          <div *ngFor="let item of this.is_origanzation_signature">
+            <div class="input_text">{{item.name}} - {{item.email}}</div>
           </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <div class="label_item">Văn thư</div>
-                <div>
-                  <div class="input_text">Nguyễn Văn A - abc@gmail.com.vn</div>
-                </div>
-              </div>
-            </div>
+          <div class="label_item">Văn thư</div>
+          <div *ngFor="let item of this.is_origanzation_document">
+            <div class="input_text">{{item.name}} - {{item.email}}</div>
           </div>
   
-          <div style="background: #C7D0E9;
-          padding: 8px;
-          margin: 10px 0;">
-            BÊN KÝ 2
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <div class="label_item">Người xem xét</div>
-                <div>
-                  <div class="input_text">Nguyễn Văn A - abc@gmail.com.vn</div>
-                </div>
-              </div>
+          <div *ngFor="let record of this.data_parnter_organization; let i=index">
+            <div style="background: #C7D0E9;
+            padding: 8px;margin-top: 8px;">
+              ĐỐI TÁC {{i + 1}}
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <div class="label_item">Người ký</div>
-                <div>
-                  <div class="input_text">Nguyễn Văn A - abc@gmail.com.vn</div>
-                </div>
-              </div>
+            <div class="label_item">Người xem xét</div>
+            <div *ngFor="let item of getPartnerReviewer(record)">
+              <div class="input_text">{{item.name}} - {{item.email}}</div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <div class="label_item">Văn thư</div>
-                <div>
-                  <div class="input_text">Nguyễn Văn A - abc@gmail.com.vn</div>
-                </div>
-              </div>
+            <div class="label_item">Người ký</div>
+            <div *ngFor="let item of getPartnerSignature(record)">
+              <div class="input_text">{{item.name}} - {{item.email}}</div>
+            </div>
+            <div class="label_item">Văn thư</div>
+            <div *ngFor="let item of getPartnerDocument(record)">
+              <div class="input_text">{{item.name}} - {{item.email}}</div>
             </div>
           </div>
         </div>
@@ -101,30 +64,31 @@
     <!--  file content-->
     <!--  width: 74.7%-->
     <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
-         style="background-color: #F2F2F2; position: relative;">
-      <div id="pdf-viewer-step-3">
-        <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-          <div class="resize-drag not-out-drop"
-               [id]="d.id"
-               style="z-index: -1"
-               #itemElement
-               (click)="getSignSelect(d)"
-               [ngClass]="changeColorDrag(null,true)"
-               [ngStyle]="changePosition(d)">
-            <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
-            <!--          </div>-->
-            <app-sign-contract [datas]="datas" [sign]="d"></app-sign-contract>
-          </div>
+       style="background-color: #F2F2F2; position: relative;">
+    <div id="pdf-viewer-step-3">  
+      <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+        <div class="resize-drag not-out-drop ck-da-keo"
+             [id]="d.id"
+             style="z-index: -1;"
+             #itemElement
+             (click)="getSignSelect(d)"
+             [ngClass]="changeColorDrag(null, true)"
+             [ngStyle]="changePosition(d)">
+          <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
+          <app-image-sign-contract-detail *ngIf="!d.value" [datas]="datasBatch" [sign]="d"></app-image-sign-contract-detail>
         </div>
       </div>
     </div>
+  </div>
     </div>
     <div class="footer-sample-contract">
         <button type="button" name="next" class="next action-button"
             style="background-color: #8B8B8B">Quay lại</button>
         <div>
-            <button type="button" name="next" class="next action-button">Hoàn thành</button>
+            <button (click)="next()" type="button" name="next" class="next action-button">Hoàn thành</button>
         </div>
     </div>
   
-  
+    <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+      <p style="font-size: 18px; color: white">Đang xử lý...</p>
+  </ngx-spinner>
