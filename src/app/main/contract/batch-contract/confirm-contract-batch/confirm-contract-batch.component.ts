@@ -13,6 +13,7 @@ import interact from "interactjs";
 import * as $ from "jquery";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-confirm-contract-batch',
   templateUrl: './confirm-contract-batch.component.html',
@@ -105,7 +106,8 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     private dialog: MatDialog,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private contractTemplateService: ContractTemplateService
+    private contractTemplateService: ContractTemplateService,
+    private router: Router,
   ) {
     this.step = variable.stepSampleContractBatch.step2
   }
@@ -143,9 +145,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
       
     this.data = this.contractList[page];
     
-    if (!this.datasBatch.is_data_object_signature) {
-      this.datasBatch.is_data_object_signature = [];
-    }
+    this.datasBatch.is_data_object_signature = [];
     this.data.participants.forEach((res: any) => {
       res.recipients.forEach((element: any) => {
 
@@ -246,11 +246,12 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
           }
         
         }
+        this.loaded = true;
+        this.spinner.hide();
       });
       
       
-      this.loaded = true;
-      this.spinner.hide();
+      
     
   }
 
@@ -438,7 +439,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     if (d['height']) {
       style.height = parseInt(d['height']) + "px";
     }
-
+    console.log(style);
     return style;
   }
 
@@ -523,12 +524,14 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
 
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
-    if (this.datasBatch && this.isDataObjectSignature && this.isDataObjectSignature.length) {
+    if (this.datasBatch && this.datasBatch.is_data_object_signature && this.datasBatch.is_data_object_signature.length) {
     //   let arrSignConfig: any = [];
     //   arrSignConfig = this.datas.is_data_object_signature;
       // return this.datas.is_data_object_signature.filter(
       //   (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived
       // );
+      console.log("a");
+      console.log(this.datasBatch.is_data_object_signature);
       return this.datasBatch.is_data_object_signature;
     } else {
       return [];
@@ -647,6 +650,9 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     this.spinner.show();
     this.contractService.confirmContractBatchList(this.datasBatch.contractFile, this.datasBatch.idContractTemplate).subscribe((response: any) => {
       console.log(response);
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/main/contract/create/processing']);
+      });
       this.spinner.hide();
       this.toastService.showSuccessHTMLWithTimeout("Tạo hợp đồng theo lô thành công", "", 3000);
     }), (error: any) => this.toastService.showErrorHTMLWithTimeout("Tạo hợp đồng theo lô thất bại", "", 3000);
