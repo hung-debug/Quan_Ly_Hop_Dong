@@ -428,12 +428,12 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
     async getDataContractForm() {
         if (this.datasForm.isChangeForm) {
-            // let is_create_error = false;
-            // await this.contractTemplateService.getFileContractFormUrl(this.datasForm.id_form, this.datasForm.contract_id).toPromise().then((res: any) => {
+        //     let is_create_error = false;
+        //     await this.contractTemplateService.getFileContractFormUrl(this.datasForm.id_form, this.datasForm.contract_id).toPromise().then((res: any) => {
 
-            // }, (error) => {
-            //     is_create_error = true;
-            // })
+        //     }, (error) => {
+        //         is_create_error = true;
+        //     })
 
             // if (!is_create_error) {
                 await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.id_form, 'get-form-data').toPromise().then((res: any) => {
@@ -446,7 +446,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             // } else {
             //     this.toastService.showErrorHTMLWithTimeout("error.server", "", 3000);
             // }
-            
+        
         } else {
             this.nextForm();
         }

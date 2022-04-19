@@ -524,7 +524,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             let canvasElement = document.getElementById("canvas-step3-" + i);
             // @ts-ignore
             let canvasInfo = canvasElement.getBoundingClientRect();
-            layerY += canvasInfo.height + 2;
+            layerY += canvasInfo.height + 3;
           }
           // @ts-ignore
           layerY += page / 3;
