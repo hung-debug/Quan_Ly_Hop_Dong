@@ -86,6 +86,8 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   data_contract: any;
   allFileAttachment: any[];
   loaded = false;
+  isDisablePrevious = false;
+  isDisableNext = false;
 
   data_organization:any;
   is_origanzation_reviewer: any = [];
@@ -142,15 +144,18 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   data:any;
   getDataContractSignature(page:any) {
     this.spinner.show();
-      
+    
+    this.checkDisableIcon();
     this.data = this.contractList[page];
     
+    let i = 0;
     this.datasBatch.is_data_object_signature = [];
     this.data.participants.forEach((res: any) => {
       res.recipients.forEach((element: any) => {
 
         if (element.fields && element.fields.length && element.fields.length > 0) {
           element.fields.forEach((res: any) => {
+            
             // res['coordinate_x'] = res.coordinate_x;
             // res['coordinate_y'] = res.coordinate_y;
             // res['font'] = res.font;
@@ -165,6 +170,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
             // res['value'] = res.value;
             // res['width'] = res.width;
 
+            res['id'] = i++;
             if (res.type == 1) {
               res['sign_unit'] = 'text';
             }
@@ -222,10 +228,8 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
       this.data_parnter_organization = this.data?.participants.filter((p: any) => p.type == 2 || p.type == 3);
 
       console.log(this.datasBatch.contract_user_sign);
-      console.log(this.datasBatch.idContractTemplate);
       this.contractTemplateService.getDetailContract(this.datasBatch.idContractTemplate).subscribe(rs => {
         this.datasBatch.i_data_file_contract = rs[1];
-        console.log(this.datasBatch.i_data_file_contract);
         if (this.datasBatch?.i_data_file_contract) {
           let fileC = null;
           const pdfC2 = this.datasBatch.i_data_file_contract.find((p: any) => p.type == 2);
@@ -439,7 +443,6 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     if (d['height']) {
       style.height = parseInt(d['height']) + "px";
     }
-    console.log(style);
     return style;
   }
 
@@ -530,8 +533,6 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
       // return this.datas.is_data_object_signature.filter(
       //   (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived
       // );
-      console.log("a");
-      console.log(this.datasBatch.is_data_object_signature);
       return this.datasBatch.is_data_object_signature;
     } else {
       return [];
@@ -646,10 +647,22 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     this.getDataContractSignature(this.pageNumberCurrent);
   }
 
+  checkDisableIcon(){
+    if(this.pageNumberCurrent + 1 == 1){
+      this.isDisablePrevious = true;
+    }else{
+      this.isDisablePrevious = false;
+    }
+    if(this.pageNumberCurrent + 1 == this.pageNumberTotal){
+      this.isDisableNext = true;
+    }else{
+      this.isDisableNext = false;
+    }
+  }
+
   next(){
     this.spinner.show();
     this.contractService.confirmContractBatchList(this.datasBatch.contractFile, this.datasBatch.idContractTemplate).subscribe((response: any) => {
-      console.log(response);
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate(['/main/contract/create/processing']);
       });

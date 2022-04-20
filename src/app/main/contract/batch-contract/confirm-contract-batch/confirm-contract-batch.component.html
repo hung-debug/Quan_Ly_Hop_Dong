@@ -5,10 +5,11 @@
       <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
         <div style="padding-bottom: 10px; text-align: center" class="label">SỐ HỢP ĐỒNG THEO LÔ</div>
         <div style="line-height: 25px; text-align: center;">
-          <img src="/assets/img/icon_previous.svg" style="padding-right: 10px; cursor: pointer;" (click)="previousPage()"/>
-  
+          <img *ngIf="!isDisablePrevious" src="/assets/img/icon_previous.svg" style="padding-right: 10px; cursor: pointer;" (click)="previousPage()"/>
+          <img *ngIf="isDisablePrevious" src="/assets/img/icon_previous_hidden.svg" style="padding-right: 10px; cursor: pointer;"/>
           <input type="text" value="{{pageNumberCurrent + 1}}" style="width: 30px;text-align: center;border-radius: 3px;border: 1px solid #106DB6;"/> / {{pageNumberTotal}}
-          <img src="/assets/img/icon_next.svg" style="padding-left: 10px; cursor: pointer;" (click)="nextPage()"/>
+          <img *ngIf="!isDisableNext" src="/assets/img/icon_next.svg" style="padding-left: 10px; cursor: pointer;" (click)="nextPage()"/>
+          <img *ngIf="isDisableNext" src="/assets/img/icon_next_hidden.svg" style="padding-left: 10px; cursor: pointer;"/>
         </div>
       </div>
       <hr style="margin: 10px;">
@@ -25,33 +26,33 @@
           <div style="background: #C7D0E9;padding: 8px;">
             TỔ CHỨC CỦA TÔI
           </div>
-          <div class="label_item">Người xem xét</div>
+          <div *ngIf="this.is_origanzation_reviewer.length > 0" class="label_item">Người xem xét</div>
           <div *ngFor="let item of this.is_origanzation_reviewer">
             <div class="input_text">{{item.name}} - {{item.email}}</div>
           </div>
-          <div class="label_item">Người ký</div>
+          <div *ngIf="this.is_origanzation_signature.length > 0" class="label_item">Người ký</div>
           <div *ngFor="let item of this.is_origanzation_signature">
             <div class="input_text">{{item.name}} - {{item.email}}</div>
           </div>
-          <div class="label_item">Văn thư</div>
+          <div *ngIf="this.is_origanzation_document.length > 0" class="label_item">Văn thư</div>
           <div *ngFor="let item of this.is_origanzation_document">
             <div class="input_text">{{item.name}} - {{item.email}}</div>
           </div>
   
           <div *ngFor="let record of this.data_parnter_organization; let i=index">
             <div style="background: #C7D0E9;
-            padding: 8px;margin-top: 8px;">
-              ĐỐI TÁC {{i + 1}}
+            padding: 8px;margin-top: 15px;">
+              ĐỐI TÁC <span *ngIf="this.data_parnter_organization.length > 1">{{i + 1}}</span>
             </div>
-            <div class="label_item">Người xem xét</div>
+            <div *ngIf="this.getPartnerReviewer(record).length > 0" class="label_item">Người xem xét</div>
             <div *ngFor="let item of getPartnerReviewer(record)">
               <div class="input_text">{{item.name}} - {{item.email}}</div>
             </div>
-            <div class="label_item">Người ký</div>
+            <div *ngIf="this.getPartnerSignature(record).length > 0" class="label_item">Người ký</div>
             <div *ngFor="let item of getPartnerSignature(record)">
               <div class="input_text">{{item.name}} - {{item.email}}</div>
             </div>
-            <div class="label_item">Văn thư</div>
+            <div *ngIf="this.getPartnerDocument(record).length > 0" class="label_item">Văn thư</div>
             <div *ngFor="let item of getPartnerDocument(record)">
               <div class="input_text">{{item.name}} - {{item.email}}</div>
             </div>
@@ -71,7 +72,7 @@
              [id]="d.id"
              style="z-index: -1;"
              #itemElement
-             (click)="getSignSelect(d)"
+             
              [ngClass]="changeColorDrag(null, true)"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
