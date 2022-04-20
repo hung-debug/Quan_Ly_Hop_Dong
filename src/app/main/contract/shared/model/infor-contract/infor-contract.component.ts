@@ -195,7 +195,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       const file = e.target.files[i];
       if (file) {
         // giới hạn file upload lên là 5mb
-        if (file.size <= 5000000) {
+        if (file.size <= 10000000) {
           const file_name = file.name;
           // if (this.attachFileNameArr.filter((p: any) => p.filename == file_name).length == 0) {
             const extension = file.name.split('.').pop();
@@ -342,7 +342,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
               await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then((data) => {
                 // this.datas.attachFileArr[i].file_path = data.file_object.file_path;
-                // this.datas.attachFileArr[i].name = data.file_object.filename; 
+                // this.datas.attachFileArr[i].name = data.file_object.filename;
                 if (!this.datas.attachFileArr[i].id) {
                   this.datas.filePathAttach = data.file_object.file_path;
                   this.datas.fileNameAttach = data.file_object.filename;
@@ -651,7 +651,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     //     this.save_draft_infor.close_modal.close();
     //   }
     //   return;
-    // } 
+    // }
     // else {
     this.spinner.show();
     // set value to datas
@@ -712,7 +712,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       else
         this.callAPI_Draft();
     }
-    // 
+    //
     // }
   }
 
