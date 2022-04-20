@@ -21,8 +21,10 @@
       <div class="select-file-contract">
         <div class="file-approve">
           <div class="label_item">{{'file.attach' | translate}}</div>
+          
           <input id="attachFile" type="file" accept=".pdf, .doc, .docx" (change)="uploadFileAttachForm($event)"
             style="display: none;" multiple />
+
           <div class="select-contract">
             <div class="div_file_attach">
               <div *ngIf="this.listFileAttach.length == 0" style="color:gray">{{'choose.contract.file.attach' |

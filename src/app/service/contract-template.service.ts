@@ -32,6 +32,7 @@ export class ContractTemplateService {
   editContractSampleUrl: any = `${environment.apiUrl}/api/v1/fields/template/`;
   deleteInfoContractUrl: any = `${environment.apiUrl}/api/v1/fields/template/`;
   copyFileContractFormUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
+  urlGetListFileTemplate: any = `${environment.apiUrl}/api/v1/contracts/template/release`;
 
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
@@ -96,6 +97,14 @@ export class ContractTemplateService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
       return this.http.get<any>(this.getDataContract + `${template_contract_id}/${contract_id}`, { headers })
+  }
+
+  getListFileTemplate() {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+      return this.http.get<any>(this.urlGetListFileTemplate, { headers })
   }
 
   addDocument(datas: any) {

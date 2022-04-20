@@ -121,12 +121,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
 
     getContractTemplateForm() {
-        this.contractTemplateService.getContractTemplateList(this.isShare, this.name, this.type, 0, 0).subscribe(response => {
-            // console.log(response);
-            this.typeListForm = response.entities;
-            // this.pageTotal = response.total_elements;
+        this.contractTemplateService.getListFileTemplate().subscribe(response => {
+            this.typeListForm = response;
         })
-
     }
 
     OnChangeForm(e: any) {
@@ -203,11 +200,8 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
 
     addFileAttach() {
-        console.log(document.getElementById('attachFile'));
-
         // @ts-ignore
         document.getElementById('attachFile').click();
-
     }
 
     uploadFileAttachForm(e: any) {
@@ -232,15 +226,21 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                     this.datasForm.attachFile = '';
                     this.toastService.showErrorHTMLWithTimeout("File đính kèm yêu cầu có dung lượng nhỏ hơn 5MB", "", 3000);
                     break;
-                  }
-            } 
+                }
+            }
         }
+        const valueEmpty: any = document.getElementById('attachFile');
+        valueEmpty.value = "";
     }
 
 
 
     deleteFileAttach(item: any, index_dlt: number) {
         this.datasForm.fileAttachForm.splice(index_dlt, 1);
+        if (this.listFileAttach.some((p: any) => p.filename != item.filename)) {
+            this.listFileAttach = this.listFileAttach.filter((p: any) => p.filename != item.filename);
+        }
+
     }
 
     validDataForm() {
@@ -426,15 +426,15 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
 
     async getDataContractForm() {
-        if (this.datasForm.isChangeForm) {
-            let is_create_error = false;
-            await this.contractTemplateService.getFileContractFormUrl(this.datasForm.id_form, this.datasForm.contract_id).toPromise().then((res: any) => {
-                
-            }, (error) => {
-                is_create_error = true;
-            })
+        let is_create_error = false;
+        await this.contractTemplateService.getFileContractFormUrl(this.datasForm.id_form, this.datasForm.contract_id).toPromise().then((res: any) => {
+        }, (error) => {
+            is_create_error = true;
+            this.toastService.showErrorHTMLWithTimeout("error.server", "", 3000);
+        })
 
-            if (!is_create_error) {
+        if (!is_create_error) {
+            if (this.datasForm.isChangeForm) {
                 await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.id_form, 'get-form-data').toPromise().then((res: any) => {
                     this.datasForm.is_determine_clone = res.participants;
                     this.datasForm.contract_id_action = res.id;
@@ -443,12 +443,10 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                     this.errorData();
                 })
             } else {
-                this.toastService.showErrorHTMLWithTimeout("error.server", "", 3000);
+                this.nextForm();
             }
-        } else {
-            this.nextForm();
         }
-
+        
     }
 
     nextForm() {

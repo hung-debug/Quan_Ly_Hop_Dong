@@ -147,48 +147,19 @@ export class PartyContractFormComponent implements OnInit {
     async getApiDetermine(is_save?: boolean) {
         this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
             items.recipients.forEach((element: any) => {
-                element['template_recipient_id'] = element.id;
-                element.id = null;
+                // tạo mới hđ từ mẫu gán id = null
+                if (!element.template_recipient_id) {
+                    if (!element.id) {
+                        element.id = null;
+                    }
+                    element['template_recipient_id'] = element.id;
+                    element.id = null;
+                }
             })
             if (items.type == 3)
                 this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
         })
         this.spinner.show();
-        // let isCheckId = this.datasForm.is_determine_clone.filter((p: any) => p.id);
-        // this.datasForm.is_action_contract_created && this.router.url.includes("edit")
-        // if (isCheckId && isCheckId.length == this.datasForm.is_determine_clone.length) {
-        //     let isBody: any[] = [];
-        //     let count = 0;
-        //     let is_error = '';
-        //     // this.datasForm.contract_id_action
-
-        //     for (let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
-        //         this.datasForm.is_determine_clone[i].recipients.forEach((element: any) => {
-        //             if (!element.id) element.id = 0;
-        //         })
-        //         await this.contractService.getContractDetermineCoordination(this.datasForm.is_determine_clone[i], this.datasForm.is_determine_clone[i].id).toPromise().then((res: any) => {
-        //             isBody.push(res);
-        //         }, (res: any) => {
-        //             is_error = res.error;
-        //             count++
-        //         })
-        //         if (count > 0) {
-        //             break;
-        //         }
-        //     }
-        //     if (isBody.length == this.datasForm.is_determine_clone.length) {
-        //         this.getDataApiDetermine(isBody, is_save)
-        //     } else {
-        //         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-        //             this.save_draft_infor_form.close_header = false;
-        //             this.save_draft_infor_form.close_modal.close();
-        //         }
-        //         this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
-        //     }
-        //     this.spinner.hide()
-        // } 
-        
-        // else {
             this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
                 this.getDataApiDetermine(res, is_save)
             }, (error: HttpErrorResponse) => {
@@ -202,11 +173,9 @@ export class PartyContractFormComponent implements OnInit {
                 this.spinner.hide();
             }
             );
-        // }
     }
 
     getDataApiDetermine(res: any, is_save?: boolean) {
-        // this.datasForm.id = data?.id;
         if (!is_save) {
             if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
                 this.save_draft_infor_form.close_header = false;
