@@ -80,7 +80,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         if (this.datasForm.attachFormFileNameArr) {
             this.attachFormFileNameArr = this.datasForm.attachFormFileNameArr
         }
-        
+
         if (!this.datasForm.isChangeForm) {
             this.datasForm['isChangeForm'] = false;
         }
@@ -204,10 +204,10 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
     addFileAttach() {
         console.log(document.getElementById('attachFile'));
-        
+
         // @ts-ignore
         document.getElementById('attachFile').click();
-        
+
     }
 
     uploadFileAttachForm(e: any) {
@@ -218,7 +218,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         for (let i = 0; i < files.length; i++) {
             const file = e.target.files[i];
             if (file) {
-                if (file.size <= 5000000) {
+                if (file.size <= 10000000) {
                     const file_name = file.name;
                     if (this.listFileAttach.filter((p: any) => p.filename == file_name).length == 0) {
                         this.listFileAttach.push(file);
@@ -227,14 +227,13 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                     if (!this.datasForm.fileAttachForm.some((p: any) => file.name == p.filename || file.name == p.name)) {
                         this.datasForm.fileAttachForm.push(file);
                     }
-                }
-
-            } else {
-                this.datasForm.file_name_attach = '';
-                this.datasForm.attachFile = '';
-                this.toastService.showErrorHTMLWithTimeout("File đính kèm yêu cầu có dung lượng nhỏ hơn 5MB", "", 3000);
-                break;
-            }
+                } else {
+                    this.datasForm.file_name_attach = '';
+                    this.datasForm.attachFile = '';
+                    this.toastService.showErrorHTMLWithTimeout("File đính kèm yêu cầu có dung lượng nhỏ hơn 5MB", "", 3000);
+                    break;
+                  }
+            } 
         }
     }
 
@@ -308,7 +307,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                     this.errorData();
                 })
             }
-            
+
             // upload file dinh kem (neu add them file dinh kem)
             if (!coutError && this.datasForm.fileAttachForm && this.datasForm.fileAttachForm.length && this.datasForm.fileAttachForm.length > 0) {
                 for (let i = 0; i < this.datasForm.fileAttachForm.length; i++) {
@@ -446,11 +445,11 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             // } else {
             //     this.toastService.showErrorHTMLWithTimeout("error.server", "", 3000);
             // }
-        
+
         } else {
             this.nextForm();
         }
-        
+
     }
 
     nextForm() {
