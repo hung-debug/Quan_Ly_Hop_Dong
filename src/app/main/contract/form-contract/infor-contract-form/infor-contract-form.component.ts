@@ -80,7 +80,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         if (this.datasForm.attachFormFileNameArr) {
             this.attachFormFileNameArr = this.datasForm.attachFormFileNameArr
         }
-        
+
         if (!this.datasForm.isChangeForm) {
             this.datasForm['isChangeForm'] = false;
         }
@@ -93,15 +93,15 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         setTimeout(() => {
-          this.nameContract.nativeElement.focus();
+            this.nameContract.nativeElement.focus();
         }, 0)
-      }
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.step == 'infor-contract-form') {
-          this.next('luu_nhap');
+            this.next('luu_nhap');
         }
-      }
+    }
 
     getListTypeContract() {
         this.contractService.getContractTypeList().subscribe(data => {
@@ -167,7 +167,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             }
             setTimeout(() => {
                 this.nameContract.nativeElement.focus();
-              }, 100)
+            }, 100)
         }, (error) => {
             console.log(error);
             this.spinner.hide();
@@ -204,10 +204,10 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
     addFileAttach() {
         console.log(document.getElementById('attachFile'));
-        
+
         // @ts-ignore
         document.getElementById('attachFile').click();
-        
+
     }
 
     uploadFileAttachForm(e: any) {
@@ -286,7 +286,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                 });
         }
 
-        if (!coutError && (action == 'luu_nhap' || (action == 'chuyen_buoc' && this.validDataForm())) ) {
+        if (!coutError && (action == 'luu_nhap' || (action == 'chuyen_buoc' && this.validDataForm()))) {
             // define du lieu hop dong lien quan
             this.defineData(this.datasForm);
             if (!coutError) {
@@ -308,7 +308,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                     this.errorData();
                 })
             }
-            
+
             // upload file dinh kem (neu add them file dinh kem)
             if (!coutError && this.datasForm.fileAttachForm && this.datasForm.fileAttachForm.length && this.datasForm.fileAttachForm.length > 0) {
                 for (let i = 0; i < this.datasForm.fileAttachForm.length; i++) {
@@ -397,10 +397,10 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                 if (action == "luu_nhap") {
                     this.router.navigate(['/main/contract/create/draft']);
                     this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-                  } else {
-                //next step
+                } else {
+                    //next step
                     this.getDataContractForm();
-                  }
+                }
                 this.spinner.hide();
             }
             // }
@@ -428,14 +428,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
     async getDataContractForm() {
         if (this.datasForm.isChangeForm) {
-        //     let is_create_error = false;
-        //     await this.contractTemplateService.getFileContractFormUrl(this.datasForm.id_form, this.datasForm.contract_id).toPromise().then((res: any) => {
+            let is_create_error = false;
+            await this.contractTemplateService.getFileContractFormUrl(this.datasForm.id_form, this.datasForm.contract_id).toPromise().then((res: any) => {
+                
+            }, (error) => {
+                is_create_error = true;
+            })
 
-        //     }, (error) => {
-        //         is_create_error = true;
-        //     })
-
-            // if (!is_create_error) {
+            if (!is_create_error) {
                 await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.id_form, 'get-form-data').toPromise().then((res: any) => {
                     this.datasForm.is_determine_clone = res.participants;
                     this.datasForm.contract_id_action = res.id;
@@ -443,14 +443,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                 }, (error) => {
                     this.errorData();
                 })
-            // } else {
-            //     this.toastService.showErrorHTMLWithTimeout("error.server", "", 3000);
-            // }
-        
+            } else {
+                this.toastService.showErrorHTMLWithTimeout("error.server", "", 3000);
+            }
+
         } else {
             this.nextForm();
         }
-        
+
     }
 
     nextForm() {

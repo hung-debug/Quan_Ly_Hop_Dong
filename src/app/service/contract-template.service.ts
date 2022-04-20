@@ -20,7 +20,7 @@ export class ContractTemplateService {
   addDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/template/contract/`;
   addSampleContractUrl: any = `${environment.apiUrl}/api/v1/fields/template`;
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
-  getDataContract: any = `${environment.apiUrl}/api/v1/contracts/template/`;
+  getDataContract: any = `${environment.apiUrl}/api/v1/contracts/template/clone/`;
   getFileContract: any = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
   getObjectSignature: any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
   checkCodeUniqueUrl: any = `${environment.apiUrl}/api/v1/contracts/template/check-code-unique`;

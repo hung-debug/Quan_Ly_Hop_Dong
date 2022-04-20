@@ -146,6 +146,10 @@ export class PartyContractFormComponent implements OnInit {
 
     async getApiDetermine(is_save?: boolean) {
         this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
+            items.recipients.forEach((element: any) => {
+                element['template_recipient_id'] = element.id;
+                element.id = null;
+            })
             if (items.type == 3)
                 this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
         })
