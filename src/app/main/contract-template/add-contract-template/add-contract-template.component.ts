@@ -76,6 +76,7 @@ export class AddContractTemplateComponent implements OnInit {
 
   ngOnInit() {
     //title
+    this.datas.isEdit = false;
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
 
@@ -121,6 +122,7 @@ export class AddContractTemplateComponent implements OnInit {
 
       if (this.action == 'copy' || this.action == 'edit') {
         this.spinner.show();
+        this.datas.isEdit = true;
         this.contractTemplateService.getDetailContract(this.id).subscribe((rs: any) => {
           let data_api = {
             is_data_contract: rs[0],
