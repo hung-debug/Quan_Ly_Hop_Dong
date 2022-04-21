@@ -74,14 +74,11 @@ export class ContractHeaderComponent implements OnInit {
     modal.close('Save click');
     if (this.datas.id) {
       this.contractService.deleteContract(this.datas.id).subscribe((data) => {
-
         if (data.success) {
-
-          this.toastService.showSuccessHTMLWithTimeout("Xóa hợp đồng thành công!", "", 3000);
-
+          // this.toastService.showSuccessHTMLWithTimeout("Xóa hợp đồng thành công!", "", 3000);
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             void this.router.navigate(['/main/dashboard']);
-          });         
+          });
         } else {
           if (data.message == 'E02') {
             this.toastService.showErrorHTMLWithTimeout("Hợp đồng không phải bản nháp!", "", 3000);
