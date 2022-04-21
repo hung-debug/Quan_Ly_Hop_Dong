@@ -76,19 +76,15 @@ export class InforContractBatchComponent implements OnInit {
   }
 
   getContractTemplateForm() {
-    this.contractTemplateService.getContractTemplateList('off', '', '', 0, 0).subscribe(response => {
+    this.contractTemplateService.getListFileTemplate().subscribe(response => {
         // console.log(response);
-        this.typeListForm = response.entities;
+        this.typeListForm = response;
     })
   }
 
   ngOnInit(): void {
-
+    this.idContractTemplate = this.datasBatch.idContractTemplate ? this.datasBatch.idContractTemplate : '';
     this.getContractTemplateForm();
-
-    this.name = this.datasBatch.name ? this.datasBatch.name : '';
-    this.notes = this.datasBatch.notes ? this.datasBatch.notes : '';
-
   }
 
   OnChangeForm(e: any) {    
@@ -159,7 +155,7 @@ export class InforContractBatchComponent implements OnInit {
   //--valid data step 1
   validData() {
     this.clearError();
-    if (!this.name) {
+    if (!this.idContractTemplate) {
       this.errorContractName = 'Tên mẫu hợp đồng không được để trống!';
       return false;
     }
@@ -194,7 +190,7 @@ export class InforContractBatchComponent implements OnInit {
       this.datasBatch.notes = this.notes;
       this.datasBatch.idContractTemplate = this.idContractTemplate;
 
-      this.contractService.uploadFileContractBatch(this.datasBatch.contractFile, this.idContractTemplate).subscribe((response: any) => {
+      this.contractService.uploadFileContractBatch(this.datasBatch.contractFile, this.datasBatch.idContractTemplate).subscribe((response: any) => {
         console.log(response);
         if(response.success){
           //next step

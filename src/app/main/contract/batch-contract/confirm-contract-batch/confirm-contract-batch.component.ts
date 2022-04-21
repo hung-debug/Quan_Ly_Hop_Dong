@@ -228,7 +228,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
       this.data_parnter_organization = this.data?.participants.filter((p: any) => p.type == 2 || p.type == 3);
 
       console.log(this.datasBatch.contract_user_sign);
-      this.contractTemplateService.getDetailContract(this.datasBatch.idContractTemplate).subscribe(rs => {
+      this.contractTemplateService.getDetailContractV2(this.datasBatch.idContractTemplate).subscribe(rs => {
         this.datasBatch.i_data_file_contract = rs[1];
         if (this.datasBatch?.i_data_file_contract) {
           let fileC = null;
@@ -609,11 +609,6 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     return Math.round(this.objSignInfo.traf_y)
   }
 
-  back(e: any, step?: any) {
-    // if (!this.datas.isView) {
-    this.nextOrPreviousStep(step);
-  }
-
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datasBatch.stepLast = step;
@@ -660,6 +655,10 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     }
   }
 
+  back(e: any, step?: any) {
+    this.nextOrPreviousStep(step);
+  }
+
   next(){
     this.spinner.show();
     this.contractService.confirmContractBatchList(this.datasBatch.contractFile, this.datasBatch.idContractTemplate).subscribe((response: any) => {
@@ -669,6 +668,5 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
       this.spinner.hide();
       this.toastService.showSuccessHTMLWithTimeout("Tạo hợp đồng theo lô thành công", "", 3000);
     }), (error: any) => this.toastService.showErrorHTMLWithTimeout("Tạo hợp đồng theo lô thất bại", "", 3000);
-
   }
 }

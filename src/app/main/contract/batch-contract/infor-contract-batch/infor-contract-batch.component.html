@@ -5,7 +5,7 @@
         <div class="form-group">
           <div class="label_item">{{'contract-template.name' | translate}} <span class="require_star">*</span></div>
           <div>
-            <p-dropdown panelStyleClass="font" [options]="typeListForm" [(ngModel)]="name" 
+            <p-dropdown panelStyleClass="font" [options]="typeListForm" [(ngModel)]="idContractTemplate" 
               optionLabel="name" optionValue="id" placeholder="Chọn mẫu hợp đồng" [filter]="true" filterBy="name"
               (onChange)="OnChangeForm($event)">
             </p-dropdown>
