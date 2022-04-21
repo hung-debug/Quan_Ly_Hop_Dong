@@ -21,6 +21,7 @@ export class ContractTemplateService {
   addSampleContractUrl: any = `${environment.apiUrl}/api/v1/fields/template`;
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
   getDataContract: any = `${environment.apiUrl}/api/v1/contracts/template/clone/`;
+  getDataContractV2: any = `${environment.apiUrl}/api/v1/contracts/template/`;
   getFileContract: any = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
   getObjectSignature: any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
   checkCodeUniqueUrl: any = `${environment.apiUrl}/api/v1/contracts/template/check-code-unique`;
@@ -239,6 +240,20 @@ export class ContractTemplateService {
     let arrApi = [];
     arrApi = [
       this.http.get<any>(this.getDataContract + idContract, { headers }),
+      this.http.get<any>(this.getFileContract + idContract, { headers }),
+      this.http.get<any>(this.getObjectSignature + idContract, { headers }),
+    ];
+    return forkJoin(arrApi);
+  }
+
+  getDetailContractV2(idContract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let arrApi = [];
+    arrApi = [
+      this.http.get<any>(this.getDataContractV2 + idContract, { headers }),
       this.http.get<any>(this.getFileContract + idContract, { headers }),
       this.http.get<any>(this.getObjectSignature + idContract, { headers }),
     ];

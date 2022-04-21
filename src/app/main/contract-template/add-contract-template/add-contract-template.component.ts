@@ -123,7 +123,7 @@ export class AddContractTemplateComponent implements OnInit {
       if (this.action == 'copy' || this.action == 'edit') {
         this.spinner.show();
         this.datas.isEdit = true;
-        this.contractTemplateService.getDetailContract(this.id).subscribe((rs: any) => {
+        this.contractTemplateService.getDetailContractV2(this.id).subscribe((rs: any) => {
           let data_api = {
             is_data_contract: rs[0],
             i_data_file_contract: rs[1],
