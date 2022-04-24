@@ -23,6 +23,7 @@ import { count } from 'console';
 import { data } from 'jquery';
 import { environment } from "src/environments/environment";
 import { ContractTemplateService } from "src/app/service/contract-template.service";
+import { SignContractComponent } from "src/app/main/contract-signature/components/sign-contract/sign-contract.component";
 
 @Component({
   selector: 'app-sample-contract-form',
@@ -36,6 +37,7 @@ export class SampleContractFormComponent implements OnInit {
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
   @Output() stepChangeSampleContractForm = new EventEmitter<string>();
   @Input() save_draft_infor_form: any;
+  @ViewChild('SignContract') SignContractComponent: SignContractComponent | unknown;
 
   pdfSrc: any;
   thePDF = null;
@@ -418,8 +420,8 @@ export class SampleContractFormComponent implements OnInit {
               }
             } else {
               dataForm.sign_config[i].name = "";
-              if (dataForm.sign_unit == 'text') {
-                dataForm.sign_config[i].value = "Nhập nội dung..";
+              if (dataForm.sign_unit == 'text' && !dataForm.sign_config[i].recipient_id) {
+                dataForm.sign_config[i].value = "text_1";
               }
             }
           }
@@ -1300,6 +1302,10 @@ export class SampleContractFormComponent implements OnInit {
         // console.log(this.objSignInfo)
       }
     }
+  }
+
+  getValueText(e: any, d: any) {
+    d.value = e;
   }
 
   getTrafX() {

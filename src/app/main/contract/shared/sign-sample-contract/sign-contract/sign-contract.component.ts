@@ -1,5 +1,5 @@
-import {Component, OnInit, Input, AfterViewInit} from '@angular/core';
-
+import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { NgxInputSearchModule } from "ngx-input-search";
 @Component({
   selector: 'app-sign-contract',
   templateUrl: './sign-contract.component.html',
@@ -8,6 +8,7 @@ import {Component, OnInit, Input, AfterViewInit} from '@angular/core';
 export class SignContractComponent implements OnInit, AfterViewInit {
   @Input() datas: any;
   @Input() sign: any;
+  @Output() onChangeValueText = new EventEmitter<any>();
 
   constructor() {
   }
@@ -29,10 +30,19 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     if (this.sign.sign_unit == 'so_tai_lieu' || this.sign.sign_unit == 'text') {
       setTimeout(() => {
-        // @ts-ignore
-        document.getElementById("input-text").focus();
+        if (document.getElementById("input-text")) {
+          // @ts-ignore
+          document.getElementById("input-text").focus();
+        }
       }, 0)
     }
+  }
+
+  doTheSearch($event: Event): void {
+    const stringEmitted = ($event.target as HTMLInputElement).value;
+    console.log(stringEmitted);
+  
+    this.onChangeValueText.emit(stringEmitted);    
   }
 
 }
