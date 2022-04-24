@@ -751,29 +751,34 @@ export class SampleContractFormComponent implements OnInit {
     }
   }
 
-  getCheckSignature(isSignType: any, listSelect?: string) {
+  getCheckSignature(isSignType: any, listSelect?: string, value?: any) {
     // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
-      if ((element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
-        let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
-        if (data.length > 0)
-          element.is_disable = true;
-        else element.is_disable = false;
+      if (isSignType == 'text' && value == 'text_1') {
+        element.is_disable = true;
       } else {
-        if (this.convertToSignConfig().some((p: any) => (p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType)) {
-          if (isSignType != 'text') {
+        if ((element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
+          let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
+          if (data.length > 0)
             element.is_disable = true;
-          }
+          else element.is_disable = false;
         } else {
-          if (isSignType == 'chu_ky_anh') {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
-          } else if (isSignType == 'chu_ky_so') {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
-          } else if (isSignType == 'text') {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
-          } else element.is_disable = (element.role != 4 || (this.datasForm.contract_no && element.role == 4)); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
+          if (this.convertToSignConfig().some((p: any) => (p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType)) {
+            if (isSignType != 'text') {
+              element.is_disable = true;
+            }
+          } else {
+            if (isSignType == 'chu_ky_anh') {
+              element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
+            } else if (isSignType == 'chu_ky_so') {
+              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
+            } else if (isSignType == 'text') {
+              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
+            } else element.is_disable = (element.role != 4 || (this.datasForm.contract_no && element.role == 4)); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
+          }
         }
       }
+      
 
       if (listSelect) {
         element.selected = listSelect && element.name == listSelect;
@@ -1094,6 +1099,11 @@ export class SampleContractFormComponent implements OnInit {
 
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
+
+        if (this.objSignInfo.value == 'text_1') {
+          this.objSignInfo.is_diablse = true;
+        }
+
         if (this.isEnableText) {
           this.objSignInfo.text_attribute_name = d.text_attribute_name
         }
@@ -1109,7 +1119,7 @@ export class SampleContractFormComponent implements OnInit {
         //   } else item.is_disable = item.role != 4;
         //   item.selected = d.name && item.name == d.name;
         // })
-        this.getCheckSignature(d.sign_unit, d.name);
+        this.getCheckSignature(d.sign_unit, d.name, d.value);
 
         if (!d.name) //@ts-ignore
           document.getElementById('select-dropdown').value = "";
