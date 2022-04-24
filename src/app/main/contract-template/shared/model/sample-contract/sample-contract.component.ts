@@ -1463,7 +1463,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (this.datas.contract_user_sign[i].sign_config.length > 0) {
         for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
           let element = this.datas.contract_user_sign[i].sign_config[j];
-          if (element.sign_unit == 'text' && !element.name) {
+          //neu la text thi neu khong duoc gan nguoi thi khong duoc trung nhau
+          //form them moi: xet name null, form sua: xet recipient_id null
+          if (element.sign_unit == 'text' && (!element.recipient_id || !element.name)) {
             arrCheckName.push(element.text_attribute_name);
           }
         }
@@ -1554,6 +1556,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           name: '',
           sign_type: ''
         };
+        console.log("a");
+        console.log(data_organization);
+        
         // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_organization) {
           if (element.sign_type.length > 0) {
@@ -1585,15 +1590,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           sign_type: ''
         };
         // valid ký kéo thiếu ô ký cho từng loại ký
+        console.log("partner");
+        console.log(data_partner);
         for (const element of data_partner) {
           if (element.sign_type.length > 0) {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && arrSign_partner.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && arrSign_partner.filter((item: any) => item.recipient_id == element.id && item.sign_unit == 'chu_ky_so').length == 0) {
               countError_partner++;
               nameSign_partner.name = element.name;
               nameSign_partner.sign_type = 'chu_ky_so';
               break
             }
-            if (element.sign_type.some((p: any) => p.id == 1) && arrSign_partner.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_anh').length == 0) {
+            if (element.sign_type.some((p: any) => p.id == 1) && arrSign_partner.filter((item: any) => item.recipient_id == element.id && item.sign_unit == 'chu_ky_anh').length == 0) {
               countError_partner++;
               nameSign_partner.name = element.name;
               nameSign_partner.sign_type = 'chu_ky_anh';

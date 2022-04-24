@@ -21,6 +21,7 @@ export class ContractTemplateService {
   addSampleContractUrl: any = `${environment.apiUrl}/api/v1/fields/template`;
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
   getDataContract: any = `${environment.apiUrl}/api/v1/contracts/template/clone/`;
+  getDataContractV2: any = `${environment.apiUrl}/api/v1/contracts/template/`;
   getFileContract: any = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
   getObjectSignature: any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
   checkCodeUniqueUrl: any = `${environment.apiUrl}/api/v1/contracts/template/check-code-unique`;
@@ -245,6 +246,20 @@ export class ContractTemplateService {
     return forkJoin(arrApi);
   }
 
+  getDetailContractV2(idContract: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let arrApi = [];
+    arrApi = [
+      this.http.get<any>(this.getDataContractV2 + idContract, { headers }),
+      this.http.get<any>(this.getFileContract + idContract, { headers }),
+      this.http.get<any>(this.getObjectSignature + idContract, { headers }),
+    ];
+    return forkJoin(arrApi);
+  }
+
   shareContract(email: any, id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -267,7 +282,7 @@ export class ContractTemplateService {
     return this.http.delete<any>(this.deleteContractUrl + id, { 'headers': headers });
   }
 
-  checkCodeUnique(code: any, start_time: any, end_time: any) {
+  checkCodeUnique(code: any, start_time: any, end_time: any, id:any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -276,7 +291,8 @@ export class ContractTemplateService {
       code: code,
       start_time: this.datepipe.transform(start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
       end_time: this.datepipe.transform(end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-      organization_id: this.organization_id
+      organization_id: this.organization_id,
+      id: id
     });
     console.log(body);
     return this.http.post<any>(this.checkCodeUniqueUrl, body, { headers }).pipe();

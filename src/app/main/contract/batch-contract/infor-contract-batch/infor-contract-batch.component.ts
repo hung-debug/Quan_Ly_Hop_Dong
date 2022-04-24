@@ -76,19 +76,15 @@ export class InforContractBatchComponent implements OnInit {
   }
 
   getContractTemplateForm() {
-    this.contractTemplateService.getContractTemplateList('off', '', '', 0, 0).subscribe(response => {
+    this.contractTemplateService.getListFileTemplate().subscribe(response => {
         // console.log(response);
-        this.typeListForm = response.entities;
+        this.typeListForm = response;
     })
   }
 
   ngOnInit(): void {
-
+    this.idContractTemplate = this.datasBatch.idContractTemplate ? this.datasBatch.idContractTemplate : '';
     this.getContractTemplateForm();
-
-    this.name = this.datasBatch.name ? this.datasBatch.name : '';
-    this.notes = this.datasBatch.notes ? this.datasBatch.notes : '';
-
   }
 
   OnChangeForm(e: any) {    
@@ -96,32 +92,37 @@ export class InforContractBatchComponent implements OnInit {
   }
   downFileExample(){
     this.spinner.show();
-    this.contractService.getFileContractBatch(this.idContractTemplate).subscribe((res: any) => {
-      console.log(res);
-      this.uploadService.downloadFile(res.path).subscribe((response: any) => {
-        //console.log(response);
+    if(this.idContractTemplate){
+      this.contractService.getFileContractBatch(this.idContractTemplate).subscribe((res: any) => {
+        console.log(res);
+        this.uploadService.downloadFile(res.path).subscribe((response: any) => {
+          //console.log(response);
+      
+          let url = window.URL.createObjectURL(response);
+          let a = document.createElement('a');
+          document.body.appendChild(a);
+          a.setAttribute('style', 'display: none');
+          a.href = url;
+          a.download = res.filename;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+      
+          this.toastService.showSuccessHTMLWithTimeout("Tải file tài liệu mẫu thành công", "", 3000);
+          this.spinner.hide();
+        }), 
+        (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
     
-        let url = window.URL.createObjectURL(response);
-        let a = document.createElement('a');
-        document.body.appendChild(a);
-        a.setAttribute('style', 'display: none');
-        a.href = url;
-        a.download = "Example";
-        a.click();
-        window.URL.revokeObjectURL(url);
-        a.remove();
-    
-        this.toastService.showSuccessHTMLWithTimeout("Tải file tài liệu mẫu thành công", "", 3000);
-        this.spinner.hide();
-      }), 
-      (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
-  
-    }, (error) => {
-        console.log(error);
-        this.spinner.hide();
-    }, () => {
-        this.spinner.hide();
-    });
+      }, (error) => {
+          console.log(error);
+          this.spinner.hide();
+      }, () => {
+          this.spinner.hide();
+      });
+    }else{
+      this.spinner.hide();
+      this.toastService.showErrorHTMLWithTimeout("Bạn chưa chọn mẫu hợp đồng", "", 3000);
+    }
   }
 
   fileChanged(e: any) {
@@ -154,7 +155,7 @@ export class InforContractBatchComponent implements OnInit {
   //--valid data step 1
   validData() {
     this.clearError();
-    if (!this.name) {
+    if (!this.idContractTemplate) {
       this.errorContractName = 'Tên mẫu hợp đồng không được để trống!';
       return false;
     }
@@ -166,6 +167,7 @@ export class InforContractBatchComponent implements OnInit {
     return true
   }
 
+  errorDetail:any[] = [];
   clearError(){
     if (this.name) {
       this.errorContractName = '';
@@ -186,8 +188,9 @@ export class InforContractBatchComponent implements OnInit {
       this.datasBatch.contractConnect = this.contractConnect;
       this.datasBatch.sign_time = this.sign_time;
       this.datasBatch.notes = this.notes;
+      this.datasBatch.idContractTemplate = this.idContractTemplate;
 
-      this.contractService.uploadFileContractBatch(this.datasBatch.contractFile, this.idContractTemplate).subscribe((response: any) => {
+      this.contractService.uploadFileContractBatch(this.datasBatch.contractFile, this.datasBatch.idContractTemplate).subscribe((response: any) => {
         console.log(response);
         if(response.success){
           //next step
@@ -196,6 +199,7 @@ export class InforContractBatchComponent implements OnInit {
           this.nextOrPreviousStep(this.step);
           console.log(this.datasBatch);
         }else{
+          this.errorDetail = response.detail;
           this.toastService.showErrorHTMLWithTimeout("File mẫu không hợp lệ", "", 3000);
         }
       }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);

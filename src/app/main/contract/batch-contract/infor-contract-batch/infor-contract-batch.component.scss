@@ -22,6 +22,9 @@
     }
   }
   
+  .invalid{
+    color: red;
+  }
   //upload file
   input[type="file"] {
     display: none;
@@ -88,7 +91,7 @@
   }
   
   .file-contract{
-    height: 120px;
+    min-height: 120px;
     border: 1px solid #106DB6;
     cursor: pointer;
     padding: 10px;

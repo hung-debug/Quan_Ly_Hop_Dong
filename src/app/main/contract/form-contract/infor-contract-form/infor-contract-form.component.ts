@@ -271,7 +271,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         let coutError = false;
         if (this.datasForm.contract_no && action != 'luu_nhap') {
             //check trung so hop dong
-            await this.contractTemplateService.checkCodeUnique(this.datasForm.contract_no, this.datasForm.start_time, this.datasForm.end_time).toPromise().then(
+            await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
                 dataCode => {
                     if (!dataCode.success) {
                         this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);

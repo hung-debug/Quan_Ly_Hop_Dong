@@ -154,7 +154,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
       if(isShare.length > 0){
         this.roleAccess = true;
       }
-      this.contractTemplateService.getDetailContract(this.idContract).subscribe(rs => {
+      this.contractTemplateService.getDetailContractV2(this.idContract).subscribe(rs => {
         console.log(rs);
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
