@@ -13,6 +13,7 @@ import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-li
 import { MatDialog } from '@angular/material/dialog';
 import { UploadService } from 'src/app/service/upload.service';
 import { ToastService } from 'src/app/service/toast.service';
+import * as moment from "moment";
 @Component({
   selector: 'app-contract',
   templateUrl: './contract-signature.component.html',
@@ -295,6 +296,15 @@ export class ContractSignatureComponent implements OnInit {
       );
     }
 
+  }
+
+  getSignContract(data: any) {
+    if (!data.participant.contract.sign_time || 
+      (new Date(moment(data.participant.contract.sign_time).format('yyyy/MM/DD'))).valueOf() < (new Date(moment().format('yyyy/MM/DD'))).valueOf()) {
+      return false;
+    } else if (data.status == 1 && data.role == 3) {
+      return true;
+    } else return false;
   }
 
   openSignatureContract(item: any) {
