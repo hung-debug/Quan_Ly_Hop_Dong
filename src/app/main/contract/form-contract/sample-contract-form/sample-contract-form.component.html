@@ -34,7 +34,7 @@
                 <div class="name-text" *ngIf="isEnableText">
                     <label class="label-require">Tên trường: *</label>
                     <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name"
-                        (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')" [disabled]="this.objSignInfo.is_diablse">
+                        (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                 </div>
                 <div class="sign-unit-select">
                     <label class="label-require">{{isEnableText || isChangeText ? "Người nhập" : "Người ký"}}: *</label>

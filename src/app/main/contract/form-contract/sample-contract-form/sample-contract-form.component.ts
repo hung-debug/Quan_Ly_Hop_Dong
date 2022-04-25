@@ -421,7 +421,7 @@ export class SampleContractFormComponent implements OnInit {
             } else {
               dataForm.sign_config[i].name = "";
               if (dataForm.sign_unit == 'text' && !dataForm.sign_config[i].recipient_id) {
-                dataForm.sign_config[i].value = "text_1";
+                dataForm.sign_config[i].is_have_text = true;
               }
             }
           }
@@ -754,7 +754,7 @@ export class SampleContractFormComponent implements OnInit {
   getCheckSignature(isSignType: any, listSelect?: string, value?: any) {
     // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
-      if (isSignType == 'text' && value == 'text_1') {
+      if (isSignType == 'text' && value) {
         element.is_disable = true;
       } else {
         if ((element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
@@ -1100,10 +1100,6 @@ export class SampleContractFormComponent implements OnInit {
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
 
-        if (this.objSignInfo.value == 'text_1') {
-          this.objSignInfo.is_diablse = true;
-        }
-
         if (this.isEnableText) {
           this.objSignInfo.text_attribute_name = d.text_attribute_name
         }
@@ -1119,7 +1115,12 @@ export class SampleContractFormComponent implements OnInit {
         //   } else item.is_disable = item.role != 4;
         //   item.selected = d.name && item.name == d.name;
         // })
-        this.getCheckSignature(d.sign_unit, d.name, d.value);
+        this.getCheckSignature(d.sign_unit, d.name, d.is_have_text);
+
+        if (d.is_have_text) {
+          this.isEnableText = false;
+          this.isEnableSelect = true;
+        }
 
         if (!d.name) //@ts-ignore
           document.getElementById('select-dropdown').value = "";
@@ -1358,7 +1359,7 @@ export class SampleContractFormComponent implements OnInit {
           this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
         } else {
           this.data_sample_contract = [];
-          let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
+          let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value", "is_have_text"];
           let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
           isContractUserSign_clone.forEach((element: any) => {
             if (element.sign_config.length > 0) {
@@ -1427,7 +1428,7 @@ export class SampleContractFormComponent implements OnInit {
   async getDefindDataSignEdit(dataSignId: any, dataSignNotId: any, action: any) {
     let dataSample_contract: any[] = [];
     if (dataSignId.length > 0) {
-      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit'];
+      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text"];
       dataSignId.forEach((res: any) => {
         data_remove_arr_signId.forEach((itemRemove: any) => {
           delete res[itemRemove];
@@ -1454,7 +1455,7 @@ export class SampleContractFormComponent implements OnInit {
 
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
-      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'value'];
+      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text"];
       dataSignNotId.forEach((item: any) => {
         item['font'] = 'Arial';
         item['font_size'] = 14;
@@ -1547,17 +1548,16 @@ export class SampleContractFormComponent implements OnInit {
         if (this.datasForm.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datasForm.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datasForm.contract_user_sign[i].sign_config[j];
-            if (!element.name && element.sign_unit != 'so_tai_lieu') { // element.sign_unit != 'so_tai_lieu'
+            if (!element.name && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') { // element.sign_unit != 'so_tai_lieu'
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu' && element.length > 1) {
               count_number++;
               break;
             } else if (element.sign_unit == 'so_tai_lieu' && !this.datasForm.contract_no && !element.email) {
-              // count_number++;
               count++;
               break
-            } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
+            } else if (element.sign_unit == 'text' && !element.text_attribute_name && !element.is_have_text) {
               count_text++;
               break
             } else {
