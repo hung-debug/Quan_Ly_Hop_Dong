@@ -349,7 +349,6 @@ export class SampleContractFormComponent implements OnInit {
     })
 
     // Lọc dữ liệu không thay đổi của đối tượng ký
-    // (val.recipient_id as any) == (data.id as any) &&
     dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
       ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
         (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
@@ -403,7 +402,6 @@ export class SampleContractFormComponent implements OnInit {
       this.datasForm.contract_user_sign.forEach((dataForm: any) => {
         if (dataForm.sign_config.length > 0) {
           for (let i = 0; i < dataForm.sign_config.length; i++) {
-            // let dataObj = dataNoEmail.filter((p: any) => p.id == dataForm.sign_config[i].recipient_id)[0];
             let dataObj = dataNoEmail.filter((p: any) => p.template_recipient_id == dataForm.sign_config[i].recipient_id)[0];
             if (!dataForm.sign_config[i].email && dataObj) {
               if (dataForm.sign_unit != 'so_tai_lieu' || (dataForm.sign_unit == 'so_tai_lieu' && !this.datasForm.contract_no)) {
@@ -420,6 +418,7 @@ export class SampleContractFormComponent implements OnInit {
               }
             } else {
               dataForm.sign_config[i].name = "";
+              // add variable is_have_text check "text" accept input data content
               if (dataForm.sign_unit == 'text' && !dataForm.sign_config[i].recipient_id) {
                 dataForm.sign_config[i].is_have_text = true;
               }
@@ -436,6 +435,7 @@ export class SampleContractFormComponent implements OnInit {
             res.sign_config[i].name = "";
             res.sign_config[i].recipient_id = "";
             res.sign_config[i].email = "";
+            res.sign_config[i].value = this.datasForm.contract_no;
           }
         }
       })
@@ -1317,6 +1317,9 @@ export class SampleContractFormComponent implements OnInit {
 
   getValueText(e: any, d: any) {
     d.value = e;
+    if (d.sign_unit == 'so_tai_lieu') {
+      this.datasForm.contract_no = e;
+    }
   }
 
   getTrafX() {

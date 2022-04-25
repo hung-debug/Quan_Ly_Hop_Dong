@@ -5,6 +5,7 @@
 
 <div class="text-sign" *ngIf="sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu'">
 <!--  <input id="input-text" type="text" [placeholder]="sign.sign_unit == 'text' ? 'Nhập text' : 'Nhập số tài liệu'">-->
-  <span *ngIf="!sign.is_have_text" id="input-text">{{getText(sign)}}</span>
-  <input *ngIf="sign.is_have_text" id="input-text-value" placeholder="Nhập nội dung.." type="text" (ngxInputSearch)="doTheSearch($event)">
+  <span *ngIf="!sign.is_have_text && sign.recipient_id" id="input-text">{{getText(sign)}}</span>
+  <input *ngIf="sign.is_have_text && sign.sign_unit == 'text'" id="input-text-value" placeholder="Nhập nội dung Text.." [ngModel]="sign.value" type="text" (ngxInputSearch)="doTheSearch($event)">
+  <input *ngIf="sign.sign_unit == 'so_tai_lieu' && !sign.recipient_id" id="input-number-value" [ngModel]="sign.value" placeholder="Nhập số hợp đồng.." type="text" (ngxInputSearch)="doTheSearch($event)">
 </div>

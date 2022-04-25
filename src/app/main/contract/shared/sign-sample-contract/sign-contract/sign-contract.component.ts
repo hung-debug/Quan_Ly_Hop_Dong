@@ -9,6 +9,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   @Input() datas: any;
   @Input() sign: any;
   @Output() onChangeValueText = new EventEmitter<any>();
+  isContent: any;
 
   constructor() {
   }
@@ -21,9 +22,11 @@ export class SignContractComponent implements OnInit, AfterViewInit {
     if (sign.sign_unit == 'text') {
       return 'Text';
     } else {
-      if (this.datas.contract_no)
+      if (this.datas.contract_no) {
         return this.datas.contract_no
-      else return 'Số hợp đồng';
+      } else if (sign.value) {
+        return sign.value;
+      } else return 'Số hợp đồng';
     }
   }
 
@@ -40,8 +43,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
 
   doTheSearch($event: Event): void {
     const stringEmitted = ($event.target as HTMLInputElement).value;
-    console.log(stringEmitted);
-  
+    this.isContent = stringEmitted;
     this.onChangeValueText.emit(stringEmitted);    
   }
 
