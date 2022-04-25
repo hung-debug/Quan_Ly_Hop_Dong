@@ -138,6 +138,7 @@ export class InforContractBatchComponent implements OnInit {
           fileInput.value = '';
           this.datasBatch.file_name = file_name;
           this.datasBatch.contractFile = file;
+          this.errorDetail = [];
         } else {
           this.toastService.showErrorHTMLWithTimeout("Chỉ hỗ trợ file có định dạng XLS, XLSX", "", 3000);
         }
