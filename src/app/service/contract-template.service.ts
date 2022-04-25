@@ -13,7 +13,7 @@ export class ContractTemplateService {
   organization_id: any;
 
   shareContractTemplateUrl: any = `${environment.apiUrl}/api/v1/shares/template`;
-  listContractTemplateUrl: any = `${environment.apiUrl}/api/v1/contracts/template/my-contract`;
+  listContractTemplateUrl: any = `${environment.apiUrl}/api/v1/contracts/template/my-contract/list`;
   listContractShareTemplateUrl: any = `${environment.apiUrl}/api/v1/shares/template`;
   addInforContractTemplateUrl: any = `${environment.apiUrl}/api/v1/contracts/template`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents/template`;
@@ -33,7 +33,7 @@ export class ContractTemplateService {
   editContractSampleUrl: any = `${environment.apiUrl}/api/v1/fields/template/`;
   deleteInfoContractUrl: any = `${environment.apiUrl}/api/v1/fields/template/`;
   copyFileContractFormUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
-  urlGetListFileTemplate: any = `${environment.apiUrl}/api/v1/contracts/template/release`;
+  urlGetListFileTemplate: any = `${environment.apiUrl}/api/v1/contracts/template/release/list`;
 
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
