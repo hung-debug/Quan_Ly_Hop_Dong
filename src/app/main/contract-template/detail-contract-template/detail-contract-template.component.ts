@@ -211,7 +211,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
         let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
         let data_sign_config_cka = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
         let data_sign_config_text = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
-        // let data_sign_config_so_tai_lieu = this.datas.determine_contract.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+        let data_sign_config_so_tai_lieu = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'so_tai_lieu');
   
         this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
   
@@ -224,7 +224,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
           } else if (element.sign_unit == 'text') {
             Array.prototype.push.apply(element.sign_config, data_sign_config_text);
           } else if (element.sign_unit == 'so_tai_lieu') {
-            // Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
+            Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
           }
         })
         if(this.datas?.is_data_contract?.type_id){

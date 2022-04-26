@@ -56,11 +56,11 @@
                [id]="d.id"
                style="z-index: -1;"
                #itemElement
-               (click)="getSignSelect(d)"
+               
                [ngClass]="changeColorDrag(null, d, true)"
                [ngStyle]="changePosition(d)">
             <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
-            <app-image-sign-contract-template-detail *ngIf="!d.value" [datas]="datas" [sign]="d"></app-image-sign-contract-template-detail>
+            <app-image-sign-contract-template-detail  [datas]="datas" [sign]="d"></app-image-sign-contract-template-detail>
           </div>
         </div>
       </div>
