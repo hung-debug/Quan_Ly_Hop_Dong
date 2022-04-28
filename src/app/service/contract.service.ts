@@ -145,7 +145,7 @@ export class ContractService {
     return this.http.post<any>(this.getSaveContractFormInfo, {data}, {headers}).pipe();
   }
 
-  public getContractList(isOrg:any, isOrgChildren:any, filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any): Observable<any> {
+  public getContractList(isOrg:any, organization_id:any, filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any): Observable<any> {
     this.getCurrentUser();
 
     if (filter_from_date != "") {
@@ -165,10 +165,10 @@ export class ContractService {
     if(isOrg == 'off'){
       listContractUrl = this.listContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
     }else{
-      if(isOrgChildren == 'off'){
-        listContractUrl = this.listContractOrgUrl + '?organization_id=' + this.organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
-      }else{
+      if(organization_id == ''){
         listContractUrl = this.listContractOrgChildrenUrl + '?organizationId=' + this.organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
+      }else{
+        listContractUrl = this.listContractOrgUrl + '?organization_id=' + this.organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
       }
     }
 

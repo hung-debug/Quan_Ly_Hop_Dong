@@ -23,7 +23,7 @@
     outline: 0 !important;
     box-shadow: none !important;
     height: 33px;
-    width: 135px;
+    width: 50%;
   }
   // .p-buttonset .p-button:first-of-type {
   //   border-top-left-radius: 20px;
@@ -97,4 +97,17 @@
 h3{
   color: #106DB6;
   text-transform: uppercase;
+}
+:host ::ng-deep {
+  .p-dropdown {
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      height: 33px;
+      width: 100%;
+      outline: 0;
+      color: black !important;
+  }
+  .p-dropdown-label {
+      padding: 5px 5px 5px 15px;
+  }
 }

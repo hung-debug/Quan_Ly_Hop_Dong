@@ -12,6 +12,7 @@ export class DashboardService {
 
   countContractCreateUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-contract`;
   countContractOrgCreateUrl: any = `${environment.apiUrl}/api/v1/dashboard/organization-contract`;
+  countContractOrgAllCreateUrl: any = `${environment.apiUrl}/api/v1/contracts/count-my-org-and-descendant-contract`;
   countContractReceivedUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-process`;
   listNotificationUrl: any = `${environment.apiUrl}/api/v1/notification/my-notice`;
   updateViewNotificationUrl:any = `${environment.apiUrl}/api/v1/notification/viewed/`;
@@ -31,22 +32,17 @@ export class DashboardService {
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
 
-  public countContractCreate(isOrg:any, from_date: any, to_date: any): Observable<any> {
+  public countContractCreate(isOrg:any, organization_id:any, from_date: any, to_date: any): Observable<any> {
     this.getCurrentUser();
     console.log(from_date);
-    if (from_date != "" && from_date[0] != 0) {
-      from_date.forEach((key: any, v: any) => {
-        if(v == 0 && key){
-          from_date = this.datepipe.transform(key, 'yyyy-MM-dd');
-        }else if(v == 1 && key){
-          to_date = this.datepipe.transform(key, 'yyyy-MM-dd');
-        }
-      });
-    }
     let countContractCreateUrl = '';
     console.log(isOrg);
     if(isOrg != 'off'){
-      countContractCreateUrl = this.countContractOrgCreateUrl + '?organization_id=' + this.organization_id + '&from_date=' + from_date + '&to_date=' + to_date;
+      if(organization_id == ""){
+        countContractCreateUrl = this.countContractOrgAllCreateUrl + '?organizationId=' + this.organization_id + '&from_date=' + from_date + '&to_date=' + to_date;
+      }else{
+        countContractCreateUrl = this.countContractOrgCreateUrl + '?organization_id=' + organization_id + '&from_date=' + from_date + '&to_date=' + to_date;
+      }
     }else{
       countContractCreateUrl = this.countContractCreateUrl + '?from_date=' + from_date + '&to_date=' + to_date;
     }

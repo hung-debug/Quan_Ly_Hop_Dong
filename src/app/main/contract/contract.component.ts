@@ -43,8 +43,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
   id: any = "";
   notification: any = "";
   isOrg: string = 'off';
-  isOrgChildren:any = 'off';
   stateOptions: any[];
+  organization_id:any="";
 
   //filter contract
   filter_name: any = "";
@@ -125,6 +125,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.isOrg = "off";
       }
+      if (typeof params.organization_id != 'undefined' && params.organization_id) {
+        this.organization_id = params.organization_id;
+      } else {
+        this.organization_id = "";
+      }
     });
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
@@ -165,7 +170,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
             //neu co quyen xem danh sach hop dong cua to chuc minh va to chuc con
             if(this.isQLHD_03){
-              this.isOrgChildren = 'on';
+              //this.isOrgChildren = 'on';
             }
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
@@ -190,7 +195,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   getContractList() {
     //get list contract
-    this.contractService.getContractList(this.isOrg, this.isOrgChildren, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+    this.contractService.getContractList(this.isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
       this.contracts = data.entities;
       this.pageTotal = data.total_elements;
       console.log(this.contracts);
@@ -322,7 +327,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
       filter_from_date: this.filter_from_date,
       filter_to_date: this.filter_to_date,
       status: this.status,
-      isOrg: this.isOrg
+      isOrg: this.isOrg,
+      organization_id: this.organization_id
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(FilterListDialogComponent, {
