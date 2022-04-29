@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastService } from 'src/app/service/toast.service';
+import {parttern_input} from "../../config/parttern";
 
 @Component({
   selector: 'app-signup',
@@ -17,10 +18,15 @@ export class SignupComponent implements OnInit {
   closeResult:string= '';
   error:boolean = false;
   errorDetail:string = '';
+  addForm: FormGroup;
+  submitted = false;
+  get f() { return this.addForm.controls; }
+
   constructor(private modalService: NgbModal,
               private router: Router,
               public translate: TranslateService,
-              private toastService: ToastService,) {
+              private toastService: ToastService,
+              private fbd: FormBuilder,) {
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang('vi');
     //localStorage.setItem('lang', 'vi');
@@ -33,33 +39,17 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  signupForm = new FormGroup({
-    tax_code: new FormControl(''),
-    username: new FormControl(''),
-    password: new FormControl('')
-  })
-
-  //open popup
-  open(content:any) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    this.addForm = this.fbd.group({
+      nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      short_name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      email: this.fbd.control("", [Validators.required, Validators.email]),
+      phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+      fax: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+      status: 1,
+      parent_id: this.fbd.control("", [Validators.required]),
     });
-  }
-
-  //close popup
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
-    }
-  }
+  }   
 
   sendSignup(){
     this.toastService.showSuccessHTMLWithTimeout("no.signup.success", "", 3000);
