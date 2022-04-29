@@ -48,4 +48,10 @@ export class SignContractComponent implements OnInit, AfterViewInit {
     this.onChangeValueText.emit(stringEmitted);    
   }
 
+  focusOutFunction() {
+    console.log(this.sign.value);
+    if (!this.sign.value) {
+      this.onChangeValueText.emit('');    
+    }
+  }
 }
