@@ -862,22 +862,22 @@ export class ContractService {
         {
           recipient_id: Helper._ranDomNumberText(10),
           sign_unit: 'so_tai_lieu',
-          sign_config: "[]",
+          sign_config: [],
         },
         {
           recipient_id: Helper._ranDomNumberText(10),
           sign_unit: 'text',
-          sign_config: "[]",
+          sign_config: [],
         },
         {
           recipient_id: Helper._ranDomNumberText(10),
           sign_unit: 'chu_ky_anh',
-          sign_config: "[]",
+          sign_config: [],
         },
         {
           recipient_id: Helper._ranDomNumberText(10),
           sign_unit: 'chu_ky_so',
-          sign_config: "[]",
+          sign_config: [],
         },
       ]
     }

@@ -12,6 +12,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../../../../../service/toast.service";
 import {Router} from "@angular/router";
 import {parttern} from "../../../../../../../config/parttern";
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-determine-signer',
@@ -584,6 +585,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 2);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
+    if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'người xem xét tổ chức')) {
+      return;
+    }
     arr_clone.forEach((element: any, index: number) => {
       if (index != i) {
         array_empty.push(element);
@@ -607,6 +611,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 3);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
+    if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'người ký tổ chức')) {
+      return;
+    }
     arr_clone.forEach((element: any, index: number) => {
       if (index != i) {
         array_empty.push(element);
@@ -625,6 +632,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 4);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
+    if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'văn thư tổ chức')) {
+      return;
+    }
     arr_clone.forEach((element: any, index: number) => {
       if (index != i) {
         array_empty.push(element);
@@ -661,6 +671,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 2);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
+    if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'người xem xét đối tác')) {
+      return;
+    }
     arr_clone.forEach((element: any, index: number) => {
       if (index != index_item) {
         array_empty.push(element);
@@ -679,6 +692,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 3);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
+    if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'người ký đối tác')) {
+      return;
+    }
     arr_clone.forEach((element: any, index: number) => {
       if (index != index_item) {
         array_empty.push(element);
@@ -696,6 +712,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 4);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
+    if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'văn thư đối tác')) {
+      return;
+    }
     arr_clone.forEach((element: any, index: number) => {
       if (index != index_item) {
         array_empty.push(element);
@@ -778,6 +797,24 @@ export class DetermineSignerComponent implements OnInit {
       item.ordering = 2;
       this.is_change_party = false;
     }
+  }
+
+  deleteElement(dataArrClone: any, assignElement: string) {
+    this.spinner.show();
+    let count = 0;
+    this.contractService.deleteInfoContractSignature(dataArrClone.fields[0].id).subscribe((res: any) => {
+      this.toastService.showSuccessHTMLWithTimeout(`Bạn đã xóa ${assignElement} ${dataArrClone.name}!`, "", "3000");
+    }, (error: HttpErrorResponse) => {
+      this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+      this.spinner.hide();
+      count = 1;
+    }, () => {
+      this.spinner.hide();
+    })
+
+    if (count == 0)
+      return true
+    else return false;
   }
 
 }

@@ -5,6 +5,8 @@
   /*CSS counters to number the steps*/
   counter-reset: step;
   padding: 0;
+  display: flex;
+  justify-content: center;
 }
 
 #progressbar li {

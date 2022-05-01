@@ -92,18 +92,15 @@ export class FooterSignatureComponent implements OnInit {
       //     }
       //   }
       // }
-      // console.log(recipient_data);
-      if (this.is_data_coordination) {
-        // @ts-ignore
+      if (this.is_data_coordination) { // chỉ lấy dữ liệu của người điều phối
         if (this.is_data_coordination['recipients']) {
-          //@ts-ignore
-          let dataCoordination = this.is_data_coordination['recipients'].filter((p: any) => p.role == 1)[0];
+          let dataCoordination = this.is_data_coordination['recipients'].filter((p: any) => p.role == 1)[0]; // get dữ liệu người điều phối
           if (dataCoordination) {
             this.datas.recipient_id_coordition = dataCoordination.id;
           }
         }
-        this.datas.determine_contract = this.is_data_coordination;
-        this.datas.step = variable.stepSampleContract.step_confirm_coordination;
+        this.datas.determine_contract = this.is_data_coordination; // data determine contract
+        this.datas.step = variable.stepSampleContract.step_confirm_coordination; // set step 2
       }
     } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
       this.submitChanges.emit(1);
