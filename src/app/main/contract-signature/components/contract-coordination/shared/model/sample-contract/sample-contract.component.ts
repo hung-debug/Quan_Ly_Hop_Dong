@@ -800,6 +800,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.eventMouseover();
   }
 
+  setClass(dataDrag: any) {
+    if (this.datas.contract_user_sign.some((p: any) => p.sign_unit == 'so_tai_lieu' && p.sign_config.length > 0) && dataDrag.sign_unit == 'so_tai_lieu') {
+      return 'none-drag';
+    } else return 'resize-drag'
+  }
+
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
   setPosition() {
     if (this.convertToSignConfig().length > 0) {
@@ -1216,66 +1222,69 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   next() {
     if (!this.validData()) return;
-    else {
-      let data_sample_contract: string | any[] = [];
-      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
-      this.datas.contract_user_sign.forEach((element: any) => {
-        if (element.sign_config.length > 0) {
-          element.sign_config.forEach((item: any) => {
-            item['font'] = 'Arial';
-            item['font_size'] = 14;
-            item['contract_id'] = this.datas.data_contract_document_id.contract_id;
-            item['document_id'] = this.datas.data_contract_document_id.document_id;
-            if (item.text_attribute_name) {
-              item.name = item.text_attribute_name;
-            }
-            if (item.sign_unit == 'chu_ky_anh') {
-              item['type'] = 2;
-            } else if (item.sign_unit == 'chu_ky_so') {
-              item['type'] = 3;
-            } else if (item.sign_unit == 'so_tai_lieu') {
-              item['type'] = 4;
-            } else {
-              item['type'] = 1;
-            }
-            // item['recipient_id'] = element.id;
-            data_remove_arr_request.forEach((itemRemove: any) => {
-              delete item[itemRemove];
-            })
-          })
-          Array.prototype.push.apply(data_sample_contract, element.sign_config);
-        }
-      })
 
-      console.log(data_sample_contract);
-      this.spinner.show();
-      this.contractService.getContractSample(data_sample_contract).subscribe((data: any) => {
-          console.log(JSON.stringify(data));
-          this.datas.is_data_object_signature.forEach((p: any) => {
-            data.forEach((element: any) => {
-              if (p.recipient_id == element.recipient_id) {
-                p = element;
-              } else this.datas.is_data_object_signature.push(element);
-            })
-          })
+    this.step = variable.stepSampleContract.step4;
+    this.datas.stepLast = this.step
+    this.nextOrPreviousStep(this.step);
 
-          // this.datas.is_data_object_signature = data_sample_contract;
-          this.step = variable.stepSampleContract.step4;
-          this.datas.stepLast = this.step
-          this.nextOrPreviousStep(this.step);
-        },
-        error => {
-          this.spinner.hide();
-          console.log("false connect file");
-          return false;
-        }, () => {
-          this.spinner.hide();
-        }
-      );
-      // Đây là dữ liệu mảng request truyền lên cho server
+    // else {
+    //   let data_sample_contract: string | any[] = [];
+    //   let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
+    //   this.datas.contract_user_sign.forEach((element: any) => {
+    //     if (element.sign_config.length > 0) {
+    //       element.sign_config.forEach((item: any) => {
+    //         item['font'] = 'Arial';
+    //         item['font_size'] = 14;
+    //         item['contract_id'] = this.datas.data_contract_document_id.contract_id;
+    //         item['document_id'] = this.datas.data_contract_document_id.document_id;
+    //         if (item.text_attribute_name) {
+    //           item.name = item.text_attribute_name;
+    //         }
+    //         if (item.sign_unit == 'chu_ky_anh') {
+    //           item['type'] = 2;
+    //         } else if (item.sign_unit == 'chu_ky_so') {
+    //           item['type'] = 3;
+    //         } else if (item.sign_unit == 'so_tai_lieu') {
+    //           item['type'] = 4;
+    //         } else {
+    //           item['type'] = 1;
+    //         }
+    //         // item['recipient_id'] = element.id;
+    //         data_remove_arr_request.forEach((itemRemove: any) => {
+    //           delete item[itemRemove];
+    //         })
+    //       })
+    //       Array.prototype.push.apply(data_sample_contract, element.sign_config);
+    //     }
+    //   })
 
+    //   console.log(data_sample_contract);
+    //   this.spinner.show();
+    //   this.contractService.getContractSample(data_sample_contract).subscribe((data: any) => {
+    //       console.log(JSON.stringify(data));
+    //       this.datas.is_data_object_signature.forEach((p: any) => {
+    //         data.forEach((element: any) => {
+    //           if (p.recipient_id == element.recipient_id) {
+    //             p = element;
+    //           } else this.datas.is_data_object_signature.push(element);
+    //         })
+    //       })
 
-    }
+    //       // this.datas.is_data_object_signature = data_sample_contract;
+    //       this.step = variable.stepSampleContract.step4;
+    //       this.datas.stepLast = this.step
+    //       this.nextOrPreviousStep(this.step);
+    //     },
+    //     error => {
+    //       this.spinner.hide();
+    //       console.log("false connect file");
+    //       return false;
+    //     }, () => {
+    //       this.spinner.hide();
+    //     }
+    //   );
+    //   // Đây là dữ liệu mảng request truyền lên cho server
+    // }
   }
 
   // forward data component

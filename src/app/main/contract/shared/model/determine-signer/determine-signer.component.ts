@@ -294,11 +294,11 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
       //@ts-ignore
-      if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
-        this.getNotificationValid("Số điện thoại của" + this.getNameObjectValid(3) + "tổ chức của tôi không hợp lệ!")
-        count++;
-        break;
-      }
+      // if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
+      //   this.getNotificationValid("Số điện thoại của" + this.getNameObjectValid(3) + "tổ chức của tôi không hợp lệ!")
+      //   count++;
+      //   break;
+      // }
     }
 
     if (count == 0) {
@@ -355,6 +355,12 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
+            if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email)) {
+              this.getNotificationValid("Email của" + this.getNameObjectValid(3) + "của đối tác không hợp lệ!")
+              count++;
+              break;
+            }
+
           } else if (dataArrPartner[j].type == 3) {
             if (!isParterSort[k].name && isParterSort[k].role == 3) {
               this.getNotificationValid("Vui lòng nhập tên" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân!")
@@ -382,13 +388,13 @@ export class DetermineSignerComponent implements OnInit {
               isPartnerCaNhanDuplicate = [];
             }
 
-            if (!isParterSort[k].phone &&
-              isParterSort[k].role == 3 &&
-              (isParterSort[k].is_otp || isParterSort[k].is_otp == 1)) {
-              this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObjectValid(3) + "của đối tác!")
-              count++;
-              break;
-            }
+            // if (!isParterSort[k].phone &&
+            //   isParterSort[k].role == 3 &&
+            //   (isParterSort[k].is_otp || isParterSort[k].is_otp == 1)) {
+            //   this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObjectValid(3) + "của đối tác!")
+            //   count++;
+            //   break;
+            // }
 
             //@ts-ignore
             // if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
@@ -403,11 +409,12 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
             //@ts-ignore
-            if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone)) {
-              this.getNotificationValid("Số điện thoại" + this.getNameObjectValid(3) + "của đối tác không hợp lệ!")
-              count++;
-              break;
-            }
+            // valid phone number
+            // if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone)) {
+            //   this.getNotificationValid("Số điện thoại" + this.getNameObjectValid(3) + "của đối tác không hợp lệ!")
+            //   count++;
+            //   break;
+            // }
           }
         }
       }

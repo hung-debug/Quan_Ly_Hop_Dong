@@ -1,11 +1,11 @@
-import {DatePipe} from '@angular/common';
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {variable} from 'src/app/config/variable';
-import {ContractService} from 'src/app/service/contract.service';
-import {ToastService} from 'src/app/service/toast.service';
-import {NgxSpinnerService} from "ngx-spinner";
+import { DatePipe } from '@angular/common';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { variable } from 'src/app/config/variable';
+import { ContractService } from 'src/app/service/contract.service';
+import { ToastService } from 'src/app/service/toast.service';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-confirm-info-contract',
@@ -19,11 +19,11 @@ export class ConfirmInfoContractComponent implements OnInit {
   @Output() stepChangeSampleContract = new EventEmitter<string>();
 
   constructor(private formBuilder: FormBuilder,
-              public datepipe: DatePipe,
-              private contractService: ContractService,
-              private router: Router,
-              private spinner: NgxSpinnerService,
-              private toastService: ToastService,) {
+    public datepipe: DatePipe,
+    private contractService: ContractService,
+    private router: Router,
+    private spinner: NgxSpinnerService,
+    private toastService: ToastService,) {
     this.step = variable.stepSampleContract.step4
   }
 
@@ -106,18 +106,12 @@ export class ConfirmInfoContractComponent implements OnInit {
     this.nextOrPreviousStep(step);
   }
 
-  // next step event
-  // next() {
-  //   this.callAPI();
-  // }
-
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
     // this.stepChangeConfirmInforContract.emit(step);
     this.stepChangeSampleContract.emit(step);
   }
-
 
   next() {
     //call API step confirm
@@ -127,25 +121,166 @@ export class ConfirmInfoContractComponent implements OnInit {
       }
       delete item.id;
     })
-    let data_determine = this.datas.determine_contract.recipients.filter((p: any) => p.role != 1);
-    // this.contractService.addConfirmContract(this.datas).subscribe((data) => {
-    this.spinner.show();
-    this.contractService.coordinationContract(this.datas.determine_contract.id, data_determine, this.datas.recipient_id_coordition).subscribe((data) => {
-        // console.log(JSON.stringify(data));
-        // let emailCurrent = this.contractService.getAuthCurrentUser().email;
-        // let status_new_coordination = '';
-        // //@ts-ignore
-        // for (let i = 0; i < data['recipients'].length; i++) {
-        //   //@ts-ignore
-        //   let element = data['recipients'][i];
-        //   if (element.email == emailCurrent) {
-        //     if (element.status != 1) {
-        //       status_new_coordination = element.status;
-        //     } else status_new_coordination = element.status;
-        //     break;
-        //   }
-        // }
 
+    let isHaveFieldId: any[] = [];
+    let isNotFieldId: any[] = [];
+    let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
+    isUserSign_clone.forEach((res: any) => {
+      res.sign_config.forEach((element: any) => {
+        if (element.id_have_data) {
+          isHaveFieldId.push(element)
+        } else isNotFieldId.push(element);
+      })
+    })
+    this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId);
+
+    // let data_sample_contract: string | any[] = [];
+    // let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
+    // this.datas.contract_user_sign.forEach((element: any) => {
+    //   if (element.sign_config.length > 0) {
+    //     element.sign_config.forEach((item: any) => {
+    //       item['font'] = 'Arial';
+    //       item['font_size'] = 14;
+    //       item['contract_id'] = this.datas.data_contract_document_id.contract_id;
+    //       item['document_id'] = this.datas.data_contract_document_id.document_id;
+    //       if (item.text_attribute_name) {
+    //         item.name = item.text_attribute_name;
+    //       }
+    //       if (item.sign_unit == 'chu_ky_anh') {
+    //         item['type'] = 2;
+    //       } else if (item.sign_unit == 'chu_ky_so') {
+    //         item['type'] = 3;
+    //       } else if (item.sign_unit == 'so_tai_lieu') {
+    //         item['type'] = 4;
+    //         if (this.datas.contract_no) {
+    //           if (!item.name)
+    //             item.name = "";
+
+    //           if (!item.recipient_id)
+    //             item.recipient_id = "";
+
+    //           if (!item.status)
+    //             item.status = 0;
+    //         }
+
+    //       } else {
+    //         item['type'] = 1;
+    //       }
+    //       // item['recipient_id'] = element.id;
+    //       data_remove_arr_request.forEach((itemRemove: any) => {
+    //         delete item[itemRemove];
+    //       })
+    //     })
+    //     Array.prototype.push.apply(data_sample_contract, element.sign_config);
+    //   }
+    // })
+
+    // this.spinner.show();
+    // this.contractService.getContractSample(data_sample_contract).subscribe((data: any) => {
+    //   console.log(JSON.stringify(data));
+    //   this.datas.is_data_object_signature.forEach((p: any) => {
+    //     data.forEach((element: any) => {
+    //       if (p.recipient_id == element.recipient_id) {
+    //         p = element;
+    //       } else this.datas.is_data_object_signature.push(element);
+    //     })
+    //   })
+
+    //   this.step = variable.stepSampleContract.step4;
+    //   this.datas.stepLast = this.step
+    //   this.nextOrPreviousStep(this.step);
+    // },
+    //   error => {
+    //     this.spinner.hide();
+    //     console.log("false connect file");
+    //     return false;
+    //   }, () => {
+    //     this.spinner.hide();
+    //   }
+    // );
+
+
+  }
+
+  async getDefindDataSignEdit(dataSignId: any, dataSignNotId: any) {
+    let dataSample_contract: any[] = [];
+    if (dataSignId.length > 0) {
+      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit'];
+      dataSignId.forEach((res: any) => {
+        data_remove_arr_signId.forEach((itemRemove: any) => {
+          delete res[itemRemove];
+        })
+      })
+
+      let countIsSignId = 0;
+      this.spinner.show();
+      for (let i = 0; i < dataSignId.length; i++) {
+        let id = dataSignId[i].id_have_data;
+        delete dataSignId[i].id_have_data;
+        await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then((data: any) => {
+          dataSample_contract.push(data);
+        }, (error) => {
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
+          countIsSignId++;
+        })
+        if (countIsSignId > 0) {
+          break;
+        }
+      }
+      // this.spinner.hide();
+    }
+
+    let isErrorNotId = false;
+    if (dataSignNotId.length > 0) {
+      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'value'];
+      dataSignNotId.forEach((item: any) => {
+        item['font'] = 'Arial';
+        item['font_size'] = 14;
+        item['contract_id'] = this.datas.contract_id;
+        item['document_id'] = this.datas.document_id;
+        if (item.text_attribute_name) {
+          item.name = item.text_attribute_name;
+        }
+        if (item.sign_unit == 'chu_ky_anh') {
+          item['type'] = 2;
+        } else if (item.sign_unit == 'chu_ky_so') {
+          item['type'] = 3;
+        } else if (item.sign_unit == 'so_tai_lieu') {
+          item['type'] = 4;
+        } else {
+          item['type'] = 1;
+        }
+
+        data_remove_arr_request.forEach((item_remove: any) => {
+          delete item[item_remove]
+        })
+      })
+      // Array.prototype.push.apply(this.data_sample_contract, dataSignNotId);
+      await this.contractService.getContractSample(dataSignNotId).toPromise().then((data) => {
+        this.spinner.hide();
+      }, error => {
+        isErrorNotId = true;
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
+        return false;
+      });
+    }
+
+    let isSuccess = 0;
+    if (dataSignId.length > 0 && dataSample_contract.length != dataSignId.length) {
+      isSuccess += 1;
+    }
+
+    if (dataSignNotId.length > 0 && isErrorNotId) {
+      isSuccess += 1;
+    }
+
+    if (isSuccess == 0) {
+      // api dieu phoi hop dong
+      let data_determine = this.datas.determine_contract.recipients.filter((p: any) => p.role != 1);
+      this.spinner.show();
+      this.contractService.coordinationContract(this.datas.determine_contract.id, data_determine, this.datas.recipient_id_coordition).subscribe((data) => {
         this.contractService.getDataCoordination(this.datas.determine_contract.contract_id).subscribe((res: any) => {
           if (res) {
             this.datas.is_data_contract = res;
@@ -164,15 +299,15 @@ export class ConfirmInfoContractComponent implements OnInit {
           this.spinner.hide();
         })
       },
-      error => {
-        this.spinner.hide();
-        console.log("false content");
-        return false;
-      }, () => {
-        this.spinner.hide();
-      }
-    );
-
+        error => {
+          this.spinner.hide();
+          console.log("false content");
+          return false;
+        }, () => {
+          this.spinner.hide();
+        }
+      );
+    }
   }
 
 }

@@ -254,12 +254,11 @@
           <!-- điều phối hđ -->
           <div class="participants-border">
             <div class="label">{{'user.lead' | translate}}</div>
-            <div class="participants&#45;&#45;content"
+            <div class="participants--content"
               *ngFor="let d of getPartnerCoordination(item); let index = index">
-              <input [id]="'ordering-lead-' + index" (focusout)="onChangeValue($event,'ordering-lead-' + index)"
-                class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
-              <div class="col-md-10 participants&#45;&#45;input" style="display: flex; margin-bottom: 14px">
+              <!-- (focusout)="onChangeValue($event,'ordering-lead-' + index)" -->
+              <input [id]="'ordering-lead-' + index" class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number" [ngModel]="1" disabled>
+              <div class="col-md-10 participants--input" style="display: flex; margin-bottom: 14px">
                 <div class="participants__name">
                   <div class="label text-color">{{'user.name' | translate}}: <span class="required-title">*</span></div>
                   <div class="input-data">
