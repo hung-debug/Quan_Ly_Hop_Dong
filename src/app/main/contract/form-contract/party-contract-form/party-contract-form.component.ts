@@ -121,7 +121,6 @@ export class PartyContractFormComponent implements OnInit {
     }
 
     back(e: any, step?: any) {
-        // if (!this.datasForm.isView) {
         this.nextOrPreviousStep(step);
     }
 

@@ -7,6 +7,6 @@
     <app-sample-contract #sampleContract *ngIf="stepLast == 'sample-contract'" [datas]="datas" [step]="stepLast"
       (stepChangeSampleContract)="getStep($event)"></app-sample-contract>
     <app-confirm-info-contract #confirmInforContract *ngIf="stepLast == 'confirm-contract'" [datas]="datas"
-      [step]="stepLast"></app-confirm-info-contract>
+      [step]="stepLast" (stepChangeConfirmInforContract)="getStep($event)"></app-confirm-info-contract>
   </ng-container>
 </div>

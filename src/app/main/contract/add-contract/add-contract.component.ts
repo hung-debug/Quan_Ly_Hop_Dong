@@ -188,10 +188,6 @@ export class AddContractComponent implements OnInit {
         this.stepBatch = variable.stepSampleContractBatch.step1;
       } 
     });
-    setTimeout(() => {
-      console.log(this.is_disable);
-      
-    }, 3000)
   }
 
   getDataContractCreated(data: any) {
@@ -323,12 +319,7 @@ export class AddContractComponent implements OnInit {
     } else if (this.type == 3) {
       this.stepBatch = e;
     }
-    this.is_disable = (e != 'infor-contract' || e != 'infor-contract-form' || e != 'infor-contract-batch');
-  }
-
-
-  getDataStepContract(e: any) {
-
+    this.is_disable = ((this.type == 1 && e != 'infor-contract') || (this.type == 2 && e != 'infor-contract-form') || (this.type == 3 && e != 'infor-contract-batch'));
   }
 
   t() {
