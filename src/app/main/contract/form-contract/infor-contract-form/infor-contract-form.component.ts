@@ -58,7 +58,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     attachFileArr: any[] = [];
     uploadFileAttachAgain: boolean = false;
 
-
     listFileAttach: any[] = [];
     isChangeForm: boolean = false;
 
@@ -446,7 +445,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                 this.nextForm();
             }
         }
-        
+
     }
 
     nextForm() {
