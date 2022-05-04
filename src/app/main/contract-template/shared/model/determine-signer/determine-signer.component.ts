@@ -250,17 +250,21 @@ export class DetermineSignerComponent implements OnInit {
     }
   }
 
-  changeIsCoordination(e:any, item: any, id:any, index:any) {
+  changeIsCoordination(e:any, item: any, id:any) {
     console.log();
     console.log(item);
     console.log(id);
-    console.log(index);
+    console.log(e.target.checked);
     if (e.target.checked) {
       //goi ham them
       this.addPartnerCoordination(item, id);
     } else {
       //goi ham xoa
-      this.deletePartnerCoordination(index, item, id);
+      this.deletePartnerCoordination(0, item, id);
+      //kiem tra neu chua co nguoi ky thi them 1 nguoi ky
+      if(this.getPartnerSignature(item).length == 0){
+        this.addPartnerSignature(item, id);
+      }
     }
   }
 
@@ -560,6 +564,9 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo đối tượng người điều phối đối tác
   getPartnerCoordination(item: any) {
+    console.log("a");
+    console.log(item.recipients.filter((p: any) => p.role == 1).length);
+    console.log(item.recipients.filter((p: any) => p.role == 1));
     return item.recipients.filter((p: any) => p.role == 1)
   }
 
