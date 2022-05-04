@@ -72,6 +72,7 @@ import { ContractSignatureComponent } from './main/contract-signature/contract-s
 import { NotificationComponent } from './main/notification/notification.component';
 import { ActionDeviceComponent } from './action-device/action-device.component';
 import { ContractTemplateModule } from './main/contract-template/contract-template.module';
+import { NotifiSignupDialogComponent } from './login/dialog/notifi-signup-dialog/notifi-signup-dialog.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -112,6 +113,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CheckSignDigitalComponent,
     NotificationComponent,
     ActionDeviceComponent,
+    NotifiSignupDialogComponent,
   ],
   imports: [
     BrowserModule,

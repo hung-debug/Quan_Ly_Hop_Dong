@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastService } from 'src/app/service/toast.service';
+import { UserService } from 'src/app/service/user.service';
 import {parttern_input} from "../../config/parttern";
+import { NotifiSignupDialogComponent } from '../dialog/notifi-signup-dialog/notifi-signup-dialog.component';
 
 @Component({
   selector: 'app-signup',
@@ -13,11 +16,6 @@ import {parttern_input} from "../../config/parttern";
 })
 export class SignupComponent implements OnInit {
 
-  status:number = 1;
-  notification:string = '';
-  closeResult:string= '';
-  error:boolean = false;
-  errorDetail:string = '';
   addForm: FormGroup;
   submitted = false;
   get f() { return this.addForm.controls; }
@@ -26,7 +24,10 @@ export class SignupComponent implements OnInit {
               private router: Router,
               public translate: TranslateService,
               private toastService: ToastService,
-              private fbd: FormBuilder,) {
+              private fbd: FormBuilder,
+              private userService: UserService,
+              private dialog: MatDialog,
+              ) {
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang('vi');
     //localStorage.setItem('lang', 'vi');
@@ -40,19 +41,62 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
     this.addForm = this.fbd.group({
-      nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-      short_name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-      code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      size: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      address: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
+      tax_code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      representatives: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      position: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       email: this.fbd.control("", [Validators.required, Validators.email]),
       phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-      fax: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
-      status: 1,
-      parent_id: this.fbd.control("", [Validators.required]),
     });
   }   
 
-  sendSignup(){
-    this.toastService.showSuccessHTMLWithTimeout("no.signup.success", "", 3000);
+  onSubmit() {
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.addForm.invalid) {
+      return;
+    }
+    const data = {
+      name: this.addForm.value.name,
+      size: this.addForm.value.size,
+      address: this.addForm.value.address,
+      tax_code: this.addForm.value.tax_code,
+      representatives: this.addForm.value.representatives,
+      position: this.addForm.value.position,
+      email: this.addForm.value.email,
+      phone: this.addForm.value.phone
+    }
+    console.log(data);
+    
+    //them to chuc
+    this.userService.signup(data).subscribe(
+      data => {
+        this.sendNotifi("Đăng ký thành công!");
+        console.log(data);        
+      }, error => {
+        this.sendNotifi("Đăng ký thất bại!");
+      }
+    )
+  }
+
+  sendNotifi(message:any) {
+    const data = {
+      title: 'notification',
+      message: message,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(NotifiSignupDialogComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
   //return login

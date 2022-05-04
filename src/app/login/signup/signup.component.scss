@@ -6,8 +6,9 @@
 .label{
     text-align: left;
 }
-.required-title {
+.required-title, .invalid {
     color: red;
+    text-align: left;
 }
 .input-text{
     min-height: 33px;
