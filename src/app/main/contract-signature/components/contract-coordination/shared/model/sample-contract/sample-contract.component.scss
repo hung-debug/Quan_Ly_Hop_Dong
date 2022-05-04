@@ -1,6 +1,6 @@
 .sample-contract {
     //height: calc(100vh - 221px);
-    height: calc(100vh - 201px);
+    height: calc(100vh - 226px);
     &__file {
         //position: relative;
         .sig-img-daky {
@@ -25,7 +25,7 @@
     }
     .viewer-pdf.isDrag {
         //height: calc(100vh - 221px);
-        height: calc(100vh - 201px);
+        height: calc(100vh - 226px);
         overflow-x: auto;
         text-align: center;
         background-color: rgba(239, 239, 239, 1);
@@ -207,7 +207,8 @@
     //padding: 10px;
     .name-sig-img-daky {
         position: absolute;
-        background-color: white;
+        background-color: yellow;
+        border: 1px solid #ddd;
         top: -15px;
         left: 6px;
         padding: 0 4px;
@@ -224,6 +225,10 @@
             right: 3px;
         }
     }
+}
+
+.none-drag {
+    opacity: 0.6;
 }
 
 .drag-image {

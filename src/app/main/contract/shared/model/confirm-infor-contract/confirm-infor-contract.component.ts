@@ -129,11 +129,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
-    // this.datas['back_step_4'] = true;
-    // let data = {
-    //   step: step,
-    //   isBackStep_4: true
-    // }
     this.stepChangeConfirmInforContract.emit(step);
   }
 
@@ -203,11 +198,9 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
               item['type'] = 4;
               if (this.datas.contract_no) {
                 if (!item.name) 
-                // item.name = null;
                 item.name = "";
             
               if (!item.recipient_id) 
-                // item.recipient_id = null;
                 item.recipient_id = "";
             
               if (!item.status) 

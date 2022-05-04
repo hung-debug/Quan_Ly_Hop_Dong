@@ -172,9 +172,9 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     let data_sign_config_text = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
     let data_sign_config_so_tai_lieu = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'so_tai_lieu');
 
-    this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+    this.datas.contract_user_sign_index = this.contractService.getDataFormatContractUserSign();
 
-    this.datas.contract_user_sign.forEach((element: any) => {
+    this.datas.contract_user_sign_index.forEach((element: any) => {
       if (element.sign_unit == 'chu_ky_so') {
         Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
       } else if (element.sign_unit == 'chu_ky_anh') {

@@ -12,6 +12,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../../../../../service/toast.service";
 import {Router} from "@angular/router";
 import {parttern} from "../../../../../../../config/parttern";
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-determine-signer',
@@ -128,9 +129,7 @@ export class DetermineSignerComponent implements OnInit {
     // this.nextOrPreviousStep(step);
   }
 
-  // next step event
   next() {
-    // this.submitted = true;
     if (!this.validData()) return;
     else
       this.getApiDetermine();
@@ -149,14 +148,6 @@ export class DetermineSignerComponent implements OnInit {
         this.step = variable.stepSampleContract.step3;
         this.datas.stepLast = this.step
         this.nextOrPreviousStep(this.step);
-        // } else {
-        //   this.datas.save_draft.determine_signer = false;
-        //   this.saveDraftDetermineSigner.emit('save_draft_determine_contract');
-        //   if (this.datas['close_modal']) {
-        //     this.datas.close_modal.close('Save click');
-        //   }
-        //   void this.router.navigate(['/main/dashboard']);
-        // }
       },
       (res: any) => {
         this.spinner.hide();
@@ -180,72 +171,8 @@ export class DetermineSignerComponent implements OnInit {
   // valid data step 2
   validData() {
     let count = 0;
-    // if (this.data_organization && this.data_organization.recipients.length > 0) {
-    //   let dataArr = [];
-    //   dataArr = this.data_organization.recipients;
-    //   for (let i = 0; i < dataArr.length; i++) {
-    //     if (!dataArr[i].name) {
-    //       this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!");
-    //       count++;
-    //       break;
-    //     }
-    //     if (!dataArr[i].email) {
-    //       this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
-    //       count++;
-    //       break;
-    //     }
-    //     if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
-    //       this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
-    //       count++;
-    //       break;
-    //     } else if (dataArr[i].sign_type.length > 0 && dataArr[i].role != 2) {
-    //       let is_duplicate = [];
-    //       is_duplicate = dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
-    //       if (is_duplicate.length > 1) {
-    //         this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
-    //         count++;
-    //         break;
-    //       }
-    //       is_duplicate = [];
-    //     }
-    //
-    //     if (!dataArr[i].phone && dataArr[i].role == 3 && (dataArr[i].is_otp || dataArr[i].is_otp == 1)) {
-    //       this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi!")
-    //       count++;
-    //       break;
-    //     }
-    //     // @ts-ignore
-    //     if (!this.pattern.name.test(dataArr[i].name)) {
-    //       this.getNotificationValid("Tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
-    //       count++;
-    //       break;
-    //     }
-    //     // @ts-ignore
-    //     if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email)) {
-    //       this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
-    //       count++;
-    //       break;
-    //     }
-    //     //@ts-ignore
-    //     if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
-    //       this.getNotificationValid("Số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
-    //       count++;
-    //       break;
-    //     }
-    //   }
-    //
-    //   if (count == 0) {
-    //     if (this.getCheckDuplicateEmail('only_party_origanzation', dataArr)) {
-    //       this.getNotificationValid("Email tổ chức của tôi không được trùng nhau!");
-    //       return false
-    //     }
-    //   }
-    // }
-
     let dataArrPartner = [];
     dataArrPartner = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-    // if (count == 0) {
-
     for (let i = 0; i < dataArrPartner.length; i++) {
       if (!dataArrPartner[i].recipients.some((p: any) => p.role == 3)) {
         this.getNotificationValid("Vui lòng chọn người ký của đối tác!");
@@ -253,7 +180,6 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
     }
-
 
     // validate phía đối tác
     for (let j = 0; j < dataArrPartner.length; j++) {
@@ -297,6 +223,12 @@ export class DetermineSignerComponent implements OnInit {
             break;
           }
 
+          if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email)) {
+            this.getNotificationValid("Email" + this.getNameObject(3) + "của đối tác không hợp lệ!")
+            count++;
+            break;
+          }
+
         } else if (dataArrPartner[j].type == 3) {
           if (!dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3) {
             this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
@@ -332,43 +264,38 @@ export class DetermineSignerComponent implements OnInit {
             break;
           }
 
-          //@ts-ignore
-          if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
-            this.getNotificationValid("Tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " đối tác cá nhân không hợp lệ!");
-            count++;
-            break;
-          }
-          //@ts-ignore
+          // if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
+          //   this.getNotificationValid("Tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " đối tác cá nhân không hợp lệ!");
+          //   count++;
+          //   break;
+          // }
           if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email) && dataArrPartner[j].recipients[k].role == 3) {
             this.getNotificationValid("Email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân không hợp lệ!")
             count++;
             break;
           }
-          //@ts-ignore
-          if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
-            this.getNotificationValid("Số điện thoại" + this.getNameObject(3) + "của đối tác không hợp lệ!")
-            count++;
-            break;
-          }
+          // if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
+          //   this.getNotificationValid("Số điện thoại" + this.getNameObject(3) + "của đối tác không hợp lệ!")
+          //   count++;
+          //   break;
+          // }
         }
       }
     }
-    // }
 
     if (count == 0) {
-      // dataArrPartyCheckEmail = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
       if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
         this.getNotificationValid("Email đối tác không được trùng nhau!");
         return false
       }
     }
 
-    if (count == 0) {
-      if (this.getCheckDuplicateEmail('allCheckEmail', this.is_determine_clone)) {
-        this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
-        return false
-      }
-    }
+    // if (count == 0) {
+    //   if (this.getCheckDuplicateEmail('allCheckEmail', this.is_determine_clone)) {
+    //     this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
+    //     return false
+    //   }
+    // }
 
     if (count > 0) {
       return false;
@@ -379,8 +306,6 @@ export class DetermineSignerComponent implements OnInit {
   getCheckDuplicateEmail(isParty: string, dataValid?: any) {
     let arrCheckEmail = [];
     if (isParty != 'only_party_origanzation') {
-      // for (let i = 0; i < this.is_determine_clone.length; i++) {
-      //   const element = this.is_determine_clone[i].recipients;
       for (let i = 0; i < dataValid.length; i++) {
         const element = dataValid[i].recipients;
         for (let j = 0; j < element.length; j++) {
@@ -584,6 +509,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 2);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
+    if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'người xem xét tổ chức')) {
+      return;
+    }
     arr_clone.forEach((element: any, index: number) => {
       if (index != i) {
         array_empty.push(element);
@@ -607,6 +535,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 3);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
+    if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'người ký tổ chức')) {
+      return;
+    }
     arr_clone.forEach((element: any, index: number) => {
       if (index != i) {
         array_empty.push(element);
@@ -625,6 +556,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 4);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
+    if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'văn thư tổ chức')) {
+      return;
+    }
     arr_clone.forEach((element: any, index: number) => {
       if (index != i) {
         array_empty.push(element);
@@ -661,6 +595,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 2);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
+    if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'người xem xét đối tác')) {
+      return;
+    }
     arr_clone.forEach((element: any, index: number) => {
       if (index != index_item) {
         array_empty.push(element);
@@ -679,6 +616,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 3);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
+    if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'người ký đối tác')) {
+      return;
+    }
     arr_clone.forEach((element: any, index: number) => {
       if (index != index_item) {
         array_empty.push(element);
@@ -696,6 +636,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 4);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
+    if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'văn thư đối tác')) {
+      return;
+    }
     arr_clone.forEach((element: any, index: number) => {
       if (index != index_item) {
         array_empty.push(element);
@@ -778,6 +721,24 @@ export class DetermineSignerComponent implements OnInit {
       item.ordering = 2;
       this.is_change_party = false;
     }
+  }
+
+  deleteElement(dataArrClone: any, assignElement: string) {
+    this.spinner.show();
+    let count = 0;
+    this.contractService.deleteInfoContractSignature(dataArrClone.fields[0].id).subscribe((res: any) => {
+      this.toastService.showSuccessHTMLWithTimeout(`Bạn đã xóa ${assignElement} ${dataArrClone.name}!`, "", "3000");
+    }, (error: HttpErrorResponse) => {
+      this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+      this.spinner.hide();
+      count = 1;
+    }, () => {
+      this.spinner.hide();
+    })
+
+    if (count == 0)
+      return true
+    else return false;
   }
 
 }

@@ -121,7 +121,6 @@ export class PartyContractFormComponent implements OnInit {
     }
 
     back(e: any, step?: any) {
-        // if (!this.datasForm.isView) {
         this.nextOrPreviousStep(step);
     }
 
@@ -160,19 +159,19 @@ export class PartyContractFormComponent implements OnInit {
                 this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
         })
         this.spinner.show();
-            this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
-                this.getDataApiDetermine(res, is_save)
-            }, (error: HttpErrorResponse) => {
-                if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-                    this.save_draft_infor_form.close_header = false;
-                    this.save_draft_infor_form.close_modal.close();
-                }
-                this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-            }, () => {
-                this.spinner.hide();
+        this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
+            this.getDataApiDetermine(res, is_save)
+        }, (error: HttpErrorResponse) => {
+            if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                this.save_draft_infor_form.close_header = false;
+                this.save_draft_infor_form.close_modal.close();
             }
-            );
+            this.spinner.hide();
+            this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+        }, () => {
+            this.spinner.hide();
+        }
+        );
     }
 
     getDataApiDetermine(res: any, is_save?: boolean) {
@@ -337,6 +336,12 @@ export class PartyContractFormComponent implements OnInit {
 
                         if (!isParterSort[k].phone && isParterSort[k].role == 3 && (isParterSort[k].is_otp || isParterSort[k].is_otp == 1)) {
                             this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "của đối tác!")
+                            count++;
+                            break;
+                        }
+
+                        if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email)) {
+                            this.getNotificationValid("Email của" + this.getNameObject(3) + "của đối tác không hợp lệ!")
                             count++;
                             break;
                         }

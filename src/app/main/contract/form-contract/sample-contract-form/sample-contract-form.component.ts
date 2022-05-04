@@ -292,13 +292,7 @@ export class SampleContractFormComponent implements OnInit {
   //   })
   // }
 
-  // config variable contract_user_sign
   setDataSignContract() {
-    // let data_sign_config_cks = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_so');
-    // let data_sign_config_cka = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-    // let data_sign_config_text = this.dataSignPosition.filter((p: any) => p.sign_unit == 'text');
-    // var data_sign_config_num_document = this.dataSignPosition.filter((p: any) => p.sign_unit == 'so_tai_lieu');
-
     if (!this.datasForm.is_data_object_signature) {
       this.datasForm.is_data_object_signature = [];
     }
@@ -415,6 +409,9 @@ export class SampleContractFormComponent implements OnInit {
                 dataForm.sign_config[i].recipient_id = "";
                 dataForm.sign_config[i].name = "";
                 dataForm.sign_config[i].email = "";
+                if (dataForm.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
+                  dataForm.sign_config[i].value = this.datasForm.contract_no;
+                }
               }
             } else {
               dataForm.sign_config[i].name = "";
@@ -422,25 +419,39 @@ export class SampleContractFormComponent implements OnInit {
               if (dataForm.sign_unit == 'text' && !dataForm.sign_config[i].recipient_id) {
                 dataForm.sign_config[i].is_have_text = true;
               }
+              if (dataForm.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
+                dataForm.sign_config[i].value = this.datasForm.contract_no;
+              }
             }
           }
         }
       })
-
       this.isNoEmailObj = true;
     } else {
-      this.datasForm.contract_user_sign.forEach((res: any) => {
-        if (res.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
-          for (let i = 0; i < res.sign_config.length; i++) {
-            res.sign_config[i].name = "";
-            res.sign_config[i].recipient_id = "";
-            res.sign_config[i].email = "";
-            res.sign_config[i].value = this.datasForm.contract_no;
+      for (const element of this.datasForm.contract_user_sign) {
+        if (element.sign_unit == 'so_tai_lieu') {
+          for (const item of element.sign_config) {
+            item.value = this.datasForm.contract_no;
+            if (this.datasForm.contract_no) {
+              item.name = "";
+              item.recipient_id = "";
+              item.email = "";
+            }
           }
         }
-      })
-    }
+      }
 
+      // this.datasForm.contract_user_sign.forEach((res: any) => {
+      //   if (res.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
+      //     for (let i = 0; i < res.sign_config.length; i++) {
+      //       res.sign_config[i].name = "";
+      //       res.sign_config[i].recipient_id = "";
+      //       res.sign_config[i].email = "";
+      //       res.sign_config[i].value = this.datasForm.contract_no;
+      //     }
+      //   }
+      // })
+    }
 
     // xoa nhung du lieu doi tuong bi thay doi khi sua
     // if (dataDiffirent.length > 0) {
@@ -465,11 +476,8 @@ export class SampleContractFormComponent implements OnInit {
     //       res.sign_config.forEach((items: any) => {
     //         items.id = items.id + '1';
     //       })
-
-
     //     }
     //   })
-
     // }
   }
 
@@ -778,7 +786,7 @@ export class SampleContractFormComponent implements OnInit {
           }
         }
       }
-      
+
 
       if (listSelect) {
         element.selected = listSelect && element.name == listSelect;
@@ -1302,6 +1310,15 @@ export class SampleContractFormComponent implements OnInit {
             isObjSign.email = data_name.email;
             signElement.setAttribute("type", isObjSign.email);
 
+            if (!isObjSign.height) {
+              isObjSign.height = ['so_tai_lieu', 'text'].includes(isObjSign.sign_unit) ? 28 : 85;
+              signElement.setAttribute("height", isObjSign.height);
+            }
+
+            if (!isObjSign.width) {
+              isObjSign.width = 135;
+              signElement.setAttribute("height", isObjSign.width);
+            }
           }
           // else {
           //   // tránh trường hợp chọn người ký khác sau khi đã kéo thả sẽ bị mất dữ liệu người ký cũ trước khi thay đổi
@@ -1344,8 +1361,7 @@ export class SampleContractFormComponent implements OnInit {
         this.save_draft_infor_form.close_modal.close();
       }
       return;
-    }
-    else {
+    } else {
       if (action == 'save_draft') {
         if (this.datasForm.is_action_contract_created && this.router.url.includes("edit")) {
           let isHaveFieldId: any[] = [];
@@ -1410,15 +1426,26 @@ export class SampleContractFormComponent implements OnInit {
           }
         }
       } else if (action == 'next_step') {
-        console.log(this.datasForm.contract_user_sign);
-
-        this.stepForm = variable.stepSampleContractForm.step4;
-        this.datasForm.stepLast = this.stepForm
-        this.nextOrPreviousStep(this.stepForm);
+        let coutError = false;
+        this.spinner.show();
+        await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
+          dataCode => {
+            if (!dataCode.success) {
+              this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+              coutError = true;
+            }
+            this.spinner.hide();
+          }, (error) => {
+            coutError = true;
+            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+            this.spinner.hide();
+          });
+        if (!coutError) {
+          this.stepForm = variable.stepSampleContractForm.step4;
+          this.datasForm.stepLast = this.stepForm
+          this.nextOrPreviousStep(this.stepForm);
+        }
       }
-
-
-      // this.spinner.show();
     }
   }
 

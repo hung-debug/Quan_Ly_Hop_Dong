@@ -52,6 +52,7 @@ export class ActionDeviceComponent implements OnInit {
             isLogin = 'login'
 
           }
+          
 
           if (urlEmail) {
 
