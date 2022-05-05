@@ -251,10 +251,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeIsCoordination(e:any, item: any, id:any) {
-    console.log();
-    console.log(item);
-    console.log(id);
-    console.log(e.target.checked);
+    
     if (e.target.checked) {
       //goi ham them
       this.addPartnerCoordination(item, id);
@@ -564,9 +561,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo đối tượng người điều phối đối tác
   getPartnerCoordination(item: any) {
-    console.log("a");
-    console.log(item.recipients.filter((p: any) => p.role == 1).length);
-    console.log(item.recipients.filter((p: any) => p.role == 1));
+    
     return item.recipients.filter((p: any) => p.role == 1)
   }
 

@@ -1,4 +1,4 @@
-<div class="labelOrg">{{'contract-template' | translate}}</div>
+<div class="labelOrg" style="text-transform: uppercase;">{{'contract-template' | translate}}</div>
 <div class="infor_contact">
     <div class="row">
         <div class="col-md-5">
@@ -7,7 +7,7 @@
                     <div class="form-group">
                         <div class="label_item">{{'contract-template.name' | translate}}</div>
                         <div>
-                            <div [innerHTML]="contractName" class="input_text"></div>
+                            <div [innerHTML]="this.datas.name" class="input_text"></div>
                         </div>
                     </div>
                 </div>
@@ -17,7 +17,7 @@
                     <div class="form-group">
                         <div class="label_item">{{'contract-template.file' | translate}}</div>
                         <div>
-                            <div [innerHTML]="contractFileName" class="input_text"></div>
+                            <div [innerHTML]="this.datas.file_name" class="input_text"></div>
                         </div>
                     </div>
                 </div>
@@ -26,8 +26,10 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <div class="label_item">{{'effective-date' | translate}}</div>
-                        <div>
-                            <div [innerHTML]="time" class="input_text"></div>
+                        <div class="input_text" style="display: flex;">
+                            <div [innerHTML]="this.datas.start_time | date: 'dd/MM/yyyy'" ></div>
+                            <div> - </div>
+                            <div [innerHTML]="this.datas.end_time | date: 'dd/MM/yyyy'" ></div>
                         </div>
                     </div>
                 </div>
@@ -40,7 +42,7 @@
                     <div class="form-group">
                         <div class="label_item">{{'contract-template.code' | translate}}</div>
                         <div>
-                            <div [innerHTML]="contractCode" class="input_text"></div>
+                            <div [innerHTML]="this.datas.contract_no" class="input_text"></div>
                         </div>
                     </div>
                 </div>
@@ -59,17 +61,19 @@
     </div>
 </div>
 
-<div class="labelOrg">{{'side.sign' | translate}}</div>
+<div class="labelOrg" style="text-transform: uppercase;">{{'side.sign' | translate}}</div>
 <div class="determine_contact">
     <div class="user_contact">
-        <div class="label">{{'organization.me'  | translate}}</div>
+        <div class="label" style="text-transform: uppercase;">{{'organization.me'  | translate}}</div>
         <div class="content_determine">
             <div class="row">
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="label_item">{{'user.view' | translate}}</div>
-                        <div>
-                            <div [innerHTML]="userViews" class="input_text"></div>
+                        <div class="input_text">
+                            <div *ngFor="let item of this.is_origanzation_reviewer">
+                                <div>{{item.name}} - {{item.email}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -77,8 +81,10 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="label_item">{{'user.sign' | translate}}</div>
-                        <div>
-                            <div [innerHTML]="userSigns" class="input_text"></div>
+                        <div class="input_text">
+                            <div *ngFor="let item of this.is_origanzation_signature">
+                                <div>{{item.name}} - {{item.email}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -88,8 +94,10 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="label_item">{{'user.doc' | translate}}</div>
-                        <div>
-                            <div [innerHTML]="userDocs" class="input_text"></div>
+                        <div class="input_text">
+                            <div *ngFor="let item of this.is_origanzation_document">
+                                <div>{{item.name}} - {{item.email}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -97,15 +105,15 @@
         </div>
     </div>
 
-    <div class="partner_contact">
-        <div class="label">{{'organization.partner'  | translate}}</div>
+    <div class="partner_contact" *ngFor="let record of this.data_parnter_organization;">
+        <div class="label" style="text-transform: uppercase;">{{'organization.partner'  | translate}} {{record.name}}</div>
         <div class="content_determine">
-            <div class="row" *ngIf="isOrg">
+            <div class="row" *ngIf="record.type == 2">
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="label_item">{{'user.lead' | translate}}</div>
-                        <div>
-                            <div [innerHTML]="countPartnerLeads" class="input_text"></div>
+                        <div class="input_text">
+                            <div>{{getPartnerCoordinationer(record).length}}</div>
                         </div>
                     </div>
                 </div>
@@ -113,8 +121,8 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="label_item">{{'user.view' | translate}}</div>
-                        <div>
-                            <div [innerHTML]="countPartnerViews" class="input_text"></div>
+                        <div class="input_text">
+                            <div>{{getPartnerReviewer(record).length}}</div>
                         </div>
                     </div>
                 </div>
@@ -124,17 +132,17 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="label_item">{{'user.sign' | translate}}</div>
-                        <div>
-                            <div [innerHTML]="countPartnerSigns" class="input_text"></div>
+                        <div class="input_text">
+                            <div>{{getPartnerSignature(record).length}}</div>
                         </div>
                     </div>
-                </div>
+                </div>   
                 <div class="col-md-2"></div>
-                <div class="col-md-5" *ngIf="isOrg">
+                <div class="col-md-5" *ngIf="record.type == 2">
                     <div class="form-group">
                         <div class="label_item">{{'user.doc' | translate}}</div>
-                        <div>
-                            <div [innerHTML]="countPartnerDocs" class="input_text"></div>
+                        <div class="input_text">
+                            <div>{{getPartnerDocument(record).length}}</div>
                         </div>
                     </div>
                 </div>
@@ -142,6 +150,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="footer-infor-contract">
     <div style="width: 200px;">
