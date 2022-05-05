@@ -45,7 +45,7 @@ export class FilterListDialogComponent implements OnInit {
         filter_to_date: this.fbd.control(this.data.filter_to_date),
         status:this.data.status,
         isOrg:this.data.isOrg,
-        organization_id: this.fbd.control(Number(this.data.organization_id))
+        organization_id: this.fbd.control(Number(this.data.organization_id)),
       });
     }
 
@@ -58,8 +58,9 @@ export class FilterListDialogComponent implements OnInit {
     });
 
     this.unitService.getUnitList('', '').subscribe(data => {
-      console.log(data.entities);
-      this.orgListTmp.push({name: "Tất cả", id:""});
+      if(this.data.filter_is_org_me_and_children){
+        this.orgListTmp.push({name: "Tất cả", id:""});
+      }
       let dataUnit = data.entities.sort((a:any,b:any) => a.name.toString().localeCompare(b.name.toString()));
       for(var i = 0; i < dataUnit.length; i++){
         this.orgListTmp.push(dataUnit[i]);
@@ -76,7 +77,7 @@ export class FilterListDialogComponent implements OnInit {
       filter_to_date: this.data.filter_to_date!=""?this.fbd.control(new Date(this.data.filter_to_date)):"",
       status:this.data.status,
       isOrg:this.data.isOrg,
-      organization_id:  this.data.organization_id!=""?this.fbd.control(Number(this.data.organization_id)):"", 
+      organization_id:  this.data.organization_id!=""?this.fbd.control(Number(this.data.organization_id)):""
     });
     this.isOrg = this.data.isOrg;
     console.log(this.addForm);
