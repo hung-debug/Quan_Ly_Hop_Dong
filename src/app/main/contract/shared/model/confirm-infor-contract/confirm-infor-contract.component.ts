@@ -28,87 +28,37 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     this.step = variable.stepSampleContract.step4
   }
 
-  contractFileName: string = '';
-  dateDeadline: string = '';
-  comment: string = '';
-  userViews: string = '';
-  userSigns: string = '';
-  userDocs: string = '';
-  partnerLeads: string = '';
-  partnerViews: string = '';
-  partnerSigns: string = '';
-  partnerDocs: string = '';
-  partnerUsers: string = '';
-
-  connUserViews: string = '';
-  connUserSigns: string = '';
-  connUserDocs: string = '';
-  connPartnerLeads: string = '';
-  connPartnerViews: string = '';
-  connPartnerSigns: string = '';
-  connPartnerDocs: string = '';
-  connPartnerUsers: string = '';
-  isOrg: boolean = true;
   data_sample_contract: any = [];
 
-  conn: string;
+  data_organization:any;
+  is_origanzation_reviewer: any = [];
+  is_origanzation_signature: any = [];
+  is_origanzation_document: any = [];
+  data_parnter_organization: any = [];
+
+  getPartnerCoordinationer(item: any) {
+    return item.recipients.filter((p: any) => p.role == 1)
+  }
+
+  getPartnerReviewer(item: any) {
+    return item.recipients.filter((p: any) => p.role == 2)
+  }
+  getPartnerSignature(item: any) {
+    return item.recipients.filter((p: any) => p.role == 3)
+  }
+  getPartnerDocument(item: any) {
+    return item.recipients.filter((p: any) => p.role == 4);
+  }
+
   ngOnInit(): void {
-    console.log("step4" + this.datas.contract_user_sign);
+    console.log(this.datas);
 
-    this.contractFileName = this.datas.file_name;
-    this.dateDeadline = this.datepipe.transform(this.datas.sign_time, 'dd/MM/yyyy') || '';
-    this.comment = this.datas.notes;
+    this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];
+    this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
+    this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
+    this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
-    if (this.datas.is_determine_clone && this.datas.is_determine_clone.length > 0) {
-      let data_user_sign = [...this.datas.is_determine_clone];
-      console.log(data_user_sign);
-      data_user_sign.forEach((element: any) => {
-        if (element.type == 1) {
-          element.recipients.forEach((item: any) => {
-            if (item.role == 2 && item.name) {
-              this.userViews += this.connUserViews + item.name + " - " + item.email;
-              this.connUserViews = "<br>";
-            }
-            else if (item.role == 3 && item.name) {
-              this.userSigns += this.connUserSigns + item.name + " - " + item.email;
-              this.connUserSigns = "<br>";
-            }
-            else if (item.role == 4 && item.name) {
-              this.userDocs += this.connUserDocs + item.name + " - " + item.email;
-              this.connUserDocs = "<br>";
-            }
-          })
-        } else if (element.type == 2) {
-          this.isOrg = true;
-          element.recipients.forEach((item: any) => {
-            if (item.role == 1 && item.name) {
-              this.partnerLeads += this.connPartnerLeads + item.name + " - " + item.email;
-              this.connPartnerLeads = "<br>";
-            }
-            else if (item.role == 2 && item.name) {
-              this.partnerViews += this.connPartnerViews + item.name + " - " + item.email;
-              this.connPartnerViews = "<br>";
-            }
-            else if (item.role == 3 && item.name) {
-              this.partnerSigns += this.connPartnerSigns + item.name + " - " + item.email;
-              this.connPartnerSigns = "<br>";
-            }
-            else if (item.role == 4 && item.name) {
-              this.partnerDocs += this.connPartnerDocs + item.name + " - " + item.email;
-              this.connPartnerDocs = "<br>";
-            }
-          })
-        } else if (element.type == 3) {
-          this.isOrg = false;
-          element.recipients.forEach((item: any) => {
-            if (item.role == 3 && item.name) {
-              this.partnerSigns += this.connPartnerSigns + item.name + " - " + item.email;
-              this.connPartnerSigns = "<br>";
-            }
-          })
-        }
-      })
-    }
+    this.data_parnter_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
