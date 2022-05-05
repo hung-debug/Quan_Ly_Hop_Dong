@@ -399,6 +399,9 @@ export class SampleContractFormComponent implements OnInit {
             let dataObj = dataNoEmail.filter((p: any) => p.template_recipient_id == dataForm.sign_config[i].recipient_id)[0];
             if (!dataForm.sign_config[i].email && dataObj) {
               if (dataForm.sign_unit != 'so_tai_lieu' || (dataForm.sign_unit == 'so_tai_lieu' && !this.datasForm.contract_no)) {
+                if (dataForm.sign_unit == 'text') {
+                  dataForm.sign_config[i].text_attribute_name = dataForm.sign_config[i].name;
+                }
                 dataForm.sign_config[i].email = dataObj.email;
                 dataForm.sign_config[i].name = dataObj.recipient ? dataObj.recipient.name : dataObj.name;
                 dataForm.sign_config[i].recipient_id = dataObj.id;
@@ -406,6 +409,9 @@ export class SampleContractFormComponent implements OnInit {
                   dataForm.sign_config[i].recipient.email = dataObj.email;
                 }
               } else {
+                if (dataForm.sign_unit == 'text') {
+                  dataForm.sign_config[i].text_attribute_name = dataForm.sign_config[i].name;
+                }
                 dataForm.sign_config[i].recipient_id = "";
                 dataForm.sign_config[i].name = "";
                 dataForm.sign_config[i].email = "";
