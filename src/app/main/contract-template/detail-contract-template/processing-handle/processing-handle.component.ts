@@ -10,113 +10,44 @@ import * as moment from 'moment';
 })
 export class ProcessingHandleComponent implements OnInit {
 
-  is_list_name: any = [];
-  status: any = [
-    {
-      value: 0,
-      name: 'Tạm dừng'
-    },
-    {
-      value: 1,
-      name: 'Hoạt động'
-    }
-  ]
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
       is_data_contract: any,
       content: any},
     public router: Router,
     public dialog: MatDialog,
-    // public name: LoginComponent
   ) {
   }
 
-  userViews:any="";
-  userSigns:any="";
-  userDocs:any="";
-  countPartnerLeads:any=0;
-  countPartnerViews:any=0;
-  countPartnerSigns:any=0;
-  countPartnerDocs:any=0;
-  listPartner:any=[];
-  isOrg:boolean = true;
+  data_organization:any;
+  is_origanzation_reviewer: any = [];
+  is_origanzation_signature: any = [];
+  is_origanzation_document: any = [];
+  data_parnter_organization: any = [];
 
-  connUserView:any="";
-  connUserSign:any="";
-  connUserDoc:any="";
+  getPartnerCoordinationer(item: any) {
+    return item.recipients.filter((p: any) => p.role == 1)
+  }
+
+  getPartnerReviewer(item: any) {
+    return item.recipients.filter((p: any) => p.role == 2)
+  }
+  getPartnerSignature(item: any) {
+    return item.recipients.filter((p: any) => p.role == 3)
+  }
+  getPartnerDocument(item: any) {
+    return item.recipients.filter((p: any) => p.role == 4);
+  }
+
   ngOnInit(): void {
     console.log(this.data.is_data_contract.participants);
-    this.data.is_data_contract.participants.forEach((item: any) => {
 
-      if(item.type==1){
-        item.recipients.forEach((element: any) => {
-          if(element.role == 2){
-            this.userViews += this.connUserView + element.name + " - " + element.email;
-            this.connUserView = "<br>";
-          }
-          if(element.role == 3){
-            this.userSigns += this.connUserSign + element.name + " - " + element.email;
-            this.connUserSign = "<br>";
-          }
-          if(element.role == 4){
-            this.userDocs += this.connUserDoc + element.name + " - " + element.email;
-            this.connUserDoc = "<br>";
-          }
-        })
-      }else{
-        if(item.type==2){
-          this.isOrg = true;
-        }
-        item.recipients.forEach((element: any) => {
-          if(element.role == 1){
-            this.countPartnerLeads++;
-          }
-          if(element.role == 2){
-            this.countPartnerViews++;
-          }
-          if(element.role == 3){
-            this.countPartnerSigns++;
-          }
-          if(element.role == 4){
-            this.countPartnerDocs ++;
-          }
-        })
-      }
-    })
-    console.log(this.is_list_name)
-  }
+    this.data_organization = this.data.is_data_contract.participants.filter((p: any) => p.type == 1)[0];
+    this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
+    this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
+    this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
-  getStatus(status: any) {
-    if (status == 1) {
-      return 'Hoạt động';
-    } else if (status == 0) {
-      return 'Tạm dừng';
-    }
-  }
-
-  checkStatusUser(status: any, role: any) {
-    let res = '';
-    if (status == 3) {
-      return 'Đã từ chối';
-    }
-    if (status == 0) {
-      res += 'Chưa ';
-    } else if (status == 1) {
-      res += 'Đang ';
-    } else if (status == 2) {
-      res += 'Đã ';
-    }
-    if (role == 1) {
-      res +=  'điều phối';
-    } else if (role == 2) {
-      res +=  'xem xét';
-    } else if (role == 3) {
-      res +=  'ký';
-    } else if (role == 4) {
-      res =  res + ' đóng dấu';
-    }
-    return res;
+    this.data_parnter_organization = this.data.is_data_contract.participants.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
   acceptRequest() {

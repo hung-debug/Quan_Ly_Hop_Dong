@@ -1,8 +1,10 @@
 import { DatePipe } from '@angular/common';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { isPdfFile } from 'pdfjs-dist';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 
 @Injectable({
@@ -30,7 +32,8 @@ export class DashboardService {
   }
 
   constructor(private http: HttpClient,
-    public datepipe: DatePipe,) { }
+    public datepipe: DatePipe,
+    public router: Router,) { }
 
   public countContractCreate(isOrg:any, organization_id:any, from_date: any, to_date: any): Observable<any> {
     this.getCurrentUser();
@@ -72,7 +75,7 @@ export class DashboardService {
     let listNotificationUrl = this.listNotificationUrl + '?status=' + status + '&from_date=' + from_date + '&to_date=' + to_date + '&size=' + size + '&page=' + page;
     console.log(listNotificationUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<any[]>(listNotificationUrl, {headers}).pipe();
+    return this.http.get<any[]>(listNotificationUrl, {headers}).pipe(catchError(this.handleError));
   }
 
   updateViewNotification(id: any) {
@@ -82,7 +85,20 @@ export class DashboardService {
       .append('Authorization', 'Bearer ' + this.token);
       console.log(headers);
     const body ="";
-    return this.http.post<any>(this.updateViewNotificationUrl + id, body, {headers}).pipe();
+    return this.http.post<any>(this.updateViewNotificationUrl + id, body, {headers}).pipe(catchError(this.handleError));
   }
 
+
+  handleError(error: HttpErrorResponse) {
+    if (error.status === 401 && error.error == 'Unauthorized') {
+      this.logout();
+    }
+    return throwError(this.errorData);
+  };
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigateByUrl("/login");
+  }
 }

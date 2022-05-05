@@ -641,7 +641,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.contractTemplateService.updateFileAttach(item.id, data).subscribe((res: any) => {
         this.datas.attachFileNameArr.splice(index_dlt, 1);
         this.attachFileNameArr.splice(index_dlt, 1);
-        this.datas.attachFileArr.splice(index_dlt, 1);
+        //this.datas.attachFileArr.splice(index_dlt, 1);
         console.log(this.attachFileArr);
       }, error => {
         this.toastService.showErrorHTMLWithTimeout("Lỗi xoá file đính kèm!", "", 3000);

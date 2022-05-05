@@ -7,18 +7,22 @@
               <div class="row">
                   <div class="col-md-6">
                       <div class="form-group">
-                          <div class="label_item">{{'user.view' | translate}}</div>
-                          <div>
-                              <div [innerHTML]="userViews" class="input_text"></div>
-                          </div>
+                            <div class="label_item">{{'user.view' | translate}}</div>
+                            <div class="input_text">
+                                <div *ngFor="let item of this.is_origanzation_reviewer">
+                                    <div>{{item.name}} - {{item.email}}</div>
+                                </div>
+                            </div>
                       </div>
                   </div>
                   <div class="col-md-6">
                       <div class="form-group">
-                          <div class="label_item">{{'user.sign' | translate}}</div>
-                          <div>
-                              <div [innerHTML]="userSigns" class="input_text"></div>
-                          </div>
+                            <div class="label_item">{{'user.sign' | translate}}</div>
+                            <div class="input_text">
+                                <div *ngFor="let item of this.is_origanzation_signature">
+                                    <div>{{item.name}} - {{item.email}}</div>
+                                </div>
+                            </div>
                       </div>
                   </div>
               </div>
@@ -26,34 +30,36 @@
               <div class="row">
                   <div class="col-md-6">
                       <div class="form-group">
-                          <div class="label_item">{{'user.doc' | translate}}</div>
-                          <div>
-                              <div [innerHTML]="userDocs" class="input_text"></div>
-                          </div>
+                            <div class="label_item">{{'user.doc' | translate}}</div>
+                            <div class="input_text">
+                                <div *ngFor="let item of this.is_origanzation_document">
+                                    <div>{{item.name}} - {{item.email}}</div>
+                                </div>
+                            </div>
                       </div>
                   </div>
               </div>
           </div>
       </div>
   
-      <div class="partner_contact">
-          <div class="label">{{'organization.partner'  | translate}}</div>
+      <div class="partner_contact" *ngFor="let record of this.data_parnter_organization;">
+          <div class="label" style="text-transform: uppercase;">{{'organization.partner'  | translate}} {{record.name}}</div>
           <div class="content_determine">
-              <div class="row" *ngIf="isOrg">
+              <div class="row" *ngIf="record.type == 2">
                   <div class="col-md-6">
                       <div class="form-group">
-                          <div class="label_item">{{'user.lead' | translate}}</div>
-                          <div>
-                              <div [innerHTML]="countPartnerLeads" class="input_text"></div>
-                          </div>
+                            <div class="label_item">{{'user.lead' | translate}}</div>
+                            <div class="input_text">
+                                <div>{{getPartnerCoordinationer(record).length}}</div>
+                            </div>
                       </div>
                   </div>
                   <div class="col-md-6">
                       <div class="form-group">
-                          <div class="label_item">{{'user.view' | translate}}</div>
-                          <div>
-                              <div [innerHTML]="countPartnerViews" class="input_text"></div>
-                          </div>
+                            <div class="label_item">{{'user.view' | translate}}</div>
+                            <div class="input_text">
+                                <div>{{getPartnerReviewer(record).length}}</div>
+                            </div>
                       </div>
                   </div>
               </div>
@@ -61,18 +67,18 @@
               <div class="row">
                   <div class="col-md-6">
                       <div class="form-group">
-                          <div class="label_item">{{'user.sign' | translate}}</div>
-                          <div>
-                              <div [innerHTML]="countPartnerSigns" class="input_text"></div>
-                          </div>
+                            <div class="label_item">{{'user.sign' | translate}}</div>
+                            <div class="input_text">
+                                <div>{{getPartnerSignature(record).length}}</div>
+                            </div>
                       </div>
                   </div>
-                  <div class="col-md-6" *ngIf="isOrg">
+                  <div class="col-md-6" *ngIf="record.type == 2">
                       <div class="form-group">
-                          <div class="label_item">{{'user.doc' | translate}}</div>
-                          <div>
-                              <div [innerHTML]="countPartnerDocs" class="input_text"></div>
-                          </div>
+                            <div class="label_item">{{'user.doc' | translate}}</div>
+                            <div class="input_text">
+                                <div>{{getPartnerDocument(record).length}}</div>
+                            </div>
                       </div>
                   </div>
               </div>
