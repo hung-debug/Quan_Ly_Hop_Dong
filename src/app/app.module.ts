@@ -73,7 +73,16 @@ import { NotificationComponent } from './main/notification/notification.componen
 import { ActionDeviceComponent } from './action-device/action-device.component';
 import { ContractTemplateModule } from './main/contract-template/contract-template.module';
 import { NotifiSignupDialogComponent } from './login/dialog/notifi-signup-dialog/notifi-signup-dialog.component';
-
+import { AdminAddUnitComponent } from './admin/admin-main/admin-unit/admin-add-unit/admin-add-unit.component';
+import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
+import { AdminMainComponent } from './admin/admin-main/admin-main.component';
+import { AdminUnitComponent } from './admin/admin-main/admin-unit/admin-unit.component';
+import { AdminSidebarComponent } from './admin/admin-main/admin-sidebar/admin-sidebar.component';
+import { AdminDashboardComponent } from './admin/admin-main/admin-dashboard/admin-dashboard.component';
+import { AdminUserComponent } from './admin/admin-main/admin-user/admin-user.component';
+import { AdminAddUserComponent } from './admin/admin-main/admin-user/admin-add-user/admin-add-user.component';
+import { AdminDetailUserComponent } from './admin/admin-main/admin-user/admin-detail-user/admin-detail-user.component';
+import { AdminDetailUnitComponent } from './admin/admin-main/admin-unit/admin-detail-unit/admin-detail-unit.component';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -114,6 +123,17 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NotificationComponent,
     ActionDeviceComponent,
     NotifiSignupDialogComponent,
+
+    AdminLoginComponent,
+    AdminMainComponent,
+    AdminSidebarComponent,
+    AdminDashboardComponent,
+    AdminUnitComponent,
+    AdminAddUnitComponent,
+    AdminDetailUnitComponent,
+    AdminUserComponent,
+    AdminAddUserComponent,
+    AdminDetailUserComponent,
   ],
   imports: [
     BrowserModule,
