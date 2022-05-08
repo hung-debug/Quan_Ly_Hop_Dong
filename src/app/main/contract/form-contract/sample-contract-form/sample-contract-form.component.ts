@@ -769,9 +769,9 @@ export class SampleContractFormComponent implements OnInit {
   getCheckSignature(isSignType: any, listSelect?: string, value?: any) {
     // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
-      // if (isSignType == 'text' && value) {
-      //   element.is_disable = true;
-      // } else {
+      if (isSignType == 'text' && value) {
+        element.is_disable = true;
+      } else {
         if ((element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
           let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
           if (data.length > 0)
@@ -792,7 +792,7 @@ export class SampleContractFormComponent implements OnInit {
             } else element.is_disable = (element.role != 4 || (this.datasForm.contract_no && element.role == 4)); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
           }
         }
-      // }
+      }
 
 
       if (listSelect) {
@@ -1119,10 +1119,10 @@ export class SampleContractFormComponent implements OnInit {
 
         this.getCheckSignature(d.sign_unit, d.name, d.is_have_text);
 
-        // if (d.is_have_text) {
-        //   this.isEnableText = false;
-        //   this.isEnableSelect = true;
-        // }
+        if (d.is_have_text) {
+          // this.isEnableText = false;
+          this.isEnableSelect = true;
+        }
 
         if (!d.name) //@ts-ignore
           document.getElementById('select-dropdown').value = "";
@@ -1357,7 +1357,7 @@ export class SampleContractFormComponent implements OnInit {
       return;
     } else {
       if (action == 'save_draft') {
-        if (this.datasForm.is_action_contract_created && this.router.url.includes("edit")) {
+        if (this.router.url.includes("edit")) {
           let isHaveFieldId: any[] = [];
           let isNotFieldId: any[] = [];
           // console.log(this.datasForm.contract_user_sign);
@@ -1390,6 +1390,16 @@ export class SampleContractFormComponent implements OnInit {
                   item['type'] = 3;
                 } else if (item.sign_unit == 'so_tai_lieu') {
                   item['type'] = 4;
+                  if (this.datasForm.contract_no) {
+                    if (!item.name)
+                        item.name = "";
+
+                    if (!item.recipient_id)
+                        item.recipient_id = "";
+
+                    if (!item.status)
+                        item.status = 0;
+                }
                 } else {
                   item['type'] = 1;
                 }
@@ -1494,6 +1504,16 @@ export class SampleContractFormComponent implements OnInit {
           item['type'] = 3;
         } else if (item.sign_unit == 'so_tai_lieu') {
           item['type'] = 4;
+          if (this.datasForm.contract_no) {
+            if (!item.name)
+                item.name = "";
+
+            if (!item.recipient_id)
+                item.recipient_id = "";
+
+            if (!item.status)
+                item.status = 0;
+        }
         } else {
           item['type'] = 1;
         }

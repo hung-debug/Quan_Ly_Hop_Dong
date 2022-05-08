@@ -163,7 +163,7 @@ export class ConfirmContractFormComponent implements OnInit {
                 })
             })
             this.getDefinddatasFormignEdit(isHaveFieldId, isNotFieldId, action);
-        } 
+        }
         else {
             this.data_sample_contract = [];
             let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text"];
