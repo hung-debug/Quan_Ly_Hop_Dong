@@ -2,9 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AddContractComponent } from "../../../add-contract/add-contract.component";
 import { variable } from "../../../../../config/variable";
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from "@angular/router";
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { ActivatedRoute, Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-contract-header',
@@ -25,18 +26,25 @@ export class ContractHeaderComponent implements OnInit {
   }
   closeResult: string = '';
   message: string;
+  sub: any;
+  action: string;
 
   constructor(
     private modalService: NgbModal,
     private router: Router,
     private contractService: ContractService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private route: ActivatedRoute,
   ) {
     // this.step = variable.stepSampleContract.step4
   }
 
   ngOnInit(): void {
-
+    this.sub = this.route.params.subscribe((params: any) => {
+      this.action = params.action
+    }, null, () => {
+      this.sub.unsubscribe;
+    })
   }
 
   open(content: any) {
@@ -71,30 +79,34 @@ export class ContractHeaderComponent implements OnInit {
   }
 
   closeCreateContract(modal: any) {
-    modal.close('Save click');
-    if (this.datas.id) {
-      this.contractService.deleteContract(this.datas.id).subscribe((data) => {
-        if (data.success) {
-          // this.toastService.showSuccessHTMLWithTimeout("Xóa hợp đồng thành công!", "", 3000);
-          this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-            void this.router.navigate(['/main/dashboard']);
-          });
-        } else {
-          if (data.message == 'E02') {
-            this.toastService.showErrorHTMLWithTimeout("Hợp đồng không phải bản nháp!", "", 3000);
-          } else {
-            this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại!", "", 3000);
-          }
-        }
-      },
-        error => {
-          this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại", "", 3000);
-        }
-      );
+    if (this.action == "edit") {
+      this.saveContract(modal);
     } else {
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        void this.router.navigate(['/main/dashboard']);
-      });
+      modal.close('Save click');
+      if (this.datas.id) {
+        this.contractService.deleteContract(this.datas.id).subscribe((data) => {
+          if (data.success) {
+            // this.toastService.showSuccessHTMLWithTimeout("Xóa hợp đồng thành công!", "", 3000);
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              void this.router.navigate(['/main/dashboard']);
+            });
+          } else {
+            if (data.message == 'E02') {
+              this.toastService.showErrorHTMLWithTimeout("Hợp đồng không phải bản nháp!", "", 3000);
+            } else {
+              this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại!", "", 3000);
+            }
+          }
+        },
+          error => {
+            this.toastService.showErrorHTMLWithTimeout("Xóa hợp đồng thất bại", "", 3000);
+          }
+        );
+      } else {
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          void this.router.navigate(['/main/dashboard']);
+        });
+      }
     }
 
     //void this.router.navigate(['/main/contract/create/draft']);

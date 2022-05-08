@@ -420,11 +420,12 @@ export class SampleContractFormComponent implements OnInit {
                 }
               }
             } else {
-              dataForm.sign_config[i].name = "";
               // add variable is_have_text check "text" accept input data content
               if (dataForm.sign_unit == 'text' && !dataForm.sign_config[i].recipient_id) {
                 dataForm.sign_config[i].is_have_text = true;
+                dataForm.sign_config[i].text_attribute_name = dataForm.sign_config[i].name;
               }
+              dataForm.sign_config[i].name = "";
               if (dataForm.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
                 dataForm.sign_config[i].value = this.datasForm.contract_no;
               }
@@ -768,9 +769,9 @@ export class SampleContractFormComponent implements OnInit {
   getCheckSignature(isSignType: any, listSelect?: string, value?: any) {
     // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
-      if (isSignType == 'text' && value) {
-        element.is_disable = true;
-      } else {
+      // if (isSignType == 'text' && value) {
+      //   element.is_disable = true;
+      // } else {
         if ((element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
           let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
           if (data.length > 0)
@@ -791,7 +792,7 @@ export class SampleContractFormComponent implements OnInit {
             } else element.is_disable = (element.role != 4 || (this.datasForm.contract_no && element.role == 4)); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
           }
         }
-      }
+      // }
 
 
       if (listSelect) {
@@ -1093,8 +1094,6 @@ export class SampleContractFormComponent implements OnInit {
     if (set_id) {
       // set lại id cho đối tượng ký đã click
       this.objSignInfo.id = set_id.id;
-      // this.objSignInfo.width = set_id.width;
-      // this.objSignInfo.height = set_id.width;
       signElement = document.getElementById(this.objSignInfo.id);
     } else
       signElement = document.getElementById(this.objSignInfo.id);
@@ -1118,23 +1117,12 @@ export class SampleContractFormComponent implements OnInit {
           this.objSignInfo.text_attribute_name = d.text_attribute_name
         }
 
-        // for để set lại list đối tượng ký
-        // this.list_sign_name.forEach((item: any) => {
-        //   if (d.sign_unit == 'chu_ky_anh') {
-        //     item.is_disable = !(item.sign_type.some((p: any) => p.id == 1) && item.role != 2);
-        //   } else if (d.sign_unit == 'chu_ky_so') {
-        //     item.is_disable = !(item.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && item.role != 2);
-        //   } else if (d.sign_unit == 'text') {
-        //     item.is_disable = !(item.sign_type.some((p: any) => p.id == 2) || item.role == 4);
-        //   } else item.is_disable = item.role != 4;
-        //   item.selected = d.name && item.name == d.name;
-        // })
         this.getCheckSignature(d.sign_unit, d.name, d.is_have_text);
 
-        if (d.is_have_text) {
-          this.isEnableText = false;
-          this.isEnableSelect = true;
-        }
+        // if (d.is_have_text) {
+        //   this.isEnableText = false;
+        //   this.isEnableSelect = true;
+        // }
 
         if (!d.name) //@ts-ignore
           document.getElementById('select-dropdown').value = "";
@@ -1593,7 +1581,7 @@ export class SampleContractFormComponent implements OnInit {
             } else if (element.sign_unit == 'so_tai_lieu' && !this.datasForm.contract_no && !element.email) {
               count++;
               break
-            } else if (element.sign_unit == 'text' && !element.text_attribute_name && !element.is_have_text) {
+            } else if (element.sign_unit == 'text' && !element.text_attribute_name) { //!element.is_have_text
               count_text++;
               break
             } else {
