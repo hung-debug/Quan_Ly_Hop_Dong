@@ -420,11 +420,12 @@ export class SampleContractFormComponent implements OnInit {
                 }
               }
             } else {
-              dataForm.sign_config[i].name = "";
               // add variable is_have_text check "text" accept input data content
               if (dataForm.sign_unit == 'text' && !dataForm.sign_config[i].recipient_id) {
                 dataForm.sign_config[i].is_have_text = true;
+                dataForm.sign_config[i].text_attribute_name = dataForm.sign_config[i].name;
               }
+              dataForm.sign_config[i].name = "";
               if (dataForm.sign_unit == 'so_tai_lieu' && this.datasForm.contract_no) {
                 dataForm.sign_config[i].value = this.datasForm.contract_no;
               }
@@ -1093,8 +1094,6 @@ export class SampleContractFormComponent implements OnInit {
     if (set_id) {
       // set lại id cho đối tượng ký đã click
       this.objSignInfo.id = set_id.id;
-      // this.objSignInfo.width = set_id.width;
-      // this.objSignInfo.height = set_id.width;
       signElement = document.getElementById(this.objSignInfo.id);
     } else
       signElement = document.getElementById(this.objSignInfo.id);
@@ -1118,21 +1117,10 @@ export class SampleContractFormComponent implements OnInit {
           this.objSignInfo.text_attribute_name = d.text_attribute_name
         }
 
-        // for để set lại list đối tượng ký
-        // this.list_sign_name.forEach((item: any) => {
-        //   if (d.sign_unit == 'chu_ky_anh') {
-        //     item.is_disable = !(item.sign_type.some((p: any) => p.id == 1) && item.role != 2);
-        //   } else if (d.sign_unit == 'chu_ky_so') {
-        //     item.is_disable = !(item.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && item.role != 2);
-        //   } else if (d.sign_unit == 'text') {
-        //     item.is_disable = !(item.sign_type.some((p: any) => p.id == 2) || item.role == 4);
-        //   } else item.is_disable = item.role != 4;
-        //   item.selected = d.name && item.name == d.name;
-        // })
         this.getCheckSignature(d.sign_unit, d.name, d.is_have_text);
 
         if (d.is_have_text) {
-          this.isEnableText = false;
+          // this.isEnableText = false;
           this.isEnableSelect = true;
         }
 
@@ -1369,7 +1357,7 @@ export class SampleContractFormComponent implements OnInit {
       return;
     } else {
       if (action == 'save_draft') {
-        if (this.datasForm.is_action_contract_created && this.router.url.includes("edit")) {
+        if (this.router.url.includes("edit")) {
           let isHaveFieldId: any[] = [];
           let isNotFieldId: any[] = [];
           // console.log(this.datasForm.contract_user_sign);
@@ -1402,6 +1390,16 @@ export class SampleContractFormComponent implements OnInit {
                   item['type'] = 3;
                 } else if (item.sign_unit == 'so_tai_lieu') {
                   item['type'] = 4;
+                  if (this.datasForm.contract_no) {
+                    if (!item.name)
+                        item.name = "";
+
+                    if (!item.recipient_id)
+                        item.recipient_id = "";
+
+                    if (!item.status)
+                        item.status = 0;
+                }
                 } else {
                   item['type'] = 1;
                 }
@@ -1506,6 +1504,16 @@ export class SampleContractFormComponent implements OnInit {
           item['type'] = 3;
         } else if (item.sign_unit == 'so_tai_lieu') {
           item['type'] = 4;
+          if (this.datasForm.contract_no) {
+            if (!item.name)
+                item.name = "";
+
+            if (!item.recipient_id)
+                item.recipient_id = "";
+
+            if (!item.status)
+                item.status = 0;
+        }
         } else {
           item['type'] = 1;
         }
@@ -1593,7 +1601,7 @@ export class SampleContractFormComponent implements OnInit {
             } else if (element.sign_unit == 'so_tai_lieu' && !this.datasForm.contract_no && !element.email) {
               count++;
               break
-            } else if (element.sign_unit == 'text' && !element.text_attribute_name && !element.is_have_text) {
+            } else if (element.sign_unit == 'text' && !element.text_attribute_name) { //!element.is_have_text
               count_text++;
               break
             } else {

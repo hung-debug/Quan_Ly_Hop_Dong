@@ -14,18 +14,18 @@
         <div class="radio col-md-4 label_type">
             <label>
                 <input type="radio" name="contract_create" [value]="1" [(ngModel)]="type"
-                    (change)="changeType($event)" [disabled]="is_disable">
+                    (change)="changeType($event)" [disabled]="is_disable || this.action == 'edit'">
                 <span> {{'contract.not-by-template' | translate}}</span>
             </label>
         </div>
         <div class="radio col-md-4 label_type">
             <label><input type="radio" name="contract_create" [value]="2" [(ngModel)]="type"
-                    (change)="changeType($event)" [disabled]="is_disable">
+                    (change)="changeType($event)" [disabled]="is_disable || this.action == 'edit'">
                 <span> {{'contract.by-template' | translate}}</span></label>
         </div> 
         <div class="radio col-md-4 label_type">
             <label><input type="radio" name="contract_create" [value]="3" [(ngModel)]="type"
-                    (change)="changeType($event)" [disabled]="is_disable">
+                    (change)="changeType($event)" [disabled]="is_disable || this.action == 'edit'">
                 <span> {{'contract.by-batch' | translate}}</span></label>
         </div>
     </div>

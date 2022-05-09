@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from "@angular/core";
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, AfterViewInit } from "@angular/core";
 // import { variable } from "src/app/config/variable";
 import { parttern } from "src/app/config/parttern";
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
@@ -11,7 +11,7 @@ import {
 import { ContractService } from "src/app/service/contract.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "src/app/service/toast.service";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { HttpErrorResponse } from "@angular/common/http";
 
 
@@ -21,7 +21,7 @@ import { HttpErrorResponse } from "@angular/common/http";
     styleUrls: ['./party-contract-form.component.scss']
 })
 
-export class PartyContractFormComponent implements OnInit {
+export class PartyContractFormComponent implements OnInit, AfterViewInit {
     @Input() datasForm: any;
     @Input() stepForm: any;
     @Output() stepChangePartyContractForm = new EventEmitter<string>();
@@ -61,6 +61,7 @@ export class PartyContractFormComponent implements OnInit {
     arrSearchNameSignature: any = [];
     arrSearchNameView: any = [];
     is_change_party: boolean = false;
+    action: any;
 
     get determineContract() {
         return this.determineDetails.controls;
@@ -71,7 +72,8 @@ export class PartyContractFormComponent implements OnInit {
         private contractService: ContractService,
         private spinner: NgxSpinnerService,
         private toastService: ToastService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     ) {
         this.stepForm = variable.stepSampleContract.step2
     }
@@ -103,6 +105,14 @@ export class PartyContractFormComponent implements OnInit {
         };
 
         if (this.datasForm.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
+    }
+
+    ngAfterViewInit(): void {
+        let isRouter = this.route.params.subscribe((params: any) => {
+            this.action = params.action;
+        }, null, () => {
+            isRouter.unsubscribe;
+        })
     }
 
 
@@ -145,33 +155,70 @@ export class PartyContractFormComponent implements OnInit {
 
     async getApiDetermine(is_save?: boolean) {
         this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
-            items.recipients.forEach((element: any) => {
-                // tạo mới hđ từ mẫu gán id = null
-                if (!element.template_recipient_id) {
-                    if (!element.id) {
+            if (this.action != 'edit') {
+                items.recipients.forEach((element: any) => {
+                    // tạo mới hđ từ mẫu gán id = null
+                    if (!element.template_recipient_id) {
+                        if (!element.id) {
+                            element.id = null;
+                        }
+                        element['template_recipient_id'] = element.id;
                         element.id = null;
                     }
-                    element['template_recipient_id'] = element.id;
-                    element.id = null;
-                }
-            })
+                })
+            }
+
             if (items.type == 3)
                 this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
         })
         this.spinner.show();
-        this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
-            this.getDataApiDetermine(res, is_save)
-        }, (error: HttpErrorResponse) => {
-            if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-                this.save_draft_infor_form.close_header = false;
-                this.save_draft_infor_form.close_modal.close();
+        // let isCheckId = this.datasForm.is_determine_clone.filter((p: any) => p.id);
+        if (this.action == 'edit') {
+
+            let isBody: any[] = [];
+            let count = 0;
+            let is_error = '';
+
+            for (let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
+                this.datasForm.is_determine_clone[i].recipients.forEach((element: any) => {
+                    if (!element.id) element.id = 0;
+                })
+                await this.contractService.getContractDetermineCoordination(this.datasForm.is_determine_clone[i], this.datasForm.is_determine_clone[i].id).toPromise().then((res: any) => {
+                    isBody.push(res);
+                }, (res: any) => {
+                    is_error = res.error;
+                    count++
+                })
+                if (count > 0) {
+                    break;
+                }
             }
-            this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-        }, () => {
-            this.spinner.hide();
+            if (isBody.length == this.datasForm.is_determine_clone.length) {
+                this.getDataApiDetermine(isBody, is_save)
+            } else {
+                if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                    this.save_draft_infor_form.close_header = false;
+                    this.save_draft_infor_form.close_modal.close();
+                }
+                this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
+            }
+
+            this.spinner.hide()
+        } else {
+            this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
+                this.getDataApiDetermine(res, is_save)
+            }, (error: HttpErrorResponse) => {
+                if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                    this.save_draft_infor_form.close_header = false;
+                    this.save_draft_infor_form.close_modal.close();
+                }
+                this.spinner.hide();
+                this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+            }, () => {
+                this.spinner.hide();
+            }
+            );
         }
-        );
     }
 
     getDataApiDetermine(res: any, is_save?: boolean) {

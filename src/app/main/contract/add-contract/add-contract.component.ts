@@ -1,17 +1,17 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ConfirmInforContractComponent} from "../shared/model/confirm-infor-contract/confirm-infor-contract.component";
-import {ContractHeaderComponent} from "../shared/model/contract-header/contract-header.component";
-import {DetermineSignerComponent} from "../shared/model/determine-signer/determine-signer.component";
-import {InforContractComponent} from "../shared/model/infor-contract/infor-contract.component";
-import {SampleContractComponent} from "../shared/model/sample-contract/sample-contract.component";
-import {variable} from "../../../config/variable";
-import {AppService} from 'src/app/service/app.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ContractService} from "../../../service/contract.service";
-import {UploadService} from "../../../service/upload.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {ToastService} from "../../../service/toast.service";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConfirmInforContractComponent } from "../shared/model/confirm-infor-contract/confirm-infor-contract.component";
+import { ContractHeaderComponent } from "../shared/model/contract-header/contract-header.component";
+import { DetermineSignerComponent } from "../shared/model/determine-signer/determine-signer.component";
+import { InforContractComponent } from "../shared/model/infor-contract/infor-contract.component";
+import { SampleContractComponent } from "../shared/model/sample-contract/sample-contract.component";
+import { variable } from "../../../config/variable";
+import { AppService } from 'src/app/service/app.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ContractService } from "../../../service/contract.service";
+import { UploadService } from "../../../service/upload.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { ToastService } from "../../../service/toast.service";
 import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
 // import * as from moment;
@@ -100,22 +100,22 @@ export class AddContractComponent implements OnInit {
 
 
   constructor(private formBuilder: FormBuilder,
-              private appService: AppService,
-              private route: ActivatedRoute,
-              private contractService: ContractService,
-              private router: Router,
-              private uploadService: UploadService,
-              private spinner: NgxSpinnerService,
-              private toastService : ToastService,
-              private userService: UserService,
-              private roleService: RoleService,
+    private appService: AppService,
+    private route: ActivatedRoute,
+    private contractService: ContractService,
+    private router: Router,
+    private uploadService: UploadService,
+    private spinner: NgxSpinnerService,
+    private toastService: ToastService,
+    private userService: UserService,
+    private roleService: RoleService,
   ) {
   }
 
-  isQLHD_01:boolean=true;
-  isQLHD_02:boolean=true;
-  isQLHD_08:boolean=true;
-  isQLHD_11:boolean=true;
+  isQLHD_01: boolean = true;
+  isQLHD_02: boolean = true;
+  isQLHD_08: boolean = true;
+  isQLHD_11: boolean = true;
 
   ngOnInit() {
     //title
@@ -123,35 +123,35 @@ export class AddContractComponent implements OnInit {
       this.action = params['action'];
 
       //lay id user
-    let userId = this.userService.getAuthCurrentUser().id;
-    this.userService.getUserById(userId).subscribe(
-      data => {
-        //lay id role
-        this.roleService.getRoleById(data.role_id).subscribe(
-          data => {
-            console.log(data);
-            let listRole: any[];
-            listRole = data.permissions;
-            this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
-            // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
-            // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
-            this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-          }
-        );
+      let userId = this.userService.getAuthCurrentUser().id;
+      this.userService.getUserById(userId).subscribe(
+        data => {
+          //lay id role
+          this.roleService.getRoleById(data.role_id).subscribe(
+            data => {
+              console.log(data);
+              let listRole: any[];
+              listRole = data.permissions;
+              this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
+              // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
+              // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
+              this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+            }
+          );
 
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-      })
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+        })
 
       //set title
       if (this.action == 'add') {
         this.appService.setTitle('contract.add');
       } else if (this.action == 'add-contract-connect') {
         this.appService.setTitle('contract.add');
-        const array_empty: any [] = [];
-        array_empty.push({ref_id: Number(params['id'])});
+        const array_empty: any[] = [];
+        array_empty.push({ ref_id: Number(params['id']) });
         this.datas.contractConnect = array_empty;
         console.log(this.datas.contractConnect);
       } else if (this.action == 'edit') {
@@ -163,7 +163,7 @@ export class AddContractComponent implements OnInit {
       }
 
       if (this.action == 'copy' || this.action == 'edit') {
-        
+
         this.spinner.show();
         this.contractService.getDetailContract(this.id).subscribe((rs: any) => {
           let data_api = {
@@ -181,12 +181,12 @@ export class AddContractComponent implements OnInit {
         })
       } else {
         // if (this.type == 1) {
-          this.step = variable.stepSampleContract.step1;
+        this.step = variable.stepSampleContract.step1;
         // } else if (this.type == 2) {
-          this.stepForm = variable.stepSampleContractForm.step1;
+        this.stepForm = variable.stepSampleContractForm.step1;
         // }
         this.stepBatch = variable.stepSampleContractBatch.step1;
-      } 
+      }
     });
   }
 
@@ -201,8 +201,8 @@ export class AddContractComponent implements OnInit {
         data.is_data_contract['document_id'] = fileName.id;
       }
       if (fileNameAttach) {
-        data.is_data_contract['file_name_attach'] = fileNameAttach.map((p: any) => 
-        ({filename :p.filename, id: p.id}));
+        data.is_data_contract['file_name_attach'] = fileNameAttach.map((p: any) =>
+          ({ filename: p.filename, id: p.id }));
         data.is_data_contract['attachFile'] = fileNameAttach.map((p: any) => p.path);
       }
       this.datas.contractConnect = data.is_data_contract.refs;
@@ -241,7 +241,7 @@ export class AddContractComponent implements OnInit {
           'confirm_infor_contract': false
         }
       }
-    
+
     } else if (this.type == 2) {
       this.datasForm = {
         stepFormLast: variable.stepSampleContractForm.step1,
