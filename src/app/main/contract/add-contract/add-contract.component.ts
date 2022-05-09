@@ -162,8 +162,7 @@ export class AddContractComponent implements OnInit {
         this.appService.setTitle('contract.copy');
       }
 
-      if (this.action == 'copy' || this.action == 'edit') {
-
+      if (this.action == 'edit') { // || this.action == 'copy'
         this.spinner.show();
         this.contractService.getDetailContract(this.id).subscribe((rs: any) => {
           let data_api = {
@@ -171,7 +170,6 @@ export class AddContractComponent implements OnInit {
             i_data_file_contract: rs[1],
             is_data_object_signature: rs[2]
           }
-          // this.contractService.changeMessage(data_api);
           this.getDataContractCreated(data_api);
         }, () => {
           this.spinner.hide();
@@ -191,44 +189,52 @@ export class AddContractComponent implements OnInit {
   }
 
   getDataContractCreated(data: any) {
-    // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
+    let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1 && p.status == 1)[0];
+    let fileNameAttach = data.i_data_file_contract.filter((p: any) => p.type == 3);
     if (data) {
-      let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1 && p.status == 1)[0];
-      let fileNameAttach = data.i_data_file_contract.filter((p: any) => p.type == 3);
-      if (fileName) {
-        data.is_data_contract['file_name'] = fileName.filename;
-        data.is_data_contract['contractFile'] = fileName.path;
-        data.is_data_contract['document_id'] = fileName.id;
+      // sua hop dong don le theo mau
+      if (data.is_data_contract.is_template) {
+        this.type = 2;
+        this.stepForm = variable.stepSampleContractForm.step1;
+        this.datasForm.name = data.is_data_contract.name;
+        this.datasForm.contractConnect = data.is_data_contract.refs;
+        this.datasForm.contract_no = data.is_data_contract.contract_no;
+        this.datasForm.sign_time = data.is_data_contract.sign_time;
+        this.datasForm.notes = data.is_data_contract.notes;
+        this.datasForm.type_id = data.is_data_contract.type_id;
+        this.datasForm.is_determine_clone = data.is_data_contract.participants;
+        this.datasForm.is_data_object_signature = data.is_data_object_signature;
+        this.datasForm.contract_id_action = data.is_data_contract.id;
+        this.datasForm.pdfUrl = fileName.path;
+        this.datasForm.document_id = fileName.id;
+        // this.datasForm.form_id = 473;
+        if (fileNameAttach) {
+          this.datasForm.fileAttachForm = fileNameAttach;
+        }
+        // this.datas = Object.assign(this.datasForm, data.is_data_contract);
+      } else {
+        if (fileName) {
+          data.is_data_contract['file_name'] = fileName.filename;
+          data.is_data_contract['contractFile'] = fileName.path;
+          data.is_data_contract['document_id'] = fileName.id;
+        }
+      
+        if (fileNameAttach) {
+          data.is_data_contract['file_name_attach'] = fileNameAttach.map((p: any) =>
+            ({ filename: p.filename, id: p.id }));
+          data.is_data_contract['attachFile'] = fileNameAttach.map((p: any) => p.path);
+        }
+        this.datas.contractConnect = data.is_data_contract.refs;
+        data.is_data_contract['is_action_contract_created'] = true;
+        this.datas.is_determine_clone = data.is_data_contract.participants;
+        this.datas.contract_id_action = data.is_data_contract.id;
+        this.datas.i_data_file_contract = data.i_data_file_contract;
+        this.datas['is_data_object_signature'] = data.is_data_object_signature;
+        this.datas = Object.assign(this.datas, data.is_data_contract);
+        this.step = variable.stepSampleContract.step1;
       }
-      if (fileNameAttach) {
-        data.is_data_contract['file_name_attach'] = fileNameAttach.map((p: any) =>
-          ({ filename: p.filename, id: p.id }));
-        data.is_data_contract['attachFile'] = fileNameAttach.map((p: any) => p.path);
-      }
-      this.datas.contractConnect = data.is_data_contract.refs;
-      data.is_data_contract['is_action_contract_created'] = true;
-      // this.datas.determine_contract = data.is_data_contract.participants;
-      this.datas.is_determine_clone = data.is_data_contract.participants;
-      this.datas.contract_id_action = data.is_data_contract.id;
-      this.datas.i_data_file_contract = data.i_data_file_contract;
-      this.datas['is_data_object_signature'] = data.is_data_object_signature;
-      // this.datas.determine_contract.forEach((res: any) => {
-      //   delete res.id;
-      //   res.recipients.forEach((element: any) => {
-      //     delete element.id;
-      //   })
-      // })
-      this.datas = Object.assign(this.datas, data.is_data_contract);
-      this.step = variable.stepSampleContract.step1;
-      // console.log(this.datas);
     }
   }
-
-  // ngOnDestroy() {
-  //   if (this.action == 'copy' || this.action == 'edit') {
-  //     this.subscription.unsubscribe();
-  //   }
-  // }
 
   changeType(e: any) {
     if (this.type == 1) {
