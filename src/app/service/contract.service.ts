@@ -191,7 +191,7 @@ export class ContractService {
     return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
   }
 
-  addContractStep1(datas: any, id?: any) {
+  addContractStep1(datas: any, id?: any, type_form?: string) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -210,6 +210,7 @@ export class ContractService {
       alias_url: "",
       refs: datas.contractConnect,
       type_id: datas.type_id,
+      is_template: type_form ? true : false
       //refs:[]
     });
     // console.log(headers);

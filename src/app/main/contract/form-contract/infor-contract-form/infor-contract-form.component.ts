@@ -289,7 +289,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             this.defineData(this.datasForm);
             if (!coutError) {
                 // push du lieu cac thong tin tao buoc 1
-                await this.contractService.addContractStep1(this.datasForm).toPromise().then((data) => {
+                await this.contractService.addContractStep1(this.datasForm, null, 'template_form').toPromise().then((data) => {
                     this.datasForm.id = data?.id;
                     this.datasForm.contract_id = data?.id;
                 }, (error) => {
