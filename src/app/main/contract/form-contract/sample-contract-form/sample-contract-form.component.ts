@@ -94,6 +94,7 @@ export class SampleContractFormComponent implements OnInit {
   listSignNameClone: any = [];
   data_sample_contract: any = [];
   isNoEmailObj: boolean = true;
+  isChangeNumberContract: number;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -121,9 +122,12 @@ export class SampleContractFormComponent implements OnInit {
     // this.setDataSignContract();
     // }
 
+    this.isChangeNumberContract = this.datasForm.contract_no;
+
     if (!this.datasForm.contract_user_sign) {
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
         this.datasForm.is_data_object_signature.forEach((res: any) => {
+          res['id_have_data'] = res.id;
           if (res.type == 1) {
             res['sign_unit'] = 'text';
           }
@@ -1357,7 +1361,17 @@ export class SampleContractFormComponent implements OnInit {
       return;
     } else {
       if (action == 'save_draft') {
+        // if (this.datasForm.contract_no && this.isChangeNumberContract != this.datasForm.contract_no) {
+        //   await this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id_action && this.router.url.includes("edit") ? this.datasForm.contract_id_action : null, 'template_form').toPromise().then((data) => {
+        //     this.datasForm.id = data?.id;
+        //     this.datasForm.contract_id = data?.id;
+        //   }, (error) => {
+        //     this.toastService.showErrorHTMLWithTimeout('Lỗi dữ liệu', "", 3000);
+        //   })
+        // }
+
         if (this.router.url.includes("edit")) {
+
           let isHaveFieldId: any[] = [];
           let isNotFieldId: any[] = [];
           // console.log(this.datasForm.contract_user_sign);
@@ -1372,7 +1386,7 @@ export class SampleContractFormComponent implements OnInit {
           this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
         } else {
           this.data_sample_contract = [];
-          let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value", "is_have_text"];
+          let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data"];
           let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
           isContractUserSign_clone.forEach((element: any) => {
             if (element.sign_config.length > 0) {
@@ -1392,14 +1406,14 @@ export class SampleContractFormComponent implements OnInit {
                   item['type'] = 4;
                   if (this.datasForm.contract_no) {
                     if (!item.name)
-                        item.name = "";
+                      item.name = "";
 
                     if (!item.recipient_id)
-                        item.recipient_id = "";
+                      item.recipient_id = "";
 
                     if (!item.status)
-                        item.status = 0;
-                }
+                      item.status = 0;
+                  }
                 } else {
                   item['type'] = 1;
                 }
@@ -1432,18 +1446,31 @@ export class SampleContractFormComponent implements OnInit {
       } else if (action == 'next_step') {
         let coutError = false;
         this.spinner.show();
-        await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
-          dataCode => {
-            if (!dataCode.success) {
-              this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+        if (this.datasForm.contract_no && this.isChangeNumberContract != this.datasForm.contract_no) {
+          await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
+            dataCode => {
+              if (!dataCode.success) {
+                this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+                coutError = true;
+              }
+              this.spinner.hide();
+            }, (error) => {
               coutError = true;
-            }
-            this.spinner.hide();
-          }, (error) => {
-            coutError = true;
-            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
-            this.spinner.hide();
-          });
+              this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+              this.spinner.hide();
+            });
+
+          // if (!coutError) {
+          //   await this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id_action ? this.datasForm.contract_id_action : null, 'template_form').toPromise().then((data) => {
+          //     this.datasForm.id = data?.id;
+          //     this.datasForm.contract_id = data?.id;
+          //   }, (error) => {
+          //     coutError = true;
+          //     this.toastService.showErrorHTMLWithTimeout('Lỗi dữ liệu', "", 3000);
+          //   })
+          // }
+        }
+
         if (!coutError) {
           this.stepForm = variable.stepSampleContractForm.step4;
           this.datasForm.stepLast = this.stepForm
@@ -1462,7 +1489,7 @@ export class SampleContractFormComponent implements OnInit {
   async getDefindDataSignEdit(dataSignId: any, dataSignNotId: any, action: any) {
     let dataSample_contract: any[] = [];
     if (dataSignId.length > 0) {
-      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text"];
+      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data"];
       dataSignId.forEach((res: any) => {
         data_remove_arr_signId.forEach((itemRemove: any) => {
           delete res[itemRemove];
@@ -1489,7 +1516,7 @@ export class SampleContractFormComponent implements OnInit {
 
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
-      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text"];
+      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data"];
       dataSignNotId.forEach((item: any) => {
         item['font'] = 'Arial';
         item['font_size'] = 14;
@@ -1506,14 +1533,14 @@ export class SampleContractFormComponent implements OnInit {
           item['type'] = 4;
           if (this.datasForm.contract_no) {
             if (!item.name)
-                item.name = "";
+              item.name = "";
 
             if (!item.recipient_id)
-                item.recipient_id = "";
+              item.recipient_id = "";
 
             if (!item.status)
-                item.status = 0;
-        }
+              item.status = 0;
+          }
         } else {
           item['type'] = 1;
         }

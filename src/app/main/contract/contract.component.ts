@@ -304,23 +304,16 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   openEdit(id: number) {
-    // //@ts-ignore
-    // if (JSON.parse(localStorage.getItem('is_action_contract_created'))) {
-    //   localStorage.removeItem('is_action_contract_created');
-    // }
-    this.getDataContract(id, 'edit')
+    setTimeout(() => {
+      // if (action == 'copy')
+      //   void this.router.navigate(['main/form-contract/copy/' + id]);
+      // else void this.router.navigate(['main/form-contract/edit/' + id]);
+      void this.router.navigate(['main/form-contract/edit/' + id]);
+    }, 100)
   }
 
   addContractConnectNew(id: number) {
     this.router.navigate(['main/form-contract/add-contract-connect/' + id]);
-  }
-
-  getDataContract(id: number, action: string) {
-    setTimeout(() => {
-      if (action == 'copy')
-        void this.router.navigate(['main/form-contract/copy/' + id]);
-      else void this.router.navigate(['main/form-contract/edit/' + id]);
-    }, 100)
   }
 
   deleteItem(id: number) {

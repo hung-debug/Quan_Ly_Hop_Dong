@@ -155,18 +155,20 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
     async getApiDetermine(is_save?: boolean) {
         this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
-            if (this.action != 'edit') {
                 items.recipients.forEach((element: any) => {
-                    // tạo mới hđ từ mẫu gán id = null
-                    if (!element.template_recipient_id) {
-                        if (!element.id) {
+                    if (this.action != 'edit') {
+                        // tạo mới hđ từ mẫu gán id = null
+                        if (!element.template_recipient_id) {
+                            if (!element.id) {
+                                element.id = null;
+                            }
+                            element['template_recipient_id'] = element.id;
                             element.id = null;
                         }
-                        element['template_recipient_id'] = element.id;
-                        element.id = null;
+                    } else {
+                        element.template_recipient_id = element.id;
                     }
                 })
-            }
 
             if (items.type == 3)
                 this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
@@ -174,7 +176,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         this.spinner.show();
         // let isCheckId = this.datasForm.is_determine_clone.filter((p: any) => p.id);
         if (this.action == 'edit') {
-
             let isBody: any[] = [];
             let count = 0;
             let is_error = '';
@@ -184,6 +185,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                     if (!element.id) element.id = 0;
                 })
                 await this.contractService.getContractDetermineCoordination(this.datasForm.is_determine_clone[i], this.datasForm.is_determine_clone[i].id).toPromise().then((res: any) => {
+                    res.recipients.forEach((item: any) => {
+                        item.template_recipient_id = item.id
+                    })
                     isBody.push(res);
                 }, (res: any) => {
                     is_error = res.error;

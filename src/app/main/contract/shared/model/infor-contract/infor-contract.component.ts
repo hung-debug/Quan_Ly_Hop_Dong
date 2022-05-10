@@ -103,23 +103,17 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.datas.attachFileNameArr = this.datas.file_name_attach;
       let isAttachFileClone = JSON.parse(JSON.stringify(this.datas.attachFileNameArr));
       this.attachFileNameArr = isAttachFileClone.map((p: any) => ({ filename: p.filename }));
-      // datas.contractFile
     }
 
     this.convertData(this.datas);
 
     this.contractService.getContractTypeList().subscribe(data => {
-      // console.log(data);
       this.typeList = data
     });
 
     this.contractService.getContractList('off', '', '', '', '', '', '', 30, "", "").subscribe(data => {
-      // console.log(data.entities);
       this.contractConnectList = data.entities;
     });
-
-    // this.subscription = this.contractService.sharedMessage.subscribe(msg => this.messageForSibling = msg);
-    // console.log(this.messageForSibling)
 
   }
 
@@ -278,7 +272,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
       // sua hop dong
-      // datas.contractConnect
       if (this.datas.contractConnect && this.datas.contractConnect.length && this.datas.contractConnect.length > 0) {
         this.datas.contractConnect.forEach((res: any) => {
           res['contract_id'] = this.datas.contract_id_action;
@@ -446,7 +439,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                     }
 
                     //next step
-                    console.log("next step");
                     this.step = variable.stepSampleContract.step2;
                     this.datas.stepLast = this.step;
                     // this.datas.document_id = '1';
@@ -461,7 +453,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                     this.datas.stepLast = this.step;
                     // this.datas.document_id = '1';
                     this.nextOrPreviousStep(this.step);
-                    console.log(this.datas);
                     this.spinner.hide();
                   }
                 }, error => {
@@ -524,7 +515,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.defineData(this.datas);
       const fileReader = new FileReader();
       if (this.datas.is_action_contract_created) {
-        console.log(typeof this.datas.contractFile)
         // file hợp đồng chính không thay đổi => convert url sang dạng blob
         if (!this.uploadFileContractAgain && this.datas.contractFile && (typeof this.datas.contractFile == 'string')) {
           // await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
