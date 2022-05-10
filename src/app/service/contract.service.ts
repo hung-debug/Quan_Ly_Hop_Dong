@@ -337,7 +337,8 @@ export class ContractService {
       px: Math.floor(signCertDigital.signDigitalX ? signCertDigital.signDigitalX : signCertDigital.coordinate_x).toString(),
       py: Math.floor(signCertDigital.signDigitalY ? signCertDigital.signDigitalY : signCertDigital.coordinate_y).toString(),
       signDate: "11-05-2019 09:55:55",
-      typeSign: "4"
+      typeSign: "4",
+      algDigest: "SHA_256"
     };
     return axios.post(this.postSignDigital, dataPost, config);
     // console.log(datePost);
