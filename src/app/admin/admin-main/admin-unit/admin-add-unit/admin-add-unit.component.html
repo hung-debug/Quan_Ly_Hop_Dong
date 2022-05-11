@@ -1,1 +1,147 @@
-<p>admin-add-unit works!</p>
+<div class="container-fluid">
+    <div class="header">
+      <h3 class="label-header">{{this.datas.title | translate}}</h3>
+    </div>
+    <form [formGroup]="addForm" class="content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="label text-color">{{'unit.name' | translate }} <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <input type="text" formControlName="nameOrg">
+                </div>
+                <div *ngIf="submitted && f.nameOrg.errors" class="invalid">
+                    <div *ngIf="f.nameOrg.errors.required">{{'error.unit.name.required' | translate}}</div>
+                    <div *ngIf="f.nameOrg.errors.pattern">{{'Tên tổ chức không được chứa ký tự đặc biệt' | translate}}</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label text-color">{{'unit.code' | translate }} <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <input type="text" formControlName="code" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                </div>
+                <div *ngIf="submitted && f.code.errors" class="invalid">
+                    <div *ngIf="f.code.errors.required">{{'error.unit.code.required' | translate}}</div>
+                    <div *ngIf="f.code.errors.pattern">{{'Mã tổ chức không được chứa ký tự đặc biệt' | translate}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label text-color">{{'Mã số thuế' | translate }} <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <input type="text" formControlName="tax_code">
+                </div>
+                <div *ngIf="submitted && f.tax_code.errors" class="invalid">
+                    <div *ngIf="f.tax_code.errors.required">{{'Mã số thuế không được để trống' | translate}}</div>
+                    <div *ngIf="f.tax_code.errors.pattern">{{'Mã số thuế không được chứa ký tự đặc biệt' | translate}}</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label text-color">{{'unit.short-name' | translate }}</div>
+                <div class="input-data">
+                    <input type="text" formControlName="short_name">
+                </div>
+                <div *ngIf="submitted && f.short_name.errors" class="invalid">
+                    <div *ngIf="f.short_name.errors.required">{{'error.unit.short-code.required' | translate}}</div>
+                    <div *ngIf="f.short_name.errors.pattern">{{'Tên viết tắt không được chứa ký tự đặc biệt' | translate}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label text-color">{{'Địa chỉ' | translate }} <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <input type="text" formControlName="address">
+                </div>
+                <div *ngIf="submitted && f.address.errors" class="invalid">
+                    <div *ngIf="f.address.errors.required">{{'Địa chỉ không được để trống' | translate}}</div>
+                    <div *ngIf="f.address.errors.pattern">{{'Địa chỉ không được chứa ký tự đặc biệt' | translate}}</div>
+                </div>
+            </div>
+        
+            <div class="col-md-6">
+                <div class="label text-color">{{'Email' | translate }} <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <input type="text" formControlName="email">
+                </div>
+                <div *ngIf="submitted && f.email.errors" class="invalid">
+                    <div *ngIf="f.email.errors.required">{{'error.user.email.required' | translate}}</div>
+                    <div *ngIf="f.email.errors.email">{{'error.user.email.format' | translate}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label text-color">{{'Người đại diện' | translate }} <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <input type="text" formControlName="representatives">
+                </div>
+                <div *ngIf="submitted && f.representatives.errors" class="invalid">
+                    <div *ngIf="f.representatives.errors.required">{{'Người đại diện không được để trống' | translate}}</div>
+                    <div *ngIf="f.representatives.errors.pattern">{{'Người đại diện không được chứa ký tự đặc biệt' | translate}}</div>
+                </div>
+            </div>
+        
+            <div class="col-md-6">
+                <div class="label text-color">{{'Chức vụ' | translate }} <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <input type="text" formControlName="position">
+                </div>
+                <div *ngIf="submitted && f.position.errors" class="invalid">
+                    <div *ngIf="f.position.errors.required">{{'Chức vụ không được để trống' | translate}}</div>
+                    <div *ngIf="f.position.errors.pattern">{{'Chức vụ không được chứa ký tự đặc biệt' | translate}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label text-color">{{'Quy mô' | translate }} <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <input type="text" formControlName="size">
+                </div>
+                <div *ngIf="submitted && f.size.errors" class="invalid">
+                    <div *ngIf="f.size.errors.required">{{'Quy mô không được để trống' | translate}}</div>
+                    <div *ngIf="f.size.errors.pattern">{{'Quy mô không được chứa ký tự đặc biệt' | translate}}</div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label text-color">{{'unit.phone' | translate }} <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <input type="text" formControlName="phone">
+                </div>
+                <div *ngIf="submitted && f.phone.errors" class="invalid">
+                    <div *ngIf="f.phone.errors.required">{{'error.user.phone.required' | translate}}</div>
+                    <div *ngIf="f.phone.errors.pattern">{{'error.user.phone.format' | translate}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6" style="align-self: center;">
+                <div class="row">
+                    <div class="col-md-5">
+                        <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="status" name="status">
+                        <span> {{'unit.active' | translate }}</span>
+                    </div>
+                    <div class="col-md-7">
+                        <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="status" name="status">
+                        <span> {{'unit.inactive' | translate }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row" style="justify-content: center;padding-top: 10px;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
+            <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>
+        </div>
+    </form>
+  </div>
+  

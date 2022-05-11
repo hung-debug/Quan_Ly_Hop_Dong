@@ -1,52 +1,52 @@
-<div *ngIf="isQLTC_01 || isQLTC_02 || isQLTC_03 || isQLTC_04" class="container-fluid">
+<div class="container-fluid">
     <div class="row">
-      <div class="col-md-3" *ngIf="isQLTC_03">
+      <div class="col-md-3">
         <div>{{'unit.code' | translate}}</div>
         <div class="input-line">
           <input type="text" [(ngModel)]="code" class="input_text"/>
         </div>
       </div>
-      <div class="col-md-3" *ngIf="isQLTC_03">
+      <div class="col-md-3">
         <div>{{'unit.name' | translate}}</div>
         <div class="input-line">
           <input type="text" [(ngModel)]="name" class="input_text"/>
         </div>
       </div>
       <div class="col-md-6 btn_search">
-        <button *ngIf="isQLTC_03" class="btn btn-lg btn-block btn_submit" (click)="searchUnit()">{{'btn.search' | translate }}</button>
-        <button *ngIf="isQLTC_01" class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
+        <button class="btn btn-lg btn-block btn_submit" (click)="searchUnit()">{{'btn.search' | translate }}</button>
+        <button class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
       </div>
     </div>
     <div class="row" style="padding-top: 20px;">
-      <p-treeTable [value]="list" id="table" [autoLayout]="true">
+      <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
         <ng-template pTemplate="header" let-columns>
-        <tr> 
-          <th *ngFor="let col of cols" [style]='col.style'>
-            {{col.header | translate}}
-          </th>
-        </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
           <tr>
-            <td><p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler><a (click)="isQLTC_04?detailUnit(rowData.id):null" style="color: #0160AE; cursor: pointer;">{{rowData.name}}</a></td>
-            <td>{{rowData.short_name}}</td>
-            <td>{{rowData.code}}</td>
-            <td>{{rowData.status==1?'Hoạt động':'Không hoạt động'}}</td>
-            <td>{{rowData.parent_id==null?'Tổ chức cha':'Tổ chức con'}}</td>
-            <td style="text-align: center">
-              <img *ngIf="rowData.is_edit && isQLTC_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUnit(rowData.id)" style="cursor: pointer;"/>
-            </td>
+              <th *ngFor="let col of cols" [style]='col.style'>
+                {{col.header | translate}}
+              </th>
           </tr>
         </ng-template>
-        
-      </p-treeTable>
-      <div class="footer_page_number">
-        {{'chart.number' | translate}}: {{total}}
-      </div> 
+        <ng-template pTemplate="body" let-list>
+            <tr>
+                <td><a  style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
+                <td>{{list.email}}</td>
+                <td>{{list.phone}}</td>
+                <td>{{list.organization.name}}</td>
+                <td>{{list.status==1?'Hoạt động':'Không hoạt động'}}</td>
+                <td>{{list.role?.name}}</td>
+                <td style="text-align: center">
+                  <img src="../../../assets/img/icon_edit.svg" width="20px"  style="cursor: pointer;"/>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+          <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template>
+        <ng-template pTemplate="paginatorright" let-state>
+          <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template> 
+      </p-table>
     </div>
-  </div>
-  <div *ngIf="!isQLTC_01 && !isQLTC_02 && !isQLTC_03 && !isQLTC_04">
-    {{'no.role' | translate}}
   </div>
    
     

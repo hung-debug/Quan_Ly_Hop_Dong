@@ -6,6 +6,7 @@ import { isPdfFile } from 'pdfjs-dist';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {environment} from '../../environments/environment';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,8 @@ export class DashboardService {
 
   constructor(private http: HttpClient,
     public datepipe: DatePipe,
-    public router: Router,) { }
+    public router: Router,
+    private toastService: ToastService) { }
 
   public countContractCreate(isOrg:any, organization_id:any, from_date: any, to_date: any): Observable<any> {
     this.getCurrentUser();
@@ -91,6 +93,7 @@ export class DashboardService {
 
   handleError(error: HttpErrorResponse) {
     if (error.status === 401 && error.error == 'Unauthorized') {
+      this.toastService.showWarningHTMLWithTimeout('Hết phiên đăng nhập', "", 3000)
       this.logout();
     }
     return throwError(this.errorData);
