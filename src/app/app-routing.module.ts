@@ -24,6 +24,12 @@ import {CheckSignDigitalComponent} from './main/check-sign-digital/check-sign-di
 import { NotificationComponent } from './main/notification/notification.component';
 import { AddContractTemplateComponent } from './main/contract-template/add-contract-template/add-contract-template.component';
 import { DetailContractTemplateComponent } from './main/contract-template/detail-contract-template/detail-contract-template.component';
+import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
+import { AdminAuthGuard } from './help/admin-auth.guard';
+import { AdminMainComponent } from './admin/admin-main/admin-main.component';
+import { AdminDashboardComponent } from './admin/admin-main/admin-dashboard/admin-dashboard.component';
+import { AdminUnitComponent } from './admin/admin-main/admin-unit/admin-unit.component';
+import { AdminUserComponent } from './admin/admin-main/admin-user/admin-user.component';
 
 const routes: Routes = [
   {
@@ -144,6 +150,29 @@ const routes: Routes = [
       {
         path: 'notification',
         component: NotificationComponent,
+      },
+    ],
+  },
+  {
+    path: 'admin/login',
+    component: AdminLoginComponent
+  },
+  {
+    path: 'admin-main',
+    canActivate: [AdminAuthGuard],
+    component: AdminMainComponent,
+    children: [
+      {
+        path: 'dashboard',
+        component: AdminDashboardComponent,
+      },
+      {
+        path: 'unit',
+        component: AdminUnitComponent,
+      },
+      {
+        path: 'user',
+        component: AdminUserComponent,
       },
     ],
   },

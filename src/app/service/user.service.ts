@@ -39,6 +39,7 @@ export class UserService {
   getUserByEmailUrl:any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
   checkPhoneUrl:any = `${environment.apiUrl}/api/v1/customers/check-phone-unique`;
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
+  signupUrl:any = `${environment.apiUrl}/api/v1/customers/registrations`;
 
   token:any;
   customer_id:any;
@@ -99,6 +100,22 @@ export class UserService {
      }),
      catchError(this.handleError)
    )
+  }
+
+  signup(datas:any){
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json');
+    const body = JSON.stringify({
+      name: datas.name,
+      size: datas.size,
+      address: datas.address,
+      tax_code: datas.tax_code,
+      representatives: datas.representatives,
+      position: datas.position,
+      email: datas.email,
+      phone: datas.phone
+    });
+    return this.http.post<any>(this.signupUrl, body, {'headers': headers});
   }
 
   sendResetPasswordToken(passwordOld:string, passwordNew:string) {

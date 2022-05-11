@@ -1,282 +1,119 @@
-<!-- 
-<body>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <div class="bg"></div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="row content_header">
-          <div class="col-md-12">
-            <div ngbDropdown class="d-inline-block header_language">
-              <div class="social-icons" ngbDropdownToggle>
-                <span class="{{'language_icon' | translate }}"></span>
-                <div class="label">{{'language' | translate }}</div>
-              </div>
-
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-                <button ngbDropdownItem class="drop" (click)="switchLang('en')">
-                  <div style="display: flex; align-items: center;">
-                    <div class="db_user">
-                      <div class="db_icon_english"></div>
-                    </div>
-                    <div>{{'language_en' | translate }}</div></div>
-                </button>
-                <button ngbDropdownItem class="drop" (click)="switchLang('vi')">
-                  <div style="display: flex; align-items: center;">
-                    <div class="db_user">
-                      <div class="db_icon_vietnam"></div>
-                    </div>
-                    <div>{{'language_vi' | translate }}</div></div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row content_body">
-          <form [formGroup]="signupForm">
-            <div style="margin: 0 30px;color:#106DB6; font-size: 30px;">{{'signup' | translate}}</div>
-            <div class="form-group">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <div class="input-line">
-                      <img src="../../assets/img/login_user.svg" class="input-img">
-                      <input type="text" id="username" placeholder="{{'organization' | translate}}"
-                        formControlName="username" class="input-text"/>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <div class="input-line">
-                      <img src="../../assets/img/icon_edit.svg" class="input-img">
-                      <input type="text" id="username" placeholder="{{'scale' | translate}}"
-                        formControlName="username" class="input-text"/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <div class="input-line">
-                      <img src="../../assets/img/icon_edit.svg" class="input-img">
-                      <input type="text" id="username" placeholder="{{'address' | translate}}"
-                        formControlName="username" class="input-text"/>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <div class="input-line">
-                      <img src="../../assets/img/icon_edit.svg" class="input-img">
-                      <input type="text" id="username" placeholder="{{'tax_code' | translate}}"
-                        formControlName="username" class="input-text"/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <div class="input-line">
-                      <img src="../../assets/img/icon_edit.svg" class="input-img">
-                      <input type="text" id="username" placeholder="{{'representative' | translate}}"
-                        formControlName="username" class="input-text"/>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <div class="input-line">
-                      <img src="../../assets/img/icon_edit.svg" class="input-img">
-                      <input type="text" id="username" placeholder="{{'position' | translate}}"
-                        formControlName="username" class="input-text"/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <div class="input-line">
-                      <img src="../../assets/img/login_email.svg" class="input-img">
-                      <input type="text" id="username" placeholder="{{'user.email' | translate}}"
-                        formControlName="username" class="input-text"/>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <div class="input-line">
-                      <img src="../../assets/img/icon_edit.svg" class="input-img">
-                      <input type="text" id="username" placeholder="{{'user.phone' | translate}}"
-                        formControlName="username" class="input-text"/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <p class="alert alert-danger" role="alert" *ngIf="error" style="text-align: center; font-size: 15px;">
-                  <strong>{{errorDetail}}</strong>
-                </p>
-              </div>
-
-              <div class="form-group sub-login" style="width: 60%;margin: 0 auto;">
-                <button class="btn btn-lg btn-block" (click)="sendSignup()">{{'btn.sendRequest' | translate}}</button>
-              </div>
-              </div>
-          </form>
-        </div>
-        <div class="row content_footer">
-          <div class="col-md-12">
-            <div class="bg-footer-login"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</body> -->
 <div style="background-color: #f9f9f9;">
   <div class="full-height d-flex flex-row">
     <div class="left-background">
 
     </div>
     <div class="right-panel">
-      <div ngbDropdown class="d-inline-block header_language">
-        <div class="social-icons" ngbDropdownToggle>
-          <span class="{{'language_icon' | translate }}"></span>
-          <div class="label">{{'language' | translate }}</div>
-        </div>
-  
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="drop_menu">
-          <button ngbDropdownItem class="drop" (click)="switchLang('en')">
-            <div style="display: flex; align-items: center;">
-              <div class="db_user">
-                <div class="db_icon_english"></div>
-              </div>
-              <div>{{'language_en' | translate }}</div></div>
-          </button>
-          <button ngbDropdownItem class="drop" (click)="switchLang('vi')">
-            <div style="display: flex; align-items: center;">
-              <div class="db_user">
-                <div class="db_icon_vietnam"></div>
-              </div>
-              <div>{{'language_vi' | translate }}</div></div>
-          </button>
-        </div>
-      </div>
-      <div class="small-logo d-flex flex-column justify-content-center">
-        <div>
-          <img src="../../assets/img/logo_eContract_21.svg" width="300px"/>
-        </div>
-      </div>
-      <div class="input-form ng-touched ng-pristine ng-invalid">
-        <form [formGroup]="signupForm">
+      <div class="input-form ng-touched ng-pristine ng-invalid" style="display: table;top: 0;left: 0;width: 100%;height: 75%;text-align: center;">
+        <div style="display: table-cell;vertical-align: middle;">
+        <form [formGroup]="addForm">
           <div style="margin: 0 30px;color:#106DB6; font-size: 30px;">{{'signup' | translate}}</div>
           <div class="form-group">
             <div class="row">
               <div class="col-md-6">
-                <div class="form-group">
-                  <div class="input-line">
-                    <img src="../../assets/img/login_user.svg" class="input-img">
-                    <input type="text" id="username" placeholder="{{'organization' | translate}}"
-                      formControlName="username" class="input-text"/>
-                  </div>
+                <div class="label text-color">{{'Tên tổ chức' | translate }} <span class="required-title">*</span></div>
+                <div class="input-line">
+                  <input type="text" placeholder="{{'Nhập tên tổ chức' | translate}}"
+                    formControlName="name" class="input-text"/>
+                </div>
+                <div *ngIf="submitted && f.name.errors" class="invalid">
+                  <div *ngIf="f.name.errors.required">{{'error.unit.name.required' | translate}}</div>
+                  <div *ngIf="f.name.errors.pattern">{{'Tên tổ chức không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group">
-                  <div class="input-line">
-                    <img src="../../assets/img/icon_edit.svg" class="input-img">
-                    <input type="text" id="username" placeholder="{{'scale' | translate}}"
-                      formControlName="username" class="input-text"/>
-                  </div>
+                <div class="label text-color">{{'Quy mô' | translate }} <span class="required-title">*</span></div>
+                <div class="input-line">
+                  <input type="text" placeholder="{{'Nhập quy mô' | translate}}"
+                    formControlName="size" class="input-text"/>
+                </div>
+                <div *ngIf="submitted && f.size.errors" class="invalid">
+                  <div *ngIf="f.size.errors.required">{{'Quy mô không được để trống' | translate}}</div>
+                  <div *ngIf="f.size.errors.pattern">{{'Quy mô không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
               </div>
             </div>
 
-            <div class="row">
+            <div class="row" style="padding-top: 2%;">
               <div class="col-md-6">
-                <div class="form-group">
-                  <div class="input-line">
-                    <img src="../../assets/img/icon_edit.svg" class="input-img">
-                    <input type="text" id="username" placeholder="{{'address' | translate}}"
-                      formControlName="username" class="input-text"/>
-                  </div>
+                <div class="label text-color">{{'Địa chỉ' | translate }}</div>
+                <div class="input-line">
+                  <input type="text" placeholder="{{'Nhập địa chỉ' | translate}}"
+                    formControlName="address" class="input-text"/>
+                </div>
+                <div *ngIf="submitted && f.address.errors" class="invalid">
+                  <div *ngIf="f.address.errors.pattern">{{'Địa chỉ không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group">
-                  <div class="input-line">
-                    <img src="../../assets/img/icon_edit.svg" class="input-img">
-                    <input type="text" id="username" placeholder="{{'tax_code' | translate}}"
-                      formControlName="username" class="input-text"/>
-                  </div>
+                <div class="label text-color">{{'Mã số thuế' | translate }} <span class="required-title">*</span></div>
+                <div class="input-line">
+                  <input type="text" placeholder="{{'Nhập mã số thuế' | translate}}"
+                    formControlName="tax_code" class="input-text"/>
                 </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <div class="input-line">
-                    <img src="../../assets/img/icon_edit.svg" class="input-img">
-                    <input type="text" id="username" placeholder="{{'representative' | translate}}"
-                      formControlName="username" class="input-text"/>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <div class="input-line">
-                    <img src="../../assets/img/icon_edit.svg" class="input-img">
-                    <input type="text" id="username" placeholder="{{'position' | translate}}"
-                      formControlName="username" class="input-text"/>
-                  </div>
+                <div *ngIf="submitted && f.tax_code.errors" class="invalid">
+                  <div *ngIf="f.tax_code.errors.required">{{'Mã số thuế không được để trống' | translate}}</div>
+                  <div *ngIf="f.tax_code.errors.pattern">{{'Mã số thuế không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
               </div>
             </div>
 
-            <div class="row">
+            <div class="row" style="padding-top: 2%;">
               <div class="col-md-6">
-                <div class="form-group">
-                  <div class="input-line">
-                    <img src="../../assets/img/login_email.svg" class="input-img">
-                    <input type="text" id="username" placeholder="{{'user.email' | translate}}"
-                      formControlName="username" class="input-text"/>
-                  </div>
+                <div class="label text-color">{{'Người đại diện' | translate }} <span class="required-title">*</span></div>
+                <div class="input-line">
+                  <input type="text" placeholder="{{'Nhập người đại diện' | translate}}"
+                    formControlName="representatives" class="input-text"/>
+                </div>
+                <div *ngIf="submitted && f.representatives.errors" class="invalid">
+                  <div *ngIf="f.representatives.errors.required">{{'Người đại diện không được để trống' | translate}}</div>
+                  <div *ngIf="f.representatives.errors.pattern">{{'Người đại diện không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group">
-                  <div class="input-line">
-                    <img src="../../assets/img/icon_edit.svg" class="input-img">
-                    <input type="text" id="username" placeholder="{{'user.phone' | translate}}"
-                      formControlName="username" class="input-text"/>
-                  </div>
+                <div class="label text-color">{{'Chức vụ' | translate }} <span class="required-title">*</span></div>
+                <div class="input-line">
+                  <input type="text" placeholder="{{'Nhập chức vụ' | translate}}"
+                    formControlName="position" class="input-text"/>
+                </div>
+                <div *ngIf="submitted && f.position.errors" class="invalid">
+                  <div *ngIf="f.position.errors.required">{{'Chức vụ không được để trống' | translate}}</div>
+                  <div *ngIf="f.position.errors.pattern">{{'Chức vụ không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
               </div>
             </div>
 
-            <div class="form-group">
-              <p class="alert alert-danger" role="alert" *ngIf="error" style="text-align: center; font-size: 15px;">
-                <strong>{{errorDetail}}</strong>
-              </p>
+            <div class="row" style="padding-top: 2%;">
+              <div class="col-md-6">
+                  <div class="label text-color">{{'Email' | translate }} <span class="required-title">*</span></div>
+                  <div class="input-line">
+                    <input type="text" placeholder="{{'Nhập email' | translate}}"
+                      formControlName="email" class="input-text"/>
+                  </div>
+                  <div *ngIf="submitted && f.email.errors" class="invalid">
+                    <div *ngIf="f.email.errors.required">{{'Email không được để trống' | translate}}</div>
+                    <div *ngIf="f.email.errors.email">{{'Email không đúng định dạng' | translate}}</div>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                <div class="label text-color">{{'Số điện thoại' | translate }} <span class="required-title">*</span></div>
+                <div class="input-line">
+                  <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}"
+                    formControlName="phone" class="input-text"/>
+                </div>
+                <div *ngIf="submitted && f.phone.errors" class="invalid">
+                  <div *ngIf="f.phone.errors.required">{{'Số điện thoại không được để trống' | translate}}</div>
+                  <div *ngIf="f.phone.errors.pattern">{{'Số điện thoại không đúng định dạng' | translate}}</div>
+                </div>
+              </div>
             </div>
 
-            <div class="form-group sub-login" style="width: 60%;margin: 0 auto;">
-              <button class="btn btn-lg btn-block" (click)="sendSignup()">{{'btn.sendRequest' | translate}}</button>
-            </div>
+              <div class="form-group sub-login" style="width: 60%;margin: 0 auto;padding-top: 4%;">
+                <button class="btn btn-lg btn-block" (click)="onSubmit()">{{'btn.sendRequest' | translate}}</button>
+              </div>
             </div>
         </form>
+      </div>
       </div>
       <div class="slogan">
         <div class="bg-footer-login"></div>

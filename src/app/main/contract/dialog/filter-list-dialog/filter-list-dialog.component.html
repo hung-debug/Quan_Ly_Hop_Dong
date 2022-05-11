@@ -45,6 +45,22 @@
                 </div>
             </div>
         </div>
+
+        <div class="row" style="padding-top: 10px;" *ngIf="isOrg=='on'">
+            <div class="col-md-12">
+                <div class="label text-color">Tổ chức</div>
+                <p-dropdown    
+                panelStyleClass="font"
+                appendTo="body"
+                [options]="orgList" 
+                formControlName="organization_id" 
+                optionLabel="name" 
+                optionValue="id" 
+                [filter]="true" 
+                filterBy="name" 
+                ></p-dropdown>
+            </div>
+        </div>
     
         <div class="row" style="justify-content: center;padding-top: 10px;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">Hủy</button>

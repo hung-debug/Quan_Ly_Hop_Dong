@@ -1,0 +1,311 @@
+.page-wrapper {
+    height: 100vh;
+  
+    .page-content {
+      display: inline-block;
+      width: 100%;
+      padding-top: 20px;
+      transition: padding-left .3s ease;
+  
+      @media screen and (min-width: 768px) {
+        padding-left: 220px;
+      }
+  
+      .overlay {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 998;
+        background: #000;
+        opacity: .5;
+        display: none;
+  
+        &.show {
+  
+          @media screen and (max-width: 768px) {
+            display: block;
+          }
+        }
+      }
+    }
+  
+    .sidebar {
+      left: 0px;
+    }
+  
+    &.toggled {
+  
+      .page-content {
+        padding-left: 0;
+      }
+    }
+  
+    .attribution{
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      padding: 5px;
+      margin: 5px;
+      letter-spacing: 1px;
+    }
+  }
+  
+  header {
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    //width: calc(100% - 220px);
+    background: #fff;
+    height: 60px;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e6e7ec;
+    transition: left 500ms;
+  }
+  .search-wrapper {
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+  
+  .social-icons {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 20px;
+  
+  }
+  .social-icons:hover {
+    background: #c5ebff;
+  }
+  
+  
+  .social-icons .notification_login{
+    height: 20px;
+    width: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(../../../assets/img/notification_login.svg);
+  }
+  .social-icons .user_login {
+    height: 20px;
+    width: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(../../../assets/img/user_login.svg);
+    //border-radius: 50%;
+  }
+  .social-icons .document {
+    height: 20px;
+    width: 18px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(../../../assets/img/icon_document.svg);
+    //border-radius: 50%;
+  }
+  .social-icons .label{  
+    color: #106DB6;
+    margin-left: 10px;
+  }
+  
+  .dropdown-toggle::after {
+    display:none;
+  }
+  
+  h3{
+    margin: 0;
+    font-weight: 500;
+    font-family: inherit;
+    text-transform: uppercase;
+  }
+  
+  //dropdown menu
+  .drop_menu{
+    //margin-top: 22px;
+    border-color: #368ee0;
+    padding: 0;
+    font-size: inherit;
+    right: 0px;
+    left: unset !important;
+  }
+  .drop{
+    padding: 10px;
+    color:#106DB6;
+    min-height: 45px;
+  }
+  .drop_notification{
+    padding: 5px 10px;
+    color:#106DB6;
+    min-height: 45px;
+    border-bottom: 1px solid rgb(223, 220, 220);
+  }
+  .drop_notification:hover{
+    background-color: #e6e7ec;
+    cursor: pointer;
+  }
+  .drop_red{
+    padding: 10px;
+    color: #ED1C24;
+    min-height: 45px;
+  }
+  .drop_icon{
+    width: 20px
+  }
+  
+  //content
+  //.content{
+  //  margin-top: 60px;
+  //  //margin-top: 40px;
+  //}
+  .content_footer{
+    text-align: center;
+    color:#0160AE;
+    font-weight: 500;
+    width: calc(100% - 220px);
+    height: 25px;
+    padding: 3px;
+    bottom: 0;
+    position: fixed;
+    background-color: #f3f8fe;
+  }
+  
+  //popup
+  .popup_content{
+    padding: 30px;
+  }
+  .popup_title{
+    margin: 0;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  .popup_close{
+    font-size: 25px;
+    text-align: right;
+    cursor: pointer;
+  }
+  .btn_close {
+    width: 90px;
+    font-size: inherit;
+    background: #6c6c6d;
+    color: white;
+    border: 1px solid #808183;
+  }
+  .btn_submit{
+    width: 110px;
+    font-size: inherit;
+    background: #106DB6;
+    color: white;
+    border: 1px solid #87CAFF;
+  }
+  .label_item{
+    padding: 10px 0px 5px;
+    color: #5e5e5e;
+  }
+  .item_text{
+    padding: 10px;
+  }
+  
+  .fa_icon{
+    font-size: 18px;
+    color: #106DB6;
+  }
+  .label_infor{
+    font-weight: 500;
+    padding-left: 15px;
+  }
+  .db_user{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    margin-right: 5px;
+  }
+  .db_user_detail {
+    height: 15px;
+    width: 15px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(../../../assets/img/db_user_detail.svg);
+  }
+  .db_password {
+    height: 25px;
+    width: 25px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(../../../assets/img/db_password.svg);
+  }
+  .db_log_out {
+    height: 18px;
+    width: 18px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(../../../assets/img/db_log_out.svg);
+  }
+  .db_icon_english {
+    height: 20px;
+    width: 30px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(../../../assets/img/icon_english.svg);
+  }
+  .db_icon_vietnam {
+    height: 20px;
+    width: 30px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(../../../assets/img/icon_vietnam.svg);
+  }
+  .db_document_use{
+    height: 22px;
+    width: 16px;   
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(../../../assets/img/db_document.svg);
+  }
+  .item_contract_name {
+    font-weight: 500;
+    font-size: 15px;
+    color: #106DB6;
+  }
+  
+  .item_contract_infor{
+    font-size: 11px;
+    color: #666666;
+  }
+  
+  .status_blue{
+    color: #027e21;
+  }
+  .title_notification{
+    color:#106DB6;
+    padding: 10px;
+    border-bottom: 1px solid rgb(223, 220, 220);
+    text-transform: uppercase;
+  }
+  .view_all{
+    color:#106DB6;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .view_all:hover{
+    background-color: #e6e7ec;
+  }
+  :host ::ng-deep {
+    .p-badge {
+      background: red;
+      font-size: 9px !important;
+      padding: 5px !important;
+      height: 1.2rem !important;
+      line-height: 0.5rem !important;
+      min-width: 1.2rem !important;
+    }
+  }
+  .pi-bell{
+    font-size: 20px;
+    color:#106db6
+  }

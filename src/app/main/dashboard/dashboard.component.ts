@@ -6,6 +6,8 @@ import { ContractService } from 'src/app/service/contract.service';
 import { DashboardService } from 'src/app/service/dashboard.service';
 import { UserService } from 'src/app/service/user.service';
 import { Router } from '@angular/router';
+import { UnitService } from 'src/app/service/unit.service';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -23,6 +25,7 @@ export class DashboardComponent implements OnInit {
   totalCreate:any=0;
 
   //filter
+  date:any="";
   filter_from_date:any = "";
   filter_to_date:any = "";
 
@@ -36,13 +39,17 @@ export class DashboardComponent implements OnInit {
   stateOptions: any[];
 
   listNotification: any[] = [];
+  orgList: any[] = [];
+  orgListTmp: any[] = [];
+  organization_id:any = "";
 
   constructor(
     private appService: AppService,
     private dashboardService: DashboardService,
     private userService: UserService,
-    private contractService:ContractService,
+    private unitService:UnitService,
     private router: Router,
+    public datepipe: DatePipe,
   ) {
     this.stateOptions = [
       { label: 'HĐ của tôi', value: 'off' },
@@ -55,6 +62,17 @@ export class DashboardComponent implements OnInit {
     this.search();
 
     this.user = this.userService.getInforUser();
+
+    this.unitService.getUnitList('', '').subscribe(data => {
+      console.log(data.entities);
+      this.orgListTmp.push({name: "Tất cả", id:""});
+      let dataUnit = data.entities.sort((a:any,b:any) => a.name.toString().localeCompare(b.name.toString()));
+      for(var i = 0; i < dataUnit.length; i++){
+        this.orgListTmp.push(dataUnit[i]);
+      }
+      
+      this.orgList = this.orgListTmp;
+    });
   }
 
   openLink(link:any) {
@@ -63,6 +81,12 @@ export class DashboardComponent implements OnInit {
     // });
     window.location.href = link;
     //this.router.navigate([link]);
+  }
+
+  detailContract(id:any){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/contract/create/processing']);
+    });
   }
 
   openLinkNotification(link:any, id:any) {
@@ -74,8 +98,21 @@ export class DashboardComponent implements OnInit {
 
   searchCountCreate(){
     console.log(this.isOrg);
-    this.dashboardService.countContractCreate(this.isOrg, this.filter_from_date, this.filter_to_date).subscribe(data => {     
+    if (this.date != "" && this.date[0] != 0) {
+      this.date.forEach((key: any, v: any) => {
+        if(v == 0 && key){
+          this.filter_from_date = this.datepipe.transform(key, 'yyyy-MM-dd');
+        }else if(v == 1 && key){
+          this.filter_to_date = this.datepipe.transform(key, 'yyyy-MM-dd');
+        }
+      });
+    }
+    this.dashboardService.countContractCreate(this.isOrg, this.organization_id ,this.filter_from_date, this.filter_to_date).subscribe(data => {     
       console.log(data);    
+      data.isOrg = this.isOrg;
+      data.organization_id = this.organization_id;
+      data.from_date = this.filter_from_date;
+      data.to_date = this.filter_to_date;
       this.totalCreate = data.total_process + data.total_signed + data.total_reject + data.total_cancel + data.total_expires;
       this.chartCreated = new Chart({
         colors: ['#4B71F0', '#58A55C', '#ED1C24', '#717070', '#FF710B'],
@@ -109,6 +146,7 @@ export class DashboardComponent implements OnInit {
             },
             formatter: function() {
               var link = "";
+              
               if(this.value == 'Đang xử lý'){
                 link = "/main/contract/create/processing"
               }else if(this.value == 'Hoàn thành'){
@@ -120,7 +158,8 @@ export class DashboardComponent implements OnInit {
               }else if(this.value == 'Quá hạn'){
                 link = "/main/contract/create/overdue"
               }
-              return '<a style="cursor: pointer; color: #106db6; text-decoration: none" href="'+ link + '">' + this.value + '</a>';
+              link = link + "?isOrg=" + data.isOrg + "&organization_id=" + data.organization_id + "&filter_from_date=" + data.from_date + "&filter_to_date=" + data.to_date;
+              return '<a style="cursor: pointer; color: #106db6; text-decoration: none" href="'+ link  + '">' + this.value + '</a>';
             },
             useHTML: true
           }
@@ -156,7 +195,7 @@ export class DashboardComponent implements OnInit {
                       }else if(this.x == 4){
                         link = "/main/contract/create/overdue"
                       }
-                      window.location.href= link;
+                      window.location.href= link + "?isOrg=" + data.isOrg + "&organization_id=" + data.organization_id + "&filter_from_date=" + data.from_date + "&filter_to_date=" + data.to_date;
                     }
                 }
             },

@@ -27,6 +27,7 @@ export class ShareContractTemplateDialogComponent implements OnInit {
   stateOptions: any[];
   cols: any[]; 
   list: any[] = [];
+  orgListTmp:any[] = [];
 
   get fUser() { return this.addFormUser.controls; }
 
@@ -53,15 +54,17 @@ export class ShareContractTemplateDialogComponent implements OnInit {
     }
 
   organization_id_user_login:any;
-  orgId:any;
+  orgId:any="";
   ngOnInit(): void {
-    //lay danh sach to chuc
-    this.unitService.getUnitList('', '').subscribe(data => {
-      console.log(data.entities);
-      this.orgList = data.entities;
-    });
+    
 
     if(this.isList == 'off'){
+      //lay danh sach to chuc
+      this.unitService.getUnitList('', '').subscribe(data => {
+        console.log(data.entities);
+        this.orgList = data.entities;
+      });
+
       //lay id user
       this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
       
@@ -75,7 +78,18 @@ export class ShareContractTemplateDialogComponent implements OnInit {
         email: this.fbd.control("", [Validators.required])
       });
     }else{
-      this.orgId=this.userService.getAuthCurrentUser().organizationId;
+      //lay danh sach to chuc
+      this.unitService.getUnitList('', '').subscribe(data => {
+        console.log(data.entities);
+        this.orgListTmp.push({name: "Tất cả", id:""});
+        let dataUnit = data.entities.sort((a:any,b:any) => a.name.toString().localeCompare(b.name.toString()));
+        for(var i = 0; i < dataUnit.length; i++){
+          this.orgListTmp.push(dataUnit[i]);
+        }
+        
+        this.orgList = this.orgListTmp;
+      });
+
       this.cols = [
         {header: 'Email đã chia sẻ', style:'text-align: left;' },
         {header: 'Tổ chức', style:'text-align: left;' },
@@ -94,12 +108,15 @@ export class ShareContractTemplateDialogComponent implements OnInit {
 
   getUserByOrg(orgId:any){
     console.log(orgId);
+    let emailLogin = this.userService.getAuthCurrentUser().email;
+    console.log(emailLogin);
     //lay danh sach email da duoc chia se
     this.contractTemplateService.getEmailShareList(this.data.id, orgId).subscribe(listShared => {
       this.userService.getUserList(orgId, "").subscribe(data => {
         console.log(data);
+        let dataFilter = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
         //chi lay danh sach user chua duoc chia se
-        this.userList = data.entities.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
+        this.userList = dataFilter.filter((o1:any) => !listShared.some((o2:any) => o1.email === o2.email));
       });
     });
 

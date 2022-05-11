@@ -207,6 +207,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         // giới hạn file upload lên là 5mb
         if (file.size <= 5000000) {
           const file_name = file.name;
+          console.log(this.attachFileNameArr);
           if (this.attachFileNameArr.filter((p: any) => p.filename == file_name).length == 0) {
             const extension = file.name.split('.').pop();
             //this.datas.file_name_attach = file_name;
@@ -639,6 +640,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       if (data) data.status = 0;
       this.contractTemplateService.updateFileAttach(item.id, data).subscribe((res: any) => {
         this.datas.attachFileNameArr.splice(index_dlt, 1);
+        this.attachFileNameArr.splice(index_dlt, 1);
+        //this.datas.attachFileArr.splice(index_dlt, 1);
+        console.log(this.attachFileArr);
       }, error => {
         this.toastService.showErrorHTMLWithTimeout("Lỗi xoá file đính kèm!", "", 3000);
         this.spinner.hide();
@@ -647,14 +651,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       })
     } else {
       this.datas.attachFileNameArr.splice(index_dlt, 1);
+      this.attachFileNameArr.splice(index_dlt, 1);
+      this.datas.attachFileArr.splice(index_dlt, 1);
+      console.log(this.attachFileArr);
     }
-    // this.datas.attachFileNameArr = this.attachFileNameArr;
-    this.attachFileArr.forEach((element, index) => {
-      // console.log(element.name);
-      if (element.name == item) this.attachFileArr.splice(index, 1);
-    });
-    this.datas.attachFileArr = this.attachFileArr;
-    // console.log(this.datas.attachFileArr);
+    
   }
 
   contractNameValid(){

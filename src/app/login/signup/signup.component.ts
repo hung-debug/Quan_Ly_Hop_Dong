@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastService } from 'src/app/service/toast.service';
+import { UserService } from 'src/app/service/user.service';
+import {parttern_input} from "../../config/parttern";
+import { NotifiSignupDialogComponent } from '../dialog/notifi-signup-dialog/notifi-signup-dialog.component';
 
 @Component({
   selector: 'app-signup',
@@ -12,15 +16,18 @@ import { ToastService } from 'src/app/service/toast.service';
 })
 export class SignupComponent implements OnInit {
 
-  status:number = 1;
-  notification:string = '';
-  closeResult:string= '';
-  error:boolean = false;
-  errorDetail:string = '';
+  addForm: FormGroup;
+  submitted = false;
+  get f() { return this.addForm.controls; }
+
   constructor(private modalService: NgbModal,
               private router: Router,
               public translate: TranslateService,
-              private toastService: ToastService,) {
+              private toastService: ToastService,
+              private fbd: FormBuilder,
+              private userService: UserService,
+              private dialog: MatDialog,
+              ) {
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang('vi');
     //localStorage.setItem('lang', 'vi');
@@ -33,36 +40,63 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  signupForm = new FormGroup({
-    tax_code: new FormControl(''),
-    username: new FormControl(''),
-    password: new FormControl('')
-  })
-
-  //open popup
-  open(content:any) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    this.addForm = this.fbd.group({
+      name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      size: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      address: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
+      tax_code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      representatives: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      position: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      email: this.fbd.control("", [Validators.required, Validators.email]),
+      phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
     });
-  }
+  }   
 
-  //close popup
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
+  onSubmit() {
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.addForm.invalid) {
+      return;
     }
+    const data = {
+      name: this.addForm.value.name,
+      size: this.addForm.value.size,
+      address: this.addForm.value.address,
+      tax_code: this.addForm.value.tax_code,
+      representatives: this.addForm.value.representatives,
+      position: this.addForm.value.position,
+      email: this.addForm.value.email,
+      phone: this.addForm.value.phone
+    }
+    console.log(data);
+    
+    //them to chuc
+    this.userService.signup(data).subscribe(
+      data => {
+        this.sendNotifi("Đăng ký thành công!");
+        console.log(data);        
+      }, error => {
+        this.sendNotifi("Đăng ký thất bại!");
+      }
+    )
   }
 
-  sendSignup(){
-    this.toastService.showSuccessHTMLWithTimeout("no.signup.success", "", 3000);
+  sendNotifi(message:any) {
+    const data = {
+      title: 'notification',
+      message: message,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(NotifiSignupDialogComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
   //return login

@@ -1,0 +1,55 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        <div>{{'Họ tên' | translate}}</div>
+        <div class="input-line">
+          <input type="text" [(ngModel)]="name" class="input_text"/>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div>{{'Email' | translate}}</div>
+        <div class="input-line">
+          <input type="text" [(ngModel)]="email" class="input_text"/>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div>{{'Số điện thoại' | translate}}</div>
+        <div class="input-line">
+          <input type="text" [(ngModel)]="phone" class="input_text"/>
+        </div>
+      </div>
+      <div class="col-md-3 btn_search">
+        <button class="btn btn-lg btn-block btn_submit" (click)="searchUser()">{{'btn.search' | translate }}</button>
+        <button class="btn btn-lg btn-block btn_submit" (click)="addUser()">{{'btn.add' | translate }}</button>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 20px;">
+      <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+              <th *ngFor="let col of cols" [style]='col.style'>
+                {{col.header | translate}}
+              </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-list>
+            <tr>
+                <td><a (click)="detailUser(list.id)" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
+                <td>{{list.email}}</td>
+                <td>{{list.phone}}</td>
+                <td style="text-align: center">
+                  <img *ngIf="list.organization_id == this.organization_id_user_login" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>
+                </td> 
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+          <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template>
+        <ng-template pTemplate="paginatorright" let-state>
+          <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
+        </ng-template> 
+      </p-table>
+    </div>
+  </div>
+   
+    

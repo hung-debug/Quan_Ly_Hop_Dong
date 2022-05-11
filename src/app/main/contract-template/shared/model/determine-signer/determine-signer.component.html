@@ -253,12 +253,10 @@
              <div>
              {{'user.lead' | translate}}
             </div>
-             <div class="participants-otp" *ngFor="let d of getPartnerCoordination(item); let index = index">
-              <input [id]="'ordering-lead-' + index" (focusout)="onChangeValue($event,'ordering-lead-' + index)" class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
-                     [(ngModel)]="d.ordering"
-                     oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" disabled>  
-              <input type="checkbox" (ngModelChange)="changeIsCoordination($event, index, item, id)">
-                <span style="padding: 0 10px">Có người điều phối</span>
+              <div class="participants-otp" style="display: flex">
+                <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item).length == 0" (change)="changeIsCoordination($event, item, id)">
+                <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="getPartnerCoordination(item).length > 0" checked (change)="changeIsCoordination($event, item, id)">
+                <div style="padding: 0 10px">Có người điều phối</div>
               </div>
             </div>
            <!-- <div class="participants&#45;&#45;content" *ngFor="let d of getPartnerCoordination(item); let index = index">
@@ -579,12 +577,12 @@
 </div>
 
 <!--ẩn tạm thời-->
-<!--<div style="display: flex">-->
-<!--  <div style="margin-right: 80px"></div>-->
-<!--  <div style="display: inline-block; cursor: pointer">-->
-<!--    <u class="label text-color" (click)="addPartner()" style="background-color: #FFFFFF">{{'them_doi_tac' | translate}}</u>-->
-<!--  </div>-->
-<!--</div>-->
+<!-- <div style="display: flex">
+  <div style="margin-right: 80px"></div>
+  <div style="display: inline-block; cursor: pointer">
+    <u class="label text-color" (click)="addPartner()" style="background-color: #FFFFFF">{{'them_doi_tac' | translate}}</u>
+  </div>
+</div> -->
 
 <div class="footer-determine" style="display: flex; justify-content: space-between">
   <div style="width: 200px;">

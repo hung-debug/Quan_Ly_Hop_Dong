@@ -43,8 +43,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
   id: any = "";
   notification: any = "";
   isOrg: string = 'off';
-  isOrgChildren:any = 'off';
   stateOptions: any[];
+  organization_id:any="";
 
   //filter contract
   filter_name: any = "";
@@ -54,8 +54,10 @@ export class ContractComponent implements OnInit, AfterViewInit {
   filter_to_date: any = "";
   filter_status: any = "";
   filter_remain_day: any = "";
+  filter_is_org_me_and_children:any = "";
   message: any;
   subscription: Subscription;
+  roleMess:any="";
 
   //phan quyen
   isQLHD_01: boolean = true;  //them moi hop dong
@@ -125,6 +127,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.isOrg = "off";
       }
+      if (typeof params.organization_id != 'undefined' && params.organization_id) {
+        this.organization_id = params.organization_id;
+      } else {
+        this.organization_id = "";
+      }
     });
     this.sub = this.route.params.subscribe(params => {
       this.action = params['action'];
@@ -133,49 +140,48 @@ export class ContractComponent implements OnInit, AfterViewInit {
       //set title
       this.convertStatusStr();
 
-      this.appService.setTitle("contract.list.created");
+      this.appService.setTitle("contract.list.created");      
 
-      this.p = 1;
-      this.getContractList();
+      //lay id user
+      let userId = this.userService.getAuthCurrentUser().id;
+      this.userService.getUserById(userId).subscribe(
+        data => {
+          //lay id role
+          this.roleService.getRoleById(data.role_id).subscribe(
+            data => {
+              console.log(data);
+              let listRole: any[];
+              listRole = data.permissions;
+              this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
+              this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
+              this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
+              this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
+              this.isQLHD_05 = listRole.some(element => element.code == 'QLHD_05');
+              this.isQLHD_06 = listRole.some(element => element.code == 'QLHD_06');
+              this.isQLHD_07 = listRole.some(element => element.code == 'QLHD_07');
+              this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
+              this.isQLHD_09 = listRole.some(element => element.code == 'QLHD_09');
+              this.isQLHD_10 = listRole.some(element => element.code == 'QLHD_10');
+              this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
+              this.isQLHD_12 = listRole.some(element => element.code == 'QLHD_12');
+              this.isQLHD_13 = listRole.some(element => element.code == 'QLHD_13');
+
+              //neu co quyen xem danh sach hop dong cua to chuc minh va to chuc con
+              this.filter_is_org_me_and_children = this.isQLHD_03;
+
+              this.getContractList();
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+            }
+          );
+
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+        }
+      )
     });
 
-    //lay id user
-    let userId = this.userService.getAuthCurrentUser().id;
-    this.userService.getUserById(userId).subscribe(
-      data => {
-        //lay id role
-        this.roleService.getRoleById(data.role_id).subscribe(
-          data => {
-            console.log(data);
-            let listRole: any[];
-            listRole = data.permissions;
-            this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
-            this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
-            this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
-            this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
-            this.isQLHD_05 = listRole.some(element => element.code == 'QLHD_05');
-            this.isQLHD_06 = listRole.some(element => element.code == 'QLHD_06');
-            this.isQLHD_07 = listRole.some(element => element.code == 'QLHD_07');
-            this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
-            this.isQLHD_09 = listRole.some(element => element.code == 'QLHD_09');
-            this.isQLHD_10 = listRole.some(element => element.code == 'QLHD_10');
-            this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
-            this.isQLHD_12 = listRole.some(element => element.code == 'QLHD_12');
-            this.isQLHD_13 = listRole.some(element => element.code == 'QLHD_13');
-
-            //neu co quyen xem danh sach hop dong cua to chuc minh va to chuc con
-            if(this.isQLHD_03){
-              this.isOrgChildren = 'on';
-            }
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-          }
-        );
-
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-      }
-    )
+    
 
     // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
   }
@@ -189,34 +195,42 @@ export class ContractComponent implements OnInit, AfterViewInit {
   // }
 
   getContractList() {
-    //get list contract
-    this.contractService.getContractList(this.isOrg, this.isOrgChildren, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
-      this.contracts = data.entities;
-      this.pageTotal = data.total_elements;
-      console.log(this.contracts);
-      if (this.pageTotal == 0) {
-        this.p = 0;
-        this.pageStart = 0;
-        this.pageEnd = 0;
-      } else {
-        this.setPage();
-      }
-      this.contracts.forEach((key: any, v: any) => {
-        this.contracts[v].status = this.filter_status;
-        let participants = key.participants;
-        //console.log(participants);
-        participants.forEach((key: any, val: any) => {
-          if (key.type == 1) {
-            this.contracts[v].sideA = key.name;
-          } else {
-            this.contracts[v].sideB = key.name;
-          }
-          console.log(this.contracts[v].sideA);
-        })
+    this.roleMess = "";
+    if(this.isOrg == 'off' && !this.isQLHD_05){
+      this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
+
+    }else if(this.isOrg == 'on' && !this.isQLHD_04){
+      this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
+    }
+    if(!this.roleMess){
+      //get list contract
+      this.contractService.getContractList(this.isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+        this.contracts = data.entities;
+        this.pageTotal = data.total_elements;
+        console.log(this.contracts);
+        if (this.pageTotal == 0) {
+          this.p = 0;
+          this.pageStart = 0;
+          this.pageEnd = 0;
+        } else {
+          this.setPage();
+        }
+        this.contracts.forEach((key: any, v: any) => {
+          this.contracts[v].status = this.filter_status;
+          let participants = key.participants;
+          //console.log(participants);
+          participants.forEach((key: any, val: any) => {
+            if (key.type == 1) {
+              this.contracts[v].sideA = key.name;
+            } else {
+              this.contracts[v].sideB = key.name;
+            }
+            console.log(this.contracts[v].sideA);
+          })
+        });
+        console.log(this.contracts);
       });
-      console.log(this.contracts);
-      console.log(this.pageTotal);
-    });
+    }
   }
 
   private convertStatusStr() {
@@ -315,7 +329,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
       filter_from_date: this.filter_from_date,
       filter_to_date: this.filter_to_date,
       status: this.status,
-      isOrg: this.isOrg
+      isOrg: this.isOrg,
+      organization_id: this.organization_id,
+      filter_is_org_me_and_children: this.filter_is_org_me_and_children
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(FilterListDialogComponent, {

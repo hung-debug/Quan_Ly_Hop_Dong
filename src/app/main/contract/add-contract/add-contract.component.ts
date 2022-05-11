@@ -189,7 +189,7 @@ export class AddContractComponent implements OnInit {
   }
 
   getDataContractCreated(data: any) {
-    let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1 && p.status == 1)[0];
+    let fileName = data.i_data_file_contract.filter((p: any) => p.type == 2 && p.status == 1)[0];
     let fileNameAttach = data.i_data_file_contract.filter((p: any) => p.type == 3);
     if (data) {
       // sua hop dong don le theo mau
@@ -235,6 +235,7 @@ export class AddContractComponent implements OnInit {
       }
     }
   }
+
 
   changeType(e: any) {
     if (this.type == 1) {
