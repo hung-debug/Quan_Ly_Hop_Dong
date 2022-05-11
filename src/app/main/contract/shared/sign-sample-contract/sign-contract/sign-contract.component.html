@@ -4,16 +4,15 @@
   <span style="color: #106DB6;">{{sign.sign_unit == 'chu_ky_anh' ? 'Chữ ký ảnh' : 'Chữ ký số'}}</span>
 </div>
 
-<div class="text-sign" *ngIf="(sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu') && !signTemplate">
+<!-- && !signTemplate -->
+<div class="text-sign" *ngIf="sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu'"> 
   <span id="input-text">{{getText(sign)}}</span>
 </div>
 
-<div class="text-sign" *ngIf="(sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu') && signTemplate">
-  <!--  <input id="input-text" type="text" [placeholder]="sign.sign_unit == 'text' ? 'Nhập text' : 'Nhập số tài liệu'">-->
-  <!-- sign.recipient_id -->
+<!-- <div class="text-sign" *ngIf="(sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu') && signTemplate">
   <span *ngIf="!sign.is_have_text" id="input-text">{{getText(sign)}}</span> 
   <input *ngIf="sign.sign_unit == 'text' && sign.is_have_text" id="input-text-value" placeholder="Nhập nội dung Text.."
     [(ngModel)]="sign.value" type="text" (ngxInputSearch)="doTheSearch($event)">
-  <!-- <input *ngIf="sign.sign_unit == 'so_tai_lieu' && !sign.recipient_id" id="input-number-value" (focusout)="focusOutFunction()" [(ngModel)]="sign.value"
+ <input *ngIf="sign.sign_unit == 'so_tai_lieu' && !sign.recipient_id" id="input-number-value" (focusout)="focusOutFunction()" [(ngModel)]="sign.value"
     placeholder="Nhập số hợp đồng.." type="text" (ngxInputSearch)="doTheSearch($event)"> -->
-</div>
+<!-- </div> -->

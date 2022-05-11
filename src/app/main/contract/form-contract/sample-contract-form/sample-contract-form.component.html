@@ -95,7 +95,8 @@
                         <img src="assets/img/clear.svg" alt="">
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>
-                    <app-sign-contract [datas]="datasForm" (onChangeValueText)="getValueText($event, d)" [sign]="d" [signTemplate]="true"></app-sign-contract>
+                    <!-- (onChangeValueText)="getValueText($event, d) [signTemplate]="true"" -->
+                    <app-sign-contract [datas]="datasForm" [sign]="d"></app-sign-contract>
                 </div>
             </div>
         </div>

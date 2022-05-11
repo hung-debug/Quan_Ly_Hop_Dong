@@ -426,7 +426,7 @@ export class SampleContractFormComponent implements OnInit {
             } else {
               // add variable is_have_text check "text" accept input data content
               if (dataForm.sign_unit == 'text' && !dataForm.sign_config[i].recipient_id) {
-                dataForm.sign_config[i].is_have_text = true;
+                // dataForm.sign_config[i].is_have_text = true;
                 dataForm.sign_config[i].text_attribute_name = dataForm.sign_config[i].name;
               }
               dataForm.sign_config[i].name = "";
@@ -773,9 +773,9 @@ export class SampleContractFormComponent implements OnInit {
   getCheckSignature(isSignType: any, listSelect?: string, value?: any) {
     // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
-      if (isSignType == 'text' && value) {
-        element.is_disable = true;
-      } else {
+      // if (isSignType == 'text' && value) {
+      //   element.is_disable = true;
+      // } else {
         if ((element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
           let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
           if (data.length > 0)
@@ -796,7 +796,7 @@ export class SampleContractFormComponent implements OnInit {
             } else element.is_disable = (element.role != 4 || (this.datasForm.contract_no && element.role == 4)); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
           }
         }
-      }
+      // }
 
 
       if (listSelect) {
@@ -1123,10 +1123,9 @@ export class SampleContractFormComponent implements OnInit {
 
         this.getCheckSignature(d.sign_unit, d.name, d.is_have_text);
 
-        if (d.is_have_text) {
-          // this.isEnableText = false;
-          this.isEnableSelect = true;
-        }
+        // if (d.is_have_text) {
+        //   this.isEnableSelect = true;
+        // }
 
         if (!d.name) //@ts-ignore
           document.getElementById('select-dropdown').value = "";
@@ -1153,7 +1152,7 @@ export class SampleContractFormComponent implements OnInit {
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
-    if (data.id_have_data) {
+    if (data.id_have_data && this.router.url.includes("edit")) {
       this.spinner.show();
       await this.contractTemplateService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
         this.toastService.showSuccessHTMLWithTimeout(`Bạn đã xóa đối tượng ký trong hợp đồng!`, "", "3000");
@@ -1584,7 +1583,7 @@ export class SampleContractFormComponent implements OnInit {
         if (this.datasForm.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datasForm.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datasForm.contract_user_sign[i].sign_config[j];
-            if (!element.name && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') { // element.sign_unit != 'so_tai_lieu'
+            if (!element.name && element.sign_unit != 'so_tai_lieu') { // element.sign_unit != 'so_tai_lieu'
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu' && element.length > 1) {
