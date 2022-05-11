@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { AdminAddUserComponent } from './admin-add-user/admin-add-user.component';
 
 @Component({
   selector: 'app-admin-user',
@@ -16,6 +18,7 @@ export class AdminUserComponent implements OnInit {
     private adminUserService: AdminUserService,
     private adminUnitService: AdminUnitService,
     private router : Router,
+    private dialog: MatDialog,
     private toastService: ToastService) { }
 
   organization_id_user_login:any;
@@ -28,27 +31,14 @@ export class AdminUserComponent implements OnInit {
   orgList: any[] = [];
   orgListTmp: any[] = [];
 
-  //phan quyen
-  isQLND_01:boolean=true;  //them moi nguoi dung
-  isQLND_02:boolean=true;  //sua nguoi dung
-  isQLND_03:boolean=true;  //tim kiem nguoi dung
-  isQLND_04:boolean=true;  //xem thong tin chi tiet nguoi dung
-
   ngOnInit(): void {
     this.appService.setTitle("user.list");
-    //lay id user
-    //mac dinh se search theo ma to chuc minh
-    this.organization_id = this.organization_id_user_login;
-
     this.searchUser();
 
     this.cols = [
       {header: 'user.name', style:'text-align: left;' },
       {header: 'user.email', style:'text-align: left;' },
       {header: 'user.phone', style:'text-align: left;' },
-      {header: 'unit.name', style:'text-align: left;' },
-      {header: 'unit.status', style:'text-align: left;' },
-      {header: 'menu.role.list', style:'text-align: left;' },
       {header: 'unit.manage', style:'text-align: center;' },
     ];
   }
@@ -63,7 +53,20 @@ export class AdminUserComponent implements OnInit {
   }
 
   addUser() {
-    this.router.navigate(['/admin-main/form-user/add']);
+    const data = {
+      title: 'THÊM MỚI NGƯỜI DÙNG'
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminAddUserComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
   editUser(id:any) {

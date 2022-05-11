@@ -2,13 +2,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
-import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
-import {parttern_input} from "../../../../config/parttern"
+import {parttern_input} from "../../../../config/parttern";
 import {roleList} from "../../../../config/variable";
 @Component({
   selector: 'app-admin-add-unit',
