@@ -94,7 +94,7 @@ export class SampleContractFormComponent implements OnInit {
   listSignNameClone: any = [];
   data_sample_contract: any = [];
   isNoEmailObj: boolean = true;
-  isChangeNumberContract: number;
+  // isChangeNumberContract: number;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -122,7 +122,7 @@ export class SampleContractFormComponent implements OnInit {
     // this.setDataSignContract();
     // }
 
-    this.isChangeNumberContract = this.datasForm.contract_no;
+    // this.isChangeNumberContract = this.datasForm.contract_no;
 
     if (!this.datasForm.contract_user_sign) {
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
@@ -1332,9 +1332,9 @@ export class SampleContractFormComponent implements OnInit {
 
   getValueText(e: any, d: any) {
     d.value = e;
-    if (d.sign_unit == 'so_tai_lieu') {
-      this.datasForm.contract_no = e;
-    }
+    // if (d.sign_unit == 'so_tai_lieu') {
+    //   this.datasForm.contract_no = e;
+    // }
   }
 
   getTrafX() {
@@ -1361,17 +1361,7 @@ export class SampleContractFormComponent implements OnInit {
       return;
     } else {
       if (action == 'save_draft') {
-        // if (this.datasForm.contract_no && this.isChangeNumberContract != this.datasForm.contract_no) {
-        //   await this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id_action && this.router.url.includes("edit") ? this.datasForm.contract_id_action : null, 'template_form').toPromise().then((data) => {
-        //     this.datasForm.id = data?.id;
-        //     this.datasForm.contract_id = data?.id;
-        //   }, (error) => {
-        //     this.toastService.showErrorHTMLWithTimeout('Lỗi dữ liệu', "", 3000);
-        //   })
-        // }
-
         if (this.router.url.includes("edit")) {
-
           let isHaveFieldId: any[] = [];
           let isNotFieldId: any[] = [];
           // console.log(this.datasForm.contract_user_sign);
@@ -1446,31 +1436,6 @@ export class SampleContractFormComponent implements OnInit {
       } else if (action == 'next_step') {
         let coutError = false;
         this.spinner.show();
-        if (this.datasForm.contract_no && this.isChangeNumberContract != this.datasForm.contract_no) {
-          await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
-            dataCode => {
-              if (!dataCode.success) {
-                this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
-                coutError = true;
-              }
-              this.spinner.hide();
-            }, (error) => {
-              coutError = true;
-              this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
-              this.spinner.hide();
-            });
-
-          // if (!coutError) {
-          //   await this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id_action ? this.datasForm.contract_id_action : null, 'template_form').toPromise().then((data) => {
-          //     this.datasForm.id = data?.id;
-          //     this.datasForm.contract_id = data?.id;
-          //   }, (error) => {
-          //     coutError = true;
-          //     this.toastService.showErrorHTMLWithTimeout('Lỗi dữ liệu', "", 3000);
-          //   })
-          // }
-        }
-
         if (!coutError) {
           this.stepForm = variable.stepSampleContractForm.step4;
           this.datasForm.stepLast = this.stepForm

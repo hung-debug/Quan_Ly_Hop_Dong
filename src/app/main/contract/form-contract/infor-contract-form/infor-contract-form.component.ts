@@ -35,7 +35,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     typeList: Array<any> = [];
     typeListForm: Array<any> = [];
     type_id: any;
-    form_id: any;
     // name: any;
     sign_time: Date; // ngay het han ky
     minDate: Date = moment().toDate();
@@ -82,7 +81,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
         this.datasForm.sign_time = this.datasForm.sign_time ? moment(this.datasForm.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
         // this.datasForm.type_id = this.datasForm.type_id ? this.datasForm.type_id : null;
-        // this.form_id = this.datasForm.form_id ? this.datasForm.form_id : null;
         this.contractConnect = this.datasForm.contractConnect ? this.datasForm.contractConnect : null;
         if (this.datasForm.fileAttachForm && this.datasForm.fileAttachForm.length > 0) {
             this.listFileAttach = this.datasForm.fileAttachForm;
@@ -139,7 +137,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     OnChangeForm(e: any) {
         this.spinner.show();
         this.contractService.getDetailContractFormInfor(e.value).subscribe((res: any) => {
-            this.datasForm['id_form'] = e.value;
+            this.datasForm['template_contract_id'] = e.value;
             let dataContractForm = res.filter((p: any) => p.type == 1 && p.status == 1)[0];
             let dataContractAttachForm = res.filter((p: any) => p.type == 3);
             let isDataInfo = this.typeListForm.filter((data: any) => data.id == e.value)[0];
@@ -251,7 +249,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
 
     validDataForm() {
-        if (!this.datasForm.form_id && this.action != 'edit') {
+        if (!this.datasForm.template_contract_id && this.action != 'edit') {
             this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn mẫu hợp đồng!", "", "3000");
             return false;
         }
@@ -422,7 +420,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             this.nextForm();
         } else {
             let is_create_error = false;
-            await this.contractTemplateService.getFileContractFormUrl(this.datasForm.id_form, this.datasForm.contract_id).toPromise().then((res: any) => {
+            await this.contractTemplateService.getFileContractFormUrl(this.datasForm.template_contract_id, this.datasForm.contract_id).toPromise().then((res: any) => {
             }, (error) => {
                 is_create_error = true;
                 this.toastService.showErrorHTMLWithTimeout("error.server", "", 3000);
@@ -430,7 +428,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
             if (!is_create_error) {
                 if (this.datasForm.isChangeForm) {
-                    await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.id_form, 'get-form-data').toPromise().then((res: any) => {
+                    await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.template_contract_id, 'get-form-data').toPromise().then((res: any) => {
                         this.datasForm.is_determine_clone = res.participants;
                         this.datasForm.contract_id_action = res.id;
                         this.nextForm();

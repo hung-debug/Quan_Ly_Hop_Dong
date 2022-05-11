@@ -241,7 +241,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 this.nextOrPreviousStep(this.stepForm);
             } else {
                 this.spinner.show();
-                this.contractService.getSignPositionCoordinatesForm(this.datasForm.id_form).subscribe((result: any) => {
+                this.contractService.getSignPositionCoordinatesForm(this.datasForm.template_contract_id).subscribe((result: any) => {
                     // this.datasForm.i_data_file_contract = result.i_data_file_contract;
                     this.datasForm['is_data_object_signature'] = result;
                     this.datasForm.is_determine_clone = res ? res : this.datasForm.is_determine_clone;

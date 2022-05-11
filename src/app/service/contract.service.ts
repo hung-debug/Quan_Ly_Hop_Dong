@@ -196,7 +196,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = {
+    const body = JSON.stringify({
       name: datas.name,
       code: datas.contract_no,
       contract_no: datas.contract_no,
@@ -209,15 +209,11 @@ export class ContractService {
       alias_url: "",
       refs: datas.contractConnect,
       type_id: datas.type_id,
-      is_template: type_form ? true : false
-    };
-    // if (type_form) {
-    //   //@ts-ignore
-    //   body.form_id = datas.form_id;
-    // }
-    let isConvertBody = JSON.stringify(body);
+      is_template: type_form ? true : false,
+      template_contract_id: type_form ? datas.template_contract_id : null
+    });
     if (id) {
-      return this.http.put<Contract>(this.addGetDataContract + id, isConvertBody, {'headers': headers})
+      return this.http.put<Contract>(this.addGetDataContract + id, body, {'headers': headers})
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -229,7 +225,7 @@ export class ContractService {
         catchError(this.handleError)
       );
     } else {
-      return this.http.post<Contract>(this.addContractUrl, isConvertBody, {'headers': headers})
+      return this.http.post<Contract>(this.addContractUrl, body, {'headers': headers})
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
