@@ -14,7 +14,7 @@
       </div>
       <div class="col-md-6 btn_search">
         <button class="btn btn-lg btn-block btn_submit" (click)="searchUnit()">{{'btn.search' | translate }}</button>
-        <button class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
+        <button class="btn btn-lg btn-block btn_submit" (click)="addPack()">{{'btn.add' | translate }}</button>
       </div>
     </div>
     <div class="row" style="padding-top: 20px;">
@@ -28,15 +28,14 @@
         </ng-template>
         <ng-template pTemplate="body" let-list>
             <tr>
-                <td><a style="color: #0160AE; cursor: pointer;" (click)="detailUnit(list.id)">{{list.name}}</a></td>
+                <td><a style="color: #0160AE; cursor: pointer;" (click)="detailPack(list.id)">{{list.name}}</a></td>
                 <td>{{list.code}}</td>
-                <td>{{list.phone}}</td>
-                <td>{{list.active==1?'Đã kích hoạt':'Chưa kích hoạt'}}</td>
-                <td>{{list.email}}</td>
+                <td>{{list.time}}</td>
+                <td>{{list.numberContract}}</td>
+                <td>{{list.price}}</td>
                 <td style="text-align: center">
-                  <img src="../../../assets/img/icon_edit.svg" width="20px" style="cursor: pointer;"/>&nbsp;&nbsp;
-                  <img src="../../../assets/img/icon_delete.svg" width="16px" style="cursor: pointer;"/>&nbsp;&nbsp;
-                  <img src="../../../assets/img/icon_detail.svg" width="18px" style="cursor: pointer;"/>
+                  <img src="../../../assets/img/icon_edit.svg" (click)="editPack(list.id)" width="20px" style="cursor: pointer;"/>&nbsp;&nbsp;
+                  <img src="../../../assets/img/icon_delete.svg" (click)="deletePack(list.id)" width="16px" style="cursor: pointer;"/>
                 </td>
             </tr>
         </ng-template>

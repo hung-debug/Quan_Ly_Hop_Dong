@@ -35,7 +35,7 @@ export class AdminSidebarService {
       icon: '/assets/img/db_role.svg',
       active: false,
       type: 'simple',
-      href: '/admin-main/package'
+      href: '/admin-main/pack'
     }
   ];
   

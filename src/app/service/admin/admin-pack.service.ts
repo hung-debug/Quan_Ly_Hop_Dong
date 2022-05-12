@@ -4,8 +4,9 @@ import {environment} from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class AdminUnitService {
-  listUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
+export class AdminPackService {
+
+  listPackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
 
   constructor(
     private http: HttpClient,
@@ -17,11 +18,11 @@ export class AdminUnitService {
     this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   }
 
-  getUnitList(code: any, name:any){
+  getPackList(name:any, code:any, price:any, time:any, status:any, number_contract:any){
     this.getCurrentUser();
-    let listUnitUrl = this.listUnitUrl + '?code=' + code.trim() + '&name=' + name.trim() + "&size=10000";
+    let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&price=' + price.trim() + '&time=' + time.trim() + '&status=' + status.trim() + '&number_contract=' + number_contract.trim() + "&size=10000";
     const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<any>(listUnitUrl, {headers}).pipe();
+    return this.http.get<any>(listPackUrl, {headers}).pipe();
   
   }
 }
