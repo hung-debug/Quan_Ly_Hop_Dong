@@ -458,14 +458,12 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   }
 
 // hàm stype đối tượng boder kéo thả
-  changeColorDrag(role: any, valueSign: any, isDaKeo?: any) {
-    if (isDaKeo && !valueSign.value) {
+  changeColorDrag(role: any, valueSign: any) {
+    if (!valueSign.value) {
       return 'ck-da-keo';
-    } else if (!valueSign.value) {
-      return 'employer-ck';
     } else {
-      return '';
-    }
+      return 'employer-ck';
+    } 
   }
 
   // get select người ký

@@ -438,7 +438,7 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
       "position": "absolute",
       "backgroundColor": '#EBF8FF'
     }
-    style.backgroundColor = d.value ? '' : '#EBF8FF';
+    style.backgroundColor = '#EBF8FF';
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";
     }
