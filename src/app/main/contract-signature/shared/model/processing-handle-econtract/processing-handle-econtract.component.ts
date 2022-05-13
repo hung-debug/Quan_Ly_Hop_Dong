@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import * as moment from 'moment';
+import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
   selector: 'app-processing-handle-econtract',
@@ -27,23 +28,37 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       content: any},
     public router: Router,
     public dialog: MatDialog,
+    private contractService : ContractService
     // public name: LoginComponent
   ) {
   }
 
   ngOnInit(): void {
-    this.data.is_data_contract.participants.forEach((item: any) => {
-      item.recipients.forEach((element: any) => {
+    // this.data.is_data_contract.participants.forEach((item: any) => {
+    //   item.recipients.forEach((element: any) => {
+    //     let data = {
+    //       name: element.name,
+    //       name_company: item.name,
+    //       emailRecipients: element.email,
+    //       status: this.checkStatusUser(element.status, element.role),
+    //       process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").add(7, 'hours').format("YYYY/MM/DD HH:mm:ss") : null
+    //     }
+    //     this.is_list_name.push(data);
+    //   })
+    // })
+    this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
+    
+      response.forEach((element: any) => {
         let data = {
           name: element.name,
-          name_company: item.name,
+          name_company: element.participantName,
           emailRecipients: element.email,
           status: this.checkStatusUser(element.status, element.role),
           process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").add(7, 'hours').format("YYYY/MM/DD HH:mm:ss") : null
         }
         this.is_list_name.push(data);
       })
-    })
+    });
     // console.log(this.is_list_name)
   }
 

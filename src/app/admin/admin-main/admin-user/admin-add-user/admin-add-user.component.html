@@ -16,6 +16,18 @@
             </div>
 
             <div class="col-md-6">
+                <div class="label text-color">{{'Mật khẩu' | translate }} <span class="required-title">*</span></div>
+                <div class="input-data">
+                    <input type="password" formControlName="email">
+                </div>
+                <div *ngIf="submitted && f.email.errors" class="invalid">
+                    <div *ngIf="f.email.errors.required">{{'error.user.email.required' | translate}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
                 <div class="label text-color">{{'Email' | translate }} <span class="required-title">*</span></div>
                 <div class="input-data">
                     <input type="text" formControlName="email">
@@ -25,9 +37,7 @@
                     <div *ngIf="f.email.errors.email">{{'error.user.email.format' | translate}}</div>
                 </div>
             </div>
-        </div>
 
-        <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
                 <div class="label text-color">{{'unit.phone' | translate }} <span class="required-title">*</span></div>
                 <div class="input-data">
@@ -38,7 +48,9 @@
                     <div *ngIf="f.phone.errors.pattern">{{'error.user.phone.format' | translate}}</div>
                 </div>
             </div>
+        </div>
 
+        <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
                 <div class="label text-color">{{'Phân quyền' | translate }}</div>
                 <div class="input-data">

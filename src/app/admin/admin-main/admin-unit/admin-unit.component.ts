@@ -4,6 +4,7 @@ import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { AdminActiveUnitComponent } from './admin-active-unit/admin-active-unit.component';
 import { AdminAddUnitComponent } from './admin-add-unit/admin-add-unit.component';
 import { AdminDetailUnitComponent } from './admin-detail-unit/admin-detail-unit.component';
 
@@ -97,6 +98,24 @@ export class AdminUnitComponent implements OnInit {
     const dialogRef = this.dialog.open(AdminDetailUnitComponent, {
       width: '80%',
       height: '80%',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  activeUnit(id:any) {
+    const data = {
+      title: 'KÍCH HOẠT TỔ CHỨC',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminActiveUnitComponent, {
+      width: '400px',
       backdrop: 'static',
       keyboard: false,
       data
