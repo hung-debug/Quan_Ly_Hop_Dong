@@ -40,19 +40,19 @@ export class AdminAddUnitComponent implements OnInit {
     private roleService: RoleService,
     ) { 
 
-      this.addForm = this.fbd.group({
-        nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        short_name: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        email: this.fbd.control("", [Validators.required, Validators.email]),
-        phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-        size: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        status: 1,
-        representatives: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        tax_code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        address: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        position : this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-      });
+      // this.addForm = this.fbd.group({
+      //   nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      //   short_name: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
+      //   code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      //   email: this.fbd.control("", [Validators.required, Validators.email]),
+      //   phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+      //   size: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      //   status: 1,
+      //   representatives: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      //   tax_code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      //   address: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      //   position : this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      // });
     }
 
   ngOnInit(): void {    
@@ -64,17 +64,17 @@ export class AdminAddUnitComponent implements OnInit {
       
       this.unitService.getUnitById(this.data.id).subscribe(
         data => {
-          this.addForm = this.fbd.group({
-            nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.input_form)]),
-            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            email: this.fbd.control(data.email, [Validators.required, Validators.email]),
-            phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-            fax: this.fbd.control(data.fax, Validators.pattern(parttern_input.input_form)),
-            status: this.fbd.control(data.status),
-            representatives: this.fbd.control(""),
-            path: this.fbd.control(data.path)
-          });
+          // this.addForm = this.fbd.group({
+          //   nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+          //   short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.input_form)]),
+          //   code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+          //   email: this.fbd.control(data.email, [Validators.required, Validators.email]),
+          //   phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+          //   fax: this.fbd.control(data.fax, Validators.pattern(parttern_input.input_form)),
+          //   status: this.fbd.control(data.status),
+          //   representatives: this.fbd.control(""),
+          //   path: this.fbd.control(data.path)
+          // });
           this.nameOld = data.name;
           this.codeOld = data.code;
           this.emailOld = data.email;

@@ -4,6 +4,7 @@ import { AdminPackService } from 'src/app/service/admin/admin-pack.service';
 import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { AdminAddPackComponent } from './admin-add-pack/admin-add-pack.component';
+import { AdminDeletePackComponent } from './admin-delete-pack/admin-delete-pack.component';
 import { AdminDetailPackComponent } from './admin-detail-pack/admin-detail-pack.component';
 
 @Component({
@@ -17,6 +18,8 @@ export class AdminPackComponent implements OnInit {
     private dialog: MatDialog,
     private adminPackService: AdminPackService,
     private toastService: ToastService) { }
+
+  filter_name:any="";
 
   code:any = "";
   name:any = "";
@@ -93,7 +96,7 @@ export class AdminPackComponent implements OnInit {
 
   detailPack(id:any) {
     const data = {
-      title: 'unit.information',
+      title: 'THÔNG TIN GÓI CƯỚC',
       id: id,
     };
     // @ts-ignore
@@ -110,7 +113,28 @@ export class AdminPackComponent implements OnInit {
   }
 
   deletePack(id:any){
-    
+    const data = {
+      title: 'XÓA GÓI DỊCH VỤ',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminDeletePackComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
+  autoSearch(event: any) {
+    this.filter_name = event.target.value;
+  }
+
+  search(){
+    
+  }
 }

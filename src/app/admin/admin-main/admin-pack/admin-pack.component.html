@@ -1,22 +1,12 @@
 <div class="container-fluid">
     <div class="row">
-      <div class="col-md-3">
-        <div>{{'unit.code' | translate}}</div>
-        <div class="input-line">
-          <input type="text" [(ngModel)]="code" class="input_text"/>
-        </div>
+      <div class="input-line search">
+        <img src="../../assets/img/icon_search.svg" class="input-img" />
+        <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}"
+        (keyup)="autoSearch($event)" />
+        <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="search()"/>
       </div>
-      <div class="col-md-3">
-        <div>{{'unit.name' | translate}}</div>
-        <div class="input-line">
-          <input type="text" [(ngModel)]="name" class="input_text"/>
-        </div>
-      </div>
-      <div class="col-md-6 btn_search">
-        <button class="btn btn-lg btn-block btn_submit" (click)="searchUnit()">{{'btn.search' | translate }}</button>
-        <button class="btn btn-lg btn-block btn_submit" (click)="addPack()">{{'btn.add' | translate }}</button>
-      </div>
-    </div>
+    </div>  
     <div class="row" style="padding-top: 20px;">
       <p-table [value]="listData" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
         <ng-template pTemplate="header" let-columns>

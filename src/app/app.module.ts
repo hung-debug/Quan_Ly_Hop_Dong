@@ -90,6 +90,8 @@ import { AdminPackComponent } from './admin/admin-main/admin-pack/admin-pack.com
 import { AdminAddPackComponent } from './admin/admin-main/admin-pack/admin-add-pack/admin-add-pack.component';
 import { AdminDetailPackComponent } from './admin/admin-main/admin-pack/admin-detail-pack/admin-detail-pack.component';
 import { AdminDeleteUserComponent } from './admin/admin-main/admin-user/admin-delete-user/admin-delete-user.component';
+import { AdminDeletePackComponent } from './admin/admin-main/admin-pack/admin-delete-pack/admin-delete-pack.component';
+import { AdminFilterPackComponent } from './admin/admin-main/admin-pack/dialog/admin-filter-pack/admin-filter-pack.component';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -148,6 +150,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdminAddPackComponent,
     AdminDetailPackComponent,
     AdminDeleteUserComponent,
+    AdminDeletePackComponent,
+    AdminFilterPackComponent,
   ],
   imports: [
     BrowserModule,

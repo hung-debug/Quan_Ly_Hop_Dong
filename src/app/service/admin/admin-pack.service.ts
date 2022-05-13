@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {environment} from '../../../environments/environment';
 @Injectable({
@@ -7,6 +7,8 @@ import {environment} from '../../../environments/environment';
 export class AdminPackService {
 
   listPackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
+  getPackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
+  deletePackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
 
   constructor(
     private http: HttpClient,
@@ -24,5 +26,20 @@ export class AdminPackService {
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(listPackUrl, {headers}).pipe();
   
+  }
+
+  getPackById(id:any){
+    this.getCurrentUser();
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<any>(this.getPackUrl + id, {headers}).pipe();
+  }
+
+  deletePack(id:any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({});
+    return this.http.post<any>(this.deletePackUrl + id, body, {'headers': headers});
   }
 }

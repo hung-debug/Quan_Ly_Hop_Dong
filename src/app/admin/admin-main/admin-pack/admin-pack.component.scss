@@ -104,3 +104,24 @@
   padding: 8px 16px;
   text-align: right;
 } 
+
+.input-line {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.input-img {
+  padding: 10px;
+  cursor: pointer;
+}
+.search{
+  border: 1px solid #106DB6;
+  border-radius: 15px;
+  height: 38px;
+}
+.input-text {
+  border: 0;
+  padding: 10px;
+  width: 100%;
+  outline:0px;
+}
