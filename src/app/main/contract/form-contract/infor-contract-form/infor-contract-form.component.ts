@@ -302,7 +302,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             }
             if (!coutError) {
                 // push du lieu cac thong tin tao buoc 1
-                await this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id_action ? this.datasForm.contract_id_action : null, 'template_form').toPromise().then((data) => {
+                await this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id ? this.datasForm.contract_id : null, 'template_form').toPromise().then((data) => {
                     this.datasForm.id = data?.id;
                     this.datasForm.contract_id = data?.id;
                 }, (error) => {
@@ -420,7 +420,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             this.nextForm();
         } else {
             let is_create_error = false;
-            await this.contractTemplateService.getFileContractFormUrl(this.datasForm.template_contract_id, this.datasForm.contract_id).toPromise().then((res: any) => {
+            await this.contractTemplateService.getFileContractFormClone(this.datasForm.template_contract_id, this.datasForm.contract_id).toPromise().then((res: any) => {
             }, (error) => {
                 is_create_error = true;
                 this.toastService.showErrorHTMLWithTimeout("error.server", "", 3000);
