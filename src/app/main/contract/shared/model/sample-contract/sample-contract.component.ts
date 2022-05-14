@@ -328,7 +328,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
 
-    // loc du lieu khong trung nhau
+    // Lọc dữ liệu không bị thay đổi
     // (val.recipient_id as any) == (data.id as any) &&
     dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
       (((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
@@ -337,7 +337,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     ));
 
 
-    // Get những dữ liệu còn lại khi thay đổi
+    // Get những dữ liệu bị thay đổi
     let dataDiffirent: any[] = [];
     if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
       dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>

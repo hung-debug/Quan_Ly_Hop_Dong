@@ -207,7 +207,7 @@ export class AddContractComponent implements OnInit {
         this.datasForm.contract_id_action = data.is_data_contract.id;
         this.datasForm.pdfUrl = fileName.path;
         this.datasForm.document_id = fileName.id;
-        // this.datasForm.form_id = 473;
+        this.datasForm.template_contract_id = data.is_data_contract.template_contract_id;
         if (fileNameAttach) {
           this.datasForm.fileAttachForm = fileNameAttach;
         }

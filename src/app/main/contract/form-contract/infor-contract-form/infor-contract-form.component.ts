@@ -249,7 +249,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
 
     validDataForm() {
-        if (!this.datasForm.template_contract_id && this.action != 'edit') {
+        if (!this.datasForm.template_contract_id) {
             this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn mẫu hợp đồng!", "", "3000");
             return false;
         }
