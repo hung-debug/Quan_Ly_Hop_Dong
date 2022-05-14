@@ -198,7 +198,7 @@ export class AddContractComponent implements OnInit {
         this.stepForm = variable.stepSampleContractForm.step1;
         this.datasForm.name = data.is_data_contract.name;
         this.datasForm.contractConnect = data.is_data_contract.refs;
-        this.datasForm.contract_no = data.is_data_contract.contract_no;
+        this.datasForm.contract_no = data.is_data_contract.contract_no || data.is_data_contract.code;
         this.datasForm.sign_time = data.is_data_contract.sign_time;
         this.datasForm.notes = data.is_data_contract.notes;
         this.datasForm.type_id = data.is_data_contract.type_id;

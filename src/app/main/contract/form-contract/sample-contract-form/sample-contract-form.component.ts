@@ -358,9 +358,8 @@ export class SampleContractFormComponent implements OnInit {
       dataDiffirent = dataContractUserSign.filter((val: any) => !dataDetermine.some((data: any) =>
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
           (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-        ((val.recipient ? (val.recipient.name == data.name && ((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : ((val.sign_unit != 'text' && (val.name && val.name == data.name) || !val.name) && ((val.email && val.email == data.email) || !val.email)))
+        ((val.recipient ? (val.recipient.name == data.name && ((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : (((val.name && val.name == data.name) || !val.name || (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email)))
         )));
-        console.log(dataDiffirent);
     }
 
     // if (dataDiffirent.length > 0) {
@@ -368,9 +367,8 @@ export class SampleContractFormComponent implements OnInit {
       dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
         ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
           (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-        ((val.recipient ? (val.recipient.name == data.name && ((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : (((val.name && val.name == data.name && val.sign_unit != 'text') || !val.name) && ((val.email && val.email == data.email) || !val.email))
+        ((val.recipient ? (val.recipient.name == data.name && ((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : (((val.name && val.name == data.name) || !val.name || (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email))
         ))));
-        console.log(dataContractUserSign);
         // 
     // }
 
@@ -378,33 +376,33 @@ export class SampleContractFormComponent implements OnInit {
 
     // xoa nhung du lieu doi tuong thay doi khi sua, remove element when change data step 2
 
-    // if (dataDiffirent.length > 0) {
-    //   this.datasForm.contract_user_sign.forEach((res: any) => {
-    //     if (res.sign_config.length > 0) {
-    //       /*
-    //       * begin xóa đối tượng ký đã bị thay đổi dữ liệu
-    //       */
-    //       res.sign_config.forEach((element: any) => {
-    //         if (element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data)) {
+    if (dataDiffirent.length > 0 && this.router.url.includes('edit')) {
+      this.datasForm.contract_user_sign.forEach((res: any) => {
+        if (res.sign_config.length > 0) {
+          /*
+          * begin xóa đối tượng ký đã bị thay đổi dữ liệu
+          */
+          res.sign_config.forEach((element: any) => {
+            if (element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data)) {
 
-    //         } else {
-    //           if (element.id_have_data) {
-    //             this.removeDataSignChange(element.id_have_data);
-    //           }
-    //         }
-    //       })
-    //       /*
-    //       end
-    //       */
-    //       res.sign_config = res.sign_config.filter((val: any) => 
-    //       dataDiffirent.some((data: any) => 
-    //       (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
-    //       res.sign_config.forEach((items: any) => {
-    //         items.id = items.id + '1';
-    //       })
-    //     }
-    //   })
-    // }
+            } else {
+              if (element.id_have_data) {
+                this.removeDataSignChange(element.id_have_data);
+              }
+            }
+          })
+          /*
+          end
+          */
+          // res.sign_config = res.sign_config.filter((val: any) => 
+          // dataDiffirent.some((data: any) => 
+          // (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
+          // res.sign_config.forEach((items: any) => {
+          //   items.id = items.id + '1';
+          // })
+        }
+      })
+    }
 
 
     this.datasForm.contract_user_sign.forEach((resForm: any) => {
@@ -416,16 +414,12 @@ export class SampleContractFormComponent implements OnInit {
         //     (val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email : data.email as any) &&
         //     val.sign_unit == data.sign_unit));
 
-        let arrConfig = [];
-        console.log(resForm.sign_config, dataContractUserSign);
-        
+        let arrConfig = [];        
         arrConfig = resForm.sign_config.filter((val: any) =>
           dataContractUserSign.some((data) => data.sign_unit == val.sign_unit && 
           (val.recipient ? val.recipient.name : val.name) == (data.recipient ? data.recipient.name : data.name) && 
           (val.recipient ? val.recipient.email : val.email) == (data.recipient ? data.recipient.email : data.email))
-        )
-        console.log(arrConfig);
-        
+        )        
         resForm.sign_config = arrConfig;
 
         resForm.sign_config.forEach((items: any) => {
