@@ -211,7 +211,6 @@ export class AddContractComponent implements OnInit {
         if (fileNameAttach) {
           this.datasForm.fileAttachForm = fileNameAttach;
         }
-        // this.datas = Object.assign(this.datasForm, data.is_data_contract);
       } else {
         if (fileName) {
           data.is_data_contract['file_name'] = fileName.filename;

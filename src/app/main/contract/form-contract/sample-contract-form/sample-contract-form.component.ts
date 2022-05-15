@@ -523,6 +523,8 @@ export class SampleContractFormComponent implements OnInit {
     // this.spinner.show();
     await this.contractTemplateService.deleteInfoContractSignature(data).toPromise().then((res: any) => {
     }, (error: HttpErrorResponse) => {
+      console.log(error);
+      
       this.toastService.showErrorHTMLWithTimeout(`Đối tượng không tồn tại. Xóa dữ liệu lỗi!`, "", 3000);
     })
   }
