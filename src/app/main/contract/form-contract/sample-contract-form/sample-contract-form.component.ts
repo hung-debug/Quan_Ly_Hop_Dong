@@ -383,23 +383,13 @@ export class SampleContractFormComponent implements OnInit {
           * begin xóa đối tượng ký đã bị thay đổi dữ liệu
           */
           res.sign_config.forEach((element: any) => {
-            if (element.id_have_data && dataDiffirent.some((p: any) => p.id_have_data == element.id_have_data)) {
-
-            } else {
-              if (element.id_have_data) {
-                this.removeDataSignChange(element.id_have_data);
-              }
+            if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id && p.id_have_data == element.id_have_data)) {
+              this.removeDataSignChange(element.id_have_data);
             }
           })
           /*
           end
           */
-          // res.sign_config = res.sign_config.filter((val: any) => 
-          // dataDiffirent.some((data: any) => 
-          // (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
-          // res.sign_config.forEach((items: any) => {
-          //   items.id = items.id + '1';
-          // })
         }
       })
     }
@@ -522,10 +512,8 @@ export class SampleContractFormComponent implements OnInit {
   async removeDataSignChange(data: any) {
     // this.spinner.show();
     await this.contractTemplateService.deleteInfoContractSignature(data).toPromise().then((res: any) => {
-    }, (error: HttpErrorResponse) => {
-      console.log(error);
-      
-      this.toastService.showErrorHTMLWithTimeout(`Đối tượng không tồn tại. Xóa dữ liệu lỗi!`, "", 3000);
+    }, (error: HttpErrorResponse) => {      
+      this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000);
     })
   }
 
@@ -1178,7 +1166,7 @@ export class SampleContractFormComponent implements OnInit {
     if (data.id_have_data && this.router.url.includes("edit")) {
       this.spinner.show();
       await this.contractTemplateService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
-        this.toastService.showSuccessHTMLWithTimeout(`Bạn đã xóa đối tượng ký trong hợp đồng!`, "", "3000");
+        this.toastService.showSuccessHTMLWithTimeout('Bạn đã xóa đối tượng ký trong hợp đồng!', "", "3000");
         this.list_sign_name.forEach((p: any) => {
           if (p.fields && p.fields.length && p.fields.length > 0) {
             for (let i = 0; i < p.fields.length; i++) {
@@ -1189,10 +1177,8 @@ export class SampleContractFormComponent implements OnInit {
           }
         })
         this.spinner.hide();
-      }, (error: HttpErrorResponse) => {
-        console.log(error);
-        
-        this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+      }, (error: HttpErrorResponse) => {        
+        this.toastService.showErrorHTMLWithTimeout(error.message, "", "3000");
         this.spinner.hide();
         dataHaveId = false;
       })
@@ -1478,7 +1464,7 @@ export class SampleContractFormComponent implements OnInit {
   async getDefindDataSignEdit(dataSignId: any, dataSignNotId: any, action: any) {
     let dataSample_contract: any[] = [];
     if (dataSignId.length > 0) {
-      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data"];
+      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text"];
       dataSignId.forEach((res: any) => {
         data_remove_arr_signId.forEach((itemRemove: any) => {
           delete res[itemRemove];
@@ -1493,7 +1479,7 @@ export class SampleContractFormComponent implements OnInit {
         await this.contractTemplateService.editContractSample(dataSignId[i], id).toPromise().then((data: any) => {
           dataSample_contract.push(data);
         }, (error: HttpErrorResponse) => {
-          this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ với nhà phát triển để xử lý", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000);
           countIsSignId++;
         })
         if (countIsSignId > 0) {
