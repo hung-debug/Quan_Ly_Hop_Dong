@@ -447,7 +447,7 @@ export class SampleContractFormComponent implements OnInit {
       this.datasForm.contract_user_sign.forEach((dataForm: any) => {
         if (dataForm.sign_config.length > 0) {
           for (let i = 0; i < dataForm.sign_config.length; i++) {
-            let dataObj = dataNoEmail.filter((p: any) => p.template_recipient_id == dataForm.sign_config[i].recipient_id)[0];
+            let dataObj = dataNoEmail.filter((p: any) => p.template_recipient_id && p.template_recipient_id == dataForm.sign_config[i].recipient_id)[0];
             if (!dataForm.sign_config[i].email && dataObj) {
               if (dataForm.sign_unit != 'so_tai_lieu' || (dataForm.sign_unit == 'so_tai_lieu' && !this.datasForm.contract_no)) {
                 if (dataForm.sign_unit == 'text') {
@@ -456,7 +456,7 @@ export class SampleContractFormComponent implements OnInit {
                 dataForm.sign_config[i].email = dataObj.email;
                 dataForm.sign_config[i].name = dataObj.recipient ? dataObj.recipient.name : dataObj.name;
                 dataForm.sign_config[i].recipient_id = dataObj.id;
-                if (!dataForm.sign_config[i].recipient.email) {
+                if (dataForm.sign_config[i].recipient && !dataForm.sign_config[i].recipient.email) {
                   dataForm.sign_config[i].recipient.email = dataObj.email;
                 }
               } else {
@@ -1190,7 +1190,9 @@ export class SampleContractFormComponent implements OnInit {
         })
         this.spinner.hide();
       }, (error: HttpErrorResponse) => {
-        this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+        console.log(error);
+        
+        this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
         this.spinner.hide();
         dataHaveId = false;
       })

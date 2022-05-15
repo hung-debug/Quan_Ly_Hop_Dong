@@ -50,6 +50,25 @@ export class ConfirmContractFormComponent implements OnInit {
     connPartnerUsers: string = '';
     isOrg: boolean = true;
     data_sample_contract: any = [];
+    arrVariableRemove = [
+        'id', 
+        'sign_unit', 
+        'position', 
+        'left', 
+        'top', 
+        'text_attribute_name', 
+        'sign_type', 
+        'signature_party', 
+        'is_type_party', 
+        'role', 
+        'recipient', 
+        'email', 
+        'is_disable', 
+        'selected', 
+        'type_unit', 
+        "is_have_text", 
+        "id_have_data"
+    ];
 
     conn: string;
     ngOnInit(): void {
@@ -164,11 +183,8 @@ export class ConfirmContractFormComponent implements OnInit {
                 })
             })
             this.getDefinddatasFormignEdit(isHaveFieldId, isNotFieldId, action);
-        }
-        else {
-            this.data_sample_contract = [];
-            let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data"];
-    
+        } else {
+            this.data_sample_contract = [];    
             let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
             isContractUserSign_clone.forEach((element: any) => {
                 if (element.sign_config.length > 0) {
@@ -202,7 +218,7 @@ export class ConfirmContractFormComponent implements OnInit {
                             item['type'] = 1;
                         }
 
-                        data_remove_arr_request.forEach((item_remove: any) => {
+                        this.arrVariableRemove.forEach((item_remove: any) => {
                             delete item[item_remove]
                         })
                     })
@@ -241,10 +257,11 @@ export class ConfirmContractFormComponent implements OnInit {
     async getDefinddatasFormignEdit(datasFormignId: any, datasFormignNotId: any, action: any) {
         let datasFormample_contract: any[] = [];
         if (datasFormignId.length > 0) {
-            let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data"];
             datasFormignId.forEach((res: any) => {
-                data_remove_arr_signId.forEach((itemRemove: any) => {
-                    delete res[itemRemove];
+                this.arrVariableRemove.forEach((itemRemove: any) => {
+                    if (itemRemove !== 'id_have_data') {
+                        delete res[itemRemove];
+                    }
                 })
             })
 
@@ -269,7 +286,6 @@ export class ConfirmContractFormComponent implements OnInit {
 
         let isErrorNotId = false;
         if (datasFormignNotId.length > 0) {
-            let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data"];
             datasFormignNotId.forEach((item: any) => {
                 item['font'] = 'Arial';
                 item['font_size'] = 14;
@@ -298,7 +314,7 @@ export class ConfirmContractFormComponent implements OnInit {
                     item['type'] = 1;
                 }
 
-                data_remove_arr_request.forEach((item_remove: any) => {
+                this.arrVariableRemove.forEach((item_remove: any) => {
                     delete item[item_remove]
                 })
             })
