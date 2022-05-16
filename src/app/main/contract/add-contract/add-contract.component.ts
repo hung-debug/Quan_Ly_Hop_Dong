@@ -198,7 +198,7 @@ export class AddContractComponent implements OnInit {
         this.stepForm = variable.stepSampleContractForm.step1;
         this.datasForm.name = data.is_data_contract.name;
         this.datasForm.contractConnect = data.is_data_contract.refs;
-        this.datasForm.contract_no = data.is_data_contract.contract_no;
+        this.datasForm.contract_no = data.is_data_contract.contract_no || data.is_data_contract.code;
         this.datasForm.sign_time = data.is_data_contract.sign_time;
         this.datasForm.notes = data.is_data_contract.notes;
         this.datasForm.type_id = data.is_data_contract.type_id;
@@ -207,11 +207,10 @@ export class AddContractComponent implements OnInit {
         this.datasForm.contract_id_action = data.is_data_contract.id;
         this.datasForm.pdfUrl = fileName.path;
         this.datasForm.document_id = fileName.id;
-        // this.datasForm.form_id = 473;
+        this.datasForm.template_contract_id = data.is_data_contract.template_contract_id;
         if (fileNameAttach) {
           this.datasForm.fileAttachForm = fileNameAttach;
         }
-        // this.datas = Object.assign(this.datasForm, data.is_data_contract);
       } else {
         if (fileName) {
           data.is_data_contract['file_name'] = fileName.filename;

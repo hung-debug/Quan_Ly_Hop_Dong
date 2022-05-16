@@ -20,7 +20,7 @@ export class ContractTemplateService {
   addDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/template/contract/`;
   addSampleContractUrl: any = `${environment.apiUrl}/api/v1/fields/template`;
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
-  getDataContract: any = `${environment.apiUrl}/api/v1/contracts/template/clone/`;
+  getDataContractClone: any = `${environment.apiUrl}/api/v1/contracts/template/clone/`;
   getDataContractV2: any = `${environment.apiUrl}/api/v1/contracts/template/`;
   getFileContract: any = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
   getObjectSignature: any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
@@ -82,7 +82,6 @@ export class ContractTemplateService {
         type_id: datas.type_id
       });
     }
-    // console.log(body);
     if (id && body && !actionGet) {
       return this.http.put<any>(this.editInforContractTemplateUrl + id, body, { 'headers': headers }).pipe();
     } else if (actionGet == 'get-form-data') {
@@ -92,12 +91,12 @@ export class ContractTemplateService {
     }
   }
 
-  getFileContractFormUrl(template_contract_id: any, contract_id: any) {
+  getFileContractFormClone(template_contract_id: any, contract_id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-      return this.http.get<any>(this.getDataContract + `${template_contract_id}/${contract_id}`, { headers })
+      return this.http.get<any>(this.getDataContractClone + `${template_contract_id}/${contract_id}`, { headers })
   }
 
   getListFileTemplate() {
@@ -239,7 +238,7 @@ export class ContractTemplateService {
       .append('Authorization', 'Bearer ' + this.token);
     let arrApi = [];
     arrApi = [
-      this.http.get<any>(this.getDataContract + idContract, { headers }),
+      this.http.get<any>(this.getDataContractClone + idContract, { headers }),
       this.http.get<any>(this.getFileContract + idContract, { headers }),
       this.http.get<any>(this.getObjectSignature + idContract, { headers }),
     ];
