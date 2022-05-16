@@ -7,7 +7,9 @@
         <div style="line-height: 25px; text-align: center;">
           <img *ngIf="!isDisablePrevious" src="/assets/img/icon_previous.svg" style="padding-right: 10px; cursor: pointer;" (click)="previousPage()"/>
           <img *ngIf="isDisablePrevious" src="/assets/img/icon_previous_hidden.svg" style="padding-right: 10px; cursor: pointer;"/>
-          <input type="text" value="{{pageNumberCurrent + 1}}" style="width: 30px;text-align: center;border-radius: 3px;border: 1px solid #106DB6;"/> / {{pageNumberTotal}}
+          <input type="text" value="{{pageNumberCurrent + 1}}" style="width: 30px;text-align: center;border-radius: 3px;border: 1px solid #106DB6;"
+          oninput="this.value = this.value.replace(/[^1-9]/g ,'', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" (change)="typingPage($event)"
+          /> / {{pageNumberTotal}}  
           <img *ngIf="!isDisableNext" src="/assets/img/icon_next.svg" style="padding-left: 10px; cursor: pointer;" (click)="nextPage()"/>
           <img *ngIf="isDisableNext" src="/assets/img/icon_next_hidden.svg" style="padding-left: 10px; cursor: pointer;"/>
         </div>

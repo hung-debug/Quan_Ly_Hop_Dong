@@ -1,6 +1,6 @@
 <div class="container-fluid">
 
-  <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="getContractList()"></p-selectButton>
+  <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()"></p-selectButton>
 
   <ng-template [ngIf]="!roleMess">
     <div class="col-md-12" style="padding-top: 20px;">

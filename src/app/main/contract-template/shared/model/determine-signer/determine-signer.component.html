@@ -221,7 +221,7 @@
        style="display: flex">
     <div style="margin-right: 50px">
       <input [id]="'ordering-partner-' + id" class="contract-total" (focusout)="onChangeValue($event,'ordering-partner-' + id)" style="width: 25px; height: 25px" type="number" [(ngModel)]="item.ordering"
-      disabled>
+      [disabled]="is_change_party">
     </div>
     <div class="contract--content">
       <div class="contract__content--title">
