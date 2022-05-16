@@ -7,6 +7,7 @@ import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { AdminAddUserComponent } from './admin-add-user/admin-add-user.component';
 import { AdminDeleteUserComponent } from './admin-delete-user/admin-delete-user.component';
+import { AdminDetailUserComponent } from './admin-detail-user/admin-detail-user.component';
 
 @Component({
   selector: 'app-admin-user',
@@ -86,7 +87,21 @@ export class AdminUserComponent implements OnInit {
   }
 
   detailUser(id:any) {
-    this.router.navigate(['/admin-main/user-detail/' + id]);
+    const data = {
+      title: 'THÔNG TIN NGƯỜI DÙNG',
+      id: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminDetailUserComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
   deleteUser(id:any) {

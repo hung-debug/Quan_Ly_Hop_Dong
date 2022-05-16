@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Router } from '@angular/router';
 import { AdminPackService } from 'src/app/service/admin/admin-pack.service';
 import { ToastService } from 'src/app/service/toast.service';
+import {statusList} from '../../../../../config/variable'
 
 @Component({
   selector: 'app-admin-filter-pack',
@@ -14,50 +15,37 @@ export class AdminFilterPackComponent implements OnInit {
 
   addForm: FormGroup;
   datas: any;
-
-  dropdownOrgSettings: any = {};
-  contractTypeList: Array<any> = [];
   submitted = false;
-
-  orgList: any[] = [];
-  orgListTmp: any[] = [];
-  isOrg:any=""
+  statusList: any[] = [];
 
   get f() { return this.addForm.controls; }
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
-    private adminPackService : AdminPackService,
-    private toastService : ToastService,
     public dialogRef: MatDialogRef<AdminFilterPackComponent>,
     public router: Router,
     public dialog: MatDialog,
     ) { 
 
       this.addForm = this.fbd.group({
-        filter_type: this.fbd.control(Number(this.data.filter_type)),
-        filter_contract_no:this.fbd.control(this.data.filter_contract_no),
-        filter_from_date: this.fbd.control(this.data.filter_from_date),
-        filter_to_date: this.fbd.control(this.data.filter_to_date),
-        status:this.data.status,
-        isOrg:this.data.isOrg,
-        organization_id: this.fbd.control(Number(this.data.organization_id)),
+        filter_code: this.fbd.control(this.data.filter_code),
+        filter_price:this.fbd.control(this.data.filter_price),
+        filter_time: this.fbd.control(this.data.filter_time),
+        filter_status: this.fbd.control(this.data.filter_status),
+        filter_number_contract: this.fbd.control(this.data.filter_number_contract),
       });
     }
 
   ngOnInit(): void {
     this.addForm = this.fbd.group({
-      filter_type: this.data.filter_type!=""?this.fbd.control(Number(this.data.filter_type)):"",
-      filter_contract_no:this.fbd.control(this.data.filter_contract_no),
-      filter_from_date: this.data.filter_from_date!=""?this.fbd.control(new Date(this.data.filter_from_date)):"",
-      filter_to_date: this.data.filter_to_date!=""?this.fbd.control(new Date(this.data.filter_to_date)):"",
-      status:this.data.status,
-      isOrg:this.data.isOrg,
-      organization_id:  this.data.organization_id!=""?this.fbd.control(Number(this.data.organization_id)):""
+      filter_code: this.fbd.control(this.data.filter_code),
+      filter_price:this.fbd.control(this.data.filter_price),
+      filter_time: this.fbd.control(this.data.filter_time),
+      filter_status: this.fbd.control(this.data.filter_status),
+      filter_number_contract: this.fbd.control(this.data.filter_number_contract),
     });
-    this.isOrg = this.data.isOrg;
-    console.log(this.addForm);
+    this.statusList = statusList;
   }
 
   onSubmit() {
@@ -67,26 +55,23 @@ export class AdminFilterPackComponent implements OnInit {
       return;
     }
     const data = {
-      filter_type: this.addForm.value.filter_type,
-      filter_contract_no: this.addForm.value.filter_contract_no,
-      filter_from_date: this.addForm.value.filter_from_date,
-      filter_to_date: this.addForm.value.filter_to_date,
-      status: this.addForm.value.status,
-      isOrg: this.addForm.value.isOrg,
-      organization_id: this.addForm.value.organization_id
+      filter_code: this.addForm.value.filter_code,
+      filter_price: this.addForm.value.filter_price,
+      filter_time: this.addForm.value.filter_time,
+      filter_status: this.addForm.value.filter_status,
+      filter_number_contract: this.addForm.value.filter_number_contract,
     }
     this.dialogRef.close();
     console.log(data);
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(['/main/contract/create/' + data.status],
+      this.router.navigate(['/admin-main/pack'],
       {
         queryParams: {
-          'filter_type': data.filter_type, 
-          'filter_contract_no': data.filter_contract_no,
-          'filter_from_date': data.filter_from_date,
-          'filter_to_date': data.filter_to_date,
-          'isOrg': data.isOrg,
-          'organization_id': data.organization_id,
+          'filter_code': data.filter_code, 
+          'filter_price': data.filter_price,
+          'filter_time': data.filter_time,
+          'filter_status': data.filter_status,
+          'filter_number_contract': data.filter_number_contract,
         },
         skipLocationChange: true
       });

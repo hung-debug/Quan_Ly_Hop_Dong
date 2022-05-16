@@ -6,6 +6,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { AdminAddPackComponent } from './admin-add-pack/admin-add-pack.component';
 import { AdminDeletePackComponent } from './admin-delete-pack/admin-delete-pack.component';
 import { AdminDetailPackComponent } from './admin-detail-pack/admin-detail-pack.component';
+import { AdminFilterPackComponent } from './dialog/admin-filter-pack/admin-filter-pack.component';
 
 @Component({
   selector: 'app-admin-pack',
@@ -20,6 +21,11 @@ export class AdminPackComponent implements OnInit {
     private toastService: ToastService) { }
 
   filter_name:any="";
+  filter_code:any="";
+  filter_price:any="";
+  filter_time:any="";
+  filter_status:any="";
+  filter_number_contract:any="";
 
   code:any = "";
   name:any = "";
@@ -135,6 +141,24 @@ export class AdminPackComponent implements OnInit {
   }
 
   search(){
-    
+    const data = {
+      title: 'TÌM KIẾM GÓI DỊCH VỤ',
+      filter_code: this.filter_code,
+      filter_price: this.filter_price,
+      filter_time: this.filter_time,
+      filter_status: this.filter_status,
+      filter_number_contract: this.filter_number_contract,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminFilterPackComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 }
