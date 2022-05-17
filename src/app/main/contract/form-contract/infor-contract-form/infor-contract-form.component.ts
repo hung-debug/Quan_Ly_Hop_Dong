@@ -434,7 +434,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                 if (this.datasForm.isChangeForm) {
                     await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.template_contract_id, 'get-form-data').toPromise().then((res: any) => {
                         this.datasForm.is_determine_clone = res.participants;
-                        this.datasForm.contract_id = res.id;
+                        // this.datasForm.contract_id = res.id;
                         this.nextForm();
                     }, (error) => {
                         this.errorData();

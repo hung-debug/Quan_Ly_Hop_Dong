@@ -296,7 +296,6 @@ export class ContractSignatureComponent implements OnInit {
         }
       );
     }
-
   }
 
   getSignContract(data: any) {
