@@ -79,6 +79,7 @@ export class ContractService {
   uploadFileContractBatchUrl:any = `${environment.apiUrl}/api/v1/batch/validate/`;
   getContractBatchListUrl:any = `${environment.apiUrl}/api/v1/batch/parse/`;
   confirmContractBatchListUrl:any = `${environment.apiUrl}/api/v1/batch/process/`;
+  getCheckSign: any = `${environment.apiUrl}/api/v1/recipients/internal/`;
 
   token:any;
   customer_id:any;
@@ -703,6 +704,14 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
 
     return this.http.post<any>(this.uploadFileBase64Url + formData?.organizationId + `/base64`, formData, {'headers':headers});
+  }
+
+  getCheckSignatured(id_recipient?: number | string) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getCheckSign + id_recipient, {headers});
   }
 
 

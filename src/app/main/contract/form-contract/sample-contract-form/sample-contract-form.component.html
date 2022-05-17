@@ -96,7 +96,7 @@
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>
                     <!-- (onChangeValueText)="getValueText($event, d) [signTemplate]="true"" -->
-                    <app-sign-contract [datas]="datasForm" [sign]="d"></app-sign-contract>
+                    <app-sign-contract [datas]="datasForm" (onChangeValueText)="getValueText($event, d)" [signTemplate]="true" [sign]="d"></app-sign-contract>
                 </div>
             </div>
         </div>
@@ -105,7 +105,6 @@
 <div class="footer-sample-contract">
     <button (click)="back($event, 'party-contract-form')" type="button" name="next" class="next action-button"
         style="background-color: #8B8B8B">Quay lại</button>
-    <!-- <div class="content_footer">@Copyright 2021 - MobiFone</div> -->
     <div>
         <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
             style="background-color: #FCAF17">Lưu nháp</button>
