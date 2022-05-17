@@ -328,4 +328,73 @@ export var roleList = [
       { label: "Xem thông tin chi tiết loại hợp đồng", value: "QLLHD_05"},
     ]
   }
+];
+
+export var adminRoleList = [
+  {
+    //Nhóm chức năng quản lý tổ chức
+    label: "Nhóm chức năng quản lý tổ chức", value: "QLTC",
+    items: [
+      //Thêm mới tổ chức
+      { label: "Thêm mới tổ chức", value: "QLTC_01"},
+      //Sửa tổ chức
+      { label: "Sửa tổ chức", value: "QLTC_02"},
+      //Thêm mới gói dịch vụ cho tổ chức
+      { label: "Thêm mới gói dịch vụ cho tổ chức", value: "QLTC_03"},
+      //Sửa gói dịch vụ cho tổ chức
+      { label: "Sửa gói dịch vụ cho tổ chức", value: "QLTC_04"},
+      //Theo dõi các gói dịch vụ
+      { label: "Theo dõi các gói dịch vụ", value: "QLTC_05"},
+      //Hủy gói dịch vụ của tổ chức
+      { label: "Hủy gói dịch vụ của tổ chức", value: "QLTC_06"},
+      //Xóa tổ chức
+      { label: "Xóa tổ chức", value: "QLTC_07"},
+      //Kích hoạt tổ chức
+      { label: "Kích hoạt tổ chức", value: "QLTC_08"},
+      //Tìm kiếm tổ chức
+      { label: "Tìm kiếm tổ chức", value: "QLTC_09"},
+      //Xem thông tin chi tiết tổ chức
+      { label: "Xem thông tin chi tiết tổ chức", value: "QLTC_10"},
+    ]
+  },
+  {
+    //Nhóm chức năng quản lý người dùng
+    label: "Nhóm chức năng quản lý người dùng", value: "QLND",
+    items: [
+      //Thêm mới người dùng
+      { label: "Thêm mới người dùng", value: "QLND_01"},
+      //Sửa người dùng
+      { label: "Sửa người dùng", value: "QLND_02"},
+      //Tìm kiếm người dùng
+      { label: "Tìm kiếm người dùng", value: "QLND_03"},
+      //Xem thông tin chi tiết người dùng
+      { label: "Xem thông tin chi tiết người dùng", value: "QLND_04"},
+      //Xóa người dùng
+      { label: "Xóa người dùng", value: "QLND_05"},
+    ]
+  },
+  {
+    //Nhóm chức năng quản lý gói dịch vụ
+    label: "Nhóm chức năng quản lý gói dịch vụ", value: "QLGDV",
+    items: [
+      //Thêm mới gói dịch vụ
+      { label: "Thêm mới gói dịch vụ", value: "QLGDV_01"},
+      //Sửa gói dịch vụ
+      { label: "Sửa gói dịch vụ", value: "QLGDV_02"},
+      //Tìm kiếm gói dịch vụ
+      { label: "Tìm kiếm gói dịch vụ", value: "QLGDV_03"},
+      //Xem thông tin chi tiết gói dịch vụ
+      { label: "Xem thông tin chi tiết gói dịch vụ", value: "QLGDV_04"},
+      //Xóa gói dịch vụ
+      { label: "Xóa gói dịch vụ", value: "QLGDV_05"},
+    ]
+  },
+  {
+    //Nhóm chức năng quản lý thông báo
+    label: "Nhóm chức năng quản lý thông báo", value: "QLTB",
+    items: [
+      //Xem thông báo
+      { label: "Xem thông báo", value: "QLTB_01"},
+    ]
+  }
 ]

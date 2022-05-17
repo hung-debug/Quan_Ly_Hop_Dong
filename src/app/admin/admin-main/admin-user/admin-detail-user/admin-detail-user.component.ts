@@ -2,8 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { SelectItemGroup } from 'primeng/api';
 import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { ToastService } from 'src/app/service/toast.service';
+import {adminRoleList} from "../../../../config/variable";
 
 @Component({
   selector: 'app-admin-detail-user',
@@ -15,6 +17,7 @@ export class AdminDetailUserComponent implements OnInit {
   datas:any;
   cols: any[];
   list: any[];
+  groupedRole: SelectItemGroup[];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -26,6 +29,7 @@ export class AdminDetailUserComponent implements OnInit {
     public dialog: MatDialog,) { }
 
   ngOnInit(): void {
+    this.groupedRole = adminRoleList;
     this.adminUserService.getUserById(this.data.id).subscribe(
       data => {
         console.log(data);

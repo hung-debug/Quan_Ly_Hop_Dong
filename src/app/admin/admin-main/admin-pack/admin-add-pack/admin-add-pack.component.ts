@@ -40,11 +40,11 @@ export class AdminAddPackComponent implements OnInit {
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         price: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         calc: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        type: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        condition: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        type: this.fbd.control(""),
+        condition: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
         time: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         number_contract: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        describe: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        describe: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
         status: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       });
     }
@@ -63,12 +63,12 @@ export class AdminAddPackComponent implements OnInit {
             name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             price: this.fbd.control(data.price, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             calc: this.fbd.control(data.calc, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            type: this.fbd.control(data.type, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            condition: this.fbd.control(data.condition, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            type: this.fbd.control(data.type),
+            condition: this.fbd.control(data.condition, [Validators.pattern(parttern_input.input_form)]),
             time: this.fbd.control(data.time, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             number_contract: this.fbd.control(data.number_contract, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             describe: this.fbd.control(data.describe, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            status: this.fbd.control(data.status, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            status: this.fbd.control(data.status, [Validators.pattern(parttern_input.input_form)]),
           });
     
         }, error => {
@@ -84,11 +84,11 @@ export class AdminAddPackComponent implements OnInit {
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         price: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         calc: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        type: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        condition: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        type: this.fbd.control(""),
+        condition: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
         time: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         number_contract: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        describe: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        describe: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
         status: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       });
     }

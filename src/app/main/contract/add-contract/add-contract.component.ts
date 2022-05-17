@@ -204,7 +204,7 @@ export class AddContractComponent implements OnInit {
         this.datasForm.type_id = data.is_data_contract.type_id;
         this.datasForm.is_determine_clone = data.is_data_contract.participants;
         this.datasForm.is_data_object_signature = data.is_data_object_signature;
-        this.datasForm.contract_id_action = data.is_data_contract.id;
+        this.datasForm.contract_id = data.is_data_contract.id;
         this.datasForm.pdfUrl = fileName.path;
         this.datasForm.document_id = fileName.id;
         this.datasForm.template_contract_id = data.is_data_contract.template_contract_id;

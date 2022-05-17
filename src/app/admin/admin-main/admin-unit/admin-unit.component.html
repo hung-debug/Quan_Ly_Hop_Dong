@@ -31,12 +31,13 @@
                 <td><a style="color: #0160AE; cursor: pointer;" (click)="detailUnit(list.id)">{{list.name}}</a></td>
                 <td>{{list.code}}</td>
                 <td>{{list.phone}}</td>
-                <td>{{list.active==1?'Đã kích hoạt':'Chưa kích hoạt'}}</td>
+                <td><a *ngIf="list.active!=1" (click)="activeUnit(list.id)" style="color: #0160AE; cursor: pointer;">{{'Chưa kích hoạt' | translate}}</a>
+                  <a *ngIf="list.active==1">{{'Đã kích hoạt' | translate}}</a>
+                </td>
                 <td>{{list.email}}</td>
                 <td style="text-align: center">
-                  <img src="../../../assets/img/icon_edit.svg" width="20px" style="cursor: pointer;"/>&nbsp;&nbsp;
-                  <img src="../../../assets/img/icon_delete.svg" width="16px" style="cursor: pointer;"/>&nbsp;&nbsp;
-                  <img (click)="activeUnit(list.id)" src="../../../assets/img/icon_detail.svg" width="18px" style="cursor: pointer;"/>
+                  <img src="../../../assets/img/icon_edit.svg" (click)="editUnit(list.id)" width="20px" style="cursor: pointer;"/>&nbsp;&nbsp;
+                  <img src="../../../assets/img/icon_delete.svg" width="16px" style="cursor: pointer;"/>
                 </td>
             </tr>
         </ng-template>

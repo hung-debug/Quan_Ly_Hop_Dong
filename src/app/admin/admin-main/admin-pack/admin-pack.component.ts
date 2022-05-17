@@ -102,7 +102,7 @@ export class AdminPackComponent implements OnInit {
 
   detailPack(id:any) {
     const data = {
-      title: 'THÔNG TIN GÓI CƯỚC',
+      title: 'THÔNG TIN GÓI DỊCH VỤ',
       id: id,
     };
     // @ts-ignore

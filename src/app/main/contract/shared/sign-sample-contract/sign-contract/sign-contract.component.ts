@@ -8,7 +8,7 @@ import { NgxInputSearchModule } from "ngx-input-search";
 export class SignContractComponent implements OnInit, AfterViewInit {
   @Input() datas: any;
   @Input() sign: any;
-  // @Input() signTemplate: boolean;
+  @Input() signTemplate: boolean;
   @Output() onChangeValueText = new EventEmitter<any>();
   isContent: any;
 

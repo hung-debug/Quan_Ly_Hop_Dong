@@ -40,6 +40,7 @@ import domtoimage from 'dom-to-image';
 import {concatMap, delay, map, tap} from 'rxjs/operators';
 import { of } from 'rxjs';
 import {networkList} from "../../../../config/variable";
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-consider-contract',
@@ -756,11 +757,30 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         cancelButtonText: 'Hủy'
       }).then(async (result) => {
         if (result.isConfirmed) {
-          if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
-            this.pkiDialogSignOpen();
-          } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-            await this.signContractSubmit();
+          // Kiểm tra ô ký đã ký chưa (status = 2)
+          this.spinner.show();
+          let idCheckRecipientSign = this.datas.is_data_object_signature.filter((p: any) => p.recipient && p.recipient.email == this.currentUser.email && p.recipient.role == this.datas.roleContractReceived)[0];
+          let id_recipient_signature = '';
+          if (idCheckRecipientSign) {
+            id_recipient_signature = idCheckRecipientSign.recipient_id;
           }
+          this.contractService.getCheckSignatured(id_recipient_signature).subscribe((res: any) => {
+            if (res && res.status == 2) {
+              this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
+            } else {
+              if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
+                this.pkiDialogSignOpen();
+              } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
+                this.signContractSubmit();
+              }
+            }
+          }, (error: HttpErrorResponse) => {
+            this.spinner.hide();
+            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra chữ ký!', "", 3000);
+          }, () => {
+            this.spinner.hide();
+          })
+
         }
       });
     } else if (e && e == 1 && ((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
@@ -1034,8 +1054,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       let ir = 0;
       for (const resE of results) {
         this.datas.filePath = resE?.file_object?.file_path;
-
-
         if (this.datas.filePath) {
           this.isDataObjectSignature[indexSignUpload[ir]].value = this.datas.filePath;
         }

@@ -8,7 +8,7 @@
           <img *ngIf="!isDisablePrevious" src="/assets/img/icon_previous.svg" style="padding-right: 10px; cursor: pointer;" (click)="previousPage()"/>
           <img *ngIf="isDisablePrevious" src="/assets/img/icon_previous_hidden.svg" style="padding-right: 10px; cursor: pointer;"/>
           <input type="text" value="{{pageNumberCurrent + 1}}" style="width: 30px;text-align: center;border-radius: 3px;border: 1px solid #106DB6;"
-          oninput="this.value = this.value.replace(/[^1-9]/g ,'', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" (change)="typingPage($event)"
+          pattern="^[1-9][0-9]?$|^100$" oninput="this.value = this.value.replace(/[^1-9]/g ,'', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" (change)="typingPage($event)"
           /> / {{pageNumberTotal}}  
           <img *ngIf="!isDisableNext" src="/assets/img/icon_next.svg" style="padding-left: 10px; cursor: pointer;" (click)="nextPage()"/>
           <img *ngIf="isDisableNext" src="/assets/img/icon_next_hidden.svg" style="padding-left: 10px; cursor: pointer;"/>
@@ -28,36 +28,53 @@
           <div style="background: #C7D0E9;padding: 8px;">
             TỔ CHỨC CỦA TÔI
           </div>
-          <div *ngIf="this.is_origanzation_reviewer.length > 0" class="label_item">Người xem xét</div>
-          <div *ngFor="let item of this.is_origanzation_reviewer">
-            <div class="input_text">{{item.name}} - {{item.email}}</div>
+          <div *ngIf="this.is_origanzation_reviewer.length > 0">
+            <div class="label_item">Người xem xét</div>
+            <div class="input_text">
+              <div *ngFor="let item of this.is_origanzation_reviewer">{{item.name}} - {{item.email}}</div>
+            </div>
           </div>
-          <div *ngIf="this.is_origanzation_signature.length > 0" class="label_item">Người ký</div>
-          <div *ngFor="let item of this.is_origanzation_signature">
-            <div class="input_text">{{item.name}} - {{item.email}}</div>
+          
+          <div *ngIf="this.is_origanzation_signature.length > 0">
+            <div class="label_item">Người ký</div>
+            <div class="input_text">
+              <div *ngFor="let item of this.is_origanzation_signature">{{item.name}} - {{item.email}}</div>
+            </div>
           </div>
-          <div *ngIf="this.is_origanzation_document.length > 0" class="label_item">Văn thư</div>
-          <div *ngFor="let item of this.is_origanzation_document">
-            <div class="input_text">{{item.name}} - {{item.email}}</div>
+
+          <div *ngIf="this.is_origanzation_document.length > 0">
+            <div class="label_item">Văn thư</div>
+            <div class="input_text">
+              <div *ngFor="let item of this.is_origanzation_document">{{item.name}} - {{item.email}}</div>
+            </div>
           </div>
   
           <div *ngFor="let record of this.data_parnter_organization; let i=index">
             <div style="background: #C7D0E9;
             padding: 8px;margin-top: 15px;">
-              ĐỐI TÁC <span *ngIf="this.data_parnter_organization.length > 1">{{i + 1}}</span>
+              {{record.name}}
             </div>
-            <div *ngIf="this.getPartnerReviewer(record).length > 0" class="label_item">Người xem xét</div>
-            <div *ngFor="let item of getPartnerReviewer(record)">
-              <div class="input_text">{{item.name}} - {{item.email}}</div>
+            <div *ngIf="this.getPartnerReviewer(record).length > 0">
+              <div class="label_item">Người xem xét</div>
+              <div class="input_text">
+                <div *ngFor="let item of getPartnerReviewer(record)">{{item.name}} - {{item.email}}</div>
+              </div>
             </div>
-            <div *ngIf="this.getPartnerSignature(record).length > 0" class="label_item">Người ký</div>
-            <div *ngFor="let item of getPartnerSignature(record)">
-              <div class="input_text">{{item.name}} - {{item.email}}</div>
+
+            <div *ngIf="this.getPartnerSignature(record).length > 0">
+              <div class="label_item">Người ký</div>
+              <div class="input_text">
+                <div *ngFor="let item of getPartnerSignature(record)">{{item.name}} - {{item.email}}</div>
+              </div>
             </div>
-            <div *ngIf="this.getPartnerDocument(record).length > 0" class="label_item">Văn thư</div>
-            <div *ngFor="let item of getPartnerDocument(record)">
-              <div class="input_text">{{item.name}} - {{item.email}}</div>
+            
+            <div *ngIf="this.getPartnerDocument(record).length > 0">
+              <div class="label_item">Văn thư</div>
+              <div class="input_text">
+                <div *ngFor="let item of getPartnerDocument(record)">{{item.name}} - {{item.email}}</div>
+              </div>
             </div>
+            
           </div>
         </div>
       </div>

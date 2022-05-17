@@ -5,32 +5,51 @@
     <div class="content">
         <div class="row">  
             <div class="col-md-6">  
-                <div class="label_item">{{'Họ tên' | translate }}</div>
-                <div>
-                    <div [innerHTML]="datas.name" class="input_text"></div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="label_item">{{'Họ tên' | translate }}</div>
+                        <div>
+                            <div [innerHTML]="datas.name" class="input_text"></div>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="row" style="padding-top: 10px;">
+                    <div class="col-md-12">
+                        <div class="label_item">{{'Email' | translate }}</div>
+                        <div>
+                            <div [innerHTML]="datas.email" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-top: 10px;">
+                    <div class="col-md-12">
+                        <div class="label_item">{{'Số điện thoại' | translate }}</div>
+                        <div>
+                            <div [innerHTML]="datas.phone" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
 
-            <div class="col-md-6">
-                <div class="label_item">{{'Email' | translate }}</div>
-                <div>
-                    <div [innerHTML]="datas.email" class="input_text"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row" style="padding-top: 10px;">
-            <div class="col-md-6">
-                <div class="label_item">{{'Số điện thoại' | translate }}</div>
-                <div>
-                    <div [innerHTML]="datas.phone" class="input_text"></div>
-                </div>
-            </div>
-        
             <div class="col-md-6">
                 <div class="label_item">{{'Phân quyền' | translate }}</div>
                 <div>
-                    <div [innerHTML]="datas.position" class="input_text"></div>
+                    <p-listbox [options]="groupedRole" [group]="true" [(ngModel)]="datas.role" 
+                        [checkbox]="true" [multiple]="true"  [listStyle]="{'max-height':'300px'}" [style]="{'width':'100%'}">
+                        <ng-template let-group pTemplate="group">
+                            <div class="p-d-flex p-ai-center">
+                                <span>{{group.label | translate}}</span>
+                            </div>
+                        </ng-template>
+                        <ng-template let-group pTemplate="item">
+                            <div class="p-d-flex p-ai-center">
+                                <span>{{group.label | translate}}</span>
+                            </div>
+                        </ng-template>
+                    </p-listbox>
                 </div>
             </div>
         </div>

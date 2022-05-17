@@ -389,5 +389,6 @@
     "have_version_app_mobile": "Đã có phiên bản trên điện thoại di động.",
     "please_openApp_or_download": "Vui lòng truy cập hoặc tải ứng dụng để tiếp tục sử dụng dịch vụ.",
     "open_app": "Mở app",
-    "download_app": "Tải app"
+    "download_app": "Tải app",
+    "contract_signature_success": "Hợp đồng đã được xử lý!"
 }

@@ -156,7 +156,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                 this.datasForm.start_time = isDataInfo.start_time;
                 this.datasForm.notes = isDataInfo.notes;
                 this.datasForm.type_id = isDataInfo.type_id;
-                this.datasForm.document_id = dataContractForm.id;
+                // this.datasForm.document_id = dataContractForm.id;
                 if (this.datasForm.is_data_object_signature) {
                     this.datasForm.is_data_object_signature = "";
                 }
@@ -296,9 +296,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             if (this.action == 'edit') {
                 if (this.datasForm.contractConnect && this.datasForm.contractConnect.length && this.datasForm.contractConnect.length > 0) {
                     this.datasForm.contractConnect.forEach((res: any) => {
-                      res['contract_id'] = this.datasForm.contract_id_action;
+                        res['contract_id'] = this.datasForm.contract_id;
                     })
-                  }
+                }
             }
             if (!coutError) {
                 // push du lieu cac thong tin tao buoc 1
@@ -421,6 +421,10 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         } else {
             let is_create_error = false;
             await this.contractTemplateService.getFileContractFormClone(this.datasForm.template_contract_id, this.datasForm.contract_id).toPromise().then((res: any) => {
+                let dataContractTemplate = res.filter((p: any) => p.type == 2 && p.status == 1)[0];
+                if (dataContractTemplate) {
+                    this.datasForm.document_id = dataContractTemplate.id;
+                }
             }, (error) => {
                 is_create_error = true;
                 this.toastService.showErrorHTMLWithTimeout("error.server", "", 3000);
@@ -430,7 +434,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                 if (this.datasForm.isChangeForm) {
                     await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.template_contract_id, 'get-form-data').toPromise().then((res: any) => {
                         this.datasForm.is_determine_clone = res.participants;
-                        this.datasForm.contract_id_action = res.id;
+                        this.datasForm.contract_id = res.id;
                         this.nextForm();
                     }, (error) => {
                         this.errorData();
