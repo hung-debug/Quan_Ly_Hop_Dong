@@ -54,6 +54,14 @@
             padding: 8px;margin-top: 15px;">
               {{record.name}}
             </div>
+
+            <div *ngIf="this.getPartnerCoordinationer(record).length > 0">
+              <div class="label_item">Người điều phối</div>
+              <div class="input_text">
+                <div *ngFor="let item of getPartnerCoordinationer(record)">{{item.name}} - {{item.email}}</div>
+              </div>
+            </div>
+
             <div *ngIf="this.getPartnerReviewer(record).length > 0">
               <div class="label_item">Người xem xét</div>
               <div class="input_text">
