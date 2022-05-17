@@ -233,7 +233,13 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
 
+  changeTab(){
+    this.p = 1;
+    this.getContractList();
+  }
+
   private convertStatusStr() {
+    this.p = 1;
     if (this.status == 'draft') {
       this.filter_status = 0;
       this.title = 'contract.status.draft';

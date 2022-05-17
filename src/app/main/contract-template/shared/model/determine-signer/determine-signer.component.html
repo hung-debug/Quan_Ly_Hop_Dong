@@ -221,7 +221,7 @@
        style="display: flex">
     <div style="margin-right: 50px">
       <input [id]="'ordering-partner-' + id" class="contract-total" (focusout)="onChangeValue($event,'ordering-partner-' + id)" style="width: 25px; height: 25px" type="number" [(ngModel)]="item.ordering"
-      disabled>
+      [disabled]="is_change_party">
     </div>
     <div class="contract--content">
       <div class="contract__content--title">
@@ -230,10 +230,10 @@
                [(ngModel)]="item.name" disabled>
         <!--        <input *ngIf="item.type == 3" type="text" [ngModel]="this.getNameIndividual" disabled>-->
       </div>
-      <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
+      <!-- <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
         <u class="label text-color" (click)="deletePartner(id)"
            style="background-color: #FFFFFF; cursor: pointer">{{(item.type == 2 ? 'xoa_doi_tac_to_chuc' : 'xoa_doi_tac_ca_nhan') | translate}}</u>
-      </div>
+      </div> -->
       <div class="contract__content--participants">
         <div class="row">
           <div class="radio col-md-6 label_type">
@@ -577,12 +577,12 @@
 </div>
 
 <!--ẩn tạm thời-->
-<!-- <div style="display: flex">
+<div style="display: flex">
   <div style="margin-right: 80px"></div>
   <div style="display: inline-block; cursor: pointer">
     <u class="label text-color" (click)="addPartner()" style="background-color: #FFFFFF">{{'them_doi_tac' | translate}}</u>
   </div>
-</div> -->
+</div>
 
 <div class="footer-determine" style="display: flex; justify-content: space-between">
   <div style="width: 200px;">

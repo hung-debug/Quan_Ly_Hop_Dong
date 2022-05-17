@@ -79,7 +79,9 @@ export class ContractService {
   uploadFileContractBatchUrl:any = `${environment.apiUrl}/api/v1/batch/validate/`;
   getContractBatchListUrl:any = `${environment.apiUrl}/api/v1/batch/parse/`;
   confirmContractBatchListUrl:any = `${environment.apiUrl}/api/v1/batch/process/`;
+  viewFlowUrl:any = `${environment.apiUrl}/api/v1/contracts/bpmn-flow/`;
   getCheckSign: any = `${environment.apiUrl}/api/v1/recipients/internal/`;
+
 
   token:any;
   customer_id:any;
@@ -337,7 +339,7 @@ export class ContractService {
       py: Math.floor(signCertDigital.signDigitalY ? signCertDigital.signDigitalY : signCertDigital.coordinate_y).toString(),
       signDate: "11-05-2019 09:55:55",
       typeSign: "4",
-      algDigest: "SHA_256"
+      //algDigest: "SHA_256"
     };
     return axios.post(this.postSignDigital, dataPost, config);
     // console.log(datePost);
@@ -821,6 +823,12 @@ export class ContractService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.post<any>(this.confirmContractBatchListUrl + idContractTemplate, formData, {'headers':headers});
+  }
+
+  viewFlowContract(id: any): Observable<any> {
+    this.getCurrentUser();
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<any>(this.viewFlowUrl + id, {headers}).pipe();
   }
 
   objDefaultSampleContract() {

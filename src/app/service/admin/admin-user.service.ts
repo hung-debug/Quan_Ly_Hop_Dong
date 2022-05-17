@@ -7,18 +7,20 @@ import {environment} from '../../../environments/environment';
   providedIn: 'root'
 })
 export class AdminUserService {
-  listUserUrl: any = `${environment.apiUrl}`;
-  getUserByIdUrl: any = `${environment.apiUrl}`;
+  listUserUrl:any = `${environment.apiUrl}/api/v1/customers/search`;
+  getUserByIdUrl: any = `${environment.apiUrl}/api/v1/customers/`;
   updateUserUrl: any = `${environment.apiUrl}`;
   checkPhoneUrl:any = `${environment.apiUrl}`;
   getUserByEmailUrl:any = `${environment.apiUrl}`;
   addUserUrl:any = `${environment.apiUrl}`;
+  deleteUserUrl:any = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient,) { }
 
   token:any;
   getCurrentUser(){
-    this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').access_token;
+    //this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').access_token;
+    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
   }
 
   getUserList(name: any, email: any, phone:any): Observable<any> {
@@ -113,6 +115,15 @@ export class AdminUserService {
     console.log(headers);   
     console.log(body);
     return this.http.post<any>(this.addUserUrl, body, {'headers': headers});
+  }
+
+  deleteUser(id: any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({});
+    return this.http.post<any>(this.deleteUserUrl + id, body, {'headers': headers});
   }
 
 }

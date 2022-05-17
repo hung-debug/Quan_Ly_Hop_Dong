@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="row" style="padding-top: 20px;">
-      <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+      <p-table [value]="listData" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
         <ng-template pTemplate="header" let-columns>
           <tr>
               <th *ngFor="let col of cols" [style]='col.style'>
@@ -28,14 +28,15 @@
         </ng-template>
         <ng-template pTemplate="body" let-list>
             <tr>
-                <td><a  style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
-                <td>{{list.email}}</td>
+                <td><a style="color: #0160AE; cursor: pointer;" (click)="detailUnit(list.id)">{{list.name}}</a></td>
+                <td>{{list.code}}</td>
                 <td>{{list.phone}}</td>
-                <td>{{list.organization.name}}</td>
-                <td>{{list.status==1?'Hoạt động':'Không hoạt động'}}</td>
-                <td>{{list.role?.name}}</td>
+                <td>{{list.active==1?'Đã kích hoạt':'Chưa kích hoạt'}}</td>
+                <td>{{list.email}}</td>
                 <td style="text-align: center">
-                  <img src="../../../assets/img/icon_edit.svg" width="20px"  style="cursor: pointer;"/>
+                  <img src="../../../assets/img/icon_edit.svg" width="20px" style="cursor: pointer;"/>&nbsp;&nbsp;
+                  <img src="../../../assets/img/icon_delete.svg" width="16px" style="cursor: pointer;"/>&nbsp;&nbsp;
+                  <img (click)="activeUnit(list.id)" src="../../../assets/img/icon_detail.svg" width="18px" style="cursor: pointer;"/>
                 </td>
             </tr>
         </ng-template>

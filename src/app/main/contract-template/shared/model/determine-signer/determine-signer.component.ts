@@ -845,8 +845,9 @@ export class DetermineSignerComponent implements OnInit {
       if(res.type != 1){
         res.name = "Tổ chức " + index;
       }
-    })
-
+    }) 
+    console.log("this.datas.is_determine_clone");
+    console.log(this.datas.is_determine_clone);
     console.log(this.data_parnter_organization);
   }
 

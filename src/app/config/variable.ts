@@ -83,6 +83,11 @@ export var networkList = [
   { id : 3, name: 'Vietnamobile'}
 ];
 
+export var statusList = [
+  { id : 1, name: 'Hoạt động'},
+  { id : 0, name: 'Ngừng hoạt động'}
+];
+
 // export var roleList = [
 //   {
 //     //Nhóm chức năng quản lý hợp đồng

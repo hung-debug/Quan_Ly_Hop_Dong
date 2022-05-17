@@ -198,6 +198,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   private convertActionStr(): string {
+    this.p = 1;
     return 'contract.list.received';
   }
 
@@ -299,7 +300,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   getSignContract(data: any) {
-    if (!data.participant.contract.sign_time || 
+    if (!data.participant || !data.participant.contract.sign_time || 
       (new Date(moment(data.participant.contract.sign_time).format('yyyy/MM/DD'))).valueOf() < (new Date(moment().format('yyyy/MM/DD'))).valueOf()) {
       return false;
     } else if (data.status == 1 && data.role == 3) {

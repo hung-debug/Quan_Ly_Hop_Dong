@@ -282,6 +282,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
     // let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
     this.dataSignPosition = [...dataPosition, ...dataNotPosition, ...dataNotAssign];
+    console.log("this.dataSignPosition");
     console.log(this.dataSignPosition);
 
     
@@ -443,6 +444,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             item['type_unit'] = 'organization';
             item['selected'] = false;
             item['is_disable'] = false;
+            item['org_name'] = element.name;
             this.list_sign_name.push(item);
           }
         })
@@ -453,6 +455,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             item['selected'] = false;
             item['is_disable'] = false;
             item['type'] = element.type;
+            item['org_name'] = element.name;
             this.list_sign_name.push(item);
           }
         })
@@ -700,19 +703,27 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   getCheckSignature(isSignType: any, listSelect?: string) {
     // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
-      if ((element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
+      console.log(element);
+      if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
+        //console.log("ba");
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
         if (data.length > 0)
           element.is_disable = true;
         else element.is_disable = false;
+        //element.is_disable = false;
       } else {
         //console.log(this.convertToSignConfig());
         //console.log(this.list_sign_name);
-        if (this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.name && p.name == element.name)) && p.sign_unit == isSignType)) {
+        if (this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && p.sign_unit == isSignType)) {
           if (isSignType != 'text') {
+            console.log("a");
             element.is_disable = true;
-          }
+          } else element.is_disable = false;
         } else {
+          console.log("ab");
+          console.log(element);
+          console.log(isSignType);
+          console.log(listSelect);
           if (isSignType == 'chu_ky_anh') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
           } else if (isSignType == 'chu_ky_so') {
@@ -720,6 +731,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           } else if (isSignType == 'text') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
           } else element.is_disable = element.role != 4;
+          console.log(!(element.sign_type.some((p: any) => p.id == 2) || element.role == 4));
+          console.log(element.is_disable);
         }
       }
 
@@ -1633,7 +1646,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (data.type_unit == 'organization') {
       return 'Tổ chức của tôi - ' + data.name;
     } else if (data.type_unit == 'partner') {
-      return 'Đối tác - ' + data.name;
+      return 'Đối tác (' + data.org_name + ') - '+ data.name;
     }
   }
 

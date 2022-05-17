@@ -4,6 +4,7 @@ import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { AdminActiveUnitComponent } from './admin-active-unit/admin-active-unit.component';
 import { AdminAddUnitComponent } from './admin-add-unit/admin-add-unit.component';
 import { AdminDetailUnitComponent } from './admin-detail-unit/admin-detail-unit.component';
 
@@ -39,7 +40,7 @@ export class AdminUnitComponent implements OnInit {
       { field: 'name', header: 'unit.name', style:'text-align: left;' },
       { field: 'code', header: 'unit.code', style:'text-align: left;' },
       { field: 'phone', header: 'Số điện thoại', style:'text-align: left;' },
-      { field: 'status', header: 'unit.status', style:'text-align: left;' },
+      { field: 'active', header: 'Kích hoạt', style:'text-align: left;' },
       { field: 'email', header: 'Email đăng ký', style:'text-align: left;' },
       { field: 'id', header: 'unit.manage', style:'text-align: center;' },
       ]; 
@@ -47,10 +48,6 @@ export class AdminUnitComponent implements OnInit {
 
   array_empty: any = [];
   searchUnit(){
-    this.getData();
-  }
-
-  getData(){
     this.adminUnitService.getUnitList(this.code, this.name).subscribe(response => {
       this.listData = response.entities;
       this.total = this.listData.length;
@@ -99,7 +96,26 @@ export class AdminUnitComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminDetailUnitComponent, {
-      width: '580px',
+      width: '80%',
+      height: '80%',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  activeUnit(id:any) {
+    const data = {
+      title: 'KÍCH HOẠT TỔ CHỨC',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminActiveUnitComponent, {
+      width: '400px',
       backdrop: 'static',
       keyboard: false,
       data

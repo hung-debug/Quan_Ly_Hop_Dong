@@ -57,6 +57,7 @@ export class AdminAddUserComponent implements OnInit {
       email: this.fbd.control("", [Validators.required, Validators.email]),
       phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
       role: this.fbd.control("", [Validators.required]),
+      password: this.fbd.control("", [Validators.required]),
     });
   }
   
@@ -65,7 +66,7 @@ export class AdminAddUserComponent implements OnInit {
       this.action = params['action'];
 
       //set title
-      if (this.action == 'add') {
+      if (!this.data.id) {
         this.appService.setTitle('user.add');
         this.isEditRole = true;
         if(this.isQLND_01){
@@ -75,10 +76,11 @@ export class AdminAddUserComponent implements OnInit {
             birthday: null,
             phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
             role: this.fbd.control("", [Validators.required]),
+            password: this.fbd.control("", [Validators.required]),
           });
         }
-      } else if (this.action == 'edit') {
-        this.id = params['id'];
+      } else {
+        this.id = this.data.id;
         this.appService.setTitle('user.update');
 
         this.adminUserService.getUserById(this.id).subscribe(
@@ -91,6 +93,7 @@ export class AdminAddUserComponent implements OnInit {
               phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
               organizationId: this.fbd.control(data.organization_id, [Validators.required]),
               role: this.fbd.control(data.role_id, [Validators.required]),
+              password: this.fbd.control("", [Validators.required]),
               status: data.status,
 
               phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),

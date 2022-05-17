@@ -143,6 +143,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
 
   data:any;
   getDataContractSignature(page:any) {
+    console.log(page);
     this.spinner.show();
     
     this.checkDisableIcon();
@@ -458,14 +459,12 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   }
 
 // hàm stype đối tượng boder kéo thả
-  changeColorDrag(role: any, valueSign: any, isDaKeo?: any) {
-    if (isDaKeo && !valueSign.value) {
+  changeColorDrag(role: any, valueSign: any) {
+    if (!valueSign.value) {
       return 'ck-da-keo';
-    } else if (!valueSign.value) {
-      return 'employer-ck';
     } else {
-      return '';
-    }
+      return 'employer-ck';
+    } 
   }
 
   // get select người ký
@@ -640,6 +639,23 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   previousPage(){
     this.pageNumberCurrent--;
     this.getDataContractSignature(this.pageNumberCurrent);
+  }
+
+  typingPage(event:any){
+    let value = event.target.value;
+    if(!value){
+      this.toastService.showErrorHTMLWithTimeout("Số hợp đồng không được để trống", "", 3000);
+    }else if(value > this.pageNumberTotal){
+      this.toastService.showErrorHTMLWithTimeout("Không nhập số hợp đồng vượt quá " + this.pageNumberTotal, "", 3000);
+    }else if(value < 1){
+      this.toastService.showErrorHTMLWithTimeout("Không nhập số hợp đồng nhỏ hơn 1", "", 3000);
+    }else{
+      this.pageNumberCurrent = value - 1;
+    
+      console.log(this.pageNumberCurrent);
+      this.getDataContractSignature(this.pageNumberCurrent);
+    }
+    
   }
 
   checkDisableIcon(){
