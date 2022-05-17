@@ -776,7 +776,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             }
           }, (error: HttpErrorResponse) => {
             this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra chữ ký!', "", 3000);
+            this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
           }, () => {
             this.spinner.hide();
           })

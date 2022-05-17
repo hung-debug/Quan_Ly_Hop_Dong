@@ -390,5 +390,6 @@
     "please_openApp_or_download": "Please visit or download the application to continue using the service.",
     "open_app": "Open app",
     "download_app": "Download app",
-    "contract_signature_success": "The contract has been processed!"
+    "contract_signature_success": "The contract has been processed!",
+    "error_check_signature": "Signature check error!"
 }
