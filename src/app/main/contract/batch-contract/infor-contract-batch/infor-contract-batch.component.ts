@@ -87,7 +87,8 @@ export class InforContractBatchComponent implements OnInit {
     this.getContractTemplateForm();
   }
 
-  OnChangeForm(e: any) {    
+  OnChangeForm(e: any) {   
+    this.clearError();
     this.idContractTemplate = e.value;
   }
   downFileExample(){
@@ -170,7 +171,7 @@ export class InforContractBatchComponent implements OnInit {
 
   errorDetail:any[] = [];
   clearError(){
-    if (this.name) {
+    if (this.idContractTemplate) {
       this.errorContractName = '';
     }
     if (this.datasBatch.contractFile) {

@@ -163,7 +163,7 @@ export class DetermineSignerComponent implements OnInit {
     this.spinner.show();
     let isCheckId = this.datas.is_determine_clone.filter((p: any) => p.id);
     //&& (isCheckId && isCheckId.length == this.datas.is_determine_clone.length)
-    if (this.datas.is_action_contract_created && this.router.url.includes("edit") ) {
+    if (this.datas.is_action_contract_created && this.router.url.includes("edit") && (isCheckId && isCheckId.length == this.datas.is_determine_clone.length)) {
       let isBody: any[] = [];
       let count = 0;
       let is_error = '';
@@ -173,23 +173,29 @@ export class DetermineSignerComponent implements OnInit {
         this.datas.is_determine_clone[i].recipients.forEach((element: any) => {
           if (!element.id) element.id = 0;
         })
-        if(this.datas.is_determine_clone[i].id){
-          await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
-            isBody.push(res);
-          }, (res: any) => {
-            is_error = res.error;
-            count++
-          })
-        }else{
-          let bodyNew: any[] = [];
-          bodyNew.push(this.datas.is_determine_clone[i]);
-          await this.contractTemplateService.getContractDetermine(bodyNew, this.datas.id).toPromise().then((res: any) => {
-            isBody.push(res);
-          }, (res: any) => {
-            is_error = res.error;
-            count++
-          })
-        }
+        // if(this.datas.is_determine_clone[i].id){
+        //   await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
+        //     isBody.push(res);
+        //   }, (res: any) => {
+        //     is_error = res.error;
+        //     count++
+        //   })
+        // }else{
+        //   let bodyNew: any[] = [];
+        //   bodyNew.push(this.datas.is_determine_clone[i]);
+        //   await this.contractTemplateService.getContractDetermine(bodyNew, this.datas.id).toPromise().then((res: any) => {
+        //     isBody.push(res);
+        //   }, (res: any) => {
+        //     is_error = res.error;
+        //     count++
+        //   })
+        // }
+        await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
+          isBody.push(res);
+        }, (res: any) => {
+          is_error = res.error;
+          count++
+        })
         
         if (count > 0) {
           break;

@@ -31,8 +31,10 @@
             <div style="padding-top: 7px;" *ngIf="errorDetail && errorDetail.length > 0">
               <span style="color: red;">Dữ liệu không hợp lệ. Tổng số {{errorDetail.length}} lỗi</span>
             </div>
-            <div style="padding-top: 7px;" *ngFor="let item of errorDetail; let i = index">
-              <span style="color: red;">{{item}}</span>
+            <div style="max-height: 135px; overflow-y: auto;">
+              <div style="padding-top: 7px;" *ngFor="let item of errorDetail; let i = index">
+                <span style="color: red;">{{item}}</span>
+              </div>
             </div>
           </div>
         </div>
