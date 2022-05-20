@@ -29,7 +29,7 @@
         <div class="col-md-4">
           <div class="label text-color">{{'user.birthday' | translate}}</div>
           <div>
-            <p-calendar formControlName="birthday" [showIcon]="true" dateFormat="dd/mm/yy" [readonlyInput]="true"></p-calendar>
+            <p-calendar formControlName="birthday" [maxDate]="maxDate" [showIcon]="true" dateFormat="dd/mm/yy" [readonlyInput]="true"></p-calendar>
           </div>
         </div>
       </div>
@@ -204,3 +204,7 @@
 <div *ngIf="!isQLND_01 && !isQLND_02">
   {{'no.role' | translate}}
 </div>
+
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">Đang xử lý...</p>
+</ngx-spinner>

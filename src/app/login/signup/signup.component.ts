@@ -73,10 +73,10 @@ export class SignupComponent implements OnInit {
     //them to chuc
     this.userService.signup(data).subscribe(
       data => {
-        this.sendNotifi("Đăng ký thành công!");
+        this.sendNotifi("Bạn đã đăng ký thành công dịch vụ hệ thống eContract.<br>Vui lòng chờ liên hệ của nhà cung cấp!");
         console.log(data);        
       }, error => {
-        this.sendNotifi("Đăng ký thất bại!");
+        this.sendNotifi("Đăng ký thất bại<br>Vui lòng liên hệ nhà phát triển để được xử lý!");
       }
     )
   }

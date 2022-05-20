@@ -9,6 +9,8 @@ import { RoleService } from 'src/app/service/role.service';
 import { networkList } from "../../../config/variable";
 import { UploadService } from 'src/app/service/upload.service';
 import {parttern_input} from "../../../config/parttern";
+import * as moment from "moment";
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-add-user',
   templateUrl: './add-user.component.html',
@@ -40,6 +42,7 @@ export class AddUserComponent implements OnInit {
   organizationName:any;
   roleName:any;
   userRoleCode:string='';
+  maxDate: Date = moment().toDate();
 
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
@@ -53,7 +56,8 @@ export class AddUserComponent implements OnInit {
               private fbd: FormBuilder,
               public router: Router,
               private roleService: RoleService,
-              private uploadService:UploadService
+              private uploadService:UploadService,
+              private spinner: NgxSpinnerService
     ) {
     this.addForm = this.fbd.group({
       name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
@@ -229,13 +233,16 @@ export class AddUserComponent implements OnInit {
             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
               this.router.navigate(['/main/user']);
             });
+            this.spinner.hide();
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
+            this.spinner.hide();
           }
         )
       },
       error => {
         this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+        this.spinner.hide();
         return false;
       });
     }else{
@@ -252,8 +259,10 @@ export class AddUserComponent implements OnInit {
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
             this.router.navigate(['/main/user']);
           });
+          this.spinner.hide();
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
+          this.spinner.hide();
         }
       )
     }
@@ -265,6 +274,7 @@ export class AddUserComponent implements OnInit {
     if (this.addForm.invalid) {
       return;
     }
+    this.spinner.show();
     const data = {
       id: "",
       name: this.addForm.value.name,
@@ -312,12 +322,14 @@ export class AddUserComponent implements OnInit {
                         
                       }, error => {
                         this.toastService.showErrorHTMLWithTimeout('Lỗi cập nhật số điện thoại tổ chức', "", 3000);
+                        this.spinner.hide();
                       }
                     )
                   }
                   
                 }, error => {
                   this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                  this.spinner.hide();
                 }
               )
 
@@ -325,9 +337,11 @@ export class AddUserComponent implements OnInit {
               this.update(data);
             }else if(dataByPhone.code == '01'){
               this.toastService.showErrorHTMLWithTimeout('Số điện thoại đã tồn tại trong hệ thống', "", 3000);
+              this.spinner.hide();
             }
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+            this.spinner.hide();
           }
         )
       }else{
@@ -361,13 +375,16 @@ export class AddUserComponent implements OnInit {
                           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                             this.router.navigate(['/main/user']);
                           });
+                          this.spinner.hide();
                         }, error => {
                           this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
+                          this.spinner.hide();
                         }
                       )
                     },
                     error => {
                       this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+                      this.spinner.hide();
                       return false;
                     });
                   }else{
@@ -379,23 +396,29 @@ export class AddUserComponent implements OnInit {
                         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                           this.router.navigate(['/main/user']);
                         });
+                        this.spinner.hide();
                       }, error => {
                         this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
+                        this.spinner.hide();
                       }
                     )
                   }
                 }else{
                   this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
+                  this.spinner.hide();
                 }
               }, error => {
                 this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                this.spinner.hide();
               }
             )
           }else if(dataByPhone.code == '01'){
             this.toastService.showErrorHTMLWithTimeout('Số điện thoại đã tồn tại trong hệ thống', "", 3000);
+            this.spinner.hide();
           }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+          this.spinner.hide();
         }
       )
     }

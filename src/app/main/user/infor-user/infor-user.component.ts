@@ -9,7 +9,7 @@ import { UploadService } from 'src/app/service/upload.service';
 import { UserService } from 'src/app/service/user.service';
 import { networkList } from "../../../config/variable";
 import {parttern_input} from "../../../config/parttern"
-
+import * as moment from "moment";
 @Component({
   selector: 'app-infor-user',
   templateUrl: './infor-user.component.html',
@@ -49,6 +49,7 @@ export class InforUserComponent implements OnInit {
 
   organizationName:any;
   roleName:any;
+  maxDate: Date = moment().toDate();
 
   constructor(private appService: AppService,
     private toastService : ToastService,
