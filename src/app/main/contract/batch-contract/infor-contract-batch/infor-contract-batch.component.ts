@@ -114,6 +114,9 @@ export class InforContractBatchComponent implements OnInit {
         }), 
         (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
     
+
+        // this.toastService.showSuccessHTMLWithTimeout("Tải file tài liệu mẫu thành công", "", 3000);
+        // this.spinner.hide();
       }, (error) => {
           console.log(error);
           this.spinner.hide();
@@ -183,6 +186,7 @@ export class InforContractBatchComponent implements OnInit {
   next() {
     if (!this.validData()) return;
     else {
+      this.spinner.show();
       // gán value step 1 vào datasBatch
       this.datasBatch.name = this.name;
       this.datasBatch.code = this.code;
@@ -200,11 +204,13 @@ export class InforContractBatchComponent implements OnInit {
           this.datasBatch.stepLast = this.step
           this.nextOrPreviousStep(this.step);
           console.log(this.datasBatch);
+          this.spinner.hide();
         }else{
           this.errorDetail = response.detail;
           this.toastService.showErrorHTMLWithTimeout("File mẫu không hợp lệ", "", 3000);
+          this.spinner.hide();
         }
-      }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
+      }), (error: any) => {this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);this.spinner.hide();}
 
       
     }

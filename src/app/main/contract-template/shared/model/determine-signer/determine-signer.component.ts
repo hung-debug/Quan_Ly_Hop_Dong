@@ -862,7 +862,7 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.is_determine_clone.forEach((res: any, index: number) => {
       res.ordering = index + 1;
       if(res.type != 1){
-        res.name = "Tổ chức " + index;
+        res.name = "Đối tác " + index;
       }
     }) 
     console.log("this.datas.is_determine_clone");
@@ -876,7 +876,7 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.is_determine_clone.forEach((res: any, index: number) => {
       res.ordering = index + 1;
       if(res.type != 1){
-        res.name = "Tổ chức " + index;
+        res.name = "Đối tác " + index;
       }
     })
   }

@@ -1650,7 +1650,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (data.type_unit == 'organization') {
       return 'Tổ chức của tôi - ' + data.name;
     } else if (data.type_unit == 'partner') {
-      return 'Đối tác (' + data.org_name + ') - '+ data.name;
+      return data.org_name + ' - '+ data.name;
     }
   }
 
