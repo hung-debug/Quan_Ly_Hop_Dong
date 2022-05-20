@@ -781,7 +781,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               this.spinner.hide();
               this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
             }, () => {
-              this.spinner.hide();
+              //this.spinner.hide();
             })
           }else{
             if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {

@@ -700,8 +700,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  getCheckSignature(isSignType: any, listSelect?: string) {
+  getCheckSignature(isSignType: any, listSelect?: string, recipient_id?:any) {
     // p.recipient_id == element.id && p.sign_unit == isSignType)
+    console.log("isSignType");
+    console.log(isSignType);
+    console.log(listSelect)
     this.list_sign_name.forEach((element: any) => {
       console.log(element);
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
@@ -733,8 +736,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
 
-      if (listSelect) {
-        element.selected = listSelect && element.name == listSelect;
+      console.log("isSignType");
+      console.log(recipient_id);
+      console.log(element);
+      console.log(isSignType);
+      if (recipient_id || listSelect) {
+        console.log("element_ok");
+        console.log(element);
+        element.selected = (recipient_id?element.id==recipient_id:element.name == listSelect);
       }
     })
   }
@@ -1036,7 +1045,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
-    console.log(this.datas.contract_user_sign);
+    console.log("d");
+    console.log(d);
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
@@ -1081,7 +1091,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         //   } else item.is_disable = item.role != 4;
         //   item.selected = d.name && item.name == d.name;
         // })
-        this.getCheckSignature(d.sign_unit, d.name);
+        this.getCheckSignature(d.sign_unit, d.name, d.recipient_id);
 
         if (!d.name) //@ts-ignore
           document.getElementById('select-dropdown').value = "";

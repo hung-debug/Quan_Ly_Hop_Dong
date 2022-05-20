@@ -2,8 +2,9 @@
 <div class="container-fluid">
   <div class="contract-determine">
     <div style="margin-right: 50px">
+      <!-- [disabled]="is_change_party" -->
       <input id="order-organization" class="contract-total" style="width: 25px; height: 25px" type="number"
-             [(ngModel)]="data_organization.ordering" [disabled]="is_change_party"
+             [(ngModel)]="data_organization.ordering" 
              (focusout)="onChangeValue($event,'order-organization')"
              oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
     </div>
@@ -220,8 +221,9 @@
   <div class="contract-determine" *ngFor="let item of dataParnterOrganization(); let id = index"
        style="display: flex">
     <div style="margin-right: 50px">
+      <!-- [disabled]="is_change_party" -->
       <input [id]="'ordering-partner-' + id" class="contract-total" (focusout)="onChangeValue($event,'ordering-partner-' + id)" style="width: 25px; height: 25px" type="number" [(ngModel)]="item.ordering"
-      [disabled]="is_change_party">
+      >
     </div>
     <div class="contract--content">
       <div class="contract__content--title">
@@ -491,9 +493,10 @@
           <div class="participants-border">
             <div class="label">{{'user.sign' | translate}}</div>
             <div class="participants--content" *ngFor="let d of getPartnerSignature(item); let index = index">
+               
               <input [id]="'ordering-sign-partner-' + index" (focusout)="onChangeValue($event, 'ordering-sign-partner-' + index)" class="col-md-1 contract-total" style="width: 25px; height: 25px" type="number"
                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                     [(ngModel)]="d.ordering" [disabled]="getPartnerSignature(item).length == 1">
+                     [(ngModel)]="d.ordering" [disabled]="getPartnerSignature(item).length == 1" >
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
