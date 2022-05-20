@@ -27,7 +27,6 @@ import { DetailContractTemplateComponent } from './main/contract-template/detail
 import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
 import { AdminAuthGuard } from './help/admin-auth.guard';
 import { AdminMainComponent } from './admin/admin-main/admin-main.component';
-import { AdminDashboardComponent } from './admin/admin-main/admin-dashboard/admin-dashboard.component';
 import { AdminUnitComponent } from './admin/admin-main/admin-unit/admin-unit.component';
 import { AdminUserComponent } from './admin/admin-main/admin-user/admin-user.component';
 import { AdminPackComponent } from './admin/admin-main/admin-pack/admin-pack.component';
@@ -163,10 +162,6 @@ const routes: Routes = [
     canActivate: [AdminAuthGuard],
     component: AdminMainComponent,
     children: [
-      {
-        path: 'dashboard',
-        component: AdminDashboardComponent,
-      },
       {
         path: 'unit',
         component: AdminUnitComponent,

@@ -54,7 +54,7 @@ export class AdminLoginComponent implements OnInit {
           if (this.adminAuthService.isLoggedInSuccess() == true) {
             this.error = false;
             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-              this.router.navigate(['/admin-main/dashboard']);
+              this.router.navigate(['/admin-main/unit']);
             });
           } else {
             this.error = true;

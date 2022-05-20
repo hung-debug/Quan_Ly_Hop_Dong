@@ -9,14 +9,6 @@ export class AdminSidebarService {
   _hasBackgroundImage = true;
   menus:any[] = [
     {
-      title: 'menu.dashboard',
-      icon: '/assets/img/db_home.svg',
-      active: false,
-      type: 'simple',
-      href: '/admin-main/dashboard'
-    },
-   
-    {
       title: 'menu.user.list',
       icon: '/assets/img/db_user.svg',
       active: false,

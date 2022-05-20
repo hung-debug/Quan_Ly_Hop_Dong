@@ -82,7 +82,7 @@ export class AdminMainComponent implements OnInit {
     sessionStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('url');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/admin/login']);
   }
 
   resetPassword(){
