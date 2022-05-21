@@ -2,10 +2,12 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SelectItemGroup } from 'primeng/api';
 import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
 import {parttern_input} from "../../../../config/parttern";
+import {adminRoleList} from "../../../../config/variable";
 @Component({
   selector: 'app-admin-add-user',
   templateUrl: './admin-add-user.component.html',
@@ -15,6 +17,7 @@ export class AdminAddUserComponent implements OnInit {
 
   submitted = false;
   get f() { return this.addForm.controls; }
+  groupedRole: SelectItemGroup[];
 
   action: string;
   private sub: any;
@@ -76,7 +79,6 @@ export class AdminAddUserComponent implements OnInit {
             birthday: null,
             phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
             role: this.fbd.control("", [Validators.required]),
-            password: this.fbd.control("", [Validators.required]),
           });
         }
       } else {
@@ -93,21 +95,10 @@ export class AdminAddUserComponent implements OnInit {
               phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
               organizationId: this.fbd.control(data.organization_id, [Validators.required]),
               role: this.fbd.control(data.role_id, [Validators.required]),
-              password: this.fbd.control("", [Validators.required]),
+              password: this.fbd.control(data.password, [Validators.required]),
               status: data.status,
-
-              phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
-              networkKpi: data.phone_tel,
-
-              nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.input_form)),
-
-              fileImage:null
             }); 
             this.phoneOld = data.phone;
-            this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
-            this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
-            this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
-            console.log(this.addForm);
 
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
@@ -119,6 +110,7 @@ export class AdminAddUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDataOnInit();
+    this.groupedRole = adminRoleList;
   }
 
   onCancel(){

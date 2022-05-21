@@ -162,6 +162,7 @@ export class DetermineSignerComponent implements OnInit {
     })
     this.spinner.show();
     let isCheckId = this.datas.is_determine_clone.filter((p: any) => p.id);
+    //&& (isCheckId && isCheckId.length == this.datas.is_determine_clone.length)
     if (this.datas.is_action_contract_created && this.router.url.includes("edit") && (isCheckId && isCheckId.length == this.datas.is_determine_clone.length)) {
       let isBody: any[] = [];
       let count = 0;
@@ -172,12 +173,30 @@ export class DetermineSignerComponent implements OnInit {
         this.datas.is_determine_clone[i].recipients.forEach((element: any) => {
           if (!element.id) element.id = 0;
         })
+        // if(this.datas.is_determine_clone[i].id){
+        //   await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
+        //     isBody.push(res);
+        //   }, (res: any) => {
+        //     is_error = res.error;
+        //     count++
+        //   })
+        // }else{
+        //   let bodyNew: any[] = [];
+        //   bodyNew.push(this.datas.is_determine_clone[i]);
+        //   await this.contractTemplateService.getContractDetermine(bodyNew, this.datas.id).toPromise().then((res: any) => {
+        //     isBody.push(res);
+        //   }, (res: any) => {
+        //     is_error = res.error;
+        //     count++
+        //   })
+        // }
         await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
           isBody.push(res);
         }, (res: any) => {
           is_error = res.error;
           count++
         })
+        
         if (count > 0) {
           break;
         }
@@ -841,9 +860,12 @@ export class DetermineSignerComponent implements OnInit {
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];
     this.datas.is_determine_clone.push(data_partner_add);
     this.datas.is_determine_clone.forEach((res: any, index: number) => {
-      res.ordering = index + 1;
+      //res.ordering = index + 1;
       if(res.type != 1){
-        res.name = "Tổ chức " + index;
+        res.name = "Đối tác " + index;
+      }
+      if(index == this.dataParnterOrganization().length){
+        res.ordering = index + 1;
       }
     }) 
     console.log("this.datas.is_determine_clone");
@@ -857,7 +879,7 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.is_determine_clone.forEach((res: any, index: number) => {
       res.ordering = index + 1;
       if(res.type != 1){
-        res.name = "Tổ chức " + index;
+        res.name = "Đối tác " + index;
       }
     })
   }
@@ -898,15 +920,15 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
 
     console.log(item);
-    if (item.type == 3) {
-      this.data_organization.ordering = 2;
-      item.ordering = 1;
-      this.is_change_party = true;
-    } else {
-      this.data_organization.ordering = 1;
-      item.ordering = 2;
-      this.is_change_party = false;
-    }
+    // if (item.type == 3) {
+    //   this.data_organization.ordering = 2;
+    //   item.ordering = 1;
+    //   this.is_change_party = true;
+    // } else {
+    //   this.data_organization.ordering = 1;
+    //   item.ordering = 2;
+    //   this.is_change_party = false;
+    // }
   }
 
   // style select otp and phone with signature

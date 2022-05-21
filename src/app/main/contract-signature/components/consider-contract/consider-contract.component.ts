@@ -759,27 +759,38 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         if (result.isConfirmed) {
           // Kiểm tra ô ký đã ký chưa (status = 2)
           this.spinner.show();
+          console.log(this.datas.is_data_object_signature);
           let idCheckRecipientSign = this.datas.is_data_object_signature.filter((p: any) => p.recipient && p.recipient.email == this.currentUser.email && p.recipient.role == this.datas.roleContractReceived)[0];
           let id_recipient_signature = '';
           if (idCheckRecipientSign) {
             id_recipient_signature = idCheckRecipientSign.recipient_id;
           }
-          this.contractService.getCheckSignatured(id_recipient_signature).subscribe((res: any) => {
-            if (res && res.status == 2) {
-              this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
-            } else {
-              if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
-                this.pkiDialogSignOpen();
-              } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-                this.signContractSubmit();
+          //neu co id nguoi xu ly thi moi kiem tra
+          if(id_recipient_signature){
+            this.contractService.getCheckSignatured(id_recipient_signature).subscribe((res: any) => {
+              if (res && res.status == 2) {
+                this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
+              } else {
+                if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
+                  this.pkiDialogSignOpen();
+                } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
+                  this.signContractSubmit();
+                }
               }
+            }, (error: HttpErrorResponse) => {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
+            }, () => {
+              //this.spinner.hide();
+            })
+          }else{
+            if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
+              this.pkiDialogSignOpen();
+            } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
+              this.signContractSubmit();
             }
-          }, (error: HttpErrorResponse) => {
-            this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
-          }, () => {
-            this.spinner.hide();
-          })
+          }
+          
 
         }
       });

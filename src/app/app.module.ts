@@ -78,7 +78,6 @@ import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
 import { AdminMainComponent } from './admin/admin-main/admin-main.component';
 import { AdminUnitComponent } from './admin/admin-main/admin-unit/admin-unit.component';
 import { AdminSidebarComponent } from './admin/admin-main/admin-sidebar/admin-sidebar.component';
-import { AdminDashboardComponent } from './admin/admin-main/admin-dashboard/admin-dashboard.component';
 import { AdminUserComponent } from './admin/admin-main/admin-user/admin-user.component';
 import { AdminAddUserComponent } from './admin/admin-main/admin-user/admin-add-user/admin-add-user.component';
 import { AdminDetailUserComponent } from './admin/admin-main/admin-user/admin-detail-user/admin-detail-user.component';
@@ -136,7 +135,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdminLoginComponent,
     AdminMainComponent,
     AdminSidebarComponent,
-    AdminDashboardComponent,
     AdminUnitComponent,
     AdminAddUnitComponent,
     AdminDetailUnitComponent,

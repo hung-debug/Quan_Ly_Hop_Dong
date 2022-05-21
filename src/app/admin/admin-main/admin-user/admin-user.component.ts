@@ -57,7 +57,7 @@ export class AdminUserComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddUserComponent, {
-      width: '580px',
+      width: '620px',
       backdrop: 'static',
       keyboard: false,
       data
@@ -75,7 +75,7 @@ export class AdminUserComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddUserComponent, {
-      width: '580px',
+      width: '620px',
       backdrop: 'static',
       keyboard: false,
       data
@@ -93,7 +93,7 @@ export class AdminUserComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminDetailUserComponent, {
-      width: '580px',
+      width: '620px',
       backdrop: 'static',
       keyboard: false,
       data

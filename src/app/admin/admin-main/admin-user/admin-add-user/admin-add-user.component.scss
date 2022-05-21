@@ -79,5 +79,11 @@
 .hidden-color{
     background-color: #EFF2F5;
   }
+
+  :host ::ng-deep {
+    .p-listbox {
+        border: 1px solid #106DB6;
+    }
+}
   
   

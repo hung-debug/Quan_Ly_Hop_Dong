@@ -745,7 +745,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   endTimeCompare(){
-    if(this.start_time && this.end_time && new Date(this.start_time) > new Date(this.end_time)){
+    if(this.start_time && this.end_time && moment(this.datepipe.transform(this.start_time, 'yyyy-MM-dd')).toDate() > moment(this.datepipe.transform(this.end_time, 'yyyy-MM-dd')).toDate()){
       this.errorEndTime = "error.contract-template.effective-end-date.compare";
       return false;
     }

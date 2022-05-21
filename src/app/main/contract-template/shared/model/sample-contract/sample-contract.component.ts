@@ -101,7 +101,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     
-    console.log("this.datas.contract_user_sign");
     console.log(this.datas.contract_user_sign);
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
@@ -310,6 +309,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
       }
     })
+    console.log(data_sign_config_text);
     console.log("console.log(this.datas.contract_user_sign);");
     console.log(this.datas.contract_user_sign);
   }
@@ -700,8 +700,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  getCheckSignature(isSignType: any, listSelect?: string) {
+  getCheckSignature(isSignType: any, listSelect?: string, recipient_id?:any) {
     // p.recipient_id == element.id && p.sign_unit == isSignType)
+    console.log("isSignType");
+    console.log(isSignType);
+    console.log(listSelect)
     this.list_sign_name.forEach((element: any) => {
       console.log(element);
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
@@ -714,11 +717,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       } else {
         //console.log(this.convertToSignConfig());
         //console.log(this.list_sign_name);
-        if (this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && p.sign_unit == isSignType)) {
-          if (isSignType != 'text') {
-            console.log("a");
-            element.is_disable = true;
-          } else element.is_disable = false;
+        if (isSignType != 'text' && this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && p.sign_unit == isSignType)) {
+          console.log("a");
+          element.is_disable = true;
         } else {
           console.log("ab");
           console.log(element);
@@ -731,13 +732,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           } else if (isSignType == 'text') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
           } else element.is_disable = element.role != 4;
-          console.log(!(element.sign_type.some((p: any) => p.id == 2) || element.role == 4));
           console.log(element.is_disable);
         }
       }
 
-      if (listSelect) {
-        element.selected = listSelect && element.name == listSelect;
+      console.log("isSignType");
+      console.log(recipient_id);
+      console.log(element);
+      console.log(isSignType);
+      if (recipient_id || listSelect) {
+        console.log("element_ok");
+        console.log(element);
+        element.selected = (recipient_id?element.id==recipient_id:element.name == listSelect);
       }
     })
   }
@@ -1039,6 +1045,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
+    console.log("d");
+    console.log(d);
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
@@ -1083,13 +1091,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         //   } else item.is_disable = item.role != 4;
         //   item.selected = d.name && item.name == d.name;
         // })
-        this.getCheckSignature(d.sign_unit, d.name);
+        this.getCheckSignature(d.sign_unit, d.name, d.recipient_id);
 
         if (!d.name) //@ts-ignore
           document.getElementById('select-dropdown').value = "";
 
       }
     }
+    console.log(this.datas.contract_user_sign);
   }
 
   // getIdSignClick() {
@@ -1199,6 +1208,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
     // console.log(e, this.objSignInfo, this.signCurent);
+    //console.log(this.datas.contract_user_sign);
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
@@ -1238,11 +1248,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             isObjSign.status = data_name.status;
             signElement.setAttribute("status", isObjSign.status);
 
-            isObjSign.type = data_name.type;
-            signElement.setAttribute("type", isObjSign.type);
+            //console.log(data_name);
+            // isObjSign.type = data_name.type;
+            // signElement.setAttribute("type", isObjSign.type);
 
             isObjSign.email = data_name.email;
-            signElement.setAttribute("type", isObjSign.email);
+            signElement.setAttribute("email", isObjSign.email);
 
           }
           // else {
@@ -1255,6 +1266,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // console.log(this.objSignInfo)
       }
     }
+    //console.log(this.datas.contract_user_sign);
   }
 
   getTrafX() {
@@ -1569,8 +1581,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           name: '',
           sign_type: ''
         };
-        console.log("a");
-        console.log(data_organization);
         
         // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_organization) {
@@ -1581,11 +1591,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               nameSign_organization.sign_type = 'chu_ky_so';
               break
             }
+
+            if (element.sign_type.some((p: any) => p.id == 1) && arrSign_organization.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_anh').length == 0) {
+              error_organization++;
+              nameSign_organization.name = element.name;
+              nameSign_organization.sign_type = 'chu_ky_anh';
+              break
+            }
           }
         }
         if (error_organization > 0) {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout(`Thiếu đối tượng ký số ${nameSign_organization.name} của tổ chức, vui lòng chọn đủ người ký!`, "", 3000);
+          this.toastService.showErrorHTMLWithTimeout(`Thiếu đối tượng ${nameSign_organization.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh'} ${nameSign_organization.name} của tổ chức, vui lòng chọn đủ người ký!`, "", 3000);
           return false;
         }
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
@@ -1603,8 +1620,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           sign_type: ''
         };
         // valid ký kéo thiếu ô ký cho từng loại ký
-        console.log("partner");
-        console.log(data_partner);
         for (const element of data_partner) {
           if (element.sign_type.length > 0) {
             if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && arrSign_partner.filter((item: any) => item.recipient_id == element.id && item.sign_unit == 'chu_ky_so').length == 0) {
@@ -1628,8 +1643,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           return false;
         }
 
-        console.log(arrSign_partner);
-        console.log(data_partner);
+        
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
         if (arrSign_partner.length < data_partner.length) {
           // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
@@ -1646,7 +1660,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (data.type_unit == 'organization') {
       return 'Tổ chức của tôi - ' + data.name;
     } else if (data.type_unit == 'partner') {
-      return 'Đối tác (' + data.org_name + ') - '+ data.name;
+      return data.org_name + ' - '+ data.name;
     }
   }
 

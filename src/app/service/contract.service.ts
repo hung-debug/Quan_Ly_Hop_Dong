@@ -82,7 +82,6 @@ export class ContractService {
   viewFlowUrl:any = `${environment.apiUrl}/api/v1/contracts/bpmn-flow/`;
   getCheckSign: any = `${environment.apiUrl}/api/v1/recipients/internal/`;
 
-
   token:any;
   customer_id:any;
   organization_id:any;
@@ -800,7 +799,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.post<any>(this.uploadFileContractBatchUrl + idContractTemplate, formData, {'headers':headers});
+    return this.http.post<any>(this.uploadFileContractBatchUrl + idContractTemplate + "?organization_id=" + this.organization_id, formData, {'headers':headers});
   }
 
   getContractBatchList(file:any, idContractTemplate:any){

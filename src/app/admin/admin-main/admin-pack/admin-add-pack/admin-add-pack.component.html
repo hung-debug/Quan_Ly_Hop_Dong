@@ -29,7 +29,7 @@
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label text-color">{{'Đơn giá' | translate }} <span class="required-title">*</span></div>
+                <div class="label text-color">{{'Đơn giá (VND)' | translate }} <span class="required-title">*</span></div>
                 <div class="input-data">
                     <input type="text" formControlName="price">
                 </div>
@@ -40,7 +40,7 @@
             </div>
 
             <div class="col-md-6">
-                <div class="label text-color">{{'Thể thức tính' | translate }}</div>
+                <div class="label text-color">{{'Thể thức tính' | translate }} <span class="required-title">*</span></div>
                 <div class="input-data">
                     <input type="text" formControlName="calc">
                 </div>
@@ -53,24 +53,16 @@
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label text-color">{{'Loại gói' | translate }} <span class="required-title">*</span></div>
+                <div class="label text-color">{{'Loại gói' | translate }}</div>
                 <div class="input-data">
                     <input type="text" formControlName="type">
-                </div>
-                <div *ngIf="submitted && f.type.errors" class="invalid">
-                    <div *ngIf="f.type.errors.required">{{'Loại gói không được để trống' | translate}}</div>
-                    <div *ngIf="f.type.errors.pattern">{{'Loại gói không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
             </div>
         
             <div class="col-md-6">
-                <div class="label text-color">{{'Điều kiện áp dụng' | translate }} <span class="required-title">*</span></div>
+                <div class="label text-color">{{'Điều kiện áp dụng' | translate }}</div>
                 <div class="input-data">
                     <input type="text" formControlName="condition">
-                </div>
-                <div *ngIf="submitted && f.condition.errors" class="invalid">
-                    <div *ngIf="f.condition.errors.required">{{'Điều kiện áp dụng không được để trống' | translate}}</div>
-                    <div *ngIf="f.condition.errors.pattern">{{'Điều kiện áp dụng không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
             </div>
         </div>
@@ -101,12 +93,11 @@
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label text-color">{{'Mô tả' | translate }} <span class="required-title">*</span></div>
+                <div class="label text-color">{{'Mô tả' | translate }}</div>
                 <div class="input-data">
                     <input type="text" formControlName="describe">
                 </div>
                 <div *ngIf="submitted && f.describe.errors" class="invalid">
-                    <div *ngIf="f.describe.errors.required">{{'Mô tả không được để trống' | translate}}</div>
                     <div *ngIf="f.describe.errors.pattern">{{'Mô tả không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
             </div>

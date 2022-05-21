@@ -260,6 +260,10 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     
   }
 
+  getPartnerCoordinationer(item: any) {
+    return item.recipients.filter((p: any) => p.role == 1)
+  }
+
   getPartnerReviewer(item: any) {
     return item.recipients.filter((p: any) => p.role == 2)
   }

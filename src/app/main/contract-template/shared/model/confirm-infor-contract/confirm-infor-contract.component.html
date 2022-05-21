@@ -106,7 +106,7 @@
     </div>
 
     <div class="partner_contact" *ngFor="let record of this.data_parnter_organization;">
-        <div class="label" style="text-transform: uppercase;">{{'organization.partner'  | translate}} {{record.name}}</div>
+        <div class="label" style="text-transform: uppercase;">{{record.name}}</div>
         <div class="content_determine">
             <div class="row" *ngIf="record.type == 2">
                 <div class="col-md-5">
