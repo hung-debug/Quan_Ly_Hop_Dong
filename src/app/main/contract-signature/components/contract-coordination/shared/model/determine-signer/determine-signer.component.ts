@@ -256,13 +256,13 @@ export class DetermineSignerComponent implements OnInit {
             isPartnerCaNhanDuplicate = [];
           }
 
-          if (!dataArrPartner[j].recipients[k].phone &&
-            dataArrPartner[j].recipients[k].role == 3 &&
-            (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
-            this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(3) + "của đối tác!")
-            count++;
-            break;
-          }
+          // if (!dataArrPartner[j].recipients[k].phone &&
+          //   dataArrPartner[j].recipients[k].role == 3 &&
+          //   (dataArrPartner[j].recipients[k].is_otp || dataArrPartner[j].recipients[k].is_otp == 1)) {
+          //   this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(3) + "của đối tác!")
+          //   count++;
+          //   break;
+          // }
 
           // if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
           //   this.getNotificationValid("Tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " đối tác cá nhân không hợp lệ!");
@@ -305,16 +305,33 @@ export class DetermineSignerComponent implements OnInit {
 
   getCheckDuplicateEmail(isParty: string, dataValid?: any) {
     let arrCheckEmail = [];
+    // valid email đối tác và các bên tham gia
     if (isParty != 'only_party_origanzation') {
+      let arrEmail = [];
       for (let i = 0; i < dataValid.length; i++) {
         const element = dataValid[i].recipients;
         for (let j = 0; j < element.length; j++) {
           if (element[j].email) {
-            arrCheckEmail.push(element[j].email);
+            let items = {
+              email: element[j].email,
+              role: element[j].role
+            }
+            // arrCheckEmail.push(element[j].email);
+            arrEmail.push(items);
           }
         }
       }
+
+      if (arrEmail.some((p: any) => p.role == 1) && arrEmail.some((p: any) => p.role == 3)) {
+        arrEmail = arrEmail.filter((p: any) => p.role != 1);
+      }
+
+      arrEmail.forEach((items: any) => {
+        arrCheckEmail.push(items.email)
+      })
+
     } else {
+      // valid email tổ chức của tôi
       for (let i = 0; i < dataValid.length; i++) {
         if (dataValid[i].email) {
           arrCheckEmail.push(dataValid[i].email);
