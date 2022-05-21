@@ -45,8 +45,10 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="label_item">Người xem xét</div>
-                        <div>
-                            <div [innerHTML]="userViews" class="input_text"></div>
+                        <div class="input_text">
+                            <div *ngFor="let item of this.is_origanzation_reviewer">
+                                <div>{{item.name}} - {{item.email}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -54,8 +56,10 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="label_item">Người ký</div>
-                        <div>
-                            <div [innerHTML]="userSigns" class="input_text"></div>
+                        <div class="input_text">
+                            <div *ngFor="let item of this.is_origanzation_signature">
+                                <div>{{item.name}} - {{item.email}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -65,8 +69,10 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="label_item">Văn thư</div>
-                        <div>
-                            <div [innerHTML]="userDocs" class="input_text"></div>
+                        <div class="input_text">
+                            <div *ngFor="let item of this.is_origanzation_document">
+                                <div>{{item.name}} - {{item.email}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -74,15 +80,17 @@
         </div>
     </div>
 
-    <div class="partner_contact">
-        <div class="label">ĐỐI TÁC</div>
+    <div class="partner_contact" *ngFor="let record of this.data_parnter_organization;">
+        <div class="label">ĐỐI TÁC {{record.name | uppercase}}</div>
         <div class="content_determine">
-            <div class="row" *ngIf="isOrg">
+            <div class="row" *ngIf="record.type == 2">
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="label_item">Người điều phối</div>
-                        <div>
-                            <div [innerHTML]="partnerLeads" class="input_text"></div>
+                        <div class="input_text">
+                            <div *ngFor="let item of getPartnerCoordinationer(record)">
+                                <div>{{item.name}} - {{item.email}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -90,8 +98,10 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="label_item">Người xem xét</div>
-                        <div>
-                            <div [innerHTML]="partnerViews" class="input_text"></div>
+                        <div class="input_text">
+                            <div *ngFor="let item of getPartnerReviewer(record)">
+                                <div>{{item.name}} - {{item.email}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -101,17 +111,21 @@
                 <div class="col-md-5">
                     <div class="form-group">
                         <div class="label_item">Người ký</div>
-                        <div>
-                            <div [innerHTML]="partnerSigns" class="input_text"></div>
+                        <div class="input_text">
+                            <div *ngFor="let item of getPartnerSignature(record)">
+                                <div>{{item.name}} - {{item.email}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2"></div>
-                <div class="col-md-5" *ngIf="isOrg">
+                <div class="col-md-5" *ngIf="record.type == 2">
                     <div class="form-group">
                         <div class="label_item">Văn thư</div>
-                        <div>
-                            <div [innerHTML]="partnerDocs" class="input_text"></div>
+                        <div class="input_text">
+                            <div *ngFor="let item of getPartnerDocument(record)">
+                                <div>{{item.name}} - {{item.email}}</div>
+                            </div>
                         </div>
                     </div>
                 </div>

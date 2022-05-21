@@ -2,8 +2,9 @@
 <div class="container-fluid">
   <div class="contract-determine">
     <div style="margin-right: 50px">
+      <!-- [disabled]="is_change_party" -->
       <input id="order-organization" class="contract-total" style="width: 25px; height: 25px" type="number"
-        [(ngModel)]="data_organization.ordering" [disabled]="is_change_party"
+        [(ngModel)]="data_organization.ordering" 
         (focusout)="onChangeValue($event,'order-organization')"
         oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
     </div>
@@ -220,9 +221,10 @@
 
   <div class="contract-determine" *ngFor="let item of dataParnterOrganization(); let id = index" style="display: flex">
     <div style="margin-right: 50px">
+      <!-- [disabled]="is_change_party" -->
       <input [id]="'ordering-partner-' + id" class="contract-total"
         (focusout)="onChangeValue($event,'ordering-partner-' + id)" style="width: 25px; height: 25px" type="number"
-        [(ngModel)]="item.ordering" [disabled]="is_change_party"
+        [(ngModel)]="item.ordering" 
         oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
     </div>
     <div class="contract--content">

@@ -1,7 +1,7 @@
 <div class="row col-md-12">
   <div class="col-md-5" style="display: flex; flex-direction: column">
     <div class="form-group">
-      <div class="label_item">Mẫu hợp đồng <span class="require_star">*</span></div>
+      <div class="label_item">{{'menu.contract.template.list' | translate}} <span class="require_star">*</span></div>
       <div [style.background]="action == 'edit' ? '#ddd' : ''">
         <p-dropdown panelStyleClass="font" [options]="typeListForm" [(ngModel)]="this.datasForm.template_contract_id" optionLabel="name"
           optionValue="id" placeholder="Chọn hợp đồng" [filter]="true" filterBy="name" [showClear]="true" [disabled]="action == 'edit'"
@@ -9,11 +9,11 @@
         </p-dropdown>
       </div>
     </div>
+
     <div class="form-group">
-      <div class="label_item">Số hợp đồng </div>
+      <div class="label_item">{{'contract.number' | translate}}</div>
       <div class="input-group">
-        <input type="text" [(ngModel)]="this.datasForm.contract_no" maxlength="32" class="input_text" placeholder="Nhập số hợp đồng" 
-        oninput="this.value = this.value.replace(/[^a-zA-Z0-9!@#$&()-`.+,_]/g ,'', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"/>
+        <input type="text" [(ngModel)]="this.datasForm.contract_no" maxlength="32" class="input_text" placeholder="Nhập số hợp đồng" />
       </div>
     </div>
 

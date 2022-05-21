@@ -51,82 +51,53 @@ export class ConfirmContractFormComponent implements OnInit {
     isOrg: boolean = true;
     data_sample_contract: any = [];
     arrVariableRemove = [
-        'id', 
-        'sign_unit', 
-        'position', 
-        'left', 
-        'top', 
-        'text_attribute_name', 
-        'sign_type', 
-        'signature_party', 
-        'is_type_party', 
-        'role', 
-        'recipient', 
-        'email', 
-        'is_disable', 
-        'selected', 
-        'type_unit', 
-        "is_have_text", 
+        'id',
+        'sign_unit',
+        'position',
+        'left',
+        'top',
+        'text_attribute_name',
+        'sign_type',
+        'signature_party',
+        'is_type_party',
+        'role',
+        'recipient',
+        'email',
+        'is_disable',
+        'selected',
+        'type_unit',
+        "is_have_text",
         "id_have_data"
     ];
+    data_organization: any;
+    is_origanzation_reviewer: any = [];
+    is_origanzation_signature: any = [];
+    is_origanzation_document: any = [];
+    data_parnter_organization: any = [];
 
     conn: string;
     ngOnInit(): void {
         this.spinner.hide();
-        this.contractFileName = this.datasForm.filename;
-        this.dateDeadline = this.datepipe.transform(this.datasForm.end_time, 'dd/MM/yyyy') || '';
-        this.comment = this.datasForm.notes;
+        this.data_organization = this.datasForm.is_determine_clone.filter((p: any) => p.type == 1)[0];
+        this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
+        this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
+        this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
-        if (this.datasForm.is_determine_clone && this.datasForm.is_determine_clone.length > 0) {
-            let data_user_sign = [...this.datasForm.is_determine_clone];
-            console.log(data_user_sign);
-            data_user_sign.forEach((element: any) => {
-                if (element.type == 1) {
-                    element.recipients.forEach((item: any) => {
-                        if (item.role == 2 && item.name) {
-                            this.userViews += this.connUserViews + item.name + " - " + item.email;
-                            this.connUserViews = "<br>";
-                        }
-                        else if (item.role == 3 && item.name) {
-                            this.userSigns += this.connUserSigns + item.name + " - " + item.email;
-                            this.connUserSigns = "<br>";
-                        }
-                        else if (item.role == 4 && item.name) {
-                            this.userDocs += this.connUserDocs + item.name + " - " + item.email;
-                            this.connUserDocs = "<br>";
-                        }
-                    })
-                } else if (element.type == 2) {
-                    this.isOrg = true;
-                    element.recipients.forEach((item: any) => {
-                        if (item.role == 1 && item.name) {
-                            this.partnerLeads += this.connPartnerLeads + item.name + " - " + item.email;
-                            this.connPartnerLeads = "<br>";
-                        }
-                        else if (item.role == 2 && item.name) {
-                            this.partnerViews += this.connPartnerViews + item.name + " - " + item.email;
-                            this.connPartnerViews = "<br>";
-                        }
-                        else if (item.role == 3 && item.name) {
-                            this.partnerSigns += this.connPartnerSigns + item.name + " - " + item.email;
-                            this.connPartnerSigns = "<br>";
-                        }
-                        else if (item.role == 4 && item.name) {
-                            this.partnerDocs += this.connPartnerDocs + item.name + " - " + item.email;
-                            this.connPartnerDocs = "<br>";
-                        }
-                    })
-                } else if (element.type == 3) {
-                    this.isOrg = false;
-                    element.recipients.forEach((item: any) => {
-                        if (item.role == 3 && item.name) {
-                            this.partnerSigns += this.connPartnerSigns + item.name + " - " + item.email;
-                            this.connPartnerSigns = "<br>";
-                        }
-                    })
-                }
-            })
-        }
+        this.data_parnter_organization = this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+    }
+
+    getPartnerCoordinationer(item: any) {
+        return item.recipients.filter((p: any) => p.role == 1)
+    }
+
+    getPartnerReviewer(item: any) {
+        return item.recipients.filter((p: any) => p.role == 2)
+    }
+    getPartnerSignature(item: any) {
+        return item.recipients.filter((p: any) => p.role == 3)
+    }
+    getPartnerDocument(item: any) {
+        return item.recipients.filter((p: any) => p.role == 4);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -184,7 +155,7 @@ export class ConfirmContractFormComponent implements OnInit {
             })
             this.getDefinddatasFormignEdit(isHaveFieldId, isNotFieldId, action);
         } else {
-            this.data_sample_contract = [];    
+            this.data_sample_contract = [];
             let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
             isContractUserSign_clone.forEach((element: any) => {
                 if (element.sign_config.length > 0) {
@@ -301,15 +272,15 @@ export class ConfirmContractFormComponent implements OnInit {
                 } else if (item.sign_unit == 'so_tai_lieu') {
                     item['type'] = 4;
                     if (this.datasForm.contract_no) {
-                        if (!item.name) 
-                        item.name = "";
-                    
-                      if (!item.recipient_id) 
-                        item.recipient_id = "";
-                    
-                      if (!item.status) 
-                        item.status = 0;
-                      }
+                        if (!item.name)
+                            item.name = "";
+
+                        if (!item.recipient_id)
+                            item.recipient_id = "";
+
+                        if (!item.status)
+                            item.status = 0;
+                    }
                 } else {
                     item['type'] = 1;
                 }

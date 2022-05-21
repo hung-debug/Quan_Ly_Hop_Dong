@@ -868,15 +868,15 @@ export class DetermineSignerComponent implements OnInit {
     }
     this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
 
-    if (item.type == 3) {
+    // if (item.type == 3) {
       // this.data_organization.ordering = 2;
       // item.ordering = 1;
-      this.is_change_party = true;
-    } else {
+      // this.is_change_party = true;
+    // } else {
       // this.data_organization.ordering = 1;
       // item.ordering = 2;
-      this.is_change_party = false;
-    }
+      // this.is_change_party = false;
+    // }
   }
 
   // style select otp and phone with signature

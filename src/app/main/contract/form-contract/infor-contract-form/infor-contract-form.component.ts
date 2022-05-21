@@ -163,8 +163,10 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
                 this.datasForm['isChangeForm'] = true;
             }
+
             if (dataContractAttachForm) {
                 this.datasForm.fileAttachForm = dataContractAttachForm; // du lieu file dinh kem tu mau
+                this.listFileAttach = this.datasForm.fileAttachForm;
             } else {
                 this.datasForm.fileAttachForm = [];
             }
