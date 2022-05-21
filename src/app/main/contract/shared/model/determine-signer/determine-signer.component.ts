@@ -867,7 +867,6 @@ export class DetermineSignerComponent implements OnInit {
       })
     }
     this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
-
     // if (item.type == 3) {
       // this.data_organization.ordering = 2;
       // item.ordering = 1;

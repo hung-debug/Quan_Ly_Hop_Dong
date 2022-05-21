@@ -369,6 +369,7 @@
     "nhap_ten_doi_tac_to_chuc": "Nhập tên đối tác tổ chức...",
     "valid_trung_email": "Địa chỉ email không được trùng nhau giữa các bên tham gia!",
     "vui_long_nhap_ten": "Vui lòng nhập tên",
+    "please_input_text_number_contract": "Vui lòng nhập nội dung ô text/số hợp đồng!",
     "to_chuc_of_toi": "tổ chức của tôi!",
     "vui_long_nhap_email": "Vui lòng nhập email",
     "vui_long_nhap_loai_ky": "Vui lòng chọn loại ký của",
@@ -391,5 +392,6 @@
     "open_app": "Mở app",
     "download_app": "Tải app",
     "contract_signature_success": "Hợp đồng đã được xử lý!",
-    "error_check_signature": "Lỗi kiểm tra chữ ký!"
+    "error_check_signature": "Lỗi kiểm tra chữ ký!",
+    "error_change_contract_template": "Lỗi dữ liệu thay đổi hợp đồng mẫu, Vui lòng hủy hợp đồng và thao tác lại!"
 }

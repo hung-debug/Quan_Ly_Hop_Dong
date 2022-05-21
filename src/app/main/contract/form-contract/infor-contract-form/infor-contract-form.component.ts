@@ -157,11 +157,16 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                 this.datasForm.notes = isDataInfo.notes;
                 this.datasForm.type_id = isDataInfo.type_id;
                 // this.datasForm.document_id = dataContractForm.id;
-                if (this.datasForm.is_data_object_signature) {
-                    this.datasForm.is_data_object_signature = "";
-                }
+                // if (this.datasForm.is_data_object_signature) {
+                //     this.datasForm.is_data_object_signature = "";
+                // }
 
                 this.datasForm['isChangeForm'] = true;
+
+                this.datasForm.contract_user_sign = null;
+                this.datasForm.is_determine_clone = [];
+                this.datasForm.is_data_object_signature = null;
+
             }
 
             if (dataContractAttachForm) {
@@ -170,6 +175,22 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             } else {
                 this.datasForm.fileAttachForm = [];
             }
+
+            if (this.datasForm.id) {
+                this.contractService.deleteContract(this.datasForm.id).subscribe((data) => {
+                    if (data.success) {
+                        this.datasForm.id = "";
+                        this.datasForm.contract_id = "";
+                    } else {
+                        this.toastService.showErrorHTMLWithTimeout("error_change_contract_template", "", 3000);
+                    }
+                },
+                    error => {
+                        this.toastService.showErrorHTMLWithTimeout("error_change_contract_template", "", 3000);
+                    }
+                );
+            }
+
             setTimeout(() => {
                 this.nameContract.nativeElement.focus();
             }, 100)

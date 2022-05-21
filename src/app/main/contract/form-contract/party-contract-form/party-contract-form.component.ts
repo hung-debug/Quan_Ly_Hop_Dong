@@ -143,8 +143,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 this.save_draft_infor_form.close_modal.close();
             }
             return;
-        }
-        else {
+        } else {
             let is_save = false;
             if (action == 'save-step') {
                 is_save = true;
@@ -1008,7 +1007,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }
 
     onChangeValue(e: any, orering_data: string) {
-        // console.log(e.target.value);
         if (!e.target.value) {
             let data_ordering = document.getElementById(orering_data);
             if (data_ordering)

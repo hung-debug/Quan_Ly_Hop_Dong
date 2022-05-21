@@ -1586,7 +1586,7 @@ export class SampleContractFormComponent implements OnInit {
       let count = 0;
       let count_text = 0;
       let count_number = 0;
-      let count_text_content = 0;
+      let count_text_number = 0;
 
       let arrSign_organization: any[] = [];
       let arrSign_partner: any[] = [];
@@ -1603,7 +1603,7 @@ export class SampleContractFormComponent implements OnInit {
                 count_number++;
                 break;
               } else if (!this.datasForm.contract_no && !element.email) {
-                count++;
+                count_text_number++;
                 break
               }
             } else if (element.sign_unit == 'text') { //!element.is_have_text
@@ -1611,7 +1611,7 @@ export class SampleContractFormComponent implements OnInit {
                 count_text++;
                 break
               } else if (element.is_have_text && !element.value) {
-                count_text_content++;
+                count_text_number++;
                 break;
               }
             } else {
@@ -1651,9 +1651,9 @@ export class SampleContractFormComponent implements OnInit {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Bạn chưa nhập tên trường cho đối tượng Text!", "", 3000);
         return false;
-      } else if (count_text_content > 0) {
+      } else if (count_text_number > 0) {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Bạn chưa nhập nội dung đối tượng Text!", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout("please_input_text_number_contract", "", 3000);
         return false;
       } else {
         // valid đối tượng ký của tổ chức
