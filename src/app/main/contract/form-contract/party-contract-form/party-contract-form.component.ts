@@ -878,7 +878,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }
 
     changeType(e: any, item: any, index: number) {
-        // console.log(item, e);
         item.name = "";
         let newArr: any[] = [];
         for (let i = 0; i < item.recipients.length; i++) {
@@ -904,12 +903,12 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
 
         if (item.type == 3) {
-            this.data_organization.ordering = 2;
-            item.ordering = 1;
+            // this.data_organization.ordering = 2;
+            // item.ordering = 1;
             this.is_change_party = true;
         } else {
-            this.data_organization.ordering = 1;
-            item.ordering = 2;
+            // this.data_organization.ordering = 1;
+            // item.ordering = 2;
             this.is_change_party = false;
         }
     }
