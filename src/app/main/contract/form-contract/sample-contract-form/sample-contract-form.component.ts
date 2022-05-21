@@ -1586,6 +1586,7 @@ export class SampleContractFormComponent implements OnInit {
       let count = 0;
       let count_text = 0;
       let count_number = 0;
+      let count_text_content = 0;
 
       let arrSign_organization: any[] = [];
       let arrSign_partner: any[] = [];
@@ -1597,15 +1598,22 @@ export class SampleContractFormComponent implements OnInit {
             if (!element.name && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') { // element.sign_unit != 'so_tai_lieu'
               count++;
               break
-            } else if (element.sign_unit == 'so_tai_lieu' && element.length > 1) {
-              count_number++;
-              break;
-            } else if (element.sign_unit == 'so_tai_lieu' && !this.datasForm.contract_no && !element.email) {
-              count++;
-              break
-            } else if (element.sign_unit == 'text' && !element.text_attribute_name && !element.is_have_text) { //!element.is_have_text
-              count_text++;
-              break
+            } else if (element.sign_unit == 'so_tai_lieu') {
+              if (element.length > 1) {
+                count_number++;
+                break;
+              } else if (!this.datasForm.contract_no && !element.email) {
+                count++;
+                break
+              }
+            } else if (element.sign_unit == 'text') { //!element.is_have_text
+              if (!element.text_attribute_name && !element.is_have_text) {
+                count_text++;
+                break
+              } else if (element.is_have_text && !element.value) {
+                count_text_content++;
+                break;
+              }
             } else {
               let data_sign = {
                 name: element.name,
@@ -1641,7 +1649,11 @@ export class SampleContractFormComponent implements OnInit {
         return false;
       } else if (count_text > 0) {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout("Bạn chưa nhập tên trường cho đối tượng Text!", "", 3000);
+        return false;
+      } else if (count_text_content > 0) {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("Bạn chưa nhập nội dung đối tượng Text!", "", 3000);
         return false;
       } else {
         // valid đối tượng ký của tổ chức
