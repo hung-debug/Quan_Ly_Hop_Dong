@@ -45,13 +45,25 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   doTheSearch($event: Event): void {
     const stringEmitted = ($event.target as HTMLInputElement).value;
     this.isContent = stringEmitted;
-    this.onChangeValueText.emit(stringEmitted);    
+    this.onChangeValueText.emit(stringEmitted);
   }
 
   focusOutFunction() {
-    console.log(this.sign.value);
     if (!this.sign.value) {
-      this.onChangeValueText.emit('');    
+      this.onChangeValueText.emit('');
     }
+  }
+
+  getSpecifiedHandle() {
+    if ((!this.sign.is_have_text && this.sign.recipient_id) || (this.sign.value !== null && this.sign.value === undefined))
+      // sign.sign_unit == 'so_tai_lieu' && !sign.recipient_id
+      return true;
+    else return false;
+  }
+
+  getNotSpecifiedYetHandle() {
+    if (this.sign.sign_unit == 'so_tai_lieu' && !this.sign.recipient_id && this.sign.value !== undefined)
+      return true;
+    else return false;
   }
 }
