@@ -94,7 +94,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    console.log(this.datas);
+    // console.log(this.datas);
     if (!this.datas.contract_user_sign) {
       this.getDataSignUpdateAction();
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
@@ -553,6 +553,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     // dataPosition = dataPosition.filter()
     this.dataSignPosition = [...dataPosition, ...dataNotPosition];
+    
     this.dataSignPosition.forEach((res: any) => {
       if (res.sign_unit == 'text') {
         res['text_attribute_name'] = res.name;
