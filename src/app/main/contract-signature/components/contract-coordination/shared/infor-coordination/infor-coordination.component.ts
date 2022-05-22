@@ -123,7 +123,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
   ngOnInit() {
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
-    console.log(this.datas);
+    // console.log(this.datas);
     this.getDataContractSignature();
   }
 
@@ -134,7 +134,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       .subscribe(params => {
           this.recipientId = params.recipientId;
           this.view = params.view;
-          console.log(this.recipientId);
         }
       );
     // this.contractService.getDetailContract(this.idContract).subscribe(rs => {

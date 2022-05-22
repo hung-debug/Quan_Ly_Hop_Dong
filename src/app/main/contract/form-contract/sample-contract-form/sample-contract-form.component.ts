@@ -513,7 +513,7 @@ export class SampleContractFormComponent implements OnInit {
     // this.spinner.show();
     await this.contractService.deleteInfoContractSignature(data).toPromise().then((res: any) => {
     }, (error: HttpErrorResponse) => {
-      this.toastService.showErrorHTMLWithTimeout('Xóa dữ liệu ô ký lỗi, vui lòng kiểm tra hoặc thao tác lại!', "", 3000);
+      this.toastService.showErrorHTMLWithTimeout('error_delete_object_signature', "", 3000);
     })
   }
 
@@ -787,7 +787,7 @@ export class SampleContractFormComponent implements OnInit {
       if (isSignType == 'text' && value) {
         element.is_disable = true;
       } else {
-        if ((element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
+        if (this.getConditionFiledSign(element, isSignType)) {
           let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
           if (data.length > 0)
             element.is_disable = true;
@@ -814,6 +814,13 @@ export class SampleContractFormComponent implements OnInit {
         element.selected = listSelect && element.name == listSelect;
       }
     })
+  }
+
+  getConditionFiledSign(element: any, isSignType: string) {
+    if ((element.fields && element.fields.length && element.fields.length > 0) && 
+    (element.sign_type.some((id: number) => id == 1) && isSignType == 'chu_ky_anh') || (element.sign_type.some((id: number) => [2,3,4].includes(id)) && isSignType == 'chu_ky_so') || (isSignType == 'text' && (element.sign_type.some((id: number) => id == 2) || element.role == 4) || (isSignType == 'so_tai_lieu' && (element.role != 4 || (this.datasForm.contract_no && element.role == 4))))) {
+      return true;
+    } else return false;
   }
 
   // Hàm tính tọa độ ký
@@ -1117,7 +1124,6 @@ export class SampleContractFormComponent implements OnInit {
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
       if (isObjSign) {
         this.isEnableSelect = false;
-
         this.objSignInfo.traf_x = d.coordinate_x;
         this.objSignInfo.traf_y = d.coordinate_y;
         // this.signCurent.name = d.name;
@@ -1316,7 +1322,7 @@ export class SampleContractFormComponent implements OnInit {
             signElement.setAttribute("type", isObjSign.type);
 
             isObjSign.email = data_name.email;
-            signElement.setAttribute("type", isObjSign.email);
+            signElement.setAttribute("email", isObjSign.email);
 
             if (!isObjSign.height) {
               isObjSign.height = ['so_tai_lieu', 'text'].includes(isObjSign.sign_unit) ? 28 : 85;

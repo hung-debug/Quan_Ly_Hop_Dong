@@ -654,7 +654,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   getCheckSignature(isSignType: any, listSelect?: string) {
     // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
-      if ((element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
+      if (this.getConditionFiledSign(element, isSignType)) {
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
         if (data.length > 0)
           element.is_disable = true;
@@ -679,6 +679,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         element.selected = listSelect && element.name == listSelect;
       }
     })
+  }
+
+  getConditionFiledSign(element: any, isSignType: string) {
+    if ((element.fields && element.fields.length && element.fields.length > 0) && 
+    (element.sign_type.some((id: number) => id == 1) && isSignType == 'chu_ky_anh') || (element.sign_type.some((id: number) => [2,3,4].includes(id)) && isSignType == 'chu_ky_so') || (isSignType == 'text' && (element.sign_type.some((id: number) => id == 2) || element.role == 4) || (isSignType == 'so_tai_lieu' && (element.role != 4 || (this.datas.contract_no && element.role == 4))))) {
+      return true;
+    } else return false;
   }
 
   // Hàm tính tọa độ ký
@@ -1011,18 +1018,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (this.isEnableText) {
           this.objSignInfo.text_attribute_name = d.text_attribute_name
         }
-
-        // for để set lại list đối tượng ký
-        // this.list_sign_name.forEach((item: any) => {
-        //   if (d.sign_unit == 'chu_ky_anh') {
-        //     item.is_disable = !(item.sign_type.some((p: any) => p.id == 1) && item.role != 2);
-        //   } else if (d.sign_unit == 'chu_ky_so') {
-        //     item.is_disable = !(item.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && item.role != 2);
-        //   } else if (d.sign_unit == 'text') {
-        //     item.is_disable = !(item.sign_type.some((p: any) => p.id == 2) || item.role == 4);
-        //   } else item.is_disable = item.role != 4;
-        //   item.selected = d.name && item.name == d.name;
-        // })
         this.getCheckSignature(d.sign_unit, d.name);
 
         if (!d.name) //@ts-ignore
@@ -1182,7 +1177,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             signElement.setAttribute("type", isObjSign.type);
 
             isObjSign.email = data_name.email;
-            signElement.setAttribute("type", isObjSign.email);
+            signElement.setAttribute("email", isObjSign.email);
 
           }
           // else {

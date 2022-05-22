@@ -664,7 +664,6 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = "";
-    console.log(headers);
     return this.http.delete<any>(this.updateInfoContractUrl + id, {headers});
   }
 
@@ -673,8 +672,6 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    console.log(headers);
-
     return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, {'headers': headers});
 
   }

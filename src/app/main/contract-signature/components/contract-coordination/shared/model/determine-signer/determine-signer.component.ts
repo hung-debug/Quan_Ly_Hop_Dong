@@ -131,8 +131,7 @@ export class DetermineSignerComponent implements OnInit {
 
   next() {
     if (!this.validData()) return;
-    else
-      this.getApiDetermine();
+    else this.getApiDetermine();
   }
 
   getApiDetermine() {

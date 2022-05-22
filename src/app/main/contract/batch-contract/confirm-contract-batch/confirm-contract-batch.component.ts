@@ -115,7 +115,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   }
 
   ngOnInit() {
-    console.log(this.datasBatch);
+    // console.log(this.datasBatch);
     this.spinner.show();
     this.contractService.getContractBatchList(this.datasBatch.contractFile, this.datasBatch.idContractTemplate).subscribe((response: any) => {
       console.log(response);
