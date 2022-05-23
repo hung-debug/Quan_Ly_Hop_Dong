@@ -162,7 +162,6 @@ export class DetermineSignerComponent implements OnInit {
     })
     this.spinner.show();
     let isCheckId = this.datas.is_determine_clone.filter((p: any) => p.id);
-    //&& (isCheckId && isCheckId.length == this.datas.is_determine_clone.length)
     if (this.datas.is_action_contract_created && this.router.url.includes("edit") && (isCheckId && isCheckId.length == this.datas.is_determine_clone.length)) {
       let isBody: any[] = [];
       let count = 0;
@@ -188,7 +187,8 @@ export class DetermineSignerComponent implements OnInit {
         //   }, (res: any) => {
         //     is_error = res.error;
         //     count++
-        //   })
+        //   }
+        //   )
         // }
         await this.contractTemplateService.editContractDetermine(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
           isBody.push(res);
@@ -875,6 +875,15 @@ export class DetermineSignerComponent implements OnInit {
 
   // xóa đối tham gia bên đối tác
   deletePartner(index: any) {
+    // let arr_clone = this.datas.is_determine_clone[index].recipients;
+    // const array_empty: any[] = [];
+    // let new_arr: any[] = [];
+    // arr_clone.forEach((res: any, i: number) => {
+    //   if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'tổ chức')) {
+    //     return;
+    //   }
+    // })
+    
     this.datas.is_determine_clone.splice(index + 1, 1);
     this.datas.is_determine_clone.forEach((res: any, index: number) => {
       res.ordering = index + 1;

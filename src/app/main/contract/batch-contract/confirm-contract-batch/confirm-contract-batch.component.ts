@@ -77,7 +77,8 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   isEnableText: boolean = false;
   isChangeText: boolean = false;
 
-  pageNumberCurrent:any = 0;
+  pageNumberCurrent:any = 1;
+  pageNumberOld:any=1;
   pageNumberTotal:any = 1;
   contractList:any[] = [];
   isDataContract: any;
@@ -123,7 +124,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
 
       this.pageNumberTotal = this.contractList.length;
       if(this.pageNumberTotal > 0){
-        this.getDataContractSignature(this.pageNumberCurrent);
+        this.getDataContractSignature(this.pageNumberCurrent-1);
       }
       
     }), (error: any) => {
@@ -637,38 +638,52 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
 
   nextPage(){
     this.pageNumberCurrent++;
-    this.getDataContractSignature(this.pageNumberCurrent);
+    this.pageNumberOld = this.pageNumberCurrent;
+    this.getDataContractSignature(this.pageNumberCurrent-1);
   }
 
   previousPage(){
     this.pageNumberCurrent--;
-    this.getDataContractSignature(this.pageNumberCurrent);
+    this.pageNumberOld = this.pageNumberCurrent;
+    this.getDataContractSignature(this.pageNumberCurrent-1);
   }
 
   typingPage(event:any){
     let value = event.target.value;
     if(!value){
-      this.toastService.showErrorHTMLWithTimeout("Số hợp đồng không được để trống", "", 3000);
+      this.pageNumberCurrent = this.pageNumberOld;
+      //this.toastService.showErrorHTMLWithTimeout("Số hợp đồng không được để trống", "", 3000);
     }else if(value > this.pageNumberTotal){
-      this.toastService.showErrorHTMLWithTimeout("Không nhập số hợp đồng vượt quá " + this.pageNumberTotal, "", 3000);
+      this.pageNumberCurrent = this.pageNumberOld;
+      //this.toastService.showErrorHTMLWithTimeout("Không nhập số hợp đồng vượt quá " + this.pageNumberTotal, "", 3000);
     }else if(value < 1){
-      this.toastService.showErrorHTMLWithTimeout("Không nhập số hợp đồng nhỏ hơn 1", "", 3000);
+      this.pageNumberCurrent = this.pageNumberOld;
+      //this.toastService.showErrorHTMLWithTimeout("Không nhập số hợp đồng nhỏ hơn 1", "", 3000);
     }else{
-      this.pageNumberCurrent = value - 1;
-    
+      this.pageNumberCurrent = value;
+      this.pageNumberOld = this.pageNumberCurrent;
       console.log(this.pageNumberCurrent);
-      this.getDataContractSignature(this.pageNumberCurrent);
+      this.getDataContractSignature(this.pageNumberCurrent-1);
     }
     
   }
 
+  numberOnly(event:any): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+
+  }
+
   checkDisableIcon(){
-    if(this.pageNumberCurrent + 1 == 1){
+    if(this.pageNumberCurrent == 1){
       this.isDisablePrevious = true;
     }else{
       this.isDisablePrevious = false;
     }
-    if(this.pageNumberCurrent + 1 == this.pageNumberTotal){
+    if(this.pageNumberCurrent == this.pageNumberTotal){
       this.isDisableNext = true;
     }else{
       this.isDisableNext = false;

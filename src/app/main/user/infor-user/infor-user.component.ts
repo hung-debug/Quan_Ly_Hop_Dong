@@ -10,6 +10,7 @@ import { UserService } from 'src/app/service/user.service';
 import { networkList } from "../../../config/variable";
 import {parttern_input} from "../../../config/parttern"
 import * as moment from "moment";
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-infor-user',
   templateUrl: './infor-user.component.html',
@@ -59,7 +60,8 @@ export class InforUserComponent implements OnInit {
     private fbd: FormBuilder,
     public router: Router,
     private roleService: RoleService,
-    private uploadService:UploadService
+    private uploadService:UploadService,
+    private spinner: NgxSpinnerService
     ) {
       this.addInforForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
@@ -176,13 +178,16 @@ export class InforUserComponent implements OnInit {
     }
     this.userService.updateUser(data).subscribe(
       data => {
+        alert("a");
         console.log(data);
         this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/user-infor']);
         });
+        //this.spinner.hide();
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+        this.spinner.hide();
       }
     )
   }
@@ -204,13 +209,16 @@ export class InforUserComponent implements OnInit {
             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
               this.router.navigate(['/main/user-infor']);
             });
+            this.spinner.hide();
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+            this.spinner.hide();
           }
         )
       },
       error => {
         this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+        this.spinner.hide();
         return false;
       });
     }else{
@@ -228,8 +236,10 @@ export class InforUserComponent implements OnInit {
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
             this.router.navigate(['/main/user-infor']);
           });
+          this.spinner.hide();
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
+          this.spinner.hide();
         }
       )
     }
@@ -241,6 +251,7 @@ export class InforUserComponent implements OnInit {
     if (this.addInforForm.invalid) {
       return;
     }
+    this.spinner.show();
     const data = {
       id: this.id,
       name: this.addInforForm.value.name,
@@ -291,12 +302,14 @@ export class InforUserComponent implements OnInit {
                       
                     }, error => {
                       this.toastService.showErrorHTMLWithTimeout('Có lỗi cập nhật số điện thoại tổ chức', "", 3000);
+                      this.spinner.hide();
                     }
                   )
                 }
                 
               }, error => {
                 this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                this.spinner.hide();
               }
             )
 
@@ -304,9 +317,11 @@ export class InforUserComponent implements OnInit {
             this.update(data);
           }else if(dataByPhone.code == '01'){
             this.toastService.showErrorHTMLWithTimeout('Số điện thoại đã tồn tại trong hệ thống', "", 3000);
+            this.spinner.hide();
           }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+          this.spinner.hide();
         }
       )
     }else{
@@ -321,6 +336,7 @@ export class InforUserComponent implements OnInit {
     if (this.addKpiForm.invalid || this.addHsmForm.invalid) {
       return;
     }
+    this.spinner.show();
     const data = {
       id: this.id,
       name: this.addInforFormOld.value.name,
