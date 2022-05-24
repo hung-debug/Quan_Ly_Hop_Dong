@@ -70,25 +70,22 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // console.log(this.datas.determine_contract);
     if (this.datas.determine_contract)
-      this.is_determine_clone = [this.datas.determine_contract];
+      this.is_determine_clone = [...this.datas.determine_contract];
     else
       this.is_determine_clone = [...this.contractService.getDataDetermine()];
     // data Tổ chức của tôi
-
-    if (this.is_determine_clone && this.is_determine_clone.type == 1) {
-      this.data_organization = this.is_determine_clone.filter((p: any) => p.type == 1)[0];
-      // this.data_organization = this.is_determine_clone;
-      this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
-      this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
-      this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
-    }
+    // if (this.is_determine_clone && this.is_determine_clone.type == 1) {
+    //   this.data_organization = this.is_determine_clone.filter((p: any) => p.type == 1)[0];
+    //   this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
+    //   this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
+    //   this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
+    // }
 
     // data đối tác
-    if (this.is_determine_clone.type == 3) {
+    // if (this.is_determine_clone.type == 3) {
       this.data_parnter_organization = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-    }
+    // }
 
     // this.data_parnter_individual = this.is_determine_clone.filter((p: any) => p.type == 3);
 
@@ -129,12 +126,13 @@ export class DetermineSignerComponent implements OnInit {
     // this.nextOrPreviousStep(step);
   }
 
-  next() {
-    if (!this.validData()) return;
-    else this.getApiDetermine();
-  }
+  // next() {
+  //   if (!this.validData()) return;
+  //   else this.getApiDetermine();
+  // }
 
   getApiDetermine() {
+    if (!this.validData()) return;
     this.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3) {
         let data = items.recipients.filter((p: any) => p.role == 3);
@@ -142,7 +140,7 @@ export class DetermineSignerComponent implements OnInit {
       }
     })
     this.spinner.show();
-    this.contractService.getContractDetermineCoordination(this.is_determine_clone[0], this.datas.determine_contract.id).subscribe((res: any) => {
+    this.contractService.getContractDetermine(this.is_determine_clone, this.datas.data_contract_document_id.contract_id).subscribe((res: any) => {
         this.datas.determine_contract = res ? res : this.is_determine_clone;
         this.step = variable.stepSampleContract.step3;
         this.datas.stepLast = this.step
@@ -289,12 +287,12 @@ export class DetermineSignerComponent implements OnInit {
       }
     }
 
-    // if (count == 0) {
-    //   if (this.getCheckDuplicateEmail('allCheckEmail', this.is_determine_clone)) {
-    //     this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
-    //     return false
-    //   }
-    // }
+    if (count == 0) {
+      if (this.getCheckDuplicateEmail('allCheckEmail', this.is_determine_clone)) {
+        this.getNotificationValid("Email bị trùng với email trong cùng 1 bên tham gia hoặc giữa các bên, vui lòng kiểm tra lại!");
+        return false
+      }
+    }
 
     if (count > 0) {
       return false;
@@ -668,8 +666,8 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   dataParnterOrganization() {
-    // return this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-    return this.is_determine_clone;
+    return this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+    // return this.is_determine_clone;
   }
 
   // thêm đối tác

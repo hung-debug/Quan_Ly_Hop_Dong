@@ -140,7 +140,7 @@ export class DetermineSignerComponent implements OnInit {
         this.save_draft_infor.close_modal.close();
       }
       return;
-    } 
+    }
     else {
       let is_save = false;
       if (action == 'save-step') {
@@ -161,7 +161,7 @@ export class DetermineSignerComponent implements OnInit {
     //   let isBody: any[] = [];
     //   let count = 0;
     //   let is_error = '';
-      
+
     //   for (let i = 0; i < this.datas.is_determine_clone.length; i++) {
     //     this.datas.is_determine_clone[i].recipients.forEach((element: any) => {
     //       if (!element.id) element.id = 0;
@@ -185,22 +185,22 @@ export class DetermineSignerComponent implements OnInit {
     //     }
     //     this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
     //   }
-        
+
     //   this.spinner.hide()
     // } else {
-      this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
-        this.getDataApiDetermine(res, is_save)
-      }, (error: HttpErrorResponse) => {
-        if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
-          this.save_draft_infor.close_header = false;
-          this.save_draft_infor.close_modal.close();
-        }
-        this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-      }, () => {
-        this.spinner.hide();
+    this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
+      this.getDataApiDetermine(res, is_save)
+    }, (error: HttpErrorResponse) => {
+      if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+        this.save_draft_infor.close_header = false;
+        this.save_draft_infor.close_modal.close();
       }
-      );
+      this.spinner.hide();
+      this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+    }, () => {
+      this.spinner.hide();
+    }
+    );
     // }
   }
 
@@ -867,13 +867,13 @@ export class DetermineSignerComponent implements OnInit {
     }
     this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
     // if (item.type == 3) {
-      // this.data_organization.ordering = 2;
-      // item.ordering = 1;
-      // this.is_change_party = true;
+    // this.data_organization.ordering = 2;
+    // item.ordering = 1;
+    // this.is_change_party = true;
     // } else {
-      // this.data_organization.ordering = 1;
-      // item.ordering = 2;
-      // this.is_change_party = false;
+    // this.data_organization.ordering = 1;
+    // item.ordering = 2;
+    // this.is_change_party = false;
     // }
   }
 
