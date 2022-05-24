@@ -174,57 +174,42 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         })
         this.spinner.show();
         // let isCheckId = this.datasForm.is_determine_clone.filter((p: any) => p.id);
-        if (this.action == 'edit') {
-            let isBody: any[] = [];
-            let count = 0;
-            let is_error = '';
+        // if (this.action == 'edit') {
+        //     let isBody: any[] = [];
+        //     let count = 0;
+        //     let is_error = '';
+            
+        //     for (let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
+        //         this.datasForm.is_determine_clone[i].recipients.forEach((element: any) => {
+        //             if (!element.id) element.id = 0;
+        //         })
+        //         // if (this.datasForm.is_determine_clone[i].id) {
+        //             await this.contractService.getContractDetermineCoordination(this.datasForm.is_determine_clone[i], this.datasForm.is_determine_clone[i].id).toPromise().then((res: any) => {
+        //                 res.recipients.forEach((item: any) => {
+        //                     item.template_recipient_id = item.id
+        //                 })
+        //                 isBody.push(res);
+        //             }, (res: any) => {
+        //                 is_error = res.error;
+        //                 count++
+        //             })
+        //             if (count > 0) {
+        //                 break;
+        //             }
+            
+        //     }
+        //     if (isBody.length == this.datasForm.is_determine_clone.length) {
+        //         this.getDataApiDetermine(isBody, is_save)
+        //     } else {
+        //         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+        //             this.save_draft_infor_form.close_header = false;
+        //             this.save_draft_infor_form.close_modal.close();
+        //         }
+        //         this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
+        //     }
 
-            for (let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
-                this.datasForm.is_determine_clone[i].recipients.forEach((element: any) => {
-                    if (!element.id) element.id = 0;
-                })
-                // if (this.datasForm.is_determine_clone[i].id) {
-                    await this.contractService.getContractDetermineCoordination(this.datasForm.is_determine_clone[i], this.datasForm.is_determine_clone[i].id).toPromise().then((res: any) => {
-                        res.recipients.forEach((item: any) => {
-                            item.template_recipient_id = item.id
-                        })
-                        isBody.push(res);
-                    }, (res: any) => {
-                        is_error = res.error;
-                        count++
-                    })
-                    if (count > 0) {
-                        break;
-                    }
-                // } else {
-                //     await this.contractService.getContractDetermine(this.datasForm.is_determine_clone[i], this.datasForm.id).subscribe((res: any) => {
-                //         this.getDataApiDetermine(res, is_save)
-                //       }, (error: HttpErrorResponse) => {
-                //         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-                //           this.save_draft_infor_form.close_header = false;
-                //           this.save_draft_infor_form.close_modal.close();
-                //         }
-                //         this.spinner.hide();
-                //         this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-                //       }, () => {
-                //         this.spinner.hide();
-                //       }
-                //       );
-                // }
-                
-            }
-            if (isBody.length == this.datasForm.is_determine_clone.length) {
-                this.getDataApiDetermine(isBody, is_save)
-            } else {
-                if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-                    this.save_draft_infor_form.close_header = false;
-                    this.save_draft_infor_form.close_modal.close();
-                }
-                this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
-            }
-
-            this.spinner.hide()
-        } else {
+        //     this.spinner.hide()
+        // } else {
             this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
                 this.getDataApiDetermine(res, is_save)
             }, (error: HttpErrorResponse) => {
@@ -238,7 +223,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 this.spinner.hide();
             }
             );
-        }
+        // }
     }
 
     getDataApiDetermine(res: any, is_save?: boolean) {

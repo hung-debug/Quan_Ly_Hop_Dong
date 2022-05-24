@@ -394,5 +394,6 @@
     "contract_signature_success": "Hợp đồng đã được xử lý!",
     "error_check_signature": "Lỗi kiểm tra chữ ký!",
     "error_change_contract_template": "Lỗi dữ liệu thay đổi hợp đồng mẫu, Vui lòng hủy hợp đồng và thao tác lại!",
-    "error_delete_object_signature": "không thể xóa dữ liệu thay đổi, vui lòng thử lại!"
+    "error_delete_object_signature": "không thể xóa dữ liệu thay đổi, vui lòng thử lại!",
+    "contract_number_already_exist": "Số hợp đồng đã tồn tại!"
 }

@@ -165,7 +165,7 @@ export class DetermineSignerComponent implements OnInit {
       
       for (let i = 0; i < this.datas.is_determine_clone.length; i++) {
         this.datas.is_determine_clone[i].recipients.forEach((element: any) => {
-          if (!element.id) element.id = 0;
+          // if (!element.id) element.id = 0;
         })
         await this.contractService.getContractDetermineCoordination(this.datas.is_determine_clone[i], this.datas.is_determine_clone[i].id).toPromise().then((res: any) => {
           isBody.push(res);
