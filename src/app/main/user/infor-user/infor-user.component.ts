@@ -178,13 +178,12 @@ export class InforUserComponent implements OnInit {
     }
     this.userService.updateUser(data).subscribe(
       data => {
-        alert("a");
         console.log(data);
         this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/user-infor']);
         });
-        //this.spinner.hide();
+        this.spinner.hide();
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin thất bại', "", 3000);
         this.spinner.hide();

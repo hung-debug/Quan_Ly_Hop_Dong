@@ -769,10 +769,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           if(id_recipient_signature){
             this.contractService.getCheckSignatured(id_recipient_signature).subscribe((res: any) => {
               if (res && res.status == 2) {
+                this.spinner.hide();
                 this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
               } else {
                 if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
                   this.pkiDialogSignOpen();
+                  this.spinner.hide();
                 } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
                   this.signContractSubmit();
                 }
@@ -780,12 +782,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             }, (error: HttpErrorResponse) => {
               this.spinner.hide();
               this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
-            }, () => {
-              //this.spinner.hide();
             })
           }else{
             if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
               this.pkiDialogSignOpen();
+              this.spinner.hide();
             } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
               this.signContractSubmit();
             }
