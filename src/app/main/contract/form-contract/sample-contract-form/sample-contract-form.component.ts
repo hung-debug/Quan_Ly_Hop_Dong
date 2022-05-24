@@ -94,7 +94,7 @@ export class SampleContractFormComponent implements OnInit {
   listSignNameClone: any = [];
   data_sample_contract: any = [];
   isNoEmailObj: boolean = true;
-  // isChangeNumberContract: number;
+  isChangeNumberContract: number;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -120,6 +120,10 @@ export class SampleContractFormComponent implements OnInit {
     // }
     // this.setDataSignContract();
     // }
+
+    if (this.datasForm.contract_no) {
+      this.isChangeNumberContract = this.datasForm.contract_no;
+    }
 
     if (!this.datasForm.contract_user_sign) {
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
@@ -788,7 +792,7 @@ export class SampleContractFormComponent implements OnInit {
         element.is_disable = true;
       } else {
         if (this.getConditionFiledSign(element, isSignType)) {
-          let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
+          let data = this.convertToSignConfig().filter((isName: any) => element.fields && element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
           if (data.length > 0)
             element.is_disable = true;
           else element.is_disable = false;
@@ -817,8 +821,8 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   getConditionFiledSign(element: any, isSignType: string) {
-    if ((element.fields && element.fields.length && element.fields.length > 0) && 
-    (element.sign_type.some((id: number) => id == 1) && isSignType == 'chu_ky_anh') || (element.sign_type.some((id: number) => [2,3,4].includes(id)) && isSignType == 'chu_ky_so') || (isSignType == 'text' && (element.sign_type.some((id: number) => id == 2) || element.role == 4) || (isSignType == 'so_tai_lieu' && (element.role != 4 || (this.datasForm.contract_no && element.role == 4))))) {
+    if ((element.fields && element.fields.length && element.fields.length > 0) &&
+      (element.sign_type.some((id: number) => id == 1) && isSignType == 'chu_ky_anh') || (element.sign_type.some((id: number) => [2, 3, 4].includes(id)) && isSignType == 'chu_ky_so') || (isSignType == 'text' && (element.sign_type.some((id: number) => id == 2) || element.role == 4) || (isSignType == 'so_tai_lieu' && (element.role != 4 || (this.datasForm.contract_no && element.role == 4))))) {
       return true;
     } else return false;
   }
@@ -1376,11 +1380,37 @@ export class SampleContractFormComponent implements OnInit {
       }
       return;
     } else {
+      let coutError = false;
+      if (this.isChangeNumberContract != this.datasForm.contract_no) {
+        await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
+          dataCode => {
+            if (!dataCode.success) {
+              this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+              this.spinner.hide();
+              coutError = true;
+            }
+          }, (error) => {
+            coutError = true;
+            this.toastService.showErrorHTMLWithTimeout('Lỗi kiểm tra số hợp đồng', "", 3000);
+            this.spinner.hide();
+          });
+
+          if (!coutError) {
+            await this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id, 'template_form').toPromise().then((data) => {
+              // this.datasForm.id = data?.id;
+              // this.datasForm.contract_id = data?.id;
+            }, (error) => {
+              coutError = true;
+            })
+          }
+      }
+
+      if (coutError) return; 
+
       if (action == 'save_draft') {
         if (this.router.url.includes("edit")) {
           let isHaveFieldId: any[] = [];
           let isNotFieldId: any[] = [];
-          // console.log(this.datasForm.contract_user_sign);
           let isUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
           isUserSign_clone.forEach((res: any) => {
             res.sign_config.forEach((element: any) => {
@@ -1450,13 +1480,13 @@ export class SampleContractFormComponent implements OnInit {
           }
         }
       } else if (action == 'next_step') {
-        let coutError = false;
+        // let coutError = false;
         this.spinner.show();
-        if (!coutError) {
+        // if (!coutError) {
           this.stepForm = variable.stepSampleContractForm.step4;
           this.datasForm.stepLast = this.stepForm
           this.nextOrPreviousStep(this.stepForm);
-        }
+        // }
       }
     }
   }

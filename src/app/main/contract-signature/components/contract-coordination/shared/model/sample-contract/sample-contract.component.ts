@@ -1087,7 +1087,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   getCheckSignature(isSignType: any, listSelect?: string) {
     this.list_sign_name.forEach((element: any) => {
       if (this.getConditionFiledSign(element, isSignType)) {
-        let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
+        let data = this.convertToSignConfig().filter((isName: any) => element.fields && element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
         if (data.length > 0)
           element.is_disable = true;
         else element.is_disable = false;
