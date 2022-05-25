@@ -7,6 +7,7 @@ import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import {roleList} from "../../../config/variable";
 import {parttern_input} from "../../../config/parttern"
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-add-role',
@@ -34,7 +35,9 @@ export class AddRoleComponent implements OnInit {
     private toastService : ToastService,
     public dialogRef: MatDialogRef<AddRoleComponent>,
     public router: Router,
-    public dialog: MatDialog,) { 
+    public dialog: MatDialog,
+    private spinner: NgxSpinnerService
+    ) { 
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
@@ -87,8 +90,7 @@ export class AddRoleComponent implements OnInit {
       note: this.addForm.value.note,
       selectedRole: this.addForm.value.selectedRole,
     }
-    console.log(data);
-    console.log(this.addForm.invalid);
+    this.spinner.show();
     if (this.addForm.invalid) {
       console.log(this.addForm.invalid);
       return;
@@ -109,8 +111,10 @@ export class AddRoleComponent implements OnInit {
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
             this.router.navigate(['/main/role']);
           });
+          this.spinner.hide();
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+          this.spinner.hide();
         }
       )
     }else{
@@ -132,24 +136,30 @@ export class AddRoleComponent implements OnInit {
                       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                         this.router.navigate(['/main/role']);
                       });
+                      this.spinner.hide();
                     }, error => {
                       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                      this.spinner.hide();
                     }
                   )
                 //neu da ton tai ten
                 }else{
                   this.toastService.showErrorHTMLWithTimeout('Tên vai trò đã tồn tại', "", 3000);
+                  this.spinner.hide();
                 }
               }, error => {
                 this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                this.spinner.hide();
               }
             )
           //neu da ton tai ma
           }else{
             this.toastService.showErrorHTMLWithTimeout('Mã vai trò đã tồn tại', "", 3000);
+            this.spinner.hide();
           }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+          this.spinner.hide();
         }
       )
     }

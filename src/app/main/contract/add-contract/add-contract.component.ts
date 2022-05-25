@@ -113,6 +113,8 @@ export class AddContractComponent implements OnInit {
   }
 
   isQLHD_01: boolean = true;
+  isQLHD_14: boolean = true;
+  isQLHD_15: boolean = true;
   isQLHD_02: boolean = true;
   isQLHD_08: boolean = true;
   isQLHD_11: boolean = true;
@@ -133,9 +135,21 @@ export class AddContractComponent implements OnInit {
               let listRole: any[];
               listRole = data.permissions;
               this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
+              this.isQLHD_14 = listRole.some(element => element.code == 'QLHD_14');
+              this.isQLHD_15 = listRole.some(element => element.code == 'QLHD_15');
               // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
               // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
               this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
+
+              if(this.action=='add' && this.isQLHD_15){
+                this.type=3;
+              }
+              if(this.action=='add' && this.isQLHD_14){
+                this.type=2;
+              }
+              if(this.action=='add' && this.isQLHD_01){
+                this.type=1;
+              }
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
             }

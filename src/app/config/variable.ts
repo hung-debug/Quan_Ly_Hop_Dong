@@ -214,8 +214,12 @@ export var roleList = [
     //Nhóm chức năng quản lý hợp đồng
     label: "Nhóm chức năng quản lý hợp đồng", value: "QLHD",
     items: [
-      //Thêm mới hợp đồng đơn lẻ
-      { label: "Thêm mới hợp đồng đơn lẻ", value: "QLHD_01"},
+      //Thêm mới hợp đồng đơn lẻ không theo mẫu
+      { label: "Thêm mới hợp đồng đơn lẻ không theo mẫu", value: "QLHD_01"},
+      //Thêm mới hợp đồng đơn lẻ theo mẫu
+      { label: "Thêm mới hợp đồng đơn lẻ theo mẫu", value: "QLHD_14"},
+      //Thêm mới hợp đồng theo lô
+      { label: "Thêm mới hợp đồng theo lô", value: "QLHD_15"},
       //Sửa hợp đồng
       { label: "Sửa hợp đồng", value: "QLHD_02"},
       //Xem danh sách hợp đồng của tổ chức của tôi và tổ chức con
