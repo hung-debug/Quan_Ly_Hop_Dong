@@ -94,82 +94,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    // console.log(this.datas);
     if (!this.datas.contract_user_sign) {
       this.getDataSignUpdateAction();
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
       this.setDataSignContract();
     } 
     this.defindDataContract();
-    // cập nhật defind dữ liệu
-    // let dataPosition: any[] = [];
-    // let dataNotPosition: any[] = [];
-    // this.datas.determine_contract.forEach((res: any) => {
-      // this.datas.determine_contract.recipients.forEach((element: any) => {
-      //   let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == element.id)[0];
-      //   if (data_duplicate) {
-      //     // lấy ra dữ liệu bị trùng và update lại với dữ liệu mới;
-      //     data_duplicate.name = element.name;
-      //     data_duplicate.email = element.email;
-      //     data_duplicate.phoneNumber = element.phoneNumber;
-      //     data_duplicate.sign_type = element.sign_type;
-      //     data_duplicate.is_otp = element.is_otp;
-      //     data_duplicate['is_type_party'] = this.datas.determine_contract.type;
-      //     data_duplicate['role'] = data_duplicate.recipient.role;
-      //     dataPosition.push(data_duplicate)
-      //   } else {
-      //     element['is_type_party'] = this.datas.determine_contract.type;
-      //     element['role'] = element.role;
-      //     dataNotPosition.push(element)
-      //   }
-      // })
-    // })
-
-    // console.log(dataNotPosition, dataPosition);
-
-    // let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
-    // let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
-    // this.dataSignPosition = [...data_sign_position, ...dataNotSignPosition];
-
-    // this.dataSignPosition.forEach((res: any) => {
-    //   if (res.sign_unit == 'text') {
-    //     res['text_attribute_name'] = res.name;
-    //   }
-    // })
-
-    // console.log(this.datas.contract_user_sign)
+    
     this.scale = 1;
-
-    // this.list_sign_name.forEach((item: any) => {
-    //   item['selected'] = false;
-    // })
-    // if (this.dataSignPosition && this.dataSignPosition.length > 0) {
-    //   // let data_list_user_sign: any[] = [];
-    //   let data_user_sign = [...this.dataSignPosition];
-    //   data_user_sign.forEach((element: any) => {
-    //     if (element.is_type_party == 1) {
-    //       // element.recipients.forEach((item: any) => {
-    //       if (element.role == 3 || element.role == 4 || element.role == 2) {
-    //         element['type_unit'] = 'organization';
-    //         element['selected'] = false;
-    //         element['is_disable'] = false;
-    //         // item['type'] = element.type;
-    //         this.list_sign_name.push(element);
-    //       }
-    //       // })
-    //     } else if (element.is_type_party == 2 || element.is_type_party == 3) {
-    //       // element.recipients.forEach((item: any) => {
-    //       if (element.role == 3 || element.role == 4 || element.role == 2) {
-    //         element['type_unit'] = 'partner'
-    //         element['selected'] = false;
-    //         element['is_disable'] = false;
-    //         // element['type'] = element.type;
-    //         this.list_sign_name.push(element);
-    //       }
-    //       // })
-    //     }
-    //   })
-    // }
 
     if (this.datas.determine_contract) {
       let data_user_sign = {...this.datas.determine_contract};
@@ -576,15 +508,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
 
-    // Get data ky khi thay doi du lieu
-    let dataDiffirent: any[] = [];
-    if (dataDetermine.length > 0) {
-      dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) => data.sign_type.length > 0 &&
-        ((val.sign_unit == "chu_ky_anh" && !data.sign_type.some((p: any) => p.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
-        (val.sign_unit == "chu_ky_so" && !data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4)) ||
-        val.name != data.name || val.email != data.email)));
-    }
-
     // loc doi tuong o ky ko bi thay doi du lieu
     dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) => data.sign_type.length > 0 &&
       (((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
@@ -592,6 +515,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         (val.name == data.name) && (val.email == data.email))
     ));
 
+    // Get data ky khi thay doi du lieu
+    let dataDiffirent: any[] = [];
+    if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
+      dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) => data.sign_type.length > 0 &&
+        ((val.sign_unit == "chu_ky_anh" && !data.sign_type.some((p: any) => p.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
+        (val.sign_unit == "chu_ky_so" && !data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4)) ||
+        val.name != data.name || val.email != data.email)));
+    }
+// 
     // xoa nhung du lieu doi tuong bi thay doi
     if (dataDiffirent.length > 0) {
       this.datas.contract_user_sign.forEach((res: any) => {
@@ -1087,7 +1019,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   getCheckSignature(isSignType: any, listSelect?: string) {
     this.list_sign_name.forEach((element: any) => {
       if (this.getConditionFiledSign(element, isSignType)) {
-        let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
+        let data = this.convertToSignConfig().filter((isName: any) => element.fields && element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
         if (data.length > 0)
           element.is_disable = true;
         else element.is_disable = false;

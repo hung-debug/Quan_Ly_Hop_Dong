@@ -364,5 +364,6 @@
   "contract_signature_success": "The contract has been processed!",
   "error_check_signature": "Signature check error!",
   "error_change_contract_template": "Sample contract change data error, Please cancel the contract and rework again!",
-  "error_delete_object_signature": "cannot delete change data, please try again!"
+  "error_delete_object_signature": "cannot delete change data, please try again!",
+  "contract_number_already_exist": "contract number already exist!"
 }

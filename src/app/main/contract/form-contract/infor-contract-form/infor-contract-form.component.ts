@@ -302,7 +302,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
                 dataCode => {
                     if (!dataCode.success) {
-                        this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+                        this.toastService.showErrorHTMLWithTimeout('contract_number_already_exist', "", 3000);
                         this.spinner.hide();
                         coutError = true;
                     }

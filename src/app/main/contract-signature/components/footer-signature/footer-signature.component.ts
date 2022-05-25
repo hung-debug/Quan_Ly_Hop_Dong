@@ -99,7 +99,8 @@ export class FooterSignatureComponent implements OnInit {
             this.datas.recipient_id_coordition = dataCoordination.id;
           }
         }
-        this.datas.determine_contract = this.is_data_coordination; // data determine contract
+        // this.datas.determine_contract = this.is_data_coordination; // data determine contract
+        this.datas.determine_contract = this.datas.is_data_contract.participants; // data determine contract
         this.datas.step = variable.stepSampleContract.step_confirm_coordination; // set step 2
       }
     } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
