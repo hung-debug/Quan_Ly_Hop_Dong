@@ -9,15 +9,15 @@ import {
   OnDestroy,
   AfterViewInit, Output, EventEmitter
 } from '@angular/core';
-import {variable} from "../../../../../../../config/variable";
-import {Helper} from "../../../../../../../core/Helper";
-import {environment} from "../../../../../../../../environments/environment";
+import { variable } from "../../../../../../../config/variable";
+import { Helper } from "../../../../../../../core/Helper";
+import { environment } from "../../../../../../../../environments/environment";
 import * as $ from 'jquery';
 
 import interact from 'interactjs'
-import {ContractService} from "../../../../../../../service/contract.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {ToastService} from "../../../../../../../service/toast.service";
+import { ContractService } from "../../../../../../../service/contract.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { ToastService } from "../../../../../../../service/toast.service";
 import { HttpErrorResponse } from '@angular/common/http';
 
 
@@ -98,14 +98,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.getDataSignUpdateAction();
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
       this.setDataSignContract();
-    } 
+    }
 
     this.defindDataContract();
-    
+
     this.scale = 1;
 
     if (this.datas.determine_contract) {
-      let data_user_sign = {...this.datas.determine_contract};
+      let data_user_sign = { ...this.datas.determine_contract };
       this.getListNameSign(data_user_sign);
     }
 
@@ -140,7 +140,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('dragend', this.showEventInfo).draggable({
-      listeners: {move: this.dragMoveListener, onend: this.showEventInfo},
+      listeners: { move: this.dragMoveListener, onend: this.showEventInfo },
       inertia: true,
       modifiers: [
         interact.modifiers.restrictRect({
@@ -151,7 +151,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
-      edges: {right: true, bottom: true}, // Cho phép resize theo chiều nào.
+      edges: { right: true, bottom: true }, // Cho phép resize theo chiều nào.
       listeners: {
         move: this.resizableListener, onend: this.resizeSignature
       },
@@ -420,7 +420,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     }
   }
-  
+
   setDataSignContract() {
     let data_sign_config_cks = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_so');
     let data_sign_config_cka = this.dataSignPosition.filter((p: any) => p.sign_unit == 'chu_ky_anh');
@@ -447,28 +447,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       element.recipients.forEach((item: any) => {
         if (item.fields && item.fields.length && item.fields.length > 0) {
           item.fields.forEach((res: any) => {
-            item['id_have_data'] = res.id;
-            item['is_type_party'] = element.type;
-            item['role'] = res.recipient.role;
-            if (res.type == 1) {
-              item['sign_unit'] = 'text';
-            }
-            if (res.type == 2) {
-              item['sign_unit'] = 'chu_ky_anh'
-            }
-            if (res.type == 3) {
-              item['sign_unit'] = 'chu_ky_so'
-            }
-            if (res.type == 4) {
-              item['sign_unit'] = 'so_tai_lieu'
-            }
+            res['id_have_data'] = res.id;
+            res['is_type_party'] = element.type;
+            res['role'] = res.recipient.role;
+            if (res.type == 1)
+              res['sign_unit'] = 'text';
+            if (res.type == 2)
+              res['sign_unit'] = 'chu_ky_anh';
+            if (res.type == 3)
+              res['sign_unit'] = 'chu_ky_so';
+            if (res.type == 4)
+              res['sign_unit'] = 'so_tai_lieu';
             // res.name = res.recipient.name;
-            item.email = res.email;
-            dataPosition.push(item);
+            res.email = res.recipient.email;
+            dataPosition.push(res);
           })
-
         } else {
-          item['is_type_party'] = this.datas.determine_contract.type;
+          // item['is_type_party'] = this.datas.determine_contract.type;
+          item['is_type_party'] = element.type;
           item['role'] = item.role;
           dataNotPosition.push(item)
         }
@@ -477,7 +473,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     // dataPosition = dataPosition.filter()
     this.dataSignPosition = [...dataPosition, ...dataNotPosition];
-    
+
     this.dataSignPosition.forEach((res: any) => {
       if (res.sign_unit == 'text') {
         res['text_attribute_name'] = res.name;
@@ -524,60 +520,60 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //     (val.sign_unit == "chu_ky_so" && !data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4)) ||
     //     val.name != data.name || val.email != data.email)));
     // }
-// 
+    // 
     // xoa nhung du lieu doi tuong bi thay doi
     // if (dataDiffirent.length > 0) {
-      this.datas.contract_user_sign.forEach((res: any) => {
+    this.datas.contract_user_sign.forEach((res: any) => {
+      if (res.sign_config.length > 0) {
+        /*
+        * begin xóa đối tượng ký đã bị thay đổi dữ liệu
+        */
+        // res.sign_config.forEach((element: any) => {
+        //   if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id && p.id_have_data == element.id_have_data)) {
+        //     this.removeDataSignChange(element.id_have_data);
+        //   }
+        // })
+        /*
+        end
+        */
+        // res.sign_config = res.sign_config.filter((val: any) => dataContractUserSign.some((data: any) => (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
         if (res.sign_config.length > 0) {
-          /*
-          * begin xóa đối tượng ký đã bị thay đổi dữ liệu
-          */
-          // res.sign_config.forEach((element: any) => {
-          //   if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id && p.id_have_data == element.id_have_data)) {
-          //     this.removeDataSignChange(element.id_have_data);
-          //   }
-          // })
-          /*
-          end
-          */
-          // res.sign_config = res.sign_config.filter((val: any) => dataContractUserSign.some((data: any) => (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
-          if (res.sign_config.length > 0) {
-            res.sign_config.forEach((items: any) => {
-              items.id = items.id + '1';
-            })
-          }
+          res.sign_config.forEach((items: any) => {
+            items.id = items.id + '1';
+          })
         }
-      })
+      }
+    })
     // }
   }
 
   getListNameSign(data_user_sign: any) {
     // data_user_sign.forEach((element: any) => {
-      if (data_user_sign.type == 1) {
-        data_user_sign.forEach((item: any) => {
-          item.recipients.forEach((element: any) => {
-            if (element.role == 3 || element.role == 4 || element.role == 2) {
-              element['type_unit'] = 'organization';
-              element['selected'] = false;
-              element['is_disable'] = false;
-              this.list_sign_name.push(element);
-            }
-          })
-          
+    if (data_user_sign.type == 1) {
+      data_user_sign.forEach((item: any) => {
+        item.recipients.forEach((element: any) => {
+          if (element.role == 3 || element.role == 4 || element.role == 2) {
+            element['type_unit'] = 'organization';
+            element['selected'] = false;
+            element['is_disable'] = false;
+            this.list_sign_name.push(element);
+          }
         })
-      } else if (data_user_sign.type == 2 || data_user_sign.type == 3) {
-        data_user_sign.forEach((item: any) => {
-          item.recipients.forEach((element: any) => {
-            if (element.role == 3 || element.role == 4 || element.role == 2) {
-              element['type_unit'] = 'partner'
-              element['selected'] = false;
-              element['is_disable'] = false;
-              element['type'] = data_user_sign.type;
-              this.list_sign_name.push(element);
-            }
-          })
+
+      })
+    } else if (data_user_sign.type == 2 || data_user_sign.type == 3) {
+      data_user_sign.forEach((item: any) => {
+        item.recipients.forEach((element: any) => {
+          if (element.role == 3 || element.role == 4 || element.role == 2) {
+            element['type_unit'] = 'partner'
+            element['selected'] = false;
+            element['is_disable'] = false;
+            element['type'] = data_user_sign.type;
+            this.list_sign_name.push(element);
+          }
         })
-      }
+      })
+    }
     // })
     // this.listSignNameClone = JSON.parse(JSON.stringify(this.list_sign_name));
   }
@@ -665,7 +661,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.arrPage = [];
       for (let page = 1; page <= this.pageNumber; page++) {
         let canvas = document.createElement("canvas");
-        this.arrPage.push({page: page});
+        this.arrPage.push({ page: page });
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
         // canvas.style.paddingLeft = '15px';
@@ -735,7 +731,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.convertToSignConfig().forEach((element: any) => {
         let a = document.getElementById(element.id);
         if (a) {
-          if (element['coordinate_x'] && element['coordinate_y']) { // @ts-ignore
+          if ((!element.is_type_party || (element.is_type_party && element.is_type_party != 1)) && element['coordinate_x'] && element['coordinate_y']) { // @ts-ignore
             a.style["z-index"] = '1';
           }
           // else
@@ -763,7 +759,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
       // let viewport = page.getViewport(this.scale);
-      let viewport = page.getViewport({scale: this.scale});
+      let viewport = page.getViewport({ scale: this.scale });
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
@@ -777,7 +773,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           height: viewport.height,
         });
       }
-      page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
+      page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
@@ -867,7 +863,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     } else return {}
   }
 
-// hàm stype đối tượng boder kéo thả
+  // hàm stype đối tượng boder kéo thả
   changeColorDrag(role: any, isDaKeo?: any) {
     if (isDaKeo) {
       return 'ck-da-keo';
@@ -1053,8 +1049,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getConditionFiledSign(element: any, isSignType: string) {
-    if ((element.fields && element.fields.length && element.fields.length > 0) && 
-    (element.sign_type.some((id: number) => id == 1) && isSignType == 'chu_ky_anh') || (element.sign_type.some((id: number) => [2,3,4].includes(id)) && isSignType == 'chu_ky_so') || (isSignType == 'text' && element.sign_type.some((id: number) => id == 2) || (isSignType == 'so_tai_lieu' && (element.role != 4 || (this.datas.contract_no && element.role == 4))))) {
+    if ((element.fields && element.fields.length && element.fields.length > 0) &&
+      (element.sign_type.some((id: number) => id == 1) && isSignType == 'chu_ky_anh') || (element.sign_type.some((id: number) => [2, 3, 4].includes(id)) && isSignType == 'chu_ky_so') || (isSignType == 'text' && element.sign_type.some((id: number) => id == 2) || (isSignType == 'so_tai_lieu' && (element.role != 4 || (this.datas.contract_no && element.role == 4))))) {
       return true;
     } else return false;
   }
@@ -1141,17 +1137,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     return Math.round(this.objSignInfo.traf_y)
   }
 
-  // edit size doi tuong ky
-  // changeSizeSign(e: any, sizeChange: any) {
-  //   let signElement = document.getElementById(this.objSignInfo.id);
-  //   if (signElement) {
-  //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-  //     if (isObjSign) {
-  //
-  //     }
-  //   }
-  // }
-
   back(e: any, step?: any) {
     // if (!this.datas.isView) {
     this.nextOrPreviousStep(step);
@@ -1162,65 +1147,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.step = variable.stepSampleContract.step4;
     this.datas.stepLast = this.step
     this.nextOrPreviousStep(this.step);
-
-    // else {
-    //   let data_sample_contract: string | any[] = [];
-    //   let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
-    //   this.datas.contract_user_sign.forEach((element: any) => {
-    //     if (element.sign_config.length > 0) {
-    //       element.sign_config.forEach((item: any) => {
-    //         item['font'] = 'Arial';
-    //         item['font_size'] = 14;
-    //         item['contract_id'] = this.datas.data_contract_document_id.contract_id;
-    //         item['document_id'] = this.datas.data_contract_document_id.document_id;
-    //         if (item.text_attribute_name) {
-    //           item.name = item.text_attribute_name;
-    //         }
-    //         if (item.sign_unit == 'chu_ky_anh') {
-    //           item['type'] = 2;
-    //         } else if (item.sign_unit == 'chu_ky_so') {
-    //           item['type'] = 3;
-    //         } else if (item.sign_unit == 'so_tai_lieu') {
-    //           item['type'] = 4;
-    //         } else {
-    //           item['type'] = 1;
-    //         }
-    //         // item['recipient_id'] = element.id;
-    //         data_remove_arr_request.forEach((itemRemove: any) => {
-    //           delete item[itemRemove];
-    //         })
-    //       })
-    //       Array.prototype.push.apply(data_sample_contract, element.sign_config);
-    //     }
-    //   })
-
-    //   console.log(data_sample_contract);
-    //   this.spinner.show();
-    //   this.contractService.getContractSample(data_sample_contract).subscribe((data: any) => {
-    //       console.log(JSON.stringify(data));
-    //       this.datas.is_data_object_signature.forEach((p: any) => {
-    //         data.forEach((element: any) => {
-    //           if (p.recipient_id == element.recipient_id) {
-    //             p = element;
-    //           } else this.datas.is_data_object_signature.push(element);
-    //         })
-    //       })
-
-    //       // this.datas.is_data_object_signature = data_sample_contract;
-    //       this.step = variable.stepSampleContract.step4;
-    //       this.datas.stepLast = this.step
-    //       this.nextOrPreviousStep(this.step);
-    //     },
-    //     error => {
-    //       this.spinner.hide();
-    //       console.log("false connect file");
-    //       return false;
-    //     }, () => {
-    //       this.spinner.hide();
-    //     }
-    //   );
-    //   // Đây là dữ liệu mảng request truyền lên cho server
-    // }
   }
 
   // forward data component
@@ -1237,7 +1163,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   validData() {
-    // console.log(this.datas);
     let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
     if (!data_not_drag) {
       this.spinner.hide();
@@ -1298,7 +1223,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
         return false;
       } else {
-        
+
 
         // if (!arrSign_organization.some((p: any) => p.role == 3)) {
         //   this.spinner.hide();

@@ -167,6 +167,8 @@ export class DetermineSignerComponent implements OnInit {
       }
     })
 
+    console.log(isDataSignCheck, this.datas.is_data_object_signature);
+
     // xoa du lieu o ky da thay doi
     if (isDataSignCheck.length > 0) {
       for (const d of isDataSignCheck) {
@@ -183,7 +185,7 @@ export class DetermineSignerComponent implements OnInit {
     this.step = variable.stepSampleContract.step3;
     this.datas.stepLast = this.step
     this.nextOrPreviousStep(this.step);
-    console.log(this.datas.is_data_object_signature, isDataSignCheck);
+    // console.log(this.datas.is_data_object_signature, isDataSignCheck);
   }
 
   // forward data component
@@ -193,7 +195,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getData(item: any) {
-    console.log(item)
+    // console.log(item)
   }
 
   // valid data step 2
