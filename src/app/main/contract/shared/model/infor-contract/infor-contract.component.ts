@@ -237,6 +237,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   //--valid data step 1
   validData() {
     this.clearError();
+    this.contractNameRequired();
+    this.contractFileRequired();
     if (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid()) {
       // this.spinner.hide();
       return false;

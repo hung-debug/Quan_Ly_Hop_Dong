@@ -143,6 +143,7 @@ export class InforContractBatchComponent implements OnInit {
           this.datasBatch.file_name = file_name;
           this.datasBatch.contractFile = file;
           this.errorDetail = [];
+          this.clearError();
         } else {
           this.toastService.showErrorHTMLWithTimeout("Chỉ hỗ trợ file có định dạng XLS, XLSX", "", 3000);
         }
@@ -155,19 +156,22 @@ export class InforContractBatchComponent implements OnInit {
   addFile() {
     // @ts-ignore
     document.getElementById('file-input').click();
+    
   }
 
   //--valid data step 1
   validData() {
     this.clearError();
-    if (!this.idContractTemplate) {
-      this.errorContractName = 'Tên mẫu hợp đồng không được để trống!';
+    if(!this.idContractTemplate || !this.datasBatch.contractFile){
+      if (!this.idContractTemplate) {
+        this.errorContractName = 'Tên mẫu hợp đồng không được để trống!';
+      }
+      if (!this.datasBatch.contractFile) {
+        this.errorContractFile = 'File tài liệu không được để trống!';
+      }
       return false;
     }
-    if (!this.datasBatch.contractFile) {
-      this.errorContractFile = 'File tài liệu không được để trống!';
-      return false;
-    }
+    
 
     return true
   }

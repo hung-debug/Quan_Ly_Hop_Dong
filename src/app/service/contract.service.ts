@@ -81,6 +81,7 @@ export class ContractService {
   confirmContractBatchListUrl:any = `${environment.apiUrl}/api/v1/batch/process/`;
   viewFlowUrl:any = `${environment.apiUrl}/api/v1/contracts/bpmn-flow/`;
   getCheckSign: any = `${environment.apiUrl}/api/v1/recipients/internal/`;
+  deleteParticipantContractUrl:any = `${environment.apiUrl}/api/v1/participants/`;
 
   token:any;
   customer_id:any;
@@ -825,6 +826,14 @@ export class ContractService {
     this.getCurrentUser();
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(this.viewFlowUrl + id, {headers}).pipe();
+  }
+
+  deleteParticipantContract(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.delete<any>(this.deleteParticipantContractUrl + id, { headers });
   }
 
   objDefaultSampleContract() {

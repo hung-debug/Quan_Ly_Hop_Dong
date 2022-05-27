@@ -881,10 +881,10 @@ export class DetermineSignerComponent implements OnInit {
         if(res.success==true){
           this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
         }else{
-          this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");
+          this.toastService.showErrorHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");
         }
       }, (error: HttpErrorResponse) => {
-        this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+        this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
       })
     }
 

@@ -754,7 +754,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#b0bec5',
         confirmButtonText: 'Xác nhận',
-        cancelButtonText: 'Hủy'
+        cancelButtonText: 'Hủy bỏ',
       }).then(async (result) => {
         if (result.isConfirmed) {
           // Kiểm tra ô ký đã ký chưa (status = 2)
