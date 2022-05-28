@@ -1478,16 +1478,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       // }
 
       if (count > 0) {
-        // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
-        // this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 3000);
         return false;
       } else if (count_number > 1) {
-        // this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Hợp đồng chỉ được phép có 1 số hợp đồng!", "", 3000);
         return false;
       } else if (count_text > 0) {
-        // this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
         return false;
       } else {

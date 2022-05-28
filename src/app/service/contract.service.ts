@@ -613,14 +613,12 @@ export class ContractService {
     return this.http.post<Contract>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, {'headers': headers});
   }
 
-  coordinationContract(id: any, data: any, recipient_id: any) {
+  coordinationContract(participant_id: any, body: any, recipient_id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = "";
-    // console.log(headers);
-    return this.http.put<Contract>(this.coordinationSuccess + id + `/${recipient_id}`, data, {'headers': headers});
+    return this.http.put<Contract>(this.coordinationSuccess + `${participant_id}/${recipient_id}`, body, {'headers': headers});
   }
 
   considerRejectContract(id: any, reason: string) {
