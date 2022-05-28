@@ -22,6 +22,7 @@ import { Router } from "@angular/router";
 import { HttpErrorResponse } from '@angular/common/http';
 import { count } from 'console';
 import { data } from 'jquery';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-sample-contract',
@@ -241,46 +242,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           item['role'] = item.role;
           dataNotPosition.push(item)
         }
-
-
-        // p.recipient_id == item.id
-        // let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient.email == item.email)[0];
-        // if (data_duplicate) {
-        //   // lấy ra dữ liệu bị trùng và update lại với dữ liệu mới;
-        //   data_duplicate.name = item.name;
-        //   data_duplicate.email = item.email;
-        //   data_duplicate.phoneNumber = item.phoneNumber;
-        //   data_duplicate.sign_type = item.sign_type;
-        //   // data_duplicate.sign_unit = item.sign_type.some((data: any) => data.id == 1) ? 'chu_ky_anh' : 'chu_ky_so';
-        //   data_duplicate.is_otp = item.is_otp;
-        //   data_duplicate['id_have_data'] = data_duplicate.id;
-        //   data_duplicate['is_type_party'] = element.type;
-        //   data_duplicate['role'] = data_duplicate.recipient.role;
-        //   if (data_duplicate.sign_unit == 'chu_ky_so' || data_duplicate.sign_unit == 'so_tai_lieu') {
-        //     data_duplicate.sign_unit = item.sign_type.some((data: any) => data.id == 1) ? 'chu_ky_anh' : 'chu_ky_so';
-        //   }
-        //   // delete data_duplicate.recipient;
-        //   dataPosition.push(data_duplicate);
-        // } else {
-        //   item['is_type_party'] = this.datas.is_determine_clone.type;
-        //   item['role'] = item.role;
-        //   dataNotPosition.push(item)
-        // }
       })
-      // console.log(this.datas.is_determine_clone);
-
     })
 
-    // let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
-    // let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
     this.dataSignPosition = [...dataPosition, ...dataNotPosition];
-
     this.dataSignPosition.forEach((res: any) => {
       if (res.sign_unit == 'text') {
         res['text_attribute_name'] = res.name;
       }
     })
-    // this.datas.is_determine_clone = this.dataSignPosition;
   }
 
   setDataSignContract() {
@@ -412,7 +382,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
-    // this.listSignNameClone = JSON.parse(JSON.stringify(this.list_sign_name));
   }
 
   getListSignName(listSignForm: any = []) {
@@ -1252,7 +1221,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           let isHaveFieldId: any[] = [];
           let isNotFieldId: any[] = [];
           // console.log(this.datas.contract_user_sign);
-          let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
+          let isUserSign_clone = _.cloneDeep(this.datas.contract_user_sign)
           isUserSign_clone.forEach((res: any) => {
             res.sign_config.forEach((element: any) => {
               if (element.id_have_data) {
@@ -1264,7 +1233,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         } else {
           this.data_sample_contract = [];
           let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
-          let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
+          let isContractUserSign_clone = _.cloneDeep(this.datas.contract_user_sign)
           isContractUserSign_clone.forEach((element: any) => {
             if (element.sign_config.length > 0) {
               element.sign_config.forEach((item: any) => {

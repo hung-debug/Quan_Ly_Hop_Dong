@@ -24,6 +24,7 @@ import { data } from 'jquery';
 import { environment } from "src/environments/environment";
 import { ContractTemplateService } from "src/app/service/contract-template.service";
 import { SignContractComponent } from "src/app/main/contract-signature/components/sign-contract/sign-contract.component";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-sample-contract-form',
@@ -541,7 +542,6 @@ export class SampleContractFormComponent implements OnInit {
         })
       }
     })
-    // this.listSignNameClone = JSON.parse(JSON.stringify(this.list_sign_name));
   }
 
   getListSignName(listSignForm: any = []) {
@@ -1268,7 +1268,7 @@ export class SampleContractFormComponent implements OnInit {
 
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckTextContent.length; ++k) {
-      var value = arrCheckTextContent[k];
+      var value: any = arrCheckTextContent[k];
       if (value in valueSoFar) {
         return true;
       }
@@ -1408,7 +1408,7 @@ export class SampleContractFormComponent implements OnInit {
         if (this.router.url.includes("edit")) {
           let isHaveFieldId: any[] = [];
           let isNotFieldId: any[] = [];
-          let isUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
+          let isUserSign_clone = _.cloneDeep(this.datasForm.contract_user_sign);
           isUserSign_clone.forEach((res: any) => {
             res.sign_config.forEach((element: any) => {
               if (element.id_have_data) {
@@ -1420,7 +1420,7 @@ export class SampleContractFormComponent implements OnInit {
         } else {
           this.data_sample_contract = [];
           let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data"];
-          let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
+          let isContractUserSign_clone = _.cloneDeep(this.datasForm.contract_user_sign);
           isContractUserSign_clone.forEach((element: any) => {
             if (element.sign_config.length > 0) {
               element.sign_config.forEach((item: any) => {
