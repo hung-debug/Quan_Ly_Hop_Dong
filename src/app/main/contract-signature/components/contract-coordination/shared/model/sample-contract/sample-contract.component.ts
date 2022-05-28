@@ -1019,12 +1019,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   getCheckSignature(isSignType: any, listSelect?: string) {
     this.list_sign_name.forEach((element: any) => {
-      if (this.getConditionFiledSign(element, isSignType)) {
-        let data = this.convertToSignConfig().filter((isName: any) => element.fields && element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
-        if (data.length > 0)
-          element.is_disable = true;
-        else element.is_disable = false;
-      } else {
+      // if (this.getConditionFiledSign(element, isSignType)) {
+      // if (element.fields && element.fields.length > 0) {
+      //   let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
+      //   if (data.length > 0)
+      //     element.is_disable = true;
+      //   else element.is_disable = false;
+      // } else {
         if (this.convertToSignConfig().some((p: any) => (p.email == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && p.email && p.sign_unit == 'so_tai_lieu'))) {
           if (isSignType != 'text') {
             element.is_disable = true;
@@ -1036,9 +1037,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
           } else if (isSignType == 'text') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2)); // ô text chỉ có ký usb token mới được chỉ định (element.role == 4)
-          } else element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4)); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
+          } else {
+            if (element.role != 4 || (this.datas.contract_no && element.role == 4)) {
+              element.is_disable = true;
+            } else element.is_disable = false;
+            // element.is_disable = (); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
+          } 
         }
-      }
+      // }
 
       if (listSelect) {
         element.selected = listSelect && element.name == listSelect;
