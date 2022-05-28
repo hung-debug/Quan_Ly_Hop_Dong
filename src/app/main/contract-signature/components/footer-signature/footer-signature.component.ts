@@ -28,12 +28,7 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('footer...', this.datas);
-    //@ts-ignore
-    // let isCheckCoordination = JSON.parse(localStorage.getItem('coordination_complete'));
-    // if (isCheckCoordination) {
-    //   this.datas.coordination_complete = true;
-    // }
+    // console.log('footer...', this.datas);
     let recipient_data = {
       recipients: undefined
     };
@@ -50,15 +45,12 @@ export class FooterSignatureComponent implements OnInit {
 
     console.log(this.is_data_coordination);
     if (this.is_data_coordination) {
-      let count_uncoordinated = 0;
-      let count_coordinated = 0;
       // @ts-ignore
       for (let i = 0; i < this.is_data_coordination.recipients.length; i++) {
         //@ts-ignore
         let element = this.is_data_coordination.recipients[i];
         if (element.role == 1) {
           if (element.status != 1) {
-            // count_coordinated++;
             this.is_show_coordination = true;
             this.view = true;
             break;
@@ -68,14 +60,6 @@ export class FooterSignatureComponent implements OnInit {
           }
         }
       }
-
-      // if (count_coordinated > 0) {
-      //   this.is_show_coordination = true;
-      //   this.view = true;
-      // } else {
-      //   this.is_show_coordination = false;
-      // }
-
     }
   }
 

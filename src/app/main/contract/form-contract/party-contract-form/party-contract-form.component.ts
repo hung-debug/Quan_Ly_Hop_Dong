@@ -540,7 +540,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
     getNotificationValid(is_notify: string) {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout(is_notify, "", 3000);
+        this.toastService.showWarningHTMLWithTimeout(is_notify, "", 3000);
     }
 
     getNameObject(role_numer: number) {

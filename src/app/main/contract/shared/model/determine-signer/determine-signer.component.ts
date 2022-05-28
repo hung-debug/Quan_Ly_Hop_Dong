@@ -280,24 +280,12 @@ export class DetermineSignerComponent implements OnInit {
         count++;
         break;
       }
-      // @ts-ignore
-      // if (!this.pattern.name.test(dataArr[i].name)) {
-      //   this.getNotificationValid("Tên" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
-      //   count++;
-      //   break;
-      // }
-      // @ts-ignore
+
       if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email)) {
         this.getNotificationValid("Email của" + this.getNameObjectValid(3) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
       }
-      //@ts-ignore
-      // if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
-      //   this.getNotificationValid("Số điện thoại của" + this.getNameObjectValid(3) + "tổ chức của tôi không hợp lệ!")
-      //   count++;
-      //   break;
-      // }
     }
 
     if (count == 0) {
@@ -314,6 +302,10 @@ export class DetermineSignerComponent implements OnInit {
       // validate phía đối tác
       for (let j = 0; j < dataArrPartner.length; j++) {
         let isParterSort = (dataArrPartner[j].recipients).sort((beforeItemParter: any, afterItemParter: any) => beforeItemParter.role - afterItemParter.role);
+        if (isParterSort.length == 0) {
+          this.getNotificationValid("Không có người ký đối tác!");
+          break;
+        } 
         for (let k = 0; k < isParterSort.length; k++) {
           if (dataArrPartner[j].type != 3) {
             if (!dataArrPartner[j].name) {
@@ -503,7 +495,7 @@ export class DetermineSignerComponent implements OnInit {
 
   getNotificationValid(is_notify: string) {
     this.spinner.hide();
-    this.toastService.showErrorHTMLWithTimeout(is_notify, "", 3000);
+    this.toastService.showWarningHTMLWithTimeout(is_notify, "", 3000);
   }
 
   getNameObjectValid(role_numer: number) {
@@ -974,7 +966,7 @@ export class DetermineSignerComponent implements OnInit {
       let data_ordering = document.getElementById(orering_data);
       if (data_ordering)
         data_ordering.focus();
-      this.toastService.showErrorHTMLWithTimeout("Bạn chưa nhập thứ tự ký!", "", 3000);
+      this.toastService.showWarningHTMLWithTimeout("Bạn chưa nhập thứ tự ký!", "", 3000);
     }
   }
 
@@ -984,7 +976,7 @@ export class DetermineSignerComponent implements OnInit {
     this.contractService.deleteInfoContractSignature(dataArrClone.fields[0].id).subscribe((res: any) => {
       this.toastService.showSuccessHTMLWithTimeout(`Bạn đã xóa ${assignElement} ${dataArrClone.name}!`, "", "3000");
     }, (error: HttpErrorResponse) => {
-      this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+      this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
       this.spinner.hide();
       count = 1;
     }, () => {
