@@ -202,12 +202,9 @@ export class ContractService {
       name: datas.name,
       code: datas.contract_no,
       contract_no: datas.contract_no,
-      //sign_order: 1,
       sign_time: this.datepipe.transform(datas.sign_time ? datas.sign_time : datas.end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
       notes: datas.notes,
       role_id: datas.role_id,
-      //customer_id: this.customer_id,
-      //status: 1,
       alias_url: "",
       refs: datas.contractConnect,
       type_id: datas.type_id,
@@ -489,8 +486,6 @@ export class ContractService {
       status: 1,
       contract_id: datas.id,
     });
-    console.log(headers);
-    console.log(body);
     return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
   }
 

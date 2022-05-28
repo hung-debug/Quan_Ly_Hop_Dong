@@ -193,22 +193,19 @@ export class ConfirmInfoContractComponent implements OnInit {
     if (isSuccess == 0) {
       // api dieu phoi hop dong
       let isCheckFail = false;
-      // let isUserSign = data_user_sign.filter((p: any) => p.type != 1);
-      // let data_determine = this.datas.determine_contract.recipients.filter((p: any) => p.role != 1);
       let isUserSign = this.datas.determine_contract.filter((p: any) => p.type != 1);
-
-      // let data_determine = isUserSign.recipients.filter((p: any) => p.role != 1);
       let arrCoordination: any[] = [];
-      let idRecipient = null;
-      //@ts-ignore
-      let currenUserCoordination = JSON.parse(localStorage.getItem('currentUser')).customer.info.email;
-      isUserSign.forEach((element: any) => {
-        idRecipient = element.recipients.filter((p: any) => p.role == 1 && p.email == currenUserCoordination)[0].id;
-        Array.prototype.push.apply(arrCoordination, element.recipients);
-      })
+      let participantId = null;
+      for (const d of isUserSign) {
+        if (d.recipients.some((p: any) => p.id == this.datas.recipient_id_coordition)) {
+          participantId = d.id;
+          Array.prototype.push.apply(arrCoordination, d.recipients);
+          break;
+        }
+      }
       
       this.spinner.show();
-      await this.contractService.coordinationContract(idRecipient, arrCoordination, this.datas.recipient_id_coordition).toPromise().then((data) => {
+      await this.contractService.coordinationContract(participantId, arrCoordination, this.datas.recipient_id_coordition).toPromise().then((data) => {
         this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
       },
         error => {
@@ -227,11 +224,6 @@ export class ConfirmInfoContractComponent implements OnInit {
             // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
             localStorage.setItem('coordination_complete', JSON.stringify(true));
             this.spinner.hide();
-            // setTimeout(() => {
-            //   this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.data_contract_document_id.contract_id]);
-            //   this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
-            //   this.spinner.hide();
-            // }, 100)
           }
         }, () => {
           this.spinner.hide();

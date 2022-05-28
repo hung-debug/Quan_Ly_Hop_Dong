@@ -315,14 +315,14 @@ export class DetermineSignerComponent implements OnInit {
 
     if (count == 0) {
       if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
-        this.getNotificationValid("Email đối tác không được trùng nhau!");
+        this.getNotificationValid("Email đối tác đã tồn tại, vui lòng nhập lại!");
         return false
       }
     }
 
     if (count == 0) {
       if (this.getCheckDuplicateEmail('allCheckEmail', this.is_determine_clone)) {
-        this.getNotificationValid("Email bị trùng với email trong cùng 1 bên tham gia hoặc giữa các bên, vui lòng kiểm tra lại!");
+        this.getNotificationValid("Email đã tồn tại trong luồng xử lý, vui lòng nhập lại thông tin email!");
         return false
       }
     }
@@ -371,7 +371,7 @@ export class DetermineSignerComponent implements OnInit {
 
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckEmail.length; ++k) {
-      var value = arrCheckEmail[k];
+      var value: any = arrCheckEmail[k];
       if (value in valueSoFar) {
         return true;
       }
@@ -382,7 +382,7 @@ export class DetermineSignerComponent implements OnInit {
 
   getNotificationValid(is_notify: string) {
     this.spinner.hide();
-    this.toastService.showErrorHTMLWithTimeout(is_notify, "", 3000);
+    this.toastService.showWarningHTMLWithTimeout(is_notify, "", 3000);
   }
 
   getNameObject(role_numer: number) {

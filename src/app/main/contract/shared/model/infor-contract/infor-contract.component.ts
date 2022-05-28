@@ -397,8 +397,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       // }
 
     } else {
-      this.contractService.addContractStep1(this.datas).subscribe((data) => {
-        // console.log(JSON.stringify(data));
+      this.contractService.addContractStep1(this.datas, this.datas.contract_id ? this.datas.contract_id : null).subscribe((data) => {
         this.datas.id = data?.id;
         this.datas.contract_id = data?.id;
         this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
@@ -530,19 +529,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             this.datas.uploadFileContractAgain = true;
           };
         }
-
-        // file đính kèm sửa hợp đồng
-        // if (!this.uploadFileAttachAgain && this.datas.attachFile && this.datas.attachFile.length > 0) {
-        //   let dataArr: any[] = [];
-        //   for (let i = 0; i < this.datas.attachFile.length; i++) {
-        //     if (typeof this.datas.attachFile[i] == 'string') {
-        //       await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile[i]).toPromise().then((data: any) => {
-        //         if (data) dataArr.push(data)
-        //       })
-        //     }
-        //   }
-        //   this.datas.attachFile = dataArr;
-        // }
       } else {
         fileReader.readAsDataURL(this.datas.contractFile);
         fileReader.onload = (e) => {

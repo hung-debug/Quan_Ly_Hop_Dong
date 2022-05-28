@@ -451,7 +451,9 @@ export class DetermineSignerComponent implements OnInit {
           if (element[j].email) {
             let items = {
               email: element[j].email,
-              role: element[j].role
+              role: element[j].role,
+              type: dataValid[i].type,
+              ordering: dataValid[i].ordering
             }
             // arrCheckEmail.push(element[j].email);
             arrEmail.push(items);
@@ -460,7 +462,19 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       if (arrEmail.some((p: any) => p.role == 1) && arrEmail.some((p: any) => p.role == 3)) {
-        arrEmail = arrEmail.filter((p: any) => p.role != 1);
+        if (isParty == 'only_party_partner') {
+          arrEmail = arrEmail.filter((p: any) => p.role != 1);
+        } else {
+          let duplicateEmail: any[] = [];
+          let countCheck_duplicate = true;
+          for (const d of arrEmail) {
+            if (duplicateEmail.length > 0 && duplicateEmail.some((p: any) => p.email == d.email && (p.type != d.type || p.ordering != d.ordering))) { // check duplicate email coordination with between party
+              return true;
+            }
+            duplicateEmail.push(d);
+          }
+          if (countCheck_duplicate) return false;
+        }
       }
 
       arrEmail.forEach((items: any) => {
@@ -478,7 +492,7 @@ export class DetermineSignerComponent implements OnInit {
 
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckEmail.length; ++k) {
-      var value = arrCheckEmail[k];
+      var value:any = arrCheckEmail[k];
       if (value in valueSoFar) {
         return true;
       }
