@@ -90,12 +90,14 @@ export class AdminUserService {
     return this.http.post<any>(this.getUserByEmailUrl, body, {'headers': headers});
   }
 
+  //call api them moi nguoi dung
   addUser(datas: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
+    // 
     const body = JSON.stringify({
       name: datas.name,
       email: datas.email,

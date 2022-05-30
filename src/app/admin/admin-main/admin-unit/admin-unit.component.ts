@@ -47,6 +47,8 @@ export class AdminUnitComponent implements OnInit {
   }  
 
   array_empty: any = [];
+
+  //Tìm kiếm tổ chức
   searchUnit(){
     this.adminUnitService.getUnitList(this.code, this.name).subscribe(response => {
       this.listData = response.entities;
@@ -54,6 +56,7 @@ export class AdminUnitComponent implements OnInit {
     });
   }
 
+  //Thêm mới tổ chức
   addUnit() {
     const data = {
       title: 'unit.add'

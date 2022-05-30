@@ -16,7 +16,7 @@ export class AdminAuthenticationService {
 
   constructor(private http: HttpClient) { }
 
-
+  //login admin
   loginAuthencation(username: string, password: string) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
     const body = JSON.stringify({email: username.trim(), password: password});
@@ -26,6 +26,10 @@ export class AdminAuthenticationService {
         map((user) => {
           if (JSON.parse(JSON.stringify(user)) != null) {
             localStorage.setItem('currentUser', JSON.stringify(user));
+            
+            //luu thong tin admin
+            // localStorage.setItem('currentAdmin', JSON.stringify(user))
+
             return user;
           }else{
             console.log(JSON.stringify(user));

@@ -20,7 +20,8 @@ export const data_signature_contract = {
       item_id: 2,
       item_text: "Loại hợp đồng B"
     }
-  ],
+    
+    ],
   "contractConnect": [
     {item_id: 1, item_text: 'Hợp đồng A'},
     {item_id: 2, item_text: 'Hợp đồng B'}

@@ -88,6 +88,18 @@ export var statusList = [
   { id : 0, name: 'Ngừng hoạt động'}
 ];
 
+export var theThucTinhList = [
+  {id: 0, name: 'Chọn thể thức tính'},
+  {id: 1, name: 'Theo thời gian'},
+  {id: 2, name: 'Theo số lượng hợp đồng'}
+];
+
+export var loaiGoiDichVuList = [
+  {id: 0, name: 'Chọn loại gói'},
+  {id: 1, name: 'Bình thường'},
+  {id: 2, name: 'Khuyến mại'}
+]
+
 // export var roleList = [
 //   {
 //     //Nhóm chức năng quản lý hợp đồng

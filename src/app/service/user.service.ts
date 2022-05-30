@@ -102,6 +102,7 @@ export class UserService {
    )
   }
 
+  //ghep api dang ky
   signup(datas:any){
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json');
@@ -115,6 +116,7 @@ export class UserService {
       email: datas.email,
       phone: datas.phone
     });
+
     return this.http.post<any>(this.signupUrl, body, {'headers': headers});
   }
 

@@ -5,6 +5,9 @@ import { Router } from '@angular/router';
 import { AdminPackService } from 'src/app/service/admin/admin-pack.service';
 import { ToastService } from 'src/app/service/toast.service';
 import {parttern_input} from "../../../../config/parttern";
+import {theThucTinhList, loaiGoiDichVuList} from "../../../../config/variable";
+
+
 @Component({
   selector: 'app-admin-add-pack',
   templateUrl: './admin-add-pack.component.html',
@@ -23,6 +26,10 @@ export class AdminAddPackComponent implements OnInit {
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
   submitted = false;
+
+  theThucTinh = theThucTinhList;
+  loaiGoi = loaiGoiDichVuList;
+
   get f() { return this.addForm.controls; }
 
   constructor(
