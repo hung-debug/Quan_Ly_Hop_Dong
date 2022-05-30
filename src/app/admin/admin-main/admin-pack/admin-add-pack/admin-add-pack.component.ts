@@ -1,11 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AdminPackService } from 'src/app/service/admin/admin-pack.service';
 import { ToastService } from 'src/app/service/toast.service';
 import {parttern_input} from "../../../../config/parttern";
 import {theThucTinhList, loaiGoiDichVuList} from "../../../../config/variable";
+
 
 
 @Component({
@@ -21,14 +22,19 @@ export class AdminAddPackComponent implements OnInit {
   nameOld:any
   parentName:any;
   emailOld:any;
-  phoneOld:any
+  phoneOld:any;
+
+  theThucTinh: Array<any> = [];
+  loaiGoi: Array<any> = []; 
+
+  formComboBox: FormGroup;
+
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
   submitted = false;
 
-  theThucTinh = theThucTinhList;
-  loaiGoi = loaiGoiDichVuList;
+
 
   get f() { return this.addForm.controls; }
 
@@ -54,9 +60,16 @@ export class AdminAddPackComponent implements OnInit {
         describe: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
         status: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       });
+
     }
 
   ngOnInit(): void {    
+    this.formComboBox = new FormGroup({
+      OrganizationId: new FormControl()
+    });
+
+    this.loadedListComboBox();
+
     this.datas = this.data;
 
     //lay du lieu form cap nhat
@@ -99,6 +112,11 @@ export class AdminAddPackComponent implements OnInit {
         status: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       });
     }
+  }
+
+  loadedListComboBox()  {
+   this.theThucTinh = theThucTinhList;
+   this.loaiGoi = loaiGoiDichVuList;
   }
 
   update(data:any){

@@ -67,19 +67,23 @@
           {{ "Thể thức tính" | translate }}
           <span class="required-title">*</span>
         </div>
-          <select class="select-data">
+        <form [formGroup]="formComboBox">
+          <select  class="select-data">
+            <option>Chọn thể thức tính</option>
             <option *ngFor="let n of theThucTinh">
               {{ n.name }}
             </option>
+
           </select>
-        <div *ngIf="submitted && f.calc.errors" class="invalid">
+        </form>
+        <!-- <div *ngIf="submitted && f.calc.errors" class="invalid">
           <div *ngIf="f.calc.errors.required">
             {{ "Thể thức tính không được để trống" | translate }}
           </div>
           <div *ngIf="f.calc.errors.pattern">
             {{ "Thể thức tính không được chứa ký tự đặc biệt" | translate }}
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -87,10 +91,11 @@
       <div class="col-md-6">
         <div class="label text-color">{{ "Loại gói" | translate }}</div>
         <select class="select-data">
-            <option *ngFor="let n of loaiGoi">
-              {{ n.name }}
-            </option>
-          </select>
+          <option value="null" disabled>Chọn loại gói</option>
+          <option *ngFor="let n of loaiGoi">
+            {{ n.name }}
+          </option>
+        </select>
       </div>
 
       <div class="col-md-6">
@@ -109,7 +114,7 @@
           {{ "Thời gian" | translate }} <span class="required-title">*</span>
         </div>
         <div class="input-data">
-          <input type="text" formControlName="time" />
+          <input type="text" formControlName="time" [readonly]="true" />
         </div>
         <div *ngIf="submitted && f.time.errors" class="invalid">
           <div *ngIf="f.time.errors.required">
@@ -127,7 +132,11 @@
           <span class="required-title">*</span>
         </div>
         <div class="input-data">
-          <input type="text" formControlName="number_contract" />
+          <input
+            type="text"
+            formControlName="number_contract"
+            [readonly]="true"
+          />
         </div>
         <div *ngIf="submitted && f.number_contract.errors" class="invalid">
           <div *ngIf="f.number_contract.errors.required">

@@ -89,13 +89,11 @@ export var statusList = [
 ];
 
 export var theThucTinhList = [
-  {id: 0, name: 'Chọn thể thức tính'},
   {id: 1, name: 'Theo thời gian'},
   {id: 2, name: 'Theo số lượng hợp đồng'}
 ];
 
 export var loaiGoiDichVuList = [
-  {id: 0, name: 'Chọn loại gói'},
   {id: 1, name: 'Bình thường'},
   {id: 2, name: 'Khuyến mại'}
 ]
