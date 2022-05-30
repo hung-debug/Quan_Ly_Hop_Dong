@@ -16,7 +16,26 @@ export class ConfirmInfoContractComponent implements OnInit {
   @Input() datas: any;
   @Input() step: any;
   @Output() stepChangeConfirmInforContract = new EventEmitter<string>();
-  // @Output() stepChangeSampleContract = new EventEmitter<string>();
+
+  arrVariableRemove = [
+    'id',
+    'sign_unit',
+    'position',
+    'left',
+    'top',
+    'text_attribute_name',
+    'sign_type',
+    'signature_party',
+    'is_type_party',
+    'role',
+    'recipient',
+    'email',
+    'is_disable',
+    'selected',
+    'type_unit',
+    "is_have_text",
+    "id_have_data"
+];
 
   constructor(private formBuilder: FormBuilder,
     public datepipe: DatePipe,
@@ -27,79 +46,35 @@ export class ConfirmInfoContractComponent implements OnInit {
     this.step = variable.stepSampleContract.step4
   }
 
-  contractFileName: string = '';
-  dateDeadline: string = '';
-  comment: string = '';
-  userViews: string = '';
-  userSigns: string = '';
-  userDocs: string = '';
-  partnerLeads: string = '';
-  partnerViews: string = '';
-  partnerSigns: string = '';
-  partnerDocs: string = '';
-  partnerUsers: string = '';
+  data_sample_contract: any = [];
 
-  connUserViews: string = '';
-  connUserSigns: string = '';
-  connUserDocs: string = '';
-  connPartnerLeads: string = '';
-  connPartnerViews: string = '';
-  connPartnerSigns: string = '';
-  connPartnerDocs: string = '';
-  connPartnerUsers: string = '';
+  data_organization:any;
+  is_origanzation_reviewer: any = [];
+  is_origanzation_signature: any = [];
+  is_origanzation_document: any = [];
+  data_parnter_organization: any = [];
 
-  conn: string;
+  getPartnerCoordinationer(item: any) {
+    return item.recipients.filter((p: any) => p.role == 1)
+  }
 
+  getPartnerReviewer(item: any) {
+    return item.recipients.filter((p: any) => p.role == 2)
+  }
+  getPartnerSignature(item: any) {
+    return item.recipients.filter((p: any) => p.role == 3)
+  }
+  getPartnerDocument(item: any) {
+    return item.recipients.filter((p: any) => p.role == 4);
+  }
 
   ngOnInit(): void {
-    console.log("step4" + this.datas.contract_user_sign);
+    this.data_organization = this.datas.determine_contract.filter((p: any) => p.type == 1)[0];
+    this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
+    this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
+    this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
-    this.contractFileName = this.datas.i_data_file_contract[0].filename;
-    this.dateDeadline = this.datepipe.transform(this.datas.is_data_contract.sign_time, 'dd/MM/yyyy') || '';
-    this.comment = this.datas.is_data_contract.notes;
-
-    if (this.datas.determine_contract) {
-      let data_user_sign = JSON.parse(JSON.stringify(this.datas.determine_contract));
-      console.log(data_user_sign);
-      // data_user_sign.forEach((element: any) => {
-      if (data_user_sign.type == 1) {
-        data_user_sign.recipients.forEach((item: any) => {
-          if (item.role == 2 && item.name) {
-            this.userViews += this.connUserViews + item.name + " - " + item.email;
-            this.connUserViews = "<br>";
-          } else if (item.role == 3 && item.name) {
-            this.userSigns += this.connUserSigns + item.name + " - " + item.email;
-            this.connUserSigns = "<br>";
-          } else if (item.role == 4 && item.name) {
-            this.userDocs += this.connUserDocs + item.name + " - " + item.email;
-            this.connUserDocs = "<br>";
-          }
-        })
-      } else if (data_user_sign.type == 2) {
-        data_user_sign.recipients.forEach((item: any) => {
-          if (item.role == 1 && item.name) {
-            this.partnerLeads += this.connPartnerLeads + item.name + " - " + item.email;
-            this.connPartnerLeads = "<br>";
-          } else if (item.role == 2 && item.name) {
-            this.partnerViews += this.connPartnerViews + item.name + " - " + item.email;
-            this.connPartnerViews = "<br>";
-          } else if (item.role == 3 && item.name) {
-            this.partnerSigns += this.connPartnerSigns + item.name + " - " + item.email;
-            this.connPartnerSigns = "<br>";
-          } else if (item.role == 4 && item.name) {
-            this.partnerDocs += this.connPartnerDocs + item.name + " - " + item.email;
-            this.connPartnerDocs = "<br>";
-          }
-        })
-      } else if (data_user_sign.type == 3) {
-        data_user_sign.recipients.forEach((item: any) => {
-          if (item.role == 3 && item.name) {
-            this.partnerSigns += this.connPartnerSigns + item.name + " - " + item.email;
-            this.connPartnerSigns = "<br>";
-          }
-        })
-      }
-    }
+    this.data_parnter_organization = this.datas.determine_contract.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
   back(e: any, step?: any) {
@@ -110,17 +85,13 @@ export class ConfirmInfoContractComponent implements OnInit {
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
     this.stepChangeConfirmInforContract.emit(step);
-    // this.stepChangeSampleContract.emit(step);
   }
 
   next() {
     //call API step confirm
-    this.datas.determine_contract.recipients.forEach((item: any) => {
-      // if (!item.phone) {
-      //   item.phone = null;
-      // }
-      delete item.id;
-    })
+    // this.datas.determine_contract.forEach((item: any) => {
+    //   delete item.id;
+    // })
 
     let isHaveFieldId: any[] = [];
     let isNotFieldId: any[] = [];
@@ -133,82 +104,17 @@ export class ConfirmInfoContractComponent implements OnInit {
       })
     })
     this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId);
-
-    // let data_sample_contract: string | any[] = [];
-    // let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
-    // this.datas.contract_user_sign.forEach((element: any) => {
-    //   if (element.sign_config.length > 0) {
-    //     element.sign_config.forEach((item: any) => {
-    //       item['font'] = 'Arial';
-    //       item['font_size'] = 14;
-    //       item['contract_id'] = this.datas.data_contract_document_id.contract_id;
-    //       item['document_id'] = this.datas.data_contract_document_id.document_id;
-    //       if (item.text_attribute_name) {
-    //         item.name = item.text_attribute_name;
-    //       }
-    //       if (item.sign_unit == 'chu_ky_anh') {
-    //         item['type'] = 2;
-    //       } else if (item.sign_unit == 'chu_ky_so') {
-    //         item['type'] = 3;
-    //       } else if (item.sign_unit == 'so_tai_lieu') {
-    //         item['type'] = 4;
-    //         if (this.datas.contract_no) {
-    //           if (!item.name)
-    //             item.name = "";
-
-    //           if (!item.recipient_id)
-    //             item.recipient_id = "";
-
-    //           if (!item.status)
-    //             item.status = 0;
-    //         }
-
-    //       } else {
-    //         item['type'] = 1;
-    //       }
-    //       // item['recipient_id'] = element.id;
-    //       data_remove_arr_request.forEach((itemRemove: any) => {
-    //         delete item[itemRemove];
-    //       })
-    //     })
-    //     Array.prototype.push.apply(data_sample_contract, element.sign_config);
-    //   }
-    // })
-
-    // this.spinner.show();
-    // this.contractService.getContractSample(data_sample_contract).subscribe((data: any) => {
-    //   console.log(JSON.stringify(data));
-    //   this.datas.is_data_object_signature.forEach((p: any) => {
-    //     data.forEach((element: any) => {
-    //       if (p.recipient_id == element.recipient_id) {
-    //         p = element;
-    //       } else this.datas.is_data_object_signature.push(element);
-    //     })
-    //   })
-
-    //   this.step = variable.stepSampleContract.step4;
-    //   this.datas.stepLast = this.step
-    //   this.nextOrPreviousStep(this.step);
-    // },
-    //   error => {
-    //     this.spinner.hide();
-    //     console.log("false connect file");
-    //     return false;
-    //   }, () => {
-    //     this.spinner.hide();
-    //   }
-    // );
-
-
   }
 
+  // push dữ liệu step 3
   async getDefindDataSignEdit(dataSignId: any, dataSignNotId: any) {
     let dataSample_contract: any[] = [];
     if (dataSignId.length > 0) {
-      let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit'];
       dataSignId.forEach((res: any) => {
-        data_remove_arr_signId.forEach((itemRemove: any) => {
-          delete res[itemRemove];
+        this.arrVariableRemove.forEach((itemRemove: any) => {
+          if (itemRemove != 'id_have_data') {
+            delete res[itemRemove];
+          }
         })
       })
 
@@ -228,17 +134,15 @@ export class ConfirmInfoContractComponent implements OnInit {
           break;
         }
       }
-      // this.spinner.hide();
     }
 
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
-      let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'value'];
       dataSignNotId.forEach((item: any) => {
         item['font'] = 'Arial';
         item['font_size'] = 14;
-        item['contract_id'] = this.datas.contract_id;
-        item['document_id'] = this.datas.document_id;
+        item['contract_id'] = this.datas.data_contract_document_id.contract_id;
+        item['document_id'] = this.datas.data_contract_document_id.document_id;
         if (item.text_attribute_name) {
           item.name = item.text_attribute_name;
         }
@@ -248,11 +152,21 @@ export class ConfirmInfoContractComponent implements OnInit {
           item['type'] = 3;
         } else if (item.sign_unit == 'so_tai_lieu') {
           item['type'] = 4;
+          if (this.datas.contract_no) {
+            if (!item.name)
+                item.name = "";
+
+            if (!item.recipient_id)
+                item.recipient_id = "";
+
+            if (!item.status)
+                item.status = 0;
+        }
         } else {
           item['type'] = 1;
         }
 
-        data_remove_arr_request.forEach((item_remove: any) => {
+        this.arrVariableRemove.forEach((item_remove: any) => {
           delete item[item_remove]
         })
       })
@@ -278,35 +192,43 @@ export class ConfirmInfoContractComponent implements OnInit {
 
     if (isSuccess == 0) {
       // api dieu phoi hop dong
-      let data_determine = this.datas.determine_contract.recipients.filter((p: any) => p.role != 1);
+      let isCheckFail = false;
+      let isUserSign = this.datas.determine_contract.filter((p: any) => p.type != 1);
+      let arrCoordination: any[] = [];
+      let participantId = null;
+      for (const d of isUserSign) {
+        if (d.recipients.some((p: any) => p.id == this.datas.recipient_id_coordition)) {
+          participantId = d.id;
+          Array.prototype.push.apply(arrCoordination, d.recipients);
+          break;
+        }
+      }
+      
       this.spinner.show();
-      this.contractService.coordinationContract(this.datas.determine_contract.id, data_determine, this.datas.recipient_id_coordition).subscribe((data) => {
-        this.contractService.getDataCoordination(this.datas.determine_contract.contract_id).subscribe((res: any) => {
+      await this.contractService.coordinationContract(participantId, arrCoordination, this.datas.recipient_id_coordition).toPromise().then((data) => {
+        this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
+      },
+        error => {
+          isCheckFail = true;
+          this.spinner.hide();
+          return false;
+        }
+      );
+
+      if (!isCheckFail) {
+        // load data after when coordination success
+        await this.contractService.getDataCoordination(this.datas.determine_contract.contract_id).toPromise().then((res: any) => {
           if (res) {
             this.datas.is_data_contract = res;
             this.datas.step = variable.stepSampleContract.step_coordination;
             // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
             localStorage.setItem('coordination_complete', JSON.stringify(true));
-            this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
             this.spinner.hide();
-            setTimeout(() => {
-              // this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.data_contract_document_id.contract_id]);
-              // this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
-              // this.spinner.hide();
-            }, 100)
           }
         }, () => {
           this.spinner.hide();
         })
-      },
-        error => {
-          this.spinner.hide();
-          console.log("false content");
-          return false;
-        }, () => {
-          this.spinner.hide();
-        }
-      );
+      }
     }
   }
 

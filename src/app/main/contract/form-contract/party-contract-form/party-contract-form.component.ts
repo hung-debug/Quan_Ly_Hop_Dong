@@ -154,20 +154,20 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
     async getApiDetermine(is_save?: boolean) {
         this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
-                items.recipients.forEach((element: any) => {
-                    if (this.action != 'edit') {
-                        // tạo mới hđ từ mẫu gán id = null
-                        if (!element.template_recipient_id) {
-                            if (!element.id) {
-                                element.id = null;
-                            }
-                            element['template_recipient_id'] = element.id;
+            items.recipients.forEach((element: any) => {
+                if (this.action != 'edit') {
+                    // tạo mới hđ từ mẫu gán id = null
+                    if (!element.template_recipient_id) {
+                        if (!element.id) {
                             element.id = null;
                         }
-                    } else {
-                        element.template_recipient_id = element.id;
+                        element['template_recipient_id'] = element.id;
+                        element.id = null;
                     }
-                })
+                } else {
+                    element.template_recipient_id = element.id;
+                }
+            })
 
             if (items.type == 3)
                 this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
@@ -178,7 +178,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         //     let isBody: any[] = [];
         //     let count = 0;
         //     let is_error = '';
-            
+
         //     for (let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
         //         this.datasForm.is_determine_clone[i].recipients.forEach((element: any) => {
         //             if (!element.id) element.id = 0;
@@ -196,7 +196,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         //             if (count > 0) {
         //                 break;
         //             }
-            
+
         //     }
         //     if (isBody.length == this.datasForm.is_determine_clone.length) {
         //         this.getDataApiDetermine(isBody, is_save)
@@ -210,19 +210,19 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
         //     this.spinner.hide()
         // } else {
-            this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
-                this.getDataApiDetermine(res, is_save)
-            }, (error: HttpErrorResponse) => {
-                if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-                    this.save_draft_infor_form.close_header = false;
-                    this.save_draft_infor_form.close_modal.close();
-                }
-                this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-            }, () => {
-                this.spinner.hide();
+        this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
+            this.getDataApiDetermine(res, is_save)
+        }, (error: HttpErrorResponse) => {
+            if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                this.save_draft_infor_form.close_header = false;
+                this.save_draft_infor_form.close_modal.close();
             }
-            );
+            this.spinner.hide();
+            this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+        }, () => {
+            this.spinner.hide();
+        }
+        );
         // }
     }
 
@@ -488,7 +488,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                     if (element[j].email) {
                         let items = {
                             email: element[j].email,
-                            role: element[j].role
+                            role: element[j].role,
+                            type: dataValid[i].type,
+                            ordering: dataValid[i].ordering
                         }
                         // arrCheckEmail.push(element[j].email);
                         arrEmail.push(items);
@@ -497,7 +499,19 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             }
 
             if (arrEmail.some((p: any) => p.role == 1) && arrEmail.some((p: any) => p.role == 3)) {
-                arrEmail = arrEmail.filter((p: any) => p.role != 1);
+                if (isParty == 'only_party_partner') {
+                    arrEmail = arrEmail.filter((p: any) => p.role != 1);
+                } else {
+                    let duplicateEmail: any[] = [];
+                    let countCheck_duplicate = true;
+                    for (const d of arrEmail) {
+                        if (duplicateEmail.length > 0 && duplicateEmail.some((p: any) => p.email == d.email && (p.type != d.type || p.ordering != d.ordering))) { // check duplicate email coordination with between party
+                            return true;
+                        }
+                        duplicateEmail.push(d);
+                    }
+                    if (countCheck_duplicate) return false;
+                }
             }
 
             arrEmail.forEach((items: any) => {
@@ -526,7 +540,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
     getNotificationValid(is_notify: string) {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout(is_notify, "", 3000);
+        this.toastService.showWarningHTMLWithTimeout(is_notify, "", 3000);
     }
 
     getNameObject(role_numer: number) {
@@ -917,13 +931,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
 
         // if (item.type == 3) {
-            // this.data_organization.ordering = 2;
-            // item.ordering = 1;
-            // this.is_change_party = true;
+        // this.data_organization.ordering = 2;
+        // item.ordering = 1;
+        // this.is_change_party = true;
         // } else {
-            // this.data_organization.ordering = 1;
-            // item.ordering = 2;
-            // this.is_change_party = false;
+        // this.data_organization.ordering = 1;
+        // item.ordering = 2;
+        // this.is_change_party = false;
         // }
     }
 

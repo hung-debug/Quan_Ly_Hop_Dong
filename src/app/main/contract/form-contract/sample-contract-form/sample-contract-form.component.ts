@@ -24,6 +24,7 @@ import { data } from 'jquery';
 import { environment } from "src/environments/environment";
 import { ContractTemplateService } from "src/app/service/contract-template.service";
 import { SignContractComponent } from "src/app/main/contract-signature/components/sign-contract/sign-contract.component";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-sample-contract-form',
@@ -541,7 +542,6 @@ export class SampleContractFormComponent implements OnInit {
         })
       }
     })
-    // this.listSignNameClone = JSON.parse(JSON.stringify(this.list_sign_name));
   }
 
   getListSignName(listSignForm: any = []) {
@@ -788,12 +788,12 @@ export class SampleContractFormComponent implements OnInit {
       if (isSignType == 'text' && value) {
         element.is_disable = true;
       } else {
-        if (this.getConditionFiledSign(element, isSignType)) {
-          let data = this.convertToSignConfig().filter((isName: any) => element.fields && element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
-          if (data.length > 0)
-            element.is_disable = true;
-          else element.is_disable = false;
-        } else {
+        // if (this.getConditionFiledSign(element, isSignType)) {
+        //   let data = this.convertToSignConfig().filter((isName: any) => element.fields && element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
+        //   if (data.length > 0)
+        //     element.is_disable = true;
+        //   else element.is_disable = false;
+        // } else {
           if (this.convertToSignConfig().some((p: any) => (p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType)) {
             if (isSignType != 'text') {
               element.is_disable = true;
@@ -807,7 +807,7 @@ export class SampleContractFormComponent implements OnInit {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
             } else element.is_disable = (element.role != 4 || (this.datasForm.contract_no && element.role == 4)); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
           }
-        }
+        // }
       }
 
 
@@ -1268,7 +1268,7 @@ export class SampleContractFormComponent implements OnInit {
 
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckTextContent.length; ++k) {
-      var value = arrCheckTextContent[k];
+      var value: any = arrCheckTextContent[k];
       if (value in valueSoFar) {
         return true;
       }
@@ -1382,7 +1382,7 @@ export class SampleContractFormComponent implements OnInit {
         await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
           dataCode => {
             if (!dataCode.success) {
-              this.toastService.showErrorHTMLWithTimeout('contract_number_already_exist', "", 3000);
+              this.toastService.showWarningHTMLWithTimeout('contract_number_already_exist', "", 3000);
               this.spinner.hide();
               coutError = true;
             }
@@ -1408,7 +1408,7 @@ export class SampleContractFormComponent implements OnInit {
         if (this.router.url.includes("edit")) {
           let isHaveFieldId: any[] = [];
           let isNotFieldId: any[] = [];
-          let isUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
+          let isUserSign_clone = _.cloneDeep(this.datasForm.contract_user_sign);
           isUserSign_clone.forEach((res: any) => {
             res.sign_config.forEach((element: any) => {
               if (element.id_have_data) {
@@ -1420,7 +1420,7 @@ export class SampleContractFormComponent implements OnInit {
         } else {
           this.data_sample_contract = [];
           let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text", "id_have_data"];
-          let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
+          let isContractUserSign_clone = _.cloneDeep(this.datasForm.contract_user_sign);
           isContractUserSign_clone.forEach((element: any) => {
             if (element.sign_config.length > 0) {
               element.sign_config.forEach((item: any) => {
@@ -1613,7 +1613,7 @@ export class SampleContractFormComponent implements OnInit {
     let data_not_drag = this.datasForm.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
     if (!data_not_drag) {
       this.spinner.hide();
-      this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn ít nhất 1 đối tượng kéo thả!", "", 3000);
+      this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn ít nhất 1 đối tượng kéo thả!", "", 3000);
       return false;
     } else {
       let count = 0;
@@ -1667,26 +1667,26 @@ export class SampleContractFormComponent implements OnInit {
       }
 
       if (this.onContentTextEvent()) {
-        this.toastService.showErrorHTMLWithTimeout("Trùng tên trường ô text. Vui lòng kiểm tra lại!", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("Trùng tên trường ô text. Vui lòng kiểm tra lại!", "", 3000);
         return false;
       }
 
       if (count > 0) {
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 3000);
         return false;
       } else if (count_number > 1) {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Hợp đồng chỉ được phép có 1 số hợp đồng!", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("Hợp đồng chỉ được phép có 1 số hợp đồng!", "", 3000);
         return false;
       } else if (count_text > 0) {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Bạn chưa nhập tên trường cho đối tượng Text!", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("Bạn chưa nhập tên trường cho đối tượng Text!", "", 3000);
         return false;
       } else if (count_text_number > 0) {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("please_input_text_number_contract", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("please_input_text_number_contract", "", 3000);
         return false;
       } else {
         // valid đối tượng ký của tổ chức
@@ -1709,13 +1709,13 @@ export class SampleContractFormComponent implements OnInit {
         }
         if (error_organization > 0) {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout(`Thiếu đối tượng ký số ${nameSign_organization.name} của tổ chức, vui lòng chọn đủ người ký!`, "", 3000);
+          this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ký số ${nameSign_organization.name} của tổ chức, vui lòng chọn đủ người ký!`, "", 3000);
           return false;
         }
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
         if (arrSign_organization.length < data_organization.length) {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!", "", 3000);
           return false;
         }
 
@@ -1746,7 +1746,7 @@ export class SampleContractFormComponent implements OnInit {
 
         if (countError_partner > 0) {
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
+          this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ${nameSign_partner.sign_type == 'chu_ky_so' ? 'ký số' : 'ký ảnh'} của đối tác ${nameSign_partner.name}, vui lòng chọn đủ người ký!`, "", 3000);
           return false;
         }
 
@@ -1755,7 +1755,7 @@ export class SampleContractFormComponent implements OnInit {
         if (arrSign_partner.length < data_partner.length) {
           // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!", "", 3000);
           return false;
         }
       }

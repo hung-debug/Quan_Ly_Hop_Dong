@@ -168,12 +168,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
           // console.log(this.datas);
         } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {
-          this.toastService.showErrorHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 3000);
         } else {
-          this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu định dạng PDF", "", 3000);
         }
       } else {
-        this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu nhỏ hơn 5MB", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("File hợp đồng yêu cầu nhỏ hơn 5MB", "", 3000);
       }
     }
   }
@@ -206,12 +206,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               this.uploadFileAttachAgain = true;
             }
           } else{
-            this.toastService.showErrorHTMLWithTimeout("Trùng file đính kèm", "", 3000);
+            this.toastService.showWarningHTMLWithTimeout("Trùng file đính kèm", "", 3000);
           }
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
-          this.toastService.showErrorHTMLWithTimeout("File đính kèm yêu cầu nhỏ hơn 5MB", "", 3000);
+          this.toastService.showWarningHTMLWithTimeout("File đính kèm yêu cầu nhỏ hơn 5MB", "", 3000);
           break;
         }
       }
@@ -248,7 +248,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     let isDateNow = new Date(moment().format('YYYY-MM-DD'));
 
     if (Number(isDateSign) < Number(isDateNow)) {
-      this.toastService.showErrorHTMLWithTimeout('Ngày hết hạn ký không được nhỏ hơn ngày hiện tại!', "", 3000);
+      this.toastService.showWarningHTMLWithTimeout('Ngày hết hạn ký không được nhỏ hơn ngày hiện tại!', "", 3000);
       return false;
     }
 
@@ -399,8 +399,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       // }
 
     } else {
-      this.contractService.addContractStep1(this.datas).subscribe((data) => {
-        // console.log(JSON.stringify(data));
+      this.contractService.addContractStep1(this.datas, this.datas.contract_id ? this.datas.contract_id : null).subscribe((data) => {
         this.datas.id = data?.id;
         this.datas.contract_id = data?.id;
         this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
@@ -532,19 +531,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             this.datas.uploadFileContractAgain = true;
           };
         }
-
-        // file đính kèm sửa hợp đồng
-        // if (!this.uploadFileAttachAgain && this.datas.attachFile && this.datas.attachFile.length > 0) {
-        //   let dataArr: any[] = [];
-        //   for (let i = 0; i < this.datas.attachFile.length; i++) {
-        //     if (typeof this.datas.attachFile[i] == 'string') {
-        //       await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile[i]).toPromise().then((data: any) => {
-        //         if (data) dataArr.push(data)
-        //       })
-        //     }
-        //   }
-        //   this.datas.attachFile = dataArr;
-        // }
       } else {
         fileReader.readAsDataURL(this.datas.contractFile);
         fileReader.onload = (e) => {

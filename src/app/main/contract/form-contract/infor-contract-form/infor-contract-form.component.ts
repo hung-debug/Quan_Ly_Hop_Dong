@@ -251,7 +251,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                 } else {
                     this.datasForm.file_name_attach = '';
                     this.datasForm.attachFile = '';
-                    this.toastService.showErrorHTMLWithTimeout("File đính kèm yêu cầu có dung lượng nhỏ hơn 5MB", "", 3000);
+                    this.toastService.showWarningHTMLWithTimeout("File đính kèm yêu cầu có dung lượng nhỏ hơn 5MB", "", 3000);
                     break;
                 }
             }
@@ -285,7 +285,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         let isDateNow = new Date(moment().format('YYYY-MM-DD'));
 
         if (Number(isDateSign) < Number(isDateNow)) {
-            this.toastService.showErrorHTMLWithTimeout('Ngày hết hạn ký không được nhỏ hơn ngày hiện tại!', "", 3000);
+            this.toastService.showWarningHTMLWithTimeout('Ngày hết hạn ký không được nhỏ hơn ngày hiện tại!', "", 3000);
             return false;
         }
 
@@ -302,7 +302,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
                 dataCode => {
                     if (!dataCode.success) {
-                        this.toastService.showErrorHTMLWithTimeout('contract_number_already_exist', "", 3000);
+                        this.toastService.showWarningHTMLWithTimeout('contract_number_already_exist', "", 3000);
                         this.spinner.hide();
                         coutError = true;
                     }

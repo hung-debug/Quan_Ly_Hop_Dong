@@ -142,19 +142,6 @@ export class InforContractComponent implements OnInit {
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension.toLowerCase() == 'pdf') {
-          // const fileReader = new FileReader();
-          // fileReader.readAsDataURL(file);
-          // fileReader.onload = (e) => {
-          //   //@ts-ignore
-          //   const base64result = fileReader.result.toString().split(',')[1];
-          //   const fileInput: any = document.getElementById('file-input');
-          //   fileInput.value = '';
-          //   this.datas.file_content = base64result;
-          //   this.datas.file_name = file_name;
-          //   this.datas.contractFile = file;
-          //   // this.datas.documents['file_content_docx'] = null;
-          //   // this.pdfSrc = Helper._getUrlPdf(base64result);
-          // };
           const fileInput: any = document.getElementById('file-input');
           fileInput.value = '';
           this.datas.file_name = file_name;
@@ -241,37 +228,6 @@ export class InforContractComponent implements OnInit {
     if (this.datas.contractFile) {
       this.errorContractFile = '';
     }
-  }
-
-  callAPI() {
-    //call API step 1
-    // this.contractService.addContractStep1(this.datas).subscribe((data) => {
-    //     this.datas.id = data?.id;
-    //     console.log(data);
-    //
-    //     //call API upload file
-    //     // this.uploadService.uploadFile(this.datas).subscribe((data) => {
-    //     //   console.log("File" + data);
-    //
-    //     //next step
-    //     this.step = variable.stepSampleContract.step2;
-    //     this.datas.stepLast = this.step
-    //     this.nextOrPreviousStep(this.step);
-    //     console.log(this.datas);
-    //     // },
-    //     // error => {
-    //     //   console.log("false file");
-    //     //   return false;
-    //     // }
-    //     // );
-    //
-    //   },
-    //   error => {
-    //     console.log("false content");
-    //     return false;
-    //   }
-    // );
-
   }
 
   // --next step 2

@@ -5,7 +5,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-contract-header',
@@ -182,7 +182,7 @@ export class ContractHeaderComponent implements OnInit {
           break;
       }
       this.nextStep(nextStep);
-      let data = JSON.parse(JSON.stringify(this.datas));
+      let data = _.cloneDeep(this.datas);
       // if (!isGhiTam)
       data.stepLast = nextStep;
       this.datas.stepLast = data.stepLast;
@@ -200,10 +200,6 @@ export class ContractHeaderComponent implements OnInit {
   validData(step: any) {
     switch (step) {
       case variable.stepSampleContract.step1:
-        // valid data step 1, defind value
-        // let dataInfo = JSON.parse(JSON.stringify(this.datas.inforDetails.value));
-        // this.datas.inforDetails = dataInfo;
-
         if (!this.datas.file_content) {
           alert('Vui lòng chọn file hợp đồng!');
           return false;

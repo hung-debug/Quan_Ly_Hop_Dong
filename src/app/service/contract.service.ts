@@ -203,12 +203,9 @@ export class ContractService {
       name: datas.name,
       code: datas.contract_no,
       contract_no: datas.contract_no,
-      //sign_order: 1,
       sign_time: this.datepipe.transform(datas.sign_time ? datas.sign_time : datas.end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
       notes: datas.notes,
       role_id: datas.role_id,
-      //customer_id: this.customer_id,
-      //status: 1,
       alias_url: "",
       refs: datas.contractConnect,
       type_id: datas.type_id,
@@ -490,8 +487,6 @@ export class ContractService {
       status: 1,
       contract_id: datas.id,
     });
-    console.log(headers);
-    console.log(body);
     return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
   }
 
@@ -614,14 +609,12 @@ export class ContractService {
     return this.http.post<Contract>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, {'headers': headers});
   }
 
-  coordinationContract(id: any, data: any, recipient_id: any) {
+  coordinationContract(participant_id: any, body: any, recipient_id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = "";
-    // console.log(headers);
-    return this.http.put<Contract>(this.coordinationSuccess + id + `/${recipient_id}`, data, {'headers': headers});
+    return this.http.put<Contract>(this.coordinationSuccess + `${participant_id}/${recipient_id}`, body, {'headers': headers});
   }
 
   considerRejectContract(id: any, reason: string) {
