@@ -76,6 +76,7 @@
           [filter]="true"
           filterBy="name"
           [showClear]="true"
+          (onChange) = "onChangeTheThucTinh($event)"
         ></p-dropdown>
         <div *ngIf="submitted && f.calc.errors" class="invalid">
           <div *ngIf="f.calc.errors.required">
@@ -94,7 +95,6 @@
         <p-dropdown
           panelStyleClass="font"
           [options]="loaiGoi"
-          onchange="onChangeLoaiGoi()"
           optionLabel="name"
           optionValue="id"
           placeholder="Chọn loại gói"
@@ -121,7 +121,7 @@
           <span class="required-title">*</span>
         </div>
         <div class="input-data">
-          <input type="text" formControlName="time" [readonly]="true" />
+          <input type="text" formControlName="time" />
         </div>
         <div *ngIf="submitted && f.time.errors" class="invalid">
           <div *ngIf="f.time.errors.required">
@@ -142,7 +142,6 @@
           <input
             type="text"
             formControlName="number_contract"
-            [readonly]="true"
           />
         </div>
         <div *ngIf="submitted && f.number_contract.errors" class="invalid">
