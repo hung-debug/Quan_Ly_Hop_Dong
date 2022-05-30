@@ -67,35 +67,42 @@
           {{ "Thể thức tính" | translate }}
           <span class="required-title">*</span>
         </div>
-        <form [formGroup]="formComboBox">
-          <select  class="select-data">
-            <option>Chọn thể thức tính</option>
-            <option *ngFor="let n of theThucTinh">
-              {{ n.name }}
-            </option>
-
-          </select>
-        </form>
-        <!-- <div *ngIf="submitted && f.calc.errors" class="invalid">
+        <p-dropdown
+          panelStyleClass="font"
+          [options]="theThucTinh"
+          formControlName="formComboBox"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Chọn thể thức tính"
+          [filter]="true"
+          filterBy="name"
+          [showClear]="true"
+        ></p-dropdown>
+        <div *ngIf="submitted && f.calc.errors" class="invalid">
           <div *ngIf="f.calc.errors.required">
             {{ "Thể thức tính không được để trống" | translate }}
           </div>
           <div *ngIf="f.calc.errors.pattern">
             {{ "Thể thức tính không được chứa ký tự đặc biệt" | translate }}
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
 
     <div class="row" style="padding-top: 10px">
       <div class="col-md-6">
         <div class="label text-color">{{ "Loại gói" | translate }}</div>
-        <select class="select-data">
-          <option value="null" disabled>Chọn loại gói</option>
-          <option *ngFor="let n of loaiGoi">
-            {{ n.name }}
-          </option>
-        </select>
+        <p-dropdown
+          panelStyleClass="font"
+          [options]="loaiGoi"
+          formControlName="formComboBox"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Chọn loại gói"
+          [filter]="true"
+          filterBy="name"
+          [showClear]="true"
+        ></p-dropdown>
       </div>
 
       <div class="col-md-6">
@@ -111,7 +118,8 @@
     <div class="row" style="padding-top: 10px">
       <div class="col-md-6">
         <div class="label text-color">
-          {{ "Thời gian" | translate }} <span class="required-title">*</span>
+          {{ "Thời gian (tháng)" | translate }}
+          <span class="required-title">*</span>
         </div>
         <div class="input-data">
           <input type="text" formControlName="time" [readonly]="true" />
