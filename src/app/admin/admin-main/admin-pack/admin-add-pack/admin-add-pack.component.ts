@@ -27,8 +27,6 @@ export class AdminAddPackComponent implements OnInit {
   theThucTinh: Array<any> = [];
   loaiGoi: Array<any> = []; 
 
-  formComboBox: FormGroup;
-
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
@@ -64,9 +62,7 @@ export class AdminAddPackComponent implements OnInit {
     }
 
   ngOnInit(): void {    
-    this.formComboBox = new FormGroup({
-      OrganizationId: new FormControl()
-    });
+   
 
     this.loadedListComboBox();
 
@@ -213,6 +209,10 @@ export class AdminAddPackComponent implements OnInit {
           }
         )
     }
+  }
+
+  onChangeLoaiGoi() {
+    console.log("test")
   }
 
 }

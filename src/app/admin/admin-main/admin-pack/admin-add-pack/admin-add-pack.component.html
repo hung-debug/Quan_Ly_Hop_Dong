@@ -70,7 +70,6 @@
         <p-dropdown
           panelStyleClass="font"
           [options]="theThucTinh"
-          formControlName="formComboBox"
           optionLabel="name"
           optionValue="id"
           placeholder="Chọn thể thức tính"
@@ -95,7 +94,7 @@
         <p-dropdown
           panelStyleClass="font"
           [options]="loaiGoi"
-          formControlName="formComboBox"
+          onchange="onChangeLoaiGoi()"
           optionLabel="name"
           optionValue="id"
           placeholder="Chọn loại gói"
