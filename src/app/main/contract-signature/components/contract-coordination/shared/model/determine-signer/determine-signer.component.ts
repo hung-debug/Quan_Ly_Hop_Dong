@@ -1,17 +1,17 @@
-import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import {
   type_signature,
   type_signature_doc,
   type_signature_personal_party,
   variable
 } from "../../../../../../../config/variable";
-import {Helper} from "../../../../../../../core/Helper";
-import {ContractService} from "../../../../../../../service/contract.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {ToastService} from "../../../../../../../service/toast.service";
-import {Router} from "@angular/router";
-import {parttern} from "../../../../../../../config/parttern";
+import { Helper } from "../../../../../../../core/Helper";
+import { ContractService } from "../../../../../../../service/contract.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { ToastService } from "../../../../../../../service/toast.service";
+import { Router } from "@angular/router";
+import { parttern } from "../../../../../../../config/parttern";
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -45,7 +45,7 @@ export class DetermineSignerComponent implements OnInit {
 
   //dropdown
   signTypeList: Array<any> = type_signature;
-  signTypeList_personal_partner: Array<any> =  type_signature_personal_party;
+  signTypeList_personal_partner: Array<any> = type_signature_personal_party;
   signType_doc: Array<any> = type_signature_doc;
 
   dropdownSignTypeSettings: any = {};
@@ -70,6 +70,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // this.getChangeStatus(5);
     if (this.datas.determine_contract)
       this.is_determine_clone = [...this.datas.determine_contract];
     else
@@ -84,7 +85,7 @@ export class DetermineSignerComponent implements OnInit {
 
     // data đối tác
     // if (this.is_determine_clone.type == 3) {
-      this.data_parnter_organization = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+    this.data_parnter_organization = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
     // }
 
     // this.data_parnter_individual = this.is_determine_clone.filter((p: any) => p.type == 3);
@@ -104,6 +105,31 @@ export class DetermineSignerComponent implements OnInit {
 
     if (this.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
   }
+
+  // check nguoi xu ly thao tac tren 2 tab de dieu phoi;
+  // getChangeStatus(new_status: number) {
+  //   let emailUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
+  //   let idAssignHandle = null;
+  //   for (const d of this.datas.determine_contract) {
+  //     for (const f of d.recipients) {
+  //       if (f.status == 1 && f.email == emailUser) {
+  //         idAssignHandle = f.id;
+  //         break;
+  //       }
+  //     }
+  //     if (idAssignHandle) break;
+  //   }
+  //   if (idAssignHandle) {
+  //     this.contractService.getChangeNewStatus(idAssignHandle, new_status).subscribe((res) => {
+  //       console.log('change status successfully!');
+  //     }, (error: HttpErrorResponse) => {
+  //       this.toastService.showErrorHTMLWithTimeout('Lỗi thay đổi trạng thái thao tác hợp đồng!', "", 3000);
+  //     })
+  //   }
+
+  //   // console.log(this.datas);
+  // }
+
 
   // ngOnChanges(changes: SimpleChanges) {
   //   // console.log(changes);
@@ -141,8 +167,8 @@ export class DetermineSignerComponent implements OnInit {
     })
     this.spinner.show();
     this.contractService.getContractDetermine(this.is_determine_clone, this.datas.data_contract_document_id.contract_id).subscribe((res: any) => {
-        this.getDefindObjSign(res);
-      },
+      this.getDefindObjSign(res);
+    },
       (res: any) => {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout(res.error, "", 3000);
@@ -159,8 +185,8 @@ export class DetermineSignerComponent implements OnInit {
       // get data change map signature drag
       if (item.recipients.filter((res: any) => this.datas.is_data_object_signature.some((p: any) => p.recipient_id == res.id)).length > 0) {
         if ((item.recipients.filter((res: any) => this.datas.is_data_object_signature.some((p: any) => p.recipient_id == res.id &&
-        ((res.name != p.name) || (p.recipient && res.email != p.recipient.email) || 
-        (p.type == 2 && !res.sign_type.some((q: any) => q.id == 1)) || (p.type == 3 && !res.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) || (p.type == 1 && !res.sign_type.some((q: any) => q.id == 2)))))).length > 0) {
+          ((res.name != p.name) || (p.recipient && res.email != p.recipient.email) ||
+            (p.type == 2 && !res.sign_type.some((q: any) => q.id == 1)) || (p.type == 3 && !res.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) || (p.type == 1 && !res.sign_type.some((q: any) => q.id == 2)))))).length > 0) {
           isDataSignCheck.push(item.recipients[index]);
           // Lấy những đối tượng ký còn lại khi check dữ liệu thay đổi
           this.datas.is_data_object_signature = this.datas.is_data_object_signature.filter((element: any) => element.recipient_id != item.recipients[index].id);
@@ -178,7 +204,7 @@ export class DetermineSignerComponent implements OnInit {
           }, (error: HttpErrorResponse) => {
             this.toastService.showErrorHTMLWithTimeout('error_delete_object_signature', "", "3000");
           })
-        } 
+        }
       }
     }
 
@@ -420,8 +446,8 @@ export class DetermineSignerComponent implements OnInit {
 
   getValueData(data: any, index: any) {
     return [
-      {id: 1, name: 'Ký ảnh'},
-      {id: 2, name: 'Ký số'}
+      { id: 1, name: 'Ký ảnh' },
+      { id: 2, name: 'Ký số' }
     ]
   }
 
@@ -429,7 +455,7 @@ export class DetermineSignerComponent implements OnInit {
     this.getDataPartner(number_type);
   }
 
-// tạo mảng đối tác
+  // tạo mảng đối tác
   getDataPartner(number_type?: number, name?: string) {
     let data = [...this.is_determine_clone];
     return data.filter((p: any) => (p.type == 2 || p.type == 3));
@@ -699,7 +725,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   dataParnterOrganization() {
-    return this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+    return this.is_determine_clone.filter((p: any) => (p.type == 2 || p.type == 3) && p.recipients.some((q: any) => q.status == 1));
     // return this.is_determine_clone;
   }
 

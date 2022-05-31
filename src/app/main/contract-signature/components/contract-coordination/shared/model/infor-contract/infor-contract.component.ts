@@ -84,7 +84,6 @@ export class InforContractComponent implements OnInit {
     // keyboardEvents: true // enable keyboard events
   };
   ngOnInit(): void {
-
     this.name = this.datas.infor_contract.name ? this.datas.infor_contract.name : '';
     this.code = this.datas.infor_contract.code ? this.datas.infor_contract.code : '';
     this.type_id = this.datas.infor_contract.type_id ? this.datas.infor_contract.type_id : '';
