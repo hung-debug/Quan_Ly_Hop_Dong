@@ -203,11 +203,11 @@ export class AddContractComponent implements OnInit {
   }
 
   getDataContractCreated(data: any) {
-    let fileName = data.i_data_file_contract.filter((p: any) => p.type == 2 && p.status == 1)[0];
     let fileNameAttach = data.i_data_file_contract.filter((p: any) => p.type == 3);
     if (data) {
       // sua hop dong don le theo mau
       if (data.is_data_contract.is_template) {
+        let fileName = data.i_data_file_contract.filter((p: any) => p.type == 2 && p.status == 1)[0];
         this.type = 2;
         this.stepForm = variable.stepSampleContractForm.step1;
         this.datasForm.name = data.is_data_contract.name;
@@ -226,6 +226,7 @@ export class AddContractComponent implements OnInit {
           this.datasForm.fileAttachForm = fileNameAttach;
         }
       } else {
+        let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1 && p.status == 1)[0];
         if (fileName) {
           data.is_data_contract['file_name'] = fileName.filename;
           data.is_data_contract['contractFile'] = fileName.path;

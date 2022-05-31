@@ -43,7 +43,6 @@ export class FooterSignatureComponent implements OnInit {
       }
     }
 
-    console.log(this.is_data_coordination);
     if (this.is_data_coordination) {
       // @ts-ignore
       for (let i = 0; i < this.is_data_coordination.recipients.length; i++) {
@@ -167,7 +166,7 @@ export class FooterSignatureComponent implements OnInit {
     const dialogRef = this.dialog.open(ForwardContractComponent, {
       width: '450px',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
@@ -192,7 +191,7 @@ export class FooterSignatureComponent implements OnInit {
     const dialogRef = this.dialog.open(ForwardContractComponent, {
       width: '450px',
       backdrop: 'static',
-      keyboard: false,
+      keyboard: true,
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
