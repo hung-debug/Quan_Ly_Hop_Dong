@@ -152,11 +152,6 @@ export class DetermineSignerComponent implements OnInit {
     // this.nextOrPreviousStep(step);
   }
 
-  // next() {
-  //   if (!this.validData()) return;
-  //   else this.getApiDetermine();
-  // }
-
   getApiDetermine() {
     if (!this.validData()) return;
     this.is_determine_clone.forEach((items: any, index: number) => {
