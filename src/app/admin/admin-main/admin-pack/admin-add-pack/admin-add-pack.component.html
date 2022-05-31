@@ -56,8 +56,10 @@
           <div *ngIf="f.price.errors.required">
             {{ "Đơn giá không được để trống" | translate }}
           </div>
+          <!-- dungpt -->
+          <!-- input cua don gia phai la so moi hop le -->
           <div *ngIf="f.price.errors.pattern">
-            {{ "Đơn giá không được chứa ký tự đặc biệt" | translate }}
+            {{ "Đơn giá phải là số" | translate }}
           </div>
         </div>
       </div>
@@ -67,6 +69,9 @@
           {{ "Thể thức tính" | translate }}
           <span class="required-title">*</span>
         </div>
+
+        <!-- dungpt -->
+        <!-- them combobox the thuc tinh -->
         <p-dropdown
           panelStyleClass="font"
           [options]="theThucTinh"
@@ -76,7 +81,7 @@
           [filter]="true"
           filterBy="name"
           [showClear]="true"
-          (onChange) = "onChangeTheThucTinh($event)"
+          (onChange)="onChangeTheThucTinh($event)"
         ></p-dropdown>
         <div *ngIf="submitted && f.calc.errors" class="invalid">
           <div *ngIf="f.calc.errors.required">
@@ -92,6 +97,9 @@
     <div class="row" style="padding-top: 10px">
       <div class="col-md-6">
         <div class="label text-color">{{ "Loại gói" | translate }}</div>
+
+        <!-- dungpt -->
+        <!-- them combobox loai goi -->
         <p-dropdown
           panelStyleClass="font"
           [options]="loaiGoi"
@@ -121,14 +129,23 @@
           <span class="required-title">*</span>
         </div>
         <div class="input-data">
-          <input type="text" formControlName="time" />
+          <!-- dungpt -->
+          <!-- tao ngModel va  name cho input thoi gian -->
+          <input
+            type="text"
+            [(ngModel)]="timeName"
+            name="timeName"
+            formControlName="time"
+          />
         </div>
         <div *ngIf="submitted && f.time.errors" class="invalid">
           <div *ngIf="f.time.errors.required">
             {{ "Thời gian không được để trống" | translate }}
           </div>
+           <!-- dungpt -->
+          <!-- input cua thoi gian phai la so moi hop le -->
           <div *ngIf="f.time.errors.pattern">
-            {{ "Thời gian không được chứa ký tự đặc biệt" | translate }}
+            {{ "Thời gian phải là số" | translate }}
           </div>
         </div>
       </div>
@@ -139,8 +156,12 @@
           <span class="required-title">*</span>
         </div>
         <div class="input-data">
+          <!-- dungpt -->
+          <!-- tao ngModel va  name cho input so luong hop dong -->
           <input
             type="text"
+            [(ngModel)]="numberContractName"
+            name="numberContractName"
             formControlName="number_contract"
           />
         </div>
@@ -148,8 +169,10 @@
           <div *ngIf="f.number_contract.errors.required">
             {{ "Số lượng hợp đồng không được để trống" | translate }}
           </div>
+           <!-- dungpt -->
+          <!-- input cua so luong hop dong phai la so moi hop le -->
           <div *ngIf="f.number_contract.errors.pattern">
-            {{ "Số lượng hợp đồng không được chứa ký tự đặc biệt" | translate }}
+            {{ "Số lượng hợp đồng phải là số" | translate }}
           </div>
         </div>
       </div>
