@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {environment} from '../../../environments/environment';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +13,7 @@ export class AdminUserService {
   updateUserUrl: any = `${environment.apiUrl}`;
   checkPhoneUrl:any = `${environment.apiUrl}`;
   getUserByEmailUrl:any = `${environment.apiUrl}`;
-  addUserUrl:any = `${environment.apiUrl}`;
+  addUserUrl:any = `${environment.apiUrl}/api/v1/ad-user/`;
   deleteUserUrl:any = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient,) { }
@@ -92,30 +93,26 @@ export class AdminUserService {
 
   //call api them moi nguoi dung
   addUser(datas: any) {
+
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
     // 
+
+
+    console.log("vao day")
+
     const body = JSON.stringify({
-      name: datas.name,
       email: datas.email,
       phone: datas.phone,
-      organization_id: datas.organizationId,
-      birthday: datas.birthday,
-      status: datas.status,
-      role_id: datas.role,
-
-      sign_image: datas.sign_image,
-
-      phone_sign: datas.phoneKpi,
-      phone_tel: datas.networkKpi,
-
-      hsm_name: datas.nameHsm
+      fullName: datas.name,
+      adPermissions: datas.role
     });
+
     console.log(headers);   
-    console.log(body);
+    console.log("body add user "+body);
     return this.http.post<any>(this.addUserUrl, body, {'headers': headers});
   }
 
