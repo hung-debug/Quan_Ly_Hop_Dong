@@ -217,7 +217,7 @@ export class ConfirmInfoContractComponent implements OnInit {
 
       if (!isCheckFail) {
         // load data after when coordination success
-        await this.contractService.getDataCoordination(this.datas.determine_contract.contract_id).toPromise().then((res: any) => {
+        await this.contractService.getDataCoordination(this.datas.determine_contract[0].contract_id).toPromise().then((res: any) => {
           if (res) {
             this.datas.is_data_contract = res;
             this.datas.step = variable.stepSampleContract.step_coordination;
