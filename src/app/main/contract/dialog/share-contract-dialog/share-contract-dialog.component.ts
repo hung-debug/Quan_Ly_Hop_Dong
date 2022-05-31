@@ -79,9 +79,10 @@ export class ShareContractDialogComponent implements OnInit {
 
   getUserByOrg(orgId:any){
     console.log(orgId);
+    let emailLogin = this.userService.getAuthCurrentUser().email;
     this.userService.getUserList(orgId, "").subscribe(data => {
       console.log(data);
-      this.userList = data.entities;
+      this.userList = data.entities.filter((p: any) => p.email != emailLogin && p.status == 1);
 
       this.addFormUser = this.fbd.group({
         orgId: orgId,
@@ -105,12 +106,17 @@ export class ShareContractDialogComponent implements OnInit {
       this.checkEmailError=false;
       // this.email = this.addForm.value.email;
       console.log(this.addForm.value.email);
+      let emailLogin = this.userService.getAuthCurrentUser().email;
       this.addForm.value.email.split(',').forEach((key: any, v: any) => {
         console.log(key);
         if(this.isValidEmail(key.trim())== false){
           this.toastService.showErrorHTMLWithTimeout('Tồn tại email ' + key.trim() + ' sai định dạng', "", 3000);
           this.checkEmailError=true;
-        }else{
+        }else if(key.trim() == emailLogin){
+          this.toastService.showErrorHTMLWithTimeout('Không thể chia sẻ cho chính mình', "", 3000);
+          this.checkEmailError=true;
+        }
+        else{
           this.emailArr.push(key.trim());
         }
       });
@@ -136,6 +142,7 @@ export class ShareContractDialogComponent implements OnInit {
         return;
       }
       console.log("email=" + this.addFormUser.value.email);
+    
       this.contractService.shareContract(this.addFormUser.value.email, this.data.id).subscribe(data => {
         console.log(data);
         if(data.contract_id != null){
@@ -145,7 +152,8 @@ export class ShareContractDialogComponent implements OnInit {
           this.toastService.showErrorHTMLWithTimeout('Chia sẻ hợp đồng thất bại', "", 3000);
         }
       });
-    }    
+      
+    } 
   }
 
   isValidEmail(emailString: any) {
