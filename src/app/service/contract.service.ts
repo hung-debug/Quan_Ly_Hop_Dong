@@ -82,6 +82,7 @@ export class ContractService {
   viewFlowUrl:any = `${environment.apiUrl}/api/v1/contracts/bpmn-flow/`;
   getCheckSign: any = `${environment.apiUrl}/api/v1/recipients/internal/`;
   deleteParticipantContractUrl:any = `${environment.apiUrl}/api/v1/participants/`;
+  changeStatusHandle: any = `${environment.apiUrl}/api/v1/recipients/`;
 
   token:any;
   customer_id:any;
@@ -471,7 +472,7 @@ export class ContractService {
     return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();
   }
 
-  addDocument(datas: any, is_type?: number) {
+  addDocument(datas: any, is_type?: number, is_status?: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -484,17 +485,18 @@ export class ContractService {
       bucket: datas.fileBucket,
       internal: 1,
       ordering: 1,
-      status: 1,
+      status: is_status ? is_status : 1,
       contract_id: datas.id,
     });
     return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
   }
 
-  updateFileAttach(id: any, body: any) {
+  updateFileAttach(id: any, body: any, isStatus?: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+      if (isStatus) body.type = isStatus;
     return this.http.put<Contract>(this.documentUrl + `/${id}`, body, {'headers': headers});
   }
 
@@ -514,8 +516,8 @@ export class ContractService {
       status: 1,
       contract_id: datas.id,
     });
-    console.log(headers);
-    console.log(body);
+    // console.log(headers);
+    // console.log(body);
     return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
   }
 
@@ -602,11 +604,19 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = {
-      reason: reason
-    };
-    console.log(headers);
+      const body = {
+        reason: reason
+      }
     return this.http.post<Contract>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, {'headers': headers});
+  }
+  
+  getChangeNewStatus(id: number, new_status: number) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+      let body = {};
+    return this.http.put<any>(this.changeStatusHandle + id + '/change-status/' + new_status, body ,{'headers': headers});
   }
 
   coordinationContract(participant_id: any, body: any, recipient_id: any) {

@@ -7,6 +7,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {ForwardContractComponent} from "../../shared/model/forward-contract/forward-contract.component";
 import {ContractService} from "../../../../service/contract.service";
 import {DisplayDigitalSignatureComponent} from "../../display-digital-signature/display-digital-signature.component";
+import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
   selector: 'app-footer-signature',
@@ -23,7 +24,8 @@ export class FooterSignatureComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private toastService: ToastService
   ) {
   }
 
@@ -80,8 +82,13 @@ export class FooterSignatureComponent implements OnInit {
           let dataCoordination = this.is_data_coordination['recipients'].filter((p: any) => p.role == 1)[0]; // get dữ liệu người điều phối
           if (dataCoordination) {
             this.datas.recipient_id_coordition = dataCoordination.id;
+            if (dataCoordination.status == 5) {
+              this.toastService.showWarningHTMLWithTimeout("Hợp đồng đang trong quá trình xử lý!", "", 3000);
+              return;
+            }
           }
         }
+        
         // this.datas.determine_contract = this.is_data_coordination; // data determine contract
         this.datas.determine_contract = this.datas.is_data_contract.participants; // data determine contract
         this.datas.step = variable.stepSampleContract.step_confirm_coordination; // set step 2
