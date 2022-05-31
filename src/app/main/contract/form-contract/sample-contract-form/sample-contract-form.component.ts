@@ -1512,7 +1512,7 @@ export class SampleContractFormComponent implements OnInit {
         await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then((data: any) => {
           dataSample_contract.push(data);
         }, (error: HttpErrorResponse) => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! vui lòng thao tác lại hoặc liên hệ với nhà phát triển để xử lý', "", 3000);
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! vui lòng thao tác lại hoặc liên hệ với nhà phát triển để xử lý!', "", 3000);
           countIsSignId++;
         })
         if (countIsSignId > 0) {
