@@ -128,7 +128,9 @@
           {{ "Thời gian (tháng)" | translate }}
           <span class="required-title">*</span>
         </div>
-        <div class="input-data">
+        <div class="input-data" [ngClass]="{
+          'fff':  this.flagComboBoxTheThucTinh == 2 || this.flagComboBoxTheThucTinh == 3
+        }">
           <!-- dungpt -->
           <!-- tao ngModel va  name cho input thoi gian -->
           <input
@@ -155,7 +157,9 @@
           {{ "Số lượng hợp đồng" | translate }}
           <span class="required-title">*</span>
         </div>
-        <div class="input-data">
+        <div class="input-data" [ngClass]="{
+          'fff':  this.flagComboBoxTheThucTinh == 1 || this.flagComboBoxTheThucTinh == 3
+        }">
           <!-- dungpt -->
           <!-- tao ngModel va  name cho input so luong hop dong -->
           <input

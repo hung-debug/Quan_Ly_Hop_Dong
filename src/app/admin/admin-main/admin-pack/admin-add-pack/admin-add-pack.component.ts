@@ -36,6 +36,10 @@ export class AdminAddPackComponent implements OnInit {
   timeName: string;
   numberContractName: string;
 
+  //1 => time: white, so luong: gray
+  //2 => so luong: white, time: gray
+  //3 => all gray
+  flagComboBoxTheThucTinh:any;
 
   get f() { return this.addForm.controls; }
 
@@ -79,6 +83,8 @@ export class AdminAddPackComponent implements OnInit {
     //gan data cho combobox
     this.loadedListComboBox();
 
+    this.flagComboBoxTheThucTinh = 3;
+
     this.datas = this.data;
 
     //lay du lieu form cap nhat
@@ -94,8 +100,8 @@ export class AdminAddPackComponent implements OnInit {
             calc: this.fbd.control(data.calc, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             type: this.fbd.control(data.type),
             condition: this.fbd.control(data.condition, [Validators.pattern(parttern_input.input_form)]),
-            time: this.fbd.control({value: data.time, disabled: false}, [Validators.required, Validators.pattern(parttern_input.number_form)]),
-            number_contract: this.fbd.control(data.number_contract, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            time: this.fbd.control({value: data.time, disabled: true}, [Validators.required, Validators.pattern(parttern_input.number_form)]),
+            number_contract: this.fbd.control({value:data.number_contract, disabled: true}, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             describe: this.fbd.control(data.describe, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             status: this.fbd.control(data.status, [Validators.pattern(parttern_input.input_form)]),
           });
@@ -235,17 +241,23 @@ export class AdminAddPackComponent implements OnInit {
 
       this.numberContractName = "";
 
+      this.flagComboBoxTheThucTinh = 1;
     } else if(event.value == 2) {
       //Chon so hop dong
 
       this.addForm.controls.number_contract.enable();
       this.addForm.controls.time.disable();
-
       this.timeName = "";
+
+      this.flagComboBoxTheThucTinh = 2;
     } else {
 
       this.addForm.controls.time.disable();
       this.addForm.controls.number_contract.disable();
+      this.numberContractName = "";
+      this.timeName = "";
+
+      this.flagComboBoxTheThucTinh = 3;
 
     }
   }
