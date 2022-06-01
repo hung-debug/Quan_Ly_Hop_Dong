@@ -14,9 +14,14 @@ export class AdminAddPackUnitComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialog: MatDialog,
+    public dialogRef: MatDialogRef<AdminAddPackUnitComponent>,
   ) { }
 
   ngOnInit(): void {
+  }
+
+  cancel() {
+    this.dialogRef.close();
   }
 
 }
