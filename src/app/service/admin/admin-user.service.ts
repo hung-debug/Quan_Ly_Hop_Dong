@@ -93,16 +93,10 @@ export class AdminUserService {
 
   //call api them moi nguoi dung
   addUser(datas: any) {
-
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-
-    // 
-
-
-    console.log("vao day")
 
     const body = JSON.stringify({
       email: datas.email,

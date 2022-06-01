@@ -49,7 +49,7 @@ export class AdminDetailUnitComponent implements OnInit {
 
   addPack(id:any) {
     const data = {
-      title: 'unit.information',
+      title: 'THÊM GÓI DỊCH VỤ CHO TỔ CHỨC',
       id: id,
     };
     // @ts-ignore

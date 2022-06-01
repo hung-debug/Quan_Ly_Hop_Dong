@@ -197,61 +197,35 @@ export class AdminAddUserComponent implements OnInit {
     });
     data.role = this.selectedRoleConvert;
 
-    if (this.id != null) {
-      //neu thay doi so dien thoai thi can check lai
-      if (data.phone != this.phoneOld) {
-        this.adminUserService.checkPhoneUser(data.phone).subscribe(
-          (dataByPhone) => {
-            if (dataByPhone.code == '00') {
-              //ham update nguoi dung
-              this.update(data);
-            } else if (dataByPhone.code == '01') {
-              this.toastService.showErrorHTMLWithTimeout(
-                'Số điện thoại đã tồn tại trong hệ thống',
-                '',
-                3000
-              );
-            }
-          },
-          (error) => {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
-              '',
-              3000
-            );
-          }
-        );
-      } else {
-        //ham update
-        this.update(data);
-      }
-    } else {
-      this.adminUserService.addUser(data).subscribe(
-        (data) => {
-          if (data.id != null) {
-            this.toastService.showSuccessHTMLWithTimeout(
-              'Thêm mới thành công!',
-              '',
-              3000
-            );
-            this.router
-              .navigateByUrl('/', { skipLocationChange: true })
-              .then(() => {
-                this.router.navigate(['admin-main/user']);
-              });
-          } else {
-            this.toastService.showSuccessHTMLWithTimeout(data.errors[0].message,'',3000);
-          }
-        },
-        (error) => {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Thêm mới thất bại',
+    this.adminUserService.addUser(data).subscribe(
+      (data) => {
+        if (data.id != null) {
+          this.toastService.showSuccessHTMLWithTimeout(
+            'Thêm mới thành công!',
+            '',
+            3000
+          );
+          this.router
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate(['admin-main/user']);
+            });
+        } else {
+          this.toastService.showSuccessHTMLWithTimeout(
+            data.errors[0].message,
             '',
             3000
           );
         }
-      );
-    }
+      },
+      (error) => {
+        this.toastService.showErrorHTMLWithTimeout(
+          'Thêm mới thất bại',
+          '',
+          3000
+        );
+      }
+    );
   }
 
   fileChangedAttach(e: any) {

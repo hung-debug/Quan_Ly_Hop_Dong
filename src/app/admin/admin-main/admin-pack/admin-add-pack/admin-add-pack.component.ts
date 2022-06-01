@@ -27,11 +27,6 @@ export class AdminAddPackComponent implements OnInit {
   theThucTinh: Array<any> = [];
   loaiGoi: Array<any> = []; 
 
-  //dungpt
-  //variable disable thoi gian va so luong hop dong
-  isDisableTime: boolean;
-  isDisableNumberContract: boolean;
-
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
   submitted = false;
@@ -80,12 +75,6 @@ export class AdminAddPackComponent implements OnInit {
     }
 
   ngOnInit(): void {    
-
-    //dungpt
-    //init thoi gian va so luong hop dong la disable
-    this.isDisableTime = true;
-    this.isDisableNumberContract = true;
-
     //dungpt
     //gan data cho combobox
     this.loadedListComboBox();

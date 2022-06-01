@@ -93,6 +93,7 @@ export class AddRoleComponent implements OnInit {
       console.log(this.addForm.invalid);
       return;
     }
+    
     this.selectedRoleConvert = [];
     data.selectedRole.forEach((key: any, v: any) => {
       console.log(key);
