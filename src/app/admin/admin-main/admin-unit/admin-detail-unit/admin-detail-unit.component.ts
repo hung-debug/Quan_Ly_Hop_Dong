@@ -2,9 +2,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { AdminAddPackUnitComponent } from '../admin-add-pack-unit/admin-add-pack-unit.component';
+import { AdminDetailPackUnitComponent } from '../admin-detail-pack-unit/admin-detail-pack-unit.component';
 
 @Component({
   selector: 'app-admin-detail-unit',
@@ -16,6 +18,8 @@ export class AdminDetailUnitComponent implements OnInit {
   datas:any;
   cols: any[];
   list: any[];
+  name: string;
+  code: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -24,9 +28,14 @@ export class AdminDetailUnitComponent implements OnInit {
     private toastService : ToastService,
     public dialogRef: MatDialogRef<AdminDetailUnitComponent>,
     public router: Router,
-    public dialog: MatDialog,) { }
+    public dialog: MatDialog,
+    private adminUnitService: AdminUnitService,
+    ) { }
 
   ngOnInit(): void {
+
+    console.log("detai unit");
+
     this.unitService.getUnitById(this.data.id).subscribe(
       data => {
         console.log(data);
@@ -45,6 +54,41 @@ export class AdminDetailUnitComponent implements OnInit {
       { field: 'status', header: 'Trạng thái', style:'text-align: left;' },
       { field: 'id', header: 'unit.manage', style:'text-align: center;' },
       ]; 
+      
+      this.searchPackUnit();
+  }
+  searchPackUnit() {
+    const data = [
+      {
+        "name":"name",
+        "code":"code",
+        "time": "time",
+        "start_time": "start_time",
+        "status":"status",
+      }
+    ];
+
+    this.list = data;
+    
+    console.log("this list "+this.list)
+  }
+
+  detailPackUnit(id: any) {
+    const data = {
+      title: 'CHI TIẾT GÓI DỊCH VỤ CỦA TỔ CHỨC',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminDetailPackUnitComponent, {
+      width: '600px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
   addPack(id:any) {
@@ -64,5 +108,6 @@ export class AdminDetailUnitComponent implements OnInit {
       let is_data = result
     })
   }
+
 
 }
