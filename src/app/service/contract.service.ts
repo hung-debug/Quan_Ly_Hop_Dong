@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {environment} from '../../environments/environment';
-import {map, catchError, retry} from 'rxjs/operators';
-import {Helper} from "../core/Helper";
-import {DatePipe} from '@angular/common';
-import {forkJoin, BehaviorSubject, Subject} from "rxjs";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { map, catchError, retry } from 'rxjs/operators';
+import { Helper } from "../core/Helper";
+import { DatePipe } from '@angular/common';
+import { forkJoin, BehaviorSubject, Subject } from "rxjs";
 import axios from 'axios';
-import {User} from "./user.service";
+import { User } from "./user.service";
 
 export interface Contract {
   id: number,
@@ -48,15 +48,15 @@ export class ContractService {
   coordinationSuccess: any = `${environment.apiUrl}/api/v1/processes/coordinator/`;
   listContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/organizations/`;
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
-  addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
-  addGetFileContract:any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
-  addGetObjectSignature:any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
-  updateInfoContractUrl:any = `${environment.apiUrl}/api/v1/fields/`;
-  updateInfoContractConsiderUrl:any = `${environment.apiUrl}/api/v1/processes/approval/`;
-  rejectContractUrl:any = `${environment.apiUrl}/api/v1/processes/reject/`;
-  uploadFileUrl:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
-  uploadFileBase64Url:any = `${environment.apiUrl}/api/v1/upload/organizations/`;
-  currentUser:any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+  addGetDataContract: any = `${environment.apiUrl}/api/v1/contracts/`;
+  addGetFileContract: any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
+  addGetObjectSignature: any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
+  updateInfoContractUrl: any = `${environment.apiUrl}/api/v1/fields/`;
+  updateInfoContractConsiderUrl: any = `${environment.apiUrl}/api/v1/processes/approval/`;
+  rejectContractUrl: any = `${environment.apiUrl}/api/v1/processes/reject/`;
+  uploadFileUrl: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
+  uploadFileBase64Url: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
+  currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
   isDataDetermine: any = `${environment.apiUrl} /api/v1/participants/byRecipient/`;
   signDigitalMobi: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
@@ -68,25 +68,25 @@ export class ContractService {
   getAllContractTypesUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
   imageMobiBase64: any;
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
-  addGetFileZipContract:any = `${environment.apiUrl}/api/v1/documents/compress/`;
-  checkCodeUniqueUrl:any = `${environment.apiUrl}/api/v1/contracts/check-code-unique`;
+  addGetFileZipContract: any = `${environment.apiUrl}/api/v1/documents/compress/`;
+  checkCodeUniqueUrl: any = `${environment.apiUrl}/api/v1/contracts/check-code-unique`;
   getCopyContract: any = `${environment.apiUrl}/api/v1/contracts/clone/`;
   deleteContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
   private getDetailFormContract = `${environment.apiUrl}/api/v1/documents/template/by-contract/`;
   private getSaveContractFormInfo = `${environment.apiUrl}/api/v1/contracts/template`;
   getObjectSignature: any = `${environment.apiUrl}/api/v1/fields/template/by-contract/`;
   getFileContractBatchUrl: any = `${environment.apiUrl}/api/v1/batch/`;
-  uploadFileContractBatchUrl:any = `${environment.apiUrl}/api/v1/batch/validate/`;
-  getContractBatchListUrl:any = `${environment.apiUrl}/api/v1/batch/parse/`;
-  confirmContractBatchListUrl:any = `${environment.apiUrl}/api/v1/batch/process/`;
-  viewFlowUrl:any = `${environment.apiUrl}/api/v1/contracts/bpmn-flow/`;
+  uploadFileContractBatchUrl: any = `${environment.apiUrl}/api/v1/batch/validate/`;
+  getContractBatchListUrl: any = `${environment.apiUrl}/api/v1/batch/parse/`;
+  confirmContractBatchListUrl: any = `${environment.apiUrl}/api/v1/batch/process/`;
+  viewFlowUrl: any = `${environment.apiUrl}/api/v1/contracts/bpmn-flow/`;
   getCheckSign: any = `${environment.apiUrl}/api/v1/recipients/internal/`;
-  deleteParticipantContractUrl:any = `${environment.apiUrl}/api/v1/participants/`;
+  deleteParticipantContractUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   changeStatusHandle: any = `${environment.apiUrl}/api/v1/recipients/`;
 
-  token:any;
-  customer_id:any;
-  organization_id:any;
+  token: any;
+  customer_id: any;
+  organization_id: any;
   errorData: any = {};
   redirectUrl: string = '';
 
@@ -107,7 +107,7 @@ export class ContractService {
 
 
   constructor(private http: HttpClient,
-              public datepipe: DatePipe,) {
+    public datepipe: DatePipe,) {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/text');
     this.http.get('/assets/sign-digital.txt', { responseType: 'text', headers }).subscribe(data => {
@@ -119,7 +119,7 @@ export class ContractService {
     this.messageShareData.next(message);
   }
 
-  getCurrentUser(){
+  getCurrentUser() {
     this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
     this.customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id;
     this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
@@ -131,25 +131,25 @@ export class ContractService {
 
   getDetailContractFormInfor(id: number) {
     this.getCurrentUser();
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<Contract[]>(this.getDetailFormContract + `${id}`, {headers}).pipe();
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    return this.http.get<Contract[]>(this.getDetailFormContract + `${id}`, { headers }).pipe();
   }
 
   public getContractTypeList(): Observable<any> {
     this.getCurrentUser();
     let listContractTypeUrl = this.listContractTypeUrl + this.organization_id;
     // console.log(listContractTypeUrl);
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<Contract[]>(listContractTypeUrl, {headers}).pipe();
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    return this.http.get<Contract[]>(listContractTypeUrl, { headers }).pipe();
   }
 
   public saveContractFormInfo(data: any) {
     this.getCurrentUser();
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.post<any>(this.getSaveContractFormInfo, {data}, {headers}).pipe();
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    return this.http.post<any>(this.getSaveContractFormInfo, { data }, { headers }).pipe();
   }
 
-  public getContractList(isOrg:any, organization_id:any, filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any): Observable<any> {
+  public getContractList(isOrg: any, organization_id: any, filter_name: any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status: any, page: any, size: any): Observable<any> {
     this.getCurrentUser();
 
     if (filter_from_date != "") {
@@ -159,26 +159,26 @@ export class ContractService {
       filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
     }
     let remain_day = "";
-    if(filter_status != "" && filter_status == 33){
+    if (filter_status != "" && filter_status == 33) {
       remain_day = "5";
     }
-    if(page != ""){
+    if (page != "") {
       page = page - 1;
     }
     let listContractUrl = "";
-    if(isOrg == 'off'){
+    if (isOrg == 'off') {
       listContractUrl = this.listContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
-    }else{
-      if(organization_id == ''){
+    } else {
+      if (organization_id == '') {
         listContractUrl = this.listContractOrgChildrenUrl + '?organizationId=' + this.organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
-      }else{
+      } else {
         listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
       }
     }
 
     console.log(listContractUrl);
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
   }
 
   public getContractMyProcessList(filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any): Observable<any> {
@@ -191,8 +191,8 @@ export class ContractService {
     }
     let listContractMyProcessUrl = this.listContractMyProcessUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "";
     console.log(listContractMyProcessUrl);
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    return this.http.get<Contract[]>(listContractMyProcessUrl, { headers }).pipe();
   }
 
   addContractStep1(datas: any, id?: any, type_form?: string) {
@@ -214,29 +214,29 @@ export class ContractService {
       template_contract_id: type_form ? datas.template_contract_id : null
     });
     if (id) {
-      return this.http.put<Contract>(this.addGetDataContract + id, body, {'headers': headers})
-      .pipe(
-        map((contract) => {
-          if (JSON.parse(JSON.stringify(contract)).id != 0) {
-            return contract;
-          } else {
-            return null;
-          }
-        }),
-        catchError(this.handleError)
-      );
+      return this.http.put<Contract>(this.addGetDataContract + id, body, { 'headers': headers })
+        .pipe(
+          map((contract) => {
+            if (JSON.parse(JSON.stringify(contract)).id != 0) {
+              return contract;
+            } else {
+              return null;
+            }
+          }),
+          catchError(this.handleError)
+        );
     } else {
-      return this.http.post<Contract>(this.addContractUrl, body, {'headers': headers})
-      .pipe(
-        map((contract) => {
-          if (JSON.parse(JSON.stringify(contract)).id != 0) {
-            return contract;
-          } else {
-            return null;
-          }
-        }),
-        catchError(this.handleError)
-      );
+      return this.http.post<Contract>(this.addContractUrl, body, { 'headers': headers })
+        .pipe(
+          map((contract) => {
+            if (JSON.parse(JSON.stringify(contract)).id != 0) {
+              return contract;
+            } else {
+              return null;
+            }
+          }),
+          catchError(this.handleError)
+        );
     }
 
   }
@@ -247,7 +247,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-     return this.http.get<any>(this.getObjectSignature + `${id_contract_form}`, { headers });
+    return this.http.get<any>(this.getObjectSignature + `${id_contract_form}`, { headers });
   }
 
   getContractSample(data_sample_contract: any) {
@@ -256,7 +256,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_sample_contract);
-    return this.http.post<Contract>(this.addSampleCntractUrl, body, {'headers': headers})
+    return this.http.post<Contract>(this.addSampleCntractUrl, body, { 'headers': headers })
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -275,7 +275,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_sample_contract);
-    return this.http.put<Contract>(this.addSampleCntractUrl + `/${id}`, body, {'headers': headers})
+    return this.http.put<Contract>(this.addSampleCntractUrl + `/${id}`, body, { 'headers': headers })
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -293,7 +293,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.post<any>(this.processAuthorizeContractUrl, infoAuthorize, {'headers': headers});
+    return this.http.post<any>(this.processAuthorizeContractUrl, infoAuthorize, { 'headers': headers });
   }
 
   getAllAccountsDigital() {
@@ -389,7 +389,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('TenantCode', 'mobifone.vn');
 
-    return this.http.post<any>(this.postSignDigitalSimPKI, formData, {'headers':headers}).toPromise();
+    return this.http.post<any>(this.postSignDigitalSimPKI, formData, { 'headers': headers }).toPromise();
   }
 
   getDataNotifyOriganzation() {
@@ -398,7 +398,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     let listContractUrl = this.getNotifyOriganzation + this.organization_id;
-    return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();
+    return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
   }
 
   getContractDetermine(data_determine: any, id: any) {
@@ -407,7 +407,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_determine);
-    return this.http.post<Contract>(this.addDetermineUrl + id, body, {'headers': headers})
+    return this.http.post<Contract>(this.addDetermineUrl + id, body, { 'headers': headers })
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -425,7 +425,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.getAllContractTypesUrl + idTypeContract, {'headers': headers})
+    return this.http.get<any>(this.getAllContractTypesUrl + idTypeContract, { 'headers': headers })
       .pipe(
         map((typesContract) => {
           return typesContract.name ? typesContract.name : '';
@@ -441,7 +441,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_determine);
-    return this.http.put<Contract>(this.addDetermineCoorditionUrl + id, body, {'headers': headers})
+    return this.http.put<Contract>(this.addDetermineCoorditionUrl + id, body, { 'headers': headers })
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -457,8 +457,8 @@ export class ContractService {
   public getNameOrganization(filter_organization_id: any, filter_name: any): Observable<any> {
     this.getCurrentUser();
     let listUserUrl = this.getNameSearch + '?name=' + filter_name + "&size=10000";
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<User[]>(listUserUrl, {headers}).pipe();
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    return this.http.get<User[]>(listUserUrl, { headers }).pipe();
   }
 
 
@@ -467,9 +467,9 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = JSON.stringify({type: id});
+    const body = JSON.stringify({ type: id });
     let listContractUrl = this.addConfirmContractUrl + id;
-    return this.http.get<Contract[]>(listContractUrl, {headers}).pipe();
+    return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
   }
 
   addDocument(datas: any, is_type?: number, is_status?: number) {
@@ -488,7 +488,7 @@ export class ContractService {
       status: is_status ? is_status : 1,
       contract_id: datas.id,
     });
-    return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
+    return this.http.post<Contract>(this.documentUrl, body, { 'headers': headers });
   }
 
   updateFileAttach(id: any, body: any, isStatus?: number) {
@@ -496,8 +496,8 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-      if (isStatus) body.type = isStatus;
-    return this.http.put<Contract>(this.documentUrl + `/${id}`, body, {'headers': headers});
+    if (isStatus) body.type = isStatus;
+    return this.http.put<Contract>(this.documentUrl + `/${id}`, body, { 'headers': headers });
   }
 
   addDocumentDone(datas: any) {
@@ -518,7 +518,7 @@ export class ContractService {
     });
     // console.log(headers);
     // console.log(body);
-    return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
+    return this.http.post<Contract>(this.documentUrl, body, { 'headers': headers });
   }
 
   signPkiDigital(phone: any, networkCode: any, recipientId: any, nameContract: any) {
@@ -533,7 +533,7 @@ export class ContractService {
       "prompt": `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
       "reason": "reason"
     };
-    return this.http.post<any>(this.signFilePKI + recipientId, body, {'headers': headers}).toPromise();
+    return this.http.post<any>(this.signFilePKI + recipientId, body, { 'headers': headers }).toPromise();
   }
 
   addDocumentAttach(datas: any) {
@@ -554,7 +554,7 @@ export class ContractService {
     });
     // console.log(headers);
     // console.log(body);
-    return this.http.post<Contract>(this.documentUrl, body, {'headers': headers});
+    return this.http.post<Contract>(this.documentUrl, body, { 'headers': headers });
   }
 
   addConfirmContract(datas: any) {
@@ -564,31 +564,31 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = "";
     console.log(headers);
-    return this.http.put<Contract>(this.addConfirmContractUrl + datas.id + '/start-bpm', body, {'headers': headers});
+    return this.http.put<Contract>(this.addConfirmContractUrl + datas.id + '/start-bpm', body, { 'headers': headers });
   }
 
-  getFileContract(idContract: any) : Observable<any> {
+  getFileContract(idContract: any): Observable<any> {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<File>(this.addGetFileContract + idContract, {headers}).pipe();
+    return this.http.get<File>(this.addGetFileContract + idContract, { headers }).pipe();
   }
 
-  getFileZipContract(idContract: any) : Observable<any> {
+  getFileZipContract(idContract: any): Observable<any> {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<File>(this.addGetFileZipContract + idContract, {headers}).pipe();
+    return this.http.get<File>(this.addGetFileZipContract + idContract, { headers }).pipe();
   }
 
-  getFileContractPromise(idContract: any) : Promise<any> {
+  getFileContractPromise(idContract: any): Promise<any> {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<File>(this.addGetFileContract + idContract, {headers}).toPromise();
+    return this.http.get<File>(this.addGetFileContract + idContract, { headers }).toPromise();
   }
 
   getDetermineCoordination(idCoordination: number) {
@@ -596,27 +596,27 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<File>(this.isDataDetermine + idCoordination, {headers}).pipe();
+    return this.http.get<File>(this.isDataDetermine + idCoordination, { headers }).pipe();
   }
 
-  changeStatusContract(id: any, statusNew:any, reason:any) {
+  changeStatusContract(id: any, statusNew: any, reason: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-      const body = {
-        reason: reason
-      }
-    return this.http.post<Contract>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, {'headers': headers});
+    const body = {
+      reason: reason
+    }
+    return this.http.post<Contract>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, { 'headers': headers });
   }
-  
+
   getChangeNewStatus(id: number, new_status: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-      let body = {};
-    return this.http.put<any>(this.changeStatusHandle + id + '/change-status/' + new_status, body ,{'headers': headers});
+    let body = {};
+    return this.http.put<any>(this.changeStatusHandle + id + '/change-status/' + new_status, body, { 'headers': headers });
   }
 
   coordinationContract(participant_id: any, body: any, recipient_id: any) {
@@ -624,7 +624,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.put<Contract>(this.coordinationSuccess + `${participant_id}/${recipient_id}`, body, {'headers': headers});
+    return this.http.put<Contract>(this.coordinationSuccess + `${participant_id}/${recipient_id}`, body, { 'headers': headers });
   }
 
   considerRejectContract(id: any, reason: string) {
@@ -636,7 +636,7 @@ export class ContractService {
       reason: reason
     };
     console.log(headers);
-    return this.http.put<any>(this.rejectContractUrl + id, body,{'headers': headers});
+    return this.http.put<any>(this.rejectContractUrl + id, body, { 'headers': headers });
   }
 
   updateDigitalSignatured(id: any, base64: string) {
@@ -649,7 +649,7 @@ export class ContractService {
       content: "data:application/pdf," + base64
     };
     console.log(headers);
-    return this.http.put<any>(this.signDigitalMobi + id, body,{'headers': headers}).toPromise();
+    return this.http.put<any>(this.signDigitalMobi + id, body, { 'headers': headers }).toPromise();
   }
 
   updateInfoContractSignature(datas: any) {
@@ -659,7 +659,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = "";
     console.log(headers);
-    return this.http.put<any>(this.updateInfoContractUrl + datas.id, datas, {'headers': headers});
+    return this.http.put<any>(this.updateInfoContractUrl + datas.id, datas, { 'headers': headers });
   }
 
   deleteInfoContractSignature(id: any) {
@@ -668,7 +668,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = "";
-    return this.http.delete<any>(this.updateInfoContractUrl + id, {headers});
+    return this.http.delete<any>(this.updateInfoContractUrl + id, { headers });
   }
 
   updateInfoContractConsider(datas: any, recipient_id: any) {
@@ -676,7 +676,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, {'headers': headers});
+    return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, { 'headers': headers });
 
   }
 
@@ -686,7 +686,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, {'headers': headers}).toPromise();
+    return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, { 'headers': headers }).toPromise();
 
   }
 
@@ -696,7 +696,7 @@ export class ContractService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.post<File>(this.uploadFileUrl + this.currentUser?.organizationId + `/single`, formData, {'headers': headers});
+    return this.http.post<File>(this.uploadFileUrl + this.currentUser?.organizationId + `/single`, formData, { 'headers': headers });
   }
 
   uploadFileImageBase64Signature(formData: any) {
@@ -705,7 +705,7 @@ export class ContractService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.post<any>(this.uploadFileBase64Url + formData?.organizationId + `/base64`, formData, {'headers':headers});
+    return this.http.post<any>(this.uploadFileBase64Url + formData?.organizationId + `/base64`, formData, { 'headers': headers });
   }
 
   getCheckSignatured(id_recipient?: number | string) {
@@ -713,7 +713,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.getCheckSign + id_recipient, {headers});
+    return this.http.get<any>(this.getCheckSign + id_recipient, { headers });
   }
 
 
@@ -724,19 +724,28 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     let arrApi = [];
     arrApi = [
-      this.http.get<any>(this.addGetDataContract + idContract, {headers}),
-      this.http.get<any>(this.addGetFileContract + idContract, {headers}),
-      this.http.get<any>(this.addGetObjectSignature + idContract, {headers}),
+      this.http.get<any>(this.addGetDataContract + idContract, { headers }),
+      this.http.get<any>(this.addGetFileContract + idContract, { headers }),
+      this.http.get<any>(this.addGetObjectSignature + idContract, { headers }),
     ];
     return forkJoin(arrApi);
   }
+
+  getDataObjectSignatureLoadChange(contract_id: number) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.addGetObjectSignature + contract_id, { headers })
+  }
+
 
   getDataCoordination(idContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.addGetDataContract + idContract, {headers});
+    return this.http.get<any>(this.addGetDataContract + idContract, { headers });
     // addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
   }
 
@@ -746,7 +755,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.get<any>(this.addGetDataContract + idContract, {headers});
+    return this.http.get<any>(this.addGetDataContract + idContract, { headers });
   }
 
   getContractCopy(id: any) {
@@ -754,7 +763,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.getCopyContract + id, {headers});
+    return this.http.get<any>(this.getCopyContract + id, { headers });
   }
 
   convertUrltoBinary(res: any) {
@@ -763,16 +772,16 @@ export class ContractService {
     return this.http.get(res, { responseType: 'binary', headers })
   }
 
-  checkCodeUnique(code:any){
+  checkCodeUnique(code: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
-        code: code,
-        organization_id: this.organization_id
-      });
-    return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
+      code: code,
+      organization_id: this.organization_id
+    });
+    return this.http.post<any>(this.checkCodeUniqueUrl, body, { headers }).pipe();
   }
 
   deleteContract(id: any) {
@@ -780,19 +789,19 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.delete<any>(this.deleteContractUrl + id, {'headers': headers});
+    return this.http.delete<any>(this.deleteContractUrl + id, { 'headers': headers });
   }
 
-  getFileContractBatch(idContractTemplate:any){
+  getFileContractBatch(idContractTemplate: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = "";
-    return this.http.post<any>(this.getFileContractBatchUrl + idContractTemplate, body, {headers}).pipe();
+    return this.http.post<any>(this.getFileContractBatchUrl + idContractTemplate, body, { headers }).pipe();
   }
 
-  uploadFileContractBatch(file: any, idContractTemplate:any) {
+  uploadFileContractBatch(file: any, idContractTemplate: any) {
     this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', file);
@@ -800,10 +809,10 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.post<any>(this.uploadFileContractBatchUrl + idContractTemplate + "?organization_id=" + this.organization_id, formData, {'headers':headers});
+    return this.http.post<any>(this.uploadFileContractBatchUrl + idContractTemplate + "?organization_id=" + this.organization_id, formData, { 'headers': headers });
   }
 
-  getContractBatchList(file:any, idContractTemplate:any){
+  getContractBatchList(file: any, idContractTemplate: any) {
     this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', file);
@@ -811,10 +820,10 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.post<any>(this.getContractBatchListUrl + idContractTemplate, formData, {'headers':headers});
+    return this.http.post<any>(this.getContractBatchListUrl + idContractTemplate, formData, { 'headers': headers });
   }
 
-  confirmContractBatchList(file:any, idContractTemplate:any){
+  confirmContractBatchList(file: any, idContractTemplate: any) {
     this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', file);
@@ -822,13 +831,13 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.post<any>(this.confirmContractBatchListUrl + idContractTemplate, formData, {'headers':headers});
+    return this.http.post<any>(this.confirmContractBatchListUrl + idContractTemplate, formData, { 'headers': headers });
   }
 
   viewFlowContract(id: any): Observable<any> {
     this.getCurrentUser();
-    const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<any>(this.viewFlowUrl + id, {headers}).pipe();
+    const headers = { 'Authorization': 'Bearer ' + this.token }
+    return this.http.get<any>(this.viewFlowUrl + id, { headers }).pipe();
   }
 
   deleteParticipantContract(id: any) {

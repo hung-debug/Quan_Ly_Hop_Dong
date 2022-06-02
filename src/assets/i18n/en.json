@@ -355,7 +355,7 @@
   "of_doi_tac_ca_nhan": "của đối tác cá nhân!",
   "doi_tac_ca_nhan_ko_hop_le": " đối tác cá nhân không hợp lệ!",
   "doi_tac_ko_hop_le": " đối tác không hợp lệ!",
-  "note_email_doi_tac": "Note: The dispatcher's email may match the email in the same partner organization!",
+  "note_email_doi_tac": "Note: The dispatcher's email may match the email in the same organization!",
   "email_partern_not_duplicate": "Email đối tác không được trùng nhau!",
   "have_version_app_mobile": "There is a mobile version available.",
   "please_openApp_or_download": "Please visit or download the application to continue using the service.",

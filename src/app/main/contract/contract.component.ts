@@ -294,7 +294,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (this.status != 'complete') {
       this.spinner.show();
       this.contractService.getContractCopy(id).subscribe((res: any) => {
-        console.log(res);
+        // console.log(res);
         this.toastService.showSuccessHTMLWithTimeout(`Sao chép hợp đồng ${res.name} thành công!`, "", 3000)
         this.getContractList();
         

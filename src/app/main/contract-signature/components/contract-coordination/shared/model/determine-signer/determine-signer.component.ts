@@ -130,14 +130,6 @@ export class DetermineSignerComponent implements OnInit {
   //   // console.log(this.datas);
   // }
 
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   // console.log(changes);
-  //   if (this.saveDraftStep) {
-  //     this.getApiDetermine();
-  //   }
-  // }
-
   //dropdown contract type
   get getSignTypeItems() {
     return this.signTypeList.reduce((acc, curr) => {
@@ -147,9 +139,16 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   back(e: any, step?: any) {
-    // if (!this.datas.isView) {
-    this.datas.step = step;
-    // this.nextOrPreviousStep(step);
+    this.spinner.show();
+    this.contractService.getDataObjectSignatureLoadChange(this.datas.data_contract_document_id.contract_id).subscribe((res: any) => {
+      this.datas.is_data_object_signature = res;
+    }, (error: HttpErrorResponse) => {
+      this.spinner.hide();
+      this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000);
+    }, () => {
+      this.spinner.hide();
+      this.datas.step = step;
+    })
   }
 
   getApiDetermine() {
@@ -162,7 +161,11 @@ export class DetermineSignerComponent implements OnInit {
     })
     this.spinner.show();
     this.contractService.getContractDetermine(this.is_determine_clone, this.datas.data_contract_document_id.contract_id).subscribe((res: any) => {
-      this.getDefindObjSign(res);
+      this.datas.determine_contract = res;
+      this.step = variable.stepSampleContract.step3;
+      this.datas.stepLast = this.step;
+      this.nextOrPreviousStep(this.step);
+      // this.getDefindObjSign(res);
     },
       (res: any) => {
         this.spinner.hide();
@@ -174,38 +177,53 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   async getDefindObjSign(data: any) {
-    let isDataParnter = data.filter((p: any) => p.type == 2 || p.type == 3);
-    let isDataSignCheck: any[] = [];
-    isDataParnter.forEach((item: any, index: number) => {
-      // get data change map signature drag
-      if (item.recipients.filter((res: any) => this.datas.is_data_object_signature.some((p: any) => p.recipient_id == res.id)).length > 0) {
-        if ((item.recipients.filter((res: any) => this.datas.is_data_object_signature.some((p: any) => p.recipient_id == res.id &&
-          ((res.name != p.name) || (p.recipient && res.email != p.recipient.email) ||
-            (p.type == 2 && !res.sign_type.some((q: any) => q.id == 1)) || (p.type == 3 && !res.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) || (p.type == 1 && !res.sign_type.some((q: any) => q.id == 2)))))).length > 0) {
-          isDataSignCheck.push(item.recipients[index]);
-          // Lấy những đối tượng ký còn lại khi check dữ liệu thay đổi
-          this.datas.is_data_object_signature = this.datas.is_data_object_signature.filter((element: any) => element.recipient_id != item.recipients[index].id);
-        }
-      }
-    })
+    // let isDataParnter = data.filter((p: any) => p.type == 2 || p.type == 3);
+    // let isDataSignCheck: any[] = [];
+    // isDataParnter.forEach((item: any, index: number) => {
+    //   // get data change map signature drag
+    //   if (!this.datas.contract_user_sign) {
+    //     if (item.recipients.filter((res: any) => this.datas.is_data_object_signature.some((p: any) => p.recipient_id == res.id)).length > 0) {
+    //       if ((item.recipients.filter((res: any) => this.datas.is_data_object_signature.some((p: any) => p.recipient_id == res.id &&
+    //         ((res.name != p.name) || (p.recipient && res.email != p.recipient.email) ||
+    //           (p.type == 2 && !res.sign_type.some((q: any) => q.id == 1)) || (p.type == 3 && !res.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) || (p.type == 1 && !res.sign_type.some((q: any) => q.id == 2)))))).length > 0) {
 
-    console.log(isDataSignCheck, this.datas.is_data_object_signature);
+    //         isDataSignCheck.push(item.recipients[index]);
+    //         // Lấy những đối tượng ký còn lại khi check dữ liệu thay đổi
+
+    //         // this.datas.is_data_object_signature = this.datas.is_data_object_signature.filter((element: any) => element.recipient_id != item.recipients[index].id);
+    //       }
+    //     }
+    //   } else {
+    //     if (item.recipients.filter((res: any) => this.datas.is_data_object_signature.some((p: any) => p.recipient_id == res.id)).length > 0) {
+    //       if ((item.recipients.filter((res: any) => this.datas.is_data_object_signature.some((p: any) => p.recipient_id == res.id &&
+    //         ((res.name != p.name) || (p.recipient && res.email != p.recipient.email) ||
+    //           (p.type == 2 && !res.sign_type.some((q: any) => q.id == 1)) || (p.type == 3 && !res.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) || (p.type == 1 && !res.sign_type.some((q: any) => q.id == 2)))))).length > 0) {
+    //         isDataSignCheck.push(item.recipients[index]);
+    //         // Lấy những đối tượng ký còn lại khi check dữ liệu thay đổi
+
+    //         this.datas.is_data_object_signature = this.datas.is_data_object_signature.filter((element: any) => element.recipient_id != item.recipients[index].id);
+    //       }
+    //     }
+    //   }
+    // })
+    // console.log(isDataSignCheck, this.datas.is_data_object_signature);
 
     // xoa du lieu o ky da thay doi
-    if (isDataSignCheck.length > 0) {
-      for (const d of isDataSignCheck) {
-        if (d.fields && d.fields.length > 0) {
-          await this.contractService.deleteInfoContractSignature(d.fields[0].id).toPromise().then((res: any) => {
-          }, (error: HttpErrorResponse) => {
-            this.toastService.showErrorHTMLWithTimeout('error_delete_object_signature', "", "3000");
-          })
-        }
-      }
-    }
+
+    // if (isDataSignCheck.length > 0) {
+    //   for (const d of isDataSignCheck) {
+    //     if (d.fields && d.fields.length > 0) {
+    //       await this.contractService.deleteInfoContractSignature(d.fields[0].id).toPromise().then((res: any) => {
+    //       }, (error: HttpErrorResponse) => {
+    //         this.toastService.showErrorHTMLWithTimeout('error_delete_object_signature', "", "3000");
+    //       })
+    //     }
+    //   }
+    // }
 
     this.datas.determine_contract = data;
     this.step = variable.stepSampleContract.step3;
-    this.datas.stepLast = this.step
+    this.datas.stepLast = this.step;
     this.nextOrPreviousStep(this.step);
   }
 
