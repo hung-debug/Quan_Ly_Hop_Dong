@@ -35,7 +35,7 @@ export class ConfirmInfoContractComponent implements OnInit {
     'type_unit',
     "is_have_text",
     "id_have_data"
-];
+  ];
 
   constructor(private formBuilder: FormBuilder,
     public datepipe: DatePipe,
@@ -48,11 +48,13 @@ export class ConfirmInfoContractComponent implements OnInit {
 
   data_sample_contract: any = [];
 
-  data_organization:any;
+  data_organization: any;
   is_origanzation_reviewer: any = [];
   is_origanzation_signature: any = [];
   is_origanzation_document: any = [];
   data_parnter_organization: any = [];
+
+  isFileName: string;
 
   getPartnerCoordinationer(item: any) {
     return item.recipients.filter((p: any) => p.role == 1)
@@ -73,8 +75,8 @@ export class ConfirmInfoContractComponent implements OnInit {
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
-
     this.data_parnter_organization = this.datas.determine_contract.filter((p: any) => p.type == 2 || p.type == 3);
+    this.isFileName = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].filename;
   }
 
   back(e: any, step?: any) {
@@ -154,14 +156,14 @@ export class ConfirmInfoContractComponent implements OnInit {
           item['type'] = 4;
           if (this.datas.contract_no) {
             if (!item.name)
-                item.name = "";
+              item.name = "";
 
             if (!item.recipient_id)
-                item.recipient_id = "";
+              item.recipient_id = "";
 
             if (!item.status)
-                item.status = 0;
-        }
+              item.status = 0;
+          }
         } else {
           item['type'] = 1;
         }
@@ -172,7 +174,7 @@ export class ConfirmInfoContractComponent implements OnInit {
       })
       // Array.prototype.push.apply(this.data_sample_contract, dataSignNotId);
       await this.contractService.getContractSample(dataSignNotId).toPromise().then((data) => {
-        this.spinner.hide();
+        // this.spinner.hide();
       }, error => {
         isErrorNotId = true;
         this.spinner.hide();
@@ -203,17 +205,31 @@ export class ConfirmInfoContractComponent implements OnInit {
           break;
         }
       }
-      
-      this.spinner.show();
-      await this.contractService.coordinationContract(participantId, arrCoordination, this.datas.recipient_id_coordition).toPromise().then((data) => {
-        this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
-      },
-        error => {
+
+      if (!isCheckFail) {
+        await this.contractService.getDataObjectSignatureLoadChange(this.datas.data_contract_document_id.contract_id).toPromise().then((res: any) => {
+          this.datas.is_data_object_signature = res;
+        }, (error) => {
           isCheckFail = true;
           this.spinner.hide();
-          return false;
-        }
-      );
+          this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000);
+        })
+      }
+
+      if (!isCheckFail) {
+        await this.contractService.coordinationContract(participantId, arrCoordination, this.datas.recipient_id_coordition).toPromise().then((data) => {
+          this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
+          // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
+          // localStorage.setItem('coordination_complete', JSON.stringify(true));
+          this.spinner.hide();
+        },
+          error => {
+            isCheckFail = true;
+            this.spinner.hide();
+            return false;
+          }
+        );
+      }
 
       if (!isCheckFail) {
         // load data after when coordination success
@@ -221,12 +237,11 @@ export class ConfirmInfoContractComponent implements OnInit {
           if (res) {
             this.datas.is_data_contract = res;
             this.datas.step = variable.stepSampleContract.step_coordination;
-            // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
-            localStorage.setItem('coordination_complete', JSON.stringify(true));
-            this.spinner.hide();
           }
-        }, () => {
+        }, (error) => {
+          isCheckFail = true;
           this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000);
         })
       }
     }

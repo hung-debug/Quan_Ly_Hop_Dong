@@ -446,10 +446,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.datas.determine_contract.forEach((element: any) => {
       element.recipients.forEach((item: any) => {
         let dataChange = [];
+
         dataChange = this.datas.is_data_object_signature.filter((p: any) => p.recipient.id == item.id && 
-        (p.recipient.email != item.email || p.recipient.name != item.name || (p.type == 2 && !item.sign_type.some((q: any) => q.id == 1) || 
+        ((p.recipient.email != item.email || p.recipient.name != item.name || (p.type == 2 && !item.sign_type.some((q: any) => q.id == 1) || 
         (p.type == 3 && !item.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) ||
-        (p.type == 1 && !item.sign_type.some((q: any) => q.id == 2)))));
+        (p.type == 1 && !item.sign_type.some((q: any) => q.id == 2))))));
+
         if (dataChange.length == 0) {
           if (item.fields && item.fields.length && item.fields.length > 0) {
             item.fields.forEach((res: any) => {
@@ -464,7 +466,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 res['sign_unit'] = 'chu_ky_so';
               if (res.type == 4)
                 res['sign_unit'] = 'so_tai_lieu';
-              // res.name = res.recipient.name;
+              res.name = res.recipient.name;
               res.email = res.recipient.email;
               dataPosition.push(res);
             })
