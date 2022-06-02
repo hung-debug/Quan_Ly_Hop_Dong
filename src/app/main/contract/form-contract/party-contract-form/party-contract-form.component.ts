@@ -352,6 +352,11 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             // validate phía đối tác
             for (let j = 0; j < dataArrPartner.length; j++) {
                 let isParterSort = (dataArrPartner[j].recipients).sort((beforeItemParter: any, afterItemParter: any) => beforeItemParter.role - afterItemParter.role);
+                if (isParterSort.length == 0) {
+                    count++;
+                    this.getNotificationValid("Không có người ký đối tác. Vui lòng chọn lại!");
+                    break;
+                  } 
                 for (let k = 0; k < isParterSort.length; k++) {
                     if (dataArrPartner[j].type != 3) {
                         if (!dataArrPartner[j].name) {

@@ -379,14 +379,18 @@ export class SampleContractFormComponent implements OnInit {
     // xoa nhung du lieu doi tuong thay doi khi sua, remove element when change data step 2
 
     if (dataDiffirent.length > 0 && this.router.url.includes('edit')) {
+
       this.datasForm.contract_user_sign.forEach((res: any) => {
         if (res.sign_config.length > 0) {
           /*
           * begin xóa đối tượng ký đã bị thay đổi dữ liệu
           */
           res.sign_config.forEach((element: any) => {
+            
             if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id && p.id_have_data == element.id_have_data)) {
-              this.removeDataSignChange(element.id_have_data);
+              if (dataDetermine.some((p: any) => p.id == element.recipient_id)) {
+                this.removeDataSignChange(element.id_have_data);
+              }
             }
           })
           /*
@@ -515,7 +519,7 @@ export class SampleContractFormComponent implements OnInit {
     // this.spinner.show();
     await this.contractService.deleteInfoContractSignature(data).toPromise().then((res: any) => {
     }, (error: HttpErrorResponse) => {
-      this.toastService.showErrorHTMLWithTimeout('error_delete_object_signature', "", 3000);
+      // this.toastService.showErrorHTMLWithTimeout('error_delete_object_signature', "", 3000);
     })
   }
 

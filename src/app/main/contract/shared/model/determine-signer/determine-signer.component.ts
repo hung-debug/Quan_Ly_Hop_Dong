@@ -303,7 +303,8 @@ export class DetermineSignerComponent implements OnInit {
       for (let j = 0; j < dataArrPartner.length; j++) {
         let isParterSort = (dataArrPartner[j].recipients).sort((beforeItemParter: any, afterItemParter: any) => beforeItemParter.role - afterItemParter.role);
         if (isParterSort.length == 0) {
-          this.getNotificationValid("Không có người ký đối tác!");
+          count++;
+          this.getNotificationValid("Không có người ký đối tác. Vui lòng chọn lại!");
           break;
         } 
         for (let k = 0; k < isParterSort.length; k++) {
