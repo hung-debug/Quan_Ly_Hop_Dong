@@ -33,8 +33,13 @@ export class DeleteContractTemplateDialogComponent implements OnInit {
           this.router.navigate(['/main/contract-template']);
         });  
       }else{
-        this.toastService.showErrorHTMLWithTimeout("Xóa mẫu hợp đồng thất bại!", "", 3000);
-        this.dialogRef.close();
+        if(data.message == "E02"){
+          this.toastService.showErrorHTMLWithTimeout("Không thể xóa mẫu hợp đồng đã được sử dụng!", "", 3000);
+          this.dialogRef.close();
+        }else{
+          this.toastService.showErrorHTMLWithTimeout("Xóa mẫu hợp đồng thất bại!", "", 3000);
+          this.dialogRef.close();
+        }
       }
     },
     error => {

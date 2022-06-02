@@ -318,7 +318,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         }, (error: HttpErrorResponse) => {
           countSuccess++
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Thay thế file hợp đồng thất bại", "", 3000);
           // return;
         })
       }
