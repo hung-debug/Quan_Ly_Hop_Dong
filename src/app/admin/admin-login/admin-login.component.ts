@@ -55,6 +55,8 @@ export class AdminLoginComponent implements OnInit {
             this.error = false;
             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
               this.router.navigate(['/admin-main/unit']);
+
+              console.log("current admin login "+JSON.parse(localStorage.getItem('currentAdmin') || '').access_token);
             });
           } else {
             this.error = true;

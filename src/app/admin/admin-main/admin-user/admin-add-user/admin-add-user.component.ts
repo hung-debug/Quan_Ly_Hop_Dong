@@ -190,11 +190,18 @@ export class AdminAddUserComponent implements OnInit {
     console.log(data);
 
     this.selectedRoleConvert = [];
+
+    console.log("data role ");
+    console.log(data.role)
+
     data.role.forEach((key: any, v: any) => {
-      console.log(key);
-      let jsonData = { code: key };
+      console.log("value "+v);
+      let jsonData = { code: key};
       this.selectedRoleConvert.push(jsonData);
     });
+
+    console.log("this selected role convert "+this.selectedRoleConvert);
+
     data.role = this.selectedRoleConvert;
 
     this.adminUserService.addUser(data).subscribe(
@@ -219,6 +226,8 @@ export class AdminAddUserComponent implements OnInit {
         }
       },
       (error) => {
+        console.log("error ");
+        console.log(error);
         this.toastService.showErrorHTMLWithTimeout(
           'Thêm mới thất bại',
           '',

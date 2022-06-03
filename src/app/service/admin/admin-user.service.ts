@@ -20,7 +20,7 @@ export class AdminUserService {
 
   token:any;
   getCurrentUser(){
-    this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').access_token;
+    this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').token;
   }
 
   getUserList(name: any, email: any, phone:any): Observable<any> {
@@ -104,8 +104,7 @@ export class AdminUserService {
       permissions: datas.role
     });
 
-    console.log(headers);   
-    console.log("body add user "+body);
+  
     return this.http.post<any>(this.addUserUrl, body, {'headers': headers});
   }
 
