@@ -20,7 +20,7 @@ export class AdminUserService {
 
   token:any;
   getCurrentUser(){
-    this.token = JSON.parse(localStorage.getItem('currentAdmin') || '')._token;
+    this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').token;
   }
 
   getUserList(name: any, email: any, phone:any): Observable<any> {

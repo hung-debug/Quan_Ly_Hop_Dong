@@ -19,7 +19,7 @@ export class AdminPackService {
 
   token:any;
   getCurrentUser(){
-    this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').access_token;
+    this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').token;
   }
 
   getPackList(name:any, code:any, price:any, time:any, status:any, number_contract:any){
