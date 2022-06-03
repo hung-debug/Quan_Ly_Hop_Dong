@@ -47,7 +47,7 @@
         </div>
         <div class="col-md-4">
           <div class="label text-color">{{'organization' | translate}} <span class="required-title">*</span></div>
-          <div *ngIf="id == null">
+          <div *ngIf="!id || (id && isEditRole)">
             <p-dropdown
               panelStyleClass="font"
               [options]="orgList" 
@@ -55,12 +55,14 @@
               optionLabel="name" 
               optionValue="id" 
               placeholder="Chọn tổ chức" 
-              [filter]="true" 
+              [filter]="true"   
               filterBy="name" 
               [showClear]="true"
+              (onChange)="getRoleByOrg(organizationId.value)"
+              #organizationId
               ></p-dropdown>
           </div>
-          <div *ngIf="id != null" class="input-data hidden-color">
+          <div *ngIf="id && !isEditRole" class="input-data hidden-color">
             <div class="hidden-color">{{organizationName}}</div>
           </div>
             <div *ngIf="submitted && f.organizationId.errors" class="invalid">

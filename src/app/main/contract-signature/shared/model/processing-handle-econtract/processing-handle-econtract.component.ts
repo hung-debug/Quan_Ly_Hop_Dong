@@ -54,7 +54,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           name_company: element.participantName,
           emailRecipients: element.email,
           status: this.checkStatusUser(element.status, element.role),
-          process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").add(7, 'hours').format("YYYY/MM/DD HH:mm:ss") : null
+          process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null
         }
         this.is_list_name.push(data);
       })
