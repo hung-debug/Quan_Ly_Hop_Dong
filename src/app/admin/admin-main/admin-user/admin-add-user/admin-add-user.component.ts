@@ -211,7 +211,7 @@ export class AdminAddUserComponent implements OnInit {
               this.router.navigate(['admin-main/user']);
             });
         } else {
-          this.toastService.showSuccessHTMLWithTimeout(
+          this.toastService.showErrorHTMLWithTimeout(
             data.errors[0].message,
             '',
             3000

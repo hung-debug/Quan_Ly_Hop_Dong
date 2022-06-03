@@ -13,7 +13,7 @@ export class AdminUserService {
   updateUserUrl: any = `${environment.apiUrl}`;
   checkPhoneUrl:any = `${environment.apiUrl}`;
   getUserByEmailUrl:any = `${environment.apiUrl}`;
-  addUserUrl:any = `${environment.apiUrl}/api/v1/ad-user/`;
+  addUserUrl:any = `${environment.apiUrl}/api/v1/admin/user/`;
   deleteUserUrl:any = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient,) { }
@@ -101,8 +101,8 @@ export class AdminUserService {
     const body = JSON.stringify({
       email: datas.email,
       phone: datas.phone,
-      fullName: datas.name,
-      adPermissions: datas.role
+      name: datas.name,
+      permissions: datas.role
     });
 
     console.log(headers);   
