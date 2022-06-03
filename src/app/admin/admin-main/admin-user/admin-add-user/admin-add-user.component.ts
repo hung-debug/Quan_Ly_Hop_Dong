@@ -195,7 +195,6 @@ export class AdminAddUserComponent implements OnInit {
     console.log(data.role)
 
     data.role.forEach((key: any, v: any) => {
-      console.log("value "+v);
       let jsonData = { code: key};
       this.selectedRoleConvert.push(jsonData);
     });

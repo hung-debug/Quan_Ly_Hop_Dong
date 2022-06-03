@@ -379,8 +379,6 @@ export var adminRoleList = [
       { label: "Tìm kiếm người dùng", value: "QLND_03"},
       //Xem thông tin chi tiết người dùng
       { label: "Xem thông tin chi tiết người dùng", value: "QLND_04"},
-      //Xóa người dùng
-      { label: "Xóa người dùng", value: "QLND_05"},
     ]
   },
   {

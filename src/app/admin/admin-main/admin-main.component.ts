@@ -79,7 +79,7 @@ export class AdminMainComponent implements OnInit {
   logout() {
     localStorage.clear();
     sessionStorage.clear();
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentAdmin');
     localStorage.removeItem('url');
     this.router.navigate(['/admin/login']);
   }
@@ -171,9 +171,9 @@ export class AdminMainComponent implements OnInit {
   }
 
   infoUserDetail() {
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(['/main/user-infor']);
-    });
+    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+    //   // this.router.navigate(['/main/user-infor']);
+    // });
     //this.router.navigate(['/main/user-infor']);
   }
 
