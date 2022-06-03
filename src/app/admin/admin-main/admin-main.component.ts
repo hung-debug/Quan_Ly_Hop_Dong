@@ -62,10 +62,8 @@ export class AdminMainComponent implements OnInit {
     // } else this.isRouterContractNew = true;
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
 
-    this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
-      data => {
-        this.nameCurrentUser = data.name;
-      });
+    this.nameCurrentUser = JSON.parse(localStorage.getItem('currentAdmin') || '').user.name;
+
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;
     });

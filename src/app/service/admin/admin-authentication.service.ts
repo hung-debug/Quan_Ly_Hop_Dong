@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 })
 export class AdminAuthenticationService {
 
-  loginUrl:any = `${environment.apiUrl}/api/v1/auth`;
+  loginUrl:any = `${environment.apiUrl}/api/v1/auth/admin`;
   errorData:any = {};
   redirectUrl: string = '';
 
@@ -24,11 +24,11 @@ export class AdminAuthenticationService {
     return this.http.post<any>(this.loginUrl, body, {'headers':headers})
       .pipe(
         map((user) => {
-          if (JSON.parse(JSON.stringify(user)) != null) {
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            
+          if (JSON.parse(JSON.stringify(user)) != null) {            
             //luu thong tin admin
-            // localStorage.setItem('currentAdmin', JSON.stringify(user))
+            localStorage.setItem('currentAdmin', JSON.stringify(user));
+
+            console.log("user "+user);
 
             return user;
           }else{
@@ -41,7 +41,7 @@ export class AdminAuthenticationService {
   }
 
   isLoggedInSuccess() {
-    if (localStorage.getItem('currentUser') != null) {
+    if (localStorage.getItem('currentAdmin') != null) {
       return true;
     }
     return false;
@@ -66,9 +66,9 @@ export class AdminAuthenticationService {
   private loginError(error: HttpErrorResponse) {
     console.log(error);
     if (JSON.parse(JSON.stringify(error)).status == 400 && JSON.parse(JSON.stringify(error)).access_token == null) {
-      localStorage.setItem('checkUser', "error");
+      localStorage.setItem('checkAdmin', "error");
     }else{
-      localStorage.setItem('checkUser', "");
+      localStorage.setItem('checkAdmin', "");
     }
     return throwError(this.errorData);
   }
