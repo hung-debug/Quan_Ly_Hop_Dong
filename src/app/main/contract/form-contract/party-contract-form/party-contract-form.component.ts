@@ -13,6 +13,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "src/app/service/toast.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpErrorResponse } from "@angular/common/http";
+import * as _ from 'lodash';
 
 
 @Component({
@@ -352,11 +353,11 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             // validate phía đối tác
             for (let j = 0; j < dataArrPartner.length; j++) {
                 let isParterSort = (dataArrPartner[j].recipients).sort((beforeItemParter: any, afterItemParter: any) => beforeItemParter.role - afterItemParter.role);
-                if (isParterSort.length == 0) {
-                    count++;
-                    this.getNotificationValid("Không có người ký đối tác. Vui lòng chọn lại!");
-                    break;
-                  } 
+                // if (isParterSort.length == 0) {
+                //     count++;
+                //     this.getNotificationValid("Không có người ký đối tác. Vui lòng chọn lại!");
+                //     break;
+                // }
                 for (let k = 0; k < isParterSort.length; k++) {
                     if (dataArrPartner[j].type != 3) {
                         if (!dataArrPartner[j].name) {
@@ -802,6 +803,18 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         })
         new_arr = arr_clone_different.concat(array_empty);
         item.recipients = new_arr;
+        if (!item.recipients.some((p: any) => p.role == 3)) {
+            item.recipients.push({
+              name: "",
+              email: "",
+              phone: "",
+              role: 3, // người ký
+              ordering: 1,
+              status: 0,
+              is_otp: 0,
+              sign_type: []
+            })
+          }
     }
 
     // xóa đối tượng người xem xét đối tác
@@ -882,17 +895,17 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }
 
     // xóa đối tham gia bên đối tác
-    deletePartner(index: any, item:any) {
+    deletePartner(index: any, item: any) {
         //xoa doi tuong tham gia
-        if(item.id){
+        if (item.id) {
             this.contractService.deleteParticipantContract(item.id).subscribe((res: any) => {
-            if(res.success==true){
-                this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
-            }else{
-                this.toastService.showErrorHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");
-            }
+                if (res.success == true) {
+                    this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
+                } else {
+                    this.toastService.showErrorHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");
+                }
             }, (error: HttpErrorResponse) => {
-            this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+                this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
             })
         }
 
@@ -913,37 +926,28 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     changeType(e: any, item: any, index: number) {
         item.name = "";
         let newArr: any[] = [];
+
         for (let i = 0; i < item.recipients.length; i++) {
             if (!newArr.some((p: any) => p.role == item.recipients[i].role)) {
                 newArr.push(item.recipients[i]);
             }
         }
         if (newArr.length) {
-            newArr.forEach((item: any) => {
-                if (item.role == 3) {
-                    item.name = "";
-                    item.email = "";
-                    item.phone = "";
-                    item.role = 3; // người ký
-                    item.ordering = 1;
-                    item.status = 0;
-                    item.is_otp = 0;
-                    item.sign_type = [];
-                    if (item.id) delete item.id;
+            newArr.forEach((element: any) => {
+                if (element.role == 3 || item.type == 3) {
+                    element.name = "";
+                    element.email = "";
+                    element.phone = "";
+                    element.role = 3; // người ký
+                    element.ordering = 1;
+                    element.status = 0;
+                    element.is_otp = 0;
+                    element.sign_type = [];
+                    if (element.id) delete element.id;
                 }
             })
         }
         this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
-
-        // if (item.type == 3) {
-        // this.data_organization.ordering = 2;
-        // item.ordering = 1;
-        // this.is_change_party = true;
-        // } else {
-        // this.data_organization.ordering = 1;
-        // item.ordering = 2;
-        // this.is_change_party = false;
-        // }
     }
 
     // style select otp and phone with signature

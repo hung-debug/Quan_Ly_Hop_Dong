@@ -302,11 +302,11 @@ export class DetermineSignerComponent implements OnInit {
       // validate phía đối tác
       for (let j = 0; j < dataArrPartner.length; j++) {
         let isParterSort = (dataArrPartner[j].recipients).sort((beforeItemParter: any, afterItemParter: any) => beforeItemParter.role - afterItemParter.role);
-        if (isParterSort.length == 0) {
-          count++;
-          this.getNotificationValid("Vui lòng nhập người ký đối tác!");
-          break;
-        } 
+        // if (isParterSort.length == 0) {
+        //   count++;
+        //   this.getNotificationValid("Vui lòng nhập người ký");
+        //   break;
+        // }
         for (let k = 0; k < isParterSort.length; k++) {
           if (dataArrPartner[j].type != 3) {
             if (!dataArrPartner[j].name) {
@@ -485,7 +485,7 @@ export class DetermineSignerComponent implements OnInit {
 
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckEmail.length; ++k) {
-      var value:any = arrCheckEmail[k];
+      var value: any = arrCheckEmail[k];
       if (value in valueSoFar) {
         return true;
       }
@@ -753,6 +753,18 @@ export class DetermineSignerComponent implements OnInit {
     })
     new_arr = arr_clone_different.concat(array_empty);
     item.recipients = new_arr;
+    if (!item.recipients.some((p: any) => p.role == 3)) {
+      item.recipients.push({
+        name: "",
+        email: "",
+        phone: "",
+        role: 3, // người ký
+        ordering: 1,
+        status: 0,
+        is_otp: 0,
+        sign_type: []
+      })
+    }
   }
 
   // xóa đối tượng người xem xét đối tác
@@ -833,14 +845,14 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   // xóa đối tham gia bên đối tác
-  deletePartner(index: any, item:any) {
+  deletePartner(index: any, item: any) {
 
     //xoa doi tuong tham gia
-    if(item.id){
+    if (item.id) {
       this.contractService.deleteParticipantContract(item.id).subscribe((res: any) => {
-        if(res.success==true){
+        if (res.success == true) {
           this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
-        }else{
+        } else {
           this.toastService.showErrorHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");
         }
       }, (error: HttpErrorResponse) => {
@@ -872,17 +884,17 @@ export class DetermineSignerComponent implements OnInit {
       }
     }
     if (newArr.length) {
-      newArr.forEach((item: any) => {
-        if (item.role == 3) {
-          item.name = "";
-          item.email = "";
-          item.phone = "";
-          item.role = 3; // người ký
-          item.ordering = 1;
-          item.status = 0;
-          item.is_otp = 0;
-          item.sign_type = [];
-          if (item.id) delete item.id;
+      newArr.forEach((element: any) => {
+        if (element.role == 3 || item.type == 3) {
+          element.name = "";
+          element.email = "";
+          element.phone = "";
+          element.role = 3; // người ký
+          element.ordering = 1;
+          element.status = 0;
+          element.is_otp = 0;
+          element.sign_type = [];
+          if (element.id) delete element.id;
         }
       })
     }

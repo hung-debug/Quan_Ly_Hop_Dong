@@ -280,7 +280,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           id: element.id,
           sign_type: element.sign_type,
           name: element.name,
-          email: element.email
+          email: element.email,
+          role: element.role
         }
         dataDetermine.push(isObj);
       })
@@ -299,7 +300,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // Lọc dữ liệu không bị thay đổi
     // (val.recipient_id as any) == (data.id as any) &&
     dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
-      (((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
+      (((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) || (val.sign_unit == 'so_tai_lieu' && data.role == 4) ||
         (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
         (val.name == data.name) && (val.email == data.email)) || !val.email
     ));
@@ -309,7 +310,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataDiffirent: any[] = [];
     if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
       dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
-        (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
+        (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1)) || (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) || (val.sign_unit == 'so_tai_lieu' && data.role == 4) ||
         (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4))) ||
         val.name == data.name || val.email == data.email || !val.email));
     }
