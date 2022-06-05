@@ -83,6 +83,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   isChangeText: boolean = false;
 
   dataSignPosition: any;
+  emailUser_sample: string;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -94,6 +95,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
+    this.emailUser_sample = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
     if (!this.datas.contract_user_sign) {
       this.getDataSignUpdateAction();
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
@@ -444,42 +446,43 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
     this.datas.determine_contract.forEach((element: any) => {
-      element.recipients.forEach((item: any) => {
-        let dataChange = [];
-
-        dataChange = this.datas.is_data_object_signature.filter((p: any) => p.recipient.id == item.id && 
-        ((p.recipient.email != item.email || p.recipient.name != item.name || (p.type == 2 && !item.sign_type.some((q: any) => q.id == 1) || 
-        (p.type == 3 && !item.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) ||
-        (p.type == 1 && !item.sign_type.some((q: any) => q.id == 2))))));
-
-        if (dataChange.length == 0) {
-          if (item.fields && item.fields.length && item.fields.length > 0) {
-            item.fields.forEach((res: any) => {
-              res['id_have_data'] = res.id;
-              res['is_type_party'] = element.type;
-              res['role'] = res.recipient.role;
-              if (res.type == 1)
-                res['sign_unit'] = 'text';
-              if (res.type == 2)
-                res['sign_unit'] = 'chu_ky_anh';
-              if (res.type == 3)
-                res['sign_unit'] = 'chu_ky_so';
-              if (res.type == 4)
-                res['sign_unit'] = 'so_tai_lieu';
-              res.name = res.recipient.name;
-              res.email = res.recipient.email;
-              dataPosition.push(res);
-            })
+      if (element.recipients.some((q: any) => q.status == 1 && q.email == this.emailUser_sample)) {
+        element.recipients.forEach((item: any) => {
+          let dataChange = [];
+          dataChange = this.datas.is_data_object_signature.filter((p: any) => p.recipient.id == item.id && 
+          ((p.recipient.email != item.email || p.recipient.name != item.name || (p.type == 2 && !item.sign_type.some((q: any) => q.id == 1) || 
+          (p.type == 3 && !item.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) ||
+          (p.type == 1 && !item.sign_type.some((q: any) => q.id == 2))))));
+  
+          if (dataChange.length == 0) {
+            if (item.fields && item.fields.length && item.fields.length > 0) {
+              item.fields.forEach((res: any) => {
+                res['id_have_data'] = res.id;
+                res['is_type_party'] = element.type;
+                res['role'] = res.recipient.role;
+                if (res.type == 1)
+                  res['sign_unit'] = 'text';
+                if (res.type == 2)
+                  res['sign_unit'] = 'chu_ky_anh';
+                if (res.type == 3)
+                  res['sign_unit'] = 'chu_ky_so';
+                if (res.type == 4)
+                  res['sign_unit'] = 'so_tai_lieu';
+                res.name = res.recipient.name;
+                res.email = res.recipient.email;
+                dataPosition.push(res);
+              })
+            } else {
+              // item['is_type_party'] = this.datas.determine_contract.type;
+              item['is_type_party'] = element.type;
+              item['role'] = item.role;
+              dataNotPosition.push(item)
+            }
           } else {
-            // item['is_type_party'] = this.datas.determine_contract.type;
-            item['is_type_party'] = element.type;
-            item['role'] = item.role;
-            dataNotPosition.push(item)
+            this.removeDataSignChange(dataChange[0].id).then();
           }
-        } else {
-          this.removeDataSignChange(dataChange[0].id).then();
-        }
-      })
+        })
+      }
     })
 
     // dataPosition = dataPosition.filter()
@@ -560,27 +563,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   getListNameSign(data_user_sign: any) {
     let isUserSign = data_user_sign.filter((p: any) => p.type != 1);
-    // if (isUserSign.type == 1) {
-    //   data_user_sign.forEach((item: any) => {
-    //     item.recipients.forEach((element: any) => {
-    //       if (element.role == 3 || element.role == 4 || element.role == 2) {
-    //         element['type_unit'] = 'organization';
-    //         element['selected'] = false;
-    //         element['is_disable'] = false;
-    //         this.list_sign_name.push(element);
-    //       }
-    //     })
-    //   })
-    // } 
-    // else if (isUserSign.type == 2 || isUserSign.type == 3) {
     for (const d of isUserSign) {
-      for (const item of d.recipients) {
-        if (item.role == 3 || item.role == 4 || item.role == 2) {
-          item['type_unit'] = 'partner'
-          item['selected'] = false;
-          item['is_disable'] = false;
-          item['type'] = d.type;
-          this.list_sign_name.push(item);
+      if (d.recipients.some((p: any) => p.status == 1 && p.email == this.emailUser_sample)) {
+        for (const item of d.recipients) {
+          if (item.role == 3 || item.role == 4 || item.role == 2) {
+            item['type_unit'] = 'partner'
+            item['selected'] = false;
+            item['is_disable'] = false;
+            item['type'] = d.type;
+            this.list_sign_name.push(item);
+          }
         }
       }
     }
