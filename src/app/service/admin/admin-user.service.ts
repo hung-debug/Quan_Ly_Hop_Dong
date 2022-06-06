@@ -12,7 +12,7 @@ export class AdminUserService {
 
   getUserByIdUrl: any = `${environment.apiUrl}/api/v1/admin/user/`;
 
-  updateUserUrl: any = `${environment.apiUrl}`;
+  updateUserUrl: any = `${environment.apiUrl}/api/v1/admin/user/`;
   checkPhoneUrl:any = `${environment.apiUrl}`;
   getUserByEmailUrl:any = `${environment.apiUrl}`;
   addUserUrl:any = `${environment.apiUrl}/api/v1/admin/user/`;
@@ -53,19 +53,15 @@ export class AdminUserService {
       name: datas.name,
       email: datas.email,
       phone: datas.phone,
-      organization_id: datas.organizationId,
-      birthday: datas.birthday,
-      status: datas.status,
-      role_id: datas.role,
 
-      sign_image: datas.sign_image,
-
-      phone_sign: datas.phoneKpi,
-      phone_tel: datas.networkKpi,
-
-      hsm_name: datas.nameHsm
+      permissions: datas.role
+    
     });console.log(headers);
+    
     console.log(body);
+
+    console.log("id ");
+    console.log(datas);
     return this.http.put<any>(this.updateUserUrl + datas.id, body, {'headers': headers});
   }
 

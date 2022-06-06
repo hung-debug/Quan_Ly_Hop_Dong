@@ -47,6 +47,10 @@ export class AdminAddUserComponent implements OnInit {
   isQLND_01: boolean = true; //them moi nguoi dung
   isQLND_02: boolean = true; //sua nguoi dung
 
+  //0 -> add
+  //1 -> update
+  flagAddUpdate: number = -1;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private appService: AppService,
@@ -72,15 +76,24 @@ export class AdminAddUserComponent implements OnInit {
     });
   }
 
+  checkClick() {
+    console.log("flag "+this.flagAddUpdate);
+
+    if(this.flagAddUpdate === 0) {
+      this.onSubmit();
+    } else if(this.flagAddUpdate === 1) {
+      this.update();
+    }
+  }
+
   getDataOnInit() {
-
-    console.log("id "+this.data.id);
-
     this.sub = this.route.params.subscribe((params) => {
       this.action = params['action'];
 
       //set title
       if (!this.data.id) {
+        this.flagAddUpdate = 0;
+
         this.appService.setTitle('user.add');
         this.isEditRole = true;
         if (this.isQLND_01) {
@@ -101,18 +114,14 @@ export class AdminAddUserComponent implements OnInit {
           });
         }
       } else {
-
+        this.flagAddUpdate = 1;
         this.addForm.controls.email.disable();
 
         this.id = this.data.id;
         this.appService.setTitle('user.update');
 
-
-      
-
         this.adminUserService.getUserById(this.id).subscribe(
           (data) => {
-
             this.addForm = this.fbd.group({
               name: this.fbd.control(data.name, [
                 Validators.required,
@@ -130,9 +139,11 @@ export class AdminAddUserComponent implements OnInit {
               organizationId: this.fbd.control(data.organization_id, [
                 Validators.required,
               ]),
-              
-              role: this.fbd.control(this.convertRoleArr(data.permissions), [Validators.required]),
-              
+
+              role: this.fbd.control(this.convertRoleArr(data.permissions), [
+                Validators.required,
+              ]),
+
               password: this.fbd.control(data.password, [Validators.required]),
               status: data.status,
             });
@@ -150,13 +161,13 @@ export class AdminAddUserComponent implements OnInit {
     });
   }
 
-  convertRoleArr(roleArr:[]){
+  convertRoleArr(roleArr: []) {
     let roleArrConvert: any = [];
     roleArr.forEach((key: any, v: any) => {
       roleArrConvert.push(key.code);
     });
 
-    console.log("role arr convert");
+    console.log('role arr convert');
     console.log(roleArrConvert);
 
     return roleArrConvert;
@@ -173,19 +184,51 @@ export class AdminAddUserComponent implements OnInit {
     });
   }
 
-  update(data: any) {
-    this.adminUserService.updateUser(data).subscribe(
+  update() {
+    const dataUpdate = {
+      id: this.data.id,
+      name: this.addForm.value.name,
+      email: this.addForm.value.email,
+      phone: this.addForm.value.phone,
+      role: this.addForm.value.role,
+    };
+
+    console.log('data update phone ');
+    console.log(dataUpdate.phone);
+
+    var selectedRoleConvert: any[] = [];
+
+    dataUpdate.role.forEach((key: any) => {
+      let jsonData = { code: key };
+      selectedRoleConvert.push(jsonData);
+    });
+
+    dataUpdate.role = selectedRoleConvert;
+
+    this.adminUserService.updateUser(dataUpdate).subscribe(
       (data) => {
-        this.toastService.showSuccessHTMLWithTimeout(
-          'Cập nhật thành công!',
-          '',
-          3000
-        );
-        this.router
-          .navigateByUrl('/', { skipLocationChange: true })
-          .then(() => {
-            this.router.navigate(['/main/user']);
-          });
+
+        console.log("data");
+        console.log(data.id);
+
+        if (data.id != undefined) {
+          this.toastService.showSuccessHTMLWithTimeout(
+            'Cập nhật thành công!',
+            '',
+            3000
+          );
+          this.router
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate(['admin-main/user']);
+            });
+        } else {
+          this.toastService.showErrorHTMLWithTimeout(
+            data.errors[0].message,
+            '',
+            3000
+          );
+        }
       },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout(
@@ -214,15 +257,15 @@ export class AdminAddUserComponent implements OnInit {
 
     this.selectedRoleConvert = [];
 
-    console.log("data role ");
-    console.log(data.role)
+    console.log('data role ');
+    console.log(data.role);
 
     data.role.forEach((key: any, v: any) => {
-      let jsonData = { code: key};
+      let jsonData = { code: key };
       this.selectedRoleConvert.push(jsonData);
     });
 
-    console.log("this selected role convert "+this.selectedRoleConvert);
+    console.log('this selected role convert ' + this.selectedRoleConvert);
 
     data.role = this.selectedRoleConvert;
 
@@ -248,7 +291,7 @@ export class AdminAddUserComponent implements OnInit {
         }
       },
       (error) => {
-        console.log("error ");
+        console.log('error ');
         console.log(error);
         this.toastService.showErrorHTMLWithTimeout(
           'Thêm mới thất bại',
