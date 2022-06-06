@@ -76,10 +76,6 @@ export class AdminAddUserComponent implements OnInit {
 
     console.log("id "+this.data.id);
 
-    if(this.data.id != null) {
-      this.addForm.controls.email.disable();
-    }
-
     this.sub = this.route.params.subscribe((params) => {
       this.action = params['action'];
 
@@ -105,12 +101,18 @@ export class AdminAddUserComponent implements OnInit {
           });
         }
       } else {
+
+        this.addForm.controls.email.disable();
+
         this.id = this.data.id;
         this.appService.setTitle('user.update');
 
+
+      
+
         this.adminUserService.getUserById(this.id).subscribe(
           (data) => {
-            console.log(data);
+
             this.addForm = this.fbd.group({
               name: this.fbd.control(data.name, [
                 Validators.required,
@@ -128,7 +130,9 @@ export class AdminAddUserComponent implements OnInit {
               organizationId: this.fbd.control(data.organization_id, [
                 Validators.required,
               ]),
-              role: this.fbd.control(data.role_id, [Validators.required]),
+              
+              role: this.fbd.control(this.convertRoleArr(data.permissions), [Validators.required]),
+              
               password: this.fbd.control(data.password, [Validators.required]),
               status: data.status,
             });
@@ -144,6 +148,18 @@ export class AdminAddUserComponent implements OnInit {
         );
       }
     });
+  }
+
+  convertRoleArr(roleArr:[]){
+    let roleArrConvert: any = [];
+    roleArr.forEach((key: any, v: any) => {
+      roleArrConvert.push(key.code);
+    });
+
+    console.log("role arr convert");
+    console.log(roleArrConvert);
+
+    return roleArrConvert;
   }
 
   ngOnInit(): void {
