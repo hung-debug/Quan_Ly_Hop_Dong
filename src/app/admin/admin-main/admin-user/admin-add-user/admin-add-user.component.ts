@@ -77,11 +77,11 @@ export class AdminAddUserComponent implements OnInit {
   }
 
   checkClick() {
-    console.log("flag "+this.flagAddUpdate);
+    console.log('flag ' + this.flagAddUpdate);
 
-    if(this.flagAddUpdate === 0) {
+    if (this.flagAddUpdate === 0) {
       this.onSubmit();
-    } else if(this.flagAddUpdate === 1) {
+    } else if (this.flagAddUpdate === 1) {
       this.update();
     }
   }
@@ -207,8 +207,7 @@ export class AdminAddUserComponent implements OnInit {
 
     this.adminUserService.updateUser(dataUpdate).subscribe(
       (data) => {
-
-        console.log("data");
+        console.log('data');
         console.log(data.id);
 
         if (data.id != undefined) {
@@ -222,6 +221,8 @@ export class AdminAddUserComponent implements OnInit {
             .then(() => {
               this.router.navigate(['admin-main/user']);
             });
+
+          this.dialog.closeAll();
         } else {
           this.toastService.showErrorHTMLWithTimeout(
             data.errors[0].message,
@@ -282,6 +283,8 @@ export class AdminAddUserComponent implements OnInit {
             .then(() => {
               this.router.navigate(['admin-main/user']);
             });
+
+          this.dialog.closeAll();
         } else {
           this.toastService.showErrorHTMLWithTimeout(
             data.errors[0].message,
