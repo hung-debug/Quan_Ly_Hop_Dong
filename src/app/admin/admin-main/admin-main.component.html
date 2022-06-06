@@ -7,7 +7,7 @@
         </div>  
         <div *ngIf="getShowHideSideBar()">
           <div ngbDropdown class="d-inline-block">
-            <div class="social-icons" ngbDropdownToggle (click)="loadDataNotification()">
+            <div *ngIf = "qltb === false" class="social-icons" ngbDropdownToggle (click)="loadDataNotification()">
               <i *ngIf="numberNotification == 0" class="pi pi-bell p-mr-4 p-text-secondary"></i>
               <i *ngIf="numberNotification > 0" class="pi pi-bell p-mr-4 p-text-secondary" pBadge value="{{numberNotification}}"></i>
               <div class="label">{{'notification' | translate }}</div>

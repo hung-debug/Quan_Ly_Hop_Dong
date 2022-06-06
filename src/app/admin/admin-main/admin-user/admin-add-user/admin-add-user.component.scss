@@ -28,7 +28,12 @@
     > div{
         padding: 5px 15px;
     }
-}  
+}
+
+input:read-only ,.fff {
+    background-color: #F2F2F2
+}
+
 .cancel-button{
     border: 0px;
     border-radius: 5px;

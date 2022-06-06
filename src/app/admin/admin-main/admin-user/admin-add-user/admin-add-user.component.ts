@@ -73,6 +73,13 @@ export class AdminAddUserComponent implements OnInit {
   }
 
   getDataOnInit() {
+
+    console.log("id "+this.data.id);
+
+    if(this.data.id != null) {
+      this.addForm.controls.email.disable();
+    }
+
     this.sub = this.route.params.subscribe((params) => {
       this.action = params['action'];
 

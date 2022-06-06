@@ -31,6 +31,8 @@ export class AdminMainComponent implements OnInit {
   urlLoginType: any;
   nameCurrentUser:any;
   listNotification: any[] = [];
+  selectedRoleConvert: any[];
+  qltb: boolean = false;
 
   constructor(private router: Router,
               private modalService: NgbModal,
@@ -49,6 +51,25 @@ export class AdminMainComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    // const permissions =  JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
+
+    // this.selectedRoleConvert = [];
+
+    // permissions.forEach((key: any) => {
+    //   let jsonData = { code: key.code, name: key.name};
+    //   this.selectedRoleConvert.push(jsonData);
+    // });
+
+    // for(let i = 0; i < this.selectedRoleConvert.length; i++) {
+    //   let role = this.selectedRoleConvert[i].code;
+
+    //   if(role.includes("QLTB") && this.qltb === false) {
+    //     this.qltb = true;
+    //     break;
+    //   }
+    // }
+
 
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('urlLoginType')));
@@ -77,9 +98,11 @@ export class AdminMainComponent implements OnInit {
 
   //click logout
   logout() {
+    localStorage.removeItem('currentAdmin');
+    localStorage.removeItem('');
+
     localStorage.clear();
     sessionStorage.clear();
-    localStorage.removeItem('currentAdmin');
     localStorage.removeItem('url');
     this.router.navigate(['/admin/login']);
   }

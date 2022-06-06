@@ -20,22 +20,11 @@
                     </div>
                 </div>
 
-                <div class="row" style="padding-top: 10px;" *ngIf="this.data.id">
-                    <div class="col-md-12">
-                        <div class="label text-color">{{'Mật khẩu' | translate }} <span class="required-title">*</span></div>
-                        <div class="input-data">
-                            <input type="password" formControlName="email">
-                        </div>
-                        <div *ngIf="submitted && f.email.errors" class="invalid">
-                            <div *ngIf="f.email.errors.required">{{'error.user.email.required' | translate}}</div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="row" style="padding-top: 10px;">
                     <div class="col-md-12">
                         <div class="label text-color">{{'Email' | translate }} <span class="required-title">*</span></div>
-                        <div class="input-data">
+                        <div class="input-data" [ngClass]="{
+                            'fff':  this.data.id != null}">
                             <input type="text" formControlName="email">
                         </div>
                         <div *ngIf="submitted && f.email.errors" class="invalid">

@@ -9,7 +9,9 @@ import {environment} from '../../../environments/environment';
 })
 export class AdminUserService {
   listUserUrl:any = `${environment.apiUrl}/api/v1/admin/user/search`;
-  getUserByIdUrl: any = `${environment.apiUrl}/api/v1/customers/`;
+
+  getUserByIdUrl: any = `${environment.apiUrl}/api/v1/admin/user/`;
+
   updateUserUrl: any = `${environment.apiUrl}`;
   checkPhoneUrl:any = `${environment.apiUrl}`;
   getUserByEmailUrl:any = `${environment.apiUrl}`;
@@ -104,7 +106,6 @@ export class AdminUserService {
       permissions: datas.role
     });
 
-  
     return this.http.post<any>(this.addUserUrl, body, {'headers': headers});
   }
 

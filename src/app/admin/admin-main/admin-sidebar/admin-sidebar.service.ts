@@ -32,7 +32,6 @@ export class AdminSidebarService {
     }
   ];
 
-  menuShow: any =[];
   selectedRoleConvert: any[];
     
   constructor() {
@@ -52,6 +51,7 @@ export class AdminSidebarService {
 
   getMenuList(): any[] {
     const permissions =  JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
+    const menuShow = [];
 
     this.selectedRoleConvert = [];
 
@@ -68,22 +68,24 @@ export class AdminSidebarService {
       let role = this.selectedRoleConvert[i].code;
 
       if(role.includes("QLND") && qlnd === false) {
-        this.menuShow.push(this.menus[0]);
+        menuShow.push(this.menus[0]);
         qlnd = true;
       }
 
       if(role.includes("QLTC") && qltc === false) {
-        this.menuShow.push(this.menus[1]);
+        menuShow.push(this.menus[1]);
         qltc = true;
       }
 
       if(role.includes("QLGDV") && qlgdv === false) {
-        this.menuShow.push(this.menus[2]);
+        menuShow.push(this.menus[2]);
         qlgdv = true;
       }
     }
+
+    console.log("length menu show "+menuShow.length);
     
-    return this.menuShow;
+    return menuShow;
   }
 
   getSubMenuList(menuParent:any) {
