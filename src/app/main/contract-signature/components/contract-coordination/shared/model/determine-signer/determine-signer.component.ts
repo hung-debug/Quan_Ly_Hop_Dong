@@ -242,9 +242,10 @@ export class DetermineSignerComponent implements OnInit {
   validData() {
     let count = 0;
     let dataArrPartner = [];
-    dataArrPartner = this.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+    dataArrPartner = this.is_determine_clone.filter((p: any) => (p.type == 2 || p.type == 3) && p.recipients.some((q: any) => q.email == this.emailUser && q.status == 1));
+
     for (let i = 0; i < dataArrPartner.length; i++) {
-      if (!dataArrPartner[i].recipients.some((p: any) => p.role == 3 || p.role == 1)) {
+      if (!dataArrPartner[i].recipients.some((p: any) => p.role == 3)) {
         this.getNotificationValid("Vui lòng chọn người ký của đối tác!");
         count++;
         break;

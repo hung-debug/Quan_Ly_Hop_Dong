@@ -760,7 +760,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           // Kiểm tra ô ký đã ký chưa (status = 2)
           this.spinner.show();
           let id_recipient_signature = null;
-          console.log(this.datas);
+          // console.log(this.datas);
           for (const d of this.datas.is_data_contract.participants) {
             for (const q of d.recipients) {
               if (q.email == this.currentUser.email && q.status == 1) {
