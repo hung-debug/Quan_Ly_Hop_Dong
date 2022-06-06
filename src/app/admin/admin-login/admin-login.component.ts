@@ -63,11 +63,10 @@ export class AdminLoginComponent implements OnInit {
                   .navigateByUrl('/', { skipLocationChange: true })
                   .then(() => {
                   
-
                     if(data.user.permissions.length === 1) {
                         if(data.user.permissions[0].code.includes('QLND')) {
                           this.router.navigate(['/admin-main/user']);
-                        } else if(data.user.permissions[0].code.includes('QLTC')) {
+                        } else if(data.user.permissions[0].code.includes('QLTC') || data.user.permissions[0].code.includes('QLTB')) {
                           this.router.navigate(['/admin-main/unit']);
                         } else if(data.user.permissions[0].code.includes('QLGDV')) {
                           this.router.navigate(['/admin-main/pack']);

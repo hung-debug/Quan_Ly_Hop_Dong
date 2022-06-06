@@ -36,7 +36,15 @@ export class AdminUnitComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.appService.setTitle('unit.list');
+    const permissions =  JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
+
+    if(permissions.length === 1 && permissions[0].code.includes("QLTB")) {
+      console.log("vao day");
+      this.adminUnit = false;
+      this.appService.setTitle('');
+    } else {
+      this.appService.setTitle('unit.list')
+    };
     this.searchUnit();
 
     this.cols = [

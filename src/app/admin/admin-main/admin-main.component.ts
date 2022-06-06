@@ -78,7 +78,6 @@ export class AdminMainComponent implements OnInit {
       }
     }
 
-
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('urlLoginType')));
     // if (this.router.url.includes('/main/form-contract/add') ||
