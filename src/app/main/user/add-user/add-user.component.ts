@@ -87,11 +87,12 @@ export class AddUserComponent implements OnInit {
       this.unitService.getUnitList('', '').subscribe(data => {
         console.log(data.entities);
         console.log(orgId);
-        if(this.action == 'add'){
-          this.orgList = data.entities.filter((p: any) => p.id == orgId);
-        }else{
-          this.orgList = data.entities;
-        }
+        this.orgList = data.entities;
+        // if(this.action == 'add'){
+        //   this.orgList = data.entities.filter((p: any) => p.id == orgId);
+        // }else{
+        //   this.orgList = data.entities;
+        // }
         
       });
 

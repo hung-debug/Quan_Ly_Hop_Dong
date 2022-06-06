@@ -221,6 +221,11 @@ export class SidebarService {
         title: 'contract.status.complete',
         active: false,
         href: '/main/contract/create/complete'
+      },
+      {
+        title: 'Hoàn thành ĐV cũ',
+        active: false,
+        href: '/main/contract/create/past-complete'
       });
 
       this.menus.push({
