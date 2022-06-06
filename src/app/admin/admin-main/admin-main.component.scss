@@ -107,7 +107,22 @@
     background-image: url(../../../assets/img/icon_document.svg);
     //border-radius: 50%;
   }
+
   .social-icons .label{  
+    color: #106DB6;
+    margin-left: 10px;
+  }
+
+  .social-icons-right .document {
+    height: 20px;
+    width: 18px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(../../../assets/img/icon_document.svg);
+    //border-radius: 50%;
+  }
+
+  .social-icons-right .label {
     color: #106DB6;
     margin-left: 10px;
   }
@@ -308,4 +323,8 @@
   .pi-bell{
     font-size: 20px;
     color:#106db6
+  }
+
+  .fff {
+    background-color: #000;
   }

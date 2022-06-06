@@ -11,70 +11,75 @@ import { AdminDetailUnitComponent } from './admin-detail-unit/admin-detail-unit.
 @Component({
   selector: 'app-admin-unit',
   templateUrl: './admin-unit.component.html',
-  styleUrls: ['./admin-unit.component.scss']
+  styleUrls: ['./admin-unit.component.scss'],
 })
 export class AdminUnitComponent implements OnInit {
-
-  constructor(private appService: AppService,
+  constructor(
+    private appService: AppService,
     private dialog: MatDialog,
     private adminUnitService: AdminUnitService,
     private adminUserService: AdminUserService,
-    private toastService: ToastService) { }
+    private toastService: ToastService
+  ) {}
 
-  code:any = "";
-  name:any = "";
+  code: any = '';
+  name: any = '';
   list: any[];
-  listData:any[];
+  listData: any[];
   cols: any[];
-  files:any[];
-  test:any;
-  total:any;
-  orgId:any;
-  isAdmin:boolean=false;
+  files: any[];
+  test: any;
+  total: any;
+  orgId: any;
+  isAdmin: boolean = false;
+  adminUnit: boolean = true;
 
   ngOnInit(): void {
-    this.appService.setTitle("unit.list");
+
+    this.appService.setTitle('unit.list');
     this.searchUnit();
 
     this.cols = [
-      { field: 'name', header: 'unit.name', style:'text-align: left;' },
-      { field: 'code', header: 'unit.code', style:'text-align: left;' },
-      { field: 'phone', header: 'Số điện thoại', style:'text-align: left;' },
-      { field: 'active', header: 'Kích hoạt', style:'text-align: left;' },
-      { field: 'email', header: 'Email đăng ký', style:'text-align: left;' },
-      { field: 'id', header: 'unit.manage', style:'text-align: center;' },
-      ]; 
-  }  
+      { field: 'name', header: 'unit.name', style: 'text-align: left;' },
+      { field: 'code', header: 'unit.code', style: 'text-align: left;' },
+      { field: 'phone', header: 'Số điện thoại', style: 'text-align: left;' },
+      { field: 'active', header: 'Kích hoạt', style: 'text-align: left;' },
+      { field: 'email', header: 'Email đăng ký', style: 'text-align: left;' },
+      { field: 'id', header: 'unit.manage', style: 'text-align: center;' },
+    ];
+  }
 
   array_empty: any = [];
 
   //Tìm kiếm tổ chức
-  searchUnit(){
-    this.adminUnitService.getUnitList(this.code, this.name).subscribe(response => {
-      this.listData = response.entities;
-      this.total = this.listData.length;
-    });
+  searchUnit() {
+    this.adminUnitService
+      .getUnitList(this.code, this.name)
+      .subscribe((response) => {
+        this.listData = response.entities;
+        this.total = this.listData.length;
+      });
   }
 
   //Thêm mới tổ chức
   addUnit() {
     const data = {
-      title: 'unit.add'
+      title: 'unit.add',
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddUnitComponent, {
       width: '580px',
       backdrop: 'static',
       keyboard: false,
-      data
-    })
+      data,
+    });
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
-    })
+      let is_data = result;
+    });
   }
 
-  editUnit(id:any) {
+  editUnit(id: any) {
     const data = {
       title: 'unit.update',
       id: id,
@@ -84,15 +89,15 @@ export class AdminUnitComponent implements OnInit {
       width: '580px',
       backdrop: 'static',
       keyboard: false,
-      data
-    })
+      data,
+    });
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
-    })
+      let is_data = result;
+    });
   }
 
-  detailUnit(id:any) {
+  detailUnit(id: any) {
     const data = {
       title: 'unit.information',
       id: id,
@@ -103,15 +108,15 @@ export class AdminUnitComponent implements OnInit {
       height: '80%',
       backdrop: 'static',
       keyboard: false,
-      data
-    })
+      data,
+    });
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
-    })
+      let is_data = result;
+    });
   }
 
-  activeUnit(id:any) {
+  activeUnit(id: any) {
     const data = {
       title: 'KÍCH HOẠT TỔ CHỨC',
       id: id,
@@ -121,12 +126,11 @@ export class AdminUnitComponent implements OnInit {
       width: '400px',
       backdrop: 'static',
       keyboard: false,
-      data
-    })
+      data,
+    });
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
-    })
+      let is_data = result;
+    });
   }
-
 }

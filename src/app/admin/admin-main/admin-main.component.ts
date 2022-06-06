@@ -33,6 +33,8 @@ export class AdminMainComponent implements OnInit {
   listNotification: any[] = [];
   selectedRoleConvert: any[];
   qltb: boolean = false;
+  adminUnit: boolean = true;
+
 
   constructor(private router: Router,
               private modalService: NgbModal,
@@ -53,6 +55,12 @@ export class AdminMainComponent implements OnInit {
   ngOnInit(): void {
 
     const permissions =  JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
+
+    if(permissions.length === 0) {
+      this.adminUnit = false;
+    }
+
+    console.log("boolean "+this.adminUnit);
 
     this.selectedRoleConvert = [];
 

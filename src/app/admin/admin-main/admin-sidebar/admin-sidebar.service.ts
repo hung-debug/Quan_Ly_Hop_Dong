@@ -82,8 +82,6 @@ export class AdminSidebarService {
         qlgdv = true;
       }
     }
-
-    console.log("length menu show "+menuShow.length);
     
     return menuShow;
   }
