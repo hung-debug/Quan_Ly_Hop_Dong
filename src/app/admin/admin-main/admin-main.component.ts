@@ -52,23 +52,23 @@ export class AdminMainComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // const permissions =  JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
+    const permissions =  JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
 
-    // this.selectedRoleConvert = [];
+    this.selectedRoleConvert = [];
 
-    // permissions.forEach((key: any) => {
-    //   let jsonData = { code: key.code, name: key.name};
-    //   this.selectedRoleConvert.push(jsonData);
-    // });
+    permissions.forEach((key: any) => {
+      let jsonData = { code: key.code, name: key.name};
+      this.selectedRoleConvert.push(jsonData);
+    });
 
-    // for(let i = 0; i < this.selectedRoleConvert.length; i++) {
-    //   let role = this.selectedRoleConvert[i].code;
+    for(let i = 0; i < this.selectedRoleConvert.length; i++) {
+      let role = this.selectedRoleConvert[i].code;
 
-    //   if(role.includes("QLTB") && this.qltb === false) {
-    //     this.qltb = true;
-    //     break;
-    //   }
-    // }
+      if(role.includes("QLTB") && this.qltb === false) {
+        this.qltb = true;
+        break;
+      }
+    }
 
 
     //update title by component
@@ -98,11 +98,10 @@ export class AdminMainComponent implements OnInit {
 
   //click logout
   logout() {
-    localStorage.removeItem('currentAdmin');
-    localStorage.removeItem('');
-
     localStorage.clear();
     sessionStorage.clear();
+    localStorage.removeItem('currentAdmin');
+    localStorage.removeItem('');
     localStorage.removeItem('url');
     this.router.navigate(['/admin/login']);
   }
