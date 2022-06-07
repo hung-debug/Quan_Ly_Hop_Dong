@@ -31,6 +31,10 @@ export class AdminMainComponent implements OnInit {
   urlLoginType: any;
   nameCurrentUser:any;
   listNotification: any[] = [];
+  selectedRoleConvert: any[];
+  qltb: boolean = false;
+  adminUnit: boolean = true;
+
 
   constructor(private router: Router,
               private modalService: NgbModal,
@@ -49,6 +53,31 @@ export class AdminMainComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    const permissions =  JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
+
+    if(permissions.length === 0) {
+      this.adminUnit = false;
+    }
+
+    console.log("boolean "+this.adminUnit);
+
+    this.selectedRoleConvert = [];
+
+    permissions.forEach((key: any) => {
+      let jsonData = { code: key.code, name: key.name};
+      this.selectedRoleConvert.push(jsonData);
+    });
+
+    for(let i = 0; i < this.selectedRoleConvert.length; i++) {
+      let role = this.selectedRoleConvert[i].code;
+
+      if(role.includes("QLTB") && this.qltb === false) {
+        this.qltb = true;
+        break;
+      }
+    }
+
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('urlLoginType')));
     // if (this.router.url.includes('/main/form-contract/add') ||
@@ -62,10 +91,8 @@ export class AdminMainComponent implements OnInit {
     // } else this.isRouterContractNew = true;
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
 
-    this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
-      data => {
-        this.nameCurrentUser = data.name;
-      });
+    this.nameCurrentUser = JSON.parse(localStorage.getItem('currentAdmin') || '').user.name;
+
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;
     });
@@ -80,7 +107,8 @@ export class AdminMainComponent implements OnInit {
   logout() {
     localStorage.clear();
     sessionStorage.clear();
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentAdmin');
+    localStorage.removeItem('');
     localStorage.removeItem('url');
     this.router.navigate(['/admin/login']);
   }
@@ -172,9 +200,9 @@ export class AdminMainComponent implements OnInit {
   }
 
   infoUserDetail() {
-    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(['/main/user-infor']);
-    });
+    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+    //   // this.router.navigate(['/main/user-infor']);
+    // });
     //this.router.navigate(['/main/user-infor']);
   }
 

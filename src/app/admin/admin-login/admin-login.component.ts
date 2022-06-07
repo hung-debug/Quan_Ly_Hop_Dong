@@ -11,10 +11,9 @@ import { AuthenticationService } from 'src/app/service/authentication.service';
 @Component({
   selector: 'app-admin-login',
   templateUrl: './admin-login.component.html',
-  styleUrls: ['./admin-login.component.scss']
+  styleUrls: ['./admin-login.component.scss'],
 })
 export class AdminLoginComponent implements OnInit {
-
   error: Boolean = false;
   errorDetail: string = '';
   fieldTextType: boolean = false;
@@ -38,54 +37,79 @@ export class AdminLoginComponent implements OnInit {
   loginForm = new FormGroup({
     tax_code: new FormControl(''),
     username: new FormControl(''),
-    password: new FormControl('')
-  })
+    password: new FormControl(''),
+  });
 
   loginUser() {
     if (this.loginForm.value.username == '') {
       this.error = true;
-      this.errorDetail = "error.username.required";
+      this.errorDetail = 'error.username.required';
     } else if (this.loginForm.value.password == '') {
       this.error = true;
-      this.errorDetail = "error.password.required";
+      this.errorDetail = 'error.password.required';
     } else {
-      this.adminAuthService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password).subscribe((data) => {
-        if(data?.code == '00'){
-          if (this.adminAuthService.isLoggedInSuccess() == true) {
-            this.error = false;
-            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-              this.router.navigate(['/admin-main/unit']);
-            });
-          } else {
-            this.error = true;
-            this.errorDetail = "error.username.password";
-          }
-        }else if(data?.code == '01'){
-          this.error = true;
-          this.errorDetail = "Tài khoản không hoạt động";
-        }else if(data?.code == '02'){
-          this.error = true;
-          this.errorDetail = "Tổ chức không hoạt động";
-        }else {
-          this.error = true;
-          this.errorDetail = "error.username.password";
-        }
-          
-        },
-        error => {
-          console.log(localStorage.getItem('checkUser'));
-          if(localStorage.getItem('checkUser') == 'error'){
-            this.error = true;
-            this.errorDetail = "error.username.password";
-          }else{
-            this.error = true;
-            this.errorDetail = "error.server";
-          }
-        }
-      );
-      
-    }
+      this.adminAuthService
+        .loginAuthencation(
+          this.loginForm.value.username,
+          this.loginForm.value.password
+        )
+        .subscribe(
+          (data) => {
+            if (data?.code == '00') {
+              if (this.adminAuthService.isLoggedInSuccess() == true) {
+                this.error = false;
 
+                this.router
+                  .navigateByUrl('/', { skipLocationChange: true })
+                  .then(() => {
+                  
+                    if(data.user.permissions.length === 1) {
+                        if(data.user.permissions[0].code.includes('QLND')) {
+                          this.router.navigate(['/admin-main/user']);
+                        } else if(data.user.permissions[0].code.includes('QLTC') || data.user.permissions[0].code.includes('QLTB')) {
+                          this.router.navigate(['/admin-main/unit']);
+                        } else if(data.user.permissions[0].code.includes('QLGDV')) {
+                          this.router.navigate(['/admin-main/pack']);
+                        }
+                    } else {
+                      for(let i = 0; i < data.user.permissions.length; i++) {
+                        if(data.user.permissions[i].code.includes('QLTC')) {
+                          this.router.navigate(['/admin-main/unit']);
+                          break;
+                        } else {
+                          this.router.navigate(['/admin-main/user']);
+                        }
+                      }
+                    }
+
+                  });
+              } else {
+                this.error = true;
+                this.errorDetail = 'error.username.password';
+              }
+            } else if (data?.code == '01') {
+              this.error = true;
+              this.errorDetail = 'Tài khoản không hoạt động';
+            } else if (data?.code == '02') {
+              this.error = true;
+              this.errorDetail = 'Tổ chức không hoạt động';
+            } else {
+              this.error = true;
+              this.errorDetail = 'error.username.password';
+            }
+          },
+          (error) => {
+            console.log(localStorage.getItem('checkUser'));
+            if (localStorage.getItem('checkUser') == 'error') {
+              this.error = true;
+              this.errorDetail = 'error.username.password';
+            } else {
+              this.error = true;
+              this.errorDetail = 'error.server';
+            }
+          }
+        );
+    }
   }
 
   toggleFieldTextType() {
@@ -123,24 +147,27 @@ export class AdminLoginComponent implements OnInit {
 
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
-      console.log(this.deviceService.isMobile(), this.deviceService.deviceType, this.deviceService);
+      console.log(
+        this.deviceService.isMobile(),
+        this.deviceService.deviceType,
+        this.deviceService
+      );
       // @ts-ignore
       const dialogRef = this.dialog.open(ActionDeviceComponent, {
         width: '580px',
         backdrop: 'static',
         keyboard: false,
-        panelClass: 'custom-modalbox'
-      })
+        panelClass: 'custom-modalbox',
+      });
       dialogRef.afterClosed().subscribe((result: any) => {
         console.log('the close dialog');
         if (!this.router.url.endsWith('login')) {
-          this.sub = this.route.params.subscribe(params => {
+          this.sub = this.route.params.subscribe((params) => {
             this.type = params['loginType'];
           });
         }
         // let is_data = result
-      })
+      });
     }
   }
-
 }

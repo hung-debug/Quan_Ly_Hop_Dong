@@ -338,7 +338,8 @@ export class AddUnitComponent implements OnInit {
                                   dataUnit => {
                                     //this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
                                     console.log(dataUnit);
-              
+                            
+
                                     //them vai tro
                                     let roleArrConvert: any = [];
                                     roleList.forEach((key: any, v: any) => {

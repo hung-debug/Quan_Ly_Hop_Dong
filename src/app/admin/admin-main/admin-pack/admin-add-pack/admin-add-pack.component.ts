@@ -1,10 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AdminPackService } from 'src/app/service/admin/admin-pack.service';
 import { ToastService } from 'src/app/service/toast.service';
 import {parttern_input} from "../../../../config/parttern";
+import {theThucTinhList, loaiGoiDichVuList} from "../../../../config/variable";
+
+
+
 @Component({
   selector: 'app-admin-add-pack',
   templateUrl: './admin-add-pack.component.html',
@@ -18,11 +22,25 @@ export class AdminAddPackComponent implements OnInit {
   nameOld:any
   parentName:any;
   emailOld:any;
-  phoneOld:any
+  phoneOld:any;
+
+  theThucTinh: Array<any> = [];
+  loaiGoi: Array<any> = []; 
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
   submitted = false;
+
+  //dungpt
+  //name input thoi gian va so luong hop dong
+  timeName: string;
+  numberContractName: string;
+
+  //1 => time: white, so luong: gray
+  //2 => so luong: white, time: gray
+  //3 => all gray
+  flagComboBoxTheThucTinh:any;
+
   get f() { return this.addForm.controls; }
 
   constructor(
@@ -38,18 +56,35 @@ export class AdminAddPackComponent implements OnInit {
       this.addForm = this.fbd.group({
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        price: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+
+        //dungpt
+        //chinh validate so cua don gia
+        price: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
         calc: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         type: this.fbd.control(""),
         condition: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-        time: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        number_contract: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+
+        //dungpt
+        //chinh validate so cua thoi gian
+        time: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+
+        
+        //dungpt
+        //chinh validate so cua luong hop dong
+        number_contract: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
         describe: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
         status: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       });
+
     }
 
   ngOnInit(): void {    
+    //dungpt
+    //gan data cho combobox
+    this.loadedListComboBox();
+
+    this.flagComboBoxTheThucTinh = 3;
+
     this.datas = this.data;
 
     //lay du lieu form cap nhat
@@ -61,12 +96,12 @@ export class AdminAddPackComponent implements OnInit {
           this.addForm = this.fbd.group({
             code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            price: this.fbd.control(data.price, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            price: this.fbd.control(data.price, [Validators.required, Validators.pattern(parttern_input.number_form)]),
             calc: this.fbd.control(data.calc, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             type: this.fbd.control(data.type),
             condition: this.fbd.control(data.condition, [Validators.pattern(parttern_input.input_form)]),
-            time: this.fbd.control(data.time, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            number_contract: this.fbd.control(data.number_contract, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            time: this.fbd.control({value: data.time, disabled: true}, [Validators.required, Validators.pattern(parttern_input.number_form)]),
+            number_contract: this.fbd.control({value:data.number_contract, disabled: true}, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             describe: this.fbd.control(data.describe, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             status: this.fbd.control(data.status, [Validators.pattern(parttern_input.input_form)]),
           });
@@ -82,16 +117,21 @@ export class AdminAddPackComponent implements OnInit {
       this.addForm = this.fbd.group({
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        price: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        price: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
         calc: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         type: this.fbd.control(""),
         condition: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-        time: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        number_contract: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        time: this.fbd.control({value: '',disabled: true}, [Validators.required, Validators.pattern(parttern_input.number_form)]),
+        number_contract: this.fbd.control({value: '',disabled: true}, [Validators.required, Validators.pattern(parttern_input.input_form)]),
         describe: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
         status: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       });
     }
+  }
+
+  loadedListComboBox()  {
+   this.theThucTinh = theThucTinhList;
+   this.loaiGoi = loaiGoiDichVuList;
   }
 
   update(data:any){
@@ -187,6 +227,38 @@ export class AdminAddPackComponent implements OnInit {
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
           }
         )
+    }
+  }
+
+  //dungpt
+  //Bat su kien khi combobox the thuc tinh thay doi
+  onChangeTheThucTinh(event :any) {
+    if(event.value == 1) {
+      //Chon thoi gian
+
+      this.addForm.controls.time.enable();
+      this.addForm.controls.number_contract.disable();
+
+      this.numberContractName = "";
+
+      this.flagComboBoxTheThucTinh = 1;
+    } else if(event.value == 2) {
+      //Chon so hop dong
+
+      this.addForm.controls.number_contract.enable();
+      this.addForm.controls.time.disable();
+      this.timeName = "";
+
+      this.flagComboBoxTheThucTinh = 2;
+    } else {
+
+      this.addForm.controls.time.disable();
+      this.addForm.controls.number_contract.disable();
+      this.numberContractName = "";
+      this.timeName = "";
+
+      this.flagComboBoxTheThucTinh = 3;
+
     }
   }
 

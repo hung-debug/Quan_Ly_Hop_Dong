@@ -58,11 +58,13 @@ export class UnitService {
     return this.http.get<Unit[]>(listUnitUrl, {headers}).pipe(catchError(this.handleError));
   }  
 
+  //add api thêm mới tổ chức user
   addUnit(datas: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+
     const body = JSON.stringify({
       name: datas.name,
       short_name: datas.short_name,
@@ -73,6 +75,9 @@ export class UnitService {
       status: datas.status,
       parent_id: datas.parent_id
     });
+
+    console.log("body "+body);
+
     return this.http.post<Unit>(this.addUnitUrl, body, {'headers': headers});
   }
 

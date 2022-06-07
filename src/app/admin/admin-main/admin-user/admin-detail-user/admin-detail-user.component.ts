@@ -30,6 +30,7 @@ export class AdminDetailUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.groupedRole = adminRoleList;
+    console.log("data title "+this.data.title);
     this.adminUserService.getUserById(this.data.id).subscribe(
       data => {
         console.log(data);

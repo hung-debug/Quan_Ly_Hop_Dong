@@ -1,1 +1,156 @@
-<p>admin-detail-pack-unit works!</p>
+<div class="container-fluid">
+  <div class="header">
+    <h3 class="label-header">{{ this.data.title | translate }}</h3>
+  </div>
+  <form class="content">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Mã gói dịch vụ" | translate }}
+        </div>
+        <div class="input-data fff">
+          <input readonly />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Tên gói dịch vụ" | translate }}
+        </div>
+        <div class="input-data fff">
+          <input type="text" [readonly]="true" />
+        </div>
+        <div class="invalid"></div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Đơn giá (VND)" | translate }}
+        </div>
+        <div class="input-data fff">
+          <input type="text" readonly />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Thể thức tính" | translate }}
+        </div>
+        <div class="input-data fff">
+          <input type="text" readonly />
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-6">
+        <div class="label text-color">{{ "Thời gian " | translate }}</div>
+        <div class="input-data fff">
+          <input type="text" readonly />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Số lượng hợp đồng " | translate }}
+        </div>
+        <div class="input-data fff">
+          <input type="text" readonly />
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Loại gói dịch vụ" | translate }}
+        </div>
+        <div class="input-data">
+          <input readonly type="text" />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Điều kiện" | translate }}
+        </div>
+        <div class="input-data fff">
+          <!-- dungpt -->
+          <!-- tao ngModel va  name cho input so luong hop dong -->
+          <input type="text" readonly />
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Ngày mua gói" | translate }}
+        </div>
+        <div class="input-data">
+          <input readonly />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Kiểu thanh toán" | translate }}
+        </div>
+        <div class="input-data">
+          <input readonly />
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Trạng thái thanh toán " | translate }}
+        </div>
+        <div class="input-data fff">
+            <input readonly/>
+          </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Ngày thanh toán " | translate }}
+        </div>
+        <div class="input-data fff">
+          <input />
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Ngày bắt đầu" | translate }}
+        </div>
+        <div class="input-data fff">
+          <input readonly />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label text-color">
+          {{ "Ngày kết thúc" | translate }}
+        </div>
+        <div class="input-data fff">
+          <input readonly />
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="justify-content: center; padding-top: 10px">
+      <button class="cancel-button" type="button" (click)="cancel()">
+        {{ "btn.cancel" | translate }}
+      </button>
+      <button class="save-button">
+        {{ "btn.save" | translate }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -88,6 +88,16 @@ export var statusList = [
   { id : 0, name: 'Ngừng hoạt động'}
 ];
 
+export var theThucTinhList = [
+  {id: 1, name: 'Theo thời gian'},
+  {id: 2, name: 'Theo số lượng hợp đồng'}
+];
+
+export var loaiGoiDichVuList = [
+  {id: 1, name: 'Bình thường'},
+  {id: 2, name: 'Khuyến mại'}
+]
+
 // export var roleList = [
 //   {
 //     //Nhóm chức năng quản lý hợp đồng
@@ -373,8 +383,6 @@ export var adminRoleList = [
       { label: "Tìm kiếm người dùng", value: "QLND_03"},
       //Xem thông tin chi tiết người dùng
       { label: "Xem thông tin chi tiết người dùng", value: "QLND_04"},
-      //Xóa người dùng
-      { label: "Xóa người dùng", value: "QLND_05"},
     ]
   },
   {
