@@ -15,7 +15,7 @@
       <div *ngIf="getShowHideSideBar()">
         <div ngbDropdown class="d-inline-block">
           <div
-            *ngIf="qltb === true"
+            *ngIf="this.qltb === true"
             class="social-icons"
             ngbDropdownToggle
             (click)="loadDataNotification()"
