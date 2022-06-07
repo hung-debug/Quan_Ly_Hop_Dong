@@ -194,7 +194,9 @@ export class UserService {
       phone_sign: datas.phoneKpi,
       phone_tel: datas.networkKpi,
 
-      hsm_name: datas.nameHsm
+      hsm_name: datas.nameHsm,
+
+      organization_change: datas.organization_change
     });console.log(headers);
     console.log(body);
     return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
@@ -207,7 +209,7 @@ export class UserService {
       .append('Authorization', 'Bearer ' + this.token);
 
     console.log(headers);
-    return this.http.get<User>(this.getUserByIdUrl + id, {'headers': headers});
+    return this.http.get<any>(this.getUserByIdUrl + id, {'headers': headers});
   }
 
   getUserByEmail(email:any){

@@ -75,7 +75,9 @@ export class AddUserComponent implements OnInit {
 
       nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
 
-      fileImage:null
+      fileImage:null,
+
+      organization_change:null
     });
   }
   
@@ -152,7 +154,9 @@ export class AddUserComponent implements OnInit {
 
                 nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.input_form)),
 
-                fileImage:null
+                fileImage:null,
+
+                organization_change: data.organization_change
               }); 
               this.phoneOld = data.phone;
               this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
@@ -227,6 +231,7 @@ export class AddUserComponent implements OnInit {
 
   update(data:any){
     data.id = this.id;
+
     if(data.fileImage != null){
       this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
         console.log(JSON.stringify(dataFile));
@@ -265,9 +270,9 @@ export class AddUserComponent implements OnInit {
       this.userService.updateUser(data).subscribe(
         dataOut => {
           
-          
+          let emailCurrent = this.userService.getAuthCurrentUser().email;
           //neu nguoi thao tac chuyen to chuc cho chinh minh thi can logout de lay lai thong tin to chuc moi
-          if(data.organizationId != this.orgIdOld){
+          if(data.organizationId != this.orgIdOld && emailCurrent == data.email){
             this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công. Vui lòng đăng nhập lại!', "", 3000);
             localStorage.clear();
             sessionStorage.clear();
@@ -317,7 +322,8 @@ export class AddUserComponent implements OnInit {
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,
       fileImage: this.attachFile,
-      sign_image: []
+      sign_image: [],
+      organization_change: this.addForm.value.organizationId!= this.orgIdOld?1:this.addForm.value.organization_change
     }
     console.log(data);
     

@@ -30,6 +30,8 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
+    //this.menus = this.sidebarservice.getMenuList();
+    console.log(this.menus);
     this.menus.forEach((element: any) => {
       element.active = false;
       if (element.href != '#') {

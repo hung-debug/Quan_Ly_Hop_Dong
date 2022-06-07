@@ -221,12 +221,18 @@ export class SidebarService {
         title: 'contract.status.complete',
         active: false,
         href: '/main/contract/create/complete'
-      },
-      {
-        title: 'Hoàn thành ĐV cũ',
-        active: false,
-        href: '/main/contract/create/past-complete'
       });
+
+      const currentUserC = JSON.parse(localStorage.getItem('currentUser') || '');
+      console.log(currentUserC.customer.info.organizationChange);
+      if(currentUserC.customer.info.organizationChange == 1){
+        submenusCreate.push(
+        {
+          title: 'Hoàn thành ĐV cũ',
+          active: false,
+          href: '/main/contract/create/past-complete'
+        });
+      }
 
       this.menus.push({
         title: 'menu.contract.create.list',
