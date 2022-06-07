@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CheckboxControlValueAccessor } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
@@ -12,112 +13,158 @@ import { AdminDetailUserComponent } from './admin-detail-user/admin-detail-user.
 @Component({
   selector: 'app-admin-user',
   templateUrl: './admin-user.component.html',
-  styleUrls: ['./admin-user.component.scss']
+  styleUrls: ['./admin-user.component.scss'],
 })
 export class AdminUserComponent implements OnInit {
-
-  constructor(private appService: AppService,
+  constructor(
+    private appService: AppService,
     private adminUserService: AdminUserService,
     private adminUnitService: AdminUnitService,
-    private router : Router,
+    private router: Router,
     private dialog: MatDialog,
-    private toastService: ToastService) { }
+    private toastService: ToastService
+  ) {}
 
-  name:any="";
-  email:any="";
-  phone:any="";
+  name: any = '';
+  email: any = '';
+  phone: any = '';
   list: any[];
   cols: any[];
   orgList: any[] = [];
   orgListTmp: any[] = [];
 
+  addUserRole: boolean = false;
+  searchUserRole: boolean = false;
+  infoUserRole: boolean = false;
+  editUserRole: boolean = false;
+
   ngOnInit(): void {
-    this.appService.setTitle("user.list");
+    this.addUserRole = this.checkRole(this.addUserRole, 'QLND_01');
+    this.searchUserRole = this.checkRole(this.searchUserRole, 'QLND_03');
+    this.infoUserRole = this.checkRole(this.infoUserRole, 'QLND_04');
+    this.editUserRole = this.checkRole(this.editUserRole, 'QLND_02');
+
+    console.log("qlnd 02");
+    console.log(this.editUserRole);
+
+    this.appService.setTitle('user.list');
     this.searchUser();
 
     this.cols = [
-      {header: 'user.name', style:'text-align: left;' },
-      {header: 'user.email', style:'text-align: left;' },
-      {header: 'user.phone', style:'text-align: left;' },
-      {header: 'unit.manage', style:'text-align: center;' },
+      { header: 'user.name', style: 'text-align: left;' },
+      { header: 'user.email', style: 'text-align: left;' },
+      { header: 'user.phone', style: 'text-align: left;' },
     ];
+
+    if(this.editUserRole === true) {
+      this.cols.push({
+        header: 'unit.manage', style: 'text-align: center;'
+      })
+    }
+  }
+  checkRole(flag: boolean, code: string) {
+    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
+      .user.permissions;
+
+    const selectedRoleConvert: { code: any }[] = [];
+
+    permissions.forEach((key: any) => {
+      let jsonData = { code: key.code, name: key.name };
+      selectedRoleConvert.push(jsonData);
+    });
+
+    for (let i = 0; i < selectedRoleConvert.length; i++) {
+      let role = selectedRoleConvert[i].code;
+
+      if (role.includes(code)) {
+        flag = true;
+        break;
+      }
+
+    }
+
+    return flag;
   }
 
-  searchUser(){
-    this.adminUserService.getUserList(this.name, this.email, this.phone).subscribe(response => {
-      console.log(response);
-      this.list = response.entities;
-    });
+  searchUser() {
+    this.adminUserService
+      .getUserList(this.name, this.email, this.phone)
+      .subscribe((response) => {
+        console.log(response);
+        this.list = response.entities;
+      });
   }
 
   addUser() {
     const data = {
-      title: 'THÊM MỚI NGƯỜI DÙNG'
+      title: 'THÊM MỚI NGƯỜI DÙNG',
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddUserComponent, {
       width: '620px',
       backdrop: 'static',
       keyboard: false,
-      data
-    })
+      data,
+    });
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
-    })
+      let is_data = result;
+    });
   }
 
-  editUser(id:any) {
+  editUser(id: any) {
     const data = {
       title: 'CẬP NHẬT NGƯỜI DÙNG',
-      id: id
+      id: id,
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddUserComponent, {
       width: '620px',
       backdrop: 'static',
       keyboard: false,
-      data
-    })
+      data,
+    });
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
-    })
+      let is_data = result;
+    });
   }
 
-  detailUser(id:any) {
-    const data = {
-      title: 'THÔNG TIN NGƯỜI DÙNG',
-      id: id
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(AdminDetailUserComponent, {
-      width: '620px',
-      backdrop: 'static',
-      keyboard: false,
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
-    })
+  detailUser(id: any) {
+    if (this.infoUserRole === true) {
+      const data = {
+        title: 'THÔNG TIN NGƯỜI DÙNG',
+        id: id,
+      };
+      // @ts-ignore
+      const dialogRef = this.dialog.open(AdminDetailUserComponent, {
+        width: '620px',
+        backdrop: 'static',
+        keyboard: false,
+        data,
+      });
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog');
+        let is_data = result;
+      });
+    }
   }
 
-  deleteUser(id:any) {
+  deleteUser(id: any) {
     const data = {
       title: 'XÓA NGƯỜI DÙNG',
-      id: id
+      id: id,
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminDeleteUserComponent, {
       width: '500px',
       backdrop: 'static',
       keyboard: false,
-      data
-    })
+      data,
+    });
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
-    })
+      let is_data = result;
+    });
   }
 }
