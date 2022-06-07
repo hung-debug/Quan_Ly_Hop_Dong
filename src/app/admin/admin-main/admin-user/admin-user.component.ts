@@ -47,7 +47,6 @@ export class AdminUserComponent implements OnInit {
     this.adminUserService.getUserList(this.name, this.email, this.phone).subscribe(response => {
       console.log(response);
       this.list = response.entities;
-      console.log(this.list);
     });
   }
 
