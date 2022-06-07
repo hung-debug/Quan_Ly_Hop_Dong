@@ -8,6 +8,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import {roleList} from "../../../config/variable";
 import {parttern_input} from "../../../config/parttern"
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-add-unit',
@@ -37,11 +38,13 @@ export class AddUnitComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
     private userService : UserService,
-    private roleService: RoleService,) { 
+    private roleService: RoleService,
+    private spinner: NgxSpinnerService
+    ) { 
 
       this.addForm = this.fbd.group({
         nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        short_name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        short_name: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         email: this.fbd.control("", [Validators.required, Validators.email]),
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -67,7 +70,7 @@ export class AddUnitComponent implements OnInit {
         data => {
           this.addForm = this.fbd.group({
             nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            short_name: this.fbd.control(data.short_name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.input_form)]),
             code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             email: this.fbd.control(data.email, [Validators.required, Validators.email]),
             phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -105,7 +108,7 @@ export class AddUnitComponent implements OnInit {
       });
       this.addForm = this.fbd.group({
         nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        short_name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        short_name: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         email: this.fbd.control("", [Validators.required, Validators.email]),
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
@@ -124,8 +127,10 @@ export class AddUnitComponent implements OnInit {
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/unit']);
         });
+        this.spinner.hide();
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+        this.spinner.hide();
       }
     )
   }
@@ -167,6 +172,7 @@ export class AddUnitComponent implements OnInit {
                       this.update(data);
                     }, error => {
                       this.toastService.showErrorHTMLWithTimeout('Thêm mới admin tổ chức thất bại', "", 3000);
+                      this.spinner.hide();
                     }
                   )
                 
@@ -198,20 +204,24 @@ export class AddUnitComponent implements OnInit {
                         this.update(data);
                       }, error => {
                         this.toastService.showErrorHTMLWithTimeout('Cập nhật thông tin admin tổ chức thất bại', "", 3000);
+                        this.spinner.hide();
                       }
                     )
                   }else{
                     this.toastService.showErrorHTMLWithTimeout('Người dùng đăng ký admin không thuộc tổ chức', "", 3000);
+                    this.spinner.hide();
                   }
                 }
               }
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin vai trò tổ chức', "", 3000);
+              this.spinner.hide();
             }
           ); 
           
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+          this.spinner.hide();
         }
       )
     }else{
@@ -234,9 +244,11 @@ export class AddUnitComponent implements OnInit {
 
           }else if(dataByCode.code == '01'){
             this.toastService.showErrorHTMLWithTimeout('Mã tổ chức đã tồn tại trong hệ thống', "", 3000);
+            this.spinner.hide();
           }
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+          this.spinner.hide();
         }
       )
     //neu khong thay doi ma thi khong can check ma
@@ -266,6 +278,7 @@ export class AddUnitComponent implements OnInit {
     }
     console.log(data);
 
+    this.spinner.show();
     //truong hop sua ban ghi
     if(this.data.id !=null){
       data.id = this.data.id;
@@ -282,9 +295,11 @@ export class AddUnitComponent implements OnInit {
 
             }else if(dataByName.code == '01'){
               this.toastService.showErrorHTMLWithTimeout('Tên tổ chức đã tồn tại trong hệ thống', "", 3000);
+              this.spinner.hide();
             }
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+            this.spinner.hide();
           }
         )
       //neu khong thay doi thi khong can check ten
@@ -321,7 +336,7 @@ export class AddUnitComponent implements OnInit {
                                 //them to chuc
                                 this.unitService.addUnit(data).subscribe(
                                   dataUnit => {
-                                    this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
+                                    //this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
                                     console.log(dataUnit);
                             
 
@@ -359,50 +374,63 @@ export class AddUnitComponent implements OnInit {
                                           dataUser => {
                                             console.log(dataUser);
                                             //this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
+                                            this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
                                             this.dialogRef.close();
                                             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
                                               this.router.navigate(['/main/unit']);
                                             });
+                                            this.spinner.hide();
                                           }, error => {
                                             this.toastService.showErrorHTMLWithTimeout('Thêm mới người dùng admin thất bại', "", 3000);
+                                            this.spinner.hide();
                                           }
                                         )
                                       }, error => {
                                         this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
+                                        this.spinner.hide();
                                       }
                                     )
                                   }, error => {
                                     this.toastService.showErrorHTMLWithTimeout('Thêm mới tổ chức thất bại', "", 3000);
+                                    this.spinner.hide();
                                   }
                                 )
                               }else if(dataByPhone.code == '01'){
                                 this.toastService.showErrorHTMLWithTimeout('Số điện thoại đã tồn tại trong hệ thống', "", 3000);
+                                this.spinner.hide();
                               }
                             }, error => {
                               this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                              this.spinner.hide();
                             }
                           )
                           
                         }else{
                           this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
+                          this.spinner.hide();
                         }
                       }, error => {
                         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                        this.spinner.hide();
                       }
                     )
                   }else if(dataByCode.code == '01'){
                     this.toastService.showErrorHTMLWithTimeout('Mã tổ chức đã tồn tại trong hệ thống', "", 3000);
+                    this.spinner.hide();
                   }
                 }, error => {
                   this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                  this.spinner.hide();
                 }
               )
               
             }else if(dataByName.code == '01'){
               this.toastService.showErrorHTMLWithTimeout('Tên tổ chức đã tồn tại trong hệ thống', "", 3000);
+              this.spinner.hide();
             }
           }, error => {
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+            this.spinner.hide();
           }
         )
     }

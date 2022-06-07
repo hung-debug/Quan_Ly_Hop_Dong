@@ -13,6 +13,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "src/app/service/toast.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpErrorResponse } from "@angular/common/http";
+import * as _ from 'lodash';
 
 
 @Component({
@@ -154,91 +155,76 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
     async getApiDetermine(is_save?: boolean) {
         this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
-                items.recipients.forEach((element: any) => {
-                    if (this.action != 'edit') {
-                        // tạo mới hđ từ mẫu gán id = null
-                        if (!element.template_recipient_id) {
-                            if (!element.id) {
-                                element.id = null;
-                            }
-                            element['template_recipient_id'] = element.id;
+            items.recipients.forEach((element: any) => {
+                if (this.action != 'edit') {
+                    // tạo mới hđ từ mẫu gán id = null
+                    if (!element.template_recipient_id) {
+                        if (!element.id) {
                             element.id = null;
                         }
-                    } else {
-                        element.template_recipient_id = element.id;
+                        element['template_recipient_id'] = element.id;
+                        element.id = null;
                     }
-                })
+                } else {
+                    element.template_recipient_id = element.id;
+                }
+            })
 
             if (items.type == 3)
                 this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
         })
         this.spinner.show();
         // let isCheckId = this.datasForm.is_determine_clone.filter((p: any) => p.id);
-        if (this.action == 'edit') {
-            let isBody: any[] = [];
-            let count = 0;
-            let is_error = '';
+        // if (this.action == 'edit') {
+        //     let isBody: any[] = [];
+        //     let count = 0;
+        //     let is_error = '';
 
-            for (let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
-                this.datasForm.is_determine_clone[i].recipients.forEach((element: any) => {
-                    if (!element.id) element.id = 0;
-                })
-                // if (this.datasForm.is_determine_clone[i].id) {
-                    await this.contractService.getContractDetermineCoordination(this.datasForm.is_determine_clone[i], this.datasForm.is_determine_clone[i].id).toPromise().then((res: any) => {
-                        res.recipients.forEach((item: any) => {
-                            item.template_recipient_id = item.id
-                        })
-                        isBody.push(res);
-                    }, (res: any) => {
-                        is_error = res.error;
-                        count++
-                    })
-                    if (count > 0) {
-                        break;
-                    }
-                // } else {
-                //     await this.contractService.getContractDetermine(this.datasForm.is_determine_clone[i], this.datasForm.id).subscribe((res: any) => {
-                //         this.getDataApiDetermine(res, is_save)
-                //       }, (error: HttpErrorResponse) => {
-                //         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-                //           this.save_draft_infor_form.close_header = false;
-                //           this.save_draft_infor_form.close_modal.close();
-                //         }
-                //         this.spinner.hide();
-                //         this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-                //       }, () => {
-                //         this.spinner.hide();
-                //       }
-                //       );
-                // }
-                
-            }
-            if (isBody.length == this.datasForm.is_determine_clone.length) {
-                this.getDataApiDetermine(isBody, is_save)
-            } else {
-                if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-                    this.save_draft_infor_form.close_header = false;
-                    this.save_draft_infor_form.close_modal.close();
-                }
-                this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
-            }
+        //     for (let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
+        //         this.datasForm.is_determine_clone[i].recipients.forEach((element: any) => {
+        //             if (!element.id) element.id = 0;
+        //         })
+        //         // if (this.datasForm.is_determine_clone[i].id) {
+        //             await this.contractService.getContractDetermineCoordination(this.datasForm.is_determine_clone[i], this.datasForm.is_determine_clone[i].id).toPromise().then((res: any) => {
+        //                 res.recipients.forEach((item: any) => {
+        //                     item.template_recipient_id = item.id
+        //                 })
+        //                 isBody.push(res);
+        //             }, (res: any) => {
+        //                 is_error = res.error;
+        //                 count++
+        //             })
+        //             if (count > 0) {
+        //                 break;
+        //             }
 
-            this.spinner.hide()
-        } else {
-            this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
-                this.getDataApiDetermine(res, is_save)
-            }, (error: HttpErrorResponse) => {
-                if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
-                    this.save_draft_infor_form.close_header = false;
-                    this.save_draft_infor_form.close_modal.close();
-                }
-                this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-            }, () => {
-                this.spinner.hide();
+        //     }
+        //     if (isBody.length == this.datasForm.is_determine_clone.length) {
+        //         this.getDataApiDetermine(isBody, is_save)
+        //     } else {
+        //         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+        //             this.save_draft_infor_form.close_header = false;
+        //             this.save_draft_infor_form.close_modal.close();
+        //         }
+        //         this.toastService.showErrorHTMLWithTimeout(is_error ? is_error : 'Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý.', "", 3000);
+        //     }
+
+        //     this.spinner.hide()
+        // } else {
+        this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
+            this.getDataApiDetermine(res, is_save)
+        }, (error: HttpErrorResponse) => {
+            if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
+                this.save_draft_infor_form.close_header = false;
+                this.save_draft_infor_form.close_modal.close();
             }
-            );
+            this.spinner.hide();
+            this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+        }, () => {
+            this.spinner.hide();
         }
+        );
+        // }
     }
 
     getDataApiDetermine(res: any, is_save?: boolean) {
@@ -367,6 +353,11 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             // validate phía đối tác
             for (let j = 0; j < dataArrPartner.length; j++) {
                 let isParterSort = (dataArrPartner[j].recipients).sort((beforeItemParter: any, afterItemParter: any) => beforeItemParter.role - afterItemParter.role);
+                // if (isParterSort.length == 0) {
+                //     count++;
+                //     this.getNotificationValid("Không có người ký đối tác. Vui lòng chọn lại!");
+                //     break;
+                // }
                 for (let k = 0; k < isParterSort.length; k++) {
                     if (dataArrPartner[j].type != 3) {
                         if (!dataArrPartner[j].name) {
@@ -503,7 +494,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                     if (element[j].email) {
                         let items = {
                             email: element[j].email,
-                            role: element[j].role
+                            role: element[j].role,
+                            type: dataValid[i].type,
+                            ordering: dataValid[i].ordering
                         }
                         // arrCheckEmail.push(element[j].email);
                         arrEmail.push(items);
@@ -512,7 +505,19 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             }
 
             if (arrEmail.some((p: any) => p.role == 1) && arrEmail.some((p: any) => p.role == 3)) {
-                arrEmail = arrEmail.filter((p: any) => p.role != 1);
+                if (isParty == 'only_party_partner') {
+                    arrEmail = arrEmail.filter((p: any) => p.role != 1);
+                } else {
+                    let duplicateEmail: any[] = [];
+                    let countCheck_duplicate = true;
+                    for (const d of arrEmail) {
+                        if (duplicateEmail.length > 0 && duplicateEmail.some((p: any) => p.email == d.email && (p.type != d.type || p.ordering != d.ordering))) { // check duplicate email coordination with between party
+                            return true;
+                        }
+                        duplicateEmail.push(d);
+                    }
+                    if (countCheck_duplicate) return false;
+                }
             }
 
             arrEmail.forEach((items: any) => {
@@ -541,7 +546,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
     getNotificationValid(is_notify: string) {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout(is_notify, "", 3000);
+        this.toastService.showWarningHTMLWithTimeout(is_notify, "", 3000);
     }
 
     getNameObject(role_numer: number) {
@@ -798,6 +803,18 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         })
         new_arr = arr_clone_different.concat(array_empty);
         item.recipients = new_arr;
+        if (!item.recipients.some((p: any) => p.role == 3)) {
+            item.recipients.push({
+              name: "",
+              email: "",
+              phone: "",
+              role: 3, // người ký
+              ordering: 1,
+              status: 0,
+              is_otp: 0,
+              sign_type: []
+            })
+          }
     }
 
     // xóa đối tượng người xem xét đối tác
@@ -878,7 +895,20 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }
 
     // xóa đối tham gia bên đối tác
-    deletePartner(index: any) {
+    deletePartner(index: any, item: any) {
+        //xoa doi tuong tham gia
+        if (item.id) {
+            this.contractService.deleteParticipantContract(item.id).subscribe((res: any) => {
+                if (res.success == true) {
+                    this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
+                } else {
+                    this.toastService.showErrorHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");
+                }
+            }, (error: HttpErrorResponse) => {
+                this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+            })
+        }
+
         this.datasForm.is_determine_clone.splice(index + 1, 1);
         this.datasForm.is_determine_clone.forEach((res: any, index: number) => {
             res.ordering = index + 1;
@@ -896,37 +926,28 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     changeType(e: any, item: any, index: number) {
         item.name = "";
         let newArr: any[] = [];
+
         for (let i = 0; i < item.recipients.length; i++) {
             if (!newArr.some((p: any) => p.role == item.recipients[i].role)) {
                 newArr.push(item.recipients[i]);
             }
         }
         if (newArr.length) {
-            newArr.forEach((item: any) => {
-                if (item.role == 3) {
-                    item.name = "";
-                    item.email = "";
-                    item.phone = "";
-                    item.role = 3; // người ký
-                    item.ordering = 1;
-                    item.status = 0;
-                    item.is_otp = 0;
-                    item.sign_type = [];
-                    if (item.id) delete item.id;
+            newArr.forEach((element: any) => {
+                if (element.role == 3 || item.type == 3) {
+                    element.name = "";
+                    element.email = "";
+                    element.phone = "";
+                    element.role = 3; // người ký
+                    element.ordering = 1;
+                    element.status = 0;
+                    element.is_otp = 0;
+                    element.sign_type = [];
+                    if (element.id) delete element.id;
                 }
             })
         }
         this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
-
-        // if (item.type == 3) {
-            // this.data_organization.ordering = 2;
-            // item.ordering = 1;
-            // this.is_change_party = true;
-        // } else {
-            // this.data_organization.ordering = 1;
-            // item.ordering = 2;
-            // this.is_change_party = false;
-        // }
     }
 
     // style select otp and phone with signature

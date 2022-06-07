@@ -6,7 +6,7 @@ import {NgSignaturePadOptions, SignaturePadComponent} from "@almothafar/angular-
 import {ContractSignatureService} from "../../../../../service/contract-signature.service";
 import {INgxSelectOption} from "ngx-select-ex/ngx-select/ngx-select.interfaces";
 import Swal from 'sweetalert2'
-
+import { ToastService } from 'src/app/service/toast.service';
 @Component({
   selector: 'app-image-dialog-sign',
   templateUrl: './image-dialog-sign.component.html',
@@ -34,6 +34,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     public router: Router,
     public dialog: MatDialog,
     private contractSignatureService: ContractSignatureService,
+    private toastService : ToastService,
     public dialogRef: MatDialogRef<ImageDialogSignComponent>
   ) { }
 
@@ -112,6 +113,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
         this.signaturePad.set('canvasWidth', 950);
         this.signaturePad.clear();
       }, 200);
+    } else if (ev == 1 && !this.datas.imgSignAcc) {
+      this.toastService.showWarningHTMLWithTimeout('notify_have_not_sign_acc', "", 3000);
     }
   }
 

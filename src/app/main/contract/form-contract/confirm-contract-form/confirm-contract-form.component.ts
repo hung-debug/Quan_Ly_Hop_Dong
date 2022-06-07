@@ -6,6 +6,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DatePipe } from "@angular/common";
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-confirm-contract-form',
@@ -145,7 +146,7 @@ export class ConfirmContractFormComponent implements OnInit {
         if (this.router.url.includes("edit")) {
             let isHaveFieldId: any[] = [];
             let isNotFieldId: any[] = [];
-            let isUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
+            let isUserSign_clone = _.cloneDeep(this.datasForm.contract_user_sign)
             isUserSign_clone.forEach((res: any) => {
                 res.sign_config.forEach((element: any) => {
                     if (element.id_have_data) {
@@ -156,7 +157,7 @@ export class ConfirmContractFormComponent implements OnInit {
             this.getDefinddatasFormignEdit(isHaveFieldId, isNotFieldId, action);
         } else {
             this.data_sample_contract = [];
-            let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datasForm.contract_user_sign));
+            let isContractUserSign_clone = _.cloneDeep(this.datasForm.contract_user_sign)
             isContractUserSign_clone.forEach((element: any) => {
                 if (element.sign_config.length > 0) {
                     element.sign_config.forEach((item: any) => {

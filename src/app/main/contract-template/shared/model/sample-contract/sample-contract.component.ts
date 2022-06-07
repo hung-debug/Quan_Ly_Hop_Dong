@@ -328,7 +328,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
     })
 
-    console.log(this.datas);
+    console.log("dataDetermine");
+    console.log(dataDetermine);
     // lay du lieu vi tri va toa do ky cua buoc 3 da thao tac
     let dataContractUserSign: any[] = [];
     this.datas.contract_user_sign.forEach((res: any, index: number) => {
@@ -388,10 +389,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           end
           */
           //giu lai cac ban ghi chua gan nguoi xu ly + o so tai lieu chua gan nguoi xu ly + o text da co ten chua gan nguoi xu ly + da gan nguoi xu ly va nguoi xu ly con ton tai
-          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) =>!(val.recipient ? val.recipient : val.name)
-                                                                                                  || (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'so_tai_lieu') 
+          //!(val.recipient ? val.recipient : val.name) ||
+          res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) =>!(val.recipient ? val.recipient : val.name) ||
+                                                                                                  (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'so_tai_lieu') 
                                                                                                   || (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'text' && val.text_attribute_name) 
-                                                                                                  || ((val.name as any) == (data.name as any) && (val.type as any) == (data.type as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit)));
+                                                                                                  || (
+                                                                                                      (val.name as any) == (data.name as any) 
+                                                                                                      && (val.type as any) == (data.type as any) 
+                                                                                                      && (val.recipient_id ? val.recipient_id as any : val.email as any) === (val.recipient_id ? data.recipient_id as any : data.email as any) 
+                                                                                                      && val.sign_unit == data.sign_unit)));
           res.sign_config.forEach((items: any) => {
             items.id = items.id + '1';
           })

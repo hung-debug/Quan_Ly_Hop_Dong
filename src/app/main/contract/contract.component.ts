@@ -137,7 +137,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.action = params['action'];
       this.status = params['status'];
 
-      //set title
+      //set status
       this.convertStatusStr();
 
       this.appService.setTitle("contract.list.created");      
@@ -242,31 +242,20 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.p = 1;
     if (this.status == 'draft') {
       this.filter_status = 0;
-      this.title = 'contract.status.draft';
-    } else if (this.status == 'wait-processing') {
-      this.title = 'contract.status.wait-processing';
-    } else if (this.status == 'processing') {
+    }  else if (this.status == 'processing') {
       this.filter_status = 20;
-      this.title = 'contract.status.processing';
-    } else if (this.status == 'processed') {
-      this.title = 'contract.status.processed';
     } else if (this.status == 'expire') {
       this.filter_status = 33;
-      this.title = 'contract.status.expire';
     } else if (this.status == 'overdue') {
       this.filter_status = 34;
-      this.title = 'contract.status.overdue';
     } else if (this.status == 'fail') {
       this.filter_status = 31;
-      this.title = 'contract.status.fail';
     } else if (this.status == 'cancel') {
       this.filter_status = 32;
-      this.title = 'contract.status.cancel';
     } else if (this.status == 'complete') {
       this.filter_status = 30;
-      this.title = 'contract.status.complete';
-    } else {
-      this.title = '';
+    } else if (this.status == 'past-complete') {
+      this.filter_status = 40;
     }
   }
 
@@ -294,7 +283,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (this.status != 'complete') {
       this.spinner.show();
       this.contractService.getContractCopy(id).subscribe((res: any) => {
-        console.log(res);
+        // console.log(res);
         this.toastService.showSuccessHTMLWithTimeout(`Sao chép hợp đồng ${res.name} thành công!`, "", 3000)
         this.getContractList();
         

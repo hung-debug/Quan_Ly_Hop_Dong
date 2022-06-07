@@ -44,6 +44,8 @@ export class AddUserComponent implements OnInit {
   userRoleCode:string='';
   maxDate: Date = moment().toDate();
 
+  orgIdOld:any;
+
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
@@ -79,12 +81,19 @@ export class AddUserComponent implements OnInit {
   
   getDataOnInit(){
     let orgId = this.userService.getAuthCurrentUser().organizationId;
+    this.orgIdOld = orgId;
     if(this.isQLND_01 || this.isQLND_02){
       //lay danh sach to chuc
       this.unitService.getUnitList('', '').subscribe(data => {
         console.log(data.entities);
         console.log(orgId);
-        this.orgList = data.entities.filter((p: any) => p.id == orgId);
+        this.orgList = data.entities;
+        // if(this.action == 'add'){
+        //   this.orgList = data.entities.filter((p: any) => p.id == orgId);
+        // }else{
+        //   this.orgList = data.entities;
+        // }
+        
       });
 
       //lay danh sach vai tro
@@ -254,11 +263,22 @@ export class AddUserComponent implements OnInit {
       }
       console.log(data);
       this.userService.updateUser(data).subscribe(
-        data => {
-          this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
-          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-            this.router.navigate(['/main/user']);
-          });
+        dataOut => {
+          
+          
+          //neu nguoi thao tac chuyen to chuc cho chinh minh thi can logout de lay lai thong tin to chuc moi
+          if(data.organizationId != this.orgIdOld){
+            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công. Vui lòng đăng nhập lại!', "", 3000);
+            localStorage.clear();
+            sessionStorage.clear();
+            this.router.navigate(['/login']);
+          }else{
+            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
+            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+              this.router.navigate(['/main/user']);
+            });
+          }
+          
           this.spinner.hide();
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
@@ -266,6 +286,15 @@ export class AddUserComponent implements OnInit {
         }
       )
     }
+  }
+
+  getRoleByOrg(orgId:any){
+    this.addForm.patchValue({
+      role: null, 
+    });
+    this.roleService.getRoleByOrgId(orgId).subscribe(data => {
+      this.roleList = data.entities;
+    });
   }
 
   onSubmit() {

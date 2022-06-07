@@ -235,7 +235,7 @@
         <!--        <input *ngIf="item.type == 3" type="text" [ngModel]="this.getNameIndividual" disabled>-->
       </div>
       <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
-        <u class="label text-color" (click)="deletePartner(id)"
+        <u class="label text-color" (click)="deletePartner(id, item)"
           style="background-color: #FFFFFF; cursor: pointer">{{(item.type == 2 ? 'xoa_doi_tac_to_chuc' :
           'xoa_doi_tac_ca_nhan') | translate}}</u>
       </div>
@@ -288,7 +288,7 @@
                 <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
               </div>
             </div>
-            <div *ngIf="getPartnerCoordination(item).length < 1" class="participants&#45;&#45;add">
+            <div *ngIf="getPartnerCoordination(item).length < 1" class="participants--add">
               <u class="label text-color" (click)="addPartnerCoordination(item, id)">{{'btn.add.user.lead' |
                 translate}}</u>
             </div>

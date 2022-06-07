@@ -923,6 +923,12 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   checkStatusUser(status: any, role: any) {
     if (this.isDataContract.status == 30) {
       return 'Tải xuống';
+    }else if (this.isDataContract.status == 32) {
+      return 'Đã hủy bỏ';
+    }else if (this.isDataContract.status == 31) {
+      return 'Đã từ chối';
+    }else if (this.isDataContract.release_state == 'HET_HIEU_LUC') {
+      return 'Đã quá hạn';
     }
 
     if (status == 3) {

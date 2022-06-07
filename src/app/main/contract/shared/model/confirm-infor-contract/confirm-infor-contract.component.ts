@@ -6,6 +6,7 @@ import { variable } from 'src/app/config/variable';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-confirm-infor-contract',
@@ -116,7 +117,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
       let isHaveFieldId: any[] = [];
       let isNotFieldId: any[] = [];
-      let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
+      let isUserSign_clone = _.cloneDeep(this.datas.contract_user_sign)
       isUserSign_clone.forEach((res: any) => {
         res.sign_config.forEach((element: any) => {
           if (element.id_have_data) {
@@ -128,7 +129,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     } else {
       this.data_sample_contract = [];
       let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "value"];
-      let isContractUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
+      let isContractUserSign_clone = _.cloneDeep(this.datas.contract_user_sign)
       isContractUserSign_clone.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {

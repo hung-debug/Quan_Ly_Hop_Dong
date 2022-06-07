@@ -874,16 +874,20 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   // xóa đối tham gia bên đối tác
-  deletePartner(index: any) {
-    // let arr_clone = this.datas.is_determine_clone[index].recipients;
-    // const array_empty: any[] = [];
-    // let new_arr: any[] = [];
-    // arr_clone.forEach((res: any, i: number) => {
-    //   if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'tổ chức')) {
-    //     return;
-    //   }
-    // })
-    
+  deletePartner(index: any, item:any) {
+    //xoa doi tuong tham gia
+    if(item.id){
+      this.contractTemplateService.deleteParticipantContract(item.id).subscribe((res: any) => {
+        if(res.success==true){
+          this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
+        }else{
+          this.toastService.showErrorHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");
+        }
+      }, (error: HttpErrorResponse) => {
+        this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+      })
+    }
+
     this.datas.is_determine_clone.splice(index + 1, 1);
     this.datas.is_determine_clone.forEach((res: any, index: number) => {
       res.ordering = index + 1;

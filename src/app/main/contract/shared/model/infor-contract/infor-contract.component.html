@@ -36,8 +36,8 @@
         <input id="file-input" type="file" accept=".pdf" (change)="fileChanged($event)" style="display: none;" />
         <div class="file-contract" (click)="addFile()">
           <img src="assets/img/upload_file.svg" alt="mobifone.contract">
-          <div style="padding-top: 7px;"><span style="color: #798693;"
-              *ngIf="this.datas.file_name==null">{{'choose.contract.file' | translate }}</span>{{this.datas.file_name}}
+          <div style="padding-top: 7px;"><span style="color: #798693" 
+            *ngIf="this.datas.file_name==null">{{'choose.contract.file' | translate }}</span>{{datas.file_name}}
           </div>
         </div>
       </div>

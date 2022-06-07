@@ -63,10 +63,15 @@ export class ForwardContractComponent implements OnInit {
     if (this.currentUser) {
       this.spinner.show();
       let coutError = 0;
-      let idCheckRecipientSign = this.datas.dataContract.is_data_object_signature.filter((p: any) => p.recipient && p.recipient.email == this.currentUser.customer.info.email && p.recipient.role == this.datas.dataContract.roleContractReceived)[0];
-      let id_recipient_signature = '';
-      if (idCheckRecipientSign) {
-        id_recipient_signature = idCheckRecipientSign.recipient_id;
+      let id_recipient_signature = null;
+      for (const d of this.datas.dataContract.is_data_contract.participants) {
+        for (const q of d.recipients) {
+          if (q.email == this.currentUser.customer.info.email && q.status == 1) {
+            id_recipient_signature = q.id;
+            break
+          }
+        }
+        if (id_recipient_signature) break;
       }
 
       await this.contractService.getCheckSignatured(id_recipient_signature).toPromise().then((res: any) => {

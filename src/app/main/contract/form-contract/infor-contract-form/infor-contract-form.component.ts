@@ -251,7 +251,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
                 } else {
                     this.datasForm.file_name_attach = '';
                     this.datasForm.attachFile = '';
-                    this.toastService.showErrorHTMLWithTimeout("File đính kèm yêu cầu có dung lượng nhỏ hơn 5MB", "", 3000);
+                    this.toastService.showWarningHTMLWithTimeout("File đính kèm yêu cầu có dung lượng nhỏ hơn 5MB", "", 3000);
                     break;
                 }
             }
@@ -264,12 +264,30 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
 
     deleteFileAttach(item: any, index_dlt: number) {
+        if (item.id) {
+            this.spinner.show();
+            let data = this.datasForm.fileAttachForm.filter((p: any) => p.id == item.id)[0];
+            if (data) data.status = 0;
+            this.contractService.updateFileAttach(item.id, data).subscribe((res: any) => {
+                this.getListFileAfterDelete(item, index_dlt);
+            }, error => {
+                this.toastService.showErrorHTMLWithTimeout("Lỗi xoá file đính kèm!", "", 3000);
+                this.spinner.hide();
+            }, () => {
+                this.spinner.hide();
+            })
+        } else
+            this.getListFileAfterDelete(item, index_dlt);
+
+    }
+
+    getListFileAfterDelete(item: any, index_dlt: number) {
         this.datasForm.fileAttachForm.splice(index_dlt, 1);
         if (this.listFileAttach.some((p: any) => p.filename != item.filename)) {
             this.listFileAttach = this.listFileAttach.filter((p: any) => p.filename != item.filename);
         }
-
     }
+
 
     validDataForm() {
         if (!this.datasForm.template_contract_id) {
@@ -285,7 +303,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         let isDateNow = new Date(moment().format('YYYY-MM-DD'));
 
         if (Number(isDateSign) < Number(isDateNow)) {
-            this.toastService.showErrorHTMLWithTimeout('Ngày hết hạn ký không được nhỏ hơn ngày hiện tại!', "", 3000);
+            this.toastService.showWarningHTMLWithTimeout('Ngày hết hạn ký không được nhỏ hơn ngày hiện tại!', "", 3000);
             return false;
         }
 
@@ -302,7 +320,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             await this.contractService.checkCodeUnique(this.datasForm.contract_no).toPromise().then(
                 dataCode => {
                     if (!dataCode.success) {
-                        this.toastService.showErrorHTMLWithTimeout('Số hợp đồng đã tồn tại', "", 3000);
+                        this.toastService.showWarningHTMLWithTimeout('contract_number_already_exist', "", 3000);
                         this.spinner.hide();
                         coutError = true;
                     }
@@ -393,29 +411,25 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
                 if (!coutError) {
                     if (action == "chuyen_buoc") {
-                        this.getDataContractForm();
+                        this.getDataContractForm('next_step');
                     } else {
                         if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
                             this.save_draft_infor_form.close_header = false;
                             this.save_draft_infor_form.close_modal.close();
                         }
-                        this.router.navigate(['/main/contract/create/draft']);
-                        this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+                        this.getDataContractForm('save_temp');
                     }
                     this.spinner.hide();
                 }
 
             } else if (!coutError) {
-                if (action == "luu_nhap") {
-                    this.router.navigate(['/main/contract/create/draft']);
-                    this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-                } else {
+                if (action == "luu_nhap")
+                    this.getDataContractForm('save_temp');
+                else
                     //next step
-                    this.getDataContractForm();
-                }
+                    this.getDataContractForm('next_step');
                 this.spinner.hide();
             }
-            // }
         } else this.spinner.hide();
     }
 
@@ -438,9 +452,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
         this.toastService.showWarningHTMLWithTimeout("no.push.information.contract.error", "", "3000");
     }
 
-    async getDataContractForm() {
+    async getDataContractForm(action: string) {
         if (this.action == 'edit') {
-            this.nextForm();
+            if (action == 'next_step') {
+                this.nextForm();
+            } else {
+                this.router.navigate(['/main/contract/create/draft']);
+                this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
+            }
         } else {
             let is_create_error = false;
             await this.contractTemplateService.getFileContractFormClone(this.datasForm.template_contract_id, this.datasForm.contract_id).toPromise().then((res: any) => {
@@ -454,16 +473,19 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             })
 
             if (!is_create_error) {
-                if (this.datasForm.isChangeForm) {
-                    await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.template_contract_id, 'get-form-data').toPromise().then((res: any) => {
-                        this.datasForm.is_determine_clone = res.participants;
-                        // this.datasForm.contract_id = res.id;
-                        this.nextForm();
-                    }, (error) => {
-                        this.errorData();
-                    })
+                if (action == 'next_step') {
+                    if (this.datasForm.isChangeForm) {
+                        await this.contractTemplateService.addInforContractTemplate(null, this.datasForm.template_contract_id, 'get-form-data').toPromise().then((res: any) => {
+                            this.datasForm.is_determine_clone = res.participants;
+                            // this.datasForm.contract_id = res.id;
+                            this.nextForm();
+                        }, (error) => {
+                            this.errorData();
+                        })
+                    } else this.nextForm();
                 } else {
-                    this.nextForm();
+                    this.router.navigate(['/main/contract/create/draft']);
+                    this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
                 }
             }
         }

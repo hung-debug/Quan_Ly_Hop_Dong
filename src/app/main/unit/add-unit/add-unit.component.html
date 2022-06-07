@@ -16,12 +16,11 @@
             </div>
         
             <div class="col-md-6">
-                <div class="label text-color">{{'unit.short-name' | translate }} <span class="required-title">*</span></div>
+                <div class="label text-color">{{'unit.short-name' | translate }}</div>
                 <div class="input-data">
                     <input type="text" formControlName="short_name">
                 </div>
                 <div *ngIf="submitted && f.short_name.errors" class="invalid">
-                    <div *ngIf="f.short_name.errors.required">{{'error.unit.short-code.required' | translate}}</div>
                     <div *ngIf="f.short_name.errors.pattern">{{'Tên viết tắt không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
             </div>
@@ -121,4 +120,8 @@
         </div>
     </form>
   </div>
+
+  <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+    <p style="font-size: 18px; color: white">Đang xử lý...</p>
+  </ngx-spinner>
   

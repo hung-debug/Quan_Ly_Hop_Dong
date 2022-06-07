@@ -11,35 +11,35 @@ import {
   QueryList,
   ViewChild
 } from '@angular/core';
-import {ContractSignatureService} from "../../../../service/contract-signature.service";
-import {ContractService} from "../../../../service/contract.service";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import { ContractSignatureService } from "../../../../service/contract-signature.service";
+import { ContractService } from "../../../../service/contract.service";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import * as $ from "jquery";
 import {
   ProcessingHandleEcontractComponent
 } from "../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
 import interact from "interactjs";
-import {variable} from "../../../../config/variable";
-import {ActivatedRoute, Router} from "@angular/router";
+import { variable } from "../../../../config/variable";
+import { ActivatedRoute, Router } from "@angular/router";
 import Swal from 'sweetalert2'
-import {AppService} from "../../../../service/app.service";
-import {ConfirmSignOtpComponent} from "./confirm-sign-otp/confirm-sign-otp.component";
-import {ImageDialogSignComponent} from "./image-dialog-sign/image-dialog-sign.component";
-import {PkiDialogSignComponent} from "./pki-dialog-sign/pki-dialog-sign.component";
-import {HsmDialogSignComponent} from "./hsm-dialog-sign/hsm-dialog-sign.component";
-import {forkJoin, from, throwError, timer} from "rxjs";
-import {ToastService} from "../../../../service/toast.service";
-import {UploadService} from "../../../../service/upload.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {DigitalSignatureService} from "../service/digital-sign.service";
-import {encode} from "base64-arraybuffer";
-import {UserService} from "../../../../service/user.service";
+import { AppService } from "../../../../service/app.service";
+import { ConfirmSignOtpComponent } from "./confirm-sign-otp/confirm-sign-otp.component";
+import { ImageDialogSignComponent } from "./image-dialog-sign/image-dialog-sign.component";
+import { PkiDialogSignComponent } from "./pki-dialog-sign/pki-dialog-sign.component";
+import { HsmDialogSignComponent } from "./hsm-dialog-sign/hsm-dialog-sign.component";
+import { forkJoin, from, throwError, timer } from "rxjs";
+import { ToastService } from "../../../../service/toast.service";
+import { UploadService } from "../../../../service/upload.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { DigitalSignatureService } from "../service/digital-sign.service";
+import { encode } from "base64-arraybuffer";
+import { UserService } from "../../../../service/user.service";
 // @ts-ignore
 import domtoimage from 'dom-to-image';
-import {concatMap, delay, map, tap} from 'rxjs/operators';
+import { concatMap, delay, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import {networkList} from "../../../../config/variable";
+import { networkList } from "../../../../config/variable";
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -116,16 +116,16 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   allRelateToContract: any[];
 
   isPartySignature: any = [
-    {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
-    {id: 2, name: 'Công ty newEZ Việt Nam'},
-    {id: 3, name: 'Tập đoàn Bảo Việt'}
+    { id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam' },
+    { id: 2, name: 'Công ty newEZ Việt Nam' },
+    { id: 3, name: 'Tập đoàn Bảo Việt' }
   ];
 
   optionsSign: any = [
-    {item_id: 1, item_text: 'Ký ảnh'},
-    {item_id: 2, item_text: 'Ký số bằng USB token'},
-    {item_id: 3, item_text: 'Ký số bằng sim PKI'},
-    {item_id: 4, item_text: 'Ký số bằng HSM'}
+    { item_id: 1, item_text: 'Ký ảnh' },
+    { item_id: 2, item_text: 'Ký số bằng USB token' },
+    { item_id: 3, item_text: 'Ký số bằng sim PKI' },
+    { item_id: 4, item_text: 'Ký số bằng HSM' }
   ];
   typeSign: any = 0;
   isOtp: boolean = false;
@@ -155,8 +155,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     private activeRoute: ActivatedRoute,
     private router: Router,
     private appService: AppService,
-    private toastService : ToastService,
-    private uploadService : UploadService,
+    private toastService: ToastService,
+    private uploadService: UploadService,
     private spinner: NgxSpinnerService,
     private digitalSignatureService: DigitalSignatureService,
     private userService: UserService,
@@ -174,8 +174,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
     this.activeRoute.queryParams
       .subscribe(params => {
-          this.recipientId = params.recipientId;
-        }
+        this.recipientId = params.recipientId;
+      }
       );
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
       console.log(rs);
@@ -196,7 +196,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         this.datas = Object.assign(this.datas, this.data_contract);
       }*/
       this.datas = this.data_contract;
-      if(this.datas?.is_data_contract?.type_id){
+      if (this.datas?.is_data_contract?.type_id) {
         this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe(data => {
           if (this.datas?.is_data_contract) {
             this.datas.is_data_contract.type_name = data;
@@ -215,7 +215,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         tap((res) => {
           for (const eR of res) {
             if (eR.type == 2) {
-              for (const re of this.datas.is_data_contract.refs)  {
+              for (const re of this.datas.is_data_contract.refs) {
                 if (re.ref_id == eR.contract_id) {
                   re.path = eR.path;
                 }
@@ -353,7 +353,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       this.arrPage = [];
       for (let page = 1; page <= this.pageNumber; page++) {
         let canvas = document.createElement("canvas");
-        this.arrPage.push({page: page});
+        this.arrPage.push({ page: page });
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
         // canvas.style.paddingLeft = '15px';
@@ -431,7 +431,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
       // let viewport = page.getViewport(this.scale);
-      let viewport = page.getViewport({scale: this.scale});
+      let viewport = page.getViewport({ scale: this.scale });
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
@@ -446,7 +446,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           height: viewport.height,
         });
       }
-      page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
+      page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
@@ -511,7 +511,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     } else return {}
   }
 
-// hàm stype đối tượng boder kéo thả
+  // hàm stype đối tượng boder kéo thả
   changeColorDrag(role: any, valueSign: any, isDaKeo?: any) {
     if (isDaKeo && !valueSign.valueSign) {
       return 'ck-da-keo';
@@ -582,8 +582,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     if (this.datas && this.isDataObjectSignature && this.isDataObjectSignature.length) {
-    //   let arrSignConfig: any = [];
-    //   arrSignConfig = this.datas.is_data_object_signature;
+      //   let arrSignConfig: any = [];
+      //   arrSignConfig = this.datas.is_data_object_signature;
       return this.datas.is_data_object_signature.filter(
         (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived
       );
@@ -754,25 +754,33 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#b0bec5',
         confirmButtonText: 'Xác nhận',
-        cancelButtonText: 'Hủy'
+        cancelButtonText: 'Hủy bỏ',
       }).then(async (result) => {
         if (result.isConfirmed) {
           // Kiểm tra ô ký đã ký chưa (status = 2)
           this.spinner.show();
-          console.log(this.datas.is_data_object_signature);
-          let idCheckRecipientSign = this.datas.is_data_object_signature.filter((p: any) => p.recipient && p.recipient.email == this.currentUser.email && p.recipient.role == this.datas.roleContractReceived)[0];
-          let id_recipient_signature = '';
-          if (idCheckRecipientSign) {
-            id_recipient_signature = idCheckRecipientSign.recipient_id;
+          let id_recipient_signature = null;
+          // console.log(this.datas);
+          for (const d of this.datas.is_data_contract.participants) {
+            for (const q of d.recipients) {
+              if (q.email == this.currentUser.email && q.status == 1) {
+                id_recipient_signature = q.id;
+                break
+              }
+            }
+            if (id_recipient_signature) break;
           }
+
           //neu co id nguoi xu ly thi moi kiem tra
-          if(id_recipient_signature){
+          if (id_recipient_signature) {
             this.contractService.getCheckSignatured(id_recipient_signature).subscribe((res: any) => {
               if (res && res.status == 2) {
+                this.spinner.hide();
                 this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
               } else {
                 if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
                   this.pkiDialogSignOpen();
+                  this.spinner.hide();
                 } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
                   this.signContractSubmit();
                 }
@@ -780,17 +788,16 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             }, (error: HttpErrorResponse) => {
               this.spinner.hide();
               this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
-            }, () => {
-              //this.spinner.hide();
             })
-          }else{
+          } else {
             if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
               this.pkiDialogSignOpen();
+              this.spinner.hide();
             } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
               this.signContractSubmit();
             }
           }
-          
+
 
         }
       });
@@ -889,7 +896,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       } else if (this.confirmConsider == 2) {
         return 'Bạn có chắc chắn từ chối hợp đồng này?';
       }
-    } else if ([3,4].includes(this.datas.roleContractReceived)) {
+    } else if ([3, 4].includes(this.datas.roleContractReceived)) {
       if (this.confirmSignature == 1 && this.datas.roleContractReceived == 3) {
         return 'Bạn có đồng ý với nội dung của hợp đồng và xác nhận ký?';
       } else if (this.confirmSignature == 1 && this.datas.roleContractReceived == 4) {
@@ -922,8 +929,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   async signDigitalDocument() {
     let typeSignDigital = 0;
 
-    for(const signUpdate of this.isDataObjectSignature) {
-      if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+    for (const signUpdate of this.isDataObjectSignature) {
+      if (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
@@ -940,8 +947,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     if (typeSignDigital == 2) {
       if (this.signCertDigital && this.signCertDigital.Serial) {
         // this.signCertDigital = resSignDigital.data;
-        for(const signUpdate of this.isDataObjectSignature) {
-          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 1 || signUpdate.type == 4) && [3,4].includes(this.datas.roleContractReceived)
+        for (const signUpdate of this.isDataObjectSignature) {
+          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 1 || signUpdate.type == 4) && [3, 4].includes(this.datas.roleContractReceived)
             && signUpdate?.recipient?.email === this.currentUser.email
             && signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
@@ -1000,7 +1007,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         return false;
       }
     } else if (typeSignDigital == 3) {
-      const objSign = this.isDataObjectSignature.filter((signUpdate: any) => (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+      const objSign = this.isDataObjectSignature.filter((signUpdate: any) => (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived));
       let fileC = await this.contractService.getFileContractPromise(this.idContract);
@@ -1043,9 +1050,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
     let iu = 0;
-    for(const signUpdate of this.isDataObjectSignature) {
+    for (const signUpdate of this.isDataObjectSignature) {
       console.log('ki anh', signUpdate);
-      if (signUpdate && signUpdate.type == 2 && [3,4].includes(this.datas.roleContractReceived)
+      if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
@@ -1084,17 +1091,18 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
     const signUpdatePayload = signUpdateTemp.filter(
       (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
-      .map((item: any) =>  {
-      return {
-        id: item.id,
-        name: item.name,
-        value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
-        font: item.font,
-        font_size: item.font_size
-      }});
+      .map((item: any) => {
+        return {
+          id: item.id,
+          name: item.name,
+          value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
+          font: item.font,
+          font_size: item.font_size
+        }
+      });
     let typeSignDigital = null;
-    for(const signUpdate of this.isDataObjectSignature) {
-      if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+    for (const signUpdate of this.isDataObjectSignature) {
+      if (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
@@ -1154,14 +1162,15 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       signDigitalStatus = await this.signDigitalDocument();
       signUpdateTempN = signUpdateTempN.filter(
         (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
-        .map((item: any) =>  {
+        .map((item: any) => {
           return {
             id: item.id,
             name: item.name,
             value: null,
             font: item.font,
             font_size: item.font_size
-          }});
+          }
+        });
     }
     if (notContainSignImage && !signDigitalStatus && this.datas.roleContractReceived != 2) {
       this.spinner.hide();
@@ -1175,7 +1184,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         setTimeout(() => {
           this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
           this.toastService.showSuccessHTMLWithTimeout(
-            [3,4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+            [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
             , '', 3000);
           this.spinner.hide();
         }, 1000);
@@ -1189,8 +1198,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
     let iu = 0;
-    for(const signUpdate of this.isDataObjectSignature) {
-      if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
+    for (const signUpdate of this.isDataObjectSignature) {
+      if (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
@@ -1222,14 +1231,15 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const signUpdatePayload = signUpdateTemp.filter(
       (item: any) => item?.recipient?.email === this.currentUser.email && item.type == 3 &&
         item?.recipient?.role === this.datas?.roleContractReceived)
-      .map((item: any) =>  {
+      .map((item: any) => {
         return {
           id: item.id,
           name: item.name,
           value: item.value,
           font: item.font,
           font_size: item.font_size
-        }});
+        }
+      });
     const signRes = await this.contractService.updateInfoContractConsiderToPromise(signUpdatePayload, this.recipientId);
     /*let ir = 0;
     for (const resE of imgLinksRes) {
@@ -1305,25 +1315,25 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     console.log(this);
   }
 
-  downloadContract(id:any){
+  downloadContract(id: any) {
     this.contractService.getFileZipContract(id).subscribe((data) => {
-        
-        this.uploadService.downloadFile(data.path).subscribe((response: any) => {
-          //console.log(response);
 
-          let url = window.URL.createObjectURL(response);
-          let a = document.createElement('a');
-          document.body.appendChild(a);
-          a.setAttribute('style', 'display: none');
-          a.href = url;
-          a.download = data.name;
-          a.click();
-          window.URL.revokeObjectURL(url);
-          a.remove();
+      this.uploadService.downloadFile(data.path).subscribe((response: any) => {
+        //console.log(response);
 
-          this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
-        }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
-      },
+        let url = window.URL.createObjectURL(response);
+        let a = document.createElement('a');
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display: none');
+        a.href = url;
+        a.download = data.name;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+
+        this.toastService.showSuccessHTMLWithTimeout("no.contract.download.file.success", "", 3000);
+      }), (error: any) => this.toastService.showErrorHTMLWithTimeout("no.contract.download.file.error", "", 3000);
+    },
       error => {
         this.toastService.showErrorHTMLWithTimeout("no.contract.get.file.error", "", 3000);
       }

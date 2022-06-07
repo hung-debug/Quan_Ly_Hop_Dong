@@ -260,38 +260,18 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   //--valid data step 1
   validData() {
+    this.contractNameValid();
+    this.contractFileValid();
+    this.contractNumberValid();
+    this.startTimeRequired();
+    this.endTimeValid();
     if(!this.contractNameValid() || !this.contractFileValid() 
       || !this.contractNumberValid() || !this.startTimeRequired() || !this.endTimeValid()){
       //this.spinner.hide();
       return false;
     }
-
-
-    // let isDateSign = new Date(moment(this.sign_time).format('YYYY-MM-DD'));
-    // let isDateNow = new Date(moment().format('YYYY-MM-DD'));
-
-    // if (Number(isDateSign) < Number(isDateNow)) {
-    //   this.toastService.showErrorHTMLWithTimeout('Ngày hết hạn ký không được nhỏ hơn ngày hiện tại!', "", 3000);
-    //   return false;
-    // }
-
     return true
   }
-
-  clearError() {
-    if (this.name) {
-      this.errorContractName = '';
-    }
-    if (this.datas.contractFile) {
-      this.errorContractFile = '';
-    }
-    // if (Math.round((this.sign_time.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24) >= 0) {
-    //   this.errorSignTime = '';
-    // }
-  }
-
-
-  // getDataCoordination
 
   async callAPI(action?: string) {
     //call API step 1
@@ -338,7 +318,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         }, (error: HttpErrorResponse) => {
           countSuccess++
           this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
+          this.toastService.showErrorHTMLWithTimeout("Thay thế file hợp đồng thất bại", "", 3000);
           // return;
         })
       }

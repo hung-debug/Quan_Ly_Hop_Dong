@@ -34,6 +34,7 @@ export class ContractTemplateService {
   deleteInfoContractUrl: any = `${environment.apiUrl}/api/v1/fields/template/`;
   copyFileContractFormUrl: any = `${environment.apiUrl}/api/v1/contracts/template/`;
   urlGetListFileTemplate: any = `${environment.apiUrl}/api/v1/contracts/template/release/list`;
+  deleteParticipantContractUrl: any = `${environment.apiUrl}/api/v1/participants/template/`;
 
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
@@ -310,6 +311,14 @@ export class ContractTemplateService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.delete<any>(this.deleteShareUrl + id, { 'headers': headers });
+  }
+
+  deleteParticipantContract(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.delete<any>(this.deleteParticipantContractUrl + id, { headers });
   }
 
   getDataDetermine() {

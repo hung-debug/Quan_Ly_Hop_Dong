@@ -24,7 +24,6 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {MatDialog} from "@angular/material/dialog";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ToastService} from "../../../../../../service/toast.service";
-import {ContractSignatureService} from "../../../../../../service/contract-signature.service";
 import {AppService} from "../../../../../../service/app.service";
 import {throwError} from "rxjs";
 
@@ -100,12 +99,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   valid: boolean = false;
   loaded: boolean = false;
 
-  // isPartySignature: any = [
-  //   {id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam'},
-  //   {id: 2, name: 'Công ty newEZ Việt Nam'},
-  //   {id: 3, name: 'Tập đoàn Bảo Việt'}
-  // ]
-
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -113,8 +106,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     private dialog: MatDialog,
     private activeRoute: ActivatedRoute,
     private toastService: ToastService,
-    private router: Router,
-    private contractSignatureService: ContractSignatureService,
     private appService: AppService
   ) {
     this.step = variable.stepSampleContract.step3;

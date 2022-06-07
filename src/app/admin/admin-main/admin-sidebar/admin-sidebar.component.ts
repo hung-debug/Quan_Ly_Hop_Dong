@@ -134,9 +134,9 @@ export class AdminSidebarComponent implements OnInit {
 
   getRemoveLocal() {
     //@ts-ignore
-    if (JSON.parse(localStorage.getItem('coordination_complete'))) {
-      localStorage.removeItem('coordination_complete')
-    }
+    // if (JSON.parse(localStorage.getItem('coordination_complete'))) {
+    //   localStorage.removeItem('coordination_complete')
+    // }
     //@ts-ignore
     if (JSON.parse(localStorage.getItem('data_coordinates_contract_id'))) {
       localStorage.removeItem('data_coordinates_contract_id');

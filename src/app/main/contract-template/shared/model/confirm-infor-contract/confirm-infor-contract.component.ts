@@ -116,11 +116,11 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate(['/main/contract-template']);
       });
-      this.spinner.show();
+      this.spinner.hide();
       this.toastService.showSuccessHTMLWithTimeout("Tạo mẫu hợp đồng thành công!", "", 3000);
     },
     error => {
-      this.spinner.show();
+      this.spinner.hide();
       this.toastService.showErrorHTMLWithTimeout("Tạo mẫu hợp đồng thất bại", "", 3000);
       return false;
     }

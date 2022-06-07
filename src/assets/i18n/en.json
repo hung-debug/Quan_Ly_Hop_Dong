@@ -355,7 +355,7 @@
   "of_doi_tac_ca_nhan": "của đối tác cá nhân!",
   "doi_tac_ca_nhan_ko_hop_le": " đối tác cá nhân không hợp lệ!",
   "doi_tac_ko_hop_le": " đối tác không hợp lệ!",
-  "note_email_doi_tac": "Lưu ý: email người điều phối có thể trùng với email người ký!",
+  "note_email_doi_tac": "Note: The dispatcher's email may match the email in the same organization!",
   "email_partern_not_duplicate": "Email đối tác không được trùng nhau!",
   "have_version_app_mobile": "There is a mobile version available.",
   "please_openApp_or_download": "Please visit or download the application to continue using the service.",
@@ -364,5 +364,7 @@
   "contract_signature_success": "The contract has been processed!",
   "error_check_signature": "Signature check error!",
   "error_change_contract_template": "Sample contract change data error, Please cancel the contract and rework again!",
-  "error_delete_object_signature": "cannot delete change data, please try again!"
+  "error_delete_object_signature": "cannot delete change data, please try again!",
+  "contract_number_already_exist": "contract number already exist!",
+  "notify_have_not_sign_acc": "You don't have a signed photo from your account!"
 }
