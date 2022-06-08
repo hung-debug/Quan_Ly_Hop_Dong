@@ -34,7 +34,12 @@ export class AdminUnitComponent implements OnInit {
   isAdmin: boolean = false;
   adminUnit: boolean = true;
 
+  addUnitRole: boolean = false;
+  searchUnitRole: boolean = false;
+
   ngOnInit(): void {
+    this.addUnitRole = this.checkRole(this.addUnitRole, 'QLTC_01');
+    this.searchUnitRole = this.checkRole(this.searchUnitRole,'QLTC_03');
 
     const permissions =  JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
 
@@ -55,6 +60,29 @@ export class AdminUnitComponent implements OnInit {
       { field: 'email', header: 'Email đăng ký', style: 'text-align: left;' },
       { field: 'id', header: 'unit.manage', style: 'text-align: center;' },
     ];
+  }
+  checkRole(flag: boolean, code: string): boolean {
+    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
+      .user.permissions;
+
+    const selectedRoleConvert: { code: any }[] = [];
+
+    permissions.forEach((key: any) => {
+      let jsonData = { code: key.code, name: key.name };
+      selectedRoleConvert.push(jsonData);
+    });
+
+    for (let i = 0; i < selectedRoleConvert.length; i++) {
+      let role = selectedRoleConvert[i].code;
+
+      if (role.includes(code)) {
+        flag = true;
+        break;
+      }
+
+    }
+
+    return flag;
   }
 
   array_empty: any = [];

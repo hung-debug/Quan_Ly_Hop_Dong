@@ -60,8 +60,6 @@ export class AdminMainComponent implements OnInit {
       this.adminUnit = false;
     }
 
-    console.log("boolean "+this.adminUnit);
-
     this.selectedRoleConvert = [];
 
     permissions.forEach((key: any) => {

@@ -80,6 +80,7 @@ export class AdminAddUserComponent implements OnInit {
     console.log('flag ' + this.flagAddUpdate);
 
     if (this.flagAddUpdate === 0) {
+      console.log("on submit");
       this.onSubmit();
     } else if (this.flagAddUpdate === 1) {
       this.update();
@@ -185,16 +186,13 @@ export class AdminAddUserComponent implements OnInit {
   }
 
   update() {
-    const dataUpdate = {
+    var dataUpdate = {
       id: this.data.id,
       name: this.addForm.value.name,
       email: this.addForm.value.email,
       phone: this.addForm.value.phone,
       role: this.addForm.value.role,
     };
-
-    console.log('data update phone ');
-    console.log(dataUpdate.phone);
 
     var selectedRoleConvert: any[] = [];
 
@@ -207,10 +205,9 @@ export class AdminAddUserComponent implements OnInit {
 
     this.adminUserService.updateUser(dataUpdate).subscribe(
       (data) => {
-        console.log('data');
-        console.log(data.id);
+        console.log(data);
 
-        if (data.id != undefined) {
+        if (data.id != undefined && data.id != null) {
           this.toastService.showSuccessHTMLWithTimeout(
             'Cập nhật thành công!',
             '',
