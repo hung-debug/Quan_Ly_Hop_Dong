@@ -90,7 +90,56 @@ export class AdminAddUnitComponent implements OnInit {
     this.datas = this.data;
 
     //lay du lieu form cap nhat
-    if (this.data.id != null) {
+    if (this.data.list != null) {
+
+      if(this.data.list.id != null) {
+        console.log("data");
+        console.log(this.data);
+  
+        this.addForm = this.fbd.group({
+          nameOrg: this.fbd.control(this.data.list.name, [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          short_name: this.fbd.control(this.data.list.shortName, [
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          code: this.fbd.control(this.data.list.code, [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          email: this.fbd.control(this.data.list.email, [
+            Validators.required,
+            Validators.email,
+          ]),
+          phone: this.fbd.control(this.data.list.phone, [
+            Validators.required,
+            Validators.pattern('[0-9 ]{10}'),
+          ]),
+          tax_code: this.fbd.control(
+            this.data.list.taxCode,
+            Validators.pattern(parttern_input.input_form)
+          ),
+          address: this.fbd.control(this.data.list.address, [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          status: this.fbd.control(this.convertStatus(this.data.list.status),[
+            Validators.required
+          ]),
+          representatives: this.fbd.control(this.data.list.representative, Validators.required),
+          position: this.fbd.control(this.data.list.position, [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          size: this.fbd.control(this.data.list.size, [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+        });
+      }
+     
+
       //lay danh sach to chuc
       // this.unitService.getUnitById(this.data.id).subscribe(
       //   data => {
@@ -155,6 +204,19 @@ export class AdminAddUnitComponent implements OnInit {
         ]),
       });
     }
+  }
+  convertStatus(status: any): any {
+
+    console.log("status value");
+    console.log(status);
+
+    if(status == 'IN_ACTIVE') {
+        status = 0;
+    } else if(status == 'ACTIVE') {
+        status = 1;
+    }
+
+    return status;
   }
 
   update(data: any) {
@@ -312,23 +374,23 @@ export class AdminAddUnitComponent implements OnInit {
     if (this.addForm.invalid) {
       return;
     }
-    const data = {
-      id: '',
-      name: this.addForm.value.nameOrg,
-      short_name: this.addForm.value.short_name,
-      code: this.addForm.value.code,
-      email: this.addForm.value.email,
-      phone: this.addForm.value.phone,
-      size: this.addForm.value.size,
-      status: this.addForm.value.status,
-      representatives: this.addForm.value.representatives,
-      path: this.addForm.value.path,
-    };
-    console.log(data);
+    // const data = {
+    //   id: '',
+    //   name: this.addForm.value.nameOrg,
+    //   short_name: this.addForm.value.short_name,
+    //   code: this.addForm.value.code,
+    //   email: this.addForm.value.email,
+    //   phone: this.addForm.value.phone,
+    //   size: this.addForm.value.size,
+    //   status: this.addForm.value.status,
+    //   representatives: this.addForm.value.representatives,
+    //   path: this.addForm.value.path,
+    // };
+    // console.log(data);
 
     //truong hop sua ban ghi
     if (this.data.id != null) {
-      data.id = this.data.id;
+      // data.id = this.data.id;
       //neu thay doi ten thi can check lai
       // if(data.name != this.nameOld){
       //   //kiem tra ten to chuc da ton tai trong he thong hay chua
@@ -381,6 +443,9 @@ export class AdminAddUnitComponent implements OnInit {
       this.adminUnitService.addUnit(data).subscribe(
         (data) => {
           if (data.id != null) {
+            console.log("data");
+            console.log(data.status);
+
             this.toastService.showSuccessHTMLWithTimeout(
               'Thêm mới thành công!',
               '',
@@ -402,13 +467,13 @@ export class AdminAddUnitComponent implements OnInit {
 
             if (data.errors[0].code == 1001) {
               this.toastService.showErrorHTMLWithTimeout(
-                "Email đã tồn tại trên hệ thống",
+                'Email đã tồn tại trên hệ thống',
                 '',
                 3000
               );
-            } else if(data.errors[0].code == 1003) {
+            } else if (data.errors[0].code == 1003) {
               this.toastService.showErrorHTMLWithTimeout(
-                "Tên tổ chức đã được sử dụng",
+                'Tên tổ chức đã được sử dụng',
                 '',
                 3000
               );
