@@ -54,6 +54,9 @@ export class AdminMainComponent implements OnInit {
 
   ngOnInit(): void {
 
+    console.log("info");
+    console.log(JSON.parse(localStorage.getItem('currentAdmin') || ''));
+
     const permissions =  JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
 
     if(permissions.length === 0) {
