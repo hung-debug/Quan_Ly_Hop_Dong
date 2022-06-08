@@ -256,32 +256,28 @@ export var roleList = [
       { label: "Chia sẻ hợp đồng", value: "QLHD_13"},
     ]
   },
-  // {
-  //   //Nhóm chức năng quản lý mẫu hợp đồng
-  //   label: "Nhóm chức năng quản lý mẫu hợp đồng", value: "QLMHD",
-  //   items: [
-  //     //Thêm mới mẫu hợp đồng
-  //     { label: "Thêm mới mẫu hợp đồng", value: "QLMHD_01"},
-  //     //Sửa mẫu hợp đồng
-  //     { label: "Sửa mẫu hợp đồng", value: "QLMHD_02"},
-  //     //Tạo hợp đồng đơn lẻ theo mẫu
-  //     { label: "Tạo hợp đồng đơn lẻ theo mẫu", value: "QLMHD_03"},
-  //     //Tạo hợp đồng theo lô
-  //     { label: "Tạo hợp đồng theo lô", value: "QLMHD_04"},
-  //     //Ngừng phát hành mẫu hợp đồng
-  //     { label: "Ngừng phát hành mẫu hợp đồng", value: "QLMHD_05"},
-  //     //Phát hành mẫu hợp đồng
-  //     { label: "Phát hành mẫu hợp đồng", value: "QLMHD_06"},
-  //     //Chia sẻ mẫu hợp đồng
-  //     { label: "Chia sẻ mẫu hợp đồng", value: "QLMHD_07"},
-  //     //Tìm kiếm mẫu hợp đồng
-  //     { label: "Tìm kiếm mẫu hợp đồng", value: "QLMHD_08"},
-  //     //Xóa mẫu hợp đồng
-  //     { label: "Xóa mẫu hợp đồng", value: "QLMHD_09"},
-  //     //Xem thông tin chi tiết mẫu hợp đồng
-  //     { label: "Xem thông tin chi tiết mẫu hợp đồng", value: "QLMHD_10"},
-  //   ]
-  // },
+  {
+    //Nhóm chức năng quản lý mẫu hợp đồng
+    label: "Nhóm chức năng quản lý mẫu hợp đồng", value: "QLMHD",
+    items: [
+      //Thêm mới mẫu hợp đồng
+      { label: "Thêm mới mẫu hợp đồng", value: "QLMHD_01"},
+      //Sửa mẫu hợp đồng
+      { label: "Sửa mẫu hợp đồng", value: "QLMHD_02"},
+      //Ngừng phát hành mẫu hợp đồng
+      { label: "Ngừng phát hành mẫu hợp đồng", value: "QLMHD_03"},
+      //Phát hành mẫu hợp đồng
+      { label: "Phát hành mẫu hợp đồng", value: "QLMHD_04"},
+      //Chia sẻ mẫu hợp đồng
+      { label: "Chia sẻ mẫu hợp đồng", value: "QLMHD_05"},
+      //Tìm kiếm mẫu hợp đồng
+      { label: "Tìm kiếm mẫu hợp đồng", value: "QLMHD_06"},
+      //Xóa mẫu hợp đồng
+      { label: "Xóa mẫu hợp đồng", value: "QLMHD_07"},
+      //Xem thông tin chi tiết mẫu hợp đồng
+      { label: "Xem thông tin chi tiết mẫu hợp đồng", value: "QLMHD_08"},
+    ]
+  },
   {
     //Nhóm chức năng quản lý tổ chức
     label: "Nhóm chức năng quản lý tổ chức", value: "QLTC",

@@ -160,8 +160,17 @@ export class AddContractComponent implements OnInit {
         })
 
       //set title
+      this.type = 1;
       if (this.action == 'add') {
         this.appService.setTitle('contract.add');
+      }else if (this.action == 'add-form') {
+        this.type = 2;
+        this.appService.setTitle('contract.add');
+        this.datasForm.template_contract_id = Number(params['id']);
+      } else if (this.action == 'add-batch') {
+        this.type = 3;
+        this.appService.setTitle('contract.add');
+        this.datasBatch.idContractTemplate = Number(params['id']);
       } else if (this.action == 'add-contract-connect') {
         this.appService.setTitle('contract.add');
         const array_empty: any[] = [];
@@ -192,12 +201,13 @@ export class AddContractComponent implements OnInit {
           this.spinner.hide();
         })
       } else {
-        // if (this.type == 1) {
+        if (this.type == 1) {
         this.step = variable.stepSampleContract.step1;
-        // } else if (this.type == 2) {
+        } else if (this.type == 2) {
         this.stepForm = variable.stepSampleContractForm.step1;
-        // }
-        this.stepBatch = variable.stepSampleContractBatch.step1;
+        } else if (this.type == 3) {
+          this.stepBatch = variable.stepSampleContractBatch.step1;
+        }
       }
     });
   }
