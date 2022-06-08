@@ -90,8 +90,12 @@ export class AdminUnitComponent implements OnInit {
   //Tìm kiếm tổ chức
   searchUnit() {
     this.adminUnitService
-      .getUnitList(this.code, this.name)
+      .getUnitList('', this.name, '', '', '', '', '', '' )
       .subscribe((response) => {
+
+        console.log("response entities");
+        console.log(response.entities);
+
         this.listData = response.entities;
         this.total = this.listData.length;
       });

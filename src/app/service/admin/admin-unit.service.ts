@@ -5,7 +5,8 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class AdminUnitService {
-  listUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
+  listUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization`;
+
   activeUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
   addUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
@@ -16,16 +17,40 @@ export class AdminUnitService {
     this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').token;
   }
 
-  getUnitList(code: any, name: any) {
+  getUnitList(
+    name: any,
+    address: any,
+    representative: any,
+    email: any,
+    phone: any,
+    status: any,
+    page: any,
+    size: any
+  ) {
     this.getCurrentUser();
+
     let listUnitUrl =
       this.listUnitUrl +
-      '?code=' +
-      code.trim() +
-      '&name=' +
+      '?name=' +
       name.trim() +
-      '&size=10000';
-    const headers = { Authorization: 'Bearer ' + this.token };
+      '&address=' +
+      address.trim() +
+      '&representative=' +
+      representative.trim() +
+      '&email=' +
+      email.trim() +
+      '&phone=' +
+      phone.trim() +
+      '&status=' +
+      status.trim() +
+      '&page=' +
+      page.trim() +
+      '&size=' +
+      size.trim();
+    const headers = { 'Authorization': 'Bearer ' + this.token };
+
+    console.log("vao api tim kiem");
+
     return this.http.get<any>(listUnitUrl, { headers }).pipe();
   }
 
@@ -61,7 +86,7 @@ export class AdminUnitService {
       status: datas.status,
     });
 
-    console.log("body unit");
+    console.log('body unit');
     console.log(body);
 
     return this.http.post<any>(this.addUnitUrl, body, { headers: headers });
