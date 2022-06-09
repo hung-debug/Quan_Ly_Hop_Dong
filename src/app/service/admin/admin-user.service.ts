@@ -28,7 +28,7 @@ export class AdminUserService {
   getUserList(name: any, email: any, phone:any): Observable<any> {
     this.getCurrentUser();
 
-    let listUserUrl = this.listUserUrl + '?name=' + name.trim() + '&email=' + email.trim() + '&phone=' + phone.trim() + "&page="+ "&size=" +"&sort=name";
+    let listUserUrl = this.listUserUrl + '?name=' + name.trim() + '&email=' + email.trim() + '&phone=' + phone.trim() + "&page=0"+ "&size=1000" +"&sort=name";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(listUserUrl, {headers}).pipe();
   }
@@ -54,7 +54,9 @@ export class AdminUserService {
       email: datas.email,
       phone: datas.phone,
 
-      permissions: datas.role
+      permissions: datas.role,
+
+      status: datas.status
     
     });console.log(headers);
     
@@ -62,6 +64,7 @@ export class AdminUserService {
 
     console.log("id ");
     console.log(datas);
+    
     return this.http.put<any>(this.updateUserUrl + datas.id, body, {'headers': headers});
   }
 
@@ -95,11 +98,15 @@ export class AdminUserService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
+      console.log("data add user");
+      console.log(datas);
+
     const body = JSON.stringify({
       email: datas.email,
       phone: datas.phone,
       name: datas.name,
-      permissions: datas.role
+      permissions: datas.role,
+      status: datas.status
     });
 
     return this.http.post<any>(this.addUserUrl, body, {'headers': headers});

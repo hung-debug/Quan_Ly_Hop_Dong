@@ -8,7 +8,10 @@ export class AdminUnitService {
   listUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization`;
 
   activeUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
+
   addUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
+
+  updateUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
   constructor(private http: HttpClient) {}
 
@@ -43,10 +46,10 @@ export class AdminUnitService {
       phone.trim() +
       '&status=' +
       status.trim() +
-      '&page=' +
-      page.trim() +
-      '&size=' +
-      size.trim();
+      '&page=0' +
+      '&size=1000'+
+      '&sort=name'
+      ;
     const headers = { 'Authorization': 'Bearer ' + this.token };
 
     console.log("vao api tim kiem");
@@ -65,7 +68,39 @@ export class AdminUnitService {
     });
   }
 
+  updateUnitt(datas: any) {
+
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+      const body = JSON.stringify({
+        name: datas.nameOrg,
+        code: datas.code,
+        taxCode: datas.tax_code,
+        shortName: datas.short_name,
+        address: datas.address,
+        email: datas.email,
+        representative: datas.representatives,
+        position: datas.position,
+        size: datas.size,
+        phone: datas.phone,
+        status: datas.status,
+      });
+
+      // console.log("id ");
+      // console.log(datas);
+
+      return this.http.put<any>(this.addUnitUrl + datas.id, body, { headers: headers });
+  }
+
   addUnit(datas: any) {
+
+
+    console.log("datas");
+    console.log(datas);
+
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -73,9 +108,9 @@ export class AdminUnitService {
       .append('Authorization', 'Bearer ' + this.token);
 
     const body = JSON.stringify({
-      name: datas.nameOrg,
+      name: datas.name,
       code: datas.code,
-      taxCode: datas.tax_code,
+      taxCode: datas.taxCode,
       shortName: datas.short_name,
       address: datas.address,
       email: datas.email,

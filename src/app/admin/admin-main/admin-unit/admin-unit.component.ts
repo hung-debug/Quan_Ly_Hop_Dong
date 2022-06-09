@@ -90,11 +90,14 @@ export class AdminUnitComponent implements OnInit {
   //Tìm kiếm tổ chức
   searchUnit() {
     this.adminUnitService
-      .getUnitList('', this.name, '', '', '', '', '', '' )
+      .getUnitList('', '', '', '', '', '', '', '' )
       .subscribe((response) => {
 
         this.listData = response.entities;
         this.total = this.listData.length;
+
+        console.log("length ");
+        console.log(this.total);
       });
   }
 
@@ -116,11 +119,11 @@ export class AdminUnitComponent implements OnInit {
     });
   }
 
-  editUnit(list: any) {
+  editUnit(id: any) {
 
     const data = {
       title: 'unit.update',
-      list: list,
+      id: id,
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddUnitComponent, {
