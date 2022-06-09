@@ -10,22 +10,22 @@
     <app-contract-batch-header *ngIf="type == 3 && (isQLHD_15 || this.action == 'edit')" #contractHeader [AddComponent]="this" [datasBatch]="datasBatch" [stepBatch]="stepBatch"
         (messageEvent)="receiveMessage($event)"></app-contract-batch-header>
 
-    <div class="row" style="margin: 0">
-        <div class="radio col-md-4 label_type" *ngIf="(isQLHD_01 || this.action == 'edit')">
+    <div class="row" style="margin: 0" *ngIf="this.action == 'add'">
+        <div class="radio col-md-4 label_type" *ngIf="isQLHD_01">
             <label>
                 <input type="radio" name="contract_create" [value]="1" [(ngModel)]="type"
-                    (change)="changeType($event)" [disabled]="is_disable || this.action == 'edit'">
+                    (change)="changeType($event)" [disabled]="is_disable ">
                 <span> {{'contract.not-by-template' | translate}}</span>
             </label>
         </div>
-        <div class="radio col-md-4 label_type" *ngIf="(isQLHD_14 || this.action == 'edit')">
+        <div class="radio col-md-4 label_type" *ngIf="isQLHD_14">
             <label><input type="radio" name="contract_create" [value]="2" [(ngModel)]="type"
-                    (change)="changeType($event)" [disabled]="is_disable || this.action == 'edit'">
+                    (change)="changeType($event)" [disabled]="is_disable ">
                 <span> {{'contract.by-template' | translate}}</span></label>
         </div> 
-        <div class="radio col-md-4 label_type" *ngIf="(isQLHD_15 || this.action == 'edit')">
+        <div class="radio col-md-4 label_type" *ngIf="isQLHD_15">
             <label><input type="radio" name="contract_create" [value]="3" [(ngModel)]="type"
-                    (change)="changeType($event)" [disabled]="is_disable || this.action == 'edit'">
+                    (change)="changeType($event)" [disabled]="is_disable ">
                 <span> {{'contract.by-batch' | translate}}</span></label>
         </div>
     </div>

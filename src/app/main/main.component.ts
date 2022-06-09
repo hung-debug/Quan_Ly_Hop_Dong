@@ -80,13 +80,7 @@ export class MainComponent implements OnInit {
     sessionStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('url');
-    // this.router.navigateByUrl('/', {skipLocationChange: false}).then(() => {
-    //   this.router.navigate(['/login']);
-    //   window.location.reload();
-    // });
-    //this.router.navigate(['/login']);
-    window.location.reload();
-    //this.router.navigate(['/login']);
+    this.router.navigate(['/login']);
   }
 
   resetPassword(){

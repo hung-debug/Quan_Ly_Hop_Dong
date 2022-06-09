@@ -41,6 +41,8 @@ export class UserService {
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
   signupUrl:any = `${environment.apiUrl}/api/v1/customers/registrations`;
 
+  getCheckContractUserUrl:any = `${environment.apiUrl}/api/v1/contracts/check-contract-exist`;
+
   token:any;
   customer_id:any;
   organization_id:any;
@@ -275,6 +277,15 @@ export class UserService {
     let listUserUrl = this.getNameSearch + '?name=' + filter_name + "&size=10000";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<User[]>(listUserUrl, {headers}).pipe();
+  }
+
+  getCheckContractUser(id:any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    console.log(headers);
+    return this.http.get<any>(this.getCheckContractUserUrl + "?id=" + id, {'headers': headers});
   }
 
   // Error handling
