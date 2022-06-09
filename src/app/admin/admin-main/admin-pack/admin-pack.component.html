@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="col-md-12">
-      <div class="input-line search">
+      <div *ngIf="this.searchPackRole === true" class="input-line search">
         <img src="../../assets/img/icon_search.svg" class="input-img" />
         <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'Nhập từ khóa tìm kiếm theo tên gói dịch vụ' | translate}}"
         (keyup)="autoSearch($event)" />
@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="col-md-12 btn_search">
-      <button class="btn btn-lg btn-block btn_submit" (click)="addPack()">{{'btn.add' | translate }}</button>
+      <button *ngIf="this.addPackRole === true" class="btn btn-lg btn-block btn_submit" (click)="addPack()">{{'btn.add' | translate }}</button>
     </div>  
     <div class="row" style="padding-top: 10px;">
       <p-table [value]="listData" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
@@ -27,8 +27,8 @@
                 <td>{{list.numberContract}}</td>
                 <td>{{list.price}}</td>
                 <td style="text-align: center">
-                  <img src="../../../assets/img/icon_edit.svg" (click)="editPack(list.id)" width="20px" style="cursor: pointer;"/>&nbsp;&nbsp;
-                  <img src="../../../assets/img/icon_delete.svg" (click)="deletePack(list.id)" width="16px" style="cursor: pointer;"/>
+                  <img *ngIf="this.editPackRole === true" src="../../../assets/img/icon_edit.svg" (click)="editPack(list.id)" width="20px" style="cursor: pointer;"/>&nbsp;&nbsp;
+                  <img *ngIf="this.deletePackRole === true" src="../../../assets/img/icon_delete.svg" (click)="deletePack(list.id)" width="16px" style="cursor: pointer;"/>
                 </td>
             </tr>
         </ng-template>

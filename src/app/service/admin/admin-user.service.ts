@@ -28,7 +28,7 @@ export class AdminUserService {
   getUserList(name: any, email: any, phone:any): Observable<any> {
     this.getCurrentUser();
 
-    let listUserUrl = this.listUserUrl + '?name=' + name.trim() + '&email=' + email.trim() + '&phone=' + phone.trim() + "&page="+ "&size=";
+    let listUserUrl = this.listUserUrl + '?name=' + name.trim() + '&email=' + email.trim() + '&phone=' + phone.trim() + "&page="+ "&size=" +"&sort=name";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(listUserUrl, {headers}).pipe();
   }

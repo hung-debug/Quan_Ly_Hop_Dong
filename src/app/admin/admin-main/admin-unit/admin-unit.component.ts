@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { AppService } from 'src/app/service/app.service';
@@ -90,8 +90,9 @@ export class AdminUnitComponent implements OnInit {
   //Tìm kiếm tổ chức
   searchUnit() {
     this.adminUnitService
-      .getUnitList(this.code, this.name)
+      .getUnitList('', this.name, '', '', '', '', '', '' )
       .subscribe((response) => {
+
         this.listData = response.entities;
         this.total = this.listData.length;
       });
@@ -115,10 +116,11 @@ export class AdminUnitComponent implements OnInit {
     });
   }
 
-  editUnit(id: any) {
+  editUnit(list: any) {
+
     const data = {
       title: 'unit.update',
-      id: id,
+      list: list,
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddUnitComponent, {
@@ -134,6 +136,7 @@ export class AdminUnitComponent implements OnInit {
   }
 
   detailUnit(id: any) {
+
     const data = {
       title: 'unit.information',
       id: id,
@@ -153,6 +156,7 @@ export class AdminUnitComponent implements OnInit {
   }
 
   activeUnit(id: any) {
+
     const data = {
       title: 'KÍCH HOẠT TỔ CHỨC',
       id: id,
