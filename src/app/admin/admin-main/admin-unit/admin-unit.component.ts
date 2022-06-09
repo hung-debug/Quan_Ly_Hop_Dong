@@ -123,19 +123,24 @@ export class AdminUnitComponent implements OnInit {
       filter_time: this.filter_time,
       filter_status: this.filter_status,
       filter_number_contract: this.filter_number_contract,
+      list: this.listData
     };
+
 
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminFilterUnitComponent, {
       width: '580px',
       backdrop: 'static',
       keyboard: false,
-      data,
+      data
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
       let is_data = result;
+
+      console.log("result");
+      console.log(result);
     });
   }
 
@@ -214,15 +219,9 @@ export class AdminUnitComponent implements OnInit {
 
 
   autoSearch(event: any) {
-    console.log("this ");
-    console.log(this.listData);
-
-    console.log("this filter search "+this.filterSearch);
-
     this.listData = this.temp.filter(word => word.name.includes(this.filterSearch) 
       || word.shortName.includes(this.filterSearch) || word.code.includes(this.filterSearch)
     );
-
   }
 
 }

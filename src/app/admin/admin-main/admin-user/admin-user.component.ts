@@ -19,7 +19,6 @@ export class AdminUserComponent implements OnInit {
   constructor(
     private appService: AppService,
     private adminUserService: AdminUserService,
-    private adminUnitService: AdminUnitService,
     private router: Router,
     private dialog: MatDialog,
     private toastService: ToastService
