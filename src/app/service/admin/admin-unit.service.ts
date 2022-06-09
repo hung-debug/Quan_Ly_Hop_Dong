@@ -32,6 +32,9 @@ export class AdminUnitService {
     page: any,
     size: any
   ) {
+
+    console.log("api danh sach to chuc");
+
     this.getCurrentUser();
 
     let listUnitUrl =

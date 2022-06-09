@@ -237,11 +237,19 @@ export class AdminAddUserComponent implements OnInit {
 
           this.dialog.closeAll();
         } else {
-          this.toastService.showErrorHTMLWithTimeout(
-            data.errors[0].message,
-            '',
-            3000
-          );
+          if (data.errors[0].code === 1001) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Email đã tồn tại trên hệ thống',
+              '',
+              3000
+            );
+          } else if (data.errors[0].code === 1002) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'SĐT đã được sử dụng',
+              '',
+              3000
+            );
+          }
         }
       },
       (error) => {
@@ -306,7 +314,7 @@ export class AdminAddUserComponent implements OnInit {
           //   3000
           // );
 
-          console.log("error");
+          console.log('error');
           console.log(data.errors);
 
           if (data.errors[0].code === 1001) {
@@ -315,7 +323,7 @@ export class AdminAddUserComponent implements OnInit {
               '',
               3000
             );
-          } else if(data.errors[0].code === 1002) {
+          } else if (data.errors[0].code === 1002) {
             this.toastService.showErrorHTMLWithTimeout(
               'SĐT đã được sử dụng',
               '',
