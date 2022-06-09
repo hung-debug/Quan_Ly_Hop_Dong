@@ -81,7 +81,7 @@ export class AdminAddUserComponent implements OnInit {
     console.log('flag ' + this.flagAddUpdate);
 
     if (this.flagAddUpdate === 0) {
-      console.log("on submit");
+      console.log('on submit');
       this.onSubmit();
     } else if (this.flagAddUpdate === 1) {
       this.update();
@@ -113,7 +113,7 @@ export class AdminAddUserComponent implements OnInit {
               Validators.pattern('[0-9 ]{10}'),
             ]),
             role: this.fbd.control('', [Validators.required]),
-            status: 1
+            status: 1,
           });
         }
       } else {
@@ -165,9 +165,9 @@ export class AdminAddUserComponent implements OnInit {
     });
   }
   convertStatus(status: any): any {
-    if(status == 'ACTIVE') {
+    if (status == 'ACTIVE') {
       return 1;
-    } else if(status == 'IN_ACTIVE') {
+    } else if (status == 'IN_ACTIVE') {
       return 0;
     }
 
@@ -204,10 +204,10 @@ export class AdminAddUserComponent implements OnInit {
       email: this.addForm.value.email,
       phone: this.addForm.value.phone,
       role: this.addForm.value.role,
-      status: this.addForm.value.status
+      status: this.addForm.value.status,
     };
 
-    console.log("data update");
+    console.log('data update');
     console.log(dataUpdate);
 
     var selectedRoleConvert: any[] = [];
@@ -266,7 +266,7 @@ export class AdminAddUserComponent implements OnInit {
       email: this.addForm.value.email,
       phone: this.addForm.value.phone,
       role: this.addForm.value.role,
-      status: this.addForm.value.status
+      status: this.addForm.value.status,
     };
     console.log(data);
 
@@ -300,11 +300,28 @@ export class AdminAddUserComponent implements OnInit {
 
           this.dialog.closeAll();
         } else {
-          this.toastService.showErrorHTMLWithTimeout(
-            data.errors[0].message,
-            '',
-            3000
-          );
+          // this.toastService.showErrorHTMLWithTimeout(
+          //   data.errors[0].message,
+          //   '',
+          //   3000
+          // );
+
+          console.log("error");
+          console.log(data.errors);
+
+          if (data.errors[0].code === 1001) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Email đã tồn tại trên hệ thống',
+              '',
+              3000
+            );
+          } else if(data.errors[0].code === 1002) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'SĐT đã được sử dụng',
+              '',
+              3000
+            );
+          }
         }
       },
       (error) => {
