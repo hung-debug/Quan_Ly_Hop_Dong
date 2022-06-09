@@ -141,10 +141,10 @@ export class AddContractComponent implements OnInit {
               // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
               this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
 
-              if(this.action=='add' && this.isQLHD_15){
+              if((this.action=='add' || this.action=='add-batch')  && this.isQLHD_15){
                 this.type=3;
               }
-              if(this.action=='add' && this.isQLHD_14){
+              if((this.action=='add' || this.action=='add-form') && this.isQLHD_14){
                 this.type=2;
               }
               if(this.action=='add' && this.isQLHD_01){
@@ -262,6 +262,16 @@ export class AddContractComponent implements OnInit {
 
 
   changeType(e: any) {
+    console.log("a");
+    console.log(this.type);
+    console.log(this.isQLHD_14);
+    if (this.type == 1) {
+      this.step = variable.stepSampleContract.step1;
+    } else if (this.type == 2) {
+      this.stepForm = variable.stepSampleContractForm.step1;
+    } else if (this.type == 3) {
+      this.stepBatch = variable.stepSampleContractBatch.step1;
+    }
     if (this.type == 1) {
       this.datas = {
         stepLast: variable.stepSampleContract.step1,

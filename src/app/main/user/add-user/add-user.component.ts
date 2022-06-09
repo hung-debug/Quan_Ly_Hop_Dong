@@ -276,7 +276,9 @@ export class AddUserComponent implements OnInit {
             this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công. Vui lòng đăng nhập lại!', "", 3000);
             localStorage.clear();
             sessionStorage.clear();
-            this.router.navigate(['/login']);
+            //this.router.navigate(['/login']);
+
+            window.location.reload();
           }else{
             this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
