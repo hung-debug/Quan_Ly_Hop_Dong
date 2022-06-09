@@ -6,9 +6,11 @@
         type="text"
         id="filter_name"
         class="input-text"
+        [(ngModel)]="filterSearch"
         placeholder="{{
-          'Nhập từ khóa tìm kiếm theo tên tổ chức' | translate
+          'Nhập từ khóa tìm kiếm theo tên tổ chức và mã tổ chức' | translate
         }}"
+        (keyup)="autoSearch($event)" 
       />
       <img
         src="../../assets/img/icon_search_group.svg"
