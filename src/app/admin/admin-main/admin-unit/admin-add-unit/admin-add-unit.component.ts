@@ -89,80 +89,68 @@ export class AdminAddUnitComponent implements OnInit {
   ngOnInit(): void {
     this.datas = this.data;
 
-    //lay du lieu form cap nhat
-    if (this.data.list != null) {
-      if (this.data.list.id != null) {
-        console.log('data');
-        console.log(this.data);
+    console.log('data ');
+    console.log(this.data);
 
-        this.addForm = this.fbd.group({
-          nameOrg: this.fbd.control(this.data.list.name, [
-            Validators.required,
-            Validators.pattern(parttern_input.input_form),
-          ]),
-          short_name: this.fbd.control(this.data.list.shortName, [
-            Validators.pattern(parttern_input.input_form),
-          ]),
-          code: this.fbd.control(this.data.list.code, [
-            Validators.required,
-            Validators.pattern(parttern_input.input_form),
-          ]),
-          email: this.fbd.control(this.data.list.email, [
-            Validators.required,
-            Validators.email,
-          ]),
-          phone: this.fbd.control(this.data.list.phone, [
-            Validators.required,
-            Validators.pattern('[0-9 ]{10}'),
-          ]),
-          tax_code: this.fbd.control(
-            this.data.list.taxCode,
-            Validators.pattern(parttern_input.input_form)
-          ),
-          address: this.fbd.control(this.data.list.address, [
-            Validators.required,
-            Validators.pattern(parttern_input.input_form),
-          ]),
-          status: this.fbd.control(this.convertStatus(this.data.list.status), [
-            Validators.required,
-          ]),
-          representatives: this.fbd.control(
-            this.data.list.representative,
-            Validators.required
-          ),
-          position: this.fbd.control(this.data.list.position, [
-            Validators.required,
-            Validators.pattern(parttern_input.input_form),
-          ]),
-          size: this.fbd.control(this.data.list.size, [
-            Validators.required,
-            Validators.pattern(parttern_input.input_form),
-          ]),
-        });
-      }
+    //lay du lieu form cap nhat
+    if (this.data.id != null) {
+      console.log('vao form cap nhat');
 
       //lay danh sach to chuc
-      // this.unitService.getUnitById(this.data.id).subscribe(
-      //   data => {
-      //     this.addForm = this.fbd.group({
-      //       nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-      //       short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.input_form)]),
-      //       code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-      //       email: this.fbd.control(data.email, [Validators.required, Validators.email]),
-      //       phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-      //       fax: this.fbd.control(data.fax, Validators.pattern(parttern_input.input_form)),
-      //       status: this.fbd.control(data.status),
-      //       representatives: this.fbd.control(""),
-      //       path: this.fbd.control(data.path)
-      //     });
-      //     this.nameOld = data.name;
-      //     this.codeOld = data.code;
-      //     this.emailOld = data.email;
-      //     this.phoneOld = data.phone;
-      //   }, error => {
-      //     this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-      //   }
-      // )
+      this.adminUnitService.getUnitById(this.data.id).subscribe(
+        (data) => {
+
+          console.log("data");
+          console.log(data);
+        
+          this.addForm = this.fbd.group({
+            nameOrg: this.fbd.control(data.name, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            short_name: this.fbd.control(data.shortName, [
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            code: this.fbd.control(data.code, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            email: this.fbd.control(data.email, [Validators.required, Validators.email]),
+            phone: this.fbd.control(data.phone, [
+              Validators.required,
+              Validators.pattern('[0-9 ]{10}'),
+            ]),
+            size: this.fbd.control(data.size, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            status: 1,
+            representatives: this.fbd.control(data.representative, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            tax_code: this.fbd.control(data.taxCode, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            address: this.fbd.control(data.address, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            position: this.fbd.control(data.position, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),          
+          });
+        },
+        (error) => {
+          this.toastService.showErrorHTMLWithTimeout(
+            'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
+            '',
+            3000
+          );
+        }
+      );
       //khoi tao form them moi
     } else {
       this.addForm = this.fbd.group({
@@ -206,6 +194,7 @@ export class AdminAddUnitComponent implements OnInit {
       });
     }
   }
+
   convertStatus(status: any): any {
     console.log('status value');
     console.log(status);
@@ -375,19 +364,26 @@ export class AdminAddUnitComponent implements OnInit {
       return;
     }
 
-    const dataForm = {
+    let dataForm = {
+      id: this.data.id,
       name: this.addForm.value.nameOrg,
-      short_name: this.addForm.value.short_name,
+      shortName: this.addForm.value.short_name,
       code: this.addForm.value.code,
       email: this.addForm.value.email,
       phone: this.addForm.value.phone,
       size: this.addForm.value.size,
       status: this.addForm.value.status,
-      representatives: this.addForm.value.representatives,
+      representative: this.addForm.value.representatives,
       taxCode: this.addForm.value.tax_code,
       position: this.addForm.value.position,
-      address: this.addForm.value.address
+      address: this.addForm.value.address,
     };
+
+    if (dataForm.status == 1) {
+      dataForm.status = 'ACTIVE';
+    } else if (dataForm.status == 0) {
+      dataForm.status = 'IN_ACTIVE';
+    }
 
     //truong hop sua ban ghi
     if (this.data.id != null) {
@@ -396,7 +392,7 @@ export class AdminAddUnitComponent implements OnInit {
       console.log('data');
       console.log(this.data);
 
-      this.adminUnitService.updateUnitt(this.data).subscribe(
+      this.adminUnitService.updateUnitt(dataForm).subscribe(
         (data) => {
           if (data.id != null) {
             console.log('data');
@@ -415,25 +411,31 @@ export class AdminAddUnitComponent implements OnInit {
 
             this.dialog.closeAll();
           } else {
-            this.toastService.showErrorHTMLWithTimeout(
-              data.errors[0].message,
-              '',
-              3000
-            );
-
-            // if (data.errors[0].code == 1001) {
-            //   this.toastService.showErrorHTMLWithTimeout(
-            //     'Email đã tồn tại trên hệ thống',
-            //     '',
-            //     3000
-            //   );
-            // } else if (data.errors[0].code == 1003) {
-            //   this.toastService.showErrorHTMLWithTimeout(
-            //     'Tên tổ chức đã được sử dụng',
-            //     '',
-            //     3000
-            //   );
-            // }
+            if (data.errors[0].code == 1001) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Email đã tồn tại trên hệ thống',
+                '',
+                3000
+              );
+            } else if (data.errors[0].code == 1003) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Tên tổ chức đã được sử dụng',
+                '',
+                3000
+              );
+            } else if (data.errors[0].code == 1002) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'SĐT đã được sử dụng',
+                '',
+                3000
+              );
+            } else if (data.errors[0].code == 1006) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Mã số thuế đã tồn tại trên hệ thống',
+                '',
+                3000
+              );
+            }
           }
         },
         (error) => {
@@ -451,18 +453,11 @@ export class AdminAddUnitComponent implements OnInit {
     } else {
       console.log('vao truong hop them moi ban ghi');
 
-      if (dataForm.status == 1) {
-        dataForm.status = 'ACTIVE';
-      } else if (dataForm.status == 0) {
-        dataForm.status = 'IN_ACTIVE';
-      }
-
- 
       this.adminUnitService.addUnit(dataForm).subscribe(
         (data) => {
           if (data.id != null) {
-            console.log('data');
-            console.log(data.status);
+            console.log('data add');
+            console.log(data);
 
             this.toastService.showSuccessHTMLWithTimeout(
               'Thêm mới thành công!',

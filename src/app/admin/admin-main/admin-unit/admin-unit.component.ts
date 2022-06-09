@@ -7,6 +7,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { AdminActiveUnitComponent } from './admin-active-unit/admin-active-unit.component';
 import { AdminAddUnitComponent } from './admin-add-unit/admin-add-unit.component';
 import { AdminDetailUnitComponent } from './admin-detail-unit/admin-detail-unit.component';
+import { AdminFilterUnitComponent } from './dialog/admin-filter-unit/admin-filter-unit.component';
 
 @Component({
   selector: 'app-admin-unit',
@@ -14,6 +15,11 @@ import { AdminDetailUnitComponent } from './admin-detail-unit/admin-detail-unit.
   styleUrls: ['./admin-unit.component.scss'],
 })
 export class AdminUnitComponent implements OnInit {
+  filter_code: any;
+  filter_price: any;
+  filter_time: any;
+  filter_status: any;
+  filter_number_contract: any;
   constructor(
     private appService: AppService,
     private dialog: MatDialog,
@@ -39,18 +45,20 @@ export class AdminUnitComponent implements OnInit {
 
   ngOnInit(): void {
     this.addUnitRole = this.checkRole(this.addUnitRole, 'QLTC_01');
-    this.searchUnitRole = this.checkRole(this.searchUnitRole,'QLTC_03');
+    this.searchUnitRole = this.checkRole(this.searchUnitRole, 'QLTC_03');
 
-    const permissions =  JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
+    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
+      .user.permissions;
 
-    if(permissions.length === 1 && permissions[0].code.includes("QLTB")) {
-      console.log("vao day");
+    if (permissions.length === 1 && permissions[0].code.includes('QLTB')) {
+      console.log('vao day');
       this.adminUnit = false;
       this.appService.setTitle('');
     } else {
-      this.appService.setTitle('unit.list')
-    };
-    this.searchUnit();
+      this.appService.setTitle('unit.list');
+    }
+
+    this.getUnitList();
 
     this.cols = [
       { field: 'name', header: 'unit.name', style: 'text-align: left;' },
@@ -61,6 +69,18 @@ export class AdminUnitComponent implements OnInit {
       { field: 'id', header: 'unit.manage', style: 'text-align: center;' },
     ];
   }
+  getUnitList() {
+    this.adminUnitService
+      .getUnitList('', '', '', '', '', '', '', '')
+      .subscribe((response) => {
+        this.listData = response.entities;
+        this.total = this.listData.length;
+
+        console.log('length ');
+        console.log(this.total);
+      });
+  }
+
   checkRole(flag: boolean, code: string): boolean {
     const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
       .user.permissions;
@@ -79,7 +99,6 @@ export class AdminUnitComponent implements OnInit {
         flag = true;
         break;
       }
-
     }
 
     return flag;
@@ -89,16 +108,27 @@ export class AdminUnitComponent implements OnInit {
 
   //Tìm kiếm tổ chức
   searchUnit() {
-    this.adminUnitService
-      .getUnitList('', '', '', '', '', '', '', '' )
-      .subscribe((response) => {
+    const data = {
+      title: 'TÌM KIẾM TỔ CHỨC',
+      filter_code: this.filter_code,
+      filter_price: this.filter_price,
+      filter_time: this.filter_time,
+      filter_status: this.filter_status,
+      filter_number_contract: this.filter_number_contract,
+    };
 
-        this.listData = response.entities;
-        this.total = this.listData.length;
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminFilterUnitComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+    });
 
-        console.log("length ");
-        console.log(this.total);
-      });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result;
+    });
   }
 
   //Thêm mới tổ chức
@@ -120,7 +150,6 @@ export class AdminUnitComponent implements OnInit {
   }
 
   editUnit(id: any) {
-
     const data = {
       title: 'unit.update',
       id: id,
@@ -139,7 +168,6 @@ export class AdminUnitComponent implements OnInit {
   }
 
   detailUnit(id: any) {
-
     const data = {
       title: 'unit.information',
       id: id,
@@ -159,7 +187,6 @@ export class AdminUnitComponent implements OnInit {
   }
 
   activeUnit(id: any) {
-
     const data = {
       title: 'KÍCH HOẠT TỔ CHỨC',
       id: id,

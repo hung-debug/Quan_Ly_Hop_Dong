@@ -1,0 +1,62 @@
+<div class="container-fluid">
+  <div style="text-align: center; font-weight: bold">
+    <h3 style="color: #106db6; font-family: inherit">{{ this.data.title }}</h3>
+  </div>
+  <form [formGroup]="addForm" class="content">
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-6">
+        <div class="label text-color">Người đại diện</div>
+        <div class="input-data">
+          <input type="text" formControlName="filter_price" />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label text-color">Email</div>
+        <div class="input-data">
+          <input type="text" formControlName="filter_time" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-6">
+        <div class="label text-color">Số điện thoại</div>
+        <div class="input-data">
+          <input type="text" formControlName="filter_phone" />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="label text-color">Trạng thái</div>
+        <div>
+          <p-dropdown
+            panelStyleClass="font"
+            appendTo="body"
+            formControlName="filter_status"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Chọn trạng thái"
+            [options]="statusList" 
+          ></p-dropdown>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-12">
+        <div class="label text-color">Địa chỉ</div>
+        <div class="input-data">
+          <input type="text" formControlName="filter_code" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="justify-content: center; padding-top: 10px">
+      <button class="cancel-button" (click)="dialog.closeAll()" type="button">
+        Hủy
+      </button>
+      <button class="save-button" (click)="onSubmit()">Tìm kiếm</button>
+    </div>
+  </form>
+</div>
