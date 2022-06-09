@@ -73,6 +73,7 @@ export class AdminAddUserComponent implements OnInit {
       ]),
       role: this.fbd.control('', [Validators.required]),
       password: this.fbd.control('', [Validators.required]),
+      status: 1,
     });
   }
 
@@ -112,6 +113,7 @@ export class AdminAddUserComponent implements OnInit {
               Validators.pattern('[0-9 ]{10}'),
             ]),
             role: this.fbd.control('', [Validators.required]),
+            status: 1
           });
         }
       } else {
@@ -146,8 +148,9 @@ export class AdminAddUserComponent implements OnInit {
               ]),
 
               password: this.fbd.control(data.password, [Validators.required]),
-              status: data.status,
+              status: this.convertStatus(data.status),
             });
+
             this.phoneOld = data.phone;
           },
           (error) => {
@@ -160,6 +163,15 @@ export class AdminAddUserComponent implements OnInit {
         );
       }
     });
+  }
+  convertStatus(status: any): any {
+    if(status == 'ACTIVE') {
+      return 1;
+    } else if(status == 'IN_ACTIVE') {
+      return 0;
+    }
+
+    return -1;
   }
 
   convertRoleArr(roleArr: []) {
@@ -192,7 +204,11 @@ export class AdminAddUserComponent implements OnInit {
       email: this.addForm.value.email,
       phone: this.addForm.value.phone,
       role: this.addForm.value.role,
+      status: this.addForm.value.status
     };
+
+    console.log("data update");
+    console.log(dataUpdate);
 
     var selectedRoleConvert: any[] = [];
 
@@ -241,15 +257,16 @@ export class AdminAddUserComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     // stop here if form is invalid
-    if (this.addForm.invalid) {
-      return;
-    }
+    // if (this.addForm.invalid) {
+    //   return;
+    // }
 
     const data = {
       name: this.addForm.value.name,
       email: this.addForm.value.email,
       phone: this.addForm.value.phone,
       role: this.addForm.value.role,
+      status: this.addForm.value.status
     };
     console.log(data);
 
