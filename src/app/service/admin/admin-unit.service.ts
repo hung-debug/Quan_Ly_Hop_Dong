@@ -13,6 +13,8 @@ export class AdminUnitService {
 
   updateUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
+  getUnitByIdUrl : any = `${environment.apiUrl}/api/v1/admin/organization/`;
+
   constructor(private http: HttpClient) {}
 
   token: any;
@@ -75,14 +77,17 @@ export class AdminUnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
+      console.log("upate unit service");
+      console.log(datas.id);
+
       const body = JSON.stringify({
-        name: datas.nameOrg,
+        name: datas.name,
         code: datas.code,
-        taxCode: datas.tax_code,
-        shortName: datas.short_name,
+        taxCode: datas.taxCode,
+        shortName: datas.shortName,
         address: datas.address,
         email: datas.email,
-        representative: datas.representatives,
+        representative: datas.representative,
         position: datas.position,
         size: datas.size,
         phone: datas.phone,
@@ -93,6 +98,16 @@ export class AdminUnitService {
       // console.log(datas);
 
       return this.http.put<any>(this.addUnitUrl + datas.id, body, { headers: headers });
+  }
+
+  getUnitById(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    console.log(headers);
+    return this.http.get<any>(this.getUnitByIdUrl + id, {'headers': headers});
   }
 
   addUnit(datas: any) {
