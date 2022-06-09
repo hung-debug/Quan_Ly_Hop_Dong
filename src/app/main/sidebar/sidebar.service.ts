@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
@@ -60,11 +61,12 @@ export class SidebarService {
   _hasBackgroundImage = true;
   
   
-  
+  subMenus: any = [];
   constructor(
     private userService: UserService,
     private roleService: RoleService,
-    private toastService: ToastService) {
+    private toastService: ToastService,
+    private router: Router) {
     
   }
 
@@ -313,6 +315,30 @@ export class SidebarService {
       type: 'simple',
       href: '/main/check-sign-digital'
     },)
+
+    //xu ly highlight
+    this.menus.forEach((element: any) => {
+      element.active = false;
+      if (element.href != '#') {
+        if (this.router.url.includes(element.href)) {
+          element.active = true;
+        }
+      } else {
+        this.subMenus = element.submenus;
+        element.activeDrop = false;
+        element.active = false;
+        this.subMenus.forEach((elementSub: any) => {
+          if (this.router.url.includes(elementSub.href)) {
+            element.activeDrop = true;
+            element.active = true; 
+            elementSub.active = true;
+          } else {
+            elementSub.active = false;
+          }
+        });
+      }
+    });
+    console.log(this.menus);
   }
 
   getSubMenuList(menuParent:any) {

@@ -31,29 +31,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit() {
     //this.menus = this.sidebarservice.getMenuList();
-    console.log(this.menus);
-    this.menus.forEach((element: any) => {
-      element.active = false;
-      if (element.href != '#') {
-        if (this.router.url.includes(element.href)) {
-          element.active = true;
-        }
-      } else {
-        this.subMenus = element.submenus;
-        element.activeDrop = false;
-        element.active = false;
-        this.subMenus.forEach((elementSub: any) => {
-          if (this.router.url.includes(elementSub.href)) {
-            element.activeDrop = true;
-            element.active = true; 
-            elementSub.active = true;
-          } else {
-            elementSub.active = false;
-          }
-        });
-      }
-    });
-    console.log(this.menus);
+    
   }
 
   getSideBarState() {
