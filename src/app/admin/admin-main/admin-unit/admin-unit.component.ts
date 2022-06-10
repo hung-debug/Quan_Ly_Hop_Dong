@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { AdminUserService } from 'src/app/service/admin/admin-user.service';
@@ -21,6 +21,8 @@ export class AdminUnitComponent implements OnInit {
   filter_status: any;
   filter_number_contract: any;
   filter_name:any="";
+
+  @Output() messageEvent = new EventEmitter<any[]>();
   constructor(
     private appService: AppService,
     private dialog: MatDialog,
@@ -126,6 +128,7 @@ export class AdminUnitComponent implements OnInit {
       list: this.listData
     };
 
+    this.messageEvent.emit(this.listData);
 
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminFilterUnitComponent, {
@@ -142,6 +145,10 @@ export class AdminUnitComponent implements OnInit {
       console.log("result");
       console.log(result);
     });
+  }
+
+  search() {
+    console.log("tim kiem");
   }
 
   //Thêm mới tổ chức

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   MatDialog,
@@ -22,11 +22,13 @@ export class AdminFilterUnitComponent implements OnInit {
   submitted = false;
   statusList: any[] = [];
 
+  listData:any[];
+
+
   get f() {
     return this.addForm.controls;
   }
 
-  @ViewChild(AdminUnitComponent) adminUnitComponent: any;  
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
@@ -56,6 +58,15 @@ export class AdminFilterUnitComponent implements OnInit {
     // });
   }
 
+  receiveMessage($event: any) {
+
+    console.log("vao day");
+
+    this.listData = $event;
+
+    console.log("this list data ", this.listData);
+  }
+
   onSubmit() {
     const address = this.convertString(this.addForm.value.filter_address);
     const representative = this.convertString(
@@ -70,8 +81,6 @@ export class AdminFilterUnitComponent implements OnInit {
       .subscribe(
         (response) => {
           // this.data.list = response;
-
-          this.adminUnitComponent.listData = response;
 
           console.log("this data");
           console.log(this.data.list);
