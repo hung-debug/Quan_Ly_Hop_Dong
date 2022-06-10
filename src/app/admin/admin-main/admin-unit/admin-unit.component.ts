@@ -50,6 +50,7 @@ export class AdminUnitComponent implements OnInit {
 
   addUnitRole: boolean = false;
   searchUnitRole: boolean = false;
+  infoUnitRole: boolean = false;
 
   filterSearch: string;
 
@@ -57,8 +58,7 @@ export class AdminUnitComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-
-      console.log("param filter re");
+      console.log('param filter re');
       console.log(params.filter_address);
 
       if (
@@ -80,8 +80,7 @@ export class AdminUnitComponent implements OnInit {
         this.filter_phone = '';
       }
       if (typeof params.filter_status != 'undefined' && params.filter_status) {
-
-        if(params.filter_status != 0) {
+        if (params.filter_status != 0) {
           this.filter_status = params.filter_status;
         } else {
           this.filter_status = '';
@@ -89,7 +88,10 @@ export class AdminUnitComponent implements OnInit {
       } else {
         this.filter_status = '';
       }
-      if (typeof params.filter_address != 'undefined' && params.filter_address) {
+      if (
+        typeof params.filter_address != 'undefined' &&
+        params.filter_address
+      ) {
         this.filter_address = params.filter_address;
       } else {
         this.filter_address = '';
@@ -105,6 +107,7 @@ export class AdminUnitComponent implements OnInit {
 
     this.addUnitRole = this.checkRole(this.addUnitRole, 'QLTC_01');
     this.searchUnitRole = this.checkRole(this.searchUnitRole, 'QLTC_03');
+    this.infoUnitRole = this.checkRole(this.infoUnitRole, 'QLTC_04');
 
     const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
       .user.permissions;
@@ -129,13 +132,20 @@ export class AdminUnitComponent implements OnInit {
     ];
   }
   getUnitList() {
-
-    console.log("re ", this.filter_representative);
+    console.log('re ', this.filter_representative);
 
     this.adminUnitService
-      .getUnitList('', this.filter_address, this.filter_representative, this.filter_email, this.filter_phone, this.filter_status, '', '')
+      .getUnitList(
+        '',
+        this.filter_address,
+        this.filter_representative,
+        this.filter_email,
+        this.filter_phone,
+        this.filter_status,
+        '',
+        ''
+      )
       .subscribe((response) => {
-
         this.temp = response.entities;
         this.listData = this.temp;
         this.total = this.listData.length;
@@ -239,22 +249,24 @@ export class AdminUnitComponent implements OnInit {
   }
 
   detailUnit(id: any) {
-    const data = {
-      title: 'unit.information',
-      id: id,
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(AdminDetailUnitComponent, {
-      width: '80%',
-      height: '80%',
-      backdrop: 'static',
-      keyboard: false,
-      data,
-    });
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result;
-    });
+    if (this.infoUnitRole === true) {
+      const data = {
+        title: 'unit.information',
+        id: id,
+      };
+      // @ts-ignore
+      const dialogRef = this.dialog.open(AdminDetailUnitComponent, {
+        width: '80%',
+        height: '80%',
+        backdrop: 'static',
+        keyboard: false,
+        data,
+      });
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog');
+        let is_data = result;
+      });
+    }
   }
 
   activeUnit(id: any) {

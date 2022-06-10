@@ -56,13 +56,6 @@ export class AdminFilterUnitComponent implements OnInit {
 
   ngOnInit(): void {
     this.statusList = statusList;
-    // this.addForm = this.fbd.group({
-    //   filter_code: this.fbd.control(this.data.filter_code),
-    //   filter_price:this.fbd.control(this.data.filter_price),
-    //   filter_time: this.fbd.control(this.data.filter_time),
-    //   filter_status: this.fbd.control(this.data.filter_status),
-    //   filter_number_contract: this.fbd.control(this.data.filter_number_contract),
-    // });
   }
 
   onSubmit() {
@@ -97,44 +90,6 @@ export class AdminFilterUnitComponent implements OnInit {
         skipLocationChange: true
       });
     });
-
-    // this.adminUnitComponent.search();
-
-    // const address = this.convertString(this.addForm.value.filter_address);
-    // const representative = this.convertString(
-    //   this.addForm.value.filter_representative
-    // );
-    // const email = this.convertString(this.addForm.value.filter_email);
-    // const phone = this.convertString(this.addForm.value.phone);
-    // const status = this.convertString(this.addForm.value.status);
-
-
-    // this.adminUnitService
-    //   .getUnitList('', address, representative, email, phone, status, '', '')
-    //   .subscribe(
-    //     (response) => {
-    //       // this.data.list = response;
-
-    //       console.log("this data");
-    //       console.log(this.data.list);
-
-    //       this.router
-    //         .navigateByUrl('/', { skipLocationChange: true })
-    //         .then(() => {
-    //           this.router.navigate(['admin-main/unit']);
-    //         });
-
-    //       this.dialog.closeAll();
-    //     },
-    //     (error) => {
-    //       console.log(error);
-    //       this.toastService.showErrorHTMLWithTimeout(
-    //         'Tìm kiếm thất bại',
-    //         '',
-    //         3000
-    //       );
-    //     }
-    //   );
   }
 
   convertString(filter: any): string {
