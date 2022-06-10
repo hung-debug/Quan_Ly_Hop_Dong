@@ -7,14 +7,14 @@
       <div class="col-md-6">
         <div class="label text-color">Người đại diện</div>
         <div class="input-data">
-          <input type="text" formControlName="filter_price" />
+          <input type="text" formControlName="filter_representative" />
         </div>
       </div>
 
       <div class="col-md-6">
         <div class="label text-color">Email</div>
         <div class="input-data">
-          <input type="text" formControlName="filter_time" />
+          <input type="text" formControlName="filter_email" />
         </div>
       </div>
     </div>
@@ -37,6 +37,7 @@
             optionLabel="name"
             optionValue="id"
             placeholder="Chọn trạng thái"
+            [filter]="true" 
             [options]="statusList" 
           ></p-dropdown>
         </div>
@@ -47,7 +48,7 @@
       <div class="col-md-12">
         <div class="label text-color">Địa chỉ</div>
         <div class="input-data">
-          <input type="text" formControlName="filter_code" />
+          <input type="text" formControlName="filter_address" />
         </div>
       </div>
     </div>

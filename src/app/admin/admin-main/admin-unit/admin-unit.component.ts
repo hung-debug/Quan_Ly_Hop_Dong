@@ -20,6 +20,7 @@ export class AdminUnitComponent implements OnInit {
   filter_time: any;
   filter_status: any;
   filter_number_contract: any;
+  filter_name:any="";
   constructor(
     private appService: AppService,
     private dialog: MatDialog,
@@ -43,7 +44,12 @@ export class AdminUnitComponent implements OnInit {
   addUnitRole: boolean = false;
   searchUnitRole: boolean = false;
 
+  filterSearch: string;
+
+  temp: any[];
+
   ngOnInit(): void {
+
     this.addUnitRole = this.checkRole(this.addUnitRole, 'QLTC_01');
     this.searchUnitRole = this.checkRole(this.searchUnitRole, 'QLTC_03');
 
@@ -73,7 +79,9 @@ export class AdminUnitComponent implements OnInit {
     this.adminUnitService
       .getUnitList('', '', '', '', '', '', '', '')
       .subscribe((response) => {
-        this.listData = response.entities;
+
+        this.temp = response.entities;
+        this.listData = this.temp;
         this.total = this.listData.length;
 
         console.log('length ');
@@ -115,19 +123,24 @@ export class AdminUnitComponent implements OnInit {
       filter_time: this.filter_time,
       filter_status: this.filter_status,
       filter_number_contract: this.filter_number_contract,
+      list: this.listData
     };
+
 
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminFilterUnitComponent, {
       width: '580px',
       backdrop: 'static',
       keyboard: false,
-      data,
+      data
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
       let is_data = result;
+
+      console.log("result");
+      console.log(result);
     });
   }
 
@@ -203,4 +216,16 @@ export class AdminUnitComponent implements OnInit {
       let is_data = result;
     });
   }
+
+
+  autoSearch(event: any) {
+    this.listData = this.temp.filter(word => word.name.includes(this.filterSearch) 
+      || word.shortName.includes(this.filterSearch) || word.code.includes(this.filterSearch)
+    );
+  }
+
 }
+
+
+
+

@@ -37,20 +37,23 @@ export class AdminUnitService {
 
     this.getCurrentUser();
 
+  
+
+
     let listUnitUrl =
       this.listUnitUrl +
       '?name=' +
-      name.trim() +
+      name +
       '&address=' +
-      address.trim() +
+      address +
       '&representative=' +
-      representative.trim() +
+      representative +
       '&email=' +
-      email.trim() +
+      email +
       '&phone=' +
-      phone.trim() +
+      phone +
       '&status=' +
-      status.trim() +
+      status +
       '&page=0' +
       '&size=1000'+
       '&sort=name'

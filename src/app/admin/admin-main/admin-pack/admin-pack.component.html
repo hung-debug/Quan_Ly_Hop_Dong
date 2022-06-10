@@ -2,7 +2,7 @@
     <div class="col-md-12">
       <div *ngIf="this.searchPackRole === true" class="input-line search">
         <img src="../../assets/img/icon_search.svg" class="input-img" />
-        <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'Nhập từ khóa tìm kiếm theo tên gói dịch vụ' | translate}}"
+        <input type="text" id="filter_name" (keyup)="autoSearch($event)"  class="input-text" placeholder="{{'Nhập từ khóa tìm kiếm theo tên gói dịch vụ' | translate}}"
         (keyup)="autoSearch($event)" />
         <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="search()"/>
       </div>
