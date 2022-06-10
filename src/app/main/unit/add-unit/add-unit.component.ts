@@ -212,6 +212,9 @@ export class AddUnitComponent implements OnInit {
                     this.spinner.hide();
                   }
                 }
+              }else{
+                this.toastService.showErrorHTMLWithTimeout('Không tìm thấy vai trò ADMIN của tổ chức', "", 3000);
+                this.spinner.hide();
               }
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin vai trò tổ chức', "", 3000);
