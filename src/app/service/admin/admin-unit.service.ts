@@ -34,6 +34,9 @@ export class AdminUnitService {
   ) {
     this.getCurrentUser();
 
+    console.log("status");
+    console.log(status);
+
     let listUnitUrl =
       this.listUnitUrl +
       '?name=' +

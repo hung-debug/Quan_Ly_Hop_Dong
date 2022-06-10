@@ -16,13 +16,19 @@ import { AdminUnitComponent } from '../../admin-unit.component';
   templateUrl: './admin-filter-unit.component.html',
   styleUrls: ['./admin-filter-unit.component.scss'],
 })
+
+
 export class AdminFilterUnitComponent implements OnInit {
   addForm: FormGroup;
   datas: any;
   submitted = false;
-  statusList: any[] = [];
+  statusList: any[];
+
+  name: string;
 
   listData:any[];
+
+  flagSearch: boolean = false;
 
 
   get f() {
@@ -42,10 +48,11 @@ export class AdminFilterUnitComponent implements OnInit {
       filter_representative: this.fbd.control(this.data.filter_representative),
       filter_email: this.fbd.control(this.data.filter_email),
       filter_phone: this.fbd.control(this.data.filter_phone),
-      filter_status: this.fbd.control(this.data.filter_status),
+      filter_status: this.fbd.control(Number(this.data.filter_status)),
       filter_address: this.fbd.control(this.data.filter_address),
     });
   }
+
 
   ngOnInit(): void {
     this.statusList = statusList;
@@ -58,50 +65,76 @@ export class AdminFilterUnitComponent implements OnInit {
     // });
   }
 
-  receiveMessage($event: any) {
-
-    console.log("vao day");
-
-    this.listData = $event;
-
-    console.log("this list data ", this.listData);
-  }
-
   onSubmit() {
-    const address = this.convertString(this.addForm.value.filter_address);
-    const representative = this.convertString(
-      this.addForm.value.filter_representative
-    );
-    const email = this.convertString(this.addForm.value.filter_email);
-    const phone = this.convertString(this.addForm.value.phone);
-    const status = this.convertString(this.addForm.value.status);
 
-    this.adminUnitService
-      .getUnitList('', address, representative, email, phone, status, '', '')
-      .subscribe(
-        (response) => {
-          // this.data.list = response;
+    console.log("value");
+    console.log(this.addForm.value.filter_status);
 
-          console.log("this data");
-          console.log(this.data.list);
-
-          this.router
-            .navigateByUrl('/', { skipLocationChange: true })
-            .then(() => {
-              this.router.navigate(['admin-main/unit']);
-            });
-
-          this.dialog.closeAll();
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.addForm.invalid) {
+      return;
+    }
+    const data = {
+      filter_representative: this.addForm.value.filter_representative,
+      filter_email: this.addForm.value.filter_email,
+      filter_phone: this.addForm.value.filter_phone,
+      filter_status: this.addForm.value.filter_status,
+      filter_address: this.addForm.value.filter_address,
+    }
+    this.dialogRef.close();
+    console.log(data);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/admin-main/unit'],
+      {
+        queryParams: {
+          'filter_representative': data.filter_representative, 
+          'filter_email': data.filter_email,
+          'filter_phone': data.filter_phone,
+          'filter_status': data.filter_status,
+          'filter_address': data.filter_address,
         },
-        (error) => {
-          console.log(error);
-          this.toastService.showErrorHTMLWithTimeout(
-            'Tìm kiếm thất bại',
-            '',
-            3000
-          );
-        }
-      );
+        skipLocationChange: true
+      });
+    });
+
+    // this.adminUnitComponent.search();
+
+    // const address = this.convertString(this.addForm.value.filter_address);
+    // const representative = this.convertString(
+    //   this.addForm.value.filter_representative
+    // );
+    // const email = this.convertString(this.addForm.value.filter_email);
+    // const phone = this.convertString(this.addForm.value.phone);
+    // const status = this.convertString(this.addForm.value.status);
+
+
+    // this.adminUnitService
+    //   .getUnitList('', address, representative, email, phone, status, '', '')
+    //   .subscribe(
+    //     (response) => {
+    //       // this.data.list = response;
+
+    //       console.log("this data");
+    //       console.log(this.data.list);
+
+    //       this.router
+    //         .navigateByUrl('/', { skipLocationChange: true })
+    //         .then(() => {
+    //           this.router.navigate(['admin-main/unit']);
+    //         });
+
+    //       this.dialog.closeAll();
+    //     },
+    //     (error) => {
+    //       console.log(error);
+    //       this.toastService.showErrorHTMLWithTimeout(
+    //         'Tìm kiếm thất bại',
+    //         '',
+    //         3000
+    //       );
+    //     }
+    //   );
   }
 
   convertString(filter: any): string {

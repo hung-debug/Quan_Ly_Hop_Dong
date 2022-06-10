@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { AppService } from 'src/app/service/app.service';
@@ -15,12 +16,15 @@ import { AdminFilterUnitComponent } from './dialog/admin-filter-unit/admin-filte
   styleUrls: ['./admin-unit.component.scss'],
 })
 export class AdminUnitComponent implements OnInit {
-  filter_code: any;
-  filter_price: any;
-  filter_time: any;
-  filter_status: any;
-  filter_number_contract: any;
-  filter_name:any="";
+  filter_representative: any = '';
+  filter_email: any = '';
+  filter_phone: any = '';
+  filter_status: any = '';
+  filter_address: any = '';
+
+  private sub: any;
+  action: string;
+  status: string;
 
   @Output() messageEvent = new EventEmitter<any[]>();
   constructor(
@@ -28,7 +32,8 @@ export class AdminUnitComponent implements OnInit {
     private dialog: MatDialog,
     private adminUnitService: AdminUnitService,
     private adminUserService: AdminUserService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private route: ActivatedRoute
   ) {}
 
   code: any = '';
@@ -51,6 +56,52 @@ export class AdminUnitComponent implements OnInit {
   temp: any[];
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+
+      console.log("param filter re");
+      console.log(params.filter_address);
+
+      if (
+        typeof params.filter_representative != 'undefined' &&
+        params.filter_representative
+      ) {
+        this.filter_representative = params.filter_representative;
+      } else {
+        this.filter_representative = '';
+      }
+      if (typeof params.filter_email != 'undefined' && params.filter_email) {
+        this.filter_email = params.filter_email;
+      } else {
+        this.filter_email = '';
+      }
+      if (typeof params.filter_phone != 'undefined' && params.filter_phone) {
+        this.filter_phone = params.filter_phone;
+      } else {
+        this.filter_phone = '';
+      }
+      if (typeof params.filter_status != 'undefined' && params.filter_status) {
+
+        if(params.filter_status != 0) {
+          this.filter_status = params.filter_status;
+        } else {
+          this.filter_status = '';
+        }
+      } else {
+        this.filter_status = '';
+      }
+      if (typeof params.filter_address != 'undefined' && params.filter_address) {
+        this.filter_address = params.filter_address;
+      } else {
+        this.filter_address = '';
+      }
+    });
+
+    this.sub = this.route.params.subscribe((params) => {
+      this.action = params['action'];
+      this.status = params['status'];
+
+      this.getUnitList();
+    });
 
     this.addUnitRole = this.checkRole(this.addUnitRole, 'QLTC_01');
     this.searchUnitRole = this.checkRole(this.searchUnitRole, 'QLTC_03');
@@ -78,8 +129,11 @@ export class AdminUnitComponent implements OnInit {
     ];
   }
   getUnitList() {
+
+    console.log("re ", this.filter_representative);
+
     this.adminUnitService
-      .getUnitList('', '', '', '', '', '', '', '')
+      .getUnitList('', this.filter_address, this.filter_representative, this.filter_email, this.filter_phone, this.filter_status, '', '')
       .subscribe((response) => {
 
         this.temp = response.entities;
@@ -120,35 +174,32 @@ export class AdminUnitComponent implements OnInit {
   searchUnit() {
     const data = {
       title: 'TÌM KIẾM TỔ CHỨC',
-      filter_code: this.filter_code,
-      filter_price: this.filter_price,
-      filter_time: this.filter_time,
+      filter_representative: this.filter_representative,
+      filter_email: this.filter_email,
+      filter_phone: this.filter_phone,
       filter_status: this.filter_status,
-      filter_number_contract: this.filter_number_contract,
-      list: this.listData
+      filter_address: this.filter_address,
     };
-
-    this.messageEvent.emit(this.listData);
 
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminFilterUnitComponent, {
       width: '580px',
       backdrop: 'static',
       keyboard: false,
-      data
+      data,
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
       let is_data = result;
 
-      console.log("result");
+      console.log('result');
       console.log(result);
     });
   }
 
   search() {
-    console.log("tim kiem");
+    console.log('vao tim kiem');
   }
 
   //Thêm mới tổ chức
@@ -224,15 +275,12 @@ export class AdminUnitComponent implements OnInit {
     });
   }
 
-
   autoSearch(event: any) {
-    this.listData = this.temp.filter(word => word.name.includes(this.filterSearch) 
-      || word.shortName.includes(this.filterSearch) || word.code.includes(this.filterSearch)
+    this.listData = this.temp.filter(
+      (word) =>
+        word.name.includes(this.filterSearch) ||
+        word.shortName.includes(this.filterSearch) ||
+        word.code.includes(this.filterSearch)
     );
   }
-
 }
-
-
-
-
