@@ -35,6 +35,7 @@ export class ContractService {
 
 
   listContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
+  listPastContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract/organization-old`;
   listContractOrgUrl: any = `${environment.apiUrl}/api/v1/contracts/my-organization-contract`;
   listContractOrgChildrenUrl: any = `${environment.apiUrl}/api/v1/contracts/my-org-and-descendant-contract`;
   listContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
@@ -167,7 +168,12 @@ export class ContractService {
     }
     let listContractUrl = "";
     if (isOrg == 'off') {
-      listContractUrl = this.listContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
+      if(filter_status == '40'){
+        filter_status = '30';
+        listContractUrl = this.listPastContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
+      }else{
+        listContractUrl = this.listContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
+      }
     } else {
       if (organization_id == '') {
         listContractUrl = this.listContractOrgChildrenUrl + '?organizationId=' + this.organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;

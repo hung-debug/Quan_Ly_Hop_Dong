@@ -241,6 +241,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         if (element.type == 4) {
           element['sign_unit'] = 'so_tai_lieu'
         }
+
+        if (element.recipient) { // set name (nguoi dc uy quyen hoac chuyen tiep)
+          element.name = element.recipient.name;
+        }
+      
       })
 
       let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');

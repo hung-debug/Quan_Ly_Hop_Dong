@@ -6,7 +6,9 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
+import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
+import { UserService } from 'src/app/service/user.service';
 import { DeleteContractTemplateDialogComponent } from './dialog/delete-contract-template-dialog/delete-contract-template-dialog.component';
 import { ReleaseContractTemplateDialogComponent } from './dialog/release-contract-template-dialog/release-contract-template-dialog.component';
 import { ShareContractTemplateDialogComponent } from './dialog/share-contract-template-dialog/share-contract-template-dialog.component';
@@ -30,12 +32,28 @@ export class ContractTemplateComponent implements OnInit {
 
   name:any="";
   type:any="";
+  loaded:boolean=false;
+
+  //phan quyen
+  isQLMHD_01:boolean=true;  //them moi mau hop dong
+  isQLMHD_02:boolean=true;  //sua mau hop dong
+  isQLMHD_03:boolean=true;  //ngung phat hanh mau hop dong
+  isQLMHD_04:boolean=true;  //phat hanh mau hop dong
+  isQLMHD_05:boolean=true;  //chia se mau hop dong
+  isQLMHD_06:boolean=true;  //tim kiem mau hop dong
+  isQLMHD_07:boolean=true;  //xoa mau hop dong
+  isQLMHD_08:boolean=true;  //xem thong tin chi tiet mau hop dong
+  isQLHD_14:boolean=true;   //tao hop dong don le theo mau
+  isQLHD_15:boolean=true;   //tao hop dong don le theo lo
 
   constructor(private appService: AppService,
               private contractTemplateService: ContractTemplateService,
               private router: Router,
               private dialog: MatDialog,
-              private contractTypeService: ContractTypeService) { 
+              private contractTypeService: ContractTypeService,
+              private userService: UserService,
+              private roleService: RoleService,
+              private toastService: ToastService) { 
 
     this.stateOptions = [
       { label: 'Mẫu hợp đồng tạo', value: 'off' },
@@ -45,18 +63,53 @@ export class ContractTemplateComponent implements OnInit {
 
   ngOnInit(): void {
     this.appService.setTitle('contract-template.list');
-    this.getContractTemplateList();
+    //lay id user
+    let userId = this.userService.getAuthCurrentUser().id;
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data.role_id).subscribe(
+          async data => {
+            console.log(data);
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLMHD_01 = listRole.some(element => element.code == 'QLMHD_01');
+            this.isQLMHD_02 = listRole.some(element => element.code == 'QLMHD_02');
+            this.isQLMHD_03 = listRole.some(element => element.code == 'QLMHD_03');
+            this.isQLMHD_04 = listRole.some(element => element.code == 'QLMHD_04');
+            this.isQLMHD_05 = listRole.some(element => element.code == 'QLMHD_05');
+            this.isQLMHD_06 = listRole.some(element => element.code == 'QLMHD_06');
+            this.isQLMHD_07 = listRole.some(element => element.code == 'QLMHD_07');
+            this.isQLMHD_08 = listRole.some(element => element.code == 'QLMHD_08');
+            this.isQLHD_14 = listRole.some(element => element.code == 'QLHD_14');
+            this.isQLHD_15 = listRole.some(element => element.code == 'QLHD_15');
 
-    this.contractTypeService.getContractTypeList("", "").subscribe(response => {
-      console.log(response);
+            this.getContractTemplateList();
+
+            this.getContractType();
+
+            this.loaded = true;
+            
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+          }
+        ); 
+      
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+      }
+    )
+    
+  }
+  async getContractType(){
+    await this.contractTypeService.getContractTypeList("", "").toPromise().then(response => {
       this.contractTypeList = response;
     });
   }
 
-  getContractTemplateList(){
+  async getContractTemplateList(){
     //get list contract template
-    this.contractTemplateService.getContractTemplateList(this.isShare, this.name, this.type, this.p, this.page).subscribe(response => {
-      console.log(response);
+    await this.contractTemplateService.getContractTemplateList(this.isShare, this.name, this.type, this.p, this.page).toPromise().then(response => {
       this.contractsTemplate = response.entities;
       //this.pageTotal = response.total_elements;
       this.pageTotal = response.total_elements;
@@ -92,7 +145,6 @@ export class ContractTemplateComponent implements OnInit {
           }
         })
         
-
         let sideB = "";
         let connB = "";
         if(partnerLead > 0){
@@ -221,5 +273,13 @@ export class ContractTemplateComponent implements OnInit {
       console.log('the close dialog');
       let is_data = result
     })
+  }
+
+  addContractForm(id: number) {
+    this.router.navigate(['main/form-contract/add-form/' + id]);
+  }
+
+  addContractBatch(id: number) {
+    this.router.navigate(['main/form-contract/add-batch/' + id]);
   }
 }

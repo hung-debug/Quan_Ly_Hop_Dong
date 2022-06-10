@@ -40,17 +40,19 @@ export class FooterSignatureComponent implements OnInit {
       for (let j = 0; j < data_coordination[i].recipients.length; j++) {
         if (data_coordination[i].recipients[j].email == emailCurrent) {
           this.is_data_coordination = data_coordination[i];
+          console.log(data_coordination[i]);
           break;
         }
       }
     }
 
     if (this.is_data_coordination) {
+      
       // @ts-ignore
       for (let i = 0; i < this.is_data_coordination.recipients.length; i++) {
         //@ts-ignore
         let element = this.is_data_coordination.recipients[i];
-        if (element.role == 1) {
+        if (element.role == 1 && element.email == emailCurrent) {
           if (element.status != 1) {
             this.is_show_coordination = true;
             this.view = true;
@@ -62,6 +64,7 @@ export class FooterSignatureComponent implements OnInit {
         }
       }
     }
+   
   }
 
   action() {

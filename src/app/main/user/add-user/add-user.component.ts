@@ -75,13 +75,15 @@ export class AddUserComponent implements OnInit {
 
       nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
 
-      fileImage:null
+      fileImage:null,
+
+      organization_change:null
     });
   }
   
   getDataOnInit(){
     let orgId = this.userService.getAuthCurrentUser().organizationId;
-    this.orgIdOld = orgId;
+    
     if(this.isQLND_01 || this.isQLND_02){
       //lay danh sach to chuc
       this.unitService.getUnitList('', '').subscribe(data => {
@@ -96,11 +98,7 @@ export class AddUserComponent implements OnInit {
         
       });
 
-      //lay danh sach vai tro
-      this.roleService.getRoleList('', '').subscribe(data => {
-        console.log(data);
-        this.roleList = data.entities;
-      });
+      
 
       this.networkList = networkList;
     }
@@ -111,6 +109,13 @@ export class AddUserComponent implements OnInit {
       //set title
       if (this.action == 'add') {
         this.appService.setTitle('user.add');
+
+        //lay danh sach vai tro
+        this.roleService.getRoleList('', '').subscribe(data => {
+          console.log(data);
+          this.roleList = data.entities;
+        });
+
         this.isEditRole = true;
         if(this.isQLND_01){
           this.addForm = this.fbd.group({
@@ -138,6 +143,7 @@ export class AddUserComponent implements OnInit {
           this.userService.getUserById(this.id).subscribe(
             data => {
               console.log(data);
+              this.orgIdOld = data.organization_id;
               this.addForm = this.fbd.group({
                 name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
                 email: this.fbd.control(data.email, [Validators.required, Validators.email]),
@@ -152,7 +158,9 @@ export class AddUserComponent implements OnInit {
 
                 nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.input_form)),
 
-                fileImage:null
+                fileImage:null,
+
+                organization_change: data.organization_change
               }); 
               this.phoneOld = data.phone;
               this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
@@ -181,6 +189,12 @@ export class AddUserComponent implements OnInit {
                   });
                 }
               }
+
+              //lay danh sach vai tro
+            this.roleService.getRoleByOrgId(data.organization_id).subscribe(data => {
+              console.log(data);
+              this.roleList = data.entities;
+            });
               
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
@@ -225,8 +239,32 @@ export class AddUserComponent implements OnInit {
     });
   }
 
+  checkChangeUnit(data:any){
+    //kiem tra xem nguoi dung co chuyen to chuc hay khong
+    if(data.organizationId != this.orgIdOld){
+      //kiem tra xem nguoi dung da xu ly xong het cac hop dong hay chua
+      this.userService.getCheckContractUser(this.id).subscribe(
+        dataCheckContract => {
+          if(dataCheckContract.success){
+            this.update(data);
+          }else{
+            this.toastService.showErrorHTMLWithTimeout('Không thể chuyển đơn vị cho người dùng tồn tại hợp đồng chưa xử lý', "", 3000);
+            this.spinner.hide();
+          }
+      
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Kiểm tra hợp đồng theo người dùng thất bại', "", 3000);
+          this.spinner.hide();
+        }
+      )
+    }else{
+      this.update(data);
+    }
+  }
+
   update(data:any){
     data.id = this.id;
+
     if(data.fileImage != null){
       this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
         console.log(JSON.stringify(dataFile));
@@ -265,13 +303,14 @@ export class AddUserComponent implements OnInit {
       this.userService.updateUser(data).subscribe(
         dataOut => {
           
-          
+          let emailCurrent = this.userService.getAuthCurrentUser().email;
           //neu nguoi thao tac chuyen to chuc cho chinh minh thi can logout de lay lai thong tin to chuc moi
-          if(data.organizationId != this.orgIdOld){
+          if(data.organizationId != this.orgIdOld && emailCurrent == data.email){
             this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công. Vui lòng đăng nhập lại!', "", 3000);
             localStorage.clear();
             sessionStorage.clear();
             this.router.navigate(['/login']);
+
           }else{
             this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
             this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
@@ -317,7 +356,8 @@ export class AddUserComponent implements OnInit {
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,
       fileImage: this.attachFile,
-      sign_image: []
+      sign_image: [],
+      organization_change: this.addForm.value.organizationId!= this.orgIdOld?1:this.addForm.value.organization_change
     }
     console.log(data);
     
@@ -363,7 +403,7 @@ export class AddUserComponent implements OnInit {
               )
 
               //ham update nguoi dung
-              this.update(data);
+              this.checkChangeUnit(data);
             }else if(dataByPhone.code == '01'){
               this.toastService.showErrorHTMLWithTimeout('Số điện thoại đã tồn tại trong hệ thống', "", 3000);
               this.spinner.hide();
@@ -375,7 +415,7 @@ export class AddUserComponent implements OnInit {
         )
       }else{
         //ham update
-        this.update(data);
+        this.checkChangeUnit(data);
       }
       
     }else{
