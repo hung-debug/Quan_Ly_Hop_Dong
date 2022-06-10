@@ -51,6 +51,9 @@ export class AdminUnitComponent implements OnInit {
   addUnitRole: boolean = false;
   searchUnitRole: boolean = false;
   infoUnitRole: boolean = false;
+  activeUnitRole: boolean = false;
+  editUnitRole: boolean = false;
+  deleteUnitRole: boolean = false;
 
   filterSearch: string;
 
@@ -58,11 +61,15 @@ export class AdminUnitComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.appService.setTitle('unit.list');
     this.addUnitRole = this.checkRole(this.infoUnitRole, 'QLTC_01');
     this.searchUnitRole = this.checkRole(this.searchUnitRole, 'QLTC_09');
     this.infoUnitRole = this.checkRole(this.infoUnitRole, 'QLTC_10');
+    this.activeUnitRole = this.checkRole(this.activeUnitRole, 'QLTC_08');
+    this.editUnitRole = this.checkRole(this.editUnitRole, 'QLTC_02');
+    this.deleteUnitRole = this.checkRole(this.deleteUnitRole, 'QLTC_07');
 
-    console.log("search unit role");
+    console.log('search unit role');
     console.log(this.searchUnitRole);
 
     this.route.queryParams.subscribe((params) => {
@@ -113,20 +120,17 @@ export class AdminUnitComponent implements OnInit {
       this.getUnitList();
     });
 
-
-    console.log("info unit role");
+    console.log('info unit role');
     console.log(this.infoUnitRole);
 
-    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
-      .user.permissions;
 
-    if (permissions.length === 1 && permissions[0].code.includes('QLTB')) {
-      console.log('vao day');
-      this.adminUnit = false;
-      this.appService.setTitle('');
-    } else {
-      this.appService.setTitle('unit.list');
-    }
+    // if (permissions.length === 1 && permissions[0].code.includes('QLTB')) {
+    //   console.log('vao day');
+    //   this.adminUnit = false;
+    //   this.appService.setTitle('');
+    // } else {
+    //   this.appService.setTitle('unit.list');
+    // }
 
     this.getUnitList();
 
@@ -136,8 +140,16 @@ export class AdminUnitComponent implements OnInit {
       { field: 'phone', header: 'Số điện thoại', style: 'text-align: left;' },
       { field: 'active', header: 'Kích hoạt', style: 'text-align: left;' },
       { field: 'email', header: 'Email đăng ký', style: 'text-align: left;' },
-      { field: 'id', header: 'unit.manage', style: 'text-align: center;' },
+      // { field: 'id', header: 'unit.manage', style: 'text-align: center;' },
     ];
+
+    if (!(this.editUnitRole === false && this.deleteUnitRole === false)) {
+      this.cols.push({
+        field: 'id',
+        header: 'unit.manage',
+        style: 'text-align: center;',
+      });
+    }
   }
   getUnitList() {
     console.log('re ', this.filter_representative);
@@ -164,8 +176,7 @@ export class AdminUnitComponent implements OnInit {
   }
 
   checkRole(flag: boolean, code: string): boolean {
-    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
-      .user.permissions;
+    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
 
     const selectedRoleConvert: { code: any }[] = [];
 
@@ -174,24 +185,21 @@ export class AdminUnitComponent implements OnInit {
       selectedRoleConvert.push(jsonData);
     });
 
-    console.log("se");
+    console.log('se');
     console.log(selectedRoleConvert);
 
     for (let i = 0; i < selectedRoleConvert.length; i++) {
       let role = selectedRoleConvert[i].code;
 
       if (role.includes(code)) {
-
-        console.log("role ",role);
-        console.log("code ", code);    
-        console.log("i ",i);
+        console.log('role ', role);
+        console.log('code ', code);
+        console.log('i ', i);
 
         flag = true;
         break;
       }
     }
-
-
 
     return flag;
   }
@@ -288,21 +296,23 @@ export class AdminUnitComponent implements OnInit {
   }
 
   activeUnit(id: any) {
-    const data = {
-      title: 'KÍCH HOẠT TỔ CHỨC',
-      id: id,
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(AdminActiveUnitComponent, {
-      width: '400px',
-      backdrop: 'static',
-      keyboard: false,
-      data,
-    });
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result;
-    });
+    if (this.activeUnitRole === true) {
+      const data = {
+        title: 'KÍCH HOẠT TỔ CHỨC',
+        id: id,
+      };
+      // @ts-ignore
+      const dialogRef = this.dialog.open(AdminActiveUnitComponent, {
+        width: '400px',
+        backdrop: 'static',
+        keyboard: false,
+        data,
+      });
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog');
+        let is_data = result;
+      });
+    }
   }
 
   autoSearch(event: any) {
