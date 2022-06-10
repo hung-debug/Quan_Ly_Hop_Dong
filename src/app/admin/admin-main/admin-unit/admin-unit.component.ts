@@ -57,6 +57,14 @@ export class AdminUnitComponent implements OnInit {
   temp: any[];
 
   ngOnInit(): void {
+
+    this.addUnitRole = this.checkRole(this.infoUnitRole, 'QLTC_01');
+    this.searchUnitRole = this.checkRole(this.searchUnitRole, 'QLTC_09');
+    this.infoUnitRole = this.checkRole(this.infoUnitRole, 'QLTC_10');
+
+    console.log("search unit role");
+    console.log(this.searchUnitRole);
+
     this.route.queryParams.subscribe((params) => {
       console.log('param filter re');
       console.log(params.filter_address);
@@ -105,9 +113,9 @@ export class AdminUnitComponent implements OnInit {
       this.getUnitList();
     });
 
-    this.addUnitRole = this.checkRole(this.addUnitRole, 'QLTC_01');
-    this.searchUnitRole = this.checkRole(this.searchUnitRole, 'QLTC_03');
-    this.infoUnitRole = this.checkRole(this.infoUnitRole, 'QLTC_04');
+
+    console.log("info unit role");
+    console.log(this.infoUnitRole);
 
     const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
       .user.permissions;
@@ -166,14 +174,24 @@ export class AdminUnitComponent implements OnInit {
       selectedRoleConvert.push(jsonData);
     });
 
+    console.log("se");
+    console.log(selectedRoleConvert);
+
     for (let i = 0; i < selectedRoleConvert.length; i++) {
       let role = selectedRoleConvert[i].code;
 
       if (role.includes(code)) {
+
+        console.log("role ",role);
+        console.log("code ", code);    
+        console.log("i ",i);
+
         flag = true;
         break;
       }
     }
+
+
 
     return flag;
   }

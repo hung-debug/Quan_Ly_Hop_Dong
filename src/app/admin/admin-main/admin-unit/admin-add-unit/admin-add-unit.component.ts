@@ -99,10 +99,9 @@ export class AdminAddUnitComponent implements OnInit {
       //lay danh sach to chuc
       this.adminUnitService.getUnitById(this.data.id).subscribe(
         (data) => {
-
-          console.log("data");
+          console.log('data');
           console.log(data);
-        
+
           this.addForm = this.fbd.group({
             nameOrg: this.fbd.control(data.name, [
               Validators.required,
@@ -115,7 +114,10 @@ export class AdminAddUnitComponent implements OnInit {
               Validators.required,
               Validators.pattern(parttern_input.input_form),
             ]),
-            email: this.fbd.control(data.email, [Validators.required, Validators.email]),
+            email: this.fbd.control(data.email, [
+              Validators.required,
+              Validators.email,
+            ]),
             phone: this.fbd.control(data.phone, [
               Validators.required,
               Validators.pattern('[0-9 ]{10}'),
@@ -140,7 +142,7 @@ export class AdminAddUnitComponent implements OnInit {
             position: this.fbd.control(data.position, [
               Validators.required,
               Validators.pattern(parttern_input.input_form),
-            ]),          
+            ]),
           });
         },
         (error) => {
@@ -455,8 +457,10 @@ export class AdminAddUnitComponent implements OnInit {
 
       this.adminUnitService.addUnit(dataForm).subscribe(
         (data) => {
+          console.log('data add ');
+          console.log(data);
 
-          if (data.id != null) {
+          if (data.id != null || data.id != undefined) {
             this.toastService.showSuccessHTMLWithTimeout(
               'Thêm mới thành công!',
               '',
@@ -470,12 +474,6 @@ export class AdminAddUnitComponent implements OnInit {
 
             this.dialog.closeAll();
           } else {
-            // this.toastService.showErrorHTMLWithTimeout(
-            //   data.errors[0].message,
-            //   '',
-            //   3000
-            // );
-
             if (data.errors[0].code == 1001) {
               this.toastService.showErrorHTMLWithTimeout(
                 'Email đã tồn tại trên hệ thống',
@@ -485,6 +483,18 @@ export class AdminAddUnitComponent implements OnInit {
             } else if (data.errors[0].code == 1003) {
               this.toastService.showErrorHTMLWithTimeout(
                 'Tên tổ chức đã được sử dụng',
+                '',
+                3000
+              );
+            } else if (data.errors[0].code == 1006) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Mã số thuế đã tồn tại trên hệ thống',
+                '',
+                3000
+              );
+            } else if (data.errors[0].code == 1002) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'SĐT đã được sử dụng',
                 '',
                 3000
               );

@@ -28,7 +28,7 @@ export class AdminAuthenticationService {
             //luu thong tin admin
             localStorage.setItem('currentAdmin', JSON.stringify(user));
 
-            console.log("user "+user);
+            console.log("user ",user);
 
             return user;
           }else{

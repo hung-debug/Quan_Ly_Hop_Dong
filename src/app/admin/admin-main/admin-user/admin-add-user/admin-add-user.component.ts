@@ -287,7 +287,7 @@ export class AdminAddUserComponent implements OnInit {
 
     this.adminUserService.addUser(data).subscribe(
       (data) => {
-        if (data.id != null) {
+        if (data.id != null || data.id != undefined) {
           this.toastService.showSuccessHTMLWithTimeout(
             'Thêm mới thành công!',
             '',
