@@ -90,11 +90,6 @@ export class ConfirmInfoContractComponent implements OnInit {
   }
 
   next() {
-    //call API step confirm
-    // this.datas.determine_contract.forEach((item: any) => {
-    //   delete item.id;
-    // })
-
     let isHaveFieldId: any[] = [];
     let isNotFieldId: any[] = [];
     let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));

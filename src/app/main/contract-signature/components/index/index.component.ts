@@ -117,15 +117,17 @@ export class IndexComponent implements OnInit {
         }
 
         //neu co id nguoi xu ly thi moi kiem tra
+        
         if (id_recipient_signature) {
-          await this.contractService.considerRejectContract(id_recipient_signature, textRefuse).toPromise().then(
+          this.contractService.considerRejectContract(id_recipient_signature, textRefuse).subscribe(
             (result) => {
-              this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công', '', 3000);
-              // this.spinner.show();
-              this.getLoadChangeData();
+              this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công!', '', 3000);
+              this.router.navigate(['/main/contract-signature/receive/wait-processing']);
             }, error => {
               this.spinner.hide();
               this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
+            }, () => {
+              // this.getLoadChangeDataRefuse();
             }
           )
         }
@@ -133,18 +135,19 @@ export class IndexComponent implements OnInit {
     }
   }
 
-  getLoadChangeData() {
-    this.contractService.getDataObjectSignatureLoadChange(this.datas.data_contract_document_id.contract_id).subscribe((res: any) => {
-      this.datas.is_data_object_signature = res;
-      this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.data_contract_document_id.data_contract_document_id]);
-    }, (error: HttpErrorResponse) => {
-      this.spinner.hide();
-      this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000);
-    }, () => {
-      this.spinner.hide();
-    })
-  }
-
-
+  // getLoadChangeDataRefuse() {
+  //   // load data after when coordination success
+  //   this.contractService.getDataCoordination(this.datas.data_contract_document_id.contract_id).subscribe((res: any) => {
+  //     if (res) {
+  //       this.datas.is_data_contract = res;
+  //       this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.data_contract_document_id.contract_id]);
+  //     }
+  //   }, (error) => {
+  //     this.spinner.hide();
+  //     this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000);
+  //   }, () => {
+  //     this.spinner.hide();
+  //   })
+  // }
 
 }

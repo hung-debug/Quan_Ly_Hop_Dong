@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import {variable} from "../../../../config/variable";
 import {
   ProcessingHandleEcontractComponent
@@ -14,7 +14,7 @@ import { ToastService } from 'src/app/service/toast.service';
   templateUrl: './footer-signature.component.html',
   styleUrls: ['./footer-signature.component.scss']
 })
-export class FooterSignatureComponent implements OnInit {
+export class FooterSignatureComponent implements OnInit, OnChanges {
   @Input() datas: any;
   @Input() view: any;
   @Input() recipientId: any;
@@ -67,6 +67,11 @@ export class FooterSignatureComponent implements OnInit {
       }
     }
    
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+    
   }
 
   action() {
