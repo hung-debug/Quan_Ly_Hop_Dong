@@ -176,7 +176,7 @@ export class AdminUnitComponent implements OnInit {
   }
 
   checkRole(flag: boolean, code: string): boolean {
-    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
+    let permissions = JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
 
     const selectedRoleConvert: { code: any }[] = [];
 

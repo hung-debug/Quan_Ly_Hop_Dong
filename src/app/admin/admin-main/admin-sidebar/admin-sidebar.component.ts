@@ -18,10 +18,11 @@ export class AdminSidebarComponent implements OnInit {
     public adminSidebarservice: AdminSidebarService,
     private router: Router
   ) {
-    this.menus = adminSidebarservice.getMenuList();
   }
 
   ngOnInit() {
+    this.menus = this.adminSidebarservice.getMenuList();
+
     this.menus.forEach((element: any) => {
       element.active = false;
       if (element.href != '#') {

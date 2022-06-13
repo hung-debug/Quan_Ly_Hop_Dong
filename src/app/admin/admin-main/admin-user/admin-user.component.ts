@@ -40,9 +40,9 @@ export class AdminUserComponent implements OnInit {
   permissions: any;
 
   ngOnInit(): void {
-
-    this.permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
-      .user.permissions;
+    this.permissions = JSON.parse(
+      localStorage.getItem('currentAdmin') || ''
+    ).user.permissions;
 
     this.addUserRole = this.checkRole(this.addUserRole, 'QLND_01');
     this.searchUserRole = this.checkRole(this.searchUserRole, 'QLND_03');
@@ -69,8 +69,6 @@ export class AdminUserComponent implements OnInit {
     }
   }
   checkRole(flag: boolean, code: string) {
-    
-
     console.log('length ', this.permissions.length);
 
     console.log('permission ', this.permissions);
@@ -133,47 +131,77 @@ export class AdminUserComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
+
+      console.log("result ",result);
+
       console.log('the close dialog');
 
-      // if (
-      //   JSON.parse(localStorage.getItem('currentAdmin') || '').user.id ==
-      //   data.id
-      // ) {
-      this.adminUserService.getUserById(data.id).subscribe(
-        (data) => {
-          // localStorage.setItem('adminRole', JSON.stringify(data));
+      // this.adminUserService.getUserById(data.id).subscribe(
+      //   (data) => {
+      //     if (
+      //       data.id ==
+      //       JSON.parse(localStorage.getItem('currentAdmin') || '').user.id
+      //     ) {
+      //       console.log('vao day');
 
-          if (
-            data.id ==
-            JSON.parse(localStorage.getItem('currentAdmin') || '').user.id
-          ) {
-            const dataUpdate = {
-              token: JSON.parse(localStorage.getItem('currentAdmin') || '')
-                .token,
-              user: JSON.parse(localStorage.getItem('currentAdmin') || '').user,
-            };
+      //       const dataUpdate = {
+      //         token: JSON.parse(localStorage.getItem('currentAdmin') || '')
+      //           .token,
+      //         user: JSON.parse(localStorage.getItem('currentAdmin') || '').user,
+      //       };
 
-            localStorage.setItem('currentAdmin', JSON.stringify(dataUpdate));
+      //       dataUpdate.user.permissions = data.permissions;
 
-            // localStorage.clear();
-          }
-        },
-        (error) => {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Lỗi lấy thông tin người dùng',
-            '',
-            3000
-          );
-        }
-      );
-      // } else {
-      //   console.log(
-      //     'json id ',
-      //     JSON.parse(localStorage.getItem('currentAdmin') || '').user.id
-      //   );
+      //       localStorage.setItem('currentAdmin', JSON.stringify(dataUpdate));
 
-      //   console.log('data id ', data.id);
-      // }
+      //       let flag = 0;
+      //       if (dataUpdate.user.permissions.length == 1) {
+      //         if (dataUpdate.user.permissions[0].code.includes('QLTC')) {
+      //           this.router.navigate(['/admin-main/unit']);
+      //         } else if (
+      //           dataUpdate.user.permissions[0].code.includes('QLGDV')
+      //         ) {
+      //           this.router.navigate(['/admin-main/pack']);
+      //         } else {
+      //           window.location.reload();
+      //         }
+      //         flag = 1;
+      //       } else {
+      //         for (let i = 0; i < dataUpdate.user.permissions.length; i++) {
+      //           if (dataUpdate.user.permissions[i].code.includes('QLND')) {
+      //             window.location.reload();
+      //             flag = 2;
+      //             break;
+      //           }
+      //         }
+
+      //         if (flag == 0) {
+      //           console.log('vao day ');
+      //           for (let i = 0; i < dataUpdate.user.permissions.length; i++) {
+      //             if (dataUpdate.user.permissions[i].code.includes('QLTC')) {
+      //               console.log('vao phan quan ly to chuc');
+      //               this.router.navigate(['/admin-main/unit']);
+      //               break;
+      //             } else {
+      //               console.log('vao day goi dich vu');
+      //               this.router.navigate(['/admin-main/pack']);
+      //               break;
+      //             }
+      //           }
+      //         }
+      //       }
+
+      //       window.location.reload();
+      //     }
+      //   },
+      //   (error) => {
+      //     this.toastService.showErrorHTMLWithTimeout(
+      //       'Lỗi lấy thông tin người dùng',
+      //       '',
+      //       3000
+      //     );
+      //   }
+      // );
     });
   }
 
