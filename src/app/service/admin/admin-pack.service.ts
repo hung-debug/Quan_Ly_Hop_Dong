@@ -6,7 +6,7 @@ import {environment} from '../../../environments/environment';
 })
 export class AdminPackService {
 
-  listPackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
+  listPackUrl: any = `${environment.apiUrl}/api/v1/admin/service-package`;
   getPackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
   deletePackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
   updatePackUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
@@ -22,9 +22,10 @@ export class AdminPackService {
     this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').token;
   }
 
-  getPackList(name:any, code:any, price:any, time:any, status:any, number_contract:any){
+  getPackList(name:any, code:any, total:any, duration:any, numberOfContracts:any, status:any){
     this.getCurrentUser();
-    let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&price=' + price.trim() + '&time=' + time.trim() + '&status=' + status.trim() + '&number_contract=' + number_contract.trim() + "&size=10000";
+    let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&total=' + total.trim() + '&duration=' + duration.trim() + 
+    '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status.trim() +  "&page=0"+ "&size=1000" +"&sort=name";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(listPackUrl, {headers}).pipe();
   

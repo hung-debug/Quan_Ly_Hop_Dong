@@ -29,17 +29,16 @@ export class AdminPackComponent implements OnInit {
 
   code:any = "";
   name:any = "";
-  price:any = "";
-  time:any = "";
-  status:any = "";
-  number_contract:any = "";
+  total: any = "";
+  duration: any = "";
+  numberOfContracts: any = "";
+  status: any = "";
 
   list: any[];
   listData:any[];
   cols: any[];
   files:any[];
   test:any;
-  total:any;
   orgId:any;
   isAdmin:boolean=false;
 
@@ -99,7 +98,7 @@ export class AdminPackComponent implements OnInit {
 
   array_empty: any = [];
   searchUnit(){
-    this.adminPackService.getPackList(this.name, this.code, this.price ,this.time, this.status, this.number_contract).subscribe(response => {
+    this.adminPackService.getPackList(this.name, this.code, this.total ,this.duration, this.numberOfContracts, this.status).subscribe(response => {
       this.listData = response.entities;
       this.total = this.listData.length;
     });
