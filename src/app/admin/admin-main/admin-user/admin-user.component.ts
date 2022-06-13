@@ -40,9 +40,9 @@ export class AdminUserComponent implements OnInit {
   permissions: any;
 
   ngOnInit(): void {
-
-    this.permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
-      .user.permissions;
+    this.permissions = JSON.parse(
+      localStorage.getItem('currentAdmin') || ''
+    ).user.permissions;
 
     this.addUserRole = this.checkRole(this.addUserRole, 'QLND_01');
     this.searchUserRole = this.checkRole(this.searchUserRole, 'QLND_03');
@@ -69,8 +69,6 @@ export class AdminUserComponent implements OnInit {
     }
   }
   checkRole(flag: boolean, code: string) {
-    
-
     console.log('length ', this.permissions.length);
 
     console.log('permission ', this.permissions);
@@ -133,47 +131,12 @@ export class AdminUserComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
+
+      console.log("result ",result);
+
       console.log('the close dialog');
 
-      // if (
-      //   JSON.parse(localStorage.getItem('currentAdmin') || '').user.id ==
-      //   data.id
-      // ) {
-      this.adminUserService.getUserById(data.id).subscribe(
-        (data) => {
-          // localStorage.setItem('adminRole', JSON.stringify(data));
-
-          if (
-            data.id ==
-            JSON.parse(localStorage.getItem('currentAdmin') || '').user.id
-          ) {
-            const dataUpdate = {
-              token: JSON.parse(localStorage.getItem('currentAdmin') || '')
-                .token,
-              user: JSON.parse(localStorage.getItem('currentAdmin') || '').user,
-            };
-
-            localStorage.setItem('currentAdmin', JSON.stringify(dataUpdate));
-
-            // localStorage.clear();
-          }
-        },
-        (error) => {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Lỗi lấy thông tin người dùng',
-            '',
-            3000
-          );
-        }
-      );
-      // } else {
-      //   console.log(
-      //     'json id ',
-      //     JSON.parse(localStorage.getItem('currentAdmin') || '').user.id
-      //   );
-
-      //   console.log('data id ', data.id);
-      // }
+      
     });
   }
 

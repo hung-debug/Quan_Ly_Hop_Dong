@@ -26,6 +26,7 @@ export class AdminAddUnitComponent implements OnInit {
   parentName: any;
   emailOld: any;
   phoneOld: any;
+  status: any;
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
@@ -126,7 +127,7 @@ export class AdminAddUnitComponent implements OnInit {
               Validators.required,
               Validators.pattern(parttern_input.input_form),
             ]),
-            status: 1,
+            status: this.convertStatus(data.status),
             representatives: this.fbd.control(data.representative, [
               Validators.required,
               Validators.pattern(parttern_input.input_form),
@@ -198,12 +199,11 @@ export class AdminAddUnitComponent implements OnInit {
   }
 
   convertStatus(status: any): any {
-    console.log('status value');
-    console.log(status);
-
+  
     if (status == 'IN_ACTIVE') {
       status = 0;
     } else if (status == 'ACTIVE') {
+      console.log("status 0");
       status = 1;
     }
 
@@ -381,23 +381,15 @@ export class AdminAddUnitComponent implements OnInit {
       address: this.addForm.value.address,
     };
 
-    if (dataForm.status == 1) {
-      dataForm.status = 'ACTIVE';
-    } else if (dataForm.status == 0) {
-      dataForm.status = 'IN_ACTIVE';
-    }
+  
 
     //truong hop sua ban ghi
     if (dataForm.id != null) {
-      console.log('vao truong hop sua ban ghi');
-
-      console.log('data');
-      console.log(this.data);
 
       this.adminUnitService.updateUnitt(dataForm).subscribe(
         (data) => {
           if (data.id != null) {
-            console.log('data');
+            console.log('vao truong hop sua ban ghi');
             console.log(data.status);
 
             this.toastService.showSuccessHTMLWithTimeout(
@@ -454,6 +446,12 @@ export class AdminAddUnitComponent implements OnInit {
       //truong hop them moi ban ghi
     } else {
       console.log('vao truong hop them moi ban ghi');
+
+      if (dataForm.status == 1) {
+        dataForm.status = 'ACTIVE';
+      } else if (dataForm.status == 0) {
+        dataForm.status = 'IN_ACTIVE';
+      }
 
       this.adminUnitService.addUnit(dataForm).subscribe(
         (data) => {

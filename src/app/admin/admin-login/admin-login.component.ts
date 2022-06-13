@@ -62,6 +62,8 @@ export class AdminLoginComponent implements OnInit {
                 this.router
                   .navigateByUrl('/', { skipLocationChange: true })
                   .then(() => {
+
+                    let flag = 0;
                   
                     if(data.user.permissions.length === 1) {
                         if(data.user.permissions[0].code.includes('QLND')) {
@@ -71,13 +73,25 @@ export class AdminLoginComponent implements OnInit {
                         } else if(data.user.permissions[0].code.includes('QLGDV')) {
                           this.router.navigate(['/admin-main/pack']);
                         }
+                        flag = 1;
                     } else {
                       for(let i = 0; i < data.user.permissions.length; i++) {
                         if(data.user.permissions[i].code.includes('QLTC')) {
                           this.router.navigate(['/admin-main/unit']);
+                          flag = 2;
+                          break;
+                        } 
+                      }
+                    }
+
+                    if(flag == 0) {
+                      for (let i = 0; i < data.user.permissions.length; i++) {
+                        if (data.user.permissions[i].code.includes('QLND')) {
+                          this.router.navigate(['/admin-main/user']);
                           break;
                         } else {
-                          this.router.navigate(['/admin-main/user']);
+                          this.router.navigate(['/admin-main/pack']);
+                          break;
                         }
                       }
                     }
