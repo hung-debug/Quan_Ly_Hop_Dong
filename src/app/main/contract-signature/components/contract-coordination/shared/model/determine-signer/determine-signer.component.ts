@@ -162,7 +162,7 @@ export class DetermineSignerComponent implements OnInit {
     })
     // this.spinner.show();
     // this.contractService.getContractDetermine(this.is_determine_clone, this.datas.data_contract_document_id.contract_id).subscribe((res: any) => {
-      // this.datas.determine_contract = res;
+    //   this.datas.determine_contract = res;
       this.step = variable.stepSampleContract.step3;
       this.datas.stepLast = this.step;
       this.nextOrPreviousStep(this.step);
@@ -817,7 +817,7 @@ export class DetermineSignerComponent implements OnInit {
     this.contractService.deleteInfoContractSignature(dataArrClone.fields[0].id).subscribe((res: any) => {
       this.toastService.showSuccessHTMLWithTimeout(`Bạn đã xóa ${assignElement} ${dataArrClone.name}!`, "", "3000");
     }, (error: HttpErrorResponse) => {
-      this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+      this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
       this.spinner.hide();
       count = 1;
     }, () => {
