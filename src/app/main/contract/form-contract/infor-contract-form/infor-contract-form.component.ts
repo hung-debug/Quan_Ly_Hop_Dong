@@ -73,6 +73,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     ) { }
 
     ngOnInit(): void {
+        this.spinner.hide();
         let dataRouter = this.route.params.subscribe((params: any) => {
             this.action = params.action;
         }, null, () => {
