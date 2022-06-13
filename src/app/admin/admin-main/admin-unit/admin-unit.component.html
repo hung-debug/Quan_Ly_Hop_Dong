@@ -1,8 +1,8 @@
 <div *ngIf="this.adminUnit === true" class="container-fluid">
-  <div class="col-md-12">
+  <div *ngIf="this.searchUnitRole === true" class="col-md-12">
     <div class="input-line search">
       <img src="../../assets/img/icon_search.svg" class="input-img" />
-      <input
+      <input 
         type="text"
         id="filter_name"
         class="input-text"
@@ -20,7 +20,7 @@
     </div>
   </div>
   <div class="col-md-12 btn_search">
-    <button class="btn btn-lg btn-block btn_submit" (click)="addUnit()">
+    <button *ngIf="this.addUnitRole === true" class="btn btn-lg btn-block btn_submit" (click)="addUnit()">
       {{ "btn.add" | translate }}
     </button>
   </div>
@@ -54,22 +54,23 @@
             <a
               *ngIf="list.status == 'IN_ACTIVE'"
               (click)="activeUnit(list.id)"
-              style="color: #0160ae; cursor: pointer; text-decoration: none"
+              style="color: #0160ae; cursor: pointer; text-decoration:underline"
               >{{ "Chưa kích hoạt" | translate }}</a
             >
-            <a *ngIf="list.status == 'ACTIVE'">{{
+            <a *ngIf="list.status == 'ACTIVE'"
+            style="color: #495057; cursor: pointer; text-decoration: none">{{
               "Đã kích hoạt" | translate
             }}</a>
           </td>
           <td>{{ list.email }}</td>
-          <td style="text-align: center">
-            <img
+          <td *ngIf="!(this.editUnitRole === false && this.deleteUnitRole === false)" style="text-align: center">
+            <img *ngIf="this.editUnitRole === true"
               src="../../../assets/img/icon_edit.svg"
               (click)="editUnit(list.id)"
               width="20px"
               style="cursor: pointer"
             />&nbsp;&nbsp;
-            <img
+            <img *ngIf="this.deleteUnitRole === true"
               src="../../../assets/img/icon_delete.svg"
               width="16px"
               style="cursor: pointer"

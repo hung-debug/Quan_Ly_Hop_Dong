@@ -1,5 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { AppService } from 'src/app/service/app.service';
@@ -15,18 +16,24 @@ import { AdminFilterUnitComponent } from './dialog/admin-filter-unit/admin-filte
   styleUrls: ['./admin-unit.component.scss'],
 })
 export class AdminUnitComponent implements OnInit {
-  filter_code: any;
-  filter_price: any;
-  filter_time: any;
-  filter_status: any;
-  filter_number_contract: any;
-  filter_name:any="";
+  filter_representative: any = '';
+  filter_email: any = '';
+  filter_phone: any = '';
+  filter_status: any = '';
+  filter_address: any = '';
+
+  private sub: any;
+  action: string;
+  status: string;
+
+  @Output() messageEvent = new EventEmitter<any[]>();
   constructor(
     private appService: AppService,
     private dialog: MatDialog,
     private adminUnitService: AdminUnitService,
     private adminUserService: AdminUserService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private route: ActivatedRoute
   ) {}
 
   code: any = '';
@@ -43,6 +50,10 @@ export class AdminUnitComponent implements OnInit {
 
   addUnitRole: boolean = false;
   searchUnitRole: boolean = false;
+  infoUnitRole: boolean = false;
+  activeUnitRole: boolean = false;
+  editUnitRole: boolean = false;
+  deleteUnitRole: boolean = false;
 
   filterSearch: string;
 
@@ -50,19 +61,76 @@ export class AdminUnitComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.addUnitRole = this.checkRole(this.addUnitRole, 'QLTC_01');
-    this.searchUnitRole = this.checkRole(this.searchUnitRole, 'QLTC_03');
+    this.appService.setTitle('unit.list');
+    this.addUnitRole = this.checkRole(this.infoUnitRole, 'QLTC_01');
+    this.searchUnitRole = this.checkRole(this.searchUnitRole, 'QLTC_09');
+    this.infoUnitRole = this.checkRole(this.infoUnitRole, 'QLTC_10');
+    this.activeUnitRole = this.checkRole(this.activeUnitRole, 'QLTC_08');
+    this.editUnitRole = this.checkRole(this.editUnitRole, 'QLTC_02');
+    this.deleteUnitRole = this.checkRole(this.deleteUnitRole, 'QLTC_07');
 
-    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
-      .user.permissions;
+    console.log('search unit role');
+    console.log(this.searchUnitRole);
 
-    if (permissions.length === 1 && permissions[0].code.includes('QLTB')) {
-      console.log('vao day');
-      this.adminUnit = false;
-      this.appService.setTitle('');
-    } else {
-      this.appService.setTitle('unit.list');
-    }
+    this.route.queryParams.subscribe((params) => {
+      console.log('param filter re');
+      console.log(params.filter_address);
+
+      if (
+        typeof params.filter_representative != 'undefined' &&
+        params.filter_representative
+      ) {
+        this.filter_representative = params.filter_representative;
+      } else {
+        this.filter_representative = '';
+      }
+      if (typeof params.filter_email != 'undefined' && params.filter_email) {
+        this.filter_email = params.filter_email;
+      } else {
+        this.filter_email = '';
+      }
+      if (typeof params.filter_phone != 'undefined' && params.filter_phone) {
+        this.filter_phone = params.filter_phone;
+      } else {
+        this.filter_phone = '';
+      }
+      if (typeof params.filter_status != 'undefined' && params.filter_status) {
+        if (params.filter_status != 0) {
+          this.filter_status = params.filter_status;
+        } else {
+          this.filter_status = '';
+        }
+      } else {
+        this.filter_status = '';
+      }
+      if (
+        typeof params.filter_address != 'undefined' &&
+        params.filter_address
+      ) {
+        this.filter_address = params.filter_address;
+      } else {
+        this.filter_address = '';
+      }
+    });
+
+    this.sub = this.route.params.subscribe((params) => {
+      this.action = params['action'];
+      this.status = params['status'];
+
+      this.getUnitList();
+    });
+
+    console.log('info unit role');
+    console.log(this.infoUnitRole);
+
+
+    // if (permissions.length === 1 && permissions[0].code.includes('QLTB')) {
+    //   console.log('vao day');
+    //   this.adminUnit = false;
+    //   this.appService.setTitle('');
+    // } else {
+    //   this.appService.setTitle('unit.list');
+    // }
 
     this.getUnitList();
 
@@ -72,14 +140,32 @@ export class AdminUnitComponent implements OnInit {
       { field: 'phone', header: 'Số điện thoại', style: 'text-align: left;' },
       { field: 'active', header: 'Kích hoạt', style: 'text-align: left;' },
       { field: 'email', header: 'Email đăng ký', style: 'text-align: left;' },
-      { field: 'id', header: 'unit.manage', style: 'text-align: center;' },
+      // { field: 'id', header: 'unit.manage', style: 'text-align: center;' },
     ];
+
+    if (!(this.editUnitRole === false && this.deleteUnitRole === false)) {
+      this.cols.push({
+        field: 'id',
+        header: 'unit.manage',
+        style: 'text-align: center;',
+      });
+    }
   }
   getUnitList() {
-    this.adminUnitService
-      .getUnitList('', '', '', '', '', '', '', '')
-      .subscribe((response) => {
+    console.log('re ', this.filter_representative);
 
+    this.adminUnitService
+      .getUnitList(
+        '',
+        this.filter_address,
+        this.filter_representative,
+        this.filter_email,
+        this.filter_phone,
+        this.filter_status,
+        '',
+        ''
+      )
+      .subscribe((response) => {
         this.temp = response.entities;
         this.listData = this.temp;
         this.total = this.listData.length;
@@ -90,8 +176,7 @@ export class AdminUnitComponent implements OnInit {
   }
 
   checkRole(flag: boolean, code: string): boolean {
-    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
-      .user.permissions;
+    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
 
     const selectedRoleConvert: { code: any }[] = [];
 
@@ -100,10 +185,17 @@ export class AdminUnitComponent implements OnInit {
       selectedRoleConvert.push(jsonData);
     });
 
+    console.log('se');
+    console.log(selectedRoleConvert);
+
     for (let i = 0; i < selectedRoleConvert.length; i++) {
       let role = selectedRoleConvert[i].code;
 
       if (role.includes(code)) {
+        console.log('role ', role);
+        console.log('code ', code);
+        console.log('i ', i);
+
         flag = true;
         break;
       }
@@ -118,30 +210,32 @@ export class AdminUnitComponent implements OnInit {
   searchUnit() {
     const data = {
       title: 'TÌM KIẾM TỔ CHỨC',
-      filter_code: this.filter_code,
-      filter_price: this.filter_price,
-      filter_time: this.filter_time,
+      filter_representative: this.filter_representative,
+      filter_email: this.filter_email,
+      filter_phone: this.filter_phone,
       filter_status: this.filter_status,
-      filter_number_contract: this.filter_number_contract,
-      list: this.listData
+      filter_address: this.filter_address,
     };
-
 
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminFilterUnitComponent, {
       width: '580px',
       backdrop: 'static',
       keyboard: false,
-      data
+      data,
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
       let is_data = result;
 
-      console.log("result");
+      console.log('result');
       console.log(result);
     });
+  }
+
+  search() {
+    console.log('vao tim kiem');
   }
 
   //Thêm mới tổ chức
@@ -181,51 +275,52 @@ export class AdminUnitComponent implements OnInit {
   }
 
   detailUnit(id: any) {
-    const data = {
-      title: 'unit.information',
-      id: id,
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(AdminDetailUnitComponent, {
-      width: '80%',
-      height: '80%',
-      backdrop: 'static',
-      keyboard: false,
-      data,
-    });
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result;
-    });
+    if (this.infoUnitRole === true) {
+      const data = {
+        title: 'unit.information',
+        id: id,
+      };
+      // @ts-ignore
+      const dialogRef = this.dialog.open(AdminDetailUnitComponent, {
+        width: '80%',
+        height: '80%',
+        backdrop: 'static',
+        keyboard: false,
+        data,
+      });
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog');
+        let is_data = result;
+      });
+    }
   }
 
   activeUnit(id: any) {
-    const data = {
-      title: 'KÍCH HOẠT TỔ CHỨC',
-      id: id,
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(AdminActiveUnitComponent, {
-      width: '400px',
-      backdrop: 'static',
-      keyboard: false,
-      data,
-    });
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result;
-    });
+    if (this.activeUnitRole === true) {
+      const data = {
+        title: 'KÍCH HOẠT TỔ CHỨC',
+        id: id,
+      };
+      // @ts-ignore
+      const dialogRef = this.dialog.open(AdminActiveUnitComponent, {
+        width: '400px',
+        backdrop: 'static',
+        keyboard: false,
+        data,
+      });
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog');
+        let is_data = result;
+      });
+    }
   }
-
 
   autoSearch(event: any) {
-    this.listData = this.temp.filter(word => word.name.includes(this.filterSearch) 
-      || word.shortName.includes(this.filterSearch) || word.code.includes(this.filterSearch)
+    this.listData = this.temp.filter(
+      (word) =>
+        word.name.includes(this.filterSearch) ||
+        word.shortName.includes(this.filterSearch) ||
+        word.code.includes(this.filterSearch)
     );
   }
-
 }
-
-
-
-

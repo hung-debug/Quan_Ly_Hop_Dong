@@ -32,13 +32,10 @@ export class AdminUnitService {
     page: any,
     size: any
   ) {
-
-    console.log("api danh sach to chuc");
-
     this.getCurrentUser();
 
-  
-
+    console.log("status");
+    console.log(status);
 
     let listUnitUrl =
       this.listUnitUrl +
@@ -117,8 +114,6 @@ export class AdminUnitService {
   }
 
   addUnit(datas: any) {
-
-
     console.log("datas");
     console.log(datas);
 
@@ -132,10 +127,10 @@ export class AdminUnitService {
       name: datas.name,
       code: datas.code,
       taxCode: datas.taxCode,
-      shortName: datas.short_name,
+      shortName: datas.shortName,
       address: datas.address,
       email: datas.email,
-      representative: datas.representatives,
+      representative: datas.representative,
       position: datas.position,
       size: datas.size,
       phone: datas.phone,
