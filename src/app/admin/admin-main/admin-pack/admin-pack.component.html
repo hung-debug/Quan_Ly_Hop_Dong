@@ -26,7 +26,7 @@
                 <td>{{list.time}}</td>
                 <td>{{list.numberContract}}</td>
                 <td>{{list.price}}</td>
-                <td style="text-align: center">
+                <td *ngIf="!(this.editPackRole === false && this.deletePackRole === false)" style="text-align: center">
                   <img *ngIf="this.editPackRole === true" src="../../../assets/img/icon_edit.svg" (click)="editPack(list.id)" width="20px" style="cursor: pointer;"/>&nbsp;&nbsp;
                   <img *ngIf="this.deletePackRole === true" src="../../../assets/img/icon_delete.svg" (click)="deletePack(list.id)" width="16px" style="cursor: pointer;"/>
                 </td>

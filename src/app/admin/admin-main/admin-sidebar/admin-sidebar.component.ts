@@ -18,10 +18,11 @@ export class AdminSidebarComponent implements OnInit {
     public adminSidebarservice: AdminSidebarService,
     private router: Router
   ) {
-    this.menus = adminSidebarservice.getMenuList();
   }
 
   ngOnInit() {
+    this.menus = this.adminSidebarservice.getMenuList();
+
     this.menus.forEach((element: any) => {
       element.active = false;
       if (element.href != '#') {
@@ -79,13 +80,7 @@ export class AdminSidebarComponent implements OnInit {
         element.activeDrop = false;
       }
     });
-    // if (sessionStorage.getItem('copy_right_show')) {
-    //   sessionStorage.removeItem('copy_right_show');
-    // }
-    // if (nameFeature && nameFeature == "create-contract-new") {
-    //   this.evenSelectSidebar.emit(nameFeature)
-    // } else
-    //   this.evenSelectSidebar.emit(undefined)
+
     this.router.navigate(['/' + currentMenu.href]);
     this.getRemoveLocal();
   }

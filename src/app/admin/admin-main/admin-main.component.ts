@@ -10,6 +10,7 @@ import { AppService } from 'src/app/service/app.service';
 import { DashboardService } from 'src/app/service/dashboard.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
+import { AdminSidebarService } from './admin-sidebar/admin-sidebar.service';
 
 @Component({
   selector: 'app-admin-main',
@@ -40,7 +41,7 @@ export class AdminMainComponent implements OnInit {
               private modalService: NgbModal,
               private fb: FormBuilder,
               private appService: AppService,
-              public sidebarservice: SidebarService,
+              public sidebarservice: AdminSidebarService,
               private dashboardService: DashboardService,
               private changeDetectorRef: ChangeDetectorRef,
               public translate: TranslateService,
@@ -61,7 +62,7 @@ export class AdminMainComponent implements OnInit {
 
     if(permissions.length === 0) {
       this.adminUnit = false;
-    }
+    } 
 
     this.selectedRoleConvert = [];
 

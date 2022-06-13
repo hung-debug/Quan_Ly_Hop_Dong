@@ -37,14 +37,20 @@ export class AdminUserComponent implements OnInit {
   infoUserRole: boolean = false;
   editUserRole: boolean = false;
 
+  permissions: any;
+
   ngOnInit(): void {
+    this.permissions = JSON.parse(
+      localStorage.getItem('currentAdmin') || ''
+    ).user.permissions;
+
     this.addUserRole = this.checkRole(this.addUserRole, 'QLND_01');
     this.searchUserRole = this.checkRole(this.searchUserRole, 'QLND_03');
     this.infoUserRole = this.checkRole(this.infoUserRole, 'QLND_04');
     this.editUserRole = this.checkRole(this.editUserRole, 'QLND_02');
 
-    console.log("qlnd 02");
-    console.log(this.editUserRole);
+    console.log('qlnd 02');
+    console.log(this.addUserRole);
 
     this.appService.setTitle('user.list');
     this.searchUser();
@@ -55,19 +61,21 @@ export class AdminUserComponent implements OnInit {
       { header: 'user.phone', style: 'text-align: left;' },
     ];
 
-    if(this.editUserRole === true) {
+    if (this.editUserRole === true) {
       this.cols.push({
-        header: 'unit.manage', style: 'text-align: center;'
-      })
+        header: 'unit.manage',
+        style: 'text-align: center;',
+      });
     }
   }
   checkRole(flag: boolean, code: string) {
-    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
-      .user.permissions;
+    console.log('length ', this.permissions.length);
+
+    console.log('permission ', this.permissions);
 
     const selectedRoleConvert: { code: any }[] = [];
 
-    permissions.forEach((key: any) => {
+    this.permissions.forEach((key: any) => {
       let jsonData = { code: key.code, name: key.name };
       selectedRoleConvert.push(jsonData);
     });
@@ -79,7 +87,6 @@ export class AdminUserComponent implements OnInit {
         flag = true;
         break;
       }
-
     }
 
     return flag;
@@ -124,8 +131,12 @@ export class AdminUserComponent implements OnInit {
       data,
     });
     dialogRef.afterClosed().subscribe((result: any) => {
+
+      console.log("result ",result);
+
       console.log('the close dialog');
-      let is_data = result;
+
+      
     });
   }
 

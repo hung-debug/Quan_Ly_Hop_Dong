@@ -75,15 +75,14 @@ export class AdminPackComponent implements OnInit {
   }
   
   checkRole(flag: boolean, code: string): boolean {
-    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
-      .user.permissions;
+    let permissions = JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
 
-    const selectedRoleConvert: { code: any }[] = [];
+     const selectedRoleConvert: { code: any }[] = [];
 
-    permissions.forEach((key: any) => {
-      let jsonData = { code: key.code, name: key.name };
-      selectedRoleConvert.push(jsonData);
-    });
+     permissions.forEach((key: any) => {
+       let jsonData = { code: key.code, name: key.name };
+       selectedRoleConvert.push(jsonData);
+     });
 
     for (let i = 0; i < selectedRoleConvert.length; i++) {
       let role = selectedRoleConvert[i].code;

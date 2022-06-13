@@ -96,32 +96,25 @@ export class AdminAddUserComponent implements OnInit {
       if (!this.data.id) {
         this.flagAddUpdate = 0;
 
-        this.appService.setTitle('user.add');
-        this.isEditRole = true;
-        if (this.isQLND_01) {
-          this.addForm = this.fbd.group({
-            name: this.fbd.control('', [
-              Validators.required,
-              Validators.pattern(parttern_input.input_form),
-            ]),
-            email: this.fbd.control('', [
-              Validators.required,
-              Validators.email,
-            ]),
-            phone: this.fbd.control('', [
-              Validators.required,
-              Validators.pattern('[0-9 ]{10}'),
-            ]),
-            role: this.fbd.control('', [Validators.required]),
-            status: 1,
-          });
-        }
+        this.addForm = this.fbd.group({
+          name: this.fbd.control('', [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          email: this.fbd.control('', [Validators.required, Validators.email]),
+          phone: this.fbd.control('', [
+            Validators.required,
+            Validators.pattern('[0-9 ]{10}'),
+          ]),
+          role: this.fbd.control('', [Validators.required]),
+          status: 1,
+        });
       } else {
         this.flagAddUpdate = 1;
         this.addForm.controls.email.disable();
 
         this.id = this.data.id;
-        this.appService.setTitle('user.update');
+        //this.appService.setTitle('user.update');
 
         this.adminUserService.getUserById(this.id).subscribe(
           (data) => {
@@ -134,20 +127,15 @@ export class AdminAddUserComponent implements OnInit {
                 Validators.required,
                 Validators.email,
               ]),
-              birthday: data.birthday == null ? null : new Date(data.birthday),
               phone: this.fbd.control(data.phone, [
                 Validators.required,
                 Validators.pattern('[0-9 ]{10}'),
-              ]),
-              organizationId: this.fbd.control(data.organization_id, [
-                Validators.required,
               ]),
 
               role: this.fbd.control(this.convertRoleArr(data.permissions), [
                 Validators.required,
               ]),
 
-              password: this.fbd.control(data.password, [Validators.required]),
               status: this.convertStatus(data.status),
             });
 
@@ -192,13 +180,21 @@ export class AdminAddUserComponent implements OnInit {
   }
 
   onCancel() {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate(['/main/user']);
-    });
+    // this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+    //   this.router.navigate(['/main/user']);
+    // });
+
+    this.dialog.closeAll();
   }
 
   update() {
-    var dataUpdate = {
+    this.submitted = true;
+
+    if (this.addForm.invalid) {
+      return;
+    }
+
+    const dataUpdate = {
       id: this.data.id,
       name: this.addForm.value.name,
       email: this.addForm.value.email,
@@ -206,9 +202,6 @@ export class AdminAddUserComponent implements OnInit {
       role: this.addForm.value.role,
       status: this.addForm.value.status,
     };
-
-    console.log('data update');
-    console.log(dataUpdate);
 
     var selectedRoleConvert: any[] = [];
 
@@ -221,19 +214,106 @@ export class AdminAddUserComponent implements OnInit {
 
     this.adminUserService.updateUser(dataUpdate).subscribe(
       (data) => {
-        console.log(data);
-
         if (data.id != undefined && data.id != null) {
           this.toastService.showSuccessHTMLWithTimeout(
             'Cập nhật thành công!',
             '',
             3000
           );
-          this.router
-            .navigateByUrl('/', { skipLocationChange: true })
-            .then(() => {
-              this.router.navigate(['admin-main/user']);
-            });
+
+          if (data.status == 'ACTIVE') {
+            this.adminUserService.getUserById(dataUpdate.id).subscribe(
+              (data) => {
+                if (
+                  data.id ==
+                  JSON.parse(localStorage.getItem('currentAdmin') || '').user.id
+                ) {
+                  console.log('vao day');
+
+                  const dataUpdate = {
+                    token: JSON.parse(
+                      localStorage.getItem('currentAdmin') || ''
+                    ).token,
+                    user: JSON.parse(localStorage.getItem('currentAdmin') || '')
+                      .user,
+                  };
+
+                  dataUpdate.user.permissions = data.permissions;
+
+                  localStorage.setItem(
+                    'currentAdmin',
+                    JSON.stringify(dataUpdate)
+                  );
+
+                  let flag = 0;
+                  if (dataUpdate.user.permissions.length == 1) {
+                    if (dataUpdate.user.permissions[0].code.includes('QLTC')) {
+                      this.router.navigate(['/admin-main/unit']);
+                    } else if (
+                      dataUpdate.user.permissions[0].code.includes('QLGDV')
+                    ) {
+                      this.router.navigate(['/admin-main/pack']);
+                    }
+
+                    flag = 1;
+
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 100);
+                  } else {
+                    for (
+                      let i = 0;
+                      i < dataUpdate.user.permissions.length;
+                      i++
+                    ) {
+                      if (
+                        dataUpdate.user.permissions[i].code.includes('QLND')
+                      ) {
+                        window.location.reload();
+                        flag = 2;
+                        break;
+                      }
+                    }
+
+                    if (flag == 0) {
+                      console.log('vao day ');
+                      for (
+                        let i = 0;
+                        i < dataUpdate.user.permissions.length;
+                        i++
+                      ) {
+                        if (
+                          dataUpdate.user.permissions[i].code.includes('QLTC')
+                        ) {
+                          console.log('vao phan quan ly to chuc');
+                          this.router.navigate(['/admin-main/unit']);
+                          break;
+                        } else {
+                          console.log('vao day goi dich vu');
+                          this.router.navigate(['/admin-main/pack']);
+                          break;
+                        }
+                      }
+
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 100);
+                    }
+                  }
+                }
+              },
+              (error) => {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Lỗi lấy thông tin người dùng',
+                  '',
+                  3000
+                );
+              }
+            );
+          } else {
+            this.router.navigate(['/admin/login']);
+            localStorage.clear();
+          }
 
           this.dialog.closeAll();
         } else {
@@ -294,7 +374,7 @@ export class AdminAddUserComponent implements OnInit {
 
     this.adminUserService.addUser(data).subscribe(
       (data) => {
-        if (data.id != null) {
+        if (data.id != null || data.id != undefined) {
           this.toastService.showSuccessHTMLWithTimeout(
             'Thêm mới thành công!',
             '',

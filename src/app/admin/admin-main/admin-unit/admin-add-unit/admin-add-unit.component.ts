@@ -26,6 +26,7 @@ export class AdminAddUnitComponent implements OnInit {
   parentName: any;
   emailOld: any;
   phoneOld: any;
+  status: any;
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
@@ -99,10 +100,9 @@ export class AdminAddUnitComponent implements OnInit {
       //lay danh sach to chuc
       this.adminUnitService.getUnitById(this.data.id).subscribe(
         (data) => {
-
-          console.log("data");
+          console.log('data');
           console.log(data);
-        
+
           this.addForm = this.fbd.group({
             nameOrg: this.fbd.control(data.name, [
               Validators.required,
@@ -115,7 +115,10 @@ export class AdminAddUnitComponent implements OnInit {
               Validators.required,
               Validators.pattern(parttern_input.input_form),
             ]),
-            email: this.fbd.control(data.email, [Validators.required, Validators.email]),
+            email: this.fbd.control(data.email, [
+              Validators.required,
+              Validators.email,
+            ]),
             phone: this.fbd.control(data.phone, [
               Validators.required,
               Validators.pattern('[0-9 ]{10}'),
@@ -124,7 +127,7 @@ export class AdminAddUnitComponent implements OnInit {
               Validators.required,
               Validators.pattern(parttern_input.input_form),
             ]),
-            status: 1,
+            status: this.convertStatus(data.status),
             representatives: this.fbd.control(data.representative, [
               Validators.required,
               Validators.pattern(parttern_input.input_form),
@@ -140,7 +143,7 @@ export class AdminAddUnitComponent implements OnInit {
             position: this.fbd.control(data.position, [
               Validators.required,
               Validators.pattern(parttern_input.input_form),
-            ]),          
+            ]),
           });
         },
         (error) => {
@@ -196,12 +199,11 @@ export class AdminAddUnitComponent implements OnInit {
   }
 
   convertStatus(status: any): any {
-    console.log('status value');
-    console.log(status);
-
+  
     if (status == 'IN_ACTIVE') {
       status = 0;
     } else if (status == 'ACTIVE') {
+      console.log("status 0");
       status = 1;
     }
 
@@ -360,9 +362,9 @@ export class AdminAddUnitComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     // stop here if form is invalid
-    if (this.addForm.invalid) {
-      return;
-    }
+    // if (this.addForm.invalid) {
+    //   return;
+    // }
 
     let dataForm = {
       id: this.data.id,
@@ -379,23 +381,15 @@ export class AdminAddUnitComponent implements OnInit {
       address: this.addForm.value.address,
     };
 
-    if (dataForm.status == 1) {
-      dataForm.status = 'ACTIVE';
-    } else if (dataForm.status == 0) {
-      dataForm.status = 'IN_ACTIVE';
-    }
+  
 
     //truong hop sua ban ghi
-    if (this.data.id != null) {
-      console.log('vao truong hop sua ban ghi');
-
-      console.log('data');
-      console.log(this.data);
+    if (dataForm.id != null) {
 
       this.adminUnitService.updateUnitt(dataForm).subscribe(
         (data) => {
           if (data.id != null) {
-            console.log('data');
+            console.log('vao truong hop sua ban ghi');
             console.log(data.status);
 
             this.toastService.showSuccessHTMLWithTimeout(
@@ -453,12 +447,18 @@ export class AdminAddUnitComponent implements OnInit {
     } else {
       console.log('vao truong hop them moi ban ghi');
 
+      if (dataForm.status == 1) {
+        dataForm.status = 'ACTIVE';
+      } else if (dataForm.status == 0) {
+        dataForm.status = 'IN_ACTIVE';
+      }
+
       this.adminUnitService.addUnit(dataForm).subscribe(
         (data) => {
-          if (data.id != null) {
-            console.log('data add');
-            console.log(data);
+          console.log('data add ');
+          console.log(data);
 
+          if (data.id != null || data.id != undefined) {
             this.toastService.showSuccessHTMLWithTimeout(
               'Thêm mới thành công!',
               '',
@@ -472,12 +472,6 @@ export class AdminAddUnitComponent implements OnInit {
 
             this.dialog.closeAll();
           } else {
-            // this.toastService.showErrorHTMLWithTimeout(
-            //   data.errors[0].message,
-            //   '',
-            //   3000
-            // );
-
             if (data.errors[0].code == 1001) {
               this.toastService.showErrorHTMLWithTimeout(
                 'Email đã tồn tại trên hệ thống',
@@ -487,6 +481,18 @@ export class AdminAddUnitComponent implements OnInit {
             } else if (data.errors[0].code == 1003) {
               this.toastService.showErrorHTMLWithTimeout(
                 'Tên tổ chức đã được sử dụng',
+                '',
+                3000
+              );
+            } else if (data.errors[0].code == 1006) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Mã số thuế đã tồn tại trên hệ thống',
+                '',
+                3000
+              );
+            } else if (data.errors[0].code == 1002) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'SĐT đã được sử dụng',
                 '',
                 3000
               );

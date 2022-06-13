@@ -50,7 +50,8 @@ export class AdminSidebarService {
   }
 
   getMenuList(): any[] {
-    const permissions =  JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
+    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
+
     const menuShow = [];
 
     this.selectedRoleConvert = [];
