@@ -362,9 +362,9 @@ export class AdminAddUnitComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     // stop here if form is invalid
-    // if (this.addForm.invalid) {
-    //   return;
-    // }
+    if (this.addForm.invalid) {
+      return;
+    }
 
     let dataForm = {
       id: this.data.id,
