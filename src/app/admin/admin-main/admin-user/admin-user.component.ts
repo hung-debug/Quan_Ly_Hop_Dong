@@ -136,72 +136,7 @@ export class AdminUserComponent implements OnInit {
 
       console.log('the close dialog');
 
-      // this.adminUserService.getUserById(data.id).subscribe(
-      //   (data) => {
-      //     if (
-      //       data.id ==
-      //       JSON.parse(localStorage.getItem('currentAdmin') || '').user.id
-      //     ) {
-      //       console.log('vao day');
-
-      //       const dataUpdate = {
-      //         token: JSON.parse(localStorage.getItem('currentAdmin') || '')
-      //           .token,
-      //         user: JSON.parse(localStorage.getItem('currentAdmin') || '').user,
-      //       };
-
-      //       dataUpdate.user.permissions = data.permissions;
-
-      //       localStorage.setItem('currentAdmin', JSON.stringify(dataUpdate));
-
-      //       let flag = 0;
-      //       if (dataUpdate.user.permissions.length == 1) {
-      //         if (dataUpdate.user.permissions[0].code.includes('QLTC')) {
-      //           this.router.navigate(['/admin-main/unit']);
-      //         } else if (
-      //           dataUpdate.user.permissions[0].code.includes('QLGDV')
-      //         ) {
-      //           this.router.navigate(['/admin-main/pack']);
-      //         } else {
-      //           window.location.reload();
-      //         }
-      //         flag = 1;
-      //       } else {
-      //         for (let i = 0; i < dataUpdate.user.permissions.length; i++) {
-      //           if (dataUpdate.user.permissions[i].code.includes('QLND')) {
-      //             window.location.reload();
-      //             flag = 2;
-      //             break;
-      //           }
-      //         }
-
-      //         if (flag == 0) {
-      //           console.log('vao day ');
-      //           for (let i = 0; i < dataUpdate.user.permissions.length; i++) {
-      //             if (dataUpdate.user.permissions[i].code.includes('QLTC')) {
-      //               console.log('vao phan quan ly to chuc');
-      //               this.router.navigate(['/admin-main/unit']);
-      //               break;
-      //             } else {
-      //               console.log('vao day goi dich vu');
-      //               this.router.navigate(['/admin-main/pack']);
-      //               break;
-      //             }
-      //           }
-      //         }
-      //       }
-
-      //       window.location.reload();
-      //     }
-      //   },
-      //   (error) => {
-      //     this.toastService.showErrorHTMLWithTimeout(
-      //       'Lỗi lấy thông tin người dùng',
-      //       '',
-      //       3000
-      //     );
-      //   }
-      // );
+      
     });
   }
 

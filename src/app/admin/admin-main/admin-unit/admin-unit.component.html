@@ -1,8 +1,8 @@
 <div *ngIf="this.adminUnit === true" class="container-fluid">
-  <div *ngIf="this.searchUnitRole === true" class="col-md-12">
-    <div class="input-line search">
+  <div *ngIf="this.searchUnitRole === true" class="col-md-12" style="display: flex;">
+    <div class="input-line search" style="width: calc(100% - 100px)">
       <img src="../../assets/img/icon_search.svg" class="input-img" />
-      <input 
+      <input
         type="text"
         id="filter_name"
         class="input-text"
@@ -10,7 +10,7 @@
         placeholder="{{
           'Nhập từ khóa tìm kiếm theo tên tổ chức và mã tổ chức' | translate
         }}"
-        (keyup)="autoSearch($event)" 
+        (keyup)="autoSearch($event)"
       />
       <img
         src="../../assets/img/icon_search_group.svg"
@@ -18,12 +18,17 @@
         (click)="searchUnit()"
       />
     </div>
+    <div class="col-md-12 btn_search" style="width: 100px">
+      <button
+        *ngIf="this.addUnitRole === true"
+        class="btn btn-lg btn-block btn_submit"
+        (click)="addUnit()"
+      >
+        {{ "btn.add" | translate }}
+      </button>
+    </div>
   </div>
-  <div class="col-md-12 btn_search">
-    <button *ngIf="this.addUnitRole === true" class="btn btn-lg btn-block btn_submit" (click)="addUnit()">
-      {{ "btn.add" | translate }}
-    </button>
-  </div>
+
   <div class="row" style="padding-top: 20px">
     <p-table
       [value]="listData"
@@ -54,23 +59,35 @@
             <a
               *ngIf="list.status == 'IN_ACTIVE'"
               (click)="activeUnit(list.id)"
-              style="color: #0160ae; cursor: pointer; text-decoration:underline"
+              style="
+                color: #0160ae;
+                cursor: pointer;
+                text-decoration: underline;
+              "
               >{{ "Chưa kích hoạt" | translate }}</a
             >
-            <a *ngIf="list.status == 'ACTIVE'"
-            style="color: #495057; cursor: pointer; text-decoration: none">{{
-              "Đã kích hoạt" | translate
-            }}</a>
+            <a
+              *ngIf="list.status == 'ACTIVE'"
+              style="color: #495057; cursor: pointer; text-decoration: none"
+              >{{ "Đã kích hoạt" | translate }}</a
+            >
           </td>
           <td>{{ list.email }}</td>
-          <td *ngIf="!(this.editUnitRole === false && this.deleteUnitRole === false)" style="text-align: center">
-            <img *ngIf="this.editUnitRole === true"
+          <td
+            *ngIf="
+              !(this.editUnitRole === false && this.deleteUnitRole === false)
+            "
+            style="text-align: center"
+          >
+            <img
+              *ngIf="this.editUnitRole === true"
               src="../../../assets/img/icon_edit.svg"
               (click)="editUnit(list.id)"
               width="20px"
               style="cursor: pointer"
             />&nbsp;&nbsp;
-            <img *ngIf="this.deleteUnitRole === true"
+            <img
+              *ngIf="this.deleteUnitRole === true"
               src="../../../assets/img/icon_delete.svg"
               width="16px"
               style="cursor: pointer"
