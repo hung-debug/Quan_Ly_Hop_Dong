@@ -62,15 +62,15 @@ export class AdminUnitComponent implements OnInit {
   ngOnInit(): void {
 
     this.appService.setTitle('unit.list');
-    this.addUnitRole = this.checkRole(this.infoUnitRole, 'QLTC_01');
+    this.addUnitRole = this.checkRole(this.addUnitRole, 'QLTC_01');
     this.searchUnitRole = this.checkRole(this.searchUnitRole, 'QLTC_09');
     this.infoUnitRole = this.checkRole(this.infoUnitRole, 'QLTC_10');
     this.activeUnitRole = this.checkRole(this.activeUnitRole, 'QLTC_08');
     this.editUnitRole = this.checkRole(this.editUnitRole, 'QLTC_02');
     this.deleteUnitRole = this.checkRole(this.deleteUnitRole, 'QLTC_07');
 
-    console.log('search unit role');
-    console.log(this.searchUnitRole);
+    console.log('add unit role');
+    console.log(this.addUnitRole);
 
     this.route.queryParams.subscribe((params) => {
       console.log('param filter re');
@@ -122,15 +122,6 @@ export class AdminUnitComponent implements OnInit {
 
     console.log('info unit role');
     console.log(this.infoUnitRole);
-
-
-    // if (permissions.length === 1 && permissions[0].code.includes('QLTB')) {
-    //   console.log('vao day');
-    //   this.adminUnit = false;
-    //   this.appService.setTitle('');
-    // } else {
-    //   this.appService.setTitle('unit.list');
-    // }
 
     this.getUnitList();
 

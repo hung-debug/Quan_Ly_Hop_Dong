@@ -15,7 +15,7 @@
             </div>
             <div *ngIf="submitted && f.name.errors" class="invalid">
               <div *ngIf="f.name.errors.required">
-                {{ "error.unit.name.required" | translate }}
+                {{ "Tên người dùng không được để trống" | translate }}
               </div>
               <div *ngIf="f.name.errors.pattern">
                 {{ "Tên người dùng không được chứa ký tự đặc biệt" | translate }}

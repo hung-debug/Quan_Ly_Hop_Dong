@@ -1,6 +1,6 @@
-<div *ngIf="this.adminUnit === true" class="container-fluid">
-  <div *ngIf="this.searchUnitRole === true" class="col-md-12" style="display: flex;">
-    <div class="input-line search" style="width: calc(100% - 100px)">
+<div class="container-fluid">
+  <div *ngIf="this.searchUnitRole === true" class="col-md-12">
+    <div class="input-line search">
       <img src="../../assets/img/icon_search.svg" class="input-img" />
       <input
         type="text"
@@ -18,8 +18,11 @@
         (click)="searchUnit()"
       />
     </div>
-    <div class="col-md-12 btn_search" style="width: 100px">
-      <button
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 btn_search">
+      <button style="float: right;"
         *ngIf="this.addUnitRole === true"
         class="btn btn-lg btn-block btn_submit"
         (click)="addUnit()"
@@ -28,6 +31,7 @@
       </button>
     </div>
   </div>
+  
 
   <div class="row" style="padding-top: 20px">
     <p-table
