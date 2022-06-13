@@ -92,7 +92,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-list>
                 <tr>
-                    <td><a style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
+                    <td><a style="color: #0160AE; cursor: pointer" (click)="detailPackUnit(list.id)">{{list.name}}</a></td>
                     <td>{{list.code}}</td>
                     <td>{{list.time}}</td>
                     <td>{{list.start_time}}</td>

@@ -36,21 +36,25 @@ export class FooterSignatureComponent implements OnInit {
     };
     let data_coordination = this.datas.is_data_contract.participants;
     let emailCurrent = this.contractService.getAuthCurrentUser().email;
+    let isBreak = false;
     for (let i = 0; i < data_coordination.length; i++) {
       for (let j = 0; j < data_coordination[i].recipients.length; j++) {
         if (data_coordination[i].recipients[j].email == emailCurrent) {
           this.is_data_coordination = data_coordination[i];
+          isBreak = true;
           break;
         }
       }
+      if (isBreak) break
     }
 
     if (this.is_data_coordination) {
+      
       // @ts-ignore
       for (let i = 0; i < this.is_data_coordination.recipients.length; i++) {
         //@ts-ignore
         let element = this.is_data_coordination.recipients[i];
-        if (element.role == 1) {
+        if (element.role == 1 && element.email == emailCurrent) {
           if (element.status != 1) {
             this.is_show_coordination = true;
             this.view = true;
@@ -62,21 +66,11 @@ export class FooterSignatureComponent implements OnInit {
         }
       }
     }
+   
   }
 
   action() {
     if (this.datas.action_title == 'dieu_phoi') {
-      // let recipient_data = {};
-      // let data_coordination = this.datas.is_data_contract.participants;
-      // let emailCurrent = this.contractService.getAuthCurrentUser().email;
-      // for (let i = 0; i < data_coordination.length; i++) {
-      //   for (let j = 0; j < data_coordination[i].recipients.length; j++) {
-      //     if (data_coordination[i].recipients[j].email == emailCurrent) {
-      //       recipient_data = data_coordination[i];
-      //       break;
-      //     }
-      //   }
-      // }
       if (this.is_data_coordination) { // chỉ lấy dữ liệu của người điều phối
         if (this.is_data_coordination['recipients']) {
           let dataCoordination = this.is_data_coordination['recipients'].filter((p: any) => p.role == 1)[0]; // get dữ liệu người điều phối
@@ -114,18 +108,11 @@ export class FooterSignatureComponent implements OnInit {
     })
   }
 
-  // getDataCoordination(recipient_data: any) {
-  //   let data_coordination = this.datas.is_data_contract.participants;
-  //   let emailCurrent = this.contractService.getAuthCurrentUser().email;
-  //   for (let i = 0; i < data_coordination.length; i++) {
-  //     for (let j = 0; j < data_coordination[i].recipients.length; j++) {
-  //       if (data_coordination[i].recipients[j].email == emailCurrent) {
-  //         recipient_data = data_coordination[i];
-  //         break;
-  //       }
-  //     }
-  //   }
-  // }
+  refuseContract() {
+    if (this.datas.action_title == 'dieu_phoi') {
+      this.submitChanges.emit(1);
+    }
+  }
 
   downloadFilePDF() {
     this.submitChanges.emit(2);

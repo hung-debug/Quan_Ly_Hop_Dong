@@ -15,6 +15,7 @@ export class CheckSignDigitalComponent implements OnInit {
   list: any[];
   fileName:any='';
   totalRecord:number;
+  isModified:boolean=false;
 
   constructor(
     private appService: AppService,
@@ -57,6 +58,16 @@ export class CheckSignDigitalComponent implements OnInit {
             this.fileName = file.name;
             this.checkSignDigitalService.getList(file).subscribe(response => {
               this.list = response;
+
+              //kiem tra tinh nguyen ven cua noi dung van ban
+              this.isModified=false;
+              for(var i = 0; i < this.list.length; i++){
+                if(this.list[i].isModified){
+                  this.isModified = true;
+                  break;
+                }
+              }
+
               this.totalRecord = this.list.length;
               this.spinner.hide();
             },

@@ -71,7 +71,7 @@ export class AdminAuthGuard implements CanActivate {
         return false;
       } else return true;
     } else {
-      if (localStorage.getItem('currentUser') != null) {
+      if (localStorage.getItem('currentAdmin') != null) {
         //console.log(localStorage.getItem('currentUser'));
         return true;
       } else {

@@ -15,5 +15,6 @@ export const parttern = {
 };
 
 export const parttern_input = {
-  input_form: /^[^!“#$%&‘()*;<=>?@[\]^_`{|}~\\]*$/
+  input_form: /^[^!“#$%&‘()*;<=>?@[\]^_`{|}~\\]*$/,
+  number_form: /^[0-9]+$/,
 }

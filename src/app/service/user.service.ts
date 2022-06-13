@@ -41,6 +41,8 @@ export class UserService {
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
   signupUrl:any = `${environment.apiUrl}/api/v1/customers/registrations`;
 
+  getCheckContractUserUrl:any = `${environment.apiUrl}/api/v1/contracts/check-contract-exist`;
+
   token:any;
   customer_id:any;
   organization_id:any;
@@ -102,6 +104,7 @@ export class UserService {
    )
   }
 
+  //ghep api dang ky
   signup(datas:any){
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json');
@@ -115,6 +118,7 @@ export class UserService {
       email: datas.email,
       phone: datas.phone
     });
+
     return this.http.post<any>(this.signupUrl, body, {'headers': headers});
   }
 
@@ -192,7 +196,9 @@ export class UserService {
       phone_sign: datas.phoneKpi,
       phone_tel: datas.networkKpi,
 
-      hsm_name: datas.nameHsm
+      hsm_name: datas.nameHsm,
+
+      organization_change: datas.organization_change
     });console.log(headers);
     console.log(body);
     return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
@@ -205,7 +211,7 @@ export class UserService {
       .append('Authorization', 'Bearer ' + this.token);
 
     console.log(headers);
-    return this.http.get<User>(this.getUserByIdUrl + id, {'headers': headers});
+    return this.http.get<any>(this.getUserByIdUrl + id, {'headers': headers});
   }
 
   getUserByEmail(email:any){
@@ -271,6 +277,15 @@ export class UserService {
     let listUserUrl = this.getNameSearch + '?name=' + filter_name + "&size=10000";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<User[]>(listUserUrl, {headers}).pipe();
+  }
+
+  getCheckContractUser(id:any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    console.log(headers);
+    return this.http.get<any>(this.getCheckContractUserUrl + "?id=" + id, {'headers': headers});
   }
 
   // Error handling

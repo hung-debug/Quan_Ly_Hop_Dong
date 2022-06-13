@@ -212,6 +212,9 @@ export class AddUnitComponent implements OnInit {
                     this.spinner.hide();
                   }
                 }
+              }else{
+                this.toastService.showErrorHTMLWithTimeout('Không tìm thấy vai trò ADMIN của tổ chức', "", 3000);
+                this.spinner.hide();
               }
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin vai trò tổ chức', "", 3000);
@@ -338,7 +341,8 @@ export class AddUnitComponent implements OnInit {
                                   dataUnit => {
                                     //this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
                                     console.log(dataUnit);
-              
+                            
+
                                     //them vai tro
                                     let roleArrConvert: any = [];
                                     roleList.forEach((key: any, v: any) => {

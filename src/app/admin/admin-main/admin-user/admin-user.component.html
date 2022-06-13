@@ -1,26 +1,26 @@
 <div class="container-fluid">
     <div class="row">
-      <div class="col-md-3">
+      <div *ngIf="this.searchUserRole === true" class="col-md-3">
         <div>{{'Họ tên' | translate}}</div>
         <div class="input-line">
           <input type="text" [(ngModel)]="name" class="input_text"/>
         </div>
       </div>
-      <div class="col-md-3">
+      <div *ngIf="this.searchUserRole === true" class="col-md-3">
         <div>{{'Email' | translate}}</div>
         <div class="input-line">
           <input type="text" [(ngModel)]="email" class="input_text"/>
         </div>
       </div>
-      <div class="col-md-3">
+      <div *ngIf="this.searchUserRole === true" class="col-md-3">
         <div>{{'Số điện thoại' | translate}}</div>
         <div class="input-line">
           <input type="text" [(ngModel)]="phone" class="input_text"/>
         </div>
       </div>
       <div class="col-md-3 btn_search">
-        <button class="btn btn-lg btn-block btn_submit" (click)="searchUser()">{{'btn.search' | translate }}</button>
-        <button class="btn btn-lg btn-block btn_submit" (click)="addUser()">{{'btn.add' | translate }}</button>
+        <button *ngIf="this.searchUserRole === true" class="btn btn-lg btn-block btn_submit" (click)="searchUser()">{{'btn.search' | translate }}</button>
+        <button *ngIf="this.addUserRole === true" class="btn btn-lg btn-block btn_submit" (click)="addUser()">{{'btn.add' | translate }}</button>
       </div>
     </div>
     <div class="row" style="padding-top: 20px;">
@@ -37,9 +37,8 @@
                 <td><a (click)="detailUser(list.id)" style="color: #0160AE; cursor: pointer;">{{list.name}}</a></td>
                 <td>{{list.email}}</td>
                 <td>{{list.phone}}</td>
-                <td style="text-align: center">
+                <td *ngIf="this.editUserRole === true" style="text-align: center">
                   <img src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>&nbsp;&nbsp;
-                  <img src="../../../assets/img/icon_delete.svg" width="16px" (click)="deleteUser(list.id)" style="cursor: pointer;"/>
                 </td> 
             </tr>
         </ng-template>

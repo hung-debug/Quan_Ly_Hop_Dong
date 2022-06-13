@@ -1,54 +1,106 @@
-<div class="container-fluid">
-    <div class="row">
-      <div class="col-md-3">
-        <div>{{'unit.code' | translate}}</div>
-        <div class="input-line">
-          <input type="text" [(ngModel)]="code" class="input_text"/>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div>{{'unit.name' | translate}}</div>
-        <div class="input-line">
-          <input type="text" [(ngModel)]="name" class="input_text"/>
-        </div>
-      </div>
-      <div class="col-md-6 btn_search">
-        <button class="btn btn-lg btn-block btn_submit" (click)="searchUnit()">{{'btn.search' | translate }}</button>
-        <button class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
-      </div>
-    </div>
-    <div class="row" style="padding-top: 20px;">
-      <p-table [value]="listData" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
-        <ng-template pTemplate="header" let-columns>
-          <tr>
-              <th *ngFor="let col of cols" [style]='col.style'>
-                {{col.header | translate}}
-              </th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-list>
-            <tr>
-                <td><a style="color: #0160AE; cursor: pointer;" (click)="detailUnit(list.id)">{{list.name}}</a></td>
-                <td>{{list.code}}</td>
-                <td>{{list.phone}}</td>
-                <td><a *ngIf="list.active!=1" (click)="activeUnit(list.id)" style="color: #0160AE; cursor: pointer;text-decoration: none;">{{'Chưa kích hoạt' | translate}}</a>
-                  <a *ngIf="list.active==1">{{'Đã kích hoạt' | translate}}</a>
-                </td>
-                <td>{{list.email}}</td>
-                <td style="text-align: center">
-                  <img src="../../../assets/img/icon_edit.svg" (click)="editUnit(list.id)" width="20px" style="cursor: pointer;"/>&nbsp;&nbsp;
-                  <img src="../../../assets/img/icon_delete.svg" width="16px" style="cursor: pointer;"/>
-                </td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="paginatorleft" let-state>
-          <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-        </ng-template>
-        <ng-template pTemplate="paginatorright" let-state>
-          <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-        </ng-template> 
-      </p-table>
+<div *ngIf="this.adminUnit === true" class="container-fluid">
+  <div class="col-md-12">
+    <div class="input-line search">
+      <img src="../../assets/img/icon_search.svg" class="input-img" />
+      <input
+        type="text"
+        id="filter_name"
+        class="input-text"
+        [(ngModel)]="filterSearch"
+        placeholder="{{
+          'Nhập từ khóa tìm kiếm theo tên tổ chức và mã tổ chức' | translate
+        }}"
+        (keyup)="autoSearch($event)" 
+      />
+      <img
+        src="../../assets/img/icon_search_group.svg"
+        class="input-img"
+        (click)="searchUnit()"
+      />
     </div>
   </div>
-   
-    
+  <div class="col-md-12 btn_search">
+    <button class="btn btn-lg btn-block btn_submit" (click)="addUnit()">
+      {{ "btn.add" | translate }}
+    </button>
+  </div>
+  <div class="row" style="padding-top: 20px">
+    <p-table
+      [value]="listData"
+      [paginator]="true"
+      [rows]="15"
+      id="table"
+      [autoLayout]="true"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of cols" [style]="col.style">
+            {{ col.header | translate }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-list>
+        <tr>
+          <td>
+            <a
+              style="color: #0160ae; cursor: pointer"
+              (click)="detailUnit(list.id)"
+              >{{ list.name }}</a
+            >
+          </td>
+          <td>{{ list.code }}</td>
+          <td>{{ list.phone }}</td>
+          <td>
+            <a
+              *ngIf="list.status == 'IN_ACTIVE'"
+              (click)="activeUnit(list.id)"
+              style="color: #0160ae; cursor: pointer; text-decoration: none"
+              >{{ "Chưa kích hoạt" | translate }}</a
+            >
+            <a *ngIf="list.status == 'ACTIVE'">{{
+              "Đã kích hoạt" | translate
+            }}</a>
+          </td>
+          <td>{{ list.email }}</td>
+          <td style="text-align: center">
+            <img
+              src="../../../assets/img/icon_edit.svg"
+              (click)="editUnit(list.id)"
+              width="20px"
+              style="cursor: pointer"
+            />&nbsp;&nbsp;
+            <img
+              src="../../../assets/img/icon_delete.svg"
+              width="16px"
+              style="cursor: pointer"
+            />
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <span style="color: white !important"
+          >{{ "chart.number" | translate }}:
+          {{ state.totalRecords > 0 ? state.first + 1 : state.first }} -
+          {{
+            state.first + state.rows > state.totalRecords
+              ? state.totalRecords
+              : state.first + state.rows
+          }}
+          / {{ state.totalRecords }}</span
+        >
+      </ng-template>
+      <ng-template pTemplate="paginatorright" let-state>
+        <span style="color: #0160ae !important"
+          >{{ "chart.number" | translate }}:
+          {{ state.totalRecords > 0 ? state.first + 1 : state.first }} -
+          {{
+            state.first + state.rows > state.totalRecords
+              ? state.totalRecords
+              : state.first + state.rows
+          }}
+          / {{ state.totalRecords }}</span
+        >
+      </ng-template>
+    </p-table>
+  </div>
+</div>

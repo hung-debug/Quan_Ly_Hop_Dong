@@ -43,7 +43,19 @@ export class AdminPackComponent implements OnInit {
   orgId:any;
   isAdmin:boolean=false;
 
+  deletePackRole: boolean = false;
+  editPackRole: boolean = false;
+  addPackRole: boolean = false;
+  searchPackRole: boolean = false;
+  infoPackRole: boolean = false;
+
   ngOnInit(): void {
+    this.deletePackRole = this.checkRole(this.deletePackRole, 'QLGDV_05');
+    this.editPackRole = this.checkRole(this.editPackRole,'QLGDV_02');
+    this.addPackRole = this.checkRole(this.addPackRole,'QLGDV_01');
+    this.searchPackRole = this.checkRole(this.searchPackRole, 'QLGDV_03');
+    this.infoPackRole = this.checkRole(this.infoPackRole,'QLGDV_04');
+
     this.appService.setTitle("DANH SÁCH GÓI DỊCH VỤ");
     this.searchUnit();
 
@@ -53,9 +65,38 @@ export class AdminPackComponent implements OnInit {
       { field: 'time', header: 'Thời gian', style:'text-align: left;' },
       { field: 'numberContract', header: 'Số lượng hợp đồng', style:'text-align: left;' },
       { field: 'price', header: 'Đơn giá', style:'text-align: left;' },
-      { field: 'id', header: 'unit.manage', style:'text-align: center;' },
-      ]; 
-  }  
+      ];
+      
+      if(!(this.editPackRole === false && this.deletePackRole === false)) {
+        this.cols.push(
+          { field: 'id', header: 'unit.manage', style:'text-align: center;' },
+        );
+      }
+  }
+  
+  checkRole(flag: boolean, code: string): boolean {
+    const permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
+      .user.permissions;
+
+    const selectedRoleConvert: { code: any }[] = [];
+
+    permissions.forEach((key: any) => {
+      let jsonData = { code: key.code, name: key.name };
+      selectedRoleConvert.push(jsonData);
+    });
+
+    for (let i = 0; i < selectedRoleConvert.length; i++) {
+      let role = selectedRoleConvert[i].code;
+
+      if (role.includes(code)) {
+        flag = true;
+        break;
+      }
+
+    }
+
+    return flag;
+  }
 
   array_empty: any = [];
   searchUnit(){
@@ -101,21 +142,23 @@ export class AdminPackComponent implements OnInit {
   }
 
   detailPack(id:any) {
-    const data = {
-      title: 'THÔNG TIN GÓI DỊCH VỤ',
-      id: id,
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(AdminDetailPackComponent, {
-      width: '580px',
-      backdrop: 'static',
-      keyboard: false,
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
-    })
+    if(this.infoPackRole === true) {
+      const data = {
+        title: 'THÔNG TIN GÓI DỊCH VỤ',
+        id: id,
+      };
+      // @ts-ignore
+      const dialogRef = this.dialog.open(AdminDetailPackComponent, {
+        width: '580px',
+        backdrop: 'static',
+        keyboard: false,
+        data
+      })
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog');
+        let is_data = result
+      })
+    }
   }
 
   deletePack(id:any){

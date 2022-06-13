@@ -70,7 +70,8 @@ export class InforUserComponent implements OnInit {
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
         organizationId: this.fbd.control("", [Validators.required]),
         role: this.fbd.control("", [Validators.required]),
-        status: 1
+        status: 1,
+        organization_change:null
       });
      
       this.addKpiForm = this.fbd.group({
@@ -112,6 +113,7 @@ export class InforUserComponent implements OnInit {
           organizationId: this.fbd.control(data.organization_id, [Validators.required]),
           role: this.fbd.control(data.role_id, [Validators.required]),
           status: data.status,
+          organization_change: data.organization_change
         });
         this.phoneOld = data.phone;
 
@@ -267,8 +269,9 @@ export class InforUserComponent implements OnInit {
       phoneKpi: this.addKpiFormOld.value.phoneKpi,
       networkKpi: this.addKpiFormOld.value.networkKpi,
 
-      nameHsm: this.addHsmFormOld.value.nameHsm
+      nameHsm: this.addHsmFormOld.value.nameHsm,
 
+      organization_change: this.addInforForm.value.organization_change
     }
     console.log(data);
     //neu thay doi so dien thoai thi can check lai

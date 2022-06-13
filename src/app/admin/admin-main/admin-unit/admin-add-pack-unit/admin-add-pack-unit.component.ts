@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-admin-add-pack-unit',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminAddPackUnitComponent implements OnInit {
 
-  constructor() { }
+  datas: any;
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialog: MatDialog,
+    public dialogRef: MatDialogRef<AdminAddPackUnitComponent>,
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  cancel() {
+    this.dialogRef.close();
   }
 
 }

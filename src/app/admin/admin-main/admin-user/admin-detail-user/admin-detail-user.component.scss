@@ -1,128 +1,103 @@
 .header{
-    text-align: center; 
-    font-weight: bold
+  text-align: center; 
+  font-weight: bold
 }
 .label-header{
-    color: #106DB6; 
-    font-family: inherit;
-    text-transform: uppercase;
+  color: #106DB6; 
+  font-family: inherit;
+  text-transform: uppercase;
 }
-.cancel-button{
-    border: 0px;
-    border-radius: 5px;
-    height: 33px;
-    width: 100px;
-    box-sizing: border-box;
-    color: white;
-    background-color: #8B8B8B;
-    font-size: 13px;
-    margin: 0 10px;
+.required-title {
+  color: red;
 }
-.input_text{
-    background: #EFF2F5;
-    padding: 10px;
-    border-radius: 5px;
-    min-height: 40px;
-  }
-  .btn_submit{
-    border: 0px;
-    border-radius: 5px;
-    height: 33px;
-    width: 150px;
-    box-sizing: border-box;
-    color: white;
-    background-color: #106DB6;
-    font-size: 13px;
-    margin: 0 10px;
-}
-  #table {
-    border-collapse: collapse;
-    width: 100%;
-    font-size: 13px;
-    font-family: font_lexend_deca;
-  }
-  #table td, #table th {
-    //border: 1px solid #ddd;
-    padding: 8px;
-  }
-  
-  #table tr:nth-child(even){background-color: #f2f2f2;}
-  
-  #table tr:hover {background-color: #ddd;}
-  
-  #table th {
-    //text-align: center;
-    background-color: #E2ECF6;
-    color: #106DB6;
-  }
-  
-  #table tr:last-child th:first-child {
-    border-top-left-radius: 10px;
-  }
-  #table tr:last-child th:last-child {
-    border-top-right-radius: 10px;
-  }
-  #table tr:last-child td:first-child {
-    border-bottom-left-radius: 10px;
-  }
-  #table tr:last-child td:last-child {
-    border-bottom-right-radius: 10px;
-  }
-  
-  :host ::ng-deep {
-    .pi-fw {
-      color:  #106DB6;
-      font-size: 10px;
-      font-weight: 600;
-    }
-    .p-treetable-toggler {
-      width: 1rem !important;
-      height: 1rem !important;
-    }
-    .p-paginator .p-paginator-pages .p-paginator-page{
-      color: black;
-      float: left;
-      padding: 8px 16px;
-      text-decoration: none;
-      transition: background-color .3s;
-      border: 1px solid #ddd;
-      margin: 4px;
-      height: 26px !important;
-      width: 50px;
+
+.input-data {
+  border: 1px solid #106DB6;
+  border-radius: 5px;
+  min-height: 33px;
+  display: flex;
+  align-items: center;
+
+  > input, div {
+      border: none;
+      outline: none;
+      padding-left: 15px;
+      width: 100%;
       border-radius: 5px;
-      background-color: #e6e6e6;
-    }
-  
-    .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
-      background-color: #2199e8;
-      color: white;
-      border: 1px solid #2199e8;
-    }
-  
-    .p-paginator-bottom .p-ripple{
-      padding: 10px;
-      border-width: 0 !important;
-      height: 26px !important;
-      width: 50px !important;
-    }
-  
-    .p-datatable-table, .p-datatable-table .ng-star-inserted, .p-paginator-pages .ng-star-inserted{
-      font-size: 13px;
-      font-family: font_lexend_deca;
-    }
-    .p-treetable .p-paginator-bottom {
-      border-width: 0;
-    }
   }
-  :host ::ng-deep {
-    .p-listbox, .p-listbox .p-listbox-list .p-listbox-item-group {
-        border: none;
-        background: #EFF2F5; 
-    }
-    .p-listbox .p-listbox-list{
-       pointer-events: none;
-    }
-    .p-listbox .p-listbox-header{
-        display: none;
-    }
+  > div{
+      padding: 5px 15px;
+  }
 }
+
+input:read-only ,.fff {
+  background-color: #F2F2F2
+}
+
+.cancel-button{
+  border: 0px;
+  border-radius: 5px;
+  height: 33px;
+  width: 100px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #8B8B8B;
+  font-size: 13px;
+  margin: 0 10px;
+}
+.save-button{
+  border: 0px;
+  border-radius: 5px;
+  height: 33px;
+  width: 100px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #106DB6;
+  font-size: 13px;
+  margin: 0 10px;
+}
+.error-detail{
+  font-size: inherit;
+  padding: 6px;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+:host ::ng-deep {
+  .p-dropdown {
+      border: 1px solid #106DB6;
+      border-radius: 5px;
+      height: 33px;
+      width: 100%;
+      outline: 0;
+      color: black !important;
+  }
+  .p-dropdown-label {
+      padding: 5px 5px 5px 15px;
+  }
+  .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
+      color: #6c757d !important;
+  }
+}
+.invalid{
+  color: red;
+}
+.hidden-color{
+  background-color: #EFF2F5;
+}
+
+:host ::ng-deep {
+  .p-listbox, .p-listbox .p-listbox-list .p-listbox-item-group {
+      border: none;
+      background: #EFF2F5; 
+  }
+  .p-listbox .p-listbox-list{
+     pointer-events: none;
+  }
+  .p-listbox
+   .p-listbox-header{
+      display: none;
+  }
+
+
+}
+

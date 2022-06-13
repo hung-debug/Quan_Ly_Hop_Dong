@@ -95,10 +95,10 @@ export class LoginComponent implements OnInit {
               } else {
                 this.error = false;
                 if (this.type == 0) {
-                  //this.router.navigate(['/main/dashboard']);
-                  this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                    this.router.navigate(['/main/dashboard']);
-                  });
+                  this.router.navigate(['/main/dashboard']);
+                  // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                  //   this.router.navigate(['/main/dashboard']);
+                  // });
                 } else {
                   this.router.navigate([localStorage.getItem('url')]);
                 }
@@ -106,10 +106,10 @@ export class LoginComponent implements OnInit {
             } else { 
               this.error = false;
               if (this.type == 0) {
-                //this.router.navigate(['/main/dashboard']);
-                this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                  this.router.navigate(['/main/dashboard']);
-                });
+                this.router.navigate(['/main/dashboard']);
+                // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                //   this.router.navigate(['/main/dashboard']);
+                // });
               } else {
                 this.router.navigate([localStorage.getItem('url')]);
               }

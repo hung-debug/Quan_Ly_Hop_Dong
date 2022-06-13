@@ -1,0 +1,107 @@
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
+import { ToastService } from 'src/app/service/toast.service';
+import { statusList } from '../../../../../config/variable';
+import { AdminUnitComponent } from '../../admin-unit.component';
+
+@Component({
+  selector: 'app-admin-filter-unit',
+  templateUrl: './admin-filter-unit.component.html',
+  styleUrls: ['./admin-filter-unit.component.scss'],
+})
+export class AdminFilterUnitComponent implements OnInit {
+  addForm: FormGroup;
+  datas: any;
+  submitted = false;
+  statusList: any[] = [];
+
+  get f() {
+    return this.addForm.controls;
+  }
+
+  @ViewChild(AdminUnitComponent) adminUnitComponent: any;  
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private fbd: FormBuilder,
+    public dialogRef: MatDialogRef<AdminFilterUnitComponent>,
+    public router: Router,
+    public dialog: MatDialog,
+    private adminUnitService: AdminUnitService,
+    private toastService: ToastService
+  ) {
+    this.addForm = this.fbd.group({
+      filter_representative: this.fbd.control(this.data.filter_representative),
+      filter_email: this.fbd.control(this.data.filter_email),
+      filter_phone: this.fbd.control(this.data.filter_phone),
+      filter_status: this.fbd.control(this.data.filter_status),
+      filter_address: this.fbd.control(this.data.filter_address),
+    });
+  }
+
+  ngOnInit(): void {
+    this.statusList = statusList;
+    // this.addForm = this.fbd.group({
+    //   filter_code: this.fbd.control(this.data.filter_code),
+    //   filter_price:this.fbd.control(this.data.filter_price),
+    //   filter_time: this.fbd.control(this.data.filter_time),
+    //   filter_status: this.fbd.control(this.data.filter_status),
+    //   filter_number_contract: this.fbd.control(this.data.filter_number_contract),
+    // });
+  }
+
+  onSubmit() {
+    const address = this.convertString(this.addForm.value.filter_address);
+    const representative = this.convertString(
+      this.addForm.value.filter_representative
+    );
+    const email = this.convertString(this.addForm.value.filter_email);
+    const phone = this.convertString(this.addForm.value.phone);
+    const status = this.convertString(this.addForm.value.status);
+
+    this.adminUnitService
+      .getUnitList('', address, representative, email, phone, status, '', '')
+      .subscribe(
+        (response) => {
+          // this.data.list = response;
+
+          this.adminUnitComponent.listData = response;
+
+          console.log("this data");
+          console.log(this.data.list);
+
+          this.router
+            .navigateByUrl('/', { skipLocationChange: true })
+            .then(() => {
+              this.router.navigate(['admin-main/unit']);
+            });
+
+          this.dialog.closeAll();
+        },
+        (error) => {
+          console.log(error);
+          this.toastService.showErrorHTMLWithTimeout(
+            'Tìm kiếm thất bại',
+            '',
+            3000
+          );
+        }
+      );
+  }
+
+  convertString(filter: any): string {
+    if (filter == null || filter == undefined) {
+      filter = '';
+    } else {
+      filter = filter.trim();
+    }
+
+    return filter;
+  }
+}
