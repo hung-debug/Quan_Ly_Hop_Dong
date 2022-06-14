@@ -61,9 +61,10 @@ export class AdminPackComponent implements OnInit {
     this.cols = [
       { field: 'name', header: 'Tên gói', style:'text-align: left;' },
       { field: 'code', header: 'Mã gói', style:'text-align: left;' },
-      { field: 'time', header: 'Thời gian', style:'text-align: left;' },
+      { field: 'duration', header: 'Thời gian', style:'text-align: left;' },
       { field: 'numberContract', header: 'Số lượng hợp đồng', style:'text-align: left;' },
-      { field: 'price', header: 'Đơn giá', style:'text-align: left;' },
+      { field: 'priceBefore', header: 'Đơn giá trước VAT', style:'text-align: left;' },
+      { field: 'priceAfter', header: 'Đơn giá sau VAT', style:'text-align: left;' },
       ];
       
       if(!(this.editPackRole === false && this.deletePackRole === false)) {
@@ -100,6 +101,7 @@ export class AdminPackComponent implements OnInit {
   searchUnit(){
     this.adminPackService.getPackList(this.name, this.code, this.total ,this.duration, this.numberOfContracts, this.status).subscribe(response => {
       this.listData = response.entities;
+      console.log("res ",response.entities);
       this.total = this.listData.length;
     });
   }
