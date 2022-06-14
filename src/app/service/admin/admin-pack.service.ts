@@ -70,7 +70,7 @@ export class AdminPackService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({});
-    return this.http.post<any>(this.deletePackUrl + id, body, {'headers': headers});
+    return this.http.delete<any>(this.listPackUrl + id, {'headers': headers});
   }
 
   updatePack(datas: any) {
