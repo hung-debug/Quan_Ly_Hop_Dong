@@ -188,6 +188,20 @@ export class ConfirmInfoContractComponent implements OnInit {
     }
 
     if (isSuccess == 0) {
+      this.contractService.getContractDetermine(this.datas.determine_contract, this.datas.data_contract_document_id.contract_id).subscribe((res: any) => {
+        console.log('success step confirm 2');
+      },
+        (error: any) => {
+          isSuccess++;
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout(error.error, "", 3000);
+        }, () => {
+          this.spinner.hide();
+        }
+      );
+    }
+
+    if (isSuccess == 0) {
       // api dieu phoi hop dong
       let isCheckFail = false;
       let isUserSign = this.datas.determine_contract.filter((p: any) => p.type != 1);

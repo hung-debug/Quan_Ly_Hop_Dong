@@ -9,16 +9,16 @@ import {
   OnDestroy,
   AfterViewInit, Output, EventEmitter
 } from '@angular/core';
-import { variable } from "../../../../../../../config/variable";
-import { Helper } from "../../../../../../../core/Helper";
-import { environment } from "../../../../../../../../environments/environment";
+import {variable} from "../../../../../../../config/variable";
+import {Helper} from "../../../../../../../core/Helper";
+import {environment} from "../../../../../../../../environments/environment";
 import * as $ from 'jquery';
 
 import interact from 'interactjs'
-import { ContractService } from "../../../../../../../service/contract.service";
-import { NgxSpinnerService } from "ngx-spinner";
-import { ToastService } from "../../../../../../../service/toast.service";
-import { HttpErrorResponse } from '@angular/common/http';
+import {ContractService} from "../../../../../../../service/contract.service";
+import {NgxSpinnerService} from "ngx-spinner";
+import {ToastService} from "../../../../../../../service/toast.service";
+import {HttpErrorResponse} from '@angular/common/http';
 
 import * as _ from 'lodash';
 
@@ -98,17 +98,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     this.emailUser_sample = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
-    if (!this.datas.contract_user_sign) {
+    if (!this.datas.contract_user_sign) { // next first step
       this.getDataSignUpdateAction();
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
       this.setDataSignContract();
     } else {
       let isDefindDetermine = _.cloneDeep(this.datas.determine_contract);
-      let isCloneDeter = isDefindDetermine.map(({recipients}: any) => {
+      let isCloneDeter = isDefindDetermine.map(({recipients, type}: any) => {
         return recipients;
-      })
+      });
+      let isArrCoordination: any[] = [];
+      for (const d of isCloneDeter) {
+        if (d.some((p: any) => p.email == this.emailUser_sample)) {
+          isArrCoordination = d;
+          break;
+        }
+      }
       this.datas.contract_user_sign.forEach((res: any) => {
-        res.sign_config = res.sign_config.filter((p: any) =>  isCloneDeter.some((q: any) => q.sign_type && (p.email == q.email && p.name == q.name &&
+        res.sign_config = res.sign_config.filter((p: any) => isArrCoordination.some((q: any) => q.sign_type && (p.email == q.email && p.name == q.name &&
           ((p.sign_unit == 'chu_ky_anh' && q.sign_type.some(({id}: any) => id == 1) ||
             (p.sign_unit == 'chu_ky_so' && q.sign_type.some(({id}: any) => id == 2 || id == 3 || id == 4) ||
               (p.sign_unit == 'text' && q.sign_type.some(({id}: any) => id == 2)) ||
@@ -133,7 +140,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
 
-
     // convert base64 file pdf to url
     let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
     let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
@@ -156,7 +162,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('dragend', this.showEventInfo).draggable({
-      listeners: { move: this.dragMoveListener, onend: this.showEventInfo },
+      listeners: {move: this.dragMoveListener, onend: this.showEventInfo},
       inertia: true,
       modifiers: [
         interact.modifiers.restrictRect({
@@ -167,7 +173,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
-      edges: { right: true, bottom: true }, // Cho phép resize theo chiều nào.
+      edges: {right: true, bottom: true}, // Cho phép resize theo chiều nào.
       listeners: {
         move: this.resizableListener, onend: this.resizeSignature
       },
@@ -456,7 +462,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
   }
 
- async getDataSignUpdateAction() {
+  async getDataSignUpdateAction() {
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
     this.datas.determine_contract.forEach((element: any) => {
@@ -464,9 +470,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         element.recipients.forEach((item: any) => {
           let dataChange = [];
           dataChange = this.datas.is_data_object_signature.filter((p: any) => p.recipient.id == item.id &&
-          ((p.recipient.email != item.email || p.recipient.name != item.name || (p.type == 2 && !item.sign_type.some((q: any) => q.id == 1) ||
-          (p.type == 3 && !item.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) ||
-          (p.type == 1 && !item.sign_type.some((q: any) => q.id == 2))))));
+            ((p.recipient.email != item.email || p.recipient.name != item.name || (p.type == 2 && !item.sign_type.some((q: any) => q.id == 1) ||
+              (p.type == 3 && !item.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) ||
+              (p.type == 1 && !item.sign_type.some((q: any) => q.id == 2))))));
 
           if (dataChange.length == 0) {
             if (item.fields && item.fields.length && item.fields.length > 0) {
@@ -676,7 +682,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.arrPage = [];
       for (let page = 1; page <= this.pageNumber; page++) {
         let canvas = document.createElement("canvas");
-        this.arrPage.push({ page: page });
+        this.arrPage.push({page: page});
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
         // canvas.style.paddingLeft = '15px';
@@ -775,7 +781,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
       // let viewport = page.getViewport(this.scale);
-      let viewport = page.getViewport({ scale: this.scale });
+      let viewport = page.getViewport({scale: this.scale});
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
@@ -789,7 +795,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           height: viewport.height,
         });
       }
-      page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+      page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
@@ -1044,24 +1050,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       //     element.is_disable = true;
       //   else element.is_disable = false;
       // } else {
-        if (this.convertToSignConfig().some((p: any) => (p.email == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && p.email && p.sign_unit == 'so_tai_lieu'))) {
-          if (isSignType != 'text') {
-            element.is_disable = true;
-          }
-        } else {
-          if (isSignType == 'chu_ky_anh') {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
-          } else if (isSignType == 'chu_ky_so') {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
-          } else if (isSignType == 'text') {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2)); // ô text chỉ có ký usb token mới được chỉ định (element.role == 4)
-          } else {
-            if (element.role != 4 || (this.datas.contract_no && element.role == 4)) {
-              element.is_disable = true;
-            } else element.is_disable = false;
-            // element.is_disable = (); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
-          }
+      if (this.convertToSignConfig().some((p: any) => (p.email == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && p.email && p.sign_unit == 'so_tai_lieu'))) {
+        if (isSignType != 'text') {
+          element.is_disable = true;
         }
+      } else {
+        if (isSignType == 'chu_ky_anh') {
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
+        } else if (isSignType == 'chu_ky_so') {
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
+        } else if (isSignType == 'text') {
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2)); // ô text chỉ có ký usb token mới được chỉ định (element.role == 4)
+        } else {
+          if (element.role != 4 || (this.datas.contract_no && element.role == 4)) {
+            element.is_disable = true;
+          } else element.is_disable = false;
+          // element.is_disable = (); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
+        }
+      }
       // }
 
       if (listSelect) {
