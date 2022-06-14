@@ -6,7 +6,8 @@ import {environment} from '../../../environments/environment';
 })
 export class AdminPackService {
 
-  listPackUrl: any = `${environment.apiUrl}/api/v1/admin/service-package`;
+  listPackUrl: any = `${environment.apiUrl}/api/v1/admin/service-package/`;
+
   getPackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
   deletePackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
   updatePackUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
@@ -29,6 +30,32 @@ export class AdminPackService {
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(listPackUrl, {headers}).pipe();
   
+  }
+
+  addPack(datas: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      code: datas.code,
+      name: datas.name,
+      totalBeforeVAT: datas.totalBeforeVAT,
+      totalAfterVAT: datas.totalAfterVAT,
+      type: datas.type,
+      calculatorMethod: datas.calc,
+      duration: datas.time,
+      numberOfContracts: datas.number_contract,
+      description: datas.describe,
+      status: datas.status
+    });
+
+    console.log('body unit');
+    console.log(body);
+
+    return this.http.post<any>(this.listPackUrl, body, { headers: headers });
   }
 
   getPackById(id:any){

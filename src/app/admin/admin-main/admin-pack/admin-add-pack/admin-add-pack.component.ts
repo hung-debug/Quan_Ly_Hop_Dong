@@ -57,15 +57,13 @@ export class AdminAddPackComponent implements OnInit {
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
 
-        //dungpt
-        //chinh validate so cua don gia
-        price: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+        totalBeforeVAT: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+        totalAfterVAT: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+
         calc: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         type: this.fbd.control(""),
         condition: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
 
-        //dungpt
-        //chinh validate so cua thoi gian
         time: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
 
         
@@ -96,7 +94,11 @@ export class AdminAddPackComponent implements OnInit {
           this.addForm = this.fbd.group({
             code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            price: this.fbd.control(data.price, [Validators.required, Validators.pattern(parttern_input.number_form)]),
+
+            totalBeforeVAT: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+            totalAfterVAT: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+    
+
             calc: this.fbd.control(data.calc, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             type: this.fbd.control(data.type),
             condition: this.fbd.control(data.condition, [Validators.pattern(parttern_input.input_form)]),
@@ -117,7 +119,11 @@ export class AdminAddPackComponent implements OnInit {
       this.addForm = this.fbd.group({
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        price: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+
+        totalBeforeVAT: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+        totalAfterVAT: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+
+
         calc: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         type: this.fbd.control(""),
         condition: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
@@ -154,79 +160,132 @@ export class AdminAddPackComponent implements OnInit {
     if (this.addForm.invalid) {
       return;
     }
-    const data = {
-      id: "",
+
+    let dataForm = {
+      id: this.data.id,
       code: this.addForm.value.code,
       name: this.addForm.value.name,
-      price: this.addForm.value.price,
+      totalBeforeVAT: this.addForm.value.totalBeforeVAT,
+      totalAfterVAT: this.addForm.value.totalAfterVAT,
       calc: this.addForm.value.calc,
       type: this.addForm.value.type,
-      condition: this.addForm.value.condition,
       time: this.addForm.value.time,
       number_contract: this.addForm.value.number_contract,
       describe: this.addForm.value.describe,
       status: this.addForm.value.status
     }
-    console.log(data);
+
+    if(this.addForm.value.calc == 1) {
+      dataForm.calc = 'BY_TIME';
+    } else if(this.addForm.value.calc == 2) {
+      dataForm.calc = 'BY_CONTRACT_NUMBERS';
+    }
+
+    if(this.addForm.value.type == 1) {
+      dataForm.type = 'NORMAL';
+    } else if(this.addForm.value.type == 2) {
+      dataForm.type = 'PROMOTION';
+    }
+
+    if(this.addForm.value.status == 1) {
+      dataForm.status = 'ACTIVE';
+    } else if(this.addForm.value.status == 2) {
+      dataForm.status = 'IN_ACTIVE';
+    }
+
+    console.log("number ",dataForm.number_contract)
 
     //truong hop sua ban ghi
     if(this.data.id !=null){
-      data.id = this.data.id;
-      //neu thay doi ten thi can check lai
-      if(data.name != this.nameOld){
-        //kiem tra ten to chuc da ton tai trong he thong hay chua
-        this.adminPackService.checkNameUnique(data, data.name).subscribe(
-          dataByName => {
-            console.log(dataByName);
-            if(dataByName.code == '00'){
+      // data.id = this.data.id;
+      // //neu thay doi ten thi can check lai
+      // if(data.name != this.nameOld){
+      //   //kiem tra ten to chuc da ton tai trong he thong hay chua
+      //   this.adminPackService.checkNameUnique(data, data.name).subscribe(
+      //     dataByName => {
+      //       console.log(dataByName);
+      //       if(dataByName.code == '00'){
 
-              //ham check ma
-              this.update(data);
+      //         //ham check ma
+      //         this.update(data);
 
-            }else if(dataByName.code == '01'){
-              this.toastService.showErrorHTMLWithTimeout('Tên tổ chức đã tồn tại trong hệ thống', "", 3000);
-            }
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-          }
-        )
-      //neu khong thay doi thi khong can check ten
-      }else{
-        //update
-        this.update(data);
-      }
+      //       }else if(dataByName.code == '01'){
+      //         this.toastService.showErrorHTMLWithTimeout('Tên tổ chức đã tồn tại trong hệ thống', "", 3000);
+      //       }
+      //     }, error => {
+      //       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+      //     }
+      //   )
+      // //neu khong thay doi thi khong can check ten
+      // }else{
+      //   //update
+      //   this.update(data);
+      // }
       
 
     //truong hop them moi ban ghi
     }else{
-      //kiem tra ten to chuc da ton tai trong he thong hay chua
-      this.adminPackService.checkNameUnique(data, data.name).subscribe(
-        dataByName => {
-          console.log(dataByName);
-          if(dataByName.code == '00'){
+      if (dataForm.status == 1) {
+        dataForm.status = 'ACTIVE';
+      } else if (dataForm.status == 0) {
+        dataForm.status = 'IN_ACTIVE';
+      }
+      this.adminPackService.addPack(dataForm).subscribe(
+        (data) => {
+          console.log('data add ');
+          console.log(data);
 
-            //kiem tra ma to chuc da ton tai trong he thong hay chua
-            this.adminPackService.checkCodeUnique(data, data.code).subscribe(
-              dataByCode => {
+          if (data.id  != null && data.id != undefined) {
+            this.toastService.showSuccessHTMLWithTimeout(
+              'Thêm mới thành công!',
+              '',
+              3000
+            );
+            this.router
+              .navigateByUrl('/', { skipLocationChange: true })
+              .then(() => {
+                this.router.navigate(['admin-main/pack']);
+              });
 
-                if(dataByCode.code == '00'){
-                  //update
-                  this.update(data);
-                }else if(dataByCode.code == '01'){
-                  this.toastService.showErrorHTMLWithTimeout('Mã tổ chức đã tồn tại trong hệ thống', "", 3000);
-                }
-              }, error => {
-                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-              }
-            )
-              
-            }else if(dataByName.code == '01'){
-              this.toastService.showErrorHTMLWithTimeout('Tên tổ chức đã tồn tại trong hệ thống', "", 3000);
+            this.dialog.closeAll();
+          } else {
+            if (data.errors[0].code == 1001) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Email đã tồn tại trên hệ thống',
+                '',
+                3000
+              );
+            } else if (data.errors[0].code == 1003) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Tên tổ chức đã được sử dụng',
+                '',
+                3000
+              );
+            } else if (data.errors[0].code == 1006) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Mã số thuế đã tồn tại trên hệ thống',
+                '',
+                3000
+              );
+            } else if (data.errors[0].code == 1002) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'SĐT đã được sử dụng',
+                '',
+                3000
+              );
             }
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
           }
-        )
+        },
+        (error) => {
+          console.log('error ');
+          console.log(error);
+          this.toastService.showErrorHTMLWithTimeout(
+            'Thêm mới thất bại',
+            '',
+            3000
+          );
+        }
+      );
     }
   }
 

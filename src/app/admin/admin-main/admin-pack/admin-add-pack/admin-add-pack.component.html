@@ -50,15 +50,15 @@
           <span class="required-title">*</span>
         </div>
         <div class="input-data">
-          <input type="text" formControlName="price" />
+          <input type="text" formControlName="totalBeforeVAT" />
         </div>
-        <div *ngIf="submitted && f.price.errors" class="invalid">
-          <div *ngIf="f.price.errors.required">
+        <div *ngIf="submitted && f.totalBeforeVAT.errors" class="invalid">
+          <div *ngIf="f.totalBeforeVAT.errors.required">
             {{ "Đơn giá không được để trống" | translate }}
           </div>
           <!-- dungpt -->
           <!-- input cua don gia phai la so moi hop le -->
-          <div *ngIf="f.price.errors.pattern">
+          <div *ngIf="f.totalBeforeVAT.errors.pattern">
             {{ "Đơn giá phải là số" | translate }}
           </div>
         </div>
@@ -70,15 +70,15 @@
           <span class="required-title">*</span>
         </div>
         <div class="input-data">
-          <input type="text" formControlName="price" />
+          <input type="text" formControlName="totalAfterVAT" />
         </div>
-        <div *ngIf="submitted && f.price.errors" class="invalid">
-          <div *ngIf="f.price.errors.required">
+        <div *ngIf="submitted && f.totalAfterVAT.errors" class="invalid">
+          <div *ngIf="f.totalAfterVAT.errors.required">
             {{ "Đơn giá không được để trống" | translate }}
           </div>
           <!-- dungpt -->
           <!-- input cua don gia phai la so moi hop le -->
-          <div *ngIf="f.price.errors.pattern">
+          <div *ngIf="f.totalAfterVAT.errors.pattern">
             {{ "Đơn giá phải là số" | translate }}
           </div>
         </div>
@@ -97,6 +97,7 @@
           [filter]="true"
           filterBy="name"
           [showClear]="true"
+          formControlName="type"
         ></p-dropdown>
       </div>
 
@@ -116,6 +117,7 @@
           filterBy="name"
           [showClear]="true"
           (onChange)="onChangeTheThucTinh($event)"
+          formControlName="calc"
         ></p-dropdown>
         <div *ngIf="submitted && f.calc.errors" class="invalid">
           <div *ngIf="f.calc.errors.required">
