@@ -61,7 +61,7 @@ export class AdminPackService {
   getPackById(id:any){
     this.getCurrentUser();
     const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<any>(this.getPackUrl + id, {headers}).pipe();
+    return this.http.get<any>(this.listPackUrl + id, {headers}).pipe();
   }
 
   deletePack(id:any){
@@ -78,20 +78,21 @@ export class AdminPackService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+
     const body = JSON.stringify({
-      name: datas.name,
-      short_name: datas.short_name,
       code: datas.code,
-      email: datas.email,
-      phone: datas.phone,
-      fax: datas.fax,
-      status: datas.status,
-      parent_id: datas.parent_id,
-      path: datas.path
+      name: datas.name,
+      totalBeforeVAT: datas.totalBeforeVAT,
+      totalAfterVAT: datas.totalAfterVAT,
+      type: datas.type,
+      calculatorMethod: datas.calc,
+      duration: datas.time,
+      numberOfContracts: datas.number_contract,
+      description: datas.describe,
+      status: datas.status
     });
-    console.log(headers);
-    console.log(body);
-    return this.http.put<any>(this.updatePackUrl + datas.id, body, {'headers': headers});
+
+    return this.http.post<any>(this.listPackUrl + datas.id, { headers: headers });
   }
 
   checkNameUnique(data:any, name:any){

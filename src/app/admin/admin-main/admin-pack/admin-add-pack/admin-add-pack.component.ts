@@ -87,7 +87,8 @@ export class AdminAddPackComponent implements OnInit {
 
     //lay du lieu form cap nhat
     if( this.data.id != null){
-      //lay danh sach to chuc
+      
+      console.log("this flag ", this.flagComboBoxTheThucTinh);
       
       this.adminPackService.getPackById(this.data.id).subscribe(
         data => {
@@ -95,17 +96,18 @@ export class AdminAddPackComponent implements OnInit {
             code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
 
-            totalBeforeVAT: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
-            totalAfterVAT: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+            totalBeforeVAT: this.fbd.control(data.totalBeforeVAT, [Validators.required, Validators.pattern(parttern_input.number_form)]),
+            totalAfterVAT: this.fbd.control(data.totalAfterVAT, [Validators.required, Validators.pattern(parttern_input.number_form)]),
     
+            calc: this.convertCalc(data.calculatorMethod),
+            type: this.convertType(data.type),
 
-            calc: this.fbd.control(data.calc, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            type: this.fbd.control(data.type),
-            condition: this.fbd.control(data.condition, [Validators.pattern(parttern_input.input_form)]),
-            time: this.fbd.control({value: data.time, disabled: true}, [Validators.required, Validators.pattern(parttern_input.number_form)]),
-            number_contract: this.fbd.control({value:data.number_contract, disabled: true}, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            describe: this.fbd.control(data.describe, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            status: this.fbd.control(data.status, [Validators.pattern(parttern_input.input_form)]),
+            time: this.fbd.control(data.duration, [Validators.required, Validators.pattern(parttern_input.number_form)]),
+            number_contract: this.fbd.control(data.number_contract, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+
+            describe: this.fbd.control(data.description, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+
+            status: this.convertStatus(data.status),
           });
     
         }, error => {
@@ -126,13 +128,47 @@ export class AdminAddPackComponent implements OnInit {
 
         calc: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         type: this.fbd.control(""),
-        condition: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
+
         time: this.fbd.control({value: '',disabled: true}, [Validators.required, Validators.pattern(parttern_input.number_form)]),
+
         number_contract: this.fbd.control({value: '',disabled: true}, [Validators.required, Validators.pattern(parttern_input.input_form)]),
         describe: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
         status: 1,
       });
     }
+  }
+
+  convertType(type: any): number {
+    if(type == 'NORMAL') {
+      return 1;
+    } else if(type == 'PROMOTION') {
+      return 2;
+    }
+    return 0;
+  }
+
+  convertCalc(calc: any): number {
+    if(calc == 'BY_TIME') {
+      this.addForm.controls.number_contract.disable();
+      this.flagComboBoxTheThucTinh = 1;
+      return 1;
+    } else if(calc == 'BY_CONTRACT_NUMBERS') {
+      this.addForm.controls.time.disable();
+      this.flagComboBoxTheThucTinh = 2;
+      return 2;
+    }
+
+    return 0;
+  }
+
+  convertStatus(status: any): number {
+    if (status == 'ACTIVE') {
+      return 1;
+    } else if (status == 'IN_ACTIVE') {
+      return 0;
+    }
+
+    return -1;
   }
 
   loadedListComboBox()  {
@@ -196,40 +232,50 @@ export class AdminAddPackComponent implements OnInit {
     console.log("number ",dataForm.number_contract)
 
     //truong hop sua ban ghi
-    if(this.data.id !=null){
-      // data.id = this.data.id;
-      // //neu thay doi ten thi can check lai
-      // if(data.name != this.nameOld){
-      //   //kiem tra ten to chuc da ton tai trong he thong hay chua
-      //   this.adminPackService.checkNameUnique(data, data.name).subscribe(
-      //     dataByName => {
-      //       console.log(dataByName);
-      //       if(dataByName.code == '00'){
+    if(this.data.id !=null && this.data.id != undefined){
 
-      //         //ham check ma
-      //         this.update(data);
+      this.adminPackService.updatePack(dataForm).subscribe(
+        (data) => {
+          if (data.id != null && data.id != undefined) {
+            console.log('vao truong hop sua ban ghi');
+            console.log(data.status);
 
-      //       }else if(dataByName.code == '01'){
-      //         this.toastService.showErrorHTMLWithTimeout('Tên tổ chức đã tồn tại trong hệ thống', "", 3000);
-      //       }
-      //     }, error => {
-      //       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
-      //     }
-      //   )
-      // //neu khong thay doi thi khong can check ten
-      // }else{
-      //   //update
-      //   this.update(data);
-      // }
+            this.toastService.showSuccessHTMLWithTimeout(
+              'Cập nhật thành công!',
+              '',
+              3000
+            );
+            this.router
+              .navigateByUrl('/', { skipLocationChange: true })
+              .then(() => {
+                this.router.navigate(['admin-main/unit']);
+              });
+
+            this.dialog.closeAll();
+          } else {
+            if (data.errors[0].code == 1008) {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Mã dịch vụ đã được sử dụng',
+                '',
+                3000
+              );
+            } 
+          }
+        },
+        (error) => {
+          console.log('error ');
+          console.log(error);
+          this.toastService.showErrorHTMLWithTimeout(
+            'Cập nhật thất bại',
+            '',
+            3000
+          );
+        }
+      );
       
 
     //truong hop them moi ban ghi
     }else{
-      if (dataForm.status == 1) {
-        dataForm.status = 'ACTIVE';
-      } else if (dataForm.status == 0) {
-        dataForm.status = 'IN_ACTIVE';
-      }
       this.adminPackService.addPack(dataForm).subscribe(
         (data) => {
           console.log('data add ');
@@ -249,27 +295,9 @@ export class AdminAddPackComponent implements OnInit {
 
             this.dialog.closeAll();
           } else {
-            if (data.errors[0].code == 1001) {
+            if (data.errors[0].code == 1008) {
               this.toastService.showErrorHTMLWithTimeout(
-                'Email đã tồn tại trên hệ thống',
-                '',
-                3000
-              );
-            } else if (data.errors[0].code == 1003) {
-              this.toastService.showErrorHTMLWithTimeout(
-                'Tên tổ chức đã được sử dụng',
-                '',
-                3000
-              );
-            } else if (data.errors[0].code == 1006) {
-              this.toastService.showErrorHTMLWithTimeout(
-                'Mã số thuế đã tồn tại trên hệ thống',
-                '',
-                3000
-              );
-            } else if (data.errors[0].code == 1002) {
-              this.toastService.showErrorHTMLWithTimeout(
-                'SĐT đã được sử dụng',
+                'Mã dịch vụ đã được sử dụng',
                 '',
                 3000
               );
