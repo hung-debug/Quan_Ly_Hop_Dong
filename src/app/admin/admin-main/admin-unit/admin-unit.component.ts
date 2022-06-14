@@ -225,10 +225,6 @@ export class AdminUnitComponent implements OnInit {
     });
   }
 
-  search() {
-    console.log('vao tim kiem');
-  }
-
   //Thêm mới tổ chức
   addUnit() {
     const data = {

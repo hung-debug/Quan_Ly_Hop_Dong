@@ -23,9 +23,9 @@ export class AdminPackService {
     this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').token;
   }
 
-  getPackList(name:any, code:any, total:any, duration:any, numberOfContracts:any, status:any){
+  getPackList(name:any, code:any, totalBeforeVAT:any,totalAfterVAT: any, duration:any, numberOfContracts:any, status:any){
     this.getCurrentUser();
-    let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&total=' + total.trim() + '&duration=' + duration.trim() + 
+    let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&totalBeforeVAT=' + totalBeforeVAT + '&totalAfterVAT='+totalAfterVAT+'&duration=' + duration.trim() + 
     '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status.trim() +  "&page=0"+ "&size=1000" +"&sort=name";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(listPackUrl, {headers}).pipe();

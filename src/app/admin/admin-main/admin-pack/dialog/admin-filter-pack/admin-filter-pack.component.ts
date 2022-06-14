@@ -62,7 +62,7 @@ export class AdminFilterPackComponent implements OnInit {
       filter_number_contract: this.addForm.value.filter_number_contract,
     }
     this.dialogRef.close();
-    console.log(data);
+    console.log("data filter code ",data.filter_code);
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/admin-main/pack'],
       {

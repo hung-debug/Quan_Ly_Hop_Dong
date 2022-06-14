@@ -22,7 +22,8 @@ export class AdminPackComponent implements OnInit {
 
   filter_name:any="";
   filter_code:any="";
-  filter_price:any="";
+  filter_totaBeforeVAT:any="";
+  filter_totalAfterVAT:any="";
   filter_time:any="";
   filter_status:any="";
   filter_number_contract:any="";
@@ -60,7 +61,7 @@ export class AdminPackComponent implements OnInit {
     this.infoPackRole = this.checkRole(this.infoPackRole,'QLGDV_04');
 
     this.appService.setTitle("DANH SÁCH GÓI DỊCH VỤ");
-    this.searchUnit();
+    this.searchPack();
 
     this.cols = [
       { field: 'name', header: 'Tên gói', style:'text-align: left;' },
@@ -102,8 +103,10 @@ export class AdminPackComponent implements OnInit {
   }
 
   array_empty: any = [];
-  searchUnit(){
-    this.adminPackService.getPackList(this.name, this.code, this.total ,this.duration, this.numberOfContracts, this.status).subscribe(response => {
+
+  searchPack(){
+    this.adminPackService.getPackList(this.filter_name, this.filter_code, this.filter_totaBeforeVAT ,this.filter_totalAfterVAT,this.filter_time, 
+      this.filter_time, this.filter_status).subscribe(response => {
       this.temp = response.entities;
       this.listData = this.temp;
       console.log("res ",response.entities);
@@ -196,7 +199,8 @@ export class AdminPackComponent implements OnInit {
     const data = {
       title: 'TÌM KIẾM GÓI DỊCH VỤ',
       filter_code: this.filter_code,
-      filter_price: this.filter_price,
+      filter_totalBeforeVAT: this.filter_totaBeforeVAT,
+      filter_totalAfterVAT: this.filter_totalAfterVAT,
       filter_time: this.filter_time,
       filter_status: this.filter_status,
       filter_number_contract: this.filter_number_contract,
