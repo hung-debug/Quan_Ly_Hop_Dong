@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { AdminPackService } from 'src/app/service/admin/admin-pack.service';
 import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
@@ -18,7 +19,9 @@ export class AdminPackComponent implements OnInit {
   constructor(private appService: AppService,
     private dialog: MatDialog,
     private adminPackService: AdminPackService,
-    private toastService: ToastService) { }
+    private toastService: ToastService,
+    private route: ActivatedRoute,
+    ) { }
 
   filter_name:any="";
   filter_code:any="";
@@ -59,6 +62,57 @@ export class AdminPackComponent implements OnInit {
     this.addPackRole = this.checkRole(this.addPackRole,'QLGDV_01');
     this.searchPackRole = this.checkRole(this.searchPackRole, 'QLGDV_03');
     this.infoPackRole = this.checkRole(this.infoPackRole,'QLGDV_04');
+
+    
+    this.route.queryParams.subscribe((params) => {
+      console.log('param filter re');
+      console.log(params.filter_address);
+
+      if (
+        typeof params.filter_code != 'undefined' &&
+        params.filter_code
+      ) {
+        this.filter_code = params.filter_code;
+      } else {
+        this.filter_code = '';
+      }
+      if (typeof params.filter_totalBeforeVAT != 'undefined' && params.filter_totaBeforeVAT) {
+        this.filter_totaBeforeVAT = params.filter_totaBeforeVAT;
+      } else {
+        this.filter_totaBeforeVAT = '';
+      }
+      if (typeof params.filter_totalAfterVAT != 'undefined' && params.filter_totalAfterVAT) {
+        this.filter_totalAfterVAT = params.filter_totalAfterVAT;
+      } else {
+        this.filter_totalAfterVAT = '';
+      }
+      if (typeof params.filter_status != 'undefined' && params.filter_status) {
+        if (params.filter_status != 0) {
+          this.filter_status = params.filter_status;
+        } else {
+          this.filter_status = '';
+        }
+      } else {
+        this.filter_status = '';
+      }
+      if (
+        typeof params.filter_time != 'undefined' &&
+        params.filter_time
+      ) {
+        this.filter_time = params.filter_time;
+      } else {
+        this.filter_time = '';
+      }
+
+      if (
+        typeof params.filter_number_contract != 'undefined' &&
+        params.filter_number_contract
+      ) {
+        this.filter_number_contract = params.filter_number_contract;
+      } else {
+        this.filter_number_contract = '';
+      }
+    });
 
     this.appService.setTitle("DANH SÁCH GÓI DỊCH VỤ");
     this.searchPack();
@@ -105,6 +159,8 @@ export class AdminPackComponent implements OnInit {
   array_empty: any = [];
 
   searchPack(){
+    console.log("filter_name ",this.filter_name);
+    console.log("filter_code", this.filter_code);
     this.adminPackService.getPackList(this.filter_name, this.filter_code, this.filter_totaBeforeVAT ,this.filter_totalAfterVAT,this.filter_time, 
       this.filter_time, this.filter_status).subscribe(response => {
       this.temp = response.entities;
