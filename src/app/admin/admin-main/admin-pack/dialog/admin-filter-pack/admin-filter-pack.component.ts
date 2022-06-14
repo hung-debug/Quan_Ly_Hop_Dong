@@ -33,7 +33,7 @@ export class AdminFilterPackComponent implements OnInit {
         filter_totalBeforeVAT:this.fbd.control(this.data.filter_totalBeforeVAT),
         filter_totalAfterVAT:this.fbd.control(this.data.filter_totalAfterVAT),
         filter_time: this.fbd.control(this.data.filter_time),
-        filter_status: this.fbd.control(this.data.filter_status),
+        filter_status: this.fbd.control(Number(this.data.filter_status)),
         filter_number_contract: this.fbd.control(this.data.filter_number_contract),
       });
     }
@@ -44,7 +44,7 @@ export class AdminFilterPackComponent implements OnInit {
       filter_totalBeforeVAT:this.fbd.control(this.data.filter_totalBeforeVAT),
       filter_totalAfterVAT:this.fbd.control(this.data.filter_totalAfterVAT),
       filter_time: this.fbd.control(this.data.filter_time),
-      filter_status: this.fbd.control(this.data.filter_status),
+      filter_status: this.fbd.control(Number(this.data.filter_status)),
       filter_number_contract: this.fbd.control(this.data.filter_number_contract),
     });
     this.statusList = statusList;

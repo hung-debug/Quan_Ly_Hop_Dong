@@ -12,39 +12,39 @@ import { AdminFilterPackComponent } from './dialog/admin-filter-pack/admin-filte
 @Component({
   selector: 'app-admin-pack',
   templateUrl: './admin-pack.component.html',
-  styleUrls: ['./admin-pack.component.scss']
+  styleUrls: ['./admin-pack.component.scss'],
 })
 export class AdminPackComponent implements OnInit {
-
-  constructor(private appService: AppService,
+  constructor(
+    private appService: AppService,
     private dialog: MatDialog,
     private adminPackService: AdminPackService,
     private toastService: ToastService,
-    private route: ActivatedRoute,
-    ) { }
+    private route: ActivatedRoute
+  ) {}
 
-  filter_name:any="";
-  filter_code:any="";
-  filter_totaBeforeVAT:any="";
-  filter_totalAfterVAT:any="";
-  filter_time:any="";
-  filter_status:any="";
-  filter_number_contract:any="";
+  filter_name: any = '';
+  filter_code: any = '';
+  filter_totaBeforeVAT: any = '';
+  filter_totalAfterVAT: any = '';
+  filter_time: any = '';
+  filter_status: any = '';
+  filter_number_contract: any = '';
 
-  code:any = "";
-  name:any = "";
-  total: any = "";
-  duration: any = "";
-  numberOfContracts: any = "";
-  status: any = "";
+  code: any = '';
+  name: any = '';
+  total: any = '';
+  duration: any = '';
+  numberOfContracts: any = '';
+  status: any = '';
 
   list: any[];
-  listData:any[];
+  listData: any[];
   cols: any[];
-  files:any[];
-  test:any;
-  orgId:any;
-  isAdmin:boolean=false;
+  files: any[];
+  test: any;
+  orgId: any;
+  isAdmin: boolean = false;
 
   deletePackRole: boolean = false;
   editPackRole: boolean = false;
@@ -58,47 +58,48 @@ export class AdminPackComponent implements OnInit {
 
   ngOnInit(): void {
     this.deletePackRole = this.checkRole(this.deletePackRole, 'QLGDV_05');
-    this.editPackRole = this.checkRole(this.editPackRole,'QLGDV_02');
-    this.addPackRole = this.checkRole(this.addPackRole,'QLGDV_01');
+    this.editPackRole = this.checkRole(this.editPackRole, 'QLGDV_02');
+    this.addPackRole = this.checkRole(this.addPackRole, 'QLGDV_01');
     this.searchPackRole = this.checkRole(this.searchPackRole, 'QLGDV_03');
-    this.infoPackRole = this.checkRole(this.infoPackRole,'QLGDV_04');
+    this.infoPackRole = this.checkRole(this.infoPackRole, 'QLGDV_04');
 
-    
     this.route.queryParams.subscribe((params) => {
       console.log('param filter re');
       console.log(params.filter_address);
 
-      if (
-        typeof params.filter_code != 'undefined' &&
-        params.filter_code
-      ) {
+      if (typeof params.filter_code != 'undefined' && params.filter_code) {
         this.filter_code = params.filter_code;
       } else {
         this.filter_code = '';
       }
-      if (typeof params.filter_totalBeforeVAT != 'undefined' && params.filter_totaBeforeVAT) {
+      if (
+        typeof params.filter_totalBeforeVAT != 'undefined' &&
+        params.filter_totaBeforeVAT
+      ) {
         this.filter_totaBeforeVAT = params.filter_totaBeforeVAT;
       } else {
         this.filter_totaBeforeVAT = '';
       }
-      if (typeof params.filter_totalAfterVAT != 'undefined' && params.filter_totalAfterVAT) {
+      if (
+        typeof params.filter_totalAfterVAT != 'undefined' &&
+        params.filter_totalAfterVAT
+      ) {
         this.filter_totalAfterVAT = params.filter_totalAfterVAT;
       } else {
         this.filter_totalAfterVAT = '';
       }
       if (typeof params.filter_status != 'undefined' && params.filter_status) {
-        if (params.filter_status != 0) {
-          this.filter_status = params.filter_status;
+        console.log('pa ', params.filter_status);
+
+        if (params.filter_status == 1) {
+          this.filter_status = 1;
+        } else if (params.filter_status == 2) {
+          this.filter_status = 0;
         } else {
           this.filter_status = '';
         }
-      } else {
-        this.filter_status = '';
       }
-      if (
-        typeof params.filter_time != 'undefined' &&
-        params.filter_time
-      ) {
+      if (typeof params.filter_time != 'undefined' && params.filter_time) {
         this.filter_time = params.filter_time;
       } else {
         this.filter_time = '';
@@ -114,34 +115,49 @@ export class AdminPackComponent implements OnInit {
       }
     });
 
-    this.appService.setTitle("DANH SÁCH GÓI DỊCH VỤ");
+    this.appService.setTitle('DANH SÁCH GÓI DỊCH VỤ');
     this.searchPack();
 
     this.cols = [
-      { field: 'name', header: 'Tên gói', style:'text-align: left;' },
-      { field: 'code', header: 'Mã gói', style:'text-align: left;' },
-      { field: 'duration', header: 'Thời gian', style:'text-align: left;' },
-      { field: 'numberOfContracts', header: 'Số lượng hợp đồng', style:'text-align: left;' },
-      { field: 'totalBeforeVAT', header: 'Đơn giá trước VAT', style:'text-align: left;' },
-      { field: 'totalAfterVAT', header: 'Đơn giá sau VAT', style:'text-align: left;' },
-      ];
-      
-      if(!(this.editPackRole === false && this.deletePackRole === false)) {
-        this.cols.push(
-          { field: 'id', header: 'unit.manage', style:'text-align: center;' },
-        );
-      }
+      { field: 'name', header: 'Tên gói', style: 'text-align: left;' },
+      { field: 'code', header: 'Mã gói', style: 'text-align: left;' },
+      { field: 'duration', header: 'Thời gian', style: 'text-align: left;' },
+      {
+        field: 'numberOfContracts',
+        header: 'Số lượng hợp đồng',
+        style: 'text-align: left;',
+      },
+      {
+        field: 'totalBeforeVAT',
+        header: 'Đơn giá trước VAT',
+        style: 'text-align: left;',
+      },
+      {
+        field: 'totalAfterVAT',
+        header: 'Đơn giá sau VAT',
+        style: 'text-align: left;',
+      },
+    ];
+
+    if (!(this.editPackRole === false && this.deletePackRole === false)) {
+      this.cols.push({
+        field: 'id',
+        header: 'unit.manage',
+        style: 'text-align: center;',
+      });
+    }
   }
-  
+
   checkRole(flag: boolean, code: string): boolean {
-    let permissions = JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
+    let permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
+      .user.permissions;
 
-     const selectedRoleConvert: { code: any }[] = [];
+    const selectedRoleConvert: { code: any }[] = [];
 
-     permissions.forEach((key: any) => {
-       let jsonData = { code: key.code, name: key.name };
-       selectedRoleConvert.push(jsonData);
-     });
+    permissions.forEach((key: any) => {
+      let jsonData = { code: key.code, name: key.name };
+      selectedRoleConvert.push(jsonData);
+    });
 
     for (let i = 0; i < selectedRoleConvert.length; i++) {
       let role = selectedRoleConvert[i].code;
@@ -150,7 +166,6 @@ export class AdminPackComponent implements OnInit {
         flag = true;
         break;
       }
-
     }
 
     return flag;
@@ -158,36 +173,45 @@ export class AdminPackComponent implements OnInit {
 
   array_empty: any = [];
 
-  searchPack(){
-    console.log("filter_name ",this.filter_name);
-    console.log("filter_code", this.filter_code);
-    this.adminPackService.getPackList(this.filter_name, this.filter_code, this.filter_totaBeforeVAT ,this.filter_totalAfterVAT,this.filter_time, 
-      this.filter_time, this.filter_status).subscribe(response => {
-      this.temp = response.entities;
-      this.listData = this.temp;
-      console.log("res ",response.entities);
-      this.total = this.listData.length;
-    });
+  searchPack() {
+    console.log('filter_name ', this.filter_name);
+    console.log('filter_code', this.filter_code);
+    this.adminPackService
+      .getPackList(
+        this.filter_name,
+        this.filter_code,
+        this.filter_totaBeforeVAT,
+        this.filter_totalAfterVAT,
+        this.filter_time,
+        this.filter_time,
+        this.filter_status
+      )
+      .subscribe((response) => {
+        this.temp = response.entities;
+        this.listData = this.temp;
+        console.log('res ', response.entities);
+        this.total = this.listData.length;
+      });
   }
 
   addPack() {
     const data = {
-      title: 'THÊM MỚI GÓI DỊCH VỤ'
+      title: 'THÊM MỚI GÓI DỊCH VỤ',
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddPackComponent, {
       width: '580px',
       backdrop: 'static',
       keyboard: false,
-      data
-    })
+      data,
+    });
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
-    })
+      let is_data = result;
+    });
   }
 
-  editPack(id:any) {
+  editPack(id: any) {
     const data = {
       title: 'CẬP NHẬT GÓI DỊCH VỤ',
       id: id,
@@ -197,16 +221,16 @@ export class AdminPackComponent implements OnInit {
       width: '580px',
       backdrop: 'static',
       keyboard: false,
-      data
-    })
+      data,
+    });
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
-    })
+      let is_data = result;
+    });
   }
 
-  detailPack(id:any) {
-    if(this.infoPackRole === true) {
+  detailPack(id: any) {
+    if (this.infoPackRole === true) {
       const data = {
         title: 'THÔNG TIN GÓI DỊCH VỤ',
         id: id,
@@ -216,16 +240,16 @@ export class AdminPackComponent implements OnInit {
         width: '580px',
         backdrop: 'static',
         keyboard: false,
-        data
-      })
+        data,
+      });
       dialogRef.afterClosed().subscribe((result: any) => {
         console.log('the close dialog');
-        let is_data = result
-      })
+        let is_data = result;
+      });
     }
   }
 
-  deletePack(id:any){
+  deletePack(id: any) {
     const data = {
       title: 'XÓA GÓI DỊCH VỤ',
       id: id,
@@ -235,12 +259,12 @@ export class AdminPackComponent implements OnInit {
       width: '580px',
       backdrop: 'static',
       keyboard: false,
-      data
-    })
+      data,
+    });
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
-    })
+      let is_data = result;
+    });
   }
 
   autoSearch(event: any) {
@@ -251,7 +275,7 @@ export class AdminPackComponent implements OnInit {
     );
   }
 
-  search(){
+  search() {
     const data = {
       title: 'TÌM KIẾM GÓI DỊCH VỤ',
       filter_code: this.filter_code,
@@ -266,13 +290,11 @@ export class AdminPackComponent implements OnInit {
       width: '580px',
       backdrop: 'static',
       keyboard: false,
-      data
-    })
+      data,
+    });
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
-    })
+      let is_data = result;
+    });
   }
-
-  
 }

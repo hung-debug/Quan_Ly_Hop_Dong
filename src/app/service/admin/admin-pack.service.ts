@@ -24,9 +24,12 @@ export class AdminPackService {
   }
 
   getPackList(name:any, code:any, totalBeforeVAT:any,totalAfterVAT: any, duration:any, numberOfContracts:any, status:any){
+
+    console.log("status ",status);
+
     this.getCurrentUser();
     let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&totalBeforeVAT=' + totalBeforeVAT + '&totalAfterVAT='+totalAfterVAT+'&duration=' + duration.trim() + 
-    '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status.trim() +  "&page=0"+ "&size=1000" +"&sort=name";
+    '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status +  "&page=0"+ "&size=1000" +"&sort=name";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(listPackUrl, {headers}).pipe();
   
