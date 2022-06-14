@@ -48,6 +48,10 @@ export class AdminPackComponent implements OnInit {
   searchPackRole: boolean = false;
   infoPackRole: boolean = false;
 
+  filterSearch: string;
+
+  temp: any[];
+
   ngOnInit(): void {
     this.deletePackRole = this.checkRole(this.deletePackRole, 'QLGDV_05');
     this.editPackRole = this.checkRole(this.editPackRole,'QLGDV_02');
@@ -100,7 +104,8 @@ export class AdminPackComponent implements OnInit {
   array_empty: any = [];
   searchUnit(){
     this.adminPackService.getPackList(this.name, this.code, this.total ,this.duration, this.numberOfContracts, this.status).subscribe(response => {
-      this.listData = response.entities;
+      this.temp = response.entities;
+      this.listData = this.temp;
       console.log("res ",response.entities);
       this.total = this.listData.length;
     });
@@ -180,7 +185,11 @@ export class AdminPackComponent implements OnInit {
   }
 
   autoSearch(event: any) {
-    this.filter_name = event.target.value;
+    this.listData = this.temp.filter(
+      (word) =>
+        word.name.includes(this.filterSearch) ||
+        word.code.includes(this.filterSearch)
+    );
   }
 
   search(){
@@ -204,4 +213,6 @@ export class AdminPackComponent implements OnInit {
       let is_data = result
     })
   }
+
+  
 }
