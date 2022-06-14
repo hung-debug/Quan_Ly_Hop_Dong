@@ -62,9 +62,9 @@ export class AdminPackComponent implements OnInit {
       { field: 'name', header: 'Tên gói', style:'text-align: left;' },
       { field: 'code', header: 'Mã gói', style:'text-align: left;' },
       { field: 'duration', header: 'Thời gian', style:'text-align: left;' },
-      { field: 'numberContract', header: 'Số lượng hợp đồng', style:'text-align: left;' },
-      { field: 'priceBefore', header: 'Đơn giá trước VAT', style:'text-align: left;' },
-      { field: 'priceAfter', header: 'Đơn giá sau VAT', style:'text-align: left;' },
+      { field: 'numberOfContracts', header: 'Số lượng hợp đồng', style:'text-align: left;' },
+      { field: 'totalBeforeVAT', header: 'Đơn giá trước VAT', style:'text-align: left;' },
+      { field: 'totalAfterVAT', header: 'Đơn giá sau VAT', style:'text-align: left;' },
       ];
       
       if(!(this.editPackRole === false && this.deletePackRole === false)) {

@@ -124,7 +124,7 @@ export class AdminAddPackComponent implements OnInit {
         time: this.fbd.control({value: '',disabled: true}, [Validators.required, Validators.pattern(parttern_input.number_form)]),
         number_contract: this.fbd.control({value: '',disabled: true}, [Validators.required, Validators.pattern(parttern_input.input_form)]),
         describe: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-        status: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        status: 1,
       });
     }
   }
