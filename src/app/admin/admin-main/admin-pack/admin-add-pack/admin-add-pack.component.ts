@@ -1,31 +1,40 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AdminPackService } from 'src/app/service/admin/admin-pack.service';
 import { ToastService } from 'src/app/service/toast.service';
-import {parttern_input} from "../../../../config/parttern";
-import {theThucTinhList, loaiGoiDichVuList} from "../../../../config/variable";
-
-
+import { parttern_input } from '../../../../config/parttern';
+import {
+  theThucTinhList,
+  loaiGoiDichVuList,
+} from '../../../../config/variable';
 
 @Component({
   selector: 'app-admin-add-pack',
   templateUrl: './admin-add-pack.component.html',
-  styleUrls: ['./admin-add-pack.component.scss']
+  styleUrls: ['./admin-add-pack.component.scss'],
 })
 export class AdminAddPackComponent implements OnInit {
-
   addForm: FormGroup;
   datas: any;
-  codeOld:any;
-  nameOld:any
-  parentName:any;
-  emailOld:any;
-  phoneOld:any;
+  codeOld: any;
+  nameOld: any;
+  parentName: any;
+  emailOld: any;
+  phoneOld: any;
 
   theThucTinh: Array<any> = [];
-  loaiGoi: Array<any> = []; 
+  loaiGoi: Array<any> = [];
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
@@ -33,50 +42,72 @@ export class AdminAddPackComponent implements OnInit {
 
   //dungpt
   //name input thoi gian va so luong hop dong
-  timeName: string;
-  numberContractName: string;
+  timeName: any;
+  numberContractName: any;
 
   //1 => time: white, so luong: gray
   //2 => so luong: white, time: gray
   //3 => all gray
-  flagComboBoxTheThucTinh:any;
+  flagComboBoxTheThucTinh: any;
 
-  get f() { return this.addForm.controls; }
+  get f() {
+    return this.addForm.controls;
+  }
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
-    private toastService : ToastService,
+    private toastService: ToastService,
     public dialogRef: MatDialogRef<AdminAddPackComponent>,
     public router: Router,
     public dialog: MatDialog,
-    private adminPackService : AdminPackService,
-    ) { 
+    private adminPackService: AdminPackService
+  ) {
+    this.addForm = this.fbd.group({
+      code: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      name: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
 
-      this.addForm = this.fbd.group({
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      totalBeforeVAT: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.number_form),
+      ]),
+      totalAfterVAT: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.number_form),
+      ]),
 
-        totalBeforeVAT: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
-        totalAfterVAT: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+      calc: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      type: this.fbd.control(''),
 
-        calc: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        type: this.fbd.control(""),
-        condition: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
+      time: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.number_form),
+      ]),
 
-        time: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+      number_contract: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.number_form),
+      ]),
+      describe: this.fbd.control('', [
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      status: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+    });
+  }
 
-        
-        //dungpt
-        //chinh validate so cua luong hop dong
-        number_contract: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
-        describe: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-        status: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-      });
-
-    }
-
-  ngOnInit(): void {    
+  ngOnInit(): void {
     //dungpt
     //gan data cho combobox
     this.loadedListComboBox();
@@ -86,75 +117,125 @@ export class AdminAddPackComponent implements OnInit {
     this.datas = this.data;
 
     //lay du lieu form cap nhat
-    if( this.data.id != null){
-      
-      console.log("this flag ", this.flagComboBoxTheThucTinh);
-      
-      this.adminPackService.getPackById(this.data.id).subscribe(
-        data => {
-          this.addForm = this.fbd.group({
-            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+    if (this.data.id != null) {
+      console.log('this flag ', this.flagComboBoxTheThucTinh);
 
-            totalBeforeVAT: this.fbd.control(data.totalBeforeVAT, [Validators.required, Validators.pattern(parttern_input.number_form)]),
-            totalAfterVAT: this.fbd.control(data.totalAfterVAT, [Validators.required, Validators.pattern(parttern_input.number_form)]),
-    
+      this.adminPackService.getPackById(this.data.id).subscribe(
+        (data) => {
+          this.addForm = this.fbd.group({
+            code: this.fbd.control(data.code, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            name: this.fbd.control(data.name, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+
+            totalBeforeVAT: this.fbd.control(data.totalBeforeVAT, [
+              Validators.required,
+              Validators.pattern(parttern_input.number_form),
+            ]),
+            totalAfterVAT: this.fbd.control(data.totalAfterVAT, [
+              Validators.required,
+              Validators.pattern(parttern_input.number_form),
+            ]),
+
             calc: this.convertCalc(data.calculatorMethod),
             type: this.convertType(data.type),
 
-            time: this.fbd.control(data.duration, [Validators.required, Validators.pattern(parttern_input.number_form)]),
-            number_contract: this.fbd.control(data.number_contract, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            time: this.fbd.control(data.duration),
+            number_contract: this.fbd.control(data.numberOfContracts),
 
-            describe: this.fbd.control(data.description, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            describe: this.fbd.control(data.description, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
 
             status: this.convertStatus(data.status),
           });
-    
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+
+          if(this.flagComboBoxTheThucTinh == 1) {
+            this.addForm.controls.time.setValidators([Validators.required, Validators.pattern(parttern_input.input_form)]);
+          } else if(this.flagComboBoxTheThucTinh == 2) {
+            this.addForm.controls.number_contract.setValidators([Validators.required, Validators.pattern(parttern_input.input_form)]);
+          }
+
+        },
+        (error) => {
+          this.toastService.showErrorHTMLWithTimeout(
+            'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
+            '',
+            3000
+          );
         }
-      )
+      );
 
-    //khoi tao form them moi
-    }else{
-      
+      //khoi tao form them moi
+    } else {
       this.addForm = this.fbd.group({
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        code: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        name: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
 
-        totalBeforeVAT: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
-        totalAfterVAT: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
+        totalBeforeVAT: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.number_form),
+        ]),
+        totalAfterVAT: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.number_form),
+        ]),
 
+        calc: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        type: this.fbd.control(''),
 
-        calc: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        type: this.fbd.control(""),
+        time: this.fbd.control({ value: '', disabled: true }, [
+          Validators.required,
+          Validators.pattern(parttern_input.number_form),
+        ]),
 
-        time: this.fbd.control({value: '',disabled: true}, [Validators.required, Validators.pattern(parttern_input.number_form)]),
-
-        number_contract: this.fbd.control({value: '',disabled: true}, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        describe: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
+        number_contract: this.fbd.control({ value: '', disabled: true }, [
+          Validators.required,
+          Validators.pattern(parttern_input.number_form),
+        ]),
+        describe: this.fbd.control('', [
+          Validators.pattern(parttern_input.number_form),
+        ]),
         status: 1,
       });
     }
   }
 
   convertType(type: any): number {
-    if(type == 'NORMAL') {
+    if (type == 'NORMAL') {
       return 1;
-    } else if(type == 'PROMOTION') {
+    } else if (type == 'PROMOTION') {
       return 2;
     }
     return 0;
   }
 
   convertCalc(calc: any): number {
-    if(calc == 'BY_TIME') {
+    if (calc == 'BY_TIME') {
       this.addForm.controls.number_contract.disable();
+
       this.flagComboBoxTheThucTinh = 1;
+
       return 1;
-    } else if(calc == 'BY_CONTRACT_NUMBERS') {
+    } else if (calc == 'BY_CONTRACT_NUMBERS') {
       this.addForm.controls.time.disable();
+
       this.flagComboBoxTheThucTinh = 2;
+
       return 2;
     }
 
@@ -171,31 +252,46 @@ export class AdminAddPackComponent implements OnInit {
     return -1;
   }
 
-  loadedListComboBox()  {
-   this.theThucTinh = theThucTinhList;
-   this.loaiGoi = loaiGoiDichVuList;
+  loadedListComboBox() {
+    this.theThucTinh = theThucTinhList;
+    this.loaiGoi = loaiGoiDichVuList;
   }
 
-  update(data:any){
+  update(data: any) {
     this.adminPackService.updatePack(data).subscribe(
-      data => {
-        this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
+      (data) => {
+        this.toastService.showSuccessHTMLWithTimeout(
+          'Cập nhật thông tin thành công!',
+          '',
+          3000
+        );
         this.dialogRef.close();
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-          this.router.navigate(['/admin-main/pack']);
-        });
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+        this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate(['/admin-main/pack']);
+          });
+      },
+      (error) => {
+        this.toastService.showErrorHTMLWithTimeout(
+          'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
+          '',
+          3000
+        );
       }
-    )
+    );
   }
 
   onSubmit() {
     this.submitted = true;
+
     // stop here if form is invalid
     if (this.addForm.invalid) {
+      console.log('invalid');
       return;
     }
+
+    console.log("time ", this.addForm.controls.time);
 
     let dataForm = {
       id: this.data.id,
@@ -208,38 +304,32 @@ export class AdminAddPackComponent implements OnInit {
       time: this.addForm.value.time,
       number_contract: this.addForm.value.number_contract,
       describe: this.addForm.value.describe,
-      status: this.addForm.value.status
-    }
+      status: this.addForm.value.status,
+    };
 
-    if(this.addForm.value.calc == 1) {
+    if (this.addForm.value.calc == 1) {
       dataForm.calc = 'BY_TIME';
-    } else if(this.addForm.value.calc == 2) {
+    } else if (this.addForm.value.calc == 2) {
       dataForm.calc = 'BY_CONTRACT_NUMBERS';
     }
 
-    if(this.addForm.value.type == 1) {
+    if (this.addForm.value.type == 1) {
       dataForm.type = 'NORMAL';
-    } else if(this.addForm.value.type == 2) {
+    } else if (this.addForm.value.type == 2) {
       dataForm.type = 'PROMOTION';
     }
 
-    if(this.addForm.value.status == 1) {
+    if (this.addForm.value.status == 1) {
       dataForm.status = 'ACTIVE';
-    } else if(this.addForm.value.status == 2) {
+    } else if (this.addForm.value.status == 2) {
       dataForm.status = 'IN_ACTIVE';
     }
 
-    console.log("number ",dataForm.number_contract)
-
     //truong hop sua ban ghi
-    if(this.data.id !=null && this.data.id != undefined){
-
+    if (this.data.id != null && this.data.id != undefined) {
       this.adminPackService.updatePack(dataForm).subscribe(
         (data) => {
           if (data.id != null && data.id != undefined) {
-            console.log('vao truong hop sua ban ghi');
-            console.log(data.status);
-
             this.toastService.showSuccessHTMLWithTimeout(
               'Cập nhật thành công!',
               '',
@@ -248,7 +338,7 @@ export class AdminAddPackComponent implements OnInit {
             this.router
               .navigateByUrl('/', { skipLocationChange: true })
               .then(() => {
-                this.router.navigate(['admin-main/unit']);
+                this.router.navigate(['admin-main/pack']);
               });
 
             this.dialog.closeAll();
@@ -259,7 +349,7 @@ export class AdminAddPackComponent implements OnInit {
                 '',
                 3000
               );
-            } 
+            }
           }
         },
         (error) => {
@@ -272,16 +362,15 @@ export class AdminAddPackComponent implements OnInit {
           );
         }
       );
-      
 
-    //truong hop them moi ban ghi
-    }else{
+      //truong hop them moi ban ghi
+    } else {
       this.adminPackService.addPack(dataForm).subscribe(
         (data) => {
           console.log('data add ');
           console.log(data);
 
-          if (data.id  != null && data.id != undefined) {
+          if (data.id != null && data.id != undefined) {
             this.toastService.showSuccessHTMLWithTimeout(
               'Thêm mới thành công!',
               '',
@@ -319,34 +408,41 @@ export class AdminAddPackComponent implements OnInit {
 
   //dungpt
   //Bat su kien khi combobox the thuc tinh thay doi
-  onChangeTheThucTinh(event :any) {
-    if(event.value == 1) {
+  onChangeTheThucTinh(event: any) {
+
+    console.log("event ", event);
+
+    if (event.value == 1) {
+      this.addForm.controls.time.setValidators([Validators.required, Validators.pattern(parttern_input.number_form)]);
+
       //Chon thoi gian
 
       this.addForm.controls.time.enable();
       this.addForm.controls.number_contract.disable();
 
-      this.numberContractName = "";
+      this.numberContractName = '';
 
+
+      console.log("vao day nhe event 1");
       this.flagComboBoxTheThucTinh = 1;
-    } else if(event.value == 2) {
+    } else if (event.value == 2) {
+      this.addForm.controls.number_contract.setValidators([Validators.required, Validators.pattern(parttern_input.number_form)]);
       //Chon so hop dong
 
       this.addForm.controls.number_contract.enable();
       this.addForm.controls.time.disable();
-      this.timeName = "";
+      this.timeName = '';
 
+
+      console.log("vao day nhe event 2");
       this.flagComboBoxTheThucTinh = 2;
     } else {
-
       this.addForm.controls.time.disable();
       this.addForm.controls.number_contract.disable();
-      this.numberContractName = "";
-      this.timeName = "";
+      this.numberContractName = '';
+      this.timeName = '';
 
       this.flagComboBoxTheThucTinh = 3;
-
     }
   }
-
 }

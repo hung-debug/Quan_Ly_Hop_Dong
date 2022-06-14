@@ -92,7 +92,8 @@ export class AdminPackService {
       status: datas.status
     });
 
-    return this.http.post<any>(this.listPackUrl + datas.id, { headers: headers });
+
+    return this.http.put<any>(this.listPackUrl + datas.id,body, { headers: headers });
   }
 
   checkNameUnique(data:any, name:any){
