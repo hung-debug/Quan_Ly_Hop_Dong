@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div *ngIf="this.adminUserRole === true" class="container-fluid">
     <div class="row">
       <div *ngIf="this.searchUserRole === true" class="col-md-3">
         <div>{{'Họ tên' | translate}}</div>
