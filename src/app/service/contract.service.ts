@@ -963,30 +963,6 @@ export class ContractService {
     return throwError(errorMessage);
   }
 
-  getDatermineRole3() {
-    return {
-      "name": "",
-      "type": 3, // Đối tác cá nhân
-      "ordering": 1,
-      "contract_id": 1,
-      "recipients": [
-        // người ký
-        {
-          "name": "",
-          "email": "",
-          "phone": "",
-          "role": 3, // người ký
-          "ordering": 1,
-          "status": 1,
-          "username": "",
-          "password": "",
-          "is_otp": 1,
-          "sign_type": []
-        }
-      ],
-    }
-  }
-
   getDataDetermine() {
     return [
       {
@@ -1000,11 +976,10 @@ export class ContractService {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
+            "card_id": "", // cccd người tham gia
             "role": 2, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
-            // "username": "", // username khi click từ link email
-            // "password": "", // pw click từ link email
             "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
             ]
@@ -1014,11 +989,10 @@ export class ContractService {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
+            "card_id": "", // cccd người tham gia
             "role": 3, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
-            // "username": "thangbt", // username khi click từ link email
-            // "password": "ad", // pw click từ link email
             "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
             ]
@@ -1028,17 +1002,15 @@ export class ContractService {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
+            "card_id": "", // cccd người tham gia
             "role": 4, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
-            // "username": "", // username khi click từ link email
-            // "password": "", // pw click từ link email
             "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
             ]
           },
         ],
-        // "contract_id": 1
       },
       // Đối tác
       // Tổ chức
@@ -1053,11 +1025,10 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "", // cccd người tham gia
             "role": 1, // người điều phối
             "ordering": 1,
             "status": 0,
-            // "username": "",
-            // "password": "",
             "is_otp": 0,
             "sign_type": []
           },
@@ -1066,11 +1037,10 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "", // cccd người tham gia
             "role": 2, // người xem xét
             "ordering": 1,
             "status": 0,
-            // "username": "",
-            // "password": "",
             "is_otp": 0,
             "sign_type": []
           },
@@ -1079,11 +1049,10 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "", // cccd người tham gia
             "role": 3, // người ký
             "ordering": 1,
             "status": 0,
-            // "username": "",
-            // "password": "",
             "is_otp": 0,
             "sign_type": []
           },
@@ -1092,38 +1061,15 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "", // cccd người tham gia
             "role": 4, // văn thư
             "ordering": 1,
             "status": 0,
-            // "username": "",
-            // "password": "",
             "is_otp": 0,
             "sign_type": []
           }
         ],
-        // "contract_id": 1
-      },
-      // {
-      //   "name": "",
-      //   "type": 3, // Đối tác cá nhân
-      //   "ordering": 1,
-      //   "contract_id": 1,
-      //   "recipients": [
-      //     // người ký
-      //     {
-      //       "name": "",
-      //       "email": "",
-      //       "phone": "",
-      //       "role": 3, // người ký
-      //       "ordering": 1,
-      //       "status": 1,
-      //       "username": "",
-      //       "password": "",
-      //       "is_otp": 1,
-      //       "sign_type": []
-      //     }
-      //   ],
-      // }
+      }
     ]
   }
 
@@ -1139,6 +1085,7 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "",
             "role": 3,
             "ordering": 1,
             "status": 0,
@@ -1158,6 +1105,7 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "",
             "role": 3,
             "ordering": 1,
             "status": 0,

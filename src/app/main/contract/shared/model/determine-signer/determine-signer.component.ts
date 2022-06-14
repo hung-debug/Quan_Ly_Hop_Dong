@@ -758,6 +758,7 @@ export class DetermineSignerComponent implements OnInit {
         name: "",
         email: "",
         phone: "",
+        card_id: "",
         role: 3, // người ký
         ordering: 1,
         status: 0,
@@ -889,6 +890,7 @@ export class DetermineSignerComponent implements OnInit {
           element.name = "";
           element.email = "";
           element.phone = "";
+          element.card_id = "";
           element.role = 3; // người ký
           element.ordering = 1;
           element.status = 0;

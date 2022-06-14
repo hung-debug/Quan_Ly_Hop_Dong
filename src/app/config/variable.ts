@@ -37,11 +37,11 @@ export const type_signature = [
     name: 'Ký số bằng sim PKI',
     is_otp: false,
   },
-  // {
-  //   id: 4,
-  //   name: "Ký số bằng HSM",
-  //   is_otp: false
-  // }
+  {
+    id: 4,
+    name: "Ký số bằng eKYC",
+    is_otp: false
+  }
 ];
 
 export const type_signature_personal_party = [
@@ -60,11 +60,11 @@ export const type_signature_personal_party = [
     name: 'Ký số bằng sim PKI',
     is_otp: false,
   },
-  // {
-  //   id: 4,
-  //   name: "Ký số bằng HSM",
-  //   is_otp: false
-  // }
+  {
+    id: 4,
+    name: "Ký số bằng eKYC",
+    is_otp: false
+  }
 ];
 
 export const type_signature_doc = [
@@ -78,6 +78,11 @@ export const type_signature_doc = [
     name: 'Ký số bằng USB token',
     is_otp: false,
   },
+  {
+    id: 4,
+    name: "Ký số bằng eKYC",
+    is_otp: false
+  }
 ];
 
 export var networkList = [
