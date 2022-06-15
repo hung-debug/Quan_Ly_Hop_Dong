@@ -58,19 +58,19 @@ export class AdminDetailUnitComponent implements OnInit {
       this.searchPackUnit();
   }
   searchPackUnit() {
-    const data = [
-      {
-        "name":"name",
-        "code":"code",
-        "time": "time",
-        "start_time": "start_time",
-        "status":"status",
-      }
-    ];
+    // const data = [
+    //   {
+    //     "name":"name",
+    //     "code":"code",
+    //     "time": "time",
+    //     "start_time": "start_time",
+    //     "status":"status",
+    //   }
+    // ];
 
-    this.list = data;
+    // this.list = data;
     
-    console.log("this list "+this.list)
+    // console.log("this list "+this.list)
   }
 
   detailPackUnit(id: any) {
@@ -91,10 +91,10 @@ export class AdminDetailUnitComponent implements OnInit {
     })
   }
 
-  addPack(id:any) {
+  addPack() {
     const data = {
       title: 'THÊM GÓI DỊCH VỤ CHO TỔ CHỨC',
-      id: id,
+      id: this.data.id,
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddPackUnitComponent, {

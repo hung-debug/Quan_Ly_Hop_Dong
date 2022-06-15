@@ -9,7 +9,13 @@
           {{ "Mã gói dịch vụ" | translate }}
           <span class="required-title">*</span>
         </div>
-        <p-dropdown placeholder="Chọn gói dịch vụ"> </p-dropdown>
+        <p-dropdown 
+        placeholder="Chọn gói dịch vụ"
+        [filter]="true"
+        filterBy="name"
+        [showClear]="true"
+        [options]="danhSachGoiDichVu"
+        > </p-dropdown>
       </div>
 
       <div class="col-md-6">
