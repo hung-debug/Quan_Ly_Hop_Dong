@@ -7,6 +7,7 @@ import {environment} from '../../../environments/environment';
 export class AdminPackService {
 
   listPackUrl: any = `${environment.apiUrl}/api/v1/admin/service-package/`;
+  listPackUrlComboBox: any = `${environment.apiUrl}/api/v1/admin/service-package/codes`;
 
   getPackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
   deletePackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
@@ -32,6 +33,18 @@ export class AdminPackService {
     '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status +  "&page=0"+ "&size=1000" +"&sort=name";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(listPackUrl, {headers}).pipe();
+  
+  }
+
+  getPackListComboBox(name:any, code:any, totalBeforeVAT:any,totalAfterVAT: any, duration:any, numberOfContracts:any, status:any){
+
+    console.log("status ",status);
+
+    this.getCurrentUser();
+    let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&totalBeforeVAT=' + totalBeforeVAT + '&totalAfterVAT='+totalAfterVAT+'&duration=' + duration.trim() + 
+    '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status +  "&page=0"+ "&size=1000" +"&sort=name";
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<any>(this.listPackUrlComboBox, {headers}).pipe();
   
   }
 
@@ -66,6 +79,7 @@ export class AdminPackService {
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(this.listPackUrl + id, {headers}).pipe();
   }
+
 
   deletePack(id:any){
     this.getCurrentUser();
@@ -124,4 +138,5 @@ export class AdminPackService {
       });
     return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
   }
+
 }
