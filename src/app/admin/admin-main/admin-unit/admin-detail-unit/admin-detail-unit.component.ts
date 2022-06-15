@@ -24,7 +24,7 @@ export class AdminDetailUnitComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
-    private unitService : UnitService,
+    private unitService : AdminUnitService,
     private toastService : ToastService,
     public dialogRef: MatDialogRef<AdminDetailUnitComponent>,
     public router: Router,
