@@ -94,12 +94,12 @@
                 <tr>
                     <td><a style="color: #0160AE; cursor: pointer" (click)="detailPackUnit(list.id)">{{list.name}}</a></td>
                     <td>{{list.code}}</td>
-                    <td>{{list.time}}</td>
-                    <td>{{list.start_time}}</td>
-                    <td>{{list.active==1?'Đang sử dụng':'Hết hạn'}}</td>
+                    <td>{{list.duration}}</td>
+                    <td>{{list.startDate}}</td>
+                    <td>{{list.usageStatus=='USING'?'Đang sử dụng':'Hết hạn'}}</td>
                     <td style="text-align: center">
-                      <img src="../../../assets/img/icon_delete.svg" width="16px" style="cursor: pointer;"/>&nbsp;&nbsp;
-                      <img src="../../../assets/img/icon_detail.svg" width="18px" style="cursor: pointer;"/>
+                        <img src="../../../assets/img/icon_edit.svg" width="20px" style="cursor: pointer;"/>&nbsp;&nbsp;
+                      <img src="../../../assets/img/icon_delete.svg" width="16px" style="cursor: pointer;"/>
                     </td>
                 </tr>
             </ng-template>

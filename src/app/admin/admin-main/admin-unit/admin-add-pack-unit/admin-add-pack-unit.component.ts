@@ -5,7 +5,7 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { parttern_input } from 'src/app/config/parttern';
+import {  paidStatusList, paidTypeList } from 'src/app/config/variable';
 import { AdminPackService } from 'src/app/service/admin/admin-pack.service';
 
 @Component({
@@ -17,6 +17,9 @@ export class AdminAddPackUnitComponent implements OnInit {
   datas: any;
   listCodeDichVu: any[];
   listDichVu: any[];
+  listPaidType:  Array<any> = [];
+  listStatusType:  Array<any> = [];
+
   namePack: string;
   totalBeforeVAT: string;
   totalAfterVAT: string;
@@ -24,6 +27,9 @@ export class AdminAddPackUnitComponent implements OnInit {
   numberOfContracts: string;
   calculatorMethod: string = "";
   type: string;
+  
+  statusType: string;
+  flagNgayThanhToan: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -41,6 +47,8 @@ export class AdminAddPackUnitComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.listPaidType = paidTypeList;
+    this.listStatusType = paidStatusList;
     this.getPackList();
   }
 
@@ -96,7 +104,14 @@ export class AdminAddPackUnitComponent implements OnInit {
       }
     }
 
-    console.log('id ', id);
+  }
+
+  onChangeStatus(event: any) {
+    if(event.value.id == "PAID") {
+      this.flagNgayThanhToan = true;
+    } else {
+      this.flagNgayThanhToan = false;
+    }
   }
 
   cancel() {

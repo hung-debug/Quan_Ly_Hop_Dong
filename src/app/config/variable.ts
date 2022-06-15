@@ -102,6 +102,16 @@ export var loaiGoiDichVuList = [
   { id: 2, name: 'Khuyến mại' },
 ];
 
+export var paidTypeList = [
+  {id: 'PRE', name:'Trả trước'},
+  {id:'POST', name:'Trả sau'}
+]
+
+export var paidStatusList = [
+  {id:'UNPAID', name:'Chưa thanh toán'},
+  {id:'PAID', name:'Đã thanh toán'}
+]
+
 // export var roleList = [
 //   {
 //     //Nhóm chức năng quản lý hợp đồng

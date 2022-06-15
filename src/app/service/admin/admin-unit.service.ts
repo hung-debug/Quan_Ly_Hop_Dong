@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class AdminUnitService {
-  listUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization`;
+  listUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
   activeUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
 
@@ -21,6 +21,16 @@ export class AdminUnitService {
   getCurrentUser() {
     this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').token;
   }
+
+  deleteUnit(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({});
+    return this.http.delete<any>(this.listUnitUrl + id, {'headers': headers});
+  }
+
 
   getUnitList(
     name: any,

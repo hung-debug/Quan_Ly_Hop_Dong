@@ -24,7 +24,6 @@ export class AdminDetailUnitComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
-    private unitService : AdminUnitService,
     private toastService : ToastService,
     public dialogRef: MatDialogRef<AdminDetailUnitComponent>,
     public router: Router,
@@ -36,7 +35,7 @@ export class AdminDetailUnitComponent implements OnInit {
 
     console.log("detai unit");
 
-    this.unitService.getUnitById(this.data.id).subscribe(
+    this.adminUnitService.getUnitById(this.data.id).subscribe(
       data => {
         console.log(data);
         this.datas = data;
@@ -49,9 +48,9 @@ export class AdminDetailUnitComponent implements OnInit {
     this.cols = [
       { field: 'name', header: 'Tên gói', style:'text-align: left;' },
       { field: 'code', header: 'Mã gói', style:'text-align: left;' },
-      { field: 'time', header: 'Thời gian', style:'text-align: left;' },
-      { field: 'start_time', header: 'Ngày bắt đầu', style:'text-align: left;' },
-      { field: 'status', header: 'Trạng thái', style:'text-align: left;' },
+      { field: 'duration', header: 'Thời gian', style:'text-align: left;' },
+      { field: 'startDate', header: 'Ngày bắt đầu', style:'text-align: left;' },
+      { field: 'usageStatus', header: 'Trạng thái sử dụng', style:'text-align: left;' },
       { field: 'id', header: 'unit.manage', style:'text-align: center;' },
       ]; 
       
@@ -71,6 +70,12 @@ export class AdminDetailUnitComponent implements OnInit {
     // this.list = data;
     
     // console.log("this list "+this.list)
+
+    this.adminUnitService.getUnitById(this.data.id).subscribe((response) => {
+      console.log("res ",response);
+      this.list = response.services;
+    })
+
   }
 
   detailPackUnit(id: any) {

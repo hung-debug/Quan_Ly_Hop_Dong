@@ -56,7 +56,7 @@
 
     <div class="row" style="padding-top: 10px">
       <div class="col-md-6">
-        <div class="label text-color">{{ "Thời gian *" | translate }}</div>
+        <div class="label text-color">{{ "Thời gian(tháng) *" | translate }}</div>
         <div class="input-data fff">
           <input type="text" value="{{duration}}" readonly />
         </div>
@@ -117,7 +117,12 @@
           {{ "Kiểu thanh toán" | translate }}
           <span class="required-title">*</span>
         </div>
-        <p-dropdown placeholder="Chọn kiểu thanh toán"> </p-dropdown>
+        <p-dropdown 
+        placeholder="Chọn kiểu thanh toán"
+        [options]="listPaidType"
+        optionLabel="name"
+        > 
+      </p-dropdown>
       </div>
     </div>
 
@@ -126,12 +131,18 @@
         <div class="label text-color">
           {{ "Trạng thái thanh toán *" | translate }}
         </div>
-        <p-dropdown placeholder="Chọn trạng thái"> </p-dropdown>
+        <p-dropdown 
+        placeholder="Chọn trạng thái"
+        optionLabel="name"
+        [options]="listStatusType"
+        (onChange)="onChangeStatus($event)"
+        > </p-dropdown>
       </div>
 
       <div class="col-md-6">
         <div class="label text-color">
-          {{ "Ngày thanh toán *" | translate }}
+          {{ "Ngày thanh toán " | translate }}
+          <span *ngIf="this.flagNgayThanhToan === true" class="required-title">*</span>
         </div>
         <p-calendar
           appendTo="body"

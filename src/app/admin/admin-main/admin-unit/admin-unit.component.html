@@ -93,6 +93,7 @@
             <img
               *ngIf="this.deleteUnitRole === true"
               src="../../../assets/img/icon_delete.svg"
+              (click)="deleteUnit(list.id)"
               width="16px"
               style="cursor: pointer"
             />
