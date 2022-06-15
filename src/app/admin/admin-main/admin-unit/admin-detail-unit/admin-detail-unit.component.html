@@ -1,123 +1,177 @@
 <div class="container-fluid">
-    <div class="header">
-      <h3 class="label-header">{{this.data.title | translate}}</h3>
+  <div class="header">
+    <h3 class="label-header">{{ this.data.title | translate }}</h3>
+  </div>
+  <div class="content">
+    <div class="label-header">{{ "THÔNG TIN CHI TIẾT" | translate }}</div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="label_item">{{ "unit.name" | translate }}</div>
+        <div>
+          <div [innerHTML]="datas.name" class="input_text"></div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="label_item">{{ "unit.code" | translate }}</div>
+        <div>
+          <div [innerHTML]="datas.code" class="input_text"></div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="label_item">{{ "unit.email" | translate }}</div>
+        <div>
+          <div [innerHTML]="datas.email" class="input_text"></div>
+        </div>
+      </div>
     </div>
-    <div class="content">
-        <div class="label-header">{{'THÔNG TIN CHI TIẾT' | translate}}</div>
-        <div class="row">  
-            <div class="col-md-4">  
-                <div class="label_item">{{'unit.name' | translate }}</div>
-                <div>
-                    <div [innerHTML]='datas.name' class="input_text"></div>
-                </div>
-            </div>
 
-            <div class="col-md-4">
-                <div class="label_item">{{'unit.code' | translate }}</div>
-                <div>
-                    <div [innerHTML]="datas.code" class="input_text"></div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="label_item">{{'unit.email' | translate }}</div>
-                <div>
-                    <div [innerHTML]="datas.email" class="input_text"></div>
-                </div>
-            </div>
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-4">
+        <div class="label_item">{{ "Mã số thuế" | translate }}</div>
+        <div>
+          <div [innerHTML]="datas.taxCode" class="input_text"></div>
         </div>
+      </div>
 
-        <div class="row" style="padding-top: 10px;">
-            <div class="col-md-4">
-                <div class="label_item">{{'Mã số thuế' | translate }}</div>
-                <div>
-                    <div [innerHTML]="datas.taxCode" class="input_text"></div>
-                </div>
-            </div>
-        
-            <div class="col-md-4">
-                <div class="label_item">{{'Chức vụ' | translate }}</div>
-                <div>
-                    <div [innerHTML]="datas.position" class="input_text"></div>
-                </div>
-            </div>
-            
-            <div class="col-md-4">
-                <div class="label_item">{{'Địa chỉ' | translate }}</div>
-                <div>
-                    <div [innerHTML]="datas.address" class="input_text"></div>
-                </div>
-            </div>
+      <div class="col-md-4">
+        <div class="label_item">{{ "Chức vụ" | translate }}</div>
+        <div>
+          <div [innerHTML]="datas.position" class="input_text"></div>
         </div>
+      </div>
 
-        <div class="row" style="padding-top: 10px;">
-            <div class="col-md-4">
-                <div class="label_item">{{'Người đại diện' | translate }}</div>
-                <div>
-                    <div [innerHTML]="datas.representative" class="input_text"></div>
-                </div>
-            </div>
-        
-            <div class="col-md-4">
-                <div class="label_item">{{'unit.phone' | translate }}</div>
-                <div>
-                    <div [innerHTML]="datas.phone" class="input_text"></div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="label_item">{{'unit.fax' | translate }}</div>
-                <div>
-                    <div [innerHTML]="datas.size" class="input_text"></div>
-                </div>
-            </div>
+      <div class="col-md-4">
+        <div class="label_item">{{ "Địa chỉ" | translate }}</div>
+        <div>
+          <div [innerHTML]="datas.address" class="input_text"></div>
         </div>
+      </div>
+    </div>
 
-        <div class="row" style="padding-top: 10px;">
-            <div class="col-md-6" style="align-self: center;">
-                <input type="radio" checked style="outline: none;">
-                <span> {{(datas.status=='ACTIVE'?'unit.active' : 'unit.inactive') | translate}}</span>
-            </div>
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-4">
+        <div class="label_item">{{ "Người đại diện" | translate }}</div>
+        <div>
+          <div [innerHTML]="datas.representative" class="input_text"></div>
         </div>
+      </div>
 
-
-        <div class="label-header" style="padding-top: 10px;">{{'THÔNG TIN GÓI DỊCH VỤ' | translate}}</div>
-        <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
-            <ng-template pTemplate="header" let-columns>
-              <tr>
-                  <th *ngFor="let col of cols" [style]='col.style'>
-                    {{col.header | translate}}
-                  </th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-list>
-                <tr>
-                    <td><a style="color: #0160AE; cursor: pointer" (click)="detailPackUnit(list.id)">{{list.name}}</a></td>
-                    <td>{{list.code}}</td>
-                    <td>{{list.duration}}</td>
-                    <td>{{list.startDate}}</td>
-                    <td>{{list.usageStatus=='USING'?'Đang sử dụng':'Hết hạn'}}</td>
-                    <td style="text-align: center">
-                        <img src="../../../assets/img/icon_edit.svg" width="20px" style="cursor: pointer;"/>&nbsp;&nbsp;
-                      <img src="../../../assets/img/icon_delete.svg" width="16px" style="cursor: pointer;"/>
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="paginatorleft" let-state>
-              <span style="color: white !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-            </ng-template>
-            <ng-template pTemplate="paginatorright" let-state>
-              <span style="color: #0160AE !important;">{{'chart.number' | translate}}: {{state.totalRecords > 0 ? state.first+1 : state.first}} - {{(state.first+state.rows)> state.totalRecords ? state.totalRecords : state.first+state.rows}} / {{state.totalRecords}}</span>
-            </ng-template> 
-        </p-table>
-
-        <div class="row" style="justify-content: right;">
-            <button class="btn btn-lg btn-block btn_submit" (click)="addPack()">{{'Thêm gói dịch vụ' | translate }}</button>
+      <div class="col-md-4">
+        <div class="label_item">{{ "unit.phone" | translate }}</div>
+        <div>
+          <div [innerHTML]="datas.phone" class="input_text"></div>
         </div>
+      </div>
 
-        <div class="row" style="justify-content: center;padding-top: 10px;">
-            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
+      <div class="col-md-4">
+        <div class="label_item">{{ "unit.fax" | translate }}</div>
+        <div>
+          <div [innerHTML]="datas.size" class="input_text"></div>
         </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-6" style="align-self: center">
+        <input type="radio" checked style="outline: none" />
+        <span>
+          {{
+            (datas.status == "ACTIVE" ? "unit.active" : "unit.inactive")
+              | translate
+          }}</span
+        >
+      </div>
+    </div>
+
+    <div class="label-header" style="padding-top: 10px">
+      {{ "THÔNG TIN GÓI DỊCH VỤ" | translate }}
+    </div>
+    <p-table
+      [value]="list"
+      [paginator]="true"
+      [rows]="15"
+      id="table"
+      [autoLayout]="true"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of cols" [style]="col.style">
+            {{ col.header | translate }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-list>
+        <tr>
+          <td>
+            <a
+              style="color: #0160ae; cursor: pointer"
+              (click)="detailPackUnit(list.serviceId)"
+              >{{ list.name }}</a
+            >
+          </td>
+          <td>{{ list.code }}</td>
+          <td>{{ list.duration }}</td>
+          <td>{{ list.startDate }}</td>
+          <td>
+            <span *ngIf="list.usageStatus == 'NOT_USED'">Chưa sử dụng</span>
+            <span *ngIf="list.usageStatus == 'USING'">Đang sử dụng</span>
+            <span *ngIf="list.usageStatus == 'FINISHED'">Đã kết thúc</span>
+            <span *ngIf="list.usageStatus == 'CANCELED'">Đã huỷ</span>
+          </td>
+          <td style="text-align: center">
+            <img
+            (click)="editUnitPack(list.serviceId)"
+              src="../../../assets/img/icon_edit.svg"
+              width="20px"
+              style="cursor: pointer"
+            />&nbsp;&nbsp;
+            <img
+            (click)="deleteUnitPack(list.serviceId)"
+              src="../../../assets/img/icon_delete.svg"
+              width="16px"
+              style="cursor: pointer"
+            />
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <span style="color: white !important"
+          >{{ "chart.number" | translate }}:
+          {{ state.totalRecords > 0 ? state.first + 1 : state.first }} -
+          {{
+            state.first + state.rows > state.totalRecords
+              ? state.totalRecords
+              : state.first + state.rows
+          }}
+          / {{ state.totalRecords }}</span
+        >
+      </ng-template>
+      <ng-template pTemplate="paginatorright" let-state>
+        <span style="color: #0160ae !important"
+          >{{ "chart.number" | translate }}:
+          {{ state.totalRecords > 0 ? state.first + 1 : state.first }} -
+          {{
+            state.first + state.rows > state.totalRecords
+              ? state.totalRecords
+              : state.first + state.rows
+          }}
+          / {{ state.totalRecords }}</span
+        >
+      </ng-template>
+    </p-table>
+
+    <div class="row" style="justify-content: right">
+      <button class="btn btn-lg btn-block btn_submit" (click)="addPack()">
+        {{ "Thêm gói dịch vụ" | translate }}
+      </button>
+    </div>
+
+    <div class="row" style="justify-content: center; padding-top: 10px">
+      <button class="cancel-button" (click)="dialog.closeAll()" type="button">
+        {{ "btn.close" | translate }}
+      </button>
     </div>
   </div>
-  
+</div>

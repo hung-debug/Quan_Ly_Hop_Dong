@@ -6,6 +6,7 @@ import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { AdminAddPackUnitComponent } from '../admin-add-pack-unit/admin-add-pack-unit.component';
+import { AdminDeletePackUnitComponent } from '../admin-delete-pack-unit/admin-delete-pack-unit.component';
 import { AdminDetailPackUnitComponent } from '../admin-detail-pack-unit/admin-detail-pack-unit.component';
 
 @Component({
@@ -57,20 +58,6 @@ export class AdminDetailUnitComponent implements OnInit {
       this.searchPackUnit();
   }
   searchPackUnit() {
-    // const data = [
-    //   {
-    //     "name":"name",
-    //     "code":"code",
-    //     "time": "time",
-    //     "start_time": "start_time",
-    //     "status":"status",
-    //   }
-    // ];
-
-    // this.list = data;
-    
-    // console.log("this list "+this.list)
-
     this.adminUnitService.getUnitById(this.data.id).subscribe((response) => {
       console.log("res ",response);
       this.list = response.services;
@@ -100,7 +87,52 @@ export class AdminDetailUnitComponent implements OnInit {
     const data = {
       title: 'THÊM GÓI DỊCH VỤ CHO TỔ CHỨC',
       id: this.data.id,
+      idPack: null
     };
+
+    console.log("add ",data.id);
+
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminAddPackUnitComponent, {
+      width: '600px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  deleteUnitPack(id: any) {
+    const data = {
+      title: 'XOÁ GÓI DỊCH VỤ CHO TỔ CHỨC',
+      id: this.data.id,
+      idPack: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminDeletePackUnitComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result;
+    });
+  }
+
+  editUnitPack(id: any) {
+    const data = {
+      title: 'SỬA GÓI DỊCH VỤ CHO TỔ CHỨC',
+      id: this.data.id,
+      idPack: id
+    };
+
+    console.log("edit ", data.idPack);
+
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddPackUnitComponent, {
       width: '600px',
