@@ -27,8 +27,16 @@ export class AdminUnitService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = JSON.stringify({});
     return this.http.delete<any>(this.listUnitUrl + id, {'headers': headers});
+  }
+
+  deletePackUnit(id: any, idPack: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({});
+    return this.http.delete<any>(this.listUnitUrl + id+"/service/register/"+idPack, {'headers': headers});
   }
 
 
@@ -151,5 +159,25 @@ export class AdminUnitService {
     console.log(body);
 
     return this.http.post<any>(this.addUnitUrl, body, { headers: headers });
+  }
+
+  addPackUnit(datas: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      serviceId: datas.idPack,
+      purchaseDate: datas.purchaseDate,
+      paymentDate: datas.paymentDate,
+      paymentType: datas.paymentType,
+      paymentStatus: datas.paymentStatus,
+      startDate: datas.startDate,
+      endDate: datas.endDate
+    });
+
+    return this.http.patch<any>(this.listUnitUrl+datas.id+"/service/register",body, { headers: headers });
   }
 }
