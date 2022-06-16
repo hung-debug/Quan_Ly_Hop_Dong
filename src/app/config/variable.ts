@@ -24,8 +24,13 @@ export const variable = {
 export const type_signature = [
   {
     id: 1,
-    name: 'Ký ảnh',
+    name: 'Ký ảnh và OTP',
     is_otp: false,
+  },
+  {
+    id: 5,
+    name: "Ký eKYC",
+    is_otp: false
   },
   {
     id: 2,
@@ -37,18 +42,19 @@ export const type_signature = [
     name: 'Ký số bằng sim PKI',
     is_otp: false,
   },
-  {
-    id: 4,
-    name: "Ký số bằng eKYC",
-    is_otp: false
-  }
+  
 ];
 
 export const type_signature_personal_party = [
   {
     id: 1,
-    name: 'Ký ảnh',
+    name: 'Ký ảnh và OTP',
     is_otp: false,
+  },
+  {
+    id: 5,
+    name: "Ký eKYC",
+    is_otp: false
   },
   {
     id: 2,
@@ -60,29 +66,24 @@ export const type_signature_personal_party = [
     name: 'Ký số bằng sim PKI',
     is_otp: false,
   },
-  {
-    id: 4,
-    name: "Ký số bằng eKYC",
-    is_otp: false
-  }
 ];
 
 export const type_signature_doc = [
   {
     id: 1,
-    name: 'Ký ảnh',
+    name: 'Ký ảnh và OTP',
     is_otp: false,
+  },
+  {
+    id: 5,
+    name: "Ký eKYC",
+    is_otp: false
   },
   {
     id: 2,
     name: 'Ký số bằng USB token',
     is_otp: false,
   },
-  {
-    id: 4,
-    name: "Ký số bằng eKYC",
-    is_otp: false
-  }
 ];
 
 export var networkList = [
