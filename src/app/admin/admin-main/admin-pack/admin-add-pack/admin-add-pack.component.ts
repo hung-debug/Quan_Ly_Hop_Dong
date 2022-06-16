@@ -208,7 +208,7 @@ export class AdminAddPackComponent implements OnInit {
           Validators.pattern(parttern_input.number_form),
         ]),
         describe: this.fbd.control('', [
-          Validators.pattern(parttern_input.number_form),
+          Validators.pattern(parttern_input.input_form),
         ]),
         status: 1,
       });
