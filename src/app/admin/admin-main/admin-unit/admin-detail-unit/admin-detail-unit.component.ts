@@ -66,7 +66,6 @@ export class AdminDetailUnitComponent implements OnInit {
   }
 
   detailPackUnit(id: any) {
-    console.log("id unit ", id);
     const data = {
       title: 'CHI TIẾT GÓI DỊCH VỤ CỦA TỔ CHỨC',
       id: id,

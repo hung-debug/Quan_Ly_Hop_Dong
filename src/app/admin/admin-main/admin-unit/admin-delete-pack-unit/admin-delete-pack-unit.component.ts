@@ -27,24 +27,24 @@ export class AdminDeletePackUnitComponent implements OnInit {
     console.log("t",this.data)
     this.adminUnitService.deletePackUnit(this.data.id, this.data.idPack).subscribe(
       data => {
-        this.toastService.showSuccessHTMLWithTimeout("Xóa tổ chức thành công!", "", 3000);
-        this.dialog.closeAll();
+        this.toastService.showSuccessHTMLWithTimeout("Xóa gói dịch vụ cho tổ chức thành công!", "", 3000);
+        // this.dialog.closeAll();
         
-        const dataForm = {
-          title: 'unit.information',
-          id: this.data.id,
-        };
-        // @ts-ignore
-        const dialogRef1 = this.dialog.open(AdminDetailUnitComponent, {
-          width: '80%',
-          height: '80%',
-          backdrop: 'static',
-          keyboard: false,
-          data,
-        });
-        dialogRef1.afterClosed().subscribe((result: any) => {
-          console.log('the close dialog');
-        });
+        // const dataForm = {
+        //   title: 'unit.information',
+        //   id: this.data.id,
+        // };
+        // // @ts-ignore
+        // const dialogRef1 = this.dialog.open(AdminDetailUnitComponent, {
+        //   width: '80%',
+        //   height: '80%',
+        //   backdrop: 'static',
+        //   keyboard: false,
+        //   data,
+        // });
+        // dialogRef1.afterClosed().subscribe((result: any) => {
+        //   console.log('the close dialog');
+        // });
           
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);

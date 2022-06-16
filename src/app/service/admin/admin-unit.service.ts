@@ -31,15 +31,19 @@ export class AdminUnitService {
   }
 
   deletePackUnit(id: any, idPack: any) {
+
     this.getCurrentUser();
+
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = JSON.stringify({});
-    return this.http.delete<any>(
-      this.listUnitUrl + id + '/service/register/' + idPack,
+
+    console.log("token ",this.token);
+
+    return this.http.patch<any>(
+      this.listUnitUrl + id + '/service/cancel/' + idPack, '',
       { headers: headers }
-    );
+    ).pipe();
   }
 
   getUnitList(
@@ -209,8 +213,6 @@ export class AdminUnitService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-
-    console.log('type ', JSON.stringify(datas.purchaseDate));
 
     const body = JSON.stringify({
       serviceId: datas.idPack,
