@@ -4,6 +4,8 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef} from "@angula
 import {Router} from "@angular/router";
 import {Observable, timer} from "rxjs";
 import {map, take} from "rxjs/operators";
+import { ContractService } from 'src/app/service/contract.service';
+import { ToastService } from 'src/app/service/toast.service';
 import {ImageDialogSignComponent} from "../image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.component";
 
@@ -12,58 +14,70 @@ import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.compone
   templateUrl: './confirm-sign-otp.component.html',
   styleUrls: ['./confirm-sign-otp.component.scss']
 })
-export class ConfirmSignOtpComponent implements OnInit {myForm: FormGroup;
+export class ConfirmSignOtpComponent implements OnInit {
+  addForm: FormGroup;
   datas: any;
-  counter$: Observable<number>;
+  c:any;
+  counter$: any;
   count = 120;
   isSentOpt = false;
+  submitted = false;
+  get f() { return this.addForm.controls; }
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {},
     public router: Router,
     public dialog: MatDialog,
     private fbd: FormBuilder,
     public dialogRef: MatDialogRef<ConfirmSignOtpComponent>,
-    private el: ElementRef
+    private el: ElementRef,
+    private contractService: ContractService,
+    private toastService: ToastService
   ) { }
 
 
 
   ngOnInit(): void {
     this.datas = this.data;
-    this.myForm = this.fbd.group({
-      name: this.fbd.control("", [Validators.required]),
-      email: this.fbd.control("", [Validators.required]),
+    this.addForm = this.fbd.group({
+      otp: this.fbd.control("", [Validators.required]),
     });
+    this.sendOtp(this.datas.recipient_id, this.datas.phone);
+    this.countTimeOtp();
   }
 
   onSubmit() {
-    let isSub = false;
-    const keyObj = [
-      {code: "name", name: 'Họ và tên'},
-      {code: "email", name: 'Email'},
-    ];
-    for (const key of Object.keys(this.myForm.controls)) {
-      if (this.myForm.controls[key].invalid) {
-        const keyError = keyObj.filter((item) => item.code === key)[0];
-        const invalidControl = this.el.nativeElement.querySelector('[formcontrolname="' + key + '"]');
-        alert(keyError.name + " " + 'không được để trống')
-        // Library.notify(keyError.name + " " + 'không được để trống', sEnum.statusApi.error);
-        invalidControl.focus();
-        isSub = true;
-        break;
-      }
+    this.submitted = true;
+    if (this.addForm.invalid) {
+      return;
     }
+    this.dialogRef.close(this.addForm.value.otp);
   }
 
   countTimeOtp() {
     this.isSentOpt = true;
     this.counter$ = timer(0,1000).pipe(
       take(this.count),
-      map(() => --this.count)
+      map(() => this.transform(--this.count))
     );
+    
   }
 
-  submitOtp() {
-    this.dialogRef.close(1);
+  transform(value: number): string {
+    const minutes: number = Math.floor(value / 60);
+    return minutes.toString().padStart(2, '0') + ':' + 
+        (value - minutes * 60).toString().padStart(2, '0');
+  }
+
+  sendOtp(recipient_id:any, phone:any){
+    this.contractService.sendOtpContractProcess(recipient_id, phone).subscribe(
+      data => {
+        if(!data.success){
+          this.toastService.showErrorHTMLWithTimeout('Lỗi gửi OTP', "", 3000);
+        }
+      
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi', "", 3000);
+      }
+    )
   }
 }

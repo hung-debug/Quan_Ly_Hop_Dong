@@ -84,6 +84,8 @@ export class ContractService {
   getCheckSign: any = `${environment.apiUrl}/api/v1/recipients/internal/`;
   deleteParticipantContractUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   changeStatusHandle: any = `${environment.apiUrl}/api/v1/recipients/`;
+  getSendOtpContractProcessUrl: any = `${environment.apiUrl}/api/v1/processes/approval/`;
+  updateInfoContractConsiderAndOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
 
   token: any;
   customer_id: any;
@@ -682,8 +684,9 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, { 'headers': headers });
-
+    //return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, { 'headers': headers });
+    
+    return this.http.put<any>(this.updateInfoContractConsiderAndOtpUrl + recipient_id, datas, { 'headers': headers });
   }
 
   updateInfoContractConsiderToPromise(datas: any, recipient_id: any) {
@@ -852,6 +855,15 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.delete<any>(this.deleteParticipantContractUrl + id, { headers });
+  }
+
+  sendOtpContractProcess(recipient_id:any, phone:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    
+    return this.http.post<any>(this.getSendOtpContractProcessUrl + recipient_id + '/gen-otp?phone=' + phone,'', { headers });
   }
 
   objDefaultSampleContract() {
