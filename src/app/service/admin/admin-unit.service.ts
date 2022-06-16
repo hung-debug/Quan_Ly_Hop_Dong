@@ -170,12 +170,12 @@ export class AdminUnitService {
 
     const body = JSON.stringify({
       serviceId: datas.idPack,
-      purchaseDate: "2022-06-15",
-      paymentDate: "2022-06-15",
-      paymentType: "PRE",
-      paymentStatus: "PAID",
-      startDate: "2022-06-15",
-      endDate: "2022-06-15"
+      purchaseDate: datas.purchaseDate,
+      paymentDate: datas.paymentDate,
+      paymentType: datas.paymentType,
+      paymentStatus: datas.paymentStatus,
+      startDate: datas.startDate,
+      endDate: datas.endDate
     });
 
     return this.http.patch<any>(this.listUnitUrl+datas.id+"/service/register",body, { headers: headers });
