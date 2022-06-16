@@ -6,7 +6,9 @@ import {environment} from '../../../environments/environment';
 })
 export class AdminPackService {
 
-  listPackUrl: any = `${environment.apiUrl}/api/v1/admin/service-package`;
+  listPackUrl: any = `${environment.apiUrl}/api/v1/admin/service-package/`;
+  listPackUrlComboBox: any = `${environment.apiUrl}/api/v1/admin/service-package/codes`;
+
   getPackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
   deletePackUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
   updatePackUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
@@ -22,20 +24,62 @@ export class AdminPackService {
     this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').token;
   }
 
-  getPackList(name:any, code:any, total:any, duration:any, numberOfContracts:any, status:any){
+  getPackList(name:any, code:any, totalBeforeVAT:any,totalAfterVAT: any, duration:any, numberOfContracts:any, status:any){
+
+    console.log("status ",status);
+
     this.getCurrentUser();
-    let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&total=' + total.trim() + '&duration=' + duration.trim() + 
-    '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status.trim() +  "&page=0"+ "&size=1000" +"&sort=name";
+    let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&totalBeforeVAT=' + totalBeforeVAT + '&totalAfterVAT='+totalAfterVAT+'&duration=' + duration.trim() + 
+    '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status +  "&page=0"+ "&size=1000" +"&sort=name";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(listPackUrl, {headers}).pipe();
   
   }
 
+  getPackListComboBox(name:any, code:any, totalBeforeVAT:any,totalAfterVAT: any, duration:any, numberOfContracts:any, status:any){
+
+    console.log("status ",status);
+
+    this.getCurrentUser();
+    let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&totalBeforeVAT=' + totalBeforeVAT + '&totalAfterVAT='+totalAfterVAT+'&duration=' + duration.trim() + 
+    '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status +  "&page=0"+ "&size=1000" +"&sort=name";
+    const headers = {'Authorization': 'Bearer ' + this.token}
+    return this.http.get<any>(this.listPackUrlComboBox, {headers}).pipe();
+  
+  }
+
+  addPack(datas: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      code: datas.code,
+      name: datas.name,
+      totalBeforeVAT: datas.totalBeforeVAT,
+      totalAfterVAT: datas.totalAfterVAT,
+      type: datas.type,
+      calculatorMethod: datas.calc,
+      duration: datas.time,
+      numberOfContracts: datas.number_contract,
+      description: datas.describe,
+      status: datas.status
+    });
+
+    console.log('body unit');
+    console.log(body);
+
+    return this.http.post<any>(this.listPackUrl, body, { headers: headers });
+  }
+
   getPackById(id:any){
     this.getCurrentUser();
     const headers = {'Authorization': 'Bearer ' + this.token}
-    return this.http.get<any>(this.getPackUrl + id, {headers}).pipe();
+    return this.http.get<any>(this.listPackUrl + id, {headers}).pipe();
   }
+
 
   deletePack(id:any){
     this.getCurrentUser();
@@ -43,7 +87,7 @@ export class AdminPackService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({});
-    return this.http.post<any>(this.deletePackUrl + id, body, {'headers': headers});
+    return this.http.delete<any>(this.listPackUrl + id, {'headers': headers});
   }
 
   updatePack(datas: any) {
@@ -51,20 +95,22 @@ export class AdminPackService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+
     const body = JSON.stringify({
-      name: datas.name,
-      short_name: datas.short_name,
       code: datas.code,
-      email: datas.email,
-      phone: datas.phone,
-      fax: datas.fax,
-      status: datas.status,
-      parent_id: datas.parent_id,
-      path: datas.path
+      name: datas.name,
+      totalBeforeVAT: datas.totalBeforeVAT,
+      totalAfterVAT: datas.totalAfterVAT,
+      type: datas.type,
+      calculatorMethod: datas.calc,
+      duration: datas.time,
+      numberOfContracts: datas.number_contract,
+      description: datas.describe,
+      status: datas.status
     });
-    console.log(headers);
-    console.log(body);
-    return this.http.put<any>(this.updatePackUrl + datas.id, body, {'headers': headers});
+
+
+    return this.http.put<any>(this.listPackUrl + datas.id,body, { headers: headers });
   }
 
   checkNameUnique(data:any, name:any){
@@ -92,4 +138,5 @@ export class AdminPackService {
       });
     return this.http.post<any>(this.checkCodeUniqueUrl, body, {headers}).pipe();
   }
+
 }

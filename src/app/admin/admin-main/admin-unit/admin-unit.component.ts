@@ -7,6 +7,7 @@ import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { AdminActiveUnitComponent } from './admin-active-unit/admin-active-unit.component';
 import { AdminAddUnitComponent } from './admin-add-unit/admin-add-unit.component';
+import { AdminDeleteUnitComponent } from './admin-delete-unit/admin-delete-unit.component';
 import { AdminDetailUnitComponent } from './admin-detail-unit/admin-detail-unit.component';
 import { AdminFilterUnitComponent } from './dialog/admin-filter-unit/admin-filter-unit.component';
 
@@ -225,10 +226,6 @@ export class AdminUnitComponent implements OnInit {
     });
   }
 
-  search() {
-    console.log('vao tim kiem');
-  }
-
   //Thêm mới tổ chức
   addUnit() {
     const data = {
@@ -254,6 +251,24 @@ export class AdminUnitComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddUnitComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result;
+    });
+  }
+
+  deleteUnit(id: any) {
+    const data = {
+      title: 'XOÁ TỔ CHỨC',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminDeleteUnitComponent, {
       width: '580px',
       backdrop: 'static',
       keyboard: false,

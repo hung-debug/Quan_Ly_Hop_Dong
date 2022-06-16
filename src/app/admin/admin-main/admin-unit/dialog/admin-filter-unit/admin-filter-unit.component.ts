@@ -41,8 +41,6 @@ export class AdminFilterUnitComponent implements OnInit {
     public dialogRef: MatDialogRef<AdminFilterUnitComponent>,
     public router: Router,
     public dialog: MatDialog,
-    private adminUnitService: AdminUnitService,
-    private toastService: ToastService
   ) {
     this.addForm = this.fbd.group({
       filter_representative: this.fbd.control(this.data.filter_representative),

@@ -1,27 +1,345 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+import { parttern_input } from 'src/app/config/parttern';
+import { paidStatusList, paidTypeList } from 'src/app/config/variable';
+import { AdminPackService } from 'src/app/service/admin/admin-pack.service';
+import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
+import { ToastService } from 'src/app/service/toast.service';
+import { AdminDetailUnitComponent } from '../admin-detail-unit/admin-detail-unit.component';
 
 @Component({
   selector: 'app-admin-add-pack-unit',
   templateUrl: './admin-add-pack-unit.component.html',
-  styleUrls: ['./admin-add-pack-unit.component.scss']
+  styleUrls: ['./admin-add-pack-unit.component.scss'],
 })
 export class AdminAddPackUnitComponent implements OnInit {
+  addForm: FormGroup;
 
   datas: any;
+  listCodeDichVu: any[];
+  listDichVu: any[];
+  listPaidType: Array<any> = [];
+  listStatusType: Array<any> = [];
+
+  namePack: string;
+  totalBeforeVAT: string;
+  totalAfterVAT: string;
+  duration: string;
+  numberOfContracts: string;
+  calculatorMethod: string = '';
+  type: string;
+
+  statusType: string;
+  flagNgayThanhToan: boolean = false;
+
+  idPack: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private fbd: FormBuilder,
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<AdminAddPackUnitComponent>,
-  ) { }
+    private adminUnitService: AdminUnitService,
+    private adminPackService: AdminPackService,
+    private toastService: ToastService
+  ) {
+    this.addForm = this.fbd.group({
+      packCode: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      namePack: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      totalBeforeVAT: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      totalAfterVAT: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      duration: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      numberOfContracts: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      type: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      calculatorMethod: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      purchaseDate: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      paymentType: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      paymentStatus: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      paymentDate: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      startDate: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+      endDate: this.fbd.control('', [
+        Validators.required,
+        Validators.pattern(parttern_input.input_form),
+      ]),
+    });
+  }
 
   ngOnInit(): void {
+    this.listPaidType = paidTypeList;
+    this.listStatusType = paidStatusList;
+    this.getPackList();
+
+    if(this.data.idPack == null) {
+      this.addForm = this.fbd.group({
+        packCode: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        namePack: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        totalBeforeVAT: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        totalAfterVAT: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        duration: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        numberOfContracts: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        type: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        calculatorMethod: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        purchaseDate: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        paymentType: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        paymentStatus: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        paymentDate: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        startDate: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+        endDate: this.fbd.control('', [
+          Validators.required,
+          Validators.pattern(parttern_input.input_form),
+        ]),
+      });
+    } else {
+      // this.addForm = this.fbd.group({
+      //   packCode: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   namePack: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   totalBeforeVAT: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   totalAfterVAT: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   duration: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   numberOfContracts: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   type: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   calculatorMethod: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   purchaseDate: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   paymentType: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   paymentStatus: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   paymentDate: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   startDate: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      //   endDate: this.fbd.control('', [
+      //     Validators.required,
+      //     Validators.pattern(parttern_input.input_form),
+      //   ]),
+      // });
+    }
+
+  }
+
+  getPackList(): any {
+    this.adminPackService
+      .getPackListComboBox('', '', '', '', '', '', '')
+      .subscribe((response) => {
+        const listCode: any[] = [];
+
+        console.log('response ', response);
+
+        this.listDichVu = response;
+
+        response.forEach((key: any) => {
+          listCode.push(key.code);
+        });
+
+        this.listCodeDichVu = listCode;
+      });
+  }
+
+  onChangeMaGoi(event: any) {
+    for (let i = 0; i < this.listDichVu.length; i++) {
+      if (this.listDichVu[i].code == event.value) {
+        this.idPack = this.listDichVu[i].id;
+        this.namePack = this.listDichVu[i].name;
+        this.totalBeforeVAT = this.listDichVu[i].totalBeforeVAT;
+        this.totalAfterVAT = this.listDichVu[i].totalAfterVAT;
+
+        if (this.listDichVu[i].calculatorMethod == 'BY_TIME') {
+          console.log('vao day thoi gian');
+          this.calculatorMethod = 'Theo thời gian';
+          this.duration = this.listDichVu[i].duration;
+          this.numberOfContracts = '';
+        } else if (
+          this.listDichVu[i].calculatorMethod == 'BY_CONTRACT_NUMBERS'
+        ) {
+          console.log('vao day so luong');
+          this.calculatorMethod = 'Theo số lượng hợp đồng';
+          this.numberOfContracts = this.listDichVu[i].numberOfContracts;
+          this.duration = '';
+        }
+
+        if (this.listDichVu[i].type == 'NORMAL') {
+          this.type = 'Bình thường';
+        } else if (this.listDichVu[i].type == 'PROMOTION') {
+          this.type = 'Khuyến mại';
+        }
+
+        break;
+      }
+    }
+  }
+
+  onChangeStatus(event: any) {
+    if (event.value.id == 'PAID') {
+      this.flagNgayThanhToan = true;
+    } else {
+      this.flagNgayThanhToan = false;
+    }
   }
 
   cancel() {
     this.dialogRef.close();
   }
 
+  addPackUnit() {
+    const dataForm = {
+      id: this.data.id,
+      idPack: this.idPack,
+      purchaseDate: this.addForm.value.purchaseDate,
+      paymentDate: this.addForm.value.paymentDate,
+      paymentType: this.addForm.value.paymentType,
+      paymentStatus: this.addForm.value.paymentStatus,
+      startDate: this.addForm.value.startDate,
+      endDate: this.addForm.value.endDate,
+    };
+
+    console.log('dataForm ', dataForm);
+
+    this.adminUnitService.addPackUnit(dataForm).subscribe((response) => {
+      if (response.id != null && response.id != undefined) {
+        this.toastService.showSuccessHTMLWithTimeout(
+          'Thêm mới thành công!',
+          '',
+          3000
+        );
+
+        // this.dialogRef.close();
+
+        this.dialog.closeAll();
+
+          const data = {
+            title: 'unit.information',
+            id: dataForm.id,
+          };
+          // @ts-ignore
+          const dialogRef1 = this.dialog.open(AdminDetailUnitComponent, {
+            width: '80%',
+            height: '80%',
+            backdrop: 'static',
+            keyboard: false,
+            data,
+          });
+          dialogRef1.afterClosed().subscribe((result: any) => {
+            console.log('the close dialog');
+          });
+      }
+    });
+  }
 }

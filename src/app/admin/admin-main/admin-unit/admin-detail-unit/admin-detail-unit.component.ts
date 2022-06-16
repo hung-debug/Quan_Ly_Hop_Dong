@@ -6,6 +6,7 @@ import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { AdminAddPackUnitComponent } from '../admin-add-pack-unit/admin-add-pack-unit.component';
+import { AdminDeletePackUnitComponent } from '../admin-delete-pack-unit/admin-delete-pack-unit.component';
 import { AdminDetailPackUnitComponent } from '../admin-detail-pack-unit/admin-detail-pack-unit.component';
 
 @Component({
@@ -24,7 +25,6 @@ export class AdminDetailUnitComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
-    private unitService : UnitService,
     private toastService : ToastService,
     public dialogRef: MatDialogRef<AdminDetailUnitComponent>,
     public router: Router,
@@ -36,7 +36,7 @@ export class AdminDetailUnitComponent implements OnInit {
 
     console.log("detai unit");
 
-    this.unitService.getUnitById(this.data.id).subscribe(
+    this.adminUnitService.getUnitById(this.data.id).subscribe(
       data => {
         console.log(data);
         this.datas = data;
@@ -49,28 +49,20 @@ export class AdminDetailUnitComponent implements OnInit {
     this.cols = [
       { field: 'name', header: 'Tên gói', style:'text-align: left;' },
       { field: 'code', header: 'Mã gói', style:'text-align: left;' },
-      { field: 'time', header: 'Thời gian', style:'text-align: left;' },
-      { field: 'start_time', header: 'Ngày bắt đầu', style:'text-align: left;' },
-      { field: 'status', header: 'Trạng thái', style:'text-align: left;' },
+      { field: 'duration', header: 'Thời gian', style:'text-align: left;' },
+      { field: 'startDate', header: 'Ngày bắt đầu', style:'text-align: left;' },
+      { field: 'usageStatus', header: 'Trạng thái sử dụng', style:'text-align: left;' },
       { field: 'id', header: 'unit.manage', style:'text-align: center;' },
       ]; 
       
       this.searchPackUnit();
   }
   searchPackUnit() {
-    const data = [
-      {
-        "name":"name",
-        "code":"code",
-        "time": "time",
-        "start_time": "start_time",
-        "status":"status",
-      }
-    ];
+    this.adminUnitService.getUnitById(this.data.id).subscribe((response) => {
+      console.log("res ",response);
+      this.list = response.services;
+    })
 
-    this.list = data;
-    
-    console.log("this list "+this.list)
   }
 
   detailPackUnit(id: any) {
@@ -91,11 +83,56 @@ export class AdminDetailUnitComponent implements OnInit {
     })
   }
 
-  addPack(id:any) {
+  addPack() {
     const data = {
       title: 'THÊM GÓI DỊCH VỤ CHO TỔ CHỨC',
-      id: id,
+      id: this.data.id,
+      idPack: null
     };
+
+    console.log("add ",data.id);
+
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminAddPackUnitComponent, {
+      width: '600px',
+      backdrop: 'static',
+      keyboard: false,
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
+  }
+
+  deleteUnitPack(id: any) {
+    const data = {
+      title: 'XOÁ GÓI DỊCH VỤ CHO TỔ CHỨC',
+      id: this.data.id,
+      idPack: id
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminDeletePackUnitComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result;
+    });
+  }
+
+  editUnitPack(id: any) {
+    const data = {
+      title: 'SỬA GÓI DỊCH VỤ CHO TỔ CHỨC',
+      id: this.data.id,
+      idPack: id
+    };
+
+    console.log("edit ", data.idPack);
+
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddPackUnitComponent, {
       width: '600px',

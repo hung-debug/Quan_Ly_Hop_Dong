@@ -458,7 +458,7 @@ export class AdminAddUnitComponent implements OnInit {
           console.log('data add ');
           console.log(data);
 
-          if (data.id != null || data.id != undefined) {
+          if (data.id != null && data.id != undefined) {
             this.toastService.showSuccessHTMLWithTimeout(
               'Thêm mới thành công!',
               '',
