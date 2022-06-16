@@ -281,6 +281,7 @@ export class AdminUnitComponent implements OnInit {
   }
 
   detailUnit(id: any) {
+    console.log("id unit ", id);
     if (this.infoUnitRole === true) {
       const data = {
         title: 'unit.information',

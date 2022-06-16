@@ -173,67 +173,114 @@ export class AdminAddPackUnitComponent implements OnInit {
         ]),
       });
     } else {
-      // this.addForm = this.fbd.group({
-      //   packCode: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   namePack: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   totalBeforeVAT: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   totalAfterVAT: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   duration: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   numberOfContracts: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   type: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   calculatorMethod: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   purchaseDate: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   paymentType: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   paymentStatus: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   paymentDate: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   startDate: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   endDate: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      // });
+      console.log("vao form cap nhat");
+      
+      this.adminUnitService.getPackUnitByIdPack(this.data.id, this.data.idPack).subscribe((response) => {
+        console.log("res ",response);
+        
+        this.addForm = this.fbd.group({
+          packCode: this.fbd.control(response.code, [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          namePack: this.fbd.control(response.name, [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          totalBeforeVAT: this.fbd.control(response.totalBeforeVAT, [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          totalAfterVAT: this.fbd.control(response.totalAfterVAT, [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          duration: this.fbd.control(response.duration, [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          numberOfContracts: this.fbd.control(response.numberOfContracts, [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          type: this.fbd.control(this.convertServiceType(response.serviceType), [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          calculatorMethod: this.fbd.control(this.convertCalculatorMethod(response.calculatorMethod), [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          purchaseDate: this.fbd.control(new Date(response.purchaseDate), [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          paymentType: this.fbd.control(this.convertPaymentType(response.paymentType), [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          paymentStatus: this.fbd.control(this.convertPaymentStatus(response.paymentStatus), [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          paymentDate: this.fbd.control(this.getPaymentDate(response.paymentDate), [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          startDate: this.fbd.control(new Date(response.startDate), [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+          endDate: this.fbd.control(new Date(response.endDate), [
+            Validators.required,
+            Validators.pattern(parttern_input.input_form),
+          ]),
+        });
+      })
     }
 
   }
+  convertCalculatorMethod(calculatorMethod: string): string {
+    if(calculatorMethod == "BY_TIME") {
+      return "Theo thời gian";
+    } else if(calculatorMethod == "BY_CONTRACT_NUMBERS") {
+      return "Theo số lượng hợp đồng";
+    }
+    return "";
+  }
+  convertServiceType(serviceType: string): string {
+    if(serviceType == "NORMAL") {
+      return "Bình thường";
+    } else if(serviceType == "PROMOTION") {
+      return "Khuyến mại";
+    }
+    return "";
+  }
+  getPaymentDate(paymentDate: any): any {
+    if(paymentDate != null) {
+      return new Date(paymentDate);
+    }
+    console.log("ngay thang toan null");
+    return null;
+  }
+  convertPaymentStatus(paymentStatus: string): any {
+    if(paymentStatus == paidStatusList[0].id) {
+      return paidStatusList[0];
+    } else if(paymentStatus == paidStatusList[1].id) {
+      return paidStatusList[1];
+    }
+    return "";
+  }
+
+  convertPaymentType(paymentType: string): any {
+    if(paymentType ==  paidTypeList[0].id) {
+      return paidTypeList[0];
+    } else if(paymentType ==  paidTypeList[1].id) {
+      return paidTypeList[1];
+    }
+    return "";
+  }
+ 
 
   getPackList(): any {
     this.adminPackService

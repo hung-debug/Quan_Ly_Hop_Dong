@@ -13,7 +13,7 @@ export class AdminUnitService {
 
   updateUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
-  getUnitByIdUrl : any = `${environment.apiUrl}/api/v1/admin/organization/`;
+  getUnitByIdUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
   constructor(private http: HttpClient) {}
 
@@ -27,7 +27,7 @@ export class AdminUnitService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.delete<any>(this.listUnitUrl + id, {'headers': headers});
+    return this.http.delete<any>(this.listUnitUrl + id, { headers: headers });
   }
 
   deletePackUnit(id: any, idPack: any) {
@@ -36,9 +36,11 @@ export class AdminUnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({});
-    return this.http.delete<any>(this.listUnitUrl + id+"/service/register/"+idPack, {'headers': headers});
+    return this.http.delete<any>(
+      this.listUnitUrl + id + '/service/register/' + idPack,
+      { headers: headers }
+    );
   }
-
 
   getUnitList(
     name: any,
@@ -52,7 +54,7 @@ export class AdminUnitService {
   ) {
     this.getCurrentUser();
 
-    console.log("status");
+    console.log('status');
     console.log(status);
 
     let listUnitUrl =
@@ -70,12 +72,11 @@ export class AdminUnitService {
       '&status=' +
       status +
       '&page=0' +
-      '&size=1000'+
-      '&sort=name'
-      ;
-    const headers = { 'Authorization': 'Bearer ' + this.token };
+      '&size=1000' +
+      '&sort=name';
+    const headers = { Authorization: 'Bearer ' + this.token };
 
-    console.log("vao api tim kiem");
+    console.log('vao api tim kiem');
 
     return this.http.get<any>(listUnitUrl, { headers }).pipe();
   }
@@ -92,33 +93,34 @@ export class AdminUnitService {
   }
 
   updateUnitt(datas: any) {
-
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-      console.log("upate unit service");
-      console.log(datas.id);
+    console.log('upate unit service');
+    console.log(datas.id);
 
-      const body = JSON.stringify({
-        name: datas.name,
-        code: datas.code,
-        taxCode: datas.taxCode,
-        shortName: datas.shortName,
-        address: datas.address,
-        email: datas.email,
-        representative: datas.representative,
-        position: datas.position,
-        size: datas.size,
-        phone: datas.phone,
-        status: datas.status,
-      });
+    const body = JSON.stringify({
+      name: datas.name,
+      code: datas.code,
+      taxCode: datas.taxCode,
+      shortName: datas.shortName,
+      address: datas.address,
+      email: datas.email,
+      representative: datas.representative,
+      position: datas.position,
+      size: datas.size,
+      phone: datas.phone,
+      status: datas.status,
+    });
 
-      // console.log("id ");
-      // console.log(datas);
+    // console.log("id ");
+    // console.log(datas);
 
-      return this.http.put<any>(this.addUnitUrl + datas.id, body, { headers: headers });
+    return this.http.put<any>(this.addUnitUrl + datas.id, body, {
+      headers: headers,
+    });
   }
 
   getUnitById(id: any) {
@@ -127,12 +129,23 @@ export class AdminUnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    console.log(headers);
-    return this.http.get<any>(this.getUnitByIdUrl + id, {'headers': headers});
+    return this.http.get<any>(this.getUnitByIdUrl + id, { headers: headers });
+  }
+
+  getPackUnitByIdPack(id: any, idPack: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.get<any>(
+      this.listUnitUrl + id + '/service/detail/' + idPack,
+      { headers: headers }
+    );
   }
 
   addUnit(datas: any) {
-    console.log("datas");
+    console.log('datas');
     console.log(datas);
 
     this.getCurrentUser();
@@ -168,19 +181,24 @@ export class AdminUnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-      console.log("type ", JSON.stringify(datas.purchaseDate));
+    console.log('type ', JSON.stringify(datas.purchaseDate));
 
     const body = JSON.stringify({
       serviceId: datas.idPack,
-      purchaseDate: JSON.stringify(datas.purchaseDate).substring(1,11),
+      purchaseDate: JSON.stringify(datas.purchaseDate).substring(1, 11),
       paymentType: datas.paymentType.id,
       paymentStatus: datas.paymentStatus.id,
-      startDate: JSON.stringify(datas.purchaseDate).substring(1,11),
-      endDate: JSON.stringify(datas.purchaseDate).substring(1,11)
+      startDate: JSON.stringify(datas.purchaseDate).substring(1, 11),
+      endDate: JSON.stringify(datas.purchaseDate).substring(1, 11),
+      paymentDate: JSON.stringify(datas.purchaseDate).substring(1, 11),
     });
 
-    console.log("body ", body);
+    console.log('body ', body);
 
-    return this.http.patch<any>(this.listUnitUrl+datas.id+"/service/register",body, { headers: headers });
+    return this.http.patch<any>(
+      this.listUnitUrl + datas.id + '/service/register',
+      body,
+      { headers: headers }
+    );
   }
 }
