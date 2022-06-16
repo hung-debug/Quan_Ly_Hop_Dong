@@ -221,7 +221,7 @@ export class AdminUnitService {
       paymentStatus: datas.paymentStatus.id,
       startDate: JSON.stringify(datas.startDate).substring(1, 11),
       endDate: JSON.stringify(datas.endDate).substring(1, 11),
-      paymentDate: JSON.stringify(datas.paymentDate).substring(1, 11),
+      paymentDate: datas.paymentDate,
     });
 
     console.log('body ', body);
