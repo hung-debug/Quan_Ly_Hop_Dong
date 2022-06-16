@@ -7,30 +7,30 @@
             <div class="col-md-6">  
                 <div class="label_item">{{'Mã gói dịch vụ' | translate }}</div>
                 <div>
-                    <div [innerHTML]="this.datas?.name" class="input_text"></div>
+                    <div [innerHTML]="this.datas?.code" class="input_text"></div>
                 </div>
             </div>
         
             <div class="col-md-6">
                 <div class="label_item">{{'Tên gói dịch vụ' | translate }}</div>
                 <div>
-                    <div [innerHTML]="this.datas?.short_name" class="input_text"></div>
+                    <div [innerHTML]="this.datas?.name" class="input_text"></div>
                 </div>
             </div>
         </div>
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label_item">{{'Đơn giá (VND)' | translate }}</div>
+                <div class="label_item">{{'Đơn giá trước VAT (VND)' | translate }}</div>
                 <div>
-                    <div [innerHTML]="this.datas?.code" class="input_text"></div>
+                    <div [innerHTML]="this.datas?.totalBeforeVAT" class="input_text"></div>
                 </div>
             </div>
         
             <div class="col-md-6">
-                <div class="label_item">{{'Thể thức tính' | translate }}</div>
+                <div class="label_item">{{'Đơn giá sau VAT (VND)' | translate }}</div>
                 <div>
-                    <div [innerHTML]="this.datas?.email" class="input_text"></div>
+                    <div [innerHTML]="this.datas?.totalAfterVAT" class="input_text"></div>
                 </div>
             </div>
         </div>
@@ -39,14 +39,14 @@
             <div class="col-md-6">
                 <div class="label_item">{{'Loại gói dịch vụ' | translate }}</div>
                 <div>
-                    <div [innerHTML]="this.datas?.parent_id" class="input_text"></div>
+                    <div [innerHTML]="this.packList()" class="input_text"></div>
                 </div>
             </div>
         
             <div class="col-md-6">
-                <div class="label_item">{{'Điều kiện áp dụng' | translate }}</div>
+                <div class="label_item">{{'Thể thức tính' | translate }}</div>
                 <div>
-                    <div [innerHTML]="this.datas?.phone" class="input_text"></div>
+                    <div [innerHTML]="this.calculatorMethodList()" class="input_text"></div>
                 </div>
             </div>
         </div>
@@ -55,14 +55,14 @@
             <div class="col-md-6">
                 <div class="label_item">{{'Thời gian' | translate }}</div>
                 <div>
-                    <div [innerHTML]="this.datas?.fax" class="input_text"></div>
+                    <div [innerHTML]="this.datas?.duration" class="input_text"></div>
                 </div>
             </div>
         
             <div class="col-md-6">
                 <div class="label_item">{{'Số lượng hợp đồng' | translate }}</div>
                 <div>
-                    <div [innerHTML]="this.datas?.fax" class="input_text"></div>
+                    <div [innerHTML]="this.datas?.numberOfContracts" class="input_text"></div>
                 </div>
             </div>
         </div>
@@ -71,13 +71,13 @@
             <div class="col-md-6">
                 <div class="label_item">{{'Mô tả' | translate }}</div>
                 <div>
-                    <div [innerHTML]="this.datas?.fax" class="input_text"></div>
+                    <div [innerHTML]="this.datas?.description" class="input_text"></div>
                 </div>
             </div>
         
             <div class="col-md-6" style="align-self: center;">
                 <input type="radio" checked style="outline: none;">
-                <span> {{(this.datas?.status==1?'unit.active' : 'unit.inactive') | translate}}</span>
+                <span> {{(this.datas?.status=='ACTIVE'?'unit.active' : 'unit.inactive') | translate}}</span>
             </div>
         </div>
     

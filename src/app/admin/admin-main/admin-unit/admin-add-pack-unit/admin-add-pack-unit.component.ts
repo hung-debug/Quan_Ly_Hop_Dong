@@ -39,6 +39,8 @@ export class AdminAddPackUnitComponent implements OnInit {
 
   idPack: any;
 
+  submitted = false;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
@@ -108,6 +110,10 @@ export class AdminAddPackUnitComponent implements OnInit {
     });
   }
 
+  get f() {
+    return this.addForm.controls;
+  }
+
   ngOnInit(): void {
     this.listPaidType = paidTypeList;
     this.listStatusType = paidStatusList;
@@ -172,6 +178,8 @@ export class AdminAddPackUnitComponent implements OnInit {
           Validators.pattern(parttern_input.input_form),
         ]),
       });
+      
+      console.log("date ", this.addForm.value.purchaseDate);
     } else {
       console.log("vao form cap nhat");
       
@@ -346,6 +354,8 @@ export class AdminAddPackUnitComponent implements OnInit {
   }
 
   onSubmit() {
+    this.submitted = true;
+
     const dataForm = {
       id: this.data.id,
       idPack: this.idPack,
@@ -356,6 +366,9 @@ export class AdminAddPackUnitComponent implements OnInit {
       startDate: this.addForm.value.startDate,
       endDate: this.addForm.value.endDate,
     };
+
+    console.log("date submit ",dataForm.purchaseDate);
+
     if(this.data.idPack == null) {
       this.addPackUnit(dataForm);
     } else {

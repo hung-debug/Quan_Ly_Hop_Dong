@@ -19,6 +19,11 @@
           formControlName="packCode"
         >
         </p-dropdown>
+        <div *ngIf="submitted && f.packCode.errors" class="invalid">
+          <div *ngIf="f.packCode.errors.required">
+            {{ "Mã gói không được để trống" | translate }}
+          </div>
+        </div>
       </div>
 
       <div class="col-md-6">
@@ -109,6 +114,11 @@
           #created_at
           formControlName="purchaseDate"
         >
+        <div *ngIf="submitted && f.purchaseDate.errors" class="invalid">
+          <div *ngIf="f.purchaseDate.errors.required">
+            {{ "Ngày mua gói không được để trống" | translate }}
+          </div>
+        </div>
         </p-calendar>
       </div>
 
