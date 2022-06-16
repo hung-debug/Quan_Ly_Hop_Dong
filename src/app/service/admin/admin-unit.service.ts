@@ -168,15 +168,18 @@ export class AdminUnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
+      console.log("type ", JSON.stringify(datas.purchaseDate));
+
     const body = JSON.stringify({
       serviceId: datas.idPack,
-      purchaseDate: datas.purchaseDate,
-      paymentDate: datas.paymentDate,
-      paymentType: datas.paymentType,
-      paymentStatus: datas.paymentStatus,
-      startDate: datas.startDate,
-      endDate: datas.endDate
+      purchaseDate: JSON.stringify(datas.purchaseDate).substring(1,11),
+      paymentType: datas.paymentType.id,
+      paymentStatus: datas.paymentStatus.id,
+      startDate: JSON.stringify(datas.purchaseDate).substring(1,11),
+      endDate: JSON.stringify(datas.purchaseDate).substring(1,11)
     });
+
+    console.log("body ", body);
 
     return this.http.patch<any>(this.listUnitUrl+datas.id+"/service/register",body, { headers: headers });
   }
