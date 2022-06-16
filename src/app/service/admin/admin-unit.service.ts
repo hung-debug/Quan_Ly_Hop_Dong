@@ -123,6 +123,35 @@ export class AdminUnitService {
     });
   }
 
+  updatePackUnit(datas: any, idPack: any
+    ) {
+    this.getCurrentUser();
+
+    console.log("end date ", datas.endDate.toLocaleDateString("fr-CA"));
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+      const body = JSON.stringify({
+        serviceId: idPack,
+        purchaseDate: datas.purchaseDate.toLocaleDateString("fr-CA"),
+        paymentType: datas.paymentType.id,
+        paymentStatus: datas.paymentStatus.id,
+        startDate: datas.startDate.toLocaleDateString("fr-CA"),
+        endDate: datas.endDate.toLocaleDateString("fr-CA"),
+        paymentDate: datas.paymentDate.toLocaleDateString("fr-CA"),
+      });
+
+    console.log('body ', body);
+
+    return this.http.patch<any>(
+      this.listUnitUrl + datas.id + '/service/register/',
+      body,
+      { headers: headers }
+    );
+  }
+
   getUnitById(id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -188,9 +217,9 @@ export class AdminUnitService {
       purchaseDate: JSON.stringify(datas.purchaseDate).substring(1, 11),
       paymentType: datas.paymentType.id,
       paymentStatus: datas.paymentStatus.id,
-      startDate: JSON.stringify(datas.purchaseDate).substring(1, 11),
-      endDate: JSON.stringify(datas.purchaseDate).substring(1, 11),
-      paymentDate: JSON.stringify(datas.purchaseDate).substring(1, 11),
+      startDate: JSON.stringify(datas.startDate).substring(1, 11),
+      endDate: JSON.stringify(datas.endDate).substring(1, 11),
+      paymentDate: JSON.stringify(datas.paymentDate).substring(1, 11),
     });
 
     console.log('body ', body);

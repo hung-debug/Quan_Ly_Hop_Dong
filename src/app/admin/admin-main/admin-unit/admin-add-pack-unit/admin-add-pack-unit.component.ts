@@ -345,7 +345,7 @@ export class AdminAddPackUnitComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  addPackUnit() {
+  onSubmit() {
     const dataForm = {
       id: this.data.id,
       idPack: this.idPack,
@@ -356,7 +356,47 @@ export class AdminAddPackUnitComponent implements OnInit {
       startDate: this.addForm.value.startDate,
       endDate: this.addForm.value.endDate,
     };
+    if(this.data.idPack == null) {
+      this.addPackUnit(dataForm);
+    } else {
+      this.updatePackUnit(dataForm);
+    }
+  }
 
+  updatePackUnit(dataForm: any) {
+    console.log("ngay ket thuc ",this.addForm.value.endDate);
+    this.adminUnitService.updatePackUnit(dataForm, this.data.idPack).subscribe((response) => {
+
+      console.log("res ", response);
+
+      if (response.id != null && response.id != undefined) {
+        this.toastService.showSuccessHTMLWithTimeout(
+          'Cập nhật thành công!',
+          '',
+          3000
+        );
+        this.dialog.closeAll();
+
+          const data = {
+            title: 'unit.information',
+            id: dataForm.id,
+          };
+          // @ts-ignore
+          const dialogRef1 = this.dialog.open(AdminDetailUnitComponent, {
+            width: '80%',
+            height: '80%',
+            backdrop: 'static',
+            keyboard: false,
+            data,
+          });
+          dialogRef1.afterClosed().subscribe((result: any) => {
+            console.log('the close dialog');
+          });
+      }
+    });
+  }
+
+  addPackUnit(dataForm: any) {
     console.log('dataForm ', dataForm);
 
     this.adminUnitService.addPackUnit(dataForm).subscribe((response) => {
