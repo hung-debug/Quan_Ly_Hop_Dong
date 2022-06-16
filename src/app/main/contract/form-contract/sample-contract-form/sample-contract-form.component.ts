@@ -253,7 +253,7 @@ export class SampleContractFormComponent implements OnInit {
   //       //     res.email = res.recipient.email;
   //       //     dataPosition.push(res);
   //       //   })
-  //       // } 
+  //       // }
 
   //       if (data_duplicate) {
   //         // defind dữ liệu tọa độ chữ ký
@@ -352,9 +352,13 @@ export class SampleContractFormComponent implements OnInit {
     let dataDiffirent: any[] = [];
     if (dataDetermine.length > 0) {
       dataDiffirent = dataContractUserSign.filter((val: any) => !dataDetermine.some((data: any) =>
-        ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) || (val.sign_unit == 'so_tai_lieu' && data.role == 4) ||
+        ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) ||
+          (val.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
+          (val.sign_unit == 'so_tai_lieu' && data.role == 4) ||
           (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-        ((val.recipient ? (val.recipient.name == data.name && ((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : (((val.name && val.name == data.name) || !val.name || (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email)))
+        ((val.recipient ? (val.recipient.name == data.name && ((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : (((val.name && val.name == data.name) ||
+            !val.name ||
+            (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email)))
         )));
     }
 
@@ -364,22 +368,18 @@ export class SampleContractFormComponent implements OnInit {
         (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
       ((val.recipient ? (val.recipient.name == data.name && ((val.recipient.email && val.recipient.email == data.email) || !val.recipient.email)) : (((val.name && val.name == data.name) || !val.name || (val.sign_unit == 'text' && !val.recipient_id)) && ((val.email && val.email == data.email) || !val.email))
       ))));
-    // 
+    //
     // }
-
-
 
     // xoa nhung du lieu doi tuong thay doi khi sua, remove element when change data step 2
 
     if (dataDiffirent.length > 0 && this.router.url.includes('edit')) {
-
       this.datasForm.contract_user_sign.forEach((res: any) => {
         if (res.sign_config.length > 0) {
           /*
           * begin xóa đối tượng ký đã bị thay đổi dữ liệu
           */
           res.sign_config.forEach((element: any) => {
-            
             if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id && p.id_have_data == element.id_have_data)) {
               if (dataDetermine.some((p: any) => p.id == element.recipient_id)) {
                 this.removeDataSignChange(element.id_have_data);
@@ -393,7 +393,6 @@ export class SampleContractFormComponent implements OnInit {
       })
     }
 
-
     this.datasForm.contract_user_sign.forEach((resForm: any) => {
       if (resForm.sign_config.length > 0) {
         // resForm.sign_config = resForm.sign_config.filter((val: any) =>
@@ -405,7 +404,7 @@ export class SampleContractFormComponent implements OnInit {
 
         let arrConfig = [];
         arrConfig = resForm.sign_config.filter((val: any) =>
-          dataContractUserSign.some((data) => data.sign_unit == val.sign_unit &&
+          !val.recipient_id || dataContractUserSign.some((data) => data.sign_unit == val.sign_unit &&
             (val.recipient ? val.recipient.name : val.name) == (data.recipient ? data.recipient.name : data.name) &&
             (val.recipient ? val.recipient.email : val.email) == (data.recipient ? data.recipient.email : data.email))
         )
@@ -424,7 +423,7 @@ export class SampleContractFormComponent implements OnInit {
         })
       }
     })
-    // 
+    //
     if (this.isNoEmailObj) {
       // lấy ra người ký từ mẫu chưa có email để gán lại
       let dataNoEmail: any[] = [];
@@ -1399,7 +1398,7 @@ export class SampleContractFormComponent implements OnInit {
           }
       }
 
-      if (coutError) return; 
+      if (coutError) return;
 
       if (action == 'save_draft') {
         if (this.router.url.includes("edit")) {
@@ -1579,7 +1578,7 @@ export class SampleContractFormComponent implements OnInit {
       //   this.step = variable.stepSampleContract.step4;
       //   this.datasForm.stepLast = this.step
       //   this.nextOrPreviousStep(this.step);
-      // } else 
+      // } else
       if (action == 'save_draft') {
         // this.datasForm.save_draft.sample_contract = false;
         this.stepChangeSampleContractForm.emit('save_draft_sample_contract')

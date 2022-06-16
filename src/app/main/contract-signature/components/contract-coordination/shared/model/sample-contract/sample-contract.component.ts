@@ -9,16 +9,18 @@ import {
   OnDestroy,
   AfterViewInit, Output, EventEmitter
 } from '@angular/core';
-import { variable } from "../../../../../../../config/variable";
-import { Helper } from "../../../../../../../core/Helper";
-import { environment } from "../../../../../../../../environments/environment";
+import {variable} from "../../../../../../../config/variable";
+import {Helper} from "../../../../../../../core/Helper";
+import {environment} from "../../../../../../../../environments/environment";
 import * as $ from 'jquery';
 
 import interact from 'interactjs'
-import { ContractService } from "../../../../../../../service/contract.service";
-import { NgxSpinnerService } from "ngx-spinner";
-import { ToastService } from "../../../../../../../service/toast.service";
-import { HttpErrorResponse } from '@angular/common/http';
+import {ContractService} from "../../../../../../../service/contract.service";
+import {NgxSpinnerService} from "ngx-spinner";
+import {ToastService} from "../../../../../../../service/toast.service";
+import {HttpErrorResponse} from '@angular/common/http';
+
+import * as _ from 'lodash';
 
 
 @Component({
@@ -96,13 +98,32 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     this.emailUser_sample = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
-    if (!this.datas.contract_user_sign) {
+    if (!this.datas.contract_user_sign) { // next first step
       this.getDataSignUpdateAction();
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
       this.setDataSignContract();
+    } else {
+      let isDefindDetermine = _.cloneDeep(this.datas.determine_contract);
+      let isCloneDeter = isDefindDetermine.map(({recipients, type}: any) => {
+        return recipients;
+      });
+      let isArrCoordination: any[] = [];
+      for (const d of isCloneDeter) {
+        if (d.some((p: any) => p.email == this.emailUser_sample)) {
+          isArrCoordination = d;
+          break;
+        }
+      }
+      this.datas.contract_user_sign.forEach((res: any) => {
+        res.sign_config = res.sign_config.filter((p: any) => isArrCoordination.some((q: any) => q.sign_type && (p.email == q.email && p.name == q.name &&
+          ((p.sign_unit == 'chu_ky_anh' && q.sign_type.some(({id}: any) => id == 1) ||
+            (p.sign_unit == 'chu_ky_so' && q.sign_type.some(({id}: any) => id == 2 || id == 3 || id == 4) ||
+              (p.sign_unit == 'text' && q.sign_type.some(({id}: any) => id == 2)) ||
+              (p.sign_unit == 'so_tai_lieu' && q.role == 4)))))));
+      })
     }
 
-    this.defindDataContract();
+    // this.defindDataContract();
 
     this.scale = 1;
 
@@ -117,7 +138,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         height: 0
       }
     }
-
 
 
     // convert base64 file pdf to url
@@ -142,7 +162,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('dragend', this.showEventInfo).draggable({
-      listeners: { move: this.dragMoveListener, onend: this.showEventInfo },
+      listeners: {move: this.dragMoveListener, onend: this.showEventInfo},
       inertia: true,
       modifiers: [
         interact.modifiers.restrictRect({
@@ -153,7 +173,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
-      edges: { right: true, bottom: true }, // Cho phép resize theo chiều nào.
+      edges: {right: true, bottom: true}, // Cho phép resize theo chiều nào.
       listeners: {
         move: this.resizableListener, onend: this.resizeSignature
       },
@@ -442,18 +462,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
   }
 
- async getDataSignUpdateAction() {
+  async getDataSignUpdateAction() {
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
     this.datas.determine_contract.forEach((element: any) => {
       if (element.recipients.some((q: any) => q.status == 1 && q.email == this.emailUser_sample)) {
         element.recipients.forEach((item: any) => {
           let dataChange = [];
-          dataChange = this.datas.is_data_object_signature.filter((p: any) => p.recipient.id == item.id && 
-          ((p.recipient.email != item.email || p.recipient.name != item.name || (p.type == 2 && !item.sign_type.some((q: any) => q.id == 1) || 
-          (p.type == 3 && !item.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) ||
-          (p.type == 1 && !item.sign_type.some((q: any) => q.id == 2))))));
-  
+          dataChange = this.datas.is_data_object_signature.filter((p: any) => p.recipient.id == item.id &&
+            ((p.recipient.email != item.email || p.recipient.name != item.name || (p.type == 2 && !item.sign_type.some((q: any) => q.id == 1) ||
+              (p.type == 3 && !item.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) ||
+              (p.type == 1 && !item.sign_type.some((q: any) => q.id == 2))))));
+
           if (dataChange.length == 0) {
             if (item.fields && item.fields.length && item.fields.length > 0) {
               item.fields.forEach((res: any) => {
@@ -500,10 +520,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.datas.determine_contract.forEach((res: any) => {
       res.recipients.forEach((element: any) => {
         let isObj = {
-          id: res.id,
-          sign_type: res.sign_type,
-          name: res.name,
-          email: res.email
+          id: element.id,
+          sign_type: element.sign_type,
+          name: element.name,
+          email: element.email
         }
         dataDetermine.push(isObj);
       })
@@ -521,20 +541,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     // loc doi tuong o ky ko bi thay doi du lieu
     // dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) => data.sign_type.length > 0 &&
-    //   (((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
+    //   (((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text' && data.sign_type.some((p: any) => p.id == 2)) || (val.sign_unit == 'so_tai_lieu' && data.type == 4) ||
     //     (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
     //     (val.name == data.name) && (val.email == data.email))
     // ));
 
-    // Get data ky khi thay doi du lieu
+    // Get data ky thay doi du lieu
     // let dataDiffirent: any[] = [];
     // if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
     //   dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) => data.sign_type.length > 0 &&
-    //     ((val.sign_unit == "chu_ky_anh" && !data.sign_type.some((p: any) => p.id == 1)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
+    //     ((val.sign_unit == "chu_ky_anh" && !data.sign_type.some((p: any) => p.id == 1)) || (val.sign_unit == 'text' && !data.sign_type.some((p: any) => p.id == 2)) || (val.sign_unit == 'so_tai_lieu' && data.type != 4) ||
     //     (val.sign_unit == "chu_ky_so" && !data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4)) ||
     //     val.name != data.name || val.email != data.email)));
     // }
-    // 
+
+    //
     // xoa nhung du lieu doi tuong bi thay doi
     // if (dataDiffirent.length > 0) {
     this.datas.contract_user_sign.forEach((res: any) => {
@@ -661,7 +682,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.arrPage = [];
       for (let page = 1; page <= this.pageNumber; page++) {
         let canvas = document.createElement("canvas");
-        this.arrPage.push({ page: page });
+        this.arrPage.push({page: page});
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
         // canvas.style.paddingLeft = '15px';
@@ -760,7 +781,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
       // let viewport = page.getViewport(this.scale);
-      let viewport = page.getViewport({ scale: this.scale });
+      let viewport = page.getViewport({scale: this.scale});
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
@@ -774,7 +795,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           height: viewport.height,
         });
       }
-      page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+      page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
@@ -1014,7 +1035,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       //   if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
       //     arrSignConfig = arrSignConfig.concat(element.sign_config);
       //   }
-      // } else 
+      // } else
       arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
     return arrSignConfig;
@@ -1029,24 +1050,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       //     element.is_disable = true;
       //   else element.is_disable = false;
       // } else {
-        if (this.convertToSignConfig().some((p: any) => (p.email == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && p.email && p.sign_unit == 'so_tai_lieu'))) {
-          if (isSignType != 'text') {
-            element.is_disable = true;
-          }
-        } else {
-          if (isSignType == 'chu_ky_anh') {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
-          } else if (isSignType == 'chu_ky_so') {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
-          } else if (isSignType == 'text') {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2)); // ô text chỉ có ký usb token mới được chỉ định (element.role == 4)
-          } else {
-            if (element.role != 4 || (this.datas.contract_no && element.role == 4)) {
-              element.is_disable = true;
-            } else element.is_disable = false;
-            // element.is_disable = (); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
-          } 
+      if (this.convertToSignConfig().some((p: any) => (p.email == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && p.email && p.sign_unit == 'so_tai_lieu'))) {
+        if (isSignType != 'text') {
+          element.is_disable = true;
         }
+      } else {
+        if (isSignType == 'chu_ky_anh') {
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 1) && element.role != 2);
+        } else if (isSignType == 'chu_ky_so') {
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
+        } else if (isSignType == 'text') {
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2)); // ô text chỉ có ký usb token mới được chỉ định (element.role == 4)
+        } else {
+          if (element.role != 4 || (this.datas.contract_no && element.role == 4)) {
+            element.is_disable = true;
+          } else element.is_disable = false;
+          // element.is_disable = (); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
+        }
+      }
       // }
 
       if (listSelect) {
@@ -1106,7 +1127,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           isObjSign.text_attribute_name = e;
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
         } else {
-          let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
+          // let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
+          let data_name = this.list_sign_name.filter((p: any) => p.email == e.target.value)[0];
           if (data_name) {
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
@@ -1151,7 +1173,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   next() {
     if (!this.validData()) return;
     console.log(this.datas);
-    
+
     this.step = variable.stepSampleContract.step4;
     this.datas.stepLast = this.step
     this.nextOrPreviousStep(this.step);
