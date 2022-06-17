@@ -865,13 +865,16 @@ export class ContractService {
     return this.http.delete<any>(this.deleteParticipantContractUrl + id, { headers });
   }
 
-  sendOtpContractProcess(recipient_id:any, phone:any) {
+  sendOtpContractProcess(contract_id:any, recipient_id:any, phone:any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    
-    return this.http.post<any>(this.getSendOtpContractProcessUrl + recipient_id + '/gen-otp?phone=' + phone,'', { headers });
+    const body = JSON.stringify({
+      contractId: contract_id,
+      phone: phone
+      });
+    return this.http.post<any>(this.getSendOtpContractProcessUrl + recipient_id + '/gen-otp', body, { headers });
   }
 
   objDefaultSampleContract() {

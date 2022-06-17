@@ -37,11 +37,12 @@ export class ConfirmSignOtpComponent implements OnInit {
 
 
   ngOnInit(): void {
+    console.log(this.datas);
     this.datas = this.data;
     this.addForm = this.fbd.group({
       otp: this.fbd.control("", [Validators.required]),
     });
-    this.sendOtp(this.datas.recipient_id, this.datas.phone);
+    this.sendOtp(this.datas.contract_id, this.datas.recipient_id, this.datas.phone);
   }
 
   onSubmit() {
@@ -67,9 +68,8 @@ export class ConfirmSignOtpComponent implements OnInit {
         (value - minutes * 60).toString().padStart(2, '0');
   }
 
-  sendOtp(recipient_id:any, phone:any){
-
-    this.contractService.sendOtpContractProcess(recipient_id, phone).subscribe(
+  sendOtp(contract_id:any, recipient_id:any, phone:any){
+    this.contractService.sendOtpContractProcess(contract_id, recipient_id, phone).subscribe(
       data => {
         if(!data.success){
           this.toastService.showErrorHTMLWithTimeout('Lỗi gửi OTP', "", 3000);

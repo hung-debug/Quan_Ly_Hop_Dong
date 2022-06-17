@@ -1471,7 +1471,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       title: 'XÁC NHẬN OTP',
       is_content: 'forward_contract',
       recipient_id: id_recipient_signature,
-      phone: phone_recipient_signature
+      phone: phone_recipient_signature,
+      contract_id: this.datas.is_data_contract.id
     };
 
     const dialogConfig = new MatDialogConfig();
