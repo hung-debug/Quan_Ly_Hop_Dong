@@ -100,10 +100,7 @@ export class AdminAddPackComponent implements OnInit {
       describe: this.fbd.control('', [
         Validators.pattern(parttern_input.input_form),
       ]),
-      status: this.fbd.control('', [
-        Validators.required,
-        Validators.pattern(parttern_input.input_form),
-      ]),
+      status: this.fbd.control(''),
     });
   }
 
@@ -147,10 +144,7 @@ export class AdminAddPackComponent implements OnInit {
             time: this.fbd.control(data.duration),
             number_contract: this.fbd.control(data.numberOfContracts),
 
-            describe: this.fbd.control(data.description, [
-              Validators.required,
-              Validators.pattern(parttern_input.input_form),
-            ]),
+            describe: this.fbd.control(data.description),
 
             status: this.convertStatus(data.status),
           });
@@ -207,9 +201,7 @@ export class AdminAddPackComponent implements OnInit {
           Validators.required,
           Validators.pattern(parttern_input.number_form),
         ]),
-        describe: this.fbd.control('', [
-          Validators.pattern(parttern_input.input_form),
-        ]),
+        describe: this.fbd.control(''),
         status: 1,
       });
     }
