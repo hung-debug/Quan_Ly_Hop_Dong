@@ -407,13 +407,24 @@ export class AdminAddPackUnitComponent implements OnInit {
 
       console.log("duration ", this.addForm.value.duration);
 
-      this.endDate = this.getPaymentDate(
-        new Date(
-          startDate1.setMonth(
-            startDate1.getMonth() + this.addForm.value.duration
-          )
-        ).toLocaleDateString('fr-CA')
-      );
+      if(this.data.idPack == null) {
+        this.endDate = this.getPaymentDate(
+          new Date(
+            startDate1.setMonth(
+              startDate1.getMonth() + this.duration
+            )
+          ).toLocaleDateString('fr-CA')
+        );
+      } else {
+        this.endDate = this.getPaymentDate(
+          new Date(
+            startDate1.setMonth(
+              startDate1.getMonth() + this.addForm.value.duration
+            )
+          ).toLocaleDateString('fr-CA')
+        );
+      }
+    
     }
   }
 
