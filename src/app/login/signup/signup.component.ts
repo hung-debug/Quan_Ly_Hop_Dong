@@ -45,7 +45,7 @@ export class SignupComponent implements OnInit {
       name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       size: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       address: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-      tax_code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      tax_code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.number_form)]),
       representatives: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       position: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       email: this.fbd.control("", [Validators.required, Validators.email]),
