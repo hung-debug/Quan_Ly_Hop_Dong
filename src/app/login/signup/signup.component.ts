@@ -41,6 +41,7 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
     this.addForm = this.fbd.group({
+      code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       size: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       address: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
@@ -59,6 +60,7 @@ export class SignupComponent implements OnInit {
       return;
     }
     const data = {
+      code: this.addForm.value.code,
       name: this.addForm.value.name,
       size: this.addForm.value.size,
       address: this.addForm.value.address,

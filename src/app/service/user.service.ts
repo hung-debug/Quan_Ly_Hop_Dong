@@ -39,7 +39,8 @@ export class UserService {
   getUserByEmailUrl:any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
   checkPhoneUrl:any = `${environment.apiUrl}/api/v1/customers/check-phone-unique`;
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
-  signupUrl:any = `${environment.apiUrl}/api/v1/customers/registrations`;
+
+  signupUrl:any = `${environment.apiUrl}/api/v1/admin/registrations/organization`;
 
   getCheckContractUserUrl:any = `${environment.apiUrl}/api/v1/contracts/check-contract-exist`;
 
@@ -109,6 +110,7 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json');
     const body = JSON.stringify({
+      code: datas.code,
       name: datas.name,
       size: datas.size,
       address: datas.address,

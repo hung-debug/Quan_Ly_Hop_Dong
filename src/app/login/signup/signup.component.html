@@ -39,7 +39,7 @@
                 <div class="label text-color">{{'Mã tổ chức' | translate }}</div>
                 <div class="input-line">
                   <input type="text" placeholder="{{'Nhập mã tổ chức' | translate}}"
-                    formControlName="address" class="input-text"/>
+                    formControlName="code" class="input-text"/>
                 </div>
                 <div *ngIf="submitted && f.address.errors" class="invalid">
                   <div *ngIf="f.address.errors.pattern">{{'Địa chỉ không được chứa ký tự đặc biệt' | translate}}</div>
@@ -113,7 +113,7 @@
                   <div class="label text-color">{{'Địa chỉ' | translate }} <span class="required-title">*</span></div>
                   <div class="input-line">
                     <input type="text" placeholder="{{'Nhập địa chỉ' | translate}}"
-                      formControlName="email" class="input-text"/>
+                      formControlName="address" class="input-text"/>
                   </div>
                   <div *ngIf="submitted && f.email.errors" class="invalid">
                     <div *ngIf="f.email.errors.required">{{'Địa chỉ không được để trống' | translate}}</div>
