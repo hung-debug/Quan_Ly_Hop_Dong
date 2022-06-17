@@ -75,8 +75,20 @@ export class SignupComponent implements OnInit {
     //them to chuc
     this.userService.signup(data).subscribe(
       data => {
-        this.sendNotifi("Bạn đã đăng ký thành công dịch vụ hệ thống eContract.<br>Vui lòng chờ liên hệ của nhà cung cấp!");
         console.log(data);        
+        if(data.id != null && data.id != undefined) {
+        this.sendNotifi("Bạn đã đăng ký thành công dịch vụ hệ thống eContract.<br>Vui lòng chờ liên hệ của nhà cung cấp!");
+        } else {
+          if(data.errors[0].code == 1003) {
+            this.toastService.showErrorHTMLWithTimeout("Tên tổ chức đã được đăng ký","",3000);
+          } else if(data.errors[0].code == 1001) {
+            this.toastService.showErrorHTMLWithTimeout("Email đã được đăng ký","",3000);
+          } else if(data.errors[0].code == 1002) {
+            this.toastService.showErrorHTMLWithTimeout("SĐT đã được đăng ký","",3000);
+          } else if(data.errors[0].code == 1006) {
+            this.toastService.showErrorHTMLWithTimeout("Mã số thuế đã được đăng ký","",3000);
+          }
+        }
       }, error => {
         this.sendNotifi("Đăng ký thất bại<br>Vui lòng liên hệ nhà phát triển để được xử lý!");
       }
