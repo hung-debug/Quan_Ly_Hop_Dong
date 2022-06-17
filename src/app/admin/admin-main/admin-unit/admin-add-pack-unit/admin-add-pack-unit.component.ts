@@ -185,9 +185,8 @@ export class AdminAddPackUnitComponent implements OnInit {
       this.adminUnitService
         .getPackUnitByIdPack(this.data.id, this.data.idPack)
         .subscribe((response) => {
-          console.log('res ', response);
-
-          this.duration = response.duration;
+          console.log('response id pack ', response);
+          console.log('response start date', response.startDate);
 
           this.addForm = this.fbd.group({
             packCode: this.fbd.control(response.code, [
@@ -246,19 +245,21 @@ export class AdminAddPackUnitComponent implements OnInit {
                 Validators.pattern(parttern_input.input_form),
               ]
             ),
-            paymentDate: this.fbd.control(
-              this.getPaymentDate(response.paymentDate),
-              [
-                Validators.required,
-                Validators.pattern(parttern_input.input_form),
-              ]
-            ),
+            paymentDate: this.fbd.control(new Date(response.paymentDate), [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+
             startDate: this.fbd.control(new Date(response.startDate), [
               Validators.required,
               Validators.pattern(parttern_input.input_form),
             ]),
-            endDate: this.fbd.control(this.getPaymentDate(response.endDate)),
+            endDate: this.fbd.control(
+              this.getPaymentDate(new Date(response.endDate))
+            ),
           });
+
+          console.log('start date ', this.addForm.value.startDate);
         });
     }
   }
@@ -399,13 +400,20 @@ export class AdminAddPackUnitComponent implements OnInit {
 
   onChangeStartDate(event: any) {
     if (this.flagTime === true) {
-      const startDate1 = new Date(this.startDate);
 
-      console.log("duration ",this.duration);
+      console.log("vao day time");
 
-      this.endDate = new Date(
-        startDate1.setMonth(startDate1.getMonth() + this.duration)
-      ).toLocaleDateString('fr-CA');
+      const startDate1 = new Date(this.addForm.value.startDate);
+
+      console.log("duration ", this.addForm.value.duration);
+
+      this.endDate = this.getPaymentDate(
+        new Date(
+          startDate1.setMonth(
+            startDate1.getMonth() + this.addForm.value.duration
+          )
+        ).toLocaleDateString('fr-CA')
+      );
     }
   }
 
@@ -426,15 +434,25 @@ export class AdminAddPackUnitComponent implements OnInit {
     };
 
     if (
-      this.addForm.value.paymentDate == null ||
-      this.addForm.value.paymentDate.trim() == ''
-    ) {
+      this.addForm.value.paymentDate == null || this.addForm.value.paymentDate == '') {
       console.log('pay ment date null');
       dataForm.paymentDate = null;
     } else {
       dataForm.paymentDate = JSON.stringify(
         this.addForm.value.paymentDate
       ).substring(1, 11);
+    }
+
+    if (
+      this.addForm.value.endDate == null ||
+      this.addForm.value.endDate == ''
+    ) {
+      dataForm.endDate = null;
+    } else {
+      dataForm.endDate = JSON.stringify(this.addForm.value.endDate).substring(
+        1,
+        11
+      );
     }
 
     console.log('date submit ', dataForm.purchaseDate);
@@ -481,7 +499,6 @@ export class AdminAddPackUnitComponent implements OnInit {
   }
 
   addPackUnit(dataForm: any) {
-    console.log('dataForm ', dataForm);
 
     this.adminUnitService.addPackUnit(dataForm).subscribe((response) => {
       if (response.id != null && response.id != undefined) {
@@ -504,6 +521,7 @@ export class AdminAddPackUnitComponent implements OnInit {
           width: '80%',
           height: '80%',
           backdrop: 'static',
+
           keyboard: false,
           data,
         });

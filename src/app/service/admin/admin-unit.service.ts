@@ -131,8 +131,6 @@ export class AdminUnitService {
     ) {
     this.getCurrentUser();
 
-    console.log("end date ", datas.endDate.toLocaleDateString("fr-CA"));
-
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
@@ -143,8 +141,8 @@ export class AdminUnitService {
         paymentType: datas.paymentType.id,
         paymentStatus: datas.paymentStatus.id,
         startDate: datas.startDate.toLocaleDateString("fr-CA"),
-        endDate: datas.endDate.toLocaleDateString("fr-CA"),
-        paymentDate: datas.paymentDate.toLocaleDateString("fr-CA"),
+        endDate: datas.endDate,
+        paymentDate: datas.paymentDate,
       });
 
     console.log('body ', body);
@@ -162,7 +160,7 @@ export class AdminUnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.get<any>(this.getUnitByIdUrl + id, { headers: headers });
+    return this.http.get<any>(this.getUnitByIdUrl + id+"?sort=startDate,desc", { headers: headers });
   }
 
   getPackUnitByIdPack(id: any, idPack: any) {

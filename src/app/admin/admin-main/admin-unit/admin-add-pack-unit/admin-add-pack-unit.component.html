@@ -241,7 +241,6 @@
           dateFormat="dd/mm/yy"
           #created_at
           formControlName="startDate"
-          [(ngModel)]="startDate"
           (onSelect) = "onChangeStartDate($event)"
         ></p-calendar>
         <div *ngIf="submitted && f.startDate.errors" class="invalid">
