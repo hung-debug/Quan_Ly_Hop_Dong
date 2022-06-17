@@ -75,11 +75,6 @@ export const type_signature_doc = [
     is_otp: false,
   },
   {
-    id: 5,
-    name: "Ký eKYC",
-    is_otp: false
-  },
-  {
     id: 2,
     name: 'Ký số bằng USB token',
     is_otp: false,

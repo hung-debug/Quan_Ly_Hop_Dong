@@ -51,7 +51,7 @@
                 <div class="participants__name" style="width: 90%">
                   <div class="label_detail text-color">Số điện thoại&nbsp;-&nbsp;<div style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
                   <div class="input-data">
-                    <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone">
+                    <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
               </div>
@@ -122,7 +122,7 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">Số điện thoại&nbsp;<span *ngIf="getDataSignCka(d).length > 0" class="required-title">*</span>-&nbsp;<div style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
                   <div class="input-data">
-                    <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone">
+                    <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
                 <!--                <div *ngIf="getOtp(d)" class="participants-otp">-->
@@ -139,7 +139,7 @@
                 <div class="participants__name" style="width: 90%">
                   <div class="label_detail text-color">CMT/CCCD&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
-                    <input type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id">
+                    <input type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
               </div>
@@ -213,7 +213,7 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">Số điện thoại&nbsp;<span *ngIf="getDataSignCka(d).length > 0" class="required-title">*</span>-&nbsp;<div style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
                   <div class="input-data">
-                    <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone">
+                    <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
               </div>
@@ -222,7 +222,7 @@
                 <div class="participants__name" style="width: 90%">
                   <div class="label_detail text-color">CMT/CCCD&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
-                    <input type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id">
+                    <input type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
               </div>
@@ -303,7 +303,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">Số điện thoại&nbsp;-&nbsp;<div style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone">
+                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -350,7 +350,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">Số điện thoại&nbsp;-&nbsp;<div style="color: #ffc107;"> ({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone">
+                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -426,7 +426,7 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">Số điện thoại&nbsp;<span *ngIf="getDataSignCka(d).length > 0" class="required-title">*</span>-&nbsp;<div style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone">
+                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -435,7 +435,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">CMT/CCCD&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id">
+                      <input type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -509,7 +509,7 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">Số điện thoại&nbsp;<span *ngIf="getDataSignCka(d).length > 0" class="required-title">*</span>-&nbsp;<div style="color: #ffc107;"> ({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone">
+                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -518,7 +518,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">CMT/CCCD&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id">
+                      <input type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -587,9 +587,9 @@
                   </div>
 
                   <div class="participants__name">
-                    <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span>-&nbsp;<div style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
+                    <div class="label_detail text-color">Số điện thoại&nbsp;<span *ngIf="getDataSignCka(d).length > 0" class="required-title">*</span>-&nbsp;<div style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone">
+                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                   <!--                    <div *ngIf="getOtp(d)" class="participants-otp">-->
@@ -606,7 +606,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">CMT/CCCD&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id">
+                      <input type="text" placeholder="{{'Nhập CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>

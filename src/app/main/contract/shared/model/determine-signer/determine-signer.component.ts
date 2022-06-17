@@ -323,7 +323,7 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       // valid cccd number
-      if (dataArr[i].card_id && !this.pattern.only_number.test(dataArr[i].card_id)) {
+      if (dataArr[i].card_id && !this.pattern.card_id.test(dataArr[i].card_id)) {
         this.getNotificationValid("CMT/CCCD của" + this.getNameObjectValid(3) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
@@ -431,7 +431,7 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             // valid cccd number
-            if (isParterSort[k].card_id && !this.pattern.only_number.test(isParterSort[k].card_id)) {
+            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id)) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObjectValid(3) + "của đối tác không hợp lệ!")
               count++;
               break;
@@ -506,7 +506,7 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             // valid cccd number
-            if (isParterSort[k].card_id && !this.pattern.only_number.test(isParterSort[k].card_id)) {
+            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id)) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObjectValid(3) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;

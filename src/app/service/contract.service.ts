@@ -684,7 +684,15 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    //return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, { 'headers': headers });
+    return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, { 'headers': headers });
+    
+  }
+
+  updateInfoContractConsiderImg(datas: any, recipient_id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
     
     return this.http.put<any>(this.updateInfoContractConsiderAndOtpUrl + recipient_id, datas, { 'headers': headers });
   }

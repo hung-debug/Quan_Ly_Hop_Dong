@@ -42,7 +42,6 @@ export class ConfirmSignOtpComponent implements OnInit {
       otp: this.fbd.control("", [Validators.required]),
     });
     this.sendOtp(this.datas.recipient_id, this.datas.phone);
-    this.countTimeOtp();
   }
 
   onSubmit() {
@@ -69,12 +68,14 @@ export class ConfirmSignOtpComponent implements OnInit {
   }
 
   sendOtp(recipient_id:any, phone:any){
+
     this.contractService.sendOtpContractProcess(recipient_id, phone).subscribe(
       data => {
         if(!data.success){
           this.toastService.showErrorHTMLWithTimeout('Lỗi gửi OTP', "", 3000);
         }
-      
+        this.count = 120;
+        this.countTimeOtp();
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi', "", 3000);
       }

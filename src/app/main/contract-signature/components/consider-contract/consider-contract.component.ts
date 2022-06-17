@@ -1168,40 +1168,36 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   async signImageC(signUpdatePayload: any, notContainSignImage: any) {
+    console.log(notContainSignImage);
     console.log(signUpdatePayload);
-    console.log(JSON.stringify(signUpdatePayload));
-    let signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
-    console.log(signUpdateTempN);
     let signDigitalStatus = null;
-    if (notContainSignImage) {
-      signDigitalStatus = await this.signDigitalDocument();
-      signUpdateTempN = signUpdateTempN.filter(
-        (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
-        .map((item: any) => {
-          return {
-            id: item.id,
-            name: item.name,
-            value: null,
-            font: item.font,
-            font_size: item.font_size
-          }
-        });
+    let signUpdateTempN = [];
+    if(signUpdatePayload){
+      signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
+      if (notContainSignImage) {
+        signDigitalStatus = await this.signDigitalDocument();
+        signUpdateTempN = signUpdateTempN.filter(
+          (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+          .map((item: any) => {
+            return {
+              id: item.id,
+              name: item.name,
+              value: null,
+              font: item.font,
+              font_size: item.font_size
+            }
+          });
+      }
     }
+    
     if (notContainSignImage && !signDigitalStatus && this.datas.roleContractReceived != 2) {
       this.spinner.hide();
       return;
     }
-    this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
-      async (result) => {
-        if(result?.success == false){
-          if(result.message == 'Wrong otp'){
-            this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng hoặc quá hạn', '', 3000);
-            this.spinner.hide();
-          }else{
-            this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
-            this.spinner.hide();
-          }
-        }else{
+    if(notContainSignImage){
+      console.log(signUpdateTempN);
+      this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
+        async (result) => {
           if (!notContainSignImage) {
             await this.signDigitalDocument();
           }
@@ -1212,13 +1208,42 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               , '', 3000);
             this.spinner.hide();
           }, 1000);
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
+          this.spinner.hide();
         }
-        
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
-        this.spinner.hide();
-      }
-    )
+      )
+    }else{
+      this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.recipientId).subscribe(
+        async (result) => {
+          if(result?.success == false){
+            if(result.message == 'Wrong otp'){
+              this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng hoặc quá hạn', '', 3000);
+              this.spinner.hide();
+            }else{
+              this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
+              this.spinner.hide();
+            }
+          }else{
+            if (!notContainSignImage) {
+              await this.signDigitalDocument();
+            }
+            setTimeout(() => {
+              this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+              this.toastService.showSuccessHTMLWithTimeout(
+                [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+                , '', 3000);
+              this.spinner.hide();
+            }, 1000);
+          }
+          
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
+          this.spinner.hide();
+        }
+      )
+    }
+    
   }
 
   async signContractSimKPI() {
