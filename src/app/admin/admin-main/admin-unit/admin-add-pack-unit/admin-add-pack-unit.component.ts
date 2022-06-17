@@ -29,7 +29,7 @@ export class AdminAddPackUnitComponent implements OnInit {
   namePack: string;
   totalBeforeVAT: string;
   totalAfterVAT: string;
-  duration: string;
+  duration: any;
   numberOfContracts: string;
   calculatorMethod: string = '';
   type: string;
@@ -38,6 +38,13 @@ export class AdminAddPackUnitComponent implements OnInit {
   flagNgayThanhToan: boolean = false;
 
   idPack: any;
+
+  submitted = false;
+
+  endDate: any;
+
+  flagTime: boolean = false;
+  startDate: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -101,11 +108,12 @@ export class AdminAddPackUnitComponent implements OnInit {
         Validators.required,
         Validators.pattern(parttern_input.input_form),
       ]),
-      endDate: this.fbd.control('', [
-        Validators.required,
-        Validators.pattern(parttern_input.input_form),
-      ]),
+      endDate: this.fbd.control(''),
     });
+  }
+
+  get f() {
+    return this.addForm.controls;
   }
 
   ngOnInit(): void {
@@ -113,7 +121,7 @@ export class AdminAddPackUnitComponent implements OnInit {
     this.listStatusType = paidStatusList;
     this.getPackList();
 
-    if(this.data.idPack == null) {
+    if (this.data.idPack == null) {
       this.addForm = this.fbd.group({
         packCode: this.fbd.control('', [
           Validators.required,
@@ -167,72 +175,134 @@ export class AdminAddPackUnitComponent implements OnInit {
           Validators.required,
           Validators.pattern(parttern_input.input_form),
         ]),
-        endDate: this.fbd.control('', [
-          Validators.required,
-          Validators.pattern(parttern_input.input_form),
-        ]),
+        endDate: this.fbd.control(''),
       });
-    } else {
-      // this.addForm = this.fbd.group({
-      //   packCode: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   namePack: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   totalBeforeVAT: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   totalAfterVAT: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   duration: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   numberOfContracts: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   type: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   calculatorMethod: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   purchaseDate: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   paymentType: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   paymentStatus: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   paymentDate: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   startDate: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      //   endDate: this.fbd.control('', [
-      //     Validators.required,
-      //     Validators.pattern(parttern_input.input_form),
-      //   ]),
-      // });
-    }
 
+      console.log('date ', this.addForm.value.purchaseDate);
+    } else {
+      console.log('vao form cap nhat');
+
+      this.adminUnitService
+        .getPackUnitByIdPack(this.data.id, this.data.idPack)
+        .subscribe((response) => {
+          console.log('res ', response);
+
+          this.duration = response.duration;
+
+          this.addForm = this.fbd.group({
+            packCode: this.fbd.control(response.code, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            namePack: this.fbd.control(response.name, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            totalBeforeVAT: this.fbd.control(response.totalBeforeVAT, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            totalAfterVAT: this.fbd.control(response.totalAfterVAT, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            duration: this.fbd.control(response.duration, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            numberOfContracts: this.fbd.control(response.numberOfContracts, [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            type: this.fbd.control(
+              this.convertServiceType(response.serviceType),
+              [
+                Validators.required,
+                Validators.pattern(parttern_input.input_form),
+              ]
+            ),
+            calculatorMethod: this.fbd.control(
+              this.convertCalculatorMethod(response.calculatorMethod),
+              [
+                Validators.required,
+                Validators.pattern(parttern_input.input_form),
+              ]
+            ),
+            purchaseDate: this.fbd.control(new Date(response.purchaseDate), [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            paymentType: this.fbd.control(
+              this.convertPaymentType(response.paymentType),
+              [
+                Validators.required,
+                Validators.pattern(parttern_input.input_form),
+              ]
+            ),
+            paymentStatus: this.fbd.control(
+              this.convertPaymentStatus(response.paymentStatus),
+              [
+                Validators.required,
+                Validators.pattern(parttern_input.input_form),
+              ]
+            ),
+            paymentDate: this.fbd.control(
+              this.getPaymentDate(response.paymentDate),
+              [
+                Validators.required,
+                Validators.pattern(parttern_input.input_form),
+              ]
+            ),
+            startDate: this.fbd.control(new Date(response.startDate), [
+              Validators.required,
+              Validators.pattern(parttern_input.input_form),
+            ]),
+            endDate: this.fbd.control(this.getPaymentDate(response.endDate)),
+          });
+        });
+    }
+  }
+  convertCalculatorMethod(calculatorMethod: string): string {
+    if (calculatorMethod == 'BY_TIME') {
+      this.flagTime = true;
+      return 'Theo thời gian';
+    } else if (calculatorMethod == 'BY_CONTRACT_NUMBERS') {
+      return 'Theo số lượng hợp đồng';
+    }
+    return '';
+  }
+  convertServiceType(serviceType: string): string {
+    if (serviceType == 'NORMAL') {
+      return 'Bình thường';
+    } else if (serviceType == 'PROMOTION') {
+      return 'Khuyến mại';
+    }
+    return '';
+  }
+
+  getPaymentDate(paymentDate: any): any {
+    if (paymentDate != null) {
+      return new Date(paymentDate).toLocaleDateString('fr-CA');
+    }
+    console.log('ngay thang toan null');
+    return null;
+  }
+  convertPaymentStatus(paymentStatus: string): any {
+    if (paymentStatus == paidStatusList[0].id) {
+      return paidStatusList[0];
+    } else if (paymentStatus == paidStatusList[1].id) {
+      return paidStatusList[1];
+    }
+    return '';
+  }
+
+  convertPaymentType(paymentType: string): any {
+    if (paymentType == paidTypeList[0].id) {
+      return paidTypeList[0];
+    } else if (paymentType == paidTypeList[1].id) {
+      return paidTypeList[1];
+    }
+    return '';
   }
 
   getPackList(): any {
@@ -253,7 +323,22 @@ export class AdminAddPackUnitComponent implements OnInit {
       });
   }
 
+  flag: number = 0;
   onChangeMaGoi(event: any) {
+    if (this.flagTime === true) {
+      console.log('vao day');
+
+      const startDate1 = new Date(this.startDate);
+
+      console.log('duration model ', this.addForm.value.duration);
+
+      this.endDate = new Date(
+        startDate1.setMonth(startDate1.getMonth() + this.duration)
+      ).toLocaleDateString('fr-CA');
+
+      console.log('this end date ', this.endDate);
+    }
+
     for (let i = 0; i < this.listDichVu.length; i++) {
       if (this.listDichVu[i].code == event.value) {
         this.idPack = this.listDichVu[i].id;
@@ -266,6 +351,20 @@ export class AdminAddPackUnitComponent implements OnInit {
           this.calculatorMethod = 'Theo thời gian';
           this.duration = this.listDichVu[i].duration;
           this.numberOfContracts = '';
+
+          const startDate1 = new Date(this.startDate);
+
+          console.log('duration model ', this.addForm.value.duration);
+
+          if (this.flag == 1)
+            this.endDate = new Date(
+              startDate1.setMonth(startDate1.getMonth() + this.duration)
+            ).toLocaleDateString('fr-CA');
+
+          console.log('this end date ', this.endDate);
+
+          this.flagTime = true;
+          this.flag = 1;
         } else if (
           this.listDichVu[i].calculatorMethod == 'BY_CONTRACT_NUMBERS'
         ) {
@@ -289,7 +388,7 @@ export class AdminAddPackUnitComponent implements OnInit {
   onChangeStatus(event: any) {
     if (event.value.id == 'PAID') {
       this.flagNgayThanhToan = true;
-    } else {
+    } else if (event.value.id == 'UNPAID') {
       this.flagNgayThanhToan = false;
     }
   }
@@ -298,7 +397,23 @@ export class AdminAddPackUnitComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  addPackUnit() {
+  onChangeStartDate(event: any) {
+    if (this.flagTime === true) {
+      const startDate1 = new Date(this.startDate);
+
+      console.log("duration ",this.duration);
+
+      this.endDate = new Date(
+        startDate1.setMonth(startDate1.getMonth() + this.duration)
+      ).toLocaleDateString('fr-CA');
+    }
+  }
+
+  onSubmit() {
+    this.submitted = true;
+    // if (this.addForm.invalid) {
+    //   return;
+    // }
     const dataForm = {
       id: this.data.id,
       idPack: this.idPack,
@@ -310,19 +425,41 @@ export class AdminAddPackUnitComponent implements OnInit {
       endDate: this.addForm.value.endDate,
     };
 
-    console.log('dataForm ', dataForm);
+    if (
+      this.addForm.value.paymentDate == null ||
+      this.addForm.value.paymentDate.trim() == ''
+    ) {
+      console.log('pay ment date null');
+      dataForm.paymentDate = null;
+    } else {
+      dataForm.paymentDate = JSON.stringify(
+        this.addForm.value.paymentDate
+      ).substring(1, 11);
+    }
 
-    this.adminUnitService.addPackUnit(dataForm).subscribe((response) => {
-      if (response.id != null && response.id != undefined) {
-        this.toastService.showSuccessHTMLWithTimeout(
-          'Thêm mới thành công!',
-          '',
-          3000
-        );
+    console.log('date submit ', dataForm.purchaseDate);
 
-        // this.dialogRef.close();
+    if (this.data.idPack == null) {
+      this.addPackUnit(dataForm);
+    } else {
+      this.updatePackUnit(dataForm);
+    }
+  }
 
-        this.dialog.closeAll();
+  updatePackUnit(dataForm: any) {
+    console.log('ngay ket thuc ', this.addForm.value.endDate);
+    this.adminUnitService
+      .updatePackUnit(dataForm, this.data.idPack)
+      .subscribe((response) => {
+        console.log('res ', response);
+
+        if (response.id != null && response.id != undefined) {
+          this.toastService.showSuccessHTMLWithTimeout(
+            'Cập nhật thành công!',
+            '',
+            3000
+          );
+          this.dialog.closeAll();
 
           const data = {
             title: 'unit.information',
@@ -339,6 +476,40 @@ export class AdminAddPackUnitComponent implements OnInit {
           dialogRef1.afterClosed().subscribe((result: any) => {
             console.log('the close dialog');
           });
+        }
+      });
+  }
+
+  addPackUnit(dataForm: any) {
+    console.log('dataForm ', dataForm);
+
+    this.adminUnitService.addPackUnit(dataForm).subscribe((response) => {
+      if (response.id != null && response.id != undefined) {
+        this.toastService.showSuccessHTMLWithTimeout(
+          'Thêm mới thành công!',
+          '',
+          3000
+        );
+
+        // this.dialogRef.close();
+
+        this.dialog.closeAll();
+
+        const data = {
+          title: 'unit.information',
+          id: dataForm.id,
+        };
+        // @ts-ignore
+        const dialogRef1 = this.dialog.open(AdminDetailUnitComponent, {
+          width: '80%',
+          height: '80%',
+          backdrop: 'static',
+          keyboard: false,
+          data,
+        });
+        dialogRef1.afterClosed().subscribe((result: any) => {
+          console.log('the close dialog');
+        });
       }
     });
   }
