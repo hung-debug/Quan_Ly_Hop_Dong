@@ -84,6 +84,8 @@ export class ContractService {
   getCheckSign: any = `${environment.apiUrl}/api/v1/recipients/internal/`;
   deleteParticipantContractUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   changeStatusHandle: any = `${environment.apiUrl}/api/v1/recipients/`;
+  getSendOtpContractProcessUrl: any = `${environment.apiUrl}/api/v1/processes/approval/`;
+  updateInfoContractConsiderAndOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
 
   token: any;
   customer_id: any;
@@ -683,7 +685,16 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, { 'headers': headers });
+    
+  }
 
+  updateInfoContractConsiderImg(datas: any, recipient_id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    
+    return this.http.put<any>(this.updateInfoContractConsiderAndOtpUrl + recipient_id, datas, { 'headers': headers });
   }
 
   updateInfoContractConsiderToPromise(datas: any, recipient_id: any) {
@@ -854,6 +865,18 @@ export class ContractService {
     return this.http.delete<any>(this.deleteParticipantContractUrl + id, { headers });
   }
 
+  sendOtpContractProcess(contract_id:any, recipient_id:any, phone:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      contractId: contract_id,
+      phone: phone
+      });
+    return this.http.post<any>(this.getSendOtpContractProcessUrl + recipient_id + '/gen-otp', body, { headers });
+  }
+
   objDefaultSampleContract() {
     return {
       file_content: "base64",
@@ -963,30 +986,6 @@ export class ContractService {
     return throwError(errorMessage);
   }
 
-  getDatermineRole3() {
-    return {
-      "name": "",
-      "type": 3, // Đối tác cá nhân
-      "ordering": 1,
-      "contract_id": 1,
-      "recipients": [
-        // người ký
-        {
-          "name": "",
-          "email": "",
-          "phone": "",
-          "role": 3, // người ký
-          "ordering": 1,
-          "status": 1,
-          "username": "",
-          "password": "",
-          "is_otp": 1,
-          "sign_type": []
-        }
-      ],
-    }
-  }
-
   getDataDetermine() {
     return [
       {
@@ -1000,11 +999,10 @@ export class ContractService {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
+            "card_id": "", // cccd người tham gia
             "role": 2, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
-            // "username": "", // username khi click từ link email
-            // "password": "", // pw click từ link email
             "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
             ]
@@ -1014,11 +1012,10 @@ export class ContractService {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
+            "card_id": "", // cccd người tham gia
             "role": 3, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
-            // "username": "thangbt", // username khi click từ link email
-            // "password": "ad", // pw click từ link email
             "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
             ]
@@ -1028,17 +1025,15 @@ export class ContractService {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
+            "card_id": "", // cccd người tham gia
             "role": 4, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
-            // "username": "", // username khi click từ link email
-            // "password": "", // pw click từ link email
             "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
             ]
           },
         ],
-        // "contract_id": 1
       },
       // Đối tác
       // Tổ chức
@@ -1053,11 +1048,10 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "", // cccd người tham gia
             "role": 1, // người điều phối
             "ordering": 1,
             "status": 0,
-            // "username": "",
-            // "password": "",
             "is_otp": 0,
             "sign_type": []
           },
@@ -1066,11 +1060,10 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "", // cccd người tham gia
             "role": 2, // người xem xét
             "ordering": 1,
             "status": 0,
-            // "username": "",
-            // "password": "",
             "is_otp": 0,
             "sign_type": []
           },
@@ -1079,11 +1072,10 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "", // cccd người tham gia
             "role": 3, // người ký
             "ordering": 1,
             "status": 0,
-            // "username": "",
-            // "password": "",
             "is_otp": 0,
             "sign_type": []
           },
@@ -1092,38 +1084,15 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "", // cccd người tham gia
             "role": 4, // văn thư
             "ordering": 1,
             "status": 0,
-            // "username": "",
-            // "password": "",
             "is_otp": 0,
             "sign_type": []
           }
         ],
-        // "contract_id": 1
-      },
-      // {
-      //   "name": "",
-      //   "type": 3, // Đối tác cá nhân
-      //   "ordering": 1,
-      //   "contract_id": 1,
-      //   "recipients": [
-      //     // người ký
-      //     {
-      //       "name": "",
-      //       "email": "",
-      //       "phone": "",
-      //       "role": 3, // người ký
-      //       "ordering": 1,
-      //       "status": 1,
-      //       "username": "",
-      //       "password": "",
-      //       "is_otp": 1,
-      //       "sign_type": []
-      //     }
-      //   ],
-      // }
+      }
     ]
   }
 
@@ -1139,6 +1108,7 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "",
             "role": 3,
             "ordering": 1,
             "status": 0,
@@ -1158,6 +1128,7 @@ export class ContractService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "",
             "role": 3,
             "ordering": 1,
             "status": 0,

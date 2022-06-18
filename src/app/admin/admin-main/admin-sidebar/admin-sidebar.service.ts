@@ -10,20 +10,23 @@ export class AdminSidebarService {
   _hasBackgroundImage = true;
   menus:any[] = [
     {
-      title: 'menu.user.list',
+      id: 1,
+      title: 'Người dùng',
       icon: '/assets/img/db_user.svg',
       active: false,
       type: 'simple',
       href: '/admin-main/user'
     },
     {
-      title: 'menu.organization.list',
+      id: 0,
+      title: 'Tổ chức',
       icon: '/assets/img/db_user_group.svg',
       active: false,
       type: 'simple',
       href: '/admin-main/unit'
     },
     {
+      id: 2,
       title: 'Gói dịch vụ',
       icon: '/assets/img/db_role.svg',
       active: false,
@@ -83,7 +86,11 @@ export class AdminSidebarService {
         qlgdv = true;
       }
     }
-    
+
+    menuShow.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+
+    console.log("menushow ",menuShow);
+  
     return menuShow;
   }
 

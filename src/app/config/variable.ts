@@ -24,8 +24,13 @@ export const variable = {
 export const type_signature = [
   {
     id: 1,
-    name: 'Ký ảnh',
+    name: 'Ký ảnh và OTP',
     is_otp: false,
+  },
+  {
+    id: 5,
+    name: "Ký eKYC",
+    is_otp: false
   },
   {
     id: 2,
@@ -37,18 +42,19 @@ export const type_signature = [
     name: 'Ký số bằng sim PKI',
     is_otp: false,
   },
-  // {
-  //   id: 4,
-  //   name: "Ký số bằng HSM",
-  //   is_otp: false
-  // }
+  
 ];
 
 export const type_signature_personal_party = [
   {
     id: 1,
-    name: 'Ký ảnh',
+    name: 'Ký ảnh và OTP',
     is_otp: false,
+  },
+  {
+    id: 5,
+    name: "Ký eKYC",
+    is_otp: false
   },
   {
     id: 2,
@@ -60,17 +66,12 @@ export const type_signature_personal_party = [
     name: 'Ký số bằng sim PKI',
     is_otp: false,
   },
-  // {
-  //   id: 4,
-  //   name: "Ký số bằng HSM",
-  //   is_otp: false
-  // }
 ];
 
 export const type_signature_doc = [
   {
     id: 1,
-    name: 'Ký ảnh',
+    name: 'Ký ảnh và OTP',
     is_otp: false,
   },
   {
@@ -101,6 +102,16 @@ export var loaiGoiDichVuList = [
   { id: 1, name: 'Bình thường' },
   { id: 2, name: 'Khuyến mại' },
 ];
+
+export var paidTypeList = [
+  {id: 'PRE', name:'Trả trước'},
+  {id:'POST', name:'Trả sau'}
+]
+
+export var paidStatusList = [
+  {id:'UNPAID', name:'Chưa thanh toán'},
+  {id:'PAID', name:'Đã thanh toán'}
+]
 
 // export var roleList = [
 //   {

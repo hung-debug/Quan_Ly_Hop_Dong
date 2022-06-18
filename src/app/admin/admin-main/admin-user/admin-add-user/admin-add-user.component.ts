@@ -220,7 +220,7 @@ export class AdminAddUserComponent implements OnInit {
             '',
             3000
           );
-
+          
           if (data.status == 'ACTIVE') {
             this.adminUserService.getUserById(dataUpdate.id).subscribe(
               (data) => {

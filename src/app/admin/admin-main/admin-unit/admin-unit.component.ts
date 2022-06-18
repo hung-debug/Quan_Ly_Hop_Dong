@@ -7,6 +7,7 @@ import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { AdminActiveUnitComponent } from './admin-active-unit/admin-active-unit.component';
 import { AdminAddUnitComponent } from './admin-add-unit/admin-add-unit.component';
+import { AdminDeleteUnitComponent } from './admin-delete-unit/admin-delete-unit.component';
 import { AdminDetailUnitComponent } from './admin-detail-unit/admin-detail-unit.component';
 import { AdminFilterUnitComponent } from './dialog/admin-filter-unit/admin-filter-unit.component';
 
@@ -62,15 +63,15 @@ export class AdminUnitComponent implements OnInit {
   ngOnInit(): void {
 
     this.appService.setTitle('unit.list');
-    this.addUnitRole = this.checkRole(this.infoUnitRole, 'QLTC_01');
+    this.addUnitRole = this.checkRole(this.addUnitRole, 'QLTC_01');
     this.searchUnitRole = this.checkRole(this.searchUnitRole, 'QLTC_09');
     this.infoUnitRole = this.checkRole(this.infoUnitRole, 'QLTC_10');
     this.activeUnitRole = this.checkRole(this.activeUnitRole, 'QLTC_08');
     this.editUnitRole = this.checkRole(this.editUnitRole, 'QLTC_02');
     this.deleteUnitRole = this.checkRole(this.deleteUnitRole, 'QLTC_07');
 
-    console.log('search unit role');
-    console.log(this.searchUnitRole);
+    console.log('add unit role');
+    console.log(this.addUnitRole);
 
     this.route.queryParams.subscribe((params) => {
       console.log('param filter re');
@@ -122,15 +123,6 @@ export class AdminUnitComponent implements OnInit {
 
     console.log('info unit role');
     console.log(this.infoUnitRole);
-
-
-    // if (permissions.length === 1 && permissions[0].code.includes('QLTB')) {
-    //   console.log('vao day');
-    //   this.adminUnit = false;
-    //   this.appService.setTitle('');
-    // } else {
-    //   this.appService.setTitle('unit.list');
-    // }
 
     this.getUnitList();
 
@@ -234,10 +226,6 @@ export class AdminUnitComponent implements OnInit {
     });
   }
 
-  search() {
-    console.log('vao tim kiem');
-  }
-
   //Thêm mới tổ chức
   addUnit() {
     const data = {
@@ -274,7 +262,26 @@ export class AdminUnitComponent implements OnInit {
     });
   }
 
+  deleteUnit(id: any) {
+    const data = {
+      title: 'XOÁ TỔ CHỨC',
+      id: id,
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(AdminDeleteUnitComponent, {
+      width: '580px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+    });
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result;
+    });
+  }
+
   detailUnit(id: any) {
+    console.log("id unit ", id);
     if (this.infoUnitRole === true) {
       const data = {
         title: 'unit.information',

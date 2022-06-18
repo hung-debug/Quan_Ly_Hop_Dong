@@ -37,6 +37,8 @@ export class AdminUserComponent implements OnInit {
   infoUserRole: boolean = false;
   editUserRole: boolean = false;
 
+  adminUserRole: boolean = true;
+
   permissions: any;
 
   ngOnInit(): void {
@@ -44,15 +46,23 @@ export class AdminUserComponent implements OnInit {
       localStorage.getItem('currentAdmin') || ''
     ).user.permissions;
 
-    this.addUserRole = this.checkRole(this.addUserRole, 'QLND_01');
-    this.searchUserRole = this.checkRole(this.searchUserRole, 'QLND_03');
-    this.infoUserRole = this.checkRole(this.infoUserRole, 'QLND_04');
-    this.editUserRole = this.checkRole(this.editUserRole, 'QLND_02');
+    if(this.permissions[0].code.includes('QLTB')) {
+      console.log("vao qltb");
+      this.adminUserRole = false;
+
+      this.appService.setTitle('');
+    } else {
+      this.addUserRole = this.checkRole(this.addUserRole, 'QLND_01');
+      this.searchUserRole = this.checkRole(this.searchUserRole, 'QLND_03');
+      this.infoUserRole = this.checkRole(this.infoUserRole, 'QLND_04');
+      this.editUserRole = this.checkRole(this.editUserRole, 'QLND_02');
+
+      this.appService.setTitle('user.list');
+    }
 
     console.log('qlnd 02');
     console.log(this.addUserRole);
 
-    this.appService.setTitle('user.list');
     this.searchUser();
 
     this.cols = [

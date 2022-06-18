@@ -362,9 +362,9 @@ export class AdminAddUnitComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     // stop here if form is invalid
-    // if (this.addForm.invalid) {
-    //   return;
-    // }
+    if (this.addForm.invalid) {
+      return;
+    }
 
     let dataForm = {
       id: this.data.id,
@@ -458,7 +458,7 @@ export class AdminAddUnitComponent implements OnInit {
           console.log('data add ');
           console.log(data);
 
-          if (data.id != null || data.id != undefined) {
+          if (data.id != null && data.id != undefined) {
             this.toastService.showSuccessHTMLWithTimeout(
               'Thêm mới thành công!',
               '',

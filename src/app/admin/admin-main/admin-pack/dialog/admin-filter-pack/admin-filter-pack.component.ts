@@ -30,9 +30,10 @@ export class AdminFilterPackComponent implements OnInit {
 
       this.addForm = this.fbd.group({
         filter_code: this.fbd.control(this.data.filter_code),
-        filter_price:this.fbd.control(this.data.filter_price),
+        filter_totalBeforeVAT:this.fbd.control(this.data.filter_totalBeforeVAT),
+        filter_totalAfterVAT:this.fbd.control(this.data.filter_totalAfterVAT),
         filter_time: this.fbd.control(this.data.filter_time),
-        filter_status: this.fbd.control(this.data.filter_status),
+        filter_status: this.fbd.control(Number(this.data.filter_status)),
         filter_number_contract: this.fbd.control(this.data.filter_number_contract),
       });
     }
@@ -40,9 +41,10 @@ export class AdminFilterPackComponent implements OnInit {
   ngOnInit(): void {
     this.addForm = this.fbd.group({
       filter_code: this.fbd.control(this.data.filter_code),
-      filter_price:this.fbd.control(this.data.filter_price),
+      filter_totalBeforeVAT:this.fbd.control(this.data.filter_totalBeforeVAT),
+      filter_totalAfterVAT:this.fbd.control(this.data.filter_totalAfterVAT),
       filter_time: this.fbd.control(this.data.filter_time),
-      filter_status: this.fbd.control(this.data.filter_status),
+      filter_status: this.fbd.control(Number(this.data.filter_status)),
       filter_number_contract: this.fbd.control(this.data.filter_number_contract),
     });
     this.statusList = statusList;
@@ -56,19 +58,21 @@ export class AdminFilterPackComponent implements OnInit {
     }
     const data = {
       filter_code: this.addForm.value.filter_code,
-      filter_price: this.addForm.value.filter_price,
+      filter_totalBeforeVAT:this.addForm.value.totalBeforeVAT,
+      filter_totalAfterVAT:this.addForm.value.totalAfterVAT,
       filter_time: this.addForm.value.filter_time,
       filter_status: this.addForm.value.filter_status,
       filter_number_contract: this.addForm.value.filter_number_contract,
     }
     this.dialogRef.close();
-    console.log(data);
+    console.log("data filter code ",data.filter_code);
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/admin-main/pack'],
       {
         queryParams: {
           'filter_code': data.filter_code, 
-          'filter_price': data.filter_price,
+          'filter_totalBeforeVAT': data.filter_totalBeforeVAT,
+          'filter_totalAfterVAT': data.filter_totalAfterVAT,
           'filter_time': data.filter_time,
           'filter_status': data.filter_status,
           'filter_number_contract': data.filter_number_contract,

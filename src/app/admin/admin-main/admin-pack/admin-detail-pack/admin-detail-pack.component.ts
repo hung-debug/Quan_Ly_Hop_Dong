@@ -34,4 +34,24 @@ export class AdminDetailPackComponent implements OnInit {
       }
     )
   }
+
+  packList(): string {
+    if(this.datas?.type == 'NORMAL') {
+      return "Bình thường";
+    } else if(this.datas?.type == 'PROMOTION') {
+      return "Khuyến mại";
+    }
+
+    return "";
+  }
+
+  calculatorMethodList(): string {
+    if(this.datas?.calculatorMethod == 'BY_TIME') {
+      return "Theo thời gian";
+    } else if(this.datas?.calculatorMethod == 'BY_CONTRACT_NUMBERS') {
+      return "Theo số lượng hợp đồng";
+    }
+
+    return "";
+  }
 }

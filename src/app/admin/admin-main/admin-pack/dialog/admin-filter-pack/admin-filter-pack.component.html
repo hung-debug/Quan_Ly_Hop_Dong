@@ -4,26 +4,33 @@
     </div>
     <form [formGroup]="addForm" class="content">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="label text-color">Mã gói</div>
                 <div class="input-data">
                     <input type="text" formControlName="filter_code">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label text-color">Thời gian</div>
+                <div class="input-data">
+                    <input type="text" formControlName="filter_time">
                 </div>
             </div>
         </div>
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label text-color">Đơn giá</div>
+                <div class="label text-color">Đơn giá trước VAT</div>
                 <div class="input-data">
-                    <input type="text" formControlName="filter_price">
+                    <input type="text" formControlName="filter_totalBeforeVAT">
                 </div>
             </div>
         
             <div class="col-md-6">
-                <div class="label text-color">Thời gian</div>
+                <div class="label text-color">Đơn giá sau VAT</div>
                 <div class="input-data">
-                    <input type="text" formControlName="filter_time">
+                    <input type="text" formControlName="filter_totalAfterVAT">
                 </div>
             </div>
         </div>
