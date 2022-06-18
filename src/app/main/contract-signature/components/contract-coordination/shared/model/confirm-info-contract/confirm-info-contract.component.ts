@@ -108,6 +108,7 @@ export class ConfirmInfoContractComponent implements OnInit {
   // push dữ liệu step 3
   async getDefindDataSignEdit(dataSignId: any, dataSignNotId: any) {
     let dataSample_contract: any[] = [];
+    this.spinner.show();
     if (dataSignId.length > 0) {
       dataSignId.forEach((res: any) => {
         this.arrVariableRemove.forEach((itemRemove: any) => {
@@ -118,7 +119,6 @@ export class ConfirmInfoContractComponent implements OnInit {
       })
 
       let countIsSignId = 0;
-      this.spinner.show();
       // mang update cac obj o ky da ton tai
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
