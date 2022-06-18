@@ -6,7 +6,7 @@
     <div class="col-md-1">
       <input class="contract-total" style="width: 25px; height: 25px" type="number" [(ngModel)]="item.ordering"
              oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-             [disabled]="is_change_party">
+             disabled>
     </div>
     <div class="col-md-11 contract--content">
       <div class="contract__content--title">
@@ -165,7 +165,7 @@
             </div>
             <div class="participants--add">
               <u class="label text-color" style="color: #106DB6"
-                 (click)="addPartnerDocument(item, id)">{{'btn.add.user.sign' | translate}}</u>
+                 (click)="addPartnerDocument(item, id)">{{'btn.add.user.doc' | translate}}</u>
             </div>
           </div>
         </div>
