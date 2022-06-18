@@ -490,7 +490,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   // }
 
   processHandleContract() {
-    // alert('Luồng xử lý hợp đồng!');
     const data = this.datas;
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {

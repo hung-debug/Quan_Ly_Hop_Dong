@@ -58,7 +58,6 @@ export class AddContractComponent implements OnInit {
         this.appService.setTitle('SAO CHÉP HỢP ĐỒNG');
       }
     });
-
   }
 
   next(){
