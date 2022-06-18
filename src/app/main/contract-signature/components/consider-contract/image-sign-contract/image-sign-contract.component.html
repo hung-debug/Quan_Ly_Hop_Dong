@@ -7,10 +7,11 @@
     <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" alt="mobifone.contract">
   </div>
   <div *ngIf="sign.valueSign" (click)="doSign()">
-    <img [src]="sign.valueSign" alt="mobifone.contract" 
-    [width]="sign.width ? sign.width : '100px'" 
+    <img [src]="sign.valueSign" alt="mobifone.contract"
+    [width]="sign.width ? sign.width : '100px'"
     [height]="sign.height ? sign.height : '54px'">
   </div>
+
 
 </div>
 

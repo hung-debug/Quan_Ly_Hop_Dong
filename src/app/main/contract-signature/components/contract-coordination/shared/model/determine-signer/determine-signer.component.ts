@@ -148,6 +148,7 @@ export class DetermineSignerComponent implements OnInit {
       this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000);
     }, () => {
       this.spinner.hide();
+      this.datas.arrDelete = null;
       this.datas.step = step;
     })
   }
@@ -598,9 +599,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 2);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
-    if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'người xem xét tổ chức')) {
-      return;
-    }
+    // if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'người xem xét tổ chức')) {
+    //   return;
+    // }
     arr_clone.forEach((element: any, index: number) => {
       if (index != i) {
         array_empty.push(element);
@@ -624,9 +625,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 3);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
-    if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'người ký tổ chức')) {
-      return;
-    }
+    // if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'người ký tổ chức')) {
+    //   return;
+    // }
     arr_clone.forEach((element: any, index: number) => {
       if (index != i) {
         array_empty.push(element);
@@ -645,9 +646,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = this.data_organization.recipients.filter((p: any) => p.role != 4);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
-    if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'văn thư tổ chức')) {
-      return;
-    }
+    // if (arr_clone[i].fields && arr_clone[i].fields.length > 0 && !this.deleteElement(arr_clone[i], 'văn thư tổ chức')) {
+    //   return;
+    // }
     arr_clone.forEach((element: any, index: number) => {
       if (index != i) {
         array_empty.push(element);
@@ -684,9 +685,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 2);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
-    if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'người xem xét đối tác')) {
-      return;
-    }
+    // if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'người xem xét đối tác')) {
+    //   return;
+    // }
     arr_clone.forEach((element: any, index: number) => {
       if (index != index_item) {
         array_empty.push(element);
@@ -705,9 +706,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 3);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
-    if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'người ký đối tác')) {
-      return;
-    }
+    // if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'người ký đối tác')) {
+    //   return;
+    // }
     arr_clone.forEach((element: any, index: number) => {
       if (index != index_item) {
         array_empty.push(element);
@@ -725,9 +726,9 @@ export class DetermineSignerComponent implements OnInit {
     let arr_clone_different = item.recipients.filter((p: any) => p.role != 4);
     const array_empty: any[] = [];
     let new_arr: any[] = [];
-    if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'văn thư đối tác')) {
-      return;
-    }
+    // if (arr_clone[index_item].fields && arr_clone[index_item].fields.length > 0 && !this.deleteElement(arr_clone[index_item], 'văn thư đối tác')) {
+    //   return;
+    // }
     arr_clone.forEach((element: any, index: number) => {
       if (index != index_item) {
         array_empty.push(element);

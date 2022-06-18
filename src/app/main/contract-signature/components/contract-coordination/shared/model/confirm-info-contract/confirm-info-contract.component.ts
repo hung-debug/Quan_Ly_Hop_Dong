@@ -1,11 +1,11 @@
-import { DatePipe } from '@angular/common';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { variable } from 'src/app/config/variable';
-import { ContractService } from 'src/app/service/contract.service';
-import { ToastService } from 'src/app/service/toast.service';
-import { NgxSpinnerService } from "ngx-spinner";
+import {DatePipe} from '@angular/common';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {variable} from 'src/app/config/variable';
+import {ContractService} from 'src/app/service/contract.service';
+import {ToastService} from 'src/app/service/toast.service';
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-confirm-info-contract',
@@ -38,11 +38,11 @@ export class ConfirmInfoContractComponent implements OnInit {
   ];
 
   constructor(private formBuilder: FormBuilder,
-    public datepipe: DatePipe,
-    private contractService: ContractService,
-    private router: Router,
-    private spinner: NgxSpinnerService,
-    private toastService: ToastService,) {
+              public datepipe: DatePipe,
+              private contractService: ContractService,
+              private router: Router,
+              private spinner: NgxSpinnerService,
+              private toastService: ToastService,) {
     this.step = variable.stepSampleContract.step4
   }
 
@@ -63,9 +63,11 @@ export class ConfirmInfoContractComponent implements OnInit {
   getPartnerReviewer(item: any) {
     return item.recipients.filter((p: any) => p.role == 2)
   }
+
   getPartnerSignature(item: any) {
     return item.recipients.filter((p: any) => p.role == 3)
   }
+
   getPartnerDocument(item: any) {
     return item.recipients.filter((p: any) => p.role == 4);
   }
@@ -117,6 +119,7 @@ export class ConfirmInfoContractComponent implements OnInit {
 
       let countIsSignId = 0;
       this.spinner.show();
+      // mang update cac obj o ky da ton tai
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
@@ -133,6 +136,7 @@ export class ConfirmInfoContractComponent implements OnInit {
       }
     }
 
+    // mang update cac doi tuong o ky moi (them or bi xoa)
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
       dataSignNotId.forEach((item: any) => {
@@ -167,9 +171,7 @@ export class ConfirmInfoContractComponent implements OnInit {
           delete item[item_remove]
         })
       })
-      // Array.prototype.push.apply(this.data_sample_contract, dataSignNotId);
       await this.contractService.getContractSample(dataSignNotId).toPromise().then((data) => {
-        // this.spinner.hide();
       }, error => {
         isErrorNotId = true;
         this.spinner.hide();
@@ -187,18 +189,27 @@ export class ConfirmInfoContractComponent implements OnInit {
       isSuccess += 1;
     }
 
+    // xoa cac du lieu thay doi trong database
+    if (isSuccess == 0 && this.datas.arrDelete.length > 0) {
+      for (let d of this.datas.arrDelete) {
+        await this.contractService.deleteInfoContractSignature(d).toPromise().then((res: any) => {
+        }, (error) => {
+          isSuccess++;
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout('error_delete_object_signature', "", "3000");
+        })
+      }
+    }
+
     if (isSuccess == 0) {
-      this.contractService.getContractDetermine(this.datas.determine_contract, this.datas.data_contract_document_id.contract_id).subscribe((res: any) => {
-        console.log('success step confirm 2');
-      },
+      await this.contractService.getContractDetermine(this.datas.determine_contract, this.datas.data_contract_document_id.contract_id).toPromise().then((res: any) => {
+          // console.log('success step confirm 2');
+        },
         (error: any) => {
           isSuccess++;
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout(error.error, "", 3000);
-        }, () => {
-          this.spinner.hide();
-        }
-      );
+        });
     }
 
     if (isSuccess == 0) {
@@ -227,11 +238,11 @@ export class ConfirmInfoContractComponent implements OnInit {
 
       if (!isCheckFail) {
         await this.contractService.coordinationContract(participantId, arrCoordination, this.datas.recipient_id_coordition).toPromise().then((data) => {
-          this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
-          // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
-          // localStorage.setItem('coordination_complete', JSON.stringify(true));
-          this.spinner.hide();
-        },
+            this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
+            // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
+            // localStorage.setItem('coordination_complete', JSON.stringify(true));
+            // this.spinner.hide();
+          },
           error => {
             isCheckFail = true;
             this.spinner.hide();
@@ -247,6 +258,7 @@ export class ConfirmInfoContractComponent implements OnInit {
             this.datas.is_data_contract = res;
             this.datas.step = variable.stepSampleContract.step_coordination;
           }
+          this.spinner.hide();
         }, (error) => {
           isCheckFail = true;
           this.spinner.hide();
