@@ -36,13 +36,14 @@
 
             <div class="row" style="padding-top: 2%;">
               <div class="col-md-6">
-                <div class="label text-color">{{'Địa chỉ' | translate }}</div>
+                <div class="label text-color">{{'Mã tổ chức' | translate }}<span class="required-title">*</span></div>
                 <div class="input-line">
-                  <input type="text" placeholder="{{'Nhập địa chỉ' | translate}}"
-                    formControlName="address" class="input-text"/>
+                  <input type="text" placeholder="{{'Nhập mã tổ chức' | translate}}"
+                    formControlName="code" class="input-text"/>
                 </div>
-                <div *ngIf="submitted && f.address.errors" class="invalid">
-                  <div *ngIf="f.address.errors.pattern">{{'Địa chỉ không được chứa ký tự đặc biệt' | translate}}</div>
+                <div *ngIf="submitted && f.code.errors" class="invalid">
+                  <div *ngIf="f.code.errors.pattern">{{'Mã tổ chức không được chứa ký tự đặc biệt' | translate}}</div>
+                  <div *ngIf="f.code.errors.required">{{'Mã tổ chức không được để trống' | translate}}</div>
                 </div>
               </div>
               <div class="col-md-6">
@@ -53,7 +54,7 @@
                 </div>
                 <div *ngIf="submitted && f.tax_code.errors" class="invalid">
                   <div *ngIf="f.tax_code.errors.required">{{'Mã số thuế không được để trống' | translate}}</div>
-                  <div *ngIf="f.tax_code.errors.pattern">{{'Mã số thuế không được chứa ký tự đặc biệt' | translate}}</div>
+                  <div *ngIf="f.tax_code.errors.pattern">{{'Mã số thuế phải là số' | translate}}</div>
                 </div>
               </div>
             </div>
@@ -105,6 +106,19 @@
                   <div *ngIf="f.phone.errors.required">{{'Số điện thoại không được để trống' | translate}}</div>
                   <div *ngIf="f.phone.errors.pattern">{{'Số điện thoại không đúng định dạng' | translate}}</div>
                 </div>
+              </div>
+            </div>
+
+            <div class="row" style="padding-top: 2%;">
+              <div class="col-md-12">
+                  <div class="label text-color">{{'Địa chỉ' | translate }} <span class="required-title">*</span></div>
+                  <div class="input-line">
+                    <input type="text" placeholder="{{'Nhập địa chỉ' | translate}}"
+                      formControlName="address" class="input-text"/>
+                  </div>
+                  <div *ngIf="submitted && f.email.errors" class="invalid">
+                    <div *ngIf="f.email.errors.required">{{'Địa chỉ không được để trống' | translate}}</div>
+                  </div>
               </div>
             </div>
 

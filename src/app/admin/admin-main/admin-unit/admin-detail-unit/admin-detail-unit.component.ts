@@ -68,7 +68,8 @@ export class AdminDetailUnitComponent implements OnInit {
   detailPackUnit(id: any) {
     const data = {
       title: 'CHI TIẾT GÓI DỊCH VỤ CỦA TỔ CHỨC',
-      id: id,
+      id: this.data.id,
+      idPack: id,
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminDetailPackUnitComponent, {
