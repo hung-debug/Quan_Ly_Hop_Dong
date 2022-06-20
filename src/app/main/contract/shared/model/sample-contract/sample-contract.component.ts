@@ -166,32 +166,38 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
-      edges: { right: true, bottom: true }, // Cho phép resize theo chiều nào.
+      edges: { left: true, right: true, bottom: true, top: true },
       listeners: {
         move: this.resizableListener, onend: this.resizeSignature
       },
       modifiers: [
-        // keep the edges inside the parent
-
-        interact.modifiers.aspectRatio({
-          // ratio may be the string 'preserve' to maintain the starting aspect ratio,
-          // or any number to force a width/height ratio
-          ratio: 'preserve',
-          // To add other modifiers that respect the aspect ratio,
-          // put them in the aspectRatio.modifiers array
-          modifiers: [
-            interact.modifiers.restrictEdges({
-              outer: '.drop-zone'
-            }),
-
-            // minimum size
-            interact.modifiers.restrictSize({
-              //min: { width: 100, height: 32 }
-            })
-          ]
+        interact.modifiers.restrictEdges({
+          outer: '.drop-zone'
+        }),
+        // minimum size
+        interact.modifiers.restrictSize({
+          // min: { width: 100, height: 32 }
         })
+        // keep the edges inside the parent (resize kich thuoc duy tri 1 khung hinh goc khi keo tha)
+        // interact.modifiers.aspectRatio({
+        //   // ratio may be the string 'preserve' to maintain the starting aspect ratio,
+        //   // or any number to force a width/height ratio
+        //   ratio: 'preserve',
+        //   // To add other modifiers that respect the aspect ratio,
+        //   // put them in the aspectRatio.modifiers array
+        //   modifiers: [
+        //     interact.modifiers.restrictEdges({
+        //       outer: '.drop-zone'
+        //     }),
+        //
+        //     // minimum size
+        //     interact.modifiers.restrictSize({
+        //       // min: { width: 100, height: 32 }
+        //     })
+        //   ]
+        // })
       ],
-      inertia: true
+      inertia: true,
     })
 
     // event resize element
@@ -204,9 +210,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       modifiers: []
     })
     interact.addDocument(document)
-
-    // console.log(this.datas)
-
   }
 
   getDataSignUpdateAction() {
@@ -652,7 +655,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getConditionFiledSign(element: any, isSignType: string) {
-    if ((element.fields && element.fields.length && element.fields.length > 0) && 
+    if ((element.fields && element.fields.length && element.fields.length > 0) &&
     (element.sign_type.some((id: number) => [1,5].includes(id)) && isSignType == 'chu_ky_anh') || (element.sign_type.some((id: number) => [2,3,4].includes(id)) && isSignType == 'chu_ky_so') || (isSignType == 'text' && (element.sign_type.some((id: number) => id == 2) || element.role == 4) || (isSignType == 'so_tai_lieu' && (element.role != 4 || (this.datas.contract_no && element.role == 4))))) {
       return true;
     } else return false;
@@ -1369,7 +1372,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       //   this.step = variable.stepSampleContract.step4;
       //   this.datas.stepLast = this.step
       //   this.nextOrPreviousStep(this.step);
-      // } else 
+      // } else
       if (action == 'save_draft') {
         this.datas.save_draft.sample_contract = false;
         this.stepChangeSampleContract.emit('save_draft_sample_contract')

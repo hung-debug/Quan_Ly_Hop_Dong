@@ -180,7 +180,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
-      edges: {right: true, bottom: true}, // Cho phép resize theo chiều nào.
+      edges: { left: true, right: true }, // Cho phép resize theo chiều nào.
       listeners: {
         move: this.resizableListener, onend: this.resizeSignature
       },

@@ -176,24 +176,30 @@ export class SampleContractFormComponent implements OnInit {
       },
       modifiers: [
         // keep the edges inside the parent
-
-        interact.modifiers.aspectRatio({
-          // ratio may be the string 'preserve' to maintain the starting aspect ratio,
-          // or any number to force a width/height ratio
-          ratio: 'preserve',
-          // To add other modifiers that respect the aspect ratio,
-          // put them in the aspectRatio.modifiers array
-          modifiers: [
-            interact.modifiers.restrictEdges({
-              outer: '.drop-zone'
-            }),
-
-            // minimum size
-            interact.modifiers.restrictSize({
-              //min: { width: 100, height: 32 }
-            })
-          ]
+        interact.modifiers.restrictEdges({
+          outer: '.drop-zone'
+        }),
+        // minimum size
+        interact.modifiers.restrictSize({
+          //min: { width: 100, height: 32 }
         })
+        // interact.modifiers.aspectRatio({
+        //   // ratio may be the string 'preserve' to maintain the starting aspect ratio,
+        //   // or any number to force a width/height ratio
+        //   ratio: 'preserve',
+        //   // To add other modifiers that respect the aspect ratio,
+        //   // put them in the aspectRatio.modifiers array
+        //   modifiers: [
+        //     interact.modifiers.restrictEdges({
+        //       outer: '.drop-zone'
+        //     }),
+        //
+        //     // minimum size
+        //     interact.modifiers.restrictSize({
+        //       //min: { width: 100, height: 32 }
+        //     })
+        //   ]
+        // })
       ],
       inertia: true
     })
