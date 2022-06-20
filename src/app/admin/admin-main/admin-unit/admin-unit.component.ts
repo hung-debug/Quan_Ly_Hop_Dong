@@ -323,11 +323,21 @@ export class AdminUnitComponent implements OnInit {
   }
 
   autoSearch(event: any) {
+    console.log("vao day");
     this.listData = this.temp.filter(
       (word) =>
         word.name.includes(this.filterSearch) ||
-        word.shortName.includes(this.filterSearch) ||
+        this.filterShortName(word) ||
         word.code.includes(this.filterSearch)
     );
   }
+
+  filterShortName(word: any) {
+    if(word.shortName != null) {
+      word.shortName.includes(this.filterSearch);
+    }
+  }
+
 }
+
+

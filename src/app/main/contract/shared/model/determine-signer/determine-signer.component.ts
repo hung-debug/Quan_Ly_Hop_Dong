@@ -104,8 +104,8 @@ export class DetermineSignerComponent implements OnInit {
       textField: "name",
       enableCheckAll: false,
       allowSearchFilter: true,
-      itemsShowLimit: 2,
-      limitSelection: 2,
+      itemsShowLimit: 1,
+      limitSelection: 1,
       disabledField: 'item_disable',
     };
 

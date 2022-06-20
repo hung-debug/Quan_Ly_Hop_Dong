@@ -11,10 +11,14 @@
         </div>
         <p-dropdown
           placeholder="Chọn gói dịch vụ"
+          filterBy="code"
           [filter]="true"
-          filterBy="name"
           [showClear]="true"
-          [options]="listCodeDichVu"
+
+          [options]="listDichVu"
+          optionLabel="code"
+          optionValue="code"
+
           (onChange)="onChangeMaGoi($event)"
           formControlName="packCode"
         >

@@ -21,7 +21,6 @@ export class AdminAddPackUnitComponent implements OnInit {
   addForm: FormGroup;
 
   datas: any;
-  listCodeDichVu: any[];
   listDichVu: any[];
   listPaidType: Array<any> = [];
   listStatusType: Array<any> = [];
@@ -285,7 +284,6 @@ export class AdminAddPackUnitComponent implements OnInit {
     if (paymentDate != null) {
       return new Date(paymentDate).toLocaleDateString('fr-CA');
     }
-    console.log('ngay thang toan null');
     return null;
   }
   convertPaymentStatus(paymentStatus: string): any {
@@ -310,17 +308,9 @@ export class AdminAddPackUnitComponent implements OnInit {
     this.adminPackService
       .getPackListComboBox('', '', '', '', '', '', '')
       .subscribe((response) => {
-        const listCode: any[] = [];
-
-        console.log('response ', response);
 
         this.listDichVu = response;
 
-        response.forEach((key: any) => {
-          listCode.push(key.code);
-        });
-
-        this.listCodeDichVu = listCode;
       });
   }
 
