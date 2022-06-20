@@ -98,6 +98,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     this.emailUser_sample = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
+    if (!this.datas['arrDelete']) {
+      this.datas.arrDelete = [];
+    }
     if (!this.datas.contract_user_sign) { // next first step
       this.getDataSignUpdateAction();
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
@@ -115,12 +118,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
       this.datas.contract_user_sign.forEach((res: any) => {
-        res.sign_config = res.sign_config.filter((p: any) => isArrCoordination.some((q: any) => q.sign_type && (p.email == q.email && p.name == q.name &&
-          ((p.sign_unit == 'chu_ky_anh' && q.sign_type.some(({id}: any) => id == 1) ||
-            (p.sign_unit == 'chu_ky_so' && q.sign_type.some(({id}: any) => id == 2 || id == 3 || id == 4) ||
-              (p.sign_unit == 'text' && q.sign_type.some(({id}: any) => id == 2)) ||
-              (p.sign_unit == 'so_tai_lieu' && q.role == 4)))))));
+        let data_no_exist = _.cloneDeep(this.getActionNextMore(res, isArrCoordination, false));
+        if (data_no_exist.length > 0) {
+          let defind_data = data_no_exist.map(({id}: any) => {return id});
+          Array.prototype.push.apply(this.datas.arrDelete, defind_data)
+        }
+        res.sign_config = this.getActionNextMore(res, isArrCoordination, true);
+        // res.sign_config = is_item;
       })
+
+      console.log(this.datas.arrDelete)
     }
 
     // this.defindDataContract();
@@ -212,6 +219,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
     interact.addDocument(document)
 
+  }
+
+  getActionNextMore(res: any, isArrCoordination: any, exist: boolean) {
+    if (exist) {
+      let data_have_position = res.sign_config.filter((p: any) => isArrCoordination.some((q: any) => q.sign_type && (p.email == q.email && p.name == q.name &&
+        ((p.sign_unit == 'chu_ky_anh' && q.sign_type.some(({id}: any) => id == 1) ||
+          (p.sign_unit == 'chu_ky_so' && q.sign_type.some(({id}: any) => id == 2 || id == 3 || id == 4) ||
+            (p.sign_unit == 'text' && (q.sign_type.some(({id}: any) => id == 2) || q.role == 4)) ||
+            (p.sign_unit == 'so_tai_lieu' && q.role == 4)))))));
+      return data_have_position;
+    } else {
+      let data_have_position = res.sign_config.filter((p: any) => !isArrCoordination.some((q: any) => q.sign_type && (p.email == q.email && p.name == q.name &&
+        ((p.sign_unit == 'chu_ky_anh' && q.sign_type.some(({id}: any) => id == 1) ||
+          (p.sign_unit == 'chu_ky_so' && q.sign_type.some(({id}: any) => id == 2 || id == 3 || id == 4) ||
+            (p.sign_unit == 'text' && (q.sign_type.some(({id}: any) => id == 2) || q.role == 4)) ||
+            (p.sign_unit == 'so_tai_lieu' && q.role == 4)))))));
+      return data_have_position;
+    }
   }
 
   getListSignName(listSignForm: any = []) {
@@ -472,7 +497,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           dataChange = this.datas.is_data_object_signature.filter((p: any) => p.recipient.id == item.id &&
             ((p.recipient.email != item.email || p.recipient.name != item.name || (p.type == 2 && !item.sign_type.some((q: any) => q.id == 1) ||
               (p.type == 3 && !item.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) ||
-              (p.type == 1 && !item.sign_type.some((q: any) => q.id == 2))))));
+              (p.type == 1 && item.role != 4 && !item.sign_type.some((q: any) => q.id == 2))))));
 
           if (dataChange.length == 0) {
             if (item.fields && item.fields.length && item.fields.length > 0) {
@@ -499,11 +524,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               dataNotPosition.push(item)
             }
           } else {
-            this.removeDataSignChange(dataChange[0].id).then();
+            // this.removeDataSignChange(dataChange[0].id).then();
+            let isValueDelete = dataChange.map(({id}: any) => {return id})
+            Array.prototype.push.apply(this.datas.arrDelete, isValueDelete);
+            // this.datas.arrDelete.push(dataChange[0].id);
           }
         })
       }
     })
+
+    console.log(this.datas.arrDelete);
 
     // dataPosition = dataPosition.filter()
     this.dataSignPosition = [...dataPosition, ...dataNotPosition];
@@ -970,60 +1000,37 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   async onCancel(e: any, data: any) {
-    let dataHaveId = true;
-    if (data.id_have_data) {
-      this.spinner.show();
-      await this.contractService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
-        this.toastService.showSuccessHTMLWithTimeout(`Bạn đã xóa đối tượng ký trong hợp đồng!`, "", 3000);
-        this.list_sign_name.forEach((p: any) => {
-          if (p.fields && p.fields.length && p.fields.length > 0) {
-            for (let i = 0; i < p.fields.length; i++) {
-              if (p.fields[i] && p.fields[i].id_have_data == data.id_have_data) {
-                delete p.fields[i];
-              }
-            }
-          }
+    data.coordinate_x = 0;
+    data.coordinate_y = 0;
+    // data.number = 0;
+    data.page = 0;
+    data.width = 0;
+    data.height = 0;
+    data.position = "";
+    if (data.sign_unit == 'text') {
+      this.isEnableText = false;
+    }
+    let signElement = document.getElementById(data.id);
+    if (signElement) {
+      this.objSignInfo.traf_x = 0;
+      this.objSignInfo.traf_y = 0;
+      this.objSignInfo.height = 0;
+      this.objSignInfo.width = 0;
+      //@ts-ignore
+      document.getElementById('select-dropdown').value = "";
+      // this.signCurent.width = 0;
+      // this.signCurent.height = 0;
+    }
+    this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
+      if (element.sign_config.length > 0) {
+        element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
+        element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
+          itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.id;
         })
-        this.spinner.hide();
-      }, (error: HttpErrorResponse) => {
-        this.toastService.showSuccessHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
-        this.spinner.hide();
-        dataHaveId = false;
-      })
-    }
-    if (dataHaveId) {
-      data.coordinate_x = 0;
-      data.coordinate_y = 0;
-      // data.number = 0;
-      data.page = 0;
-      data.width = 0;
-      data.height = 0;
-      data.position = "";
-      if (data.sign_unit == 'text') {
-        this.isEnableText = false;
       }
-      let signElement = document.getElementById(data.id);
-      if (signElement) {
-        this.objSignInfo.traf_x = 0;
-        this.objSignInfo.traf_y = 0;
-        this.objSignInfo.height = 0;
-        this.objSignInfo.width = 0;
-        //@ts-ignore
-        document.getElementById('select-dropdown').value = "";
-        // this.signCurent.width = 0;
-        // this.signCurent.height = 0;
-      }
-      this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
-        if (element.sign_config.length > 0) {
-          element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
-          element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
-            itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.id;
-          })
-        }
-      });
-      this.eventMouseover();
-      this.cdRef.detectChanges();
-    }
+    });
+    this.eventMouseover();
+    this.cdRef.detectChanges();
   }
 
   // Hàm tạo các đối tượng kéo thả
