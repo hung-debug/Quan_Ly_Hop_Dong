@@ -217,16 +217,14 @@
           dateFormat="dd/mm/yy"
           #created_at
           formControlName="paymentDate"
+          [maxDate]="maxPaymentDate"
+          [(ngModel)]="paymentDate"
+          (onSelect) = "onChangePaymentDate($event)"
         >
         </p-calendar>
-        <div
-          *ngIf="
-            submitted && f.paymentDate.errors && this.flagNgayThanhToan === true
-          "
-          class="invalid"
-        >
+        <div *ngIf="submitted && f.paymentDate.errors" class="invalid">
           <div *ngIf="f.paymentDate.errors.required">
-            {{ "Trạng thái thanh toán không được để trống" | translate }}
+            {{ "Ngày thanh toán không được để trống" | translate }}
           </div>
         </div>
       </div>
@@ -246,6 +244,7 @@
           #created_at
           formControlName="startDate"
           (onSelect) = "onChangeStartDate($event)"
+          [(ngModel)]="startDate"
         ></p-calendar>
         <div *ngIf="submitted && f.startDate.errors" class="invalid">
           <div *ngIf="f.startDate.errors.required">
@@ -264,7 +263,6 @@
             formControlName="endDate"
             value="{{ endDate }}"
             readonly
-            [(ngModel)]="endDate"
           />
         </div>
       </div>

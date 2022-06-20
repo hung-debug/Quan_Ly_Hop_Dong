@@ -34,7 +34,9 @@ export class AdminAddPackUnitComponent implements OnInit {
   type: string;
 
   statusType: string;
+
   flagNgayThanhToan: boolean = false;
+  flagPaymentDate: boolean = false;
 
   idPack: any;
 
@@ -43,7 +45,13 @@ export class AdminAddPackUnitComponent implements OnInit {
   endDate: any;
 
   flagTime: boolean = false;
+  flagStatus: boolean = false;
+
   startDate: any;
+
+  maxPaymentDate = new Date();
+
+  paymentDate: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -54,58 +62,31 @@ export class AdminAddPackUnitComponent implements OnInit {
     private adminPackService: AdminPackService,
     private toastService: ToastService
   ) {
+    this.maxPaymentDate.setDate(this.maxPaymentDate.getDate());
+
     this.addForm = this.fbd.group({
       packCode: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
       ]),
-      namePack: this.fbd.control('', [
-        Validators.required,
-        Validators.pattern(parttern_input.input_form),
-      ]),
-      totalBeforeVAT: this.fbd.control('', [
-        Validators.required,
-        Validators.pattern(parttern_input.input_form),
-      ]),
-      totalAfterVAT: this.fbd.control('', [
-        Validators.required,
-        Validators.pattern(parttern_input.input_form),
-      ]),
-      duration: this.fbd.control('', [
-        Validators.required,
-        Validators.pattern(parttern_input.input_form),
-      ]),
-      numberOfContracts: this.fbd.control('', [
-        Validators.required,
-        Validators.pattern(parttern_input.input_form),
-      ]),
-      type: this.fbd.control('', [
-        Validators.required,
-        Validators.pattern(parttern_input.input_form),
-      ]),
-      calculatorMethod: this.fbd.control('', [
-        Validators.required,
-        Validators.pattern(parttern_input.input_form),
-      ]),
+      namePack: this.fbd.control(''),
+      totalBeforeVAT: this.fbd.control(''),
+      totalAfterVAT: this.fbd.control(''),
+      duration: this.fbd.control(''),
+      numberOfContracts: this.fbd.control(''),
+      type: this.fbd.control(''),
+      calculatorMethod: this.fbd.control(''),
       purchaseDate: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
       ]),
       paymentType: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
       ]),
       paymentStatus: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
       ]),
-      paymentDate: this.fbd.control('', [
-        Validators.required,
-        Validators.pattern(parttern_input.input_form),
-      ]),
+      paymentDate: this.fbd.control(''),
       startDate: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
       ]),
       endDate: this.fbd.control(''),
     });
@@ -124,55 +105,26 @@ export class AdminAddPackUnitComponent implements OnInit {
       this.addForm = this.fbd.group({
         packCode: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
         ]),
-        namePack: this.fbd.control('', [
-          Validators.required,
-          Validators.pattern(parttern_input.input_form),
-        ]),
-        totalBeforeVAT: this.fbd.control('', [
-          Validators.required,
-          Validators.pattern(parttern_input.input_form),
-        ]),
-        totalAfterVAT: this.fbd.control('', [
-          Validators.required,
-          Validators.pattern(parttern_input.input_form),
-        ]),
-        duration: this.fbd.control('', [
-          Validators.required,
-          Validators.pattern(parttern_input.input_form),
-        ]),
-        numberOfContracts: this.fbd.control('', [
-          Validators.required,
-          Validators.pattern(parttern_input.input_form),
-        ]),
-        type: this.fbd.control('', [
-          Validators.required,
-          Validators.pattern(parttern_input.input_form),
-        ]),
-        calculatorMethod: this.fbd.control('', [
-          Validators.required,
-          Validators.pattern(parttern_input.input_form),
-        ]),
+        namePack: this.fbd.control(''),
+        totalBeforeVAT: this.fbd.control(''),
+        totalAfterVAT: this.fbd.control(''),
+        duration: this.fbd.control(''),
+        numberOfContracts: this.fbd.control(''),
+        type: this.fbd.control(''),
+        calculatorMethod: this.fbd.control(''),
         purchaseDate: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
         ]),
         paymentType: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
         ]),
         paymentStatus: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
         ]),
-        paymentDate: this.fbd.control('', [
-          Validators.required,
-          Validators.pattern(parttern_input.input_form),
-        ]),
+        paymentDate: this.fbd.control(''),
         startDate: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
         ]),
         endDate: this.fbd.control(''),
       });
@@ -190,71 +142,39 @@ export class AdminAddPackUnitComponent implements OnInit {
           this.addForm = this.fbd.group({
             packCode: this.fbd.control(response.code, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
             ]),
-            namePack: this.fbd.control(response.name, [
-              Validators.required,
-              Validators.pattern(parttern_input.input_form),
-            ]),
-            totalBeforeVAT: this.fbd.control(response.totalBeforeVAT, [
-              Validators.required,
-              Validators.pattern(parttern_input.input_form),
-            ]),
-            totalAfterVAT: this.fbd.control(response.totalAfterVAT, [
-              Validators.required,
-              Validators.pattern(parttern_input.input_form),
-            ]),
-            duration: this.fbd.control(response.duration, [
-              Validators.required,
-              Validators.pattern(parttern_input.input_form),
-            ]),
-            numberOfContracts: this.fbd.control(response.numberOfContracts, [
-              Validators.required,
-              Validators.pattern(parttern_input.input_form),
-            ]),
+            namePack: this.fbd.control(response.name),
+            totalBeforeVAT: this.fbd.control(response.totalBeforeVAT),
+            totalAfterVAT: this.fbd.control(response.totalAfterVAT),
+            duration: this.fbd.control(response.duration),
+            numberOfContracts: this.fbd.control(response.numberOfContracts),
             type: this.fbd.control(
-              this.convertServiceType(response.serviceType),
-              [
-                Validators.required,
-                Validators.pattern(parttern_input.input_form),
-              ]
+              this.convertServiceType(response.serviceType)
             ),
             calculatorMethod: this.fbd.control(
-              this.convertCalculatorMethod(response.calculatorMethod),
-              [
-                Validators.required,
-                Validators.pattern(parttern_input.input_form),
-              ]
+              this.convertCalculatorMethod(response.calculatorMethod)
             ),
             purchaseDate: this.fbd.control(new Date(response.purchaseDate), [
-              Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.required
             ]),
             paymentType: this.fbd.control(
               this.convertPaymentType(response.paymentType),
               [
-                Validators.required,
-                Validators.pattern(parttern_input.input_form),
-              ]
+                Validators.required              ]
             ),
             paymentStatus: this.fbd.control(
               this.convertPaymentStatus(response.paymentStatus),
               [
                 Validators.required,
-                Validators.pattern(parttern_input.input_form),
               ]
             ),
-            paymentDate: this.fbd.control(new Date(response.paymentDate), [
-              Validators.required,
-              Validators.pattern(parttern_input.input_form),
-            ]),
+            paymentDate: this.fbd.control(this.checkNull(response.paymentDate)),
 
             startDate: this.fbd.control(new Date(response.startDate), [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
             ]),
             endDate: this.fbd.control(
-              this.getPaymentDate(new Date(response.endDate))
+              this.checkNullEndDate(response.endDate)
             ),
           });
 
@@ -262,11 +182,26 @@ export class AdminAddPackUnitComponent implements OnInit {
         });
     }
   }
+  checkNullEndDate(endDate: string): any {
+    if(endDate != null) {
+      return new Date(endDate).toLocaleDateString('fr-CA').split("-").reverse().join("/");
+    }
+
+    return null;
+  }
+  checkNull(paymentDate: string): any {
+    if(paymentDate != null) {
+      return new Date(paymentDate);
+    }
+    return null;
+  }
+
   convertCalculatorMethod(calculatorMethod: string): string {
     if (calculatorMethod == 'BY_TIME') {
       this.flagTime = true;
       return 'Theo thời gian';
     } else if (calculatorMethod == 'BY_CONTRACT_NUMBERS') {
+      this.flagTime = false;
       return 'Theo số lượng hợp đồng';
     }
     return '';
@@ -280,12 +215,6 @@ export class AdminAddPackUnitComponent implements OnInit {
     return '';
   }
 
-  getPaymentDate(paymentDate: any): any {
-    if (paymentDate != null) {
-      return new Date(paymentDate).toLocaleDateString('fr-CA');
-    }
-    return null;
-  }
   convertPaymentStatus(paymentStatus: string): any {
     if (paymentStatus == paidStatusList[0].id) {
       return paidStatusList[0];
@@ -308,13 +237,10 @@ export class AdminAddPackUnitComponent implements OnInit {
     this.adminPackService
       .getPackListComboBox('', '', '', '', '', '', '')
       .subscribe((response) => {
-
         this.listDichVu = response;
-
       });
   }
 
-  flag: number = 0;
   onChangeMaGoi(event: any) {
     if (this.flagTime === true) {
       console.log('vao day');
@@ -347,15 +273,14 @@ export class AdminAddPackUnitComponent implements OnInit {
 
           console.log('duration model ', this.addForm.value.duration);
 
-          if (this.flag == 1)
+          if (this.startDate != null)
             this.endDate = new Date(
               startDate1.setMonth(startDate1.getMonth() + this.duration)
-            ).toLocaleDateString('fr-CA');
+            ).toLocaleDateString('fr-CA').split("-").reverse().join("/");
 
           console.log('this end date ', this.endDate);
 
           this.flagTime = true;
-          this.flag = 1;
         } else if (
           this.listDichVu[i].calculatorMethod == 'BY_CONTRACT_NUMBERS'
         ) {
@@ -376,9 +301,17 @@ export class AdminAddPackUnitComponent implements OnInit {
     }
   }
 
+
   onChangeStatus(event: any) {
     if (event.value.id == 'PAID') {
-      this.flagNgayThanhToan = true;
+        this.flagNgayThanhToan = true;
+        this.addForm.controls.paymentDate.setValidators([Validators.required]);
+
+        this.addForm.controls.paymentDate.updateValueAndValidity();
+  
+        console.log("vao day");
+      
+     
     } else if (event.value.id == 'UNPAID') {
       this.flagNgayThanhToan = false;
     }
@@ -391,38 +324,21 @@ export class AdminAddPackUnitComponent implements OnInit {
   onChangeStartDate(event: any) {
     if (this.flagTime === true) {
 
-      console.log("vao day time");
-
       const startDate1 = new Date(this.addForm.value.startDate);
 
-      console.log("duration ", this.addForm.value.duration);
-
-      if(this.data.idPack == null) {
-        this.endDate = this.getPaymentDate(
-          new Date(
-            startDate1.setMonth(
-              startDate1.getMonth() + this.duration
-            )
-          ).toLocaleDateString('fr-CA')
-        );
-      } else {
-        this.endDate = this.getPaymentDate(
-          new Date(
-            startDate1.setMonth(
-              startDate1.getMonth() + this.addForm.value.duration
-            )
-          ).toLocaleDateString('fr-CA')
-        );
-      }
-    
+      this.endDate = new Date(
+        startDate1.setMonth(startDate1.getMonth() + this.duration)
+      ).toLocaleDateString('fr-CA').split("-").reverse().join("/");
     }
   }
 
   onSubmit() {
     this.submitted = true;
-    // if (this.addForm.invalid) {
-    //   return;
-    // }
+    if (this.addForm.invalid) {
+      console.log("invalid");
+      return;
+    }
+
     const dataForm = {
       id: this.data.id,
       idPack: this.idPack,
@@ -431,36 +347,62 @@ export class AdminAddPackUnitComponent implements OnInit {
       paymentType: this.addForm.value.paymentType,
       paymentStatus: this.addForm.value.paymentStatus,
       startDate: this.addForm.value.startDate,
-      endDate: this.addForm.value.endDate,
+      endDate: this.endDate,
     };
 
+    console.log("data form start date ", dataForm.startDate);
+
     if (
-      this.addForm.value.paymentDate == null || this.addForm.value.paymentDate == '') {
-      console.log('pay ment date null');
+      this.addForm.value.paymentDate == null ||
+      this.addForm.value.paymentDate == ''
+    ) {
       dataForm.paymentDate = null;
     } else {
-      dataForm.paymentDate = JSON.stringify(
-        this.addForm.value.paymentDate
-      ).substring(1, 11);
+      dataForm.paymentDate = new Date(this.addForm.value.paymentDate).toLocaleDateString('fr-CA').split("/").reverse().join("-");
     }
 
     if (
-      this.addForm.value.endDate == null ||
-      this.addForm.value.endDate == ''
+      this.addForm.value.purchaseDate == null ||
+      this.addForm.value.purchaseDate == ''
     ) {
-      dataForm.endDate = null;
+      dataForm.purchaseDate = null;
     } else {
-      dataForm.endDate = JSON.stringify(this.addForm.value.endDate).substring(
-        1,
-        11
-      );
+      dataForm.purchaseDate = new Date(this.addForm.value.purchaseDate).toLocaleDateString('fr-CA').split("/").reverse().join("-");
     }
 
+    
+    if (
+      this.addForm.value.startDate == null ||
+      this.addForm.value.startDate == ''
+    ) {
+      dataForm.startDate = null;
+    } else {
+      dataForm.startDate = new Date(this.addForm.value.startDate).toLocaleDateString('fr-CA').split("/").reverse().join("-");
+    }
+
+   
     console.log('date submit ', dataForm.purchaseDate);
 
     if (this.data.idPack == null) {
+      if (
+        this.endDate == null ||
+        this.endDate == ''
+      ) {
+        dataForm.endDate = null;
+      } else {
+        dataForm.endDate = dataForm.endDate.split("/").reverse().join("-");
+      }  
+
       this.addPackUnit(dataForm);
     } else {
+      if (
+        this.addForm.value.endDate == null ||
+        this.addForm.value.endDate == ''
+      ) {
+        dataForm.endDate = null;
+      } else {
+        dataForm.endDate =  this.addForm.value.endDate.split("/").reverse().join("-");
+      }  
       this.updatePackUnit(dataForm);
     }
   }
@@ -500,7 +442,6 @@ export class AdminAddPackUnitComponent implements OnInit {
   }
 
   addPackUnit(dataForm: any) {
-
     this.adminUnitService.addPackUnit(dataForm).subscribe((response) => {
       if (response.id != null && response.id != undefined) {
         this.toastService.showSuccessHTMLWithTimeout(
@@ -532,4 +473,10 @@ export class AdminAddPackUnitComponent implements OnInit {
       }
     });
   }
+
+  onChangePaymentDate(event: any) {
+   console.log("event ", event);
+  }
+
+
 }
