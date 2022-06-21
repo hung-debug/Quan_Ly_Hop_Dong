@@ -137,10 +137,10 @@ export class AdminUnitService {
 
       const body = JSON.stringify({
         serviceId: idPack,
-        purchaseDate: datas.purchaseDate.toLocaleDateString("fr-CA"),
+        purchaseDate: datas.purchaseDate,
         paymentType: datas.paymentType.id,
         paymentStatus: datas.paymentStatus.id,
-        startDate: datas.startDate.toLocaleDateString("fr-CA"),
+        startDate: datas.startDate,
         endDate: datas.endDate,
         paymentDate: datas.paymentDate,
       });
@@ -164,6 +164,9 @@ export class AdminUnitService {
   }
 
   getPackUnitByIdPack(id: any, idPack: any) {
+    console.log("id ", id);
+    console.log("id pack ", idPack);
+
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -206,6 +209,9 @@ export class AdminUnitService {
   }
 
   addPackUnit(datas: any) {
+
+    console.log("datas ", datas);
+
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -214,11 +220,11 @@ export class AdminUnitService {
 
     const body = JSON.stringify({
       serviceId: datas.idPack,
-      purchaseDate: JSON.stringify(datas.purchaseDate).substring(1, 11),
+      purchaseDate: datas.purchaseDate,
       paymentType: datas.paymentType.id,
       paymentStatus: datas.paymentStatus.id,
-      startDate: JSON.stringify(datas.startDate).substring(1, 11),
-      endDate: JSON.stringify(datas.endDate).substring(1, 11),
+      startDate: datas.startDate,
+      endDate: datas.endDate,
       paymentDate: datas.paymentDate,
     });
 
