@@ -192,12 +192,16 @@ export class ConfirmInfoContractComponent implements OnInit {
     // xoa cac du lieu thay doi trong database
     if (isSuccess == 0 && this.datas.arrDelete.length > 0) {
       for (let d of this.datas.arrDelete) {
-        await this.contractService.deleteInfoContractSignature(d).toPromise().then((res: any) => {
-        }, (error) => {
-          isSuccess++;
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout('error_delete_object_signature', "", "3000");
-        })
+        if (parseInt(d)) {
+          await this.contractService.deleteInfoContractSignature(d).toPromise().then((res: any) => {
+          }, (error) => {
+            isSuccess++;
+            this.spinner.hide();
+            this.toastService.showErrorHTMLWithTimeout('error_delete_object_signature', "", "3000");
+          })
+        }
+        if (isSuccess > 0)
+          break;
       }
     }
 

@@ -488,7 +488,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
   }
 
-  async getDataSignUpdateAction() {
+  getDataSignUpdateAction() {
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
     this.datas.determine_contract.forEach((element: any) => {
