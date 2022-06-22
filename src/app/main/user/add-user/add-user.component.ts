@@ -87,8 +87,7 @@ export class AddUserComponent implements OnInit {
     if(this.isQLND_01 || this.isQLND_02){
       //lay danh sach to chuc
       this.unitService.getUnitList('', '').subscribe(data => {
-        console.log(data.entities);
-        console.log(orgId);
+        
         this.orgList = data.entities;
         // if(this.action == 'add'){
         //   this.orgList = data.entities.filter((p: any) => p.id == orgId);
@@ -97,9 +96,6 @@ export class AddUserComponent implements OnInit {
         // }
         
       });
-
-      
-
       this.networkList = networkList;
     }
 
@@ -135,6 +131,7 @@ export class AddUserComponent implements OnInit {
             fileImage:null
           });
         }
+        this.spinner.hide();
       } else if (this.action == 'edit') {
         this.id = params['id'];
         this.appService.setTitle('user.update');
@@ -150,7 +147,7 @@ export class AddUserComponent implements OnInit {
                 birthday: data.birthday==null?null:new Date(data.birthday),
                 phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
                 organizationId: this.fbd.control(data.organization_id, [Validators.required]),
-                role: this.fbd.control(data.role_id, [Validators.required]),
+                role: this.fbd.control(Number(data.role_id), [Validators.required]),
                 status: data.status,
 
                 phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
@@ -181,22 +178,38 @@ export class AddUserComponent implements OnInit {
               //neu nguoi truy cap co ma vai tro la ADMIN thi duoc quyen sua
               if(this.userRoleCode.toUpperCase() == 'ADMIN'){
                 this.isEditRole = true;
-              }else{
-                if(data.role_id != null){
-                  //lay danh sach vai tro
-                  this.roleService.getRoleById(data.role_id).subscribe(data => {
-                    this.roleName = data.name;
-                  });
-                }
-              }
 
-              //lay danh sach vai tro
-            this.roleService.getRoleByOrgId(data.organization_id).subscribe(data => {
-              console.log(data);
-              this.roleList = data.entities;
-            });
-              
+                //lay danh sach vai tro
+                this.roleService.getRoleByOrgId(orgId).subscribe(dataRole => {
+                  //this.roleList = data.entities;
+                  this.roleList = [];
+                  let checkDupRolePersent = false;
+                  dataRole.entities.forEach((key: any) => {
+                    if(key.id == data.role_id){
+                      checkDupRolePersent = true;
+                    }
+                    var role = {
+                        id:  key.id,
+                        name:  key.name,
+                        inactive: false
+                      }
+                    this.roleList.push(role);
+                  });
+                  //this.roleList = [];
+                  //neu vai tro hien tai khong co trong list vai tro => inactive vai tro do
+                  if(!checkDupRolePersent){
+                    var role = {
+                      id:  data.role_id,
+                      name:  this.roleName,
+                      inactive: true
+                    }
+                    this.roleList.push(role);
+                  }
+                });
+              }
+              this.spinner.hide();
             }, error => {
+              this.spinner.hide();
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
             }
           )
@@ -207,6 +220,7 @@ export class AddUserComponent implements OnInit {
 
   ngOnInit(): void {
     //lay id user
+    this.spinner.show();
     let userId = this.userService.getAuthCurrentUser().id;
     
     this.userService.getUserById(userId).subscribe(
@@ -214,20 +228,23 @@ export class AddUserComponent implements OnInit {
         //lay id role
         this.roleService.getRoleById(data.role_id).subscribe(
           data => {
-            this.userRoleCode = data.code;
-            console.log(data);
+            
             let listRole: any[];
+            this.userRoleCode = data.code;
+            this.roleName = data.name;
             listRole = data.permissions;
             this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
             this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
 
             this.getDataOnInit();
           }, error => {
+            this.spinner.hide();
             this.toastService.showErrorHTMLWithTimeout('Lấy thông tin phân quyền', "", 3000);
           }
         );
       
       }, error => {
+        this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
       }
     )
