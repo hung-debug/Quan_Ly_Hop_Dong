@@ -296,6 +296,16 @@ export class DetermineSignerComponent implements OnInit {
       }
     }
 
+    // check trung ten cac doi tac
+    let isNameObj: any[] = [];
+    for (const d of this.datas.determine_contract) {
+      if (isNameObj.length > 0 && isNameObj.includes(d.name)) {
+        this.getNotificationValid("Trùng tên đối tác, vui lòng kiểm tra lại!");
+        return false;
+      }
+      isNameObj.push(d.name);
+    }
+
     if (count == 0) {
       if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
         this.getNotificationValid("Email đối tác đã tồn tại, vui lòng nhập lại!");

@@ -295,7 +295,7 @@ export class DetermineSignerComponent implements OnInit {
           break;
         }
         is_duplicate = [];
-      } 
+      }
 
       if (!dataArr[i].phone && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 1).length > 0) {
         this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObjectValid(3) + "tổ chức của tôi!")
@@ -516,6 +516,16 @@ export class DetermineSignerComponent implements OnInit {
       }
     }
 
+    // check trung ten cac doi tac
+    let isNameObj: any[] = [];
+    for (const d of this.datas.is_determine_clone) {
+      if (isNameObj.length > 0 && isNameObj.includes(d.name)) {
+        this.getNotificationValid("Trùng tên đối tác. Vui lòng kiểm tra lại!");
+        return false;
+      }
+      isNameObj.push(d.name);
+    }
+
     if (count == 0) {
       // dataArrPartyCheckEmail = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
       if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
@@ -564,6 +574,8 @@ export class DetermineSignerComponent implements OnInit {
     }
     return true;
   }
+
+
 
   getCheckDuplicateEmail(isParty: string, dataValid?: any) {
     let arrCheckEmail = [];

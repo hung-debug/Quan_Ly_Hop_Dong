@@ -462,6 +462,16 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             }
         }
 
+      // check trung ten cac doi tac
+      let isNameObj: any[] = [];
+      for (const d of this.datasForm.is_determine_clone) {
+        if (isNameObj.length > 0 && isNameObj.includes(d.name)) {
+          this.getNotificationValid("Trùng tên đối tác. Vui lòng kiểm tra lại.");
+          return false;
+        }
+        isNameObj.push(d.name);
+      }
+
         if (count == 0) {
             // dataArrPartyCheckEmail = this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
             if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {

@@ -1058,10 +1058,10 @@ export class SampleContractFormComponent implements OnInit {
   // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
   // @ts-ignore
   changeDisplay() {
-    if (window.innerHeight <= 768) {
+    if (window.innerHeight <= 781 /* 768*/) {
       return {
         "overflow": "auto",
-        "height": "210px"
+        "height": "225px"
       }
     } else return {}
   }
