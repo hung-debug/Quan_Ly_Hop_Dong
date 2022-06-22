@@ -239,4 +239,10 @@
 .img_icon:hover{
   width: 30px;
 }
+.calendar_create, .calendar_deadline, .item_icon{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
 

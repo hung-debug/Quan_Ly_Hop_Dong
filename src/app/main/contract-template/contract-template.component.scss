@@ -186,3 +186,10 @@
 .btn_search{
   align-self: flex-end;
 }
+
+.calendar_create, .contract_code, .item_icon{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}

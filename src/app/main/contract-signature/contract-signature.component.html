@@ -18,22 +18,20 @@
 
   <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
     <div *ngIf="filter_status == 1 || filter_status == 4">
-      <div class="row">
-        <div class="col-md-12 item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-12 item_contract_infor">{{'contract.side.a' | translate}}: {{item.sideA}}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-12 item_contract_infor">{{'contract.side.b' | translate}}: {{item.sideB}}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-12 item_contract_infor">{{'contract.status.v2' | translate}}:
-          <span class="status_blue">{{item.contractStatus | pipe | translate}}</span>
-        </div>
-      </div>
+      
       <div class="row">
         <div class="col-md-5">
+          <div class="row">
+            <div class="col-md-12 item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
+          </div>
+          <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
+            <div class="col-md-12 item_contract_infor">Bên {{getNameOrganization(itemPar, index)}}</div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 item_contract_infor">{{'contract.status.v2' | translate}}:
+              <span class="status_blue">{{item.contractStatus | pipe | translate}}</span>
+            </div>
+          </div>
           <div class="row">
             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
               <span class="status_blue" *ngIf="item.status == 1 && item.role == 1">{{'contract.wait-lead' | translate}}</span>
@@ -52,11 +50,11 @@
           </div>
         </div>
         <div class="col-md-2 calendar_create">
-          <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractCreateTime | date: 'dd/MM/yyyy HH:mm'}}</span>
+          <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractCreateTime | date: 'dd/MM/yyyy HH:mm'}}</span></div>
         </div>
 
         <div class="col-md-2 calendar_deadline">
-          <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy'}}</span>
+          <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.contractSignTime | date: 'dd/MM/yyyy'}}</span></div>
         </div>
 
         <div class="col-md-3 item_icon">
@@ -83,16 +81,13 @@
 
     <div *ngIf="filter_status == -1">
       <div class="row">
-        <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-12 item_contract_infor">{{'contract.side.a' | translate}}: {{item.sideA}}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-12 item_contract_infor">{{'contract.side.b' | translate}}: {{item.sideB}}</div>
-      </div>
-      <div class="row">
         <div class="col-md-5">
+          <div class="row">
+            <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
+          </div>
+          <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+            <div class="col-md-12 item_contract_infor">Bên {{getNameOrganization(itemPar, index)}}</div>
+          </div>
           <div class="row">
             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
               <span class="status_blue">{{'contract.status.complete' | translate}}</span>
@@ -100,11 +95,11 @@
           </div>
         </div>
         <div class="col-md-2 calendar_create">
-          <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
+          <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span></div>
         </div>
   
         <div class="col-md-2 calendar_deadline">
-          <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span>
+          <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span></div>
         </div>
 
         <div class="col-md-3 item_icon">
@@ -119,16 +114,13 @@
 
     <div *ngIf="filter_status == 11 || filter_status == 12 || filter_status == 13 || filter_status == 14">
       <div class="row">
-        <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-12 item_contract_infor">{{'contract.side.a' | translate}}: {{item.sideA}}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-12 item_contract_infor">{{'contract.side.b' | translate}}: {{item.sideB}}</div>
-      </div>
-      <div class="row">
         <div class="col-md-5">
+          <div class="row">
+            <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
+          </div>
+          <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+            <div class="col-md-12 item_contract_infor">Bên {{getNameOrganization(itemPar, index)}}</div>
+          </div>
           <div class="row">
             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
               <span class="status_blue">{{item.status | pipe | translate}}</span>
@@ -136,11 +128,11 @@
           </div>
         </div>
         <div class="col-md-2 calendar_create">
-          <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
+          <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span></div>
         </div>
   
         <div class="col-md-2 calendar_deadline">
-          <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span>
+          <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span></div>
         </div>
 
         <div class="col-md-3 item_icon">

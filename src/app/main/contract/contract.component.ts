@@ -19,7 +19,7 @@ import { Subscription } from "rxjs";
 import { TreeMapModule } from '@swimlane/ngx-charts';
 import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
-
+import { sideList } from 'src/app/config/variable';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -215,22 +215,16 @@ export class ContractComponent implements OnInit, AfterViewInit {
         } else {
           this.setPage();
         }
-        this.contracts.forEach((key: any, v: any) => {
-          this.contracts[v].status = this.filter_status;
-          let participants = key.participants;
-          //console.log(participants);
-          participants.forEach((key: any, val: any) => {
-            if (key.type == 1) {
-              this.contracts[v].sideA = key.name;
-            } else {
-              this.contracts[v].sideB = key.name;
-            }
-            console.log(this.contracts[v].sideA);
-          })
-        });
-        console.log(this.contracts);
       });
     }
+  }
+
+  sortParticipant(list:any){
+    return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+  }
+
+  getNameOrganization(item:any, index:any){
+    return sideList[index].name + " : " + item.name;
   }
 
   changeTab(){
