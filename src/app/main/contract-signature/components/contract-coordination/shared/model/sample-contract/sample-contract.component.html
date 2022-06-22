@@ -68,12 +68,12 @@
                 <label class="label-require">Kích thước</label>
                 <div class="location">
                     <div class="location-drag">
-                        <div class="label">Chiều dài</div>
+                        <div class="label" style="font-size: 12px">Chiều dài</div>
                         <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')"
                             [ngModel]="objSignInfo.width" [readOnly]="false">
                     </div>
                     <div class="location-drag">
-                        <div class="label">Chiều rộng</div>
+                        <div class="label" style="font-size: 12px">Chiều rộng</div>
                         <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')"
                             [ngModel]="objSignInfo.height" [readOnly]="false">
                     </div>
