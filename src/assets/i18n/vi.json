@@ -367,5 +367,6 @@
   "error_delete_object_signature": "không thể xóa dữ liệu thay đổi, vui lòng thử lại!",
   "contract_number_already_exist": "Số hợp đồng đã tồn tại!",
   "notify_have_not_sign_acc": "Bạn chưa có ảnh ký từ tài khoản!",
-  "contract_processing_flow": "LUỒNG XỬ LÝ HỢP ĐỒNG"
+  "contract_processing_flow": "LUỒNG XỬ LÝ HỢP ĐỒNG",
+  "not_search_file_attach": "Không tìm thấy file đính kèm, vui lòng kiểm tra lại!"
 }

@@ -394,7 +394,7 @@ export class SampleContractFormComponent implements OnInit {
         )
         resForm.sign_config = arrConfig; // set data with object not change data
         resForm.sign_config.forEach((items: any) => {
-          items.id = items.id + '1';
+          items.id = items.id + '1'; // tránh trùng với id cũ, gây ra lỗi
           let data: any = {};
           data = dataDetermine.filter((data: any) =>
             items.recipient_id == data.template_recipient_id ||
