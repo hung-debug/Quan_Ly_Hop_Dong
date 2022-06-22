@@ -27,7 +27,7 @@
         class="btn btn-lg btn-block btn_submit"
         (click)="addUnit()"
       >
-        {{ "btn.add" | translate }}
+        {{ "Thêm mới tổ chức" | translate }}
       </button>
     </div>
   </div>
@@ -61,7 +61,7 @@
           <td>{{ list.phone }}</td>
           <td>
             <a
-              *ngIf="list.status == 'IN_ACTIVE'"
+              *ngIf="list.status == 'NOT_ACTIVATED'"
               (click)="activeUnit(list.id)"
               style="
                 color: #0160ae;

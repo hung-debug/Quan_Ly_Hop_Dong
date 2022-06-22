@@ -1094,24 +1094,41 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   async signContract(notContainSignImage?: boolean) {
     const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
-    let signUpdatePayload = signUpdateTemp.filter(
-      (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
-      .map((item: any) => {
-        return {
-          otp: this.dataOTP.otp,
-          fields:[
-            {
-              id: item.id,
-              name: item.name,
-              value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
-              font: item.font,
-              font_size: item.font_size
-            }]
-        }
-      });
-    if(signUpdatePayload){
-      signUpdatePayload = signUpdatePayload[0];
+    let signUpdatePayload = "";
+    //neu khong chua chu ky anh
+    if (notContainSignImage) {
+      signUpdatePayload = signUpdateTemp.filter(
+        (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+        .map((item: any) => {
+          return {
+            id: item.id,
+            name: item.name,
+            value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
+            font: item.font,
+            font_size: item.font_size
+          }
+        });
+    }else{
+      signUpdatePayload = signUpdateTemp.filter(
+        (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+        .map((item: any) => {
+          return {
+            otp: this.dataOTP.otp,
+            fields:[
+              {
+                id: item.id,
+                name: item.name,
+                value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
+                font: item.font,
+                font_size: item.font_size
+              }]
+          }
+        });
+      if(signUpdatePayload){
+        signUpdatePayload = signUpdatePayload[0];
+      }
     }
+    
     let typeSignDigital = null;
     for (const signUpdate of this.isDataObjectSignature) {
       if (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)

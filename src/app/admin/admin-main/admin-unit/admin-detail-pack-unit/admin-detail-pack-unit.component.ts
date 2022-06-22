@@ -10,6 +10,7 @@ import { ToastService } from 'src/app/service/toast.service';
 })
 export class AdminDetailPackUnitComponent implements OnInit {
   datas: any;
+  serviceType: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -25,6 +26,30 @@ export class AdminDetailPackUnitComponent implements OnInit {
         (response) => {
           console.log("response ", response);
           this.datas = response;
+
+          if(this.datas.serviceType == 'NORMAL') {
+            this.datas.serviceType = 'Bình thường';
+          } else if(this.data.serviceType == 'PROMOTION') {
+            this.datas.serviceType = 'Khuyến mại';
+          }
+
+          if(this.datas.calculatorMethod == 'BY_TIME') {
+            this.datas.calculatorMethod = 'Theo thời gian';
+          } else if(this.datas.calcaulatorMethod == 'BY_CONTRACT_NUMBER') {
+            this.datas.calculatorMethod = 'Theo số lượng hợp đồng';
+          }
+
+          if(this.datas.paymentType == 'PRE') {
+            this.datas.paymentType = 'Trả trước';
+          } else if(this.datas.paymentType == 'POST') {
+            this.datas.paymentType = 'Trả sau';
+          }
+
+          if(this.datas.paymentStatus == 'PAID') {
+            this.datas.paymentStatus = 'Đã thanh toán';
+          } else if(this.datas.paymentStatus == 'Chưa thanh toán') {
+            this.datas.paymentStatus = 'Trả sau';
+          }
         },
         (error) => {
           this.toastService.showErrorHTMLWithTimeout(

@@ -54,7 +54,7 @@
                 </div>
                 <div *ngIf="submitted && f.tax_code.errors" class="invalid">
                   <div *ngIf="f.tax_code.errors.required">{{'Mã số thuế không được để trống' | translate}}</div>
-                  <div *ngIf="f.tax_code.errors.pattern">{{'Mã số thuế phải là số' | translate}}</div>
+                  <div *ngIf="f.tax_code.errors.pattern">{{'Mã số không đúng định dạng' | translate}}</div>
                 </div>
               </div>
             </div>
