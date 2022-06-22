@@ -18,4 +18,5 @@ export const parttern = {
 export const parttern_input = {
   input_form: /^[^!“#$%&‘()*;<=>?@[\]^_`{|}~\\]*$/,
   number_form: /^[0-9]+$/,
+  taxCode_form: /^([0-9]{10})(|)(-[0-9]{3}|)$/,
 }
