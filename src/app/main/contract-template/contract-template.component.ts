@@ -13,6 +13,7 @@ import { DeleteContractTemplateDialogComponent } from './dialog/delete-contract-
 import { ReleaseContractTemplateDialogComponent } from './dialog/release-contract-template-dialog/release-contract-template-dialog.component';
 import { ShareContractTemplateDialogComponent } from './dialog/share-contract-template-dialog/share-contract-template-dialog.component';
 import { StopContractTemplateDialogComponent } from './dialog/stop-contract-template-dialog/stop-contract-template-dialog.component';
+import { sideList } from 'src/app/config/variable';
 @Component({
   selector: 'app-contract-template',
   templateUrl: './contract-template.component.html',
@@ -107,11 +108,11 @@ export class ContractTemplateComponent implements OnInit {
     });
   }
 
+  
   async getContractTemplateList(){
     //get list contract template
     await this.contractTemplateService.getContractTemplateList(this.isShare, this.name, this.type, this.p, this.page).toPromise().then(response => {
       this.contractsTemplate = response.entities;
-      //this.pageTotal = response.total_elements;
       this.pageTotal = response.total_elements;
       if(this.pageTotal == 0){
         this.p = 0;
@@ -120,53 +121,44 @@ export class ContractTemplateComponent implements OnInit {
       }else{
         this.setPage();
       }
-
-      this.contractsTemplate.forEach((key: any, v: any) => {
-        let partnerLead = 0;
-        let partnerView = 0;
-        let partnerSign = 0;
-        let partnerDoc = 0;
-
-        key.participants.forEach((key: any, val: any) => {
-          if (key.type == 1) {
-            this.contractsTemplate[v].sideA = key.name;
-          }else{
-            key.recipients.forEach((key: any, val: any) => {
-              if (key.role == 1) {
-                partnerLead++;
-              } else if (key.role == 2) {
-                partnerView++;
-              } else if (key.role == 3) {
-                partnerSign++;
-              } else if (key.role == 4) {
-                partnerDoc++;
-              }
-            })
-          }
-        })
-        
-        let sideB = "";
-        let connB = "";
-        if(partnerLead > 0){
-          sideB += connB + "Người điều phối (" + partnerLead + ")";
-          connB = ", ";
-        }
-        if(partnerView > 0){
-          sideB += connB + "Người xem xét (" + partnerView + ")";
-          connB = ", ";
-        }
-        if(partnerSign > 0){
-          sideB += connB + "Người ký (" + partnerSign + ")";
-          connB = ", ";
-        }
-        if(partnerDoc > 0){
-          sideB += connB + "Văn thư (" + partnerDoc + ")";
-          connB = ", ";
-        }
-        this.contractsTemplate[v].sideB = sideB;
-      });
     });
   }
+
+  sortParticipant(list:any){
+    return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+  }
+
+  getNameOrganization(item:any, index:any){
+    if(item.type == 1){
+      return sideList[0].name + " : " + item.name;
+    }else{
+      let partnerLead = item.recipients.filter((p: any) => p.role == 1).length;
+      let partnerView = item.recipients.filter((p: any) => p.role == 2).length;
+      let partnerSign = item.recipients.filter((p: any) => p.role == 3).length;
+      let partnerDoc = item.recipients.filter((p: any) => p.role == 4).length;
+      let side = "";
+      let conn = "";
+      if(partnerLead > 0){
+        side += conn + "Người điều phối (" + partnerLead + ")";
+        conn = ", ";
+      }
+      if(partnerView > 0){
+        side += conn + "Người xem xét (" + partnerView + ")";
+        conn = ", ";
+      }
+      if(partnerSign > 0){
+        side += conn + "Người ký (" + partnerSign + ")";
+        conn = ", ";
+      }
+      if(partnerDoc > 0){
+        side += conn + "Văn thư (" + partnerDoc + ")";
+        conn = ", ";
+      }
+      return sideList[index].name + " : " + side;
+    }
+    
+  }
+
 
   searchContract(){
     this.p = 1;
