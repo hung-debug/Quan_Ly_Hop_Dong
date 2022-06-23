@@ -58,12 +58,9 @@ export class AdminUserService {
 
       status: datas.status
     
-    });console.log(headers);
-    
-    console.log(body);
-
-    console.log("id ");
-    console.log(datas);
+    });    
+    console.log("body ",body);
+    console.log("id ", datas.id);
     
     return this.http.put<any>(this.updateUserUrl + datas.id, body, {'headers': headers});
   }
