@@ -41,6 +41,7 @@ import { concatMap, delay, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { networkList } from "../../../../config/variable";
 import { HttpErrorResponse } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-consider-contract',
@@ -161,7 +162,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     private spinner: NgxSpinnerService,
     private digitalSignatureService: DigitalSignatureService,
     private userService: UserService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public datepipe: DatePipe,
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
@@ -1112,17 +1114,20 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }else{
       await of(null).pipe(delay(100)).toPromise();
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
-      let signI = null;
+      let signI:any;
       if (imageRender) {
         const textSignB = await domtoimage.toPng(imageRender);
         signI = textSignB.split(",")[1];
       }
-      console.log(signI);
+      //console.log(signI);
+      //console.log(this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'));
       signUpdatePayload = signUpdateTemp.filter(
         (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
         .map((item: any) => {
           return {
             otp: this.dataOTP.otp,
+            signInfo: signI,
+            processAt: this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'),
             fields:[
               {
                 id: item.id,
