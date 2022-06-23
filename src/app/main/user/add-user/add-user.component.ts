@@ -1,0 +1,538 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastService } from 'src/app/service/toast.service';
+import { UserService } from 'src/app/service/user.service';
+import { AppService } from 'src/app/service/app.service';
+import { UnitService } from 'src/app/service/unit.service';
+import { RoleService } from 'src/app/service/role.service';
+import { networkList } from "../../../config/variable";
+import { UploadService } from 'src/app/service/upload.service';
+import {parttern_input} from "../../../config/parttern";
+import * as moment from "moment";
+import { NgxSpinnerService } from 'ngx-spinner';
+@Component({
+  selector: 'app-add-user',
+  templateUrl: './add-user.component.html',
+  styleUrls: ['./add-user.component.scss']
+})
+export class AddUserComponent implements OnInit {
+  
+  submitted = false;
+  get f() { return this.addForm.controls; }
+
+  action: string;
+  private sub: any;
+  id:any=null;
+
+  dropdownOrgSettings: any = {};
+  orgList: Array<any> = [];
+  networkList: Array<any> = [];
+  roleList: Array<any> = [];
+  phoneOld:any;
+
+  addForm: FormGroup;
+  datas: any;
+  attachFile:any;
+  sign_image:null;
+  imgSignBucket:null;
+  imgSignPath:null;
+  isEditRole:boolean=false;
+
+  organizationName:any;
+  roleName:any;
+  userRoleCode:string='';
+  maxDate: Date = moment().toDate();
+
+  orgIdOld:any;
+
+  //phan quyen
+  isQLND_01:boolean=true;  //them moi nguoi dung
+  isQLND_02:boolean=true;  //sua nguoi dung
+
+  constructor(private appService: AppService,
+              private toastService : ToastService,
+              private userService : UserService,
+              private unitService : UnitService,
+              private route: ActivatedRoute,
+              private fbd: FormBuilder,
+              public router: Router,
+              private roleService: RoleService,
+              private uploadService:UploadService,
+              private spinner: NgxSpinnerService
+    ) {
+    this.addForm = this.fbd.group({
+      name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+      email: this.fbd.control("", [Validators.required, Validators.email]),
+      birthday: null,
+      phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+      organizationId: this.fbd.control("", [Validators.required]),
+      role: this.fbd.control("", [Validators.required]),
+      status: 1,
+
+      phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
+      networkKpi: null,
+
+      nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+
+      fileImage:null,
+
+      organization_change:null
+    });
+  }
+  
+  getDataOnInit(){
+    let orgId = this.userService.getAuthCurrentUser().organizationId;
+    
+    if(this.isQLND_01 || this.isQLND_02){
+      //lay danh sach to chuc
+      this.unitService.getUnitList('', '').subscribe(data => {
+        console.log(data.entities);
+        console.log(orgId);
+        this.orgList = data.entities;
+        // if(this.action == 'add'){
+        //   this.orgList = data.entities.filter((p: any) => p.id == orgId);
+        // }else{
+        //   this.orgList = data.entities;
+        // }
+        
+      });
+
+      
+
+      this.networkList = networkList;
+    }
+
+    this.sub = this.route.params.subscribe(params => {
+      this.action = params['action'];
+
+      //set title
+      if (this.action == 'add') {
+        this.appService.setTitle('user.add');
+
+        //lay danh sach vai tro
+        this.roleService.getRoleList('', '').subscribe(data => {
+          console.log(data);
+          this.roleList = data.entities;
+        });
+
+        this.isEditRole = true;
+        if(this.isQLND_01){
+          this.addForm = this.fbd.group({
+            name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            email: this.fbd.control("", [Validators.required, Validators.email]),
+            birthday: null,
+            phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+            organizationId: this.fbd.control(orgId, [Validators.required]),
+            role: this.fbd.control("", [Validators.required]),
+            status: 1,
+
+            phoneKpi: this.fbd.control(null, [Validators.pattern("[0-9 ]{10}")]),
+            networkKpi: null,
+
+            nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+
+            fileImage:null
+          });
+        }
+      } else if (this.action == 'edit') {
+        this.id = params['id'];
+        this.appService.setTitle('user.update');
+
+        if(this.isQLND_02){
+          this.userService.getUserById(this.id).subscribe(
+            data => {
+              console.log(data);
+              this.orgIdOld = data.organization_id;
+              this.addForm = this.fbd.group({
+                name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+                email: this.fbd.control(data.email, [Validators.required, Validators.email]),
+                birthday: data.birthday==null?null:new Date(data.birthday),
+                phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+                organizationId: this.fbd.control(data.organization_id, [Validators.required]),
+                role: this.fbd.control(data.role_id, [Validators.required]),
+                status: data.status,
+
+                phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
+                networkKpi: data.phone_tel,
+
+                nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.input_form)),
+
+                fileImage:null,
+
+                organization_change: data.organization_change
+              }); 
+              this.phoneOld = data.phone;
+              this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
+              this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
+              this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
+              console.log(this.addForm);
+
+              //set name
+              if(data.organization_id != null){
+                this.unitService.getUnitById(data.organization_id).subscribe(
+                  data => {
+                    this.organizationName = data.name
+                  }, error => {
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
+                  }
+                )
+              }
+              //neu nguoi truy cap co ma vai tro la ADMIN thi duoc quyen sua
+              if(this.userRoleCode.toUpperCase() == 'ADMIN'){
+                this.isEditRole = true;
+              }else{
+                if(data.role_id != null){
+                  //lay danh sach vai tro
+                  this.roleService.getRoleById(data.role_id).subscribe(data => {
+                    this.roleName = data.name;
+                  });
+                }
+              }
+
+              //lay danh sach vai tro
+            this.roleService.getRoleByOrgId(data.organization_id).subscribe(data => {
+              console.log(data);
+              this.roleList = data.entities;
+            });
+              
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
+            }
+          )
+        }
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    //lay id user
+    let userId = this.userService.getAuthCurrentUser().id;
+    
+    this.userService.getUserById(userId).subscribe(
+      data => {
+        //lay id role
+        this.roleService.getRoleById(data.role_id).subscribe(
+          data => {
+            this.userRoleCode = data.code;
+            console.log(data);
+            let listRole: any[];
+            listRole = data.permissions;
+            this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
+            this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
+
+            this.getDataOnInit();
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lấy thông tin phân quyền', "", 3000);
+          }
+        );
+      
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
+      }
+    )
+  }
+
+  onCancel(){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/user']);
+    });
+  }
+
+  checkChangeUnit(data:any){
+    //kiem tra xem nguoi dung co chuyen to chuc hay khong
+    if(data.organizationId != this.orgIdOld){
+      //kiem tra xem nguoi dung da xu ly xong het cac hop dong hay chua
+      this.userService.getCheckContractUser(this.id).subscribe(
+        dataCheckContract => {
+          if(dataCheckContract.success){
+            this.update(data);
+          }else{
+            this.toastService.showErrorHTMLWithTimeout('Không thể chuyển đơn vị cho người dùng tồn tại hợp đồng chưa xử lý', "", 3000);
+            this.spinner.hide();
+          }
+      
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Kiểm tra hợp đồng theo người dùng thất bại', "", 3000);
+          this.spinner.hide();
+        }
+      )
+    }else{
+      this.update(data);
+    }
+  }
+
+  update(data:any){
+    data.id = this.id;
+
+    if(data.fileImage != null){
+      this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
+        console.log(JSON.stringify(dataFile));
+        const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
+        const sign_image:never[]=[];
+        (sign_image as string[]).push(sign_image_content);
+        data.sign_image = sign_image;
+        console.log(data);
+
+        this.userService.updateUser(data).subscribe(
+          data => {
+            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
+            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+              this.router.navigate(['/main/user']);
+            });
+            this.spinner.hide();
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
+            this.spinner.hide();
+          }
+        )
+      },
+      error => {
+        this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+        this.spinner.hide();
+        return false;
+      });
+    }else{
+      if(this.imgSignBucket != null && this.imgSignPath != null){
+        const sign_image_content:any = {bucket: this.imgSignBucket, path: this.imgSignPath};
+        const sign_image:never[]=[];
+        (sign_image as string[]).push(sign_image_content);
+        data.sign_image = sign_image;
+      }
+      console.log(data);
+      this.userService.updateUser(data).subscribe(
+        dataOut => {
+          
+          let emailCurrent = this.userService.getAuthCurrentUser().email;
+          //neu nguoi thao tac chuyen to chuc cho chinh minh thi can logout de lay lai thong tin to chuc moi
+          if(data.organizationId != this.orgIdOld && emailCurrent == data.email){
+            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công. Vui lòng đăng nhập lại!', "", 3000);
+            localStorage.clear();
+            sessionStorage.clear();
+            this.router.navigate(['/login']);
+
+          }else{
+            this.toastService.showSuccessHTMLWithTimeout('Cập nhật thành công!', "", 3000);
+            this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+              this.router.navigate(['/main/user']);
+            });
+          }
+          
+          this.spinner.hide();
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Cập nhật thất bại', "", 3000);
+          this.spinner.hide();
+        }
+      )
+    }
+  }
+
+  getRoleByOrg(orgId:any){
+    this.addForm.patchValue({
+      role: null, 
+    });
+    this.roleService.getRoleByOrgId(orgId).subscribe(data => {
+      this.roleList = data.entities;
+    });
+  }
+
+  onSubmit() {
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.addForm.invalid) {
+      return;
+    }
+    this.spinner.show();
+    const data = {
+      id: "",
+      name: this.addForm.value.name,
+      email: this.addForm.value.email,
+      birthday: this.addForm.value.birthday,
+      phone: this.addForm.value.phone,
+      organizationId: this.addForm.value.organizationId,
+      role: this.addForm.value.role,
+      status: this.addForm.value.status,
+      phoneKpi: this.addForm.value.phoneKpi,
+      networkKpi: this.addForm.value.networkKpi,
+      nameHsm: this.addForm.value.nameHsm,
+      fileImage: this.attachFile,
+      sign_image: [],
+      organization_change: this.addForm.value.organizationId!= this.orgIdOld?1:this.addForm.value.organization_change
+    }
+    console.log(data);
+    
+    if(this.id !=null){
+      //neu thay doi so dien thoai thi can check lai
+      if(data.phone != this.phoneOld){
+        this.userService.checkPhoneUser(data.phone).subscribe(
+          dataByPhone => {
+            if(dataByPhone.code == '00'){
+              //kiem tra xem email dang sua co phai email cua admin to chuc khong
+              //lay thong tin to chuc cua user (email) check voi email, neu trung => cap nhat so dien thoai cho to chuc do
+              this.unitService.getUnitById(data.organizationId).subscribe(
+                dataUnit => {
+                  if(dataUnit.email == data.email){
+                    const dataUpdateUnit = {
+                      id: data.organizationId,
+                      phone: data.phone,
+                      name: dataUnit.name,
+                      short_name: dataUnit.short_name,
+                      code: dataUnit.code,
+                      email: dataUnit.email,
+                      fax: dataUnit.fax,
+                      status: dataUnit.status,
+                      parent_id: dataUnit.parent_id,
+                      path: dataUnit.path
+                    }
+                    //update thong tin to chuc
+                    this.unitService.updateUnit(dataUpdateUnit).subscribe(
+                      data => {
+                        //this.toastService.showSuccessHTMLWithTimeout('Cập nhật số điện thoại tổ chức thành công!', "", 3000);
+                        
+                      }, error => {
+                        this.toastService.showErrorHTMLWithTimeout('Lỗi cập nhật số điện thoại tổ chức', "", 3000);
+                        this.spinner.hide();
+                      }
+                    )
+                  }
+                  
+                }, error => {
+                  this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                  this.spinner.hide();
+                }
+              )
+
+              //ham update nguoi dung
+              this.checkChangeUnit(data);
+            }else if(dataByPhone.code == '01'){
+              this.toastService.showErrorHTMLWithTimeout('Số điện thoại đã tồn tại trong hệ thống', "", 3000);
+              this.spinner.hide();
+            }
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+            this.spinner.hide();
+          }
+        )
+      }else{
+        //ham update
+        this.checkChangeUnit(data);
+      }
+      
+    }else{
+      this.userService.checkPhoneUser(data.phone).subscribe(
+        dataByPhone => {
+          if(dataByPhone.code == '00'){
+
+            //kiem tra email da ton tai trong he thong hay chua
+            this.userService.getUserByEmail(data.email).subscribe(
+              dataByEmail => {
+                if(dataByEmail.id == 0){
+      
+                  if(data.fileImage != null){
+                    this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
+                      console.log(JSON.stringify(dataFile));
+                      const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
+                      const sign_image:never[]=[];
+                      (sign_image as string[]).push(sign_image_content);
+                      data.sign_image = sign_image;
+                      console.log(data);
+            
+                      //call api them moi
+                      this.userService.addUser(data).subscribe(
+                        data => {
+                          this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
+                          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                            this.router.navigate(['/main/user']);
+                          });
+                          this.spinner.hide();
+                        }, error => {
+                          this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
+                          this.spinner.hide();
+                        }
+                      )
+                    },
+                    error => {
+                      this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
+                      this.spinner.hide();
+                      return false;
+                    });
+                  }else{
+      
+                    //call api them moi
+                    this.userService.addUser(data).subscribe(
+                      data => {
+                        this.toastService.showSuccessHTMLWithTimeout('Thêm mới thành công!', "", 3000);
+                        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                          this.router.navigate(['/main/user']);
+                        });
+                        this.spinner.hide();
+                      }, error => {
+                        this.toastService.showErrorHTMLWithTimeout('Thêm mới thất bại', "", 3000);
+                        this.spinner.hide();
+                      }
+                    )
+                  }
+                }else{
+                  this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong hệ thống', "", 3000);
+                  this.spinner.hide();
+                }
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+                this.spinner.hide();
+              }
+            )
+          }else if(dataByPhone.code == '01'){
+            this.toastService.showErrorHTMLWithTimeout('Số điện thoại đã tồn tại trong hệ thống', "", 3000);
+            this.spinner.hide();
+          }
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+          this.spinner.hide();
+        }
+      )
+    }
+  }
+
+  fileChangedAttach(e: any) {
+    console.log(e.target.files)
+    let files = e.target.files;
+    for(let i = 0; i < files.length; i++){
+
+      const file = e.target.files[i];
+      if (file) {
+        // giới hạn file upload lên là 5mb
+        if (e.target.files[0].size <= 50000000) {
+          const file_name = file.name;
+          const extension = file.name.split('.').pop();
+          if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpge') {
+            this.handleUpload(e);
+            this.attachFile = file;
+            console.log(this.attachFile);
+          }else{
+            this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
+          }
+
+        } else {
+          this.attachFile = null;
+          this.toastService.showErrorHTMLWithTimeout("Yêu cầu file nhỏ hơn 50MB", "", 3000);
+          break;
+        }
+      }
+    }
+  }
+  imgSignPCSelect: string;
+  handleUpload(event: any) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      //console.log(reader.result);
+      this.imgSignPCSelect = reader.result? reader.result.toString() : '';
+    };
+  }
+
+  addFileAttach() {
+    // @ts-ignore
+    document.getElementById('attachFileSignature').click();
+  }
+}

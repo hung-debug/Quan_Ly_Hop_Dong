@@ -1,0 +1,138 @@
+<!-- form step 1 -->
+<div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="label_item">{{'contract-template.name' | translate}} <span class="require_star">*</span></div>
+        <div class="input-group">
+          <input #nameContract type="text" [(ngModel)]="name" class="input_text" (keyup)="contractNameValid()"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="invalid" *ngIf="errorContractName!=''">
+          {{errorContractName | translate}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="label_item">{{'contract-template.file' | translate}} <span class="require_star">*</span></div>
+        <input id="file-input" type="file" accept=".pdf" (change)="fileChanged($event)" style="display: none;"/>
+        <div class="file-contract" (click)="addFile()">
+          <img src="assets/img/upload_file.svg" alt="mobifone.contract">
+          <div style="padding-top: 7px;"><span style="color: #798693;" *ngIf="this.datas.file_name==null">{{'choose.contract.file' | translate }}</span>{{this.datas.file_name}}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="invalid" *ngIf="errorContractFile!=''">
+          {{errorContractFile | translate}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">{{'contract-template.code' | translate}} <span class="require_star">*</span></div>
+        <div class="input-group">
+          <!-- <input type="text" [(ngModel)]="contract_no" class="input_text" (keyup)="contractNumberValid()"/> -->
+          <input type="text" [(ngModel)]="contract_no" maxlength="32" class="input_text" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" (keyup)="contractNumberValid()"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="invalid" *ngIf="errorContractNumber!=''">
+          {{errorContractNumber | translate}}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">{{'contract.type' | translate}}</div>
+        <div>
+          <p-dropdown
+            panelStyleClass="font"
+            [options]="typeList"
+            [(ngModel)]="type_id"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Chọn loại hợp đồng"
+            [filter]="true"
+            filterBy="name"
+            [showClear]="true"
+            ></p-dropdown>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="select-file-contract">
+          <div class="file-approve">
+            <div class="label_item">{{'file.attach' | translate}}</div>
+            <input id="attachFile" type="file" accept=".pdf, .doc, .docx"
+                  (change)="fileChangedAttach($event)" style="display: none;" multiple/>
+            <div class="select-contract" >
+              <div class="div_file_attach">
+                <div *ngIf="!this.datas.attachFileNameArr || this.datas.attachFileNameArr.length == 0" style="color:gray">{{'choose.contract.file.attach' | translate }}</div>
+                <div *ngFor="let item of this.datas.attachFileNameArr; let i = index" style="width: 80%;">{{item.filename}} <img *ngIf="item" style="cursor: pointer;" (click)="deleteFileAttach(item, i)" src="../../../../../../assets/img/icon_close.svg"></div>
+              </div>
+              <img src="assets/img/attachment.svg" alt="mobifone.contract" (click)="addFileAttach()">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+
+    <div class="col-md-5">
+      <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <div class="label_item">{{'effective-start-date' | translate}} <span class="require_star">*</span></div>
+          <div>
+            <p-calendar [(ngModel)]="start_time" [disabled]="this.datas.isEdit" [showIcon]="true" [readonlyInput]="true" dateFormat="dd/mm/yy" (onSelect)="startTimeRequired();"></p-calendar>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="invalid" *ngIf="errorStartTime!=''">
+            {{errorStartTime | translate}}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <div class="label_item">{{'effective-end-date' | translate}} <span class="require_star">*</span></div>
+          <div>
+            <p-calendar [(ngModel)]="end_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="dd/mm/yy" (onSelect)="endTimeValid();"></p-calendar>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="invalid" *ngIf="errorEndTime!=''">
+            {{errorEndTime | translate}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-infor-contract">
+    <button (click)="next()" type="button" name="next" class="next action-button pull-right">{{'btn.next' | translate }}</button>
+</div>
+
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-spin-clockwise">
+  <p style="font-size: 18px; color: white">Đang xử lý...</p>
+</ngx-spinner>

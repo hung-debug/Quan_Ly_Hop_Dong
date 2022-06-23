@@ -1,0 +1,61 @@
+<!--</div>-->
+<div class="col-md-12 col-md-offset-3" style="display: flex">
+  <!-- step by step -->
+  <div class="activity-card col" style="padding: 10px;text-align: center;">
+    <ul id="progressbar">
+      <li [ngClass]="(step == 'infor-contract' || step == 'determine-contract' ||
+                      step == 'sample-contract' || step == 'confirm-contract') ? 'active ' : 'inactive'">
+        <div [ngClass]="{'current_active' : step == 'infor-contract'}">{{'contract.information' | translate}}</div>
+      </li>
+
+      <li [ngClass]="(step == 'determine-contract' || step == 'sample-contract' ||
+                     step == 'confirm-contract') ? 'active' : 'inactive'">
+        <div [ngClass]="{'current_active' : step == 'determine-contract'}">{{'contract.identify-signer' | translate}}</div>
+      </li>
+
+      <li [ngClass]="(step == 'sample-contract' || step == 'confirm-contract') ? 'active' : 'inactive'">
+        <div [ngClass]="{'current_active' : step == 'sample-contract'}">{{'contract.design' | translate}}</div>
+      </li>
+
+      <li [ngClass]="step == 'confirm-contract' ? 'active' : 'inactive'">
+        <div [ngClass]="{'current_active' : step == 'confirm-contract'}">{{'contract.confirm' | translate}}</div>
+      </li>
+    </ul>
+  </div>
+  <div>
+    <img src="assets/img/icon_close.svg" width="24px" class="icon_close" ngbTooltip="{{'btn.close' | translate}}" (click)="open(modalNotifi)"/>
+  </div>
+</div>
+
+<!-- Popup notification close -->
+<ng-template #modalNotifi let-modal >
+  <div class="popup_content">
+    <div class="row">
+      <div class="col-md-10">
+        <h4 class="popup_title">{{'notification' | translate}}</h4>
+      </div>
+      <div class="col-md-2 popup_close">
+        <span (click)="modal.dismiss('Cross click')">×</span>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-md-12">
+          <div class="form-group">
+            <div class="input-group">
+              <p class="alert alert-primary" role="alert"  style="text-align: center; width: 100%;">
+              {{'no.contract.add.close' | translate}}
+              </p>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="row" style="text-align: center; padding-top: 10px;">
+      <div class="col-md-12">
+        <button type="button" class="btn btn-outline-dark btn_close" (click)="closeCreateContract(modal)">{{'btn.cancel' | translate}}</button>
+        <button type="button" class="btn btn-outline-dark btn_submit" (click)="saveContract(modal)">{{'btn.accept' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+

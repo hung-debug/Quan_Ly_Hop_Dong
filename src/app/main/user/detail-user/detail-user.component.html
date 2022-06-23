@@ -1,0 +1,136 @@
+<div *ngIf="isQLND_04">
+  <div class="label-header">{{'user.information.individual' | translate}}</div>
+  <div class="content">
+    <div class="content-body">
+      <div class="row">
+        <div class="col-md-4">
+              <div class="label text-color">{{'user.name' | translate}}</div>
+              <div>
+                  <div [innerHTML]="name" class="input_text"></div>
+              </div>
+        </div>
+        <div class="col-md-4">
+              <div class="label text-color">{{'user.email' | translate}}</div>
+              <div>
+                  <div [innerHTML]="email" class="input_text"></div>
+              </div>
+        </div>
+        <div class="col-md-4">
+          <div class="label text-color">{{'user.birthday' | translate}}</div>
+          <div>
+              <div [innerHTML]="birthday" class="input_text"></div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="row">
+        <div class="col-md-4">
+            <div class="label text-color">{{'user.phone' | translate}}</div>
+            <div>
+              <div [innerHTML]="phone" class="input_text"></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="label text-color">{{'organization' | translate}}</div>
+          <div>
+              <div [innerHTML]="organizationId" class="input_text"></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="label text-color">Vai trò</div>
+          <div>
+              <div [innerHTML]="role" class="input_text"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col-md-6" style="align-self: center;">
+              <input type="radio" checked style="outline: none;">
+              <span> {{(status==1?'unit.active':'unit.inactive') | translate}}</span>
+          </div>
+    </div>
+    </div>
+    
+    <br>
+    <div class="label-header">{{'sign.information' | translate}}</div>
+    <div class="content-body">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="label-header">
+            {{'sign.file-image' | translate}}
+          </div>
+          <div class="content-body">
+            <div [hidden]="imgSignPCSelect">
+              <input id="attachFileSignature" type="file" accept=".jpg, .png, .jpge"
+              style="display: none;"/>
+              <div class="select-contract container-img-file">
+                <div class="upload-image-region d-flex flex-column container-img-file-1">
+                  <img src="assets/img/img-icon.svg" alt="#" width="50px">
+                  <div class="text-choose-file">{{'image.empty' | translate}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="image-div">
+              <img *ngIf="imgSignPCSelect" [src]="imgSignPCSelect" alt="" style="display: block;margin: 10px auto;max-height: 30vh;max-width: 100%;">
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-md-4">
+          <div class="label-header">
+            <div class="row" style="padding: 0 10px;">
+              <div class="col-md-12">
+                {{'sign.kpi' | translate}}
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="row">
+              <div class="col-md-12">
+                <div>{{'user.phone' | translate}}</div>
+                  <div>
+                      <div [innerHTML]="phoneKpi" class="input_text"></div>
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div>{{'user.network' | translate}}</div>
+                  <div>
+                      <div [innerHTML]="networkKpi" class="input_text"></div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-md-4">
+          <div class="label-header">
+            <div class="row" style="padding: 0 10px;">
+              <div class="col-md-12">
+                {{'sign.hsm' | translate}}
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="row">
+              <div class="col-md-12">
+                <div>{{'user.name.v2' | translate}}</div>
+                <div>
+                      <div [innerHTML]="nameHsm" class="input_text"></div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+      <div class="row" style="justify-content: center;padding-top: 10px;">
+          <button class="cancel-button" (click)="onCancel()"  type="button">{{'btn.close' | translate}}</button>
+      </div>
+  </div>
+</div>
+<div *ngIf="!isQLND_04">
+  {{'no.role' | translate}}
+</div>

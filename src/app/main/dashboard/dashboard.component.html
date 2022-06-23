@@ -1,0 +1,159 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <h3>{{'dashboard.contract.received' | translate}}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="header_card header_card_1" (click)="openLink('/main/contract-signature/receive/wait-processing-dashboard')">
+        <div class="row">
+          <div class="col-md-7 text_header_card">
+              <div>{{'contract.status.wait-processing' | translate}}</div>
+              <div class="number_header_card">{{numberWaitProcess}}</div>
+          </div>
+          <div class="col-md-5 img_header_card">
+            <img src="../../../assets/img/db_header_1.svg" width="60px"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="header_card header_card_2" (click)="openLink('/main/contract-signature/receive/wait-processing-prepare-expires-dashboard')">
+        <div class="row">
+          <div class="col-md-7 text_header_card">
+              <div>{{'contract.status.expire' | translate}}</div>
+              <div class="number_header_card">{{numberExpire}}</div>
+          </div>
+          <div class="col-md-5 img_header_card">
+            <img src="../../../assets/img/db_header_2.svg" width="60px" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="header_card header_card_3" (click)="openLink('/main/contract-signature/receive/processed-waiting-dashboard')">
+        <div class="row">
+          <div class="col-md-7 text_header_card">
+              <div>{{'contract.status.wait-response' | translate}}</div>
+              <div class="number_header_card">{{numberWaitComplete}}</div>
+          </div>
+          <div class="col-md-5 img_header_card">
+            <img src="../../../assets/img/db_header_1.svg" width="60px" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="header_card header_card_4" (click)="openLink('/main/contract-signature/receive/processed-complete-dashboard')">
+        <div class="row">
+          <div class="col-md-7 text_header_card">
+              <div>{{'contract.status.complete' | translate}}</div>
+              <div class="number_header_card">{{numberComplete}}</div>
+          </div>
+          <div class="col-md-5 img_header_card">
+            <img src="../../../assets/img/db_header_3.svg" width="60px" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding: 20px 0;">
+    
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <h3>{{'dashboard.contract.created' | translate}}</h3>
+        </div>
+      </div>
+      <div class="body">
+        <div class="row" style="margin: 0 1%;">
+          <div class="col-md-6" style="text-align: center;">
+            <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="search()"></p-selectButton>
+          </div>
+          <div class="col-md-6">
+            <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy" (onSelect)="searchCountCreate()"></p-calendar>
+          </div>
+          <div style="padding-top: 10px;" *ngIf="isOrg=='on'">
+            <p-dropdown 
+              panelStyleClass="font"
+              [options]="orgList" 
+              [(ngModel)]="organization_id" 
+              optionLabel="name" 
+              optionValue="id" 
+              [filter]="true" 
+              filterBy="name" 
+              (onChange)="search()"
+              ></p-dropdown>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div *ngIf="totalCreate == 0"
+              style="height:421px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
+              <div style="display: table-cell;vertical-align: middle;">
+                <img src="../../../assets/img/empty_data.svg"/>
+                <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+              </div>
+            </div>
+            <div *ngIf="totalCreate > 0" >
+              <div [chart]="chartCreated"></div>
+              <div style="text-align: center;">{{'chart.contract.created' | translate}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <h3>{{'dashboard.notification' | translate}}</h3>
+        </div>
+      </div>
+      <div class="body">
+        <div *ngIf="listNotification.length == 0" 
+        style="height: 453px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
+        <div style="display: table-cell;vertical-align: middle;">
+          <img src="../../../assets/img/empty_data.svg"/>
+          <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+        </div>
+      </div>
+        <div *ngIf="listNotification.length > 0" [ngStyle]="{ 'min-height': isOrg=='on'? '494px':' 453px'}" style="min-height: 453px;"> 
+          <div *ngFor="let item of listNotification; let i = index" [style.border-bottom]="i != listNotification.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px;">
+            <div class="row">
+              <div class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name}}</div>
+            </div>
+            <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
+              <div class="col-md-12 item_contract_infor">
+                <img src="../../../assets/img/user_icon.svg" width="12px"/>
+                <span> {{s}}</span>
+              </div>
+            </div>
+            <div class="row item_contract_infor">
+
+              <div class="col-md-6 calendar_create">
+                <img src="../../../assets/img/calendar_icon.svg" width="15px"/>
+                <span class="item_date"> {{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
+              </div>
+              
+              <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">{{'contract.lead' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject'">{{'contract.status.fail' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_review'">{{'contract.view' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_sign'">{{'contract.sign' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_publish'">{{'contract.document' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_finish'">{{'contract.status.complete' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='sign_flow_cancel'">{{'contract.status.cancel' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='contract_exprire'">{{'contract.status.overdue' | translate}}</span>
+                <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire'">{{'contract.status.expire' | translate}}</span>
+              </div>
+          
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

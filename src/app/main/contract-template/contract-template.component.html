@@ -1,0 +1,106 @@
+<div *ngIf="loaded">
+<div *ngIf="isQLMHD_01 || isQLMHD_02 || isQLMHD_03 || isQLMHD_04 || isQLMHD_05 || isQLMHD_06 || isQLMHD_07 || isQLMHD_08 || isQLHD_14 || isQLHD_15" class="container-fluid">
+  <p-selectButton [options]="stateOptions" [(ngModel)]="isShare" optionLabel="label" optionValue="value" (click)="searchContract()"></p-selectButton>
+
+  <div class="row" style="padding-top: 10px;">
+    <div class="col-md-3" *ngIf="isQLMHD_06">
+      <div>{{'contract-template.name' | translate}}</div>
+      <div class="input-line">
+        <input type="text" [(ngModel)]="name" class="input_text"/>
+      </div>
+    </div>
+    <div class="col-md-3" *ngIf="isQLMHD_06">
+      <div>{{'contract.type' | translate}}</div>
+      <div>
+        <p-dropdown 
+          panelStyleClass="font"
+          [options]="contractTypeList" 
+          [(ngModel)]="type" 
+          optionLabel="name" 
+          optionValue="id" 
+          [filter]="true" 
+          filterBy="name" 
+          [showClear]="type?true:false"
+          placeholder="Tất cả"
+          ></p-dropdown>
+      </div>
+    </div>
+    <div class="col-md-6 btn_search">
+      <button *ngIf="isQLMHD_06" class="btn btn-lg btn-block btn_submit" (click)="searchContract()">{{'btn.search' | translate }}</button>
+      <button *ngIf="isQLMHD_01" class="btn btn-lg btn-block btn_submit" (click)="add()">{{'btn.add' | translate }}</button>
+    </div>
+  </div>
+
+  <div class="row list_header" *ngIf="pageTotal > 0;">
+    <div class="col-md-5"></div>
+    <div class="col-md-2">{{'create-date' | translate}}</div>
+    <div class="col-md-2">{{'contract-template.code' | translate}}</div>
+    <div class="col-md-3">{{'action' | translate}}</div>
+  </div>
+
+  <div class="item_contract" *ngFor="let item of contractsTemplate  | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
+    <div class="row">
+      <div class="col-md-12 item_contract_name" (click)="isQLMHD_08?openDetail(item.id):null">{{item.name}}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 item_contract_infor">Bên A: {{item.sideA}}</div>
+    </div>
+    <div class="row">
+      <div class="col-md-5">
+        <div class="row">
+          <div class="col-md-12 item_contract_infor">Bên B: {{item.sideB}}</div>
+        </div>
+      </div>
+      <div class="col-md-2 calendar_create">
+        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
+      </div>
+
+      <div class="col-md-2 contract_code">
+        <span class="item_date">{{item.code}}</span>
+      </div>
+
+      <div class="col-md-3 item_icon">
+        <div style="display: flex; justify-content: center;">
+          <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_02">
+            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'Sửa mẫu hợp đồng' | translate}}" (click)="openEdit(item.id)" />
+          </div>
+          <div class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && (isQLMHD_03 || isQLMHD_04)">
+            <img *ngIf="item.status == 10 && isQLMHD_03" src="../../assets/img/icon_stop_release.svg" class="img_icon" ngbTooltip="Ngừng phát hành" (click)="stopContractTemplate(item.id)"/>
+            <img *ngIf="item.status == 32 && isQLMHD_04" src="../../assets/img/icon_open_release.svg" class="img_icon" ngbTooltip="Mở phát hành" (click)="releaseContractTemplate(item.id)"/>
+          </div>
+
+          <div class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_14">
+            <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="Tạo hợp đồng đơn lẻ theo mẫu" (click)="addContractForm(item.id)"/>
+          </div>
+          <div class="div_icon" *ngIf="item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLHD_15">
+            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="Tạo hợp đồng theo lô" (click)="addContractBatch(item.id)"/>
+          </div>
+          <div class="div_icon" *ngIf="isShare=='off' && item.status == 10 && item.releaseState=='CON_HIEU_LUC' && isQLMHD_05">
+            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" (click)="shareContractTemplate(item.id)"/>
+          </div>
+          <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_07">
+            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="Xóa mẫu hợp đồng" (click)="deleteContractTemplate(item.id)" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="pageTotal == 0" 
+  style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+    <div style="display: table-cell;vertical-align: middle;"> 
+      <img src="../../../assets/img/empty_data.svg"/>
+      <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+    </div>
+  </div>
+
+  <div class="contract_footer">
+    <div class="footer_title"></div>
+    <div class="footer_pagination">
+      <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractTemplateList()" previousLabel="" nextLabel=""></pagination-controls>
+    </div>
+    <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
+  </div>
+
+</div>
+</div>

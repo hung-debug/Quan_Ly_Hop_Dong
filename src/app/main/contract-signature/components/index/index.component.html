@@ -1,0 +1,6 @@
+<div>
+<!--  <app-header-contract [datas]="datas"></app-header-contract>-->
+  <app-infor-coordination *ngIf="this.datas.step == 'infor-coordination'" [datas]="this.datas"></app-infor-coordination>
+  <app-add-contract *ngIf="this.datas.step == 'confirm-coordination'" #AddContract [datas]="this.datas"></app-add-contract>
+  <app-footer-signature *ngIf="this.datas.step == 'infor-coordination'" [datas]="datas"></app-footer-signature>
+</div>

@@ -1,0 +1,72 @@
+<!--xử lý gọi các component trong các step theo từng điều kiện-->
+<div *ngIf="((action=='add' || action=='add-form' || action=='add-batch') && (type == 1 && isQLHD_01) || (type == 2 && isQLHD_14) || (type == 3 && isQLHD_15)) || (action=='add-contract-connect' && isQLHD_11) || (action=='edit' && isQLHD_02) || (action=='copy' && isQLHD_08)"
+    class="container-fluid">
+    <app-contract-header *ngIf="type == 1 && (isQLHD_01 || this.action == 'edit')" #contractHeader [AddComponent]="this" [datas]="datas" [step]="step"
+        (messageEvent)="receiveMessage($event)"></app-contract-header>
+
+    <app-contract-form-header *ngIf="type == 2 && (isQLHD_14 || this.action == 'edit')" #contractHeader [AddComponent]="this" [datasForm]="datasForm" [stepForm]="stepForm"
+        (messageEvent)="receiveMessage($event)"></app-contract-form-header>
+
+    <app-contract-batch-header *ngIf="type == 3 && (isQLHD_15 || this.action == 'edit')" #contractHeader [AddComponent]="this" [datasBatch]="datasBatch" [stepBatch]="stepBatch"
+        (messageEvent)="receiveMessage($event)"></app-contract-batch-header>
+
+    <div class="row" style="margin: 0" *ngIf="this.action == 'add'">
+        <div class="radio col-md-4 label_type" *ngIf="isQLHD_01">
+            <label>
+                <input type="radio" name="contract_create" [value]="1" [(ngModel)]="type"
+                    (change)="changeType($event)" [disabled]="is_disable ">
+                <span> {{'contract.not-by-template' | translate}}</span>
+            </label>
+        </div>
+        <div class="radio col-md-4 label_type" *ngIf="isQLHD_14">
+            <label><input type="radio" name="contract_create" [value]="2" [(ngModel)]="type"
+                    (change)="changeType($event)" [disabled]="is_disable ">
+                <span> {{'contract.by-template' | translate}}</span></label>
+        </div> 
+        <div class="radio col-md-4 label_type" *ngIf="isQLHD_15">
+            <label><input type="radio" name="contract_create" [value]="3" [(ngModel)]="type"
+                    (change)="changeType($event)" [disabled]="is_disable ">
+                <span> {{'contract.by-batch' | translate}}</span></label>
+        </div>
+    </div>
+
+    <ng-container *ngIf="type == 1 && (isQLHD_01 || this.action == 'edit')">
+        <app-infor-contract #infoContract *ngIf="step == 'infor-contract'" [datas]="datas" [step]="step"
+            [save_draft_infor]="shareData" (stepChangeInfoContract)="getStep($event)"></app-infor-contract>
+        <app-determine-signer #determineSigner *ngIf="step == 'determine-contract'" [datas]="datas"
+            [save_draft_infor]="shareData" [step]="step" (stepChangeDetermineSigner)="getStep($event)">
+        </app-determine-signer>
+        <app-sample-contract #sampleContract *ngIf="step == 'sample-contract'" [datas]="datas" [step]="step"
+            [save_draft_infor]="shareData" (stepChangeSampleContract)="getStep($event)"></app-sample-contract>
+        <app-confirm-infor-contract #confirmInforContract *ngIf="step == 'confirm-contract'" [datas]="datas"
+            [save_draft_infor]="shareData" [step]="step" (stepChangeConfirmInforContract)="getStep($event)">
+        </app-confirm-infor-contract>
+    </ng-container>
+
+    <ng-container *ngIf="type == 2 && (isQLHD_14 || this.action == 'edit')">
+        <app-infor-contract-form #infoContractForm *ngIf="stepForm == 'infor-contract-form'" [datasForm]="datasForm" [stepForm]="stepForm"
+            [save_draft_infor_form]="shareData" (stepChangeInfoContractForm)="getStep($event)"></app-infor-contract-form>
+        <app-party-contract-form #partyContractForm ateStep2 *ngIf="stepForm == 'party-contract-form'" [datasForm]="datasForm"
+            [save_draft_infor_form]="shareData" [stepForm]="stepForm" (stepChangePartyContractForm)="getStep($event)">
+        </app-party-contract-form>
+        <app-sample-contract-form #sampleContractForm *ngIf="stepForm == 'sample-contract-form'" [datasForm]="datasForm" [stepForm]="stepForm"
+            [save_draft_infor_form]="shareData" (stepChangeSampleContractForm)="getStep($event)"></app-sample-contract-form>
+        <app-confirm-contract-form #confirmContractForm *ngIf="stepForm == 'confirm-contract-form'" [datasForm]="datasForm"
+            [save_draft_infor_form]="shareData" [stepForm]="stepForm" (stepChangeConfirmInforContractform)="getStep($event)">
+        </app-confirm-contract-form>
+    </ng-container>
+
+    <ng-container *ngIf="type == 3 && (isQLHD_15 || this.action == 'edit')">
+        <app-infor-contract-batch #infoContractBatch *ngIf="stepBatch == 'infor-contract-batch'" [datasBatch]="datasBatch" [stepBatch]="stepBatch" (stepChangeInfoContractBatch)="getStep($event)"></app-infor-contract-batch>
+        <app-confirm-contract-batch #confirmContractBatch *ngIf="stepBatch == 'confirm-contract-batch'" [datasBatch]="datasBatch" [stepBatch]="stepBatch" (stepChangeConfirmInforContractBatch)="getStep($event)"></app-confirm-contract-batch>
+    </ng-container>
+</div>
+<div
+    *ngIf="!(action=='add' && type == 1 && isQLHD_01) && 
+           !((action=='add' || action=='add-form') && type == 2 && isQLHD_14) && 
+           !((action=='add' || action=='add-batch') && type == 3 && isQLHD_15) && 
+           !(action=='add-contract-connect' && isQLHD_11) && 
+           !(action=='edit' && isQLHD_02) && 
+           !(action=='copy' && isQLHD_08)">
+    {{'no.role' | translate}}
+</div> 

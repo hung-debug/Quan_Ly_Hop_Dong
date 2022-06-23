@@ -1,0 +1,118 @@
+<div class="container-fluid">
+  <div class="col-md-12">
+    <div *ngIf="this.searchPackRole === true" class="input-line search">
+      <img src="../../assets/img/icon_search.svg" class="input-img" />
+      <input
+        type="text"
+        id="filter_name"
+        (keyup)="autoSearch($event)"
+        class="input-text"
+        placeholder="{{
+          'Nhập từ khóa tìm kiếm theo tên gói dịch vụ' | translate
+        }}"
+        [(ngModel)]="filterSearch"
+        (keyup)="autoSearch($event)"
+      />
+      <img
+        src="../../assets/img/icon_search_group.svg"
+        class="input-img"
+        (click)="search()"
+      />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 btn_search">
+      <button
+        style="float: right"
+        *ngIf="this.addPackRole === true"
+        class="btn btn-lg btn-block btn_submit"
+        (click)="addPack()"
+      >
+        {{ "Thêm mới gói dịch vụ" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top: 10px">
+    <p-table #myTable
+      [lazy]="true"
+      (onLazyLoad)="loadPack($event)"
+      [paginator]="true"
+      [value]="listData"
+      [loading]="loading"
+      [totalRecords]="totalRecords"
+      [rows]="rows"
+      id="table"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of cols" [style]="col.style">
+            {{ col.header | translate }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-list>
+        <tr>
+          <td>
+            <a
+              style="color: #0160ae; cursor: pointer"
+              (click)="detailPack(list.id)"
+              >{{ list.name }}</a
+            >
+          </td>
+          <td>{{ list.code }}</td>
+          <td>{{ list.duration }}</td>
+          <td>{{ list.numberOfContracts }}</td>
+          <td>{{ list.totalBeforeVAT }}</td>
+          <td>{{ list.totalBeforeVAT }}</td>
+          <td
+            *ngIf="
+              !(this.editPackRole === false && this.deletePackRole === false)
+            "
+            style="text-align: center"
+          >
+            <img
+              *ngIf="this.editPackRole === true"
+              src="../../../assets/img/icon_edit.svg"
+              (click)="editPack(list.id)"
+              width="20px"
+              style="cursor: pointer"
+            />&nbsp;&nbsp;
+            <img
+              *ngIf="this.deletePackRole === true"
+              src="../../../assets/img/icon_delete.svg"
+              (click)="deletePack(list.id)"
+              width="16px"
+              style="cursor: pointer"
+            />
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <span style="color: white !important"
+          >{{ "chart.number" | translate }}:
+          {{ state.totalRecords > 0 ? state.first + 1 : state.first }} -
+          {{
+            state.first + state.rows > state.totalRecords
+              ? state.totalRecords
+              : state.first + state.rows
+          }}
+          / {{ state.totalRecords }}</span
+        >
+      </ng-template>
+      <ng-template pTemplate="paginatorright" let-state>
+        <span style="color: #0160ae !important"
+          >{{ "chart.number" | translate }}:
+          {{ state.totalRecords > 0 ? state.first + 1 : state.first }} -
+          {{
+            state.first + state.rows > state.totalRecords
+              ? state.totalRecords
+              : state.first + state.rows
+          }}
+          / {{ state.totalRecords }}</span
+        >
+      </ng-template>
+    </p-table>
+  </div>
+</div>

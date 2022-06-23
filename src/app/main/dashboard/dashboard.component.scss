@@ -1,0 +1,113 @@
+:host ::ng-deep {
+  .p-calendar {
+    font-size: 13px !important;
+    font-family: 'font_lexend_deca';
+    width: 100%;
+  }
+  .p-datepicker table td {
+    padding: 0;
+  }
+  .p-calendar-w-btn, .p-calendar-w-btn .p-inputtext {
+    height: 33px;
+  }
+  .p-calendar-w-btn .p-inputtext{
+    //border: 1px solid #106DB6 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+  .p-calendar-w-btn .p-datepicker-trigger {
+    background-color: #e4e5e4;
+    border: 1px solid #ced4da;
+  }
+  .p-selectbutton .p-button {
+    outline: 0 !important;
+    box-shadow: none !important;
+    height: 33px;
+    width: 50%;
+  }
+  // .p-buttonset .p-button:first-of-type {
+  //   border-top-left-radius: 20px;
+  //   border-bottom-left-radius: 20px;
+  // }
+  // .p-buttonset .p-button:last-of-type {
+  //   border-top-right-radius: 20px;
+  //   border-bottom-right-radius: 20px;
+  // }
+}
+.item_contract_name {
+  font-weight: 500;
+  font-size: 15px;
+  color: #106DB6;
+  cursor: pointer;
+}
+
+.item_contract_infor{
+  font-size: 11px;
+  color: #666666;
+}
+
+.status_blue{
+  color: #027e21;
+}
+
+.list_header{
+  color:#898989;
+  text-align: center;
+  padding: 12px 12px 0;
+  font-weight: 500;
+}
+.header_card{
+  border-radius: 30px; 
+  color: white;
+}
+.header_card:hover{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  cursor: pointer;
+}
+.header_card_1{
+  background-color: #99E6FC;
+}
+.header_card_2{
+  background-color: #EF854B;
+}
+.header_card_3{
+  background-color: #4B71F0;
+}
+.header_card_4{
+  background-color: #00D0C2;
+}
+.text_header_card{
+  padding: 27px;
+  text-align: center;
+}
+.number_header_card{
+  font-size: 30px;
+  padding-top: 10px;
+}
+.img_header_card{
+  padding: 20px;
+  text-align: center;
+}
+.body{
+  padding: 10px;
+  background-color: white;
+  border-radius: 30px;
+  border: 1px solid #C7D0E9;
+}
+h3{
+  color: #106DB6;
+  text-transform: uppercase;
+}
+:host ::ng-deep {
+  .p-dropdown {
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+      height: 33px;
+      width: 100%;
+      outline: 0;
+      color: black !important;
+  }
+  .p-dropdown-label {
+      padding: 5px 5px 5px 15px;
+  }
+}

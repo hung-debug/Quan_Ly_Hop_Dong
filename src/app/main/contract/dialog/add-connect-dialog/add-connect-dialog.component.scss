@@ -1,0 +1,162 @@
+.input-data {
+    border: 1px solid #106DB6;
+    border-radius: 5px;
+    height: 33px;
+    display: flex;
+    align-items: center;
+
+    > input {
+        border: none;
+        outline: none;
+        padding-left: 5px;
+        width: 100%;
+    }
+}  
+.cancel-button{
+    border: 0px;
+    border-radius: 5px;
+    height: 33px;
+    width: 100px;
+    box-sizing: border-box;
+    color: white;
+    background-color: #8B8B8B;
+    font-size: 13px;
+    margin: 0 10px;
+}
+.save-button{
+    border: 0px;
+    border-radius: 5px;
+    height: 33px;
+    width: 100px;
+    box-sizing: border-box;
+    color: white;
+    background-color: #106DB6;
+    font-size: 13px;
+    margin: 0 10px;
+}
+.error-detail{
+    font-size: inherit;
+    padding: 6px;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+:host ::ng-deep {
+    .p-checkbox .p-checkbox-box {
+        border: 1px solid #106db6;
+    }
+    .p-calendar {
+        font-size: 13px !important;
+        font-family: 'font_lexend_deca';
+        width: 100%;
+      }
+      .p-datepicker table td {
+        padding: 0;
+      }
+      .p-calendar-w-btn, .p-calendar-w-btn .p-inputtext {
+        height: 33px;
+      }
+      .p-calendar-w-btn .p-inputtext{
+        border: 1px solid #106DB6 !important;
+        outline: 0 !important;
+        box-shadow: none !important;
+      }
+}
+  
+
+.item_contract {
+    border: 1px solid #106DB6;
+    border-radius: 10px;
+    padding: 8px;
+    margin-top: 5px;
+    line-height: 24px;
+    margin-left: 5px;
+    width: 100%;
+  }
+  
+  .item_contract:hover{
+    background-color: rgb(255, 254, 254);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  .item_contract_name {
+    font-weight: 500;
+    font-size: 16px;
+    color: #106DB6;
+    cursor: pointer;
+  }
+  
+  .item_contract_infor{
+    color: #666666;
+  }
+  
+  .status_blue{
+    color: #027e21;
+  }
+  
+  .list_header{
+    color:#898989;
+    text-align: center;
+    padding: 12px 12px 0;
+    font-weight: 500;
+  }
+
+  :host ::ng-deep {
+    .ngx-pagination {
+      padding: 0;
+    }
+    .ngx-pagination a, .ngx-pagination button {
+      text-decoration: none;
+      background: #f3f3f3;
+    }
+    .ngx-pagination li {
+      width: 50px;
+      border-radius: 5px;
+    }
+    .ngx-pagination .pagination-previous a::before,
+    .ngx-pagination .pagination-previous.disabled::before {
+      font-family: 'Material Icons';
+      content: 'keyboard_arrow_left';
+      vertical-align: middle;
+      display: inline;
+      margin: 0;
+    }
+    .ngx-pagination .pagination-next a::after,
+    .ngx-pagination .pagination-next.disabled::after {
+      font-family: 'Material Icons';
+      content: 'keyboard_arrow_right';
+      vertical-align: middle;
+      display: inline;
+      margin: 0;
+    }
+  
+    .nav-link.active {
+      color: #0d6efd;
+      font-weight: 500;
+      background-color: #c5ebff;
+    }
+    .nav-link {
+      color: #6c6c6d;
+    }
+  }
+  .contract_footer{
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .footer_title{
+    width: 120px;
+  }
+  .footer_pagination{
+    text-align: center;
+  }
+  .footer_page_number{
+    color: #0160AE
+  }
+  .calendar_create{
+    text-align: center;
+    color:#106DB6
+  }
+  .calendar_deadline{
+    text-align: center;
+    color:red
+  }

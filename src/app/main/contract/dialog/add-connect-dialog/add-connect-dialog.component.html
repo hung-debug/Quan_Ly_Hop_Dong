@@ -1,0 +1,72 @@
+<div class="container-fluid">
+    <div style="text-align: center; font-weight: bold">
+      <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{this.data.title | translate}}</h3>
+    </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="label text-color">Tên hợp đồng</div>
+                <div class="input-data">
+                    <input type="text" id="name" #name (keyup)="getContractList()">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="label text-color">Tên đối tác</div>
+                <div class="input-data">
+                    <input type="text" id="sideB" #sideB (keyup)="getContractList()">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="label text-color">Ngày tạo</div>
+                <div>
+                    <p-calendar appendTo="body" id="created_at" [showIcon]="true" dateFormat="dd/mm/yy" #created_at (change)="getContractList()"></p-calendar>
+                </div>
+            </div>
+        </div>
+
+        
+        <div *ngFor="let contract of contractsD | paginate:{itemsPerPage: pageD, currentPage:pD, totalItems: pageTotalD}" class="p-field-checkbox" style="display: flex;">
+            <p-checkbox value="contract.id" [value]="contract.id" [(ngModel)]="idList" [inputId]="contract.id"></p-checkbox>
+            <div class="item_contract">
+                <div class="row">
+                    <div class="col-md-12 item_contract_name">{{contract.name}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 item_contract_infor">{{'contract.side.a' | translate}}: {{contract.sideA}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 item_contract_infor">{{'contract.side.b' | translate}}: {{contract.sideB}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                        <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
+                            <span class="status_blue">{{'contract.status.complete' | translate}}</span>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 calendar_create">
+                        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{contract.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
+                    </div>
+                
+                    <div class="col-md-3 calendar_deadline">
+                        <i class="fa fa-calendar fa_icon"></i><span class="item_date">{{contract.sign_time | date: 'dd/MM/yyyy'}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="contract_footer">
+            <div class="footer_title"></div>
+            <div class="footer_pagination">
+              <pagination-controls *ngIf="pageTotalD > 0;" (pageChange)="pD=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
+            </div>
+            <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStartD}} - {{pageEndD}} / {{pageTotalD}}</div>
+        </div>
+        
+        <div class="row" style="justify-content: center;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
+            <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>
+        </div>
+  </div>
+  

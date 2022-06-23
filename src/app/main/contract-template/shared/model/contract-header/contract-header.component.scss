@@ -1,0 +1,122 @@
+//style step by step
+#progressbar {
+  // margin-bottom: 30px;
+  overflow: hidden;
+  /*CSS counters to number the steps*/
+  counter-reset: step;
+  padding: 0;
+}
+
+#progressbar li {
+  list-style-type: none;
+  color: #cccccc;
+  text-transform: uppercase;
+  font-size: 12px;
+  width: 25%;
+  float: left;
+  position: relative;
+  letter-spacing: 1px;
+}
+
+#progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  display: block;
+  font-size: 12px;
+  color: #333;
+  background: #333  ;
+  border-radius: 25px;
+  margin: 0 auto 10px auto;
+}
+
+//style connect step
+#progressbar li:after {
+  content: '';
+  width: 100%;
+  height: 2px;
+  background: #CCCCCC;
+  position: absolute;
+  left: -50%;
+  top: 9px;
+  z-index: 1; /*put it behind the numbers*/
+  height: 5px;
+}
+
+#progressbar li:first-child:after {
+  /*connector not needed before the first step*/
+  content: none;
+}
+
+//style step active
+#progressbar li.active:before {
+  background: #106DB6;
+  color: white;
+  z-index: 2;
+  position: relative;
+}
+
+#progressbar li.active:after {
+  background: #106DB6;
+  color: white;
+  z-index: 1;
+  position: absolute;
+  height: 5px;
+}
+
+// #progressbar li.active:before, #progressbar li.active:after {
+//   background: #106DB6;
+//   color: white;
+//   z-index: 2;
+//   position: relative;
+// }
+
+#progressbar li.inactive:before{
+  background: white;
+  color: #000;
+  border: 1px solid #cccccc;
+  z-index: 2;
+  position: relative;
+}
+
+//style current active
+#progressbar li div.current_active {
+  font-weight: 500;
+  color: #106DB6;
+}
+.icon_close{
+  margin: 10px;
+  cursor: pointer;
+}
+//popup
+.popup_content{
+  padding: 30px;
+}
+.popup_title{
+  margin: 0;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.popup_close{
+  font-size: 25px;
+  text-align: right;
+  cursor: pointer;
+}
+.btn_close {
+  width: 90px;
+  font-size: inherit;
+  background: #6c6c6d;
+  color: white;
+  border: 1px solid #808183;
+  margin: 0 5px;
+}
+.btn_submit{
+  width: 90px;
+  font-size: inherit;
+  background: #106DB6;
+  color: white;
+  border: 1px solid #87CAFF;
+  margin: 0 5px;
+}

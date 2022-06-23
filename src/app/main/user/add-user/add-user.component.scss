@@ -1,0 +1,152 @@
+.required-title {
+  color: red;
+}
+
+.input-data {
+  border: 1px solid #106DB6;
+  border-radius: 5px;
+  min-height: 33px;
+  display: flex;
+  align-items: center;
+
+  > input, div {
+      border: none;
+      outline: none;
+      padding-left: 15px;
+      width: 100%;
+      border-radius: 5px;
+  }
+  > div{
+    padding: 5px 15px;
+  }
+} 
+:host ::ng-deep {
+  .p-dropdown {
+      border: 1px solid #106DB6;
+      border-radius: 5px;
+      height: 33px;
+      width: 100%;
+      outline: 0;
+      color: black !important;
+  }
+  .p-dropdown-label {
+      padding: 5px 5px 5px 15px;
+  }
+}
+.cancel-button{
+  border: 0px;
+  border-radius: 5px;
+  height: 33px;
+  width: 100px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #8B8B8B;
+  font-size: 13px;
+  margin: 0 10px;
+}
+.save-button{
+  border: 0px;
+  border-radius: 5px;
+  height: 33px;
+  width: 100px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #106DB6;
+  font-size: 13px;
+  margin: 0 10px;
+}
+.label-header{
+  text-transform: uppercase;
+  color: #106DB6;
+}
+.content-body{
+  border: 1px solid #106DB6;
+  border-radius: 7px;
+}
+.btn-footer{
+  text-align: center;
+  padding: 10px;
+}
+.row{
+  padding: 10px;
+}
+hr{
+  margin-top: 2px;
+  border: 1px solid #87CAFF;
+}
+.container-img-file {
+  height: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #E9F4FD;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+.container-img-file:hover {
+  background: #b4ddff;
+  cursor: pointer;
+}
+
+.container-img-file-1 {
+  justify-content: center;
+  align-items: center;
+}
+
+.text-choose-file {
+  margin-top: 32px;
+  color: #106DB6;
+}
+
+.text-support-extension {
+  margin-top: 8px;
+  color: #ED1C24;
+  font-weight: 500;
+}
+:host ::ng-deep {
+  .p-calendar {
+    font-size: 13px !important;
+    font-family: 'font_lexend_deca';
+    width: 100%;
+  }
+  .p-datepicker table td {
+    padding: 0;
+  }
+  .p-calendar-w-btn, .p-calendar-w-btn .p-inputtext {
+    height: 33px;
+  }
+  .p-calendar-w-btn .p-inputtext{
+    border: 1px solid #106DB6 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+  }
+  .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {
+    color: #6c757d !important;
+  }
+}
+
+.image-div {
+  position: relative;
+  margin:5px;
+}
+.image-div:hover .hidden_img {
+  display: block;
+}
+.hidden_img:hover {
+  cursor: pointer;
+}
+.image-div .hidden_img {
+  position:absolute;
+  top:0;
+  left:0;
+  display:none;
+}
+.invalid{
+  color: red;
+}
+.hidden-color{
+  background-color: #EFF2F5;
+}
+
+  

@@ -1,0 +1,15 @@
+.input-form {
+    position: relative;
+    max-width: 680px !important;
+    margin: auto;
+}
+.label{
+    text-align: left;
+}
+.required-title, .invalid {
+    color: red;
+    text-align: left;
+}
+.input-text{
+    min-height: 33px;
+}

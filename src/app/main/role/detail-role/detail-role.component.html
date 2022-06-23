@@ -1,0 +1,59 @@
+<div class="container-fluid">
+    <div class="header">
+      <h3 class="label-header">{{this.data.title | translate}}</h3>
+    </div>
+    <div class="content">
+        <div class="row">  
+            <div class="col-md-6">  
+                <div class="row">  
+                    <div class="col-md-12">  
+                        <div class="label_item">{{'role.name' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="name" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 10px;">  
+                    <div class="col-md-12">  
+                        <div class="label_item">{{'role.code' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="code" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 10px;">  
+                    <div class="col-md-12">  
+                        <div class="label_item">{{'role.note' | translate}}</div>
+                        <div>
+                            <div [innerHTML]="role" class="input_text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="label text-color">{{'role.permission' | translate}}</div>
+                <div>
+                    <p-listbox [options]="groupedRole" [group]="true" [(ngModel)]="selectedRole" 
+                        [checkbox]="true" [multiple]="true"  [listStyle]="{'max-height':'300px'}" [style]="{'width':'100%'}">
+                        <ng-template let-group pTemplate="group">
+                            <div class="p-d-flex p-ai-center">
+                                <span>{{group.label | translate}}</span>
+                            </div>
+                        </ng-template>
+                        <ng-template let-group pTemplate="item">
+                            <div class="p-d-flex p-ai-center">
+                                <span>{{group.label | translate}}</span>
+                            </div>
+                        </ng-template>
+                    </p-listbox>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row" style="justify-content: center;padding-top: 10px;">
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>
+        </div>
+    </div>
+  </div>
+  

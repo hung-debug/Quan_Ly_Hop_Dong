@@ -1,0 +1,39 @@
+<div class="container-fluid">
+  <div style="text-align: center; font-weight: bold">
+    <h3 style="color: #106DB6; font-weight: bold">{{this.datas.title}}</h3>
+  </div>
+  <div class="content">
+    <div class="name-item">
+      <div class="label_item">Số điện thoại: <span class="require_star">*</span></div>
+      <div class="form-control input-line">
+        <input style="font-size: 14px;" autocomplete="off" type="text" [(ngModel)]="phoneNum" class="input-text" placeholder="Nhập số điện thoại" autofocus>
+      </div>
+    </div>
+
+    <div class="name-item">
+      <div class="label_item">Nhà mạng: <span class="require_star">*</span></div>
+      <p-dropdown
+        panelStyleClass="font" class="pki-dialog"
+        [options]="nl"
+        [(ngModel)]="networkCode"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Chọn nhà mạng"
+        [showClear]="true"
+      ></p-dropdown>
+      <!--<ngx-select [items]="optionsNetworkCompany" [placeholder]="'Chọn nhà mạng'" [(ngModel)]="networkCompany" optionValueField="item_id" optionTextField="item_text"></ngx-select>-->
+    </div>
+
+    <div class="select-option">
+      <button
+        class="dx-button-form dx-button-close dx-button-90"
+        (click)="dialogRef.close()"
+        type="button">Thoát
+      </button>
+      <button
+        class="dx-button-form dx-button-submit dx-button-90" (click)="onSubmit()"
+        type="default">Xác nhận
+      </button>
+    </div>
+  </div>
+</div>

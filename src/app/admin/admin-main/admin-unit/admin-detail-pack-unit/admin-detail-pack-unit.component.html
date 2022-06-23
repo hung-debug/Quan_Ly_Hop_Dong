@@ -1,0 +1,122 @@
+<div class="container-fluid">
+  <div class="header">
+    <h3 class="label-header">{{this.data.title | translate}}</h3>
+  </div>
+  <div class="content">
+      <div class="row">  
+          <div class="col-md-6">  
+              <div class="label_item">{{'Mã gói dịch vụ' | translate }}</div>
+              <div>
+                  <div [innerHTML]="this.datas?.code" class="input_text"></div>
+              </div>
+          </div>
+      
+          <div class="col-md-6">
+              <div class="label_item">{{'Tên gói dịch vụ' | translate }}</div>
+              <div>
+                  <div [innerHTML]="this.datas?.name" class="input_text"></div>
+              </div>
+          </div>
+      </div>
+
+      <div class="row" style="padding-top: 10px;">
+          <div class="col-md-6">
+              <div class="label_item">{{'Đơn giá trước VAT (VND)' | translate }}</div>
+              <div>
+                  <div [innerHTML]="this.datas?.totalBeforeVAT" class="input_text"></div>
+              </div>
+          </div>
+      
+          <div class="col-md-6">
+              <div class="label_item">{{'Đơn giá sau VAT (VND)' | translate }}</div>
+              <div>
+                  <div [innerHTML]="this.datas?.totalAfterVAT" class="input_text"></div>
+              </div>
+          </div>
+      </div>
+
+      <div class="row" style="padding-top: 10px;">
+        <div class="col-md-6">
+            <div class="label_item">{{'Thời gian(tháng)' | translate }}</div>
+            <div>
+                <div [innerHTML]="this.datas?.duration" class="input_text"></div>
+            </div>
+        </div>
+    
+        <div class="col-md-6">
+            <div class="label_item">{{'Số lượng hợp đồng' | translate }}</div>
+            <div>
+                <div [innerHTML]="this.datas?.numberOfContracts" class="input_text"></div>
+            </div>
+        </div>
+    </div>
+
+      <div class="row" style="padding-top: 10px;">
+          <div class="col-md-6">
+              <div class="label_item">{{'Loại gói dịch vụ' | translate }}</div>
+              <div>
+                  <div [innerHTML]="this.datas?.serviceType" class="input_text"></div>
+              </div>
+          </div>
+      
+          <div class="col-md-6">
+              <div class="label_item">{{'Thể thức tính' | translate }}</div>
+              <div>
+                  <div [innerHTML]="this.datas?.calculatorMethod" class="input_text"></div>
+              </div>
+          </div>
+      </div>
+
+      <div class="row" style="padding-top: 10px;">
+          <div class="col-md-6">
+              <div class="label_item">{{'Ngày mua gói' | translate }}</div>
+              <div>
+                  <div [innerHTML]="this.datas?.purchaseDate" class="input_text"></div>
+              </div>
+          </div>
+      
+          <div class="col-md-6">
+              <div class="label_item">{{'Kiểu thanh toán' | translate }}</div>
+              <div>
+                  <div [innerHTML]="this.datas?.paymentType" class="input_text"></div>
+              </div>
+          </div>
+      </div>
+
+      <div class="row" style="padding-top: 10px;">
+        <div class="col-md-6">
+            <div class="label_item">{{'Trạng thái thanh toán' | translate }}</div>
+            <div>
+                <div [innerHTML]="this.datas?.paymentStatus" class="input_text"></div>
+            </div>
+        </div>
+    
+        <div class="col-md-6">
+            <div class="label_item">{{'Ngày thanh toán' | translate }}</div>
+            <div>
+                <div [innerHTML]="this.datas?.paymentDate" class="input_text"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-6">
+          <div class="label_item">{{'Ngày bắt đầu' | translate }}</div>
+          <div>
+              <div [innerHTML]="this.datas?.startDate" class="input_text"></div>
+          </div>
+      </div>
+  
+      <div class="col-md-6">
+          <div class="label_item">{{'Ngày kết thúc' | translate }}</div>
+          <div>
+              <div [innerHTML]="this.datas?.endDate" class="input_text"></div>
+          </div>
+      </div>
+  </div>
+  
+      <div class="row" style="justify-content: center;padding-top: 10px;">
+          <button class="cancel-button" (click)="cancel()" type="button">{{'btn.close' | translate}}</button>
+      </div>
+  </div>
+</div>
