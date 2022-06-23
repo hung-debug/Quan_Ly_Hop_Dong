@@ -146,6 +146,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   heightText: any = 200;
   widthText: any = 200;
   loadingText: string = 'Đang xử lý...';
+  phoneOtp:any = "0904616491";
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -780,7 +781,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             for (const q of d.recipients) {
               if (q.email == this.currentUser.email && q.status == 1) {
                 id_recipient_signature = q.id;
-                phone_recipient_signature = q.phone;
+                this.phoneOtp = phone_recipient_signature = q.phone;
                 break
               }
             }
@@ -1109,6 +1110,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           }
         });
     }else{
+      await of(null).pipe(delay(100)).toPromise();
+      const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
+      let signI = null;
+      if (imageRender) {
+        const textSignB = await domtoimage.toPng(imageRender);
+        signI = textSignB.split(",")[1];
+      }
+      console.log(signI);
       signUpdatePayload = signUpdateTemp.filter(
         (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
         .map((item: any) => {
