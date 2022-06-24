@@ -147,7 +147,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   heightText: any = 200;
   widthText: any = 200;
   loadingText: string = 'Đang xử lý...';
-  phoneOtp:any = "0904616491";
+  phoneOtp:any;
+ // isDateTime:any= this.datepipe.transform(new Date(), "dd/MM/yyyy hh:mm");
+  isDateTime:any;
+  userOtp:any;
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -784,6 +787,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               if (q.email == this.currentUser.email && q.status == 1) {
                 id_recipient_signature = q.id;
                 this.phoneOtp = phone_recipient_signature = q.phone;
+                this.userOtp = q.name;
                 break
               }
             }
@@ -1112,14 +1116,17 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           }
         });
     }else{
+      
+      this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy hh:mm");
       await of(null).pipe(delay(100)).toPromise();
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
+      
       let signI:any;
       if (imageRender) {
         const textSignB = await domtoimage.toPng(imageRender);
         signI = textSignB.split(",")[1];
       }
-      //console.log(signI);
+      console.log(signI);
       //console.log(this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'));
       signUpdatePayload = signUpdateTemp.filter(
         (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
@@ -1127,7 +1134,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           return {
             otp: this.dataOTP.otp,
             signInfo: signI,
-            processAt: this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+            processAt: this.datepipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss'Z'"),
             fields:[
               {
                 id: item.id,

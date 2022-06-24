@@ -8,8 +8,9 @@ import domtoimage from 'dom-to-image';
 })
 export class DisplaySignatureImageComponent implements OnInit {
 
-  isDateTime: any = new Date();
+  @Input() isDateTime: string | undefined | null;
   @Input() phoneOtp: string | undefined | null;
+  @Input() userOtp: string | undefined | null;
 
   constructor() { }
 
