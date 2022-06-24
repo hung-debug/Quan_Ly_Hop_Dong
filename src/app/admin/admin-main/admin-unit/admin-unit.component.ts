@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { LazyLoadEvent } from 'primeng/api';
+import { Table } from 'primeng/table';
 import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { AppService } from 'src/app/service/app.service';
@@ -22,12 +24,13 @@ export class AdminUnitComponent implements OnInit {
   filter_phone: any = '';
   filter_status: any = '';
   filter_address: any = '';
+  filter_name: any = '';
 
   private sub: any;
   action: string;
   status: string;
 
-  @Output() messageEvent = new EventEmitter<any[]>();
+  @ViewChild('myTable', { static: false }) table: Table;
   constructor(
     private appService: AppService,
     private dialog: MatDialog,
@@ -39,8 +42,6 @@ export class AdminUnitComponent implements OnInit {
 
   code: any = '';
   name: any = '';
-  list: any[];
-  listData: any[];
   cols: any[];
   files: any[];
   test: any;
@@ -56,11 +57,22 @@ export class AdminUnitComponent implements OnInit {
   editUnitRole: boolean = false;
   deleteUnitRole: boolean = false;
 
-  filterSearch: string;
+  filterSearch: any = '';
 
   temp: any[];
+  totalRecords: number;
+  tempTotal: number = 0;
+  page: number = 0;
+  loading: boolean;
+  flagSearch: boolean = false;
+
+  listData: any[];
+  tempList: any;
+
+  rows: number;
 
   ngOnInit(): void {
+    this.rows = 20;
 
     this.appService.setTitle('unit.list');
     this.addUnitRole = this.checkRole(this.addUnitRole, 'QLTC_01');
@@ -118,13 +130,13 @@ export class AdminUnitComponent implements OnInit {
       this.action = params['action'];
       this.status = params['status'];
 
-      this.getUnitList();
+      // this.getUnitList();
     });
 
     console.log('info unit role');
     console.log(this.infoUnitRole);
 
-    this.getUnitList();
+    // this.getUnitList();
 
     this.cols = [
       { field: 'name', header: 'unit.name', style: 'text-align: left;' },
@@ -143,32 +155,43 @@ export class AdminUnitComponent implements OnInit {
       });
     }
   }
-  getUnitList() {
-    console.log('re ', this.filter_representative);
 
-    this.adminUnitService
-      .getUnitList(
-        '',
-        this.filter_address,
-        this.filter_representative,
-        this.filter_email,
-        this.filter_phone,
-        this.filter_status,
-        '',
-        ''
-      )
-      .subscribe((response) => {
-        this.temp = response.entities;
-        this.listData = this.temp;
-        this.total = this.listData.length;
+  loadUnit(event: LazyLoadEvent) {
+    this.loading = true;
 
-        console.log('length ');
-        console.log(this.total);
-      });
+    setTimeout(() => {
+      this.adminUnitService
+        .getUnitList(
+          this.filterSearch,
+          this.filterSearch,
+          this.filter_address,
+          this.filter_representative,
+          this.filter_email,
+          this.filter_phone,
+          this.filter_status,
+          this.page,
+          this.rows
+        )
+        .subscribe((res) => {
+          console.log('page', this.page);
+
+            this.temp = this.listData;
+
+            this.listData = res.entities;
+  
+            this.totalRecords = res.total_elements;
+            this.loading = false;
+        
+        
+        });
+    }, 1000);
+
+    this.page = JSON.parse(JSON.stringify(event)).first / this.rows;
   }
 
   checkRole(flag: boolean, code: string): boolean {
-    let permissions = JSON.parse(localStorage.getItem('currentAdmin') || '').user.permissions;
+    let permissions = JSON.parse(localStorage.getItem('currentAdmin') || '')
+      .user.permissions;
 
     const selectedRoleConvert: { code: any }[] = [];
 
@@ -281,7 +304,7 @@ export class AdminUnitComponent implements OnInit {
   }
 
   detailUnit(id: any) {
-    console.log("id unit ", id);
+    console.log('id unit ', id);
     if (this.infoUnitRole === true) {
       const data = {
         title: 'unit.information',
@@ -323,20 +346,26 @@ export class AdminUnitComponent implements OnInit {
   }
 
   autoSearch(event: any) {
-    this.listData = this.temp.filter(
-      (word) =>
-        word.name.includes(this.filterSearch) ||
-        this.filterShortName(word) ||
-        word.code.includes(this.filterSearch)
+    this.table.first = 0;
+
+    this.listData.filter((word) =>
+      this.adminUnitService
+        .getUnitList(this.filterSearch, this.filterSearch, '', '', '', '', '', 0, this.rows)
+        .subscribe((res) => {
+          this.listData = res.entities;
+
+          this.totalRecords = res.total_elements;
+
+          this.tempTotal = this.totalRecords;
+          this.tempList = this.listData;
+        })
     );
+
   }
 
   filterShortName(word: any) {
-    if(word.shortName != null) {
+    if (word.shortName != null) {
       word.shortName.includes(this.filterSearch);
     }
   }
-
 }
-
-

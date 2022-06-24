@@ -25,10 +25,10 @@ export class AdminUserService {
     this.token = JSON.parse(localStorage.getItem('currentAdmin') || '').token;
   }
 
-  getUserList(name: any, email: any, phone:any): Observable<any> {
+  getUserList(name: any, email: any, phone:any, page: number, size: number): Observable<any> {
     this.getCurrentUser();
 
-    let listUserUrl = this.listUserUrl + '?name=' + name.trim() + '&email=' + email.trim() + '&phone=' + phone.trim() + "&page=0"+ "&size=1000" +"&sort=name";
+    let listUserUrl = this.listUserUrl + '?name=' + name.trim() + '&email=' + email.trim() + '&phone=' + phone.trim() + "&page="+ page+ "&size=" +size+"&sort=name";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(listUserUrl, {headers}).pipe();
   }
@@ -58,9 +58,12 @@ export class AdminUserService {
 
       status: datas.status
     
-    });    
-    console.log("body ",body);
-    console.log("id ", datas.id);
+    });console.log(headers);
+    
+    console.log(body);
+
+    console.log("id ");
+    console.log(datas);
     
     return this.http.put<any>(this.updateUserUrl + datas.id, body, {'headers': headers});
   }

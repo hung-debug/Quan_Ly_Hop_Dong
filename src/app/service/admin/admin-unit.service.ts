@@ -31,23 +31,24 @@ export class AdminUnitService {
   }
 
   deletePackUnit(id: any, idPack: any) {
-
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    console.log("token ",this.token);
+    console.log('token ', this.token);
 
-    return this.http.patch<any>(
-      this.listUnitUrl + id + '/service/cancel/' + idPack, '',
-      { headers: headers }
-    ).pipe();
+    return this.http
+      .patch<any>(this.listUnitUrl + id + '/service/cancel/' + idPack, '', {
+        headers: headers,
+      })
+      .pipe();
   }
 
   getUnitList(
     name: any,
+    code: any,
     address: any,
     representative: any,
     email: any,
@@ -58,13 +59,14 @@ export class AdminUnitService {
   ) {
     this.getCurrentUser();
 
-    console.log('status');
-    console.log(status);
+    console.log("page ",page);
+    console.log("size ",size);
 
     let listUnitUrl =
       this.listUnitUrl +
       '?name=' +
       name +
+      '&code='+code+
       '&address=' +
       address +
       '&representative=' +
@@ -75,8 +77,10 @@ export class AdminUnitService {
       phone +
       '&status=' +
       status +
-      '&page=0' +
-      '&size=1000' +
+      '&page=' +
+      page +
+      '&size=' +
+      size +
       '&sort=name';
     const headers = { Authorization: 'Bearer ' + this.token };
 
@@ -127,23 +131,22 @@ export class AdminUnitService {
     });
   }
 
-  updatePackUnit(datas: any, idPack: any
-    ) {
+  updatePackUnit(datas: any, idPack: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-      const body = JSON.stringify({
-        serviceId: idPack,
-        purchaseDate: datas.purchaseDate,
-        paymentType: datas.paymentType.id,
-        paymentStatus: datas.paymentStatus.id,
-        startDate: datas.startDate,
-        endDate: datas.endDate,
-        paymentDate: datas.paymentDate,
-      });
+    const body = JSON.stringify({
+      serviceId: idPack,
+      purchaseDate: datas.purchaseDate,
+      paymentType: datas.paymentType.id,
+      paymentStatus: datas.paymentStatus.id,
+      startDate: datas.startDate,
+      endDate: datas.endDate,
+      paymentDate: datas.paymentDate,
+    });
 
     console.log('body ', body);
 
@@ -160,12 +163,15 @@ export class AdminUnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.get<any>(this.getUnitByIdUrl + id+"?sort=startDate,desc", { headers: headers });
+    return this.http.get<any>(
+      this.getUnitByIdUrl + id + '?sort=startDate,desc',
+      { headers: headers }
+    );
   }
 
   getPackUnitByIdPack(id: any, idPack: any) {
-    console.log("id ", id);
-    console.log("id pack ", idPack);
+    console.log('id ', id);
+    console.log('id pack ', idPack);
 
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -209,8 +215,7 @@ export class AdminUnitService {
   }
 
   addPackUnit(datas: any) {
-
-    console.log("datas ", datas);
+    console.log('datas ', datas);
 
     this.getCurrentUser();
 

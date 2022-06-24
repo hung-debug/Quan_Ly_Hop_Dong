@@ -30,7 +30,6 @@ import { AdminMainComponent } from './admin/admin-main/admin-main.component';
 import { AdminUnitComponent } from './admin/admin-main/admin-unit/admin-unit.component';
 import { AdminUserComponent } from './admin/admin-main/admin-user/admin-user.component';
 import { AdminPackComponent } from './admin/admin-main/admin-pack/admin-pack.component';
-import { AdminInfoUserComponent } from './admin/admin-main/admin-user/admin-info-user/admin-info-user.component';
 
 const routes: Routes = [
   {
@@ -174,10 +173,6 @@ const routes: Routes = [
       {
         path: 'pack',
         component: AdminPackComponent,
-      },
-      {
-        path: 'user-infor',
-        component: AdminInfoUserComponent,
       },
     ],
   },
