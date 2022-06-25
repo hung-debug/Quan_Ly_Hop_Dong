@@ -402,8 +402,8 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
               if (isFileAttach) {
                 await this.contractService.addDocumentAttach(isFileAttach).toPromise().then((data) => {
-                    // this.datasForm.document_attach_id = data?.id;
-                    this.datasForm.fileAttachForm[i].id = data?.id;
+                    // this.datasForm.fileAttachForm[i].id = data?.id;
+                    this.datasForm.fileAttachForm[i] = data;
                   },
                   error => {
                     coutError = true;
@@ -422,13 +422,13 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
         if (!coutError) {
           if (action == "chuyen_buoc") {
-            this.getDataContractForm('next_step');
+            this.getDataContractForm('next_step').then();
           } else {
             if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
               this.save_draft_infor_form.close_header = false;
               this.save_draft_infor_form.close_modal.close();
             }
-            this.getDataContractForm('save_temp');
+            this.getDataContractForm('save_temp').then();
           }
           this.spinner.hide();
         }
