@@ -42,7 +42,7 @@ export class AdminMainComponent implements OnInit {
               private fb: FormBuilder,
               private appService: AppService,
               public sidebarservice: AdminSidebarService,
-              private dashboardService: DashboardService,
+              // private dashboardService: DashboardService,
               private changeDetectorRef: ChangeDetectorRef,
               public translate: TranslateService,
               private toastService: ToastService,
@@ -95,9 +95,9 @@ export class AdminMainComponent implements OnInit {
 
     this.nameCurrentUser = JSON.parse(localStorage.getItem('currentAdmin') || '').user.name;
 
-    this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
-      this.numberNotification = data.total_elements;
-    });
+    // this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
+    //   this.numberNotification = data.total_elements;
+    // });
   }
 
   //apply change title
@@ -202,29 +202,29 @@ export class AdminMainComponent implements OnInit {
   }
 
   infoUserDetail() {
-    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-    //   // this.router.navigate(['/main/user-infor']);
-    // });
-    //this.router.navigate(['/main/user-infor']);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/admin-main/user-infor']);
+    });
+
   }
 
   openLinkNotification(link:any, id:any) {
-    window.location.href = link.replace('&loginType=', '').replace('&loginType=1', '');
-    this.dashboardService.updateViewNotification(id).subscribe(data => {
-      console.log(data);
-    });
+    // window.location.href = link.replace('&loginType=', '').replace('&loginType=1', '');
+    // this.dashboardService.updateViewNotification(id).subscribe(data => {
+    //   console.log(data);
+    // });
   }
 
   loadDataNotification(){
-    this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
-      //this.numberNotification = data.total_elements;
-      this.listNotification = data.entities;
-      console.log(data);
-    });
-    this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
-      this.numberNotification = data.total_elements;
-      //this.listNotification = data.entities;
-    });
+    // this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
+    //   //this.numberNotification = data.total_elements;
+    //   this.listNotification = data.entities;
+    //   console.log(data);
+    // });
+    // this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
+    //   this.numberNotification = data.total_elements;
+    //   //this.listNotification = data.entities;
+    // });
   }
 
   viewAllNotification(){
