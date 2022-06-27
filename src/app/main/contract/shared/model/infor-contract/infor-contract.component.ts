@@ -572,7 +572,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         })
       }
 
-
+      // thay doi file ===> edit update file contract
       if (dataFilePath_clone && dataFilePath_clone != this.datas.filePath && dataFileName_clone && dataFileName_clone != this.datas.fileName) {
         let data = {
           name: this.datas.name,
@@ -587,13 +587,14 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         }
         // let id_type_1 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
         await this.contractService.updateFileAttach(this.datas.document_id_1.id, data, 1).toPromise().then((res: any) => {
-          this.datas.document_id = res?.id;
+          this.datas.document_id_1 = res?.id;
         }, (error: HttpErrorResponse) => {
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000)
         })
         // let id_type_2 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 2)[0].id;
         await this.contractService.updateFileAttach(this.datas.document_id_2.id, data, 2).toPromise().then((respon: any) => {
+          this.datas.document_id_2 = respon?.id;
           this.datas.document_id = respon?.id;
         }, (error: HttpErrorResponse) => {
           countSuccess++
