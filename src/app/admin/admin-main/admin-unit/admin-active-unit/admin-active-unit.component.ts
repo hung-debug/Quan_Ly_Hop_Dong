@@ -25,12 +25,13 @@ export class AdminActiveUnitComponent implements OnInit {
 
     this.adminUnitService.activeUnit(this.data.id).subscribe(
       data => {
-        this.toastService.showSuccessHTMLWithTimeout("Kích hoạt thành công!", "", 3000);
-        this.dialogRef.close();
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-          this.router.navigate(['/admin-main/unit']);
-        });  
-          
+        if(data.status == 'ACTIVE') {
+          this.toastService.showSuccessHTMLWithTimeout("Kích hoạt thành công!", "", 3000);
+          this.dialogRef.close();
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/admin-main/unit']);
+          });  
+        }      
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
       }

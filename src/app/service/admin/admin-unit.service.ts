@@ -7,8 +7,6 @@ import { environment } from '../../../environments/environment';
 export class AdminUnitService {
   listUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
-  activeUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
-
   addUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
   updateUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
@@ -95,7 +93,7 @@ export class AdminUnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({});
-    return this.http.post<any>(this.activeUnitUrl + id, body, {
+    return this.http.patch<any>(this.listUnitUrl + id, body, {
       headers: headers,
     });
   }
