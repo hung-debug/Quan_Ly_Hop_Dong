@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ToastService } from 'src/app/service/toast.service';
-import {parttern_input} from "../../../config/parttern"
+import {parttern_input} from "../../../config/parttern";
+import { parttern } from '../../../config/parttern';
 
 @Component({
   selector: 'app-add-contract-type',
@@ -34,7 +35,7 @@ export class AddContractTypeComponent implements OnInit {
     ) {
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)])
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)])
       });
     }
 
@@ -47,7 +48,7 @@ export class AddContractTypeComponent implements OnInit {
           console.log(data);
           this.addForm = this.fbd.group({
             name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)])
+            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)])
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
@@ -58,7 +59,7 @@ export class AddContractTypeComponent implements OnInit {
     }else{
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)])
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)])
       });
     }
   }

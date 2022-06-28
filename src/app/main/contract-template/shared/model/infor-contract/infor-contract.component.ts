@@ -14,7 +14,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
-
+import { parttern } from 'src/app/config/parttern';
+import { parttern_input } from 'src/app/config/parttern';
 export class ContractConnectArr {
   ref_id: number;
 
@@ -718,6 +719,14 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   contractNumberCounter(){
     if(this.characterCounter(this.contract_no) > 32){
       this.errorContractNumber = "Mã mẫu hợp đồng không được vượt quá 32 ký tự";
+      return false;
+    }
+    return this.checkPatternContractNumber();
+  }
+
+  checkPatternContractNumber(){
+    if(!String(this.contract_no).match(parttern.name_and_number)){
+      this.errorContractNumber = "Mã mẫu hợp đồng không được chứa ký tự đặc biệt, ký tự có dấu";
       return false;
     }
     return true;
