@@ -34,15 +34,6 @@
   
 
   <div class="row" style="padding-top: 10px">
-    <!-- <p-table
-      [value]="listData"
-      [paginator]="true"
-      [rows]="15"
-      id="table"
-      [autoLayout]="true"
-      (onLazyLoad)="loadUnit($event)"
-      [lazy]="true"
-    > -->
     <p-table  #myTable
     [lazy]="true"
     (onLazyLoad)="loadUnit($event)"
@@ -73,7 +64,7 @@
           <td>{{ list.phone }}</td>
           <td>
             <a
-              *ngIf="list.status == 'NOT_ACTIVATED'"
+              *ngIf="list.status == 'NOT_ACTIVATED' || list.status == 'IN_ACTIVE'"
               (click)="activeUnit(list.id)"
               style="
                 color: #0160ae;

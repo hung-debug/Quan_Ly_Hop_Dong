@@ -1,0 +1,56 @@
+<div class="container-fluid">
+  <form [formGroup]="addForm" class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="label text-color">
+          {{ "Họ tên" | translate }} <span class="required-title">*</span>
+        </div>
+        <div class="input-data">
+          <input type="text" formControlName="name" />
+        </div>
+      </div>
+      <div *ngIf="submitted && f.name.errors" class="invalid">
+        <div *ngIf="f.name.errors.required">
+          {{ "Tên người dùng không được để trống" | translate }}
+        </div>
+        <div *ngIf="f.name.errors.pattern">
+          {{ "Tên người dùng không được chứa ký tự đặc biệt" | translate }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-12">
+        <div class="label text-color">
+          {{ "Email" | translate }} <span class="required-title">*</span>
+        </div>
+        <div class="input-data fff">
+          <input type="text" formControlName="email" readonly />
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="padding-top: 10px">
+      <div class="col-md-12">
+        <div class="label text-color">
+          {{ "unit.phone" | translate }}
+          <span class="required-title">*</span>
+        </div>
+        <div class="input-data">
+          <input type="text" formControlName="phone" />
+        </div>
+      </div>
+      <div *ngIf="submitted && f.phone.errors" class="invalid">
+        <div *ngIf="f.phone.errors.required">
+          {{ "error.user.phone.required" | translate }}
+        </div>
+        <div *ngIf="f.phone.errors.pattern">
+          {{ "error.user.phone.format" | translate }}
+        </div>
+      </div>
+    </div>
+    <div class="row" style="justify-content: center; padding-top: 0px">
+      <button (click)="updateInfor()" class="save-button">{{ "Lưu lại" | translate }}</button>
+    </div>
+  </form>
+</div>
