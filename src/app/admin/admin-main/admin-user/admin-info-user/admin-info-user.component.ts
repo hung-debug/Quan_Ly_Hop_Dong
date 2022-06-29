@@ -5,7 +5,6 @@ import { parttern_input } from 'src/app/config/parttern';
 import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
-import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 
 @Component({
   selector: 'app-admin-info-user',
@@ -132,13 +131,12 @@ export class AdminInfoUserComponent implements OnInit {
 
                   flag = 1;
 
-                  // setTimeout(() => {
-                  //   window.location.reload();
-                  // }, 100);
                 } else {
                   for (let i = 0; i < dataUpdate.user.permissions.length; i++) {
                     if (dataUpdate.user.permissions[i].code.includes('QLND')) {
-                      window.location.reload();
+                      setTimeout(() => {
+                        window.location.reload();
+                      },3000)
                       flag = 2;
                       break;
                     }
@@ -164,9 +162,6 @@ export class AdminInfoUserComponent implements OnInit {
                       }
                     }
 
-                    // setTimeout(() => {
-                    //   window.location.reload();
-                    // }, 100);
                   }
                 }
               },
@@ -183,15 +178,6 @@ export class AdminInfoUserComponent implements OnInit {
             localStorage.clear();
           }
 
-          // this.router
-          //   .navigateByUrl('/', { skipLocationChange: true })
-          //   .then(() => {
-          //     this.router.navigate(['admin-main/user-infor']);
-          //   });
-
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 100);
         } else {
           if (data.errors[0].code === 1002) {
             this.toastService.showErrorHTMLWithTimeout(

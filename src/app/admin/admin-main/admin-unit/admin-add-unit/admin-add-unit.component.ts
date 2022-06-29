@@ -296,6 +296,7 @@ export class AdminAddUnitComponent implements OnInit {
       this.addUnit(dataForm);
     }
   }
+
   addUnit(dataForm: {
     id: any;
     name: any;
@@ -324,18 +325,21 @@ export class AdminAddUnitComponent implements OnInit {
         console.log(data);
 
         if (data.id != null && data.id != undefined) {
-          this.toastService.showSuccessHTMLWithTimeout(
-            'Thêm mới thành công!',
-            '',
-            3000
-          );
-          this.router
-            .navigateByUrl('/', { skipLocationChange: true })
-            .then(() => {
-              this.router.navigate(['admin-main/unit']);
-            });
+          // this.toastService.showSuccessHTMLWithTimeout(
+          //   'Thêm mới thành công!',
+          //   '',
+          //   3000
+          // );
+          // this.router
+          //   .navigateByUrl('/', { skipLocationChange: true })
+          //   .then(() => {
+          //     this.router.navigate(['admin-main/unit']);
+          //   });
 
-          this.dialog.closeAll();
+          // this.dialog.closeAll();
+
+          //Thêm mới người dùng
+          
         } else {
           if (data.errors[0].code == 1001) {
             this.toastService.showErrorHTMLWithTimeout(
