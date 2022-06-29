@@ -166,7 +166,8 @@ export class AdminUnitComponent implements OnInit {
   loadUnit(event: LazyLoadEvent) {
     this.loading = true;
 
-    this.adminUnitService
+    setTimeout(() => {
+      this.adminUnitService
       .getUnitList(
         this.filterSearch,
         this.filterSearch,
@@ -181,13 +182,14 @@ export class AdminUnitComponent implements OnInit {
       .subscribe((res) => {
         console.log('page', this.page);
 
-        // this.temp = this.listData;
+        this.temp = this.listData;
 
         this.listData = res.entities;
 
         this.totalRecords = res.total_elements;
         this.loading = false;
       });
+    }, 1000);
 
     this.page = JSON.parse(JSON.stringify(event)).first / this.rows;
   }
