@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/api';
@@ -159,32 +166,28 @@ export class AdminUnitComponent implements OnInit {
   loadUnit(event: LazyLoadEvent) {
     this.loading = true;
 
-    setTimeout(() => {
-      this.adminUnitService
-        .getUnitList(
-          this.filterSearch,
-          this.filterSearch,
-          this.filter_address,
-          this.filter_representative,
-          this.filter_email,
-          this.filter_phone,
-          this.filter_status,
-          this.page,
-          this.rows
-        )
-        .subscribe((res) => {
-          console.log('page', this.page);
+    this.adminUnitService
+      .getUnitList(
+        this.filterSearch,
+        this.filterSearch,
+        this.filter_address,
+        this.filter_representative,
+        this.filter_email,
+        this.filter_phone,
+        this.filter_status,
+        this.page,
+        this.rows
+      )
+      .subscribe((res) => {
+        console.log('page', this.page);
 
-            this.temp = this.listData;
+        // this.temp = this.listData;
 
-            this.listData = res.entities;
-  
-            this.totalRecords = res.total_elements;
-            this.loading = false;
-        
-        
-        });
-    }, 1000);
+        this.listData = res.entities;
+
+        this.totalRecords = res.total_elements;
+        this.loading = false;
+      });
 
     this.page = JSON.parse(JSON.stringify(event)).first / this.rows;
   }
@@ -346,26 +349,37 @@ export class AdminUnitComponent implements OnInit {
   }
 
   autoSearch(event: any) {
+    console.log('event ', event);
+
     this.table.first = 0;
 
-    this.listData.filter((word) =>
-      this.adminUnitService
-        .getUnitList(this.filterSearch, this.filterSearch, '', '', '', '', '', 0, this.rows)
-        .subscribe((res) => {
-          this.listData = res.entities;
+    if (event.code.includes('Key') || event.code == 'Backspace' || event.code.includes('Numpad') || event.code.includes('Digit')) {
 
-          this.totalRecords = res.total_elements;
+      setTimeout(() => {
+        this.listData.filter((word) =>
+          this.adminUnitService
+            .getUnitList(
+              this.filterSearch,
+              this.filterSearch,
+              '',
+              '',
+              '',
+              '',
+              '',
+              0,
+              this.rows
+            )
+            .subscribe((res) => {
+              this.listData = res.entities;
 
-          this.tempTotal = this.totalRecords;
-          this.tempList = this.listData;
-        })
-    );
+              this.totalRecords = res.total_elements;
 
-  }
+              this.tempTotal = this.totalRecords;
+              this.tempList = this.listData;
 
-  filterShortName(word: any) {
-    if (word.shortName != null) {
-      word.shortName.includes(this.filterSearch);
+            })
+        );
+      }, 1000);
     }
   }
 }

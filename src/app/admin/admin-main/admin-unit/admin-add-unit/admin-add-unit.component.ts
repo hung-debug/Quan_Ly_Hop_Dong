@@ -474,7 +474,7 @@ export class AdminAddUnitComponent implements OnInit {
           } else {
             if (data.errors[0].code == 1001) {
               this.toastService.showErrorHTMLWithTimeout(
-                'Email đã tồn tại trên hệ thống',
+                'Email đã tồn tại trên hệ thống',  
                 '',
                 3000
               );
