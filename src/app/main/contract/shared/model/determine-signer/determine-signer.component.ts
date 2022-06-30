@@ -1,21 +1,21 @@
-import { ContractService } from 'src/app/service/contract.service';
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
+import {ContractService} from 'src/app/service/contract.service';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges, ElementRef} from '@angular/core';
 import {
   type_signature,
   type_signature_doc,
   type_signature_personal_party,
   variable
 } from "../../../../../config/variable";
-import { parttern } from "../../../../../config/parttern";
-import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
-import { Helper } from "../../../../../core/Helper";
+import {parttern} from "../../../../../config/parttern";
+import {FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
+import {Helper} from "../../../../../core/Helper";
 import * as ContractCreateDetermine from '../../contract_data'
-import { elements } from "@interactjs/snappers/all";
-import { NgxSpinnerService } from "ngx-spinner";
-import { ToastService } from "../../../../../service/toast.service";
-import { Router } from "@angular/router";
-import { NgxInputSearchModule } from "ngx-input-search";
-import { HttpErrorResponse } from '@angular/common/http';
+import {elements} from "@interactjs/snappers/all";
+import {NgxSpinnerService} from "ngx-spinner";
+import {ToastService} from "../../../../../service/toast.service";
+import {Router} from "@angular/router";
+import {NgxInputSearchModule} from "ngx-input-search";
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-determine-signer',
@@ -64,6 +64,10 @@ export class DetermineSignerComponent implements OnInit {
   arrSearchNameSignature: any = [];
   arrSearchNameView: any = [];
   is_change_party: boolean = false;
+  isListSignNotPerson: any = [];
+
+  ordering_person_partner = true;
+  checkCount = 0;
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -81,6 +85,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       // this.datas.is_determine_clone = null;
       // this.datas.is_determine_clone = this.datas.determine_contract;
@@ -140,8 +145,7 @@ export class DetermineSignerComponent implements OnInit {
         this.save_draft_infor.close_modal.close();
       }
       return;
-    }
-    else {
+    } else {
       let is_save = false;
       if (action == 'save-step') {
         is_save = true;
@@ -189,17 +193,17 @@ export class DetermineSignerComponent implements OnInit {
     //   this.spinner.hide()
     // } else {
     this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
-      this.getDataApiDetermine(res, is_save)
-    }, (error: HttpErrorResponse) => {
-      if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
-        this.save_draft_infor.close_header = false;
-        this.save_draft_infor.close_modal.close();
+        this.getDataApiDetermine(res, is_save)
+      }, (error: HttpErrorResponse) => {
+        if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+          this.save_draft_infor.close_header = false;
+          this.save_draft_infor.close_modal.close();
+        }
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
+      }, () => {
+        this.spinner.hide();
       }
-      this.spinner.hide();
-      this.toastService.showErrorHTMLWithTimeout("Có lỗi xảy ra, vui lòng liên hệ với nhà phát triển để xử lý!", "", 3000);
-    }, () => {
-      this.spinner.hide();
-    }
     );
     // }
   }
@@ -227,12 +231,63 @@ export class DetermineSignerComponent implements OnInit {
     this.stepChangeDetermineSigner.emit(step);
   }
 
-  selectWithOtp(e: any, data: any) {
+  selectWithOtp(e: any, data: any, item?: any) {
     // this.changeOtp(data);
 
     //clear lai gia tri card_id
-    if(this.getDataSignEkyc(data).length == 0){
+    if (this.getDataSignEkyc(data).length == 0) {
       data.card_id = "";
+    }
+
+    // set ordering
+    // if (e.length > 0 && e.some(({id}: any) => id == 1 || id == 5)) {
+    var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3);
+    var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2);
+
+    if (isParnter.length > 0) {
+      for (let i = 0; i < 2; i++) {
+        this.getSetOrderingPersonal(isParnter, i);
+      }
+    }
+
+    // if (isOrganization.length > 0) {
+    //   for (let i = 0; i < isOrganization.length; i++) {
+    //     isOrganization[i].recipients.forEach((res: any) => {
+    //       if (this.checkCount > 0) {
+    //         res.ordering = this.checkCount;
+    //       }
+    //     })
+    //   }
+    // }
+
+    this.checkCount = 0; // gan lai de lan sau ko bi tang index
+    if (isParnter.length > 1)
+      this.ordering_person_partner = false;
+    else
+      this.ordering_person_partner = true;
+  }
+
+  getSetOrderingPersonal(isParnter: any, index: number): void {
+    let isTest = 0;
+    for (let i = 0; i < isParnter.length; i++) {
+      if (index == 0) {
+        if (isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5)) {
+          // let dataFinal = isParnter.filter((val: any) => val.recipients.some(({sign_type}: any) => sign_type.some(({id}: any) => id == 1 || id == 5)))
+          // isParnter[i].recipients[0].ordering = i + 1;
+          isParnter[i].recipients[0].ordering = this.checkCount + isTest + 1;
+          // isParnter[i].recipients[0].ordering = dataFinal.length;
+          this.checkCount = i + 1;
+        } else if (isParnter[i].recipients[0].sign_type.length > 0) {
+          isTest++;
+          this.checkCount = this.checkCount - 1;
+        }
+        // else if (this.checkCount > 1 && isParnter[i].recipients[0].sign_type.length > 0) {
+        //   this.checkCount = this.checkCount + 1; // -1 vi bo qua case ko co du lieu select option exception (eKYC/OTP) => can giu nguyen index cua ordering
+        // }
+      } else if (index == 1 && !isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5)) {
+        let dataFinal = isParnter.filter((val: any) => val.recipients.some(({sign_type}: any) => sign_type.some(({id}: any) => id == 1 || id == 5)))
+        isParnter[i].recipients[0].ordering = dataFinal.length + 1;
+      }
     }
   }
 
@@ -249,11 +304,11 @@ export class DetermineSignerComponent implements OnInit {
     }
   }
 
-  getDataSignCka(data:any){
+  getDataSignCka(data: any) {
     return data.sign_type.filter((p: any) => p.id == 1);
   }
 
-  getDataSignEkyc(data:any){
+  getDataSignEkyc(data: any) {
     return data.sign_type.filter((p: any) => p.id == 5);
   }
 
@@ -576,7 +631,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
 
-
   getCheckDuplicateEmail(isParty: string, dataValid?: any) {
     let arrCheckEmail = [];
     // valid email đối tác và các bên tham gia
@@ -798,8 +852,8 @@ export class DetermineSignerComponent implements OnInit {
 
   getValueData(data: any, index: any) {
     return [
-      { id: 1, name: 'Ký ảnh' },
-      { id: 2, name: 'Ký số' }
+      {id: 1, name: 'Ký ảnh'},
+      {id: 2, name: 'Ký số'}
     ]
   }
 
@@ -1183,7 +1237,7 @@ export class DetermineSignerComponent implements OnInit {
       return {
         'width': '40%'
       }
-    } else return { 'width': '90%' }
+    } else return {'width': '90%'}
   }
 
   doTheSearch($event: Event, indexs: number, action: string): void {
@@ -1195,7 +1249,7 @@ export class DetermineSignerComponent implements OnInit {
     setTimeout(() => {
       this.contractService.getNameOrganization("", stringEmitted).subscribe((res) => {
         let arr_all = res.entities;
-        let data = arr_all.map((p: any) => ({ name: p.name, email: p.email, phone: p.phone }));
+        let data = arr_all.map((p: any) => ({name: p.name, email: p.email, phone: p.phone}));
         if (action == 'view') {
           this.arrSearchNameView = data;
         } else if (action == 'signature') {
