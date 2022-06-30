@@ -297,8 +297,8 @@ export class DetermineSignerComponent implements OnInit {
         is_duplicate = [];
       }
 
-      if (!dataArr[i].phone && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 1).length > 0) {
-        this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObjectValid(3) + "tổ chức của tôi!")
+      if (!dataArr[i].phone && dataArr[i].sign_type.filter((p: any) => p.id == 1).length > 0) {
+        this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;
       }
@@ -317,7 +317,7 @@ export class DetermineSignerComponent implements OnInit {
 
       // valid phone number
       if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
-        this.getNotificationValid("Số điện thoại của" + this.getNameObjectValid(3) + "tổ chức của tôi không hợp lệ!")
+        this.getNotificationValid("Số điện thoại của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
       }
