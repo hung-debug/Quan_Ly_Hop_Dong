@@ -1,4 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  SystemJsNgModuleLoader,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/api';
@@ -17,7 +22,6 @@ import { AdminFilterPackComponent } from './dialog/admin-filter-pack/admin-filte
   styleUrls: ['./admin-pack.component.scss'],
 })
 export class AdminPackComponent implements OnInit {
-
   @ViewChild('myTable', { static: false }) table: Table;
   constructor(
     private appService: AppService,
@@ -260,27 +264,36 @@ export class AdminPackComponent implements OnInit {
   autoSearch(event: any) {
     this.table.first = 0;
 
-    this.listData.filter(
-      (word) =>
-      
-        this.adminPackService
-        .getPackList(
-          this.filterSearch,
-          '',
-          '',
-         '',
-          '',
-          '',
-          '',
-          0,this.rows
-        )
-        .subscribe((res) => {
-        
-          this.listData = res.entities;
+    console.log('event ', event);
 
-          this.totalRecords = res.total_elements;
-        }) 
-    );
+    this.table.first = 0;
+
+    if (
+      event.code.includes('Key') ||
+      event.code == 'Backspace' ||
+      event.code.includes('Numpad') ||
+      event.code.includes('Digit')
+    ) {
+      setTimeout(() => {
+        this.listData.filter((word) =>
+          this.adminPackService
+            .getPackList(
+              this.filterSearch,
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              0,
+              this.rows
+            )
+            .subscribe((res) => {
+              this.listData = res.entities;
+            })
+        );
+      }, 1000);
+    }
   }
 
   search() {
@@ -319,12 +332,12 @@ export class AdminPackComponent implements OnInit {
           this.filter_time,
           this.filter_number_contract,
           this.filter_status,
-          this.page,20
+          this.page,
+          20
         )
         .subscribe((res) => {
-
           this.temp = this.listData;
-        
+
           this.listData = res.entities;
 
           this.totalRecords = res.total_elements;
