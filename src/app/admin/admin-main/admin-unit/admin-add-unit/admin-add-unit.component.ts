@@ -338,8 +338,56 @@ export class AdminAddUnitComponent implements OnInit {
 
           // this.dialog.closeAll();
 
-          //Thêm mới người dùng
-          
+             //them vai tro
+             let roleArrConvert: any = [];
+             roleList.forEach((key: any, v: any) => {
+               key.items.forEach((keyItem: any, vItem: any) => {
+                 let jsonData = {code: keyItem.value, status: 1};
+                 roleArrConvert.push(jsonData);
+               });
+             });
+             const dataRoleIn = {
+               name: 'Admin',
+               code: 'ADMIN',
+               selectedRole: roleArrConvert,
+               organization_id: data.id
+             }
+             
+             this.adminUnitService.addRoleByOrg(dataRoleIn).subscribe(
+               dataRole => {
+                 //this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
+                 console.log(dataRole);
+                 //them nguoi dung
+                 const dataUserIn = {
+                   name: "Admin",
+                   email: data.email,
+                   phone: data.phone,
+                   organizationId: data.id,
+                   role: dataRole.id,
+                   status: 1,
+                   sign_image: []
+                 }
+
+                 this.adminUnitService.addUser(dataUserIn).subscribe(
+                   dataUser => {
+                     console.log(dataUser);
+                     //this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
+                     this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
+                     this.dialogRef.close();
+                     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                       this.router.navigate(['/main/unit']);
+                     });
+                    //  this.spinner.hide();
+                   }, error => {
+                     this.toastService.showErrorHTMLWithTimeout('Thêm mới người dùng admin thất bại', "", 3000);
+                    //  this.spinner.hide();
+                   }
+                 )
+               }, error => {
+                 this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
+                //  this.spinner.hide();
+               }
+             )
         } else {
           if (data.errors[0].code == 1001) {
             this.toastService.showErrorHTMLWithTimeout(

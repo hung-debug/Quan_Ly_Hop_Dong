@@ -268,32 +268,14 @@ export class AdminPackComponent implements OnInit {
 
     this.table.first = 0;
 
-    if (
-      event.code.includes('Key') ||
-      event.code == 'Backspace' ||
-      event.code.includes('Numpad') ||
-      event.code.includes('Digit')
-    ) {
-      setTimeout(() => {
-        this.listData.filter((word) =>
-          this.adminPackService
-            .getPackList(
-              this.filterSearch,
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              0,
-              this.rows
-            )
-            .subscribe((res) => {
-              this.listData = res.entities;
-            })
-        );
-      }, 1000);
-    }
+    setTimeout(() => {
+      this.adminPackService
+        .getPackList(this.filterSearch, '', '', '', '', '', '', 0, this.rows)
+        .subscribe((res) => {
+          this.listData = res.entities;
+          this.totalRecords = res.total_elements;
+        });
+    }, 1000);
   }
 
   search() {
