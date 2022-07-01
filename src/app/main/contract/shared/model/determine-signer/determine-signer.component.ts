@@ -67,7 +67,8 @@ export class DetermineSignerComponent implements OnInit {
   isListSignNotPerson: any = [];
 
   ordering_person_partner = true;
-  checkCount = 0;
+  checkCount = 1;
+  isCountNext = 1;
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -231,18 +232,14 @@ export class DetermineSignerComponent implements OnInit {
     this.stepChangeDetermineSigner.emit(step);
   }
 
-  selectWithOtp(e: any, data: any, item?: any) {
+  selectWithOtp(e: any, data: any, item?: any) { // sort ordering
     // this.changeOtp(data);
-
     //clear lai gia tri card_id
     if (this.getDataSignEkyc(data).length == 0) {
       data.card_id = "";
     }
-
-    // set ordering
-    // if (e.length > 0 && e.some(({id}: any) => id == 1 || id == 5)) {
-    var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3);
-    var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2);
+    var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
+    var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
 
     if (isParnter.length > 0) {
       for (let i = 0; i < 2; i++) {
@@ -250,44 +247,26 @@ export class DetermineSignerComponent implements OnInit {
       }
     }
 
-    // if (isOrganization.length > 0) {
-    //   for (let i = 0; i < isOrganization.length; i++) {
-    //     isOrganization[i].recipients.forEach((res: any) => {
-    //       if (this.checkCount > 0) {
-    //         res.ordering = this.checkCount;
-    //       }
-    //     })
-    //   }
-    // }
-
-    this.checkCount = 0; // gan lai de lan sau ko bi tang index
-    if (isParnter.length > 1)
-      this.ordering_person_partner = false;
-    else
-      this.ordering_person_partner = true;
+    this.checkCount = 1; // gan lai de lan sau ko bi tang index
+    this.isCountNext = 1;
+    this.ordering_person_partner = isParnter.length <= 1;
   }
 
   getSetOrderingPersonal(isParnter: any, index: number): void {
-    let isTest = 0;
     for (let i = 0; i < isParnter.length; i++) {
-      if (index == 0) {
-        if (isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5)) {
-          // let dataFinal = isParnter.filter((val: any) => val.recipients.some(({sign_type}: any) => sign_type.some(({id}: any) => id == 1 || id == 5)))
-          // isParnter[i].recipients[0].ordering = i + 1;
-          isParnter[i].recipients[0].ordering = this.checkCount + isTest + 1;
-          // isParnter[i].recipients[0].ordering = dataFinal.length;
-          this.checkCount = i + 1;
-        } else if (isParnter[i].recipients[0].sign_type.length > 0) {
-          isTest++;
-          this.checkCount = this.checkCount - 1;
+      if (index == 0) { // only check signature eKYC and image or OTP
+        let isCheck = isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5);
+        if (isCheck) {
+          isParnter[i].recipients[0].ordering = this.checkCount + i;
+          this.isCountNext++;
         }
-        // else if (this.checkCount > 1 && isParnter[i].recipients[0].sign_type.length > 0) {
-        //   this.checkCount = this.checkCount + 1; // -1 vi bo qua case ko co du lieu select option exception (eKYC/OTP) => can giu nguyen index cua ordering
-        // }
-      } else if (index == 1 && !isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5)) {
-        let dataFinal = isParnter.filter((val: any) => val.recipients.some(({sign_type}: any) => sign_type.some(({id}: any) => id == 1 || id == 5)))
-        isParnter[i].recipients[0].ordering = dataFinal.length + 1;
-      }
+        // else if (!isCheck && isParnter[i].recipients[0].sign_type.length > 0)
+        //   this.checkCount++;
+        // else
+        //   isParnter[i].recipients[0].ordering = this.checkCount
+      } // only check signature not eKYC & image OTP
+      else if (i > 0 && !isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5))
+        isParnter[i].recipients[0].ordering = this.isCountNext;
     }
   }
 
@@ -1331,9 +1310,7 @@ export class DetermineSignerComponent implements OnInit {
       this.spinner.hide();
     })
 
-    if (count == 0)
-      return true
-    else return false;
+    return count == 0;
   }
 
 }
