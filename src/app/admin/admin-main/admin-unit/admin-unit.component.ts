@@ -168,27 +168,27 @@ export class AdminUnitComponent implements OnInit {
 
     setTimeout(() => {
       this.adminUnitService
-      .getUnitList(
-        this.filterSearch,
-        this.filterSearch,
-        this.filter_address,
-        this.filter_representative,
-        this.filter_email,
-        this.filter_phone,
-        this.filter_status,
-        this.page,
-        this.rows
-      )
-      .subscribe((res) => {
-        console.log('page', this.page);
+        .getUnitList(
+          this.filterSearch,
+          this.filterSearch,
+          this.filter_address,
+          this.filter_representative,
+          this.filter_email,
+          this.filter_phone,
+          this.filter_status,
+          this.page,
+          this.rows
+        )
+        .subscribe((res) => {
+          console.log('page', this.page);
 
-        this.temp = this.listData;
+          this.temp = this.listData;
 
-        this.listData = res.entities;
+          this.listData = res.entities;
 
-        this.totalRecords = res.total_elements;
-        this.loading = false;
-      });
+          this.totalRecords = res.total_elements;
+          this.loading = false;
+        });
     }, 1000);
 
     this.page = JSON.parse(JSON.stringify(event)).first / this.rows;
@@ -351,37 +351,32 @@ export class AdminUnitComponent implements OnInit {
   }
 
   autoSearch(event: any) {
-    console.log('event ', event);
 
-    this.table.first = 0;
+    setTimeout(() => {
+      this.table.first = 0;
 
-    if (event.code.includes('Key') || event.code == 'Backspace' || event.code.includes('Numpad') || event.code.includes('Digit')) {
-
-      setTimeout(() => {
-        this.listData.filter((word) =>
-          this.adminUnitService
-            .getUnitList(
-              this.filterSearch,
-              this.filterSearch,
-              '',
-              '',
-              '',
-              '',
-              '',
-              0,
-              this.rows
-            )
-            .subscribe((res) => {
-              this.listData = res.entities;
-
-              this.totalRecords = res.total_elements;
-
-              this.tempTotal = this.totalRecords;
-              this.tempList = this.listData;
-
-            })
-        );
-      }, 1000);
-    }
+      this.adminUnitService
+        .getUnitList(
+          this.filterSearch,
+          this.filterSearch,
+          '',
+          '',
+          '',
+          '',
+          '',
+          0,
+          this.rows
+        )
+        .subscribe((res) => {
+          console.log('res ');
+  
+          this.listData = res.entities;
+  
+          this.totalRecords = res.total_elements;
+  
+          this.tempTotal = this.totalRecords;
+          this.tempList = this.listData;
+        });
+    },1000)
   }
 }

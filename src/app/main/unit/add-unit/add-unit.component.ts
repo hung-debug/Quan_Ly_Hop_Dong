@@ -145,7 +145,11 @@ export class AddUnitComponent implements OnInit {
           //lay id vai tro admin theo id to chuc
           this.roleService.getRoleByOrgId(data.id).subscribe(
             dataRoleByOrgId => {
+
               let roleAdmin = dataRoleByOrgId.entities.filter((p:any) => p.code == 'ADMIN');
+
+              console.log("roleAdmin ", roleAdmin);
+
               if(roleAdmin.length > 0){
 
                 //neu user chua co => them moi user va gan vai tro admin

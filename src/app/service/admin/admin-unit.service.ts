@@ -1,6 +1,8 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { User } from '../user.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -13,7 +15,11 @@ export class AdminUnitService {
 
   getUnitByIdUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
-  constructor(private http: HttpClient) {}
+  addRoleUrl: any = `${environment.apiUrl}/api/v1/internal/customers/roles`;
+
+  addUserUrl: any = `${environment.apiUrl}/api/v1/internal/customers`;
+
+  constructor(private http: HttpClient, public datepipe: DatePipe) {}
 
   token: any;
   getCurrentUser() {
@@ -57,14 +63,15 @@ export class AdminUnitService {
   ) {
     this.getCurrentUser();
 
-    console.log("page ",page);
-    console.log("size ",size);
+    console.log('page ', page);
+    console.log('size ', size);
 
     let listUnitUrl =
       this.listUnitUrl +
       '?name=' +
       name +
-      '&code='+code+
+      '&code=' +
+      code +
       '&address=' +
       address +
       '&representative=' +
@@ -120,9 +127,6 @@ export class AdminUnitService {
       phone: datas.phone,
       status: datas.status,
     });
-
-    // console.log("id ");
-    // console.log(datas);
 
     return this.http.put<any>(this.addUnitUrl + datas.id, body, {
       headers: headers,
@@ -238,5 +242,52 @@ export class AdminUnitService {
       body,
       { headers: headers }
     );
+  }
+
+  addRoleByOrg(data: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: data.name,
+      code: data.code,
+      organization_id: data.organization_id,
+      status: 1,
+      permissions: data.selectedRole,
+      description: data.note,
+    });
+    console.log("role ",body);
+    return this.http.post<any>(this.addRoleUrl, body, { headers }).pipe();
+  }
+
+  addUser(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    if (datas.birthday != null) {
+      datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
+    }
+
+    const body = JSON.stringify({
+      name: datas.name,
+      email: datas.email,
+      phone: datas.phone,
+      organization_id: datas.organizationId,
+      birthday: datas.birthday,
+      status: datas.status,
+      role_id: datas.role,
+
+      sign_image: datas.sign_image,
+
+      phone_sign: datas.phoneKpi,
+      phone_tel: datas.networkKpi,
+
+      hsm_name: datas.nameHsm,
+    });
+    console.log(headers);
+    console.log(body);
+    return this.http.post<User>(this.addUserUrl, body, { headers: headers });
   }
 }
