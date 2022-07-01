@@ -340,12 +340,14 @@ export class AdminAddUnitComponent implements OnInit {
 
              //them vai tro
              let roleArrConvert: any = [];
+
              roleList.forEach((key: any, v: any) => {
                key.items.forEach((keyItem: any, vItem: any) => {
                  let jsonData = {code: keyItem.value, status: 1};
                  roleArrConvert.push(jsonData);
                });
              });
+             
              const dataRoleIn = {
                name: 'Admin',
                code: 'ADMIN',
@@ -375,7 +377,7 @@ export class AdminAddUnitComponent implements OnInit {
                      this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
                      this.dialogRef.close();
                      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                       this.router.navigate(['/main/unit']);
+                       this.router.navigate(['/admin-main/unit']);
                      });
                     //  this.spinner.hide();
                    }, error => {
