@@ -232,24 +232,29 @@ export class DetermineSignerComponent implements OnInit {
     this.stepChangeDetermineSigner.emit(step);
   }
 
-  selectWithOtp(e: any, data: any, item?: any) { // sort ordering
+  selectWithOtp(e: any, data: any) { // sort ordering
+    console.log(e, data);
     // this.changeOtp(data);
     //clear lai gia tri card_id
     if (this.getDataSignEkyc(data).length == 0) {
       data.card_id = "";
     }
-    var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
-    // var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
-
-    if (isParnter.length > 0) {
-      for (let i = 0; i < 2; i++) {
-        this.getSetOrderingPersonal(isParnter, i);
+    //  <=========>
+    // if (e.length > 0) {
+      var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
+      var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
+      // <==========>
+      if (isParnter.length > 0) {
+        for (let i = 0; i < 2; i++) {
+          this.getSetOrderingPersonal(isParnter, i);
+        }
       }
-    }
-
-    this.checkCount = 1; // gan lai de lan sau ko bi tang index
-    this.isCountNext = 1;
-    this.ordering_person_partner = isParnter.length <= 1;
+      // for loop check change ordering with parnter origanization
+      this.getSetOrderingPersonal(isOrganization, 1);
+      //
+      this.checkCount = 1; // gan lai de lan sau ko bi tang index
+      this.ordering_person_partner = isParnter.length <= 1; // change disable
+    // }
   }
 
   getSetOrderingPersonal(isParnter: any, index: number): void {
@@ -260,15 +265,25 @@ export class DetermineSignerComponent implements OnInit {
           if (isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5)) {
             isParnter[i].recipients[0].ordering = this.checkCount;
             this.checkCount++
-          } else {
-            this.checkCount--;
+            // comment
+            // you need save checkCount variable => when index data not pass condition
+            // cần lưu biến checkCount để khi dữ liệu có index không pass qua điều kiện, sẽ chạy tiếp từ biến cũ chứ ko chạy biến mới theo for loop
+          }
+        } else {
+          isParnter[i].recipients[0].ordering = this.checkCount; // Keep value checkCount variable (avoid case not pass index value);
+        }
+      }
+        // only check signature not eKYC/Image/OTP condition (condition exception)
+      // điều kiện chỉ check các dữ liệu không thuộc option đặc biệt
+      else {
+        if (isParnter[i].recipients[0].sign_type.length > 0) {
+          if (isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3)) {
+            isParnter[i].recipients[0].ordering = this.checkCount;
           }
         } else {
           isParnter[i].recipients[0].ordering = this.checkCount;
         }
-      } // only check signature not eKYC & image OTP
-      // else if (i > 0 && !isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5))
-      //   isParnter[i].recipients[0].ordering = this.isCountNext;
+      }
     }
   }
 
