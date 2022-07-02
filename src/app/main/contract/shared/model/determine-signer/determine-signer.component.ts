@@ -239,7 +239,7 @@ export class DetermineSignerComponent implements OnInit {
       data.card_id = "";
     }
     var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
-    var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
+    // var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
 
     if (isParnter.length > 0) {
       for (let i = 0; i < 2; i++) {
@@ -253,20 +253,22 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getSetOrderingPersonal(isParnter: any, index: number): void {
+    // this.checkCount == 1 => default
     for (let i = 0; i < isParnter.length; i++) {
       if (index == 0) { // only check signature eKYC and image or OTP
-        let isCheck = isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5);
-        if (isCheck) {
-          isParnter[i].recipients[0].ordering = this.checkCount + i;
-          this.isCountNext++;
+        if (isParnter[i].recipients[0].sign_type.length > 0) {
+          if (isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5)) {
+            isParnter[i].recipients[0].ordering = this.checkCount;
+            this.checkCount++
+          } else {
+            this.checkCount--;
+          }
+        } else {
+          isParnter[i].recipients[0].ordering = this.checkCount;
         }
-        // else if (!isCheck && isParnter[i].recipients[0].sign_type.length > 0)
-        //   this.checkCount++;
-        // else
-        //   isParnter[i].recipients[0].ordering = this.checkCount
       } // only check signature not eKYC & image OTP
-      else if (i > 0 && !isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5))
-        isParnter[i].recipients[0].ordering = this.isCountNext;
+      // else if (i > 0 && !isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5))
+      //   isParnter[i].recipients[0].ordering = this.isCountNext;
     }
   }
 
