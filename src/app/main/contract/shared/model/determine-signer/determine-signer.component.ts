@@ -240,19 +240,19 @@ export class DetermineSignerComponent implements OnInit {
     }
     //  <=========>
     // if (e.length > 0) {
-      var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
-      var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
-      // <==========>
-      if (isParnter.length > 0) {
-        for (let i = 0; i < 2; i++) {
-          this.getSetOrderingPersonal(isParnter, i);
-        }
+    var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
+    var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
+    // <==========>
+    if (isParnter.length > 0) {
+      for (let i = 0; i < 2; i++) {
+        this.getSetOrderingPersonal(isParnter, i);
       }
-      // for loop check change ordering with parnter origanization
-      this.getSetOrderingParnterOrganization(isOrganization);
-      //
-      this.checkCount = 1; // gan lai de lan sau ko bi tang index
-      this.ordering_person_partner = isParnter.length <= 1; // change disable
+    }
+    // for loop check change ordering with parnter origanization
+    this.getSetOrderingParnterOrganization(isOrganization);
+    //
+    this.checkCount = 1; // gan lai de lan sau ko bi tang index
+    this.ordering_person_partner = isParnter.length <= 1; // change disable
     // }
   }
 
@@ -288,7 +288,7 @@ export class DetermineSignerComponent implements OnInit {
 
   getSetOrderingParnterOrganization(isOrganization: any) {
     for (let i = 0; i < isOrganization.length; i++) {
-        // only check signature not eKYC/Image/OTP condition (condition exception)
+      // only check signature not eKYC/Image/OTP condition (condition exception)
       for (let j of isOrganization[i].recipients) {
         // điều kiện chỉ check các dữ liệu không thuộc option đặc biệt
         if (j.sign_type.length > 0) {
