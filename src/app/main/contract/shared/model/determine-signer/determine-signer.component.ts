@@ -233,7 +233,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   selectWithOtp(e: any, data: any) { // sort ordering
-    console.log(e, data);
     // this.changeOtp(data);
     //clear lai gia tri card_id
     if (this.getDataSignEkyc(data).length == 0) {
@@ -250,7 +249,7 @@ export class DetermineSignerComponent implements OnInit {
         }
       }
       // for loop check change ordering with parnter origanization
-      this.getSetOrderingPersonal(isOrganization, 1);
+      this.getSetOrderingParnterOrganization(isOrganization);
       //
       this.checkCount = 1; // gan lai de lan sau ko bi tang index
       this.ordering_person_partner = isParnter.length <= 1; // change disable
@@ -282,6 +281,23 @@ export class DetermineSignerComponent implements OnInit {
           }
         } else {
           isParnter[i].recipients[0].ordering = this.checkCount;
+        }
+      }
+    }
+  }
+
+  getSetOrderingParnterOrganization(isOrganization: any) {
+    for (let i = 0; i < isOrganization.length; i++) {
+        // only check signature not eKYC/Image/OTP condition (condition exception)
+      for (let j of isOrganization[i].recipients) {
+        // điều kiện chỉ check các dữ liệu không thuộc option đặc biệt
+        if (j.sign_type.length > 0) {
+          if (j.sign_type.some(({id}: any) => id == 2 || id == 3)) {
+            j.ordering = this.checkCount;
+            this.checkCount++;
+          }
+        } else {
+          j.ordering = this.checkCount;
         }
       }
     }
@@ -954,13 +970,25 @@ export class DetermineSignerComponent implements OnInit {
   // thêm đối tượng ký đối tác (done)
   addPartnerSignature(item: any, index: number) {
     let data_determine_add = [];
+
     data_determine_add = [...this.contractService.getDataDetermine()];
     let data_partner = data_determine_add.filter((p: any) => (p.type == 2))[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 3))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 3);
-    data.ordering = count_data.length + 1;
+    // @ts-ignore
+    let is_ordering: number = parseInt(this.getMaxNumberOrderingSign(count_data)); // set ordering follow data have max ordering
+    // data.ordering = count_data.length + 1;
+    data.ordering = is_ordering + 1;
     // this.data_parnter_organization[index].recipients.push(data);
     (this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
+  }
+
+  getMaxNumberOrderingSign(count_data: any) {
+    let dataPushOrdering = [];
+    for (let item of count_data) {
+      dataPushOrdering.push(item.ordering);
+    }
+    return Math.max.apply(Math, dataPushOrdering);
   }
 
   // thêm đối tượng văn thư đối tác (done)
@@ -1117,9 +1145,10 @@ export class DetermineSignerComponent implements OnInit {
         array_empty.push(element);
       }
     })
-    array_empty.forEach((item: any, index: number) => {
-      item.ordering = index + 1;
-    })
+    // for loop set ordering <==> comment code because case set ordering with option eKYC/Image/OTP not auto set ordering.
+    // array_empty.forEach((item: any, index: number) => {
+    //   item.ordering = index + 1;
+    // })
     new_arr = arr_clone_different.concat(array_empty);
     item.recipients = new_arr;
   }
