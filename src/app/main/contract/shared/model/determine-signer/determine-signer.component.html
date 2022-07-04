@@ -544,7 +544,7 @@
                 (focusout)="onChangeValue($event, 'ordering-sign-partner-' + index)" class="col-md-1 contract-total"
                 style="width: 25px; height: 25px" type="number"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                [(ngModel)]="d.ordering" [disabled]="ordering_person_partner">
+                [(ngModel)]="d.ordering" [disabled]="getPartnerSignature(item).length == 1">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column;margin-bottom: 14px">
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">

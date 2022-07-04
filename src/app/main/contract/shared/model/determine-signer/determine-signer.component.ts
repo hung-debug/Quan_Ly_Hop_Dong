@@ -66,7 +66,6 @@ export class DetermineSignerComponent implements OnInit {
   is_change_party: boolean = false;
   isListSignNotPerson: any = [];
 
-  ordering_person_partner = true;
   checkCount = 2;
   isCountNext = 1;
 
@@ -250,9 +249,7 @@ export class DetermineSignerComponent implements OnInit {
       }
       // for loop check change ordering with parnter origanization
       this.getSetOrderingParnterOrganization(isOrganization);
-      //
       this.checkCount = 2; // gan lai de lan sau ko bi tang index
-      // this.ordering_person_partner = isParnter.length <= 1; // change disable
     }
   }
 
@@ -1190,34 +1187,9 @@ export class DetermineSignerComponent implements OnInit {
     let data = [...this.contractService.getDataDetermineInitialization()];
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];
     this.datas.is_determine_clone.push(data_partner_add);
-    // let data_ordering_partner = [];
-    // var data_ordering_partner = this.datas.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5));
-    // let data_ordering_origanzation = [];
-    // var data_ordering_origanzation = this.datas.is_determine_clone.filter((val: any) => (val.type == 2 || val.type == 3) && val.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3));
-
-    // this.datas.is_determine_clone.forEach((res: any, index: number) => {
-    //   res.ordering = index + 1;
-    // })
-
     // @ts-ignore
     let is_ordering: number = parseInt(this.getMaxNumberOrderingSign()); // set ordering follow data have max ordering
     this.datas.is_determine_clone[this.datas.is_determine_clone.length - 1].ordering = is_ordering + 1;
-
-    // <==========>
-    // if (data_ordering_partner.length > 0) {
-    //   for (let i = 0; i < 2; i++) {
-    //     this.getSetOrderingPersonal(data_ordering_partner, i);
-    //   }
-    // }
-    // for loop check change ordering with parnter origanization
-    // this.getSetOrderingParnterOrganization(data_ordering_origanzation);
-    //
-    // this.checkCount = 2; // gan lai de lan sau ko bi tang index
-    // this.ordering_person_partner = isParnter.length <= 1; // change disable
-
-    // console.log(data_ordering_partner, data_ordering_origanzation)
-    //
-    // console.log(this.data_parnter_organization);
   }
 
   // xóa đối tham gia bên đối tác
