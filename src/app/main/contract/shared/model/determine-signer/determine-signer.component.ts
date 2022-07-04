@@ -250,13 +250,13 @@ export class DetermineSignerComponent implements OnInit {
       // for loop check change ordering with parnter origanization
       this.getSetOrderingParnterOrganization(isOrganization);
       // set again ordering data not option eKYC/img/otp => order
-      var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && p.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3));
+      var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && (p.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3) || p.recipients[0].sign_type.length == 0));
       var setOrderingParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3 && p.recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5));
-      if (setOrderingParnter.length > 0) {
-        setOrdering.forEach((val: any, index: number) => {
-          val.ordering = setOrderingParnter.length + index + 2;
-        })
-      }
+      // if (setOrderingParnter.length > 0) {
+      setOrdering.forEach((val: any, index: number) => {
+        val.ordering = setOrderingParnter.length > 0 ? (setOrderingParnter.length + index + 2) : (index + 2);
+      })
+      // }
       // console.log(setOrdering, setOrderingParnter.length)
       this.checkCount = 2; // gan lai de lan sau ko bi tang index
     }

@@ -283,9 +283,16 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }
     // for loop check change ordering with parnter origanization
     this.getSetOrderingParnterOrganization(isOrganization);
+    // set again ordering data not option eKYC/img/otp => order
+    var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && (p.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3) || p.recipients[0].sign_type.length == 0));
+    var setOrderingParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3 && p.recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5));
+    // if (setOrderingParnter.length > 0) {
+    setOrdering.forEach((val: any, index: number) => {
+      val.ordering = setOrderingParnter.length > 0 ? (setOrderingParnter.length + index + 2) : (index + 2);
+    })
+    // }
     //
-    this.checkCount = 1; // gan lai de lan sau ko bi tang index
-    this.ordering_person_partner = isParnter.length <= 1; // change disable
+    this.checkCount = 2; // gan lai de lan sau ko bi tang index
     // }
   }
 
@@ -295,14 +302,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       if (index == 0) { // only check signature eKYC and image or OTP
         if (isParnter[i].recipients[0].sign_type.length > 0) {
           if (isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5)) {
-            isParnter[i].recipients[0].ordering = this.checkCount;
+            isParnter[i].ordering = this.checkCount;
             this.checkCount++
             // comment
             // you need save checkCount variable => when index data not pass condition
             // cần lưu biến checkCount để khi dữ liệu có index không pass qua điều kiện, sẽ chạy tiếp từ biến cũ chứ ko chạy biến mới theo for loop
           }
         } else {
-          isParnter[i].recipients[0].ordering = this.checkCount; // Keep value checkCount variable (avoid case not pass index value);
+          isParnter[i].ordering = this.checkCount; // Keep value checkCount variable (avoid case not pass index value);
         }
       }
         // only check signature not eKYC/Image/OTP condition (condition exception)
@@ -310,10 +317,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       else {
         if (isParnter[i].recipients[0].sign_type.length > 0) {
           if (isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3)) {
-            isParnter[i].recipients[0].ordering = this.checkCount;
+            //@ts-ignore
+            // let count_ordering: number = parseInt(this.getMaxNumberOrderingSign()); // set ordering follow data have max ordering
+            // isParnter[i].ordering = this.checkCount + 1;
+            // isParnter[i].ordering = count_ordering + 1;
+            isParnter[i].ordering = this.datasForm.is_determine_clone.length;
           }
         } else {
-          isParnter[i].recipients[0].ordering = this.checkCount;
+          isParnter[i].ordering = this.checkCount;
         }
       }
     }
@@ -322,16 +333,11 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   getSetOrderingParnterOrganization(isOrganization: any) {
     for (let i = 0; i < isOrganization.length; i++) {
       // only check signature not eKYC/Image/OTP condition (condition exception)
-      for (let j of isOrganization[i].recipients) {
-        // điều kiện chỉ check các dữ liệu không thuộc option đặc biệt
-        if (j.sign_type.length > 0) {
-          if (j.sign_type.some(({id}: any) => id == 2 || id == 3)) {
-            j.ordering = this.checkCount;
-            this.checkCount++;
-          }
-        } else {
-          j.ordering = this.checkCount;
-        }
+      if (isOrganization[i].recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3)) {
+        isOrganization[i].ordering = this.checkCount;
+        this.checkCount++;
+      } else {
+        isOrganization[i].ordering = this.checkCount;
       }
     }
   }
@@ -771,17 +777,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     let data_partner = data_determine_add.filter((p: any) => (p.type == 2))[0];
     let data = (data_partner.recipients.filter((p: any) => p.role == 3))[0];
     let count_data = item.recipients.filter((p: any) => p.role == 3);
-    // data.ordering = count_data.length + 1;
-    // @ts-ignore
-    let is_ordering: number = parseInt(this.getMaxNumberOrderingSign(count_data)); // set ordering follow data have max ordering
-    data.ordering = is_ordering + 1;
+    data.ordering = count_data.length + 1;
     // this.data_parnter_organization[index].recipients.push(data);
     (this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3))[index].recipients.push(data);
   }
 
-  getMaxNumberOrderingSign(count_data: any) {
+  getMaxNumberOrderingSign() {
     let dataPushOrdering = [];
-    for (let item of count_data) {
+    for (let item of this.datasForm.is_determine_clone) {
       dataPushOrdering.push(item.ordering);
     }
     return Math.max.apply(Math, dataPushOrdering);
@@ -971,15 +974,17 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   // thêm đối tác
   addPartner() {
     let data_partner_add = {};
-    // let data = [...this.contractService.getDataDetermine()];
     let data = [...this.contractService.getDataDetermineInitialization()];
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];
     this.datasForm.is_determine_clone.push(data_partner_add);
-    this.datasForm.is_determine_clone.forEach((res: any, index: number) => {
-      res.ordering = index + 1;
-    })
-
-    console.log(this.data_parnter_organization);
+    // this.datasForm.is_determine_clone.forEach((res: any, index: number) => {
+    //   res.ordering = index + 1;
+    // })
+    //
+    // console.log(this.data_parnter_organization);
+    //@ts-ignore
+    let is_ordering: number = parseInt(this.getMaxNumberOrderingSign()); // set ordering follow data have max ordering
+    this.datasForm.is_determine_clone[this.datasForm.is_determine_clone.length - 1].ordering = is_ordering + 1;
   }
 
   // xóa đối tham gia bên đối tác
