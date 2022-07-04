@@ -279,8 +279,9 @@ export class DetermineSignerComponent implements OnInit {
           if (isParnter[i].recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3)) {
             //@ts-ignore
             let count_ordering: number = parseInt(this.getMaxNumberOrderingSign()); // set ordering follow data have max ordering
-            // isParnter[i].ordering = this.checkCount;
-            isParnter[i].ordering = count_ordering;
+            // isParnter[i].ordering = this.checkCount + 1;
+            // isParnter[i].ordering = count_ordering + 1;
+            isParnter[i].ordering = this.datas.is_determine_clone.length;
           }
         } else {
           isParnter[i].ordering = this.checkCount;

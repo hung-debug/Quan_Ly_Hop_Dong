@@ -60,7 +60,7 @@
     </div>
   </div>
   <div class="row" style="padding: 20px 0;">
-    
+
     <div class="col-md-6">
       <div class="row">
         <div class="col-md-12">
@@ -76,14 +76,14 @@
             <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy" (onSelect)="searchCountCreate()"></p-calendar>
           </div>
           <div style="padding-top: 10px;" *ngIf="isOrg=='on'">
-            <p-dropdown 
+            <p-dropdown
               panelStyleClass="font"
-              [options]="orgList" 
-              [(ngModel)]="organization_id" 
-              optionLabel="name" 
-              optionValue="id" 
-              [filter]="true" 
-              filterBy="name" 
+              [options]="orgList"
+              [(ngModel)]="organization_id"
+              optionLabel="name"
+              optionValue="id"
+              [filter]="true"
+              filterBy="name"
               (onChange)="search()"
               ></p-dropdown>
           </div>
@@ -112,14 +112,14 @@
         </div>
       </div>
       <div class="body">
-        <div *ngIf="listNotification.length == 0" 
+        <div *ngIf="listNotification.length == 0"
         style="height: 453px;display: table;top: 0;left: 0;width: 100%;text-align: center;">
         <div style="display: table-cell;vertical-align: middle;">
           <img src="../../../assets/img/empty_data.svg"/>
           <div style="color: #94A7C6">{{'no.data' | translate}}</div>
         </div>
       </div>
-        <div *ngIf="listNotification.length > 0" [ngStyle]="{ 'min-height': isOrg=='on'? '494px':' 453px'}" style="min-height: 453px;"> 
+        <div *ngIf="listNotification.length > 0" [ngStyle]="{ 'min-height': isOrg=='on'? '494px':' 453px'}" style="min-height: 453px;">
           <div *ngFor="let item of listNotification; let i = index" [style.border-bottom]="i != listNotification.length-1 ? '1px solid #C7D0E9' : ''" style="padding: 4px;">
             <div class="row">
               <div class="col-md-12 item_contract_name" (click)="openLinkNotification(item.notice_url, item.id)">{{item.notice_name}}</div>
@@ -136,7 +136,7 @@
                 <img src="../../../assets/img/calendar_icon.svg" width="15px"/>
                 <span class="item_date"> {{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span>
               </div>
-              
+
               <div class="col-md-6 item_contract_infor">{{'contract.status' | translate}}:
                 <span class="status_blue" *ngIf="item.message_code=='sign_flow_coordinator'">{{'contract.lead' | translate}}</span>
                 <span class="status_blue" *ngIf="item.message_code=='sign_flow_reject'">{{'contract.status.fail' | translate}}</span>
@@ -148,7 +148,7 @@
                 <span class="status_blue" *ngIf="item.message_code=='contract_exprire'">{{'contract.status.overdue' | translate}}</span>
                 <span class="status_blue" *ngIf="item.message_code=='contract_about_exprire'">{{'contract.status.expire' | translate}}</span>
               </div>
-          
+
             </div>
           </div>
         </div>
