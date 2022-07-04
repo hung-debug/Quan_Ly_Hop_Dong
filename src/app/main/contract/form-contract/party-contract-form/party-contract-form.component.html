@@ -110,7 +110,7 @@
                   <div class="label text-color">{{'user.sign-type' | translate}}: <span class="required-title">*</span>
                   </div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" [data]="signTypeList"
+                    [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson"
                     (ngModelChange)="selectWithOtp($event, d)">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -224,7 +224,7 @@
       <!-- [disabled]="is_change_party" -->
       <input [id]="'ordering-partner-' + id" class="contract-total"
         (focusout)="onChangeValue($event,'ordering-partner-' + id)" style="width: 25px; height: 25px" type="number"
-        [(ngModel)]="item.ordering" 
+        [(ngModel)]="item.ordering"
         oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
     </div>
     <div class="contract--content">
@@ -363,7 +363,7 @@
                         class="required-title">*</span></div>
 
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="signTypeList"
+                      [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson"
                       (ngModelChange)="selectWithOtp($event, d)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">

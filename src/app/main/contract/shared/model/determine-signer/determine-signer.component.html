@@ -3,7 +3,7 @@
   <div class="contract-determine">
     <div style="margin-right: 50px">
       <input id="order-organization" class="contract-total" style="width: 25px; height: 25px" type="number"
-        [(ngModel)]="data_organization.ordering" 
+        [(ngModel)]="data_organization.ordering"
         (focusout)="onChangeValue($event,'order-organization')"
         oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
     </div>
@@ -65,6 +65,7 @@
             <u class="label text-color" (click)="addOriganzationReviewer()">{{'btn.add.user.view' | translate}}</u>
           </div>
         </div>
+<!--        to chuc cua toi - nguoi ky-->
         <div class="participants-border">
           <div class="label">{{'user.sign' | translate}}</div>
           <div class="participants--content" *ngFor="let d of getOriganzationSignature(); let index = index">
@@ -106,7 +107,7 @@
                     <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                   </div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" [data]="signTypeList"
+                    [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson"
                     (ngModelChange)="selectWithOtp($event, d)">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -156,7 +157,6 @@
               (click)="addOriganzationSignature()">{{'btn.add.user.sign' | translate}}</u>
           </div>
         </div>
-
         <!-- to chuc cua toi - nguoi van thu -->
         <div class="participants-border">
           <div class="label">{{'user.doc' | translate}}</div>
@@ -246,7 +246,7 @@
     <div style="margin-right: 50px">
       <input [id]="'ordering-partner-' + id" class="contract-total"
         (focusout)="onChangeValue($event,'ordering-partner-' + id)" style="width: 25px; height: 25px" type="number"
-        [(ngModel)]="item.ordering" 
+        [(ngModel)]="item.ordering"
         oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
     </div>
     <div class="contract--content">
@@ -374,7 +374,7 @@
                 (focusout)="onChangeValue($event,'ordering-sign-partner-' + index)" class="col-md-1 contract-total"
                 style="width: 25px; height: 25px" type="number" [(ngModel)]="d.ordering"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                [disabled]="getPartnerSignature(item).length == 1">
+                [disabled]="getPartnerSignature(item).length == 1 ">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -401,7 +401,7 @@
                     </div>
 
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="signTypeList"
+                      [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson"
                       (ngModelChange)="selectWithOtp($event, d)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
@@ -440,12 +440,12 @@
                   </div>
                 </div>
               </div>
-              <div *ngIf="getPartnerSignature(item).length > 1 || this.getPartnerCoordination(item).length > 0"
+              <div *ngIf="getPartnerSignature(item).length > 1 || getPartnerCoordination(item).length > 0"
                 class="col-md-1 delete-element" (click)="deletePartnerSignature(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn">
                 <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
               </div>
-              <div *ngIf="getPartnerSignature(item).length == 1 && this.getPartnerCoordination(item).length == 0"
+              <div *ngIf="getPartnerSignature(item).length == 1 && getPartnerCoordination(item).length == 0"
                 class="col-md-1 delete-element"></div>
             </div>
             <div class="participants--add">
@@ -522,7 +522,7 @@
                     </div>
                   </div>
                 </div>
-                
+
               </div>
               <div class="col-md-1 delete-element" (click)="deletePartnerDocument(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn">
@@ -544,7 +544,7 @@
                 (focusout)="onChangeValue($event, 'ordering-sign-partner-' + index)" class="col-md-1 contract-total"
                 style="width: 25px; height: 25px" type="number"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                [(ngModel)]="d.ordering" [disabled]="getPartnerSignature(item).length == 1">
+                [(ngModel)]="d.ordering" [disabled]="ordering_person_partner">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column;margin-bottom: 14px">
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">

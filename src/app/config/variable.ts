@@ -42,7 +42,7 @@ export const type_signature = [
     name: 'Ký số bằng sim PKI',
     is_otp: false,
   },
-  
+
 ];
 
 export const type_signature_personal_party = [
