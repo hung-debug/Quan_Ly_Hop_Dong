@@ -231,7 +231,8 @@ export class DetermineSignerComponent implements OnInit {
     this.stepChangeDetermineSigner.emit(step);
   }
 
-  selectWithOtp(e: any, data: any) { // sort ordering
+  selectWithOtp(e: any, data: any, action?: boolean) { // sort ordering
+    console.log(e, 'selectWidthOtp', action)
     // this.changeOtp(data);
     //clear lai gia tri card_id
     if (this.getDataSignEkyc(data).length == 0) {
@@ -662,6 +663,29 @@ export class DetermineSignerComponent implements OnInit {
         this.getNotificationValid("CMT/CCCD không được trùng nhau giữa các bên tham gia!");
         return false
       }
+    }
+
+    if (count == 0) {
+      //valid ordering cac ben doi tac - to chuc
+      let isOrderingPerson_exception = this.datas.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
+      let isOrdering_not_exception = this.datas.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3));
+
+      if (isOrdering_not_exception.length > 0) {
+        let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= isOrderingPerson_exception.length);
+        if (dataError_ordering) {
+          this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+          return false;
+        }
+      }
+
+      if (isOrderingPerson_exception.length > 0) {
+        let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
+        if (dataError_ordering) {
+          this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+          return false;
+        }
+      }
+
     }
 
     if (count > 0) {
