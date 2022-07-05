@@ -9,7 +9,9 @@
     </div>
 
     <div class="name-item">
-      <input class="input-otp" id="otp" autocomplete="off" type="text" formControlName="otp" placeholder="Nhập OTP">
+      <input class="input-otp" id="otp" autocomplete="off" formControlName="otp" placeholder="Nhập OTP"
+      oninput="this.value = this.value.replace(/[^0-9]/g ,'', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
+      >
       <div *ngIf="submitted && f.otp.errors" class="invalid">
         <div *ngIf="f.otp.errors.required">{{'Mã OTP không được để trống' | translate}}</div>
       </div>
