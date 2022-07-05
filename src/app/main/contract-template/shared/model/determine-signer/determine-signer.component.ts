@@ -473,7 +473,7 @@ export class DetermineSignerComponent implements OnInit {
             // }
             //@ts-ignore
             // if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
-            //   this.getNotificationValid("Số điện thoại" + this.getNameObject(3) + "của đối tác không hợp lệ!")
+            //   this.getNotificationValid("Số điện thoại" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác không hợp lệ!")
             //   count++;
             //   break;
             // }

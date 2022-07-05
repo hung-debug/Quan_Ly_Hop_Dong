@@ -712,6 +712,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   async submitEvents(e: any) {
     let haveSignPKI = false;
     let haveSignImage = false;
+    const counteKYC = this.recipient?.sign_type.filter((p: any) => p.id == 5).length;
+    if(counteKYC > 0){
+      this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
+      return;
+    }
     if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng', '', 3000);
       return;

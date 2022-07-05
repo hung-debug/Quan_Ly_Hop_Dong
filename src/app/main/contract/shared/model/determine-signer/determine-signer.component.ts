@@ -488,8 +488,8 @@ export class DetermineSignerComponent implements OnInit {
               isPartnerOriganzationDuplicate = [];
             }
 
-            if (!isParterSort[k].phone && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
-              this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObjectValid(3) + "của đối tác!")
+            if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
+              this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
               count++;
               break;
             }
@@ -508,7 +508,7 @@ export class DetermineSignerComponent implements OnInit {
 
             // valid phone number
             if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone)) {
-              this.getNotificationValid("Số điện thoại" + this.getNameObjectValid(3) + "của đối tác không hợp lệ!")
+              this.getNotificationValid("Số điện thoại" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
               count++;
               break;
             }
@@ -556,8 +556,8 @@ export class DetermineSignerComponent implements OnInit {
               isPartnerCaNhanDuplicate = [];
             }
 
-            if (!isParterSort[k].phone && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
-              this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObjectValid(3) + "của đối tác cá nhân!")
+            if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
+              this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân!")
               count++;
               break;
             }
@@ -583,7 +583,7 @@ export class DetermineSignerComponent implements OnInit {
 
             // valid phone number
             if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone)) {
-              this.getNotificationValid("Số điện thoại" + this.getNameObjectValid(3) + "của đối tác cá nhân không hợp lệ!")
+              this.getNotificationValid("Số điện thoại" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;
             }
