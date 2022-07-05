@@ -253,19 +253,15 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   selectWithOtp(e: any, data: any) {
-    // this.changeOtp(data);
+    this.changeOtp(data);
   }
 
   changeOtp(data: any) {
     let data_sign_cka = data.sign_type.filter((p: any) => p.id == 1)[0];
-    if (data.is_otp && data_sign_cka) {
-      data.sign_type.forEach((res: any) => {
-        res.is_otp = true;
-      })
+    if (data_sign_cka) {
+      data.is_otp = 1;
     } else {
-      data.sign_type.forEach((res: any) => {
-        res.is_otp = false;
-      })
+      data.is_otp = 0;
     }
   }
 

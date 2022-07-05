@@ -114,7 +114,7 @@
                   </div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
                                            [settings]="dropdownSignTypeSettings" [data]="signTypeList"
-                                           (ngModelChange)="selectWithOtp($event, d)">
+                                           >
                     <ng-template #optionsTemplate let-item let-option="option"
                                  let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -208,7 +208,7 @@
                   </div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
                                            [settings]="dropdownSignTypeSettings" [data]="signType_doc"
-                                           (ngModelChange)="selectWithOtp($event, d)">
+                                           >
                     <ng-template #optionsTemplate let-item let-option="option"
                                  let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -420,7 +420,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div style="height: 40px; display: flex; align-items: center;">
                       <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp != 1" (change)="changeIsSmsSignature($event, item, index)">
-                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" checked (change)="changeIsSmsSignature($event, item, index)">
+                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" [disabled]="getDataSignCka(d).length > 0" checked (change)="changeIsSmsSignature($event, item, index)">
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
                     </div>
                   </div>
@@ -485,7 +485,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div style="height: 40px; display: flex; align-items: center;">
                       <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp != 1" (change)="changeIsSmsDocument($event, item, index)">
-                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" checked (change)="changeIsSmsDocument($event, item, index)">
+                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" [disabled]="getDataSignCka(d).length > 0" checked (change)="changeIsSmsDocument($event, item, index)">
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
                     </div>
                   </div>
@@ -545,7 +545,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div style="height: 40px; display: flex; align-items: center;">
                       <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp != 1" (change)="changeIsSmsSignature($event, item, index)">
-                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" checked (change)="changeIsSmsSignature($event, item, index)">
+                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" [disabled]="getDataSignCka(d).length > 0" checked (change)="changeIsSmsSignature($event, item, index)">
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
                     </div>
                   </div>
