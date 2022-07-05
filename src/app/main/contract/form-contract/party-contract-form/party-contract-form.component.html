@@ -110,7 +110,7 @@
                   <div class="label text-color">{{'user.sign-type' | translate}}: <span class="required-title">*</span>
                   </div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson"
+                    [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson" (onSelect)="onItemSelect($event)"
                     (ngModelChange)="selectWithOtp($event, d)">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -363,7 +363,7 @@
                         class="required-title">*</span></div>
 
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson"
+                      [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson" (onSelect)="onItemSelect($event)"
                       (ngModelChange)="selectWithOtp($event, d)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
@@ -505,7 +505,7 @@
                     <div class="label text-color">{{'user.sign-type' | translate}}: <span
                         class="required-title">*</span></div>
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="signTypeList"
+                      [settings]="dropdownSignTypeSettings" [data]="signTypeList" (onSelect)="onItemSelect($event)"
                       (ngModelChange)="selectWithOtp($event, d)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
