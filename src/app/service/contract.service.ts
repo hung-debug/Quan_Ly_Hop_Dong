@@ -212,7 +212,7 @@ export class ContractService {
       name: datas.name,
       code: datas.contract_no,
       contract_no: datas.contract_no,
-      sign_time: this.datepipe.transform(datas.sign_time ? datas.sign_time : datas.end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+      sign_time: this.datepipe.transform(datas.sign_time ? datas.sign_time : datas.end_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
       notes: datas.notes,
       role_id: datas.role_id,
       alias_url: "",

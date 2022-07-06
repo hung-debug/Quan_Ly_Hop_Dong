@@ -78,8 +78,8 @@ export class ContractTemplateService {
       body = JSON.stringify({
         name: datas.name,
         code: datas.contract_no,
-        start_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-        end_time: this.datepipe.transform(datas.end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+        start_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+        end_time: this.datepipe.transform(datas.end_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
         type_id: datas.type_id
       });
     }
@@ -289,8 +289,8 @@ export class ContractTemplateService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       code: code,
-      start_time: this.datepipe.transform(start_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
-      end_time: this.datepipe.transform(end_time, "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+      start_time: this.datepipe.transform(start_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+      end_time: this.datepipe.transform(end_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
       organization_id: this.organization_id,
       id: id
     });

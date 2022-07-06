@@ -148,7 +148,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   widthText: any = 200;
   loadingText: string = 'Đang xử lý...';
   phoneOtp:any;
- // isDateTime:any= this.datepipe.transform(new Date(), "dd/MM/yyyy hh:mm");
   isDateTime:any;
   userOtp:any;
 
@@ -1122,7 +1121,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         });
     }else{
       
-      this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy hh:mm");
+      this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
       await of(null).pipe(delay(100)).toPromise();
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
       
@@ -1139,7 +1138,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           return {
             otp: this.dataOTP.otp,
             signInfo: signI,
-            processAt: this.datepipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss'Z'"),
+            processAt: this.datepipe.transform(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
             fields:[
               {
                 id: item.id,
