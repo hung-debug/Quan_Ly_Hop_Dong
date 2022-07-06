@@ -271,8 +271,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     this.stepChangePartyContractForm.emit(step);
   }
 
-  selectWithOtp(e: any, data: any) {
-    // this.changeOtp(data);
+  onItemSelect(e: any) {
     var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
     var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
     // <==========>
@@ -284,16 +283,29 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     // for loop check change ordering with parnter origanization
     this.getSetOrderingParnterOrganization(isOrganization);
     // set again ordering data not option eKYC/img/otp => order
+    // var setOrderingOrganization =
     var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && (p.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3) || p.recipients[0].sign_type.length == 0));
     var setOrderingParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3 && p.recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5));
     // if (setOrderingParnter.length > 0) {
-    setOrdering.forEach((val: any, index: number) => {
-      val.ordering = setOrderingParnter.length > 0 ? (setOrderingParnter.length + index + 2) : (index + 2);
-    })
+    if (setOrderingParnter.length == 0) {
+      this.data_organization.ordering = 1;
+      setOrdering.forEach((val: any, index: number) => {
+        val.ordering = index + 2; // + 2 (1: index & 1 index tổ chức của tôi) vì sẽ luôn luôn order sau tổ chức của tôi nếu trong các bên ko có dữ liệu ký eKYC/Image/OTP.
+      })
+    } else {
+      this.data_organization.ordering = setOrderingParnter.length + 1;
+      setOrdering.forEach((val: any, index: number) => {
+        val.ordering = this.data_organization.ordering + index + 1; // tăng lên 1 ordering sau tổ chức của tôi
+      })
+    }
+
     // }
-    //
-    this.checkCount = 2; // gan lai de lan sau ko bi tang index
-    // }
+    // console.log(setOrdering, setOrderingParnter.length)
+    this.checkCount = 1; // gan lai de lan sau ko bi tang index
+  }
+
+  selectWithOtp(e: any, data: any) {
+    // this.changeOtp(data);
   }
 
   getSetOrderingPersonal(isParnter: any, index: number): void {
@@ -645,16 +657,24 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }
 
     if (count == 0) {
-      if (this.getCheckDuplicatePhone('allCheckEmail', this.datasForm.is_determine_clone)) {
-        this.getNotificationValid("Số điện thoại không được trùng nhau giữa các bên tham gia!");
-        return false
-      }
-    }
+      //valid ordering cac ben doi tac - to chuc
+      let isOrderingPerson_exception = this.datasForm.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
+      let isOrdering_not_exception = this.datasForm.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3));
 
-    if (count == 0) {
-      if (this.getCheckDuplicateCardId('allCheckEmail', this.datasForm.is_determine_clone)) {
-        this.getNotificationValid("CMT/CCCD không được trùng nhau giữa các bên tham gia!");
-        return false
+      if (isOrdering_not_exception.length > 0) {
+        let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= isOrderingPerson_exception.length);
+        if (dataError_ordering) {
+          this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+          return false;
+        }
+      }
+
+      if (isOrderingPerson_exception.length > 0) {
+        let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
+        if (dataError_ordering) {
+          this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+          return false;
+        }
       }
     }
 
