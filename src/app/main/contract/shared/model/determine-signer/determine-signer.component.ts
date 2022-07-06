@@ -703,15 +703,7 @@ export class DetermineSignerComponent implements OnInit {
       //valid ordering cac ben doi tac - to chuc
       let isOrderingPerson_exception = this.datas.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
       let isOrdering_not_exception = this.datas.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3));
-
-      if (isOrdering_not_exception.length > 0) {
-        let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= isOrderingPerson_exception.length);
-        if (dataError_ordering) {
-          this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
-          return false;
-        }
-      }
-
+      // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
       if (isOrderingPerson_exception.length > 0) {
         let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
         if (dataError_ordering) {
@@ -719,6 +711,24 @@ export class DetermineSignerComponent implements OnInit {
           return false;
         }
       }
+
+      let isCheckOrdering = [];
+      for (const d of isOrderingPerson_exception) {
+        isCheckOrdering.push(d.ordering);
+      }
+      let maxOrderingException = Math.max.apply(Math, isCheckOrdering);
+      if (!maxOrderingException) {maxOrderingException = 0;}
+      if (isOrdering_not_exception.length > 0) {
+        // let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= isOrderingPerson_exception.length);
+
+        let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= maxOrderingException);
+        if (dataError_ordering) {
+          this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+          return false;
+        }
+      }
+
+
     }
 
     if (count > 0) {
