@@ -107,8 +107,8 @@
                     <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                   </div>
                   <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                    [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson"
-                    (ngModelChange)="selectWithOtp($event, d)">
+                    [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson" (onSelect)="onItemSelect($event)"
+                    (ngModelChange)="selectWithOtp($event, d, true)">
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                         <label style="color: #333; font-weight: normal;"
@@ -401,7 +401,7 @@
                     </div>
 
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson"
+                      [settings]="dropdownSignTypeSettings" [data]="isListSignNotPerson" (onSelect)="onItemSelect($event)"
                       (ngModelChange)="selectWithOtp($event, d)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
@@ -572,8 +572,8 @@
                         <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                       </div>
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="signTypeList"
-                      (ngModelChange)="selectWithOtp($event, d)">
+                      [settings]="dropdownSignTypeSettings" [data]="signTypeList" (onSelect)="onItemSelect($event)"
+                      (ngModelChange)="selectWithOtp($event, d, true)">
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
                         <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">

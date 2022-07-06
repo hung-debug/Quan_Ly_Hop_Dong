@@ -66,7 +66,7 @@ export class DetermineSignerComponent implements OnInit {
   is_change_party: boolean = false;
   isListSignNotPerson: any = [];
 
-  checkCount = 2;
+  checkCount = 1;
   isCountNext = 1;
 
   get determineContract() {
@@ -231,35 +231,82 @@ export class DetermineSignerComponent implements OnInit {
     this.stepChangeDetermineSigner.emit(step);
   }
 
-  selectWithOtp(e: any, data: any) { // sort ordering
+  onItemSelect(e: any) {
+    var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
+    var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
+    // <==========>
+    if (isParnter.length > 0) {
+      for (let i = 0; i < 2; i++) {
+        this.getSetOrderingPersonal(isParnter, i);
+      }
+    }
+    // for loop check change ordering with parnter origanization
+    this.getSetOrderingParnterOrganization(isOrganization);
+    // set again ordering data not option eKYC/img/otp => order
+    // var setOrderingOrganization =
+    var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && (p.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3) || p.recipients[0].sign_type.length == 0));
+    var setOrderingParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3 && p.recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5));
+    // if (setOrderingParnter.length > 0) {
+    if (setOrderingParnter.length == 0) {
+      this.data_organization.ordering = 1;
+      setOrdering.forEach((val: any, index: number) => {
+        val.ordering = index + 2; // + 2 (1: index & 1 index tổ chức của tôi) vì sẽ luôn luôn order sau tổ chức của tôi nếu trong các bên ko có dữ liệu ký eKYC/Image/OTP.
+      })
+    } else {
+      this.data_organization.ordering = setOrderingParnter.length + 1;
+      setOrdering.forEach((val: any, index: number) => {
+        // val.ordering = setOrderingParnter.length > 0 ? (setOrderingParnter.length + index + 1) : (index + 1);
+        // val.ordering = setOrderingParnter.length > 0 ? (this.data_organization.ordering + index + 1) : (index + 1);
+        val.ordering = this.data_organization.ordering + index + 1; // tăng lên 1 ordering sau tổ chức của tôi
+      })
+    }
+
+    // }
+    // console.log(setOrdering, setOrderingParnter.length)
+    this.checkCount = 1; // gan lai de lan sau ko bi tang index
+  }
+
+  selectWithOtp(e: any, data: any, action?: boolean) { // sort ordering
     // this.changeOtp(data);
     //clear lai gia tri card_id
     if (this.getDataSignEkyc(data).length == 0) {
       data.card_id = "";
     }
     //  <=========>
-    if (e.length > 0) {
-      var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
-      var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
-      // <==========>
-      if (isParnter.length > 0) {
-        for (let i = 0; i < 2; i++) {
-          this.getSetOrderingPersonal(isParnter, i);
-        }
-      }
-      // for loop check change ordering with parnter origanization
-      this.getSetOrderingParnterOrganization(isOrganization);
-      // set again ordering data not option eKYC/img/otp => order
-      var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && (p.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3) || p.recipients[0].sign_type.length == 0));
-      var setOrderingParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3 && p.recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5));
-      // if (setOrderingParnter.length > 0) {
-      setOrdering.forEach((val: any, index: number) => {
-        val.ordering = setOrderingParnter.length > 0 ? (setOrderingParnter.length + index + 2) : (index + 2);
-      })
-      // }
-      // console.log(setOrdering, setOrderingParnter.length)
-      this.checkCount = 2; // gan lai de lan sau ko bi tang index
-    }
+    // if (e.length > 0) {
+    //   var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
+    //   var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
+    //   // <==========>
+    //   if (isParnter.length > 0) {
+    //     for (let i = 0; i < 2; i++) {
+    //       this.getSetOrderingPersonal(isParnter, i);
+    //     }
+    //   }
+    //   // for loop check change ordering with parnter origanization
+    //   this.getSetOrderingParnterOrganization(isOrganization);
+    //   // set again ordering data not option eKYC/img/otp => order
+    //   // var setOrderingOrganization =
+    //   var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && (p.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3) || p.recipients[0].sign_type.length == 0));
+    //   var setOrderingParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3 && p.recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5));
+    //   // if (setOrderingParnter.length > 0) {
+    //   if (setOrderingParnter.length == 0) {
+    //     this.data_organization.ordering = 1;
+    //     setOrdering.forEach((val: any, index: number) => {
+    //       val.ordering = index + 2; // + 2 (1: index & 1 index tổ chức của tôi) vì sẽ luôn luôn order sau tổ chức của tôi nếu trong các bên ko có dữ liệu ký eKYC/Image/OTP.
+    //     })
+    //   } else {
+    //     this.data_organization.ordering = setOrderingParnter.length + 1;
+    //     setOrdering.forEach((val: any, index: number) => {
+    //       // val.ordering = setOrderingParnter.length > 0 ? (setOrderingParnter.length + index + 1) : (index + 1);
+    //       // val.ordering = setOrderingParnter.length > 0 ? (this.data_organization.ordering + index + 1) : (index + 1);
+    //       val.ordering = this.data_organization.ordering + index + 1; // tăng lên 1 ordering sau tổ chức của tôi
+    //     })
+    //   }
+    //
+    //   // }
+    //   // console.log(setOrdering, setOrderingParnter.length)
+    //   this.checkCount = 1; // gan lai de lan sau ko bi tang index
+    // }
   }
 
   getSetOrderingPersonal(isParnter: any, index: number): void {
@@ -501,7 +548,7 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email)) {
-              this.getNotificationValid("Email của" + this.getNameObjectValid(3) + "của đối tác không hợp lệ!")
+              this.getNotificationValid("Email của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác không hợp lệ!")
               count++;
               break;
             }
@@ -649,6 +696,28 @@ export class DetermineSignerComponent implements OnInit {
       if (this.getCheckDuplicateCardId('allCheckEmail', this.datas.is_determine_clone)) {
         this.getNotificationValid("CMT/CCCD không được trùng nhau giữa các bên tham gia!");
         return false
+      }
+    }
+
+    if (count == 0) {
+      //valid ordering cac ben doi tac - to chuc
+      let isOrderingPerson_exception = this.datas.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
+      let isOrdering_not_exception = this.datas.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3));
+
+      if (isOrdering_not_exception.length > 0) {
+        let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= isOrderingPerson_exception.length);
+        if (dataError_ordering) {
+          this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+          return false;
+        }
+      }
+
+      if (isOrderingPerson_exception.length > 0) {
+        let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
+        if (dataError_ordering) {
+          this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+          return false;
+        }
       }
     }
 
@@ -1280,7 +1349,6 @@ export class DetermineSignerComponent implements OnInit {
 
   doTheSearch($event: Event, indexs: number, action: string): void {
     const stringEmitted = ($event.target as HTMLInputElement).value;
-    console.log(stringEmitted);
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
