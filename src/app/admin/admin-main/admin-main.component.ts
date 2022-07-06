@@ -42,7 +42,7 @@ export class AdminMainComponent implements OnInit {
               private fb: FormBuilder,
               private appService: AppService,
               public sidebarservice: AdminSidebarService,
-              // private dashboardService: DashboardService,
+              private dashboardService: DashboardService,
               private changeDetectorRef: ChangeDetectorRef,
               public translate: TranslateService,
               private toastService: ToastService,
@@ -216,15 +216,15 @@ export class AdminMainComponent implements OnInit {
   }
 
   loadDataNotification(){
-    // this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
-    //   //this.numberNotification = data.total_elements;
-    //   this.listNotification = data.entities;
-    //   console.log(data);
-    // });
-    // this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
-    //   this.numberNotification = data.total_elements;
-    //   //this.listNotification = data.entities;
-    // });
+    this.dashboardService.getNotification('', '', '', 5, '').subscribe(data => {
+      //this.numberNotification = data.total_elements;
+      this.listNotification = data.entities;
+      console.log(data);
+    });
+    this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
+      this.numberNotification = data.total_elements;
+      //this.listNotification = data.entities;
+    });
   }
 
   viewAllNotification(){

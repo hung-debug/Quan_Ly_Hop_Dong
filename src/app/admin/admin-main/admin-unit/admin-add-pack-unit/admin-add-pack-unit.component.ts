@@ -5,7 +5,6 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { parttern_input } from 'src/app/config/parttern';
 import { paidStatusList, paidTypeList } from 'src/app/config/variable';
 import { AdminPackService } from 'src/app/service/admin/admin-pack.service';
 import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
@@ -44,7 +43,7 @@ export class AdminAddPackUnitComponent implements OnInit {
 
   endDate: any;
 
-  flagTime: boolean = false;
+  flagTime: number = 0;
   flagStatus: boolean = false;
 
   startDate: any;
@@ -198,10 +197,10 @@ export class AdminAddPackUnitComponent implements OnInit {
 
   convertCalculatorMethod(calculatorMethod: string): string {
     if (calculatorMethod == 'BY_TIME') {
-      this.flagTime = true;
+      this.flagTime = 1;
       return 'Theo thời gian';
     } else if (calculatorMethod == 'BY_CONTRACT_NUMBERS') {
-      this.flagTime = false;
+      this.flagTime = 2;
       return 'Theo số lượng hợp đồng';
     }
     return '';
@@ -242,7 +241,7 @@ export class AdminAddPackUnitComponent implements OnInit {
   }
 
   onChangeMaGoi(event: any) {
-    if (this.flagTime === true) {
+    if (this.flagTime === 1) {
       console.log('vao day');
 
       const startDate1 = new Date(this.startDate);
@@ -280,7 +279,7 @@ export class AdminAddPackUnitComponent implements OnInit {
 
           console.log('this end date ', this.endDate);
 
-          this.flagTime = true;
+          this.flagTime = 1;
         } else if (
           this.listDichVu[i].calculatorMethod == 'BY_CONTRACT_NUMBERS'
         ) {
@@ -288,6 +287,8 @@ export class AdminAddPackUnitComponent implements OnInit {
           this.calculatorMethod = 'Theo số lượng hợp đồng';
           this.numberOfContracts = this.listDichVu[i].numberOfContracts;
           this.duration = '';
+          this.endDate = '';
+          this.flagTime = 2;
         }
 
         if (this.listDichVu[i].type == 'NORMAL') {
@@ -322,7 +323,7 @@ export class AdminAddPackUnitComponent implements OnInit {
   }
 
   onChangeStartDate(event: any) {
-    if (this.flagTime === true) {
+    if (this.flagTime === 1) {
 
       const startDate1 = new Date(this.addForm.value.startDate);
 
