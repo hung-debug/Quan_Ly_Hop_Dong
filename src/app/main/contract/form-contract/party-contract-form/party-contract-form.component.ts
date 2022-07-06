@@ -661,16 +661,24 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       let isOrderingPerson_exception = this.datasForm.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
       let isOrdering_not_exception = this.datasForm.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3));
 
-      if (isOrdering_not_exception.length > 0) {
-        let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= isOrderingPerson_exception.length);
+      if (isOrderingPerson_exception.length > 0) {
+        let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
         if (dataError_ordering) {
           this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
           return false;
         }
       }
 
-      if (isOrderingPerson_exception.length > 0) {
-        let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
+      let isCheckOrdering = [];
+      for (const d of isOrderingPerson_exception) {
+        isCheckOrdering.push(d.ordering);
+      }
+      let maxOrderingException = Math.max.apply(Math, isCheckOrdering);
+      if (!maxOrderingException) {maxOrderingException = 0;}
+      if (isOrdering_not_exception.length > 0) {
+        // let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= isOrderingPerson_exception.length);
+
+        let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= maxOrderingException);
         if (dataError_ordering) {
           this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
           return false;
@@ -1229,6 +1237,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   deletePartner(index: any, item: any) {
     //xoa doi tuong tham gia
     if (item.id) {
+      this.spinner.show();
       this.contractService.deleteParticipantContract(item.id).subscribe((res: any) => {
         if (res.success == true) {
           this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
@@ -1236,14 +1245,19 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
           this.toastService.showErrorHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");
         }
       }, (error: HttpErrorResponse) => {
+        this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
+      }, () => {
+        this.spinner.hide();
+        this.onItemSelect(null);
       })
     }
 
     this.datasForm.is_determine_clone.splice(index + 1, 1);
-    this.datasForm.is_determine_clone.forEach((res: any, index: number) => {
-      res.ordering = index + 1;
-    })
+    this.onItemSelect(null);
+    // this.datasForm.is_determine_clone.forEach((res: any, index: number) => {
+    //   res.ordering = index + 1;
+    // })
   }
 
   changeData(item: any, index: any) {
