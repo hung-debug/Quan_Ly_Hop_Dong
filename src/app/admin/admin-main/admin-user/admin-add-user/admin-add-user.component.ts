@@ -220,7 +220,7 @@ export class AdminAddUserComponent implements OnInit {
             '',
             3000
           );
-          
+
           if (data.status == 'ACTIVE') {
             this.adminUserService.getUserById(dataUpdate.id).subscribe(
               (data) => {
@@ -239,6 +239,7 @@ export class AdminAddUserComponent implements OnInit {
                   };
 
                   dataUpdate.user.permissions = data.permissions;
+                  dataUpdate.user.name = data.name;
 
                   localStorage.setItem(
                     'currentAdmin',
@@ -298,7 +299,7 @@ export class AdminAddUserComponent implements OnInit {
                       setTimeout(() => {
                         window.location.reload();
                       }, 100);
-                    }
+                    } 
                   }
                 }
               },
@@ -315,6 +316,11 @@ export class AdminAddUserComponent implements OnInit {
             localStorage.clear();
           }
 
+          this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate(['admin-main/user']);
+          });
           this.dialog.closeAll();
         } else {
           if (data.errors[0].code === 1001) {

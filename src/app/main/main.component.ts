@@ -62,7 +62,7 @@ export class MainComponent implements OnInit {
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
-        this.nameCurrentUser = data.name;
+        this.nameCurrentUser = data?.name;
       });
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;

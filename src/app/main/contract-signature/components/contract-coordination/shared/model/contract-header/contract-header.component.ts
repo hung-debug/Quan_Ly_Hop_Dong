@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {AddContractComponent} from "../../../../../../contract/add-contract/add-contract.component";
 import {variable} from "../../../../../../../config/variable";
+import {Observable, timer} from "rxjs";
+import {map, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-contract-header',
@@ -17,12 +19,23 @@ export class ContractHeaderComponent implements OnInit {
     step_2: false,
     step_3: false
   }
+  counter$: any;
+  count = 120;
 
   constructor() {
     // this.step = variable.stepSampleContract.step4
   }
 
   ngOnInit(): void {
+    this.counter$ = timer(0,1000).pipe(
+      take(this.count),
+      map(() => this.transform(--this.count))
+    );
+  }
+  transform(value: number): string {
+    const minutes: number = Math.floor(value / 60);
+    return minutes.toString().padStart(2, '0') + ':' + 
+        (value - minutes * 60).toString().padStart(2, '0');
   }
 
 

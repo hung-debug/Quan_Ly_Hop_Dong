@@ -106,8 +106,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       textField: "name",
       enableCheckAll: false,
       allowSearchFilter: true,
-      itemsShowLimit: 2,
-      limitSelection: 2,
+      itemsShowLimit: 1,
+      limitSelection: 1,
       disabledField: 'item_disable',
     };
 
@@ -367,6 +367,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getDataSignCka(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 1);
+  }
+
+  getDataSignEkyc(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 5);
+  }
+
   // valid data step 2
   validData() {
     let count = 0;
@@ -397,28 +405,40 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
           break;
         }
         is_duplicate = [];
+
+        //check chu ky anh
+        is_duplicate = dataArr[i].sign_type.filter((p: any) => p.id == 1 || p.id == 5);
+        if (is_duplicate.length > 1) {
+          this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký ảnh hoặc eKYC của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+          count++;
+          break;
+        }
+        is_duplicate = [];
       }
 
-      if (!dataArr[i].phone && dataArr[i].role == 3 && (dataArr[i].is_otp || dataArr[i].is_otp == 1)) {
-        this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi!")
+      if (!dataArr[i].phone && dataArr[i].sign_type.filter((p: any) => p.id == 1).length > 0) {
+        this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;
       }
-      // @ts-ignore
-      // if (!this.pattern.name.test(dataArr[i].name)) {
-      //   this.getNotificationValid("Tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
-      //   count++;
-      //   break;
-      // }
-      // @ts-ignore
+      if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 5).length > 0) {
+        this.getNotificationValid("Vui lòng nhập CMT/CCCD của" + this.getNameObject(3) + "tổ chức của tôi!")
+        count++;
+        break;
+      }
       if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email)) {
         this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
       }
-      //@ts-ignore
       if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
-        this.getNotificationValid("Số điện thoại của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+        this.getNotificationValid("Số điện thoại của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+        count++;
+        break;
+      }
+       // valid cccd number
+       if (dataArr[i].card_id && !this.pattern.card_id.test(dataArr[i].card_id)) {
+        this.getNotificationValid("CMT/CCCD của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
       }
@@ -431,6 +451,19 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       }
     }
 
+    if (count == 0) {
+      if (this.getCheckDuplicatePhone('only_party_origanzation', dataArr)) {
+        this.getNotificationValid("Số điện thoại tổ chức của tôi không được trùng nhau!");
+        return false
+      }
+    }
+
+    if (count == 0) {
+      if (this.getCheckDuplicateCardId('only_party_origanzation', dataArr)) {
+        this.getNotificationValid("CMT/CCCD tổ chức của tôi không được trùng nhau!");
+        return false
+      }
+    }
 
     let dataArrPartner = [];
     dataArrPartner = this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
@@ -475,16 +508,44 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 break;
               }
               isPartnerOriganzationDuplicate = [];
+              //check chu ky anh
+              isPartnerOriganzationDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 1 || p.id == 5);
+              if (isPartnerOriganzationDuplicate.length > 1) {
+                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký ảnh hoặc eKYC" + this.getNameObject(isParterSort[k].role) + "của đối tác!")
+                count++;
+                break;
+              }
+              isPartnerOriganzationDuplicate = [];
             }
 
-            if (!isParterSort[k].phone && isParterSort[k].role == 3 && (isParterSort[k].is_otp || isParterSort[k].is_otp == 1)) {
-              this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(3) + "của đối tác!")
+            if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
+              this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(isParterSort[k].role) + "của đối tác!")
+              count++;
+              break;
+            }
+
+            if (!isParterSort[k].card_id && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
+              this.getNotificationValid("Vui lòng CMT/CCCD của" + this.getNameObject(3) + "tổ chức của đối tác!")
               count++;
               break;
             }
 
             if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email)) {
               this.getNotificationValid("Email của" + this.getNameObject(3) + "của đối tác không hợp lệ!")
+              count++;
+              break;
+            }
+
+            // valid phone number
+            if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone)) {
+              this.getNotificationValid("Số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
+              count++;
+              break;
+            }
+
+            // valid cccd number
+            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id)) {
+              this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác không hợp lệ!")
               count++;
               break;
             }
@@ -514,31 +575,40 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 break;
               }
               isPartnerCaNhanDuplicate = [];
+              //check chu ky anh
+              isPartnerCaNhanDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 1 || p.id == 5);
+              if (isPartnerCaNhanDuplicate.length > 1) {
+                this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký ảnh hoặc eKYC" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân!")
+                count++;
+                break;
+              }
+              isPartnerCaNhanDuplicate = [];
             }
 
-            if (!isParterSort[k].phone &&
-              isParterSort[k].role == 3 &&
-              (isParterSort[k].is_otp || isParterSort[k].is_otp == 1)) {
-              this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(3) + "của đối tác!")
+            if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
+              this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân!")
               count++;
               break;
             }
 
-            //@ts-ignore
-            // if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
-            //   this.getNotificationValid("Tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " đối tác cá nhân không hợp lệ!");
-            //   count++;
-            //   break;
-            // }
-            //@ts-ignore
+            if (!isParterSort[k].card_id && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
+              this.getNotificationValid("Vui lòng CMT/CCCD của" + this.getNameObject(3) + "tổ chức của đối tác cá nhân!")
+              count++;
+              break;
+            }
+
             if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email) && isParterSort[k].role == 3) {
               this.getNotificationValid("Email" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
               count++;
               break;
             }
-            //@ts-ignore
             if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone)) {
-              this.getNotificationValid("Số điện thoại" + this.getNameObject(3) + "của đối tác không hợp lệ!")
+              this.getNotificationValid("Số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!")
+              count++;
+              break;
+            }
+            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id)) {
+              this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;
             }
@@ -561,6 +631,20 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       // dataArrPartyCheckEmail = this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
       if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
         this.getNotificationValid("Email đối tác không được trùng nhau!");
+        return false
+      }
+    }
+
+    if (count == 0) {
+      if (this.getCheckDuplicatePhone('only_party_partner', dataArrPartner)) {
+        this.getNotificationValid("Số điện thoại đối tác không được trùng nhau!");
+        return false
+      }
+    }
+
+    if (count == 0) {
+      if (this.getCheckDuplicateCardId('only_party_partner', dataArrPartner)) {
+        this.getNotificationValid("CMT/CCCD đối tác không được trùng nhau!");
         return false
       }
     }
@@ -657,6 +741,126 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         return true;
       }
       valueSoFar[arrCheckEmail[k]] = true;
+    }
+    return false;
+  }
+
+  getCheckDuplicatePhone(isParty: string, dataValid?: any) {
+    let arrCheckPhone = [];
+    // valid phone đối tác và các bên tham gia
+    if (isParty != 'only_party_origanzation') {
+      let arrPhone = [];
+      for (let i = 0; i < dataValid.length; i++) {
+        const element = dataValid[i].recipients;
+        for (let j = 0; j < element.length; j++) {
+          if (element[j].phone) {
+            let items = {
+              phone: element[j].phone,
+              role: element[j].role,
+              type: dataValid[i].type,
+              ordering: dataValid[i].ordering
+            }
+            arrPhone.push(items);
+          }
+        }
+      }
+
+      if (arrPhone.some((p: any) => p.role == 1) && arrPhone.some((p: any) => p.role == 3)) {
+        if (isParty == 'only_party_partner') {
+          arrPhone = arrPhone.filter((p: any) => p.role != 1);
+        } else {
+          let duplicatePhone: any[] = [];
+          let countCheck_duplicate = true;
+          for (const d of arrPhone) {
+            if (duplicatePhone.length > 0 && duplicatePhone.some((p: any) => p.phone == d.phone && (p.type != d.type || p.ordering != d.ordering))) { // check duplicate email coordination with between party
+              return true;
+            }
+            duplicatePhone.push(d);
+          }
+          if (countCheck_duplicate) return false;
+        }
+      }
+
+      arrPhone.forEach((items: any) => {
+        arrCheckPhone.push(items.phone)
+      })
+
+    } else {
+      // valid email tổ chức của tôi
+      for (let i = 0; i < dataValid.length; i++) {
+        if (dataValid[i].phone) {
+          arrCheckPhone.push(dataValid[i].phone);
+        }
+      }
+    }
+
+    var valueSoFar = Object.create(null);
+    for (var k = 0; k < arrCheckPhone.length; ++k) {
+      var value: any = arrCheckPhone[k];
+      if (value in valueSoFar) {
+        return true;
+      }
+      valueSoFar[value] = true;
+    }
+    return false;
+  }
+
+  getCheckDuplicateCardId(isParty: string, dataValid?: any) {
+    let arrCheckCardId = [];
+    // valid card_id đối tác và các bên tham gia
+    if (isParty != 'only_party_origanzation') {
+      let arrCardId = [];
+      for (let i = 0; i < dataValid.length; i++) {
+        const element = dataValid[i].recipients;
+        for (let j = 0; j < element.length; j++) {
+          if (element[j].card_id) {
+            let items = {
+              card_id: element[j].card_id,
+              role: element[j].role,
+              type: dataValid[i].type,
+              ordering: dataValid[i].ordering
+            }
+            arrCardId.push(items);
+          }
+        }
+      }
+
+      if (arrCardId.some((p: any) => p.role == 1) && arrCardId.some((p: any) => p.role == 3)) {
+        if (isParty == 'only_party_partner') {
+          arrCardId = arrCardId.filter((p: any) => p.role != 1);
+        } else {
+          let duplicateCardId: any[] = [];
+          let countCheck_duplicate = true;
+          for (const d of arrCardId) {
+            if (duplicateCardId.length > 0 && duplicateCardId.some((p: any) => p.card_id == d.card_id && (p.type != d.type || p.ordering != d.ordering))) { // check duplicate card_id coordination with between party
+              return true;
+            }
+            duplicateCardId.push(d);
+          }
+          if (countCheck_duplicate) return false;
+        }
+      }
+
+      arrCardId.forEach((items: any) => {
+        arrCheckCardId.push(items.card_id)
+      })
+
+    } else {
+      // valid card_id tổ chức của tôi
+      for (let i = 0; i < dataValid.length; i++) {
+        if (dataValid[i].card_id) {
+          arrCheckCardId.push(dataValid[i].card_id);
+        }
+      }
+    }
+
+    var valueSoFar = Object.create(null);
+    for (var k = 0; k < arrCheckCardId.length; ++k) {
+      var value: any = arrCheckCardId[k];
+      if (value in valueSoFar) {
+        return true;
+      }
+      valueSoFar[value] = true;
     }
     return false;
   }

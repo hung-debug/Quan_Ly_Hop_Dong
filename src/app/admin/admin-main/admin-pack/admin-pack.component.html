@@ -11,7 +11,6 @@
           'Nhập từ khóa tìm kiếm theo tên gói dịch vụ' | translate
         }}"
         [(ngModel)]="filterSearch"
-        (keyup)="autoSearch($event)"
       />
       <img
         src="../../assets/img/icon_search_group.svg"
@@ -35,12 +34,15 @@
   </div>
 
   <div class="row" style="padding-top: 10px">
-    <p-table
-      [value]="listData"
+    <p-table #myTable
+      [lazy]="true"
+      (onLazyLoad)="loadPack($event)"
       [paginator]="true"
-      [rows]="15"
+      [value]="listData"
+      [loading]="loading"
+      [totalRecords]="totalRecords"
+      [rows]="rows"
       id="table"
-      [autoLayout]="true"
     >
       <ng-template pTemplate="header" let-columns>
         <tr>

@@ -1,13 +1,13 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { User } from '../user.service';
 @Injectable({
   providedIn: 'root',
 })
 export class AdminUnitService {
   listUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
-
-  activeUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/search`;
 
   addUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
@@ -15,7 +15,11 @@ export class AdminUnitService {
 
   getUnitByIdUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
-  constructor(private http: HttpClient) {}
+  addRoleUrl: any = `${environment.apiUrl}/api/v1/internal/customers/roles`;
+
+  addUserUrl: any = `${environment.apiUrl}/api/v1/internal/customers`;
+
+  constructor(private http: HttpClient, public datepipe: DatePipe) {}
 
   token: any;
   getCurrentUser() {
@@ -31,23 +35,24 @@ export class AdminUnitService {
   }
 
   deletePackUnit(id: any, idPack: any) {
-
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    console.log("token ",this.token);
+    console.log('token ', this.token);
 
-    return this.http.patch<any>(
-      this.listUnitUrl + id + '/service/cancel/' + idPack, '',
-      { headers: headers }
-    ).pipe();
+    return this.http
+      .patch<any>(this.listUnitUrl + id + '/service/cancel/' + idPack, '', {
+        headers: headers,
+      })
+      .pipe();
   }
 
   getUnitList(
     name: any,
+    code: any,
     address: any,
     representative: any,
     email: any,
@@ -58,13 +63,15 @@ export class AdminUnitService {
   ) {
     this.getCurrentUser();
 
-    console.log('status');
-    console.log(status);
+    console.log('page ', page);
+    console.log('size ', size);
 
     let listUnitUrl =
       this.listUnitUrl +
       '?name=' +
       name +
+      '&code=' +
+      code +
       '&address=' +
       address +
       '&representative=' +
@@ -75,8 +82,10 @@ export class AdminUnitService {
       phone +
       '&status=' +
       status +
-      '&page=0' +
-      '&size=1000' +
+      '&page=' +
+      page +
+      '&size=' +
+      size +
       '&sort=name';
     const headers = { Authorization: 'Bearer ' + this.token };
 
@@ -91,7 +100,7 @@ export class AdminUnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({});
-    return this.http.post<any>(this.activeUnitUrl + id, body, {
+    return this.http.patch<any>(this.listUnitUrl + id, body, {
       headers: headers,
     });
   }
@@ -119,31 +128,27 @@ export class AdminUnitService {
       status: datas.status,
     });
 
-    // console.log("id ");
-    // console.log(datas);
-
     return this.http.put<any>(this.addUnitUrl + datas.id, body, {
       headers: headers,
     });
   }
 
-  updatePackUnit(datas: any, idPack: any
-    ) {
+  updatePackUnit(datas: any, idPack: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-      const body = JSON.stringify({
-        serviceId: idPack,
-        purchaseDate: datas.purchaseDate,
-        paymentType: datas.paymentType.id,
-        paymentStatus: datas.paymentStatus.id,
-        startDate: datas.startDate,
-        endDate: datas.endDate,
-        paymentDate: datas.paymentDate,
-      });
+    const body = JSON.stringify({
+      serviceId: idPack,
+      purchaseDate: datas.purchaseDate,
+      paymentType: datas.paymentType.id,
+      paymentStatus: datas.paymentStatus.id,
+      startDate: datas.startDate,
+      endDate: datas.endDate,
+      paymentDate: datas.paymentDate,
+    });
 
     console.log('body ', body);
 
@@ -160,12 +165,15 @@ export class AdminUnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.get<any>(this.getUnitByIdUrl + id+"?sort=startDate,desc", { headers: headers });
+    return this.http.get<any>(
+      this.getUnitByIdUrl + id + '?sort=startDate,desc',
+      { headers: headers }
+    );
   }
 
   getPackUnitByIdPack(id: any, idPack: any) {
-    console.log("id ", id);
-    console.log("id pack ", idPack);
+    console.log('id ', id);
+    console.log('id pack ', idPack);
 
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -209,8 +217,7 @@ export class AdminUnitService {
   }
 
   addPackUnit(datas: any) {
-
-    console.log("datas ", datas);
+    console.log('datas ', datas);
 
     this.getCurrentUser();
 
@@ -235,5 +242,52 @@ export class AdminUnitService {
       body,
       { headers: headers }
     );
+  }
+
+  addRoleByOrg(data: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      name: data.name,
+      code: data.code,
+      organization_id: data.organization_id,
+      status: 1,
+      permissions: data.selectedRole,
+      description: data.note,
+    });
+    console.log("role ",body);
+    return this.http.post<any>(this.addRoleUrl, body, { headers }).pipe();
+  }
+
+  addUser(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    if (datas.birthday != null) {
+      datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
+    }
+
+    const body = JSON.stringify({
+      name: datas.name,
+      email: datas.email,
+      phone: datas.phone,
+      organization_id: datas.organizationId,
+      birthday: datas.birthday,
+      status: datas.status,
+      role_id: datas.role,
+
+      sign_image: datas.sign_image,
+
+      phone_sign: datas.phoneKpi,
+      phone_tel: datas.networkKpi,
+
+      hsm_name: datas.nameHsm,
+    });
+    console.log(headers);
+    console.log(body);
+    return this.http.post<User>(this.addUserUrl, body, { headers: headers });
   }
 }

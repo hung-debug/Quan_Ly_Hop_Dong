@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CheckboxControlValueAccessor } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
+import { LazyLoadEvent } from 'primeng/api';
 import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
@@ -27,7 +27,6 @@ export class AdminUserComponent implements OnInit {
   name: any = '';
   email: any = '';
   phone: any = '';
-  list: any[];
   cols: any[];
   orgList: any[] = [];
   orgListTmp: any[] = [];
@@ -40,8 +39,15 @@ export class AdminUserComponent implements OnInit {
   adminUserRole: boolean = true;
 
   permissions: any;
+  totalRecords: number;
+  loading: boolean;
+  list: any[];
+  page: number = 0;
+
+  rows: number;
 
   ngOnInit(): void {
+    this.rows = 20;
     this.permissions = JSON.parse(
       localStorage.getItem('currentAdmin') || ''
     ).user.permissions;
@@ -63,7 +69,7 @@ export class AdminUserComponent implements OnInit {
     console.log('qlnd 02');
     console.log(this.addUserRole);
 
-    this.searchUser();
+    // this.searchUser();
 
     this.cols = [
       { header: 'user.name', style: 'text-align: left;' },
@@ -78,6 +84,7 @@ export class AdminUserComponent implements OnInit {
       });
     }
   }
+
   checkRole(flag: boolean, code: string) {
     console.log('length ', this.permissions.length);
 
@@ -104,11 +111,35 @@ export class AdminUserComponent implements OnInit {
 
   searchUser() {
     this.adminUserService
-      .getUserList(this.name, this.email, this.phone)
+      .getUserList(this.name, this.email, this.phone, 0, this.rows)
       .subscribe((response) => {
-        console.log(response);
         this.list = response.entities;
+        this.totalRecords = response.total_elements;
       });
+  }
+
+  loadUser(event: LazyLoadEvent) {
+    this.loading = true;
+
+    setTimeout(() => {
+      this.adminUserService
+        .getUserList(
+          this.name,
+          this.email,
+          this.phone,
+          this.page,
+          this.rows
+        )
+        .subscribe((res) => {
+        
+          this.list = res.entities;
+
+          this.totalRecords = res.total_elements;
+          this.loading = false;
+        });
+    }, 1000);
+
+    this.page = JSON.parse(JSON.stringify(event)).first / 20;
   }
 
   addUser() {

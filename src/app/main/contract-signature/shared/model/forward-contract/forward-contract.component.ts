@@ -5,6 +5,7 @@ import { Router } from "@angular/router";
 import { ContractService } from "../../../../../service/contract.service";
 import { ToastService } from "../../../../../service/toast.service";
 import { NgxSpinnerService } from "ngx-spinner";
+import { parttern } from 'src/app/config/parttern';
 
 @Component({
   selector: 'app-forward-contract',
@@ -15,6 +16,8 @@ export class ForwardContractComponent implements OnInit {
   myForm: FormGroup;
   datas: any;
   currentUser: any;
+  isReqPhone:boolean = false;
+  isReqCardId:boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -36,7 +39,31 @@ export class ForwardContractComponent implements OnInit {
     this.myForm = this.fbd.group({
       name: this.fbd.control("", [Validators.required]),
       email: this.fbd.control("", [Validators.required]),
+      phone: "",
+      card_id: "",
     });
+
+    //kiem tra user co bat buoc phai nhap phone, card id 
+    //phone: bat buoc nhap khi user ky anh OTP: type = 1
+    //card_id: bat buoc nhap khi user ky eKYC: type = 5
+    
+    
+    for (const d of this.datas.dataContract.is_data_contract.participants) {
+      for (const q of d.recipients) {
+        if (q.email == this.currentUser.customer.info.email && q.status == 1) {
+          let data_sign_cka = q.sign_type.filter((p: any) => p.id == 1)[0];
+          let data_sign_ekyc = q.sign_type.filter((p: any) => p.id == 5)[0];
+          if(data_sign_cka){
+            this.isReqPhone = true;
+          }
+          if(data_sign_ekyc){
+            this.isReqCardId = true;
+          }
+          break
+        }
+      }
+      if (this.isReqPhone || this.isReqCardId) break;
+    }
   }
 
   async onSubmit() {
@@ -56,8 +83,30 @@ export class ForwardContractComponent implements OnInit {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng email', '', 3000);
       return;
     }
+    if (this.isReqPhone && !String(this.myForm.value.phone)) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+      return;
+    } else if (this.myForm.value.phone && !String(this.myForm.value.phone).toLowerCase().match(parttern.phone)) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng số điện thoại', '', 3000);
+      return;
+    }
+    if (this.isReqCardId && !String(this.myForm.value.card_id)) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+      return;
+    } else if (this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id)) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng CMT/CCCD', '', 3000);
+      return;
+    }
     if (!this.checkCanSwitchContract()) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email ngoài luồng hợp đồng', '', 3000);
+      return;
+    }
+    if (this.myForm.value.phone && !this.checkCanSwitchContractPhone()) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại ngoài luồng hợp đồng', '', 3000);
+      return;
+    }
+    if (this.myForm.value.card_id && !this.checkCanSwitchContractCardId()) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD ngoài luồng hợp đồng', '', 3000);
       return;
     }
     if (this.currentUser) {
@@ -90,6 +139,8 @@ export class ForwardContractComponent implements OnInit {
         const dataAuthorize = {
           email: this.myForm.value.email,
           full_name: this.myForm.value.name,
+          phone: this.myForm.value.phone,
+          card_id: this.myForm.value.card_id,
           role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
           recipient_id: this.datas.recipientId,
           is_replace: true/*this.datas.is_content != 'forward_contract'*/
@@ -124,6 +175,32 @@ export class ForwardContractComponent implements OnInit {
       for (const participant of this.datas.dataContract.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
           if (this.myForm.value.email == recipient.email) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  checkCanSwitchContractPhone() {
+    if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
+      for (const participant of this.datas.dataContract.is_data_contract.participants) {
+        for (const recipient of participant.recipients) {
+          if (this.myForm.value.phone == recipient.phone) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  checkCanSwitchContractCardId() {
+    if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
+      for (const participant of this.datas.dataContract.is_data_contract.participants) {
+        for (const recipient of participant.recipients) {
+          if (this.myForm.value.card_id == recipient.card_id) {
             return false;
           }
         }

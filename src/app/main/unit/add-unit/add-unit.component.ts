@@ -7,7 +7,8 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import {roleList} from "../../../config/variable";
-import {parttern_input} from "../../../config/parttern"
+import {parttern_input} from "../../../config/parttern";
+import { parttern } from '../../../config/parttern';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
@@ -45,7 +46,7 @@ export class AddUnitComponent implements OnInit {
       this.addForm = this.fbd.group({
         nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         short_name: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
         email: this.fbd.control("", [Validators.required, Validators.email]),
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
         fax: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
@@ -71,7 +72,7 @@ export class AddUnitComponent implements OnInit {
           this.addForm = this.fbd.group({
             nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.input_form)]),
-            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
             email: this.fbd.control(data.email, [Validators.required, Validators.email]),
             phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
             fax: this.fbd.control(data.fax, Validators.pattern(parttern_input.input_form)),
@@ -109,7 +110,7 @@ export class AddUnitComponent implements OnInit {
       this.addForm = this.fbd.group({
         nameOrg: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
         short_name: this.fbd.control("", [Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
         email: this.fbd.control("", [Validators.required, Validators.email]),
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
         fax: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
@@ -144,7 +145,11 @@ export class AddUnitComponent implements OnInit {
           //lay id vai tro admin theo id to chuc
           this.roleService.getRoleByOrgId(data.id).subscribe(
             dataRoleByOrgId => {
+
               let roleAdmin = dataRoleByOrgId.entities.filter((p:any) => p.code == 'ADMIN');
+
+              console.log("roleAdmin ", roleAdmin);
+
               if(roleAdmin.length > 0){
 
                 //neu user chua co => them moi user va gan vai tro admin

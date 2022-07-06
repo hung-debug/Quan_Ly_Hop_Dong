@@ -334,6 +334,7 @@ export class ContractTemplateService {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
+            "card_id": "",
             "role": 2, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
@@ -348,6 +349,7 @@ export class ContractTemplateService {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
+            "card_id": "",
             "role": 3, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
@@ -362,6 +364,7 @@ export class ContractTemplateService {
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
+            "card_id": "",
             "role": 4, // loại tham gia: xem xét|điều phối| ký | văn thư
             "ordering": 1, // thứ tự thực hiện của người tham gia
             "status": 0, // Trạng thái chưa xử lý/ đã xử lý
@@ -387,6 +390,7 @@ export class ContractTemplateService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "",
             "role": 1, // người điều phối
             "ordering": 1,
             "status": 0,
@@ -400,6 +404,7 @@ export class ContractTemplateService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "",
             "role": 2, // người xem xét
             "ordering": 1,
             "status": 0,
@@ -413,6 +418,7 @@ export class ContractTemplateService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "",
             "role": 3, // người ký
             "ordering": 1,
             "status": 0,
@@ -426,6 +432,7 @@ export class ContractTemplateService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "",
             "role": 4, // văn thư
             "ordering": 1,
             "status": 0,
@@ -473,6 +480,7 @@ export class ContractTemplateService {
             "name": "",
             "email": "",
             "phone": "",
+            "card_id": "",
             "role": 3,
             "ordering": 1,
             "status": 0,
@@ -492,6 +500,7 @@ export class ContractTemplateService {
             "name": "Người ký 1",
             "email": "",
             "phone": "",
+            "card_id": "",
             "role": 3,
             "ordering": 1,
             "status": 0,

@@ -41,6 +41,7 @@ import { concatMap, delay, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { networkList } from "../../../../config/variable";
 import { HttpErrorResponse } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-consider-contract',
@@ -146,6 +147,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   heightText: any = 200;
   widthText: any = 200;
   loadingText: string = 'Đang xử lý...';
+  phoneOtp:any;
+ // isDateTime:any= this.datepipe.transform(new Date(), "dd/MM/yyyy hh:mm");
+  isDateTime:any;
+  userOtp:any;
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -160,7 +165,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     private spinner: NgxSpinnerService,
     private digitalSignatureService: DigitalSignatureService,
     private userService: UserService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public datepipe: DatePipe,
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
@@ -706,6 +712,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   async submitEvents(e: any) {
     let haveSignPKI = false;
     let haveSignImage = false;
+    const counteKYC = this.recipient?.sign_type.filter((p: any) => p.id == 5).length;
+    if(counteKYC > 0){
+      this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
+      return;
+    }
     if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng', '', 3000);
       return;
@@ -780,7 +791,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             for (const q of d.recipients) {
               if (q.email == this.currentUser.email && q.status == 1) {
                 id_recipient_signature = q.id;
-                phone_recipient_signature = q.phone;
+                this.phoneOtp = phone_recipient_signature = q.phone;
+                this.userOtp = q.name;
                 break
               }
             }
@@ -1109,11 +1121,25 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           }
         });
     }else{
+      
+      this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy hh:mm");
+      await of(null).pipe(delay(100)).toPromise();
+      const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
+      
+      let signI:any;
+      if (imageRender) {
+        const textSignB = await domtoimage.toPng(imageRender);
+        signI = textSignB.split(",")[1];
+      }
+      console.log(signI);
+      //console.log(this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'));
       signUpdatePayload = signUpdateTemp.filter(
         (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
         .map((item: any) => {
           return {
             otp: this.dataOTP.otp,
+            signInfo: signI,
+            processAt: this.datepipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss'Z'"),
             fields:[
               {
                 id: item.id,

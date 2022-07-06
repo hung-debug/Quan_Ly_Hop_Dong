@@ -1,6 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  SystemJsNgModuleLoader,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { LazyLoadEvent } from 'primeng/api';
+import { Table } from 'primeng/table';
 import { AdminPackService } from 'src/app/service/admin/admin-pack.service';
 import { AppService } from 'src/app/service/app.service';
 import { ToastService } from 'src/app/service/toast.service';
@@ -15,6 +22,7 @@ import { AdminFilterPackComponent } from './dialog/admin-filter-pack/admin-filte
   styleUrls: ['./admin-pack.component.scss'],
 })
 export class AdminPackComponent implements OnInit {
+  @ViewChild('myTable', { static: false }) table: Table;
   constructor(
     private appService: AppService,
     private dialog: MatDialog,
@@ -38,7 +46,6 @@ export class AdminPackComponent implements OnInit {
   numberOfContracts: any = '';
   status: any = '';
 
-  list: any[];
   listData: any[];
   cols: any[];
   files: any[];
@@ -56,7 +63,15 @@ export class AdminPackComponent implements OnInit {
 
   temp: any[];
 
+  totalRecords: number;
+  loading: boolean;
+  page: number = 0;
+
+  rows: number;
+
   ngOnInit(): void {
+    this.rows = 20;
+
     this.deletePackRole = this.checkRole(this.deletePackRole, 'QLGDV_05');
     this.editPackRole = this.checkRole(this.editPackRole, 'QLGDV_02');
     this.addPackRole = this.checkRole(this.addPackRole, 'QLGDV_01');
@@ -116,7 +131,7 @@ export class AdminPackComponent implements OnInit {
     });
 
     this.appService.setTitle('DANH SÁCH GÓI DỊCH VỤ');
-    this.searchPack();
+    // this.searchPack();
 
     this.cols = [
       { field: 'name', header: 'Tên gói', style: 'text-align: left;' },
@@ -172,27 +187,6 @@ export class AdminPackComponent implements OnInit {
   }
 
   array_empty: any = [];
-
-  searchPack() {
-    console.log('filter_name ', this.filter_name);
-    console.log('filter_code', this.filter_code);
-    this.adminPackService
-      .getPackList(
-        this.filter_name,
-        this.filter_code,
-        this.filter_totaBeforeVAT,
-        this.filter_totalAfterVAT,
-        this.filter_time,
-        this.filter_time,
-        this.filter_status
-      )
-      .subscribe((response) => {
-        this.temp = response.entities;
-        this.listData = this.temp;
-        console.log('res ', response.entities);
-        this.total = this.listData.length;
-      });
-  }
 
   addPack() {
     const data = {
@@ -268,11 +262,20 @@ export class AdminPackComponent implements OnInit {
   }
 
   autoSearch(event: any) {
-    this.listData = this.temp.filter(
-      (word) =>
-        word.name.includes(this.filterSearch) ||
-        word.code.includes(this.filterSearch)
-    );
+    this.table.first = 0;
+
+    console.log('event ', event);
+
+    this.table.first = 0;
+
+    setTimeout(() => {
+      this.adminPackService
+        .getPackList(this.filterSearch, '', '', '', '', '', '', 0, this.rows)
+        .subscribe((res) => {
+          this.listData = res.entities;
+          this.totalRecords = res.total_elements;
+        });
+    }, 1000);
   }
 
   search() {
@@ -296,5 +299,34 @@ export class AdminPackComponent implements OnInit {
       console.log('the close dialog');
       let is_data = result;
     });
+  }
+
+  loadPack(event: LazyLoadEvent) {
+    this.loading = true;
+
+    setTimeout(() => {
+      this.adminPackService
+        .getPackList(
+          this.filter_name,
+          this.filter_code,
+          this.filter_totaBeforeVAT,
+          this.filter_totalAfterVAT,
+          this.filter_time,
+          this.filter_number_contract,
+          this.filter_status,
+          this.page,
+          20
+        )
+        .subscribe((res) => {
+          this.temp = this.listData;
+
+          this.listData = res.entities;
+
+          this.totalRecords = res.total_elements;
+          this.loading = false;
+        });
+    }, 1000);
+
+    this.page = JSON.parse(JSON.stringify(event)).first / 20;
   }
 }

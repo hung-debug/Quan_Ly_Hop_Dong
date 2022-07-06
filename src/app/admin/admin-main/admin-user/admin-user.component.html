@@ -24,7 +24,17 @@
       </div>
     </div>
     <div class="row" style="padding-top: 20px;">
-      <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+      <!-- <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true"> -->
+        <p-table
+        [lazy]="true"
+        (onLazyLoad)="loadUser($event)"
+        [paginator]="true"
+        [value]="list"
+        [loading]="loading"
+        [totalRecords]="totalRecords"
+        [rows]="rows"
+        id="table"
+        >
         <ng-template pTemplate="header" let-columns>
           <tr>
               <th *ngFor="let col of cols" [style]='col.style'>
