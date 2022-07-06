@@ -657,19 +657,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }
 
     if (count == 0) {
-      if (this.getCheckDuplicatePhone('allCheckEmail', this.datasForm.is_determine_clone)) {
-        this.getNotificationValid("Số điện thoại không được trùng nhau giữa các bên tham gia!");
-        return false
-      }
-    }
-
-    if (count == 0) {
-      if (this.getCheckDuplicateCardId('allCheckEmail', this.datasForm.is_determine_clone)) {
-        this.getNotificationValid("CMT/CCCD không được trùng nhau giữa các bên tham gia!");
-        return false
-      }
-    }
-    if (count == 0) {
       //valid ordering cac ben doi tac - to chuc
       let isOrderingPerson_exception = this.datasForm.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
       let isOrdering_not_exception = this.datasForm.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3));
