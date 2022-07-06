@@ -234,24 +234,82 @@ export class AdminAddUnitComponent implements OnInit {
 
     //truong hop sua ban ghi
     if (dataForm.id != null) {
+
+      console.log('vao truong hop sua ban ghi');
+
       this.adminUnitService.updateUnitt(dataForm).subscribe(
         (data) => {
+
+          console.log("data ", data);
+
           if (data.id != null) {
-            console.log('vao truong hop sua ban ghi');
-            console.log(data.status);
+            if(data.codeInfo == 1) {
+              let roleArrConvert: any = [];
 
-            this.toastService.showSuccessHTMLWithTimeout(
-              'Cập nhật thành công!',
-              '',
-              3000
-            );
-            this.router
-              .navigateByUrl('/', { skipLocationChange: true })
-              .then(() => {
-                this.router.navigate(['admin-main/unit']);
+              roleList.forEach((key: any, v: any) => {
+                key.items.forEach((keyItem: any, vItem: any) => {
+                  let jsonData = {code: keyItem.value, status: 1};
+                  roleArrConvert.push(jsonData);
+                });
               });
+              
+              const dataRoleIn = {
+                name: 'Admin',
+                code: 'ADMIN',
+                selectedRole: roleArrConvert,
+                organization_id: data.id
+              }
+              
+              this.adminUnitService.addRoleByOrg(dataRoleIn).subscribe(
+                dataRole => {
+                  //this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
+                  console.log(dataRole);
+                  //them nguoi dung
+                  const dataUserIn = {
+                    name: "Admin",
+                    email: data.email,
+                    phone: data.phone,
+                    organizationId: data.id,
+                    role: dataRole.id,
+                    status: 1,
+                    sign_image: []
+                  }
+ 
+                  this.adminUnitService.addUser(dataUserIn).subscribe(
+                    dataUser => {
+                      console.log(dataUser);
+                      this.toastService.showSuccessHTMLWithTimeout('Cập nhật tổ chức thành công!', "", 3000);
+                      this.dialogRef.close();
+                      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                        this.router.navigate(['/admin-main/unit']);
+                      });
+                    }, error => {
+                      this.toastService.showErrorHTMLWithTimeout('Cập nhật người dùng admin thất bại', "", 3000);
+                    }
+                  )
+                }, error => {
+                  this.toastService.showErrorHTMLWithTimeout('Cập nhật vai trò cho tổ chức thất bại', "", 3000);
+                }
+              )
+            } else if(data.codeInfo == 2) {
 
-            this.dialog.closeAll();
+            } else if(data.codeInfo == 3) {
+              this.toastService.showErrorHTMLWithTimeout('Email đã tồn tại trong tổ chức khác', "", 3000);
+            }
+            // console.log(data.status);
+
+            // this.toastService.showSuccessHTMLWithTimeout(
+            //   'Cập nhật thành công!',
+            //   '',
+            //   3000
+            // );
+            // this.router
+            //   .navigateByUrl('/', { skipLocationChange: true })
+            //   .then(() => {
+            //     this.router.navigate(['admin-main/unit']);
+            //   });
+
+            // this.dialog.closeAll();
           } else {
             if (data.errors[0].code == 1001) {
               this.toastService.showErrorHTMLWithTimeout(
