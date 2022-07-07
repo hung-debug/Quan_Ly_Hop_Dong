@@ -14,11 +14,9 @@
           filterBy="code"
           [filter]="true"
           [showClear]="true"
-
           [options]="listDichVu"
           optionLabel="code"
           optionValue="code"
-
           (onChange)="onChangeMaGoi($event)"
           formControlName="packCode"
         >
@@ -219,7 +217,7 @@
           formControlName="paymentDate"
           [maxDate]="maxPaymentDate"
           [(ngModel)]="paymentDate"
-          (onSelect) = "onChangePaymentDate($event)"
+          (onSelect)="onChangePaymentDate($event)"
         >
         </p-calendar>
         <div *ngIf="submitted && f.paymentDate.errors" class="invalid">
@@ -236,16 +234,29 @@
           {{ "Ngày bắt đầu" | translate }}
           <span class="required-title">*</span>
         </div>
-        <p-calendar
-          appendTo="body"
-          id="created_at"
-          [showIcon]="true"
-          dateFormat="dd/mm/yy"
-          #created_at
-          formControlName="startDate"
-          (onSelect) = "onChangeStartDate($event)"
-          [(ngModel)]="startDate"
-        ></p-calendar>
+
+        <div *ngIf="this.flagTime === 0 || this.flagTime === 1">
+          <p-calendar
+            appendTo="body"
+            id="created_at"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            #created_at
+            formControlName="startDate"
+            (onSelect)="onChangeStartDate($event)"
+            [(ngModel)]="startDate"
+          ></p-calendar>
+        </div>
+
+        <div class="input-data fff" *ngIf="this.flagTime === 2">
+          <input
+            type="text"
+            formControlName="startDate"
+            value="{{ startDate }}"
+            readonly
+          />
+        </div>
+
         <div *ngIf="submitted && f.startDate.errors" class="invalid">
           <div *ngIf="f.startDate.errors.required">
             {{ "Ngày bắt đầu không được để trống" | translate }}

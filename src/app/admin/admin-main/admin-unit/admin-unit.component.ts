@@ -351,7 +351,6 @@ export class AdminUnitComponent implements OnInit {
   }
 
   autoSearch(event: any) {
-
     setTimeout(() => {
       this.table.first = 0;
 
