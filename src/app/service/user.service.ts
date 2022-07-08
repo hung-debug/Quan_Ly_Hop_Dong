@@ -33,6 +33,8 @@ export class UserService {
   resetPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/recover`;
   resetPasswordTokenUrl:any = `${environment.apiUrl}/api/v1/customers/changePassword`;
   addUserUrl:any = `${environment.apiUrl}/api/v1/customers`;
+  
+  
   updateUserUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   listUserUrl:any = `${environment.apiUrl}/api/v1/customers/search`;
