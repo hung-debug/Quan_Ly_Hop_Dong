@@ -17,7 +17,13 @@ export class AdminUnitService {
 
   addRoleUrl: any = `${environment.apiUrl}/api/v1/internal/customers/roles`;
 
-  addUserUrl: any = `${environment.apiUrl}/api/v1/internal/customers`;
+  addUserUrl: any = `${environment.apiUrl}/api/v1/internal/customers/`;
+
+  updateUserUrl: any = `${environment.apiUrl}/api/v1/customers/`;
+
+  getUserByEmailUrl:any = `${environment.apiUrl}/api/v1/customers/get-by-email`;
+
+  getRoleByOrgIdUrl: any = `${environment.apiUrl}/api/v1/customers/roles/get-by-organization/`;
 
   constructor(private http: HttpClient, public datepipe: DatePipe) {}
 
@@ -290,4 +296,59 @@ export class AdminUnitService {
     console.log(body);
     return this.http.post<User>(this.addUserUrl, body, { headers: headers });
   }
+
+  updateUser(datas: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    if(datas.birthday != null){
+        datas.birthday = this.datepipe.transform(datas.birthday, 'yyyy/MM/dd');
+    }
+    console.log("update user ",datas);
+
+    const body = JSON.stringify({
+      name: datas.name,
+      email: datas.email,
+      phone: datas.phone,
+      organization_id: datas.organizationId,
+      birthday: datas.birthday,
+      status: datas.status,
+      role_id: datas.role,
+
+      sign_image: datas.sign_image,
+
+      phone_sign: datas.phoneKpi,
+      phone_tel: datas.networkKpi,
+
+      hsm_name: datas.nameHsm,
+
+      organization_change: datas.organization_change
+    });console.log(headers);
+    console.log(body);
+    return this.http.put<User>(this.updateUserUrl + datas.id, body, {'headers': headers});
+  }
+
+  getUserByEmail(email:any){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    const body = JSON.stringify({
+      email: email
+    });
+    console.log(headers);
+    return this.http.post<User>(this.getUserByEmailUrl, body, {'headers': headers});
+  }
+
+  getRoleByOrgId(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getRoleByOrgIdUrl + id, {headers}).pipe();
+  }
+
+
+  
 }
