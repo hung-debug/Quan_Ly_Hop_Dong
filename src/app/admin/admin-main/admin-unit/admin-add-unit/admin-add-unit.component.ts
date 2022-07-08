@@ -200,7 +200,7 @@ export class AdminAddUnitComponent implements OnInit {
   }
 
   convertStatus(status: any): any {
-    if (status == 'IN_ACTIVE') {
+    if (status == 'IN_ACTIVE' || status == 'NOT_ACTIVATED') {
       status = 0;
     } else if (status == 'ACTIVE') {
       console.log('status 0');
