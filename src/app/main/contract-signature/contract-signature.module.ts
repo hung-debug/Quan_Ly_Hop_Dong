@@ -48,6 +48,7 @@ import { DisplayDigitalSignatureComponent } from './display-digital-signature/di
 import {TextSignatureImageComponent} from './components/text-signature-image/text-signature-image.component';
 import { ContractSignatureComponent } from './contract-signature.component';
 import { DisplaySignatureImageComponent } from './display-signature-image/display-signature-image.component';
+import { NotificationExpireComponent } from './components/contract-coordination/shared/model/dialog/notification-expire/notification-expire.component';
 
 export const contractSignatureRoutes: Routes = [
   { path: 'consider/:id', component: ConsiderContractComponent },
@@ -86,7 +87,8 @@ export const contractSignatureRoutes: Routes = [
     FilterListDialogComponent,
     DisplayDigitalSignatureComponent,
     TextSignatureImageComponent,
-    DisplaySignatureImageComponent
+    DisplaySignatureImageComponent,
+    NotificationExpireComponent
     // AddContractComponent
   ],
   imports: [
