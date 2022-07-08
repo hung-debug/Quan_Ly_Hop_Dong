@@ -397,11 +397,6 @@ export class DetermineSignerComponent implements OnInit {
               count++;
               break;
             }
-            if (!dataArrPartner[j].recipients[k].email) {
-              this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác!")
-              count++;
-              break;
-            }
 
             if (dataArrPartner[j].recipients[k].sign_type.length == 0 && [3, 4].includes(dataArrPartner[j].recipients[k].role)) {
               this.getNotificationValid("Vui lòng chọn loại ký" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!")
@@ -426,46 +421,35 @@ export class DetermineSignerComponent implements OnInit {
               isPartnerOriganzationDuplicate = [];
             }
 
-            if (!dataArrPartner[j].recipients[k].phone && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
-              this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!")
-              count++;
-              break;
-            }
+            // if (!dataArrPartner[j].recipients[k].phone && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
+            //   this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác!")
+            //   count++;
+            //   break;
+            // }
 
-            if (!dataArrPartner[j].recipients[k].card_id && dataArrPartner[j].recipients[k].role == 3 && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
-              this.getNotificationValid("Vui lòng CMT/CCCD của" + this.getNameObject(3) + "tổ chức của đối tác!")
-              count++;
-              break;
-            }
-
-            if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email)) {
-              this.getNotificationValid("Email của" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác không hợp lệ!")
-              count++;
-              break;
-            }
+            // if (!dataArrPartner[j].recipients[k].card_id && dataArrPartner[j].recipients[k].role == 3 && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
+            //   this.getNotificationValid("Vui lòng CMT/CCCD của" + this.getNameObject(3) + "tổ chức của đối tác!")
+            //   count++;
+            //   break;
+            // }
 
             // valid phone number
-            if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
-              this.getNotificationValid("Số điện thoại" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác không hợp lệ!")
-              count++;
-              break;
-            }
+            // if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
+            //   this.getNotificationValid("Số điện thoại" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác không hợp lệ!")
+            //   count++;
+            //   break;
+            // }
 
             // valid cccd number
-            if (dataArrPartner[j].recipients[k].card_id && !this.pattern.card_id.test(dataArrPartner[j].recipients[k].card_id)) {
-              this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác không hợp lệ!")
-              count++;
-              break;
-            }
+            // if (dataArrPartner[j].recipients[k].card_id && !this.pattern.card_id.test(dataArrPartner[j].recipients[k].card_id)) {
+            //   this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác không hợp lệ!")
+            //   count++;
+            //   break;
+            // }
 
           } else if (dataArrPartner[j].type == 3) {
             if (!dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3) {
               this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
-              count++;
-              break;
-            }
-            if (!dataArrPartner[j].recipients[k].email && dataArrPartner[j].recipients[k].role == 3) {
-              this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân!")
               count++;
               break;
             }
@@ -493,36 +477,31 @@ export class DetermineSignerComponent implements OnInit {
               isPartnerCaNhanDuplicate = [];
             }
 
-            if (!dataArrPartner[j].recipients[k].phone && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
-              this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!")
-              count++;
-              break;
-            }
+            // if (!dataArrPartner[j].recipients[k].phone && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
+            //   this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân!")
+            //   count++;
+            //   break;
+            // }
 
-            if (!dataArrPartner[j].recipients[k].card_id && dataArrPartner[j].recipients[k].role == 3 && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
-              this.getNotificationValid("Vui lòng CMT/CCCD của" + this.getNameObject(3) + "tổ chức của đối tác cá nhân!")
-              count++;
-              break;
-            }
+            // if (!dataArrPartner[j].recipients[k].card_id && dataArrPartner[j].recipients[k].role == 3 && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
+            //   this.getNotificationValid("Vui lòng CMT/CCCD của" + this.getNameObject(3) + "tổ chức của đối tác cá nhân!")
+            //   count++;
+            //   break;
+            // }
 
-            if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email) && dataArrPartner[j].recipients[k].role == 3) {
-              this.getNotificationValid("Email" + this.getNameObject(dataArrPartner[j].recipients[k].role) + " của đối tác cá nhân không hợp lệ!")
-              count++;
-              break;
-            }
             // valid phone number
-            if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
-              this.getNotificationValid("Số điện thoại" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân không hợp lệ!")
-              count++;
-              break;
-            }
+            // if (dataArrPartner[j].recipients[k].phone && !this.pattern.phone.test(dataArrPartner[j].recipients[k].phone)) {
+            //   this.getNotificationValid("Số điện thoại" + this.getNameObject(dataArrPartner[j].recipients[k].role) + "của đối tác cá nhân không hợp lệ!")
+            //   count++;
+            //   break;
+            // }
 
             // valid cccd number
-            if (dataArrPartner[j].recipients[k].card_id && !this.pattern.card_id.test(dataArrPartner[j].recipients[k].card_id)) {
-              this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
-              count++;
-              break;
-            }
+            // if (dataArrPartner[j].recipients[k].card_id && !this.pattern.card_id.test(dataArrPartner[j].recipients[k].card_id)) {
+            //   this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
+            //   count++;
+            //   break;
+            // }
           }
         }
       }
