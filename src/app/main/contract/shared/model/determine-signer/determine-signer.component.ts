@@ -1288,7 +1288,8 @@ export class DetermineSignerComponent implements OnInit {
       this.contractService.deleteParticipantContract(item.id).subscribe((res: any) => {
         if (res.success == true) {
           this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
-          this.datas.is_determine_clone.splice(index, 1);
+          this.datas.is_determine_clone = this.datas.is_determine_clone.filter((p: any) => p.id != item.id);
+          // this.datas.is_determine_clone.splice(index + 1, 1);
         } else {
           this.toastService.showErrorHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");
         }
@@ -1301,7 +1302,7 @@ export class DetermineSignerComponent implements OnInit {
       })
     } else {
       // this.datas.is_determine_clone.splice(index + 1, 1);
-      this.datas.is_determine_clone.splice(index, 1);
+      this.datas.is_determine_clone = this.datas.is_determine_clone.filter((p: any) => p.id != item.id);
       this.onItemSelect(null);
       // this.datas.is_determine_clone.forEach((res: any, index: number) => {
       //   res.ordering = index + 1;
