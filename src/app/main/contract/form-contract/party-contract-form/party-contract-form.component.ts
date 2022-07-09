@@ -1241,6 +1241,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       this.contractService.deleteParticipantContract(item.id).subscribe((res: any) => {
         if (res.success == true) {
           this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
+          this.datasForm.is_determine_clone = this.datasForm.is_determine_clone.filter((p: any) => p.id != item.id);
+          // this.datasForm.is_determine_clone.splice(index + 1, 1);
         } else {
           this.toastService.showErrorHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");
         }
@@ -1252,9 +1254,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         this.onItemSelect(null);
       })
     }
-
-    this.datasForm.is_determine_clone.splice(index + 1, 1);
-    this.onItemSelect(null);
     // this.datasForm.is_determine_clone.forEach((res: any, index: number) => {
     //   res.ordering = index + 1;
     // })
