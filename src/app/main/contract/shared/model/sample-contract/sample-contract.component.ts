@@ -330,7 +330,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             } else {
               if (element.id_have_data) {
-                this.removeDataSignChange(element.id_have_data);
+                // this.removeDataSignChange(element.id_have_data);
               }
             }
           })
