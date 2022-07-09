@@ -1302,7 +1302,7 @@ export class DetermineSignerComponent implements OnInit {
       })
     } else {
       // this.datas.is_determine_clone.splice(index + 1, 1);
-      this.datas.is_determine_clone = this.datas.is_determine_clone.filter((p: any) => p.id != item.id);
+      this.datas.is_determine_clone = this.datas.is_determine_clone.filter((p: any) => p.ordering != item.ordering);
       this.onItemSelect(null);
       // this.datas.is_determine_clone.forEach((res: any, index: number) => {
       //   res.ordering = index + 1;
