@@ -303,7 +303,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // Lọc dữ liệu không bị thay đổi
     // (val.recipient_id as any) == (data.id as any) &&
     let isContractSign: any[] = [];
-    let isContractNotSign = [];
     // dataContractSignClone = dataContractUserSign.filter(val => {
     //   !dataDetermine.some((data: any) =>
     //     ((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
@@ -327,13 +326,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           //@ts-ignore
           (d.name === data.name) && ((d.email ? d.email : d.recipient.email) === data.email)) {
           isContractSign.push(d);
-        } else {
-          isContractNotSign.push(d);
         }
       }
     }
 
-    console.log(isContractSign, isContractNotSign);
+    console.log(isContractSign);
 
     // Get những dữ liệu bị thay đổi
     let dataDiffirent: any[] = [];
@@ -344,13 +341,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //     (val.name == data.name && val.email == data.email) || !val.email));
     //   dataDiffirent = dataContractUserSign.filter((val: any) => isContractSign.some((p: any) => val.recipient_id != p.recipient_id));
       for (const d of dataContractUserSign) {
-        if (isContractSign.some((p: any) => p.recipient_id !== d.recipient_id)) {
+        if (!isContractSign.some((p: any) => p.recipient_id == d.recipient_id)) {
           dataDiffirent.push(d);
         }
       }
     }
-
-
 
     // xoa nhung du lieu doi tuong bi thay doi
     if (dataDiffirent.length > 0) {
