@@ -226,7 +226,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (res.type == 1) {
               res['sign_unit'] = 'text';
             }
-            if (res.type == 2 || res.type == 5) {
+            if (res.type == 2) {
               res['sign_unit'] = 'chu_ky_anh'
             }
             if (res.type == 3) {
@@ -300,7 +300,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
 
-    // Lọc dữ liệu không bị thay đổi
     // (val.recipient_id as any) == (data.id as any) &&
     let isContractSign: any[] = [];
     // dataContractSignClone = dataContractUserSign.filter(val => {
@@ -325,12 +324,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
           //@ts-ignore
           (d.name === data.name) && ((d.email ? d.email : d.recipient.email) === data.email)) {
-          isContractSign.push(d);
+          isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
         }
       }
     }
-
-    console.log(isContractSign);
 
     // Get những dữ liệu bị thay đổi
     let dataDiffirent: any[] = [];
@@ -342,7 +339,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //   dataDiffirent = dataContractUserSign.filter((val: any) => isContractSign.some((p: any) => val.recipient_id != p.recipient_id));
       for (const d of dataContractUserSign) {
         if (!isContractSign.some((p: any) => p.recipient_id == d.recipient_id)) {
-          dataDiffirent.push(d);
+          dataDiffirent.push(d); // mảng chứa dữ liệu bị thay đổi giá trị (name, email, sign_type)
         }
       }
     }
@@ -366,11 +363,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           /*
           end
           */
-          // res.sign_config = res.sign_config.filter((val: any) => isContractSign.some((data: any) => (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
-          res.sign_config = isContractSign;
+          res.sign_config = res.sign_config.filter((val: any) => isContractSign.some((data: any) => (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any) && val.sign_unit == data.sign_unit));
+          // res.sign_config = isContractSign;
           res.sign_config.forEach((items: any) => {
             items.id = items.id + '1';
           })
+        }
+      })
+    } else if (isContractSign.length == 0) {
+      this.datas.contract_user_sign.forEach((res: any) => {
+        if (res.sign_config.length > 0) {
+          res.sign_config.forEach((element: any) => {
+            if (element.id_have_data) {
+              this.removeDataSignChange(element.id_have_data).then();
+            }
+          })
+          res.sign_config = [];
         }
       })
     }
@@ -382,6 +390,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  // xoá dữ liệu bị thay đổi
   async removeDataSignChange(data: any) {
     this.spinner.show();
     await this.contractService.deleteInfoContractSignature(data).toPromise().then((res: any) => {
@@ -662,7 +671,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       //     element.is_disable = true;
       //   else element.is_disable = false;
       // } else {
-      if (this.convertToSignConfig().some((p: any) => (p.email == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && p.email && p.sign_unit == 'so_tai_lieu'))) {
+      if (this.convertToSignConfig().some((p: any) => ((p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && (p.recipient ? p.recipient.email : p.email) && p.sign_unit == 'so_tai_lieu'))) {
         if (isSignType != 'text') {
           element.is_disable = true;
         }
