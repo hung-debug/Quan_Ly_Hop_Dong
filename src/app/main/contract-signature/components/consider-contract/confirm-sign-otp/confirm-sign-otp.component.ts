@@ -53,8 +53,9 @@ export class ConfirmSignOtpComponent implements OnInit {
     if (this.addForm.invalid) {
       return;
     }
-    // this.dialogRef.close(this.addForm.value.otp);
-    this.confirmOtpForm.emit(this.addForm.value.otp);
+    this.dialogRef.close(this.addForm.value.otp);
+    // console.log(this.addForm.value.otp);
+    // this.confirmOtpForm.emit(this.addForm.value.otp);
   }
 
   countTimeOtp() {

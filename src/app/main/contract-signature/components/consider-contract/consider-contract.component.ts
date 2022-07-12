@@ -1522,21 +1522,22 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
-    // dialogRef.afterClosed().subscribe(async (result: any) => {
-    //   if(result){
-    //     this.dataOTP = {
-    //       otp: result
-    //     }
-    //     await this.signContractSubmit();
-    //   }
-    // })
+    dialogRef.afterClosed().subscribe(async (result: any) => {
+      if(result){
+        this.dataOTP = {
+          otp: result
+        }
+        await this.signContractSubmit();
+      }
+    })
   }
 
-  async confirmOtp(otp:any) {
+  confirmOtp(otp:any) {
+    console.log(otp);
     this.dataOTP = {
            otp: otp
     }
-    await this.signContractSubmit();
+    this.signContractSubmit();
   }
 
   prepareInfoSignUsbToken(page: any, heightPage: any) {
