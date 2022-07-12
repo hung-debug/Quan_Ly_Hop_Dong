@@ -1,9 +1,9 @@
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
 import {
-  type_signature,
-  type_signature_doc,
-  type_signature_personal_party,
+  type_signature_template,
+  type_signature_doc_template,
+  type_signature_personal_party_template,
   variable
 } from "../../../../../config/variable";
 import { parttern } from "../../../../../config/parttern";
@@ -53,9 +53,9 @@ export class DetermineSignerComponent implements OnInit {
   arrSearch: any = [];
 
   //dropdown
-  signTypeList: Array<any> = type_signature;
-  signTypeList_personal_partner: Array<any> = type_signature_personal_party;
-  signType_doc: Array<any> = type_signature_doc;
+  signTypeList: Array<any> = type_signature_template;
+  signTypeList_personal_partner: Array<any> = type_signature_personal_party_template;
+  signType_doc: Array<any> = type_signature_doc_template;
 
   dropdownSignTypeSettings: any = {};
   getNameIndividual: string = "";
