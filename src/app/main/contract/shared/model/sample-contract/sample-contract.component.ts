@@ -217,7 +217,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataNotPosition: any[] = [];
     this.datas.is_determine_clone.forEach((element: any) => {
       element.recipients.forEach((item: any) => {
-        // let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient.email == item.email && p.recipient_id == item.id)[0];
+        let data_duplicate = this.datas.is_data_object_signature.filter((p: any) => p.recipient_id == item.id)[0];
         if (item.fields && item.fields.length && item.fields.length > 0) {
           item.fields.forEach((res: any) => {
             res['id_have_data'] = res.id;
@@ -236,7 +236,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               res['sign_unit'] = 'so_tai_lieu'
             }
             // res.name = res.recipient.name;
-            // res.email = res.recipient.email;
+            res.recipient.email = data_duplicate ? data_duplicate.recipient.email : res.recipient.email;
             dataPosition.push(res);
           })
 
@@ -337,6 +337,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //     (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4)))) &&
     //     (val.name == data.name && val.email == data.email) || !val.email));
     //   dataDiffirent = dataContractUserSign.filter((val: any) => isContractSign.some((p: any) => val.recipient_id != p.recipient_id));
+      console.log(isContractSign, dataContractUserSign);
       for (const d of dataContractUserSign) {
         if (!isContractSign.some((p: any) => p.recipient_id == d.recipient_id)) {
           dataDiffirent.push(d); // mảng chứa dữ liệu bị thay đổi giá trị (name, email, sign_type)
