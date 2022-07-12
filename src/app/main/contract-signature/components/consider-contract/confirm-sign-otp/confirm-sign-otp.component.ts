@@ -1,4 +1,4 @@
-import {Component, ElementRef, Inject, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";
@@ -22,6 +22,9 @@ export class ConfirmSignOtpComponent implements OnInit {
   count = 120;
   isSentOpt = false;
   submitted = false;
+
+  @Output() confirmOtpForm = new EventEmitter();
+
   get f() { return this.addForm.controls; }
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {},
@@ -50,7 +53,8 @@ export class ConfirmSignOtpComponent implements OnInit {
     if (this.addForm.invalid) {
       return;
     }
-    this.dialogRef.close(this.addForm.value.otp);
+    // this.dialogRef.close(this.addForm.value.otp);
+    this.confirmOtpForm.emit(this.addForm.value.otp);
   }
 
   countTimeOtp() {

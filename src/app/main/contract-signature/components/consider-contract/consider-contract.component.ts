@@ -48,7 +48,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './consider-contract.component.html',
   styleUrls: ['./consider-contract.component.scss']
 })
-export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewInit {  
   datas: any;
   data_contract: any;
   data_coordinates: any;
@@ -1130,7 +1130,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         const textSignB = await domtoimage.toPng(imageRender);
         signI = textSignB.split(",")[1];
       }
-      console.log(signI);
+      //console.log(signI);
       //console.log(this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'));
       signUpdatePayload = signUpdateTemp.filter(
         (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
@@ -1522,14 +1522,21 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(async (result: any) => {
-      if(result){
-        this.dataOTP = {
-          otp: result
-        }
-        await this.signContractSubmit();
-      }
-    })
+    // dialogRef.afterClosed().subscribe(async (result: any) => {
+    //   if(result){
+    //     this.dataOTP = {
+    //       otp: result
+    //     }
+    //     await this.signContractSubmit();
+    //   }
+    // })
+  }
+
+  async confirmOtp(otp:any) {
+    this.dataOTP = {
+           otp: otp
+    }
+    await this.signContractSubmit();
   }
 
   prepareInfoSignUsbToken(page: any, heightPage: any) {
