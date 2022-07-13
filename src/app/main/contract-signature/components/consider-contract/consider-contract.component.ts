@@ -1514,7 +1514,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       is_content: 'forward_contract',
       recipient_id: id_recipient_signature,
       phone: phone_recipient_signature,
-      contract_id: this.datas.is_data_contract.id
+      name: this.userOtp,
+      contract_id: this.datas.is_data_contract.id,
+      datas: this.datas,
+      currentUser: this.currentUser,
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -1522,14 +1525,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(async (result: any) => {
-      if(result){
-        this.dataOTP = {
-          otp: result
-        }
-        await this.signContractSubmit();
-      }
-    })
+    // dialogRef.afterClosed().subscribe(async (result: any) => {
+    //   if(result){
+    //     this.dataOTP = {
+    //       otp: result
+    //     }
+    //     await this.signContractSubmit();
+    //   }
+    // })
   }
 
   confirmOtp(otp:any) {
