@@ -1471,7 +1471,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 name: element.name,
                 signature_party: element.signature_party,
                 recipient_id: element.recipient_id,
-                email: element.email,
+                email: element.email ? element.email : element.recipient.email,
                 sign_unit: element.sign_unit
               }
               if (element.signature_party == "organization" || element.is_type_party == 1)
