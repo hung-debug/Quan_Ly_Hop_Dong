@@ -113,9 +113,9 @@ export var paidStatusList = [
 ]
 
 export var fileCeCaOptions = [
-  {id: 0, name:'Không đẩy HĐ nào'},
-  {id: 1, name: 'Đẩy toàn bộ hợp đồng'},
-  {id: 2, name: 'Tuỳ biến'}
+  {id: 'NONE', name:'Không đẩy HĐ nào'},
+  {id: 'ALL', name: 'Đẩy toàn bộ hợp đồng'},
+  {id: 'SELECTION', name: 'Tuỳ biến'}
 ]
 
 // export var roleList = [

@@ -12,6 +12,7 @@ import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
+import { isConstructorDeclaration } from 'typescript';
 import { parttern_input } from '../../../../config/parttern';
 import { fileCeCaOptions, roleList } from '../../../../config/variable';
 @Component({
@@ -86,6 +87,9 @@ export class AdminAddUnitComponent implements OnInit {
         Validators.required,
         Validators.pattern(parttern_input.input_form),
       ]),
+      fileCeCa: this.fbd.control('',[
+        Validators.required
+      ])
     });
   }
 
@@ -148,6 +152,10 @@ export class AdminAddUnitComponent implements OnInit {
               Validators.required,
               Validators.pattern(parttern_input.input_form),
             ]),
+            fileCeCa: this.fbd.control(
+              this.convertFileCeCa(data.ceCAPushMode),
+              Validators.required
+            ),
           });
         },
         (error) => {
@@ -198,8 +206,22 @@ export class AdminAddUnitComponent implements OnInit {
           Validators.required,
           Validators.pattern(parttern_input.input_form),
         ]),
+        fileCeCa: this.fbd.control('', [
+          Validators.required,
+        ]),
       });
     }
+  }
+  convertFileCeCa(ceCAPushMode: any): any {
+    if ((ceCAPushMode = fileCeCaOptions[0].id)) {
+      ceCAPushMode = fileCeCaOptions[0];
+    } else if ((ceCAPushMode = fileCeCaOptions[1].id)) {
+      ceCAPushMode = fileCeCaOptions[1];
+    } else if ((ceCAPushMode = fileCeCaOptions[2].id)) {
+      ceCAPushMode = fileCeCaOptions[2];
+    }
+
+    return ceCAPushMode;
   }
 
   convertStatus(status: any): any {
@@ -233,6 +255,7 @@ export class AdminAddUnitComponent implements OnInit {
       taxCode: this.addForm.value.tax_code,
       position: this.addForm.value.position,
       address: this.addForm.value.address,
+      ceCAPushMode: this.addForm.value.fileCeCa,
     };
 
     //truong hop sua ban ghi
@@ -313,8 +336,7 @@ export class AdminAddUnitComponent implements OnInit {
                 (responseEmail) => {
                   this.adminUnitService.getRoleByOrgId(data.id).subscribe(
                     (dataRoleByOrgId) => {
-
-                      console.log("data role by org id ", dataRoleByOrgId);
+                      console.log('data role by org id ', dataRoleByOrgId);
 
                       let roleAdmin = dataRoleByOrgId.entities.filter(
                         (p: any) => p.code == 'ADMIN'

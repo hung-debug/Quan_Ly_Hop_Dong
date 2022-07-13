@@ -132,7 +132,10 @@ export class AdminUnitService {
       size: datas.size,
       phone: datas.phone,
       status: datas.status,
+      ceCAPushMode: datas.ceCAPushMode.id,
     });
+
+    console.log("body ", body);
 
     return this.http.put<any>(this.addUnitUrl + datas.id, body, {
       headers: headers,
@@ -214,6 +217,7 @@ export class AdminUnitService {
       size: datas.size,
       phone: datas.phone,
       status: datas.status,
+      ceCAPushMode: datas.ceCAPushMode.id,
     });
 
     console.log('body unit');
