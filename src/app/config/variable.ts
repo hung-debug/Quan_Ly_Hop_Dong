@@ -112,6 +112,12 @@ export var paidStatusList = [
   {id:'PAID', name:'Đã thanh toán'}
 ]
 
+export var fileCeCaOptions = [
+  {id: 0, name:'Không đẩy HĐ nào'},
+  {id: 1, name: 'Đẩy toàn bộ hợp đồng'},
+  {id: 2, name: 'Tuỳ biến'}
+]
+
 // export var roleList = [
 //   {
 //     //Nhóm chức năng quản lý hợp đồng

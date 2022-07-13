@@ -120,7 +120,8 @@ export class UserService {
       representatives: datas.representatives,
       position: datas.position,
       email: datas.email,
-      phone: datas.phone
+      phone: datas.phone,
+      ceCAPushMode: datas.ceCAPushMode,
     });
 
     return this.http.post<any>(this.signupUrl, body, {'headers': headers});

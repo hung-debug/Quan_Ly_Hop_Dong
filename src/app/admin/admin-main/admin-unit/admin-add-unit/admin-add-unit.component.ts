@@ -13,7 +13,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 import { parttern_input } from '../../../../config/parttern';
-import { roleList } from '../../../../config/variable';
+import { fileCeCaOptions, roleList } from '../../../../config/variable';
 @Component({
   selector: 'app-admin-add-unit',
   templateUrl: './admin-add-unit.component.html',
@@ -31,6 +31,7 @@ export class AdminAddUnitComponent implements OnInit {
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
+  fileCeCaOptions: Array<any> = [];
   submitted = false;
   get f() {
     return this.addForm.controls;
@@ -89,6 +90,8 @@ export class AdminAddUnitComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.fileCeCaOptions = fileCeCaOptions;
+
     this.datas = this.data;
 
     console.log('data ');

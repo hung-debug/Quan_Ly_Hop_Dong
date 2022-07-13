@@ -261,7 +261,7 @@ export class AdminUnitComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddUnitComponent, {
-      width: '580px',
+      width: '600px',
       backdrop: 'static',
       keyboard: false,
       data,
@@ -279,7 +279,7 @@ export class AdminUnitComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddUnitComponent, {
-      width: '580px',
+      width: '600px',
       backdrop: 'static',
       keyboard: false,
       data,

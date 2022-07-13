@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { fileCeCaOptions } from 'src/app/config/variable';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import {parttern_input} from "../../config/parttern";
@@ -18,6 +19,9 @@ export class SignupComponent implements OnInit {
 
   addForm: FormGroup;
   submitted = false;
+  fileCeCaOptions: Array<any> = [];
+
+
   get f() { return this.addForm.controls; }
 
   constructor(private modalService: NgbModal,
@@ -52,16 +56,28 @@ export class SignupComponent implements OnInit {
       position: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       email: this.fbd.control("", [Validators.required, Validators.email]),
       phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+      fileCeCa: this.fbd.control("", [Validators.required])
     });
+
+    this.fileCeCaOptions = fileCeCaOptions;
   }   
 
   onSubmit() {
+
+    console.log("inv ", this.addForm.invalid);
+
+    console.log("fileCeCa ", this.addForm.value.fileCeCa.name);
+
+      // stop here if form is invalid
+      if (this.addForm.invalid) {
+        return;
+      }
+
+    console.log("sub ", this.submitted);
+
     this.submitted = true;
-    // stop here if form is invalid
-    if (this.addForm.invalid) {
-      return;
-    }
-    const data = {
+    
+    var data = {
       code: this.addForm.value.code,
       name: this.addForm.value.name,
       size: this.addForm.value.size,
@@ -70,9 +86,17 @@ export class SignupComponent implements OnInit {
       representatives: this.addForm.value.representatives,
       position: this.addForm.value.position,
       email: this.addForm.value.email,
-      phone: this.addForm.value.phone
+      phone: this.addForm.value.phone,
+      ceCAPushMode: this.addForm.value.fileCeCa,
+    } 
+    
+    if(this.addForm.value.fileCeCa.name == fileCeCaOptions[0].name) {
+      data.ceCAPushMode = 'NONE';
+    } else if(this.addForm.value.fileCeCa.name == fileCeCaOptions[1].name) {
+      data.ceCAPushMode = 'ALL';
+    } else if(this.addForm.value.fileCeCa.name == fileCeCaOptions[2].name) {
+      data.ceCAPushMode = 'SELECTION';
     }
-    console.log(data);
     
     //them to chuc
     this.userService.signup(data).subscribe(
@@ -96,6 +120,7 @@ export class SignupComponent implements OnInit {
       }
     )
   }
+
 
   sendNotifi(message:any) {
     const data = {
