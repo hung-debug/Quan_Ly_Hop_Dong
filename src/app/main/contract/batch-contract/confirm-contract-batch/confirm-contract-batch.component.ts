@@ -702,7 +702,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(ConfirmCecaBatchComponent, {
-      width: '540px',
+      width: '560px',
       backdrop: 'static',
       keyboard: false,
       data,

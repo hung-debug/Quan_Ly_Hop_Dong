@@ -172,16 +172,28 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngOnInit(): void {
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
-    this.getDataContractSignature();
+    this.idContract = this.activeRoute.snapshot.paramMap.get('id');
+    this.activeRoute.queryParams.subscribe(params => {
+      this.recipientId = params.recipientId;
+
+      //kiem tra xem co bi khoa hay khong
+      this.contractService.getStatusSignImageOtp(this.recipientId).subscribe(
+        data => {
+          if(!data.locked){
+            this.getDataContractSignature();
+          }else{
+            this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(data.nextAttempt, "dd/MM/yyyy HH:mm"), "", 3000);
+            this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+          }
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi', "", 3000);
+        }
+      )
+    });
   }
 
   getDataContractSignature() {
-    this.idContract = this.activeRoute.snapshot.paramMap.get('id');
-    this.activeRoute.queryParams
-      .subscribe(params => {
-        this.recipientId = params.recipientId;
-      }
-      );
+    
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
       console.log(rs);
       this.isDataContract = rs[0];

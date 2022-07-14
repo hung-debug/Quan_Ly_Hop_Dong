@@ -122,7 +122,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(ConfirmCecaContractComponent, {
-      width: '540px',
+      width: '560px',
       backdrop: 'static',
       keyboard: false,
       data,
@@ -130,14 +130,14 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     })
     dialogRef.afterClosed().subscribe((isCeCA: any) => {
       if(isCeCA){
-        this.contractService.updateContractIsPushCeCA(this.datas.id, isCeCA).subscribe((data) => {
+        // this.contractService.updateContractIsPushCeCA(this.datas.id, isCeCA).subscribe((data) => {
           
-          this.SaveContract(action);
+        //   this.SaveContract(action);
 
-        }, error => {
-            this.toastService.showErrorHTMLWithTimeout("Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương", "", 3000);
-        });
-        
+        // }, error => {
+        //     this.toastService.showErrorHTMLWithTimeout("Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương", "", 3000);
+        // });
+        this.SaveContract(action);
       }
     })
   }

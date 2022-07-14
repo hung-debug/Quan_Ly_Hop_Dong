@@ -87,6 +87,7 @@ export class ContractService {
   getSendOtpContractProcessUrl: any = `${environment.apiUrl}/api/v1/processes/approval/`;
   updateInfoContractConsiderAndOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
   updateContractIsPushCeCAUrl: any = `${environment.apiUrl}/api/v1/contracts/ceca-push/`;
+  getStatusSignImageOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
 
   token: any;
   customer_id: any;
@@ -878,6 +879,14 @@ export class ContractService {
     return this.http.post<any>(this.getSendOtpContractProcessUrl + recipient_id + '/gen-otp', body, { headers });
   }
 
+  getStatusSignImageOtp(recipient_id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.getStatusSignImageOtpUrl + recipient_id + "/status", { headers });
+  }
+
   updateContractIsPushCeCA(id: any, isCeCA: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -885,7 +894,6 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = "";
     return this.http.put<any>(this.updateContractIsPushCeCAUrl + id + "/" + isCeCA, body, { 'headers': headers }).pipe();
-
   }
 
   objDefaultSampleContract() {

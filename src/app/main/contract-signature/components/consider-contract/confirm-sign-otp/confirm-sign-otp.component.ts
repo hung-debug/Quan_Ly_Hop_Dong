@@ -314,9 +314,18 @@ export class ConfirmSignOtpComponent implements OnInit {
         async (result) => {
           if(result?.success == false){
             if(result.message == 'Wrong otp'){
-              this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng hoặc quá hạn', '', 3000);
+              this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng', '', 3000);
               this.spinner.hide();
-            }else{
+            }else if(result.message == 'Otp code has been expired'){
+              this.toastService.showErrorHTMLWithTimeout('Mã OTP quá hạn', '', 3000);
+              this.spinner.hide();
+            }else if(result.message == 'You have entered wrong otp 5 times in a row'){
+              this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(result.nextAttempt, "dd/MM/yyyy HH:mm"), '', 3000);
+              this.dialog.closeAll();
+              this.spinner.hide();
+              this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
+              
+            } else{
               this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
               this.dialog.closeAll();
               this.spinner.hide();
