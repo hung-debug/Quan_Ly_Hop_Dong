@@ -14,6 +14,7 @@ import * as $ from "jquery";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { Router } from '@angular/router';
+import { ConfirmCecaBatchComponent } from '../confirm-ceca-batch/confirm-ceca-batch.component';
 @Component({
   selector: 'app-confirm-contract-batch',
   templateUrl: './confirm-contract-batch.component.html',
@@ -694,9 +695,29 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     this.nextOrPreviousStep(step);
   }
 
-  next(){
+
+  submit(){
+    const data = {
+      title: 'YÊU CẦU XÁC NHẬN',
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ConfirmCecaBatchComponent, {
+      width: '540px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe((isCeCA: any) => {
+      if(isCeCA){
+        this.next(isCeCA);
+      }
+    })
+  }
+
+  next(isCeCA:any){
     this.spinner.show();
-    this.contractService.confirmContractBatchList(this.datasBatch.contractFile, this.datasBatch.idContractTemplate).subscribe((response: any) => {
+    this.contractService.confirmContractBatchList(this.datasBatch.contractFile, this.datasBatch.idContractTemplate, isCeCA).subscribe((response: any) => {
       this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate(['/main/contract/create/processing']);
       });

@@ -335,7 +335,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         }
         let id_type_1 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
         await this.contractService.updateFileAttach(id_type_1, data, 1).toPromise().then((res: any) => {
-          this.datas.document_id = res?.id;
+          //this.datas.document_id = res?.id;
         }, (error: HttpErrorResponse) => {
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000)

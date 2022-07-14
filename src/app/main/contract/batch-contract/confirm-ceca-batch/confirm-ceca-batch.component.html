@@ -1,0 +1,27 @@
+<div class="container-fluid">
+    <div style="text-align: center; font-weight: bold">
+      <h3 style="color: #106DB6; font-family: inherit;text-transform: uppercase;">{{this.data.title | translate}}</h3>
+    </div>
+    <div style="font-weight: bold">
+        <h4>Bạn có muốn đẩy file hợp đồng này lên Bộ Công Thương không?</h4>
+    </div>
+    <div class="row" style="justify-content: center;padding-top: 5px;">
+        <div class="col-md-3" style="text-align: center;">
+            <label>
+                <input type="radio" name="confirm-radio-consider" [value]="1" [(ngModel)]="isCeCA" name="isCeCA">
+                <span style="font-size: 15px;"> {{'Có' | translate}}</span>
+            </label>
+        </div>
+        <div class="col-md-3" style="text-align: center;">
+            <label>
+                <input type="radio" name='confirm-radio-consider' [value]="0" [(ngModel)]="isCeCA" name="isCeCA">
+                <span style="font-size: 15px;"> {{'Không' | translate}}</span>
+            </label>
+        </div>
+    </div>
+    <div class="row" style="justify-content: center;padding-top: 15px;">
+        <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
+        <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>
+    </div>
+</div>
+   

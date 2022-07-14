@@ -128,9 +128,16 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       data,
       autoFocus: false
     })
-    dialogRef.afterClosed().subscribe(async (isCeCA: any) => {
+    dialogRef.afterClosed().subscribe((isCeCA: any) => {
       if(isCeCA){
-        await this.SaveContract(action);
+        this.contractService.updateContractIsPushCeCA(this.datas.id, isCeCA).subscribe((data) => {
+          
+          this.SaveContract(action);
+
+        }, error => {
+            this.toastService.showErrorHTMLWithTimeout("Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương", "", 3000);
+        });
+        
       }
     })
   }

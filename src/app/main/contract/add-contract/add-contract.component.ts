@@ -239,7 +239,7 @@ export class AddContractComponent implements OnInit {
           this.datasForm.fileAttachForm = fileNameAttach;
         }
       } else {
-        let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1 && p.status == 1)[0];
+        let fileName = data.i_data_file_contract.filter((p: any) => p.type == 2 && p.status == 1)[0];
         if (fileName) {
           data.is_data_contract['file_name'] = fileName.filename;
           data.is_data_contract['contractFile'] = fileName.path;
