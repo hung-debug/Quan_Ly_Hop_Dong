@@ -151,7 +151,7 @@ export class AdminUnitComponent implements OnInit {
       { field: 'phone', header: 'Số điện thoại', style: 'text-align: left;' },
       { field: 'active', header: 'Kích hoạt', style: 'text-align: left;' },
       { field: 'email', header: 'Email đăng ký', style: 'text-align: left;' },
-      // { field: 'id', header: 'unit.manage', style: 'text-align: center;' },
+      {field: 'ceCAPushMode', header: 'Đẩy file hợp đồng lên Bộ công thương', style: 'text-align: left;' }
     ];
 
     if (!(this.editUnitRole === false && this.deleteUnitRole === false)) {
@@ -161,6 +161,7 @@ export class AdminUnitComponent implements OnInit {
         style: 'text-align: center;',
       });
     }
+
   }
 
   loadUnit(event: LazyLoadEvent) {
@@ -192,6 +193,7 @@ export class AdminUnitComponent implements OnInit {
     }, 1000);
 
     this.page = JSON.parse(JSON.stringify(event)).first / this.rows;
+
   }
 
   checkRole(flag: boolean, code: string): boolean {
