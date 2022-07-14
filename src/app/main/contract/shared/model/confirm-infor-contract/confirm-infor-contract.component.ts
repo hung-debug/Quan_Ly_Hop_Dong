@@ -7,6 +7,8 @@ import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as _ from 'lodash';
+import { ConfirmCecaContractComponent } from '../confirm-ceca-contract/confirm-ceca-contract.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-confirm-infor-contract',
@@ -25,7 +27,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     private contractService: ContractService,
     private router: Router,
     private spinner: NgxSpinnerService,
-    private toastService: ToastService,) {
+    private toastService: ToastService,
+    private dialog: MatDialog,) {
     this.step = variable.stepSampleContract.step4
   }
 
@@ -111,6 +114,25 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       }
     );
 
+  }
+
+  submit(action: string){
+    const data = {
+      title: 'YÊU CẦU XÁC NHẬN',
+    };
+    // @ts-ignore
+    const dialogRef = this.dialog.open(ConfirmCecaContractComponent, {
+      width: '540px',
+      backdrop: 'static',
+      keyboard: false,
+      data,
+      autoFocus: false
+    })
+    dialogRef.afterClosed().subscribe(async (isCeCA: any) => {
+      if(isCeCA){
+        await this.SaveContract(action);
+      }
+    })
   }
 
   async SaveContract(action: string) {
