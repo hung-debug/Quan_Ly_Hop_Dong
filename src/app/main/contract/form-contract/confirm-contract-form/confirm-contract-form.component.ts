@@ -158,16 +158,17 @@ export class ConfirmContractFormComponent implements OnInit {
           autoFocus: false
         })
         dialogRef.afterClosed().subscribe((isCeCA: any) => {
-          if(isCeCA){
-            // this.contractService.updateContractIsPushCeCA(this.datasForm.id, isCeCA).subscribe((data) => {
-              
-            //   this.SaveContract(action);
-    
-            // }, error => {
-            //     this.toastService.showErrorHTMLWithTimeout("Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương", "", 3000);
-            // });
-            this.SaveContract(action);
-          }
+            if(isCeCA == 1 || isCeCA == 0){
+                this.spinner.show();
+                this.contractService.updateContractIsPushCeCA(this.datasForm.id, isCeCA).subscribe((data) => {
+                
+                this.SaveContract(action);
+        
+                }, error => {
+                    this.toastService.showErrorHTMLWithTimeout("Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương", "", 3000);
+                });
+                //this.SaveContract(action);
+            }
         })
     }
 

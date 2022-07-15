@@ -709,7 +709,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
       autoFocus: false
     })
     dialogRef.afterClosed().subscribe((isCeCA: any) => {
-      if(isCeCA){
+      if(isCeCA == 1 || isCeCA == 0){
         this.next(isCeCA);
       }
     })
