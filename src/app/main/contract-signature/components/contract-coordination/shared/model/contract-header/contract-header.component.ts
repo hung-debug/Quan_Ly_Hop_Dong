@@ -24,7 +24,7 @@ export class ContractHeaderComponent implements OnInit {
   }
   counter$: any;
   //don vi: giay
-  count = 180;
+  count = 1800;
 
   constructor(private dialog: MatDialog,
     public router: Router,) {

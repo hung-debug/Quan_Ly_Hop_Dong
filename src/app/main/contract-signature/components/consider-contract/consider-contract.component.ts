@@ -48,7 +48,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './consider-contract.component.html',
   styleUrls: ['./consider-contract.component.scss']
 })
-export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewInit {  
   datas: any;
   data_contract: any;
   data_coordinates: any;
@@ -172,16 +172,28 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngOnInit(): void {
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
-    this.getDataContractSignature();
+    this.idContract = this.activeRoute.snapshot.paramMap.get('id');
+    this.activeRoute.queryParams.subscribe(params => {
+      this.recipientId = params.recipientId;
+
+      //kiem tra xem co bi khoa hay khong
+      this.contractService.getStatusSignImageOtp(this.recipientId).subscribe(
+        data => {
+          if(!data.locked){
+            this.getDataContractSignature();
+          }else{
+            this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(data.nextAttempt, "dd/MM/yyyy HH:mm"), "", 3000);
+            this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+          }
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi', "", 3000);
+        }
+      )
+    });
   }
 
   getDataContractSignature() {
-    this.idContract = this.activeRoute.snapshot.paramMap.get('id');
-    this.activeRoute.queryParams
-      .subscribe(params => {
-        this.recipientId = params.recipientId;
-      }
-      );
+    
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
       console.log(rs);
       this.isDataContract = rs[0];
@@ -1130,7 +1142,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         const textSignB = await domtoimage.toPng(imageRender);
         signI = textSignB.split(",")[1];
       }
-      console.log(signI);
+      //console.log(signI);
       //console.log(this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'));
       signUpdatePayload = signUpdateTemp.filter(
         (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
@@ -1514,7 +1526,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       is_content: 'forward_contract',
       recipient_id: id_recipient_signature,
       phone: phone_recipient_signature,
-      contract_id: this.datas.is_data_contract.id
+      name: this.userOtp,
+      contract_id: this.datas.is_data_contract.id,
+      datas: this.datas,
+      currentUser: this.currentUser,
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -1522,14 +1537,22 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(async (result: any) => {
-      if(result){
-        this.dataOTP = {
-          otp: result
-        }
-        await this.signContractSubmit();
-      }
-    })
+    // dialogRef.afterClosed().subscribe(async (result: any) => {
+    //   if(result){
+    //     this.dataOTP = {
+    //       otp: result
+    //     }
+    //     await this.signContractSubmit();
+    //   }
+    // })
+  }
+
+  confirmOtp(otp:any) {
+    console.log(otp);
+    this.dataOTP = {
+           otp: otp
+    }
+    this.signContractSubmit();
   }
 
   prepareInfoSignUsbToken(page: any, heightPage: any) {

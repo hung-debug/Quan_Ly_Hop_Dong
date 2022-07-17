@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import {
-  type_signature,
-  type_signature_doc,
-  type_signature_personal_party,
+  type_signature_template,
+  type_signature_doc_template,
+  type_signature_personal_party_template,
   variable
 } from "../../../../../../../config/variable";
 import { Helper } from "../../../../../../../core/Helper";
@@ -44,9 +44,9 @@ export class DetermineSignerComponent implements OnInit {
   toppings = new FormControl();
 
   //dropdown
-  signTypeList: Array<any> = type_signature;
-  signTypeList_personal_partner: Array<any> = type_signature_personal_party;
-  signType_doc: Array<any> = type_signature_doc;
+  signTypeList: Array<any> = type_signature_template;
+  signTypeList_personal_partner: Array<any> = type_signature_personal_party_template;
+  signType_doc: Array<any> = type_signature_doc_template;
 
   dropdownSignTypeSettings: any = {};
   getNameIndividual: string = "";

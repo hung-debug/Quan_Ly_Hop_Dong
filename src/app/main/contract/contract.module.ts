@@ -48,6 +48,9 @@ import { SampleContractFormComponent } from './form-contract/sample-contract-for
 import { ContractBatchHeaderComponent } from './batch-contract/contract-batch-header/contract-batch-header.component';
 import { InforContractBatchComponent } from './batch-contract/infor-contract-batch/infor-contract-batch.component';
 import { ConfirmContractBatchComponent } from './batch-contract/confirm-contract-batch/confirm-contract-batch.component';
+import { ConfirmCecaContractComponent } from './shared/model/confirm-ceca-contract/confirm-ceca-contract.component';
+import { ConfirmCecaFormComponent } from './form-contract/confirm-ceca-form/confirm-ceca-form.component';
+import { ConfirmCecaBatchComponent } from './batch-contract/confirm-ceca-batch/confirm-ceca-batch.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -75,7 +78,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     InforContractFormComponent,
     PartyContractFormComponent,
     SampleContractFormComponent,
-    ConfirmContractBatchComponent
+    ConfirmContractBatchComponent,
+    ConfirmCecaContractComponent,
+    ConfirmCecaFormComponent,
+    ConfirmCecaBatchComponent,
   ],
   exports: [
     ContractHeaderComponent,

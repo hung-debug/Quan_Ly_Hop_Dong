@@ -4,7 +4,7 @@
   </div>
   <form [formGroup]="addForm" class="content">
     <div class="name-item">
-      <p>Chúng tôi đã gửi mã OTP về số điện thoại <b style="color: #106DB6;">{{this.datas.phone}}</b>.<br>
+      <p>Chúng tôi đã gửi mã OTP về số điện thoại <b style="color: #106DB6;">{{this.datasOtp.phone}}</b>.<br>
         Vui lòng nhập mã và tiếp tục thực hiện.</p>
     </div>
 
@@ -20,8 +20,11 @@
     </div>
 
     <div class="select-option">
-      <button class="dx-button-form dx-button-close dx-button-90" [ngStyle]="getStyleReset()" (click)="this.count == 0?sendOtp(this.datas.contract_id, this.datas.recipient_id, this.datas.phone):''" type="button">Gửi lại OTP</button>
+      <button class="dx-button-form dx-button-close dx-button-90" [ngStyle]="getStyleReset()" (click)="this.count == 0?sendOtp(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone):''" type="button">Gửi lại OTP</button>
       <button class="dx-button-form dx-button-close dx-button-90" (click)="onSubmit()" type="button">Xác nhận</button>
     </div>
   </form>
+</div>
+<div class="skeleton-sign position-absolute opacity-0">
+  <app-display-signature-image [userOtp]="userOtp" [phoneOtp]="phoneOtp" [isDateTime]="isDateTime"></app-display-signature-image>
 </div>
