@@ -19,7 +19,7 @@
                             <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'"
                                 [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
                             <span *ngIf="d.sign_unit == 'chu_ky_anh' || d.sign_unit == 'chu_ky_so'">{{d.sign_unit ==
-                                'chu_ky_anh' ? 'Chữ ký ảnh' : 'Chữ ký số'}}</span>
+                                'chu_ky_anh' ? 'Chữ ký ảnh hoặc eKYC' : 'Chữ ký số'}}</span>
                         </div>
                     </div>
                 </div>
@@ -69,12 +69,12 @@
                 <label class="label-require">Kích thước</label>
                 <div class="location">
                     <div class="location-drag">
-                        <div class="label">Chiều dài</div>
+                        <div class="label" style="font-size: 12px">Chiều dài</div>
                         <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')"
                             [ngModel]="objSignInfo.width" [readOnly]="false">
                     </div>
                     <div class="location-drag">
-                        <div class="label">Chiều rộng</div>
+                        <div class="label" style="font-size: 12px">Chiều rộng</div>
                         <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')"
                             [ngModel]="objSignInfo.height" [readOnly]="false">
                     </div>

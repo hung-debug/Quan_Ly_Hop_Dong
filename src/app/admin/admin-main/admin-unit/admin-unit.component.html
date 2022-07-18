@@ -80,10 +80,10 @@
             >
           </td>
           <td>{{ list.email }}</td>
-          <td *ngIf="list.ceCAPushMode == 'NONE'">Không đẩy hợp đồng nào</td>
+          <!-- <td *ngIf="list.ceCAPushMode == 'NONE'">Không đẩy hợp đồng nào</td>
           <td *ngIf="list.ceCAPushMode == 'SELECTION'">Tuỳ biến</td>
           <td *ngIf="list.ceCAPushMode == 'ALL'">Đẩy toàn bộ hợp đồng</td>
-          <td *ngIf="list.ceCAPushMode != 'NONE' && list.ceCAPushMode != 'SELECTION' && list.ceCAPushMode != 'ALL'"></td>
+          <td *ngIf="list.ceCAPushMode != 'NONE' && list.ceCAPushMode != 'SELECTION' && list.ceCAPushMode != 'ALL'"></td> -->
           <td
             *ngIf="
               !(this.editUnitRole === false && this.deleteUnitRole === false)

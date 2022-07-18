@@ -1,69 +1,355 @@
-import {Component, ElementRef, Inject, OnInit} from '@angular/core';
+import { DatePipe } from '@angular/common';
+import {Component, ElementRef, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";
-import {Observable, timer} from "rxjs";
-import {map, take} from "rxjs/operators";
+import { NgxSpinnerService } from 'ngx-spinner';
+import {forkJoin, Observable, timer} from "rxjs";
+
+import {take} from "rxjs/operators";
+import { ContractService } from 'src/app/service/contract.service';
+import { ToastService } from 'src/app/service/toast.service';
 import {ImageDialogSignComponent} from "../image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.component";
+// @ts-ignore
+import domtoimage from 'dom-to-image';
+import { concatMap, delay, map, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+
 
 @Component({
   selector: 'app-confirm-sign-otp',
   templateUrl: './confirm-sign-otp.component.html',
   styleUrls: ['./confirm-sign-otp.component.scss']
 })
-export class ConfirmSignOtpComponent implements OnInit {myForm: FormGroup;
+export class ConfirmSignOtpComponent implements OnInit {
+  addForm: FormGroup;
+  datasOtp: any;
   datas: any;
-  counter$: Observable<number>;
+  c:any;
+  counter$: any;
   count = 120;
   isSentOpt = false;
+  submitted = false;
+
+  phoneOtp:any;
+  isDateTime:any;
+  userOtp:any;
+
+  @Output() confirmOtpForm = new EventEmitter();
+
+  get f() { return this.addForm.controls; }
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {},
     public router: Router,
     public dialog: MatDialog,
     private fbd: FormBuilder,
     public dialogRef: MatDialogRef<ConfirmSignOtpComponent>,
-    private el: ElementRef
+    private el: ElementRef,
+    private contractService: ContractService,
+    private toastService: ToastService,
+    private spinner: NgxSpinnerService,
+    public datepipe: DatePipe,
   ) { }
 
 
 
   ngOnInit(): void {
-    this.datas = this.data;
-    this.myForm = this.fbd.group({
-      name: this.fbd.control("", [Validators.required]),
-      email: this.fbd.control("", [Validators.required]),
+    this.datasOtp = this.data;
+    this.datas = this.datasOtp.datas;
+    this.addForm = this.fbd.group({
+      otp: this.fbd.control("", [Validators.required]),
     });
+    this.sendOtp(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone);
   }
 
-  onSubmit() {
-    let isSub = false;
-    const keyObj = [
-      {code: "name", name: 'Họ và tên'},
-      {code: "email", name: 'Email'},
-    ];
-    for (const key of Object.keys(this.myForm.controls)) {
-      if (this.myForm.controls[key].invalid) {
-        const keyError = keyObj.filter((item) => item.code === key)[0];
-        const invalidControl = this.el.nativeElement.querySelector('[formcontrolname="' + key + '"]');
-        alert(keyError.name + " " + 'không được để trống')
-        // Library.notify(keyError.name + " " + 'không được để trống', sEnum.statusApi.error);
-        invalidControl.focus();
-        isSub = true;
-        break;
-      }
+  async onSubmit() {
+    this.submitted = true;
+    if (this.addForm.invalid) {
+      return;
     }
+    //this.dialogRef.close(this.addForm.value.otp);
+    // console.log(this.addForm.value.otp);
+    // this.confirmOtpForm.emit(this.addForm.value.otp);
+    await this.signContractSubmit();
   }
 
   countTimeOtp() {
     this.isSentOpt = true;
     this.counter$ = timer(0,1000).pipe(
       take(this.count),
-      map(() => --this.count)
+      map(() => this.transform(--this.count))
     );
+    
   }
 
-  submitOtp() {
-    this.dialogRef.close(1);
+  transform(value: number): string {
+    const minutes: number = Math.floor(value / 60);
+    return minutes.toString().padStart(2, '0') + ':' + 
+        (value - minutes * 60).toString().padStart(2, '0');
+  }
+
+  sendOtp(contract_id:any, recipient_id:any, phone:any){
+    this.contractService.sendOtpContractProcess(contract_id, recipient_id, phone).subscribe(
+      data => {
+        if(!data.success){
+          this.toastService.showErrorHTMLWithTimeout('Lỗi gửi OTP', "", 3000);
+        }
+        this.count = 120;
+        this.countTimeOtp();
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi', "", 3000);
+      }
+    )
+  }
+
+  getStyleReset(){
+    if (this.count == 0) {
+      return {
+        'background-color': '#FCAF17'
+      };
+    } else return {
+      'background-color': '#99968f'
+    }
+  }
+
+  async signContractSubmit() {
+    this.spinner.show();
+    const signUploadObs$ = [];
+    let indexSignUpload: any[] = [];
+    let iu = 0;
+    
+    for (const signUpdate of this.datas.is_data_object_signature) {
+      console.log('ki anh', signUpdate);
+      if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
+        && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
+        && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+      ) {
+
+        const formData = {
+          "name": "image_" + new Date().getTime() + ".jpg",
+          "content": signUpdate.valueSign,
+          organizationId: this.datas?.is_data_contract?.organization_id
+        }
+        signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
+        indexSignUpload.push(iu);
+      }
+      iu++;
+    }
+
+    forkJoin(signUploadObs$).subscribe(async results => {
+      let ir = 0;
+      for (const resE of results) {
+        this.datas.filePath = resE?.file_object?.file_path;
+        if (this.datas.filePath) {
+          this.datas.is_data_object_signature[indexSignUpload[ir]].value = this.datas.filePath;
+        }
+        ir++;
+      }
+      await this.signContract(false);
+    }, error => {
+      this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
+    });
+    if (signUploadObs$.length == 0) {
+      await this.signContract(true);
+    }
+
+  }
+
+  async signContract(notContainSignImage?: boolean) {
+    const signUpdateTemp = JSON.parse(JSON.stringify(this.datas.is_data_object_signature));
+    let signUpdatePayload = "";
+    //neu khong chua chu ky anh
+    if (notContainSignImage) {
+      signUpdatePayload = signUpdateTemp.filter(
+        (item: any) => item?.recipient?.email === this.datasOtp.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+        .map((item: any) => {
+          return {
+            id: item.id,
+            name: item.name,
+            value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
+            font: item.font,
+            font_size: item.font_size
+          }
+        });
+    }else{
+      this.userOtp = this.datasOtp.name;
+      this.phoneOtp = this.datasOtp.phone;
+      this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
+      await of(null).pipe(delay(100)).toPromise();
+      const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
+      
+      let signI:any;
+      if (imageRender) {
+        const textSignB = await domtoimage.toPng(imageRender);
+        signI = textSignB.split(",")[1];
+      }
+      //console.log(signI);
+      //console.log(this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'));
+      signUpdatePayload = signUpdateTemp.filter(
+        (item: any) => item?.recipient?.email === this.datasOtp.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+        .map((item: any) => {
+          return {
+            otp: this.addForm.value.otp,
+            signInfo: signI,
+            processAt: this.datepipe.transform(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+            fields:[
+              {
+                id: item.id,
+                name: item.name,
+                value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
+                font: item.font,
+                font_size: item.font_size
+              }]
+          }
+        });
+      if(signUpdatePayload){
+        signUpdatePayload = signUpdatePayload[0];
+      }
+    }
+    
+    let typeSignDigital = null;
+    for (const signUpdate of this.datas.is_data_object_signature) {
+      if (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
+        && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
+        && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+      ) {
+        if (signUpdate.recipient?.sign_type) {
+          const typeSD = signUpdate.recipient?.sign_type.find((t: any) => t.id != 1);
+          if (typeSD) {
+            typeSignDigital = typeSD.id;
+          }
+        }
+        break;
+      }
+    }
+    if (typeSignDigital && typeSignDigital == 2) {
+      // let checkSetupTool = false;
+      // this.contractService.getAllAccountsDigital().then(async (data) => {
+      //   if (data.data.Serial) {
+      //     this.signCertDigital = data.data;
+      //     this.nameCompany = data.data.CN;
+      //     checkSetupTool = true;
+      //     if (!checkSetupTool) {
+      //       this.spinner.hide();
+      //       return;
+      //     } else {
+      //       await this.signImageC(signUpdatePayload, notContainSignImage);
+      //     }
+      //   } else {
+      //     this.spinner.hide();
+      //     Swal.fire({
+      //       title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
+      //       icon: 'warning',
+      //       confirmButtonColor: '#3085d6',
+      //       cancelButtonColor: '#b0bec5',
+      //       confirmButtonText: 'Xác nhận'
+      //     });
+      //   }
+      // }, err => {
+      //   this.spinner.hide();
+      //   Swal.fire({
+      //     html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>  và cài đặt`,
+      //     icon: 'warning',
+      //     confirmButtonColor: '#3085d6',
+      //     cancelButtonColor: '#b0bec5',
+      //     confirmButtonText: 'Xác nhận'
+      //   });
+      // })
+
+    } else {
+      await this.signImageC(signUpdatePayload, notContainSignImage);
+    }
+
+  }
+
+  async signImageC(signUpdatePayload: any, notContainSignImage: any) {
+    console.log(notContainSignImage);
+    console.log(signUpdatePayload);
+    let signDigitalStatus = null;
+    let signUpdateTempN = [];
+    if(signUpdatePayload){
+      signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
+      if (notContainSignImage) {
+        // signDigitalStatus = await this.signDigitalDocument();
+        // signUpdateTempN = signUpdateTempN.filter(
+        //   (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+        //   .map((item: any) => {
+        //     return {
+        //       id: item.id,
+        //       name: item.name,
+        //       value: null,
+        //       font: item.font,
+        //       font_size: item.font_size
+        //     }
+        //   });
+      }
+    }
+    
+    if (notContainSignImage && !signDigitalStatus && this.datas.roleContractReceived != 2) {
+      this.spinner.hide();
+      return;
+    }
+    if(notContainSignImage){
+      // console.log(signUpdateTempN);
+      // this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
+      //   async (result) => {
+      //     if (!notContainSignImage) {
+      //       await this.signDigitalDocument();
+      //     }
+      //     setTimeout(() => {
+      //       this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+      //       this.toastService.showSuccessHTMLWithTimeout(
+      //         [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+      //         , '', 3000);
+      //       this.spinner.hide();
+      //     }, 1000);
+      //   }, error => {
+      //     this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
+      //     this.spinner.hide();
+      //   }
+      // )
+    }else{
+      this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.datasOtp.recipient_id).subscribe(
+        async (result) => {
+          if(result?.success == false){
+            if(result.message == 'Wrong otp'){
+              this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng', '', 3000);
+              this.spinner.hide();
+            }else if(result.message == 'Otp code has been expired'){
+              this.toastService.showErrorHTMLWithTimeout('Mã OTP quá hạn', '', 3000);
+              this.spinner.hide();
+            }else if(result.message == 'You have entered wrong otp 5 times in a row'){
+              this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(result.nextAttempt, "dd/MM/yyyy HH:mm"), '', 3000);
+              this.dialog.closeAll();
+              this.spinner.hide();
+              this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
+              
+            } else{
+              this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
+              this.dialog.closeAll();
+              this.spinner.hide();
+            }
+          }else{
+            if (!notContainSignImage) {
+              //await this.signDigitalDocument();
+            }
+            setTimeout(() => {
+              this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
+              this.toastService.showSuccessHTMLWithTimeout(
+                [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+                , '', 3000);
+                this.dialog.closeAll();
+                this.spinner.hide();
+            }, 1000);
+          }
+          
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
+          this.spinner.hide();
+        }
+      )
+    }
+    
   }
 }

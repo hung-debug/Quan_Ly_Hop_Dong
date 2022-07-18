@@ -1,9 +1,6 @@
 import {
   Component,
-  EventEmitter,
-  Inject,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -11,9 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
-import { AdminUserService } from 'src/app/service/admin/admin-user.service';
 import { AppService } from 'src/app/service/app.service';
-import { ToastService } from 'src/app/service/toast.service';
 import { AdminActiveUnitComponent } from './admin-active-unit/admin-active-unit.component';
 import { AdminAddUnitComponent } from './admin-add-unit/admin-add-unit.component';
 import { AdminDeleteUnitComponent } from './admin-delete-unit/admin-delete-unit.component';
@@ -32,6 +27,7 @@ export class AdminUnitComponent implements OnInit {
   filter_status: any = '';
   filter_address: any = '';
   filter_name: any = '';
+  filter_fileCeCa: any = '';
 
   private sub: any;
   action: string;
@@ -42,8 +38,6 @@ export class AdminUnitComponent implements OnInit {
     private appService: AppService,
     private dialog: MatDialog,
     private adminUnitService: AdminUnitService,
-    private adminUserService: AdminUserService,
-    private toastService: ToastService,
     private route: ActivatedRoute
   ) {}
 
@@ -131,6 +125,16 @@ export class AdminUnitComponent implements OnInit {
       } else {
         this.filter_address = '';
       }
+
+      if (
+        typeof params.filter_fileCeCa != 'undefined' &&
+        params.filter_fileCeCa
+      ) {
+        this.filter_fileCeCa = params.filter_fileCeCa;
+      } else {
+        this.filter_fileCeCa = '';
+      }
+
     });
 
     this.sub = this.route.params.subscribe((params) => {
@@ -151,7 +155,7 @@ export class AdminUnitComponent implements OnInit {
       { field: 'phone', header: 'Số điện thoại', style: 'text-align: left;' },
       { field: 'active', header: 'Kích hoạt', style: 'text-align: left;' },
       { field: 'email', header: 'Email đăng ký', style: 'text-align: left;' },
-      {field: 'ceCAPushMode', header: 'Đẩy file hợp đồng lên Bộ công thương', style: 'text-align: left;' }
+      // {field: 'ceCAPushMode', header: 'Đẩy file hợp đồng lên Bộ công thương', style: 'text-align: left;' }
     ];
 
     if (!(this.editUnitRole === false && this.deleteUnitRole === false)) {
@@ -237,11 +241,12 @@ export class AdminUnitComponent implements OnInit {
       filter_phone: this.filter_phone,
       filter_status: this.filter_status,
       filter_address: this.filter_address,
+      filter_fileCeCa: this.filter_fileCeCa
     };
 
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminFilterUnitComponent, {
-      width: '580px',
+      width: '600px',
       backdrop: 'static',
       keyboard: false,
       data,
@@ -261,6 +266,7 @@ export class AdminUnitComponent implements OnInit {
     const data = {
       title: 'unit.add',
     };
+    
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddUnitComponent, {
       width: '600px',

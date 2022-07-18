@@ -24,8 +24,13 @@ export const variable = {
 export const type_signature = [
   {
     id: 1,
-    name: 'Ký ảnh',
+    name: 'Ký ảnh và OTP',
     is_otp: false,
+  },
+  {
+    id: 5,
+    name: "Ký eKYC",
+    is_otp: false
   },
   {
     id: 2,
@@ -37,18 +42,19 @@ export const type_signature = [
     name: 'Ký số bằng sim PKI',
     is_otp: false,
   },
-  // {
-  //   id: 4,
-  //   name: "Ký số bằng HSM",
-  //   is_otp: false
-  // }
+
 ];
 
 export const type_signature_personal_party = [
   {
     id: 1,
-    name: 'Ký ảnh',
+    name: 'Ký ảnh và OTP',
     is_otp: false,
+  },
+  {
+    id: 5,
+    name: "Ký eKYC",
+    is_otp: false
   },
   {
     id: 2,
@@ -60,19 +66,74 @@ export const type_signature_personal_party = [
     name: 'Ký số bằng sim PKI',
     is_otp: false,
   },
-  // {
-  //   id: 4,
-  //   name: "Ký số bằng HSM",
-  //   is_otp: false
-  // }
 ];
 
 export const type_signature_doc = [
   {
     id: 1,
-    name: 'Ký ảnh',
+    name: 'Ký ảnh và OTP',
     is_otp: false,
   },
+  {
+    id: 2,
+    name: 'Ký số bằng USB token',
+    is_otp: false,
+  },
+];
+
+export const type_signature_template = [
+  // {
+  //   id: 1,
+  //   name: 'Ký ảnh và OTP',
+  //   is_otp: false,
+  // },
+  // {
+  //   id: 5,
+  //   name: "Ký eKYC",
+  //   is_otp: false
+  // },
+  {
+    id: 2,
+    name: 'Ký số bằng USB token',
+    is_otp: false,
+  },
+  {
+    id: 3,
+    name: 'Ký số bằng sim PKI',
+    is_otp: false,
+  },
+
+];
+
+export const type_signature_personal_party_template = [
+  // {
+  //   id: 1,
+  //   name: 'Ký ảnh và OTP',
+  //   is_otp: false,
+  // },
+  // {
+  //   id: 5,
+  //   name: "Ký eKYC",
+  //   is_otp: false
+  // },
+  {
+    id: 2,
+    name: 'Ký số bằng USB token',
+    is_otp: false,
+  },
+  {
+    id: 3,
+    name: 'Ký số bằng sim PKI',
+    is_otp: false,
+  },
+];
+
+export const type_signature_doc_template = [
+  // {
+  //   id: 1,
+  //   name: 'Ký ảnh và OTP',
+  //   is_otp: false,
+  // },
   {
     id: 2,
     name: 'Ký số bằng USB token',
@@ -116,6 +177,16 @@ export var fileCeCaOptions = [
   {id: 'NONE', name:'Không đẩy HĐ nào'},
   {id: 'ALL', name: 'Đẩy toàn bộ hợp đồng'},
   {id: 'SELECTION', name: 'Tuỳ biến'}
+]
+
+export var sideList = [
+  {id:'1', name:'A'}, {id:'2', name:'B'}, {id:'3', name:'C'}, {id:'4', name:'D'},
+  {id:'5', name:'E'}, {id:'6', name:'F'}, {id:'7', name:'G'}, {id:'8', name:'H'},
+  {id:'9', name:'I'}, {id:'10', name:'J'}, {id:'11', name:'K'}, {id:'12', name:'L'},
+  {id:'13', name:'M'}, {id:'14', name:'N'}, {id:'15', name:'O'}, {id:'16', name:'P'},
+  {id:'17', name:'Q'}, {id:'18', name:'R'}, {id:'19', name:'S'}, {id:'20', name:'T'},
+  {id:'21', name:'U'}, {id:'22', name:'V'}, {id:'23', name:'W'}, {id:'24', name:'X'},
+  {id:'25', name:'Y'}, {id:'26', name:'Z'}
 ]
 
 // export var roleList = [

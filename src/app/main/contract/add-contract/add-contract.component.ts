@@ -14,6 +14,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "../../../service/toast.service";
 import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
+import * as moment from "moment";
 // import * as from moment;
 import { ContractFormHeaderComponent } from '../form-contract/contract-form-header/contract-form-header.component';
 import { InforContractFormComponent } from '../form-contract/infor-contract-form/infor-contract-form.component';
@@ -23,6 +24,7 @@ import { ConfirmContractFormComponent } from '../form-contract/confirm-contract-
 import { ContractBatchHeaderComponent } from '../batch-contract/contract-batch-header/contract-batch-header.component';
 import { InforContractBatchComponent } from '../batch-contract/infor-contract-batch/infor-contract-batch.component';
 import { ConfirmContractBatchComponent } from '../batch-contract/confirm-contract-batch/confirm-contract-batch.component';
+import { ContractTemplateService } from 'src/app/service/contract-template.service';
 
 @Component({
   selector: 'app-add-contract',
@@ -104,7 +106,7 @@ export class AddContractComponent implements OnInit {
     private route: ActivatedRoute,
     private contractService: ContractService,
     private router: Router,
-    private uploadService: UploadService,
+    private contractTemplateService: ContractTemplateService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private userService: UserService,
@@ -167,6 +169,7 @@ export class AddContractComponent implements OnInit {
         this.type = 2;
         this.appService.setTitle('contract.add');
         this.datasForm.template_contract_id = Number(params['id']);
+        this.getDataContractForm(this.datasForm.template_contract_id);
       } else if (this.action == 'add-batch') {
         this.type = 3;
         this.appService.setTitle('contract.add');
@@ -236,7 +239,7 @@ export class AddContractComponent implements OnInit {
           this.datasForm.fileAttachForm = fileNameAttach;
         }
       } else {
-        let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1 && p.status == 1)[0];
+        let fileName = data.i_data_file_contract.filter((p: any) => p.type == 2 && p.status == 1)[0];
         if (fileName) {
           data.is_data_contract['file_name'] = fileName.filename;
           data.is_data_contract['contractFile'] = fileName.path;
@@ -366,4 +369,77 @@ export class AddContractComponent implements OnInit {
   t() {
     console.log(this);
   }
+
+
+  getDataContractForm(idContractTemplate: any) {
+    this.spinner.show();
+    this.contractTemplateService.getListFileTemplate().subscribe((response:any)=> {
+      let isDataInfo = response.filter((data: any) => data.id == idContractTemplate)[0];
+      this.contractService.getDetailContractFormInfor(idContractTemplate).subscribe((res: any) => {
+          this.datasForm['template_contract_id'] = idContractTemplate;
+          let dataContractForm = res.filter((p: any) => p.type == 1 && p.status == 1)[0];
+          let dataContractAttachForm = res.filter((p: any) => p.type == 3);
+          
+          if (dataContractForm && isDataInfo) {
+              this.datasForm.fileBucket = dataContractForm.bucket;
+              this.datasForm.fileName = dataContractForm.filename;
+              this.datasForm.file_content = dataContractForm.path;
+              this.datasForm.contract_no = "";
+              this.datasForm.code = "";
+              this.datasForm.name = "";
+              this.datasForm.pdfUrl = dataContractForm.path;
+              if (isDataInfo.sign_time) {
+                  this.datasForm.sign_time = moment(isDataInfo.sign_time).toDate();
+              }
+              this.datasForm.end_time = isDataInfo.end_time;
+              this.datasForm.start_time = isDataInfo.start_time;
+              this.datasForm.notes = isDataInfo.notes;
+              this.datasForm.type_id = isDataInfo.type_id;
+              // this.datasForm.document_id = dataContractForm.id;
+              // if (this.datasForm.is_data_object_signature) {
+              //     this.datasForm.is_data_object_signature = "";
+              // }
+
+              this.datasForm['isChangeForm'] = true;
+
+              this.datasForm.contract_user_sign = null;
+              this.datasForm.is_determine_clone = [];
+              this.datasForm.is_data_object_signature = null;
+
+          }
+
+          if (dataContractAttachForm) {
+              this.datasForm.fileAttachForm = dataContractAttachForm; // du lieu file dinh kem tu mau
+              //this.listFileAttach = this.datasForm.fileAttachForm;
+          } else {
+              this.datasForm.fileAttachForm = [];
+          }
+
+          if (this.datasForm.id) {
+              this.contractService.deleteContract(this.datasForm.id).subscribe((data) => {
+                  if (data.success) {
+                      this.datasForm.id = "";
+                      this.datasForm.contract_id = "";
+                  } else {
+                      this.toastService.showErrorHTMLWithTimeout("error_change_contract_template", "", 3000);
+                  }
+              },
+                  error => {
+                      this.toastService.showErrorHTMLWithTimeout("error_change_contract_template", "", 3000);
+                  }
+              );
+          }
+
+          setTimeout(() => {
+              //this.nameContract.nativeElement.focus();
+          }, 100)
+      }, (error) => {
+          this.spinner.hide();
+      }, () => {
+          this.spinner.hide();
+      });
+
+    });
+
+}
 }

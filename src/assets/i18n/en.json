@@ -366,5 +366,7 @@
   "error_change_contract_template": "Sample contract change data error, Please cancel the contract and rework again!",
   "error_delete_object_signature": "cannot delete change data, please try again!",
   "contract_number_already_exist": "contract number already exist!",
-  "notify_have_not_sign_acc": "You don't have a signed photo from your account!"
+  "notify_have_not_sign_acc": "You don't have a signed photo from your account!",
+  "contract_processing_flow": "Contract processing flow",
+  "not_search_file_attach": "Attached file not found, please check again!"
 }

@@ -87,8 +87,7 @@ export class AddUserComponent implements OnInit {
     if(this.isQLND_01 || this.isQLND_02){
       //lay danh sach to chuc
       this.unitService.getUnitList('', '').subscribe(data => {
-        console.log(data.entities);
-        console.log(orgId);
+        
         this.orgList = data.entities;
         // if(this.action == 'add'){
         //   this.orgList = data.entities.filter((p: any) => p.id == orgId);
@@ -97,9 +96,6 @@ export class AddUserComponent implements OnInit {
         // }
         
       });
-
-      
-
       this.networkList = networkList;
     }
 
@@ -135,6 +131,7 @@ export class AddUserComponent implements OnInit {
             fileImage:null
           });
         }
+        this.spinner.hide();
       } else if (this.action == 'edit') {
         this.id = params['id'];
         this.appService.setTitle('user.update');
@@ -142,61 +139,85 @@ export class AddUserComponent implements OnInit {
         if(this.isQLND_02){
           this.userService.getUserById(this.id).subscribe(
             data => {
-              console.log(data);
-              this.orgIdOld = data.organization_id;
-              this.addForm = this.fbd.group({
-                name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-                email: this.fbd.control(data.email, [Validators.required, Validators.email]),
-                birthday: data.birthday==null?null:new Date(data.birthday),
-                phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-                organizationId: this.fbd.control(data.organization_id, [Validators.required]),
-                role: this.fbd.control(data.role_id, [Validators.required]),
-                status: data.status,
+              if(data.role_id != null){
+                //lay vai tro cua user
+                this.roleService.getRoleById(data.role_id).subscribe(dataRoleUser => {
+                  this.roleName = dataRoleUser.name;
+                  console.log(data);
+                  this.orgIdOld = data.organization_id;
+                  this.addForm = this.fbd.group({
+                    name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
+                    email: this.fbd.control(data.email, [Validators.required, Validators.email]),
+                    birthday: data.birthday==null?null:new Date(data.birthday),
+                    phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+                    organizationId: this.fbd.control(data.organization_id, [Validators.required]),
+                    role: this.fbd.control(Number(data.role_id), [Validators.required]),
+                    status: data.status,
 
-                phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
-                networkKpi: data.phone_tel,
+                    phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
+                    networkKpi: data.phone_tel,
 
-                nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.input_form)),
+                    nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.input_form)),
 
-                fileImage:null,
+                    fileImage:null,
 
-                organization_change: data.organization_change
-              }); 
-              this.phoneOld = data.phone;
-              this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
-              this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
-              this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
-              console.log(this.addForm);
+                    organization_change: data.organization_change
+                  }); 
+                  this.phoneOld = data.phone;
+                  this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
+                  this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
+                  this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
+                  console.log(this.addForm);
 
-              //set name
-              if(data.organization_id != null){
-                this.unitService.getUnitById(data.organization_id).subscribe(
-                  data => {
-                    this.organizationName = data.name
-                  }, error => {
-                    this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
+                  //set name
+                  if(data.organization_id != null){
+                    this.unitService.getUnitById(data.organization_id).subscribe(
+                      data => {
+                        this.organizationName = data.name
+                      }, error => {
+                        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
+                      }
+                    )
                   }
-                )
+                
+                  //neu nguoi truy cap co ma vai tro la ADMIN thi duoc quyen sua
+                  if(this.userRoleCode.toUpperCase() == 'ADMIN'){
+                    this.isEditRole = true;
+    
+                    //lay danh sach vai tro
+                    this.roleService.getRoleByOrgId(orgId).subscribe(dataRole => {
+                      //this.roleList = data.entities;
+                      this.roleList = [];
+                      let checkDupRolePersent = false;
+                      dataRole.entities.forEach((key: any) => {
+                        if(key.id == data.role_id){
+                          checkDupRolePersent = true;
+                        }
+                        var role = {
+                            id:  key.id,
+                            name:  key.name,
+                            inactive: false
+                          }
+                        this.roleList.push(role);
+                      });
+                      //this.roleList = [];
+                      //neu vai tro hien tai khong co trong list vai tro => inactive vai tro do
+                      if(!checkDupRolePersent){
+                        var role = {
+                          id:  data.role_id,
+                          name:  dataRoleUser.name,
+                          inactive: true
+                        }
+                        this.roleList.push(role);
+                      }
+                    });
+                  }
+        
+                  this.spinner.hide();
+                });
               }
-              //neu nguoi truy cap co ma vai tro la ADMIN thi duoc quyen sua
-              if(this.userRoleCode.toUpperCase() == 'ADMIN'){
-                this.isEditRole = true;
-              }else{
-                if(data.role_id != null){
-                  //lay danh sach vai tro
-                  this.roleService.getRoleById(data.role_id).subscribe(data => {
-                    this.roleName = data.name;
-                  });
-                }
-              }
-
-              //lay danh sach vai tro
-            this.roleService.getRoleByOrgId(data.organization_id).subscribe(data => {
-              console.log(data);
-              this.roleList = data.entities;
-            });
-              
             }, error => {
+              this.spinner.hide();
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
             }
           )
@@ -207,6 +228,7 @@ export class AddUserComponent implements OnInit {
 
   ngOnInit(): void {
     //lay id user
+    this.spinner.show();
     let userId = this.userService.getAuthCurrentUser().id;
     
     this.userService.getUserById(userId).subscribe(
@@ -214,20 +236,22 @@ export class AddUserComponent implements OnInit {
         //lay id role
         this.roleService.getRoleById(data.role_id).subscribe(
           data => {
-            this.userRoleCode = data.code;
-            console.log(data);
+            
             let listRole: any[];
+            this.userRoleCode = data.code;
             listRole = data.permissions;
             this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
             this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
 
             this.getDataOnInit();
           }, error => {
+            this.spinner.hide();
             this.toastService.showErrorHTMLWithTimeout('Lấy thông tin phân quyền', "", 3000);
           }
         );
       
       }, error => {
+        this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
       }
     )

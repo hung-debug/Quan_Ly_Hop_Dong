@@ -11,6 +11,7 @@ import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.compone
 import {HsmDialogSignComponent} from "../hsm-dialog-sign/hsm-dialog-sign.component";
 import {UserService} from "../../../../../service/user.service";
 import {networkList} from "../../../../../config/variable";
+import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
   selector: 'app-image-sign-contract',
@@ -29,7 +30,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   constructor(
     private dialog: MatDialog,
     private userService: UserService,
-
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -51,8 +52,15 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doSign() {
+    console.log(this.sign);
+    //khong thuc hien ky eKYC tren web
     if (this.sign.sign_unit == 'chu_ky_anh' && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
-      this.openPopupSignContract(1);
+      if(this.sign?.recipient?.sign_type.filter((p: any) => p.id == 5).length == 0){
+        this.openPopupSignContract(1);
+      }else{
+        this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
+      }
+      
     } else if (this.sign.sign_unit == 'chu_ky_so'
       && this.sign?.recipient?.email == this.currentUser.email && !this.view
       && this.typeSignDigital && this.typeSignDigital == 3

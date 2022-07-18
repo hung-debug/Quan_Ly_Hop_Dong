@@ -98,6 +98,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   view: any;
   valid: boolean = false;
   loaded: boolean = false;
+  confirmCoordition: number = 1;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -489,7 +490,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   // }
 
   processHandleContract() {
-    // alert('Luồng xử lý hợp đồng!');
     const data = this.datas;
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {

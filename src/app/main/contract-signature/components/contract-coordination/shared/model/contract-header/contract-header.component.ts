@@ -1,6 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {AddContractComponent} from "../../../../../../contract/add-contract/add-contract.component";
 import {variable} from "../../../../../../../config/variable";
+import {Observable, timer} from "rxjs";
+import {map, take} from "rxjs/operators";
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { NotificationExpireComponent } from '../dialog/notification-expire/notification-expire.component';
 
 @Component({
   selector: 'app-contract-header',
@@ -17,12 +22,47 @@ export class ContractHeaderComponent implements OnInit {
     step_2: false,
     step_3: false
   }
+  counter$: any;
+  //don vi: giay
+  count = 1800;
 
-  constructor() {
+  constructor(private dialog: MatDialog,
+    public router: Router,) {
     // this.step = variable.stepSampleContract.step4
   }
 
   ngOnInit(): void {
+    this.counter$ = timer(0,1000).pipe(
+      take(this.count),
+      map(() => this.transform(--this.count))
+    );
+  }
+  transform(value: number): string {
+    const minutes: number = Math.floor(value / 60);
+
+    if(value == 0){
+      const data = {
+        title: 'THÔNG BÁO'
+      };
+      // @ts-ignore
+      const dialogRef = this.dialog.open(NotificationExpireComponent, {
+        width: '520px',
+        backdrop: 'static',
+        keyboard: false,
+        data
+      })
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog');
+        let is_data = result
+      })
+
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate(['/main/contract-signature/coordinates/' + this.datas.contract_id]);
+      });
+    }
+
+    return minutes.toString().padStart(2, '0') + ':' + 
+        (value - minutes * 60).toString().padStart(2, '0');
   }
 
 

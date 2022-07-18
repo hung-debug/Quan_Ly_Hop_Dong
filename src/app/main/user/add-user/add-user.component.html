@@ -29,7 +29,7 @@
         <div class="col-md-4">
           <div class="label text-color">{{'user.birthday' | translate}}</div>
           <div>
-            <p-calendar formControlName="birthday" [maxDate]="maxDate" [showIcon]="true" dateFormat="dd/mm/yy" [readonlyInput]="true"></p-calendar>
+            <p-calendar formControlName="birthday" [maxDate]="maxDate" [showIcon]="true" dateFormat="dd/mm/yy" placeholder="dd/MM/yyyy"></p-calendar>
           </div>
         </div>
       </div>
@@ -48,6 +48,7 @@
         <div class="col-md-4">
           <div class="label text-color">{{'organization' | translate}} <span class="required-title">*</span></div>
           <div *ngIf="!id || (id && isEditRole)">
+            <!-- (onChange)="getRoleByOrg(organizationId.value)" -->
             <p-dropdown
               panelStyleClass="font"
               [options]="orgList" 
@@ -58,7 +59,6 @@
               [filter]="true"   
               filterBy="name" 
               [showClear]="true"
-              (onChange)="getRoleByOrg(organizationId.value)"
               #organizationId
               ></p-dropdown>
           </div>
@@ -82,6 +82,7 @@
               [filter]="true" 
               filterBy="name" 
               [showClear]="true"  
+              optionDisabled="inactive"
               ></p-dropdown>
           </div>
           <div *ngIf="!isEditRole" class="input-data hidden-color">

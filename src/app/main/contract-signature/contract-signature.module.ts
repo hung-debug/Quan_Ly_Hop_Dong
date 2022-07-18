@@ -25,7 +25,7 @@ import { HeaderContractComponent } from './components/header-contract/header-con
 import { FooterSignatureComponent } from './components/footer-signature/footer-signature.component';
 import { ProcessingHandleEcontractComponent } from './shared/model/processing-handle-econtract/processing-handle-econtract.component';
 import {SignContractComponent} from "./components/contract-coordination/shared/sign-sample-contract/sign-contract/sign-contract.component";
-import {MatDialogModule} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import { ForwardContractComponent } from './shared/model/forward-contract/forward-contract.component';
 import {TranslateModule} from "@ngx-translate/core";
 import { InfoSignContractComponent } from './shared/info-sign-contract/info-sign-contract.component';
@@ -47,6 +47,8 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import { DisplayDigitalSignatureComponent } from './display-digital-signature/display-digital-signature.component';
 import {TextSignatureImageComponent} from './components/text-signature-image/text-signature-image.component';
 import { ContractSignatureComponent } from './contract-signature.component';
+import { DisplaySignatureImageComponent } from './display-signature-image/display-signature-image.component';
+import { NotificationExpireComponent } from './components/contract-coordination/shared/model/dialog/notification-expire/notification-expire.component';
 
 export const contractSignatureRoutes: Routes = [
   { path: 'consider/:id', component: ConsiderContractComponent },
@@ -84,7 +86,9 @@ export const contractSignatureRoutes: Routes = [
     HsmDialogSignComponent,
     FilterListDialogComponent,
     DisplayDigitalSignatureComponent,
-    TextSignatureImageComponent
+    TextSignatureImageComponent,
+    DisplaySignatureImageComponent,
+    NotificationExpireComponent
     // AddContractComponent
   ],
   imports: [
@@ -109,6 +113,11 @@ export const contractSignatureRoutes: Routes = [
     CalendarModule,
     MultiSelectModule
   ],
-  providers: [NoAuthGuard]
+  providers: [
+    NoAuthGuard,
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
+  ]
+
 })
 export class ContractSignatureModule { }

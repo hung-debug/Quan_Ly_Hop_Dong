@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { UploadService } from 'src/app/service/upload.service';
 import { ToastService } from 'src/app/service/toast.service';
 import * as moment from "moment";
+import { sideList } from 'src/app/config/variable';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract-signature.component.html',
@@ -55,6 +57,7 @@ export class ContractSignatureComponent implements OnInit {
 
   constructor(private modalService: NgbModal,
               private appService: AppService,
+              private contractServiceV1: ContractService,
               private contractService: ContractSignatureService,
               public isContractService: ContractService,
               private route: ActivatedRoute,
@@ -62,6 +65,7 @@ export class ContractSignatureComponent implements OnInit {
               private dialog: MatDialog,
               private uploadService: UploadService,
               private toastService: ToastService,
+              public datepipe: DatePipe,
   ) {
     this.constantModel = contractModel;
   }
@@ -121,22 +125,10 @@ export class ContractSignatureComponent implements OnInit {
         } else {
           this.setPage();
         }
-        this.contracts.forEach((key : any, v: any) => {
-          let participants = key.participants;
-          participants.forEach((key : any, val: any) => {
-            if (key.type == 1) {
-              this.contracts[v].sideA = key.name;
-            }else{
-              this.contracts[v].sideB = key.name;
-            }
-          })
-        });
       });
     }else if(this.filter_status == 1 || this.filter_status == 4){
       this.contractService.getContractMyProcessList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
-        console.log(data.entities);
         this.contracts = data.entities
-  
         this.pageTotal = data.total_elements;
         if (this.pageTotal == 0) {
           this.p = 0;
@@ -153,22 +145,12 @@ export class ContractSignatureComponent implements OnInit {
           this.contracts[v].contractCreateTime = key.participant.contract.created_time;
           this.contracts[v].contractStatus = key.participant.contract.status;
           this.contracts[v].contractReleaseState = key.participant.contract.release_state;
-
-          key.participant.contract.participants.forEach((key : any, val: any) => {
-            if (key.type == 1) {
-              this.contracts[v].sideA = key.name;
-            }else{
-              this.contracts[v].sideB = key.name;
-            }
-          })
         });
       });
     }else {
       console.log(this.filter_status%10);
       this.contractService.getContractMyProcessDashboard(this.filter_status%10, this.p, this.page).subscribe(data => {
-        console.log(data.entities);
         this.contracts = data.entities
-  
         this.pageTotal = data.total_elements;
         if (this.pageTotal == 0) {
           this.p = 0;
@@ -177,18 +159,16 @@ export class ContractSignatureComponent implements OnInit {
         } else {
           this.setPage();
         }
-        this.contracts.forEach((key : any, v: any) => {
-          key.participants.forEach((key : any, val: any) => {
-            if (key.type == 1) {
-              this.contracts[v].sideA = key.name;
-            }else{
-              this.contracts[v].sideB = key.name;
-            }
-            console.log(this.contracts[v].sideA);
-          })
-        });
       });
     }
+  }
+
+  sortParticipant(list:any){
+    return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+  }
+
+  getNameOrganization(item:any, index:any){
+    return sideList[index].name + " : " + item.name;
   }
 
   //auto search
@@ -309,10 +289,21 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openSignatureContract(item: any) {
-    this.router.navigate(['main/contract-signature/signatures/' + item.contractId],
-      {
-        queryParams: {'recipientId': item.id}
-      });
+    //kiem tra xem co bi khoa hay khong
+    this.contractServiceV1.getStatusSignImageOtp(item.id).subscribe(
+      data => {
+        if(!data.locked){
+          this.router.navigate(['main/contract-signature/signatures/' + item.contractId],
+          {
+            queryParams: {'recipientId': item.id}
+          });
+        }else{
+          this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(data.nextAttempt, "dd/MM/yyyy HH:mm"), "", 3000);
+        }
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi', "", 3000);
+      }
+    )
   }
 
   openCoordinatorContract(item: any) {

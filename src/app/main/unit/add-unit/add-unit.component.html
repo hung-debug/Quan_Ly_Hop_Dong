@@ -34,7 +34,7 @@
                 </div>
                 <div *ngIf="submitted && f.code.errors" class="invalid">
                     <div *ngIf="f.code.errors.required">{{'error.unit.code.required' | translate}}</div>
-                    <div *ngIf="f.code.errors.pattern">{{'Mã tổ chức không được chứa ký tự đặc biệt' | translate}}</div>
+                    <div *ngIf="f.code.errors.pattern">{{'Mã tổ chức không được chứa ký tự đặc biệt, ký tự có dấu' | translate}}</div>
                 </div>
             </div>
         

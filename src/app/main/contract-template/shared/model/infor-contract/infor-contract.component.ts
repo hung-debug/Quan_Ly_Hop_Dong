@@ -14,7 +14,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
-
+import { parttern } from 'src/app/config/parttern';
+import { parttern_input } from 'src/app/config/parttern';
 export class ContractConnectArr {
   ref_id: number;
 
@@ -335,30 +336,52 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       }
 
       if (countSuccess == 0) {
-        if (this.datas.attachFileArr != null) {
-          for (var i = 0; i < this.datas.attachFileArr.length; i++) {
-            await this.uploadService.uploadFile(this.datas.attachFileArr[i]).toPromise().then((data) => {
-              if (!this.datas.attachFileArr[i].id) {
-                this.datas.filePathAttach = data.file_object.file_path;
-                this.datas.fileNameAttach = data.file_object.filename;
-                this.datas.fileBucketAttach = data.file_object.bucket;
-                this.contractTemplateService.addDocumentAttach(this.datas).toPromise().then((data) => {
-                  // this.datas.document_attach_id = data?.id;
-                  this.datas.attachFileArr[i].id = data?.id;
-                },
-                  error => {
-                    this.spinner.hide();
-                    this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
-                  }
-                );
-              }
-              
-            },
-              error => {
-                this.spinner.hide();
-                this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
-              }
-            );
+        console.log("mang file");
+        console.log(this.attachFileArr);
+        if (this.attachFileArr != null) {
+          for (var i = 0; i < this.attachFileArr.length; i++) {
+            //kiem tra file cu da bi danh dau xoa hay chua
+            let id_type="";
+            if(this.attachFileArr[i].id){
+              console.log(this.attachFileArr[i].id);
+              id_type = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 3 && p.id == this.datas.attachFileArr[i].id)[0].id;
+            }
+            console.log("id type" + id_type);
+            console.log(this.datas.attachFileArr);
+            //neu chua co id hoac id khong con hoat dong
+            if(!this.attachFileArr[i].id || !id_type){
+              await this.uploadService.uploadFile(this.attachFileArr[i]).toPromise().then((data) => {
+                //if (!this.datas.attachFileArr[i].id) {
+                  this.datas.filePathAttach = data.file_object.file_path;
+                  this.datas.fileNameAttach = data.file_object.filename;
+                  this.datas.fileBucketAttach = data.file_object.bucket;
+                  this.contractTemplateService.addDocumentAttach(this.datas).toPromise().then((data) => {
+                    // this.datas.document_attach_id = data?.id;
+                    console.log(data?.id);
+                    console.log(this.datas.attachFileArr[i]);
+                    if(this.datas.attachFileArr[i]){
+                      this.datas.attachFileArr[i].id = data?.id;
+                    }
+                    
+  
+                    //this.datas.document_attach_id = data?.id;
+                  },
+                    error => {
+                      this.spinner.hide();
+                      this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
+                    }
+                  );
+                //}
+                
+              },
+                error => {
+                  this.spinner.hide();
+                  this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
+                }
+              );
+            }
+            
+            
           }
         } 
         this.step = variable.stepSampleContract.step2;
@@ -386,6 +409,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       if (countSuccess == 0) {
         //day file
         await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data: any) => {
+          console.log("day file");
           console.log(data);
           this.datas.filePath = data.file_object.file_path;
           this.datas.fileName = data.file_object.filename;
@@ -400,6 +424,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       if (countSuccess == 0) {
         //xac dinh moi quan he file va hop dong
         await this.contractTemplateService.addDocument(this.datas).toPromise().then((respon: any) => {
+          console.log("xac dinh moi quan he file");
           console.log(respon);
           this.datas.document_id = respon?.id;
         }, (error: HttpErrorResponse) => {
@@ -694,6 +719,14 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   contractNumberCounter(){
     if(this.characterCounter(this.contract_no) > 32){
       this.errorContractNumber = "Mã mẫu hợp đồng không được vượt quá 32 ký tự";
+      return false;
+    }
+    return this.checkPatternContractNumber();
+  }
+
+  checkPatternContractNumber(){
+    if(!String(this.contract_no).match(parttern.name_and_number)){
+      this.errorContractNumber = "Mã mẫu hợp đồng không được chứa ký tự đặc biệt, ký tự có dấu";
       return false;
     }
     return true;

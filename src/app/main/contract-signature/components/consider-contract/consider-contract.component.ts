@@ -41,13 +41,14 @@ import { concatMap, delay, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { networkList } from "../../../../config/variable";
 import { HttpErrorResponse } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-consider-contract',
   templateUrl: './consider-contract.component.html',
   styleUrls: ['./consider-contract.component.scss']
 })
-export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewInit {  
   datas: any;
   data_contract: any;
   data_coordinates: any;
@@ -146,6 +147,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   heightText: any = 200;
   widthText: any = 200;
   loadingText: string = 'Đang xử lý...';
+  phoneOtp:any;
+  isDateTime:any;
+  userOtp:any;
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -160,23 +164,36 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     private spinner: NgxSpinnerService,
     private digitalSignatureService: DigitalSignatureService,
     private userService: UserService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public datepipe: DatePipe,
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
   ngOnInit(): void {
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
-    this.getDataContractSignature();
+    this.idContract = this.activeRoute.snapshot.paramMap.get('id');
+    this.activeRoute.queryParams.subscribe(params => {
+      this.recipientId = params.recipientId;
+
+      //kiem tra xem co bi khoa hay khong
+      this.contractService.getStatusSignImageOtp(this.recipientId).subscribe(
+        data => {
+          if(!data.locked){
+            this.getDataContractSignature();
+          }else{
+            this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(data.nextAttempt, "dd/MM/yyyy HH:mm"), "", 3000);
+            this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+          }
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi', "", 3000);
+        }
+      )
+    });
   }
 
   getDataContractSignature() {
-    this.idContract = this.activeRoute.snapshot.paramMap.get('id');
-    this.activeRoute.queryParams
-      .subscribe(params => {
-        this.recipientId = params.recipientId;
-      }
-      );
+    
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
       console.log(rs);
       this.isDataContract = rs[0];
@@ -705,6 +722,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   async submitEvents(e: any) {
     let haveSignPKI = false;
+    let haveSignImage = false;
+    const counteKYC = this.recipient?.sign_type.filter((p: any) => p.id == 5).length;
+    if(counteKYC > 0){
+      this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
+      return;
+    }
     if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng', '', 3000);
       return;
@@ -716,10 +739,15 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     } else if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
       let typeSignDigital = null;
+      let typeSignImage = null;
       if (this.recipient?.sign_type) {
         const typeSD = this.recipient?.sign_type.find((t: any) => t.id != 1);
+        const typeSImage = this.recipient?.sign_type.find((t: any) => t.id == 1);
         if (typeSD) {
           typeSignDigital = typeSD.id;
+        }
+        if (typeSImage) {
+          typeSignImage = typeSImage.id;
         }
       }
       if (typeSignDigital && typeSignDigital == 3) {
@@ -749,6 +777,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           return;
         }*/
       }
+      if (typeSignImage && typeSignImage == 1) {
+        haveSignImage = true;
+      }
     }
     if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
@@ -764,12 +795,15 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         if (result.isConfirmed) {
           // Kiểm tra ô ký đã ký chưa (status = 2)
           this.spinner.show();
-          let id_recipient_signature = null;
+          let id_recipient_signature:any = null;
+          let phone_recipient_signature:any = null;
           // console.log(this.datas);
           for (const d of this.datas.is_data_contract.participants) {
             for (const q of d.recipients) {
               if (q.email == this.currentUser.email && q.status == 1) {
                 id_recipient_signature = q.id;
+                this.phoneOtp = phone_recipient_signature = q.phone;
+                this.userOtp = q.name;
                 break
               }
             }
@@ -783,7 +817,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                 this.spinner.hide();
                 this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
               } else {
-                if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
+                if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignImage) {
+                  this.confirmOtpSignContract(id_recipient_signature, phone_recipient_signature);
+                  this.spinner.hide();
+                } else if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
                   this.pkiDialogSignOpen();
                   this.spinner.hide();
                 } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
@@ -817,21 +854,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  confirmOtpSignContract() {
-    const data = {
-      title: 'Xác nhận otp',
-      is_content: 'forward_contract'
-    };
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '497px';
-    dialogConfig.hasBackdrop = true;
-    dialogConfig.data = data;
-    const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe((result: any) => {
-      this.openPopupSignContract(this.typeSign);
-    })
-  }
+  
 
   openPopupSignContract(typeSign: any) {
     if (typeSign == 1) {
@@ -1094,17 +1117,55 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   async signContract(notContainSignImage?: boolean) {
     const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
-    const signUpdatePayload = signUpdateTemp.filter(
-      (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
-      .map((item: any) => {
-        return {
-          id: item.id,
-          name: item.name,
-          value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
-          font: item.font,
-          font_size: item.font_size
-        }
-      });
+    let signUpdatePayload = "";
+    //neu khong chua chu ky anh
+    if (notContainSignImage) {
+      signUpdatePayload = signUpdateTemp.filter(
+        (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+        .map((item: any) => {
+          return {
+            id: item.id,
+            name: item.name,
+            value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
+            font: item.font,
+            font_size: item.font_size
+          }
+        });
+    }else{
+      
+      this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
+      await of(null).pipe(delay(100)).toPromise();
+      const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
+      
+      let signI:any;
+      if (imageRender) {
+        const textSignB = await domtoimage.toPng(imageRender);
+        signI = textSignB.split(",")[1];
+      }
+      //console.log(signI);
+      //console.log(this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'));
+      signUpdatePayload = signUpdateTemp.filter(
+        (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+        .map((item: any) => {
+          return {
+            otp: this.dataOTP.otp,
+            signInfo: signI,
+            processAt: this.datepipe.transform(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+            fields:[
+              {
+                id: item.id,
+                name: item.name,
+                value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
+                font: item.font,
+                font_size: item.font_size
+              }]
+          }
+        });
+      if(signUpdatePayload){
+        signUpdatePayload = signUpdatePayload[0];
+      }
+    }
+    
     let typeSignDigital = null;
     for (const signUpdate of this.isDataObjectSignature) {
       if (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
@@ -1161,42 +1222,82 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   async signImageC(signUpdatePayload: any, notContainSignImage: any) {
-    let signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
+    console.log(notContainSignImage);
+    console.log(signUpdatePayload);
     let signDigitalStatus = null;
-    if (notContainSignImage) {
-      signDigitalStatus = await this.signDigitalDocument();
-      signUpdateTempN = signUpdateTempN.filter(
-        (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
-        .map((item: any) => {
-          return {
-            id: item.id,
-            name: item.name,
-            value: null,
-            font: item.font,
-            font_size: item.font_size
-          }
-        });
+    let signUpdateTempN = [];
+    if(signUpdatePayload){
+      signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
+      if (notContainSignImage) {
+        signDigitalStatus = await this.signDigitalDocument();
+        signUpdateTempN = signUpdateTempN.filter(
+          (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+          .map((item: any) => {
+            return {
+              id: item.id,
+              name: item.name,
+              value: null,
+              font: item.font,
+              font_size: item.font_size
+            }
+          });
+      }
     }
+    
     if (notContainSignImage && !signDigitalStatus && this.datas.roleContractReceived != 2) {
       this.spinner.hide();
       return;
     }
-    this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
-      async (result) => {
-        if (!notContainSignImage) {
-          await this.signDigitalDocument();
-        }
-        setTimeout(() => {
-          this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
-          this.toastService.showSuccessHTMLWithTimeout(
-            [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-            , '', 3000);
+    if(notContainSignImage){
+      console.log(signUpdateTempN);
+      this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
+        async (result) => {
+          if (!notContainSignImage) {
+            await this.signDigitalDocument();
+          }
+          setTimeout(() => {
+            this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+            this.toastService.showSuccessHTMLWithTimeout(
+              [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+              , '', 3000);
+            this.spinner.hide();
+          }, 1000);
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
           this.spinner.hide();
-        }, 1000);
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
-      }
-    )
+        }
+      )
+    }else{
+      this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.recipientId).subscribe(
+        async (result) => {
+          if(result?.success == false){
+            if(result.message == 'Wrong otp'){
+              this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng hoặc quá hạn', '', 3000);
+              this.spinner.hide();
+            }else{
+              this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
+              this.spinner.hide();
+            }
+          }else{
+            if (!notContainSignImage) {
+              await this.signDigitalDocument();
+            }
+            setTimeout(() => {
+              this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+              this.toastService.showSuccessHTMLWithTimeout(
+                [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+                , '', 3000);
+              this.spinner.hide();
+            }, 1000);
+          }
+          
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
+          this.spinner.hide();
+        }
+      )
+    }
+    
   }
 
   async signContractSimKPI() {
@@ -1416,6 +1517,42 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         }
       }
     })
+  }
+
+  dataOTP:any;
+  confirmOtpSignContract(id_recipient_signature:any, phone_recipient_signature:any) {
+    const data = {
+      title: 'XÁC NHẬN OTP',
+      is_content: 'forward_contract',
+      recipient_id: id_recipient_signature,
+      phone: phone_recipient_signature,
+      name: this.userOtp,
+      contract_id: this.datas.is_data_contract.id,
+      datas: this.datas,
+      currentUser: this.currentUser,
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '497px';
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.data = data;
+    const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
+    // dialogRef.afterClosed().subscribe(async (result: any) => {
+    //   if(result){
+    //     this.dataOTP = {
+    //       otp: result
+    //     }
+    //     await this.signContractSubmit();
+    //   }
+    // })
+  }
+
+  confirmOtp(otp:any) {
+    console.log(otp);
+    this.dataOTP = {
+           otp: otp
+    }
+    this.signContractSubmit();
   }
 
   prepareInfoSignUsbToken(page: any, heightPage: any) {

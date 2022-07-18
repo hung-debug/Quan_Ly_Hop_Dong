@@ -437,4 +437,12 @@
   //::ng-deep .mat-form-field-flex {
   //  background-color: white;
   //}
-  
+  .label_detail {
+    font-weight: 500;
+    color: #0160AE;
+    background-color: #C7D0E9;
+    height: 40px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    align-items: center;
+  }

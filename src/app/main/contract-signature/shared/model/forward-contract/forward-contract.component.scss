@@ -39,3 +39,21 @@
     }
   }
 }
+.input-data {
+  border: 1px solid #106DB6;
+  border-radius: 5px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+
+  > img {
+    padding-left: 14px;
+  }
+
+  > input {
+    border: none;
+    outline: none;
+    padding-left: 19px;
+    width: 100%;
+  }
+}

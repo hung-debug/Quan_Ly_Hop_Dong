@@ -1,5 +1,4 @@
 <div class="sample-contract row" *ngIf="loaded && valid">
-  <!--  information contract-->
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
       <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
@@ -39,9 +38,7 @@
     <div class="location-change" [ngStyle]="changeDisplay()">
       <div class="sample-contract__information--user-sign" style="line-height: 25px">
         <div style="text-align: center; font-weight: bold" class="label">CÁC BÊN LIÊN QUAN</div>
-        <!--        <div *ngFor="let d of this.isPartySignature">-->
-        <!--          <div>{{d.name}}</div>-->
-        <!--        </div>-->
+        
         <div *ngFor="let d of this.datas?.is_data_contract?.participants">
           <div>{{d.name}}</div>
         </div>
@@ -79,16 +76,12 @@
               <label for="radio-refuse-secretary" class="ms-2">Không đồng ý</label>
             </div>
           </div>
-          <!--<p class="mb-3 mt-3 text-align-left">Chọn loại ký</p>
-          <ngx-select [placeholder]="'Chọn loại ký'" [items]="optionsSign" [(ngModel)]="typeSign" optionValueField="item_id" optionTextField="item_text"></ngx-select>
-          <p style="color:#ED1C24;" class="mt-xl-4">Bạn cần nhập vào ô thông tin trên hợp đồng để hoàn thành.</p>-->
+          
         </div>
       </div>
     </div>
   </div>
 
-  <!--  file content-->
-  <!--  width: 74.7%-->
   <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
        style="background-color: #F2F2F2; position: relative;">
     <div id="pdf-viewer-step-3">
@@ -110,10 +103,15 @@
       <div class="skeleton-sign position-absolute opacity-0">
         <app-text-signature-image [textSign]="textSign" [height]="heightText" [width]="widthText"></app-text-signature-image>
       </div>
+      <!-- <div class="skeleton-sign position-absolute opacity-0">
+        <app-display-signature-image [userOtp]="userOtp" [phoneOtp]="phoneOtp" [isDateTime]="isDateTime"></app-display-signature-image>
+      </div> -->
+      
     </div>
   </div>
 </div>
 <app-footer-signature *ngIf="loaded" [datas]="datas" [view]="[2,3].includes(recipient.status)" [recipientId]="recipientId" (submitChanges)="submitEvents($event)"></app-footer-signature>
+<!-- <app-confirm-sign-otp (confirmOtpForm)="confirmOtp($event)"></app-confirm-sign-otp> -->
 <ngx-spinner
   bdColor="rgba(51,51,51,0.8)"
   size="medium"

@@ -7,6 +7,8 @@ import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DatePipe } from "@angular/common";
 import * as _ from 'lodash';
+import { ConfirmCecaFormComponent } from "../confirm-ceca-form/confirm-ceca-form.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
     selector: 'app-confirm-contract-form',
@@ -26,7 +28,8 @@ export class ConfirmContractFormComponent implements OnInit {
         private contractService: ContractService,
         private router: Router,
         private spinner: NgxSpinnerService,
-        private toastService: ToastService
+        private toastService: ToastService,
+        private dialog: MatDialog,
     ) { this.stepForm = variable.stepSampleContractForm.step4 }
 
     contractFileName: string = '';
@@ -140,6 +143,33 @@ export class ConfirmContractFormComponent implements OnInit {
             }
         );
 
+    }
+
+    submit(action: string){
+        const data = {
+          title: 'YÊU CẦU XÁC NHẬN',
+        };
+        // @ts-ignore
+        const dialogRef = this.dialog.open(ConfirmCecaFormComponent, {
+          width: '560px',
+          backdrop: 'static',
+          keyboard: false,
+          data,
+          autoFocus: false
+        })
+        dialogRef.afterClosed().subscribe((isCeCA: any) => {
+            if(isCeCA == 1 || isCeCA == 0){
+                this.spinner.show();
+                this.contractService.updateContractIsPushCeCA(this.datasForm.id, isCeCA).subscribe((data) => {
+                
+                this.SaveContract(action);
+        
+                }, error => {
+                    this.toastService.showErrorHTMLWithTimeout("Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương", "", 3000);
+                });
+                //this.SaveContract(action);
+            }
+        })
     }
 
     async SaveContract(action: string) {
