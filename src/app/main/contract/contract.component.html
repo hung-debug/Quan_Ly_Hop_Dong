@@ -32,7 +32,7 @@
           </div>
           <div class="row">
             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
-              <span class="status_blue">{{item.status | pipe | translate}}</span>
+              <span class="status_blue">{{item.status | pipe | translate}} {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}</span>
             </div>
           </div>
         </div>

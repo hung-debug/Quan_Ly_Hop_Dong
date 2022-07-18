@@ -454,4 +454,24 @@ export class ContractComponent implements OnInit, AfterViewInit {
     );
   }
 
+  getNameStatusCeca(status:any, ceca_push:any, ceca_status:any){
+    if(status == 30){
+      if(ceca_push == 0){   
+        return "";
+      }else{
+        if(ceca_status == 0){
+          return "[Chưa đẩy lên Bộ Công Thương]";
+        }else if(ceca_status == 1){
+          return "[Đẩy lên Bộ Công Thương thành công]";
+        }else if(ceca_status == 2){
+          return "[Đẩy lên Bộ Công Thương thất bại]";
+        }else if(ceca_status == 3){
+          return "[Bộ Công Thương đã phản hồi]";
+        }
+      }
+      return "[Không xác định]";
+    }
+    return "";
+  }
+
 }
