@@ -305,12 +305,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       for (const data of dataDetermine) {
         //@ts-ignore
         if (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
-          //@ts-ignore
-          (d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
-          //@ts-ignore
-          (d.sign_unit == 'so_tai_lieu' && data.role == 4) ||
-          //@ts-ignore
-          (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
+            //@ts-ignore
+            (d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
+            //@ts-ignore
+            (d.sign_unit == 'so_tai_lieu' && data.role == 4) ||
+            //@ts-ignore
+            (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
           //@ts-ignore
           (d.name === data.name) && ((d.email ? d.email : d.recipient.email) === data.email)) {
           isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
@@ -509,20 +509,37 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
         }
 
+        let layer_Y_localtion = _.cloneDeep(layerY);
+
         let pages = event.relatedTarget.id.split("-");
-        let page = Helper._attemptConvertFloat(pages[pages.length - 1]);
-        // @ts-ignore
+        let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
+        // tinh toa do cua element / tong so trang
+        // if (page > 1) { // page: so trang ma phan tu keo tha vao
+        //   for (let i = 1; i < page; i++) {
+        //     let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
+        //     let canvasInfo = canvasElement.getBoundingClientRect();
+        //     layerY += canvasInfo.height + 3;
+        //   }
+        //   layerY += page / 3;
+        // }
+
+        /* test set location signature
+        Duongdt
+         */
         if (page > 1) {
-          // @ts-ignore
+          let countPage = 0;
           for (let i = 1; i < page; i++) {
-            let canvasElement = document.getElementById("canvas-step3-" + i);
-            // @ts-ignore
+            let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
             let canvasInfo = canvasElement.getBoundingClientRect();
-            layerY += canvasInfo.height + 3;
+            countPage += canvasInfo.height;
           }
-          // @ts-ignore
-          layerY += page / 3;
+          let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
+          let canvasInfo = canvasElement.getBoundingClientRect();
+          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + (5 * (page == 1 ? 1 : page - 1));
         }
+        //END
+
+
         let _array = Object.values(this.obj_toa_do);
         this.cdRef.detectChanges(); // render lại view
         let _sign = <HTMLElement>document.getElementById(this.signCurent['id']);
