@@ -40,7 +40,6 @@ export class AdminAddPackComponent implements OnInit {
   orgList: Array<any> = [];
   submitted = false;
 
-  //dungpt
   //name input thoi gian va so luong hop dong
   timeName: any;
   numberContractName: any;

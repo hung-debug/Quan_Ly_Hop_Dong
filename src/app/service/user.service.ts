@@ -33,6 +33,8 @@ export class UserService {
   resetPasswordUrl:any = `${environment.apiUrl}/api/v1/customers/password/recover`;
   resetPasswordTokenUrl:any = `${environment.apiUrl}/api/v1/customers/changePassword`;
   addUserUrl:any = `${environment.apiUrl}/api/v1/customers`;
+  
+  
   updateUserUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   listUserUrl:any = `${environment.apiUrl}/api/v1/customers/search`;
@@ -118,7 +120,8 @@ export class UserService {
       representatives: datas.representatives,
       position: datas.position,
       email: datas.email,
-      phone: datas.phone
+      phone: datas.phone,
+      ceCAPushMode: datas.ceCAPushMode,
     });
 
     return this.http.post<any>(this.signupUrl, body, {'headers': headers});

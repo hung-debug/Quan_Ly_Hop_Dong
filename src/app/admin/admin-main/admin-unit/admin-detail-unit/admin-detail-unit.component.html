@@ -74,6 +74,12 @@
     </div>
 
     <div class="row" style="padding-top: 10px">
+      <div class="col-md-4">
+        <div class="label_item">{{ "Đẩy file hợp đồng lên Bộ công thương" | translate }}</div>
+        <div>
+          <div [innerHTML]="this.getFileCeCa()" class="input_text"></div>
+        </div>
+      </div>
       <div class="col-md-6" style="align-self: center">
         <input type="radio" checked style="outline: none" />
         <span>
@@ -121,7 +127,7 @@
             <span *ngIf="list.usageStatus == 'CANCELED'">Đã huỷ</span>
           </td>
           <td style="text-align: center">
-            <img
+            <img *ngIf="list.usageStatus == 'NOT_USED'"
             (click)="editUnitPack(list.serviceId)"
               src="../../../assets/img/icon_edit.svg"
               width="20px"

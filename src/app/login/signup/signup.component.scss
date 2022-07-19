@@ -13,3 +13,25 @@
 .input-text{
     min-height: 33px;
 }
+
+:host ::ng-deep {
+  .p-dropdown {
+    border: 1px solid #EFF2F5;
+    border-radius: 5px;
+    height: 40px;
+    width: 100%;
+    outline: 0;
+    color: black !important;
+    background-color: #EFF2F5;
+  }
+  .p-dropdown-label {
+    padding: 10px;
+  }
+  .p-multiselect .p-multiselect-label.p-placeholder,
+  .p-dropdown .p-dropdown-label.p-placeholder {
+    color: #6c757d !important;
+  }
+}
+.invalid {
+  color: red;
+}

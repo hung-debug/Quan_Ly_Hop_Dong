@@ -173,6 +173,12 @@ export var paidStatusList = [
   {id:'PAID', name:'Đã thanh toán'}
 ]
 
+export var fileCeCaOptions = [
+  {id: 'NONE', name:'Không đẩy HĐ nào'},
+  {id: 'ALL', name: 'Đẩy toàn bộ hợp đồng'},
+  {id: 'SELECTION', name: 'Tuỳ biến'}
+]
+
 export var sideList = [
   {id:'1', name:'A'}, {id:'2', name:'B'}, {id:'3', name:'C'}, {id:'4', name:'D'},
   {id:'5', name:'E'}, {id:'6', name:'F'}, {id:'7', name:'G'}, {id:'8', name:'H'},

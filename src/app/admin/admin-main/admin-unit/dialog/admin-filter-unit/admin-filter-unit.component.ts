@@ -6,10 +6,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
-import { ToastService } from 'src/app/service/toast.service';
-import { statusList } from '../../../../../config/variable';
-import { AdminUnitComponent } from '../../admin-unit.component';
+import { fileCeCaOptions, statusList } from '../../../../../config/variable';
 
 @Component({
   selector: 'app-admin-filter-unit',
@@ -29,6 +26,7 @@ export class AdminFilterUnitComponent implements OnInit {
   listData:any[];
 
   flagSearch: boolean = false;
+  fileCeCaOptions: Array<any> = [];
 
 
   get f() {
@@ -42,25 +40,27 @@ export class AdminFilterUnitComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
   ) {
+
+
     this.addForm = this.fbd.group({
       filter_representative: this.fbd.control(this.data.filter_representative),
       filter_email: this.fbd.control(this.data.filter_email),
       filter_phone: this.fbd.control(this.data.filter_phone),
       filter_status: this.fbd.control(Number(this.data.filter_status)),
       filter_address: this.fbd.control(this.data.filter_address),
+      filter_fileCeCa: this.fbd.control(this.data.filter_fileCeCa),
     });
   }
 
 
   ngOnInit(): void {
     this.statusList = statusList;
+
+    this.fileCeCaOptions = fileCeCaOptions;
+
   }
 
   onSubmit() {
-
-    console.log("value");
-    console.log(this.addForm.value.filter_status);
-
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
@@ -72,7 +72,17 @@ export class AdminFilterUnitComponent implements OnInit {
       filter_phone: this.addForm.value.filter_phone,
       filter_status: this.addForm.value.filter_status,
       filter_address: this.addForm.value.filter_address,
+      filter_fileCeCa: this.addForm.value.filter_fileCeCa
     }
+
+    if(data.filter_fileCeCa = fileCeCaOptions[0].name) {
+      data.filter_fileCeCa = fileCeCaOptions[0].id;
+    } else if(data.filter_fileCeCa = fileCeCaOptions[1].name) {
+      data.filter_fileCeCa = fileCeCaOptions[1].id;
+    } else if(data.filter_fileCeCa = fileCeCaOptions[2].name) {
+      data.filter_fileCeCa = fileCeCaOptions[2].id;
+    }
+
     this.dialogRef.close();
     console.log(data);
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {

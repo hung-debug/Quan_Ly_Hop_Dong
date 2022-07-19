@@ -12,8 +12,9 @@ import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
+import { isConstructorDeclaration } from 'typescript';
 import { parttern_input } from '../../../../config/parttern';
-import { roleList } from '../../../../config/variable';
+import { fileCeCaOptions, roleList } from '../../../../config/variable';
 @Component({
   selector: 'app-admin-add-unit',
   templateUrl: './admin-add-unit.component.html',
@@ -31,6 +32,7 @@ export class AdminAddUnitComponent implements OnInit {
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
+  fileCeCaOptions: Array<any> = [];
   submitted = false;
   get f() {
     return this.addForm.controls;
@@ -85,10 +87,15 @@ export class AdminAddUnitComponent implements OnInit {
         Validators.required,
         Validators.pattern(parttern_input.input_form),
       ]),
+      fileCeCa: this.fbd.control('',[
+        Validators.required
+      ])
     });
   }
 
   ngOnInit(): void {
+    this.fileCeCaOptions = fileCeCaOptions;
+
     this.datas = this.data;
 
     console.log('data ');
@@ -145,6 +152,10 @@ export class AdminAddUnitComponent implements OnInit {
               Validators.required,
               Validators.pattern(parttern_input.input_form),
             ]),
+            fileCeCa: this.fbd.control(
+              this.convertFileCeCa(data.ceCAPushMode),
+              Validators.required
+            ),
           });
         },
         (error) => {
@@ -195,12 +206,26 @@ export class AdminAddUnitComponent implements OnInit {
           Validators.required,
           Validators.pattern(parttern_input.input_form),
         ]),
+        fileCeCa: this.fbd.control('', [
+          Validators.required,
+        ]),
       });
     }
   }
+  convertFileCeCa(ceCAPushMode: any): any {
+    if ((ceCAPushMode = fileCeCaOptions[0].id)) {
+      ceCAPushMode = fileCeCaOptions[0];
+    } else if ((ceCAPushMode = fileCeCaOptions[1].id)) {
+      ceCAPushMode = fileCeCaOptions[1];
+    } else if ((ceCAPushMode = fileCeCaOptions[2].id)) {
+      ceCAPushMode = fileCeCaOptions[2];
+    }
+
+    return ceCAPushMode;
+  }
 
   convertStatus(status: any): any {
-    if (status == 'IN_ACTIVE') {
+    if (status == 'IN_ACTIVE' || status == 'NOT_ACTIVATED') {
       status = 0;
     } else if (status == 'ACTIVE') {
       console.log('status 0');
@@ -230,6 +255,7 @@ export class AdminAddUnitComponent implements OnInit {
       taxCode: this.addForm.value.tax_code,
       position: this.addForm.value.position,
       address: this.addForm.value.address,
+      ceCAPushMode: this.addForm.value.fileCeCa,
     };
 
     //truong hop sua ban ghi
@@ -299,43 +325,79 @@ export class AdminAddUnitComponent implements OnInit {
                 },
                 (error) => {
                   this.toastService.showErrorHTMLWithTimeout(
-                    'Cập nhật vai trò cho tổ chức thất bại',
+                    'Cập nhật tổ chức thất bại',
                     '',
                     3000
                   );
                 }
               );
             } else if (data.codeInfo == 2) {
-              let roleArrConvert: any = [];
+              this.adminUnitService.getUserByEmail(data.email).subscribe(
+                (responseEmail) => {
+                  this.adminUnitService.getRoleByOrgId(data.id).subscribe(
+                    (dataRoleByOrgId) => {
+                      console.log('data role by org id ', dataRoleByOrgId);
 
-              roleList.forEach((key: any, v: any) => {
-                key.items.forEach((keyItem: any, vItem: any) => {
-                  let jsonData = { code: keyItem.value, status: 1 };
-                  roleArrConvert.push(jsonData);
-                });
-              });
+                      let roleAdmin = dataRoleByOrgId.entities.filter(
+                        (p: any) => p.code == 'ADMIN'
+                      );
 
-              const dataRoleIn = {
-                name: 'Admin',
-                code: 'ADMIN',
-                selectedRole: roleArrConvert,
-                organization_id: data.id,
-              };
+                      const dataUpdateUser = {
+                        id: responseEmail.id,
+                        name: 'Admin',
+                        email: dataForm.email,
+                        phone: dataForm.phone,
+                        organizationId: data.id,
+                        role: roleAdmin[0].id,
+                        status: 1,
+                        phoneKpi: null,
+                        networkKpi: null,
+                        nameHsm: null,
+                        sign_image: [],
+                      };
 
-              // this.adminUnitService.addRoleByOrg(dataRoleIn).subscribe(
-              //   dataRole => {
-              //     //this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
-              //     console.log(dataRole);
-              //     //them nguoi dung
-              //     const dataUserIn = {
-              //       name: "Admin",
-              //       email: data.email,
-              //       phone: data.phone,
-              //       organizationId: data.id,
-              //       role: dataRole.id,
-              //       status: 1,
-              //       sign_image: []
-              //     }
+                      this.adminUnitService
+                        .updateUser(dataUpdateUser)
+                        .subscribe(
+                          (response) => {
+                            this.toastService.showSuccessHTMLWithTimeout(
+                              'Cập nhật tổ chức thành công!',
+                              '',
+                              3000
+                            );
+                            this.dialogRef.close();
+                            this.router
+                              .navigateByUrl('/', { skipLocationChange: true })
+                              .then(() => {
+                                this.router.navigate(['/admin-main/unit']);
+                              });
+                          },
+                          (error) => {
+                            this.toastService.showErrorHTMLWithTimeout(
+                              'Cập nhật tổ chức thất bại',
+                              '',
+                              3000
+                            );
+                          }
+                        );
+                    },
+                    (error) => {
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Cập nhật tổ chức thất bại',
+                        '',
+                        3000
+                      );
+                    }
+                  );
+                },
+                (error) => {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    'Cập nhật tổ chức thất bại',
+                    '',
+                    3000
+                  );
+                }
+              );
             } else if (data.codeInfo == 3) {
               this.toastService.showErrorHTMLWithTimeout(
                 'Email đã tồn tại trong tổ chức khác',
@@ -432,8 +494,6 @@ export class AdminAddUnitComponent implements OnInit {
 
     this.adminUnitService.addUnit(dataForm).subscribe(
       (data) => {
-        console.log('data ', data);
-
         if (data.id != null && data.id != undefined) {
           if (data.status == 'ACTIVE') {
             //them vai tro
@@ -477,7 +537,6 @@ export class AdminAddUnitComponent implements OnInit {
                       '',
                       3000
                     );
-                   
                   },
                   (error) => {
                     this.toastService.showErrorHTMLWithTimeout(
