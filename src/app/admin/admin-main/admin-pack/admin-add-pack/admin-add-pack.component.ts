@@ -356,6 +356,8 @@ export class AdminAddPackComponent implements OnInit {
 
       //truong hop them moi ban ghi
     } else {
+      
+
       this.adminPackService.addPack(dataForm).subscribe(
         (data) => {
           console.log('data add ');

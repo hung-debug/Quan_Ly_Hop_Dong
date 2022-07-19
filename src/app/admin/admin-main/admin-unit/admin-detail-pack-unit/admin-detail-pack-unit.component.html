@@ -62,7 +62,7 @@
           <div class="col-md-6">
               <div class="label_item">{{'Thể thức tính' | translate }}</div>
               <div>
-                  <div [innerHTML]="this.datas?.calculatorMethod" class="input_text"></div>
+                  <div [innerHTML]="this.getCalculatorMethod()" class="input_text"></div>
               </div>
           </div>
       </div>
@@ -87,7 +87,7 @@
         <div class="col-md-6">
             <div class="label_item">{{'Trạng thái thanh toán' | translate }}</div>
             <div>
-                <div [innerHTML]="this.datas?.paymentStatus" class="input_text"></div>
+                <div [innerHTML]="this.getPaymentStatus()" class="input_text"></div>
             </div>
         </div>
     

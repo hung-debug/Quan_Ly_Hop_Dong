@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { paidStatusList } from 'src/app/config/variable';
 import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { ToastService } from 'src/app/service/toast.service';
 
@@ -63,5 +64,23 @@ export class AdminDetailPackUnitComponent implements OnInit {
 
   cancel() {
     this.dialogRef.close();
+  }
+
+  getPaymentStatus() {
+    if(this.datas?.paymentStatus == paidStatusList[0].id) {
+      return paidStatusList[0].name;
+    } else if(this.datas?.paymentStatus == paidStatusList[1].id) {
+      return paidStatusList[1].name;
+    }
+  }
+
+  getCalculatorMethod() {
+    if(this.datas?.calculatorMethod == 'BY_CONTRACT_NUMBERS') {
+      this.datas.calculatorMethod = 'Theo số lượng hợp đồng';
+    } else if(this.datas?.calculatorMethod == 'BY_TIME') {
+      this.datas.calculatorMethod = 'Theo thời gian';
+    }
+
+    return this.datas?.calculatorMethod;
   }
 }

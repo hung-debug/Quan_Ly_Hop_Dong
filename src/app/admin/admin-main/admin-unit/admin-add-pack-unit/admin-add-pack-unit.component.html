@@ -232,7 +232,7 @@
       <div class="col-md-6">
         <div class="label text-color">
           {{ "Ngày bắt đầu" | translate }}
-          <span class="required-title">*</span>
+          <span *ngIf="this.flagTime === 0 || this.flagTime == 1" class="required-title">*</span>
         </div>
 
         <div *ngIf="this.flagTime === 0 || this.flagTime === 1">
@@ -256,7 +256,6 @@
             readonly
           />
         </div>
-
         <div *ngIf="submitted && f.startDate.errors" class="invalid">
           <div *ngIf="f.startDate.errors.required">
             {{ "Ngày bắt đầu không được để trống" | translate }}
