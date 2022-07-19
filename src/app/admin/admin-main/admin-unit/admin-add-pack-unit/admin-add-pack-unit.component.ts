@@ -52,6 +52,9 @@ export class AdminAddPackUnitComponent implements OnInit {
 
   paymentDate: any;
 
+  serviceNumberContract: boolean = false;
+  serviceTime: boolean = true;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fbd: FormBuilder,
@@ -279,18 +282,19 @@ export class AdminAddPackUnitComponent implements OnInit {
           this.addForm.controls.startDate.updateValueAndValidity();
 
           this.flagTime = 1;
-        } else if (
-          this.listDichVu[i].calculatorMethod == 'BY_CONTRACT_NUMBERS'
-        ) {
+        } else if (this.listDichVu[i].calculatorMethod == 'BY_CONTRACT_NUMBERS') {
+          // this.startDate = '';
+          this.endDate = '';
+
           console.log('vao day so luong');
           this.calculatorMethod = 'Theo số lượng hợp đồng';
           this.numberOfContracts = this.listDichVu[i].numberOfContracts;
           this.duration = '';
-          this.endDate = '';
-          this.flagTime = 2;
 
-          this.addForm.controls.startDate.setValidators([]);
-          this.addForm.controls.startDate.updateValueAndValidity();
+          // this.addForm.controls.startDate.setValidators([]);
+          // this.addForm.controls.startDate.updateValueAndValidity();
+
+          this.flagTime = 2;
         }
 
         if (this.listDichVu[i].type == 'NORMAL') {
@@ -391,7 +395,30 @@ export class AdminAddPackUnitComponent implements OnInit {
         dataForm.endDate = dataForm.endDate.split("/").reverse().join("-");
       }
 
-      this.addPackUnit(dataForm);
+      
+      this.adminUnitService.getUnitById(this.data.id).subscribe((response) => {
+        for(let i = 0; i < response.services.length; i++) {
+          //Check xem tổ chức đã sử dụng dịch vụ nào chưa
+          //Nếu đang sử dụng dịch vụ theo thời gian => Không add dịch vụ theo thời gian
+          //Nếu đang sử dụng dịch vụ theo số lượng hợp đồng => Không add dịch vụ theo số lượng hợp đồng
+          this.adminUnitService.getPackUnitByIdPack(this.data.id, response.services[i].serviceId).subscribe((response1) => {
+            if(response1.calculatorMethod == 'BY_CONTRACT_NUMBERS') {
+              this.serviceNumberContract = true;
+            }
+             else if(response1.calculatorMethod == 'BY_TIME') {
+              this.serviceTime = true;
+            }
+          })
+        }
+      });
+
+      if(this.serviceTime == true && this.calculatorMethod == 'Theo thời gian') {
+        this.toastService.showErrorHTMLWithTimeout('Tổ chức vẫn đang sử dụng một gói dịch vụ theo thời gian','',3000)
+      } else if(this.serviceNumberContract == true && this.calculatorMethod == 'Theo số lượng hợp đồng') {
+        this.toastService.showErrorHTMLWithTimeout('Tổ chức vẫn đang sử dụng một gói dịch vụ theo số lượng hợp đồng','',3000)
+      } else {
+        this.addPackUnit(dataForm);
+      }
     } else {
       if (
         this.addForm.value.endDate == null ||
@@ -440,18 +467,6 @@ export class AdminAddPackUnitComponent implements OnInit {
   }
 
   addPackUnit(dataForm: any) {
-    this.adminUnitService.getUnitById(this.data.id).subscribe((response) => {
-      for(let i = 0; i < response.services.length; i++) {
-        this.adminUnitService.getPackUnitByIdPack(this.data.id, response.services.serviceId).subscribe((responsePack) => {
-          if(responsePack.calculatorMethod == 'Theo thời gian') {
-
-          } else if(responsePack.calculatorMethod == 'Theo thời gian') {
-
-          }
-        })
-      }
-    });
-
     this.adminUnitService.addPackUnit(dataForm).subscribe((response) => {
       if (response.id != null && response.id != undefined) {
         this.toastService.showSuccessHTMLWithTimeout(
