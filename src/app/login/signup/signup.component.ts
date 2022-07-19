@@ -64,20 +64,14 @@ export class SignupComponent implements OnInit {
 
   onSubmit() {
 
-    console.log("inv ", this.addForm.invalid);
-
-    console.log("fileCeCa ", this.addForm.value.fileCeCa.name);
+    this.submitted = true;
 
       // stop here if form is invalid
       if (this.addForm.invalid) {
         return;
       }
-
-    console.log("sub ", this.submitted);
-
-    this.submitted = true;
     
-    var data = {
+    const data = {
       code: this.addForm.value.code,
       name: this.addForm.value.name,
       size: this.addForm.value.size,

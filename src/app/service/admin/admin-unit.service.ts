@@ -181,9 +181,6 @@ export class AdminUnitService {
   }
 
   getPackUnitByIdPack(id: any, idPack: any) {
-    console.log('id ', id);
-    console.log('id pack ', idPack);
-
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')

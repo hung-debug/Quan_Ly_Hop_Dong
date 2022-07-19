@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ResetPasswordDialogComponent } from 'src/app/main/dialog/reset-password-dialog/reset-password-dialog.component';
-import { SidebarService } from 'src/app/main/sidebar/sidebar.service';
 import { AppService } from 'src/app/service/app.service';
 import { DashboardService } from 'src/app/service/dashboard.service';
 import { ToastService } from 'src/app/service/toast.service';

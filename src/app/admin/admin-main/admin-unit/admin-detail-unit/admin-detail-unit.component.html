@@ -8,21 +8,21 @@
       <div class="col-md-4">
         <div class="label_item">{{ "unit.name" | translate }}</div>
         <div>
-          <div [innerHTML]="datas.name" class="input_text"></div>
+          <div [innerHTML]="datas?.name" class="input_text"></div>
         </div>
       </div>
 
       <div class="col-md-4">
         <div class="label_item">{{ "unit.code" | translate }}</div>
         <div>
-          <div [innerHTML]="datas.code" class="input_text"></div>
+          <div [innerHTML]="datas?.code" class="input_text"></div>
         </div>
       </div>
 
       <div class="col-md-4">
         <div class="label_item">{{ "unit.email" | translate }}</div>
         <div>
-          <div [innerHTML]="datas.email" class="input_text"></div>
+          <div [innerHTML]="datas?.email" class="input_text"></div>
         </div>
       </div>
     </div>
@@ -31,21 +31,21 @@
       <div class="col-md-4">
         <div class="label_item">{{ "Mã số thuế" | translate }}</div>
         <div>
-          <div [innerHTML]="datas.taxCode" class="input_text"></div>
+          <div [innerHTML]="datas?.taxCode" class="input_text"></div>
         </div>
       </div>
 
       <div class="col-md-4">
         <div class="label_item">{{ "Chức vụ" | translate }}</div>
         <div>
-          <div [innerHTML]="datas.position" class="input_text"></div>
+          <div [innerHTML]="datas?.position" class="input_text"></div>
         </div>
       </div>
 
       <div class="col-md-4">
         <div class="label_item">{{ "Địa chỉ" | translate }}</div>
         <div>
-          <div [innerHTML]="datas.address" class="input_text"></div>
+          <div [innerHTML]="datas?.address" class="input_text"></div>
         </div>
       </div>
     </div>
@@ -54,21 +54,21 @@
       <div class="col-md-4">
         <div class="label_item">{{ "Người đại diện" | translate }}</div>
         <div>
-          <div [innerHTML]="datas.representative" class="input_text"></div>
+          <div [innerHTML]="datas?.representative" class="input_text"></div>
         </div>
       </div>
 
       <div class="col-md-4">
         <div class="label_item">{{ "unit.phone" | translate }}</div>
         <div>
-          <div [innerHTML]="datas.phone" class="input_text"></div>
+          <div [innerHTML]="datas?.phone" class="input_text"></div>
         </div>
       </div>
 
       <div class="col-md-4">
         <div class="label_item">{{ "unit.fax" | translate }}</div>
         <div>
-          <div [innerHTML]="datas.size" class="input_text"></div>
+          <div [innerHTML]="datas?.size" class="input_text"></div>
         </div>
       </div>
     </div>
@@ -84,7 +84,7 @@
         <input type="radio" checked style="outline: none" />
         <span>
           {{
-            (datas.status == "ACTIVE" ? "unit.active" : "unit.inactive")
+            (datas?.status == "ACTIVE" ? "unit.active" : "unit.inactive")
               | translate
           }}</span
         >

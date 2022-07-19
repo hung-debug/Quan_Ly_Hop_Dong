@@ -34,6 +34,7 @@ export class UserService {
   resetPasswordTokenUrl:any = `${environment.apiUrl}/api/v1/customers/changePassword`;
   addUserUrl:any = `${environment.apiUrl}/api/v1/customers`;
   
+  getUnitByIdUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
   
   updateUserUrl:any = `${environment.apiUrl}/api/v1/customers/`;
   getUserByIdUrl:any = `${environment.apiUrl}/api/v1/customers/`;
@@ -217,6 +218,18 @@ export class UserService {
 
     console.log(headers);
     return this.http.get<any>(this.getUserByIdUrl + id, {'headers': headers});
+  }
+
+  getUnitById(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.get<any>(
+      this.getUnitByIdUrl + id + '?sort=startDate,desc',
+      { headers: headers }
+    );
   }
 
   getUserByEmail(email:any){

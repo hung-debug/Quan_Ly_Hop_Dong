@@ -84,9 +84,7 @@ export class AdminAddPackUnitComponent implements OnInit {
         Validators.required,
       ]),
       paymentDate: this.fbd.control(''),
-      startDate: this.fbd.control('', [
-        Validators.required,
-      ]),
+      startDate: this.fbd.control(''),
       endDate: this.fbd.control(''),
     });
   }
@@ -122,13 +120,10 @@ export class AdminAddPackUnitComponent implements OnInit {
           Validators.required,
         ]),
         paymentDate: this.fbd.control(''),
-        startDate: this.fbd.control('', [
-          Validators.required,
-        ]),
+        startDate: this.fbd.control(''),
         endDate: this.fbd.control(''),
       });
 
-      console.log('date ', this.addForm.value.purchaseDate);
     } else {
       console.log('vao form cap nhat');
 
@@ -169,9 +164,7 @@ export class AdminAddPackUnitComponent implements OnInit {
             ),
             paymentDate: this.fbd.control(this.checkNull(response.paymentDate)),
 
-            startDate: this.fbd.control(new Date(response.startDate), [
-              Validators.required,
-            ]),
+            startDate: this.fbd.control(new Date(response.startDate)),
             endDate: this.fbd.control(
               this.checkNullEndDate(response.endDate)
             ),
@@ -197,7 +190,10 @@ export class AdminAddPackUnitComponent implements OnInit {
 
   convertCalculatorMethod(calculatorMethod: string): string {
     if (calculatorMethod == 'BY_TIME') {
+      console.log("vao day by time");
+
       this.flagTime = 1;
+
       return 'Theo thời gian';
     } else if (calculatorMethod == 'BY_CONTRACT_NUMBERS') {
       this.flagTime = 2;
@@ -279,6 +275,9 @@ export class AdminAddPackUnitComponent implements OnInit {
 
           console.log('this end date ', this.endDate);
 
+          this.addForm.controls.startDate.setValidators([Validators.required]);
+          this.addForm.controls.startDate.updateValueAndValidity();
+
           this.flagTime = 1;
         } else if (
           this.listDichVu[i].calculatorMethod == 'BY_CONTRACT_NUMBERS'
@@ -289,6 +288,9 @@ export class AdminAddPackUnitComponent implements OnInit {
           this.duration = '';
           this.endDate = '';
           this.flagTime = 2;
+
+          this.addForm.controls.startDate.setValidators([]);
+          this.addForm.controls.startDate.updateValueAndValidity();
         }
 
         if (this.listDichVu[i].type == 'NORMAL') {
@@ -308,11 +310,7 @@ export class AdminAddPackUnitComponent implements OnInit {
         this.flagNgayThanhToan = true;
         this.addForm.controls.paymentDate.setValidators([Validators.required]);
 
-        this.addForm.controls.paymentDate.updateValueAndValidity();
-  
-        console.log("vao day");
-      
-     
+        this.addForm.controls.paymentDate.updateValueAndValidity();      
     } else if (event.value.id == 'UNPAID') {
       this.flagNgayThanhToan = false;
     }
@@ -339,6 +337,8 @@ export class AdminAddPackUnitComponent implements OnInit {
       console.log("invalid");
       return;
     }
+
+    console.log("start date ", this.startDate);
 
     const dataForm = {
       id: this.data.id,
@@ -381,9 +381,6 @@ export class AdminAddPackUnitComponent implements OnInit {
       dataForm.startDate = new Date(this.addForm.value.startDate).toLocaleDateString('fr-CA').split("/").reverse().join("-");
     }
 
-   
-    console.log('date submit ', dataForm.purchaseDate);
-
     if (this.data.idPack == null) {
       if (
         this.endDate == null ||
@@ -392,7 +389,7 @@ export class AdminAddPackUnitComponent implements OnInit {
         dataForm.endDate = null;
       } else {
         dataForm.endDate = dataForm.endDate.split("/").reverse().join("-");
-      }  
+      }
 
       this.addPackUnit(dataForm);
     } else {
@@ -443,6 +440,18 @@ export class AdminAddPackUnitComponent implements OnInit {
   }
 
   addPackUnit(dataForm: any) {
+    this.adminUnitService.getUnitById(this.data.id).subscribe((response) => {
+      for(let i = 0; i < response.services.length; i++) {
+        this.adminUnitService.getPackUnitByIdPack(this.data.id, response.services.serviceId).subscribe((responsePack) => {
+          if(responsePack.calculatorMethod == 'Theo thời gian') {
+
+          } else if(responsePack.calculatorMethod == 'Theo thời gian') {
+
+          }
+        })
+      }
+    });
+
     this.adminUnitService.addPackUnit(dataForm).subscribe((response) => {
       if (response.id != null && response.id != undefined) {
         this.toastService.showSuccessHTMLWithTimeout(
@@ -450,8 +459,6 @@ export class AdminAddPackUnitComponent implements OnInit {
           '',
           3000
         );
-
-        // this.dialogRef.close();
 
         this.dialog.closeAll();
 
