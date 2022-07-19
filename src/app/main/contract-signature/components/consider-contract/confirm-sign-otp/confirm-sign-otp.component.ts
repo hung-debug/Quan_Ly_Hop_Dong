@@ -96,6 +96,7 @@ export class ConfirmSignOtpComponent implements OnInit {
           
           if(data.message == 'You have entered wrong otp 5 times in a row'){
             this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(data.nextAttempt, "dd/MM/yyyy HH:mm"), "", 3000);
+            this.dialog.closeAll();
             this.router.navigate(['/main/form-contract/detail/' + contract_id]);
           }else{
             this.toastService.showErrorHTMLWithTimeout('Lỗi gửi OTP', "", 3000);
