@@ -2,7 +2,6 @@ import { DatePipe } from '@angular/common';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { isPdfFile } from 'pdfjs-dist';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import {environment} from '../../environments/environment';
@@ -19,6 +18,8 @@ export class DashboardService {
   countContractReceivedUrl: any = `${environment.apiUrl}/api/v1/dashboard/my-process`;
   listNotificationUrl: any = `${environment.apiUrl}/api/v1/notification/my-notice`;
   updateViewNotificationUrl:any = `${environment.apiUrl}/api/v1/notification/viewed/`;
+
+  listUnitUrl: any = `${environment.apiUrl}/api/v1/admin/organization/`;
 
   token:any;
   customer_id:any;
