@@ -66,7 +66,7 @@ export class SidebarService {
     private roleService: RoleService,
     private toastService: ToastService,
     private router: Router,
-    private dashboardService: DashboardService,
+    private dashboardService: DashboardService
   ) {}
 
   toggle() {
@@ -255,7 +255,6 @@ export class SidebarService {
   }
 
   buildMenu(currentUserC: any) {
-
     //Lay id user
     const idUser = JSON.parse(localStorage.getItem('currentUser') || '')
       .customer.info.id;
@@ -265,30 +264,30 @@ export class SidebarService {
       const idOrg = response.organization_id;
 
       //Check to chuc co dung goi dich vu
-      this.userService.getUnitById(idOrg).subscribe((responseOrg) =>  {
-        console.log("res ", responseOrg.services);
+      this.userService.getUnitById(idOrg).subscribe((responseOrg) => {
+        console.log('res ', responseOrg.services);
 
-        if(responseOrg.services.length > 0) {
-          if(responseOrg.services.length == 1) {
-            if(responseOrg.services[0].usageStatus == 'USAGE') {
-              this.isQLHD_01 = false;
-              this.isQLHD_14 = false;
-              this.isQLHD_15 = false;
+        if (responseOrg.services.length > 0) {
+          let count = 0;
+          for (let i = 0; i < responseOrg.services.length; i++) {
+            if (response.services[i].usageStatus != 'USING') {
+              count++;
+            } else if(response.services[i].usageStatus == 'USING') {
+              break;
             }
-          } else if(responseOrg.services.length == 2) {
-            if(responseOrg.services[0].usageStatus == 'USAGE' || responseOrg.services[1].usageStatus == 'USAGE') {
-              this.isQLHD_01 = false;
-              this.isQLHD_14 = false;
-              this.isQLHD_15 = false;
-            }
+          }
+
+          if (count == responseOrg.services.length) {
+            this.isQLHD_01 = false;
+            this.isQLHD_14 = false;
+            this.isQLHD_15 = false;
           }
         } else {
           this.isQLHD_01 = false;
           this.isQLHD_14 = false;
           this.isQLHD_15 = false;
         }
-      })
-
+      });
     });
 
     console.log('id user ', idUser);
