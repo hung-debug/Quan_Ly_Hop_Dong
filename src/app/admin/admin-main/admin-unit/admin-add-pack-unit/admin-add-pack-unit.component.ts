@@ -249,9 +249,9 @@ export class AdminAddPackUnitComponent implements OnInit {
 
           const startDate1 = new Date(this.startDate);
 
-          console.log('duration model ', this.addForm.value.duration);
+          this.endDate = '';
 
-          if (this.startDate != null)
+          if (this.startDate != null && this.startDate != undefined)
             this.endDate = new Date(
               startDate1.setMonth(startDate1.getMonth() + this.duration)
             )
@@ -393,23 +393,30 @@ export class AdminAddPackUnitComponent implements OnInit {
         dataForm.endDate = dataForm.endDate.split('/').reverse().join('-');
       }
 
-      this.adminUnitService.getUnitById(this.data.id).subscribe((response) => {
+      const subcription = this.adminUnitService.getUnitById(this.data.id).subscribe((response) => {
+        let flagServiceTime = 0;
+        let flagServiceContract = 0;
         for (let i = 0; i < response.services.length; i++) {
           //Check xem tổ chức đã sử dụng dịch vụ nào chưa
           //Nếu đang sử dụng dịch vụ theo thời gian => Không add dịch vụ theo thời gian
           //Nếu đang sử dụng dịch vụ theo số lượng hợp đồng => Không add dịch vụ theo số lượng hợp đồng
+          if(response.services[i].calculatorMethod == 'BY_TIME' && response.services[i].usageStatus == 'USING') {
+            flagServiceTime = 1;
+          } else if(response.services[i].calculatorMethod == 'BY_CONTRACT_NUMBERS' && response.services[i].usageStatus == 'USING') {
+            flagServiceContract = 1;
+          }
         }
 
-        // console.log("service time ", this.serviceTime);
+        subcription.unsubscribe();
 
-        // if(this.serviceTime == true && this.calculatorMethod == 'Theo thời gian') {
-        //   console.log("dich vu theo thoi gian");
-        //   this.toastService.showErrorHTMLWithTimeout('Tổ chức vẫn đang sử dụng một gói dịch vụ theo thời gian','',3000);
-        // } else if(this.serviceNumberContract == true && this.calculatorMethod == 'Theo số lượng hợp đồng') {
-        //   this.toastService.showErrorHTMLWithTimeout('Tổ chức vẫn đang sử dụng một gói dịch vụ theo số lượng hợp đồng','',3000);
-        // } else {
+        if(flagServiceTime == 1 && this.calculatorMethod == 'Theo thời gian') {
+          console.log("dich vu theo thoi gian");
+          this.toastService.showErrorHTMLWithTimeout('Tổ chức vẫn đang sử dụng một gói dịch vụ theo thời gian','',3000);
+        } else if(flagServiceContract == 1 && this.calculatorMethod == 'Theo số lượng hợp đồng') {
+          this.toastService.showErrorHTMLWithTimeout('Tổ chức vẫn đang sử dụng một gói dịch vụ theo số lượng hợp đồng','',3000);
+        } else {
         this.addPackUnit(dataForm);
-        // }
+        }
       });
     } else {
       if (
