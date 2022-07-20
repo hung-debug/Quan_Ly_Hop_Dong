@@ -99,7 +99,7 @@ h3{
   text-transform: uppercase;
 }
 :host ::ng-deep {
-  .p-dropdown {
+  .p-treeselect, .p-dropdown {
       border: 1px solid #ced4da;
       border-radius: 5px;
       height: 33px;
@@ -107,7 +107,7 @@ h3{
       outline: 0;
       color: black !important;
   }
-  .p-dropdown-label {
+  .p-treeselect-label, .p-dropdown-label {
       padding: 5px 5px 5px 15px;
   }
 }

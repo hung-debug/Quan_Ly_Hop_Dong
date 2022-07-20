@@ -64,6 +64,8 @@ export class ConfirmSignOtpComponent implements OnInit {
   }
 
   async onSubmit() {
+    // @ts-ignore
+    document.getElementById("otp").focus();
     this.submitted = true;
     if (this.addForm.invalid) {
       return;
@@ -90,6 +92,8 @@ export class ConfirmSignOtpComponent implements OnInit {
   }
 
   sendOtp(contract_id:any, recipient_id:any, phone:any){
+    // @ts-ignore
+    document.getElementById("otp").focus();
     this.contractService.sendOtpContractProcess(contract_id, recipient_id, phone).subscribe(
       data => {
         if(!data.success){

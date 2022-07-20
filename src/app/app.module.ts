@@ -52,6 +52,7 @@ import {CalendarModule} from 'primeng/calendar';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {ListboxModule} from 'primeng/listbox';
 import { BadgeModule } from "primeng/badge";
+import {TreeSelectModule} from 'primeng/treeselect';
 import { AddUserComponent } from './main/user/add-user/add-user.component';
 import { InforUserComponent } from './main/user/infor-user/infor-user.component';
 import { DetailUnitComponent } from './main/unit/detail-unit/detail-unit.component';
@@ -208,6 +209,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ListboxModule,
     BadgeModule,
     ContractTemplateModule,
+    TreeSelectModule,
   ],
   providers: [ AppService, DatePipe,
     {
