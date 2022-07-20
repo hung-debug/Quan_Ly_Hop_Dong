@@ -77,6 +77,9 @@ export class AddContractComponent implements OnInit {
     | ConfirmContractBatchComponent
     | unknown;
 
+  //type = 1 => Hop dong don le khong theo mau
+  //type = 2 => Hop dong don le theo mau
+  //type = 3 => Hop dong theo lo
   type: number = 1;
   action: string;
   id: string;
