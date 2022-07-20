@@ -90,6 +90,7 @@ export class SidebarService {
         active: false,
         type: 'simple',
         href: '/main/dashboard',
+        id: 0,
       },
     ];
 
@@ -251,6 +252,10 @@ export class SidebarService {
       }
     );
 
+    this.menus =  this.menus.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+    
+    console.log("menus ", this.menus);
+
     return this.menus;
   }
 
@@ -264,42 +269,51 @@ export class SidebarService {
       const idOrg = response.organization_id;
 
       //Check to chuc co dung goi dich vu
-      this.userService.getUnitById(idOrg).subscribe((responseOrg) => {
-        console.log('res ', responseOrg.services);
+      const subcription = this.userService
+        .getUnitById(idOrg)
+        .subscribe((responseOrg) => {
+          console.log('res ', responseOrg.services);
 
-        if (responseOrg.services.length > 0) {
-          let count = 0;
-          for (let i = 0; i < responseOrg.services.length; i++) {
-            if (response.services[i].usageStatus != 'USING') {
-              count++;
-            } else if(response.services[i].usageStatus == 'USING') {
-              break;
+          if (responseOrg.services.length > 0) {
+            let count = 0;
+            for (let i = 0; i < responseOrg.services.length; i++) {
+              if (responseOrg.services[i].usageStatus != 'USING') {
+                count++;
+              } else if (responseOrg.services[i].usageStatus == 'USING') {
+                break;
+              }
             }
-          }
 
-          if (count == responseOrg.services.length) {
+            if (count == responseOrg.services.length) {
+              this.isQLHD_01 = false;
+              this.isQLHD_14 = false;
+              this.isQLHD_15 = false;
+            }
+          } else {
+            console.log('bang 0 ');
             this.isQLHD_01 = false;
             this.isQLHD_14 = false;
             this.isQLHD_15 = false;
           }
-        } else {
-          this.isQLHD_01 = false;
-          this.isQLHD_14 = false;
-          this.isQLHD_15 = false;
-        }
-      });
+
+          subcription.unsubscribe();
+
+          if (this.isQLHD_01 || this.isQLHD_14 || this.isQLHD_15) {
+            this.menus.push({
+              title: 'menu.contract.add',
+              active: false,
+              type: 'button',
+              href: '/main/form-contract/add',
+              id: 1,
+            });
+
+            this.menus =  this.menus.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+          }
+        });
     });
 
     console.log('id user ', idUser);
 
-    if (this.isQLHD_01 || this.isQLHD_14 || this.isQLHD_15) {
-      this.menus.push({
-        title: 'menu.contract.add',
-        active: false,
-        type: 'button',
-        href: '/main/form-contract/add',
-      });
-    }
     if (
       this.isQLHD_02 ||
       this.isQLHD_03 ||
@@ -368,6 +382,7 @@ export class SidebarService {
         type: 'dropdown',
         href: '#',
         submenus: submenusCreate,
+        id: 2,
       });
     }
 
@@ -398,6 +413,7 @@ export class SidebarService {
       type: 'dropdown',
       href: '#',
       submenus: submenusReceive,
+      id: 3,
     });
 
     if (
@@ -416,6 +432,7 @@ export class SidebarService {
         active: false,
         type: 'simple',
         href: '/main/contract-template',
+        id: 4,
       });
     }
 
@@ -426,6 +443,7 @@ export class SidebarService {
         active: false,
         type: 'simple',
         href: '/main/unit',
+        id: 5,
       });
     }
     if (this.isQLND_01 || this.isQLND_02 || this.isQLND_03 || this.isQLND_04) {
@@ -435,6 +453,7 @@ export class SidebarService {
         active: false,
         type: 'simple',
         href: '/main/user',
+        id: 6,
       });
     }
     if (
@@ -450,6 +469,7 @@ export class SidebarService {
         active: false,
         type: 'simple',
         href: '/main/role',
+        id: 7,
       });
     }
     if (
@@ -465,6 +485,7 @@ export class SidebarService {
         active: false,
         type: 'simple',
         href: '/main/contract-type',
+        id: 8,
       });
     }
 
@@ -474,6 +495,7 @@ export class SidebarService {
       active: false,
       type: 'simple',
       href: '/main/check-sign-digital',
+      id: 9,
     });
 
     //xu ly highlight
@@ -498,7 +520,7 @@ export class SidebarService {
         });
       }
     });
-    console.log(this.menus);
+
   }
 
   getSubMenuList(menuParent: any) {
