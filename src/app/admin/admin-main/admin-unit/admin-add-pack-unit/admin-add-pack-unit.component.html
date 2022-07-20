@@ -251,12 +251,11 @@
         <div class="input-data fff" *ngIf="this.flagTime === 2">
           <input
             type="text"
-            formControlName="startDate"
             value="{{ startDate }}"
             readonly
           />
         </div>
-        <div *ngIf="submitted && f.startDate.errors" class="invalid">
+        <div *ngIf="submitted &&  f.startDate.errors" class="invalid">
           <div *ngIf="f.startDate.errors.required">
             {{ "Ngày bắt đầu không được để trống" | translate }}
           </div>
