@@ -460,13 +460,13 @@ export class ContractComponent implements OnInit, AfterViewInit {
         return "";
       }else{
         if(ceca_status == 0){
-          return "[Chưa đẩy lên Bộ Công Thương]";
+          return "[Chưa gửi lên BCT]";
         }else if(ceca_status == 1){
-          return "[Đẩy lên Bộ Công Thương thành công]";
+          return "[Chờ BCT xác thực]";
         }else if(ceca_status == 2){
-          return "[Đẩy lên Bộ Công Thương thất bại]";
+          return "[Xác thực thất bại]";
         }else if(ceca_status == 3){
-          return "[Bộ Công Thương đã phản hồi]";
+          return "[BCT xác thực thành công]";
         }
       }
       return "[Không xác định]";

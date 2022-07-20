@@ -1,9 +1,9 @@
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
 import {
-  type_signature_template,
-  type_signature_doc_template,
-  type_signature_personal_party_template,
+  type_signature,
+  type_signature_doc,
+  type_signature_personal_party,
   variable
 } from "../../../../../config/variable";
 import { parttern } from "../../../../../config/parttern";
@@ -53,9 +53,9 @@ export class DetermineSignerComponent implements OnInit {
   arrSearch: any = [];
 
   //dropdown
-  signTypeList: Array<any> = type_signature_template;
-  signTypeList_personal_partner: Array<any> = type_signature_personal_party_template;
-  signType_doc: Array<any> = type_signature_doc_template;
+  signTypeList: Array<any> = type_signature;
+  signTypeList_personal_partner: Array<any> = type_signature_personal_party;
+  signType_doc: Array<any> = type_signature_doc;
 
   dropdownSignTypeSettings: any = {};
   getNameIndividual: string = "";
@@ -65,6 +65,7 @@ export class DetermineSignerComponent implements OnInit {
   arrSearchNameSignature: any = [];
   arrSearchNameView: any = [];
   is_change_party: boolean = false;
+  isListSignNotPerson: any = [];
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -83,6 +84,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id));
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       // this.datas.is_determine_clone = null;
       // this.datas.is_determine_clone = this.datas.determine_contract;
@@ -520,6 +522,38 @@ export class DetermineSignerComponent implements OnInit {
         this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
         return false
       }
+    }
+
+    if (count == 0) {
+      //valid ordering cac ben doi tac - to chuc
+      let isOrderingPerson_exception = this.datas.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
+      let isOrdering_not_exception = this.datas.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3));
+      // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
+      if (isOrderingPerson_exception.length > 0) {
+        let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
+        if (dataError_ordering) {
+          this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+          return false;
+        }
+      }
+
+      let isCheckOrdering = [];
+      for (const d of isOrderingPerson_exception) {
+        isCheckOrdering.push(d.ordering);
+      }
+      let maxOrderingException = Math.max.apply(Math, isCheckOrdering);
+      if (!maxOrderingException) {maxOrderingException = 0;}
+      if (isOrdering_not_exception.length > 0) {
+        // let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= isOrderingPerson_exception.length);
+
+        let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= maxOrderingException);
+        if (dataError_ordering) {
+          this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+          return false;
+        }
+      }
+
+
     }
 
     if (count > 0) {

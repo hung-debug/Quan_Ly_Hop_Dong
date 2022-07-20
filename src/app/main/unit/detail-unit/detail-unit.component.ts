@@ -31,7 +31,13 @@ export class DetailUnitComponent implements OnInit {
     public dialog: MatDialog,) { }
 
   ngOnInit(): void {
-    this.unitService.getUnitById(this.data.id).subscribe(
+    this.getData();
+  }
+
+  async getData(){
+    
+
+    await this.unitService.getUnitById(this.data.id).toPromise().then(
       data => {
         console.log(data);
         this.name = data.name,
