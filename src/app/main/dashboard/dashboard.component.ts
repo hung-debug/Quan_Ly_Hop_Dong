@@ -44,6 +44,9 @@ export class DashboardComponent implements OnInit {
   orgListTmp: any[] = [];
   organization_id: any = "";
 
+  nodes: any[];
+  selectedNode: any;
+
   constructor(
     private appService: AppService,
     private dashboardService: DashboardService,
@@ -59,6 +62,53 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+  //   this.nodes = [
+  //     {
+  //         "label": "Documents",
+  //         "data": "Documents Folder",
+  //         "children": [{
+  //                 "label": "Work",
+  //                 "data": "Work Folder",
+  //                 "children": [
+  //                   {"label": "Expenses.doc", "data": "Expenses Document"}, 
+  //                   {"label": "Resume.doc", "data": "Resume Document"}
+  //                 ]
+  //             },
+  //             {
+  //                 "label": "Home",
+  //                 "data": "Home Folder",
+  //                 "children": [{"label": "Invoices.txt", "icon": "pi pi-file", "data": "Invoices for this month"}]
+  //             }]
+  //     },
+  //     {
+  //         "label": "Pictures",
+  //         "data": "Pictures Folder",
+  //         "expandedIcon": "pi pi-folder-open",
+  //         "collapsedIcon": "pi pi-folder",
+  //         "children": [
+  //             {"label": "barcelona.jpg", "icon": "pi pi-image", "data": "Barcelona Photo"},
+  //             {"label": "logo.jpg", "icon": "pi pi-image", "data": "PrimeFaces Logo"},
+  //             {"label": "primeui.png", "icon": "pi pi-image", "data": "PrimeUI Logo"}]
+  //     },
+  //     {
+  //         "label": "Movies",
+  //         "data": "Movies Folder",
+  //         "expandedIcon": "pi pi-folder-open",
+  //         "collapsedIcon": "pi pi-folder",
+  //         "children": [{
+  //                 "label": "Al Pacino",
+  //                 "data": "Pacino Movies",
+  //                 "children": [{"label": "Scarface", "icon": "pi pi-video", "data": "Scarface Movie"}, {"label": "Serpico", "icon": "pi pi-video", "data": "Serpico Movie"}]
+  //             },
+  //             {
+  //                 "label": "Robert De Niro",
+  //                 "data": "De Niro Movies",
+  //                 "children": [{"label": "Goodfellas", "icon": "pi pi-video", "data": "Goodfellas Movie"}, {"label": "Untouchables", "icon": "pi pi-video", "data": "Untouchables Movie"}]
+  //             }]
+  //     }
+  // ];
+
     this.appService.setTitle("menu.dashboard");
     this.search();
 

@@ -64,6 +64,22 @@
                 <span> {{(status==1?'unit.active' : 'unit.inactive') | translate}}</span>
             </div>
         </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label_item">{{'Số lượng hợp đồng đã mua' | translate }}</div>
+                <div>
+                    <div [innerHTML]="numContractBuy" class="input_text"></div>
+                </div>
+            </div>
+        
+            <div class="col-md-6">
+                <div class="label_item">{{'Số lượng hợp đồng đã tạo' | translate }}</div>
+                <div>
+                    <div [innerHTML]="numContractCreate" class="input_text"></div>
+                </div>
+            </div>
+        </div>
     
         <div class="row" style="justify-content: center;padding-top: 10px;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>

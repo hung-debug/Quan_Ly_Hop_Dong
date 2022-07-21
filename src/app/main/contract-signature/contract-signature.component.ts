@@ -144,6 +144,8 @@ export class ContractSignatureComponent implements OnInit {
           this.contracts[v].contractSignTime = key.participant.contract.sign_time;
           this.contracts[v].contractCreateTime = key.participant.contract.created_time;
           this.contracts[v].contractStatus = key.participant.contract.status;
+          this.contracts[v].contractCecaPush = key.participant.contract.ceca_push;
+          this.contracts[v].contractCecaStatus = key.participant.contract.ceca_status;
           this.contracts[v].contractReleaseState = key.participant.contract.release_state;
         });
       });
@@ -164,7 +166,10 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   sortParticipant(list:any){
-    return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+    if(list.length > 0){
+      return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
+    }
+    return list;
   }
 
   getNameOrganization(item:any, index:any){
@@ -330,6 +335,26 @@ export class ContractSignatureComponent implements OnInit {
 
   t(item: any) {
     console.log(item)
+  }
+
+  getNameStatusCeca(status:any, ceca_push:any, ceca_status:any){
+    if(status == 30){
+      if(ceca_push == 0){   
+        return "";
+      }else{
+        if(ceca_status == 0){
+          return "[Chưa gửi lên BCT]";
+        }else if(ceca_status == 1){
+          return "[Chờ BCT xác thực]";
+        }else if(ceca_status == 2){
+          return "[Xác thực thất bại]";
+        }else if(ceca_status == 3){
+          return "[BCT xác thực thành công]";
+        }
+      }
+      return "[Không xác định]";
+    }
+    return "";
   }
 
 }

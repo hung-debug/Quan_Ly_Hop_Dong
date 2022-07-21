@@ -20,6 +20,8 @@ export class DetailUnitComponent implements OnInit {
   fax:any="";
   status:any="";
   parent_id:any="";
+  numContractCreate:number= 0;
+  numContractBuy:number= 0;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -31,7 +33,11 @@ export class DetailUnitComponent implements OnInit {
     public dialog: MatDialog,) { }
 
   ngOnInit(): void {
-    this.unitService.getUnitById(this.data.id).subscribe(
+    this.getData();
+  }
+
+  async getData(){
+    await this.unitService.getUnitById(this.data.id).toPromise().then(
       data => {
         console.log(data);
         this.name = data.name,
@@ -54,7 +60,22 @@ export class DetailUnitComponent implements OnInit {
           )
         }
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
+      }
+    )
+    await this.unitService.getNumberContractCreateOriganzation(this.data.id).toPromise().then(
+      data => {
+        this.numContractCreate = data.total;
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã tạo', "", 3000);
+      }
+    )
+
+    await this.unitService.getNumberContractBuyOriganzation(this.data.id).toPromise().then(
+      data => {
+        this.numContractBuy = data.total;
+      }, error => {
+        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
       }
     )
   }

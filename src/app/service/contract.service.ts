@@ -850,7 +850,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.post<any>(this.confirmContractBatchListUrl + idContractTemplate, formData, { 'headers': headers });
+    return this.http.post<any>(this.confirmContractBatchListUrl + idContractTemplate + "/" + isCeCA, formData, { 'headers': headers });
   }
 
   viewFlowContract(id: any): Observable<any> {

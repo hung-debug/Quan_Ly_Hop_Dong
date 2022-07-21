@@ -64,6 +64,8 @@ export class ConfirmSignOtpComponent implements OnInit {
   }
 
   async onSubmit() {
+    // @ts-ignore
+    document.getElementById("otp").focus();
     this.submitted = true;
     if (this.addForm.invalid) {
       return;
@@ -90,10 +92,19 @@ export class ConfirmSignOtpComponent implements OnInit {
   }
 
   sendOtp(contract_id:any, recipient_id:any, phone:any){
+    // @ts-ignore
+    document.getElementById("otp").focus();
     this.contractService.sendOtpContractProcess(contract_id, recipient_id, phone).subscribe(
       data => {
         if(!data.success){
-          this.toastService.showErrorHTMLWithTimeout('Lỗi gửi OTP', "", 3000);
+          
+          if(data.message == 'You have entered wrong otp 5 times in a row'){
+            this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(data.nextAttempt, "dd/MM/yyyy HH:mm"), "", 3000);
+            this.dialog.closeAll();
+            this.router.navigate(['/main/form-contract/detail/' + contract_id]);
+          }else{
+            this.toastService.showErrorHTMLWithTimeout('Lỗi gửi OTP', "", 3000);
+          }
         }
         this.count = 120;
         this.countTimeOtp();

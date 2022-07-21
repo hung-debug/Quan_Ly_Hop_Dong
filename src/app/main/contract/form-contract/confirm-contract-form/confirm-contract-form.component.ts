@@ -162,9 +162,10 @@ export class ConfirmContractFormComponent implements OnInit {
                 this.spinner.show();
                 this.contractService.updateContractIsPushCeCA(this.datasForm.id, isCeCA).subscribe((data) => {
                 
-                this.SaveContract(action);
-        
+                    this.SaveContract(action);
+            
                 }, error => {
+                    this.spinner.hide();
                     this.toastService.showErrorHTMLWithTimeout("Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương", "", 3000);
                 });
                 //this.SaveContract(action);
