@@ -32,6 +32,8 @@ export class UnitService {
   checkCodeUniqueUrl:any = `${environment.apiUrl}/api/v1/organizations/check-code-unique`;
   isDataDetermine: any = `${environment.apiUrl} /api/v1/participants/byRecipient/`;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
+  getNumberContractCreateOriganzationUrl: any = `${environment.apiUrl}/api/v1/contracts/total-contracts?orgId=`;
+  getNumberContractBuyOriganzationUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
 
   token:any;
   customer_id:any;
@@ -143,6 +145,24 @@ export class UnitService {
       .append('Authorization', 'Bearer ' + this.token);
     let listUrl = this.getNotifyOriganzation + this.organization_id;
     return this.http.get<any[]>(listUrl, {headers}).pipe();
+  }
+
+  getNumberContractCreateOriganzation(organization_id:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listUrl = this.getNumberContractCreateOriganzationUrl + organization_id;
+    return this.http.get<any>(listUrl, {headers}).pipe();
+  }
+
+  getNumberContractBuyOriganzation(organization_id:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listUrl = this.getNumberContractBuyOriganzationUrl + organization_id + '/service/number-of-contracts';
+    return this.http.get<any>(listUrl, {headers}).pipe();
   }
 
   handleError(error: HttpErrorResponse) {
