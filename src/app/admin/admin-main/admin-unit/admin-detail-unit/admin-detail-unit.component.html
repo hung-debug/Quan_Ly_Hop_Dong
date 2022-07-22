@@ -133,7 +133,7 @@
               width="20px"
               style="cursor: pointer"
             />&nbsp;&nbsp;
-            <img
+            <img *ngIf="list.usageStatus != 'USING'"
             (click)="deleteUnitPack(list.serviceId)"
               src="../../../assets/img/icon_delete.svg"
               width="16px"

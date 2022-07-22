@@ -146,6 +146,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
     this.getPage();
     // event drag and drop
+
+    //Xac dinh vung cho tha vao
     interact('.dropzone').dropzone({
       // only accept elements matching this CSS selector
       //@ts-ignore
@@ -165,6 +167,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       ]
     })
 
+    //phong to thu nho o ky
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
       edges: {left: true, right: true, bottom: true, top: true},
       listeners: {
@@ -201,9 +204,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     // event resize element
+    //keo o ky
     interact('.resize-drag').on('dragend', this.showEventInfo).draggable({
       listeners: {
-        move: this.dragMoveListener, onend: this.showEventInfo
+        move: this.dragMoveListener, 
+        onend: this.showEventInfo
       },
       inertia: true,
       autoScroll: true,
@@ -908,15 +913,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   activeScroll() {
+    console.log("active scroll ");
+
     document.getElementsByClassName('viewer-pdf')[0].addEventListener('scroll', () => {
       const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
+
+      console.log("imgs ", Imgs);
+
       Imgs.forEach((item: any) => {
         if (item.getBoundingClientRect().top <= (window.innerHeight / 2) &&
           (item.getBoundingClientRect().bottom >= 0) &&
           (item.getBoundingClientRect().top >= 0) ||
           (item.getBoundingClientRect().bottom >= (window.innerHeight / 2)) &&
           (item.getBoundingClientRect().bottom <= window.innerHeight) &&
-          (item.getBoundingClientRect().top <= 0)) {
+          (item.getBoundingClientRect().top <= 0)) 
+          {
           let page = item.id.split("-")[2];
           $('.page-canvas').css('border', 'none');
           let selector = '.page-canvas.page' + page;
