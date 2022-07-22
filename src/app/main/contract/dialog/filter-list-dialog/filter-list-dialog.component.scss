@@ -45,7 +45,12 @@
     margin-bottom: 0;
 }
 :host ::ng-deep {
-    .p-dropdown {
+    .pi-fw {
+        color:  #106DB6;
+        margin-right: 5px;
+        font-size: 10px;
+      }
+    .p-treeselect, .p-dropdown {
         border: 1px solid #106DB6;
         border-radius: 5px;
         height: 33px;
@@ -53,7 +58,7 @@
         outline: 0;
         color: black !important;
     }
-    .p-dropdown-label {
+    .p-treeselect-label, .p-dropdown-label {
         padding: 5px 5px 5px 15px;
     }
     .p-multiselect .p-multiselect-label.p-placeholder, .p-dropdown .p-dropdown-label.p-placeholder {

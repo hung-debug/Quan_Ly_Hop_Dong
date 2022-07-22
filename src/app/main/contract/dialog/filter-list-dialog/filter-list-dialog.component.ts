@@ -23,7 +23,16 @@ export class FilterListDialogComponent implements OnInit {
 
   orgList: any[] = [];
   orgListTmp: any[] = [];
-  isOrg:any=""
+  
+
+  filter_type:any;
+  filter_contract_no:any;
+  filter_from_date:any;
+  filter_to_date:any;
+  status:any;
+  isOrg:any="";
+  organization_id:any;
+  selectedNodeOrganization:any;
 
   get f() { return this.addForm.controls; }
 
@@ -37,19 +46,10 @@ export class FilterListDialogComponent implements OnInit {
     public dialog: MatDialog,
     private userService : UserService,
     private contractTypeService : ContractTypeService) { 
-
-      this.addForm = this.fbd.group({
-        filter_type: this.fbd.control(Number(this.data.filter_type)),
-        filter_contract_no:this.fbd.control(this.data.filter_contract_no),
-        filter_from_date: this.fbd.control(this.data.filter_from_date),
-        filter_to_date: this.fbd.control(this.data.filter_to_date),
-        status:this.data.status,
-        isOrg:this.data.isOrg,
-        organization_id: this.fbd.control(Number(this.data.organization_id)),
-      });
     }
 
   ngOnInit(): void {
+    this.organization_id = Number(this.data.organization_id);
     let orgId = this.userService.getInforUser().organization_id;
     //lay danh sach to chuc
     this.contractTypeService.getContractTypeList("", "").subscribe(data => {
@@ -61,42 +61,59 @@ export class FilterListDialogComponent implements OnInit {
       if(this.data.filter_is_org_me_and_children){
         this.orgListTmp.push({name: "Tất cả", id:""});
       }
-      let dataUnit = data.entities.sort((a:any,b:any) => a.name.toString().localeCompare(b.name.toString()));
+      let dataUnit = data.entities.sort((a:any,b:any) => a.path.toString().localeCompare(b.path.toString()));
       for(var i = 0; i < dataUnit.length; i++){
         this.orgListTmp.push(dataUnit[i]);
       }
       
       this.orgList = this.orgListTmp;
+      this.selectedNodeOrganization = this.orgList.filter((p: any) => p.id == this.organization_id);
+      this.convertData();
+
+
+      this.filter_type = this.data.filter_type?Number(this.data.filter_type):"";
+      this.filter_contract_no = this.data.filter_contract_no;
+      this.filter_from_date = this.data.filter_from_date?new Date(this.data.filter_from_date):"";
+      this.filter_to_date = this.data.filter_to_date?new Date(this.data.filter_to_date):"";
+      this.status = this.data.status;
+      this.isOrg = this.data.isOrg;
+      this.organization_id = this.data.organization_id?Number(this.data.organization_id):"";
+            
+      let dataOrg:any="";
+      dataOrg = {
+        label: this.selectedNodeOrganization?this.selectedNodeOrganization[0].name:"Tất cả", 
+        data: this.selectedNodeOrganization?this.selectedNodeOrganization[0].id:"",
+        expanded: true,
+      };
+      this.selectedNodeOrganization = [];
+      this.selectedNodeOrganization.push(dataOrg);
+      
+      console.log("test");
+      console.log(this.listOrgCombobox)
+;      console.log(this.selectedNodeOrganization);
     });
 
     console.log(this.data.filter_type);
-    this.addForm = this.fbd.group({
-      filter_type: this.data.filter_type!=""?this.fbd.control(Number(this.data.filter_type)):"",
-      filter_contract_no:this.fbd.control(this.data.filter_contract_no),
-      filter_from_date: this.data.filter_from_date!=""?this.fbd.control(new Date(this.data.filter_from_date)):"",
-      filter_to_date: this.data.filter_to_date!=""?this.fbd.control(new Date(this.data.filter_to_date)):"",
-      status:this.data.status,
-      isOrg:this.data.isOrg,
-      organization_id:  this.data.organization_id!=""?this.fbd.control(Number(this.data.organization_id)):""
-    });
+    
     this.isOrg = this.data.isOrg;
     console.log(this.addForm);
   }
 
   onSubmit() {
-    this.submitted = true;
-    // stop here if form is invalid
-    if (this.addForm.invalid) {
-      return;
-    }
+    // this.submitted = true;
+    // // stop here if form is invalid
+    // if (this.addForm.invalid) {
+    //   return;
+    // }
+    console.log(this.filter_contract_no);
     const data = {
-      filter_type: this.addForm.value.filter_type,
-      filter_contract_no: this.addForm.value.filter_contract_no,
-      filter_from_date: this.addForm.value.filter_from_date,
-      filter_to_date: this.addForm.value.filter_to_date,
-      status: this.addForm.value.status,
-      isOrg: this.addForm.value.isOrg,
-      organization_id: this.addForm.value.organization_id
+      filter_type: this.filter_type,
+      filter_contract_no: this.filter_contract_no,
+      filter_from_date: this.filter_from_date,
+      filter_to_date: this.filter_to_date,
+      status: this.status,
+      isOrg: this.isOrg,
+      organization_id: this.organization_id
     }
     this.dialogRef.close();
     console.log(data);
@@ -114,6 +131,60 @@ export class FilterListDialogComponent implements OnInit {
         skipLocationChange: true
       });
     });
+  }
+
+  array_empty: any = [];
+  listOrgCombobox: any[];
+  convertData(){
+    this.array_empty=[];
+    this.orgList.forEach((element: any, index: number) => {
+
+      let is_edit = false;
+      let dataChildren = this.findChildren(element);
+      let data:any="";
+      data = {
+        label: element.name, 
+        data: element.id,
+        expanded: true,
+        children: dataChildren
+      };
+      
+      this.array_empty.push(data);
+      //this.removeElementFromStringArray(element.id);
+    })
+    this.listOrgCombobox = this.array_empty;
+  }
+
+  findChildren(element:any){
+    let dataChildren:any[]=[];
+    let arrCon = this.orgList.filter((p: any) => p.parent_id == element.id);
+    
+    arrCon.forEach((elementCon: any, indexCOn: number) => {
+      let is_edit = false;
+      
+      dataChildren.push(
+      {
+        label: elementCon.name, 
+        data: elementCon.id,
+        expanded: true,
+        children: this.findChildren(elementCon)
+      });
+      this.removeElementFromStringArray(elementCon.id);
+    })
+    return dataChildren;
+  }
+
+  removeElementFromStringArray(element: string) {
+    this.orgList.forEach((value,index)=>{
+        if(value.id==element){
+          this.orgList.splice(index,1);
+        }
+        
+    });
+  }
+
+  changeOrg(){
+    this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";   
   }
 
 }

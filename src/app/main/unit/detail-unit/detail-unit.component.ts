@@ -59,6 +59,17 @@ export class DetailUnitComponent implements OnInit {
             }
           )
         }
+
+        //chi lay so luong hop dong mua khi chon to chuc cha to nhat
+        if(!data.parent_id){
+          this.unitService.getNumberContractBuyOriganzation(this.data.id).toPromise().then(
+            data => {
+              this.numContractBuy = data.total;
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+            }
+          )
+        }
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
       }
@@ -70,13 +81,6 @@ export class DetailUnitComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã tạo', "", 3000);
       }
     )
-
-    await this.unitService.getNumberContractBuyOriganzation(this.data.id).toPromise().then(
-      data => {
-        this.numContractBuy = data.total;
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
-      }
-    )
+    
   }
 }

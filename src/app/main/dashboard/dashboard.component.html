@@ -76,7 +76,7 @@
             <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy" (onSelect)="searchCountCreate()"></p-calendar>
           </div>
           <div style="padding-top: 10px;" *ngIf="isOrg=='on'">
-            <p-dropdown
+            <!-- <p-dropdown
               panelStyleClass="font"
               [options]="orgList"
               [(ngModel)]="organization_id"
@@ -85,8 +85,8 @@
               [filter]="true"
               filterBy="name"
               (onChange)="search()"
-              ></p-dropdown>
-              <!-- <p-treeSelect [(ngModel)]="selectedNode" [options]="nodes" placeholder="Select Item" [filter]="true" filterBy="name" (onChange)="search()"></p-treeSelect> -->
+              ></p-dropdown> -->
+              <p-treeSelect [(ngModel)]="selectedNodeOrganization" [options]="list" placeholder="Tất cả" [filter]="true" filterBy="name"  [droppable]="true" (onNodeSelect)="search()"></p-treeSelect>
           </div>
         </div>
         <div class="row">
