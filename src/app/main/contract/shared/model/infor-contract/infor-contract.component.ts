@@ -104,6 +104,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   ngOnInit(): void {
+    console.log("datas ", this.datas);
+
     this.spinner.hide();
     this.name = this.datas.name ? this.datas.name : null;
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;
@@ -740,6 +742,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       return;
     } else {
       this.spinner.show();
+
+      console.log("this datas ", this.datas);
+
       // set value to datas
       this.datas.name = this.name;
       this.datas.contract_no = this.contract_no;

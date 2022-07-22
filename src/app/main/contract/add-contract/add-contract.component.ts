@@ -150,388 +150,136 @@ export class AddContractComponent implements OnInit {
   isQLHD_11: boolean = true;
 
   ngOnInit() {
-    // //Lay id user
-    // const idUser = JSON.parse(localStorage.getItem('currentUser') || '')
-    //   .customer.info.id;
+    this.userService.checkServiceStatus().subscribe((response) => {
+      console.log("service response ",response);
 
-    // //Lay id to chuc
-    // this.userService.getUserById(idUser).subscribe((response) => {
-    //   const idOrg = response.organization_id;
+      if (response.status == 'Using') {
+        //title
+        this.sub = this.route.params.subscribe((params) => {
+          this.action = params['action'];
 
-    //   let flagNotService = false;
-    //   //Check to chuc co dung goi dich vu
-    //   const subcription = this.userService
-    //     .getUnitById(idOrg)
-    //     .subscribe((responseOrg) => {
-    //       console.log('res ', responseOrg.services);
+          //lay id user
+          let userId = this.userService.getAuthCurrentUser().id;
+          this.userService.getUserById(userId).subscribe(
+            (data) => {
+              //lay id role
+              this.roleService.getRoleById(data.role_id).subscribe(
+                (data) => {
+                  console.log(data);
+                  let listRole: any[];
+                  listRole = data.permissions;
+                  this.isQLHD_01 = listRole.some(
+                    (element) => element.code == 'QLHD_01'
+                  );
+                  this.isQLHD_14 = listRole.some(
+                    (element) => element.code == 'QLHD_14'
+                  );
+                  this.isQLHD_15 = listRole.some(
+                    (element) => element.code == 'QLHD_15'
+                  );
+                  // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
+                  // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
+                  this.isQLHD_11 = listRole.some(
+                    (element) => element.code == 'QLHD_11'
+                  );
 
-    //       if (responseOrg.services.length > 0) {
-    //         let count = 0;
-    //         for (let i = 0; i < responseOrg.services.length; i++) {
-    //           if (responseOrg.services[i].usageStatus != 'USING') {
-    //             count++;
-    //           } else if (responseOrg.services[i].usageStatus == 'USING') {
-    //             break;
-    //           }
-    //         }
-
-    //         if (count == responseOrg.services.length) {
-    //           flagNotService = true;
-    //         }
-    //       } else {
-    //         flagNotService = true;
-    //       }
-
-    //       subcription.unsubscribe();
-
-    //       if (flagNotService == true) {
-    //         this.toastService.showErrorHTMLWithTimeout(
-    //           'Tổ chức chưa đăng ký gói dịch vụ hoặc gói dịch vụ đã hết hạn',
-    //           '',
-    //           3000
-    //         );
-    //       } else {
-    //         //title
-    //         this.sub = this.route.params.subscribe((params) => {
-    //           this.action = params['action'];
-
-    //           //lay id user
-    //           let userId = this.userService.getAuthCurrentUser().id;
-    //           this.userService.getUserById(userId).subscribe(
-    //             (data) => {
-    //               //lay id role
-    //               this.roleService.getRoleById(data.role_id).subscribe(
-    //                 (data) => {
-    //                   console.log(data);
-    //                   let listRole: any[];
-    //                   listRole = data.permissions;
-    //                   this.isQLHD_01 = listRole.some(
-    //                     (element) => element.code == 'QLHD_01'
-    //                   );
-    //                   this.isQLHD_14 = listRole.some(
-    //                     (element) => element.code == 'QLHD_14'
-    //                   );
-    //                   this.isQLHD_15 = listRole.some(
-    //                     (element) => element.code == 'QLHD_15'
-    //                   );
-    //                   // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
-    //                   // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
-    //                   this.isQLHD_11 = listRole.some(
-    //                     (element) => element.code == 'QLHD_11'
-    //                   );
-
-    //                   if (
-    //                     (this.action == 'add' || this.action == 'add-batch') &&
-    //                     this.isQLHD_15
-    //                   ) {
-    //                     this.type = 3;
-    //                   }
-    //                   if (
-    //                     (this.action == 'add' || this.action == 'add-form') &&
-    //                     this.isQLHD_14
-    //                   ) {
-    //                     this.type = 2;
-    //                   }
-    //                   if (this.action == 'add' && this.isQLHD_01) {
-    //                     this.type = 1;
-    //                   }
-    //                 },
-    //                 (error) => {
-    //                   this.toastService.showErrorHTMLWithTimeout(
-    //                     'Lỗi lấy thông tin phân quyền',
-    //                     '',
-    //                     3000
-    //                   );
-    //                 }
-    //               );
-    //             },
-    //             (error) => {
-    //               this.toastService.showErrorHTMLWithTimeout(
-    //                 'Lỗi lấy thông tin phân quyền',
-    //                 '',
-    //                 3000
-    //               );
-    //             }
-    //           );
-
-    //           //set title
-    //           this.type = 1;
-    //           if (this.action == 'add') {
-    //             this.appService.setTitle('contract.add');
-    //           } else if (this.action == 'add-form') {
-    //             this.type = 2;
-    //             this.appService.setTitle('contract.add');
-    //             this.datasForm.template_contract_id = Number(params['id']);
-    //             this.getDataContractForm(this.datasForm.template_contract_id);
-    //           } else if (this.action == 'add-batch') {
-    //             this.type = 3;
-    //             this.appService.setTitle('contract.add');
-    //             this.datasBatch.idContractTemplate = Number(params['id']);
-    //           } else if (this.action == 'add-contract-connect') {
-    //             this.appService.setTitle('contract.add');
-    //             const array_empty: any[] = [];
-    //             array_empty.push({ ref_id: Number(params['id']) });
-    //             this.datas.contractConnect = array_empty;
-    //             console.log(this.datas.contractConnect);
-    //           } else if (this.action == 'edit') {
-    //             this.id = params['id'];
-    //             this.appService.setTitle('contract.edit');
-    //           } else if (this.action == 'copy') {
-    //             this.id = params['id'];
-    //             this.appService.setTitle('contract.copy');
-    //           }
-
-    //           if (this.action == 'edit') {
-    //             // || this.action == 'copy'
-    //             this.spinner.show();
-    //             this.contractService.getDetailContract(this.id).subscribe(
-    //               (rs: any) => {
-    //                 let data_api = {
-    //                   is_data_contract: rs[0],
-    //                   i_data_file_contract: rs[1],
-    //                   is_data_object_signature: rs[2],
-    //                 };
-    //                 this.getDataContractCreated(data_api);
-    //               },
-    //               () => {
-    //                 this.spinner.hide();
-    //                 this.toastService.showErrorHTMLWithTimeout(
-    //                   'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
-    //                   '',
-    //                   3000
-    //                 );
-    //               },
-    //               () => {
-    //                 this.spinner.hide();
-    //               }
-    //             );
-    //           } else {
-    //             if (this.type == 1) {
-    //               this.step = variable.stepSampleContract.step1;
-    //             } else if (this.type == 2) {
-    //               this.stepForm = variable.stepSampleContractForm.step1;
-    //             } else if (this.type == 3) {
-    //               this.stepBatch = variable.stepSampleContractBatch.step1;
-    //             }
-    //           }
-    //         });
-    //       }
-    //     });
-    // });
-
-    // this.sub = this.route.params.subscribe((params) => {
-    //           this.action = params['action'];
-
-    //           //lay id user
-    //           let userId = this.userService.getAuthCurrentUser().id;
-    //           this.userService.getUserById(userId).subscribe(
-    //             (data) => {
-    //               //lay id role
-    //               this.roleService.getRoleById(data.role_id).subscribe(
-    //                 (data) => {
-    //                   console.log(data);
-    //                   let listRole: any[];
-    //                   listRole = data.permissions;
-    //                   this.isQLHD_01 = listRole.some(
-    //                     (element) => element.code == 'QLHD_01'
-    //                   );
-    //                   this.isQLHD_14 = listRole.some(
-    //                     (element) => element.code == 'QLHD_14'
-    //                   );
-    //                   this.isQLHD_15 = listRole.some(
-    //                     (element) => element.code == 'QLHD_15'
-    //                   );
-    //                   // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
-    //                   // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
-    //                   this.isQLHD_11 = listRole.some(
-    //                     (element) => element.code == 'QLHD_11'
-    //                   );
-
-    //                   if (
-    //                     (this.action == 'add' || this.action == 'add-batch') &&
-    //                     this.isQLHD_15
-    //                   ) {
-    //                     this.type = 3;
-    //                   }
-    //                   if (
-    //                     (this.action == 'add' || this.action == 'add-form') &&
-    //                     this.isQLHD_14
-    //                   ) {
-    //                     this.type = 2;
-    //                   }
-    //                   if (this.action == 'add' && this.isQLHD_01) {
-    //                     this.type = 1;
-    //                   }
-    //                 },
-    //                 (error) => {
-    //                   this.toastService.showErrorHTMLWithTimeout(
-    //                     'Lỗi lấy thông tin phân quyền',
-    //                     '',
-    //                     3000
-    //                   );
-    //                 }
-    //               );
-    //             },
-    //             (error) => {
-    //               this.toastService.showErrorHTMLWithTimeout(
-    //                 'Lỗi lấy thông tin phân quyền',
-    //                 '',
-    //                 3000
-    //               );
-    //             }
-    //           );
-
-    //           //set title
-    //           this.type = 1;
-    //           if (this.action == 'add') {
-    //             this.appService.setTitle('contract.add');
-    //           } else if (this.action == 'add-form') {
-    //             this.type = 2;
-    //             this.appService.setTitle('contract.add');
-    //             this.datasForm.template_contract_id = Number(params['id']);
-    //             this.getDataContractForm(this.datasForm.template_contract_id);
-    //           } else if (this.action == 'add-batch') {
-    //             this.type = 3;
-    //             this.appService.setTitle('contract.add');
-    //             this.datasBatch.idContractTemplate = Number(params['id']);
-    //           } else if (this.action == 'add-contract-connect') {
-    //             this.appService.setTitle('contract.add');
-    //             const array_empty: any[] = [];
-    //             array_empty.push({ ref_id: Number(params['id']) });
-    //             this.datas.contractConnect = array_empty;
-    //             console.log(this.datas.contractConnect);
-    //           } else if (this.action == 'edit') {
-    //             this.id = params['id'];
-    //             this.appService.setTitle('contract.edit');
-    //           } else if (this.action == 'copy') {
-    //             this.id = params['id'];
-    //             this.appService.setTitle('contract.copy');
-    //           }
-
-    //           if (this.action == 'edit') {
-    //             // || this.action == 'copy'
-    //             this.spinner.show();
-    //             this.contractService.getDetailContract(this.id).subscribe(
-    //               (rs: any) => {
-    //                 let data_api = {
-    //                   is_data_contract: rs[0],
-    //                   i_data_file_contract: rs[1],
-    //                   is_data_object_signature: rs[2],
-    //                 };
-    //                 this.getDataContractCreated(data_api);
-    //               },
-    //               () => {
-    //                 this.spinner.hide();
-    //                 this.toastService.showErrorHTMLWithTimeout(
-    //                   'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
-    //                   '',
-    //                   3000
-    //                 );
-    //               },
-    //               () => {
-    //                 this.spinner.hide();
-    //               }
-    //             );
-    //           } else {
-    //             if (this.type == 1) {
-    //               this.step = variable.stepSampleContract.step1;
-    //             } else if (this.type == 2) {
-    //               this.stepForm = variable.stepSampleContractForm.step1;
-    //             } else if (this.type == 3) {
-    //               this.stepBatch = variable.stepSampleContractBatch.step1;
-    //             }
-    //           }
-    //         });
-
-            //title
-    this.sub = this.route.params.subscribe(params => {
-      this.action = params['action'];
-
-      //lay id user
-      let userId = this.userService.getAuthCurrentUser().id;
-      this.userService.getUserById(userId).subscribe(
-        data => {
-          //lay id role
-          this.roleService.getRoleById(data.role_id).subscribe(
-            data => {
-              console.log(data);
-              let listRole: any[];
-              listRole = data.permissions;
-              this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
-              this.isQLHD_14 = listRole.some(element => element.code == 'QLHD_14');
-              this.isQLHD_15 = listRole.some(element => element.code == 'QLHD_15');
-              // this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
-              // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
-              this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
-
-              if((this.action=='add' || this.action=='add-batch')  && this.isQLHD_15){
-                this.type=3;
-              }
-              if((this.action=='add' || this.action=='add-form') && this.isQLHD_14){
-                this.type=2;
-              }
-              if(this.action=='add' && this.isQLHD_01){
-                this.type=1;
-              }
-            }, error => {
-              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+                  if (
+                    (this.action == 'add' || this.action == 'add-batch') &&
+                    this.isQLHD_15
+                  ) {
+                    this.type = 3;
+                  }
+                  if (
+                    (this.action == 'add' || this.action == 'add-form') &&
+                    this.isQLHD_14
+                  ) {
+                    this.type = 2;
+                  }
+                  if (this.action == 'add' && this.isQLHD_01) {
+                    this.type = 1;
+                  }
+                },
+                (error) => {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    'Lỗi lấy thông tin phân quyền',
+                    '',
+                    3000
+                  );
+                }
+              );
+            },
+            (error) => {
+              this.toastService.showErrorHTMLWithTimeout(
+                'Lỗi lấy thông tin phân quyền',
+                '',
+                3000
+              );
             }
           );
 
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-        })
-
-      //set title
-      this.type = 1;
-      if (this.action == 'add') {
-        this.appService.setTitle('contract.add');
-      }else if (this.action == 'add-form') {
-        this.type = 2;
-        this.appService.setTitle('contract.add');
-        this.datasForm.template_contract_id = Number(params['id']);
-        this.getDataContractForm(this.datasForm.template_contract_id);
-      } else if (this.action == 'add-batch') {
-        this.type = 3;
-        this.appService.setTitle('contract.add');
-        this.datasBatch.idContractTemplate = Number(params['id']);
-      } else if (this.action == 'add-contract-connect') {
-        this.appService.setTitle('contract.add');
-        const array_empty: any[] = [];
-        array_empty.push({ ref_id: Number(params['id']) });
-        this.datas.contractConnect = array_empty;
-        console.log(this.datas.contractConnect);
-      } else if (this.action == 'edit') {
-        this.id = params['id'];
-        this.appService.setTitle('contract.edit');
-      } else if (this.action == 'copy') {
-        this.id = params['id'];
-        this.appService.setTitle('contract.copy');
-      }
-
-      if (this.action == 'edit') { // || this.action == 'copy'
-        this.spinner.show();
-        this.contractService.getDetailContract(this.id).subscribe((rs: any) => {
-          let data_api = {
-            is_data_contract: rs[0],
-            i_data_file_contract: rs[1],
-            is_data_object_signature: rs[2]
+          //set title
+          this.type = 1;
+          if (this.action == 'add') {
+            this.appService.setTitle('contract.add');
+          } else if (this.action == 'add-form') {
+            this.type = 2;
+            this.appService.setTitle('contract.add');
+            this.datasForm.template_contract_id = Number(params['id']);
+            this.getDataContractForm(this.datasForm.template_contract_id);
+          } else if (this.action == 'add-batch') {
+            this.type = 3;
+            this.appService.setTitle('contract.add');
+            this.datasBatch.idContractTemplate = Number(params['id']);
+          } else if (this.action == 'add-contract-connect') {
+            this.appService.setTitle('contract.add');
+            const array_empty: any[] = [];
+            array_empty.push({ ref_id: Number(params['id']) });
+            this.datas.contractConnect = array_empty;
+            console.log(this.datas.contractConnect);
+          } else if (this.action == 'edit') {
+            this.id = params['id'];
+            this.appService.setTitle('contract.edit');
+          } else if (this.action == 'copy') {
+            this.id = params['id'];
+            this.appService.setTitle('contract.copy');
           }
-          this.getDataContractCreated(data_api);
-        }, () => {
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
-        }, () => {
-          this.spinner.hide();
-        })
+
+          if (this.action == 'edit') {
+            // || this.action == 'copy'
+            this.spinner.show();
+            this.contractService.getDetailContract(this.id).subscribe(
+              (rs: any) => {
+                let data_api = {
+                  is_data_contract: rs[0],
+                  i_data_file_contract: rs[1],
+                  is_data_object_signature: rs[2],
+                };
+                this.getDataContractCreated(data_api);
+              },
+              () => {
+                this.spinner.hide();
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
+                  '',
+                  3000
+                );
+              },
+              () => {
+                this.spinner.hide();
+              }
+            );
+          } else {
+            if (this.type == 1) {
+              this.step = variable.stepSampleContract.step1;
+            } else if (this.type == 2) {
+              this.stepForm = variable.stepSampleContractForm.step1;
+            } else if (this.type == 3) {
+              this.stepBatch = variable.stepSampleContractBatch.step1;
+            }
+          }
+        });
       } else {
-        if (this.type == 1) {
-        this.step = variable.stepSampleContract.step1;
-        } else if (this.type == 2) {
-        this.stepForm = variable.stepSampleContractForm.step1;
-        } else if (this.type == 3) {
-          this.stepBatch = variable.stepSampleContractBatch.step1;
-        }
+        this.toastService.showErrorHTMLWithTimeout('Tổ chức chưa đăng ký sử dụng gói dịch vụ nào hoặc gói dịch vụ đã hết hạn','',3000);
       }
     });
   }
