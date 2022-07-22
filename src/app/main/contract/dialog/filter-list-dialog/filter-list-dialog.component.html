@@ -2,7 +2,7 @@
     <div style="text-align: center; font-weight: bold">
       <h3 style="color: #106DB6; font-family: inherit;">{{this.data.title}}</h3>
     </div>
-    <form [formGroup]="addForm" class="content">
+    <div class="content">
         <div class="row">
             <div class="col-md-6">
                 <div class="label text-color">Loại hợp đồng</div>
@@ -11,7 +11,7 @@
                         panelStyleClass="font"
                         appendTo="body"
                         [options]="contractTypeList" 
-                        formControlName="filter_type" 
+                        [(ngModel)]="filter_type" 
                         optionLabel="name" 
                         optionValue="id" 
                         placeholder="Chọn loại hợp đồng" 
@@ -25,7 +25,7 @@
             <div class="col-md-6">
                 <div class="label text-color">Số hợp đồng</div>
                 <div class="input-data">
-                    <input type="text" formControlName="filter_contract_no">
+                    <input type="text" [(ngModel)]="filter_contract_no">
                 </div>
             </div>
         </div>
@@ -34,14 +34,14 @@
             <div class="col-md-6">
                 <div class="label text-color">Từ ngày (ngày tạo)</div>
                 <div>
-                    <p-calendar formControlName="filter_from_date" [showIcon]="true" dateFormat="dd/mm/yy" appendTo="body"></p-calendar>
+                    <p-calendar [(ngModel)]="filter_from_date" [showIcon]="true" dateFormat="dd/mm/yy" appendTo="body"></p-calendar>
                 </div>
             </div>
         
             <div class="col-md-6">
                 <div class="label text-color">Đến ngày (ngày tạo)</div>
                 <div>
-                    <p-calendar formControlName="filter_to_date" [showIcon]="true" dateFormat="dd/mm/yy" appendTo="body"></p-calendar>
+                    <p-calendar [(ngModel)]="filter_to_date" [showIcon]="true" dateFormat="dd/mm/yy" appendTo="body"></p-calendar>
                 </div>
             </div>
         </div>
@@ -49,7 +49,7 @@
         <div class="row" style="padding-top: 10px;" *ngIf="isOrg=='on'">
             <div class="col-md-12">
                 <div class="label text-color">Tổ chức</div>
-                <p-dropdown    
+                <!-- <p-dropdown    
                 panelStyleClass="font"
                 appendTo="body"
                 [options]="orgList" 
@@ -58,7 +58,11 @@
                 optionValue="id" 
                 [filter]="true" 
                 filterBy="name" 
-                ></p-dropdown>
+                ></p-dropdown> -->
+                <div>
+                <p-treeSelect panelStyleClass="font"
+                appendTo="body" [(ngModel)]="selectedNodeOrganization" ngDefaultControl [options]="listOrgCombobox" placeholder="Tất cả" [filter]="true" filterBy="name"  [droppable]="true" (onNodeSelect)="changeOrg()"></p-treeSelect>
+                </div>
             </div>
         </div>
     
@@ -66,6 +70,6 @@
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">Hủy</button>
             <button class="save-button" (click)="onSubmit()">Tìm kiếm</button>
         </div>
-    </form>
+    </div>
   </div>
   

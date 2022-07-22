@@ -46,12 +46,14 @@ export class UserComponent implements OnInit {
     this.unitService.getUnitList('', '').subscribe(data => {
       console.log(data.entities);
       this.orgListTmp.push({name: "Tất cả", id:""});
-      let dataUnit = data.entities.sort((a:any,b:any) => a.name.toString().localeCompare(b.name.toString()));
+      let dataUnit = data.entities.sort((a:any,b:any) => a.path.toString().localeCompare(b.path.toString()));
       for(var i = 0; i < dataUnit.length; i++){
         this.orgListTmp.push(dataUnit[i]);
       }
       
       this.orgList = this.orgListTmp;
+      this.convertData();
+      this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.organization_id);
     });
 
     this.cols = [
@@ -65,7 +67,6 @@ export class UserComponent implements OnInit {
     ];
 
     
-    console.log(this.organization_id_user_login);
     let userId = this.userService.getAuthCurrentUser().id;
     this.userService.getUserById(userId).subscribe(
       data => {
@@ -88,6 +89,62 @@ export class UserComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
       }
     )
+  }
+
+  array_empty: any = [];
+  listOrgCombobox: any[];
+  selectedNodeOrganization:any;
+  convertData(){
+    this.array_empty=[];
+    this.orgList.forEach((element: any, index: number) => {
+
+      let is_edit = false;
+      let dataChildren = this.findChildren(element);
+      let data:any="";
+      data = {
+        label: element.name, 
+        data: element.id,
+        expanded: true,
+        children: dataChildren
+      };
+      
+      this.array_empty.push(data);
+      //this.removeElementFromStringArray(element.id);
+    })
+    this.listOrgCombobox = this.array_empty;
+  }
+
+  findChildren(element:any){
+    let dataChildren:any[]=[];
+    let arrCon = this.orgList.filter((p: any) => p.parent_id == element.id);
+    
+    arrCon.forEach((elementCon: any, indexCOn: number) => {
+      let is_edit = false;
+      
+      dataChildren.push(
+      {
+        label: elementCon.name, 
+        data: elementCon.id,
+        expanded: true,
+        children: this.findChildren(elementCon)
+      });
+      this.removeElementFromStringArray(elementCon.id);
+    })
+    return dataChildren;
+  }
+
+  removeElementFromStringArray(element: string) {
+    this.orgList.forEach((value,index)=>{
+        if(value.id==element){
+          this.orgList.splice(index,1);
+        }
+        
+    });
+  }
+
+  changeOrg(){
+    console.log(this.selectedNodeOrganization);
+    this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
   }
 
   searchUser(){

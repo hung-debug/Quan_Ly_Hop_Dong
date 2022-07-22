@@ -66,7 +66,7 @@
         </div>
 
         <div class="row" style="padding-top: 10px;">
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="!parent_id">
                 <div class="label_item">{{'Số lượng hợp đồng đã mua' | translate }}</div>
                 <div>
                     <div [innerHTML]="numContractBuy" class="input_text"></div>
