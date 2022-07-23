@@ -860,17 +860,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     return style;
   }
 
-  // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
-  // @ts-ignore
-  changeDisplay() {
-    if (window.innerHeight <= 781 /*768*/ ) {
-      return {
-        "overflow": "auto",
-        "height": "225px"
-      }
-    } else return {}
-  }
-
   // hàm stype đối tượng boder kéo thả
   changeColorDrag(role: any, isDaKeo?: any) {
     if (isDaKeo) {

@@ -1,285 +1,316 @@
 .sample-contract {
+  // height: calc(100vh - 246px);
+  height: calc(100vh - 287px);
+
+  &__file {
+    //position: relative;
+    .sig-img-daky {
+      position: absolute;
+      top: -11px;
+      right: -8px;
+      //cursor: pointer;
+    }
+  }
+
+  .viewer-pdf {
     // height: calc(100vh - 246px);
     height: calc(100vh - 287px);
-    &__file {
-        //position: relative;
-        .sig-img-daky {
-            position: absolute;
-            top: -11px;
-            right: -8px;
-            //cursor: pointer;
-        }
+    overflow-x: auto;
+    text-align: center;
+    background-color: rgba(239, 239, 239, 1);
+    padding-top: 10px;
+  }
+
+  #pdf-viewer-step-3.view {
+    padding-top: 15px;
+    overflow-y: auto;
+    height: calc(100vh - 122px);
+    overflow-x: hidden;
+  }
+
+  .viewer-pdf.isDrag {
+    // height: calc(100vh - 246px);
+    height: calc(100vh - 287px);
+    overflow-x: auto;
+    text-align: center;
+    background-color: rgba(239, 239, 239, 1);
+    //margin-left: 26%;
+    padding-top: 10px;
+
+    &.view {
+      height: calc(100vh - 122px) !important;
+      margin-left: 33%;
+      padding-top: 10px;
+
+      .show-list-name {
+        pointer-events: none;
+      }
     }
-    .viewer-pdf {
-        // height: calc(100vh - 246px);
-        height: calc(100vh - 287px);
-        overflow-x: auto;
-        text-align: center;
-        background-color: rgba(239, 239, 239, 1);
-        padding-top: 10px;
-    }
-    #pdf-viewer-step-3.view {
-        padding-top: 15px;
-        overflow-y: auto;
-        height: calc(100vh - 122px);
-        overflow-x: hidden;
-    }
-    .viewer-pdf.isDrag {
-        // height: calc(100vh - 246px);
-        height: calc(100vh - 287px);
-        overflow-x: auto;
-        text-align: center;
-        background-color: rgba(239, 239, 239, 1);
-        //margin-left: 26%;
-        padding-top: 10px;
-        &.view {
-            height: calc(100vh - 122px) !important;
-            margin-left: 33%;
-            padding-top: 10px;
-            .show-list-name {
-                pointer-events: none;
-            }
-        }
-    }
-    &__information {
-        &--drag {
-            .content-drag {
-                //cursor: pointer;
-                width: 100%;
-                height: 30px;
-                background-color: #EBF8FF;
-                border-radius: 5px;
-                border: 1px solid #106DB6;
-                color: #106DB6;
-                text-align: center;
-                display: flex;
-                justify-content: center;
-                align-items: center
-            }
-            .show-list-name-class:nth-last-child(4) {
-                //float: left;
-                margin-right: 11px;
-            }
-            .show-list-name-class:nth-last-child(2) {
-                margin-right: 11px;
-            }
-        }
-        &--user-sign {
-            display: flex;
-            flex-direction: column;
-            label {
-                padding-bottom: 13px;
-            }
-            .name-text {
-                display: flex;
-                flex-direction: column;
-                margin-bottom: 5px;
-                label {
-                    padding-bottom: 5px;
-                }
-                input {
-                    border-radius: 5px;
-                    border: 1px solid #87CAFF;
-                    height: 40px;
-                    outline: none;
-                }
-            }
-            .sign-unit-select {
-                label {
-                    padding-bottom: 5px;
-                }
-                select {
-                    color: #333333;
-                    border: 1px solid #87CAFF;
-                    outline: none;
-                    &.form-select:disabled {
-                        opacity: 0.7;
-                    }
-                }
-                select:invalid {
-                    color: gray;
-                }
-            }
-        }
-        .flex-column {
-            .location {
-                display: flex;
-                justify-content: space-around
-            }
-            .location-drag {
-                //display: flex;
-                float: left;
-                align-items: center;
-                div {
-                    //padding-right: 20px;
-                    //width: 88px;
-                    width: 56px;
-                    //font-size: 13px;
-                    color: #666666;
-                    text-align: center;
-                    float: left;
-                    padding-right: 15px;
-                    padding-top: 10px;
-                }
-                input {
-                    outline: none;
-                    width: 88px;
-                    height: 40px;
-                    border-radius: 5px;
-                    border: 1px solid #87CAFF;
-                }
-            }
-        }
-        //.location-change {
-        //  overflow: auto;
-        //  height: calc(50vh - 100px);
-        //}
-    }
-    .label {
-        font-size: 15px;
+  }
+
+  &__information {
+    &--drag {
+      .content-drag {
+        //cursor: pointer;
+        width: 100%;
+        height: 30px;
+        background-color: #EBF8FF;
+        border-radius: 5px;
+        border: 1px solid #106DB6;
         color: #106DB6;
-        font-style: normal;
-        font-weight: normal;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center
+      }
+
+      .show-list-name-class:nth-last-child(4) {
+        //float: left;
+        margin-right: 11px;
+      }
+
+      .show-list-name-class:nth-last-child(2) {
+        margin-right: 11px;
+      }
     }
-    .label-require {
-        font-size: 13px;
-        font-style: normal;
-        font-weight: normal;
-        color: #F48465;
+
+    &--user-sign {
+      display: flex;
+      flex-direction: column;
+
+      label {
+        padding-bottom: 13px;
+      }
+
+      .name-text {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 5px;
+
+        label {
+          padding-bottom: 5px;
+        }
+
+        input {
+          border-radius: 5px;
+          border: 1px solid #87CAFF;
+          height: 40px;
+          outline: none;
+        }
+      }
+
+      .sign-unit-select {
+        label {
+          padding-bottom: 5px;
+        }
+
+        select {
+          color: #333333;
+          border: 1px solid #87CAFF;
+          outline: none;
+
+          &.form-select:disabled {
+            opacity: 0.7;
+          }
+        }
+
+        select:invalid {
+          color: gray;
+        }
+      }
     }
+
+    .flex-column {
+      .location {
+        display: flex;
+        justify-content: space-around
+      }
+
+      .location-drag {
+        //display: flex;
+        float: left;
+        align-items: center;
+
+        div {
+          //padding-right: 20px;
+          //width: 88px;
+          width: 56px;
+          //font-size: 13px;
+          color: #666666;
+          text-align: center;
+          float: left;
+          padding-right: 15px;
+          padding-top: 10px;
+        }
+
+        input {
+          outline: none;
+          width: 88px;
+          height: 40px;
+          border-radius: 5px;
+          border: 1px solid #87CAFF;
+        }
+      }
+    }
+
+    @media screen and (min-height: 781px) {
+      .location-change {
+        height: 210px;
+        overflow: auto;
+      }
+    }
+  }
+
+  .label {
+    font-size: 15px;
+    color: #106DB6;
+    font-style: normal;
+    font-weight: normal;
+  }
+
+  .label-require {
+    font-size: 13px;
+    font-style: normal;
+    font-weight: normal;
+    color: #F48465;
+  }
 }
 
 // test
 .ck-da-keo {
-    border: 1px solid #106DB6;
-    border-radius: 5px;
+  border: 1px solid #106DB6;
+  border-radius: 5px;
 }
 
 .staff-ck-da-keo {
-    border: 1px solid #92bff5;
-    color: #2680eb;
-    border-radius: 2px;
+  border: 1px solid #92bff5;
+  color: #2680eb;
+  border-radius: 2px;
 }
 
 .employer-ck .signature-sample,
 .employer-ck .signature-sample-drag {
-    border: 1px solid #92bff5;
-    background-color: rgba(255, 233, 178, 1);
-    color: #fe7744;
-    border-radius: 2px;
+  border: 1px solid #92bff5;
+  background-color: rgba(255, 233, 178, 1);
+  color: #fe7744;
+  border-radius: 2px;
 }
 
 .employer-ck-da-keo {
-    border: 1px solid #92bff5;
-    color: #fe7744;
-    border-radius: 2px;
+  border: 1px solid #92bff5;
+  color: #fe7744;
+  border-radius: 2px;
 }
 
 .staff-ck .signature-sample,
 .staff-ck .signature-sample-drag {
-    border: 1px solid #92bff5;
-    background-color: rgba(189, 217, 249, 1);
-    color: #2680eb;
-    border-radius: 2px;
+  border: 1px solid #92bff5;
+  background-color: rgba(189, 217, 249, 1);
+  color: #2680eb;
+  border-radius: 2px;
 }
 
 .staff-ck-da-keo {
-    border: 1px solid #92bff5;
-    color: #2680eb;
-    border-radius: 2px;
+  border: 1px solid #92bff5;
+  color: #2680eb;
+  border-radius: 2px;
 }
 
 .resize-drag {
-    //position: absolute; // thuoc tinh absolute de giu nguyen vi tri khi keo sang pdf
-    z-index: 9;
-    //width: 250px;
-    //height: 32px;
-    font-size: 12px;
-    border-radius: 3px;
-    font-family: sans-serif;
-    outline: none;
-    touch-action: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(27, 51, 91, 1);
-    /* This makes things *much* easier */
-    box-sizing: border-box;
-    //padding: 10px;
-    .name-sig-img-daky {
-        position: absolute;
-        background-color: yellow;
-        border-radius: 5px;
-        top: -15px;
-        left: 6px;
-        padding: 0 4px;
-        border: 1px solid #ddd;
+  //position: absolute; // thuoc tinh absolute de giu nguyen vi tri khi keo sang pdf
+  z-index: 9;
+  //width: 250px;
+  //height: 32px;
+  font-size: 12px;
+  border-radius: 3px;
+  font-family: sans-serif;
+  outline: none;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(27, 51, 91, 1);
+  /* This makes things *much* easier */
+  box-sizing: border-box;
+  //padding: 10px;
+  .name-sig-img-daky {
+    position: absolute;
+    background-color: yellow;
+    border-radius: 5px;
+    top: -15px;
+    left: 6px;
+    padding: 0 4px;
+    border: 1px solid #ddd;
+  }
+
+  .sig-img-daky {
+    cursor: pointer;
+
+    > img {
+      width: 16px;
     }
-    .sig-img-daky {
-        cursor: pointer;
-        >img {
-            width: 16px;
-        }
-        img:nth-last-child(2) {
-            width: 8px;
-            top: 6px;
-            position: absolute;
-            right: 3px;
-        }
+
+    img:nth-last-child(2) {
+      width: 8px;
+      top: 6px;
+      position: absolute;
+      right: 3px;
     }
+  }
 }
 
 .none-drag {
-    opacity: 0.6;
+  opacity: 0.6;
 }
 
 .drag-image {
-    //position: absolute;
-    //right: -22px;
-    //top: 5px;
-    padding-left: 7px;
+  //position: absolute;
+  //right: -22px;
+  //top: 5px;
+  padding-left: 7px;
 }
 
 #element-drag-text,
 #element-drag {
-    //display: inline-block;
-    //width: ;
+  //display: inline-block;
+  //width: ;
 }
 
 //style button
 .action-button {
-    width: 100px;
-    background: #106DB6;
-    //font-weight: bold;
-    color: white;
-    border: 0 none;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 5px 5px;
+  width: 100px;
+  background: #106DB6;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 5px 5px;
 }
 
 .action-button-previous {
-    width: 100px;
-    background: #C5C5F1;
-    font-weight: bold;
-    color: white;
-    border: 0 none;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 5px 5px;
+  width: 100px;
+  background: #C5C5F1;
+  font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 5px;
+  margin: 5px 5px;
 }
 
 .footer-sample-contract {
-    border-top: 1px solid #ddd;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .content_footer {
-        color: #0160AE;
-        font-size: 13px;
-        font-weight: 500;
-    }
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .content_footer {
+    color: #0160AE;
+    font-size: 13px;
+    font-weight: 500;
+  }
 }
 

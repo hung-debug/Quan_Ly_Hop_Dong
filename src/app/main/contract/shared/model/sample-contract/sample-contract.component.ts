@@ -455,6 +455,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
+
+
   showEventInfo = (event: any) => {
     let canvasElement: HTMLElement | null;
 
@@ -535,7 +537,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
           let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
           let canvasInfo = canvasElement.getBoundingClientRect();
-          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + (5 * (page == 1 ? 1 : page - 1));
+          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
         }
         //END
 
@@ -963,33 +965,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         element['sign_unit'] = 'so_tai_lieu'
       }
     })
-  }
-
-  // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
-  // @ts-ignore
-  changeDisplay() {
-    // if (window.innerHeight < 670 && window.innerHeight > 643) {
-    //   return {
-    //     "overflow": "auto",
-    //     "height": "calc(50vh - 118px)"
-    //   }
-    // } else if (window.innerHeight <= 643) {
-    //   return {
-    //     "overflow": "auto",
-    //     "height": "calc(50vh - 170px)"
-    //   }
-    // } else if (window.innerHeight == 768) {
-    //   return {
-    //     "overflow": "auto",
-    //     "height": "285px"
-    //   }
-    // } else return {}
-    if (window.innerHeight <= 781 /*768*/) {
-      return {
-        "overflow": "auto",
-        "height": "210px"
-      }
-    } else return {}
   }
 
   // hàm stype đối tượng boder kéo thả
