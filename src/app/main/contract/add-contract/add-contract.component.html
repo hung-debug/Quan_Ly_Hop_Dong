@@ -30,6 +30,7 @@
         </div>
     </div>
 
+    <!-- Hợp đồng đơn lẻ không theo mẫu  -->
     <ng-container *ngIf="type == 1 && (isQLHD_01 || this.action == 'edit')">
         <app-infor-contract #infoContract *ngIf="step == 'infor-contract'" [datas]="datas" [step]="step"
             [save_draft_infor]="shareData" (stepChangeInfoContract)="getStep($event)"></app-infor-contract>

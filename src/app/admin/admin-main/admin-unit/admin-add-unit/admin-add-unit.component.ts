@@ -77,7 +77,7 @@ export class AdminAddUnitComponent implements OnInit {
       ]),
       tax_code: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.taxCode_form),
       ]),
       address: this.fbd.control('', [
         Validators.required,
@@ -142,7 +142,7 @@ export class AdminAddUnitComponent implements OnInit {
             ]),
             tax_code: this.fbd.control(data.taxCode, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.taxCode_form),
             ]),
             address: this.fbd.control(data.address, [
               Validators.required,
@@ -196,7 +196,7 @@ export class AdminAddUnitComponent implements OnInit {
         ]),
         tax_code: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.taxCode_form),
         ]),
         address: this.fbd.control('', [
           Validators.required,
@@ -506,6 +506,8 @@ export class AdminAddUnitComponent implements OnInit {
               });
             });
 
+            console.log("roleArrConvert ",roleArrConvert);
+
             const dataRoleIn = {
               name: 'Admin',
               code: 'ADMIN',
@@ -516,7 +518,7 @@ export class AdminAddUnitComponent implements OnInit {
             this.adminUnitService.addRoleByOrg(dataRoleIn).subscribe(
               (dataRole) => {
                 //this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
-                console.log(dataRole);
+                console.log("dataRole ",dataRole);
                 //them nguoi dung
                 const dataUserIn = {
                   name: 'Admin',

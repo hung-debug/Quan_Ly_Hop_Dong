@@ -322,10 +322,14 @@ export class ContractService {
       .append('Connection', 'keep-alive')
       .append('Sec-Fetch-Site', 'cross-site');
     // return this.http.get<any>(this.getAccountSignDigital, {'headers': headers});
+
+    console.log("get account sign digital ", this.getAccountSignDigital);
     return axios.get(this.getAccountSignDigital, config);
   }
 
   postSignDigitalMobi(signCertDigital: any, imgSignGen: any) {
+    console.log("signCertDigital ", signCertDigital);
+
     this.getCurrentUser();
     let config = {
       headers: {
@@ -349,6 +353,9 @@ export class ContractService {
       typeSign: "4",
       //algDigest: "SHA_256"
     };
+
+    console.log("dataPost ",dataPost);
+
     return axios.post(this.postSignDigital, dataPost, config);
     // console.log(datePost);
     // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});

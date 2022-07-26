@@ -1018,12 +1018,19 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             signDigital.valueSignBase64 = encode(base64String);
 
             const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+
+            console.log("data sign mobi ", dataSignMobi);
+
             if (!dataSignMobi.data.FileDataSigned) {
+              console.log("file data signed ");
+
               this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
               return false;
             }
             const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
             if (!sign.recipient_id) {
+              console.log("recipent_id")
+
               this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
               return false;
             }
@@ -1031,6 +1038,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         }
         return true;
       } else {
+        console.log("not sign cert digital ");
         this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
         return false;
       }
@@ -1184,6 +1192,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     if (typeSignDigital && typeSignDigital == 2) {
       let checkSetupTool = false;
       this.contractService.getAllAccountsDigital().then(async (data) => {
+
+        console.log("data all accounts digital ", data);
         if (data.data.Serial) {
           this.signCertDigital = data.data;
           this.nameCompany = data.data.CN;
@@ -1233,6 +1243,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         signUpdateTempN = signUpdateTempN.filter(
           (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
           .map((item: any) => {
+            console.log("item sign image c ", item);
             return {
               id: item.id,
               name: item.name,

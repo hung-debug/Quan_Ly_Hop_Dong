@@ -6,7 +6,7 @@ import {
   type_signature_personal_party,
   variable
 } from "../../../../../config/variable";
-import {parttern} from "../../../../../config/parttern";
+import {parttern, parttern_input} from "../../../../../config/parttern";
 import {FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
 import {Helper} from "../../../../../core/Helper";
 import * as ContractCreateDetermine from '../../contract_data'
@@ -146,6 +146,7 @@ export class DetermineSignerComponent implements OnInit {
       }
       return;
     } else {
+      console.log("tiep theo buoc 2 sang buoc 3");
       let is_save = false;
       if (action == 'save-step') {
         is_save = true;
@@ -403,6 +404,7 @@ export class DetermineSignerComponent implements OnInit {
         count++;
         break;
       }
+
       if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
         this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
         count++;
@@ -496,6 +498,18 @@ export class DetermineSignerComponent implements OnInit {
           if (dataArrPartner[j].type != 3) {
             if (!dataArrPartner[j].name) {
               this.getNotificationValid("Vui lòng nhập tên của đối tác tổ chức!")
+              count++;
+              break;
+            }
+
+            if(!dataArrPartner[j].taxCode) {
+              this.getNotificationValid("Vui lòng nhập mã số thuế của đối tác tổ chức!")
+              count++;
+              break;
+            }
+
+            if(dataArrPartner[j].taxCode && !parttern_input.taxCode_form.test(dataArrPartner[k].taxCode)) {
+              this.getNotificationValid("Mã số thuế của " + this.getNameObjectValid(3) + "của đối tác không hợp lệ!");
               count++;
               break;
             }
@@ -1266,6 +1280,8 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   dataParnterOrganization() {
+    console.log("datas is ", this.datas);
+    console.log("data is ", this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3));
     return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
