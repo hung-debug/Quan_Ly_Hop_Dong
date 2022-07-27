@@ -529,6 +529,22 @@ export class DetermineSignerComponent implements OnInit {
         //   break;
         // }
         for (let k = 0; k < isParterSort.length; k++) {
+          if(dataArrPartner[j].type == 3) {
+            if(this.flagUSBToken == true) {
+              if(!dataArrPartner[j].taxCode) {
+                this.getNotificationValid("Vui lòng nhập mã số thuế của đối tác tổ chức!")
+                count++;
+                break;
+              }
+            }
+           
+            if(dataArrPartner[j].taxCode && !parttern_input.taxCode_form.test(dataArrPartner[k].taxCode)) {
+              this.getNotificationValid("Mã số thuế " + this.getNameObjectValid(3) + "của đối tác không hợp lệ!");
+              count++;
+              break;
+            }
+          }
+       
           if (dataArrPartner[j].type != 3) {
             if (!dataArrPartner[j].name) {
               this.getNotificationValid("Vui lòng nhập tên của đối tác tổ chức!")

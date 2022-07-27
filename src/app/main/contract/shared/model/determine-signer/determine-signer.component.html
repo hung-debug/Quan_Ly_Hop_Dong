@@ -556,7 +556,6 @@
             (item.type == 2 ? 'Nhập mã số thuế' : '') | translate
           }}"
           [(ngModel)]="item.taxCode"
-          [disabled]="item.type == 3"
         />
       </div>
 
@@ -1236,12 +1235,15 @@
                       >
                       <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                     </div>
+
+                    <!--Loai ky cho doi tac la ca nhan-->
                     <ng-multiselect-dropdown
                       [(ngModel)]="d.sign_type"
                       placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings"
                       [data]="signTypeList"
-                      (onSelect)="onItemSelect($event)"
+                      (onSelect)="selectPartnerSign($event)"
+                      (onDeSelect)="deSelectPartnerSign($event)"
                       (ngModelChange)="selectWithOtp($event, d, true)"
                     >
                       <ng-template
