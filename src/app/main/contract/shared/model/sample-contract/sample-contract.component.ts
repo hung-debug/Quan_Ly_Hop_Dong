@@ -105,7 +105,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
       // ham chuyen doi hinh thuc ky type => sign_unit
-      // this.getAddSignUnit();
       // ham update du lieu hop dong sua
       this.getDataSignUpdateAction();
       this.datas.contract_user_sign = this.contractService.getDataFormatContractUserSign();
@@ -540,7 +539,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
         }
         //END
-
 
         let _array = Object.values(this.obj_toa_do);
         this.cdRef.detectChanges(); // render lại view
