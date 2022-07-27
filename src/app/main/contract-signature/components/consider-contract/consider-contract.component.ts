@@ -1570,11 +1570,19 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         && sign?.recipient?.email === this.currentUser.email
         && sign?.recipient?.role === this.datas?.roleContractReceived
         && sign?.page == page) {
+
         sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
         sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
         sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
         sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
-        console.log(sign);
+        
+        console.log("sign recipient_id ",sign.recipient_id);
+        
+          //Lấy thông tin mã số thuế
+          this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
+            console.log("response ", response);
+          })
+
         return sign;
       } else {
         return sign;

@@ -91,7 +91,10 @@ export class DetermineSignerComponent implements OnInit {
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       // this.datas.is_determine_clone = null;
       // this.datas.is_determine_clone = this.datas.determine_contract;
+
       this.datas.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
+
+      console.log("on init ", this.datas.is_determine_clone);
     }
 
     // data Tổ chức của tôi
@@ -161,6 +164,7 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3)
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
+        console.log("vao day ");
     })
     this.spinner.show();
     // let isCheckId = this.datas.is_determine_clone.filter((p: any) => p.id);
@@ -196,6 +200,9 @@ export class DetermineSignerComponent implements OnInit {
     //   this.spinner.hide()
     // } else {
     this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
+      console.log("this.datas.is_determine_clone ", this.datas.is_determine_clone);
+      console.log("datas id ", this.datas.id);
+      console.log("res get contract ", res);
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
         if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {

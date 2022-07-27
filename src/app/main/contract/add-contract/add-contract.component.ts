@@ -332,7 +332,9 @@ export class AddContractComponent implements OnInit {
         }
         this.datas.contractConnect = data.is_data_contract.refs;
         data.is_data_contract['is_action_contract_created'] = true;
+
         this.datas.is_determine_clone = data.is_data_contract.participants;
+
         this.datas.contract_id_action = data.is_data_contract.id;
         this.datas.i_data_file_contract = data.i_data_file_contract;
         this.datas['is_data_object_signature'] = data.is_data_object_signature;

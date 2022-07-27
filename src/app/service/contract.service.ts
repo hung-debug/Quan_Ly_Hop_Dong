@@ -59,7 +59,7 @@ export class ContractService {
   uploadFileBase64Url: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
   currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
-  isDataDetermine: any = `${environment.apiUrl} /api/v1/participants/byRecipient/`;
+  isDataDetermine: any = `${environment.apiUrl}/api/v1/participants/byRecipient/`;
   signDigitalMobi: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
   getAccountSignDigital: any = `http://localhost:6704/api/mobi/getcert?mst=`;
   postSignDigital: any = `http://localhost:6704/api/mobi/signpdf`;
@@ -613,7 +613,10 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<File>(this.isDataDetermine + idCoordination, { headers }).pipe();
+
+      console.log("url ", this.isDataDetermine + idCoordination);
+
+    return this.http.get<any>(this.isDataDetermine + idCoordination, { headers }).pipe();
   }
 
   changeStatusContract(id: any, statusNew: any, reason: any) {
@@ -1140,7 +1143,7 @@ export class ContractService {
             "status": 0,
             "is_otp": 0,
             "sign_type": [
-            ]
+            ],
           }
         ],
       },
@@ -1159,7 +1162,7 @@ export class ContractService {
             "ordering": 1,
             "status": 0,
             "is_otp": 0,
-            "sign_type": []
+            "sign_type": [],
           }
         ],
       },
