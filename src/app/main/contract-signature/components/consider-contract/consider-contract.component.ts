@@ -48,7 +48,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './consider-contract.component.html',
   styleUrls: ['./consider-contract.component.scss']
 })
-export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewInit {  
+export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewInit {
   datas: any;
   data_contract: any;
   data_coordinates: any;
@@ -193,7 +193,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   getDataContractSignature() {
-    
+
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
       console.log(rs);
       this.isDataContract = rs[0];
@@ -262,7 +262,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         if (element.recipient) { // set name (nguoi dc uy quyen hoac chuyen tiep)
           element.name = element.recipient.name;
         }
-      
+
       })
 
       let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
@@ -515,22 +515,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     return style;
-  }
-
-  // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
-  // @ts-ignore
-  changeDisplay() {
-    if (window.innerHeight < 670 && window.innerHeight > 634) {
-      return {
-        "overflow": "auto",
-        "height": "calc(50vh - 113px)"
-      }
-    } else if (window.innerHeight <= 634) {
-      return {
-        "overflow": "auto",
-        "height": "calc(50vh - 170px)"
-      }
-    } else return {}
   }
 
   // hàm stype đối tượng boder kéo thả
@@ -854,7 +838,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  
+
 
   openPopupSignContract(typeSign: any) {
     if (typeSign == 1) {
@@ -1132,11 +1116,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           }
         });
     }else{
-      
+
       this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
       await of(null).pipe(delay(100)).toPromise();
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
-      
+
       let signI:any;
       if (imageRender) {
         const textSignB = await domtoimage.toPng(imageRender);
@@ -1165,7 +1149,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         signUpdatePayload = signUpdatePayload[0];
       }
     }
-    
+
     let typeSignDigital = null;
     for (const signUpdate of this.isDataObjectSignature) {
       if (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
@@ -1243,7 +1227,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           });
       }
     }
-    
+
     if (notContainSignImage && !signDigitalStatus && this.datas.roleContractReceived != 2) {
       this.spinner.hide();
       return;
@@ -1290,14 +1274,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               this.spinner.hide();
             }, 1000);
           }
-          
+
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
           this.spinner.hide();
         }
       )
     }
-    
+
   }
 
   async signContractSimKPI() {

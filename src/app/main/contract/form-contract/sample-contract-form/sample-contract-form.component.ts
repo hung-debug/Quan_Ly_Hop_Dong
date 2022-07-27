@@ -609,19 +609,33 @@ export class SampleContractFormComponent implements OnInit {
         }
 
         let pages = event.relatedTarget.id.split("-");
-        let page = Helper._attemptConvertFloat(pages[pages.length - 1]);
+        let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
         // @ts-ignore
+        // if (page > 1) {
+        //   // @ts-ignore
+        //   for (let i = 1; i < page; i++) {
+        //     let canvasElement = document.getElementById("canvas-step3-" + i);
+        //     // @ts-ignore
+        //     let canvasInfo = canvasElement.getBoundingClientRect();
+        //     layerY += canvasInfo.height + 2;
+        //   }
+        //   // @ts-ignore
+        //   layerY += page / 3;
+        // }
+
         if (page > 1) {
-          // @ts-ignore
+          let countPage = 0;
           for (let i = 1; i < page; i++) {
-            let canvasElement = document.getElementById("canvas-step3-" + i);
-            // @ts-ignore
+            let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
             let canvasInfo = canvasElement.getBoundingClientRect();
-            layerY += canvasInfo.height + 2;
+            countPage += canvasInfo.height;
           }
-          // @ts-ignore
-          layerY += page / 3;
+          let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
+          let canvasInfo = canvasElement.getBoundingClientRect();
+          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
         }
+
+
         let _array = Object.values(this.obj_toa_do);
         this.cdRef.detectChanges(); // render lại view
         let _sign = <HTMLElement>document.getElementById(this.signCurent['id']);
@@ -1053,17 +1067,6 @@ export class SampleContractFormComponent implements OnInit {
         element['sign_unit'] = 'so_tai_lieu'
       }
     })
-  }
-
-  // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
-  // @ts-ignore
-  changeDisplay() {
-    if (window.innerHeight <= 781 /* 768*/) {
-      return {
-        "overflow": "auto",
-        "height": "225px"
-      }
-    } else return {}
   }
 
   // hàm stype đối tượng boder kéo thả

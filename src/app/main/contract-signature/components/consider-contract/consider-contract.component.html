@@ -35,10 +35,10 @@
     </div>
     <hr>
 
-    <div class="location-change" [ngStyle]="changeDisplay()">
+    <div class="location-change">
       <div class="sample-contract__information--user-sign" style="line-height: 25px">
         <div style="text-align: center; font-weight: bold" class="label">CÁC BÊN LIÊN QUAN</div>
-        
+
         <div *ngFor="let d of this.datas?.is_data_contract?.participants">
           <div>{{d.name}}</div>
         </div>
@@ -76,7 +76,7 @@
               <label for="radio-refuse-secretary" class="ms-2">Không đồng ý</label>
             </div>
           </div>
-          
+
         </div>
       </div>
     </div>
@@ -106,7 +106,7 @@
       <!-- <div class="skeleton-sign position-absolute opacity-0">
         <app-display-signature-image [userOtp]="userOtp" [phoneOtp]="phoneOtp" [isDateTime]="isDateTime"></app-display-signature-image>
       </div> -->
-      
+
     </div>
   </div>
 </div>
