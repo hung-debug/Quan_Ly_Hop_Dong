@@ -44,8 +44,7 @@ export class DashboardComponent implements OnInit {
   orgListTmp: any[] = [];
   organization_id: any = "";
 
-  nodes: any[];
-  selectedNode: any;
+  selectedNodeOrganization: any;
 
   constructor(
     private appService: AppService,
@@ -62,53 +61,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-  //   this.nodes = [
-  //     {
-  //         "label": "Documents",
-  //         "data": "Documents Folder",
-  //         "children": [{
-  //                 "label": "Work",
-  //                 "data": "Work Folder",
-  //                 "children": [
-  //                   {"label": "Expenses.doc", "data": "Expenses Document"}, 
-  //                   {"label": "Resume.doc", "data": "Resume Document"}
-  //                 ]
-  //             },
-  //             {
-  //                 "label": "Home",
-  //                 "data": "Home Folder",
-  //                 "children": [{"label": "Invoices.txt", "icon": "pi pi-file", "data": "Invoices for this month"}]
-  //             }]
-  //     },
-  //     {
-  //         "label": "Pictures",
-  //         "data": "Pictures Folder",
-  //         "expandedIcon": "pi pi-folder-open",
-  //         "collapsedIcon": "pi pi-folder",
-  //         "children": [
-  //             {"label": "barcelona.jpg", "icon": "pi pi-image", "data": "Barcelona Photo"},
-  //             {"label": "logo.jpg", "icon": "pi pi-image", "data": "PrimeFaces Logo"},
-  //             {"label": "primeui.png", "icon": "pi pi-image", "data": "PrimeUI Logo"}]
-  //     },
-  //     {
-  //         "label": "Movies",
-  //         "data": "Movies Folder",
-  //         "expandedIcon": "pi pi-folder-open",
-  //         "collapsedIcon": "pi pi-folder",
-  //         "children": [{
-  //                 "label": "Al Pacino",
-  //                 "data": "Pacino Movies",
-  //                 "children": [{"label": "Scarface", "icon": "pi pi-video", "data": "Scarface Movie"}, {"label": "Serpico", "icon": "pi pi-video", "data": "Serpico Movie"}]
-  //             },
-  //             {
-  //                 "label": "Robert De Niro",
-  //                 "data": "De Niro Movies",
-  //                 "children": [{"label": "Goodfellas", "icon": "pi pi-video", "data": "Goodfellas Movie"}, {"label": "Untouchables", "icon": "pi pi-video", "data": "Untouchables Movie"}]
-  //             }]
-  //     }
-  // ];
-
     this.appService.setTitle("menu.dashboard");
     this.search();
 
@@ -117,12 +69,66 @@ export class DashboardComponent implements OnInit {
     this.unitService.getUnitList('', '').subscribe(data => {
       console.log(data.entities);
       this.orgListTmp.push({name: "Tất cả", id: ""});
-      let dataUnit = data.entities.sort((a: any, b: any) => a.name.toString().localeCompare(b.name.toString()));
+      //sap xep theo path de cho to chuc cha len tren
+      let dataUnit = data.entities.sort((a: any, b: any) => a.path.toString().localeCompare(b.path.toString()));
       for (var i = 0; i < dataUnit.length; i++) {
         this.orgListTmp.push(dataUnit[i]);
       }
 
       this.orgList = this.orgListTmp;
+      console.log(this.orgList);
+      this.convertData();
+      console.log(this.list);
+    });
+  }
+
+  array_empty: any = [];
+  list: any[];
+  convertData(){
+    this.array_empty=[];
+    this.orgList.forEach((element: any, index: number) => {
+
+      let is_edit = false;
+      let dataChildren = this.findChildren(element);
+      let data:any="";
+      data = {
+        label: element.name, 
+        data: element.id,
+        expanded: true,
+        children: dataChildren
+      };
+      
+      this.array_empty.push(data);
+      //this.removeElementFromStringArray(element.id);
+    })
+    this.list = this.array_empty;
+  }
+
+  findChildren(element:any){
+    let dataChildren:any[]=[];
+    let arrCon = this.orgList.filter((p: any) => p.parent_id == element.id);
+    
+    arrCon.forEach((elementCon: any, indexCOn: number) => {
+      let is_edit = false;
+      
+      dataChildren.push(
+      {
+        label: elementCon.name, 
+        data: elementCon.id,
+        expanded: true,
+        children: this.findChildren(elementCon)
+      });
+      this.removeElementFromStringArray(elementCon.id);
+    })
+    return dataChildren;
+  }
+
+  removeElementFromStringArray(element: string) {
+    this.orgList.forEach((value,index)=>{
+        if(value.id==element){
+          this.orgList.splice(index,1);
+        }
+        
     });
   }
 
@@ -148,7 +154,6 @@ export class DashboardComponent implements OnInit {
   }
 
   searchCountCreate() {
-    console.log(this.isOrg);
     if (this.date != "" && this.date[0] != 0) {
       this.date.forEach((key: any, v: any) => {
         if (v == 0 && key) {
@@ -158,6 +163,7 @@ export class DashboardComponent implements OnInit {
         }
       });
     }
+    this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
     this.dashboardService.countContractCreate(this.isOrg, this.organization_id, this.filter_from_date, this.filter_to_date).subscribe(data => {
       console.log(data);
       data.isOrg = this.isOrg;

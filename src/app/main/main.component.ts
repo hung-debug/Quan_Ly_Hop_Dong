@@ -76,7 +76,7 @@ export class MainComponent implements OnInit {
 
   //click logout
   logout() {
-    localStorage.clear();
+    // localStorage.clear();
     sessionStorage.clear();
     localStorage.removeItem('currentUser');
     localStorage.removeItem('url');

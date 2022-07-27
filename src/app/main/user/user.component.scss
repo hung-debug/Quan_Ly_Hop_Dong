@@ -58,6 +58,7 @@ color: #106DB6;
   .pi-fw {
     color:  #106DB6;
     margin-right: 5px;
+    font-size: 10px;
   }
 
   .p-paginator .p-paginator-pages .p-paginator-page{
@@ -96,7 +97,7 @@ color: #106DB6;
   }
 }
 :host ::ng-deep {
-  .p-dropdown {
+  .p-treeselect, .p-dropdown {
       border: 1px solid #106DB6;
       border-radius: 5px;
       height: 33px;
@@ -104,7 +105,7 @@ color: #106DB6;
       outline: 0;
       color: black !important;
   }
-  .p-dropdown-label {
+  .p-treeselect-label, .p-dropdown-label {
       padding: 5px 5px 5px 15px;
   }
 }

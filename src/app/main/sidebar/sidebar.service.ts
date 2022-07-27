@@ -260,59 +260,15 @@ export class SidebarService {
   }
 
   buildMenu(currentUserC: any) {
-    //Lay id user
-    const idUser = JSON.parse(localStorage.getItem('currentUser') || '')
-      .customer.info.id;
-
-    //Lay id to chuc
-    this.userService.getUserById(idUser).subscribe((response) => {
-      const idOrg = response.organization_id;
-
-      //Check to chuc co dung goi dich vu
-      const subcription = this.userService
-        .getUnitById(idOrg)
-        .subscribe((responseOrg) => {
-          console.log('res ', responseOrg.services);
-
-          if (responseOrg.services.length > 0) {
-            let count = 0;
-            for (let i = 0; i < responseOrg.services.length; i++) {
-              if (responseOrg.services[i].usageStatus != 'USING') {
-                count++;
-              } else if (responseOrg.services[i].usageStatus == 'USING') {
-                break;
-              }
-            }
-
-            if (count == responseOrg.services.length) {
-              this.isQLHD_01 = false;
-              this.isQLHD_14 = false;
-              this.isQLHD_15 = false;
-            }
-          } else {
-            console.log('bang 0 ');
-            this.isQLHD_01 = false;
-            this.isQLHD_14 = false;
-            this.isQLHD_15 = false;
-          }
-
-          subcription.unsubscribe();
-
-          if (this.isQLHD_01 || this.isQLHD_14 || this.isQLHD_15) {
-            this.menus.push({
-              title: 'menu.contract.add',
-              active: false,
-              type: 'button',
-              href: '/main/form-contract/add',
-              id: 1,
-            });
-
-            this.menus =  this.menus.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
-          }
-        });
-    });
-
-    console.log('id user ', idUser);
+    if (this.isQLHD_01 || this.isQLHD_14 || this.isQLHD_15) {
+      this.menus.push({
+        title: 'menu.contract.add',
+        active: false,
+        type: 'button',
+        href: '/main/form-contract/add',
+        id: 1,
+      });
+    }
 
     if (
       this.isQLHD_02 ||

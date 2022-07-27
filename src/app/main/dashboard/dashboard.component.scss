@@ -99,6 +99,11 @@ h3{
   text-transform: uppercase;
 }
 :host ::ng-deep {
+  .pi-fw {
+    color:  #106DB6;
+    margin-right: 5px;
+    font-size: 10px;
+  }
   .p-treeselect, .p-dropdown {
       border: 1px solid #ced4da;
       border-radius: 5px;
