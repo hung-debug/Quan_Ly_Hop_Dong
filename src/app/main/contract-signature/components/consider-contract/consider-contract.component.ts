@@ -854,8 +854,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  
-
   openPopupSignContract(typeSign: any) {
     if (typeSign == 1) {
       this.imageDialogSignOpen();

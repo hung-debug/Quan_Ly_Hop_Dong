@@ -545,8 +545,7 @@
           [disabled]="item.type == 3"
         />
         <div style="width: 120px">
-          {{ "Mã số thuế" | translate | uppercase }}&nbsp;<span style="color: red"
-            >*</span
+          {{ "Mã số thuế" | translate | uppercase }}&nbsp;<span *ngIf="this.flagUSBToken === true">*</span
           >
           -
         </div>
@@ -873,12 +872,14 @@
                       <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                     </div>
 
+                    <!--Đối tác chọn loại ký-->
                     <ng-multiselect-dropdown
-                      [(ngModel)]="d.sign_type"
+                      [(ngModel)]="d.sign_type" 
                       placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings"
                       [data]="isListSignNotPerson"
-                      (onSelect)="onItemSelect($event)"
+                      (onSelect)="selectPartnerSign($event)"
+                      (onDeSelect)="deSelectPartnerSign($event)"
                       (ngModelChange)="selectWithOtp($event, d)"
                     >
                       <ng-template

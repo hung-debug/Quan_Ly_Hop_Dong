@@ -36,6 +36,8 @@ export class DetermineSignerComponent implements OnInit {
   userForm: FormGroup;
   partnerForm: FormGroup
   submitted = false;
+  flagUSBToken = false;
+
   data_organization: any;
   data_parnter_organization: any = [];
   data_parnter_individual: any = [];
@@ -233,6 +235,8 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onItemSelect(e: any) {
+    console.log("event ",e);
+
     var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
     var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
     // <==========>
@@ -267,7 +271,26 @@ export class DetermineSignerComponent implements OnInit {
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
   }
 
+  selectPartnerSign(e: any) {
+    if(e.id == 2) {
+      this.flagUSBToken = true;
+    } else {
+      this.flagUSBToken = false;
+    }
+  }
+
+  deSelectPartnerSign(e: any) {
+    if(e.id == 2) {
+      this.flagUSBToken = false;
+    }
+  }
+
+  onChangePartnerSign(e: any) {
+    console.log("event ", e);
+  }
+
   selectWithOtp(e: any, data: any, action?: boolean) { // sort ordering
+
     // this.changeOtp(data);
     //clear lai gia tri card_id
     if (this.getDataSignEkyc(data).length == 0) {
@@ -382,6 +405,10 @@ export class DetermineSignerComponent implements OnInit {
 
   getDataSignCka(data: any) {
     return data.sign_type.filter((p: any) => p.id == 1);
+  }
+
+  getDataSignUSBToken(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 2);
   }
 
   getDataSignEkyc(data: any) {
@@ -502,14 +529,16 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-            if(!dataArrPartner[j].taxCode) {
-              this.getNotificationValid("Vui lòng nhập mã số thuế của đối tác tổ chức!")
-              count++;
-              break;
+            if(this.flagUSBToken == true) {
+              if(!dataArrPartner[j].taxCode) {
+                this.getNotificationValid("Vui lòng nhập mã số thuế của đối tác tổ chức!")
+                count++;
+                break;
+              }
             }
-
+           
             if(dataArrPartner[j].taxCode && !parttern_input.taxCode_form.test(dataArrPartner[k].taxCode)) {
-              this.getNotificationValid("Mã số thuế của " + this.getNameObjectValid(3) + "của đối tác không hợp lệ!");
+              this.getNotificationValid("Mã số thuế " + this.getNameObjectValid(3) + "của đối tác không hợp lệ!");
               count++;
               break;
             }
@@ -1280,8 +1309,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   dataParnterOrganization() {
-    console.log("datas is ", this.datas);
-    console.log("data is ", this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3));
     return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
