@@ -70,6 +70,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   confirmConsider = null;
   confirmSignature = null;
 
+  taxCodePartnerStep2: any;
+
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
   x0: any = "abc";
@@ -1193,15 +1195,30 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
         console.log("data all accounts digital ", data);
         if (data.data.Serial) {
-          this.signCertDigital = data.data;
-          this.nameCompany = data.data.CN;
-          checkSetupTool = true;
-          if (!checkSetupTool) {
-            this.spinner.hide();
-            return;
-          } else {
-            await this.signImageC(signUpdatePayload, notContainSignImage);
-          }
+
+          this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
+            if(response.success == true) {
+              this.signCertDigital = data.data;
+              this.nameCompany = data.data.CN;
+              checkSetupTool = true;
+              if (!checkSetupTool) {
+                this.spinner.hide();
+                return;
+              } else {
+                await this.signImageC(signUpdatePayload, notContainSignImage);
+              }
+            } else {
+              this.spinner.hide();
+              Swal.fire({
+                title: `Mã số thuế của đối tác không giống mã số thuế của USB Token`,
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#b0bec5',
+                confirmButtonText: 'Xác nhận'
+              });
+            }
+          })
+        
         } else {
           this.spinner.hide();
           Swal.fire({
@@ -1578,10 +1595,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         
         console.log("sign recipient_id ",sign.recipient_id);
         
-          //Lấy thông tin mã số thuế
-          this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
-            console.log("response ", response);
-          })
+        //Lấy thông tin mã số thuế của đối tác ký bằng USB Token
+        this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
+          this.taxCodePartnerStep2 = response.tax_code;
+
+          console.log("tax code ", this.taxCodePartnerStep2);
+        })
 
         return sign;
       } else {

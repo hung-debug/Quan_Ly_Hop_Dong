@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { data } from 'jquery';
 
 export interface Unit {
+  tax_code: any;
   id: number,
   name: string,
   code: string,

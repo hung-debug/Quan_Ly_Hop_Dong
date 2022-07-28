@@ -16,6 +16,8 @@ import {ToastService} from "../../../../../service/toast.service";
 import {Router} from "@angular/router";
 import {NgxInputSearchModule} from "ngx-input-search";
 import {HttpErrorResponse} from '@angular/common/http';
+import { UserService } from 'src/app/service/user.service';
+import { UnitService } from 'src/app/service/unit.service';
 
 @Component({
   selector: 'app-determine-signer',
@@ -38,6 +40,8 @@ export class DetermineSignerComponent implements OnInit {
   submitted = false;
 
   flagUSBToken = false;
+  flagUSBTokenMyOrg = false;
+  flagUSBTokenDocument = false;
 
   data_organization: any;
   data_parnter_organization: any = [];
@@ -72,12 +76,17 @@ export class DetermineSignerComponent implements OnInit {
   checkCount = 1;
   isCountNext = 1;
 
+  user: any;
+  myTaxCode: any = "123";
+  isEditable: boolean;
+
   get determineContract() {
     return this.determineDetails.controls;
   }
 
   constructor(
-    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private unitService: UnitService,
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
@@ -85,12 +94,28 @@ export class DetermineSignerComponent implements OnInit {
   ) {
     this.step = variable.stepSampleContract.step2
     //this.datas.determineDetails = this.determineDetails;
+
+ 
   }
 
   ngOnInit(): void {
-    // for(let i = 0; i < this.dataParnterOrganization().length;i++) {
-    //   this.flagUSBToken[i] = false;
-    // }
+    this.user = this.userService.getInforUser();
+
+    //Lấy id của user
+    this.userService.getUserById(this.user.customer_id).subscribe(response => {
+
+      //Lấy thông tin chi tiết tổ chức của tôi
+      this.unitService.getUnitById(response.organization_id).subscribe(response1 => {
+        this.myTaxCode = response1.tax_code;
+
+        if(this.myTaxCode != null && this.myTaxCode != undefined) {
+          this.isEditable = true;
+        } else {
+
+          this.isEditable = false;
+        }
+      })
+    })
 
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
@@ -104,6 +129,7 @@ export class DetermineSignerComponent implements OnInit {
 
     // data Tổ chức của tôi
     this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];
+
     this.data_organization.name = this.datas.name_origanzation ? this.datas.name_origanzation : '';
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
@@ -125,6 +151,11 @@ export class DetermineSignerComponent implements OnInit {
     };
 
     if (this.datas.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
+  }
+
+  async logObservable() {
+    console.log("my tax code async ",this.myTaxCode);
+    return this.myTaxCode;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -281,9 +312,7 @@ export class DetermineSignerComponent implements OnInit {
     // }
     // console.log(setOrdering, setOrderingParnter.length)
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
-  }
 
-  selectPartnerSign(e: any) {
     if(e.id == 2) {
       this.flagUSBToken = true;
       return;
@@ -292,19 +321,122 @@ export class DetermineSignerComponent implements OnInit {
     return;
   }
 
-  deSelectPartnerSign(e: any, item: number) {
-    // console.log("data ", data);
-    // if(e.id == 2) {
-    //   this.flagUSBToken = false;
+  onItemSelectOrg(e: any) {
+    console.log("event ",e);
+
+    var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
+    var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
+    // <==========>
+    if (isParnter.length > 0) {
+      for (let i = 0; i < 2; i++) {
+        this.getSetOrderingPersonal(isParnter, i);
+      }
+    }
+    // for loop check change ordering with parnter origanization
+    this.getSetOrderingParnterOrganization(isOrganization);
+    // set again ordering data not option eKYC/img/otp => order
+    // var setOrderingOrganization =
+    var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && (p.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3) || p.recipients[0].sign_type.length == 0));
+    var setOrderingParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3 && p.recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5));
+    // if (setOrderingParnter.length > 0) {
+    if (setOrderingParnter.length == 0) {
+      this.data_organization.ordering = 1;
+      setOrdering.forEach((val: any, index: number) => {
+        val.ordering = index + 2; // + 2 (1: index & 1 index tổ chức của tôi) vì sẽ luôn luôn order sau tổ chức của tôi nếu trong các bên ko có dữ liệu ký eKYC/Image/OTP.
+      })
+    } else {
+      this.data_organization.ordering = setOrderingParnter.length + 1;
+      setOrdering.forEach((val: any, index: number) => {
+        // val.ordering = setOrderingParnter.length > 0 ? (setOrderingParnter.length + index + 1) : (index + 1);
+        // val.ordering = setOrderingParnter.length > 0 ? (this.data_organization.ordering + index + 1) : (index + 1);
+        val.ordering = this.data_organization.ordering + index + 1; // tăng lên 1 ordering sau tổ chức của tôi
+      })
+    }
+
     // }
+    // console.log(setOrdering, setOrderingParnter.length)
+    this.checkCount = 1; // gan lai de lan sau ko bi tang index
+
+    if(this.myTaxCode == null || this.myTaxCode == undefined) {
+      if(e.id == 2) {
+        console.log("vao day");
+        this.flagUSBTokenMyOrg = true;
+        return;
+      }
+    }
+    return;
+  }
+
+  deSelectOrg(e: any) {
+    if(this.myTaxCode == null || this.myTaxCode == undefined) {
+      if(this.getOriganzationSignature().length == 1) {
+        if(e.id == 2) {
+        this.flagUSBTokenMyOrg = false;
+        return;
+        }
+      }
+
+      let count = 0;
+      for(let i = 0; i < this.getOriganzationSignature().length; i++) {
+        if(this.getOriganzationSignature()[i].sign_type.length == 0) {
+          count++;
+          continue;
+        }
+        if(this.getOriganzationSignature()[i].sign_type[0].id == 2) {
+          this.flagUSBTokenMyOrg = true;
+          return;
+        }
+      }
+
+      if(count == this.getOriganzationSignature().length) {
+        this.flagUSBTokenMyOrg = false;
+        return;
+      }
+    }
+  }
+
+  selectPartnerDocument(e: any) {
+    if(e.id == 2) {
+      this.flagUSBTokenDocument = true;
+      return;
+    }
+    
+    return;
+  }
+
+  deSelectPartnerDocument(e: any, item: number) {
+    if(this.getPartnerSignature(item).length == 1) {
+      if(e.id == 2) {
+        this.flagUSBTokenDocument = false;
+      return;
+      }
+    }
+
+    let count = 0;
+    for(let i = 0; i < this.getPartnerSignature(item).length; i++) {
+      if(this.getPartnerSignature(item)[i].sign_type.length == 0) {
+        count++;
+        continue;
+      }
+      if(this.getPartnerSignature(item)[i].sign_type[0].id == 2) {
+        this.flagUSBTokenDocument = true;
+        return;
+      }
+    }
+
+    if(count == this.getPartnerSignature(item).length) {
+      this.flagUSBTokenDocument = false;
+      return;
+    }
+  }
+
+  deSelectPartnerSign(e: any, item: number) {
     if(this.getPartnerSignature(item).length == 1) {
       if(e.id == 2) {
       this.flagUSBToken = false;
       return;
       }
     }
-
-    console.log("this.getpartner ", this.getPartnerSignature(item));
 
     let count = 0;
     for(let i = 0; i < this.getPartnerSignature(item).length; i++) {
@@ -562,15 +694,15 @@ export class DetermineSignerComponent implements OnInit {
         // }
         for (let k = 0; k < isParterSort.length; k++) {
           if(dataArrPartner[j].type == 3) {
-            if(this.flagUSBToken == true) {
-              if(!dataArrPartner[j].taxCode) {
+            if(this.flagUSBToken == true || this.flagUSBTokenDocument == true) {
+              if(!dataArrPartner[j].tax_code) {
                 this.getNotificationValid("Vui lòng nhập mã số thuế của đối tác tổ chức!")
                 count++;
                 break;
               }
             }
            
-            if(dataArrPartner[j].taxCode && !parttern_input.taxCode_form.test(dataArrPartner[k].taxCode)) {
+            if(dataArrPartner[j].tax_code && !parttern_input.taxCode_form.test(dataArrPartner[k].tax_code)) {
               this.getNotificationValid("Mã số thuế " + this.getNameObjectValid(3) + "của đối tác không hợp lệ!");
               count++;
               break;
@@ -584,15 +716,19 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-            if(this.flagUSBToken == true) {
-              if(!dataArrPartner[j].taxCode) {
+            if(this.flagUSBToken == true || this.flagUSBTokenDocument == true) {
+              console.log("this flag usb token ", this.flagUSBToken);
+              console.log("this flag usb token documnet ", this.flagUSBTokenDocument);
+
+              console.log("tax code ", dataArrPartner[j].tax_code);
+              if(!dataArrPartner[j].tax_code) {
                 this.getNotificationValid("Vui lòng nhập mã số thuế của đối tác tổ chức!")
                 count++;
                 break;
               }
             }
            
-            if(dataArrPartner[j].taxCode && !parttern_input.taxCode_form.test(dataArrPartner[k].taxCode)) {
+            if(dataArrPartner[j].tax_code && !parttern_input.taxCode_form.test(dataArrPartner[k].tax_code)) {
               this.getNotificationValid("Mã số thuế " + this.getNameObjectValid(3) + "của đối tác không hợp lệ!");
               count++;
               break;

@@ -89,6 +89,8 @@ export class ContractService {
   updateContractIsPushCeCAUrl: any = `${environment.apiUrl}/api/v1/contracts/ceca-push/`;
   getStatusSignImageOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
 
+  checkTaxCodeExistUrl: any = `${environment.apiUrl}/api/v1/contracts/check-mst-exist`;
+
   token: any;
   customer_id: any;
   organization_id: any;
@@ -325,6 +327,25 @@ export class ContractService {
 
     console.log("get account sign digital ", this.getAccountSignDigital);
     return axios.get(this.getAccountSignDigital, config);
+  }
+
+  checkTaxCodeExist(taxCode: any, certB64: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    console.log("tax code ", taxCode);
+    console.log("certB64 ", certB64);
+    
+    const body = JSON.stringify({
+      mst: taxCode,
+      certB64: certB64
+    });
+
+    console.log("body ", body);
+
+    return this.http.post<any>(this.checkTaxCodeExistUrl, body,{'headers':headers});
   }
 
   postSignDigitalMobi(signCertDigital: any, imgSignGen: any) {

@@ -13,10 +13,41 @@
       />
     </div>
     <div class="contract--content">
-      <div class="contract__content--title">
-        <div>{{ "organization.me" | translate | uppercase }} -</div>
+
+      <!--Tổ chức của tôi title-->
+      <div class="contract__content">
+        <!-- <div>{{ "organization.me" | translate | uppercase }} -</div>
         <input type="text" [(ngModel)]="data_organization.name" disabled />
+
+        <div>{{ "organization.me" | translate | uppercase }} -</div>
+        <input type="text" [(ngModel)]="data_organization.name" disabled /> -->
+
+        <div class="contract__content--title-doi-tac">
+          <div style="width: 85px">
+            {{ "organization.me" | translate | uppercase }}&nbsp;<span style="color: red"
+              >*</span
+            >
+          </div>
+          <input
+            class="input1"
+            type="text"
+            [(ngModel)]="data_organization.name" 
+            disabled 
+          />
+          <div style="width: 110px">
+            {{ "Mã số thuế" | translate | uppercase }}&nbsp;
+            -
+          </div>
+          <span *ngIf="this.flagUSBTokenMyOrg == true">*</span>
+          <input
+            class="input2"
+            type="text"
+            [(ngModel)]="this.myTaxCode"
+            [disabled]="this.isEditable"
+          />
+        </div>
       </div>
+
       <div class="contract__content--participants">
         <!-- to chuc cua toi - nguoi xem xet -->
         <div class="participants-border">
@@ -209,12 +240,15 @@
                     >
                     <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                   </div>
+
+                  <!--Người ký là tổ chức của tôi-->
                   <ng-multiselect-dropdown
                     [(ngModel)]="d.sign_type"
                     placeholder="{{ 'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings"
                     [data]="isListSignNotPerson"
-                    (onSelect)="onItemSelect($event)"
+                    (onSelect)="onItemSelectOrg($event)"
+                    (onDeSelect)="deSelectOrg($event)"
                     (ngModelChange)="selectWithOtp($event, d, true)"
                   >
                     <ng-template
@@ -324,6 +358,7 @@
             >
           </div>
         </div>
+
         <!-- to chuc cua toi - nguoi van thu -->
         <div class="participants-border">
           <div class="label">{{ "user.doc" | translate }}</div>
@@ -405,6 +440,8 @@
                     >
                     <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                   </div>
+
+                  <!--Chọn loại ký cho tổ chức của tôi là văn thư-->
                   <ng-multiselect-dropdown
                     [(ngModel)]="d.sign_type"
                     placeholder="{{ 'choose' | translate }}"
@@ -544,8 +581,8 @@
           [(ngModel)]="item.name"
           [disabled]="item.type == 3"
         />
-        <div style="width: 120px">
-          {{ "Mã số thuế" | translate | uppercase }}&nbsp;<span *ngIf="this.flagUSBToken === true">*</span
+        <div style="width: 110px">
+          {{ "Mã số thuế" | translate | uppercase }}&nbsp;<span *ngIf="this.flagUSBToken === true || this.flagUSBTokenDocument === true">*</span
           >
           -
         </div>
@@ -555,7 +592,7 @@
           placeholder="{{
             (item.type == 2 || item.type == 3 ? 'Nhập mã số thuế' : '') | translate
           }}"
-          [(ngModel)]="item.taxCode"
+          [(ngModel)]="item.tax_code"
         />
       </div>
 
@@ -877,7 +914,7 @@
                       placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings"
                       [data]="isListSignNotPerson"
-                      (onSelect)="selectPartnerSign($event)"
+                      (onSelect)="onItemSelect($event)"
                       (onDeSelect)="deSelectPartnerSign($event, item)"
                       (ngModelChange)="selectWithOtp($event, d)"
                     >
@@ -1063,12 +1100,16 @@
                       >
                       <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                     </div>
+
+                    <!--Cho loại ký cho tổ chức là văn thư-->
                     <ng-multiselect-dropdown
                       [(ngModel)]="d.sign_type"
                       placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings"
                       [data]="signType_doc"
                       (ngModelChange)="selectWithOtp($event, d)"
+                      (onSelect)="selectPartnerDocument($event)"
+                      (onDeSelect)="deSelectPartnerDocument($event, item)"
                     >
                       <ng-template
                         #optionsTemplate
@@ -1242,7 +1283,7 @@
                       placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings"
                       [data]="signTypeList"
-                      (onSelect)="selectPartnerSign($event)"
+                      (onSelect)="onItemSelect($event)"
                       (onDeSelect)="deSelectPartnerSign($event,item)"
                       (ngModelChange)="selectWithOtp($event, d, true)"
                     >

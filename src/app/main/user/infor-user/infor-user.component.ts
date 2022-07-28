@@ -119,6 +119,7 @@ export class InforUserComponent implements OnInit {
 
         //set name
         if(data.organization_id != null){
+          console.log("data org ", data.organization_id);
           this.unitService.getUnitById(data.organization_id).subscribe(
             data => {
               this.organizationName = data.name;
