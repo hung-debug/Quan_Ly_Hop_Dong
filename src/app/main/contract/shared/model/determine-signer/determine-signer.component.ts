@@ -279,7 +279,7 @@ export class DetermineSignerComponent implements OnInit {
     this.stepChangeDetermineSigner.emit(step);
   }
 
-  onItemSelect(e: any) {
+  onItemSelect(e: any, data: any) {
     console.log("event ",e);
 
     var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
@@ -315,12 +315,23 @@ export class DetermineSignerComponent implements OnInit {
     // console.log(setOrdering, setOrderingParnter.length)
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
 
-    // if(e.id == 2) {
-    //   this.flagUSBToken = true;
-    //   return;
-    // }
-    
-    // return;
+    if(data == 2) {
+      
+    }
+
+    if(data == 3) {
+      if(e.id == 2) {
+        this.flagUSBToken = true;
+      }
+    }
+
+    if(data == this.data_organization.name) {
+      if(this.myTaxCode == null || this.myTaxCode == undefined) {
+        if(e.id == 2) {
+          this.flagUSBTokenMyOrg = true;
+        }
+      }
+    }
   }
 
   // onItemSelectOrg(e: any) {
@@ -432,7 +443,7 @@ export class DetermineSignerComponent implements OnInit {
     }
   }
 
-  deSelectPartnerSign(e: any, item: number) {
+  deSelectPartnerSign(e: any, item: any) {
     if(this.getPartnerSignature(item).length == 1) {
       if(e.id == 2) {
       this.flagUSBToken = false;
@@ -1534,12 +1545,12 @@ export class DetermineSignerComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
       }, () => {
         this.spinner.hide();
-        this.onItemSelect(null);
+        this.onItemSelect(null, null);
       })
     } else {
       // this.datas.is_determine_clone.splice(index + 1, 1);
       this.datas.is_determine_clone = this.datas.is_determine_clone.filter((p: any) => p.ordering != item.ordering);
-      this.onItemSelect(null);
+      this.onItemSelect(null, null);
       // this.datas.is_determine_clone.forEach((res: any, index: number) => {
       //   res.ordering = index + 1;
       // })
@@ -1695,3 +1706,4 @@ export class DetermineSignerComponent implements OnInit {
   }
 
 }
+
