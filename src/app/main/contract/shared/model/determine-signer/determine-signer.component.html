@@ -247,7 +247,7 @@
                     placeholder="{{ 'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings"
                     [data]="isListSignNotPerson"
-                    (onSelect)="onItemSelectOrg($event)"
+                    (onSelect)="onItemSelect($event)"
                     (onDeSelect)="deSelectOrg($event)"
                     (ngModelChange)="selectWithOtp($event, d, true)"
                   >
