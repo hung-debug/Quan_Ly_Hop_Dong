@@ -553,7 +553,7 @@
           class="input2"
           type="text"
           placeholder="{{
-            (item.type == 2 ? 'Nhập mã số thuế' : '') | translate
+            (item.type == 2 || item.type == 3 ? 'Nhập mã số thuế' : '') | translate
           }}"
           [(ngModel)]="item.taxCode"
         />
@@ -871,14 +871,14 @@
                       <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                     </div>
 
-                    <!--Đối tác chọn loại ký-->
+                    <!--Loại ký cho đối tác là tổ chức-->
                     <ng-multiselect-dropdown
                       [(ngModel)]="d.sign_type" 
                       placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings"
                       [data]="isListSignNotPerson"
                       (onSelect)="selectPartnerSign($event)"
-                      (onDeSelect)="deSelectPartnerSign($event)"
+                      (onDeSelect)="deSelectPartnerSign($event, item)"
                       (ngModelChange)="selectWithOtp($event, d)"
                     >
                       <ng-template
@@ -1236,14 +1236,14 @@
                       <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                     </div>
 
-                    <!--Loai ky cho doi tac la ca nhan-->
+                    <!--Loại ký cho đối tác là cá nhân-->
                     <ng-multiselect-dropdown
                       [(ngModel)]="d.sign_type"
                       placeholder="{{ 'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings"
                       [data]="signTypeList"
                       (onSelect)="selectPartnerSign($event)"
-                      (onDeSelect)="deSelectPartnerSign($event)"
+                      (onDeSelect)="deSelectPartnerSign($event,item)"
                       (ngModelChange)="selectWithOtp($event, d, true)"
                     >
                       <ng-template

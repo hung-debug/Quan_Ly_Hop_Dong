@@ -36,6 +36,7 @@ export class DetermineSignerComponent implements OnInit {
   userForm: FormGroup;
   partnerForm: FormGroup
   submitted = false;
+
   flagUSBToken = false;
 
   data_organization: any;
@@ -87,6 +88,10 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // for(let i = 0; i < this.dataParnterOrganization().length;i++) {
+    //   this.flagUSBToken[i] = false;
+    // }
+
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       // this.datas.is_determine_clone = null;
@@ -281,14 +286,41 @@ export class DetermineSignerComponent implements OnInit {
   selectPartnerSign(e: any) {
     if(e.id == 2) {
       this.flagUSBToken = true;
-    } else {
-      this.flagUSBToken = false;
+      return;
     }
+    
+    return;
   }
 
-  deSelectPartnerSign(e: any) {
-    if(e.id == 2) {
+  deSelectPartnerSign(e: any, item: number) {
+    // console.log("data ", data);
+    // if(e.id == 2) {
+    //   this.flagUSBToken = false;
+    // }
+    if(this.getPartnerSignature(item).length == 1) {
+      if(e.id == 2) {
       this.flagUSBToken = false;
+      return;
+      }
+    }
+
+    console.log("this.getpartner ", this.getPartnerSignature(item));
+
+    let count = 0;
+    for(let i = 0; i < this.getPartnerSignature(item).length; i++) {
+      if(this.getPartnerSignature(item)[i].sign_type.length == 0) {
+        count++;
+        continue;
+      }
+      if(this.getPartnerSignature(item)[i].sign_type[0].id == 2) {
+        this.flagUSBToken = true;
+        return;
+      }
+    }
+
+    if(count == this.getPartnerSignature(item).length) {
+      this.flagUSBToken = false;
+      return;
     }
   }
 

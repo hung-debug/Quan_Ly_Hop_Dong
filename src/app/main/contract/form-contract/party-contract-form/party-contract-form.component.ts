@@ -30,6 +30,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   @Input() saveDraftStepForm: any;
 
   determine_step = false;
+  flagUsbToken: any = [];
+
   determineDetails!: FormGroup;
   userForm: FormGroup;
   partnerForm: FormGroup
@@ -85,6 +87,11 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.flagUsbToken[0] = true;
+    for(let i = 1; i < this.dataParnterOrganization().length; i++) {
+      this.flagUsbToken[i] = false;
+    }
+
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
     if (!this.datasForm.is_determine_clone || this.datasForm.is_determine_clone.length == 0) {
       this.datasForm.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
@@ -135,6 +142,22 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       acc[curr.item_id] = curr;
       return acc;
     }, {});
+  }
+
+  selectPartnerSign(e: any, id: number) {
+    if(e.id == 2) {
+      this.flagUsbToken[id] = true;
+    } else {
+      this.flagUsbToken[id] = false;
+    }
+
+  }
+
+  deSelectPartnerSign(e: any, id: number) {
+    console.log("e de ",e);
+    if(e.id == 2) {
+      this.flagUsbToken[id] = false;
+    }
   }
 
   back(e: any, step?: any) {
@@ -369,6 +392,10 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   getDataSignCka(data: any) {
     return data.sign_type.filter((p: any) => p.id == 1);
+  }
+
+  getDataSignOTP(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 2);
   }
 
   getDataSignEkyc(data: any) {
@@ -955,6 +982,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng người ký đối tác tổ chức
   getPartnerSignature(item: any) {
+    
     return item.recipients.filter((p: any) => p.role == 3)
   }
 
