@@ -6,7 +6,7 @@ import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
-import {roleList} from "../../../config/variable";
+import {fileCeCaOptions, roleList} from "../../../config/variable";
 import {parttern_input} from "../../../config/parttern";
 import { parttern } from '../../../config/parttern';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -23,7 +23,8 @@ export class AddUnitComponent implements OnInit {
   nameOld:any
   parentName:any;
   emailOld:any;
-  phoneOld:any
+  phoneOld:any;
+  fileCeCaOptions: any;
 
   dropdownOrgSettings: any = {};
   orgList: Array<any> = [];
@@ -52,13 +53,16 @@ export class AddUnitComponent implements OnInit {
         fax: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
         status: 1,
         parent_id: this.fbd.control("", [Validators.required]),
+        taxCode: this.fbd.control("", Validators.pattern(parttern_input.taxCode_form)),
+        fileCeCa: this.fbd.control("",[Validators.required])
       });
     }
 
   ngOnInit(): void {
-    let orgId = this.userService.getInforUser().organization_id;
-    
+    this.fileCeCaOptions = fileCeCaOptions;
 
+    let orgId = this.userService.getInforUser().organization_id;
+  
     this.datas = this.data;
 
     //lay du lieu form cap nhat
@@ -69,6 +73,8 @@ export class AddUnitComponent implements OnInit {
       });
       this.unitService.getUnitById(this.data.id).subscribe(
         data => {
+          console.log("data ", data);
+
           this.addForm = this.fbd.group({
             nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.input_form)]),
@@ -78,7 +84,9 @@ export class AddUnitComponent implements OnInit {
             fax: this.fbd.control(data.fax, Validators.pattern(parttern_input.input_form)),
             status: this.fbd.control(data.status),
             parent_id: this.fbd.control(data.parent_id),
-            path: this.fbd.control(data.path)
+            path: this.fbd.control(data.path),
+            taxCode: this.fbd.control(data.tax_code, Validators.pattern(parttern_input.taxCode_form)),
+            fileCeCa: this.fbd.control(this.convertFileCeCa(data.ceca_push_mode),[Validators.required])
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
@@ -116,13 +124,34 @@ export class AddUnitComponent implements OnInit {
         fax: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
         status: 1,
         parent_id: this.fbd.control(orgId, [Validators.required]),
+        taxCode: this.fbd.control("", Validators.pattern(parttern_input.taxCode_form)),
+        fileCeCa: this.fbd.control("",[Validators.required])
       });
     }
+  }
+
+  convertFileCeCa(ceCAPushMode: any): any {
+    console.log("data cecapush mode before ", ceCAPushMode);
+
+    if (ceCAPushMode == fileCeCaOptions[0].id) {
+      ceCAPushMode = fileCeCaOptions[0];
+    } else if (ceCAPushMode ==fileCeCaOptions[1].id) {
+      console.log("vao day ");
+      ceCAPushMode = fileCeCaOptions[1];
+    } else if (ceCAPushMode == fileCeCaOptions[2].id) {
+      ceCAPushMode = fileCeCaOptions[2];
+    }
+
+    console.log("ceCAPushMode after ", ceCAPushMode);
+
+    return ceCAPushMode;
   }
 
   update(data:any){
     this.unitService.updateUnit(data).subscribe(
       data => {
+        console.log("updat data ", data);
+
         this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
         this.dialogRef.close();
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
@@ -282,8 +311,12 @@ export class AddUnitComponent implements OnInit {
       fax: this.addForm.value.fax,
       status: this.addForm.value.status,
       parent_id: this.addForm.value.parent_id,
-      path: this.addForm.value.path
+      path: this.addForm.value.path,
+      ceca_push_mode: this.addForm.value.fileCeCa,
     }
+
+
+
     console.log(data);
 
     this.spinner.show();
@@ -319,6 +352,8 @@ export class AddUnitComponent implements OnInit {
 
     //truong hop them moi ban ghi
     }else{
+      console.log("data org child ", data);
+
       //kiem tra ten to chuc da ton tai trong he thong hay chua
       this.unitService.checkNameUnique(data, data.name).subscribe(
         dataByName => {

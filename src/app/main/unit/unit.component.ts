@@ -193,7 +193,7 @@ export class UnitComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AddUnitComponent, {
-      width: '580px',
+      width: '600px',
       backdrop: 'static',
       keyboard: false,
       data
@@ -211,7 +211,7 @@ export class UnitComponent implements OnInit {
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(AddUnitComponent, {
-      width: '580px',
+      width: '600px',
       backdrop: 'static',
       keyboard: false,
       data

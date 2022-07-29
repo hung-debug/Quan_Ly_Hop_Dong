@@ -76,7 +76,44 @@
                     <div *ngIf="f.parent_id.errors.required">{{'error.unit.parent.required' | translate}}</div>
                 </div>
             </div>
-        
+
+            <div class="col-md-6">
+                <div class="label text-color">
+                  {{ "Đẩy file hợp đồng lên Bộ công thương" | translate }}
+                  <span class="required-title">*</span>
+                </div>
+                <div class="label text-color">
+                  <p-dropdown
+                    [options]="fileCeCaOptions"
+                    placeholder="Chọn"
+                    optionLabel="name"
+                    [filter]="true"
+                    filterBy="name"
+                    [showClear]="true"
+                    panelStyleClass="font"
+                    formControlName="fileCeCa"
+                  ></p-dropdown>
+                </div>
+                <div *ngIf="submitted && f.fileCeCa.errors" class="invalid">
+                  <div *ngIf="f.fileCeCa.errors.required">
+                    {{ "Lựa chọn này không được để trống" | translate }}
+                  </div>
+                </div>
+              </div>
+        </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-6">
+                <div class="label text-color">{{'unit.fax' | translate }}</div>
+                <div class="input-data">
+                    <input type="text" formControlName="fax">
+                </div>
+                <div *ngIf="submitted && f.fax.errors" class="invalid">
+                    <div *ngIf="f.fax.errors.pattern">{{'Fax không được chứa ký tự đặc biệt' | translate}}</div>
+                </div>
+            </div>
+
+            <!--Số điện thoại-->
             <div class="col-md-6">
                 <div class="label text-color">{{'unit.phone' | translate }} <span class="required-title">*</span></div>
                 <div class="input-data">
@@ -91,15 +128,14 @@
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label text-color">{{'unit.fax' | translate }}</div>
+                <div class="label text-color">{{'Mã số thuế' | translate }}</div>
                 <div class="input-data">
-                    <input type="text" formControlName="fax">
+                    <input type="text" formControlName="taxCode">
                 </div>
-                <div *ngIf="submitted && f.fax.errors" class="invalid">
-                    <div *ngIf="f.fax.errors.pattern">{{'Fax không được chứa ký tự đặc biệt' | translate}}</div>
+                <div *ngIf="submitted && f.taxCode.errors" class="invalid">
+                    <div *ngIf="f.taxCode.errors.pattern">{{'Fax không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
             </div>
-        
             <div class="col-md-6" style="align-self: center;">
                 <div class="row">
                     <div class="col-md-5">

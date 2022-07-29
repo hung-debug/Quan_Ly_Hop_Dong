@@ -1210,7 +1210,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             } else {
               this.spinner.hide();
               Swal.fire({
-                title: `Mã số thuế của đối tác không giống mã số thuế của USB Token`,
+                title: `Mã số thuế trên chữ ký số không trùng mã số thuế của tổ chức`,
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#b0bec5',

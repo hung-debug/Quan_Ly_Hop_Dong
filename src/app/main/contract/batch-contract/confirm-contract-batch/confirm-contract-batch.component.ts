@@ -15,6 +15,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { Router } from '@angular/router';
 import { ConfirmCecaBatchComponent } from '../confirm-ceca-batch/confirm-ceca-batch.component';
+import { UserService } from 'src/app/service/user.service';
+import { UnitService } from 'src/app/service/unit.service';
+import { ConfirmCecaFormComponent } from '../../form-contract/confirm-ceca-form/confirm-ceca-form.component';
 @Component({
   selector: 'app-confirm-contract-batch',
   templateUrl: './confirm-contract-batch.component.html',
@@ -104,6 +107,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   // ]
 
   constructor(
+    private userService: UserService,
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
     private modalService: NgbModal,
@@ -112,6 +116,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     private spinner: NgxSpinnerService,
     private contractTemplateService: ContractTemplateService,
     private router: Router,
+    private unitService: UnitService,
   ) {
     this.step = variable.stepSampleContractBatch.step2
   }
@@ -695,23 +700,35 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     this.nextOrPreviousStep(step);
   }
 
-
+  user: any;
   submit(){
-    const data = {
-      title: 'YÊU CẦU XÁC NHẬN',
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(ConfirmCecaBatchComponent, {
-      width: '560px',
-      backdrop: 'static',
-      keyboard: false,
-      data,
-      autoFocus: false
-    })
-    dialogRef.afterClosed().subscribe((isCeCA: any) => {
-      if(isCeCA == 1 || isCeCA == 0){
-        this.next(isCeCA);
-      }
+    this.user = this.userService.getInforUser();
+
+    this.userService.getUserById(this.user.customer_id).subscribe(response => {
+
+      //Lấy thông tin chi tiết tổ chức của tôi
+      this.unitService.getUnitById(response.organization_id).subscribe(response1 => {
+        if(response1.ceca_push_mode == 'SELECTION') {
+          const data = {
+            title: 'YÊU CẦU XÁC NHẬN',
+          };
+          // @ts-ignore
+          const dialogRef = this.dialog.open(ConfirmCecaFormComponent, {
+            width: '560px',
+            backdrop: 'static',
+            keyboard: false,
+            data,
+            autoFocus: false
+          })
+          dialogRef.afterClosed().subscribe((isCeCA: any) => {
+            if(isCeCA == 1 || isCeCA == 0){
+              this.next(isCeCA);
+            }
+          })
+        } else {
+          this.next(0);
+        }
+      })
     })
   }
 

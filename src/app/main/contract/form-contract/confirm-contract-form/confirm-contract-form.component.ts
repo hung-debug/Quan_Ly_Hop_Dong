@@ -9,6 +9,8 @@ import { DatePipe } from "@angular/common";
 import * as _ from 'lodash';
 import { ConfirmCecaFormComponent } from "../confirm-ceca-form/confirm-ceca-form.component";
 import { MatDialog } from "@angular/material/dialog";
+import { UserService } from "src/app/service/user.service";
+import { UnitService } from "src/app/service/unit.service";
 
 @Component({
     selector: 'app-confirm-contract-form',
@@ -24,6 +26,8 @@ export class ConfirmContractFormComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
+        private userService: UserService,
+        private unitService: UnitService,
         public datepipe: DatePipe,
         private contractService: ContractService,
         private router: Router,
@@ -88,6 +92,7 @@ export class ConfirmContractFormComponent implements OnInit {
         this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
         this.data_parnter_organization = this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+
     }
 
     getPartnerCoordinationer(item: any) {
@@ -145,32 +150,53 @@ export class ConfirmContractFormComponent implements OnInit {
 
     }
 
+    user: any;
     submit(action: string){
-        const data = {
-          title: 'YÊU CẦU XÁC NHẬN',
-        };
-        // @ts-ignore
-        const dialogRef = this.dialog.open(ConfirmCecaFormComponent, {
-          width: '560px',
-          backdrop: 'static',
-          keyboard: false,
-          data,
-          autoFocus: false
-        })
-        dialogRef.afterClosed().subscribe((isCeCA: any) => {
-            if(isCeCA == 1 || isCeCA == 0){
-                this.spinner.show();
-                this.contractService.updateContractIsPushCeCA(this.datasForm.id, isCeCA).subscribe((data) => {
-                
-                    this.SaveContract(action);
+        this.user = this.userService.getInforUser();
+
+        this.userService.getUserById(this.user.customer_id).subscribe(response => {
+
+            //Lấy thông tin chi tiết tổ chức của tôi
+            this.unitService.getUnitById(response.organization_id).subscribe(response1 => {
+              if(response1.ceca_push_mode == 'SELECTION') {
+                const data = {
+                  title: 'YÊU CẦU XÁC NHẬN',
+                };
+                // @ts-ignore
+                const dialogRef = this.dialog.open(ConfirmCecaFormComponent, {
+                  width: '560px',
+                  backdrop: 'static',
+                  keyboard: false,
+                  data,
+                  autoFocus: false
+                })
+                dialogRef.afterClosed().subscribe((isCeCA: any) => {
+                  if(isCeCA == 1 || isCeCA == 0){
+                    this.spinner.show();
+                    this.contractService.updateContractIsPushCeCA(this.datasForm.id, isCeCA).subscribe((data) => {
+                      
+                      this.SaveContract(action);
             
+                    }, error => {
+                        this.spinner.hide();
+                        this.toastService.showErrorHTMLWithTimeout("Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương", "", 3000);
+                    });
+                    //this.SaveContract(action);
+                  }
+                })
+              }else {
+                this.spinner.show();
+                this.contractService.updateContractIsPushCeCA(this.datasForm.id, 0).subscribe((data) => {
+                  
+                  this.SaveContract(action);
+        
                 }, error => {
                     this.spinner.hide();
                     this.toastService.showErrorHTMLWithTimeout("Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương", "", 3000);
                 });
-                //this.SaveContract(action);
-            }
-        })
+              }
+            })
+          })
     }
 
     async SaveContract(action: string) {

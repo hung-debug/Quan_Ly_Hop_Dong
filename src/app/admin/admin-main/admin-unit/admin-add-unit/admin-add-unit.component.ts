@@ -213,13 +213,17 @@ export class AdminAddUnitComponent implements OnInit {
     }
   }
   convertFileCeCa(ceCAPushMode: any): any {
-    if ((ceCAPushMode = fileCeCaOptions[0].id)) {
+
+    if (ceCAPushMode == fileCeCaOptions[0].id) {
       ceCAPushMode = fileCeCaOptions[0];
-    } else if ((ceCAPushMode = fileCeCaOptions[1].id)) {
+    } else if (ceCAPushMode ==fileCeCaOptions[1].id) {
+      console.log("vao day ");
       ceCAPushMode = fileCeCaOptions[1];
-    } else if ((ceCAPushMode = fileCeCaOptions[2].id)) {
+    } else if (ceCAPushMode == fileCeCaOptions[2].id) {
       ceCAPushMode = fileCeCaOptions[2];
     }
+
+    console.log("ceCAPushMode after ", ceCAPushMode);
 
     return ceCAPushMode;
   }

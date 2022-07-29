@@ -22,6 +22,8 @@ export class DetailUnitComponent implements OnInit {
   parent_id:any="";
   numContractCreate:number= 0;
   numContractBuy:number= 0;
+  taxCode: any = "";
+  cEcAPushMode: any = "";
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -47,7 +49,9 @@ export class DetailUnitComponent implements OnInit {
         this.phone = data.phone,
         this.fax = data.fax,
         this.status = data.status,
-        this.parent_id = data.parent_id
+        this.parent_id = data.parent_id,
+        this.taxCode = data.tax_code,
+        this.cEcAPushMode = this.convert(data.ceca_push_mode)
         
         if(data.parent_id != null){
           this.unitService.getUnitById(data.parent_id).subscribe(
@@ -83,4 +87,14 @@ export class DetailUnitComponent implements OnInit {
     )
     
   }
+  convert(ceca_push_mode: any): any {
+    if(ceca_push_mode == 'ALL') {
+      return "Đẩy toàn bộ hợp đồng"
+    } else if(ceca_push_mode == 'SELECTION') {
+      return "Tuỳ biến";
+    } else {
+      return "Không đẩy HĐ nào";
+    }
+  }
+
 }

@@ -128,13 +128,14 @@
                     <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                   </div>
 
-                  <!--Người ký là tổ chức của tôi-->
+                  <!--Tổ chức của tôi chọn loại ký-->
                   <ng-multiselect-dropdown 
                     [(ngModel)]="d.sign_type" 
                     placeholder="{{'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings" 
                     [data]="isListSignNotPerson" 
                     (onSelect)="onItemSelect($event, data_organization.name)"
+                    (onDeSelect)="deSelectOrg($event)"
                     (ngModelChange)="selectWithOtp($event, d, true)"
                   >
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
@@ -231,7 +232,8 @@
                     placeholder="{{'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings" 
                     [data]="signType_doc"
-                    (ngModelChange)="selectWithOtp($event, d)">
+                    (ngModelChange)="selectWithOtp($event, d)"
+                    >
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                         <label style="color: #333; font-weight: normal;"
@@ -466,6 +468,7 @@
                       [settings]="dropdownSignTypeSettings" 
                       [data]="isListSignNotPerson" 
                       (onSelect)="onItemSelect($event,item.type)"
+                      (onDeSelect)="deSelectPartnerSign($event, item)"
                       (ngModelChange)="selectWithOtp($event, d)"
                     >
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
@@ -556,9 +559,17 @@
                     <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span class="required-title">*</span>
                       <!-- &nbsp;-&nbsp;<div style="color: #ffc107;">({{'Chỉ được chọn 1 kiểu ký số' | translate}})</div> -->
                     </div>
-                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                      [settings]="dropdownSignTypeSettings" [data]="signType_doc"
-                      (ngModelChange)="selectWithOtp($event, d)">
+
+                    <!--Đối tác là văn thư ký-->
+                    <ng-multiselect-dropdown 
+                      [(ngModel)]="d.sign_type" 
+                      placeholder="{{'choose' | translate }}"
+                      [settings]="dropdownSignTypeSettings" 
+                      [data]="signType_doc"
+                      (ngModelChange)="selectWithOtp($event, d)"
+                      (onSelect)="selectPartnerDocument($event)"
+                      (onDeSelect)="deSelectPartnerDocument($event, item)"
+                    >
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
                         <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">

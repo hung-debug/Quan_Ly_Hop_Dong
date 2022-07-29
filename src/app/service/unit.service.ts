@@ -19,6 +19,7 @@ export interface Unit {
   status: string,
   short_name: string,
   parent_id: string,
+  ceca_push_mode: any
 }
 @Injectable({
   providedIn: 'root'
@@ -63,6 +64,8 @@ export class UnitService {
 
   //add api thêm mới tổ chức user
   addUnit(datas: any) {
+    console.log("datas unit ", datas);
+
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -76,7 +79,8 @@ export class UnitService {
       phone: datas.phone,
       fax: datas.fax,
       status: datas.status,
-      parent_id: datas.parent_id
+      parent_id: datas.parent_id,
+      ceca_push_mode: datas.ceca_push_mode.id
     });
 
     console.log("body "+body);
@@ -89,6 +93,9 @@ export class UnitService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+
+      console.log("datas update ", datas);
+
     const body = JSON.stringify({
       name: datas.name,
       short_name: datas.short_name,
@@ -98,10 +105,11 @@ export class UnitService {
       fax: datas.fax,
       status: datas.status,
       parent_id: datas.parent_id,
-      path: datas.path
+      path: datas.path,
+      ceca_push_mode: datas.ceca_push_mode.id
     });
     console.log(headers);
-    console.log(body);
+    console.log("body update ",body);
     return this.http.put<Unit>(this.updateUnitUrl + datas.id, body, {'headers': headers});
   }
 
