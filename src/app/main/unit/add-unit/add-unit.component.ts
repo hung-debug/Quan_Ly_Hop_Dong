@@ -415,7 +415,7 @@ export class AddUnitComponent implements OnInit {
                                         }
                                         this.userService.addUser(dataUserIn).subscribe(
                                           dataUser => {
-                                            console.log(dataUser);
+                                            console.log("dataUser ",dataUser);
                                             //this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
                                             this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
                                             this.dialogRef.close();

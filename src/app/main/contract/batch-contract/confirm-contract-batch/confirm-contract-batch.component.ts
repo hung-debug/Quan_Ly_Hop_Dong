@@ -727,6 +727,14 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
           })
         } else {
           this.next(0);
+
+          let isCeCA = -1;
+          if(response.ceca_push_mode == 'ALL') {
+            isCeCA = 1;
+          } else {
+            isCeCA = 0;
+          }
+            this.next(isCeCA);
         }
       })
     })

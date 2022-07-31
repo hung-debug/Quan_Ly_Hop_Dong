@@ -185,15 +185,23 @@ export class ConfirmContractFormComponent implements OnInit {
                   }
                 })
               }else {
-                this.spinner.show();
-                this.contractService.updateContractIsPushCeCA(this.datasForm.id, 0).subscribe((data) => {
-                  
-                  this.SaveContract(action);
-        
-                }, error => {
-                    this.spinner.hide();
-                    this.toastService.showErrorHTMLWithTimeout("Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương", "", 3000);
-                });
+                let isCeCA = -1;
+                if(response.ceca_push_mode == 'ALL') {
+                  isCeCA = 1;
+                } else {
+                  isCeCA = 0;
+                }
+                  this.spinner.show();
+                  this.contractService.updateContractIsPushCeCA(this.datasForm.id, isCeCA).subscribe((data) => {
+                    
+                    this.SaveContract(action);
+          
+                  }, error => {
+                      this.spinner.hide();
+                      this.toastService.showErrorHTMLWithTimeout("Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương", "", 3000);
+                  });
+                  //this.SaveContract(action);
+                
               }
             })
           })
