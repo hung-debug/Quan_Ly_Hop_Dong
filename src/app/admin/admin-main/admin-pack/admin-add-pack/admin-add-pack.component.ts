@@ -171,6 +171,7 @@ export class AdminAddPackComponent implements OnInit {
 
       //khoi tao form them moi
     } else {
+
       this.addForm = this.fbd.group({
         code: this.fbd.control('', [
           Validators.required,
@@ -445,12 +446,14 @@ export class AdminAddPackComponent implements OnInit {
   }
 
   formatCurrencyBefore(event: any) {
-    this.totalBeforeVAT = this.currencyPipe.transform(this.totalBeforeVAT.replaceAll('.',''),'VND','')?.replaceAll(',','.');
-    event.target.value = this.totalBeforeVAT;
+      this.totalBeforeVAT = this.currencyPipe.transform(this.totalBeforeVAT.replaceAll('.',''),'VND','')?.replaceAll(',','.');
+      event.target.value = this.totalBeforeVAT;
   }
 
   formatCurrencyAfter(event: any) {
-    this.totalAfterVAT = this.currencyPipe.transform(this.totalAfterVAT.replaceAll('.',''),'VND','')?.replaceAll(',','.');
-    event.target.value = this.totalAfterVAT;
+      this.totalAfterVAT = this.currencyPipe.transform(this.totalAfterVAT.replaceAll('.',''),'VND','')?.replaceAll(',','.');
+      event.target.value = this.totalAfterVAT;
   }
+
+
 }
