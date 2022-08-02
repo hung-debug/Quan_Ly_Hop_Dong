@@ -98,9 +98,6 @@ export class AdminAddUnitComponent implements OnInit {
 
     this.datas = this.data;
 
-    console.log('data ');
-    console.log(this.data);
-
     //lay du lieu form cap nhat
     if (this.data.id != null) {
       console.log('vao form cap nhat');
@@ -212,8 +209,8 @@ export class AdminAddUnitComponent implements OnInit {
       });
     }
   }
-  convertFileCeCa(ceCAPushMode: any): any {
 
+  convertFileCeCa(ceCAPushMode: any): any {
     if (ceCAPushMode == fileCeCaOptions[0].id) {
       ceCAPushMode = fileCeCaOptions[0];
     } else if (ceCAPushMode ==fileCeCaOptions[1].id) {

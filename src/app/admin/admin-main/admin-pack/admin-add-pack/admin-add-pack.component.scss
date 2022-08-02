@@ -18,6 +18,14 @@
   display: flex;
   align-items: center;
 
+  >textarea,div {
+    border: none;
+    outline: none;
+    padding-left: 15px;
+    width: 100%;
+    border-radius: 5px;
+  }
+
   > input,
   div {
     border: none;
