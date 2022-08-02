@@ -136,7 +136,7 @@ export class AdminPackComponent implements OnInit {
     this.cols = [
       { field: 'name', header: 'Tên gói', style: 'text-align: left;' },
       { field: 'code', header: 'Mã gói', style: 'text-align: left;' },
-      { field: 'duration', header: 'Thời gian', style: 'text-align: left;' },
+      { field: 'duration', header: 'Thời gian(tháng)', style: 'text-align: left;' },
       {
         field: 'numberOfContracts',
         header: 'Số lượng hợp đồng',
