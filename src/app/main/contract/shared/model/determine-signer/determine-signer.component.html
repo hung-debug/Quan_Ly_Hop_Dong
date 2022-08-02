@@ -20,7 +20,7 @@
           [(ngModel)]="data_organization.name" 
           disabled 
         />
-        <div style="width: 110px">
+        <div style="margin-left: 5px;width: 110px">
           {{ "Mã số thuế" | translate | uppercase }}&nbsp;
           -
         </div>
@@ -301,7 +301,7 @@
           [(ngModel)]="item.name"
           [disabled]="item.type == 3"
         />
-        <div style="width: 110px">
+        <div style="margin-left: 5px;width: 110px">
           {{ "Mã số thuế" | translate | uppercase }}&nbsp;<span *ngIf="this.flagUSBToken === true || this.flagUSBTokenDocument === true">*</span
           >
           -
