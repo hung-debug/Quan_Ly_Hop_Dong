@@ -11,7 +11,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatBadgeModule} from '@angular/material/badge';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { CommonModule, DatePipe} from '@angular/common';
+import { CommonModule, CurrencyPipe, DatePipe} from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 
 import { DatepickerModule } from 'ng2-datepicker';
@@ -158,7 +158,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdminFilterUnitComponent,
     AdminDeleteUnitComponent,
     AdminDeletePackUnitComponent,
-    AdminInfoUserComponent
+    AdminInfoUserComponent,
   ],
   imports: [
     BrowserModule,
@@ -211,7 +211,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ContractTemplateModule,
     TreeSelectModule,
   ],
-  providers: [ AppService, DatePipe,
+  providers: [ AppService, DatePipe,CurrencyPipe,
     {
     provide: PERFECT_SCROLLBAR_CONFIG,
     useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,

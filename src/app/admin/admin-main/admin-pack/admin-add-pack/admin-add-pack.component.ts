@@ -1,3 +1,4 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -49,6 +50,9 @@ export class AdminAddPackComponent implements OnInit {
   //3 => all gray
   flagComboBoxTheThucTinh: any;
 
+  totalBeforeVAT: any;
+  totalAfterVAT: any;
+
   get f() {
     return this.addForm.controls;
   }
@@ -60,7 +64,8 @@ export class AdminAddPackComponent implements OnInit {
     public dialogRef: MatDialogRef<AdminAddPackComponent>,
     public router: Router,
     public dialog: MatDialog,
-    private adminPackService: AdminPackService
+    private adminPackService: AdminPackService,
+    private currencyPipe: CurrencyPipe
   ) {
     this.addForm = this.fbd.group({
       code: this.fbd.control('', [
@@ -288,8 +293,8 @@ export class AdminAddPackComponent implements OnInit {
       id: this.data.id,
       code: this.addForm.value.code,
       name: this.addForm.value.name,
-      totalBeforeVAT: this.addForm.value.totalBeforeVAT,
-      totalAfterVAT: this.addForm.value.totalAfterVAT,
+      totalBeforeVAT: this.addForm.value.totalBeforeVAT.replaceAll('.',''),
+      totalAfterVAT: this.addForm.value.totalAfterVAT.replaceAll('.',''),
       calc: this.addForm.value.calc,
       type: this.addForm.value.type,
       time: this.addForm.value.time,
@@ -437,5 +442,15 @@ export class AdminAddPackComponent implements OnInit {
 
       this.flagComboBoxTheThucTinh = 3;
     }
+  }
+
+  formatCurrencyBefore(event: any) {
+    this.totalBeforeVAT = this.currencyPipe.transform(this.totalBeforeVAT.replaceAll('.',''),'VND','')?.replaceAll(',','.');
+    event.target.value = this.totalBeforeVAT;
+  }
+
+  formatCurrencyAfter(event: any) {
+    this.totalAfterVAT = this.currencyPipe.transform(this.totalAfterVAT.replaceAll('.',''),'VND','')?.replaceAll(',','.');
+    event.target.value = this.totalAfterVAT;
   }
 }
