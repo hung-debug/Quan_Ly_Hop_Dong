@@ -39,6 +39,8 @@ export class AdminFilterPackComponent implements OnInit {
     }
 
   ngOnInit(): void {
+    console.log("data ", this.data);
+
     this.addForm = this.fbd.group({
       filter_code: this.fbd.control(this.data.filter_code),
       filter_totalBeforeVAT:this.fbd.control(this.data.filter_totalBeforeVAT),
@@ -51,6 +53,7 @@ export class AdminFilterPackComponent implements OnInit {
   }
 
   onSubmit() {
+
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
@@ -58,14 +61,14 @@ export class AdminFilterPackComponent implements OnInit {
     }
     const data = {
       filter_code: this.addForm.value.filter_code,
-      filter_totalBeforeVAT:this.addForm.value.totalBeforeVAT,
-      filter_totalAfterVAT:this.addForm.value.totalAfterVAT,
+      filter_totalBeforeVAT:this.addForm.value.filter_totalBeforeVAT,
+      filter_totalAfterVAT:this.addForm.value.filter_totalAfterVAT,
       filter_time: this.addForm.value.filter_time,
       filter_status: this.addForm.value.filter_status,
       filter_number_contract: this.addForm.value.filter_number_contract,
     }
     this.dialogRef.close();
-    console.log("data filter code ",data.filter_code);
+    console.log("data filter code ",data);
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['/admin-main/pack'],
       {

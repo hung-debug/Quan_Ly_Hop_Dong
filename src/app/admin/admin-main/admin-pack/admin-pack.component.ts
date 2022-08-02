@@ -33,7 +33,7 @@ export class AdminPackComponent implements OnInit {
 
   filter_name: any = '';
   filter_code: any = '';
-  filter_totaBeforeVAT: any = '';
+  filter_totalBeforeVAT: any = '';
   filter_totalAfterVAT: any = '';
   filter_time: any = '';
   filter_status: any = '';
@@ -79,7 +79,7 @@ export class AdminPackComponent implements OnInit {
     this.infoPackRole = this.checkRole(this.infoPackRole, 'QLGDV_04');
 
     this.route.queryParams.subscribe((params) => {
-      console.log('param filter re');
+      console.log('param filter re ', params);
       console.log(params.filter_address);
 
       if (typeof params.filter_code != 'undefined' && params.filter_code) {
@@ -87,14 +87,16 @@ export class AdminPackComponent implements OnInit {
       } else {
         this.filter_code = '';
       }
+
       if (
         typeof params.filter_totalBeforeVAT != 'undefined' &&
-        params.filter_totaBeforeVAT
+        params.filter_totalBeforeVAT
       ) {
-        this.filter_totaBeforeVAT = params.filter_totaBeforeVAT;
+        this.filter_totalBeforeVAT = params.filter_totalBeforeVAT;
       } else {
-        this.filter_totaBeforeVAT = '';
+        this.filter_totalBeforeVAT = '';
       }
+
       if (
         typeof params.filter_totalAfterVAT != 'undefined' &&
         params.filter_totalAfterVAT
@@ -103,6 +105,7 @@ export class AdminPackComponent implements OnInit {
       } else {
         this.filter_totalAfterVAT = '';
       }
+
       if (typeof params.filter_status != 'undefined' && params.filter_status) {
         console.log('pa ', params.filter_status);
 
@@ -282,7 +285,7 @@ export class AdminPackComponent implements OnInit {
     const data = {
       title: 'TÌM KIẾM GÓI DỊCH VỤ',
       filter_code: this.filter_code,
-      filter_totalBeforeVAT: this.filter_totaBeforeVAT,
+      filter_totalBeforeVAT: this.filter_totalBeforeVAT,
       filter_totalAfterVAT: this.filter_totalAfterVAT,
       filter_time: this.filter_time,
       filter_status: this.filter_status,
@@ -309,7 +312,7 @@ export class AdminPackComponent implements OnInit {
         .getPackList(
           this.filter_name,
           this.filter_code,
-          this.filter_totaBeforeVAT,
+          this.filter_totalBeforeVAT,
           this.filter_totalAfterVAT,
           this.filter_time,
           this.filter_number_contract,
