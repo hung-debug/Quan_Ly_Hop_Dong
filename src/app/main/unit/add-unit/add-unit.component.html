@@ -77,7 +77,18 @@
                 </div>
             </div>
 
+            <!--Mã số thuế-->
             <div class="col-md-6">
+                <div class="label text-color">{{'Mã số thuế' | translate }}</div>
+                <div class="input-data">
+                    <input type="text" formControlName="taxCode">
+                </div>
+                <div *ngIf="submitted && f.taxCode.errors" class="invalid">
+                    <div *ngIf="f.taxCode.errors.pattern">{{'Fax không được chứa ký tự đặc biệt' | translate}}</div>
+                </div>
+            </div>
+
+            <!-- <div class="col-md-6">
                 <div class="label text-color">
                   {{ "Đẩy file hợp đồng lên Bộ công thương" | translate }}
                   <span class="required-title">*</span>
@@ -99,7 +110,7 @@
                     {{ "Lựa chọn này không được để trống" | translate }}
                   </div>
                 </div>
-              </div>
+              </div> -->
         </div>
 
         <div class="row" style="padding-top: 10px;">
@@ -127,15 +138,6 @@
         </div>
 
         <div class="row" style="padding-top: 10px;">
-            <div class="col-md-6">
-                <div class="label text-color">{{'Mã số thuế' | translate }}</div>
-                <div class="input-data">
-                    <input type="text" formControlName="taxCode">
-                </div>
-                <div *ngIf="submitted && f.taxCode.errors" class="invalid">
-                    <div *ngIf="f.taxCode.errors.pattern">{{'Fax không được chứa ký tự đặc biệt' | translate}}</div>
-                </div>
-            </div>
             <div class="col-md-6" style="align-self: center;">
                 <div class="row">
                     <div class="col-md-5">

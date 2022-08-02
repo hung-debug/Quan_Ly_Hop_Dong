@@ -134,6 +134,24 @@
 
       <div class="col-md-6">
         <div class="label text-color">
+          {{ "Chức vụ" | translate }} <span class="required-title">*</span>
+        </div>
+        <div class="input-data">
+          <input type="text" formControlName="position" />
+        </div>
+        <div *ngIf="submitted && f.position.errors" class="invalid">
+          <div *ngIf="f.position.errors.required">
+            {{ "Chức vụ không được để trống" | translate }}
+          </div>
+          <div *ngIf="f.position.errors.pattern">
+            {{ "Chức vụ không được chứa ký tự đặc biệt" | translate }}
+          </div>
+        </div>
+      </div>
+
+      <!--Đẩy file hợp đồng lên Bộ công thương-->
+      <!-- <div class="col-md-6">
+        <div class="label text-color">
           {{ "Đẩy file hợp đồng lên Bộ công thương" | translate }}
           <span class="required-title">*</span>
         </div>
@@ -154,7 +172,7 @@
             {{ "Lựa chọn này không được để trống" | translate }}
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="row" style="padding-top: 10px">
@@ -194,22 +212,6 @@
     </div>
 
     <div class="row" style="padding-top: 10px">
-      <div class="col-md-6">
-        <div class="label text-color">
-          {{ "Chức vụ" | translate }} <span class="required-title">*</span>
-        </div>
-        <div class="input-data">
-          <input type="text" formControlName="position" />
-        </div>
-        <div *ngIf="submitted && f.position.errors" class="invalid">
-          <div *ngIf="f.position.errors.required">
-            {{ "Chức vụ không được để trống" | translate }}
-          </div>
-          <div *ngIf="f.position.errors.pattern">
-            {{ "Chức vụ không được chứa ký tự đặc biệt" | translate }}
-          </div>
-        </div>
-      </div>
       <div class="col-md-6" style="align-self: center">
         <div class="row">
           <div class="col-md-5">
