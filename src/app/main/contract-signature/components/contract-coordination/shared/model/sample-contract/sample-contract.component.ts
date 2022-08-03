@@ -298,6 +298,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let canvasInfo = canvasElement ? canvasElement.getBoundingClientRect() : '';
       this.coordinates_signature = event.rect;
       let id = event.target.id;
+      let signElement = <HTMLElement>document.getElementById(id);
+      let rect_location = signElement.getBoundingClientRect();
       if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
         event.target.style.webkitTransform = event.target.style.transform = 'none';// Đẩy chữ ký về vị trí cũ
         event.target.setAttribute('data-x', 0);
@@ -333,13 +335,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         let layerX;
         // @ts-ignore
         if ("left" in canvasInfo) {
-          layerX = event.rect.left - canvasInfo.left;
+          layerX = rect_location.left - canvasInfo.left;
         }
 
-        let layerY;
+        let layerY = 0;
         //@ts-ignore
         if ("top" in canvasInfo) {
-          layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
+          layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
         }
 
 
@@ -395,12 +397,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.objSignInfo.traf_x = Math.round(this.signCurent['coordinate_x']);
         this.objSignInfo.traf_y = Math.round(this.signCurent['coordinate_y']);
 
-        this.tinhToaDoSign(event.relatedTarget.id, event.rect.width, event.rect.height, this.objSignInfo);
+        this.tinhToaDoSign(event.relatedTarget.id, rect_location.width, rect_location.height, this.objSignInfo);
         this.signCurent['position'] = _array.join(",");
         this.signCurent['left'] = this.obj_toa_do.x1;
         //@ts-ignore
         if ("top" in canvasInfo) {
-          this.signCurent['top'] = (event.rect.top - canvasInfo.top).toFixed();
+          this.signCurent['top'] = (rect_location.top - canvasInfo.top).toFixed();
         }
         let name_accept_signature = '';
         // lay lai danh sach signer sau khi keo vao hop dong

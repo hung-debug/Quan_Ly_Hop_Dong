@@ -146,10 +146,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.getPage();
     // event drag and drop
     interact('.dropzone').dropzone({
-      // only accept elements matching this CSS selector
       //@ts-ignore
       accept: null,
-      // Require a 75% element overlap for a drop to be possible
       overlap: 1,
     })
 
@@ -208,6 +206,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       autoScroll: true,
       modifiers: []
     })
+
+    interact('.resize-drag').resizable({
+      edges: { left: false, right: false, bottom: false, top: false },
+    })
+
     interact.addDocument(document)
   }
 
@@ -455,15 +458,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
 
-
   showEventInfo = (event: any) => {
     let canvasElement: HTMLElement | null;
-
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
       let canvasInfo = canvasElement ? canvasElement.getBoundingClientRect() : '';
       this.coordinates_signature = event.rect;
       let id = event.target.id;
+      let signElement = <HTMLElement>document.getElementById(id);
+      let rect_location = signElement.getBoundingClientRect();
       if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
         event.target.style.webkitTransform = event.target.style.transform = 'none';// Đẩy chữ ký về vị trí cũ
         event.target.setAttribute('data-x', 0);
@@ -501,17 +504,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         let layerX;
         // @ts-ignore
         if ("left" in canvasInfo) {
-          layerX = event.rect.left - canvasInfo.left;
+          // layerX = event.rect.left - canvasInfo.left;
+          layerX = rect_location.left - canvasInfo.left;
         }
 
-        let layerY;
+        let layerY = 0;
         //@ts-ignore
         if ("top" in canvasInfo) {
-          layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
+          // layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
+          layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
         }
-
-        let layer_Y_localtion = _.cloneDeep(layerY);
-
         let pages = event.relatedTarget.id.split("-");
         let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
         // tinh toa do cua element / tong so trang
@@ -536,6 +538,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
           let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
           let canvasInfo = canvasElement.getBoundingClientRect();
+          // @ts-ignore
           layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
         }
         //END
@@ -569,12 +572,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.objSignInfo.traf_x = Math.round(this.signCurent['coordinate_x']);
         this.objSignInfo.traf_y = Math.round(this.signCurent['coordinate_y']);
 
-        this.tinhToaDoSign(event.relatedTarget.id, event.rect.width, event.rect.height, this.objSignInfo);
+        this.tinhToaDoSign(event.relatedTarget.id, rect_location.width, rect_location.height, this.objSignInfo);
         this.signCurent['position'] = _array.join(",");
         this.signCurent['left'] = this.obj_toa_do.x1;
         //@ts-ignore
         if ("top" in canvasInfo) {
-          this.signCurent['top'] = (event.rect.top - canvasInfo.top).toFixed();
+          this.signCurent['top'] = (rect_location.top - canvasInfo.top).toFixed();
         }
         let name_accept_signature = '';
         let field_data = [];
