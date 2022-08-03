@@ -338,30 +338,33 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   deSelectOrg(e: any) {
-    if(this.myTaxCode == null || this.myTaxCode == undefined) {
-      if(this.getOriganzationSignature().length == 1) {
-        if(e.id == 2) {
-        this.flagUSBTokenMyOrg = false;
-        return;
-        }
-      }
+    // if(this.myTaxCode == null || this.myTaxCode == undefined) {
+    //   if(this.getOriganzationSignature().length == 1) {
+    //     if(e.id == 2) {
+    //     this.flagUSBTokenMyOrg = false;
+    //     return;
+    //     }
+    //   }
 
-      let count = 0;
-      for(let i = 0; i < this.getOriganzationSignature().length; i++) {
-        if(this.getOriganzationSignature()[i].sign_type.length == 0) {
-          count++;
-          continue;
-        }
-        if(this.getOriganzationSignature()[i].sign_type[0].id == 2) {
-          this.flagUSBTokenMyOrg = true;
-          return;
-        }
-      }
+    //   let count = 0;
+    //   for(let i = 0; i < this.getOriganzationSignature().length; i++) {
+    //     if(this.getOriganzationSignature()[i].sign_type.length == 0) {
+    //       count++;
+    //       continue;
+    //     }
+    //     if(this.getOriganzationSignature()[i].sign_type[0].id == 2) {
+    //       this.flagUSBTokenMyOrg = true;
+    //       return;
+    //     }
+    //   }
 
-      if(count == this.getOriganzationSignature().length) {
-        this.flagUSBTokenMyOrg = false;
-        return;
-      }
+    //   if(count == this.getOriganzationSignature().length) {
+    //     this.flagUSBTokenMyOrg = false;
+    //     return;
+    //   }
+    // }
+    if(e.id == 2) {
+      this.flagUSBTokenMyOrg = false;
     }
   }
 
@@ -558,6 +561,8 @@ export class DetermineSignerComponent implements OnInit {
 
   // valid data step 2
   validData() {
+    console.log("my tax code ", this.myTaxCode);
+
     let count = 0;
     let dataArr = [];
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
@@ -576,12 +581,21 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
 
-      if(this.flagUSBTokenMyOrg === true) {
-        this.getNotificationValid("Vui lòng nhập mã số thuế cho tổ chức của tôi ");
-        count++;
-        break;
+      if(this.myTaxCode == null || this.myTaxCode == undefined) {
+        if(this.flagUSBTokenMyOrg === true) {
+          this.getNotificationValid("Vui lòng nhập mã số thuế cho tổ chức của tôi ");
+          count++;
+          break;
+        }
+      } else {
+        //Check định dạng mã số thuế tổ chức của tôi
+        if (!parttern_input.taxCode_form.test(this.myTaxCode)) {
+          this.getNotificationValid("Mã số thuế tổ chức của tôi không đúng định dạng");
+          count++;
+          break;
+        }
       }
-
+     
       if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
         this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
         count++;
