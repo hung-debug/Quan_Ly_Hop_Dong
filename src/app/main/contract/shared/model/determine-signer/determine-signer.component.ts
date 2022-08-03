@@ -595,13 +595,13 @@ export class DetermineSignerComponent implements OnInit {
           count++;
           break;
         }
-      } else {
-        //Check định dạng mã số thuế tổ chức của tôi
-        if (!parttern_input.taxCode_form.test(this.myTaxCode)) {
-          this.getNotificationValid("Mã số thuế tổ chức của tôi không đúng định dạng");
-          count++;
-          break;
-        }
+      }
+
+      //Check định dạng mã số thuế tổ chức của tôi
+      if ((this.myTaxCode != null && this.myTaxCode != undefined) && !parttern_input.taxCode_form.test(this.myTaxCode)) {
+        this.getNotificationValid("Mã số thuế tổ chức của tôi không đúng định dạng");
+        count++;
+        break;
       }
      
       if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
