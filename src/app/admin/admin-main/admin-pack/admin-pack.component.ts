@@ -1,3 +1,4 @@
+import { CurrencyPipe } from '@angular/common';
 import {
   Component,
   OnInit,
@@ -28,7 +29,8 @@ export class AdminPackComponent implements OnInit {
     private dialog: MatDialog,
     private adminPackService: AdminPackService,
     private toastService: ToastService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private currencyPipe: CurrencyPipe
   ) {}
 
   filter_name: any = '';
@@ -331,5 +333,9 @@ export class AdminPackComponent implements OnInit {
     }, 1000);
 
     this.page = JSON.parse(JSON.stringify(event)).first / 20;
+  }
+
+  getCurrencyFormat(numberCurrency: string) {
+    return this.currencyPipe.transform(numberCurrency,'VND','')?.replaceAll(',','.');
   }
 }
