@@ -99,28 +99,38 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("vao day ");
+
     this.user = this.userService.getInforUser();
 
+
       //Lấy thông tin chi tiết tổ chức của tôi
-    if(this.myTaxCode != null && this.myTaxCode != undefined) {
          //Lấy id của user
-      this.userService.getUserById(this.user.customer_id).subscribe(response => {
+        this.userService.getUserById(this.user.customer_id).subscribe(response => {
 
         
-        this.unitService.getUnitById(response.organization_id).subscribe(response1 => {
-          this.myTaxCode = response1.tax_code;
-          this.data_organization.tax_code = this.myTaxCode;
+          this.unitService.getUnitById(response.organization_id).subscribe(response1 => {
+            console.log("response1 ",response1);
 
-          if(this.myTaxCode != null && this.myTaxCode != undefined) {
-              this.isEditable = true;
-          } else {
-              this.isEditable = false;
-          }
+            if(response1.tax_code != null) {
+              this.myTaxCode = response1.tax_code;
+              this.data_organization.tax_code = this.myTaxCode;
+
+              if(this.myTaxCode != null && this.myTaxCode != undefined) {
+                this.isEditable = true;
+              } else {
+                this.isEditable = false;
+              }
+            } else {
+              this.myTaxCode = localStorage.getItem('myTaxCode');
+            }
+
+           
+          })
         })
-      })
-    }
-
-   
+  
+      
+      
 
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
@@ -136,6 +146,8 @@ export class DetermineSignerComponent implements OnInit {
     this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];
 
     this.data_organization.name = this.datas.name_origanzation ? this.datas.name_origanzation : '';
+
+    this.myTaxCode = this.data_organization.tax_code;
 
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
@@ -157,11 +169,6 @@ export class DetermineSignerComponent implements OnInit {
     };
 
     if (this.datas.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
-  }
-
-  async logObservable() {
-    console.log("my tax code async ",this.myTaxCode);
-    return this.myTaxCode;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -186,6 +193,7 @@ export class DetermineSignerComponent implements OnInit {
   // next step event
   next(action: string) {
     this.datas.is_determine_clone[0].tax_code = this.myTaxCode;
+    localStorage.setItem("myTaxCode",this.myTaxCode);
 
     this.submitted = true;
     if (action == 'save-step' && !this.validData()) {

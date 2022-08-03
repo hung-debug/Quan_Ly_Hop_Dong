@@ -150,6 +150,8 @@ export class AddContractComponent implements OnInit {
   isQLHD_11: boolean = true;
 
   ngOnInit() {
+    localStorage.removeItem("myTaxCode");
+
     this.userService.checkServiceStatus().subscribe((response) => {
       console.log("service response ",response);
 

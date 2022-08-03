@@ -79,6 +79,7 @@ export class MainComponent implements OnInit {
     // localStorage.clear();
     sessionStorage.clear();
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('myTaxCode');
     localStorage.removeItem('url');
     this.router.navigate(['/login']);
   }
