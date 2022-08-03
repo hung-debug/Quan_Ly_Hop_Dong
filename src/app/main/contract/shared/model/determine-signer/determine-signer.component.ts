@@ -101,21 +101,26 @@ export class DetermineSignerComponent implements OnInit {
   ngOnInit(): void {
     this.user = this.userService.getInforUser();
 
-    //Lấy id của user
-    this.userService.getUserById(this.user.customer_id).subscribe(response => {
-
       //Lấy thông tin chi tiết tổ chức của tôi
-      this.unitService.getUnitById(response.organization_id).subscribe(response1 => {
-        this.myTaxCode = response1.tax_code;
-        this.data_organization.tax_code = this.myTaxCode;
+    if(this.myTaxCode != null && this.myTaxCode != undefined) {
+         //Lấy id của user
+      this.userService.getUserById(this.user.customer_id).subscribe(response => {
 
-        if(this.myTaxCode != null && this.myTaxCode != undefined) {
-          this.isEditable = true;
-        } else {
-          this.isEditable = false;
-        }
+        
+        this.unitService.getUnitById(response.organization_id).subscribe(response1 => {
+          this.myTaxCode = response1.tax_code;
+          this.data_organization.tax_code = this.myTaxCode;
+
+          if(this.myTaxCode != null && this.myTaxCode != undefined) {
+              this.isEditable = true;
+          } else {
+              this.isEditable = false;
+          }
+        })
       })
-    })
+    }
+
+   
 
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
@@ -180,6 +185,8 @@ export class DetermineSignerComponent implements OnInit {
 
   // next step event
   next(action: string) {
+    this.datas.is_determine_clone[0].tax_code = this.myTaxCode;
+
     this.submitted = true;
     if (action == 'save-step' && !this.validData()) {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -320,6 +327,7 @@ export class DetermineSignerComponent implements OnInit {
       }
     }
 
+    //Check loại ký của tổ chức của tôi là usb token
     if(data == this.data_organization.name) {
       if(this.myTaxCode == null || this.myTaxCode == undefined) {
         if(e.id == 2) {
@@ -553,6 +561,9 @@ export class DetermineSignerComponent implements OnInit {
     let count = 0;
     let dataArr = [];
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
+
+    console.log("dataArr ", dataArr);
+    
     for (let i = 0; i < dataArr.length; i++) {
       if (!dataArr[i].name) {
         this.getNotificationValid("Vui lòng nhập tên" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!");
@@ -561,6 +572,12 @@ export class DetermineSignerComponent implements OnInit {
       }
       if (!dataArr[i].email) {
         this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
+        count++;
+        break;
+      }
+
+      if(this.flagUSBTokenMyOrg === true) {
+        this.getNotificationValid("Vui lòng nhập mã số thuế cho tổ chức của tôi ");
         count++;
         break;
       }
