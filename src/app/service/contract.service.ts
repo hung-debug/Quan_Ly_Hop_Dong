@@ -39,7 +39,9 @@ export class ContractService {
   listContractOrgUrl: any = `${environment.apiUrl}/api/v1/contracts/my-organization-contract`;
   listContractOrgChildrenUrl: any = `${environment.apiUrl}/api/v1/contracts/my-org-and-descendant-contract`;
   listContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
+
   addContractUrl: any = `${environment.apiUrl}/api/v1/contracts`;
+  
   addDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/contract/`;
   addDetermineCoorditionUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
@@ -225,6 +227,9 @@ export class ContractService {
       is_template: type_form ? true : false,
       template_contract_id: type_form ? datas.template_contract_id : null
     });
+
+    console.log("body add contract step 1",body);
+
     if (id) {
       return this.http.put<Contract>(this.addGetDataContract + id, body, { 'headers': headers })
         .pipe(

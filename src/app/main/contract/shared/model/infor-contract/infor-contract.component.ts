@@ -72,6 +72,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   sign_time: Date;
   notes: any;
   filePath: any;
+  expire_time: Date;
 
   attachFileArr: any[] = [];
   attachFileNameArr: any[] = [];
@@ -269,6 +270,10 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       return false;
     }
 
+    if(this.expire_time == null || this.expire_time == undefined) {
+      return false;
+    }
+
     return true
   }
 
@@ -288,6 +293,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   // getDataCoordination
 
   async callAPI(action?: string) {
+    console.log("action ",action);
+
     //call API step 1
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
@@ -736,8 +743,13 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     return false;
   }
 
+  nextStep1: boolean = false;
   // --next step 2
   async next() {
+    console.log("exp ", this.expire_time);
+
+    this.nextStep1 = true;
+
     if (!this.validData()) {
       return;
     } else {
