@@ -23,14 +23,14 @@
         />
         <div style="margin-left: 5px;width: 110px">
           {{ "Mã số thuế" | translate | uppercase }}&nbsp;
-          -
         </div>
-        <span *ngIf="this.flagUSBTokenMyOrg == true">*</span>
+        <span style="color: red" *ngIf="this.flagUSBTokenMyOrg == true">*</span>
         <input
           class="input2"
           type="text"
           [(ngModel)]="this.myTaxCode"
           [disabled]="this.isEditable"
+          placeholder="Nhập mã số thuế"
         />
       </div>
 
@@ -303,9 +303,8 @@
           [disabled]="item.type == 3"
         />
         <div style="margin-left: 5px;width: 110px">
-          {{ "Mã số thuế" | translate | uppercase }}&nbsp;<span *ngIf="this.flagUSBToken === true || this.flagUSBTokenDocument === true">*</span
+          {{ "Mã số thuế" | translate | uppercase }}&nbsp;<span style="color: red" *ngIf="this.flagUSBToken === true || this.flagUSBTokenDocument === true">*</span
           >
-          -
         </div>
         <input
           class="input2"
