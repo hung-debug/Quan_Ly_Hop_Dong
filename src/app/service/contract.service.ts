@@ -41,7 +41,7 @@ export class ContractService {
   listContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
 
   addContractUrl: any = `${environment.apiUrl}/api/v1/contracts`;
-  
+
   addDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/contract/`;
   addDetermineCoorditionUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
@@ -231,6 +231,8 @@ export class ContractService {
     console.log("body add contract step 1",body);
 
     if (id) {
+      console.log("vao day");
+
       return this.http.put<Contract>(this.addGetDataContract + id, body, { 'headers': headers })
         .pipe(
           map((contract) => {

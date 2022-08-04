@@ -298,6 +298,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     //call API step 1
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
+
       // sua hop dong
       if (this.datas.contractConnect && this.datas.contractConnect.length && this.datas.contractConnect.length > 0) {
         this.datas.contractConnect.forEach((res: any) => {
