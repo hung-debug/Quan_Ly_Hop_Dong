@@ -33,6 +33,11 @@ export const type_signature = [
     is_otp: false
   },
   {
+    id: 4,
+    name: 'Ký số bằng HSM',
+    is_otp: false
+  },
+  {
     id: 2,
     name: 'Ký số bằng USB token',
     is_otp: false,
