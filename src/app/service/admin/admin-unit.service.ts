@@ -214,7 +214,6 @@ export class AdminUnitService {
       size: datas.size,
       phone: datas.phone,
       status: datas.status,
-      ceCAPushMode: datas.ceCAPushMode.id,
     });
 
     console.log('body unit');

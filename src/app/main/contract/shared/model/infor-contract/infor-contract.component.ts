@@ -760,6 +760,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
       this.datas.expire_time = this.expire_time;
+
       this.defineData(this.datas);
       const fileReader = new FileReader();
       if (this.datas.is_action_contract_created) {
@@ -832,6 +833,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   defineData(datas: any) {
     this.datas.name = this.name;
     this.datas.sign_time = this.sign_time;
+
     if (this.datas.contract_no == '') {
       this.datas.contract_no = null;
     }
@@ -869,6 +871,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.datas.contract_no = this.contract_no;
     this.datas.sign_time = this.sign_time;
     this.datas.notes = this.notes;
+
     this.defineData(this.datas);
     const fileReader = new FileReader();
     if (this.datas.is_action_contract_created) {

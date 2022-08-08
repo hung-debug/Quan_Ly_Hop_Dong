@@ -242,6 +242,7 @@ export class ContractService {
         .pipe(
           map((contract) => {
             if (JSON.parse(JSON.stringify(contract)).id != 0) {
+              console.log("contract ",contract);
               return contract;
             } else {
               return null;
@@ -250,10 +251,13 @@ export class ContractService {
           catchError(this.handleError)
         );
     } else {
+      console.log("post contract ");
+
       return this.http.post<Contract>(this.addContractUrl, body, { 'headers': headers })
         .pipe(
           map((contract) => {
             if (JSON.parse(JSON.stringify(contract)).id != 0) {
+              console.log("contract ",contract);
               return contract;
             } else {
               return null;

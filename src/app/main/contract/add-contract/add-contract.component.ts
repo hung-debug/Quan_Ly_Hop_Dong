@@ -256,6 +256,9 @@ export class AddContractComponent implements OnInit {
                   i_data_file_contract: rs[1],
                   is_data_object_signature: rs[2],
                 };
+
+                console.log("rs ",rs);
+
                 this.getDataContractCreated(data_api);
               },
               () => {
@@ -287,9 +290,12 @@ export class AddContractComponent implements OnInit {
   }
 
   getDataContractCreated(data: any) {
+    console.log("get data contract created ", data);
+
     let fileNameAttach = data.i_data_file_contract.filter(
       (p: any) => p.type == 3
     );
+    
     if (data) {
       // sua hop dong don le theo mau
       if (data.is_data_contract.is_template) {
@@ -318,6 +324,7 @@ export class AddContractComponent implements OnInit {
         let fileName = data.i_data_file_contract.filter(
           (p: any) => p.type == 2 && p.status == 1
         )[0];
+        
         if (fileName) {
           data.is_data_contract['file_name'] = fileName.filename;
           data.is_data_contract['contractFile'] = fileName.path;
@@ -340,6 +347,7 @@ export class AddContractComponent implements OnInit {
         this.datas.contract_id_action = data.is_data_contract.id;
         this.datas.i_data_file_contract = data.i_data_file_contract;
         this.datas['is_data_object_signature'] = data.is_data_object_signature;
+
         this.datas = Object.assign(this.datas, data.is_data_contract);
         this.step = variable.stepSampleContract.step1;
       }

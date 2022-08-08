@@ -6,6 +6,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { invalid } from 'moment';
 import { AddUnitComponent } from 'src/app/main/unit/add-unit/add-unit.component';
 import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { RoleService } from 'src/app/service/role.service';
@@ -87,9 +88,6 @@ export class AdminAddUnitComponent implements OnInit {
         Validators.required,
         Validators.pattern(parttern_input.input_form),
       ]),
-      fileCeCa: this.fbd.control('',[
-        Validators.required
-      ])
     });
   }
 
@@ -149,10 +147,6 @@ export class AdminAddUnitComponent implements OnInit {
               Validators.required,
               Validators.pattern(parttern_input.input_form),
             ]),
-            fileCeCa: this.fbd.control(
-              this.convertFileCeCa(data.ceCAPushMode),
-              Validators.required
-            ),
           });
         },
         (error) => {
@@ -203,26 +197,8 @@ export class AdminAddUnitComponent implements OnInit {
           Validators.required,
           Validators.pattern(parttern_input.input_form),
         ]),
-        fileCeCa: this.fbd.control('', [
-          Validators.required,
-        ]),
       });
     }
-  }
-
-  convertFileCeCa(ceCAPushMode: any): any {
-    if (ceCAPushMode == fileCeCaOptions[0].id) {
-      ceCAPushMode = fileCeCaOptions[0];
-    } else if (ceCAPushMode ==fileCeCaOptions[1].id) {
-      console.log("vao day ");
-      ceCAPushMode = fileCeCaOptions[1];
-    } else if (ceCAPushMode == fileCeCaOptions[2].id) {
-      ceCAPushMode = fileCeCaOptions[2];
-    }
-
-    console.log("ceCAPushMode after ", ceCAPushMode);
-
-    return ceCAPushMode;
   }
 
   convertStatus(status: any): any {
@@ -240,6 +216,7 @@ export class AdminAddUnitComponent implements OnInit {
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
+      console.log("invalid ", invalid);
       return;
     }
 
@@ -256,7 +233,6 @@ export class AdminAddUnitComponent implements OnInit {
       taxCode: this.addForm.value.tax_code,
       position: this.addForm.value.position,
       address: this.addForm.value.address,
-      ceCAPushMode: this.addForm.value.fileCeCa,
     };
 
     //truong hop sua ban ghi

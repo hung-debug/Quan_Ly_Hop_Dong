@@ -95,49 +95,15 @@ export class DetermineSignerComponent implements OnInit {
     private router: Router
   ) {
     this.step = variable.stepSampleContract.step2
-    //this.datas.determineDetails = this.determineDetails;
-
- 
   }
 
   ngOnInit(): void {
-    console.log("vao day ");
-
     this.user = this.userService.getInforUser();
-
-
-      //Lấy thông tin chi tiết tổ chức của tôi
-         //Lấy id của user
-        // this.userService.getUserById(this.user.customer_id).subscribe(response => {
-
-        
-        //   this.unitService.getUnitById(response.organization_id).subscribe(response1 => {
-        //     console.log("response1 ",response1);
-
-        //     if(response1.tax_code != null) {
-        //       this.myTaxCode = response1.tax_code;
-        //       this.data_organization.tax_code = this.myTaxCode;
-
-        //       if(this.myTaxCode != null && this.myTaxCode != undefined) {
-        //         this.isEditable = true;
-        //       } else {
-        //         this.isEditable = false;
-        //       }
-        //     } else {
-        //       this.myTaxCode = localStorage.getItem('myTaxCode');
-        //     }
-
-           
-        //   })
-        // })
   
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
     this.isListSignPerson = this.signTypeList.filter((p) => ![4].includes(p.id));
 
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
-      // this.datas.is_determine_clone = null;
-      // this.datas.is_determine_clone = this.datas.determine_contract;
-
       this.datas.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
 
       console.log("on init ", this.datas.is_determine_clone);
@@ -193,9 +159,6 @@ export class DetermineSignerComponent implements OnInit {
 
   // next step event
   next(action: string) {
-    this.datas.is_determine_clone[0].tax_code = this.myTaxCode;
-    localStorage.setItem("myTaxCode",this.myTaxCode);
-
     this.submitted = true;
     if (action == 'save-step' && !this.validData()) {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -329,21 +292,6 @@ export class DetermineSignerComponent implements OnInit {
     // }
     // console.log(setOrdering, setOrderingParnter.length)
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
-
-    // if(data == 2 || data == 3) {
-    //   if(e.id == 2) {
-    //     this.flagUSBToken = true;
-    //   }
-    // }
-
-    // //Check loại ký của tổ chức của tôi là usb token
-    // if(data == this.data_organization.name) {
-    //   if(this.myTaxCode == null || this.myTaxCode == undefined) {
-    //     if(e.id == 2) {
-    //       this.flagUSBTokenMyOrg = true;
-    //     }
-    //   }
-    // }
   }
 
   deSelectOrg(e: any) {
