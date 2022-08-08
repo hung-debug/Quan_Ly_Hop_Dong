@@ -4,6 +4,13 @@
   </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="myForm" class="content">
     <div class="name-item">
+      <div class="label_item">Mã số thuế: <span class="require_star">*</span></div>
+      <div class="form-control input-line">
+        <input autocomplete="off" type="text" formControlName="tax_code" class="input-text" placeholder="Nhập tên người dùng" autofocus>
+      </div>
+    </div>
+
+    <div class="name-item">
       <div class="label_item">Tên người dùng: <span class="require_star">*</span></div>
       <div class="form-control input-line">
         <input autocomplete="off" type="text" formControlName="name" class="input-text" placeholder="Nhập tên người dùng" autofocus>
@@ -11,9 +18,16 @@
     </div>
 
     <div class="name-item">
-      <div class="label_item">Mật khẩu: <span class="require_star">*</span></div>
+      <div class="label_item">Mật khẩu cấp 1: <span class="require_star">*</span></div>
       <div class="form-control input-line">
-        <input autocomplete="off" type="password" formControlName="email" class="input-text" placeholder="Nhập mật khẩu">
+        <input autocomplete="off" type="password" formControlName="password1" class="input-text" placeholder="Nhập mật khẩu">
+      </div>
+    </div>
+
+    <div class="name-item">
+      <div class="label_item">Mật khẩu cấp 2: <span class="require_star">*</span></div>
+      <div class="form-control input-line">
+        <input autocomplete="off" type="password" formControlName="password2" class="input-text" placeholder="Nhập mật khẩu">
       </div>
     </div>
 

@@ -725,6 +725,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   async submitEvents(e: any) {
     let haveSignPKI = false;
     let haveSignImage = false;
+    let haveSignHsm = false;
+
     const counteKYC = this.recipient?.sign_type.filter((p: any) => p.id == 5).length;
     if(counteKYC > 0){
       this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
@@ -782,6 +784,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       if (typeSignImage && typeSignImage == 1) {
         haveSignImage = true;
       }
+
+      if (typeSignImage && typeSignImage == 4) {
+        haveSignImage = true;
+      }
     }
     if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
@@ -824,6 +830,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                   this.spinner.hide();
                 } else if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
                   this.pkiDialogSignOpen();
+                  this.spinner.hide();
+                } else if([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignHsm) {
+                  this.hsmDialogSignOpen();
                   this.spinner.hide();
                 } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
                   this.signContractSubmit();
@@ -1077,6 +1086,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         }
       }
 
+    } else if(typeSignDigital == 4) {
+      this.hsmDialogSignOpen();
     }
 
   }
@@ -1247,8 +1258,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   async signImageC(signUpdatePayload: any, notContainSignImage: any) {
-    console.log(notContainSignImage);
-    console.log(signUpdatePayload);
+    console.log("notContainSignImage ", notContainSignImage);
+    console.log("sigunupdatepayload ",signUpdatePayload);
     let signDigitalStatus = null;
     let signUpdateTempN = [];
     if(signUpdatePayload){
@@ -1274,7 +1285,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       this.spinner.hide();
       return;
     }
+
     if(notContainSignImage){
+      console.log("ko phai ky anh ");
+
       console.log(signUpdateTempN);
       this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
         async (result) => {
