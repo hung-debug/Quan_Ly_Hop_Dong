@@ -108,28 +108,28 @@ export class DetermineSignerComponent implements OnInit {
 
       //Lấy thông tin chi tiết tổ chức của tôi
          //Lấy id của user
-        this.userService.getUserById(this.user.customer_id).subscribe(response => {
+        // this.userService.getUserById(this.user.customer_id).subscribe(response => {
 
         
-          this.unitService.getUnitById(response.organization_id).subscribe(response1 => {
-            console.log("response1 ",response1);
+        //   this.unitService.getUnitById(response.organization_id).subscribe(response1 => {
+        //     console.log("response1 ",response1);
 
-            if(response1.tax_code != null) {
-              this.myTaxCode = response1.tax_code;
-              this.data_organization.tax_code = this.myTaxCode;
+        //     if(response1.tax_code != null) {
+        //       this.myTaxCode = response1.tax_code;
+        //       this.data_organization.tax_code = this.myTaxCode;
 
-              if(this.myTaxCode != null && this.myTaxCode != undefined) {
-                this.isEditable = true;
-              } else {
-                this.isEditable = false;
-              }
-            } else {
-              this.myTaxCode = localStorage.getItem('myTaxCode');
-            }
+        //       if(this.myTaxCode != null && this.myTaxCode != undefined) {
+        //         this.isEditable = true;
+        //       } else {
+        //         this.isEditable = false;
+        //       }
+        //     } else {
+        //       this.myTaxCode = localStorage.getItem('myTaxCode');
+        //     }
 
            
-          })
-        })
+        //   })
+        // })
   
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
     this.isListSignPerson = this.signTypeList.filter((p) => ![4].includes(p.id));
@@ -330,48 +330,23 @@ export class DetermineSignerComponent implements OnInit {
     // console.log(setOrdering, setOrderingParnter.length)
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
 
-    if(data == 2 || data == 3) {
-      if(e.id == 2) {
-        this.flagUSBToken = true;
-      }
-    }
+    // if(data == 2 || data == 3) {
+    //   if(e.id == 2) {
+    //     this.flagUSBToken = true;
+    //   }
+    // }
 
-    //Check loại ký của tổ chức của tôi là usb token
-    if(data == this.data_organization.name) {
-      if(this.myTaxCode == null || this.myTaxCode == undefined) {
-        if(e.id == 2) {
-          this.flagUSBTokenMyOrg = true;
-        }
-      }
-    }
+    // //Check loại ký của tổ chức của tôi là usb token
+    // if(data == this.data_organization.name) {
+    //   if(this.myTaxCode == null || this.myTaxCode == undefined) {
+    //     if(e.id == 2) {
+    //       this.flagUSBTokenMyOrg = true;
+    //     }
+    //   }
+    // }
   }
 
   deSelectOrg(e: any) {
-    // if(this.myTaxCode == null || this.myTaxCode == undefined) {
-    //   if(this.getOriganzationSignature().length == 1) {
-    //     if(e.id == 2) {
-    //     this.flagUSBTokenMyOrg = false;
-    //     return;
-    //     }
-    //   }
-
-    //   let count = 0;
-    //   for(let i = 0; i < this.getOriganzationSignature().length; i++) {
-    //     if(this.getOriganzationSignature()[i].sign_type.length == 0) {
-    //       count++;
-    //       continue;
-    //     }
-    //     if(this.getOriganzationSignature()[i].sign_type[0].id == 2) {
-    //       this.flagUSBTokenMyOrg = true;
-    //       return;
-    //     }
-    //   }
-
-    //   if(count == this.getOriganzationSignature().length) {
-    //     this.flagUSBTokenMyOrg = false;
-    //     return;
-    //   }
-    // }
     if(e.id == 2) {
       this.flagUSBTokenMyOrg = false;
     }
@@ -851,6 +826,18 @@ export class DetermineSignerComponent implements OnInit {
                 break;
               }
               isPartnerCaNhanDuplicate = [];
+
+              if(!isParterSort[k].uid && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+                this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObjectValid(isParterSort[k].role)+"của đối tác cá nhân");
+                count++;
+                break;
+              }
+        
+              if(isParterSort[k].uid && (!this.pattern.card_id.test(isParterSort[k].uid || !this.pattern_input.taxCode_form.test(isParterSort[k].uid)))) {
+                this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!");
+                count++;
+                break;
+              }
             }
 
             if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {

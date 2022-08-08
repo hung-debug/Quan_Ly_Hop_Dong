@@ -222,7 +222,7 @@
                       >*</span
                     >
                   </div>
-                  <ng-multiselect-dropdown
+                  <!-- <ng-multiselect-dropdown
                     [(ngModel)]="d.sign_type"
                     placeholder="{{ 'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings"
@@ -258,7 +258,27 @@
                         </label>
                       </div>
                     </ng-template>
-                  </ng-multiselect-dropdown>
+                  </ng-multiselect-dropdown> -->
+
+                   <!--Tổ chức của tôi chọn loại ký-->
+                   <ng-multiselect-dropdown 
+                   [(ngModel)]="d.sign_type" 
+                   placeholder="{{'choose' | translate }}"
+                   [settings]="dropdownSignTypeSettings" 
+                   [data]="isListSignNotPerson" 
+                   (onSelect)="onItemSelect($event)"
+                   (onDeSelect)="deSelectOrg($event)"
+                   (ngModelChange)="selectWithOtp($event, d)"
+                 >
+                   <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
+                     <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
+                       <label style="color: #333; font-weight: normal;"
+                         [ngStyle]="{ 'font-weight': isSelected? 'bold':' normal','color': getContractConnectItems[id].isDisabled? 'lightgrey': ''}">
+                         {{getContractConnectItems[id].name}}
+                       </label>
+                     </div>
+                   </ng-template>
+                 </ng-multiselect-dropdown>
                 </div>
 
                 <div class="participants__name">
@@ -291,6 +311,26 @@
                 <!--                  <input id="focus_phone_{{d.role}}" type="number" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">-->
                 <!--                </div>-->
               </div>
+
+                <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là usbtoken-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
+                  <div class="participants__name" style="width: 90%">
+                    <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div></div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.uid" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
+
+                  <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là hsm-->
+                <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
+                  <div class="participants__name" style="width: 90%">
+                    <div class="label_detail text-color">Mã số thuế&nbsp;<span class="required-title">*</span></div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'Nhập mã số thuế' | translate}}" [(ngModel)]="d.tax_code" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
 
               <div
                 class="participants--input"
@@ -422,6 +462,8 @@
                       >*</span
                     >
                   </div>
+
+                  <!--Văn thư tổ chức của tôi chọn loại ký-->
                   <ng-multiselect-dropdown
                     [(ngModel)]="d.sign_type"
                     placeholder="{{ 'choose' | translate }}"
@@ -481,6 +523,16 @@
                   </div>
                 </div>
               </div>
+
+               <!--trường hiển thị khi văn thư tổ chức của tôi chọn loại ký là usb token-->
+               <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
+                <div class="participants__name" style="width: 90%">
+                  <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div></div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.uid" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
             </div>
             <div
               class="col-md-1 delete-element"
@@ -537,7 +589,7 @@
           [(ngModel)]="item.name"
           [disabled]="item.type == 3"
         />
-        <div style="width: 120px">
+        <!-- <div style="width: 120px">
           {{ "Mã số thuế" | translate | uppercase }}&nbsp;<span *ngIf="this.flagUsbToken[id] === true">*</span
           >
           -
@@ -549,7 +601,7 @@
             (item.type == 2 || item.type == 3 ? 'Nhập mã số thuế' : '') | translate
           }}"
           [(ngModel)]="item.taxCode"
-        />
+        /> -->
         <!--        <input *ngIf="item.type == 3" type="text" [ngModel]="this.getNameIndividual" disabled>-->
       </div>
       <div
@@ -949,6 +1001,26 @@
                     </div>
                   </div>
                 </div>
+
+                  <!--Check ký usb token cho đối tác, nếu có thì render trường mã số thuế/cccd-->
+                  <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
+                    <div class="participants__name" style="width: 90%">
+                      <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div></div>
+                      <div class="input-data">
+                        <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.uid" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      </div>
+                    </div>
+                  </div>
+  
+                  <!--trường hiển thị khi người ký của đối tác chọn loại ký là hsm-->
+                  <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
+                    <div class="participants__name" style="width: 90%">
+                      <div class="label_detail text-color">Mã số thuế&nbsp;<span class="required-title">*</span></div>
+                      <div class="input-data">
+                        <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.tax_code" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      </div>
+                    </div>
+                  </div>
               </div>
               <div
                 *ngIf="
@@ -1144,6 +1216,16 @@
                     </div>
                   </div>
                 </div>
+
+                 <!--trường hiển thị khi văn thư đối tác của tổ chức chọn loại ký là usb token-->
+                 <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
+                  <div class="participants__name" style="width: 90%">
+                    <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div></div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.uid" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
               </div>
               <div
                 class="col-md-1 delete-element"
@@ -1329,6 +1411,16 @@
                     </div>
                   </div>
                 </div>
+
+                  <!--Check ký usb token cho cá nhân, nếu có thì render trường mã số thuế/cccd-->
+                  <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
+                    <div class="participants__name" style="width: 90%">
+                      <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div></div>
+                      <div class="input-data">
+                        <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.uid" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      </div>
+                    </div>
+                  </div>
               </div>
 
               <div
