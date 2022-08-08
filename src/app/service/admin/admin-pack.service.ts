@@ -108,6 +108,8 @@ export class AdminPackService {
       status: datas.status
     });
 
+    console.log("body update pack ", body);
+
 
     return this.http.put<any>(this.listPackUrl + datas.id,body, { headers: headers });
   }

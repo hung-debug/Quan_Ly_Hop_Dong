@@ -133,11 +133,11 @@ export class AdminAddPackComponent implements OnInit {
               Validators.pattern(parttern_input.input_form),
             ]),
 
-            totalBeforeVAT: this.fbd.control(data.totalBeforeVAT, [
+            totalBeforeVAT: this.fbd.control(this.currencyPipe.transform(data.totalBeforeVAT,'VND','')?.replaceAll(',','.'), [
               Validators.required,
               Validators.pattern(parttern_input.number_form),
             ]),
-            totalAfterVAT: this.fbd.control(data.totalAfterVAT, [
+            totalAfterVAT: this.fbd.control(this.currencyPipe.transform(data.totalAfterVAT,'VND','')?.replaceAll(',','.'), [
               Validators.required,
               Validators.pattern(parttern_input.number_form),
             ]),
@@ -304,10 +304,13 @@ export class AdminAddPackComponent implements OnInit {
       status: this.addForm.value.status,
     };
 
-    console.log("typeof vat ", typeof dataForm.totalBeforeVAT);
+    if(dataForm.totalBeforeVAT >= 5) {
+      dataForm.totalBeforeVAT = dataForm.totalBeforeVAT.replaceAll('.','');
+    }
 
-    dataForm.totalBeforeVAT = dataForm.totalBeforeVAT.replaceAll('.','');
-    dataForm.totalAfterVAT = dataForm.totalAfterVAT.replaceAll('.','');
+    if(dataForm.totalAfterVAT >= 5) {
+      dataForm.totalAfterVAT = dataForm.totalAfterVAT.replaceAll('.','');
+    }
 
     if (this.addForm.value.calc == 1) {
       dataForm.calc = 'BY_TIME';
