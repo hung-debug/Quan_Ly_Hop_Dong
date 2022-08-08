@@ -10,15 +10,14 @@
           <span class="required-title">*</span>
         </div>
         <p-dropdown
-          placeholder="Chọn gói dịch vụ"
-          filterBy="code"
-          [filter]="true"
-          [showClear]="true"
-          [options]="listDichVu"
-          optionLabel="code"
-          optionValue="code"
-          (onChange)="onChangeMaGoi($event)"
-          formControlName="packCode"
+        placeholder="Chọn gói dịch vụ"
+        filterBy="code"
+        [showClear]="true"
+        [options]="listDichVu"
+        optionLabel="code"
+        optionValue="code"
+        (onChange)="onChangeMaGoi($event)"
+        formControlName="packCode"
         >
         </p-dropdown>
         <div *ngIf="submitted && f.packCode.errors" class="invalid">

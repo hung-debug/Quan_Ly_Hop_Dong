@@ -115,6 +115,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
     this.sign_time = this.datas.sign_time ? moment(this.datas.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
     this.notes = this.datas.notes ? this.datas.notes : null;
+
+    this.expire_time = this.datas.expire_time;
+
     if (this.datas.file_name_attach) {
       this.datas.attachFileNameArr = this.datas.file_name_attach;
       let isAttachFileClone = JSON.parse(JSON.stringify(this.datas.attachFileNameArr));

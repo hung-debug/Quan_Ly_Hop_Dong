@@ -294,8 +294,8 @@ export class AdminAddPackComponent implements OnInit {
       id: this.data.id,
       code: this.addForm.value.code,
       name: this.addForm.value.name,
-      totalBeforeVAT: this.addForm.value.totalBeforeVAT.replaceAll('.',''),
-      totalAfterVAT: this.addForm.value.totalAfterVAT.replaceAll('.',''),
+      totalBeforeVAT: this.addForm.value.totalBeforeVAT,
+      totalAfterVAT: this.addForm.value.totalAfterVAT,
       calc: this.addForm.value.calc,
       type: this.addForm.value.type,
       time: this.addForm.value.time,
@@ -303,6 +303,11 @@ export class AdminAddPackComponent implements OnInit {
       describe: this.addForm.value.describe,
       status: this.addForm.value.status,
     };
+
+    console.log("typeof vat ", typeof dataForm.totalBeforeVAT);
+
+    dataForm.totalBeforeVAT = dataForm.totalBeforeVAT.replaceAll('.','');
+    dataForm.totalAfterVAT = dataForm.totalAfterVAT.replaceAll('.','');
 
     if (this.addForm.value.calc == 1) {
       dataForm.calc = 'BY_TIME';

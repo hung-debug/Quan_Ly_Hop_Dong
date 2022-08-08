@@ -20,7 +20,8 @@ export class AdminAddPackUnitComponent implements OnInit {
   addForm: FormGroup;
 
   datas: any;
-  listDichVu: any[];
+  listDichVu:  Array<any> = [];
+
   listPaidType: Array<any> = [];
   listStatusType: Array<any> = [];
 
@@ -91,7 +92,6 @@ export class AdminAddPackUnitComponent implements OnInit {
   ngOnInit(): void {
     this.listPaidType = paidTypeList;
     this.listStatusType = paidStatusList;
-    this.getPackList();
 
     if (this.data.idPack == null) {
       this.addForm = this.fbd.group({
@@ -152,6 +152,8 @@ export class AdminAddPackUnitComponent implements OnInit {
           console.log('start date ', this.addForm.value.startDate);
         });
     }
+
+    this.getPackList();
   }
   checkNullEndDate(endDate: string): any {
     if (endDate != null) {
@@ -211,11 +213,14 @@ export class AdminAddPackUnitComponent implements OnInit {
     return '';
   }
 
-  getPackList(): any {
+  getPackList() {
     this.adminPackService
       .getPackListComboBox('', '', '', '', '', '', '')
-      .subscribe((response) => {
+      .subscribe(response => {
+        console.log("response dich vu ",response);
+
         this.listDichVu = response;
+
       });
   }
 
