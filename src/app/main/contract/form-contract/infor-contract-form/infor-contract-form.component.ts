@@ -87,6 +87,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    console.log("datas form ", this.datasForm);
     this.spinner.hide();
     let dataRouter = this.route.params.subscribe((params: any) => {
       this.action = params.action;
@@ -95,6 +96,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     })
 
     this.datasForm.sign_time = this.datasForm.sign_time ? moment(this.datasForm.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
+
     // this.datasForm.type_id = this.datasForm.type_id ? this.datasForm.type_id : null;
     this.contractConnect = this.datasForm.contractConnect ? this.datasForm.contractConnect : null;
     if (this.datasForm.fileAttachForm && this.datasForm.fileAttachForm.length > 0) {

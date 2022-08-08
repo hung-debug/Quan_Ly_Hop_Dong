@@ -114,6 +114,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
     this.sign_time = this.datas.sign_time ? moment(this.datas.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
+    this.expire_time = this.datas.contract_expire_time ? moment(this.datas.contract_expire_time).toDate() : moment(new Date()).add(30, 'day').toDate();
 
     this.notes = this.datas.notes ? this.datas.notes : null;
 
@@ -761,7 +762,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.datas.contract_no = this.contract_no;
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
-      this.datas.expire_time = this.expire_time;
+      this.datas.contract_expire_time = this.expire_time;
 
       this.defineData(this.datas);
       const fileReader = new FileReader();
@@ -835,6 +836,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   defineData(datas: any) {
     this.datas.name = this.name;
     this.datas.sign_time = this.sign_time;
+    this.datas.expire_time = this.expire_time;
 
     if (this.datas.contract_no == '') {
       this.datas.contract_no = null;
