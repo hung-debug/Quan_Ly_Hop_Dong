@@ -136,10 +136,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   }
 
-  // ngOnDestroy(): void {
-  //   this.subscription.unsubscribe(); // onDestroy cancels the subscribe request
-  // }
-
   ngAfterViewInit() {
     setTimeout(() => {
       this.nameContract.nativeElement.focus();
@@ -763,6 +759,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.datas.contract_no = this.contract_no;
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
+      this.datas.expire_time = this.expire_time;
       this.defineData(this.datas);
       const fileReader = new FileReader();
       if (this.datas.is_action_contract_created) {

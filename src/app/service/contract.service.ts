@@ -210,6 +210,10 @@ export class ContractService {
   }
 
   addContractStep1(datas: any, id?: any, type_form?: string) {
+    console.log("datas contract step 1 ", datas);
+
+    console.log("type form ", type_form);
+
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -225,7 +229,8 @@ export class ContractService {
       refs: datas.contractConnect,
       type_id: datas.type_id,
       is_template: type_form ? true : false,
-      template_contract_id: type_form ? datas.template_contract_id : null
+      template_contract_id: type_form ? datas.template_contract_id : null,
+      contract_expire_time: this.datepipe.transform(datas.expire_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
     });
 
     console.log("body add contract step 1",body);
