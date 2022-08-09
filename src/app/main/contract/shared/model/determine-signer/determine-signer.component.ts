@@ -88,7 +88,6 @@ export class DetermineSignerComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private unitService: UnitService,
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
@@ -98,6 +97,9 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    console.log("datas clone ", this.datas.is_determine_clone);
+
     this.user = this.userService.getInforUser();
   
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
@@ -113,8 +115,6 @@ export class DetermineSignerComponent implements OnInit {
     this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];
 
     this.data_organization.name = this.datas.name_origanzation ? this.datas.name_origanzation : '';
-
-    this.myTaxCode = this.data_organization.tax_code;
 
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
@@ -180,7 +180,7 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3)
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
-        console.log("vao day ");
+        // console.log("abc");
     })
     this.spinner.show();
     // let isCheckId = this.datas.is_determine_clone.filter((p: any) => p.id);
@@ -244,9 +244,21 @@ export class DetermineSignerComponent implements OnInit {
       this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000)
       void this.router.navigate(['/main/contract/create/draft']);
     } else if (!this.saveDraftStep || is_save) {
+      console.log("next or previous step ");
+
+      console.log("res ",res);
+      console.log("data clone 1 ", this.datas.is_determine_clone);
+
       this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;
+
+      console.log("data clone 2 ", this.datas.is_determine_clone);
+
       this.step = variable.stepSampleContract.step3;
+
       this.datas.stepLast = this.step;
+
+      console.log("data clone 3 ", this.datas.is_determine_clone);
+
       this.nextOrPreviousStep(this.step);
     }
   }
@@ -254,6 +266,9 @@ export class DetermineSignerComponent implements OnInit {
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
+
+    console.log("data clone 4 ", this.datas.is_determine_clone);
+
     this.stepChangeDetermineSigner.emit(step);
   }
 
@@ -366,47 +381,44 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   selectWithOtp(e: any, data: any, action?: boolean) { // sort ordering
+    console.log("data ", data);
 
-    // this.changeOtp(data);
     //clear lai gia tri card_id
-    if (this.getDataSignEkyc(data).length == 0) {
-      data.card_id = "";
+    //Check với tổ chức của tôi ký
+    if(data.type == 'organization') {
+      //Nếu là người ký
+      if(data.role == 3) {
+        if(this.getDataSignHsm(data).length == 0 || this.getDataSignUSBToken(data).length == 0) {
+          data.card_id = "";
+        }
+      } 
+      //Nếu là văn thư
+      else if(data.role == 4) {
+        if(this.getDataSignUSBToken(data).length == 0) {
+          data.card_id = "";
+        }
+      }
+    } else if(data.type == 'partner') {
+      //Nếu là đối tác tổ chức
+      if(data.type == 2) {
+          //Nếu là người ký
+        if(data.role == 3) {
+          if(this.getDataSignHsm(data).length == 0 || this.getDataSignUSBToken(data).length == 0) {
+            data.card_id = "";
+          }
+        } 
+        //Nếu là văn thư
+        else if(data.role == 4) {
+          if(this.getDataSignUSBToken(data).length == 0) {
+            data.card_id = "";
+          }
+        }
+      } else if(data.type == 3) {
+        if(this.getDataSignUSBToken(data).length == 0 || this.getDataSignEkyc(data).length == 0) {
+          data.card_id = "";
+        }
+      }
     }
-    //  <=========>
-    // if (e.length > 0) {
-    //   var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
-    //   var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
-    //   // <==========>
-    //   if (isParnter.length > 0) {
-    //     for (let i = 0; i < 2; i++) {
-    //       this.getSetOrderingPersonal(isParnter, i);
-    //     }
-    //   }
-    //   // for loop check change ordering with parnter origanization
-    //   this.getSetOrderingParnterOrganization(isOrganization);
-    //   // set again ordering data not option eKYC/img/otp => order
-    //   // var setOrderingOrganization =
-    //   var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && (p.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3) || p.recipients[0].sign_type.length == 0));
-    //   var setOrderingParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3 && p.recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5));
-    //   // if (setOrderingParnter.length > 0) {
-    //   if (setOrderingParnter.length == 0) {
-    //     this.data_organization.ordering = 1;
-    //     setOrdering.forEach((val: any, index: number) => {
-    //       val.ordering = index + 2; // + 2 (1: index & 1 index tổ chức của tôi) vì sẽ luôn luôn order sau tổ chức của tôi nếu trong các bên ko có dữ liệu ký eKYC/Image/OTP.
-    //     })
-    //   } else {
-    //     this.data_organization.ordering = setOrderingParnter.length + 1;
-    //     setOrdering.forEach((val: any, index: number) => {
-    //       // val.ordering = setOrderingParnter.length > 0 ? (setOrderingParnter.length + index + 1) : (index + 1);
-    //       // val.ordering = setOrderingParnter.length > 0 ? (this.data_organization.ordering + index + 1) : (index + 1);
-    //       val.ordering = this.data_organization.ordering + index + 1; // tăng lên 1 ordering sau tổ chức của tôi
-    //     })
-    //   }
-    //
-    //   // }
-    //   // console.log(setOrdering, setOrderingParnter.length)
-    //   this.checkCount = 1; // gan lai de lan sau ko bi tang index
-    // }
   }
 
   getSetOrderingPersonal(isParnter: any, index: number): void {
@@ -1228,6 +1240,7 @@ export class DetermineSignerComponent implements OnInit {
       valueSoFar[value] = true;
     }
     return false;
+
   }
 
   getNotificationValid(is_notify: string) {
@@ -1312,7 +1325,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo mảng người ký đối tác tổ chức
   getPartnerSignature(item: any) {
-    return item.recipients.filter((p: any) => p.role == 3)
+    return item.recipients.filter((p: any) => p.role == 3);
   }
 
   // tạo mảng đối tượng văn thư tổ chức của tôi

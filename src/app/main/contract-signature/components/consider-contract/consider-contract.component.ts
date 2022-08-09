@@ -1611,9 +1611,27 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         
         //Lấy thông tin mã số thuế của đối tác ký bằng USB Token
         this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
-          this.taxCodePartnerStep2 = response.recipients[0].fields[0].recipient.cardId;
 
-          console.log("tax code ", this.taxCodePartnerStep2);
+          console.log("sign rec ", sign.recipient_id);
+
+          console.log("vao day ");
+          const lengthRes = response.recipients.length;
+          for(let i = 0; i < lengthRes; i++) {
+
+            console.log("vao vong for ");
+    
+            const id = response.recipients[i].id;
+            
+            if(id == sign.recipient_id) {
+              console.log("vao doan check ");
+
+              console.log("res f ", response.recipients[i].fields[0]);
+              this.taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
+              console.log("tax code ", this.taxCodePartnerStep2);
+
+              break;
+            }
+          }
         })
 
         return sign;

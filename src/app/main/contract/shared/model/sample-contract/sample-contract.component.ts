@@ -100,7 +100,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.step = variable.stepSampleContract.step3
   }
 
+  temp: any[];
   ngOnInit() {
+    this.temp = this.datas.is_determine_clone;
+
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
@@ -775,6 +778,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // view pdf qua canvas
   async getPage() {
+    console.log("sample contract ", this.datas);
+
     // @ts-ignore
     const pdfjs = await import('pdfjs-dist/build/pdf');
     // @ts-ignore
@@ -1259,6 +1264,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // }
 
   back(e: any, step?: any) {
+    console.log("back step 3 ", this.temp);
+
     this.nextOrPreviousStep(step);
   }
 
@@ -1445,6 +1452,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   nextOrPreviousStep(step: string) {
     // this.getRemoveCopyRight();
     this.datas.stepLast = step;
+
     this.stepChangeSampleContract.emit(step);
   }
 
