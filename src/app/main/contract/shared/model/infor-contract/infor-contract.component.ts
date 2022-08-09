@@ -72,7 +72,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   sign_time: Date;
   notes: any;
   filePath: any;
-  expire_time: Date;
+  expire_time: any;
 
   attachFileArr: any[] = [];
   attachFileNameArr: any[] = [];
@@ -114,7 +114,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
     this.sign_time = this.datas.sign_time ? moment(this.datas.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
-    this.expire_time = this.datas.contract_expire_time ? moment(this.datas.contract_expire_time).toDate() : moment(new Date()).add(30, 'day').toDate();
+    this.expire_time = this.datas.contract_expire_time ? moment(this.datas.contract_expire_time).toDate() : null;
 
     this.notes = this.datas.notes ? this.datas.notes : null;
 
