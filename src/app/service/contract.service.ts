@@ -456,6 +456,8 @@ export class ContractService {
   }
 
   getContractDetermine(data_determine: any, id: any) {
+    console.log("data_determine ",data_determine);
+
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')

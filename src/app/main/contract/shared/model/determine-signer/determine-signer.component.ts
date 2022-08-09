@@ -497,7 +497,6 @@ export class DetermineSignerComponent implements OnInit {
 
   // valid data step 2
   validData() {
-    console.log("my tax code ", this.myTaxCode);
 
     let count = 0;
     let dataArr = [];
@@ -567,31 +566,33 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       // valid cccd number
-      if (dataArr[i].card_id && !this.pattern.card_id.test(dataArr[i].card_id)) {
+      if (dataArr[i].card_id && !this.pattern.card_id.test(dataArr[i].card_id) && dataArr[i].sign_type.filter((p: any) => p.id == 5).length > 0) {
         this.getNotificationValid("CMT/CCCD của" + this.getNameObjectValid(3) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
       }
 
-      if (!dataArr[i].tax_code && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0) {
+      if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0) {
+        console.log("vao day validate ");
+        console.log("data ", dataArr[i].card_id)
         this.getNotificationValid("Vui lòng nhập mã số thuế của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;
       }
 
-      if(dataArr[i].tax_code && dataArr[i].role == 3 && !this.pattern_input.taxCode_form.test(dataArr[i].tax_code)) {
+      if(dataArr[i].card_id && dataArr[i].role == 3 && !this.pattern_input.taxCode_form.test(dataArr[i].card_id) && dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0) {
         this.getNotificationValid("Mã số thuế của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
       }
 
-      if(!dataArr[i].uid && (dataArr[i].role == 3 || dataArr[i].role == 4) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0) {
+      if(!dataArr[i].card_id && (dataArr[i].role == 3 || dataArr[i].role == 4) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0) {
         this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObjectValid(dataArr[i].role)+"tổ chức của tôi");
         count++;
         break;
       }
 
-      if(dataArr[i].uid && (!this.pattern.card_id.test(dataArr[i].uid || !this.pattern_input.taxCode_form.test(dataArr[i].uid)))) {
+      if(dataArr[i].card_id && (!this.pattern.card_id.test(dataArr[i].card_id || !this.pattern_input.taxCode_form.test(dataArr[i].card_id))) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0) {
         this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!");
         count++;
         break;
@@ -709,31 +710,31 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             // valid cccd number
-            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id)) {
+            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObjectValid(3) + "của đối tác không hợp lệ!")
               count++;
               break;
             }
 
-            if(!isParterSort[k].uid && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+            if(!isParterSort[k].card_id && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
               this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObjectValid(isParterSort[k].role)+"tổ chức của đối tác");
               count++;
               break;
             }
       
-            if(isParterSort[k].uid && (!this.pattern.card_id.test(isParterSort[k].uid || !this.pattern_input.taxCode_form.test(isParterSort[k].uid)))) {
+            if(isParterSort[k].card_id && (!this.pattern.card_id.test(isParterSort[k].card_id || !this.pattern_input.taxCode_form.test(isParterSort[k].card_id))) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
               this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
               count++;
               break;
             }
 
-            if(!isParterSort[k].tax_code && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
+            if(!isParterSort[k].card_id && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
               this.getNotificationValid("Vui lòng nhập mã số thuế của"+this.getNameObjectValid(isParterSort[k].role)+"tổ chức của đối tác");
               count++;
               break;
             }
       
-            if(isParterSort[k].tax_code && !this.pattern_input.taxCode_form.test(isParterSort[k].tax_code)) {
+            if(isParterSort[k].tax_code && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
               this.getNotificationValid("Mã số thuế của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
               count++;
               break;
@@ -775,13 +776,13 @@ export class DetermineSignerComponent implements OnInit {
               }
               isPartnerCaNhanDuplicate = [];
 
-              if(!isParterSort[k].uid && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+              if(!isParterSort[k].card_id && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
                 this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObjectValid(isParterSort[k].role)+"của đối tác cá nhân");
                 count++;
                 break;
               }
         
-              if(isParterSort[k].uid && (!this.pattern.card_id.test(isParterSort[k].uid || !this.pattern_input.taxCode_form.test(isParterSort[k].uid)))) {
+              if(isParterSort[k].card_id && (!this.pattern.card_id.test(isParterSort[k].card_id || !this.pattern_input.taxCode_form.test(isParterSort[k].card_id))) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
                 this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!");
                 count++;
                 break;
@@ -800,13 +801,6 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-            //@ts-ignore
-            // if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
-            //   this.getNotificationValid("Tên" + this.getNameObjectValid(dataArrPartner[j].recipients[k].role) + " đối tác cá nhân không hợp lệ!");
-            //   count++;
-            //   break;
-            // }
-            //@ts-ignore
             if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email) && isParterSort[k].role == 3) {
               this.getNotificationValid("Email" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
               count++;
@@ -821,7 +815,7 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             // valid cccd number
-            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id)) {
+            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObjectValid(3) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;
@@ -940,9 +934,9 @@ export class DetermineSignerComponent implements OnInit {
       for (let i = 0; i < dataValid.length; i++) {
         const element = dataValid[i].recipients;
         for (let j = 0; j < element.length; j++) {
-          if (element[j].uid) {
+          if (element[j].card_id) {
             let items = {
-              email: element[j].uid,
+              email: element[j].card_id,
               role: element[j].role,
               type: dataValid[i].type,
               ordering: dataValid[i].ordering
@@ -975,8 +969,8 @@ export class DetermineSignerComponent implements OnInit {
 
     } else {
       for (let i = 0; i < dataValid.length; i++) {
-        if (dataValid[i].uid) {
-          arrCheckTaxCode.push(dataValid[i].uid);
+        if (dataValid[i].card_id) {
+          arrCheckTaxCode.push(dataValid[i].card_id);
         }
       }
     }
@@ -1001,9 +995,9 @@ export class DetermineSignerComponent implements OnInit {
       for (let i = 0; i < dataValid.length; i++) {
         const element = dataValid[i].recipients;
         for (let j = 0; j < element.length; j++) {
-          if (element[j].tax_code) {
+          if (element[j].card_id) {
             let items = {
-              email: element[j].tax_code,
+              email: element[j].card_id,
               role: element[j].role,
               type: dataValid[i].type,
               ordering: dataValid[i].ordering
@@ -1036,8 +1030,8 @@ export class DetermineSignerComponent implements OnInit {
 
     } else {
       for (let i = 0; i < dataValid.length; i++) {
-        if (dataValid[i].tax_code) {
-          arrCheckTaxCode.push(dataValid[i].tax_code);
+        if (dataValid[i].card_id) {
+          arrCheckTaxCode.push(dataValid[i].card_id);
         }
       }
     }
