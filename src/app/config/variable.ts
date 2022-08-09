@@ -74,11 +74,11 @@ export const type_signature_personal_party = [
 ];
 
 export const type_signature_doc = [
-  {
-    id: 1,
-    name: 'Ký ảnh và OTP',
-    is_otp: false,
-  },
+  // {
+  //   id: 1,
+  //   name: 'Ký ảnh và OTP',
+  //   is_otp: false,
+  // },
   {
     id: 2,
     name: 'Ký số bằng USB token',
