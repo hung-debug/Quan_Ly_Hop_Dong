@@ -113,11 +113,32 @@
             </div>
           </div>
           <div>
+
+            <!--Mã số thuế hsm-->
+            <div class="row">
+              <div class="col-md-12">
+                <div>{{'Mã số thuế' | translate}}</div>
+                <div>
+                      <div [innerHTML]="taxCodeHsm" class="input_text"></div>
+                  </div>
+              </div>
+            </div>
+
+            <!--Tên người dùng hsm-->
             <div class="row">
               <div class="col-md-12">
                 <div>{{'user.name.v2' | translate}}</div>
                 <div>
                       <div [innerHTML]="nameHsm" class="input_text"></div>
+                  </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div>{{'Mật khẩu cấp 1' | translate}}</div>
+                <div>
+                      <div [innerHTML]="password1Hsm" class="input_text"></div>
                   </div>
               </div>
             </div>

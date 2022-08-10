@@ -182,17 +182,41 @@
             </div>
           </div>
           <div>
-            <div class="row">
-              <div class="col-md-12">
-                <div>{{'user.name.v2' | translate}}</div>
-                <div class="input-data">
-                  <input type="text" formControlName="nameHsm">
-                </div>
-                <div *ngIf="submitted && f.nameHsm.errors" class="invalid">
-                  <div *ngIf="f.nameHsm.errors.pattern">{{'Tên người dùng không được chứa ký tự đặc biệt' | translate}}</div>
-                </div>
+           <!--Mã số thuế hsm-->
+           <div class="row">
+            <div class="col-md-12">
+              <div>{{'Mã số thuế' | translate}}</div>
+              <div class="input-data">
+                <input type="text" formControlName="taxCodeHsm">
+              </div>
+              <div *ngIf="submitted && f.taxCodeHsm.errors" class="invalid">
+                <div *ngIf="f.taxCodeHsm.errors.pattern">{{'Mã số thuế không đúng định dạng' | translate}}</div>
               </div>
             </div>
+          </div>
+
+          <!--Tên người dùng hsm-->
+          <div class="row">
+            <div class="col-md-12">
+              <div>{{'user.name.v2' | translate}}</div>
+              <div class="input-data">
+                <input type="text" formControlName="nameHsm">
+              </div>
+              <div *ngIf="submitted && f.nameHsm.errors" class="invalid">
+                <div *ngIf="f.nameHsm.errors.pattern">{{'Tên người dùng không được chứa ký tự đặc biệt' | translate}}</div>
+              </div>
+            </div>
+          </div>
+
+          <!--Mật khẩu cấp 1 hsm-->
+          <div class="row">
+            <div class="col-md-12">
+              <div>{{'Mật khẩu cấp 1' | translate}}</div>
+              <div class="input-data">
+                <input type="text" formControlName="password1Hsm">
+              </div>
+            </div>
+          </div>
           </div>
         </div>
       </div>

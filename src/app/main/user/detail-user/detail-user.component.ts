@@ -25,6 +25,9 @@ export class DetailUserComponent implements OnInit {
   networkKpi:any="";
 
   nameHsm:any="";
+  taxCodeHsm:any="";
+  password1Hsm:any="";
+
   imgSignPCSelect:any
 
   action: string;

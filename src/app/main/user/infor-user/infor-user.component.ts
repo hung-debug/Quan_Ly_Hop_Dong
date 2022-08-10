@@ -80,7 +80,9 @@ export class InforUserComponent implements OnInit {
       });
    
       this.addHsmForm = this.fbd.group({
-        nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form))
+        nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+        taxCodeHsm: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
+        password1Hsm: null
       });
 
  }

@@ -142,7 +142,11 @@ export class ConfirmSignOtpComponent implements OnInit {
           "content": signUpdate.valueSign,
           organizationId: this.datas?.is_data_contract?.organization_id
         }
+
         signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
+
+        console.log("signuploadobs ", signUploadObs$);
+
         indexSignUpload.push(iu);
       }
       iu++;
@@ -184,16 +188,24 @@ export class ConfirmSignOtpComponent implements OnInit {
           }
         });
     }else{
+      console.log("chu ky anh ");
+
       this.userOtp = this.datasOtp.name;
       this.phoneOtp = this.datasOtp.phone;
       this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
       await of(null).pipe(delay(100)).toPromise();
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
+
+      console.log("imageRender ",imageRender);
       
       let signI:any;
       if (imageRender) {
         const textSignB = await domtoimage.toPng(imageRender);
+
+        console.log("textSignB ", textSignB);
         signI = textSignB.split(",")[1];
+
+        console.log("signI ",signI);
       }
       //console.log(signI);
       //console.log(this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'));
@@ -214,6 +226,7 @@ export class ConfirmSignOtpComponent implements OnInit {
               }]
           }
         });
+      console.log("sign update payload ",signUpdatePayload);
       if(signUpdatePayload){
         signUpdatePayload = signUpdatePayload[0];
       }
@@ -321,8 +334,11 @@ export class ConfirmSignOtpComponent implements OnInit {
       //   }
       // )
     }else{
+      console.log("signupdatetempn ", signUpdateTempN);
+      console.log("recipient_id ", this.datasOtp.recipient_id);
       this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.datasOtp.recipient_id).subscribe(
         async (result) => {
+          console.log("result ",result);
           if(result?.success == false){
             if(result.message == 'Wrong otp'){
               this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng', '', 3000);
@@ -346,6 +362,7 @@ export class ConfirmSignOtpComponent implements OnInit {
               //await this.signDigitalDocument();
             }
             setTimeout(() => {
+              console.log("vao day ky hop dong thanh cong ");
               this.router.navigate(['/main/form-contract/detail/' + this.datasOtp.contract_id]);
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'

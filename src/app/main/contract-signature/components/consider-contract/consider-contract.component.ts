@@ -317,6 +317,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
         if (pdfC2) {
           fileC = pdfC2.path;
+
+          console.log("fileC pdf2 ", fileC);
         } else if (pdfC1) {
           fileC = pdfC1.path;
         } else {
@@ -324,6 +326,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         }
         this.pdfSrc = fileC;
       }
+
       // render pdf to canvas
       this.getPage();
       this.loaded = true;
@@ -371,6 +374,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
+      console.log("pdf ",pdf);
       this.thePDF = pdf;
       this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)
       this.removePage();

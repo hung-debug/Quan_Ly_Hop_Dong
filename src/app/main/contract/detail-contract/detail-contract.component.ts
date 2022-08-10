@@ -138,7 +138,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         }
       );
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
-      console.log(rs);
+      console.log("rs ",rs);
       this.isDataContract = rs[0];
       this.isDataFileContract = rs[1];
       this.isDataObjectSignature = rs[2];
