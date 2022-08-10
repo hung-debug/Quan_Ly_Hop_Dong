@@ -213,6 +213,8 @@ export class UserService {
     }
     console.log(datas.sign_image);
 
+    console.log("datas update user ", datas);
+
     const body = JSON.stringify({
       name: datas.name,
       email: datas.email,
@@ -228,11 +230,15 @@ export class UserService {
       phone_tel: datas.networkKpi,
 
       hsm_name: datas.nameHsm,
+      tax_code: datas.taxCodeHsm,
+      hsm_pass: datas.password1Hsm,
 
       organization_change: datas.organization_change,
     });
     console.log(headers);
     console.log(body);
+
+    console.log("id ",datas.id);
     return this.http.put<User>(this.updateUserUrl + datas.id, body, {
       headers: headers,
     });

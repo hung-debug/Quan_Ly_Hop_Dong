@@ -143,7 +143,9 @@ export class InforUserComponent implements OnInit {
         });
 
         this.addHsmForm = this.fbd.group({
-          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form))
+          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form)),
+          taxCodeHsm: this.fbd.control(data.tax_code, Validators.pattern(parttern_input.taxCode_form)),
+          password1Hsm: this.fbd.control(data.hsm_pass)
         });
         console.log(data);
         this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
@@ -164,7 +166,9 @@ export class InforUserComponent implements OnInit {
           networkKpi: data.phone_tel
         });
         this.addHsmFormOld = this.fbd.group({
-          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form))
+          nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form)),
+          taxCodeHsm: this.fbd.control(data.tax_code, Validators.pattern(parttern_input.taxCode_form)),
+          password1Hsm: this.fbd.control(data.hsm_pass)
         });
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
@@ -358,9 +362,14 @@ export class InforUserComponent implements OnInit {
       phoneKpi: this.addKpiForm.value.phoneKpi,
       networkKpi: this.addKpiForm.value.networkKpi,
 
-      nameHsm: this.addHsmForm.value.nameHsm
+      nameHsm: this.addHsmForm.value.nameHsm,
+      taxCodeHsm: this.addHsmForm.value.taxCodeHsm,
+      password1Hsm: this.addHsmForm.value.password1Hsm
 
     }
+
+    console.log("data update sign user ", data);
+
     //ham update
     this.updateSign(data);
   }
