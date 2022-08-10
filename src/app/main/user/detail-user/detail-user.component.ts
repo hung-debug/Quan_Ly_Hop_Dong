@@ -92,6 +92,8 @@ export class DetailUserComponent implements OnInit {
           this.networkKpi = data.phone_tel;
 
           this.nameHsm = data.hsm_name;
+          this.taxCodeHsm = data.tax_code;
+          this.password1Hsm = data.hsm_pass;
 
           this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
           //set name

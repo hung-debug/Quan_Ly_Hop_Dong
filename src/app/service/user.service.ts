@@ -197,6 +197,8 @@ export class UserService {
       phone_tel: datas.networkKpi,
 
       hsm_name: datas.nameHsm,
+      tax_code: datas.taxCodeHsm,
+      hsm_pass: datas.password1Hsm,
     });
     console.log(headers);
     console.log(body);

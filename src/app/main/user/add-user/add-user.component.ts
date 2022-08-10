@@ -74,6 +74,8 @@ export class AddUserComponent implements OnInit {
       networkKpi: null,
 
       nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+      taxCodeHsm: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
+      password1Hsm: this.fbd.control(""),
 
       fileImage:null,
 
@@ -127,6 +129,8 @@ export class AddUserComponent implements OnInit {
             networkKpi: null,
 
             nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+            taxCodeHsm: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
+            password1Hsm: this.fbd.control(""),
 
             fileImage:null
           });
@@ -139,6 +143,7 @@ export class AddUserComponent implements OnInit {
         if(this.isQLND_02){
           this.userService.getUserById(this.id).subscribe(
             data => {
+              console.log("data ",data);
               if(data.role_id != null){
                 //lay vai tro cua user
                 this.roleService.getRoleById(data.role_id).subscribe(dataRoleUser => {
@@ -158,6 +163,8 @@ export class AddUserComponent implements OnInit {
                     networkKpi: data.phone_tel,
 
                     nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.input_form)),
+                    taxCodeHsm: this.fbd.control(data.tax_code,Validators.pattern(parttern_input.taxCode_form)),
+                    password1Hsm: this.fbd.control(data.hsm_pass),
 
                     fileImage:null,
 
@@ -379,6 +386,8 @@ export class AddUserComponent implements OnInit {
       phoneKpi: this.addForm.value.phoneKpi,
       networkKpi: this.addForm.value.networkKpi,
       nameHsm: this.addForm.value.nameHsm,
+      taxCodeHsm: this.addForm.value.taxCodeHsm,
+      password1Hsm: this.addForm.value.password1Hsm,
       fileImage: this.attachFile,
       sign_image: [],
       organization_change: this.addForm.value.organizationId!= this.orgIdOld?1:this.addForm.value.organization_change
