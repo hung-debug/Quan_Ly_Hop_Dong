@@ -270,10 +270,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       return false;
     }
 
-    if(this.expire_time == null || this.expire_time == undefined) {
-      return false;
-    }
-
     return true
   }
 
