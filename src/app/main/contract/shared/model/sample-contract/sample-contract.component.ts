@@ -207,7 +207,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     //keo o ky
     interact('.resize-drag').on('dragend', this.showEventInfo).draggable({
       listeners: {
-        move: this.dragMoveListener, 
+        move: this.dragMoveListener,
         onend: this.showEventInfo
       },
       inertia: true,
@@ -934,7 +934,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           (item.getBoundingClientRect().top >= 0) ||
           (item.getBoundingClientRect().bottom >= (window.innerHeight / 2)) &&
           (item.getBoundingClientRect().bottom <= window.innerHeight) &&
-          (item.getBoundingClientRect().top <= 0)) 
+          (item.getBoundingClientRect().top <= 0))
           {
           let page = item.id.split("-")[2];
           $('.page-canvas').css('border', 'none');
@@ -1467,7 +1467,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 name: element.name,
                 signature_party: element.signature_party,
                 recipient_id: element.recipient_id,
-                email: element.email ? element.email : element.recipient.email,
+                email: element.email || (element.recipient && element.recipient.email) || "",
                 sign_unit: element.sign_unit
               }
               if (element.signature_party == "organization" || element.is_type_party == 1)
