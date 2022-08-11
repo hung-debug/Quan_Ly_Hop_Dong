@@ -39,7 +39,9 @@ export class ContractService {
   listContractOrgUrl: any = `${environment.apiUrl}/api/v1/contracts/my-organization-contract`;
   listContractOrgChildrenUrl: any = `${environment.apiUrl}/api/v1/contracts/my-org-and-descendant-contract`;
   listContractMyProcessUrl: any = `${environment.apiUrl}/api/v1/contracts/my-process`;
+
   addContractUrl: any = `${environment.apiUrl}/api/v1/contracts`;
+
   addDetermineUrl: any = `${environment.apiUrl}/api/v1/participants/contract/`;
   addDetermineCoorditionUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
@@ -59,7 +61,7 @@ export class ContractService {
   uploadFileBase64Url: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
   currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
-  isDataDetermine: any = `${environment.apiUrl} /api/v1/participants/byRecipient/`;
+  isDataDetermine: any = `${environment.apiUrl}/api/v1/participants/byRecipient/`;
   signDigitalMobi: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
   getAccountSignDigital: any = `http://localhost:6704/api/mobi/getcert?mst=`;
   postSignDigital: any = `http://localhost:6704/api/mobi/signpdf`;
@@ -88,6 +90,8 @@ export class ContractService {
   updateInfoContractConsiderAndOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
   updateContractIsPushCeCAUrl: any = `${environment.apiUrl}/api/v1/contracts/ceca-push/`;
   getStatusSignImageOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
+
+  checkTaxCodeExistUrl: any = `${environment.apiUrl}/api/v1/contracts/check-mst-exist`;
 
   token: any;
   customer_id: any;
@@ -206,6 +210,10 @@ export class ContractService {
   }
 
   addContractStep1(datas: any, id?: any, type_form?: string) {
+    console.log("datas contract step 1 ", datas);
+
+    console.log("type form ", type_form);
+
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -221,13 +229,20 @@ export class ContractService {
       refs: datas.contractConnect,
       type_id: datas.type_id,
       is_template: type_form ? true : false,
-      template_contract_id: type_form ? datas.template_contract_id : null
+      template_contract_id: type_form ? datas.template_contract_id : null,
+      contract_expire_time: this.datepipe.transform(datas.expire_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
     });
+
+    console.log("body add contract step 1",body);
+
     if (id) {
+      console.log("vao day");
+
       return this.http.put<Contract>(this.addGetDataContract + id, body, { 'headers': headers })
         .pipe(
           map((contract) => {
             if (JSON.parse(JSON.stringify(contract)).id != 0) {
+              console.log("contract ",contract);
               return contract;
             } else {
               return null;
@@ -236,10 +251,13 @@ export class ContractService {
           catchError(this.handleError)
         );
     } else {
+      console.log("post contract ");
+
       return this.http.post<Contract>(this.addContractUrl, body, { 'headers': headers })
         .pipe(
           map((contract) => {
             if (JSON.parse(JSON.stringify(contract)).id != 0) {
+              console.log("contract ",contract);
               return contract;
             } else {
               return null;
@@ -322,10 +340,33 @@ export class ContractService {
       .append('Connection', 'keep-alive')
       .append('Sec-Fetch-Site', 'cross-site');
     // return this.http.get<any>(this.getAccountSignDigital, {'headers': headers});
+
+    console.log("get account sign digital ", this.getAccountSignDigital);
     return axios.get(this.getAccountSignDigital, config);
   }
 
+  checkTaxCodeExist(taxCode: any, certB64: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    console.log("tax code ", taxCode);
+    console.log("certB64 ", certB64);
+    
+    const body = JSON.stringify({
+      mst: taxCode,
+      certB64: certB64
+    });
+
+    console.log("body ", body);
+
+    return this.http.post<any>(this.checkTaxCodeExistUrl, body,{'headers':headers});
+  }
+
   postSignDigitalMobi(signCertDigital: any, imgSignGen: any) {
+    console.log("signCertDigital ", signCertDigital);
+
     this.getCurrentUser();
     let config = {
       headers: {
@@ -349,6 +390,9 @@ export class ContractService {
       typeSign: "4",
       //algDigest: "SHA_256"
     };
+
+    console.log("dataPost ",dataPost);
+
     return axios.post(this.postSignDigital, dataPost, config);
     // console.log(datePost);
     // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
@@ -412,6 +456,8 @@ export class ContractService {
   }
 
   getContractDetermine(data_determine: any, id: any) {
+    console.log("data_determine ",data_determine);
+
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -606,7 +652,10 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<File>(this.isDataDetermine + idCoordination, { headers }).pipe();
+
+      console.log("url ", this.isDataDetermine + idCoordination);
+
+    return this.http.get<any>(this.isDataDetermine + idCoordination, { headers }).pipe();
   }
 
   changeStatusContract(id: any, statusNew: any, reason: any) {
@@ -1133,7 +1182,7 @@ export class ContractService {
             "status": 0,
             "is_otp": 0,
             "sign_type": [
-            ]
+            ],
           }
         ],
       },
@@ -1152,7 +1201,7 @@ export class ContractService {
             "ordering": 1,
             "status": 0,
             "is_otp": 0,
-            "sign_type": []
+            "sign_type": [],
           }
         ],
       },

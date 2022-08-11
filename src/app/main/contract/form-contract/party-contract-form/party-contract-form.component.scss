@@ -239,6 +239,34 @@
         border: 1px solid #106DB6;
       }
     }
+
+    .contract__content--title-doi-tac {
+      display: flex;
+      color: #106DB6;
+      align-items: center;
+      margin-bottom: 8px;
+  
+      > div {
+        width: 158px;
+      }
+  
+      > input.input1 {
+        padding-left: 10px;
+        outline: none;
+        height: 37px;
+        width: 100%;
+        border-radius: 7px;
+        border: 1px solid #106DB6;
+      }
+      > input.input2 {
+        padding-left: 10px;
+        outline: none;
+        height: 37px;
+        width: 30%;
+        border-radius: 7px;
+        border: 1px solid #106DB6;
+      }
+    }
   
     .contract__content--participants {
       border-radius: 10px;

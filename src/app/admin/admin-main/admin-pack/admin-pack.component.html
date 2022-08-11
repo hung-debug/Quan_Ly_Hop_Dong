@@ -63,8 +63,8 @@
           <td>{{ list.code }}</td>
           <td>{{ list.duration }}</td>
           <td>{{ list.numberOfContracts }}</td>
-          <td>{{ list.totalBeforeVAT }}</td>
-          <td>{{ list.totalBeforeVAT }}</td>
+          <td>{{ getCurrencyFormat(list.totalBeforeVAT) }}</td>
+          <td>{{ getCurrencyFormat(list.totalAfterVAT) }}</td>
           <td
             *ngIf="
               !(this.editPackRole === false && this.deletePackRole === false)

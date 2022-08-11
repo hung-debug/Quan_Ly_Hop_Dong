@@ -86,6 +86,14 @@
           aria-placeholder="chọn ngày hết hạn" dateFormat="dd/mm/yy"></p-calendar>
       </div>
     </div>
+
+    <div class="form-group">
+      <div class="label_item">Ngày hết hiệu lực hợp đồng</div>
+      <div>
+        <p-calendar [(ngModel)]="this.datasForm.expire_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true"
+          aria-placeholder="chọn ngày hết hạn hợp đồng" dateFormat="dd/mm/yy"></p-calendar>
+      </div>
+    </div>
   </div>
 
   <div class="footer-infor-contract">

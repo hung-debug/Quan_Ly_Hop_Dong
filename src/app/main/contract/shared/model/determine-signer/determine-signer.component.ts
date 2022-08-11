@@ -6,7 +6,7 @@ import {
   type_signature_personal_party,
   variable
 } from "../../../../../config/variable";
-import {parttern} from "../../../../../config/parttern";
+import {parttern, parttern_input} from "../../../../../config/parttern";
 import {FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
 import {Helper} from "../../../../../core/Helper";
 import * as ContractCreateDetermine from '../../contract_data'
@@ -16,6 +16,8 @@ import {ToastService} from "../../../../../service/toast.service";
 import {Router} from "@angular/router";
 import {NgxInputSearchModule} from "ngx-input-search";
 import {HttpErrorResponse} from '@angular/common/http';
+import { UserService } from 'src/app/service/user.service';
+import { UnitService } from 'src/app/service/unit.service';
 
 @Component({
   selector: 'app-determine-signer',
@@ -36,6 +38,11 @@ export class DetermineSignerComponent implements OnInit {
   userForm: FormGroup;
   partnerForm: FormGroup
   submitted = false;
+
+  flagUSBToken = false;
+  flagUSBTokenMyOrg = false;
+  flagUSBTokenDocument = false;
+
   data_organization: any;
   data_parnter_organization: any = [];
   data_parnter_individual: any = [];
@@ -46,6 +53,7 @@ export class DetermineSignerComponent implements OnInit {
   checked: boolean = true;
   checkedChange: any = [];
   pattern = parttern;
+  pattern_input = parttern_input;
 
   is_determine_clone: any;
   toppings = new FormControl();
@@ -69,32 +77,45 @@ export class DetermineSignerComponent implements OnInit {
   checkCount = 1;
   isCountNext = 1;
 
+  user: any;
+  myTaxCode: any;
+  isEditable: boolean;
+  isListSignPerson: any;
+
   get determineContract() {
     return this.determineDetails.controls;
   }
 
   constructor(
-    private formBuilder: FormBuilder,
+    private userService: UserService,
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private router: Router
   ) {
     this.step = variable.stepSampleContract.step2
-    //this.datas.determineDetails = this.determineDetails;
   }
 
   ngOnInit(): void {
+
+    console.log("datas clone ", this.datas.is_determine_clone);
+
+    this.user = this.userService.getInforUser();
+  
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
+    this.isListSignPerson = this.signTypeList.filter((p) => ![4].includes(p.id));
+
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
-      // this.datas.is_determine_clone = null;
-      // this.datas.is_determine_clone = this.datas.determine_contract;
       this.datas.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
+
+      console.log("on init ", this.datas.is_determine_clone);
     }
 
     // data Tổ chức của tôi
     this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];
+
     this.data_organization.name = this.datas.name_origanzation ? this.datas.name_origanzation : '';
+
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
@@ -146,6 +167,7 @@ export class DetermineSignerComponent implements OnInit {
       }
       return;
     } else {
+      console.log("tiep theo buoc 2 sang buoc 3");
       let is_save = false;
       if (action == 'save-step') {
         is_save = true;
@@ -158,6 +180,7 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3)
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
+        // console.log("abc");
     })
     this.spinner.show();
     // let isCheckId = this.datas.is_determine_clone.filter((p: any) => p.id);
@@ -193,6 +216,9 @@ export class DetermineSignerComponent implements OnInit {
     //   this.spinner.hide()
     // } else {
     this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
+      console.log("this.datas.is_determine_clone ", this.datas.is_determine_clone);
+      console.log("datas id ", this.datas.id);
+      console.log("res get contract ", res);
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
         if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -218,9 +244,21 @@ export class DetermineSignerComponent implements OnInit {
       this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000)
       void this.router.navigate(['/main/contract/create/draft']);
     } else if (!this.saveDraftStep || is_save) {
+      console.log("next or previous step ");
+
+      console.log("res ",res);
+      console.log("data clone 1 ", this.datas.is_determine_clone);
+
       this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;
+
+      console.log("data clone 2 ", this.datas.is_determine_clone);
+
       this.step = variable.stepSampleContract.step3;
+
       this.datas.stepLast = this.step;
+
+      console.log("data clone 3 ", this.datas.is_determine_clone);
+
       this.nextOrPreviousStep(this.step);
     }
   }
@@ -228,10 +266,15 @@ export class DetermineSignerComponent implements OnInit {
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
+
+    console.log("data clone 4 ", this.datas.is_determine_clone);
+
     this.stepChangeDetermineSigner.emit(step);
   }
 
-  onItemSelect(e: any) {
+  onItemSelect(e: any, data: any) {
+    console.log("event ",e);
+
     var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
     var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
     // <==========>
@@ -266,47 +309,116 @@ export class DetermineSignerComponent implements OnInit {
     this.checkCount = 1; // gan lai de lan sau ko bi tang index
   }
 
-  selectWithOtp(e: any, data: any, action?: boolean) { // sort ordering
-    // this.changeOtp(data);
-    //clear lai gia tri card_id
-    if (this.getDataSignEkyc(data).length == 0) {
-      data.card_id = "";
+  deSelectOrg(e: any) {
+    if(e.id == 2) {
+      this.flagUSBTokenMyOrg = false;
     }
-    //  <=========>
-    // if (e.length > 0) {
-    //   var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
-    //   var isOrganization = this.dataParnterOrganization().filter((p: any) => p.type == 2); // doi tac to chuc
-    //   // <==========>
-    //   if (isParnter.length > 0) {
-    //     for (let i = 0; i < 2; i++) {
-    //       this.getSetOrderingPersonal(isParnter, i);
-    //     }
-    //   }
-    //   // for loop check change ordering with parnter origanization
-    //   this.getSetOrderingParnterOrganization(isOrganization);
-    //   // set again ordering data not option eKYC/img/otp => order
-    //   // var setOrderingOrganization =
-    //   var setOrdering = this.dataParnterOrganization().filter((p: any) => p.type == 2 || p.type == 3 && (p.recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3) || p.recipients[0].sign_type.length == 0));
-    //   var setOrderingParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3 && p.recipients[0].sign_type.some(({id}: any) => id == 1 || id == 5));
-    //   // if (setOrderingParnter.length > 0) {
-    //   if (setOrderingParnter.length == 0) {
-    //     this.data_organization.ordering = 1;
-    //     setOrdering.forEach((val: any, index: number) => {
-    //       val.ordering = index + 2; // + 2 (1: index & 1 index tổ chức của tôi) vì sẽ luôn luôn order sau tổ chức của tôi nếu trong các bên ko có dữ liệu ký eKYC/Image/OTP.
-    //     })
-    //   } else {
-    //     this.data_organization.ordering = setOrderingParnter.length + 1;
-    //     setOrdering.forEach((val: any, index: number) => {
-    //       // val.ordering = setOrderingParnter.length > 0 ? (setOrderingParnter.length + index + 1) : (index + 1);
-    //       // val.ordering = setOrderingParnter.length > 0 ? (this.data_organization.ordering + index + 1) : (index + 1);
-    //       val.ordering = this.data_organization.ordering + index + 1; // tăng lên 1 ordering sau tổ chức của tôi
-    //     })
-    //   }
-    //
-    //   // }
-    //   // console.log(setOrdering, setOrderingParnter.length)
-    //   this.checkCount = 1; // gan lai de lan sau ko bi tang index
-    // }
+  }
+
+  selectPartnerDocument(e: any) {
+    if(e.id == 2) {
+      this.flagUSBTokenDocument = true;
+      return;
+    }
+    
+    return;
+  }
+
+  deSelectPartnerDocument(e: any,item: any) {
+    if(this.getPartnerSignature(item).length == 1) {
+      if(e.id == 2) {
+        this.flagUSBTokenDocument = false;
+      return;
+      }
+    }
+
+    let count = 0;
+    for(let i = 0; i < this.getPartnerSignature(item).length; i++) {
+      if(this.getPartnerSignature(item)[i].sign_type.length == 0) {
+        count++;
+        continue;
+      }
+      if(this.getPartnerSignature(item)[i].sign_type[0].id == 2) {
+        this.flagUSBTokenDocument = true;
+        return;
+      }
+    }
+
+    if(count == this.getPartnerSignature(item).length) {
+      this.flagUSBTokenDocument = false;
+      return;
+    }
+  }
+
+  deSelectPartnerSign(e: any, item: any) {
+    if(this.getPartnerSignature(item).length == 1) {
+      if(e.id == 2) {
+      this.flagUSBToken = false;
+      return;
+      }
+    }
+
+    let count = 0;
+    for(let i = 0; i < this.getPartnerSignature(item).length; i++) {
+      if(this.getPartnerSignature(item)[i].sign_type.length == 0) {
+        count++;
+        continue;
+      }
+      if(this.getPartnerSignature(item)[i].sign_type[0].id == 2) {
+        this.flagUSBToken = true;
+        return;
+      }
+    }
+
+    if(count == this.getPartnerSignature(item).length) {
+      this.flagUSBToken = false;
+      return;
+    }
+  }
+
+  onChangePartnerSign(e: any) {
+    console.log("event ", e);
+  }
+
+  selectWithOtp(e: any, data: any, action?: boolean) { // sort ordering
+    console.log("data ", data);
+
+    //clear lai gia tri card_id
+    //Check với tổ chức của tôi ký
+    if(data.type == 'organization') {
+      //Nếu là người ký
+      if(data.role == 3) {
+        if(this.getDataSignHsm(data).length == 0 || this.getDataSignUSBToken(data).length == 0) {
+          data.card_id = "";
+        }
+      } 
+      //Nếu là văn thư
+      else if(data.role == 4) {
+        if(this.getDataSignUSBToken(data).length == 0) {
+          data.card_id = "";
+        }
+      }
+    } else if(data.type == 'partner') {
+      //Nếu là đối tác tổ chức
+      if(data.type == 2) {
+          //Nếu là người ký
+        if(data.role == 3) {
+          if(this.getDataSignHsm(data).length == 0 || this.getDataSignUSBToken(data).length == 0) {
+            data.card_id = "";
+          }
+        } 
+        //Nếu là văn thư
+        else if(data.role == 4) {
+          if(this.getDataSignUSBToken(data).length == 0) {
+            data.card_id = "";
+          }
+        }
+      } else if(data.type == 3) {
+        if(this.getDataSignUSBToken(data).length == 0 || this.getDataSignEkyc(data).length == 0) {
+          data.card_id = "";
+        }
+      }
+    }
   }
 
   getSetOrderingPersonal(isParnter: any, index: number): void {
@@ -383,15 +495,27 @@ export class DetermineSignerComponent implements OnInit {
     return data.sign_type.filter((p: any) => p.id == 1);
   }
 
+  getDataSignUSBToken(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 2);
+  }
+
   getDataSignEkyc(data: any) {
     return data.sign_type.filter((p: any) => p.id == 5);
   }
 
+  getDataSignHsm(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 4);
+  }
+
   // valid data step 2
   validData() {
+
     let count = 0;
     let dataArr = [];
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
+
+    console.log("dataArr ", dataArr);
+    
     for (let i = 0; i < dataArr.length; i++) {
       if (!dataArr[i].name) {
         this.getNotificationValid("Vui lòng nhập tên" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!");
@@ -403,6 +527,7 @@ export class DetermineSignerComponent implements OnInit {
         count++;
         break;
       }
+     
       if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
         this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
         count++;
@@ -453,31 +578,66 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       // valid cccd number
-      if (dataArr[i].card_id && !this.pattern.card_id.test(dataArr[i].card_id)) {
+      if (dataArr[i].card_id && !this.pattern.card_id.test(dataArr[i].card_id) && dataArr[i].sign_type.filter((p: any) => p.id == 5).length > 0) {
         this.getNotificationValid("CMT/CCCD của" + this.getNameObjectValid(3) + "tổ chức của tôi không hợp lệ!")
+        count++;
+        break;
+      }
+
+      if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0) {
+        console.log("vao day validate ");
+        console.log("data ", dataArr[i].card_id)
+        this.getNotificationValid("Vui lòng nhập mã số thuế của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
+        count++;
+        break;
+      }
+
+      if(dataArr[i].card_id && dataArr[i].role == 3 && !this.pattern_input.taxCode_form.test(dataArr[i].card_id) && dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0) {
+        this.getNotificationValid("Mã số thuế của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+        count++;
+        break;
+      }
+
+      if(!dataArr[i].card_id && (dataArr[i].role == 3 || dataArr[i].role == 4) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0) {
+        this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObjectValid(dataArr[i].role)+"tổ chức của tôi");
+        count++;
+        break;
+      }
+
+      if(dataArr[i].card_id && (!this.pattern.card_id.test(dataArr[i].card_id || !this.pattern_input.taxCode_form.test(dataArr[i].card_id))) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0) {
+        this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!");
         count++;
         break;
       }
     }
 
+    console.log("count my org ",count);
     if (count == 0) {
-      if (this.getCheckDuplicateEmail('only_party_origanzation', dataArr)) {
+      const onlyPartOrg = 'only_party_origanzation';
+
+      if (this.getCheckDuplicateEmail(onlyPartOrg, dataArr)) {
         this.getNotificationValid("Email tổ chức của tôi không được trùng nhau!");
         return false
       }
-    }
 
-    if (count == 0) {
-      if (this.getCheckDuplicatePhone('only_party_origanzation', dataArr)) {
+      if (this.getCheckDuplicatePhone(onlyPartOrg, dataArr)) {
         this.getNotificationValid("Số điện thoại tổ chức của tôi không được trùng nhau!");
         return false
       }
-    }
 
-    if (count == 0) {
-      if (this.getCheckDuplicateCardId('only_party_origanzation', dataArr)) {
+      if (this.getCheckDuplicateCardId(onlyPartOrg, dataArr)) {
         this.getNotificationValid("CMT/CCCD tổ chức của tôi không được trùng nhau!");
         return false
+      }
+
+      if(this.getCheckDuplicateTaxCodeHsm(onlyPartOrg,dataArr)) {
+        this.getNotificationValid("Mã số thuế tổ chức của tôi không được trùng nhau!");
+        return false;
+      }
+
+      if(this.getCheckDuplicateTaxCodeUID(onlyPartOrg, dataArr)) {
+        this.getNotificationValid("Thông tin trong usb token tổ chức của tôi không được trùng nhau!");
+        return false;
       }
     }
 
@@ -493,6 +653,7 @@ export class DetermineSignerComponent implements OnInit {
         //   break;
         // }
         for (let k = 0; k < isParterSort.length; k++) {
+          //Tổ chức
           if (dataArrPartner[j].type != 3) {
             if (!dataArrPartner[j].name) {
               this.getNotificationValid("Vui lòng nhập tên của đối tác tổ chức!")
@@ -561,13 +722,38 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             // valid cccd number
-            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id)) {
+            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObjectValid(3) + "của đối tác không hợp lệ!")
               count++;
               break;
             }
 
-          } else if (dataArrPartner[j].type == 3) {
+            if(!isParterSort[k].card_id && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+              this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObjectValid(isParterSort[k].role)+"tổ chức của đối tác");
+              count++;
+              break;
+            }
+      
+            if(isParterSort[k].card_id && (!this.pattern.card_id.test(isParterSort[k].card_id || !this.pattern_input.taxCode_form.test(isParterSort[k].card_id))) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+              this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
+              count++;
+              break;
+            }
+
+            if(!isParterSort[k].card_id && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
+              this.getNotificationValid("Vui lòng nhập mã số thuế của"+this.getNameObjectValid(isParterSort[k].role)+"tổ chức của đối tác");
+              count++;
+              break;
+            }
+      
+            if(isParterSort[k].tax_code && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
+              this.getNotificationValid("Mã số thuế của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
+              count++;
+              break;
+            }
+          } 
+          //Cá nhân
+          else if (dataArrPartner[j].type == 3) {
             if (!isParterSort[k].name && isParterSort[k].role == 3) {
               this.getNotificationValid("Vui lòng nhập tên" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân!")
               count++;
@@ -601,6 +787,18 @@ export class DetermineSignerComponent implements OnInit {
                 break;
               }
               isPartnerCaNhanDuplicate = [];
+
+              if(!isParterSort[k].card_id && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+                this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObjectValid(isParterSort[k].role)+"của đối tác cá nhân");
+                count++;
+                break;
+              }
+        
+              if(isParterSort[k].card_id && (!this.pattern.card_id.test(isParterSort[k].card_id || !this.pattern_input.taxCode_form.test(isParterSort[k].card_id))) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+                this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!");
+                count++;
+                break;
+              }
             }
 
             if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
@@ -615,13 +813,6 @@ export class DetermineSignerComponent implements OnInit {
               break;
             }
 
-            //@ts-ignore
-            // if (dataArrPartner[j].recipients[k].name && !this.pattern.name.test(dataArrPartner[j].recipients[k].name && dataArrPartner[j].recipients[k].role == 3)) {
-            //   this.getNotificationValid("Tên" + this.getNameObjectValid(dataArrPartner[j].recipients[k].role) + " đối tác cá nhân không hợp lệ!");
-            //   count++;
-            //   break;
-            // }
-            //@ts-ignore
             if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email) && isParterSort[k].role == 3) {
               this.getNotificationValid("Email" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
               count++;
@@ -636,7 +827,7 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             // valid cccd number
-            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id)) {
+            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObjectValid(3) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;
@@ -657,45 +848,57 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     if (count == 0) {
-      // dataArrPartyCheckEmail = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-      if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
+      const onlyPartner = 'only_party_partner';
+      const allCheckEmail = 'allCheckEmail';
+
+      if (this.getCheckDuplicateEmail(onlyPartner, dataArrPartner)) {
         this.getNotificationValid("Email đối tác không được trùng nhau!");
         return false
       }
-    }
 
-    if (count == 0) {
-      if (this.getCheckDuplicatePhone('only_party_partner', dataArrPartner)) {
+      if (this.getCheckDuplicatePhone(onlyPartner, dataArrPartner)) {
         this.getNotificationValid("Số điện thoại đối tác không được trùng nhau!");
         return false
       }
-    }
 
-    if (count == 0) {
-      if (this.getCheckDuplicateCardId('only_party_partner', dataArrPartner)) {
+      if (this.getCheckDuplicateCardId(onlyPartner, dataArrPartner)) {
         this.getNotificationValid("CMT/CCCD đối tác không được trùng nhau!");
         return false
       }
-    }
 
-    if (count == 0) {
-      if (this.getCheckDuplicateEmail('allCheckEmail', this.datas.is_determine_clone)) {
+      if(this.getCheckDuplicateTaxCodeHsm(onlyPartner, dataArrPartner)) {
+        this.getNotificationValid("Mã số thuế của đối tác không được trùng nhau");
+        return false;
+      }
+
+      if(this.getCheckDuplicateTaxCodeUID(onlyPartner, dataArrPartner)) {
+        this.getNotificationValid("Thông tin trong usb token của đối tác không được trùng nhau");
+        return false;
+      }
+
+      if (this.getCheckDuplicateEmail(allCheckEmail, this.datas.is_determine_clone)) {
         this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
         return false
       }
-    }
 
-    if (count == 0) {
-      if (this.getCheckDuplicatePhone('allCheckEmail', this.datas.is_determine_clone)) {
+      if (this.getCheckDuplicatePhone(allCheckEmail, this.datas.is_determine_clone)) {
         this.getNotificationValid("Số điện thoại không được trùng nhau giữa các bên tham gia!");
         return false
       }
-    }
 
-    if (count == 0) {
-      if (this.getCheckDuplicateCardId('allCheckEmail', this.datas.is_determine_clone)) {
+      if (this.getCheckDuplicateCardId(allCheckEmail, this.datas.is_determine_clone)) {
         this.getNotificationValid("CMT/CCCD không được trùng nhau giữa các bên tham gia!");
         return false
+      }
+
+      if(this.getCheckDuplicateTaxCodeHsm(allCheckEmail, this.datas.is_determine_clone)) {
+        this.getNotificationValid("Mã số thuế không được trùng nhau giữa các bên tham gia");
+        return false;
+      }
+
+      if(this.getCheckDuplicateTaxCodeUID(allCheckEmail, this.datas.is_determine_clone)) {
+        this.getNotificationValid("Thông tin trong usb token không được trùng nhau giữa các bên tham gia");
+        return false;
       }
     }
 
@@ -727,14 +930,134 @@ export class DetermineSignerComponent implements OnInit {
           return false;
         }
       }
-
-
     }
 
     if (count > 0) {
       return false;
     }
     return true;
+  }
+
+  getCheckDuplicateTaxCodeUID(isParty: string, dataValid: any) {
+    let arrCheckTaxCode = [];
+
+    if (isParty != 'only_party_origanzation') {
+      let arrTaxCode = [];
+      for (let i = 0; i < dataValid.length; i++) {
+        const element = dataValid[i].recipients;
+        for (let j = 0; j < element.length; j++) {
+          if (element[j].card_id) {
+            let items = {
+              email: element[j].card_id,
+              role: element[j].role,
+              type: dataValid[i].type,
+              ordering: dataValid[i].ordering
+            }
+            // arrCheckEmail.push(element[j].email);
+            arrTaxCode.push(items);
+          }
+        }
+      }
+
+      if (arrTaxCode.some((p: any) => p.role == 1) && arrTaxCode.some((p: any) => p.role == 3)) {
+        if (isParty == 'only_party_partner') {
+          arrTaxCode = arrTaxCode.filter((p: any) => p.role != 1);
+        } else {
+          let duplicateEmail: any[] = [];
+          let countCheck_duplicate = true;
+          for (const d of arrTaxCode) {
+            if (duplicateEmail.length > 0 && duplicateEmail.some((p: any) => p.email == d.email && (p.type != d.type || p.ordering != d.ordering))) { // check duplicate email coordination with between party
+              return true;
+            }
+            duplicateEmail.push(d);
+          }
+          if (countCheck_duplicate) return false;
+        }
+      }
+
+      arrTaxCode.forEach((items: any) => {
+        arrCheckTaxCode.push(items.email)
+      })
+
+    } else {
+      for (let i = 0; i < dataValid.length; i++) {
+        if (dataValid[i].card_id) {
+          arrCheckTaxCode.push(dataValid[i].card_id);
+        }
+      }
+    }
+
+    var valueSoFar = Object.create(null);
+    for (var k = 0; k < arrCheckTaxCode.length; ++k) {
+      console.log("arr check tax code ", arrCheckTaxCode[k]);
+      var value: any = arrCheckTaxCode[k];
+      if (value in valueSoFar) {
+        return true;
+      }
+      valueSoFar[value] = true;
+    }
+    return false;
+  }
+
+  getCheckDuplicateTaxCodeHsm(isParty: string, dataValid: any) {
+    let arrCheckTaxCode = [];
+
+    if (isParty != 'only_party_origanzation') {
+      let arrTaxCode = [];
+      for (let i = 0; i < dataValid.length; i++) {
+        const element = dataValid[i].recipients;
+        for (let j = 0; j < element.length; j++) {
+          if (element[j].card_id) {
+            let items = {
+              email: element[j].card_id,
+              role: element[j].role,
+              type: dataValid[i].type,
+              ordering: dataValid[i].ordering
+            }
+            // arrCheckEmail.push(element[j].email);
+            arrTaxCode.push(items);
+          }
+        }
+      }
+
+      if (arrTaxCode.some((p: any) => p.role == 1) && arrTaxCode.some((p: any) => p.role == 3)) {
+        if (isParty == 'only_party_partner') {
+          arrTaxCode = arrTaxCode.filter((p: any) => p.role != 1);
+        } else {
+          let duplicateEmail: any[] = [];
+          let countCheck_duplicate = true;
+          for (const d of arrTaxCode) {
+            if (duplicateEmail.length > 0 && duplicateEmail.some((p: any) => p.email == d.email && (p.type != d.type || p.ordering != d.ordering))) { // check duplicate email coordination with between party
+              return true;
+            }
+            duplicateEmail.push(d);
+          }
+          if (countCheck_duplicate) return false;
+        }
+      }
+
+      arrTaxCode.forEach((items: any) => {
+        arrCheckTaxCode.push(items.email)
+      })
+
+    } else {
+      for (let i = 0; i < dataValid.length; i++) {
+        if (dataValid[i].card_id) {
+          arrCheckTaxCode.push(dataValid[i].card_id);
+        }
+      }
+    }
+
+    var valueSoFar = Object.create(null);
+    for (var k = 0; k < arrCheckTaxCode.length; ++k) {
+      console.log("arr check tax code ", arrCheckTaxCode[k]);
+      var value: any = arrCheckTaxCode[k];
+      if (value in valueSoFar) {
+        return true;
+      }
+      valueSoFar[value] = true;
+    }
+    return false;
   }
 
 
@@ -917,6 +1240,7 @@ export class DetermineSignerComponent implements OnInit {
       valueSoFar[value] = true;
     }
     return false;
+
   }
 
   getNotificationValid(is_notify: string) {
@@ -1001,7 +1325,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo mảng người ký đối tác tổ chức
   getPartnerSignature(item: any) {
-    return item.recipients.filter((p: any) => p.role == 3)
+    return item.recipients.filter((p: any) => p.role == 3);
   }
 
   // tạo mảng đối tượng văn thư tổ chức của tôi
@@ -1298,12 +1622,12 @@ export class DetermineSignerComponent implements OnInit {
         this.toastService.showErrorHTMLWithTimeout(`Đã xảy ra lỗi!`, "", "3000");
       }, () => {
         this.spinner.hide();
-        this.onItemSelect(null);
+        this.onItemSelect(null, null);
       })
     } else {
       // this.datas.is_determine_clone.splice(index + 1, 1);
       this.datas.is_determine_clone = this.datas.is_determine_clone.filter((p: any) => p.ordering != item.ordering);
-      this.onItemSelect(null);
+      this.onItemSelect(null, null);
       // this.datas.is_determine_clone.forEach((res: any, index: number) => {
       //   res.ordering = index + 1;
       // })
@@ -1459,3 +1783,4 @@ export class DetermineSignerComponent implements OnInit {
   }
 
 }
+

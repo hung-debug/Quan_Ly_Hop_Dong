@@ -100,7 +100,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.step = variable.stepSampleContract.step3
   }
 
+  temp: any[];
   ngOnInit() {
+    this.temp = this.datas.is_determine_clone;
+
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
@@ -145,6 +148,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
     this.getPage();
     // event drag and drop
+
+    //Xac dinh vung cho tha vao
     interact('.dropzone').dropzone({
       //@ts-ignore
       accept: null,
@@ -162,6 +167,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       ]
     })
 
+    //phong to thu nho o ky
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
       edges: {left: true, right: true, bottom: true, top: true},
       listeners: {
@@ -198,9 +204,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     // event resize element
+    //keo o ky
     interact('.resize-drag').on('dragend', this.showEventInfo).draggable({
       listeners: {
-        move: this.dragMoveListener, onend: this.showEventInfo
+        move: this.dragMoveListener, 
+        onend: this.showEventInfo
       },
       inertia: true,
       autoScroll: true,
@@ -773,6 +781,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // view pdf qua canvas
   async getPage() {
+    console.log("sample contract ", this.datas);
+
     // @ts-ignore
     const pdfjs = await import('pdfjs-dist/build/pdf');
     // @ts-ignore
@@ -911,15 +921,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   activeScroll() {
+    console.log("active scroll ");
+
     document.getElementsByClassName('viewer-pdf')[0].addEventListener('scroll', () => {
       const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
+
+      console.log("imgs ", Imgs);
+
       Imgs.forEach((item: any) => {
         if (item.getBoundingClientRect().top <= (window.innerHeight / 2) &&
           (item.getBoundingClientRect().bottom >= 0) &&
           (item.getBoundingClientRect().top >= 0) ||
           (item.getBoundingClientRect().bottom >= (window.innerHeight / 2)) &&
           (item.getBoundingClientRect().bottom <= window.innerHeight) &&
-          (item.getBoundingClientRect().top <= 0)) {
+          (item.getBoundingClientRect().top <= 0)) 
+          {
           let page = item.id.split("-")[2];
           $('.page-canvas').css('border', 'none');
           let selector = '.page-canvas.page' + page;
@@ -1224,6 +1240,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // }
 
   back(e: any, step?: any) {
+    console.log("back step 3 ", this.temp);
+
     this.nextOrPreviousStep(step);
   }
 
@@ -1410,6 +1428,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   nextOrPreviousStep(step: string) {
     // this.getRemoveCopyRight();
     this.datas.stepLast = step;
+
     this.stepChangeSampleContract.emit(step);
   }
 

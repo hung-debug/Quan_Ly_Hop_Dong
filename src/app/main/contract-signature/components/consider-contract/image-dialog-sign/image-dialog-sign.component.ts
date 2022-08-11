@@ -99,6 +99,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
 
   drawComplete(event: MouseEvent | Touch) {
     this.imgSignDrawing = this.signaturePad.toDataURL();
+
+    console.log("this img sign drawing ", this.imgSignDrawing);
   }
 
   drawStart(event: MouseEvent | Touch) {

@@ -30,6 +30,7 @@
         </div>
     </div>
 
+    <!-- Hợp đồng đơn lẻ không theo mẫu  -->
     <ng-container *ngIf="type == 1 && (isQLHD_01 || this.action == 'edit')">
         <app-infor-contract #infoContract *ngIf="step == 'infor-contract'" [datas]="datas" [step]="step"
             [save_draft_infor]="shareData" (stepChangeInfoContract)="getStep($event)"></app-infor-contract>
@@ -43,6 +44,7 @@
         </app-confirm-infor-contract>
     </ng-container>
 
+    <!--Hợp đồng đơn lẻ theo mẫu-->
     <ng-container *ngIf="type == 2 && (isQLHD_14 || this.action == 'edit')">
         <app-infor-contract-form #infoContractForm *ngIf="stepForm == 'infor-contract-form'" [datasForm]="datasForm" [stepForm]="stepForm"
             [save_draft_infor_form]="shareData" (stepChangeInfoContractForm)="getStep($event)"></app-infor-contract-form>

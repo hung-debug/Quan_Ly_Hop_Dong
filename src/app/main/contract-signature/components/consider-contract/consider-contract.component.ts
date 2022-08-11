@@ -70,6 +70,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   confirmConsider = null;
   confirmSignature = null;
 
+  taxCodePartnerStep2: any;
+
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
   x0: any = "abc";
@@ -517,6 +519,22 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     return style;
   }
 
+  // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
+  // @ts-ignore
+  changeDisplay() {
+    if (window.innerHeight < 670 && window.innerHeight > 634) {
+      return {
+        "overflow": "auto",
+        "height": "calc(50vh - 113px)"
+      }
+    } else if (window.innerHeight <= 634) {
+      return {
+        "overflow": "auto",
+        "height": "calc(50vh - 170px)"
+      }
+    } else return {}
+  }
+
   // hàm stype đối tượng boder kéo thả
   changeColorDrag(role: any, valueSign: any, isDaKeo?: any) {
     if (isDaKeo && !valueSign.valueSign) {
@@ -707,6 +725,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   async submitEvents(e: any) {
     let haveSignPKI = false;
     let haveSignImage = false;
+    let haveSignHsm = false;
+
     const counteKYC = this.recipient?.sign_type.filter((p: any) => p.id == 5).length;
     if(counteKYC > 0){
       this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
@@ -764,6 +784,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       if (typeSignImage && typeSignImage == 1) {
         haveSignImage = true;
       }
+
+      if (typeSignImage && typeSignImage == 4) {
+        haveSignImage = true;
+      }
     }
     if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
@@ -806,6 +830,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                   this.spinner.hide();
                 } else if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
                   this.pkiDialogSignOpen();
+                  this.spinner.hide();
+                } else if([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignHsm) {
+                  this.hsmDialogSignOpen();
                   this.spinner.hide();
                 } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
                   this.signContractSubmit();
@@ -1002,12 +1029,19 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             signDigital.valueSignBase64 = encode(base64String);
 
             const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+
+            console.log("data sign mobi ", dataSignMobi);
+
             if (!dataSignMobi.data.FileDataSigned) {
+              console.log("file data signed ");
+
               this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
               return false;
             }
             const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
             if (!sign.recipient_id) {
+              console.log("recipent_id")
+
               this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
               return false;
             }
@@ -1015,6 +1049,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         }
         return true;
       } else {
+        console.log("not sign cert digital ");
         this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
         return false;
       }
@@ -1053,6 +1088,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         }
       }
 
+    } else if(typeSignDigital == 4) {
+      this.hsmDialogSignOpen();
     }
 
   }
@@ -1168,16 +1205,33 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     if (typeSignDigital && typeSignDigital == 2) {
       let checkSetupTool = false;
       this.contractService.getAllAccountsDigital().then(async (data) => {
+
+        console.log("data all accounts digital ", data);
         if (data.data.Serial) {
-          this.signCertDigital = data.data;
-          this.nameCompany = data.data.CN;
-          checkSetupTool = true;
-          if (!checkSetupTool) {
-            this.spinner.hide();
-            return;
-          } else {
-            await this.signImageC(signUpdatePayload, notContainSignImage);
-          }
+
+          this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
+            if(response.success == true) {
+              this.signCertDigital = data.data;
+              this.nameCompany = data.data.CN;
+              checkSetupTool = true;
+              if (!checkSetupTool) {
+                this.spinner.hide();
+                return;
+              } else {
+                await this.signImageC(signUpdatePayload, notContainSignImage);
+              }
+            } else {
+              this.spinner.hide();
+              Swal.fire({
+                title: `Mã số thuế trên chữ ký số không trùng mã số thuế của tổ chức`,
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#b0bec5',
+                confirmButtonText: 'Xác nhận'
+              });
+            }
+          })
+
         } else {
           this.spinner.hide();
           Swal.fire({
@@ -1206,8 +1260,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   async signImageC(signUpdatePayload: any, notContainSignImage: any) {
-    console.log(notContainSignImage);
-    console.log(signUpdatePayload);
+    console.log("notContainSignImage ", notContainSignImage);
+    console.log("sigunupdatepayload ",signUpdatePayload);
     let signDigitalStatus = null;
     let signUpdateTempN = [];
     if(signUpdatePayload){
@@ -1217,6 +1271,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         signUpdateTempN = signUpdateTempN.filter(
           (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
           .map((item: any) => {
+            console.log("item sign image c ", item);
             return {
               id: item.id,
               name: item.name,
@@ -1232,7 +1287,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       this.spinner.hide();
       return;
     }
+
     if(notContainSignImage){
+      console.log("ko phai ky anh ");
+
       console.log(signUpdateTempN);
       this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
         async (result) => {
@@ -1545,11 +1603,39 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         && sign?.recipient?.email === this.currentUser.email
         && sign?.recipient?.role === this.datas?.roleContractReceived
         && sign?.page == page) {
+
         sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
         sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
         sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
         sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
-        console.log(sign);
+
+        console.log("sign recipient_id ",sign.recipient_id);
+
+        //Lấy thông tin mã số thuế của đối tác ký bằng USB Token
+        this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
+
+          console.log("sign rec ", sign.recipient_id);
+
+          console.log("vao day ");
+          const lengthRes = response.recipients.length;
+          for(let i = 0; i < lengthRes; i++) {
+
+            console.log("vao vong for ");
+
+            const id = response.recipients[i].id;
+
+            if(id == sign.recipient_id) {
+              console.log("vao doan check ");
+
+              console.log("res f ", response.recipients[i].fields[0]);
+              this.taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
+              console.log("tax code ", this.taxCodePartnerStep2);
+
+              break;
+            }
+          }
+        })
+
         return sign;
       } else {
         return sign;

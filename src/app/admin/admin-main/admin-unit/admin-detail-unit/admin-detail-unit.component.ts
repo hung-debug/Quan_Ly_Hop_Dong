@@ -35,9 +35,6 @@ export class AdminDetailUnitComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-
-    this.fileCeCaOptions = fileCeCaOptions;
-
     this.adminUnitService.getUnitById(this.data.id).subscribe(
       data => {
         console.log(data);
@@ -97,7 +94,7 @@ export class AdminDetailUnitComponent implements OnInit {
 
     // @ts-ignore
     const dialogRef = this.dialog.open(AdminAddPackUnitComponent, {
-      width: '600px',
+      width: '580px',
       backdrop: 'static',
       keyboard: false,
       data
@@ -148,16 +145,4 @@ export class AdminDetailUnitComponent implements OnInit {
       let is_data = result
     })
   }
-
-  getFileCeCa() {
-    if(this.datas?.ceCAPushMode == 'ALL') {
-      return "Đẩy toàn bộ hợp đồng"
-    } else if(this.datas?.ceCAPushMode == 'SELECTION') {
-      return "Tuỳ biến";
-    } else {
-      return "Không đẩy HĐ nào";
-    }
-  }
-
-
 }

@@ -106,8 +106,6 @@ export class AdminMainComponent implements OnInit {
 
   //click logout
   logout() {
-    localStorage.clear();
-    sessionStorage.clear();
     localStorage.removeItem('currentAdmin');
     localStorage.removeItem('');
     localStorage.removeItem('url');

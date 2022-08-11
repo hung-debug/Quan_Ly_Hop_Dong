@@ -72,6 +72,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   sign_time: Date;
   notes: any;
   filePath: any;
+  expire_time: any;
 
   attachFileArr: any[] = [];
   attachFileNameArr: any[] = [];
@@ -104,6 +105,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   ngOnInit(): void {
+    console.log("datas infor contract ", this.datas);
+
     this.spinner.hide();
     this.name = this.datas.name ? this.datas.name : null;
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;
@@ -111,7 +114,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
     this.sign_time = this.datas.sign_time ? moment(this.datas.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
+
+    this.expire_time = this.datas.contract_expire_time ? moment(this.datas.contract_expire_time).toDate() : null;
+
     this.notes = this.datas.notes ? this.datas.notes : null;
+
     if (this.datas.file_name_attach) {
       this.datas.attachFileNameArr = this.datas.file_name_attach;
       let isAttachFileClone = JSON.parse(JSON.stringify(this.datas.attachFileNameArr));
@@ -132,10 +139,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
 
   }
-
-  // ngOnDestroy(): void {
-  //   this.subscription.unsubscribe(); // onDestroy cancels the subscribe request
-  // }
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -286,9 +289,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   // getDataCoordination
 
   async callAPI(action?: string) {
+    console.log("action ",action);
+
     //call API step 1
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
+
       // sua hop dong
       if (this.datas.contractConnect && this.datas.contractConnect.length && this.datas.contractConnect.length > 0) {
         this.datas.contractConnect.forEach((res: any) => {
@@ -734,17 +740,27 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     return false;
   }
 
+  nextStep1: boolean = false;
   // --next step 2
   async next() {
+    console.log("exp ", this.expire_time);
+
+    this.nextStep1 = true;
+
     if (!this.validData()) {
       return;
     } else {
       this.spinner.show();
+
+      console.log("this datas ", this.datas);
+
       // set value to datas
       this.datas.name = this.name;
       this.datas.contract_no = this.contract_no;
       this.datas.sign_time = this.sign_time;
       this.datas.notes = this.notes;
+      this.datas.contract_expire_time = this.expire_time;
+
       this.defineData(this.datas);
       const fileReader = new FileReader();
       if (this.datas.is_action_contract_created) {
@@ -817,6 +833,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   defineData(datas: any) {
     this.datas.name = this.name;
     this.datas.sign_time = this.sign_time;
+    this.datas.expire_time = this.expire_time;
+
     if (this.datas.contract_no == '') {
       this.datas.contract_no = null;
     }
@@ -854,6 +872,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.datas.contract_no = this.contract_no;
     this.datas.sign_time = this.sign_time;
     this.datas.notes = this.notes;
+
     this.defineData(this.datas);
     const fileReader = new FileReader();
     if (this.datas.is_action_contract_created) {

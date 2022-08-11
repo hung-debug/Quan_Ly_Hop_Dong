@@ -148,6 +148,19 @@
       </div>
     </div>
   </div>
+
+  
+  <div class="row">
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">{{'Ngày hết hiệu lực hợp đồng' | translate}}</div>
+        <div>
+          <p-calendar [(ngModel)]="expire_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true"
+            dateFormat="dd/mm/yy"></p-calendar>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="footer-infor-contract">

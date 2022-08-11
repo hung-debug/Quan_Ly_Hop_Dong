@@ -66,7 +66,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       && this.typeSignDigital && this.typeSignDigital == 3
     ) {
       // this.openPopupSignContract(3);
-    }
+    } 
   }
 
   confirmOtpSignContract() {
@@ -87,6 +87,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   openPopupSignContract(typeSign: any) {
     if (typeSign == 1) {
+      console.log("typesign ", typeSign);
       this.imageDialogSignOpen();
     } else if (typeSign == 3) {
       this.pkiDialogSignOpen();

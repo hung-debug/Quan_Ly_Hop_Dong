@@ -88,6 +88,9 @@ export class FooterSignatureComponent implements OnInit {
         this.datas.step = variable.stepSampleContract.step_confirm_coordination; // set step 2
       }
     } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
+
+      console.log("xac nhan");
+
       this.submitChanges.emit(1);
     }
   }

@@ -250,6 +250,34 @@ input[type=number] {
     }
   }
 
+  .contract__content--title-doi-tac {
+    display: flex;
+    color: #106DB6;
+    align-items: center;
+    margin-bottom: 8px;
+
+    > div {
+      width: 158px;
+    }
+
+    > input.input1 {
+      padding-left: 10px;
+      outline: none;
+      height: 37px;
+      width: 100%;
+      border-radius: 7px;
+      border: 1px solid #106DB6;
+    }
+    > input.input2 {
+      padding-left: 10px;
+      outline: none;
+      height: 37px;
+      width: 40%;
+      border-radius: 7px;
+      border: 1px solid #106DB6;
+    }
+  }
+
   .contract__content--participants {
     border-radius: 10px;
     border: 1px solid #87CAFF;
@@ -289,6 +317,70 @@ input[type=number] {
       }
 
       .participants--input {
+        display: flex;
+        justify-content: space-around;
+
+        .participants__name {
+          width: 40%;
+
+          .input-data {
+            border: 1px solid #106DB6;
+            border-radius: 5px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+
+            > img {
+              padding-left: 14px;
+            }
+
+            > input {
+              border: none;
+              outline: none;
+              padding-left: 19px;
+              width: 100%;
+            }
+          }
+
+          input {
+            outline: none;
+            padding-left: 19px;
+            width: 100%;
+          }
+
+          .search-name {
+            display: flex;
+            position: absolute;
+            flex-direction: column;
+            background-color: white;
+            border: 1px solid #ddd;
+            width: 25%;
+            border-radius: 5px;
+            padding: 5px;
+            max-height: 190px;
+            overflow: auto;
+            cursor: pointer;
+            z-index: 1;
+
+            .search-name-items {
+              border: none;
+              background-color: white;
+              text-align: left;
+
+              &:hover {
+                background-color: #e9eceff7;
+              }
+            }
+
+            //span:hover {
+            //  background-color: #dddddd94;
+            //}
+          }
+
+        }
+      }
+
+      .participants--input1 {
         display: flex;
         justify-content: space-around;
 

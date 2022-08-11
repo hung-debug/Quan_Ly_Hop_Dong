@@ -1,3 +1,4 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -49,6 +50,9 @@ export class AdminAddPackComponent implements OnInit {
   //3 => all gray
   flagComboBoxTheThucTinh: any;
 
+  totalBeforeVAT: any;
+  totalAfterVAT: any;
+
   get f() {
     return this.addForm.controls;
   }
@@ -60,7 +64,8 @@ export class AdminAddPackComponent implements OnInit {
     public dialogRef: MatDialogRef<AdminAddPackComponent>,
     public router: Router,
     public dialog: MatDialog,
-    private adminPackService: AdminPackService
+    private adminPackService: AdminPackService,
+    private currencyPipe: CurrencyPipe
   ) {
     this.addForm = this.fbd.group({
       code: this.fbd.control('', [
@@ -128,11 +133,11 @@ export class AdminAddPackComponent implements OnInit {
               Validators.pattern(parttern_input.input_form),
             ]),
 
-            totalBeforeVAT: this.fbd.control(data.totalBeforeVAT, [
+            totalBeforeVAT: this.fbd.control(this.currencyPipe.transform(data.totalBeforeVAT,'VND','')?.replaceAll(',','.'), [
               Validators.required,
               Validators.pattern(parttern_input.number_form),
             ]),
-            totalAfterVAT: this.fbd.control(data.totalAfterVAT, [
+            totalAfterVAT: this.fbd.control(this.currencyPipe.transform(data.totalAfterVAT,'VND','')?.replaceAll(',','.'), [
               Validators.required,
               Validators.pattern(parttern_input.number_form),
             ]),
@@ -166,6 +171,7 @@ export class AdminAddPackComponent implements OnInit {
 
       //khoi tao form them moi
     } else {
+
       this.addForm = this.fbd.group({
         code: this.fbd.control('', [
           Validators.required,
@@ -297,6 +303,14 @@ export class AdminAddPackComponent implements OnInit {
       describe: this.addForm.value.describe,
       status: this.addForm.value.status,
     };
+
+    if(dataForm.totalBeforeVAT >= 5) {
+      dataForm.totalBeforeVAT = dataForm.totalBeforeVAT.replaceAll('.','');
+    }
+
+    if(dataForm.totalAfterVAT >= 5) {
+      dataForm.totalAfterVAT = dataForm.totalAfterVAT.replaceAll('.','');
+    }
 
     if (this.addForm.value.calc == 1) {
       dataForm.calc = 'BY_TIME';
@@ -438,4 +452,16 @@ export class AdminAddPackComponent implements OnInit {
       this.flagComboBoxTheThucTinh = 3;
     }
   }
+
+  formatCurrencyBefore(event: any) {
+      this.totalBeforeVAT = this.currencyPipe.transform(this.totalBeforeVAT.replaceAll('.',''),'VND','')?.replaceAll(',','.');
+      event.target.value = this.totalBeforeVAT;
+  }
+
+  formatCurrencyAfter(event: any) {
+      this.totalAfterVAT = this.currencyPipe.transform(this.totalAfterVAT.replaceAll('.',''),'VND','')?.replaceAll(',','.');
+      event.target.value = this.totalAfterVAT;
+  }
+
+
 }

@@ -50,7 +50,7 @@
           <span class="required-title">*</span>
         </div>
         <div class="input-data">
-          <input type="text" formControlName="totalBeforeVAT" />
+          <input (blur)="formatCurrencyBefore($event)" [(ngModel)]="totalBeforeVAT" type="text" formControlName="totalBeforeVAT" />
         </div>
         <div *ngIf="submitted && f.totalBeforeVAT.errors" class="invalid">
           <div *ngIf="f.totalBeforeVAT.errors.required">
@@ -70,7 +70,7 @@
           <span class="required-title">*</span>
         </div>
         <div class="input-data">
-          <input type="text" formControlName="totalAfterVAT" />
+          <input (blur)="formatCurrencyAfter($event)" type="text" formControlName="totalAfterVAT" [(ngModel)]="totalAfterVAT" formControlName="totalAfterVAT" />
         </div>
         <div *ngIf="submitted && f.totalAfterVAT.errors" class="invalid">
           <div *ngIf="f.totalAfterVAT.errors.required">
@@ -202,7 +202,7 @@
       <div class="col-md-6">
         <div class="label text-color">{{ "Mô tả" | translate }}</div>
         <div class="input-data">
-          <input style="height: 80px;" type="text" formControlName="describe" />
+          <textarea style="height: 80px" formControlName="describe" ></textarea>
         </div>
         <div *ngIf="submitted && f.describe.errors" class="invalid">
           <div *ngIf="f.describe.errors.pattern">

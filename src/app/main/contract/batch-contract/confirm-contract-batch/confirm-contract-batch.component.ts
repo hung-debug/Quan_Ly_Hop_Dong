@@ -1,5 +1,17 @@
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  QueryList,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -9,23 +21,27 @@ import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { environment } from 'src/environments/environment';
 import { throwError } from 'rxjs';
-import interact from "interactjs";
-import * as $ from "jquery";
+import interact from 'interactjs';
+import * as $ from 'jquery';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { Router } from '@angular/router';
 import { ConfirmCecaBatchComponent } from '../confirm-ceca-batch/confirm-ceca-batch.component';
+import { UserService } from 'src/app/service/user.service';
+import { UnitService } from 'src/app/service/unit.service';
+import { ConfirmCecaFormComponent } from '../../form-contract/confirm-ceca-form/confirm-ceca-form.component';
 @Component({
   selector: 'app-confirm-contract-batch',
   templateUrl: './confirm-contract-batch.component.html',
-  styleUrls: ['./confirm-contract-batch.component.scss']
+  styleUrls: ['./confirm-contract-batch.component.scss'],
 })
-export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterViewInit {
-
+export class ConfirmContractBatchComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
   @Input() datasBatch: any;
   data_coordinates: any;
   @Input() step: any;
-  @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
+  @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined;
   @Output() stepChangeConfirmInforContractBatch = new EventEmitter<string>();
   pdfSrc: any;
   thePDF = null;
@@ -40,32 +56,35 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
-  x0: any = "abc";
-  y0: any = "bcd";
+  x0: any = 'abc';
+  y0: any = 'bcd';
   listEmail: any = [];
   coordinates_signature: any;
   obj_toa_do = {
-    x1: 0, y1: 0, x2: 0, y2: 0
-  }
+    x1: 0,
+    y1: 0,
+    x2: 0,
+    y2: 0,
+  };
   text = 'Chữ ký';
   mouseoverLeftLayer = {
     layerX: 0,
     layerY: 0,
-  }
+  };
   isMove = false;
 
   objSignInfo: any = {
-    id: "",
+    id: '',
     showObjSign: false,
-    nameObj: "",
-    emailObj: "",
+    nameObj: '',
+    emailObj: '',
     traf_x: 0,
     traf_y: 0,
     x1: 0,
     y1: 0,
     offsetHeight: 0,
-    offsetWidth: 0
-  }
+    offsetWidth: 0,
+  };
 
   list_sign_name: any = [];
   signCurent: any;
@@ -78,10 +97,10 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   isEnableText: boolean = false;
   isChangeText: boolean = false;
 
-  pageNumberCurrent:any = 1;
-  pageNumberOld:any=1;
-  pageNumberTotal:any = 1;
-  contractList:any[] = [];
+  pageNumberCurrent: any = 1;
+  pageNumberOld: any = 1;
+  pageNumberTotal: any = 1;
+  contractList: any[] = [];
   isDataContract: any;
   isDataFileContract: any;
   isDataObjectSignature: any;
@@ -91,7 +110,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   isDisablePrevious = false;
   isDisableNext = false;
 
-  data_organization:any;
+  data_organization: any;
   is_origanzation_reviewer: any = [];
   is_origanzation_signature: any = [];
   is_origanzation_document: any = [];
@@ -104,6 +123,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   // ]
 
   constructor(
+    private userService: UserService,
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
     private modalService: NgbModal,
@@ -112,53 +132,65 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     private spinner: NgxSpinnerService,
     private contractTemplateService: ContractTemplateService,
     private router: Router,
+    private unitService: UnitService
   ) {
-    this.step = variable.stepSampleContractBatch.step2
+    this.step = variable.stepSampleContractBatch.step2;
   }
 
   ngOnInit() {
     // console.log(this.datasBatch);
     this.spinner.show();
-    this.contractService.getContractBatchList(this.datasBatch.contractFile, this.datasBatch.idContractTemplate).subscribe((response: any) => {
-      console.log(response);
-      this.contractList = response;
+    this.contractService
+      .getContractBatchList(
+        this.datasBatch.contractFile,
+        this.datasBatch.idContractTemplate
+      )
+      .subscribe((response: any) => {
+        console.log(response);
+        this.contractList = response;
 
-      this.pageNumberTotal = this.contractList.length;
-      if(this.pageNumberTotal > 0){
-        this.getDataContractSignature(this.pageNumberCurrent-1);
-      }
-      
-    }), (error: any) => {
-      this.spinner.hide();
-      this.toastService.showErrorHTMLWithTimeout("Lấy thông tin hợp đồng thất bại", "", 3000);  
-    }
+        this.pageNumberTotal = this.contractList.length;
+        if (this.pageNumberTotal > 0) {
+          this.getDataContractSignature(this.pageNumberCurrent - 1);
+        }
+      }),
+      (error: any) => {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout(
+          'Lấy thông tin hợp đồng thất bại',
+          '',
+          3000
+        );
+      };
 
     this.scale = 1;
 
     if (!this.signCurent) {
       this.signCurent = {
         offsetWidth: 0,
-        offsetHeight: 0
-      }
+        offsetHeight: 0,
+      };
     }
   }
 
-  data:any;
-  getDataContractSignature(page:any) {
+  data: any;
+  getDataContractSignature(page: any) {
     console.log(page);
     this.spinner.show();
-    
+
     this.checkDisableIcon();
     this.data = this.contractList[page];
-    
+
     let i = 0;
     this.datasBatch.is_data_object_signature = [];
     this.data.participants.forEach((res: any) => {
       res.recipients.forEach((element: any) => {
-
-        if (element.fields && element.fields.length && element.fields.length > 0) {
+        if (
+          element.fields &&
+          element.fields.length &&
+          element.fields.length > 0
+        ) {
           element.fields.forEach((res: any) => {
-            
             // res['coordinate_x'] = res.coordinate_x;
             // res['coordinate_y'] = res.coordinate_y;
             // res['font'] = res.font;
@@ -178,65 +210,92 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
               res['sign_unit'] = 'text';
             }
             if (res.type == 2) {
-              res['sign_unit'] = 'chu_ky_anh'
+              res['sign_unit'] = 'chu_ky_anh';
             }
             if (res.type == 3) {
-              res['sign_unit'] = 'chu_ky_so'
+              res['sign_unit'] = 'chu_ky_so';
             }
             if (res.type == 4) {
-              res['sign_unit'] = 'so_tai_lieu'
+              res['sign_unit'] = 'so_tai_lieu';
             }
             let obj = res;
             this.datasBatch.is_data_object_signature.push(obj);
-          })
-
+          });
         }
-        
-      })
-    })
-      let data_sign_config_cks = this.datasBatch.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
-      let data_sign_config_cka = this.datasBatch.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_anh');
-      let data_sign_config_text = this.datasBatch.is_data_object_signature.filter((p: any) => p.sign_unit == 'text');
-      let data_sign_config_so_tai_lieu = this.datasBatch.is_data_object_signature.filter((p: any) => p.sign_unit == 'so_tai_lieu');
+      });
+    });
+    let data_sign_config_cks = this.datasBatch.is_data_object_signature.filter(
+      (p: any) => p.sign_unit == 'chu_ky_so'
+    );
+    let data_sign_config_cka = this.datasBatch.is_data_object_signature.filter(
+      (p: any) => p.sign_unit == 'chu_ky_anh'
+    );
+    let data_sign_config_text = this.datasBatch.is_data_object_signature.filter(
+      (p: any) => p.sign_unit == 'text'
+    );
+    let data_sign_config_so_tai_lieu =
+      this.datasBatch.is_data_object_signature.filter(
+        (p: any) => p.sign_unit == 'so_tai_lieu'
+      );
 
-      this.datasBatch.contract_user_sign = this.contractService.getDataFormatContractUserSign();
+    this.datasBatch.contract_user_sign =
+      this.contractService.getDataFormatContractUserSign();
 
-      this.datasBatch.contract_user_sign.forEach((element: any) => {
-        // console.log(element.sign_unit, element.sign_config);
-        if (element.sign_unit == 'chu_ky_so') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
-        } else if (element.sign_unit == 'chu_ky_anh') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
-        } else if (element.sign_unit == 'text') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_text);
-        } else if (element.sign_unit == 'so_tai_lieu') {
-          Array.prototype.push.apply(element.sign_config, data_sign_config_so_tai_lieu);
-        }
-      })
-      this.scale = 1;
-
-      if (!this.signCurent) {
-        this.signCurent = {
-          offsetWidth: 0,
-          offsetHeight: 0
-        }
+    this.datasBatch.contract_user_sign.forEach((element: any) => {
+      // console.log(element.sign_unit, element.sign_config);
+      if (element.sign_unit == 'chu_ky_so') {
+        Array.prototype.push.apply(element.sign_config, data_sign_config_cks);
+      } else if (element.sign_unit == 'chu_ky_anh') {
+        Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
+      } else if (element.sign_unit == 'text') {
+        Array.prototype.push.apply(element.sign_config, data_sign_config_text);
+      } else if (element.sign_unit == 'so_tai_lieu') {
+        Array.prototype.push.apply(
+          element.sign_config,
+          data_sign_config_so_tai_lieu
+        );
       }
+    });
+    this.scale = 1;
 
-      // data Tổ chức của tôi
-      this.data_organization = this.data?.participants.filter((p: any) => p.type == 1)[0];
-      this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
-      this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
-      this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
+    if (!this.signCurent) {
+      this.signCurent = {
+        offsetWidth: 0,
+        offsetHeight: 0,
+      };
+    }
 
-      this.data_parnter_organization = this.data?.participants.filter((p: any) => p.type == 2 || p.type == 3);
+    // data Tổ chức của tôi
+    this.data_organization = this.data?.participants.filter(
+      (p: any) => p.type == 1
+    )[0];
+    this.is_origanzation_reviewer = this.data_organization.recipients.filter(
+      (p: any) => p.role == 2
+    );
+    this.is_origanzation_signature = this.data_organization.recipients.filter(
+      (p: any) => p.role == 3
+    );
+    this.is_origanzation_document = this.data_organization.recipients.filter(
+      (p: any) => p.role == 4
+    );
 
-      console.log(this.datasBatch.contract_user_sign);
-      this.contractTemplateService.getDetailContractV2(this.datasBatch.idContractTemplate).subscribe(rs => {
+    this.data_parnter_organization = this.data?.participants.filter(
+      (p: any) => p.type == 2 || p.type == 3
+    );
+
+    console.log(this.datasBatch.contract_user_sign);
+    this.contractTemplateService
+      .getDetailContractV2(this.datasBatch.idContractTemplate)
+      .subscribe((rs) => {
         this.datasBatch.i_data_file_contract = rs[1];
         if (this.datasBatch?.i_data_file_contract) {
           let fileC = null;
-          const pdfC2 = this.datasBatch.i_data_file_contract.find((p: any) => p.type == 2);
-          const pdfC1 = this.datasBatch.i_data_file_contract.find((p: any) => p.type == 1);
+          const pdfC2 = this.datasBatch.i_data_file_contract.find(
+            (p: any) => p.type == 2
+          );
+          const pdfC1 = this.datasBatch.i_data_file_contract.find(
+            (p: any) => p.type == 1
+          );
           if (pdfC2) {
             fileC = pdfC2.path;
           } else if (pdfC1) {
@@ -245,32 +304,31 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
             return;
           }
           if (!fileC) {
-            this.toastService.showErrorHTMLWithTimeout("Thiếu dữ liệu file hợp đồng!", "", 3000);
+            this.toastService.showErrorHTMLWithTimeout(
+              'Thiếu dữ liệu file hợp đồng!',
+              '',
+              3000
+            );
           } else {
             this.pdfSrc = fileC;
             // render pdf to canvas
             this.getPage();
           }
-        
         }
         this.loaded = true;
         this.spinner.hide();
       });
-      
-      
-      
-    
   }
 
   getPartnerCoordinationer(item: any) {
-    return item.recipients.filter((p: any) => p.role == 1)
+    return item.recipients.filter((p: any) => p.role == 1);
   }
 
   getPartnerReviewer(item: any) {
-    return item.recipients.filter((p: any) => p.role == 2)
+    return item.recipients.filter((p: any) => p.role == 2);
   }
   getPartnerSignature(item: any) {
-    return item.recipients.filter((p: any) => p.role == 3)
+    return item.recipients.filter((p: any) => p.role == 3);
   }
   getPartnerDocument(item: any) {
     return item.recipients.filter((p: any) => p.role == 4);
@@ -296,14 +354,14 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
       item['sign_unit'] = type_unit;
       item['signType'] = item.signType;
       item['is_disable'] = false;
-      this.list_sign_name.push(item)
-    })
+      this.list_sign_name.push(item);
+    });
   }
 
   setWidth(d: any) {
     return {
-      'width.px': (this.widthDrag / 2)
-    }
+      'width.px': this.widthDrag / 2,
+    };
   }
 
   // view pdf qua canvas
@@ -313,44 +371,50 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     // @ts-ignore
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-    pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
-      this.thePDF = pdf;
-      this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)
-      this.removePage();
-      this.arrPage = [];
-      for (let page = 1; page <= this.pageNumber; page++) {
-        let canvas = document.createElement("canvas");
-        this.arrPage.push({page: page});
-        canvas.className = 'dropzone';
-        canvas.id = "canvas-step3-" + page;
-        // canvas.style.paddingLeft = '15px';
-        // canvas.style.border = '9px solid transparent';
-        // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
-        let idPdf = 'pdf-viewer-step-3'
-        let viewer = document.getElementById(idPdf);
-        if (viewer) {
-          viewer.appendChild(canvas);
+    pdfjs
+      .getDocument(this.pdfSrc)
+      .promise.then((pdf: any) => {
+        this.thePDF = pdf;
+        this.pageNumber = pdf.numPages || pdf.pdfInfo.numPages;
+        this.removePage();
+        this.arrPage = [];
+        for (let page = 1; page <= this.pageNumber; page++) {
+          let canvas = document.createElement('canvas');
+          this.arrPage.push({ page: page });
+          canvas.className = 'dropzone';
+          canvas.id = 'canvas-step3-' + page;
+          // canvas.style.paddingLeft = '15px';
+          // canvas.style.border = '9px solid transparent';
+          // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
+          let idPdf = 'pdf-viewer-step-3';
+          let viewer = document.getElementById(idPdf);
+          if (viewer) {
+            viewer.appendChild(canvas);
+          }
+          this.renderPage(page, canvas);
         }
-        this.renderPage(page, canvas);
-      }
-    }).then(() => {
-      setTimeout(() => {
-        this.setPosition();
-        this.eventMouseover();
-      }, 100)
-    })
+      })
+      .then(() => {
+        setTimeout(() => {
+          this.setPosition();
+          this.eventMouseover();
+        }, 100);
+      });
   }
 
-  eventMouseover() {
-  }
+  eventMouseover() {}
 
   ngAfterViewInit() {
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
       let width_drag_element = document.getElementById('width-element-info');
-      this.widthDrag = width_drag_element ? ((width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left) - 15) : '';
-    }, 100)
+      this.widthDrag = width_drag_element
+        ? width_drag_element.getBoundingClientRect().right -
+          width_drag_element.getBoundingClientRect().left -
+          15
+        : '';
+    }, 100);
     this.setPosition();
     this.eventMouseover();
   }
@@ -362,13 +426,14 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
         let a = document.getElementById(element.id);
         if (a) {
           // if (element['position']) { // @ts-ignore
-          if (element['coordinate_x'] && element['coordinate_y']) { // @ts-ignore
-            a.style["z-index"] = '1';
+          if (element['coordinate_x'] && element['coordinate_y']) {
+            // @ts-ignore
+            a.style['z-index'] = '1';
           }
           // else
           //   a.style.display = 'none';
-          a.setAttribute("data-x", element['coordinate_x']);
-          a.setAttribute("data-y", element['coordinate_y']);
+          a.setAttribute('data-x', element['coordinate_x']);
+          a.setAttribute('data-y', element['coordinate_y']);
         }
       });
     }
@@ -376,7 +441,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
 
   removePage() {
     for (let page = 1; page <= this.pageNumber; page++) {
-      let idCanvas = "canvas-step3-" + page;
+      let idCanvas = 'canvas-step3-' + page;
       let viewCanvas = document.getElementById(idCanvas);
       if (viewCanvas) {
         viewCanvas.remove();
@@ -390,13 +455,15 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
       // let viewport = page.getViewport(this.scale);
-      let viewport = page.getViewport({scale: this.scale});
+      let viewport = page.getViewport({ scale: this.scale });
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
-      let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
+      let _objPage = this.objPdfProperties.pages.filter(
+        (p: any) => p.page_number == pageNumber
+      )[0];
       if (!_objPage) {
         this.objPdfProperties.pages.push({
           page_number: pageNumber,
@@ -404,9 +471,13 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
           height: viewport.height,
         });
       }
-      page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
+      page.render({
+        canvasContext: canvas.getContext('2d'),
+        viewport: viewport,
+      });
       if (test) {
-        let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
+        let paddingPdf =
+          (test.getBoundingClientRect().width - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
         $('.viewer-pdf').css('padding-right', paddingPdf + 'px');
       }
@@ -415,40 +486,44 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   }
 
   activeScroll() {
-    if(document.getElementsByClassName('viewer-pdf')[0]){
-    document.getElementsByClassName('viewer-pdf')[0].addEventListener('scroll', () => {
-      const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
-      Imgs.forEach((item: any) => {
-        if (item.getBoundingClientRect().top <= (window.innerHeight / 2) &&
-          (item.getBoundingClientRect().bottom >= 0) &&
-          (item.getBoundingClientRect().top >= 0) ||
-          (item.getBoundingClientRect().bottom >= (window.innerHeight / 2)) &&
-          (item.getBoundingClientRect().bottom <= window.innerHeight) &&
-          (item.getBoundingClientRect().top <= 0)) {
-          let page = item.id.split("-")[2];
-          $('.page-canvas').css('border', 'none');
-          let selector = '.page-canvas.page' + page;
-          $(selector).css('border', '2px solid #ADCFF7');
-        }
-      });
-    });
+    if (document.getElementsByClassName('viewer-pdf')[0]) {
+      document
+        .getElementsByClassName('viewer-pdf')[0]
+        .addEventListener('scroll', () => {
+          const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
+          Imgs.forEach((item: any) => {
+            if (
+              (item.getBoundingClientRect().top <= window.innerHeight / 2 &&
+                item.getBoundingClientRect().bottom >= 0 &&
+                item.getBoundingClientRect().top >= 0) ||
+              (item.getBoundingClientRect().bottom >= window.innerHeight / 2 &&
+                item.getBoundingClientRect().bottom <= window.innerHeight &&
+                item.getBoundingClientRect().top <= 0)
+            ) {
+              let page = item.id.split('-')[2];
+              $('.page-canvas').css('border', 'none');
+              let selector = '.page-canvas.page' + page;
+              $(selector).css('border', '2px solid #ADCFF7');
+            }
+          });
+        });
+    }
   }
-  }
-
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
     let style: any = {
-      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
-      "position": "absolute",
-      "backgroundColor": '#EBF8FF'
-    }
+      transform:
+        'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      position: 'absolute',
+      backgroundColor: '#EBF8FF',
+    };
     style.backgroundColor = d.value ? '' : '#EBF8FF';
     if (d['width']) {
-      style.width = parseInt(d['width']) + "px";
+      style.width = parseInt(d['width']) + 'px';
     }
     if (d['height']) {
-      style.height = parseInt(d['height']) + "px";
+      style.height = parseInt(d['height']) + 'px';
     }
     return style;
   }
@@ -458,19 +533,19 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   changeDisplay() {
     if (window.innerHeight < 670) {
       return {
-        "overflow": "auto",
-        "height": "calc(50vh - 113px)"
-      }
-    } else return {}
+        overflow: 'auto',
+        height: 'calc(50vh - 113px)',
+      };
+    } else return {};
   }
 
-// hàm stype đối tượng boder kéo thả
+  // hàm stype đối tượng boder kéo thả
   changeColorDrag(role: any, valueSign: any) {
     if (!valueSign.value) {
       return 'ck-da-keo';
     } else {
       return 'employer-ck';
-    } 
+    }
   }
 
   // get select người ký
@@ -484,10 +559,11 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
       // this.objSignInfo.offsetWidth = set_id.offsetWidth;
       // this.objSignInfo.offsetHeight = set_id.offsetWidth;
       signElement = document.getElementById(this.objSignInfo.id);
-    } else
-      signElement = document.getElementById(this.objSignInfo.id);
+    } else signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
-      let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+      let isObjSign = this.convertToSignConfig().filter(
+        (p: any) => p.id == this.objSignInfo.id
+      )[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
       if (isObjSign) {
         this.objSignInfo.traf_x = d.coordinate_x;
@@ -503,7 +579,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
         if (this.isEnableText) {
-          this.objSignInfo.text_attribute_name = d.text_attribute_name
+          this.objSignInfo.text_attribute_name = d.text_attribute_name;
         }
       }
       if (d.name) {
@@ -522,19 +598,23 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
           if (item.name == d.name) {
             item.selected = true;
           } else item.selected = false;
-        })
+        });
       } else {
         //@ts-ignore
-        document.getElementById('select-dropdown').value = "";
+        document.getElementById('select-dropdown').value = '';
       }
     }
   }
 
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
-    if (this.datasBatch && this.datasBatch.is_data_object_signature && this.datasBatch.is_data_object_signature.length) {
-    //   let arrSignConfig: any = [];
-    //   arrSignConfig = this.datas.is_data_object_signature;
+    if (
+      this.datasBatch &&
+      this.datasBatch.is_data_object_signature &&
+      this.datasBatch.is_data_object_signature.length
+    ) {
+      //   let arrSignConfig: any = [];
+      //   arrSignConfig = this.datas.is_data_object_signature;
       // return this.datas.is_data_object_signature.filter(
       //   (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived
       // );
@@ -550,7 +630,7 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
 
   // tạo id cho đối tượng chưa được kéo thả
   getIdSignChuaKeo(id: any) {
-    return "chua-keo-" + id;
+    return 'chua-keo-' + id;
   }
 
   ngOnDestroy() {
@@ -566,35 +646,45 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     // console.log(e, this.objSignInfo, this.signCurent);
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
-      let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
+      let isObjSign = this.convertToSignConfig().filter(
+        (p: any) => p.id == this.objSignInfo.id
+      )[0];
       if (isObjSign) {
         if (property == 'location') {
           if (locationChange == 'x') {
             isObjSign.coordinate_x = parseInt(e);
-            signElement.setAttribute("data-x", isObjSign.coordinate_x);
+            signElement.setAttribute('data-x', isObjSign.coordinate_x);
           } else {
             isObjSign.coordinate_y = parseInt(e);
-            signElement.setAttribute("data-y", isObjSign.coordinate_y);
+            signElement.setAttribute('data-y', isObjSign.coordinate_y);
           }
         } else if (property == 'size') {
           if (locationChange == 'width') {
             isObjSign.width = parseInt(e);
-            signElement.setAttribute("width", isObjSign.width);
+            signElement.setAttribute('width', isObjSign.width);
           } else {
             isObjSign.height = parseInt(e);
-            signElement.setAttribute("height", isObjSign.height);
+            signElement.setAttribute('height', isObjSign.height);
           }
         } else if (property == 'text') {
           isObjSign.text_attribute_name = e;
-          signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
+          signElement.setAttribute(
+            'text_attribute_name',
+            isObjSign.text_attribute_name
+          );
         } else {
-          let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
+          let data_name = this.list_sign_name.filter(
+            (p: any) => p.id == e.target.value
+          )[0];
           if (data_name) {
             isObjSign.name = data_name.name;
-            signElement.setAttribute("name", isObjSign.name);
+            signElement.setAttribute('name', isObjSign.name);
 
             isObjSign.signature_party = data_name.sign_unit;
-            signElement.setAttribute("signature_party", isObjSign.signature_party);
+            signElement.setAttribute(
+              'signature_party',
+              isObjSign.signature_party
+            );
           }
         }
         // console.log(this.signCurent)
@@ -605,13 +695,12 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
 
   getTrafX() {
     if (Math.round(this.objSignInfo.traf_x) <= 0) {
-      return Math.round(this.objSignInfo.traf_x)
-    } else
-      return Math.round(this.objSignInfo.traf_x) - 1;
+      return Math.round(this.objSignInfo.traf_x);
+    } else return Math.round(this.objSignInfo.traf_x) - 1;
   }
 
   getTrafY() {
-    return Math.round(this.objSignInfo.traf_y)
+    return Math.round(this.objSignInfo.traf_y);
   }
 
   // forward data component
@@ -621,72 +710,72 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
   }
 
   getNameContract(data: any) {
-    return (' ' + data.file_name + ',').replace(/,\s*$/, "");
+    return (' ' + data.file_name + ',').replace(/,\s*$/, '');
   }
-  
 
   dataURIToBlob(dataURI: string) {
-    const splitDataURI = dataURI.split(',')
-    const byteString = splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1])
-    const mimeString = splitDataURI[0].split(':')[1].split(';')[0]
+    const splitDataURI = dataURI.split(',');
+    const byteString =
+      splitDataURI[0].indexOf('base64') >= 0
+        ? atob(splitDataURI[1])
+        : decodeURI(splitDataURI[1]);
+    const mimeString = splitDataURI[0].split(':')[1].split(';')[0];
 
-    const ia = new Uint8Array(byteString.length)
+    const ia = new Uint8Array(byteString.length);
     for (let i = 0; i < byteString.length; i++)
-      ia[i] = byteString.charCodeAt(i)
+      ia[i] = byteString.charCodeAt(i);
 
-    return new Blob([ia], { type: mimeString })
+    return new Blob([ia], { type: mimeString });
   }
 
-  nextPage(){
+  nextPage() {
     this.pageNumberCurrent++;
     this.pageNumberOld = this.pageNumberCurrent;
-    this.getDataContractSignature(this.pageNumberCurrent-1);
+    this.getDataContractSignature(this.pageNumberCurrent - 1);
   }
 
-  previousPage(){
+  previousPage() {
     this.pageNumberCurrent--;
     this.pageNumberOld = this.pageNumberCurrent;
-    this.getDataContractSignature(this.pageNumberCurrent-1);
+    this.getDataContractSignature(this.pageNumberCurrent - 1);
   }
 
-  typingPage(event:any){
+  typingPage(event: any) {
     let value = event.target.value;
-    if(!value){
+    if (!value) {
       this.pageNumberCurrent = this.pageNumberOld;
       //this.toastService.showErrorHTMLWithTimeout("Số hợp đồng không được để trống", "", 3000);
-    }else if(value > this.pageNumberTotal){
+    } else if (value > this.pageNumberTotal) {
       this.pageNumberCurrent = this.pageNumberOld;
       //this.toastService.showErrorHTMLWithTimeout("Không nhập số hợp đồng vượt quá " + this.pageNumberTotal, "", 3000);
-    }else if(value < 1){
+    } else if (value < 1) {
       this.pageNumberCurrent = this.pageNumberOld;
       //this.toastService.showErrorHTMLWithTimeout("Không nhập số hợp đồng nhỏ hơn 1", "", 3000);
-    }else{
+    } else {
       this.pageNumberCurrent = value;
       this.pageNumberOld = this.pageNumberCurrent;
       console.log(this.pageNumberCurrent);
-      this.getDataContractSignature(this.pageNumberCurrent-1);
+      this.getDataContractSignature(this.pageNumberCurrent - 1);
     }
-    
   }
 
-  numberOnly(event:any): boolean {
-    const charCode = (event.which) ? event.which : event.keyCode;
+  numberOnly(event: any): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
       return false;
     }
     return true;
-
   }
 
-  checkDisableIcon(){
-    if(this.pageNumberCurrent == 1){
+  checkDisableIcon() {
+    if (this.pageNumberCurrent == 1) {
       this.isDisablePrevious = true;
-    }else{
+    } else {
       this.isDisablePrevious = false;
     }
-    if(this.pageNumberCurrent == this.pageNumberTotal){
+    if (this.pageNumberCurrent == this.pageNumberTotal) {
       this.isDisableNext = true;
-    }else{
+    } else {
       this.isDisableNext = false;
     }
   }
@@ -695,34 +784,52 @@ export class ConfirmContractBatchComponent implements OnInit, OnDestroy, AfterVi
     this.nextOrPreviousStep(step);
   }
 
-
-  submit(){
+  user: any;
+  submit() {
     const data = {
       title: 'YÊU CẦU XÁC NHẬN',
     };
     // @ts-ignore
-    const dialogRef = this.dialog.open(ConfirmCecaBatchComponent, {
+    const dialogRef = this.dialog.open(ConfirmCecaFormComponent, {
       width: '560px',
       backdrop: 'static',
       keyboard: false,
       data,
-      autoFocus: false
-    })
+      autoFocus: false,
+    });
     dialogRef.afterClosed().subscribe((isCeCA: any) => {
-      if(isCeCA == 1 || isCeCA == 0){
+      if (isCeCA == 1 || isCeCA == 0) {
         this.next(isCeCA);
       }
-    })
+    });
   }
 
-  next(isCeCA:any){
+  next(isCeCA: any) {
     this.spinner.show();
-    this.contractService.confirmContractBatchList(this.datasBatch.contractFile, this.datasBatch.idContractTemplate, isCeCA).subscribe((response: any) => {
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/main/contract/create/processing']);
-      });
-      this.spinner.hide();
-      this.toastService.showSuccessHTMLWithTimeout("Tạo hợp đồng theo lô thành công", "", 3000);
-    }), (error: any) => this.toastService.showErrorHTMLWithTimeout("Tạo hợp đồng theo lô thất bại", "", 3000);
+    this.contractService
+      .confirmContractBatchList(
+        this.datasBatch.contractFile,
+        this.datasBatch.idContractTemplate,
+        isCeCA
+      )
+      .subscribe((response: any) => {
+        this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate(['/main/contract/create/processing']);
+          });
+        this.spinner.hide();
+        this.toastService.showSuccessHTMLWithTimeout(
+          'Tạo hợp đồng theo lô thành công',
+          '',
+          3000
+        );
+      }),
+      (error: any) =>
+        this.toastService.showErrorHTMLWithTimeout(
+          'Tạo hợp đồng theo lô thất bại',
+          '',
+          3000
+        );
   }
 }

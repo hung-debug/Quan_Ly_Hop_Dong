@@ -6,6 +6,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { invalid } from 'moment';
 import { AddUnitComponent } from 'src/app/main/unit/add-unit/add-unit.component';
 import { AdminUnitService } from 'src/app/service/admin/admin-unit.service';
 import { RoleService } from 'src/app/service/role.service';
@@ -77,7 +78,7 @@ export class AdminAddUnitComponent implements OnInit {
       ]),
       tax_code: this.fbd.control('', [
         Validators.required,
-        Validators.pattern(parttern_input.input_form),
+        Validators.pattern(parttern_input.taxCode_form),
       ]),
       address: this.fbd.control('', [
         Validators.required,
@@ -87,9 +88,6 @@ export class AdminAddUnitComponent implements OnInit {
         Validators.required,
         Validators.pattern(parttern_input.input_form),
       ]),
-      fileCeCa: this.fbd.control('',[
-        Validators.required
-      ])
     });
   }
 
@@ -97,9 +95,6 @@ export class AdminAddUnitComponent implements OnInit {
     this.fileCeCaOptions = fileCeCaOptions;
 
     this.datas = this.data;
-
-    console.log('data ');
-    console.log(this.data);
 
     //lay du lieu form cap nhat
     if (this.data.id != null) {
@@ -142,7 +137,7 @@ export class AdminAddUnitComponent implements OnInit {
             ]),
             tax_code: this.fbd.control(data.taxCode, [
               Validators.required,
-              Validators.pattern(parttern_input.input_form),
+              Validators.pattern(parttern_input.taxCode_form),
             ]),
             address: this.fbd.control(data.address, [
               Validators.required,
@@ -152,10 +147,6 @@ export class AdminAddUnitComponent implements OnInit {
               Validators.required,
               Validators.pattern(parttern_input.input_form),
             ]),
-            fileCeCa: this.fbd.control(
-              this.convertFileCeCa(data.ceCAPushMode),
-              Validators.required
-            ),
           });
         },
         (error) => {
@@ -196,7 +187,7 @@ export class AdminAddUnitComponent implements OnInit {
         ]),
         tax_code: this.fbd.control('', [
           Validators.required,
-          Validators.pattern(parttern_input.input_form),
+          Validators.pattern(parttern_input.taxCode_form),
         ]),
         address: this.fbd.control('', [
           Validators.required,
@@ -206,22 +197,8 @@ export class AdminAddUnitComponent implements OnInit {
           Validators.required,
           Validators.pattern(parttern_input.input_form),
         ]),
-        fileCeCa: this.fbd.control('', [
-          Validators.required,
-        ]),
       });
     }
-  }
-  convertFileCeCa(ceCAPushMode: any): any {
-    if ((ceCAPushMode = fileCeCaOptions[0].id)) {
-      ceCAPushMode = fileCeCaOptions[0];
-    } else if ((ceCAPushMode = fileCeCaOptions[1].id)) {
-      ceCAPushMode = fileCeCaOptions[1];
-    } else if ((ceCAPushMode = fileCeCaOptions[2].id)) {
-      ceCAPushMode = fileCeCaOptions[2];
-    }
-
-    return ceCAPushMode;
   }
 
   convertStatus(status: any): any {
@@ -239,6 +216,7 @@ export class AdminAddUnitComponent implements OnInit {
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
+      console.log("invalid ", invalid);
       return;
     }
 
@@ -255,7 +233,6 @@ export class AdminAddUnitComponent implements OnInit {
       taxCode: this.addForm.value.tax_code,
       position: this.addForm.value.position,
       address: this.addForm.value.address,
-      ceCAPushMode: this.addForm.value.fileCeCa,
     };
 
     //truong hop sua ban ghi
@@ -506,6 +483,8 @@ export class AdminAddUnitComponent implements OnInit {
               });
             });
 
+            console.log("roleArrConvert ",roleArrConvert);
+
             const dataRoleIn = {
               name: 'Admin',
               code: 'ADMIN',
@@ -516,7 +495,7 @@ export class AdminAddUnitComponent implements OnInit {
             this.adminUnitService.addRoleByOrg(dataRoleIn).subscribe(
               (dataRole) => {
                 //this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
-                console.log(dataRole);
+                console.log("dataRole ",dataRole);
                 //them nguoi dung
                 const dataUserIn = {
                   name: 'Admin',
