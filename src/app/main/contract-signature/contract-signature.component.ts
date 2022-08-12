@@ -16,6 +16,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import * as moment from "moment";
 import { sideList } from 'src/app/config/variable';
 import { DatePipe } from '@angular/common';
+import { DialogSignManyComponentComponent } from './dialog/dialog-sign-many-component/dialog-sign-many-component.component';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract-signature.component.html',
@@ -110,6 +111,17 @@ export class ContractSignatureComponent implements OnInit {
 
       this.getContractList();
     });
+  }
+
+  typeDisplay: string = "signOne";
+  signMany() {
+    console.log("Ký nhiều ");
+    this.typeDisplay = "signMany";
+
+  }
+
+  cancelSignMany() {
+    this.typeDisplay = "signOne";
   }
 
   getContractList() {
@@ -213,6 +225,16 @@ export class ContractSignatureComponent implements OnInit {
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
+  }
+
+  signManyContract() {
+    const dialogRef = this.dialog.open(DialogSignManyComponentComponent, {
+      width: '580px',
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    })
   }
 
   searchContract(){

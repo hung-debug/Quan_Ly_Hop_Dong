@@ -117,11 +117,13 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
   // forward data component
   nextOrPreviousStep(step: string) {
+    console.log("next or previous step ");
     this.datas.stepLast = step;
     this.stepChangeConfirmInforContract.emit(step);
   }
 
   saveDraft() {
+    console.log("save draft ");
     this.toastService.showSuccessHTMLWithTimeout(
       'Lưu nháp thành công!',
       '',
@@ -135,6 +137,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   // }
 
   callAPIFinish() {
+    console.log("call api finish ");
     //call API step confirm
     //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
     this.spinner.show();
@@ -167,6 +170,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
   user: any;
   submit(action: string) {
+    console.log("submit ");
     const data = {
       title: 'YÊU CẦU XÁC NHẬN',
     };
@@ -202,7 +206,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   async SaveContract(action: string) {
-    console.log("save contract ", this.datas);
+    console.log("async save contract ", this.datas);
     if (
       this.datas.is_action_contract_created &&
       this.router.url.includes('edit')
@@ -330,6 +334,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     dataSignNotId: any,
     action: any
   ) {
+    console.log("get defind data sign edit ");
     let dataSample_contract: any[] = [];
     if (dataSignId.length > 0) {
       let data_remove_arr_signId = [
