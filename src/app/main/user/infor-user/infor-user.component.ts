@@ -175,6 +175,11 @@ export class InforUserComponent implements OnInit {
       }
     )
   }
+  
+  fieldTextType: boolean = false;
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
+  }
 
   update(data:any){
 

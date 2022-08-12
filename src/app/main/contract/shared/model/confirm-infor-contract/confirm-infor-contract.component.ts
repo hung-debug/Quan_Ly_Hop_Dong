@@ -51,6 +51,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   is_origanzation_signature: any = [];
   is_origanzation_document: any = [];
   data_parnter_organization: any = [];
+  temp: any = [];
 
   getPartnerCoordinationer(item: any) {
     return item.recipients.filter((p: any) => p.role == 1);
@@ -66,9 +67,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     return item.recipients.filter((p: any) => p.role == 4);
   }
 
+  xSoTaiLieu: any;
   ngOnInit(): void {
-    console.log(this.datas);
-
+    this.temp = this.datas;
+    console.log("inti ",this.datas);
     this.data_organization = this.datas.is_determine_clone.filter(
       (p: any) => p.type == 1
     )[0];
@@ -85,9 +87,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     this.data_parnter_organization = this.datas.is_determine_clone.filter(
       (p: any) => p.type == 2 || p.type == 3
     );
+
+    console.log("final intit ", this.datas)
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log("ng on changes ", this.datas);
     if (
       this.save_draft_infor &&
       this.save_draft_infor.close_header &&
@@ -98,6 +103,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   back(e: any, step?: any) {
+    console.log("back  ", this.datas);
+    
+    console.log("back temp ", this.temp);
+
     this.nextOrPreviousStep(step);
   }
 
@@ -193,6 +202,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   async SaveContract(action: string) {
+    console.log("save contract ", this.datas);
     if (
       this.datas.is_action_contract_created &&
       this.router.url.includes('edit')

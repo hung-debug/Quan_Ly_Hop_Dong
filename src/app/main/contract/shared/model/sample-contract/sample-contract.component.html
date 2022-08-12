@@ -11,9 +11,11 @@
                 <div *ngIf="!d.sign_config.position" [ngClass]="setClass(d)" (click)="showThumbnail()"
                     [id]=getIdSignChuaKeo(d.id)>
                     <div class="signature-sample-drag" style="position: relative">
+
                         <div *ngIf="d.sign_unit == 'so_tai_lieu' || d.sign_unit == 'text'" [ngStyle]="setWidth(d)"
                             class="content-drag" id="element-drag-text">{{d.sign_unit == 'so_tai_lieu' ? 'Số hợp đồng' :
                             'Text'}}</div>
+
                         <div *ngIf="d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh'" class="content-drag"
                             id="element-drag" style="height: 102px; flex-direction: column" [ngStyle]="setWidth(d)">
                             <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'"

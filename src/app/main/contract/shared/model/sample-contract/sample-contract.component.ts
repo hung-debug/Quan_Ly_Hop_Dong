@@ -1275,6 +1275,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
+
+      console.log("next sample contract ", this.datas);
       return;
     } else {
       if (action == 'save_draft') {
@@ -1470,10 +1472,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let arrSign_organization: any[] = [];
       let arrSign_partner: any[] = [];
 
+      console.log("datas ", this.datas);
+
       for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datas.contract_user_sign[i].sign_config[j];
+            console.log("element ",element);
+            console.log("element length ",element.length);
+            console.log("element sign unit ",element.sign_unit);
             if (!element.name && element.sign_unit != 'so_tai_lieu') { // element.sign_unit != 'so_tai_lieu'
               count++;
               break
@@ -1487,16 +1494,29 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               count_text++;
               break
             } else {
-              let data_sign = {
-                name: element.name,
-                signature_party: element.signature_party,
-                recipient_id: element.recipient_id,
-                email: element.email ? element.email : element.recipient.email,
-                sign_unit: element.sign_unit
+              if(element.email != undefined) {
+                let data_sign = {
+                  name: element.name,
+                  signature_party: element.signature_party,
+                  recipient_id: element.recipient_id,
+                  email: element.recipient ? element.recipient.email : element.email,
+                  sign_unit: element.sign_unit
+                }
+                if (element.signature_party == "organization" || element.is_type_party == 1)
+                  arrSign_organization.push(data_sign);
+                else arrSign_partner.push(data_sign);
+              } else {
+                let data_sign = {
+                  name: element.name,
+                  signature_party: element.signature_party,
+                  recipient_id: element.recipient_id,
+                  email: null,
+                  sign_unit: element.sign_unit
+                }
+                if (element.signature_party == "organization" || element.is_type_party == 1)
+                  arrSign_organization.push(data_sign);
+                else arrSign_partner.push(data_sign);
               }
-              if (element.signature_party == "organization" || element.is_type_party == 1)
-                arrSign_organization.push(data_sign);
-              else arrSign_partner.push(data_sign);
             }
           }
           if (count > 0 || count_text > 0) break

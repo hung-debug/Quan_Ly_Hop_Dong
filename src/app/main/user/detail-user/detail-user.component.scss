@@ -85,5 +85,13 @@
     border-radius: 5px;
     min-height: 40px;
   }
+
+  .input_text_pw{
+    background: #EFF2F5;
+    padding: 10px;
+    border-radius: 5px;
+    min-height: 40px;
+    -webkit-text-security: disc;
+  }
   
     

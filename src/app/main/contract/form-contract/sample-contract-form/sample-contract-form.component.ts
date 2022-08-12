@@ -1606,16 +1606,29 @@ export class SampleContractFormComponent implements OnInit {
                 break;
               }
             } else {
-              let data_sign = {
-                name: element.name,
-                signature_party: element.signature_party,
-                recipient_id: element.recipient_id,
-                email: element.recipient ? element.recipient.email : element.email,
-                sign_unit: element.sign_unit
+
+              if(element.email != undefined) {
+                let data_sign = {
+                  name: element.name,
+                  signature_party: element.signature_party,
+                  recipient_id: element.recipient_id,
+                  email: element.recipient ? element.recipient.email : element.email,
+                  sign_unit: element.sign_unit
+                }
+                if (element.signature_party == "organization" || element.is_type_party == 1)
+                  arrSign_organization.push(data_sign);
+                else arrSign_partner.push(data_sign);
+              } else {
+                let data_sign = {
+                  name: element.name,
+                  signature_party: element.signature_party,
+                  recipient_id: element.recipient_id,
+                  sign_unit: element.sign_unit
+                }
+                if (element.signature_party == "organization" || element.is_type_party == 1)
+                  arrSign_organization.push(data_sign);
+                else arrSign_partner.push(data_sign);
               }
-              if (element.signature_party == "organization" || element.is_type_party == 1)
-                arrSign_organization.push(data_sign);
-              else arrSign_partner.push(data_sign);
             }
           }
           if (count > 0 || count_number > 0 || count_text > 0) {

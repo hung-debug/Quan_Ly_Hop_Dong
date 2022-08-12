@@ -182,7 +182,7 @@
               <div class="col-md-12">
                 <div>{{'user.name.v2' | translate}}</div>
                 <div class="input-data">
-                  <input type="text" formControlName="nameHsm">
+                  <input type="text" formControlName="nameHsm" id="nameHsm">
                 </div>
                 <div *ngIf="submittedSign && fHsm.nameHsm.errors" class="invalid">
                   <div *ngIf="fHsm.nameHsm.errors.pattern">{{'Tên người dùng không được chứa ký tự đặc biệt' | translate}}</div>
@@ -195,7 +195,18 @@
               <div class="col-md-12">
                 <div>{{'Mật khẩu cấp 1' | translate}}</div>
                 <div class="input-data">
-                  <input type="text" formControlName="password1Hsm">
+                  <input *ngIf="this.fieldTextType === false" class="pw" type="text" formControlName="password1Hsm" id="password1Hsm">
+                  <input *ngIf="this.fieldTextType === true" type="text" formControlName="password1Hsm" id="password1Hsm"/>
+                    <div class="icon-password">
+                      <i class="fa"
+                        [ngClass]="{
+                          'fa-eye-slash': !fieldTextType,
+                          'fa-eye': fieldTextType
+                        }"
+                        (click)="toggleFieldTextType()"
+                        style="color: #106DB6;"
+                      ></i>
+                    </div>
                 </div>
               </div>
             </div>
