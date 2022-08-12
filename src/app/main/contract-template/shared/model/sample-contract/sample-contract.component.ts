@@ -100,7 +100,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    
+
     console.log(this.datas.contract_user_sign);
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
@@ -255,7 +255,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           item['is_type_party'] = this.datas.is_determine_clone.type;
           item['role'] = item.role;
           dataNotPosition.push(item)
-        }  
+        }
       })
     })
 
@@ -283,14 +283,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         dataNotAssign.push(res);
       }
     })
-    
+
     // let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
     // let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
     this.dataSignPosition = [...dataPosition, ...dataNotPosition, ...dataNotAssign];
     console.log("this.dataSignPosition");
     console.log(this.dataSignPosition);
 
-    
+
     this.dataSignPosition.forEach((res: any) => {
       if (res.sign_unit == 'text') {
         res['text_attribute_name'] = res.name;
@@ -351,12 +351,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // (val.recipient_id as any) == (data.id as any) &&
     dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
       (
-        (val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && (val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any)) 
-      || (val.sign_unit == 'text' && (!val.recipient_id || ((val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any)))) 
+        (val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5) && (val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))
+      || (val.sign_unit == 'text' && (!val.recipient_id || ((val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))))
       || (val.sign_unit == 'so_tai_lieu' && (!val.recipient_id || ((val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))))
       || (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && (val.recipient_id ? val.recipient_id as any : val.email as any) == (val.recipient_id ? data.id as any : data.email as any))
-      ) 
-       
+      )
+
     ));
 
 
@@ -397,12 +397,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           //giu lai cac ban ghi chua gan nguoi xu ly + o so tai lieu chua gan nguoi xu ly + o text da co ten chua gan nguoi xu ly + da gan nguoi xu ly va nguoi xu ly con ton tai
           //!(val.recipient ? val.recipient : val.name) ||
           res.sign_config = res.sign_config.filter((val: any) => dataDiffirent.some((data: any) =>!(val.recipient ? val.recipient : val.name) ||
-                                                                                                  (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'so_tai_lieu') 
-                                                                                                  || (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'text' && val.text_attribute_name) 
+                                                                                                  (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'so_tai_lieu')
+                                                                                                  || (!(val.recipient ? val.recipient : val.name) && val.sign_unit == 'text' && val.text_attribute_name)
                                                                                                   || (
-                                                                                                      (val.name as any) == (data.name as any) 
-                                                                                                      && (val.type as any) == (data.type as any) 
-                                                                                                      && (val.recipient_id ? val.recipient_id as any : val.email as any) === (val.recipient_id ? data.recipient_id as any : data.email as any) 
+                                                                                                      (val.name as any) == (data.name as any)
+                                                                                                      && (val.type as any) == (data.type as any)
+                                                                                                      && (val.recipient_id ? val.recipient_id as any : val.email as any) === (val.recipient_id ? data.recipient_id as any : data.email as any)
                                                                                                       && val.sign_unit == data.sign_unit)));
           res.sign_config.forEach((items: any) => {
             items.id = items.id + '1';
@@ -568,7 +568,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           layerX = event.rect.left - canvasInfo.left;
         }
 
-        let layerY;
+        let layerY = 0;
         //@ts-ignore
         if ("top" in canvasInfo) {
           layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
@@ -1468,7 +1468,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       //   this.step = variable.stepSampleContract.step4;
       //   this.datas.stepLast = this.step
       //   this.nextOrPreviousStep(this.step);
-      // } else 
+      // } else
       if (action == 'save_draft') {
         this.datas.save_draft.sample_contract = false;
         this.stepChangeSampleContract.emit('save_draft_sample_contract')
@@ -1566,7 +1566,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
 
-      
+
 
       if (count > 0) {
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
@@ -1593,7 +1593,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           name: '',
           sign_type: ''
         };
-        
+
         // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_organization) {
           if (element.sign_type.length > 0) {
@@ -1655,7 +1655,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           return false;
         }
 
-        
+
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
         if (arrSign_partner.length < data_partner.length) {
           // alert('Thiếu đối tượng ký của đối tác, vui lòng chọn đủ người ký!');

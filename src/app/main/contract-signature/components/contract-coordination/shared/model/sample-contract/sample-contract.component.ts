@@ -298,6 +298,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let canvasInfo = canvasElement ? canvasElement.getBoundingClientRect() : '';
       this.coordinates_signature = event.rect;
       let id = event.target.id;
+      let signElement = <HTMLElement>document.getElementById(id);
+      let rect_location = signElement.getBoundingClientRect();
       if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
         event.target.style.webkitTransform = event.target.style.transform = 'none';// Đẩy chữ ký về vị trí cũ
         event.target.setAttribute('data-x', 0);
@@ -333,30 +335,43 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         let layerX;
         // @ts-ignore
         if ("left" in canvasInfo) {
-          layerX = event.rect.left - canvasInfo.left;
+          layerX = rect_location.left - canvasInfo.left;
         }
 
-        let layerY;
+        let layerY = 0;
         //@ts-ignore
         if ("top" in canvasInfo) {
-          layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
+          layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
         }
 
 
         let pages = event.relatedTarget.id.split("-");
-        let page = Helper._attemptConvertFloat(pages[pages.length - 1]);
+        let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
         // @ts-ignore
+        // if (page > 1) {
+        //   // @ts-ignore
+        //   for (let i = 1; i < page; i++) {
+        //     let canvasElement = document.getElementById("canvas-step3-" + i);
+        //     // @ts-ignore
+        //     let canvasInfo = canvasElement.getBoundingClientRect();
+        //     layerY += canvasInfo.height + 2;
+        //   }
+        //   // @ts-ignore
+        //   layerY += page / 3;
+        // }
+
         if (page > 1) {
-          // @ts-ignore
+          let countPage = 0;
           for (let i = 1; i < page; i++) {
-            let canvasElement = document.getElementById("canvas-step3-" + i);
-            // @ts-ignore
+            let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
             let canvasInfo = canvasElement.getBoundingClientRect();
-            layerY += canvasInfo.height + 2;
+            countPage += canvasInfo.height;
           }
-          // @ts-ignore
-          layerY += page / 3;
+          let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
+          let canvasInfo = canvasElement.getBoundingClientRect();
+          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
         }
+
         let _array = Object.values(this.obj_toa_do);
         this.cdRef.detectChanges(); // render lại view
         let _sign = <HTMLElement>document.getElementById(this.signCurent['id']);
@@ -382,12 +397,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.objSignInfo.traf_x = Math.round(this.signCurent['coordinate_x']);
         this.objSignInfo.traf_y = Math.round(this.signCurent['coordinate_y']);
 
-        this.tinhToaDoSign(event.relatedTarget.id, event.rect.width, event.rect.height, this.objSignInfo);
+        this.tinhToaDoSign(event.relatedTarget.id, rect_location.width, rect_location.height, this.objSignInfo);
         this.signCurent['position'] = _array.join(",");
         this.signCurent['left'] = this.obj_toa_do.x1;
         //@ts-ignore
         if ("top" in canvasInfo) {
-          this.signCurent['top'] = (event.rect.top - canvasInfo.top).toFixed();
+          this.signCurent['top'] = (rect_location.top - canvasInfo.top).toFixed();
         }
         let name_accept_signature = '';
         // lay lai danh sach signer sau khi keo vao hop dong
@@ -698,6 +713,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // @ts-ignore
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+    this.spinner.show();
     pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
       this.thePDF = pdf;
       this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)
@@ -719,6 +735,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       setTimeout(() => {
         this.setPosition();
         this.eventMouseover();
+        this.spinner.hide();
       }, 100)
     })
   }
@@ -858,17 +875,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       style.height = parseInt(d['height']) + "px";
     }
     return style;
-  }
-
-  // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
-  // @ts-ignore
-  changeDisplay() {
-    if (window.innerHeight <= 781 /*768*/ ) {
-      return {
-        "overflow": "auto",
-        "height": "225px"
-      }
-    } else return {}
   }
 
   // hàm stype đối tượng boder kéo thả

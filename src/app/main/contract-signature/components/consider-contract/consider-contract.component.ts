@@ -48,7 +48,7 @@ import { DatePipe } from '@angular/common';
   templateUrl: './consider-contract.component.html',
   styleUrls: ['./consider-contract.component.scss']
 })
-export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewInit {  
+export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewInit {
   datas: any;
   data_contract: any;
   data_coordinates: any;
@@ -195,7 +195,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   getDataContractSignature() {
-    
+
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
       console.log(rs);
       this.isDataContract = rs[0];
@@ -264,7 +264,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         if (element.recipient) { // set name (nguoi dc uy quyen hoac chuyen tiep)
           element.name = element.recipient.name;
         }
-      
+
       })
 
       let data_sign_config_cks = this.datas.is_data_object_signature.filter((p: any) => p.sign_unit == 'chu_ky_so');
@@ -317,8 +317,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         const pdfC1 = this.datas.i_data_file_contract.find((p: any) => p.type == 1);
         if (pdfC2) {
           fileC = pdfC2.path;
-
-          console.log("fileC pdf2 ", fileC);
         } else if (pdfC1) {
           fileC = pdfC1.path;
         } else {
@@ -326,7 +324,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         }
         this.pdfSrc = fileC;
       }
-
       // render pdf to canvas
       this.getPage();
       this.loaded = true;
@@ -374,7 +371,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
-      console.log("pdf ",pdf);
       this.thePDF = pdf;
       this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)
       this.removePage();
@@ -869,6 +865,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
+
+
   openPopupSignContract(typeSign: any) {
     if (typeSign == 1) {
       this.imageDialogSignOpen();
@@ -1155,11 +1153,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           }
         });
     }else{
-      
+
       this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
       await of(null).pipe(delay(100)).toPromise();
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
-      
+
       let signI:any;
       if (imageRender) {
         const textSignB = await domtoimage.toPng(imageRender);
@@ -1188,7 +1186,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         signUpdatePayload = signUpdatePayload[0];
       }
     }
-    
+
     let typeSignDigital = null;
     for (const signUpdate of this.isDataObjectSignature) {
       if (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
@@ -1233,7 +1231,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               });
             }
           })
-        
+
         } else {
           this.spinner.hide();
           Swal.fire({
@@ -1284,7 +1282,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           });
       }
     }
-    
+
     if (notContainSignImage && !signDigitalStatus && this.datas.roleContractReceived != 2) {
       this.spinner.hide();
       return;
@@ -1334,14 +1332,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               this.spinner.hide();
             }, 1000);
           }
-          
+
         }, error => {
           this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
           this.spinner.hide();
         }
       )
     }
-    
+
   }
 
   async signContractSimKPI() {
@@ -1610,9 +1608,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
         sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
         sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
-        
+
         console.log("sign recipient_id ",sign.recipient_id);
-        
+
         //Lấy thông tin mã số thuế của đối tác ký bằng USB Token
         this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
 
@@ -1623,9 +1621,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           for(let i = 0; i < lengthRes; i++) {
 
             console.log("vao vong for ");
-    
+
             const id = response.recipients[i].id;
-            
+
             if(id == sign.recipient_id) {
               console.log("vao doan check ");
 
