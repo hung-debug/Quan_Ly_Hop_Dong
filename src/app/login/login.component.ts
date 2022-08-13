@@ -103,7 +103,7 @@ export class LoginComponent implements OnInit {
                   this.router.navigate([localStorage.getItem('url')]);
                 }
               }
-            } else { 
+            } else {
               this.error = false;
               if (this.type == 0) {
                 this.router.navigate(['/main/dashboard']);
@@ -128,7 +128,7 @@ export class LoginComponent implements OnInit {
           this.error = true;
           this.errorDetail = "error.username.password";
         }
-          
+
         },
         error => {
           console.log(localStorage.getItem('checkUser'));

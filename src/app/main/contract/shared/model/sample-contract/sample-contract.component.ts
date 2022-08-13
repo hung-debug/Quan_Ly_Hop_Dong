@@ -101,6 +101,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   temp: any[];
+
   ngOnInit() {
     this.temp = this.datas.is_determine_clone;
 
@@ -216,7 +217,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.resize-drag').resizable({
-      edges: { left: false, right: false, bottom: false, top: false },
+      edges: {left: false, right: false, bottom: false, top: false},
     })
 
     interact.addDocument(document)
@@ -286,7 +287,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   defindDataContract() {
-    let dataDetermine: { id: any; sign_type: any; name: string }[] = [];
+    let dataDetermine: {
+      role: Boolean | number;
+      id: any; sign_type: any; name: string; email: string
+    }[] = [];
     this.datas.is_determine_clone.forEach((res: any) => {
       res.recipients.forEach((element: any) => {
         let isObj = {
@@ -302,8 +306,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     // lay du lieu vi tri va toa do ky cua buoc 3 da thao tac
     let dataContractUserSign: any[] = [];
-    this.datas.contract_user_sign.forEach((res: any, index: number) => {
-      if (res.sign_config.length !== 0) {
+    this.datas.contract_user_sign.forEach((res: any) => {
+      if (res.sign_config.length > 0) {
         res.sign_config.forEach((element: any) => {
           dataContractUserSign.push(element)
         })
@@ -313,16 +317,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let isContractSign: any[] = [];
     for (const d of dataContractUserSign) {
       for (const data of dataDetermine) {
-        //@ts-ignore
         if (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
-            //@ts-ignore
             (d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
-            //@ts-ignore
             (d.sign_unit == 'so_tai_lieu' && data.role == 4) ||
-            //@ts-ignore
             (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-          //@ts-ignore
-          (d.name === data.name) && ((d.email ? d.email : d.recipient.email) === data.email)) {
+          ((d.name === data.name) && ((d.email ? d.email : d.recipient.email) === data.email)) || (!d.email && this.datas.contract_no && d.sign_unit == 'so_tai_lieu')) {
           isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
         }
       }
@@ -333,7 +332,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (isContractSign.length > 0 && dataDetermine.length > 0) {
       // console.log(isContractSign, dataContractUserSign);
       for (const d of dataContractUserSign) {
-        if (!isContractSign.some((p: any) => p.recipient_id == d.recipient_id)) {
+        let dataNotLocation = isContractSign.filter((p: any) => (d.recipient_id && p.recipient_id == d.recipient_id) || (!d.recipient_id && d.sign_unit == 'so_tai_lieu' && this.datas.contract_no))[0];
+        if (!dataNotLocation) {
           dataDiffirent.push(d); // mảng chứa dữ liệu bị thay đổi giá trị (name, email, sign_type)
         }
       }
@@ -358,7 +358,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           /*
           end
           */
-          res.sign_config = res.sign_config.filter((val: any) => isContractSign.some((data: any) => (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any) && val.sign_unit == data.sign_unit));
+          res.sign_config = res.sign_config.filter((val: any) =>
+            isContractSign.some((data: any) =>
+              (val.name as any) == (data.name as any) &&
+              (val.recipient ? val.recipient.email as any : val.email as any) === (data.recipient ? data.recipient.email as any : data.email as any) &&
+              val.sign_unit == data.sign_unit));
           // res.sign_config = isContractSign;
           res.sign_config.forEach((items: any) => {
             items.id = items.id + '1';
@@ -547,7 +551,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
           let canvasInfo = canvasElement.getBoundingClientRect();
           // @ts-ignore
-          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5*(page - 1);
+          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5 * (page - 1);
         }
         //END
 
@@ -622,8 +626,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                   if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
                     if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
-                      element['width'] = '';
-                      element['height'] = '';
+                      element['width'] = rect_location.width;
+                      element['height'] = rect_location.height;
                     } else {
                       element['width'] = '135';
                       element['height'] = '28';
@@ -934,8 +938,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           (item.getBoundingClientRect().top >= 0) ||
           (item.getBoundingClientRect().bottom >= (window.innerHeight / 2)) &&
           (item.getBoundingClientRect().bottom <= window.innerHeight) &&
-          (item.getBoundingClientRect().top <= 0))
-          {
+          (item.getBoundingClientRect().top <= 0)) {
           let page = item.id.split("-")[2];
           $('.page-canvas').css('border', 'none');
           let selector = '.page-canvas.page' + page;
