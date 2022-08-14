@@ -92,12 +92,12 @@ export class DashboardComponent implements OnInit {
       let dataChildren = this.findChildren(element);
       let data:any="";
       data = {
-        label: element.name, 
+        label: element.name,
         data: element.id,
         expanded: true,
         children: dataChildren
       };
-      
+
       this.array_empty.push(data);
       //this.removeElementFromStringArray(element.id);
     })
@@ -107,13 +107,13 @@ export class DashboardComponent implements OnInit {
   findChildren(element:any){
     let dataChildren:any[]=[];
     let arrCon = this.orgList.filter((p: any) => p.parent_id == element.id);
-    
+
     arrCon.forEach((elementCon: any, indexCOn: number) => {
       let is_edit = false;
-      
+
       dataChildren.push(
       {
-        label: elementCon.name, 
+        label: elementCon.name,
         data: elementCon.id,
         expanded: true,
         children: this.findChildren(elementCon)
@@ -128,7 +128,7 @@ export class DashboardComponent implements OnInit {
         if(value.id==element){
           this.orgList.splice(index,1);
         }
-        
+
     });
   }
 

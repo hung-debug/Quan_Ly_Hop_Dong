@@ -250,7 +250,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             res.recipient.email = data_duplicate ? data_duplicate.recipient.email : res.recipient.email;
             dataPosition.push(res);
           })
-
         } else {
           item['is_type_party'] = this.datas.is_determine_clone.type;
           item['role'] = item.role;
@@ -258,6 +257,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       })
     })
+
+    // check data object have contract number (not assign object)
+    let is_obj_contract_number = this.datas.is_data_object_signature.filter((p: any) => !p.recipient_id && !p.recipient && p.type == 4 && this.datas.contract_no)[0];
+    if (is_obj_contract_number) {
+      let item = _.cloneDeep(is_obj_contract_number);
+      item.is_type_party = is_obj_contract_number.type;
+      item.sign_unit = 'so_tai_lieu';
+      dataPosition.push(item);
+    }
 
     this.dataSignPosition = [...dataPosition, ...dataNotPosition];
     this.dataSignPosition.forEach((res: any) => {
@@ -930,7 +938,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     document.getElementsByClassName('viewer-pdf')[0].addEventListener('scroll', () => {
       const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
 
-      console.log("imgs ", Imgs);
+      // console.log("imgs ", Imgs);
 
       Imgs.forEach((item: any) => {
         if (item.getBoundingClientRect().top <= (window.innerHeight / 2) &&
