@@ -105,15 +105,15 @@
 </div>
 <div class="footer-sample-contract">
     <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button"
-        style="background-color: #8B8B8B">Quay lại</button>
+        style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
     <!-- <div class="content_footer">@Copyright 2021 - MobiFone</div> -->
     <div>
         <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
-            style="background-color: #FCAF17">Lưu nháp</button>
+            style="background-color: #FCAF17">{{'btn.save-draff' | translate}}</button>
         <button (click)="next('next_step')" type="button" name="next" class="next action-button">Tiếp theo</button>
     </div>
 </div>
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
-    <p style="font-size: 18px; color: white">Đang xử lý...</p>
+    <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
 </ngx-spinner>

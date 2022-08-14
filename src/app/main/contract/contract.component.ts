@@ -140,7 +140,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       //set status
       this.convertStatusStr();
 
-      this.appService.setTitle("contract.list.created");      
+      this.appService.setTitle("contract.list.created");
 
       //lay id user
       let userId = this.userService.getAuthCurrentUser().id;
@@ -181,7 +181,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
       )
     });
 
-    
+
 
     // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
   }
@@ -280,7 +280,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         // console.log(res);
         this.toastService.showSuccessHTMLWithTimeout(`Sao chép hợp đồng ${res.name} thành công!`, "", 3000)
         this.getContractList();
-        
+
       }, (error: HttpErrorResponse) => {
         this.toastService.showErrorHTMLWithTimeout(error.message, "", 3000)
         this.spinner.hide();
@@ -456,7 +456,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   getNameStatusCeca(status:any, ceca_push:any, ceca_status:any){
     if(status == 30){
-      if(ceca_push == 0){   
+      if(ceca_push == 0){
         return "";
       }else if(ceca_push == 1){
         if(ceca_status == -1){
