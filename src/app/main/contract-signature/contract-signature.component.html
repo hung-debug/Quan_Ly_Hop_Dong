@@ -9,13 +9,15 @@
     </div>
   </div>
 
-  <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
-    <button (click)="signMany()" class="btn btn-lg btn-block btn_submit">{{'Ký nhiều'| translate}}</button>
-  </div>
+  <div *ngIf="this.status == 'wait-processing'">
+    <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
+      <button (click)="signMany()" class="btn btn-lg btn-block btn_submit">{{'Ký nhiều'| translate}}</button>
+    </div>
 
-  <div *ngIf="this.typeDisplay === 'signMany'" style="padding-top: 10px;">
-    <button class="btn_submit" (click)="signManyContract()">{{'Ký'| translate}}</button>
-    <button class="btn_submit" (click)="cancelSignMany()">{{'Huỷ'| translate}}</button>
+    <div *ngIf="this.typeDisplay === 'signMany'" style="padding-top: 10px;">
+      <button class="btn_submit" (click)="signManyContract()">{{'Ký'| translate}}</button>
+      <button class="btn_submit" (click)="cancelSignMany()">{{'Huỷ'| translate}}</button>
+    </div>
   </div>
 
   <div class="row list_header" *ngIf="pageTotal > 0;">
