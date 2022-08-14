@@ -237,6 +237,17 @@ export class ContractSignatureComponent implements OnInit {
     })
   }
 
+  testCheckBox(item: any) {
+    console.log("vao day checkbox ");
+    const checkBox = document.getElementById("check") as HTMLInputElement | null;
+
+    if(checkBox != null) {
+      if(checkBox.checked === true) {
+        console.log("item ", item);
+      }
+    }
+  }
+
   searchContract(){
     const data = {
       title: 'TÌM KIẾM HỢP ĐỒNG',
