@@ -26,7 +26,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    console.log("a");
+    console.log("image sign contract ");
     console.log(this.sign);
     const currentUserC = JSON.parse(localStorage.getItem('currentUser') || '');
     if (currentUserC != null && currentUserC.customer?.info) {

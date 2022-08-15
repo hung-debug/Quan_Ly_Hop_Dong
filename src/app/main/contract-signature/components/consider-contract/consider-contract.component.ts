@@ -173,6 +173,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngOnInit(): void {
+    console.log("vao consider contract ");
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
     this.activeRoute.queryParams.subscribe(params => {
@@ -422,6 +423,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
   setPosition() {
+    console.log("this convert to sign config ", this.convertToSignConfig())
     if (this.convertToSignConfig().length > 0) {
       this.convertToSignConfig().forEach((element: any) => {
         let a = document.getElementById(element.id);
@@ -606,11 +608,21 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     if (this.datas && this.isDataObjectSignature && this.isDataObjectSignature.length) {
-      //   let arrSignConfig: any = [];
-      //   arrSignConfig = this.datas.is_data_object_signature;
-      return this.datas.is_data_object_signature.filter(
-        (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived
-      );
+        let arrSignConfig: any = [];
+      
+        console.log("datas sign config ", this.datas.is_data_object_signature);
+
+        arrSignConfig = this.datas.is_data_object_signature.filter(
+          (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived);
+        
+        if(this.datas.is_data_object_signature[2].id != null && !this.datas.is_data_object_signature[2].name) {
+          arrSignConfig.push(this.datas.is_data_object_signature[2]);
+        }
+
+        return arrSignConfig;
+        // return this.datas.is_data_object_signature.filter(
+        //   (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived);
+
     } else {
       return [];
     }

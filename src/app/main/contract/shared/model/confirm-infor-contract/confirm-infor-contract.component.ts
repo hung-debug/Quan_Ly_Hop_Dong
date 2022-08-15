@@ -145,6 +145,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     this.contractService.changeStatusContract(this.datas.id, 10, '').subscribe(
       (data) => {
         //this.router.navigate(['/main/contract/create/processing']);
+
+        console.log("data change status contract ", data);
         this.router
           .navigateByUrl('/', { skipLocationChange: true })
           .then(() => {
@@ -284,6 +286,11 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       });
 
       this.spinner.show();
+
+      console.log("datas contract user sign ",this.datas.contract_user_sign);
+      console.log("is contract user sign clone ",isContractUserSign_clone);
+      console.log("this data sample contract ", this.data_sample_contract);
+
       this.contractService
         .getContractSample(this.data_sample_contract)
         .subscribe(

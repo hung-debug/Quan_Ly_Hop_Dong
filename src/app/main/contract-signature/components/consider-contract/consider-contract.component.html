@@ -95,6 +95,7 @@
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
           <app-image-sign-contract *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
+          <!-- <app-sign-contract [datas]="datas" [sign]="d" ></app-sign-contract> -->
         </div>
       </div>
       <div class="skeleton-sign position-absolute opacity-0">
@@ -103,6 +104,7 @@
       <div class="skeleton-sign position-absolute opacity-0">
         <app-text-signature-image [textSign]="textSign" [height]="heightText" [width]="widthText"></app-text-signature-image>
       </div>
+
       <!-- <div class="skeleton-sign position-absolute opacity-0">
         <app-display-signature-image [userOtp]="userOtp" [phoneOtp]="phoneOtp" [isDateTime]="isDateTime"></app-display-signature-image>
       </div> -->
