@@ -141,6 +141,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     //call API step confirm
     //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
     this.spinner.show();
+    console.log("this datas ", this.datas);
     this.contractService.changeStatusContract(this.datas.id, 10, '').subscribe(
       (data) => {
         //this.router.navigate(['/main/contract/create/processing']);
