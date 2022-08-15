@@ -101,7 +101,7 @@ export class DetermineSignerComponent implements OnInit {
     console.log("datas clone ", this.datas.is_determine_clone);
 
     this.user = this.userService.getInforUser();
-  
+
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
     this.isListSignPerson = this.signTypeList.filter((p) => ![4].includes(p.id));
 
@@ -320,7 +320,7 @@ export class DetermineSignerComponent implements OnInit {
       this.flagUSBTokenDocument = true;
       return;
     }
-    
+
     return;
   }
 
@@ -391,7 +391,7 @@ export class DetermineSignerComponent implements OnInit {
         if(this.getDataSignHsm(data).length == 0 || this.getDataSignUSBToken(data).length == 0) {
           data.card_id = "";
         }
-      } 
+      }
       //Nếu là văn thư
       else if(data.role == 4) {
         if(this.getDataSignUSBToken(data).length == 0) {
@@ -406,7 +406,7 @@ export class DetermineSignerComponent implements OnInit {
           if(this.getDataSignHsm(data).length == 0 || this.getDataSignUSBToken(data).length == 0) {
             data.card_id = "";
           }
-        } 
+        }
         //Nếu là văn thư
         else if(data.role == 4) {
           if(this.getDataSignUSBToken(data).length == 0) {
@@ -515,7 +515,7 @@ export class DetermineSignerComponent implements OnInit {
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
 
     console.log("dataArr ", dataArr);
-    
+
     for (let i = 0; i < dataArr.length; i++) {
       if (!dataArr[i].name) {
         this.getNotificationValid("Vui lòng nhập tên" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!");
@@ -527,7 +527,7 @@ export class DetermineSignerComponent implements OnInit {
         count++;
         break;
       }
-     
+
       if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
         this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
         count++;
@@ -733,7 +733,7 @@ export class DetermineSignerComponent implements OnInit {
               count++;
               break;
             }
-      
+
             if(isParterSort[k].card_id && (!this.pattern.card_id.test(isParterSort[k].card_id || !this.pattern_input.taxCode_form.test(isParterSort[k].card_id))) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
               this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
               count++;
@@ -745,13 +745,13 @@ export class DetermineSignerComponent implements OnInit {
               count++;
               break;
             }
-      
+
             if(isParterSort[k].tax_code && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
               this.getNotificationValid("Mã số thuế của" + this.getNameObjectValid(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
               count++;
               break;
             }
-          } 
+          }
           //Cá nhân
           else if (dataArrPartner[j].type == 3) {
             if (!isParterSort[k].name && isParterSort[k].role == 3) {
@@ -793,7 +793,7 @@ export class DetermineSignerComponent implements OnInit {
                 count++;
                 break;
               }
-        
+
               if(isParterSort[k].card_id && (!this.pattern.card_id.test(isParterSort[k].card_id || !this.pattern_input.taxCode_form.test(isParterSort[k].card_id))) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
                 this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!");
                 count++;
