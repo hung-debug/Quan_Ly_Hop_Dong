@@ -2,12 +2,16 @@
   <div class="header">
     <h3 class="label-header">{{this.datas.title | translate}}</h3>
   </div>
-  <form class="content">
+  <form [formGroup]="myForm" class="content">
       <div class="row">
           <div class="col-md-12">
               <div class="label text-color">{{'Mã số thuế' | translate}} <span class="required-title">*</span></div>
               <div class="input-data">
                   <input type="text" formControlName="taxCode" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" autofocus>
+              </div>
+              <div *ngIf="submitted && f.taxCode.errors" class="invalid">
+                <div *ngIf="f.taxCode.errors.required">{{'Mã số thuế không được để trống' | translate}}</div>
+                <div *ngIf="f.taxCode.errors.pattern">{{'Mã số thuế không đúng định dạng' | translate}}</div>
               </div>
           </div>
       </div>
@@ -41,7 +45,7 @@
   
       <div class="row" style="justify-content: center;padding-top: 10px;">
           <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'Thoát' | translate}}</button>
-          <button class="save-button">{{'Xác nhận' | translate}}</button>
+          <button class="save-button" (click)="onSubmit()">{{'Xác nhận' | translate}}</button>
       </div>
   </form>
 </div>

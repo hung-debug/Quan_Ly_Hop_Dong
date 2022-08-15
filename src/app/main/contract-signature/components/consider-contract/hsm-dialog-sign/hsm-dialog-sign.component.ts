@@ -2,6 +2,8 @@ import {Component, ElementRef, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { UserService } from 'src/app/service/user.service';
+import { parttern_input } from 'src/app/config/parttern';
 
 @Component({
   selector: 'app-hsm-dialog-sign',
@@ -10,41 +12,58 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 })
 export class HsmDialogSignComponent implements OnInit {
   myForm: FormGroup;
-  datas: any
+  datas: any;
+  user: any;
+  id: any;
+
+  submitted = false;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {},
     public router: Router,
     public dialog: MatDialog,
     private fbd: FormBuilder,
-    private el: ElementRef
-  ) { }
+    private el: ElementRef,
+    private userService: UserService,
+  ) {
+     this.myForm = this.fbd.group({
+      taxCode: this.fbd.control("", [Validators.required,Validators.pattern(parttern_input.taxCode_form)]),
+      username: this.fbd.control("", [Validators.required]),
+      pass1: this.fbd.control("", [Validators.required]),
+      pass2: this.fbd.control("", [Validators.required])
+    });
+   }
 
 
 
   ngOnInit(): void {
     this.datas = this.data;
-    this.myForm = this.fbd.group({
-      name: this.fbd.control("", [Validators.required]),
-      email: this.fbd.control("", [Validators.required]),
-    });
+
+    this.user = this.userService.getInforUser();
+
+    this.id = this.user.customer_id;
+
+    this.userService.getUserById(this.id).subscribe((response) => {
+      console.log("response ",response);
+      this.myForm = this.fbd.group({
+        taxCode: this.fbd.control(response.tax_code, [Validators.required, Validators.pattern(parttern_input.taxCode_form)]),
+        username: this.fbd.control(response.hsm_name, [Validators.required]),
+        pass1: this.fbd.control(response.hsm_pass, [Validators.required]),
+        pass2: this.fbd.control("",[Validators.required])
+      })
+    })
+
   }
 
   onSubmit() {
-    let isSub = false;
-    const keyObj = [
-      {code: "name", name: 'Họ và tên'},
-      {code: "email", name: 'Email'},
-    ];
-    for (const key of Object.keys(this.myForm.controls)) {
-      if (this.myForm.controls[key].invalid) {
-        const keyError = keyObj.filter((item) => item.code === key)[0];
-        const invalidControl = this.el.nativeElement.querySelector('[formcontrolname="' + key + '"]');
-        alert(keyError.name + " " + 'không được để trống')
-        // Library.notify(keyError.name + " " + 'không được để trống', sEnum.statusApi.error);
-        invalidControl.focus();
-        isSub = true;
-        break;
-      }
+    this.submitted = true;
+
+    if(this.myForm.invalid) {
+      console.log("vao day ");
+      return;
     }
   }
+
+  get f() { return this.myForm.controls; }
+
 }
