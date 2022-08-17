@@ -608,20 +608,20 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     if (this.datas && this.isDataObjectSignature && this.isDataObjectSignature.length) {
-        let arrSignConfig: any = [];
+        // let arrSignConfig: any = [];
       
-        console.log("datas sign config ", this.datas.is_data_object_signature);
+        // console.log("datas sign config ", this.datas.is_data_object_signature);
 
-        arrSignConfig = this.datas.is_data_object_signature.filter(
-          (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived);
-        
-        if(this.datas.is_data_object_signature[2].id != null && !this.datas.is_data_object_signature[2].name) {
-          arrSignConfig.push(this.datas.is_data_object_signature[2]);
-        }
-
-        return arrSignConfig;
-        // return this.datas.is_data_object_signature.filter(
+        // arrSignConfig = this.datas.is_data_object_signature.filter(
         //   (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived);
+        
+        // if(this.datas.is_data_object_signature[2].id != null && !this.datas.is_data_object_signature[2].name) {
+        //   arrSignConfig.push(this.datas.is_data_object_signature[2]);
+        // }
+
+        // return arrSignConfig;
+        return this.datas.is_data_object_signature.filter(
+          (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived);
 
     } else {
       return [];

@@ -36,6 +36,7 @@ export class PkiDialogSignComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log("pki open ");
     const pattern = /^[0-9]*$/;
 
     if (!this.phoneNum || (this.phoneNum && this.phoneNum.length < 9 || this.phoneNum.length > 11) || (this.phoneNum && !pattern.test(this.phoneNum))) {

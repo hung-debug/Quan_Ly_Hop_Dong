@@ -56,7 +56,6 @@ export class SignupComponent implements OnInit {
       position: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       email: this.fbd.control("", [Validators.required, Validators.email]),
       phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-      fileCeCa: this.fbd.control("", [Validators.required])
     });
 
     this.fileCeCaOptions = fileCeCaOptions;
@@ -81,16 +80,7 @@ export class SignupComponent implements OnInit {
       position: this.addForm.value.position,
       email: this.addForm.value.email,
       phone: this.addForm.value.phone,
-      ceCAPushMode: this.addForm.value.fileCeCa,
     } 
-    
-    if(this.addForm.value.fileCeCa.name == fileCeCaOptions[0].name) {
-      data.ceCAPushMode = 'NONE';
-    } else if(this.addForm.value.fileCeCa.name == fileCeCaOptions[1].name) {
-      data.ceCAPushMode = 'ALL';
-    } else if(this.addForm.value.fileCeCa.name == fileCeCaOptions[2].name) {
-      data.ceCAPushMode = 'SELECTION';
-    }
     
     //them to chuc
     this.userService.signup(data).subscribe(

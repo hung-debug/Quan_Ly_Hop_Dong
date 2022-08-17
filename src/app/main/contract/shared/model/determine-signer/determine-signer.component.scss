@@ -120,6 +120,19 @@ hr {
   padding: 10px;
 }
 
+.label_type_email {
+  text-align: center;
+  font-weight: 500;
+  padding-top: 10px;
+}
+
+.label_type_phone {
+  text-align: center;
+  font-weight: 500;
+  margin-left: 100px;
+  padding-top: 10px;
+}
+
 //input type number
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -378,6 +391,11 @@ input[type=number] {
           }
 
         }
+      }
+
+      .participants--input--radio {
+        display: flex;
+        justify-content: flex-start;
       }
 
       .participants--input1 {

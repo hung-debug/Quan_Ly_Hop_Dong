@@ -130,6 +130,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   getDataContractSignature() {
+    console.log("vao detail contract ");
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
     this.activeRoute.queryParams
       .subscribe(params => {
