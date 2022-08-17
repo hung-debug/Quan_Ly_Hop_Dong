@@ -95,7 +95,7 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input type="radio" (change)="changeEmailPhone($event)" name="checkPhoneMailOrgSigner_{{index}}" [value]="0" checked/>
+                      <input type="radio" (change)="changeEmailPhone($event, index)" name="checkPhoneMailOrgSigner_{{index}}" value="0" checked/>
                     </div>&nbsp;
                     <div>
                       Ký bằng email
@@ -105,7 +105,7 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input type="radio" name="checkPhoneMailOrgSigner_{{index}}" (change)="changeEmailPhone($event)" [value]="1"/>
+                      <input type="radio" name="checkPhoneMailOrgSigner_{{index}}" (change)="changeEmailPhone($event, index)" value="1"/>
                     </div>&nbsp;
                     <div>
                       Ký bằng số điện thoại
@@ -234,7 +234,7 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input name="checkPhoneMailOrgDoc_{{index}}" type="radio" (change)="changeEmailPhone($event)" checked/>
+                        <input name="checkPhoneMailOrgDoc_{{index}}" type="radio" (change)="changeEmailPhone($event, index)" value="0" checked/>
                       </div>&nbsp;
                       <div>
                         Ký bằng email
@@ -244,7 +244,7 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input name="checkPhoneMailOrgDoc_{{index}}" type="radio" (change)="changeEmailPhone($event)"/>
+                        <input name="checkPhoneMailOrgDoc_{{index}}" type="radio" value="1" (change)="changeEmailPhone($event, index)"/>
                       </div>&nbsp;
                       <div>
                         Ký bằng số điện thoại
@@ -499,7 +499,7 @@
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
-                          <input name="checkPhoneMailParticipantSigner_{{index}}" type="radio" (change)="changeEmailPhone($event)" checked/>
+                          <input name="checkPhoneMailParticipantSigner_{{index}}" type="radio" value="0"  (change)="changeEmailPhone($event, index)" checked/>
                         </div>&nbsp;
                         <div>
                           Ký bằng email
@@ -509,7 +509,7 @@
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
-                          <input name="checkPhoneMailParticipantSigner_{{index}}" type="radio" (change)="changeEmailPhone($event)"/>
+                          <input name="checkPhoneMailParticipantSigner_{{index}}" type="radio" value="1" (change)="changeEmailPhone($event, index)"/>
                         </div>&nbsp;
                         <div>
                           Ký bằng số điện thoại
@@ -640,7 +640,7 @@
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
-                          <input name="checkPhoneMailParticipantDoc_{{index}}" type="radio" (change)="changeEmailPhone($event)" checked/>
+                          <input name="checkPhoneMailParticipantDoc_{{index}}" type="radio" value="0" (change)="changeEmailPhone($event, index)" checked/>
                         </div>&nbsp;
                         <div>
                           Ký bằng email
@@ -650,7 +650,7 @@
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
-                          <input name="checkPhoneMailParticipantDoc_{{index}}" type="radio" (change)="changeEmailPhone($event)"/>
+                          <input name="checkPhoneMailParticipantDoc_{{index}}" type="radio" value="1" (change)="changeEmailPhone($event, index)"/>
                         </div>&nbsp;
                         <div>
                           Ký bằng số điện thoại
@@ -765,7 +765,7 @@
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
-                          <input name="checkPhoneMailPerson_{{index}}" type="radio" (change)="changeEmailPhone($event)" checked/>
+                          <input name="checkPhoneMailPerson_{{index}}" type="radio" value="0" (change)="changeEmailPhone($event, index)" checked/>
                         </div>&nbsp;
                         <div>
                           Ký bằng email
@@ -775,7 +775,7 @@
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
-                          <input name="checkPhoneMailPerson_{{index}}" type="radio" (change)="changeEmailPhone($event)" />
+                          <input name="checkPhoneMailPerson_{{index}}" type="radio" value="1" (change)="changeEmailPhone($event, index)" />
                         </div>&nbsp;
                         <div>
                           Ký bằng số điện thoại
@@ -795,7 +795,7 @@
                         (change)="getName($event, item)">
                     </div>
                   </div>
-                  <div class="participants__name">
+                  <div  class="participants__name">
                     <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">

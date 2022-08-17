@@ -1642,8 +1642,19 @@ export class DetermineSignerComponent implements OnInit {
     this.data_parnter_organization[index] = data_partner_add;
   }
 
-  changeEmailPhone(event: any) {
+  arr: any [] = [];
+  changeEmailPhone(event: any, index: number) {
     console.log("event ", event);
+    
+    this.arr[index] = event.target.value;
+
+    console.log("this arr ",index  ,this.arr[index]);
+  }
+
+  checkMailPhone(event: any,index: number) {
+    if(event.target.value === 0) {
+      
+    }
   }
 
   changeType(e: any, item: any, index: number) {
