@@ -120,17 +120,9 @@ hr {
   padding: 10px;
 }
 
-.label_type_email {
+.label_type_radio {
   text-align: center;
   font-weight: 500;
-  padding-top: 10px;
-}
-
-.label_type_phone {
-  text-align: center;
-  font-weight: 500;
-  margin-left: 100px;
-  padding-top: 10px;
 }
 
 //input type number
@@ -391,11 +383,6 @@ input[type=number] {
           }
 
         }
-      }
-
-      .participants--input--radio {
-        display: flex;
-        justify-content: flex-start;
       }
 
       .participants--input1 {
