@@ -1642,6 +1642,10 @@ export class DetermineSignerComponent implements OnInit {
     this.data_parnter_organization[index] = data_partner_add;
   }
 
+  changeEmailPhone(event: any) {
+    console.log("event ", event);
+  }
+
   changeType(e: any, item: any, index: number) {
     // console.log(item, e);
     item.name = "";
@@ -1781,6 +1785,7 @@ export class DetermineSignerComponent implements OnInit {
 
     return count == 0;
   }
+
 
 }
 
