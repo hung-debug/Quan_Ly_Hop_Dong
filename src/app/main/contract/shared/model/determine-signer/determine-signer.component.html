@@ -133,7 +133,7 @@
                     </button>
                   </div>
                 </div>
-                <div class="participants__name">
+                <div *ngIf="this.arr[index] == 0 || this.flagInit[index] == true" class="participants__name">
                   <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">

@@ -82,6 +82,8 @@ export class DetermineSignerComponent implements OnInit {
   isEditable: boolean;
   isListSignPerson: any;
 
+  flagInit: any[] = [];
+
   get determineContract() {
     return this.determineDetails.controls;
   }
@@ -135,7 +137,9 @@ export class DetermineSignerComponent implements OnInit {
       disabledField: 'item_disable',
     };
 
-    if (this.datas.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
+    for(let i = 0; i < this.data_organization.recipients.filter((p: any) => p.role == 3).length; i++) {
+      this.flagInit[i] = true;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -1450,6 +1454,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo mảng các đối tượng người ký tổ chức của tôi
   getOriganzationSignature() {
+   
     return this.data_organization.recipients.filter((p: any) => p.role == 3);
   }
 
@@ -1644,7 +1649,9 @@ export class DetermineSignerComponent implements OnInit {
 
   arr: any [] = [];
   changeEmailPhone(event: any, index: number) {
-    console.log("event ", event);
+    this.flagInit[index] = false;
+
+    console.log("this flagIntit ",index," ",this.flagInit[index]);
     
     this.arr[index] = event.target.value;
 
@@ -1653,7 +1660,7 @@ export class DetermineSignerComponent implements OnInit {
 
   checkMailPhone(event: any,index: number) {
     if(event.target.value === 0) {
-      
+
     }
   }
 
