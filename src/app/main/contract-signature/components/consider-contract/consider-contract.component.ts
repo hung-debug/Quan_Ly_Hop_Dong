@@ -608,18 +608,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     if (this.datas && this.isDataObjectSignature && this.isDataObjectSignature.length) {
-        // let arrSignConfig: any = [];
-      
-        // console.log("datas sign config ", this.datas.is_data_object_signature);
 
-        // arrSignConfig = this.datas.is_data_object_signature.filter(
-        //   (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived);
-        
-        // if(this.datas.is_data_object_signature[2].id != null && !this.datas.is_data_object_signature[2].name) {
-        //   arrSignConfig.push(this.datas.is_data_object_signature[2]);
-        // }
-
-        // return arrSignConfig;
         return this.datas.is_data_object_signature.filter(
           (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived);
 
@@ -844,7 +833,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                   this.pkiDialogSignOpen();
                   this.spinner.hide();
                 } else if([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignHsm) {
-                  this.hsmDialogSignOpen();
+                  this.hsmDialogSignOpen(this.recipientId);
                   this.spinner.hide();
                 } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
                   this.signContractSubmit();
@@ -885,7 +874,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     } else if (typeSign == 3) {
       // this.pkiDialogSignOpen();
     } else if (typeSign == 4) {
-      this.hsmDialogSignOpen();
+      this.hsmDialogSignOpen(this.recipientId);
     }
   }
 
@@ -923,16 +912,18 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     })
   }*/
 
-  hsmDialogSignOpen() {
+  hsmDialogSignOpen(recipientId: number) {
     const data = {
       title: 'CHỮ KÝ HSM',
-      is_content: 'forward_contract'
+      is_content: 'forward_contract',
+      recipientId: recipientId,
     };
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '497px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
+
     const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
@@ -1101,7 +1092,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       }
 
     } else if(typeSignDigital == 4) {
-      this.hsmDialogSignOpen();
+      this.hsmDialogSignOpen(this.recipientId);
     }
 
   }
@@ -1623,7 +1614,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
         console.log("sign recipient_id ",sign.recipient_id);
 
-        //Lấy thông tin mã số thuế của đối tác ký bằng USB Token
+        //Lấy thông tin mã số thuế của đối tác ký 
         this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
 
           console.log("sign rec ", sign.recipient_id);

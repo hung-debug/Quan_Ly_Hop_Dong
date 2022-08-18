@@ -5,6 +5,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { UserService } from 'src/app/service/user.service';
 import { parttern_input } from 'src/app/config/parttern';
 import { ContractService } from 'src/app/service/contract.service';
+import { error } from 'jquery';
+import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
   selector: 'app-hsm-dialog-sign',
@@ -27,6 +29,7 @@ export class HsmDialogSignComponent implements OnInit {
     private el: ElementRef,
     private userService: UserService,
     private contractService: ContractService,
+    private toastService: ToastService
   ) {
      this.myForm = this.fbd.group({
       taxCode: this.fbd.control("", [Validators.required,Validators.pattern(parttern_input.taxCode_form)]),
@@ -41,20 +44,52 @@ export class HsmDialogSignComponent implements OnInit {
   ngOnInit(): void {
     this.datas = this.data;
 
+    console.log("datas ", this.datas);
+
     this.user = this.userService.getInforUser();
+
+    console.log("this user ", this.user);
 
     this.id = this.user.customer_id;
 
-    this.userService.getUserById(this.id).subscribe((response) => {
-      console.log("response ",response);
-      this.myForm = this.fbd.group({
-        taxCode: this.fbd.control(response.tax_code, [Validators.required, Validators.pattern(parttern_input.taxCode_form)]),
-        username: this.fbd.control(response.hsm_name, [Validators.required]),
-        pass1: this.fbd.control(response.hsm_pass, [Validators.required]),
-        pass2: this.fbd.control("",[Validators.required])
-      })
-    })
+    console.log("this id ", this.id);
 
+    if(this.user.organization_id != 0) {
+      console.log("id to chuc khac 0 ");
+      this.userService.getUserById(this.id).subscribe((response) => {
+        console.log("response ",response);
+        this.myForm = this.fbd.group({
+          taxCode: this.fbd.control(response.tax_code, [Validators.required, Validators.pattern(parttern_input.taxCode_form)]),
+          username: this.fbd.control(response.hsm_name, [Validators.required]),
+          pass1: this.fbd.control(response.hsm_pass, [Validators.required]),
+          pass2: this.fbd.control("",[Validators.required])
+        })
+      })
+    } else {
+      this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe((response) => {
+        const lengthRes = response.recipients.length;
+        for(let i = 0; i < lengthRes; i++) {
+
+          const id = response.recipients[i].id;
+
+          if(id == this.datas.recipientId) {
+
+            console.log("res f ", response.recipients[i].fields[0]);
+            let taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
+
+            console.log("tax code ", taxCodePartnerStep2);
+
+            this.myForm = this.fbd.group({
+              taxCode: this.fbd.control(taxCodePartnerStep2, [Validators.required, Validators.pattern(parttern_input.taxCode_form)]),
+              username: this.fbd.control(taxCodePartnerStep2, [Validators.required]),
+              pass1: this.fbd.control("", [Validators.required]),
+              pass2: this.fbd.control("",[Validators.required])
+            })
+            break;
+          }
+        }
+      })
+    }
   }
 
   onSubmit() {
@@ -65,7 +100,26 @@ export class HsmDialogSignComponent implements OnInit {
       return;
     }
 
+    const data = {
+      ma_dvcs: this.myForm.value.taxCode,
+      username: this.myForm.value.username,
+      password: this.myForm.value.pass1,
+      password2: this.myForm.value.pass2
+    };
 
+    const recipientId = this.datas.recipientId;
+
+    console.log("data ", data);
+
+    this.contractService.signHsm(data, recipientId).subscribe((response) => {
+      console.log("response ",response);
+    },
+    (error) => {
+        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
+        '',
+        3000);
+    });
+  
   }
 
   get f() { return this.myForm.controls; }

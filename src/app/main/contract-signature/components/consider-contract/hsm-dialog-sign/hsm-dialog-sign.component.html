@@ -22,6 +22,9 @@
               <div class="input-data">
                   <input type="text" formControlName="username">
               </div>
+              <div *ngIf="submitted && f.username.errors" class="invalid">
+                <div *ngIf="f.username.errors.required">{{'Tên người dùng không được để trống' | translate}}</div>
+              </div>
           </div>
       </div>
 
@@ -31,6 +34,9 @@
             <div class="input-data">
                 <input type="password" formControlName="pass1">
             </div>
+            <div *ngIf="submitted && f.pass1.errors" class="invalid">
+              <div *ngIf="f.pass1.errors.required">{{'Mật khẩu cấp 1 không được để trống' | translate}}</div>
+            </div>
         </div>
       </div>
 
@@ -39,6 +45,9 @@
             <div class="label text-color">{{'Mật khẩu cấp 2' | translate}} <span class="required-title">*</span></div>
             <div class="input-data">
                 <input type="password" formControlName="pass2">
+            </div>
+            <div *ngIf="submitted && f.pass2.errors" class="invalid">
+              <div *ngIf="f.pass2.errors.required">{{'Mật khẩu cấp 2 không được để trống' | translate}}</div>
             </div>
         </div>
       </div>

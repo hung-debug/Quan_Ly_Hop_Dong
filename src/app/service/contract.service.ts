@@ -129,7 +129,8 @@ signHsm(datas: any, recipientId: number) {
     password2: datas.password2
   });
 
-  return this.http.post<any>(this.signHsmUrl + recipientId, {body},{headers}).pipe();
+  return this.http.post<any>(this.signHsmUrl + recipientId, body,{'headers':headers});
+
 }
 
 
