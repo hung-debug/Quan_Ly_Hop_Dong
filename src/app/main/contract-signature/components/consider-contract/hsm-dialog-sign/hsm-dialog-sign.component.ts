@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { UserService } from 'src/app/service/user.service';
 import { parttern_input } from 'src/app/config/parttern';
+import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
   selector: 'app-hsm-dialog-sign',
@@ -25,6 +26,7 @@ export class HsmDialogSignComponent implements OnInit {
     private fbd: FormBuilder,
     private el: ElementRef,
     private userService: UserService,
+    private contractService: ContractService,
   ) {
      this.myForm = this.fbd.group({
       taxCode: this.fbd.control("", [Validators.required,Validators.pattern(parttern_input.taxCode_form)]),
@@ -62,6 +64,8 @@ export class HsmDialogSignComponent implements OnInit {
       console.log("vao day ");
       return;
     }
+
+
   }
 
   get f() { return this.myForm.controls; }

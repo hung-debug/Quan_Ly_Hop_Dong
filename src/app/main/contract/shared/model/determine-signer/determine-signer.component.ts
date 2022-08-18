@@ -82,8 +82,6 @@ export class DetermineSignerComponent implements OnInit {
   isEditable: boolean;
   isListSignPerson: any;
 
-  flagInit: any[] = [];
-
   get determineContract() {
     return this.determineDetails.controls;
   }
@@ -136,10 +134,6 @@ export class DetermineSignerComponent implements OnInit {
       limitSelection: 1,
       disabledField: 'item_disable',
     };
-
-    for(let i = 0; i < this.data_organization.recipients.filter((p: any) => p.role == 3).length; i++) {
-      this.flagInit[i] = true;
-    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -1357,7 +1351,10 @@ export class DetermineSignerComponent implements OnInit {
     this.data_organization.recipients.push(data);
   }
 
+  countOrgDoc: number = 0;
   addOriganzationDocument() {
+    this.countOrgDoc++;
+
     let data_determine_add = [];
     data_determine_add = [...this.contractService.getDataDetermine()];
     let data_organization = data_determine_add.filter((p: any) => p.type == 1)[0];
@@ -1645,23 +1642,6 @@ export class DetermineSignerComponent implements OnInit {
     let data = [...this.contractService.getDataDetermine()];
     data_partner_add = data.filter((p: any) => p.type == item.type)[0];
     this.data_parnter_organization[index] = data_partner_add;
-  }
-
-  arr: any [] = [];
-  changeEmailPhone(event: any, index: number) {
-    this.flagInit[index] = false;
-
-    console.log("this flagIntit ",index," ",this.flagInit[index]);
-    
-    this.arr[index] = event.target.value;
-
-    console.log("this arr ",index  ,this.arr[index]);
-  }
-
-  checkMailPhone(event: any,index: number) {
-    if(event.target.value === 0) {
-
-    }
   }
 
   changeType(e: any, item: any, index: number) {

@@ -23,8 +23,6 @@ export interface File {
   path: string,
 }
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -93,6 +91,8 @@ export class ContractService {
 
   checkTaxCodeExistUrl: any = `${environment.apiUrl}/api/v1/contracts/check-mst-exist`;
 
+  signHsmUrl: any = `${environment.apiUrl}/api/v1/signHsm/`
+
   token: any;
   customer_id: any;
   organization_id: any;
@@ -113,6 +113,24 @@ export class ContractService {
   public updateMessage(message: string): void {
     this.message.next(message);
   }
+
+  
+signHsm(datas: any, recipientId: number) {
+  this.getCurrentUser();
+
+  const headers = new HttpHeaders()
+  .append('Content-Type', 'application/json')
+  .append('Authorization', 'Bearer ' + this.token);
+
+  const body = JSON.stringify({
+    ma_dvcs: datas.ma_dvcs,
+    username: datas.username,
+    password: datas.password,
+    password2: datas.password2
+  });
+
+  return this.http.post<any>(this.signHsmUrl + recipientId, {body},{headers}).pipe();
+}
 
 
   constructor(private http: HttpClient,
@@ -1077,6 +1095,7 @@ export class ContractService {
           },
           // Dữ liệu người ký
           {
+            "typeSign":0, //Ký bằng email
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
@@ -1090,6 +1109,7 @@ export class ContractService {
           },
           // dữ liệu văn thư
           {
+            "typeSign":0, //Ký bằng email
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
@@ -1137,6 +1157,7 @@ export class ContractService {
           },
           // người ký
           {
+            "typeSign":0,
             "name": "",
             "email": "",
             "phone": "",
@@ -1149,6 +1170,7 @@ export class ContractService {
           },
           // văn thư
           {
+            "typeSign":0,
             "name": "",
             "email": "",
             "phone": "",
@@ -1173,6 +1195,7 @@ export class ContractService {
         status: 1,
         "recipients": [
           {
+            "typeSign": 0,
             "name": "",
             "email": "",
             "phone": "",
@@ -1193,6 +1216,7 @@ export class ContractService {
         status: 1,
         "recipients": [
           {
+            "typeSign": 0,
             "name": "",
             "email": "",
             "phone": "",
