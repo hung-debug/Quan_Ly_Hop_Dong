@@ -91,7 +91,7 @@ export class ContractService {
 
   checkTaxCodeExistUrl: any = `${environment.apiUrl}/api/v1/contracts/check-mst-exist`;
 
-  signHsmUrl: any = `${environment.apiUrl}/api/v1/signHsm/`
+  signHsmUrl: any = `${environment.apiUrl}/api/v1/sign/hsm/`
 
   token: any;
   customer_id: any;

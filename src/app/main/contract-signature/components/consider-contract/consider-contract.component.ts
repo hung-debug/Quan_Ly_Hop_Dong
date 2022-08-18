@@ -152,6 +152,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   phoneOtp:any;
   isDateTime:any;
   userOtp:any;
+  dataHsm: any;
 
   constructor(
     private contractSignatureService: ContractSignatureService,
@@ -755,33 +756,24 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           typeSignImage = typeSImage.id;
         }
       }
+
       if (typeSignDigital && typeSignDigital == 3) {
         haveSignPKI = true;
         this.dataNetworkPKI = {
           networkCode: this.signInfoPKIU.networkCode,
           phone: this.signInfoPKIU.phone
         }
-        /*let findDataNetwork = false;
-        for(const signUpdate of this.isDataObjectSignature) {
-          if (signUpdate && signUpdate.type == 3 && [3,4].includes(this.datas.roleContractReceived)
-            && signUpdate?.recipient?.email === this.currentUser.email
-            && signUpdate?.recipient?.role === this.datas?.roleContractReceived
-          ) {
-            if (signUpdate && signUpdate.networkCode && signUpdate.phone) {
-              findDataNetwork = true;
-              this.dataNetworkPKI = {
-                networkCode: this.signInfoPKIU.networkCode,
-                phone: this.signInfoPKIU.phone
-              }
-              break;
-            }
-          }
+      } else if(typeSignDigital && typeSignDigital == 4) {
+        haveSignHsm = true;
+
+        this.dataHsm = {
+            ma_dvcs: "",
+            username: "",
+            password: "",
+            password2: ""         
         }
-        if (!findDataNetwork) {
-          this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn nhà mạng và nhập số điện thoại kí sim PKI', '', 3000);
-          return;
-        }*/
       }
+
       if (typeSignImage && typeSignImage == 1) {
         haveSignImage = true;
       }
@@ -830,6 +822,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                   this.confirmOtpSignContract(id_recipient_signature, phone_recipient_signature);
                   this.spinner.hide();
                 } else if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
+                  console.log("pki ");
                   this.pkiDialogSignOpen();
                   this.spinner.hide();
                 } else if([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignHsm) {
@@ -846,6 +839,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           } else {
             if ([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignPKI) {
               this.pkiDialogSignOpen();
+              this.spinner.hide();
+            } else if([2, 3, 4].includes(this.datas.roleContractReceived) && haveSignHsm) {
+              this.hsmDialogSignOpen(this.recipientId);
               this.spinner.hide();
             } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
               this.signContractSubmit();
@@ -865,7 +861,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       this.downloadContract(this.idContract);
     }
   }
-
 
 
   openPopupSignContract(typeSign: any) {
@@ -889,42 +884,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
-    })
-  }
-
-  /*pkiDialogSignOpen() {
-    const data = {
-      title: 'CHỮ KÝ PKI',
-      is_content: 'forward_contract'
-    };
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '497px';
-    dialogConfig.hasBackdrop = true;
-    dialogConfig.data = data;
-    const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
-    })
-  }*/
-
-  hsmDialogSignOpen(recipientId: number) {
-    const data = {
-      title: 'CHỮ KÝ HSM',
-      is_content: 'forward_contract',
-      recipientId: recipientId,
-    };
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '497px';
-    dialogConfig.hasBackdrop = true;
-    dialogConfig.data = data;
-
-    const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
       let is_data = result
@@ -1071,15 +1030,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         return;
       }
       if (fileC && objSign.length) {
-        /*const arrBuffFile = await this.contractService.getDataBinaryFileUrlPromise(fileC);
-        const fileSignedId = await this.contractService.uploadFileSimPKI(arrBuffFile);
-        const fileSignedArr = await this.contractService.getDataFileSIMPKIUrlPromise(fileSignedId.id);
-        const valueSignBase64 = encode(fileSignedArr);
-        await this.contractService.updateDigitalSignatured(objSign[0].id, valueSignBase64);*/
-        // console.log('pki info', this.dataNetworkPKI);
-        /*for (const signSimPki of objSign) {
-          await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode, signSimPki.id);
-        }*/
         const checkSign = await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode, this.recipientId, this.datas.is_data_contract.name);
         console.log(checkSign);
         // await this.signContractSimKPI();
@@ -1092,7 +1042,25 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       }
 
     } else if(typeSignDigital == 4) {
-      this.hsmDialogSignOpen(this.recipientId);
+      const objSign = this.isDataObjectSignature.filter((signUpdate: any) => (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
+      && signUpdate?.recipient?.email === this.currentUser.email
+      && signUpdate?.recipient?.role === this.datas?.roleContractReceived));
+
+      let fileC = await this.contractService.getFileContractPromise(this.idContract);
+      const pdfC2 = fileC.find((p: any) => p.type == 2);
+      const pdfC1 = fileC.find((p: any) => p.type == 1);
+      if (pdfC2) {
+        fileC = pdfC2.path;
+      } else if (pdfC1) {
+        fileC = pdfC1.path;
+      } else {
+        return;
+      }
+
+      if (fileC && objSign.length) {
+        return true;
+      }
+      
     }
 
   }
@@ -1103,7 +1071,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     let indexSignUpload: any[] = [];
     let iu = 0;
     for (const signUpdate of this.isDataObjectSignature) {
-      console.log('ki anh', signUpdate);
       if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -1140,10 +1107,13 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   async signContract(notContainSignImage?: boolean) {
+    console.log("sign contract");
+
     const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
     let signUpdatePayload = "";
     //neu khong chua chu ky anh
     if (notContainSignImage) {
+      console.log("ko chua chu ky anh ");
       signUpdatePayload = signUpdateTemp.filter(
         (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
         .map((item: any) => {
@@ -1257,6 +1227,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       })
 
     } else {
+      console.log("vao day ");
       await this.signImageC(signUpdatePayload, notContainSignImage);
     }
 
@@ -1270,6 +1241,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     if(signUpdatePayload){
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
       if (notContainSignImage) {
+        console.log("sign image c not contain sign image ");
         signDigitalStatus = await this.signDigitalDocument();
         signUpdateTempN = signUpdateTempN.filter(
           (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
@@ -1286,7 +1258,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       }
     }
 
+    console.log("not contain sign image ",notContainSignImage);
+
     if (notContainSignImage && !signDigitalStatus && this.datas.roleContractReceived != 2) {
+      console.log("vao day ");
       this.spinner.hide();
       return;
     }
@@ -1295,9 +1270,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       console.log("ko phai ky anh ");
 
       console.log(signUpdateTempN);
+
       this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
         async (result) => {
           if (!notContainSignImage) {
+            console.log("update info contract consider ");
             await this.signDigitalDocument();
           }
           setTimeout(() => {
@@ -1392,30 +1369,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         }
       });
     const signRes = await this.contractService.updateInfoContractConsiderToPromise(signUpdatePayload, this.recipientId);
-    /*let ir = 0;
-    for (const resE of imgLinksRes) {
-      this.datas.filePath = resE?.file_object?.file_path;
-
-
-      if (this.datas.filePath) {
-        this.isDataObjectSignature[indexSignUpload[ir]].value = this.datas.filePath;
-      }
-      ir++;
-    }
-    const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
-    const signUpdatePayload = signUpdateTemp.filter(
-      (item: any) => item?.recipient?.email === this.currentUser.email && item.type == 3 &&
-        item?.recipient?.role === this.datas?.roleContractReceived)
-      .map((item: any) =>  {
-        return {
-          id: item.id,
-          name: item.name,
-          value: this.contractService.imageMobiBase64,
-          font: item.font,
-          font_size: item.font_size
-        }});
-    const signRes = this.contractService.updateInfoContractConsider(signUpdatePayload, this.recipientId);
-    console.log(signRes);*/
   }
 
   async rejectContract() {
@@ -1531,6 +1484,29 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
+  hsmDialogSignOpen(recipientId: number) {
+    const data = {
+      title: 'CHỮ KÝ HSM',
+      is_content: 'forward_contract',
+      recipientId: recipientId,
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '497px';
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.data = data;
+
+    const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(async (result: any) => {
+      console.log("dong hsm ");
+      console.log("result ", result);
+      if (result) {
+          await this.signContractSubmit();
+      }
+    })
+  }
+
   pkiDialogSignOpen() {
     const data = {
       title: 'CHỮ KÝ PKI',
@@ -1582,14 +1558,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
-    // dialogRef.afterClosed().subscribe(async (result: any) => {
-    //   if(result){
-    //     this.dataOTP = {
-    //       otp: result
-    //     }
-    //     await this.signContractSubmit();
-    //   }
-    // })
   }
 
   confirmOtp(otp:any) {

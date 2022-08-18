@@ -1,5 +1,5 @@
 import {Component, ElementRef, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { UserService } from 'src/app/service/user.service';
@@ -21,6 +21,8 @@ export class HsmDialogSignComponent implements OnInit {
 
   submitted = false;
 
+  taxCode: any;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {},
     public router: Router,
@@ -29,7 +31,8 @@ export class HsmDialogSignComponent implements OnInit {
     private el: ElementRef,
     private userService: UserService,
     private contractService: ContractService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    public dialogRef: MatDialogRef<HsmDialogSignComponent>,
   ) {
      this.myForm = this.fbd.group({
       taxCode: this.fbd.control("", [Validators.required,Validators.pattern(parttern_input.taxCode_form)]),
@@ -57,14 +60,14 @@ export class HsmDialogSignComponent implements OnInit {
     if(this.user.organization_id != 0) {
       console.log("id to chuc khac 0 ");
       this.userService.getUserById(this.id).subscribe((response) => {
-        console.log("response ",response);
         this.myForm = this.fbd.group({
           taxCode: this.fbd.control(response.tax_code, [Validators.required, Validators.pattern(parttern_input.taxCode_form)]),
           username: this.fbd.control(response.hsm_name, [Validators.required]),
           pass1: this.fbd.control(response.hsm_pass, [Validators.required]),
           pass2: this.fbd.control("",[Validators.required])
-        })
+        });
       })
+
     } else {
       this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe((response) => {
         const lengthRes = response.recipients.length;
@@ -73,11 +76,7 @@ export class HsmDialogSignComponent implements OnInit {
           const id = response.recipients[i].id;
 
           if(id == this.datas.recipientId) {
-
-            console.log("res f ", response.recipients[i].fields[0]);
             let taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
-
-            console.log("tax code ", taxCodePartnerStep2);
 
             this.myForm = this.fbd.group({
               taxCode: this.fbd.control(taxCodePartnerStep2, [Validators.required, Validators.pattern(parttern_input.taxCode_form)]),
@@ -85,11 +84,27 @@ export class HsmDialogSignComponent implements OnInit {
               pass1: this.fbd.control("", [Validators.required]),
               pass2: this.fbd.control("",[Validators.required])
             })
+
             break;
           }
         }
       })
     }
+
+    this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe((response) => {
+      const lengthRes = response.recipients.length;
+      for(let i = 0; i < lengthRes; i++) {
+
+        const id = response.recipients[i].id;
+
+        if(id == this.datas.recipientId) {
+          let taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
+
+          this.taxCode = taxCodePartnerStep2;
+          break;
+        }
+      }
+    })
   }
 
   onSubmit() {
@@ -111,15 +126,27 @@ export class HsmDialogSignComponent implements OnInit {
 
     console.log("data ", data);
 
-    this.contractService.signHsm(data, recipientId).subscribe((response) => {
-      console.log("response ",response);
-    },
-    (error) => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
-        '',
-        3000);
-    });
-  
+    console.log("tax code ", this.taxCode);
+
+    //Check voi nguoi dung trong he thong
+    if(data.ma_dvcs === this.taxCode) {
+      this.contractService.signHsm(data, recipientId).subscribe((response) => {
+        if(response.success === true) {
+          console.log("response true ");
+          this.dialogRef.close(data);
+        } else if(response.success === false) {
+          console.log("loi ky hsm ");
+          this.toastService.showErrorHTMLWithTimeout(response.message,'',3000);
+        }
+      },
+      (error) => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
+          '',
+          3000);
+      });
+    } else {
+      this.toastService.showErrorHTMLWithTimeout('Mã số thuế được nhập vào khác với mã số thuế lúc tạo hợp đồng','',3000);
+    }
   }
 
   get f() { return this.myForm.controls; }
