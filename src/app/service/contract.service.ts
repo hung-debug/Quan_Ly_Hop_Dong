@@ -1147,7 +1147,7 @@ signHsm(datas: any, recipientId: number) {
           },
           // người xem xét
           {
-            "typeSign":0, //Ký bằng email
+            "typeSign":0,
             "name": "",
             "email": "",
             "phone": "",

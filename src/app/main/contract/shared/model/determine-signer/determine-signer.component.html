@@ -205,7 +205,7 @@
                     [data]="isListSignNotPerson" 
                     (onSelect)="onItemSelect($event, data_organization.name)"
                     (onDeSelect)="deSelectOrg($event)"
-                    (ngModelChange)="selectWithOtp($event, d, true)"
+                    (ngModelChange)="selectWithOtp($event, d, 'organization')"
                   >
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -354,7 +354,7 @@
                     placeholder="{{'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings" 
                     [data]="signType_doc"
-                    (ngModelChange)="selectWithOtp($event, d)"
+                    (ngModelChange)="selectWithOtp($event, d, 'organization')"
                     >
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
                       <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -661,7 +661,7 @@
                       [data]="isListSignNotPerson" 
                       (onSelect)="onItemSelect($event,item.type)"
                       (onDeSelect)="deSelectPartnerSign($event, item)"
-                      (ngModelChange)="selectWithOtp($event, d)"
+                      (ngModelChange)="selectWithOtp($event, d, item.type)"
                     >
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
@@ -809,7 +809,7 @@
                       placeholder="{{'choose' | translate }}"
                       [settings]="dropdownSignTypeSettings" 
                       [data]="signType_doc"
-                      (ngModelChange)="selectWithOtp($event, d)"
+                      (ngModelChange)="selectWithOtp($event, d, item.type)"
                       (onSelect)="selectPartnerDocument($event)"
                       (onDeSelect)="deSelectPartnerDocument($event, item)"
                     >
@@ -884,7 +884,7 @@
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
-                          <input name="checkPhoneMailPerson_{{index}}" type="radio" [value]=0 [(ngModel)]="d.typeSign"/>
+                          <input name="checkPhoneMailPerson_{{index}}" type="radio" [value]=0 [(ngModel)]="d.typeSign" (change)="changeTypeSign(d)"/>
                         </div>&nbsp;
                         <div>
                           Ký bằng email
@@ -894,7 +894,7 @@
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
-                          <input name="checkPhoneMailPerson_{{index}}" type="radio" [value]=1 [(ngModel)]="d.typeSign"  />
+                          <input name="checkPhoneMailPerson_{{index}}" type="radio" [value]=1 [(ngModel)]="d.typeSign" (change)="changeTypeSign(d)" />
                         </div>&nbsp;
                         <div>
                           Ký bằng số điện thoại
@@ -948,7 +948,7 @@
                       [data]="isListSignPerson" 
                       (onSelect)="onItemSelect($event,item.type)"
                       (onDeSelect)="deSelectPartnerSign($event, item)"
-                      (ngModelChange)="selectWithOtp($event, d, true)"
+                      (ngModelChange)="selectWithOtp($event, d, item.type)"
                     >
                       <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">

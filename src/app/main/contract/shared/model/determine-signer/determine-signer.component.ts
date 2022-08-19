@@ -271,6 +271,8 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   onItemSelect(e: any, data: any) {
+    
+
     console.log("event ",e);
 
     var isParnter = this.dataParnterOrganization().filter((p: any) => p.type == 3); // doi tac ca nhan
@@ -378,12 +380,12 @@ export class DetermineSignerComponent implements OnInit {
     console.log("event ", e);
   }
 
-  selectWithOtp(e: any, data: any, action?: boolean) { // sort ordering
-    console.log("data ", data);
+  selectWithOtp(e: any, data: any, type: any) { // sort ordering
+    console.log("type ",type);
 
     //clear lai gia tri card_id
     //Check với tổ chức của tôi ký
-    if(data.type == 'organization') {
+    if(type == 'organization') {
       //Nếu là người ký
       if(data.role == 3) {
         if(this.getDataSignHsm(data).length == 0 || this.getDataSignUSBToken(data).length == 0) {
@@ -396,9 +398,9 @@ export class DetermineSignerComponent implements OnInit {
           data.card_id = "";
         }
       }
-    } else if(data.type == 'partner') {
+    } 
       //Nếu là đối tác tổ chức
-      if(data.type == 2) {
+      if(type == 2) {
           //Nếu là người ký
         if(data.role == 3) {
           if(this.getDataSignHsm(data).length == 0 || this.getDataSignUSBToken(data).length == 0) {
@@ -411,12 +413,26 @@ export class DetermineSignerComponent implements OnInit {
             data.card_id = "";
           }
         }
-      } else if(data.type == 3) {
+      } else if(type == 3) {
         if(this.getDataSignUSBToken(data).length == 0 || this.getDataSignEkyc(data).length == 0) {
           data.card_id = "";
         }
+
+        //Nếu cá nhân chọn loại ký là otp và ký bằng số điện thoại
+        if(data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
+          console.log("vao day ");
+          data.phone = data.email;
+        }
       }
+    
+  }
+
+  changeTypeSign(d: any) {
+    if(d.typeSign == 1) {
+      d.phone = d.email;
     }
+
+    console.log("d ",d);
   }
 
   getSetOrderingPersonal(isParnter: any, index: number): void {
