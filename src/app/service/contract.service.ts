@@ -1083,6 +1083,7 @@ signHsm(datas: any, recipientId: number) {
         "recipients": [
           // Dữ liệu người xem xét
           {
+            "typeSign":0, //Ký bằng email
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
@@ -1146,6 +1147,7 @@ signHsm(datas: any, recipientId: number) {
           },
           // người xem xét
           {
+            "typeSign":0, //Ký bằng email
             "name": "",
             "email": "",
             "phone": "",
