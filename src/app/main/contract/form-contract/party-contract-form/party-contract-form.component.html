@@ -408,15 +408,13 @@
             <div class="participants--input" style="display: flex">
               <div class="participants__name">
                 <div class="label_detail text-color">
-
-                  <div>
-                    <input *ngIf="!d.typeSign" type="radio" name="checkPhoneMailOrgDoc_{{index}}" [value]=0 checked/>
+                  <div *ngIf="d.typeSign">
+                    <input [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailOrgDoc_{{index}}" [value]=0/>
                   </div>&nbsp;
 
-                  <div>
-                    <input *ngIf="d.typeSign" [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailOrgDoc_{{index}}" [value]=0/>
+                  <div *ngIf="!d.typeSign">
+                    <input [(ngModel)]="typeSign" type="radio" name="checkPhoneMailOrgDoc_{{index}}" [value]=0/>
                   </div>&nbsp;
-
                   <div>
                     Ký bằng email
                   </div>
@@ -425,11 +423,7 @@
               <div class="participants__name">
                 <div class="label_detail text-color">
                   <div>
-                    <input *ngIf="!d.typeSign" type="radio" name="checkPhoneMailOrgDoc_{{index}}" [value]=1/>
-                  </div>&nbsp;
-
-                  <div>
-                    <input *ngIf="d.typeSign" [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailOrgDoc_{{index}}" [value]=1/>
+                    <input [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailOrgDoc_{{index}}" [value]=1/>
                   </div>&nbsp;
                   <div>
                     Ký bằng số điện thoại
@@ -479,7 +473,7 @@
                 <!--                  <input type="checkbox">-->
                 <!--                  <span class="label text-color">OTP</span>-->
                 <!--                </div>-->
-                <div class="participants__name">
+                <div *ngIf="d.typeSign == 0 || !d.typeSign" class="participants__name">
                   <div class="label_detail text-color">
                     Email&nbsp;<span class="required-title">*</span>
                   </div>
@@ -488,6 +482,20 @@
                     <input
                       type="text"
                       placeholder="{{ 'nhap_email' | translate }}"
+                      [(ngModel)]="d.email"
+                    />
+                  </div>
+                </div>
+
+                <div *ngIf="d.typeSign == 1" class="participants__name">
+                  <div class="label_detail text-color">
+                    Số điện thoại&nbsp;<span class="required-title">*</span>
+                  </div>
+                  <div class="input-data">
+                    <img src="assets/img/login_email.svg" class="input-img" />
+                    <input
+                      type="text"
+                      placeholder="{{ 'Nhập số điện thoại' | translate }}"
                       [(ngModel)]="d.email"
                     />
                   </div>
@@ -542,7 +550,7 @@
                   </ng-multiselect-dropdown>
                 </div>
 
-                <div class="participants__name">
+                <div *ngIf="d.typeSign == 0 || !d.typeSign" class="participants__name">
                   <div class="label_detail text-color">
                     Số điện thoại&nbsp;<span
                       *ngIf="getDataSignCka(d).length > 0"
@@ -561,6 +569,9 @@
                       oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
                     />
                   </div>
+                </div>
+
+                <div *ngIf="d.typeSign == 1" class="participants__name">
                 </div>
               </div>
 
@@ -871,6 +882,7 @@
             </div>
           </div>
 
+          <!--Người ký đối tác-->
           <div class="participants-border">
             <div class="label">{{ "user.sign" | translate }}</div>
             <div
@@ -894,39 +906,35 @@
                 style="display: flex; flex-direction: column"
               >
 
+              
+
                <!--Chọn ký bằng email hoặc số điện thoại với người ký tổ chức của đối tác-->
-            <div class="participants--input" style="display: flex">
-              <div class="participants__name">
-                <div class="label_detail text-color">
-
-                  <div>
-                    <input *ngIf="!d.typeSign" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}" [value]=0 checked/>
-                  </div>&nbsp;
-
-                  <div>
-                    <input *ngIf="d.typeSign" [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}" [value]=0/>
-                  </div>&nbsp;
-
-                  <div>
-                    Ký bằng email
+               <div class="participants--input" style="display: flex">
+                <div class="participants__name">
+                  <div class="label_detail text-color">
+                    <div *ngIf="d.typeSign">
+                      <input [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}" [value]=0/>
+                    </div>&nbsp;
+  
+                    <div *ngIf="!d.typeSign">
+                      <input [(ngModel)]="typeSign" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}" [value]=0/>
+                    </div>&nbsp;
+                    <div>
+                      Ký bằng email
+                    </div>
+                  </div>
+                </div>
+                <div class="participants__name">
+                  <div class="label_detail text-color">
+                    <div>
+                      <input [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}" [value]=1/>
+                    </div>&nbsp;
+                    <div>
+                      Ký bằng số điện thoại
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="participants__name">
-                <div class="label_detail text-color">
-                  <div>
-                    <input *ngIf="!d.typeSign" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}" [value]=1/>
-                  </div>&nbsp;
-
-                  <div>
-                    <input *ngIf="d.typeSign" [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}" [value]=1/>
-                  </div>&nbsp;
-                  <div>
-                    Ký bằng số điện thoại
-                  </div>
-                </div>
-              </div>
-            </div>
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -950,7 +958,7 @@
                   <!--                    <input type="checkbox">-->
                   <!--                    <span class="label text-color">OTP</span>-->
                   <!--                  </div>-->
-                  <div class="participants__name">
+                  <div *ngIf="d.typeSign == 0 || !d.typeSign" class="participants__name">
                     <div class="label_detail text-color">
                       Email&nbsp;<span class="required-title">*</span>
                     </div>
@@ -959,6 +967,20 @@
                       <input
                         type="text"
                         placeholder="{{ 'nhap_email' | translate }}"
+                        [(ngModel)]="d.email"
+                      />
+                    </div>
+                  </div>
+
+                  <div *ngIf="d.typeSign == 1" class="participants__name">
+                    <div class="label_detail text-color">
+                      Số điện thoại&nbsp;<span class="required-title">*</span>
+                    </div>
+                    <div class="input-data">
+                      <img src="assets/img/login_email.svg" class="input-img" />
+                      <input
+                        type="text"
+                        placeholder="{{ 'Nhập số điện thoại' | translate }}"
                         [(ngModel)]="d.email"
                       />
                     </div>
@@ -1021,7 +1043,7 @@
                   <!--                    <input type="number" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">-->
                   <!--                  </div>-->
 
-                  <div class="participants__name">
+                  <div *ngIf="d.typeSign == 0 || !d.typeSign" class="participants__name">
                     <div class="label_detail text-color">
                       Số điện thoại&nbsp;<span
                         *ngIf="getDataSignCka(d).length > 0"
@@ -1040,6 +1062,9 @@
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
                       />
                     </div>
+                  </div>
+
+                  <div *ngIf="d.typeSign == 1" class="participants__name">
                   </div>
                 </div>
 
@@ -1116,6 +1141,7 @@
             </div>
           </div>
 
+          <!--Người ký văn thư-->
           <div class="participants-border">
             <div class="label">{{ "user.doc" | translate }}</div>
             <div
@@ -1139,39 +1165,34 @@
                 style="display: flex; flex-direction: column"
               >
 
-                  <!--Chọn ký bằng email hoặc số điện thoại với văn thư đối tác-->
-            <div class="participants--input" style="display: flex">
-              <div class="participants__name">
-                <div class="label_detail text-color">
-
-                  <div>
-                    <input *ngIf="!d.typeSign" type="radio" name="checkPhoneMailPartDoc_{{index}}_{{id}}" [value]=0 checked/>
-                  </div>&nbsp;
-
-                  <div>
-                    <input *ngIf="d.typeSign" [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailPartDoc_{{index}}_{{id}}" [value]=0/>
-                  </div>&nbsp;
-
-                  <div>
-                    Ký bằng email
+                <!--Chọn ký bằng email hoặc số điện thoại với văn thư đối tác-->
+                <div class="participants--input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div *ngIf="d.typeSign">
+                        <input [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailPartDoc_{{index}}_{{id}}" [value]=0/>
+                      </div>&nbsp;
+    
+                      <div *ngIf="!d.typeSign">
+                        <input [(ngModel)]="typeSign" type="radio" name="checkPhoneMailPartDoc_{{index}}_{{id}}" [value]=0/>
+                      </div>&nbsp;
+                      <div>
+                        Ký bằng email
+                      </div>
+                    </div>
+                  </div>
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div>
+                        <input [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailPartDoc_{{index}}_{{id}}" [value]=1/>
+                      </div>&nbsp;
+                      <div>
+                        Ký bằng số điện thoại
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="participants__name">
-                <div class="label_detail text-color">
-                  <div>
-                    <input *ngIf="!d.typeSign" type="radio" name="checkPhoneMailPartDoc_{{index}}_{{id}}" [value]=1/>
-                  </div>&nbsp;
 
-                  <div>
-                    <input *ngIf="d.typeSign" [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailPartDoc_{{index}}_{{id}}" [value]=1/>
-                  </div>&nbsp;
-                  <div>
-                    Ký bằng số điện thoại
-                  </div>
-                </div>
-              </div>
-            </div>
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
@@ -1208,7 +1229,7 @@
                       </button>
                     </div>
                   </div>
-                  <div class="participants__name">
+                  <div *ngIf="d.typeSign == 0 || !d.typeSign" class="participants__name">
                     <div class="label_detail text-color">
                       Email&nbsp;<span class="required-title">*</span>
                     </div>
@@ -1217,6 +1238,20 @@
                       <input
                         type="text"
                         placeholder="{{ 'nhap_email' | translate }}"
+                        [(ngModel)]="d.email"
+                      />
+                    </div>
+                  </div>
+
+                  <div *ngIf="d.typeSign == 1" class="participants__name">
+                    <div class="label_detail text-color">
+                      Số điện thoại&nbsp;<span class="required-title">*</span>
+                    </div>
+                    <div class="input-data">
+                      <img src="assets/img/login_email.svg" class="input-img" />
+                      <input
+                        type="text"
+                        placeholder="{{ 'Nhập số điện thoại' | translate }}"
                         [(ngModel)]="d.email"
                       />
                     </div>
@@ -1270,7 +1305,7 @@
                     </ng-multiselect-dropdown>
                   </div>
 
-                  <div class="participants__name">
+                  <div *ngIf="d.typeSign == 0 || !d.typeSign" class="participants__name">
                     <div class="label_detail text-color">
                       Số điện thoại&nbsp;<span
                         *ngIf="getDataSignCka(d).length > 0"
@@ -1289,6 +1324,9 @@
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
                       />
                     </div>
+                  </div>
+
+                  <div *ngIf="d.typeSign == 1" class="participants__name">
                   </div>
                 </div>
 
@@ -1370,39 +1408,33 @@
                 style="display: flex; flex-direction: column"
               >
 
-                   <!--Chọn ký bằng email hoặc số điện thoại với người ký là cá nhân-->
-            <div class="participants--input" style="display: flex">
-              <div class="participants__name">
-                <div class="label_detail text-color">
-
-                  <div>
-                    <input *ngIf="!d.typeSign" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}" [value]=0 checked/>
-                  </div>&nbsp;
-
-                  <div>
-                    <input *ngIf="d.typeSign" [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}" [value]=0/>
-                  </div>&nbsp;
-
-                  <div>
-                    Ký bằng email
+                <!--Chọn ký bằng email hoặc số điện thoại với người ký là cá nhân-->
+                <div class="participants--input" style="display: flex">
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div *ngIf="d.typeSign">
+                        <input [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}" [value]=0/>
+                      </div>&nbsp;
+    
+                      <div *ngIf="!d.typeSign">
+                        <input [(ngModel)]="typeSign" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}" [value]=0/>
+                      </div>&nbsp;
+                      <div>
+                        Ký bằng email
+                      </div>
+                    </div>
+                  </div>
+                  <div class="participants__name">
+                    <div class="label_detail text-color">
+                      <div>
+                        <input [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}" [value]=1/>
+                      </div>&nbsp;
+                      <div>
+                        Ký bằng số điện thoại
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="participants__name">
-                <div class="label_detail text-color">
-                  <div>
-                    <input *ngIf="!d.typeSign" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}" [value]=1/>
-                  </div>&nbsp;
-
-                  <div>
-                    <input *ngIf="d.typeSign" [(ngModel)]="d.typeSign" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}" [value]=1/>
-                  </div>&nbsp;
-                  <div>
-                    Ký bằng số điện thoại
-                  </div>
-                </div>
-              </div>
-            </div>
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -1427,7 +1459,21 @@
                   <!--                      <input type="checkbox">-->
                   <!--                      <span class="label text-color">OTP</span>-->
                   <!--                    </div>-->
-                  <div class="participants__name">
+                  <div *ngIf="d.typeSign == 0 || !d.typeSign" class="participants__name">
+                    <div class="label_detail text-color">
+                      Email&nbsp;<span class="required-title">*</span>
+                    </div>
+                    <div class="input-data">
+                      <img src="assets/img/login_email.svg" class="input-img" />
+                      <input
+                        type="text"
+                        placeholder="{{ 'nhap_email' | translate }}"
+                        [(ngModel)]="d.email"
+                      />
+                    </div>
+                  </div>
+
+                  <div *ngIf="d.typeSign == 1" class="participants__name">
                     <div class="label_detail text-color">
                       Email&nbsp;<span class="required-title">*</span>
                     </div>
@@ -1500,7 +1546,7 @@
                   <!--                      <input type="number" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">-->
                   <!--                    </div>-->
 
-                  <div class="participants__name">
+                  <div *ngIf="d.typeSign == 0 || !d.typeSign" class="participants__name">
                     <div class="label_detail text-color">
                       Số điện thoại&nbsp;<span
                         *ngIf="getDataSignCka(d).length > 0"
@@ -1519,6 +1565,8 @@
                         oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
                       />
                     </div>
+                  </div>
+                  <div *ngIf="d.typeSign == 1" class="participants__name">
                   </div>
                 </div>
 
