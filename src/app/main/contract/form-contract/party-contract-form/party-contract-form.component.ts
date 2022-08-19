@@ -71,6 +71,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   action: any;
 
+  typeSign: number = 0;
+
   get determineContract() {
     return this.determineDetails.controls;
   }
@@ -87,12 +89,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+
     this.flagUsbToken[0] = true;
     for(let i = 1; i < this.dataParnterOrganization().length; i++) {
       this.flagUsbToken[i] = false;
     }
 
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
+
     if (!this.datasForm.is_determine_clone || this.datasForm.is_determine_clone.length == 0) {
       this.datasForm.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
     }
@@ -118,7 +122,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       disabledField: 'item_disable',
     };
 
-    if (this.datasForm.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
+    // if (this.datasForm.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
   }
 
   ngAfterViewInit(): void {
