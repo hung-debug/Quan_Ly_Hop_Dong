@@ -1081,6 +1081,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           "content": signUpdate.valueSign,
           organizationId: this.data_contract?.is_data_contract?.organization_id
         }
+
+        console.log("formData ",formData);
+
         signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
         indexSignUpload.push(iu);
       }
@@ -1110,6 +1113,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     console.log("sign contract");
 
     const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
+
     let signUpdatePayload = "";
     //neu khong chua chu ky anh
     if (notContainSignImage) {
@@ -1125,6 +1129,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             font_size: item.font_size
           }
         });
+
+        console.log("sign update payload ",signUpdatePayload);
     }else{
 
       this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
@@ -1337,6 +1343,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           "content": "data:image/png;base64," + this.contractService.imageMobiBase64,
           organizationId: this.data_contract?.is_data_contract?.organization_id
         }
+
+        console.log("form data ", formData);
+
         signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData).toPromise());
         indexSignUpload.push(iu);
       }

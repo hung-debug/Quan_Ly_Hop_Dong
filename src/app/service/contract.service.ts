@@ -759,6 +759,8 @@ signHsm(datas: any, recipientId: number) {
   }
 
   updateInfoContractConsiderImg(datas: any, recipient_id: any) {
+    console.log("datas ", datas);
+
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -791,6 +793,8 @@ signHsm(datas: any, recipientId: number) {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
+
+    console.log("formData ", formData);
 
     return this.http.post<any>(this.uploadFileBase64Url + formData?.organizationId + `/base64`, formData, { 'headers': headers });
   }
@@ -1083,7 +1087,6 @@ signHsm(datas: any, recipientId: number) {
         "recipients": [
           // Dữ liệu người xem xét
           {
-            "typeSign":0, //Ký bằng email
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
@@ -1097,7 +1100,7 @@ signHsm(datas: any, recipientId: number) {
           },
           // Dữ liệu người ký
           {
-            "typeSign":0, //Ký bằng email
+            "login_by": "email",
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
@@ -1111,7 +1114,7 @@ signHsm(datas: any, recipientId: number) {
           },
           // dữ liệu văn thư
           {
-            "typeSign":0, //Ký bằng email
+            "login_by": "email",
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
@@ -1147,7 +1150,6 @@ signHsm(datas: any, recipientId: number) {
           },
           // người xem xét
           {
-            "typeSign":0,
             "name": "",
             "email": "",
             "phone": "",
@@ -1160,7 +1162,7 @@ signHsm(datas: any, recipientId: number) {
           },
           // người ký
           {
-            "typeSign":0,
+            "login_by": "email",
             "name": "",
             "email": "",
             "phone": "",
@@ -1173,7 +1175,7 @@ signHsm(datas: any, recipientId: number) {
           },
           // văn thư
           {
-            "typeSign":0,
+            "login_by": "email",
             "name": "",
             "email": "",
             "phone": "",
@@ -1198,7 +1200,7 @@ signHsm(datas: any, recipientId: number) {
         status: 1,
         "recipients": [
           {
-            "typeSign": 0,
+            "login_by": "email",
             "name": "",
             "email": "",
             "phone": "",
@@ -1219,7 +1221,7 @@ signHsm(datas: any, recipientId: number) {
         status: 1,
         "recipients": [
           {
-            "typeSign": 0,
+            "login_by": "email",
             "name": "",
             "email": "",
             "phone": "",
