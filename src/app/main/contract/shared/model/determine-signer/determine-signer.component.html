@@ -36,31 +36,6 @@
 
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-                     <!--Chọn ký bằng email hoặc số điện thoại cho người xem xét tổ chức của tôi-->
-                     <!-- <div class="participants--input" style="display: flex">
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-      
-                          <div>
-                            <input type="radio" name="checkPhoneMailOrgReview_{{index}}"/>
-                          </div>&nbsp;
-                          <div>
-                            Ký bằng email
-                          </div>
-                        </div>
-                      </div>
-                      <div class="participants__name">
-                        <div class="label_detail text-color">
-                          <div>
-                            <input type="radio" name="checkPhoneMailOrgReview_{{index}}"/>
-                          </div>&nbsp;
-                          <div>
-                            Ký bằng số điện thoại
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
-
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
@@ -127,7 +102,7 @@
               
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-              <!--Chọn ký bằng email hoặc số điện thoại-->
+              <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại-->
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label_detail text-color">
@@ -136,7 +111,7 @@
                       <input type="radio" name="checkPhoneMailOrgSigner_{{index}}" [value]=0 [(ngModel)]="d.typeSign"/>
                     </div>&nbsp;
                     <div>
-                      Ký bằng email
+                      {{'typeOfSignEmail' | translate}}
                     </div>
                   </div>
                 </div>
@@ -146,7 +121,7 @@
                       <input type="radio" name="checkPhoneMailOrgSigner_{{index}}" [(ngModel)]="d.typeSign" [value]=1/>
                     </div>&nbsp;
                     <div>
-                      Ký bằng số điện thoại
+                      {{'typeOfSignPhone' | translate}}
                     </div>
                   </div>
                 </div>
@@ -282,7 +257,7 @@
               oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-                <!--Chọn ký bằng email hoặc số điện thoại-->
+                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại-->
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
@@ -290,7 +265,7 @@
                         <input name="checkPhoneMailOrgDoc_{{index}}" type="radio" [(ngModel)]="d.typeSign" [value]=0/>
                       </div>&nbsp;
                       <div>
-                        Ký bằng email
+                        {{'typeOfSignEmail' | translate}}
                       </div>
                     </div>
                   </div>
@@ -300,7 +275,7 @@
                         <input name="checkPhoneMailOrgDoc_{{index}}" type="radio" [value]=1 [(ngModel)]="d.typeSign"/>
                       </div>&nbsp;
                       <div>
-                        Ký bằng số điện thoại
+                        {{'typeOfSignPhone' | translate}}
                       </div>
                     </div>
                   </div>
@@ -514,7 +489,7 @@
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column; margin-bottom: 14px">
 
-                  <!--Chọn ký bằng email hoặc số điện thoại-->
+                  <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại-->
                   <!-- <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
@@ -522,7 +497,7 @@
                           <input name="checkPhoneMailParticipantReviewer_{{index}}_{{id}}" type="radio" [value]=0 [(ngModel)]="d.typeSign"/>
                         </div>&nbsp;
                         <div>
-                          Ký bằng email
+                          {{'typeOfSignEmail' | translate}}
                         </div>
                       </div>
                     </div>
@@ -532,7 +507,7 @@
                           <input name="checkPhoneMailParticipantReviewer_{{index}}_{{id}}" type="radio" [value]=1 [(ngModel)]="d.typeSign"/>
                         </div>&nbsp;
                         <div>
-                          Ký bằng số điện thoại
+                          {{'typeOfSignPhone' | translate}}
                         </div>
                       </div>
                     </div>
@@ -594,7 +569,7 @@
                 [disabled]="getPartnerSignature(item).length == 1 ">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-                  <!--Chọn ký bằng email hoặc số điện thoại-->
+                  <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại-->
                   <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
@@ -602,7 +577,7 @@
                           <input name="checkPhoneMailParticipantSigner_{{index}}_{{id}}" type="radio" [value]=0 [(ngModel)]="d.typeSign"/>
                         </div>&nbsp;
                         <div>
-                          Ký bằng email
+                          {{'typeOfSignEmail' | translate}}
                         </div>
                       </div>
                     </div>
@@ -612,7 +587,7 @@
                           <input name="checkPhoneMailParticipantSigner_{{index}}_{{id}}" type="radio" [value]=1 [(ngModel)]="d.typeSign"/>
                         </div>&nbsp;
                         <div>
-                          Ký bằng số điện thoại
+                          {{'typeOfSignPhone' | translate}}
                         </div>
                       </div>
                     </div>
@@ -709,7 +684,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">Mã số thuế&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'Nhập mã số thuế' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -740,7 +715,7 @@
                 [disabled]="getPartnerDocument(item).length == 1">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-                  <!--Chọn ký bằng email hoặc số điện thoại-->
+                  <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại-->
                   <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
@@ -748,7 +723,7 @@
                           <input name="checkPhoneMailParticipantDoc_{{index}}_{{id}}" type="radio" [value]=0 [(ngModel)]="d.typeSign"/>
                         </div>&nbsp;
                         <div>
-                          Ký bằng email
+                          {{'typeOfSignEmail' | translate}}
                         </div>
                       </div>
                     </div>
@@ -758,7 +733,7 @@
                           <input name="checkPhoneMailParticipantDoc_{{index}}_{{id}}" type="radio" [value]=1 [(ngModel)]="d.typeSign" />
                         </div>&nbsp;
                         <div>
-                          Ký bằng số điện thoại
+                          {{'typeOfSignPhone' | translate}}
                         </div>
                       </div>
                     </div>
@@ -879,7 +854,7 @@
                 [(ngModel)]="d.ordering" [disabled]="getPartnerSignature(item).length == 1">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column;margin-bottom: 14px">
 
-                  <!--Chọn ký bằng email hoặc số điện thoại đối với người ký là cá nhân-->
+                  <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại đối với người ký là cá nhân-->
                   <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
@@ -887,7 +862,7 @@
                           <input name="checkPhoneMailPerson_{{index}}" type="radio" [value]=0 [(ngModel)]="d.typeSign" (change)="changeTypeSign(d)"/>
                         </div>&nbsp;
                         <div>
-                          Ký bằng email
+                          {{'typeOfSignEmail' | translate}}
                         </div>
                       </div>
                     </div>
@@ -897,7 +872,7 @@
                           <input name="checkPhoneMailPerson_{{index}}" type="radio" [value]=1 [(ngModel)]="d.typeSign" (change)="changeTypeSign(d)" />
                         </div>&nbsp;
                         <div>
-                          Ký bằng số điện thoại
+                          {{'typeOfSignPhone' | translate}}
                         </div>
                       </div>
                     </div>
