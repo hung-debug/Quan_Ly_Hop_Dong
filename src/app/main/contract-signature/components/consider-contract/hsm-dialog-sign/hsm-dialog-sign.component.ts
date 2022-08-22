@@ -148,8 +148,11 @@ export class HsmDialogSignComponent implements OnInit {
           console.log("response true ");
           this.dialogRef.close(data);
         } else if(response.success === false) {
-          console.log("loi ky hsm ");
-          this.toastService.showErrorHTMLWithTimeout(response.message,'',3000);
+          if(!response.message) {
+            this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công','',3000);
+          } else if(response.message) {
+            this.toastService.showErrorHTMLWithTimeout(response.message,'',3000);
+          }
         }
       },
       (error) => {

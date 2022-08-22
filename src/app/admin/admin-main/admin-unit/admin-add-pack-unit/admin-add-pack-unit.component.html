@@ -5,9 +5,7 @@
   <form [formGroup]="addForm" class="content">
     <div class="row">
       <div class="col-md-6">
-        <div class="label text-color">
-          {{ "Mã gói dịch vụ" | translate }}
-          <span class="required-title">*</span>
+        <div class="label text-color">{{ "Mã gói dịch vụ" | translate }}<span class="required-title">*</span>
         </div>
         <p-dropdown
           placeholder="Chọn gói dịch vụ"
@@ -80,7 +78,8 @@
     <div class="row" style="padding-top: 10px">
       <div class="col-md-6">
         <div class="label text-color">
-          {{ "Thời gian(tháng) *" | translate }}
+          {{ "Thời gian(tháng) " | translate }}
+          <span class="required-title">*</span>
         </div>
         <div class="input-data fff">
           <input
@@ -94,7 +93,8 @@
 
       <div class="col-md-6">
         <div class="label text-color">
-          {{ "Số lượng hợp đồng *" | translate }}
+          {{ "Số lượng hợp đồng " | translate }}
+          <span class="required-title">*</span>
         </div>
         <div class="input-data fff">
           <input
@@ -184,7 +184,8 @@
     <div class="row" style="padding-top: 10px">
       <div class="col-md-6">
         <div class="label text-color">
-          {{ "Trạng thái thanh toán *" | translate }}
+          {{ "Trạng thái thanh toán " | translate }}
+          <span class="required-title">*</span>
         </div>
         <p-dropdown
           placeholder="Chọn trạng thái"
