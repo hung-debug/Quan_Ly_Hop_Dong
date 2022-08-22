@@ -47,7 +47,7 @@ export class HsmDialogSignComponent implements OnInit {
   ngOnInit(): void {
     this.datas = this.data;
 
-    console.log("datas ", this.datas);
+    console.log("field text type ", this.fieldTextType1);
 
     this.user = this.userService.getInforUser();
 
@@ -108,9 +108,16 @@ export class HsmDialogSignComponent implements OnInit {
     })
   }
 
-  fieldTextType: boolean = false;
-  toggleFieldTextType() {
-    this.fieldTextType = !this.fieldTextType;
+  fieldTextType1: boolean = false;
+  toggleFieldTextType1() {
+    this.fieldTextType1 = !this.fieldTextType1;
+
+    console.log("field text type ", this.fieldTextType1);
+  }
+
+  fieldTextType2: boolean = false;
+  toggleFieldTextType2() {
+    this.fieldTextType2 = !this.fieldTextType2;
   }
 
   onSubmit() {
@@ -151,7 +158,7 @@ export class HsmDialogSignComponent implements OnInit {
           3000);
       });
     } else {
-      this.toastService.showErrorHTMLWithTimeout('Mã số thuế được nhập vào khác với mã số thuế lúc tạo hợp đồng','',3000);
+      this.toastService.showErrorHTMLWithTimeout('Mã số thuê không trùng khớp thông tin ký hợp đồng','',3000);
     }
   }
 

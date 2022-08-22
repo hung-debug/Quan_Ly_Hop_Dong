@@ -32,15 +32,15 @@
         <div class="col-md-12">
             <div class="label text-color">{{'Mật khẩu cấp 1' | translate}} <span class="required-title">*</span></div>
             <div class="input-line">
-              <input *ngIf="this.fieldTextType === false" class="pw" type="text" formControlName="pass1" id="pass1">
-              <input class="input-text" *ngIf="this.fieldTextType === true" type="text" formControlName="pass1" id="pass1"/>
+              <input class="input-text pw" *ngIf="this.fieldTextType1 === false" type="text" formControlName="pass1" id="pass1">
+              <input class="input-text" *ngIf="this.fieldTextType1 === true" type="text" formControlName="pass1" id="pass1"/>
                 <div class="icon-password">
                   <i class="fa"
                     [ngClass]="{
-                      'fa-eye-slash': !fieldTextType,
-                      'fa-eye': fieldTextType
+                      'fa-eye-slash': !fieldTextType1,
+                      'fa-eye': fieldTextType1
                     }"
-                    (click)="toggleFieldTextType()"
+                    (click)="toggleFieldTextType1()"
                     style="color: #106DB6;"
                   ></i>
                 </div>
@@ -55,15 +55,15 @@
         <div class="col-md-12">
             <div class="label text-color">{{'Mật khẩu cấp 2' | translate}} <span class="required-title">*</span></div>
             <div class="input-line">
-              <input *ngIf="this.fieldTextType === false" class="pw" type="text" formControlName="pass1" id="pass1">
-              <input class="input-text" *ngIf="this.fieldTextType === true" type="text" formControlName="pass1" id="pass1"/>
+              <input  *ngIf="this.fieldTextType2 === false" class="input-text pw" type="text" formControlName="pass2" id="pass2">
+              <input  class="input-text" *ngIf="this.fieldTextType2 === true" type="text" formControlName="pass2" id="pass2"/>
                 <div class="icon-password">
                   <i class="fa"
                     [ngClass]="{
-                      'fa-eye-slash': !fieldTextType,
-                      'fa-eye': fieldTextType
+                      'fa-eye-slash': !fieldTextType2,
+                      'fa-eye': fieldTextType2
                     }"
-                    (click)="toggleFieldTextType()"
+                    (click)="toggleFieldTextType2()"
                     style="color: #106DB6;"
                   ></i>
                 </div>
