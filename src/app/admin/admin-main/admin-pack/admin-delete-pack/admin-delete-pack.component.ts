@@ -25,11 +25,21 @@ export class AdminDeletePackComponent implements OnInit {
 
     this.adminPackService.deletePack(this.data.id).subscribe(
       data => {
-        this.toastService.showSuccessHTMLWithTimeout("Xóa gói cước thành công!", "", 3000);
-        this.dialogRef.close();
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-          this.router.navigate(['/admin-main/pack']);
-        });  
+        if(!data) {
+          this.toastService.showSuccessHTMLWithTimeout("Xóa gói dịch vụ thành công!", "", 3000);
+          this.dialogRef.close();
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/admin-main/pack']);
+          });  
+        } else {
+          if (data.errors[0].code == 1011) {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Gói dịch vụ đang được sử dụng',
+              '',
+              3000
+            );
+          }
+        }
           
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);

@@ -29,7 +29,7 @@ export class AdminPackService {
     this.getCurrentUser();
 
     let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&totalBeforeVAT=' + totalBeforeVAT + '&totalAfterVAT='+totalAfterVAT+'&duration=' + duration.trim() + 
-    '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status +  "&page="+page+ "&size=" + size+"&sort=name";
+    '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status +  "&page="+page+ "&size=" + size+"&sort=id,desc";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(listPackUrl, {headers}).pipe();
   
@@ -41,7 +41,7 @@ export class AdminPackService {
 
     this.getCurrentUser();
     let listPackUrl = this.listPackUrl + '?name=' + name.trim() + '&code=' + code.trim() + '&totalBeforeVAT=' + totalBeforeVAT + '&totalAfterVAT='+totalAfterVAT+'&duration=' + duration.trim() + 
-    '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status +  "&page=0"+ "&size=1000" +"&sort=name";
+    '&numberOfContracts=' + numberOfContracts.trim() + '&status=' + status +  "&page=0"+ "&size=1000" +"&sort=id,desc";
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any>(this.listPackUrlComboBox, {headers}).pipe();
   
