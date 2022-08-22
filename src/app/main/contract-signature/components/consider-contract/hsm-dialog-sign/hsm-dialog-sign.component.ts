@@ -91,6 +91,7 @@ export class HsmDialogSignComponent implements OnInit {
       })
     }
 
+
     this.contractService.getDetermineCoordination(this.datas.recipientId).subscribe((response) => {
       const lengthRes = response.recipients.length;
       for(let i = 0; i < lengthRes; i++) {
@@ -105,6 +106,11 @@ export class HsmDialogSignComponent implements OnInit {
         }
       }
     })
+  }
+
+  fieldTextType: boolean = false;
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
   }
 
   onSubmit() {

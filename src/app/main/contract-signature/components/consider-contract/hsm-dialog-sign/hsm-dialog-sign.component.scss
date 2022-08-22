@@ -55,3 +55,25 @@
 .invalid{
   color: red;
 }
+
+input.pw {
+  -webkit-text-security: disc;
+}
+
+.input-line {
+  border: 1px solid #106DB6;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+
+  > input, div {
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    padding-left: 15px;
+  }
+  > div{
+    padding: 5px 15px;
+  }
+}
