@@ -945,6 +945,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         break;
       }
     }
+
+    console.log("type sign digital ", typeSignDigital);
+
     if (typeSignDigital == 2) {
       if (this.signCertDigital && this.signCertDigital.Serial) {
         // this.signCertDigital = resSignDigital.data;
@@ -1058,7 +1061,26 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       }
 
       if (fileC && objSign.length) {
-        return true;
+        
+        const checkSign = await this.contractService.signHsm(this.dataHsm, this.recipientId);;
+        console.log(checkSign);
+        if (!checkSign || (checkSign && !checkSign.success)) {
+          this.toastService.showErrorHTMLWithTimeout('Ký số không thành công!', '', 3000);
+          return false;
+        } else {
+          if(checkSign.success === true) {
+            return true;
+          } else {
+            if(!checkSign.message) {
+              this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công','',3000);
+            } else if(checkSign.message) {
+              this.toastService.showErrorHTMLWithTimeout(checkSign.message,'',3000);
+            }
+            
+            return false;
+          }
+        }
+ 
       }
       
     }
@@ -1180,6 +1202,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         break;
       }
     }
+
+    console.log("type sign digital ", typeSignDigital);
+
     if (typeSignDigital && typeSignDigital == 2) {
       let checkSetupTool = false;
       this.contractService.getAllAccountsDigital().then(async (data) => {
@@ -1517,23 +1542,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           password2: result.password2,
         }
 
-        this.contractService.signHsm(this.dataHsm, recipientId).subscribe(async (response) => {
-          if(response.success === true) {
-            console.log("response true ");
-            await this.signContractSubmit();
-          } else if(response.success === false) {
-            if(!response.message) {
-              this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công','',3000);
-            } else if(response.message) {
-              this.toastService.showErrorHTMLWithTimeout(response.message,'',3000);
-            }
-          }
-        },
-        (error) => {
-            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
-            '',
-            3000);
-        });
+        await this.signContractSubmit();
   
       }
     })

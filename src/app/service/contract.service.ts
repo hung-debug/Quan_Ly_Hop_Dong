@@ -114,28 +114,6 @@ export class ContractService {
     this.message.next(message);
   }
 
-  
-signHsm(datas: any, recipientId: number) {
-  this.getCurrentUser();
-
-  const headers = new HttpHeaders()
-  .append('Content-Type', 'application/json')
-  .append('Authorization', 'Bearer ' + this.token);
-
-  const body = JSON.stringify({
-    ma_dvcs: datas.ma_dvcs,
-    username: datas.username,
-    password: datas.password,
-    password2: datas.password2
-  });
-
-  console.log("body ", body);
-
-  return this.http.post<any>(this.signHsmUrl + recipientId, body,{'headers':headers});
-
-}
-
-
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) {
     const headers = new HttpHeaders()
@@ -611,6 +589,26 @@ signHsm(datas: any, recipientId: number) {
       "reason": "reason"
     };
     return this.http.post<any>(this.signFilePKI + recipientId, body, { 'headers': headers }).toPromise();
+  }
+
+  signHsm(datas: any, recipientId: number) {
+    this.getCurrentUser();
+  
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+  
+    const body = JSON.stringify({
+      ma_dvcs: datas.ma_dvcs,
+      username: datas.username,
+      password: datas.password,
+      password2: datas.password2
+    });
+  
+    console.log("body ", body);
+  
+    return this.http.post<any>(this.signHsmUrl + recipientId, body,{'headers':headers}).toPromise();
+  
   }
 
   addDocumentAttach(datas: any) {
