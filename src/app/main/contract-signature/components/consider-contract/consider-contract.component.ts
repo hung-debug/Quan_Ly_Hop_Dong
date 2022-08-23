@@ -1077,7 +1077,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       ) {
 
         const formData = {
-          "name": "image_" + new Date().getTime() + ".jpg",
           "content": signUpdate.valueSign,
           organizationId: this.data_contract?.is_data_contract?.organization_id
         }
@@ -1511,7 +1510,31 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       console.log("dong hsm ");
       console.log("result ", result);
       if (result) {
-          await this.signContractSubmit();
+        this.dataHsm = {
+          ma_dvcs: result.ma_dvcs,
+          username: result.username,
+          password: result.password,
+          password2: result.password2,
+        }
+
+        this.contractService.signHsm(this.dataHsm, recipientId).subscribe(async (response) => {
+          if(response.success === true) {
+            console.log("response true ");
+            await this.signContractSubmit();
+          } else if(response.success === false) {
+            if(!response.message) {
+              this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công','',3000);
+            } else if(response.message) {
+              this.toastService.showErrorHTMLWithTimeout(response.message,'',3000);
+            }
+          }
+        },
+        (error) => {
+            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
+            '',
+            3000);
+        });
+  
       }
     })
   }

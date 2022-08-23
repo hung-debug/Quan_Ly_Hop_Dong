@@ -129,6 +129,8 @@ signHsm(datas: any, recipientId: number) {
     password2: datas.password2
   });
 
+  console.log("body ", body);
+
   return this.http.post<any>(this.signHsmUrl + recipientId, body,{'headers':headers});
 
 }

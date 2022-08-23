@@ -143,25 +143,9 @@ export class HsmDialogSignComponent implements OnInit {
 
     //Check voi nguoi dung trong he thong
     if(data.ma_dvcs === this.taxCode) {
-      this.contractService.signHsm(data, recipientId).subscribe((response) => {
-        if(response.success === true) {
-          console.log("response true ");
-          this.dialogRef.close(data);
-        } else if(response.success === false) {
-          if(!response.message) {
-            this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công','',3000);
-          } else if(response.message) {
-            this.toastService.showErrorHTMLWithTimeout(response.message,'',3000);
-          }
-        }
-      },
-      (error) => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
-          '',
-          3000);
-      });
+        this.dialogRef.close(data);
     } else {
-      this.toastService.showErrorHTMLWithTimeout('Mã số thuê không trùng khớp thông tin ký hợp đồng','',3000);
+      this.toastService.showErrorHTMLWithTimeout('Mã số thuế không trùng khớp thông tin ký hợp đồng','',3000);
     }
   }
 
