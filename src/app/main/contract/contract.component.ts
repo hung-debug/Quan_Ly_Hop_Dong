@@ -468,7 +468,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         }else if(ceca_status == 0){
           return "[BCT xác thực thành công]";
         } else {
-          return "Chưa gửi lên CeCA";
+          return "[Chưa gửi lên CeCA]";
         }
       }
       return "[Không xác định]";
