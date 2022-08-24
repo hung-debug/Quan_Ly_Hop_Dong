@@ -8,6 +8,7 @@ import {ForwardContractComponent} from "../../shared/model/forward-contract/forw
 import {ContractService} from "../../../../service/contract.service";
 import {DisplayDigitalSignatureComponent} from "../../display-digital-signature/display-digital-signature.component";
 import { ToastService } from 'src/app/service/toast.service';
+import {DeviceDetectorService} from "ngx-device-detector";
 
 @Component({
   selector: 'app-footer-signature',
@@ -25,12 +26,14 @@ export class FooterSignatureComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private contractService: ContractService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private deviceService: DeviceDetectorService,
   ) {
   }
 
   ngOnInit(): void {
-    // console.log('footer...', this.datas);
+    this.getDeviceApp();
+
     let recipient_data = {
       recipients: undefined
     };
@@ -67,6 +70,17 @@ export class FooterSignatureComponent implements OnInit {
       }
     }
    
+  }
+
+  mobile: boolean = false;
+  getDeviceApp() {
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+      console.log("la mobile ");
+      this.mobile = true;
+    } else {
+      console.log("la pc");
+      this.mobile = false;
+    }
   }
 
   action() {

@@ -1,4 +1,4 @@
-<div class="sample-contract row" *ngIf="loaded && valid">
+<div class="sample-contract row" *ngIf="loaded && valid && this.mobile === false">
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
       <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
@@ -112,6 +112,56 @@
     </div>
   </div>
 </div>
+
+<div *ngIf="this.mobile === true">
+
+  <div class="header" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 3 || this.datas.roleContractReceived == 4">
+    <p class="d-flex justify-content-center mb-4 text-uppercase">XÁC NHẬN KÝ HỢP ĐỒNG</p>
+    <p class="d-flex mb-2 text-align-left mx-3">Bạn có đồng ý với nội dung, các điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch không?</p>
+    <div class="confirm-radio d-flex justify-content-between mx-4">
+      <div class="radio-confirm">
+        <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature'>
+        <label for="radio-confirm-secretary" class="ms-2">Đồng ý</label>
+      </div>
+      <div class="radio-refuse">
+        <input id="radio-refuse-secretary" type="radio" name='confirm-radio-secretary' [value]="2" [(ngModel)]='confirmSignature'>
+        <label for="radio-refuse-secretary" class="ms-2">Không đồng ý</label>
+      </div>
+    </div>
+
+  </div>
+
+    <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
+       style="background-color: #F2F2F2; position: relative;">
+    <div id="pdf-viewer-step-3">
+      <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+        <div class="resize-drag not-out-drop" *ngIf="![2,3].includes(recipient.status)"
+             [id]="d.id"
+             style="z-index: -1;"
+             #itemElement
+             (click)="getSignSelect(d)"
+             [ngClass]="changeColorDrag(null, d, true)"
+             [ngStyle]="changePosition(d)">
+          <div class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
+          <app-image-sign-contract *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
+          <!-- <app-sign-contract [datas]="datas" [sign]="d" ></app-sign-contract> -->
+        </div>
+      </div>
+      <div class="skeleton-sign position-absolute opacity-0">
+        <app-display-digital-signature [nameCompany]="nameCompany"></app-display-digital-signature>
+      </div>
+      <div class="skeleton-sign position-absolute opacity-0">
+        <app-text-signature-image [textSign]="textSign" [height]="heightText" [width]="widthText"></app-text-signature-image>
+      </div>
+
+      <!-- <div class="skeleton-sign position-absolute opacity-0">
+        <app-display-signature-image [userOtp]="userOtp" [phoneOtp]="phoneOtp" [isDateTime]="isDateTime"></app-display-signature-image>
+      </div> -->
+
+    </div>
+  </div>
+</div>
+
 <app-footer-signature *ngIf="loaded" [datas]="datas" [view]="[2,3].includes(recipient.status)" [recipientId]="recipientId" (submitChanges)="submitEvents($event)"></app-footer-signature>
 <!-- <app-confirm-sign-otp (confirmOtpForm)="confirmOtp($event)"></app-confirm-sign-otp> -->
 <ngx-spinner

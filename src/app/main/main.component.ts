@@ -10,6 +10,7 @@ import{ ResetPasswordDialogComponent } from '../../app/main/dialog/reset-passwor
 import { MatDialog } from '@angular/material/dialog';
 import { DashboardService } from '../service/dashboard.service';
 import { UserService } from '../service/user.service';
+import {DeviceDetectorService} from "ngx-device-detector";
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -40,13 +41,17 @@ export class MainComponent implements OnInit {
               public translate: TranslateService,
               private toastService: ToastService,
               private dialog: MatDialog,
-              private userService: UserService) {
+              private userService: UserService,
+              private deviceService: DeviceDetectorService,
+              ) {
     this.title = 'err';
     translate.addLangs(['en', 'vi']);
     translate.setDefaultLang(localStorage.getItem('lang') || 'vi');
   }
 
   ngOnInit(): void {
+    this.getDeviceApp();
+
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('urlLoginType')));
     // if (this.router.url.includes('/main/form-contract/add') ||
@@ -119,27 +124,47 @@ export class MainComponent implements OnInit {
   }
 
   getStyleWithSideBar() {
-    // let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
-    if (this.urlLoginType) {
+    let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
+
+    console.log("url login type ", urlLoginType);
+    if (this.urlLoginType || this.mobile === true) {
       return {
         'padding-left': '0px'
       };
-    } else return {
+    }
+     else return {
       'padding-left': '220px'
     }
   }
 
+  //get style header
   getStyleSideBar() {
-    // let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
-    if (this.urlLoginType) {
+    let urlLoginType = JSON.parse(JSON.stringify(localStorage.getItem('urlLoginType')));
+    console.log("url login type ", urlLoginType);
+
+    if (this.urlLoginType || this.mobile === true) {
       return {
         "width": "100%",
         'left': '0px'
       };
-    } else return {
+    }
+     else return {
       "width": "calc(100% - 220px)",
       'left': '220px'
     }
+  }
+
+  mobile: boolean = false;
+  getDeviceApp() {
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+      console.log("la mobile ");
+      this.mobile = true;
+    } else {
+      console.log("la pc");
+      this.mobile = false;
+    }
+
+    console.log("mobile ", this.mobile);
   }
 
   getShowHideSideBar() {

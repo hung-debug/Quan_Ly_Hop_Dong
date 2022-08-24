@@ -42,6 +42,7 @@ import { of } from 'rxjs';
 import { networkList } from "../../../../config/variable";
 import { HttpErrorResponse } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import {DeviceDetectorService} from "ngx-device-detector";
 
 @Component({
   selector: 'app-consider-contract',
@@ -169,11 +170,15 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     private userService: UserService,
     private dialog: MatDialog,
     public datepipe: DatePipe,
+    private deviceService: DeviceDetectorService,
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
   ngOnInit(): void {
+
+    this.getDeviceApp();
+
     console.log("vao consider contract ");
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
@@ -1065,20 +1070,18 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         const checkSign = await this.contractService.signHsm(this.dataHsm, this.recipientId);;
         console.log(checkSign);
         if (!checkSign || (checkSign && !checkSign.success)) {
-          this.toastService.showErrorHTMLWithTimeout('Ký số không thành công!', '', 3000);
+          
+          if(!checkSign.message) {
+            this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công','',3000);
+          } else if(checkSign.message) {
+            this.toastService.showErrorHTMLWithTimeout(checkSign.message,'',3000);
+          }
+          
           return false;
         } else {
           if(checkSign.success === true) {
             return true;
-          } else {
-            if(!checkSign.message) {
-              this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công','',3000);
-            } else if(checkSign.message) {
-              this.toastService.showErrorHTMLWithTimeout(checkSign.message,'',3000);
-            }
-            
-            return false;
-          }
+          } 
         }
  
       }
@@ -1656,4 +1659,17 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     this.currentHeight += heightPage;
   }
 
+  mobile: boolean = false;
+  getDeviceApp() {
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+      console.log("la mobile ");
+      this.mobile = true;
+    } else {
+      console.log("la pc");
+      this.mobile = false;
+    }
+  }
+
 }
+
+
