@@ -477,7 +477,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
-
   showEventInfo = (event: any) => {
     let canvasElement: HTMLElement | null;
     if (event.relatedTarget && event.relatedTarget.id) {
@@ -536,15 +535,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
         let pages = event.relatedTarget.id.split("-");
         let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
-        // tinh toa do cua element / tong so trang
-        // if (page > 1) { // page: so trang ma phan tu keo tha vao
-        //   for (let i = 1; i < page; i++) {
-        //     let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
-        //     let canvasInfo = canvasElement.getBoundingClientRect();
-        //     layerY += canvasInfo.height + 3;
-        //   }
-        //   layerY += page / 3;
-        // }
 
         /* test set location signature
         Duongdt
@@ -691,12 +681,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   getCheckSignature(isSignType: any, listSelect?: string) {
     // p.recipient_id == element.id && p.sign_unit == isSignType)
     this.list_sign_name.forEach((element: any) => {
-      // if (this.getConditionFiledSign(element, isSignType)) {
-      //   let data = this.convertToSignConfig().filter((isName: any) => element.fields && element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
-      //   if (data.length > 0)
-      //     element.is_disable = true;
-      //   else element.is_disable = false;
-      // } else {
+     
       if (this.convertToSignConfig().some((p: any) => ((p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && (p.recipient ? p.recipient.email : p.email) && p.sign_unit == 'so_tai_lieu'))) {
         if (isSignType != 'text') {
           element.is_disable = true;
@@ -785,13 +770,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       'width.px': (this.widthDrag / 2)
     }
   }
-
-  // setWidthText(d: any) {
-  //   return {
-  //     // 'width.px': (this.widthDrag / 2)
-  //     'width.px': (this.widthDrag)
-  //   }
-  // }
 
   // view pdf qua canvas
   async getPage() {
@@ -1045,21 +1023,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  // getIdSignClick() {
-  //   let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
-  //   return set_id.id;
-  //   // this.datas.contract_user_sign.forEach((element: any, index: any) => {
-  //   //   if (element.id == id) {
-  //   //     if (element.sign_config.length == 0) {
-  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
-  //   //     } else {
-  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-' + (element.sign_config.length) + '_' + element.id;
-  //   //     }
-  //   //     // element['sign_config'].push(_obj);
-  //   //   }
-  //   // })
-  // }
-
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
@@ -1210,25 +1173,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  // onContentTextEvent() {
-  //   let arrCheckTextContent = [];
-  //   let dataTextDuplicate = this.datas.contract_user_sign.filter((p: any) => p.sign_unit == "text")[0];
-  //   for (let i = 0; i < dataTextDuplicate.sign_config.length; i++) {
-  //     if (dataTextDuplicate.sign_config[i].text_attribute_name) {
-  //       arrCheckTextContent.push(dataTextDuplicate.sign_config[i].text_attribute_name);
-  //     }
-  //   }
-
-  //   var valueSoFar = Object.create(null);
-  //   for (var k = 0; k < arrCheckTextContent.length; ++k) {
-  //     var value = arrCheckTextContent[k];
-  //     if (value in valueSoFar) {
-  //       return true;
-  //     }
-  //     valueSoFar[value] = true;
-  //   }
-  //   return false;
-  // }
 
   getTrafX() {
     if (Math.round(this.objSignInfo.traf_x) <= 0) {
@@ -1241,16 +1185,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     return Math.round(this.objSignInfo.traf_y)
   }
 
-  // edit size doi tuong ky
-  // changeSizeSign(e: any, sizeChange: any) {
-  //   let signElement = document.getElementById(this.objSignInfo.id);
-  //   if (signElement) {
-  //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-  //     if (isObjSign) {
-  //
-  //     }
-  //   }
-  // }
 
   back(e: any, step?: any) {
     console.log("back step 3 ", this.temp);

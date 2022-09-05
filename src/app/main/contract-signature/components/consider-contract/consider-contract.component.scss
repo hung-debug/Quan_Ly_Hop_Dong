@@ -303,17 +303,3 @@
   height: 85px !important;
 }
 
-.header {
-  position: fixed;
-  z-index: 100;
-//   //width: calc(100% - 220px);
-  background: #fff;
-  height: 80px;
-  padding: 0 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #e6e7ec;
-  transition: left 500ms;
-}
-

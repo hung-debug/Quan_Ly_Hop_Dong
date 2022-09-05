@@ -151,12 +151,31 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  width: 50%;
+  width: 100%;
   height: calc(100vh);
   display: block;
 }
+
+.left-background-mobile {
+  position: relative;
+  background: url("../../assets/img/digital_sign.svg") center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  width: 100%;
+  height: 50px;
+  display: block;
+}
+
 .right-panel {
-  width: 50%;
+  width: 100%;
+  height: calc(100vh);
+  position: relative;
+}
+
+.right-panel-mobile {
+  width: 100%;
   height: calc(100vh);
   position: relative;
 }

@@ -37,10 +37,11 @@
 }
 
 .header {
+  width: 100%;
   // position: fixed;
-  z-index: 100;
+  // z-index: 100;
 //   //width: calc(100% - 220px);
-  background: #fff;
+  // background: #fff;
   // height: 80px;
   // padding: 0 1rem;
   // display: flex;
@@ -48,5 +49,5 @@
   // justify-content: space-between;
   // border-bottom: 1px solid #e6e7ec;
   // transition: left 500ms;
-  padding-top: 15px
+  // padding-top: 15px
 }

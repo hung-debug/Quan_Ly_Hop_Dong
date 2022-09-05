@@ -17,6 +17,7 @@ import * as moment from "moment";
 import { sideList } from 'src/app/config/variable';
 import { DatePipe } from '@angular/common';
 import { DialogSignManyComponentComponent } from './dialog/dialog-sign-many-component/dialog-sign-many-component.component';
+
 @Component({
   selector: 'app-contract',
   templateUrl: './contract-signature.component.html',
@@ -70,6 +71,8 @@ export class ContractSignatureComponent implements OnInit {
   ) {
     this.constantModel = contractModel;
   }
+
+
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -385,7 +388,7 @@ export class ContractSignatureComponent implements OnInit {
         }else if(ceca_status == 0){
           return "[BCT xác thực thành công]";
         } else {
-          return "Chưa gửi lên CeCA";
+          return "[Chưa gửi lên CeCA]";
         }
       }
       return "[Không xác định]";

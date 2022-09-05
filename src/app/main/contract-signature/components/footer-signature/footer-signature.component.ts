@@ -83,6 +83,20 @@ export class FooterSignatureComponent implements OnInit {
     }
   }
 
+  getStyleButton() {
+    if(window.innerWidth >= 396) {
+      return {
+        "position": 'absolute',
+        "right": 0
+      };
+    } else {
+      return {
+
+      }
+    }
+    
+  }
+
   action() {
     if (this.datas.action_title == 'dieu_phoi') {
       if (this.is_data_coordination) { // chỉ lấy dữ liệu của người điều phối

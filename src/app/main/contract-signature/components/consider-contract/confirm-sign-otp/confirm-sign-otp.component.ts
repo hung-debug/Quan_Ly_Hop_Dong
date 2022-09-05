@@ -15,6 +15,8 @@ import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.compone
 import domtoimage from 'dom-to-image';
 import { concatMap, delay, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { TRISTATECHECKBOX_VALUE_ACCESSOR } from 'primeng/tristatecheckbox';
 
 
 @Component({
@@ -50,11 +52,14 @@ export class ConfirmSignOtpComponent implements OnInit {
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     public datepipe: DatePipe,
+    private deviceService: DeviceDetectorService,
   ) { }
 
 
 
   ngOnInit(): void {
+    this.getDeviceApp();
+
     this.datasOtp = this.data;
     this.datas = this.datasOtp.datas;
     this.addForm = this.fbd.group({
@@ -129,28 +134,58 @@ export class ConfirmSignOtpComponent implements OnInit {
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
     let iu = 0;
-    
-    for (const signUpdate of this.datas.is_data_object_signature) {
-      console.log('ki anh', signUpdate);
-      if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
-        && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
-        && signUpdate?.recipient?.role === this.datas?.roleContractReceived
-      ) {
 
-        const formData = {
-          "name": "image_" + new Date().getTime() + ".jpg",
-          "content": signUpdate.valueSign,
-          organizationId: this.datas?.is_data_contract?.organization_id
+    if(!this.mobile) {
+      for (const signUpdate of this.datas.is_data_object_signature) {
+        console.log('ki anh', signUpdate);
+        if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
+          && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
+          && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+        ) {
+  
+          console.log("sign update ", signUpdate);
+  
+          const formData = {
+            "name": "image_" + new Date().getTime() + ".jpg",
+            "content": signUpdate.valueSign,
+            organizationId: this.datas?.is_data_contract?.organization_id
+          }
+  
+          signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
+  
+          console.log("signuploadobs ", signUploadObs$);
+  
+          indexSignUpload.push(iu);
         }
-
-        signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
-
-        console.log("signuploadobs ", signUploadObs$);
-
-        indexSignUpload.push(iu);
+        iu++;
       }
-      iu++;
+    } else {
+      console.log("is mobile ");
+      for (const signUpdate of this.datas.is_data_object_signature) {
+        console.log('ki anh', signUpdate);
+        if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
+          && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
+          && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+        ) {
+  
+          console.log("sign update ", signUpdate);
+  
+          const formData = {
+            "name": "image_" + new Date().getTime() + ".jpg",
+            "content": this.datasOtp.datas.is_data_object_signature.valueSign,
+            organizationId: this.datas?.is_data_contract?.organization_id
+          }
+  
+          signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
+  
+          console.log("signuploadobs ", signUploadObs$);
+  
+          indexSignUpload.push(iu);
+        }
+        iu++;
+      }
     }
+    
 
     forkJoin(signUploadObs$).subscribe(async results => {
       let ir = 0;
@@ -169,6 +204,17 @@ export class ConfirmSignOtpComponent implements OnInit {
       await this.signContract(true);
     }
 
+  }
+
+  mobile: boolean = false;
+  getDeviceApp() {
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+      console.log("la mobile ");
+      this.mobile = true;
+    } else {
+      console.log("la pc");
+      this.mobile = false;
+    }
   }
 
   async signContract(notContainSignImage?: boolean) {
@@ -194,6 +240,7 @@ export class ConfirmSignOtpComponent implements OnInit {
       this.phoneOtp = this.datasOtp.phone;
       this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
       await of(null).pipe(delay(100)).toPromise();
+      
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
 
       console.log("imageRender ",imageRender);
@@ -248,38 +295,6 @@ export class ConfirmSignOtpComponent implements OnInit {
       }
     }
     if (typeSignDigital && typeSignDigital == 2) {
-      // let checkSetupTool = false;
-      // this.contractService.getAllAccountsDigital().then(async (data) => {
-      //   if (data.data.Serial) {
-      //     this.signCertDigital = data.data;
-      //     this.nameCompany = data.data.CN;
-      //     checkSetupTool = true;
-      //     if (!checkSetupTool) {
-      //       this.spinner.hide();
-      //       return;
-      //     } else {
-      //       await this.signImageC(signUpdatePayload, notContainSignImage);
-      //     }
-      //   } else {
-      //     this.spinner.hide();
-      //     Swal.fire({
-      //       title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
-      //       icon: 'warning',
-      //       confirmButtonColor: '#3085d6',
-      //       cancelButtonColor: '#b0bec5',
-      //       confirmButtonText: 'Xác nhận'
-      //     });
-      //   }
-      // }, err => {
-      //   this.spinner.hide();
-      //   Swal.fire({
-      //     html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>  và cài đặt`,
-      //     icon: 'warning',
-      //     confirmButtonColor: '#3085d6',
-      //     cancelButtonColor: '#b0bec5',
-      //     confirmButtonText: 'Xác nhận'
-      //   });
-      // })
 
     } else {
       await this.signImageC(signUpdatePayload, notContainSignImage);

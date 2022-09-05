@@ -43,6 +43,8 @@ import { networkList } from "../../../../config/variable";
 import { HttpErrorResponse } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import {DeviceDetectorService} from "ngx-device-detector";
+import { DomSanitizer } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-consider-contract',
@@ -154,34 +156,40 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   isDateTime:any;
   userOtp:any;
   dataHsm: any;
+  trustedUrl: any;
+  idPdfSrcMobile: NodeJS.Timeout;
 
   constructor(
-    private contractSignatureService: ContractSignatureService,
-    private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
-    private modalService: NgbModal,
     private activeRoute: ActivatedRoute,
     private router: Router,
     private appService: AppService,
     private toastService: ToastService,
     private uploadService: UploadService,
     private spinner: NgxSpinnerService,
-    private digitalSignatureService: DigitalSignatureService,
     private userService: UserService,
     private dialog: MatDialog,
     public datepipe: DatePipe,
     private deviceService: DeviceDetectorService,
+    private sanitizer: DomSanitizer
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
-  ngOnInit(): void {
+  pdfSrcMobile: any;
 
+  ngOnInit(): void {
+    
     this.getDeviceApp();
 
     console.log("vao consider contract ");
+
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
+
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
+
+    // this.getFilePdfForMobile();
+
     this.activeRoute.queryParams.subscribe(params => {
       this.recipientId = params.recipientId;
 
@@ -201,6 +209,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     });
   }
 
+
+  timerId: any;
   getDataContractSignature() {
 
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
@@ -330,9 +340,22 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           return;
         }
         this.pdfSrc = fileC;
+
+        this.pdfSrcMobile = "https://docs.google.com/viewerng/viewer?url="+this.pdfSrc+"&embedded=true";
+
+        this.idPdfSrcMobile = setInterval(() => {
+          this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfSrcMobile);
+
+          if(this.trustedUrl) {
+            clearInterval(this.idPdfSrcMobile);
+          }
+
+        }, 2000);
+      
       }
       // render pdf to canvas
-      this.getPage();
+      if(!this.mobile)
+        this.getPage();
       this.loaded = true;
     }, (res: any) => {
       // @ts-ignore
@@ -387,6 +410,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         this.arrPage.push({ page: page });
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
+
         // canvas.style.paddingLeft = '15px';
         // canvas.style.border = '9px solid transparent';
         // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
@@ -457,18 +481,24 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
+
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
     //This gives us the page's dimensions at full scale
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
-      // let viewport = page.getViewport(this.scale);
       let viewport = page.getViewport({ scale: this.scale });
+
+      // let viewport = page.getViewport({ scale: window.innerWidth/page.getViewport({scale:1}).width });
+
+      console.log("viewport ",viewport);
+
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
+
       this.prepareInfoSignUsbToken(pageNumber, canvas.height);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
       if (!_objPage) {
@@ -485,6 +515,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         $('.viewer-pdf').css('padding-right', paddingPdf + 'px');
       }
       this.activeScroll();
+
     });
   }
 
@@ -650,6 +681,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngOnDestroy() {
+      if (this.pdfSrcMobile) {
+        clearInterval(this.pdfSrcMobile);
+      }
+    
+
     interact('.pdf-viewer-step-3').unset();
     interact('.drop-zone').unset();
     interact('.resize-drag').unset();
@@ -745,8 +781,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
     if (e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 3000);
-      return;
+        if(!this.mobile) {
+          this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 3000);
+          return;
+        } else {
+          this.imageDialogSignOpen(e, haveSignImage);
+
+          return;
+        }
     } else if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
       let typeSignDigital = null;
@@ -870,7 +912,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   openPopupSignContract(typeSign: any) {
     if (typeSign == 1) {
-      this.imageDialogSignOpen();
+      // this.imageDialogSignOpen();
     } else if (typeSign == 3) {
       // this.pkiDialogSignOpen();
     } else if (typeSign == 4) {
@@ -878,22 +920,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
-  imageDialogSignOpen() {
-    const data = {
-      title: 'KÝ HỢP ĐỒNG ',
-      is_content: 'forward_contract'
-    };
-
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '1024px';
-    dialogConfig.hasBackdrop = true;
-    dialogConfig.data = data;
-    const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-      let is_data = result
-    })
-  }
 
   getTextAlertConfirm() {
     if (this.datas.roleContractReceived == 2) {
@@ -1210,6 +1236,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
     if (typeSignDigital && typeSignDigital == 2) {
       let checkSetupTool = false;
+      
       this.contractService.getAllAccountsDigital().then(async (data) => {
 
         console.log("data all accounts digital ", data);
@@ -1407,6 +1434,64 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const signRes = await this.contractService.updateInfoContractConsiderToPromise(signUpdatePayload, this.recipientId);
   }
 
+  getFilePdfForMobile() {
+    let fieldId: number = 0;
+    let fieldName: string = "";
+
+    //this.idContract: id hợp đồng
+    this.contractService.getDetailContract(this.idContract).subscribe((response) => {
+      console.log("response organization ", response);
+
+      let organization_id = response[0].organization_id;
+
+      for(let i = 0; i < response[2].length; i++) {
+        if(response[2][i].recipient = this.recipientId) {
+          fieldId = response[2][i].id;
+          fieldName = response[2][i].name;
+        } 
+      }
+
+      const imageRender = <HTMLElement>document.getElementById('image_keo_tha');
+
+      console.log("image render ", imageRender);
+
+      const textSignB =  domtoimage.toPng(imageRender);
+
+      console.log("textSignB ", textSignB);
+
+      const valueBase64 = textSignB.split(",")[1];;
+
+      const formData = {
+        "name": "image_mobile" + new Date().getTime() + ".jpg",
+        "content": "data:image/png;base64," + valueBase64,
+        organizationId: organization_id
+      }
+
+      this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
+
+        console.log("response base 64 ", responseBase64);
+
+        const filePath = responseBase64.file_object.file_path;
+
+        const data =    [{
+          "font":"Arial",
+          "font_size":14,
+          "id":fieldId,
+          "name":fieldName,
+          "value":filePath
+       }]
+
+        this.contractService.updateInfoContractConsider(data, this.recipientId).subscribe((responseEnd) => {
+          this.contractService.getDetailContract(this.idContract).subscribe((responseLink) => {
+            console.log("response link ", responseLink);
+          })
+        })
+
+      })
+
+    })
+  }
+
   async rejectContract() {
     let inputValue = '';
     const { value: textRefuse } = await Swal.fire({
@@ -1547,6 +1632,74 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
         await this.signContractSubmit();
   
+      }
+    })
+  }
+
+  imageDialogSignOpen(e : any, haveSignImage: boolean) {
+    const data = {
+      title: 'KÝ HỢP ĐỒNG ',
+      is_content: 'forward_contract'
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '1024px';
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.data = data;
+    const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(async (result: any) => {
+      console.log('the close dialog image ', result);
+      let is_data = result;
+
+      this.datas.is_data_object_signature.valueSign = result;
+
+      console.log("datas ", this.datas.is_data_object_signature.valueSign);
+
+      if(result) {
+        if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
+        (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
+
+          let id_recipient_signature:any = null;
+          let phone_recipient_signature:any = null;
+          // console.log(this.datas);
+          for (const d of this.datas.is_data_contract.participants) {
+            for (const q of d.recipients) {
+              if (q.email == this.currentUser.email && q.status == 1) {
+                id_recipient_signature = q.id;
+                this.phoneOtp = phone_recipient_signature = q.phone;
+                this.userOtp = q.name;
+                break
+              }
+            }
+            if (id_recipient_signature) break;
+          }
+
+          //neu co id nguoi xu ly thi moi kiem tra
+          if (id_recipient_signature) {
+
+            this.contractService.getCheckSignatured(id_recipient_signature).subscribe((res: any) => {
+
+              if (res && res.status == 2) {
+                this.spinner.hide();
+                this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
+              } else {
+                if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
+
+                  this.confirmOtpSignContract(id_recipient_signature, phone_recipient_signature);
+                  this.spinner.hide();
+                } 
+              }
+            }, (error: HttpErrorResponse) => {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
+            })
+          } 
+      } else if (e && e == 1 && ((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
+        (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) ||
+        (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
+      )) {
+        await this.rejectContract();
+      }
       }
     })
   }

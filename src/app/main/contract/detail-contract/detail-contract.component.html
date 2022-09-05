@@ -1,6 +1,6 @@
 <div class="sample-contract row" *ngIf="loaded">
   <!--  information contract-->
-  <div class="col-md-3 sample-contract__information" style="background-color: white;">
+  <div *ngIf="!this.mobile" class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
       <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
       <div style="line-height: 25px">
@@ -52,22 +52,15 @@
 
   <!--  file content-->
   <!--  width: 74.7%-->
-  <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
+  <div *ngIf="!this.mobile" class="col-md-9 sample-contract__file viewer-pdf isDrag"
        style="background-color: #F2F2F2; position: relative;">
     <div id="pdf-viewer-step-3">
-      <!--<div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-        <div class="resize-drag not-out-drop"
-             [id]="d.id"
-             style="z-index: -1;"
-             #itemElement
-             (click)="getSignSelect(d)"
-             [ngClass]="changeColorDrag(null, d, true)"
-             [ngStyle]="changePosition(d)">
-          <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
-          <app-image-sign-contract-detail *ngIf="!d.value" [datas]="datas" [sign]="d"></app-image-sign-contract-detail>
-        </div>
-      </div>-->
+      
     </div>
+  </div>
+
+  <div *ngIf="this.mobile">
+    <iframe [src]="this.trustedUrl" style="width:100%; height: calc(100vh);" frameBorder="0"></iframe>
   </div>
 </div>
 <div class="footer-contract">

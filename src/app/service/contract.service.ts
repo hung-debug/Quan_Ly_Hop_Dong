@@ -61,8 +61,13 @@ export class ContractService {
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
   isDataDetermine: any = `${environment.apiUrl}/api/v1/participants/byRecipient/`;
   signDigitalMobi: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
+  
   getAccountSignDigital: any = `http://localhost:6704/api/mobi/getcert?mst=`;
+
   postSignDigital: any = `http://localhost:6704/api/mobi/signpdf`;
+
+  // postSignDigital: any = `https://127.0.0.1:14424/`;
+
   postSignDigitalSimPKI: any = `https://econtract.mobifone.vn/SignService/v2/sign-document`;
   getFileSignSimPKI: any = `https://econtract.mobifone.vn/SignService/download-signed-document?signed_doc_id=`;
   signFilePKI: any = `${environment.apiUrl}/api/v1/sign/sim-pki/`;
@@ -84,10 +89,11 @@ export class ContractService {
   getCheckSign: any = `${environment.apiUrl}/api/v1/recipients/internal/`;
   deleteParticipantContractUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   changeStatusHandle: any = `${environment.apiUrl}/api/v1/recipients/`;
-  getSendOtpContractProcessUrl: any = `${environment.apiUrl}/api/v1/processes/approval/`;
   updateInfoContractConsiderAndOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
   updateContractIsPushCeCAUrl: any = `${environment.apiUrl}/api/v1/contracts/ceca-push/`;
+
   getStatusSignImageOtpUrl: any = `${environment.apiUrl}/api/v1/processes/approval-sign-image/`;
+  getSendOtpContractProcessUrl: any = `${environment.apiUrl}/api/v1/processes/approval/`;
 
   checkTaxCodeExistUrl: any = `${environment.apiUrl}/api/v1/contracts/check-mst-exist`;
 
@@ -267,6 +273,7 @@ export class ContractService {
     }
 
   }
+
 
 
   getSignPositionCoordinatesForm(id_contract_form: number) {

@@ -3,9 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {AuthenticationService} from '../service/authentication.service';
-import {HttpErrorResponse} from "@angular/common/http";
 import {DeviceDetectorService} from "ngx-device-detector";
-import {FilterListDialogComponent} from "../main/contract/dialog/filter-list-dialog/filter-list-dialog.component";
 import {ActionDeviceComponent} from "../action-device/action-device.component";
 import { MatDialog } from '@angular/material/dialog';
 
@@ -16,6 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class LoginComponent implements OnInit {
 
+  mobile: boolean = true;
   error: Boolean = false;
   errorDetail: string = '';
   fieldTextType: boolean = false;
@@ -149,15 +148,16 @@ export class LoginComponent implements OnInit {
     this.fieldTextType = !this.fieldTextType;
   }
 
+
   ngOnInit(): void {
-    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+    console.log("mobile first ", this.mobile);
+    if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
+      console.log("mobile is true ");
       this.getDeviceApp();
+
+      this.mobile = true;
     } else {
-      // if (!this.router.url.endsWith('login')) {
-      //   this.sub = this.route.params.subscribe(params => {
-      //     this.type = params['loginType'];
-      //   });
-      // }
+      console.log("mobile is false ");
       if (sessionStorage.getItem('urlLoginType')) {
         this.type = 1;
       } else this.type = 0;
@@ -169,7 +169,11 @@ export class LoginComponent implements OnInit {
       //     this.router.navigate(['/main/dashboard']);
       //   });
       // }
+
+      this.mobile = false;
     }
+
+    console.log("mobile ", this.mobile);
   }
 
   switchLang(lang: string) {
@@ -180,6 +184,7 @@ export class LoginComponent implements OnInit {
 
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+
       console.log(this.deviceService.isMobile(), this.deviceService.deviceType, this.deviceService);
       // @ts-ignore
       const dialogRef = this.dialog.open(ActionDeviceComponent, {
@@ -197,7 +202,7 @@ export class LoginComponent implements OnInit {
         }
         // let is_data = result
       })
-    }
+    } 
   }
 
 }

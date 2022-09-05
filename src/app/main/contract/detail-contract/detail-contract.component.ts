@@ -13,7 +13,8 @@ import {variable} from "../../../config/variable";
 import Swal from 'sweetalert2';
 import * as $ from "jquery";
 import {ProcessingHandleEcontractComponent} from "../../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component"
-import { analyzeAndValidateNgModules } from '@angular/compiler';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-detail-contract',
@@ -108,23 +109,26 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   allFileAttachment: any[];
   role:any;
   status:any;
+  pdfSrcMobile: string;
+  trustedUrl: any;
 
   constructor(
-    private contractSignatureService: ContractSignatureService,
-    private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
-    private modalService: NgbModal,
     private activeRoute: ActivatedRoute,
     private router: Router,
     private appService: AppService,
     private toastService : ToastService,
     private uploadService : UploadService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private deviceService: DeviceDetectorService,
+    private sanitizer: DomSanitizer
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
   ngOnInit(): void {
+    this.getDeviceApp();
+
     this.appService.setTitle('THÔNG TIN CHI TIẾT HỢP ĐỒNG');
     this.getDataContractSignature();
   }
@@ -247,12 +251,21 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           this.toastService.showErrorHTMLWithTimeout("Thiếu dữ liệu file hợp đồng!", "", 3000);
         } else {
           this.pdfSrc = fileC;
+          this.pdfSrc = fileC;
+          this.pdfSrcMobile = "https://docs.google.com/viewerng/viewer?url="+this.pdfSrc+"&embedded=true";
+          this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfSrcMobile);
         }
       
       }
       // render pdf to canvas
-      this.getPage();
+
+      if(!this.mobile) {
+        this.getPage();
+      }
+
       this.loaded = true;
+
+      
     }, (res: any) => {
       // @ts-ignore
       this.handleError();
@@ -298,6 +311,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
       this.thePDF = pdf;
+
       this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)
       this.removePage();
       this.arrPage = [];
@@ -668,6 +682,17 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
   }
 
+  mobile: boolean = false;
+  getDeviceApp() {
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+      console.log("la mobile ");
+      this.mobile = true;
+    } else {
+      console.log("la pc");
+      this.mobile = false;
+    }
+  }
+
   confirmOtpSignContract() {
     const data = {
       title: 'Xác nhận otp',
@@ -795,7 +820,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         }
         this.contractService.uploadFileImageBase64Signature(formData).subscribe(data => {
           this.datas.filePath = data?.fileObject?.filePath;
-
 
           if (this.datas.filePath) {
             signUpdate.value = this.datas.filePath;
