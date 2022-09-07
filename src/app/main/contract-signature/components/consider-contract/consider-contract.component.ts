@@ -1103,18 +1103,13 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             console.log("token id usb ",this.sessionIdUsbToken);
 
             var json_req = JSON.stringify({
-              OperationId: 7,
+              OperationId: 10,
               SessionId: this.sessionIdUsbToken,
               checkOCSP: 0,
-              infile: fileC,
-              outfile: fileC,
-              algDigest: "SHA_256",
-              urlTimestamp: "http://tsa.lca.la/tsa/request",
-              invisible: 0,
-              tagXML: "*",
-              XMLDSig: 0,
-              xades_Version: "XADES_v1_4_1",
-              xades_Form:"XADES_T"
+              DataToBeSign: signDigital.valueSignBase64,
+              reqDigest: 1,
+              algDigest: "SHA_1",
+              extFile: "pdf",
             });
 
             console.log("json_req before ",json_req);
@@ -1131,19 +1126,29 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             else {// code for IE6, IE5
                 httpReq = new ActiveXObject("Microsoft.XMLHTTP");
             }
-            httpReq.onreadystatechange =  () => {
+            httpReq.onreadystatechange =  async () => {
                 if (httpReq.readyState == 4 && httpReq.status == 200) {
 
                   console.log("htppreq ",httpReq.responseText);
 
                     response = window.atob(httpReq.responseText);
                     
-        
                     var process = false;
                     try {
                         var json_res = JSON.parse(response);
+
+                        console.log("json_res ",json_res)
+
                         if (json_res.ResponseCode == 0) {
                             alert("Successfully. Result: " + json_res.PathFile);
+
+                              const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
+                                if (!sign.recipient_id) {
+                                  console.log("recipent_id")
+
+                                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+                                  return false;
+                                }
                         } else {
                           console.log("response ky ", response);
                           console.log("response ky msg ", json_res);

@@ -179,15 +179,22 @@ export class DetermineSignerComponent implements OnInit {
 
   async getApiDetermine(is_save?: boolean) {
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
-
-      for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
-        if(!this.datas.is_determine_clone[index].recipients[i].phone) {
-          this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email;
-        }
-      }
-
+      
       if (items.type == 3)
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
+
+        // if(!this.datas.is_determine_clone[index].recipients.phone) {
+        //   this.datas.is_determine_clone[index].recipients.phone = this.datas.is_determine_clone[index].recipients.email;
+        // }
+
+        for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
+          if(!this.datas.is_determine_clone[index].recipients[i].phone && this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
+            this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email;
+          }
+        }
+
+
+        // console.log("abc");
     })
     this.spinner.show();
   
@@ -222,10 +229,18 @@ export class DetermineSignerComponent implements OnInit {
     } else if (!this.saveDraftStep || is_save) {
       console.log("next or previous step ");
 
+      console.log("res ",res);
+      console.log("data clone 1 ", this.datas.is_determine_clone);
+
+      this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;
+
+      console.log("data clone 2 ", this.datas.is_determine_clone);
+
       this.step = variable.stepSampleContract.step3;
 
       this.datas.stepLast = this.step;
 
+      console.log("data clone 3 ", this.datas.is_determine_clone);
 
       this.nextOrPreviousStep(this.step);
     }
