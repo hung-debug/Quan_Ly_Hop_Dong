@@ -31,6 +31,9 @@ export class ActionDeviceComponent implements OnInit {
         const urlQ2 = urlQ1.split('/');
         const urlRole = urlQ2[0];
         const matchesNum = urlQ.match(/\d+/g);
+
+        console.log("url role ", urlRole);
+
         if (urlRole.includes('coordinates')) {
           role = 1;
         } else if (urlRole.includes('consider')) {

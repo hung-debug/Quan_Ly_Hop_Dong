@@ -139,7 +139,7 @@ export class UserService {
       size: datas.size,
       address: datas.address,
       tax_code: datas.tax_code,
-      representatives: datas.representatives,
+      representative: datas.representatives,
       position: datas.position,
       email: datas.email,
       phone: datas.phone,

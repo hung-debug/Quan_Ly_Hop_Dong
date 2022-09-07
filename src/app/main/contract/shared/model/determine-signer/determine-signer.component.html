@@ -78,6 +78,7 @@
                   </div>
                 </div>
               </div>
+              
             </div>
             <div class="col-md-1 delete-element" (click)="deleteOriganzationReviewer(index)">
               <img src="assets/img/border_close.svg" alt="close.vn">
@@ -159,7 +160,7 @@
                 <div *ngIf="d.login_by === 'phone'" class="participants__name">
                   <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
+                    <img class="input-img">
                     <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.email">
                   </div>
                 </div>

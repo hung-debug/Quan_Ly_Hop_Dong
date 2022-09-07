@@ -82,6 +82,7 @@ export class UnitComponent implements OnInit {
     //lay id to chuc nguoi truy cap
     this.orgId = this.userService.getInforUser().organization_id;
     let userId = this.userService.getInforUser().customer_id;
+
     this.userService.getUserById(userId).subscribe(
       data => {
         //lay id role
@@ -105,22 +106,27 @@ export class UnitComponent implements OnInit {
     )
   }
 
-  getData(){
+  getData() {
     this.unitService.getUnitList(this.code, this.name).subscribe(response => {
       this.listData = response.entities;
       console.log(this.listData);
       this.total = this.listData.length;
 
-      //let arrCha = this.listData.filter((p: any) => p.id == orgId);
-      this.listData = this.listData.sort((a,b) => a.parent_id - b.parent_id || a.name.toString().localeCompare(b.name.toString()));
+      // let arrCha = this.listData.filter((p: any) => p.id == orgId);
+
+      this.listData = this.listData.sort((a,b) => a.id - b.id || a.parent_id - b.parent_id || a.name.toString().localeCompare(b.name.toString()));
+
       //console.log(this.listData);
       let data:any="";
 
       this.array_empty=[];
+
       this.listData.forEach((element: any, index: number) => {
 
         let is_edit = false;
+
         let dataChildren = this.findChildren(element);
+
         //neu la to chuc con hoac co quyen admin thi dc phep sua
         if(element.id != this.orgId || this.isAdmin){
           is_edit = true;
@@ -142,8 +148,9 @@ export class UnitComponent implements OnInit {
         };
         
         this.array_empty.push(data);
-        //this.removeElementFromStringArray(element.id);
+        // this.removeElementFromStringArray(element.id);
       })
+
       this.list = this.array_empty;
     });
   }
@@ -151,12 +158,16 @@ export class UnitComponent implements OnInit {
   findChildren(element:any){
     let dataChildren:any[]=[];
     let arrCon = this.listData.filter((p: any) => p.parent_id == element.id);
+
+    console.log("arrCon ", arrCon);
     
     arrCon.forEach((elementCon: any, indexCOn: number) => {
+
       let is_edit = false;
       if(elementCon.id != this.orgId || this.isAdmin){
         is_edit = true;
       }
+
       dataChildren.push(
       {
         data:
@@ -172,8 +183,10 @@ export class UnitComponent implements OnInit {
         expanded: true,
         children: this.findChildren(elementCon)
       });
+
       this.removeElementFromStringArray(elementCon.id);
     })
+
     return dataChildren;
   }
 
@@ -182,7 +195,6 @@ export class UnitComponent implements OnInit {
         if(value.id==element){
           this.listData.splice(index,1);
         }
-        
     });
   }
 

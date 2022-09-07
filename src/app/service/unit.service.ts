@@ -80,7 +80,6 @@ export class UnitService {
       fax: datas.fax,
       status: datas.status,
       parent_id: datas.parent_id,
-      ceca_push_mode: datas.ceca_push_mode.id
     });
 
     console.log("body "+body);

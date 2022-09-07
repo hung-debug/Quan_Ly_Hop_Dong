@@ -160,6 +160,9 @@ export class AdminLoginComponent implements OnInit {
   }
 
   getDeviceApp() {
+
+    console.log("url ",this.router.url);
+
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
       console.log(
         this.deviceService.isMobile(),

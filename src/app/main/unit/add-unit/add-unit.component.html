@@ -84,7 +84,7 @@
                     <input type="text" formControlName="taxCode">
                 </div>
                 <div *ngIf="submitted && f.taxCode.errors" class="invalid">
-                    <div *ngIf="f.taxCode.errors.pattern">{{'Fax không được chứa ký tự đặc biệt' | translate}}</div>
+                    <div *ngIf="f.taxCode.errors.pattern">{{'Mã số thuế không được chứa ký tự đặc biệt' | translate}}</div>
                 </div>
             </div>
 

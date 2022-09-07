@@ -50,11 +50,10 @@ export class AddUnitComponent implements OnInit {
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
         email: this.fbd.control("", [Validators.required, Validators.email]),
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-        fax: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+        fax: this.fbd.control(""),
         status: 1,
         parent_id: this.fbd.control("", [Validators.required]),
-        taxCode: this.fbd.control("", Validators.pattern(parttern_input.taxCode_form)),
-        fileCeCa: this.fbd.control("",[Validators.required])
+        taxCode: this.fbd.control(""),
       });
     }
 
@@ -81,12 +80,11 @@ export class AddUnitComponent implements OnInit {
             code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
             email: this.fbd.control(data.email, [Validators.required, Validators.email]),
             phone: this.fbd.control(data.phone, [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-            fax: this.fbd.control(data.fax, Validators.pattern(parttern_input.input_form)),
+            fax: this.fbd.control(data.fax),
             status: this.fbd.control(data.status),
             parent_id: this.fbd.control(data.parent_id),
             path: this.fbd.control(data.path),
-            taxCode: this.fbd.control(data.tax_code, Validators.pattern(parttern_input.taxCode_form)),
-            fileCeCa: this.fbd.control(this.convertFileCeCa(data.ceca_push_mode),[Validators.required])
+            taxCode: this.fbd.control(data.tax_code),
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
@@ -121,11 +119,10 @@ export class AddUnitComponent implements OnInit {
         code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
         email: this.fbd.control("", [Validators.required, Validators.email]),
         phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
-        fax: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
+        fax: this.fbd.control(""),
         status: 1,
         parent_id: this.fbd.control(orgId, [Validators.required]),
-        taxCode: this.fbd.control("", Validators.pattern(parttern_input.taxCode_form)),
-        fileCeCa: this.fbd.control("",[Validators.required])
+        taxCode: this.fbd.control(""),
       });
     }
   }
@@ -299,6 +296,7 @@ export class AddUnitComponent implements OnInit {
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
+      console.log("invalid ", this.addForm);
       return;
     }
     const data = {
@@ -312,7 +310,6 @@ export class AddUnitComponent implements OnInit {
       status: this.addForm.value.status,
       parent_id: this.addForm.value.parent_id,
       path: this.addForm.value.path,
-      ceca_push_mode: this.addForm.value.fileCeCa,
     }
 
 

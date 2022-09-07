@@ -9,6 +9,7 @@ import {
   OnInit,
   Output,
   QueryList,
+  SecurityContext,
   ViewChild
 } from '@angular/core';
 import { ContractSignatureService } from "../../../../service/contract-signature.service";
@@ -40,11 +41,11 @@ import domtoimage from 'dom-to-image';
 import { concatMap, delay, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { networkList } from "../../../../config/variable";
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import {DeviceDetectorService} from "ngx-device-detector";
 import { DomSanitizer } from '@angular/platform-browser';
-
+import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.component';
 
 @Component({
   selector: 'app-consider-contract',
@@ -157,7 +158,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   userOtp:any;
   dataHsm: any;
   trustedUrl: any;
-  idPdfSrcMobile: NodeJS.Timeout;
+  idPdfSrcMobile: any;
+
+  sessionIdUsbToken: any;
+  
 
   constructor(
     private contractService: ContractService,
@@ -171,7 +175,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     private dialog: MatDialog,
     public datepipe: DatePipe,
     private deviceService: DeviceDetectorService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private http: HttpClient,
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
@@ -208,6 +213,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       )
     });
   }
+
 
 
   timerId: any;
@@ -342,19 +348,24 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         this.pdfSrc = fileC;
 
         this.pdfSrcMobile = "https://docs.google.com/viewerng/viewer?url="+this.pdfSrc+"&embedded=true";
+        
 
         this.idPdfSrcMobile = setInterval(() => {
           this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfSrcMobile);
 
-          if(this.trustedUrl) {
+          console.log("flagpdfmobile ", this.flagPdfMobile);
+          
+          if(this.flagPdfMobile > 1) {
             clearInterval(this.idPdfSrcMobile);
           }
 
         }, 2000);
+
+        
       
       }
       // render pdf to canvas
-      if(!this.mobile)
+      // if(!this.mobile)
         this.getPage();
       this.loaded = true;
     }, (res: any) => {
@@ -362,6 +373,13 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       this.handleError();
     })
   }
+
+  flagPdfMobile: number = 0;
+  onLoadPdf(e: any) {
+    console.log("e ",e);
+    this.flagPdfMobile++;
+  }
+
 
   // Error handling
   handleError(error: any) {
@@ -411,6 +429,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
 
+        // canvas.style.transform = 'scale(2,2)';
+
         // canvas.style.paddingLeft = '15px';
         // canvas.style.border = '9px solid transparent';
         // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
@@ -434,6 +454,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngAfterViewInit() {
+
+    
+
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
@@ -489,16 +512,31 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     this.thePDF.getPage(pageNumber).then((page) => {
       let viewport = page.getViewport({ scale: this.scale });
 
+      if(this.mobile)
+        viewport = page.getViewport({scale: window.innerWidth/viewport.width})
+
       // let viewport = page.getViewport({ scale: window.innerWidth/page.getViewport({scale:1}).width });
 
       console.log("viewport ",viewport);
 
       let test = document.querySelector('.viewer-pdf');
 
-      this.canvasWidth = viewport.width;
+      // this.canvasWidth = viewport.width;
+
+      var resolution = 1;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
 
+      var ctx = canvas.getContext('2d');
+      
+      if(this.mobile) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerWidth/viewport.width * viewport.height;
+
+        // ctx.scale(1,1);
+
+      }
+  
       this.prepareInfoSignUsbToken(pageNumber, canvas.height);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
       if (!_objPage) {
@@ -508,7 +546,13 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           height: viewport.height,
         });
       }
-      page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+
+
+      page.render({ 
+        canvasContext: ctx, 
+        viewport: viewport,
+        transform: [resolution,0,0,resolution,0,0]
+      });
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
@@ -765,14 +809,23 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     return (' ' + data.file_name + ',').replace(/,\s*$/, "");
   }
 
+  eKYC: boolean = false;
   async submitEvents(e: any) {
     let haveSignPKI = false;
     let haveSignImage = false;
     let haveSignHsm = false;
 
     const counteKYC = this.recipient?.sign_type.filter((p: any) => p.id == 5).length;
+
+    console.log("counterKYC ", counteKYC);
+
     if(counteKYC > 0){
-      this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
+      this.eKYC = true;
+
+      if(!this.mobile)
+        this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
+      else
+        this.eKYCSignOpen();
       return;
     }
     if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
@@ -817,7 +870,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             ma_dvcs: "",
             username: "",
             password: "",
-            password2: ""         
+            password2: "",
+            imageBase64: ""         
         }
       }
 
@@ -910,6 +964,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
 
+
   openPopupSignContract(typeSign: any) {
     if (typeSign == 1) {
       // this.imageDialogSignOpen();
@@ -979,8 +1034,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
     console.log("type sign digital ", typeSignDigital);
 
+    //= 2 => Ky usb token
     if (typeSignDigital == 2) {
-      if (this.signCertDigital && this.signCertDigital.Serial) {
+      console.log("this sign cert digital ", this.signCertDigital);
+      if (this.signCertDigital) {
         // this.signCertDigital = resSignDigital.data;
         for (const signUpdate of this.isDataObjectSignature) {
           if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 1 || signUpdate.type == 4) && [3, 4].includes(this.datas.roleContractReceived)
@@ -997,6 +1054,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             } else {
               return;
             }
+
             let signI = null;
             if (signUpdate.type == 1 || signUpdate.type == 4) {
               this.textSign = signUpdate.valueSign;
@@ -1020,30 +1078,91 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             }
 
             const signDigital = JSON.parse(JSON.stringify(signUpdate));
-            signDigital.Serial = this.signCertDigital.Serial;
+            signDigital.Serial = this.signCertDigital;
             const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
 
-            const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+            // const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
 
-            console.log("data sign mobi ", dataSignMobi);
+            // console.log("data sign mobi ", dataSignMobi);
 
-            if (!dataSignMobi.data.FileDataSigned) {
-              console.log("file data signed ");
+            // if (!dataSignMobi.data.FileDataSigned) {
+            //   console.log("file data signed ");
 
-              this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-              return false;
+            //   this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+            //   return false;
+            // }
+            // const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
+            // if (!sign.recipient_id) {
+            //   console.log("recipent_id")
+
+            //   this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+            //   return false;
+            // }
+
+            console.log("token id usb ",this.sessionIdUsbToken);
+
+            var json_req = JSON.stringify({
+              OperationId: 7,
+              SessionId: this.sessionIdUsbToken,
+              checkOCSP: 0,
+              infile: fileC,
+              outfile: fileC,
+              algDigest: "SHA_256",
+              urlTimestamp: "http://tsa.lca.la/tsa/request",
+              invisible: 0,
+              tagXML: "*",
+              XMLDSig: 0,
+              xades_Version: "XADES_v1_4_1",
+              xades_Form:"XADES_T"
+            });
+
+            console.log("json_req before ",json_req);
+
+            json_req = window.btoa(json_req);
+
+            console.log("json_req after ", json_req);
+
+            var httpReq: any = "";
+            var response = "";
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                httpReq = new XMLHttpRequest();
             }
-            const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
-            if (!sign.recipient_id) {
-              console.log("recipent_id")
-
-              this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-              return false;
+            else {// code for IE6, IE5
+                httpReq = new ActiveXObject("Microsoft.XMLHTTP");
             }
+            httpReq.onreadystatechange =  () => {
+                if (httpReq.readyState == 4 && httpReq.status == 200) {
+
+                  console.log("htppreq ",httpReq.responseText);
+
+                    response = window.atob(httpReq.responseText);
+                    
+        
+                    var process = false;
+                    try {
+                        var json_res = JSON.parse(response);
+                        if (json_res.ResponseCode == 0) {
+                            alert("Successfully. Result: " + json_res.PathFile);
+                        } else {
+                          console.log("response ky ", response);
+                          console.log("response ky msg ", json_res);
+                          alert(json_res.ResponseMsg);
+                        }
+                    }
+                    catch (err) {
+                        alert("Error: " + err);
+                    }
+                }
+            }
+            httpReq.open("POST", this.domain + "process", true);
+            httpReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            httpReq.send("request=" + json_req);
+
+            // return false;
           }
         }
-        return true;
+        return false;
       } else {
         console.log("not sign cert digital ");
         this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
@@ -1159,6 +1278,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   }
 
+  domain: any = `https://127.0.0.1:14424/`;
+
   async signContract(notContainSignImage?: boolean) {
     console.log("sign contract");
 
@@ -1236,23 +1357,219 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
     if (typeSignDigital && typeSignDigital == 2) {
       let checkSetupTool = false;
-      
-      this.contractService.getAllAccountsDigital().then(async (data) => {
 
-        console.log("data all accounts digital ", data);
-        if (data.data.Serial) {
+      // this.contractService.getAllAccountsDigital().then(async (data) => {
 
-          this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
-            if(response.success == true) {
-              this.signCertDigital = data.data;
-              this.nameCompany = data.data.CN;
-              checkSetupTool = true;
-              if (!checkSetupTool) {
-                this.spinner.hide();
-                return;
-              } else {
-                await this.signImageC(signUpdatePayload, notContainSignImage);
-              }
+      //   console.log("data all accounts digital ", data);
+      //   if (data.data.Serial) {
+
+      //     this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
+      //       if(response.success == true) {
+      //         this.signCertDigital = data.data;
+      //         this.nameCompany = data.data.CN;
+      //         checkSetupTool = true;
+      //         if (!checkSetupTool) {
+      //           this.spinner.hide();
+      //           return;
+      //         } else {
+      //           await this.signImageC(signUpdatePayload, notContainSignImage);
+      //         }
+      //       } else {
+      //         this.spinner.hide();
+      //         Swal.fire({
+      //           title: `Mã số thuế trên chữ ký số không trùng mã số thuế của tổ chức`,
+      //           icon: 'warning',
+      //           confirmButtonColor: '#3085d6',
+      //           cancelButtonColor: '#b0bec5',
+      //           confirmButtonText: 'Xác nhận'
+      //         });
+      //       }
+      //     })
+
+      //   } else {
+      //     this.spinner.hide();
+      //     Swal.fire({
+      //       title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
+      //       icon: 'warning',
+      //       confirmButtonColor: '#3085d6',
+      //       cancelButtonColor: '#b0bec5',
+      //       confirmButtonText: 'Xác nhận'
+      //     });
+      //   }
+      // }, err => {
+      //   this.spinner.hide();
+      //   Swal.fire({
+      //     html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>  và cài đặt`,
+      //     icon: 'warning',
+      //     confirmButtonColor: '#3085d6',
+      //     cancelButtonColor: '#b0bec5',
+      //     confirmButtonText: 'Xác nhận'
+      //   });
+      // })
+
+      //get session
+      console.log("get session id");
+
+      const sessionId = this.getSessionId(this.taxCodePartnerStep2, signUpdatePayload, notContainSignImage);
+      // console.log("sessionId ", sessionId);
+
+      //Lấy thông tin chữ ký số
+
+    } else {
+      console.log("vao day ");
+      await this.signImageC(signUpdatePayload, notContainSignImage);
+    }
+
+  }
+
+  //get sessionid for usb token
+  getSessionId(taxCode: any, signUpdatePayload: any, notContainSignImage: any) {
+    var LibList_MACOS = ['nca_v6.dylib'];
+    var LibList_WIN = [
+      'ShuttleCsp11_3003.dll',
+      'eps2003csp11.dll',
+      'nca_v6.dll',
+    ];
+
+    var OSName = 'Unknown';
+    if (window.navigator.userAgent.indexOf('Windows NT 6.2') != -1)
+      OSName = 'Windows 8';
+    if (window.navigator.userAgent.indexOf('Windows NT 6.1') != -1)
+      OSName = 'Windows 7';
+    if (window.navigator.userAgent.indexOf('Windows NT 6.0') != -1)
+      OSName = 'Windows Vista';
+    if (window.navigator.userAgent.indexOf('Windows NT 5.1') != -1)
+      OSName = 'Windows XP';
+    if (window.navigator.userAgent.indexOf('Windows NT 5.0') != -1)
+      OSName = 'Windows 2000';
+    if (window.navigator.userAgent.indexOf('Mac') != -1) OSName = 'Mac/iOS';
+    if (window.navigator.userAgent.indexOf('X11') != -1) OSName = 'UNIX';
+    if (window.navigator.userAgent.indexOf('Linux') != -1) OSName = 'Linux';
+    //=================>>Check OS<<=================
+
+    var OperationId = 1;
+    var pkcs11Lib = [];
+    if (OSName == 'Mac/iOS') {
+      pkcs11Lib = LibList_MACOS;
+    } else if (OSName == 'UNIX' || OSName == 'Linux') {
+      alert('Not Support');
+      return;
+    } else {
+      pkcs11Lib = LibList_WIN;
+      OperationId = OperationId;
+    }
+
+    console.log('pkcs11Lib ', pkcs11Lib);
+
+    var json_req = JSON.stringify({
+      pkcs11Lib: pkcs11Lib,
+      OperationId: OperationId,
+    });
+
+    json_req = window.btoa(json_req);
+
+    console.log('json req ', json_req);
+
+    var httpReq: any = '';
+
+    var response = '';
+    if (window.XMLHttpRequest) {
+      // code for IE7+, Firefox, Chrome, Opera, Safari
+      httpReq = new XMLHttpRequest();
+    } else {
+      // code for IE6, IE5
+      httpReq = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+
+    httpReq.open('POST', this.domain + 'process', true);
+    httpReq.setRequestHeader(
+      'Content-type',
+      'application/x-www-form-urlencoded'
+    );
+    httpReq.send('request=' + json_req);
+
+    httpReq.onreadystatechange = () => {
+      if (httpReq.readyState == 4 && httpReq.status == 200) {
+        response = window.atob(httpReq.responseText);
+
+        console.log('response ', response);
+
+        var process = false;
+        try {
+          var json_res = JSON.parse(response);
+          if (json_res.ResponseCode == 0) {
+            var hSession = json_res.SessionId;
+
+            this.sessionIdUsbToken = hSession;
+
+            alert('Comunication with SignPlugin OK');
+
+            this.getCertificate(hSession, taxCode, signUpdatePayload, notContainSignImage);
+          } else {
+            alert(json_res.ResponseMsg);
+          }
+        } catch (err) {
+          console.log('err ');
+        }
+        if (response == '') {
+          alert('Please setup SignPlugin and F5 to try again');
+          // window.location = './' + signplugin_installer;
+          return;
+        }
+      } else if (httpReq.readyState == 4 && httpReq.status != 200) {
+        alert('Please setup SignPlugin and F5 to try again');
+        // window.location = './' + signplugin_installer;
+        return;
+      }
+    };
+  }
+
+  getCertificate(hSession: any, taxCode: any, signUpdatePayload: any, notContainSignImage: any) {
+    console.log('hSesion ', hSession);
+
+    var json_req = JSON.stringify({
+      OperationId: 2,
+      SessionId: hSession,
+      checkOCSP: 0,
+    });
+
+    json_req = window.btoa(json_req);
+
+    var httpReq: any = '';
+    var response = '';
+    if (window.XMLHttpRequest) {
+      // code for IE7+, Firefox, Chrome, Opera, Safari
+      httpReq = new XMLHttpRequest();
+    } else {
+      // code for IE6, IE5
+      httpReq = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    httpReq.onreadystatechange = () => {
+      if (httpReq.readyState == 4 && httpReq.status == 200) {
+        response = window.atob(httpReq.responseText);
+
+        console.log('response  ', response);
+
+        var process = false;
+        try {
+          var json_res = JSON.parse(response);
+
+          console.log('json_res ', json_res.certInfo.Base64Encode);
+
+          this.signCertDigital = json_res.certInfo.SerialNumber;
+
+          console.log("serial number ", this.signCertDigital);
+
+          this.contractService.checkTaxCodeExist(
+            taxCode,
+            json_res.certInfo.Base64Encode
+          ).subscribe((response) => {
+            console.log('response ', response);
+
+            if (response.success == true) {
+
+
+              this.signImageC(signUpdatePayload, notContainSignImage);
             } else {
               this.spinner.hide();
               Swal.fire({
@@ -1260,37 +1577,21 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#b0bec5',
-                confirmButtonText: 'Xác nhận'
+                confirmButtonText: 'Xác nhận',
               });
             }
-          })
-
-        } else {
-          this.spinner.hide();
-          Swal.fire({
-            title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#b0bec5',
-            confirmButtonText: 'Xác nhận'
           });
+        } catch (err) {
+          alert('Error: ' + err);
         }
-      }, err => {
-        this.spinner.hide();
-        Swal.fire({
-          html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>  và cài đặt`,
-          icon: 'warning',
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#b0bec5',
-          confirmButtonText: 'Xác nhận'
-        });
-      })
-
-    } else {
-      console.log("vao day ");
-      await this.signImageC(signUpdatePayload, notContainSignImage);
-    }
-
+      }
+    };
+    httpReq.open('POST', this.domain + 'process', true);
+    httpReq.setRequestHeader(
+      'Content-type',
+      'application/x-www-form-urlencoded'
+    );
+    httpReq.send('request=' + json_req);
   }
 
   async signImageC(signUpdatePayload: any, notContainSignImage: any) {
@@ -1439,7 +1740,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     let fieldName: string = "";
 
     //this.idContract: id hợp đồng
-    this.contractService.getDetailContract(this.idContract).subscribe((response) => {
+    this.contractService.getDetailContract(this.idContract).subscribe(async (response) => {
       console.log("response organization ", response);
 
       let organization_id = response[0].organization_id;
@@ -1459,7 +1760,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
       console.log("textSignB ", textSignB);
 
-      const valueBase64 = textSignB.split(",")[1];;
+      const valueBase64 = (await textSignB).split(",")[1];;
 
       const formData = {
         "name": "image_mobile" + new Date().getTime() + ".jpg",
@@ -1605,6 +1906,16 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
+  eKYCSignOpen() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '497px';
+    const dialogRef = this.dialog.open(EkycDialogSignComponent);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      
+    })
+  }
+
   hsmDialogSignOpen(recipientId: number) {
     const data = {
       title: 'CHỮ KÝ HSM',
@@ -1628,6 +1939,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           username: result.username,
           password: result.password,
           password2: result.password2,
+          imageBase64: "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"
         }
 
         await this.signContractSubmit();

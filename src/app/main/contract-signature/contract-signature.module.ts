@@ -50,6 +50,8 @@ import { ContractSignatureComponent } from './contract-signature.component';
 import { DisplaySignatureImageComponent } from './display-signature-image/display-signature-image.component';
 import { NotificationExpireComponent } from './components/contract-coordination/shared/model/dialog/notification-expire/notification-expire.component';
 import { DialogSignManyComponentComponent } from './dialog/dialog-sign-many-component/dialog-sign-many-component.component';
+import { EkycDialogSignComponent } from './components/consider-contract/ekyc-dialog-sign/ekyc-dialog-sign.component';
+import { WebcamModule } from 'ngx-webcam';
 
 export const contractSignatureRoutes: Routes = [
   { path: 'consider/:id', component: ConsiderContractComponent },
@@ -90,7 +92,8 @@ export const contractSignatureRoutes: Routes = [
     TextSignatureImageComponent,
     DisplaySignatureImageComponent,
     NotificationExpireComponent,
-    DialogSignManyComponentComponent
+    DialogSignManyComponentComponent,
+    EkycDialogSignComponent
     // AddContractComponent
   ],
   imports: [
@@ -113,7 +116,9 @@ export const contractSignatureRoutes: Routes = [
     // ContractModule,
     DropdownModule,
     CalendarModule,
-    MultiSelectModule
+    MultiSelectModule,
+
+    WebcamModule
   ],
   providers: [
     NoAuthGuard,

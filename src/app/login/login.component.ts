@@ -51,7 +51,9 @@ export class LoginComponent implements OnInit {
     } else {
       if (sessionStorage.getItem('urlLoginType')) {
         this.type = 1;
-      } else this.type = 0;
+      } else 
+        this.type = 0;
+
       this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
         if(data?.code == '00'){
           if (this.authService.isLoggedInSuccess() == true) {
@@ -150,18 +152,22 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    
+    if (sessionStorage.getItem('urlLoginType')) {
+      this.type = 1;
+    } else this.type = 0;
+
     console.log("mobile first ", this.mobile);
     if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
+
+
       console.log("mobile is true ");
       this.getDeviceApp();
 
       this.mobile = true;
     } else {
-      console.log("mobile is false ");
-      if (sessionStorage.getItem('urlLoginType')) {
-        this.type = 1;
-      } else this.type = 0;
-
+  
       //neu dang nhap bang user co tai khoan va da dang nhap thanh cong truoc do thi khong phai dang nhap lai nua
       //comment do chua check token het han
       // if(this.type == 0 && JSON.parse(localStorage.getItem('currentUser') || '')?.code == '00'){
@@ -171,9 +177,8 @@ export class LoginComponent implements OnInit {
       // }
 
       this.mobile = false;
-    }
 
-    console.log("mobile ", this.mobile);
+    }
   }
 
   switchLang(lang: string) {
@@ -183,7 +188,10 @@ export class LoginComponent implements OnInit {
   }
 
   getDeviceApp() {
-    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+
+    console.log("type ", this.type);
+
+    if (this.type == 0 && (this.deviceService.isMobile() || this.deviceService.isTablet())) {
 
       console.log(this.deviceService.isMobile(), this.deviceService.deviceType, this.deviceService);
       // @ts-ignore

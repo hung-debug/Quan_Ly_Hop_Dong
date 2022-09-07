@@ -2,7 +2,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ChartModule } from 'angular-highcharts';
 import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -96,7 +96,11 @@ import { AdminFilterUnitComponent } from './admin/admin-main/admin-unit/dialog/a
 import { AdminDeleteUnitComponent } from './admin/admin-main/admin-unit/admin-delete-unit/admin-delete-unit.component';
 import { AdminDeletePackUnitComponent } from './admin/admin-main/admin-unit/admin-delete-pack-unit/admin-delete-pack-unit.component';
 import { AdminInfoUserComponent } from './admin/admin-main/admin-user/admin-info-user/admin-info-user.component';
-import { SafePipe } from './safe.pipe';
+
+import {WebcamModule} from 'ngx-webcam';
+import { EkycDialogSignComponent } from './main/contract-signature/components/consider-contract/ekyc-dialog-sign/ekyc-dialog-sign.component';
+
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -160,7 +164,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AdminDeleteUnitComponent,
     AdminDeletePackUnitComponent,
     AdminInfoUserComponent,
-    SafePipe,
+
   ],
   imports: [
     BrowserModule,
@@ -212,6 +216,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BadgeModule,
     ContractTemplateModule,
     TreeSelectModule,
+    WebcamModule
   ],
   providers: [ AppService, DatePipe,CurrencyPipe,
     {

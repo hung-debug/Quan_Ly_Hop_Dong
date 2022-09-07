@@ -24,6 +24,8 @@ import {count} from 'console';
 import {data} from 'jquery';
 import * as _ from 'lodash';
 
+import domtoimage from 'dom-to-image';
+
 @Component({
   selector: 'app-sample-contract',
   templateUrl: './sample-contract.component.html',
@@ -884,6 +886,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
+
+    // var node = <HTMLElement> document.getElementById("element-drag");
+
+    // domtoimage.toPng(node)
+    // .then(function (dataUrl) {
+    //     var img = new Image();
+    //     img.src = dataUrl;
+    //     document.body.appendChild(img);
+    // })
+    // .catch(function (error) {
+    //   console.log(error);
+    //     console.error('oops, something went wrong!', error);
+    // });
+    
     //This gives us the page's dimensions at full scale
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {

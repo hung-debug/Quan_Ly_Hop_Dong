@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { fileCeCaOptions } from 'src/app/config/variable';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
-import {parttern_input} from "../../config/parttern";
+import {parttern_input, parttern} from "../../config/parttern";
 import { NotifiSignupDialogComponent } from '../dialog/notifi-signup-dialog/notifi-signup-dialog.component';
 
 @Component({
@@ -55,7 +55,7 @@ export class SignupComponent implements OnInit {
       representatives: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       position: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
       email: this.fbd.control("", [Validators.required, Validators.email]),
-      phone: this.fbd.control("", [Validators.required, Validators.pattern("[0-9 ]{10}")]),
+      phone: this.fbd.control("", [Validators.required, Validators.pattern(parttern.phone)]),
     });
 
     this.fileCeCaOptions = fileCeCaOptions;

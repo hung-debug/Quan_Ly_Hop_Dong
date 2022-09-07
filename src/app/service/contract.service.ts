@@ -3,34 +3,32 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { map, catchError, retry } from 'rxjs/operators';
-import { Helper } from "../core/Helper";
+import { Helper } from '../core/Helper';
 import { DatePipe } from '@angular/common';
-import { forkJoin, BehaviorSubject, Subject } from "rxjs";
+import { forkJoin, BehaviorSubject, Subject } from 'rxjs';
 import axios from 'axios';
-import { User } from "./user.service";
+import { User } from './user.service';
 
 export interface Contract {
-  id: number,
-  name: string,
-  code: string,
-  typeId: string,
-  notes: string,
-  status: string,
-  createdAt: Date,
-  signTime: Date,
+  id: number;
+  name: string;
+  code: string;
+  typeId: string;
+  notes: string;
+  status: string;
+  createdAt: Date;
+  signTime: Date;
 }
 export interface File {
-  path: string,
+  path: string;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ContractService {
-
   private messageShareData = new BehaviorSubject<unknown>('');
   currentMessage = this.messageShareData.asObservable();
-
 
   listContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract`;
   listPastContractUrl: any = `${environment.apiUrl}/api/v1/contracts/my-contract/organization-old`;
@@ -57,11 +55,12 @@ export class ContractService {
   rejectContractUrl: any = `${environment.apiUrl}/api/v1/processes/reject/`;
   uploadFileUrl: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
   uploadFileBase64Url: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
-  currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+  currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '')
+    .customer.info;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
   isDataDetermine: any = `${environment.apiUrl}/api/v1/participants/byRecipient/`;
   signDigitalMobi: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
-  
+
   getAccountSignDigital: any = `http://localhost:6704/api/mobi/getcert?mst=`;
 
   postSignDigital: any = `http://localhost:6704/api/mobi/signpdf`;
@@ -97,13 +96,14 @@ export class ContractService {
 
   checkTaxCodeExistUrl: any = `${environment.apiUrl}/api/v1/contracts/check-mst-exist`;
 
-  signHsmUrl: any = `${environment.apiUrl}/api/v1/sign/hsm/`
+  signHsmUrl: any = `${environment.apiUrl}/api/v1/sign/hsm/`;
 
   token: any;
   customer_id: any;
   organization_id: any;
   errorData: any = {};
   redirectUrl: string = '';
+  domain: any = `https://127.0.0.1:14424/`;
 
   private message = new BehaviorSubject('First Message');
   sharedMessage = this.message.asObservable();
@@ -120,23 +120,180 @@ export class ContractService {
     this.message.next(message);
   }
 
-  constructor(private http: HttpClient,
-    public datepipe: DatePipe,) {
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/text');
-    this.http.get('/assets/sign-digital.txt', { responseType: 'text', headers }).subscribe(data => {
-      this.imageMobiBase64 = data;
-    })
+  constructor(private http: HttpClient, public datepipe: DatePipe) {
+    const headers = new HttpHeaders().append(
+      'Content-Type',
+      'application/text'
+    );
+    this.http
+      .get('/assets/sign-digital.txt', { responseType: 'text', headers })
+      .subscribe((data) => {
+        this.imageMobiBase64 = data;
+      });
   }
+
+  getSessionId(taxCode: any) {
+    var LibList_MACOS = ['nca_v6.dylib'];
+    var LibList_WIN = [
+      'ShuttleCsp11_3003.dll',
+      'eps2003csp11.dll',
+      'nca_v6.dll',
+    ];
+
+    var OSName = 'Unknown';
+    if (window.navigator.userAgent.indexOf('Windows NT 6.2') != -1)
+      OSName = 'Windows 8';
+    if (window.navigator.userAgent.indexOf('Windows NT 6.1') != -1)
+      OSName = 'Windows 7';
+    if (window.navigator.userAgent.indexOf('Windows NT 6.0') != -1)
+      OSName = 'Windows Vista';
+    if (window.navigator.userAgent.indexOf('Windows NT 5.1') != -1)
+      OSName = 'Windows XP';
+    if (window.navigator.userAgent.indexOf('Windows NT 5.0') != -1)
+      OSName = 'Windows 2000';
+    if (window.navigator.userAgent.indexOf('Mac') != -1) OSName = 'Mac/iOS';
+    if (window.navigator.userAgent.indexOf('X11') != -1) OSName = 'UNIX';
+    if (window.navigator.userAgent.indexOf('Linux') != -1) OSName = 'Linux';
+    //=================>>Check OS<<=================
+
+    const OperationId = 1;
+    var pkcs11Lib = [];
+    if (OSName == 'Mac/iOS') {
+      pkcs11Lib = LibList_MACOS;
+    } else if (OSName == 'UNIX' || OSName == 'Linux') {
+      alert('Not Support');
+      return;
+    } else {
+      pkcs11Lib = LibList_WIN;
+      OperationId: OperationId;
+    }
+
+    console.log('pkcs11Lib ', pkcs11Lib);
+
+    var json_req = JSON.stringify({
+      pkcs11Lib: pkcs11Lib,
+      OperationId: OperationId,
+    });
+
+    json_req = window.btoa(json_req);
+
+    console.log('json req ', json_req);
+
+    var httpReq: any = '';
+
+    var response = '';
+    if (window.XMLHttpRequest) {
+      // code for IE7+, Firefox, Chrome, Opera, Safari
+      httpReq = new XMLHttpRequest();
+    } else {
+      // code for IE6, IE5
+      httpReq = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+
+    httpReq.open('POST', this.domain + "process", true);
+    httpReq.setRequestHeader(
+      'Content-type',
+      'application/x-www-form-urlencoded'
+    );
+    httpReq.send('request=' + json_req);
+
+    httpReq.onreadystatechange =  () => {
+      if (httpReq.readyState == 4 && httpReq.status == 200) {
+        response = window.atob(httpReq.responseText);
+
+        console.log('response ', response);
+
+        var process = false;
+        try {
+          var json_res = JSON.parse(response);
+          if (json_res.ResponseCode == 0) {
+            var hSession = json_res.SessionId;
+
+            alert('Comunication with SignPlugin OK');
+
+            this.getCertificate(hSession, taxCode);
+           
+
+          } else {
+            alert(json_res.ResponseMsg);
+          }
+        } catch (err) {
+          console.log('err ');
+        }
+        if (response == '') {
+          alert('Please setup SignPlugin and F5 to try again');
+          // window.location = './' + signplugin_installer;
+          return;
+        }
+      } else if (httpReq.readyState == 4 && httpReq.status != 200) {
+        alert('Please setup SignPlugin and F5 to try again');
+        // window.location = './' + signplugin_installer;
+        return;
+      }
+    };
+  }
+
+  getCertificate(hSession: any, taxCode: any) {
+    console.log("hSesion ", hSession);
+
+    var json_req = JSON.stringify({
+      OperationId: 2,
+      SessionId: hSession,
+      checkOCSP: 0
+    });
+
+
+    json_req = window.btoa(json_req);
+
+    var httpReq: any = "";
+    var response = "";
+    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        httpReq = new XMLHttpRequest();
+    }
+    else {// code for IE6, IE5
+        httpReq = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    httpReq.onreadystatechange = () => {
+        if (httpReq.readyState == 4 && httpReq.status == 200) {
+            response = window.atob(httpReq.responseText);
+			
+			      console.log("response  ",response);
+
+            var process = false;
+            try {
+                var json_res = JSON.parse(response);
+
+                console.log("json_res ",json_res.certInfo.Base64Encode);
+
+                this.checkTaxCodeExist(taxCode, json_res.certInfo.Base64Encode).subscribe((response) => {
+                  console.log("response ", response);
+                })
+            }
+            catch (err) {
+                alert("Error: " + err);
+            }
+        }
+    }
+    httpReq.open("POST", this.domain + "process", true);
+    httpReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    httpReq.send("request=" + json_req);
+  }
+
 
   changeMessage(message: any) {
     this.messageShareData.next(message);
   }
 
   getCurrentUser() {
-    this.token = JSON.parse(localStorage.getItem('currentUser') || '').access_token;
-    this.customer_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id;
-    this.organization_id = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.organizationId;
+    this.token = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).access_token;
+    this.customer_id = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info.id;
+    this.organization_id = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.info.organizationId;
   }
 
   getAuthCurrentUser() {
@@ -145,79 +302,197 @@ export class ContractService {
 
   getDetailContractFormInfor(id: number) {
     this.getCurrentUser();
-    const headers = { 'Authorization': 'Bearer ' + this.token }
-    return this.http.get<Contract[]>(this.getDetailFormContract + `${id}`, { headers }).pipe();
+    const headers = { Authorization: 'Bearer ' + this.token };
+    return this.http
+      .get<Contract[]>(this.getDetailFormContract + `${id}`, { headers })
+      .pipe();
   }
 
   public getContractTypeList(): Observable<any> {
     this.getCurrentUser();
     let listContractTypeUrl = this.listContractTypeUrl + this.organization_id;
     // console.log(listContractTypeUrl);
-    const headers = { 'Authorization': 'Bearer ' + this.token }
+    const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<Contract[]>(listContractTypeUrl, { headers }).pipe();
   }
 
   public saveContractFormInfo(data: any) {
     this.getCurrentUser();
-    const headers = { 'Authorization': 'Bearer ' + this.token }
-    return this.http.post<any>(this.getSaveContractFormInfo, { data }, { headers }).pipe();
+    const headers = { Authorization: 'Bearer ' + this.token };
+    return this.http
+      .post<any>(this.getSaveContractFormInfo, { data }, { headers })
+      .pipe();
   }
 
-  public getContractList(isOrg: any, organization_id: any, filter_name: any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status: any, page: any, size: any): Observable<any> {
+  public getContractList(
+    isOrg: any,
+    organization_id: any,
+    filter_name: any,
+    filter_type: any,
+    filter_contract_no: any,
+    filter_from_date: any,
+    filter_to_date: any,
+    filter_status: any,
+    page: any,
+    size: any
+  ): Observable<any> {
     this.getCurrentUser();
 
-    if (filter_from_date != "") {
-      filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
+    if (filter_from_date != '') {
+      filter_from_date = this.datepipe.transform(
+        filter_from_date,
+        'yyyy-MM-dd'
+      );
     }
-    if (filter_to_date != "") {
+    if (filter_to_date != '') {
       filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
     }
-    let remain_day = "";
-    if (filter_status != "" && filter_status == 33) {
-      remain_day = "5";
+    let remain_day = '';
+    if (filter_status != '' && filter_status == 33) {
+      remain_day = '5';
     }
-    if (page != "") {
+    if (page != '') {
       page = page - 1;
     }
-    let listContractUrl = "";
+    let listContractUrl = '';
     if (isOrg == 'off') {
-      if(filter_status == '40'){
+      if (filter_status == '40') {
         filter_status = '30';
-        listContractUrl = this.listPastContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
-      }else{
-        listContractUrl = this.listContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
+        listContractUrl =
+          this.listPastContractUrl +
+          '?name=' +
+          filter_name.trim() +
+          '&type=' +
+          filter_type +
+          '&contract_no=' +
+          filter_contract_no.trim() +
+          '&from_date=' +
+          filter_from_date +
+          '&to_date=' +
+          filter_to_date +
+          '&status=' +
+          filter_status +
+          '&remain_day=' +
+          remain_day +
+          '&page=' +
+          page +
+          '&size=' +
+          size;
+      } else {
+        listContractUrl =
+          this.listContractUrl +
+          '?name=' +
+          filter_name.trim() +
+          '&type=' +
+          filter_type +
+          '&contract_no=' +
+          filter_contract_no.trim() +
+          '&from_date=' +
+          filter_from_date +
+          '&to_date=' +
+          filter_to_date +
+          '&status=' +
+          filter_status +
+          '&remain_day=' +
+          remain_day +
+          '&page=' +
+          page +
+          '&size=' +
+          size;
       }
     } else {
       if (organization_id == '') {
-        listContractUrl = this.listContractOrgChildrenUrl + '?organizationId=' + this.organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
+        listContractUrl =
+          this.listContractOrgChildrenUrl +
+          '?organizationId=' +
+          this.organization_id +
+          '&name=' +
+          filter_name.trim() +
+          '&type=' +
+          filter_type +
+          '&contract_no=' +
+          filter_contract_no.trim() +
+          '&from_date=' +
+          filter_from_date +
+          '&to_date=' +
+          filter_to_date +
+          '&status=' +
+          filter_status +
+          '&remain_day=' +
+          remain_day +
+          '&page=' +
+          page +
+          '&size=' +
+          size;
       } else {
-        listContractUrl = this.listContractOrgUrl + '?organization_id=' + organization_id + '&name=' + filter_name.trim() + '&type=' + filter_type + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&status=" + filter_status + "&remain_day=" + remain_day + "&page=" + page + "&size=" + size;
+        listContractUrl =
+          this.listContractOrgUrl +
+          '?organization_id=' +
+          organization_id +
+          '&name=' +
+          filter_name.trim() +
+          '&type=' +
+          filter_type +
+          '&contract_no=' +
+          filter_contract_no.trim() +
+          '&from_date=' +
+          filter_from_date +
+          '&to_date=' +
+          filter_to_date +
+          '&status=' +
+          filter_status +
+          '&remain_day=' +
+          remain_day +
+          '&page=' +
+          page +
+          '&size=' +
+          size;
       }
     }
 
     console.log(listContractUrl);
-    const headers = { 'Authorization': 'Bearer ' + this.token }
+    const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
   }
 
-  public getContractMyProcessList(filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any): Observable<any> {
+  public getContractMyProcessList(
+    filter_type: any,
+    filter_contract_no: any,
+    filter_from_date: any,
+    filter_to_date: any
+  ): Observable<any> {
     this.getCurrentUser();
-    if (filter_from_date != "") {
-      filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
+    if (filter_from_date != '') {
+      filter_from_date = this.datepipe.transform(
+        filter_from_date,
+        'yyyy-MM-dd'
+      );
     }
-    if (filter_to_date != "") {
+    if (filter_to_date != '') {
       filter_to_date = this.datepipe.transform(filter_to_date, 'yyyy-MM-dd');
     }
-    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?type=' + filter_type + '&contract_no=' + filter_contract_no + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "";
+    let listContractMyProcessUrl =
+      this.listContractMyProcessUrl +
+      '?type=' +
+      filter_type +
+      '&contract_no=' +
+      filter_contract_no +
+      '&from_date=' +
+      filter_from_date +
+      '&to_date=' +
+      filter_to_date +
+      '';
     console.log(listContractMyProcessUrl);
-    const headers = { 'Authorization': 'Bearer ' + this.token }
-    return this.http.get<Contract[]>(listContractMyProcessUrl, { headers }).pipe();
+    const headers = { Authorization: 'Bearer ' + this.token };
+    return this.http
+      .get<Contract[]>(listContractMyProcessUrl, { headers })
+      .pipe();
   }
 
   addContractStep1(datas: any, id?: any, type_form?: string) {
-    console.log("datas contract step 1 ", datas);
+    console.log('datas contract step 1 ', datas);
 
-    console.log("type form ", type_form);
+    console.log('type form ', type_form);
 
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -227,27 +502,34 @@ export class ContractService {
       name: datas.name,
       code: datas.contract_no,
       contract_no: datas.contract_no,
-      sign_time: this.datepipe.transform(datas.sign_time ? datas.sign_time : datas.end_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+      sign_time: this.datepipe.transform(
+        datas.sign_time ? datas.sign_time : datas.end_time,
+        "yyyy-MM-dd'T'HH:mm:ss'Z'"
+      ),
       notes: datas.notes,
       role_id: datas.role_id,
-      alias_url: "",
+      alias_url: '',
       refs: datas.contractConnect,
       type_id: datas.type_id,
       is_template: type_form ? true : false,
       template_contract_id: type_form ? datas.template_contract_id : null,
-      contract_expire_time: this.datepipe.transform(datas.expire_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+      contract_expire_time: this.datepipe.transform(
+        datas.expire_time,
+        "yyyy-MM-dd'T'HH:mm:ss'Z'"
+      ),
     });
 
-    console.log("body add contract step 1",body);
+    console.log('body add contract step 1', body);
 
     if (id) {
-      console.log("vao day");
+      console.log('vao day');
 
-      return this.http.put<Contract>(this.addGetDataContract + id, body, { 'headers': headers })
+      return this.http
+        .put<Contract>(this.addGetDataContract + id, body, { headers: headers })
         .pipe(
           map((contract) => {
             if (JSON.parse(JSON.stringify(contract)).id != 0) {
-              console.log("contract ",contract);
+              console.log('contract ', contract);
               return contract;
             } else {
               return null;
@@ -256,13 +538,14 @@ export class ContractService {
           catchError(this.handleError)
         );
     } else {
-      console.log("post contract ");
+      console.log('post contract ');
 
-      return this.http.post<Contract>(this.addContractUrl, body, { 'headers': headers })
+      return this.http
+        .post<Contract>(this.addContractUrl, body, { headers: headers })
         .pipe(
           map((contract) => {
             if (JSON.parse(JSON.stringify(contract)).id != 0) {
-              console.log("contract ",contract);
+              console.log('contract ', contract);
               return contract;
             } else {
               return null;
@@ -271,17 +554,16 @@ export class ContractService {
           catchError(this.handleError)
         );
     }
-
   }
-
-
 
   getSignPositionCoordinatesForm(id_contract_form: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.getObjectSignature + `${id_contract_form}`, { headers });
+    return this.http.get<any>(this.getObjectSignature + `${id_contract_form}`, {
+      headers,
+    });
   }
 
   getContractSample(data_sample_contract: any) {
@@ -290,7 +572,8 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_sample_contract);
-    return this.http.post<Contract>(this.addSampleCntractUrl, body, { 'headers': headers })
+    return this.http
+      .post<Contract>(this.addSampleCntractUrl, body, { headers: headers })
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -309,7 +592,10 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_sample_contract);
-    return this.http.put<Contract>(this.addSampleCntractUrl + `/${id}`, body, { 'headers': headers })
+    return this.http
+      .put<Contract>(this.addSampleCntractUrl + `/${id}`, body, {
+        headers: headers,
+      })
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -327,7 +613,11 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.post<any>(this.processAuthorizeContractUrl, infoAuthorize, { 'headers': headers });
+    return this.http.post<any>(
+      this.processAuthorizeContractUrl,
+      infoAuthorize,
+      { headers: headers }
+    );
   }
 
   getAllAccountsDigital() {
@@ -336,10 +626,10 @@ export class ContractService {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Sec-Fetch-Mode': 'cors',
-        'Connection': 'keep-alive',
-        'Sec-Fetch-Site': 'cross-site'
-      }
-    }
+        Connection: 'keep-alive',
+        'Sec-Fetch-Site': 'cross-site',
+      },
+    };
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json; charset=utf-8')
       .append('Sec-Fetch-Mode', 'cors')
@@ -347,7 +637,7 @@ export class ContractService {
       .append('Sec-Fetch-Site', 'cross-site');
     // return this.http.get<any>(this.getAccountSignDigital, {'headers': headers});
 
-    console.log("get account sign digital ", this.getAccountSignDigital);
+    console.log('get account sign digital ', this.getAccountSignDigital);
     return axios.get(this.getAccountSignDigital, config);
   }
 
@@ -357,75 +647,102 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    console.log("tax code ", taxCode);
-    console.log("certB64 ", certB64);
-    
+    console.log('tax code ', taxCode);
+    console.log('certB64 ', certB64);
+
     const body = JSON.stringify({
       mst: taxCode,
-      certB64: certB64
+      certB64: certB64,
     });
 
-    console.log("body ", body);
+    console.log('body ', body);
 
-    return this.http.post<any>(this.checkTaxCodeExistUrl, body,{'headers':headers});
+    return this.http.post<any>(this.checkTaxCodeExistUrl, body, {
+      headers: headers,
+    });
   }
 
   postSignDigitalMobi(signCertDigital: any, imgSignGen: any) {
-    console.log("signCertDigital ", signCertDigital);
+    console.log('signCertDigital ', signCertDigital);
 
     this.getCurrentUser();
     let config = {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'Sec-Fetch-Mode': 'cors',
-        'Connection': 'keep-alive',
-        'Sec-Fetch-Site': 'cross-site'
-      }
+        Connection: 'keep-alive',
+        'Sec-Fetch-Site': 'cross-site',
+      },
     };
     let dataPost = {
       certSerial: signCertDigital.Serial,
-      fieldName: "",
+      fieldName: '',
       fileData: signCertDigital.valueSignBase64,
       imageData: imgSignGen ? imgSignGen : this.imageMobiBase64,
       page: signCertDigital.page.toString(),
-      ph: Math.floor(signCertDigital.signDigitalHeight ? signCertDigital.signDigitalHeight : signCertDigital.height).toString(),
-      pw: Math.floor(signCertDigital.signDigitalWidth ? signCertDigital.signDigitalWidth : signCertDigital.width).toString(),
-      px: Math.floor(signCertDigital.signDigitalX ? signCertDigital.signDigitalX : signCertDigital.coordinate_x).toString(),
-      py: Math.floor(signCertDigital.signDigitalY ? signCertDigital.signDigitalY : signCertDigital.coordinate_y).toString(),
-      signDate: "11-05-2019 09:55:55",
-      typeSign: "4",
+      ph: Math.floor(
+        signCertDigital.signDigitalHeight
+          ? signCertDigital.signDigitalHeight
+          : signCertDigital.height
+      ).toString(),
+      pw: Math.floor(
+        signCertDigital.signDigitalWidth
+          ? signCertDigital.signDigitalWidth
+          : signCertDigital.width
+      ).toString(),
+      px: Math.floor(
+        signCertDigital.signDigitalX
+          ? signCertDigital.signDigitalX
+          : signCertDigital.coordinate_x
+      ).toString(),
+      py: Math.floor(
+        signCertDigital.signDigitalY
+          ? signCertDigital.signDigitalY
+          : signCertDigital.coordinate_y
+      ).toString(),
+      signDate: '11-05-2019 09:55:55',
+      typeSign: '4',
       //algDigest: "SHA_256"
     };
 
-    console.log("dataPost ",dataPost);
+    console.log('dataPost ', dataPost);
 
     return axios.post(this.postSignDigital, dataPost, config);
     // console.log(datePost);
     // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
-
   }
 
   getDataFileUrl(url: any) {
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/arraybuffer');
+    const headers = new HttpHeaders().append(
+      'Content-Type',
+      'application/arraybuffer'
+    );
     return this.http.get(url, { responseType: 'arraybuffer', headers });
   }
 
   getDataFileUrlPromise(url: any) {
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/arraybuffer');
-    return this.http.get(url, { responseType: 'arraybuffer', headers }).toPromise();
+    const headers = new HttpHeaders().append(
+      'Content-Type',
+      'application/arraybuffer'
+    );
+    return this.http
+      .get(url, { responseType: 'arraybuffer', headers })
+      .toPromise();
   }
 
   getDataBinaryFileUrlPromise(url: any) {
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/x-binary');
+    const headers = new HttpHeaders().append(
+      'Content-Type',
+      'application/x-binary'
+    );
     return this.http.get(url, { responseType: 'blob', headers }).toPromise();
   }
 
   getDataBinaryFileUrlConvert(url: any) {
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/x-binary');
+    const headers = new HttpHeaders().append(
+      'Content-Type',
+      'application/x-binary'
+    );
     return this.http.get(url, { responseType: 'blob', headers });
   }
 
@@ -433,7 +750,12 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('TenantCode', 'mobifone.vn')
       .append('Content-Type', 'application/arraybuffer');
-    return this.http.get(this.getFileSignSimPKI + idPdf, { responseType: 'arraybuffer', headers }).toPromise();
+    return this.http
+      .get(this.getFileSignSimPKI + idPdf, {
+        responseType: 'arraybuffer',
+        headers,
+      })
+      .toPromise();
   }
 
   uploadFileSimPKI(file: any) {
@@ -449,7 +771,9 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('TenantCode', 'mobifone.vn');
 
-    return this.http.post<any>(this.postSignDigitalSimPKI, formData, { 'headers': headers }).toPromise();
+    return this.http
+      .post<any>(this.postSignDigitalSimPKI, formData, { headers: headers })
+      .toPromise();
   }
 
   getDataNotifyOriganzation() {
@@ -462,14 +786,15 @@ export class ContractService {
   }
 
   getContractDetermine(data_determine: any, id: any) {
-    console.log("data_determine ",data_determine);
+    console.log('data_determine ', data_determine);
 
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_determine);
-    return this.http.post<Contract>(this.addDetermineUrl + id, body, { 'headers': headers })
+    return this.http
+      .post<Contract>(this.addDetermineUrl + id, body, { headers: headers })
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -487,7 +812,10 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.getAllContractTypesUrl + idTypeContract, { 'headers': headers })
+    return this.http
+      .get<any>(this.getAllContractTypesUrl + idTypeContract, {
+        headers: headers,
+      })
       .pipe(
         map((typesContract) => {
           return typesContract.name ? typesContract.name : '';
@@ -496,14 +824,16 @@ export class ContractService {
       );
   }
 
-
   getContractDetermineCoordination(data_determine: any, id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_determine);
-    return this.http.put<Contract>(this.addDetermineCoorditionUrl + id, body, { 'headers': headers })
+    return this.http
+      .put<Contract>(this.addDetermineCoorditionUrl + id, body, {
+        headers: headers,
+      })
       .pipe(
         map((contract) => {
           if (JSON.parse(JSON.stringify(contract)).id != 0) {
@@ -516,13 +846,16 @@ export class ContractService {
       );
   }
 
-  public getNameOrganization(filter_organization_id: any, filter_name: any): Observable<any> {
+  public getNameOrganization(
+    filter_organization_id: any,
+    filter_name: any
+  ): Observable<any> {
     this.getCurrentUser();
-    let listUserUrl = this.getNameSearch + '?name=' + filter_name + "&size=10000";
-    const headers = { 'Authorization': 'Bearer ' + this.token }
+    let listUserUrl =
+      this.getNameSearch + '?name=' + filter_name + '&size=10000';
+    const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<User[]>(listUserUrl, { headers }).pipe();
   }
-
 
   getListDataCoordination(id: any) {
     this.getCurrentUser();
@@ -550,7 +883,9 @@ export class ContractService {
       status: is_status ? is_status : 1,
       contract_id: datas.id,
     });
-    return this.http.post<Contract>(this.documentUrl, body, { 'headers': headers });
+    return this.http.post<Contract>(this.documentUrl, body, {
+      headers: headers,
+    });
   }
 
   updateFileAttach(id: any, body: any, isStatus?: number) {
@@ -559,7 +894,9 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     if (isStatus) body.type = isStatus;
-    return this.http.put<Contract>(this.documentUrl + `/${id}`, body, { 'headers': headers });
+    return this.http.put<Contract>(this.documentUrl + `/${id}`, body, {
+      headers: headers,
+    });
   }
 
   addDocumentDone(datas: any) {
@@ -580,42 +917,53 @@ export class ContractService {
     });
     // console.log(headers);
     // console.log(body);
-    return this.http.post<Contract>(this.documentUrl, body, { 'headers': headers });
+    return this.http.post<Contract>(this.documentUrl, body, {
+      headers: headers,
+    });
   }
 
-  signPkiDigital(phone: any, networkCode: any, recipientId: any, nameContract: any) {
+  signPkiDigital(
+    phone: any,
+    networkCode: any,
+    recipientId: any,
+    nameContract: any
+  ) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token)
       .append('Connection', 'Keep-Alive');
     const body = {
-      "mobile": phone,
-      "network_code": networkCode,
-      "prompt": `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
-      "reason": "reason"
+      mobile: phone,
+      network_code: networkCode,
+      prompt: `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
+      reason: 'reason',
     };
-    return this.http.post<any>(this.signFilePKI + recipientId, body, { 'headers': headers }).toPromise();
+    return this.http
+      .post<any>(this.signFilePKI + recipientId, body, { headers: headers })
+      .toPromise();
   }
 
   signHsm(datas: any, recipientId: number) {
     this.getCurrentUser();
-  
+
     const headers = new HttpHeaders()
-    .append('Content-Type', 'application/json')
-    .append('Authorization', 'Bearer ' + this.token);
-  
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
     const body = JSON.stringify({
       ma_dvcs: datas.ma_dvcs,
       username: datas.username,
       password: datas.password,
-      password2: datas.password2
+      password2: datas.password2,
+      image_base64: datas.imageBase64,
     });
-  
-    console.log("body ", body);
-  
-    return this.http.post<any>(this.signHsmUrl + recipientId, body,{'headers':headers}).toPromise();
-  
+
+    console.log('body ', body);
+
+    return this.http
+      .post<any>(this.signHsmUrl + recipientId, body, { headers: headers })
+      .toPromise();
   }
 
   addDocumentAttach(datas: any) {
@@ -636,7 +984,9 @@ export class ContractService {
     });
     // console.log(headers);
     // console.log(body);
-    return this.http.post<Contract>(this.documentUrl, body, { 'headers': headers });
+    return this.http.post<Contract>(this.documentUrl, body, {
+      headers: headers,
+    });
   }
 
   addConfirmContract(datas: any) {
@@ -644,9 +994,13 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = "";
+    const body = '';
     console.log(headers);
-    return this.http.put<Contract>(this.addConfirmContractUrl + datas.id + '/start-bpm', body, { 'headers': headers });
+    return this.http.put<Contract>(
+      this.addConfirmContractUrl + datas.id + '/start-bpm',
+      body,
+      { headers: headers }
+    );
   }
 
   getFileContract(idContract: any): Observable<any> {
@@ -654,7 +1008,9 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<File>(this.addGetFileContract + idContract, { headers }).pipe();
+    return this.http
+      .get<File>(this.addGetFileContract + idContract, { headers })
+      .pipe();
   }
 
   getFileZipContract(idContract: any): Observable<any> {
@@ -662,7 +1018,9 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<File>(this.addGetFileZipContract + idContract, { headers }).pipe();
+    return this.http
+      .get<File>(this.addGetFileZipContract + idContract, { headers })
+      .pipe();
   }
 
   getFileContractPromise(idContract: any): Promise<any> {
@@ -670,7 +1028,9 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<File>(this.addGetFileContract + idContract, { headers }).toPromise();
+    return this.http
+      .get<File>(this.addGetFileContract + idContract, { headers })
+      .toPromise();
   }
 
   getDetermineCoordination(idCoordination: number) {
@@ -679,9 +1039,11 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-      console.log("url ", this.isDataDetermine + idCoordination);
+    console.log('url ', this.isDataDetermine + idCoordination);
 
-    return this.http.get<any>(this.isDataDetermine + idCoordination, { headers }).pipe();
+    return this.http
+      .get<any>(this.isDataDetermine + idCoordination, { headers })
+      .pipe();
   }
 
   changeStatusContract(id: any, statusNew: any, reason: any) {
@@ -690,9 +1052,13 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = {
-      reason: reason
-    }
-    return this.http.post<Contract>(this.changeStatusContractUrl + id + '/change-status/' + statusNew, body, { 'headers': headers });
+      reason: reason,
+    };
+    return this.http.post<Contract>(
+      this.changeStatusContractUrl + id + '/change-status/' + statusNew,
+      body,
+      { headers: headers }
+    );
   }
 
   getChangeNewStatus(id: number, new_status: number) {
@@ -701,7 +1067,11 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     let body = {};
-    return this.http.put<any>(this.changeStatusHandle + id + '/change-status/' + new_status, body, { 'headers': headers });
+    return this.http.put<any>(
+      this.changeStatusHandle + id + '/change-status/' + new_status,
+      body,
+      { headers: headers }
+    );
   }
 
   coordinationContract(participant_id: any, body: any, recipient_id: any) {
@@ -709,7 +1079,11 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.put<Contract>(this.coordinationSuccess + `${participant_id}/${recipient_id}`, body, { 'headers': headers });
+    return this.http.put<Contract>(
+      this.coordinationSuccess + `${participant_id}/${recipient_id}`,
+      body,
+      { headers: headers }
+    );
   }
 
   considerRejectContract(id: any, reason: string) {
@@ -718,10 +1092,12 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = {
-      reason: reason
+      reason: reason,
     };
     console.log(headers);
-    return this.http.put<any>(this.rejectContractUrl + id, body, { 'headers': headers });
+    return this.http.put<any>(this.rejectContractUrl + id, body, {
+      headers: headers,
+    });
   }
 
   updateDigitalSignatured(id: any, base64: string) {
@@ -730,11 +1106,13 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = {
-      name: "contract_" + new Date().getTime() + ".pdf",
-      content: "data:application/pdf," + base64
+      name: 'contract_' + new Date().getTime() + '.pdf',
+      content: 'data:application/pdf,' + base64,
     };
     console.log(headers);
-    return this.http.put<any>(this.signDigitalMobi + id, body, { 'headers': headers }).toPromise();
+    return this.http
+      .put<any>(this.signDigitalMobi + id, body, { headers: headers })
+      .toPromise();
   }
 
   updateInfoContractSignature(datas: any) {
@@ -742,9 +1120,11 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = "";
+    const body = '';
     console.log(headers);
-    return this.http.put<any>(this.updateInfoContractUrl + datas.id, datas, { 'headers': headers });
+    return this.http.put<any>(this.updateInfoContractUrl + datas.id, datas, {
+      headers: headers,
+    });
   }
 
   deleteInfoContractSignature(id: any) {
@@ -752,7 +1132,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = "";
+    const body = '';
     return this.http.delete<any>(this.updateInfoContractUrl + id, { headers });
   }
 
@@ -761,19 +1141,26 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, { 'headers': headers });
-    
+    return this.http.put<any>(
+      this.updateInfoContractConsiderUrl + recipient_id,
+      datas,
+      { headers: headers }
+    );
   }
 
   updateInfoContractConsiderImg(datas: any, recipient_id: any) {
-    console.log("datas ", datas);
+    console.log('datas ', datas);
 
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    
-    return this.http.put<any>(this.updateInfoContractConsiderAndOtpUrl + recipient_id, datas, { 'headers': headers });
+
+    return this.http.put<any>(
+      this.updateInfoContractConsiderAndOtpUrl + recipient_id,
+      datas,
+      { headers: headers }
+    );
   }
 
   updateInfoContractConsiderToPromise(datas: any, recipient_id: any) {
@@ -782,8 +1169,11 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, { 'headers': headers }).toPromise();
-
+    return this.http
+      .put<any>(this.updateInfoContractConsiderUrl + recipient_id, datas, {
+        headers: headers,
+      })
+      .toPromise();
   }
 
   uploadFileImageSignature(formData: any) {
@@ -792,18 +1182,25 @@ export class ContractService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.post<File>(this.uploadFileUrl + this.currentUser?.organizationId + `/single`, formData, { 'headers': headers });
+    return this.http.post<File>(
+      this.uploadFileUrl + this.currentUser?.organizationId + `/single`,
+      formData,
+      { headers: headers }
+    );
   }
 
   uploadFileImageBase64Signature(formData: any) {
-
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
 
-    console.log("formData ", formData);
+    console.log('formData ', formData);
 
-    return this.http.post<any>(this.uploadFileBase64Url + formData?.organizationId + `/base64`, formData, { 'headers': headers });
+    return this.http.post<any>(
+      this.uploadFileBase64Url + formData?.organizationId + `/base64`,
+      formData,
+      { headers: headers }
+    );
   }
 
   getCheckSignatured(id_recipient?: number | string) {
@@ -813,7 +1210,6 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.get<any>(this.getCheckSign + id_recipient, { headers });
   }
-
 
   getDetailContract(idContract: any) {
     this.getCurrentUser();
@@ -834,16 +1230,19 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.addGetObjectSignature + contract_id, { headers })
+    return this.http.get<any>(this.addGetObjectSignature + contract_id, {
+      headers,
+    });
   }
-
 
   getDataCoordination(idContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.addGetDataContract + idContract, { headers });
+    return this.http.get<any>(this.addGetDataContract + idContract, {
+      headers,
+    });
     // addGetDataContract:any = `${environment.apiUrl}/api/v1/contracts/`;
   }
 
@@ -853,7 +1252,9 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    return this.http.get<any>(this.addGetDataContract + idContract, { headers });
+    return this.http.get<any>(this.addGetDataContract + idContract, {
+      headers,
+    });
   }
 
   getContractCopy(id: any) {
@@ -865,9 +1266,12 @@ export class ContractService {
   }
 
   convertUrltoBinary(res: any) {
-    const headers = new HttpHeaders().append('Content-Type', 'application/binary');
+    const headers = new HttpHeaders().append(
+      'Content-Type',
+      'application/binary'
+    );
     // @ts-ignore
-    return this.http.get(res, { responseType: 'binary', headers })
+    return this.http.get(res, { responseType: 'binary', headers });
   }
 
   checkCodeUnique(code: any) {
@@ -877,9 +1281,11 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       code: code,
-      organization_id: this.organization_id
+      organization_id: this.organization_id,
     });
-    return this.http.post<any>(this.checkCodeUniqueUrl, body, { headers }).pipe();
+    return this.http
+      .post<any>(this.checkCodeUniqueUrl, body, { headers })
+      .pipe();
   }
 
   deleteContract(id: any) {
@@ -887,7 +1293,9 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.delete<any>(this.deleteContractUrl + id, { 'headers': headers });
+    return this.http.delete<any>(this.deleteContractUrl + id, {
+      headers: headers,
+    });
   }
 
   getFileContractBatch(idContractTemplate: any) {
@@ -895,8 +1303,12 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = "";
-    return this.http.post<any>(this.getFileContractBatchUrl + idContractTemplate, body, { headers }).pipe();
+    const body = '';
+    return this.http
+      .post<any>(this.getFileContractBatchUrl + idContractTemplate, body, {
+        headers,
+      })
+      .pipe();
   }
 
   uploadFileContractBatch(file: any, idContractTemplate: any) {
@@ -907,7 +1319,14 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.post<any>(this.uploadFileContractBatchUrl + idContractTemplate + "?organization_id=" + this.organization_id, formData, { 'headers': headers });
+    return this.http.post<any>(
+      this.uploadFileContractBatchUrl +
+        idContractTemplate +
+        '?organization_id=' +
+        this.organization_id,
+      formData,
+      { headers: headers }
+    );
   }
 
   getContractBatchList(file: any, idContractTemplate: any) {
@@ -918,10 +1337,14 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.post<any>(this.getContractBatchListUrl + idContractTemplate, formData, { 'headers': headers });
+    return this.http.post<any>(
+      this.getContractBatchListUrl + idContractTemplate,
+      formData,
+      { headers: headers }
+    );
   }
 
-  confirmContractBatchList(file: any, idContractTemplate: any, isCeCA:any) {
+  confirmContractBatchList(file: any, idContractTemplate: any, isCeCA: any) {
     this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', file);
@@ -929,12 +1352,16 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.post<any>(this.confirmContractBatchListUrl + idContractTemplate + "/" + isCeCA, formData, { 'headers': headers });
+    return this.http.post<any>(
+      this.confirmContractBatchListUrl + idContractTemplate + '/' + isCeCA,
+      formData,
+      { headers: headers }
+    );
   }
 
   viewFlowContract(id: any): Observable<any> {
     this.getCurrentUser();
-    const headers = { 'Authorization': 'Bearer ' + this.token }
+    const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<any>(this.viewFlowUrl + id, { headers }).pipe();
   }
 
@@ -943,19 +1370,25 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.delete<any>(this.deleteParticipantContractUrl + id, { headers });
+    return this.http.delete<any>(this.deleteParticipantContractUrl + id, {
+      headers,
+    });
   }
 
-  sendOtpContractProcess(contract_id:any, recipient_id:any, phone:any) {
+  sendOtpContractProcess(contract_id: any, recipient_id: any, phone: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({
       contractId: contract_id,
-      phone: phone
-      });
-    return this.http.post<any>(this.getSendOtpContractProcessUrl + recipient_id + '/gen-otp', body, { headers });
+      phone: phone,
+    });
+    return this.http.post<any>(
+      this.getSendOtpContractProcessUrl + recipient_id + '/gen-otp',
+      body,
+      { headers }
+    );
   }
 
   getStatusSignImageOtp(recipient_id: any) {
@@ -963,7 +1396,10 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.getStatusSignImageOtpUrl + recipient_id + "/status", { headers });
+    return this.http.get<any>(
+      this.getStatusSignImageOtpUrl + recipient_id + '/status',
+      { headers }
+    );
   }
 
   updateContractIsPushCeCA(id: any, isCeCA: any) {
@@ -971,13 +1407,17 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    const body = "";
-    return this.http.put<any>(this.updateContractIsPushCeCAUrl + id + "/" + isCeCA, body, { 'headers': headers }).pipe();
+    const body = '';
+    return this.http
+      .put<any>(this.updateContractIsPushCeCAUrl + id + '/' + isCeCA, body, {
+        headers: headers,
+      })
+      .pipe();
   }
 
   objDefaultSampleContract() {
     return {
-      file_content: "base64",
+      file_content: 'base64',
       sign_determine: [
         {
           title: 'Người xem xét',
@@ -985,13 +1425,13 @@ export class ContractService {
           property_name: [
             {
               name: 'Họ tên',
-              value: ''
+              value: '',
             },
             {
               name: 'Email',
-              value: ''
-            }
-          ]
+              value: '',
+            },
+          ],
         },
         {
           title: 'Người ký',
@@ -999,24 +1439,23 @@ export class ContractService {
           property_name: [
             {
               name: 'Họ tên',
-              value: ''
+              value: '',
             },
             {
               name: 'Email',
-              value: ''
+              value: '',
             },
             {
               name: 'Loại ký',
-              value: ''
+              value: '',
             },
             {
               name: 'Số điện thoại',
-              value: ''
-            }
-          ]
-        }
+              value: '',
+            },
+          ],
+        },
       ],
-
 
       contract_user_sign: [
         {
@@ -1039,9 +1478,8 @@ export class ContractService {
           sign_unit: 'chu_ky_so',
           sign_config: [],
         },
-      ]
-    }
-
+      ],
+    };
   }
 
   getDataFormatContractUserSign() {
@@ -1049,26 +1487,25 @@ export class ContractService {
       {
         id: Helper._ranDomNumberText(10),
         sign_unit: 'so_tai_lieu',
-        sign_config: []
+        sign_config: [],
       },
       {
         id: Helper._ranDomNumberText(10),
         sign_unit: 'text',
-        sign_config: []
+        sign_config: [],
       },
       {
         id: Helper._ranDomNumberText(10),
         sign_unit: 'chu_ky_anh',
-        sign_config: []
+        sign_config: [],
       },
       {
         id: Helper._ranDomNumberText(10),
         sign_unit: 'chu_ky_so',
-        sign_config: []
+        sign_config: [],
       },
-    ]
+    ];
   }
-
 
   // Error handling
   handleError(error: any) {
@@ -1087,160 +1524,162 @@ export class ContractService {
   getDataDetermine() {
     return [
       {
-        "name": "", // tên bên tham gia
-        "type": 1, // loại bên tham gia: tổ chức của tôi | đối tác | cá nhân
-        "ordering": 1, // thứ tự thực hiện ký kết của các bên tham gia
+        name: '', // tên bên tham gia
+        type: 1, // loại bên tham gia: tổ chức của tôi | đối tác | cá nhân
+        ordering: 1, // thứ tự thực hiện ký kết của các bên tham gia
         status: 1, //
-        "recipients": [
+        recipients: [
           // Dữ liệu người xem xét
           {
-            "name": "", // tên người tham gia
-            "email": "", // email người tham gia
-            "phone": "", // sđt người tham gia
-            "card_id": "", // cccd người tham gia
-            "role": 2, // loại tham gia: xem xét|điều phối| ký | văn thư
-            "ordering": 1, // thứ tự thực hiện của người tham gia
-            "status": 0, // Trạng thái chưa xử lý/ đã xử lý
-            "is_otp": 0, // select otp
-            "sign_type": [ // hình thức ký
-            ]
+            name: '', // tên người tham gia
+            email: '', // email người tham gia
+            phone: '', // sđt người tham gia
+            card_id: '', // cccd người tham gia
+            role: 2, // loại tham gia: xem xét|điều phối| ký | văn thư
+            ordering: 1, // thứ tự thực hiện của người tham gia
+            status: 0, // Trạng thái chưa xử lý/ đã xử lý
+            is_otp: 0, // select otp
+            sign_type: [
+              // hình thức ký
+            ],
           },
           // Dữ liệu người ký
           {
-            "login_by": "email",
-            "name": "", // tên người tham gia
-            "email": "", // email người tham gia
-            "phone": "", // sđt người tham gia
-            "card_id": "", // cccd người tham gia
-            "role": 3, // loại tham gia: xem xét|điều phối| ký | văn thư
-            "ordering": 1, // thứ tự thực hiện của người tham gia
-            "status": 0, // Trạng thái chưa xử lý/ đã xử lý
-            "is_otp": 0, // select otp
-            "sign_type": [ // hình thức ký
-            ]
+            login_by: 'email',
+            name: '', // tên người tham gia
+            email: '', // email người tham gia
+            phone: '', // sđt người tham gia
+            card_id: '', // cccd người tham gia
+            role: 3, // loại tham gia: xem xét|điều phối| ký | văn thư
+            ordering: 1, // thứ tự thực hiện của người tham gia
+            status: 0, // Trạng thái chưa xử lý/ đã xử lý
+            is_otp: 0, // select otp
+            sign_type: [
+              // hình thức ký
+            ],
           },
           // dữ liệu văn thư
           {
-            "login_by": "email",
-            "name": "", // tên người tham gia
-            "email": "", // email người tham gia
-            "phone": "", // sđt người tham gia
-            "card_id": "", // cccd người tham gia
-            "role": 4, // loại tham gia: xem xét|điều phối| ký | văn thư
-            "ordering": 1, // thứ tự thực hiện của người tham gia
-            "status": 0, // Trạng thái chưa xử lý/ đã xử lý
-            "is_otp": 0, // select otp
-            "sign_type": [ // hình thức ký
-            ]
+            login_by: 'email',
+            name: '', // tên người tham gia
+            email: '', // email người tham gia
+            phone: '', // sđt người tham gia
+            card_id: '', // cccd người tham gia
+            role: 4, // loại tham gia: xem xét|điều phối| ký | văn thư
+            ordering: 1, // thứ tự thực hiện của người tham gia
+            status: 0, // Trạng thái chưa xử lý/ đã xử lý
+            is_otp: 0, // select otp
+            sign_type: [
+              // hình thức ký
+            ],
           },
         ],
       },
       // Đối tác
       // Tổ chức
       {
-        "name": "",
-        "type": 2, // Đối tác tổ chức
-        "ordering": 2,
+        name: '',
+        type: 2, // Đối tác tổ chức
+        ordering: 2,
         status: 1,
-        "recipients": [
+        recipients: [
           // người điều phối
           {
-            "name": "",
-            "email": "",
-            "phone": "",
-            "card_id": "", // cccd người tham gia
-            "role": 1, // người điều phối
-            "ordering": 1,
-            "status": 0,
-            "is_otp": 0,
-            "sign_type": []
+            name: '',
+            email: '',
+            phone: '',
+            card_id: '', // cccd người tham gia
+            role: 1, // người điều phối
+            ordering: 1,
+            status: 0,
+            is_otp: 0,
+            sign_type: [],
           },
           // người xem xét
           {
-            "name": "",
-            "email": "",
-            "phone": "",
-            "card_id": "", // cccd người tham gia
-            "role": 2, // người xem xét
-            "ordering": 1,
-            "status": 0,
-            "is_otp": 0,
-            "sign_type": []
+            name: '',
+            email: '',
+            phone: '',
+            card_id: '', // cccd người tham gia
+            role: 2, // người xem xét
+            ordering: 1,
+            status: 0,
+            is_otp: 0,
+            sign_type: [],
           },
           // người ký
           {
-            "login_by": "email",
-            "name": "",
-            "email": "",
-            "phone": "",
-            "card_id": "", // cccd người tham gia
-            "role": 3, // người ký
-            "ordering": 1,
-            "status": 0,
-            "is_otp": 0,
-            "sign_type": []
+            login_by: 'email',
+            name: '',
+            email: '',
+            phone: '',
+            card_id: '', // cccd người tham gia
+            role: 3, // người ký
+            ordering: 1,
+            status: 0,
+            is_otp: 0,
+            sign_type: [],
           },
           // văn thư
           {
-            "login_by": "email",
-            "name": "",
-            "email": "",
-            "phone": "",
-            "card_id": "", // cccd người tham gia
-            "role": 4, // văn thư
-            "ordering": 1,
-            "status": 0,
-            "is_otp": 0,
-            "sign_type": []
-          }
+            login_by: 'email',
+            name: '',
+            email: '',
+            phone: '',
+            card_id: '', // cccd người tham gia
+            role: 4, // văn thư
+            ordering: 1,
+            status: 0,
+            is_otp: 0,
+            sign_type: [],
+          },
         ],
-      }
-    ]
+      },
+    ];
   }
 
   getDataDetermineInitialization() {
     return [
       {
-        "name": "",
-        "type": 1,
-        "ordering": 1,
+        name: '',
+        type: 1,
+        ordering: 1,
         status: 1,
-        "recipients": [
+        recipients: [
           {
-            "login_by": "email",
-            "name": "",
-            "email": "",
-            "phone": "",
-            "card_id": "",
-            "role": 3,
-            "ordering": 1,
-            "status": 0,
-            "is_otp": 0,
-            "sign_type": [
-            ],
-          }
+            login_by: 'email',
+            name: '',
+            email: '',
+            phone: '',
+            card_id: '',
+            role: 3,
+            ordering: 1,
+            status: 0,
+            is_otp: 0,
+            sign_type: [],
+          },
         ],
       },
       {
-        "name": "",
-        "type": 2,
-        "ordering": 2,
+        name: '',
+        type: 2,
+        ordering: 2,
         status: 1,
-        "recipients": [
+        recipients: [
           {
-            "login_by": "email",
-            "name": "",
-            "email": "",
-            "phone": "",
-            "card_id": "",
-            "role": 3,
-            "ordering": 1,
-            "status": 0,
-            "is_otp": 0,
-            "sign_type": [],
-          }
+            login_by: 'email',
+            name: '',
+            email: '',
+            phone: '',
+            card_id: '',
+            role: 3,
+            ordering: 1,
+            status: 0,
+            is_otp: 0,
+            sign_type: [],
+          },
         ],
       },
-    ]
+    ];
   }
 }

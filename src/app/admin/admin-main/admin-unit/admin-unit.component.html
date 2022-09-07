@@ -91,7 +91,7 @@
             style="text-align: center"
           >
             <img
-              *ngIf="this.editUnitRole === true"
+              *ngIf="this.editUnitRole === true && list.status != 'ACTIVE'"
               src="../../../assets/img/icon_edit.svg"
               (click)="editUnit(list.id)"
               width="20px"
