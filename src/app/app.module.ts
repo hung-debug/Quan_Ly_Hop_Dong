@@ -99,6 +99,7 @@ import { AdminInfoUserComponent } from './admin/admin-main/admin-user/admin-info
 
 import {WebcamModule} from 'ngx-webcam';
 import { EkycDialogSignComponent } from './main/contract-signature/components/consider-contract/ekyc-dialog-sign/ekyc-dialog-sign.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -216,7 +217,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BadgeModule,
     ContractTemplateModule,
     TreeSelectModule,
-    WebcamModule
+    WebcamModule,
+    PdfViewerModule,
   ],
   providers: [ AppService, DatePipe,CurrencyPipe,
     {

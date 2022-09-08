@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
+import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
   selector: 'app-ekyc-dialog-sign',
@@ -8,6 +9,12 @@ import { Observable, Subject } from 'rxjs';
   styleUrls: ['./ekyc-dialog-sign.component.scss']
 })
 export class EkycDialogSignComponent implements OnInit {
+
+  constructor(
+    private contractService: ContractService,
+  ) {
+
+  }
 
   // toggle webcam on/off
   public showWebcam = true;
@@ -37,6 +44,19 @@ export class EkycDialogSignComponent implements OnInit {
 
   public triggerSnapshot(): void {
     this.trigger.next();
+
+    console.log(this.webcamImage.imageAsDataUrl);
+
+    //cccd mặt trước
+    this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
+      if(response.id) {
+        if(response.action == 'pass') {
+
+        } else {
+
+        }
+      }
+    })
   }
 
   public toggleWebcam(): void {

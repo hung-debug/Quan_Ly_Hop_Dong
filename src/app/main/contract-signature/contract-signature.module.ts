@@ -52,6 +52,7 @@ import { NotificationExpireComponent } from './components/contract-coordination/
 import { DialogSignManyComponentComponent } from './dialog/dialog-sign-many-component/dialog-sign-many-component.component';
 import { EkycDialogSignComponent } from './components/consider-contract/ekyc-dialog-sign/ekyc-dialog-sign.component';
 import { WebcamModule } from 'ngx-webcam';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 export const contractSignatureRoutes: Routes = [
   { path: 'consider/:id', component: ConsiderContractComponent },
@@ -118,7 +119,9 @@ export const contractSignatureRoutes: Routes = [
     CalendarModule,
     MultiSelectModule,
 
-    WebcamModule
+    WebcamModule,
+    PdfViewerModule,
+
   ],
   providers: [
     NoAuthGuard,

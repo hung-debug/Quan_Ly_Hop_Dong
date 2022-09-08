@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 import { forkJoin, BehaviorSubject, Subject } from 'rxjs';
 import axios from 'axios';
 import { User } from './user.service';
+import { head } from 'lodash';
 
 export interface Contract {
   id: number;
@@ -98,11 +99,15 @@ export class ContractService {
 
   signHsmUrl: any = `${environment.apiUrl}/api/v1/sign/hsm/`;
 
+  getFilePdfForMobileUrl: any = `${environment.apiUrl}/api/v1/contracts/review/`
+
   token: any;
   customer_id: any;
   organization_id: any;
   errorData: any = {};
   redirectUrl: string = '';
+
+  cccdFront: any = `http://ekyc2.mobifone.ai/v2/recognition`;
 
   private message = new BehaviorSubject('First Message');
   sharedMessage = this.message.asObservable();
@@ -418,6 +423,21 @@ export class ContractService {
     });
   }
 
+  api_key: any = '9b84cd8c-f042-11ec-aae7-0c4de99e932e';
+  detectCCCD(image: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('api-key',this.api_key);
+
+    const body = {
+      "image":image,
+    }
+
+    return this.http.post<any>(this.cccdFront, body, {headers});
+  }
+
   getContractSample(data_sample_contract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -512,6 +532,21 @@ export class ContractService {
     return this.http.post<any>(this.checkTaxCodeExistUrl, body, {
       headers: headers,
     });
+  }
+
+  getFilePdfForMobile(recipientId: any, image_base64: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = {
+      image_base64: image_base64,
+    }
+    
+    return this.http.post<any>(this.getFilePdfForMobileUrl+recipientId, body,{
+      headers: headers,
+    })
   }
 
   postSignDigitalMobi(signCertDigital: any, imgSignGen: any) {

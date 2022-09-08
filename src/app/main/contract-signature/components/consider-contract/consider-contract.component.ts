@@ -40,7 +40,7 @@ import { UserService } from "../../../../service/user.service";
 import domtoimage from 'dom-to-image';
 import { concatMap, delay, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { networkList } from "../../../../config/variable";
+import { networkList, chu_ky_anh, chu_ky_so } from "../../../../config/variable";
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import {DeviceDetectorService} from "ngx-device-detector";
@@ -219,7 +219,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   timerId: any;
   getDataContractSignature() {
 
-    this.contractService.getDetailContract(this.idContract).subscribe(rs => {
+    this.contractService.getDetailContract(this.idContract).subscribe(async rs => {
       console.log(rs);
       this.isDataContract = rs[0];
       this.isDataFileContract = rs[1];
@@ -347,25 +347,28 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         }
         this.pdfSrc = fileC;
 
-        this.pdfSrcMobile = "https://docs.google.com/viewerng/viewer?url="+this.pdfSrc+"&embedded=true";
+        let image_base64 = "";
+
+        let arr = this.convertToSignConfig();
         
+        if(arr[0].recipient.sign_type[0].id == 5 || arr[0].recipient.sign_type[0].id == 1) {
+          image_base64 = chu_ky_anh;
+        } else {
+          image_base64 = chu_ky_so;
+        }
 
-        this.idPdfSrcMobile = setInterval(() => {
-          this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfSrcMobile);
+        console.log("image_base64 ",image_base64);
 
-          console.log("flagpdfmobile ", this.flagPdfMobile);
+        if(this.mobile) {
+          this.contractService.getFilePdfForMobile(this.recipientId, image_base64).subscribe((response) => {
+            
+          this.pdfSrcMobile = response.filePath;
           
-          if(this.flagPdfMobile > 1) {
-            clearInterval(this.idPdfSrcMobile);
-          }
-
-        }, 2000);
-
-        
-      
+          })
+        }
       }
       // render pdf to canvas
-      // if(!this.mobile)
+      if(!this.mobile)
         this.getPage();
       this.loaded = true;
     }, (res: any) => {
@@ -822,10 +825,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     if(counteKYC > 0){
       this.eKYC = true;
 
-      if(!this.mobile)
-        this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
-      else
-        this.eKYCSignOpen();
+      this.eKYCSignOpen();
+
+      // if(!this.mobile)
+      //   this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
+      // else
+      //   this.eKYCSignOpen();
       return;
     }
     if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
@@ -1100,23 +1105,28 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             //   return false;
             // }
 
-            console.log("token id usb ",this.sessionIdUsbToken);
+            console.log("sign i ", signI);
 
             var json_req = JSON.stringify({
               OperationId: 10,
               SessionId: this.sessionIdUsbToken,
               checkOCSP: 0,
-              DataToBeSign: signDigital.valueSignBase64,
               reqDigest: 1,
               algDigest: "SHA_1",
               extFile: "pdf",
+              invisible: 0,
+              pageIndex: 0,
+              offsetX: 0,
+              offsetY: 0,
+              sigWidth: 275,
+              sigHeight: 120,
+              logoData: signI,
+              DataToBeSign: signDigital.valueSignBase64,
             });
 
-            console.log("json_req before ",json_req);
+            console.log("json_req ",json_req);
 
             json_req = window.btoa(json_req);
-
-            console.log("json_req after ", json_req);
 
             var httpReq: any = "";
             var response = "";
@@ -1142,12 +1152,16 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                         if (json_res.ResponseCode == 0) {
                             alert("Successfully. Result: " + json_res.PathFile);
 
+                            alert(json_res.Base64Result);
+
                               const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
                                 if (!sign.recipient_id) {
                                   console.log("recipent_id")
 
                                   this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
                                   return false;
+                                } else {
+                                  return true;
                                 }
                         } else {
                           console.log("response ky ", response);
