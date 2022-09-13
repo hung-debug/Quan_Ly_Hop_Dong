@@ -1283,6 +1283,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   }
 
+  otp: boolean = false;
   async signContractSubmit() {
     this.spinner.show();
     const signUploadObs$ = [];
@@ -1291,12 +1292,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
     let formData = {};
     let eKYC = 0;
+    let otpOrEkyc = false;
     for (const signUpdate of this.isDataObjectSignature) {
       if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
 
+        otpOrEkyc = true;
         if(signUpdate.valueSign) {
           this.eKYC = false;
           eKYC = 0;
@@ -1332,10 +1335,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     console.log("formData ",formData);
-
-    signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
-    indexSignUpload.push(iu);
-
+    
+    if(otpOrEkyc == true) {
+      signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
+      indexSignUpload.push(iu);  
+    }
+    
     iu++;
 
     forkJoin(signUploadObs$).subscribe(async results => {

@@ -45,7 +45,7 @@ export class EkycDialogSignComponent implements OnInit {
 
   title: number = -1;
 
-  flagSuccess: boolean = true;
+  flagSuccess: number = 0;
   public ngOnInit(): void {
 
     console.log("data ", this.data);
@@ -76,16 +76,15 @@ export class EkycDialogSignComponent implements OnInit {
         console.log("response ",response);
         if(response.result_code == 200 && response.action == 'pass') {
             alert("Xác thực thành công, vui lòng thực hiện bước tiếp theo");
-            this.flagSuccess = true;
+            this.flagSuccess = 1;
             this.dialogRef.close(this.webcamImage.imageAsDataUrl);
         } else {
-          this.flagSuccess = false;
+          this.flagSuccess = -1;
           if(response.action == 'manualReview') {
             alert(response.warning_msg[0]);
           } else {
-            this.flagSuccess = false;
             console.log("response ",response);
-            if(response.result_message)
+            if(response.result_message && response.result_message != 'undefined')
               alert(response.message);
             else
               alert("Xác thực thất bại")
@@ -96,17 +95,15 @@ export class EkycDialogSignComponent implements OnInit {
       this.contractService.detectFace(this.data, this.webcamImage.imageAsDataUrl).subscribe((response) => {
         this.spinner.hide();
         if(response.verify_result == 2) {
-          this.flagSuccess = true;
+          this.flagSuccess = 1;
           alert("Nhận dạng thành công");
           this.dialogRef.close(response.verify_result);
         } else {
-          this.flagSuccess = false;
+          this.flagSuccess = -1;
           if(response.action == 'manualReview') {
             alert(response.warning_msg[0]);
           } else {
-            this.flagSuccess = false;
-
-            if(response.message) {
+            if(response.message && response.result_message != 'undefined') {
               alert(response.message.error_message);
             } else {
               alert("Nhận dạng thất bại")
