@@ -60,7 +60,11 @@
   </div>
 
   <div *ngIf="this.mobile">
-    <iframe [src]="this.trustedUrl" style="width:100%; height: calc(100vh);" frameBorder="0"></iframe>
+    <pdf-viewer [src]="pdfSrc"
+    [render-text]="true"
+    style="width: 100%; height: calc(100vh)"
+    [fit-to-page]="true"
+    ></pdf-viewer>
   </div>
 </div>
 <div class="footer-contract">

@@ -56,10 +56,9 @@
             style="display: block;margin: 0 auto;max-height: 600px;">
         </div>
       </div>
-      <div>
+      <div *ngIf="typeImageSignatureRadio == 3">
         <signature-pad *ngIf="typeImageSignatureRadio == 3" #signature [options]="signaturePadOptions"
           (drawStart)="drawStart($event)" (drawEnd)="drawComplete($event)"></signature-pad>
-
       </div>
     </div>
     <div class="image-result">

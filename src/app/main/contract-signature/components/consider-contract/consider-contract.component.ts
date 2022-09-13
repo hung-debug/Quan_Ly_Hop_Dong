@@ -161,7 +161,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   idPdfSrcMobile: any;
 
   sessionIdUsbToken: any;
-  
+
+  domain: any = `https://127.0.0.1:14424/`;
 
   constructor(
     private contractService: ContractService,
@@ -357,14 +358,19 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           image_base64 = chu_ky_so;
         }
 
-        console.log("image_base64 ",image_base64);
+        console.log("image_base64 ",image_base64); 
 
-        if(this.mobile) {
+        if(this.mobile && this.recipient.status != 2 && this.recipient.status != 3) {
           this.contractService.getFilePdfForMobile(this.recipientId, image_base64).subscribe((response) => {
             
           this.pdfSrcMobile = response.filePath;
           
           })
+        } else {
+          if(this.mobile)
+            setTimeout(() => {
+              this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+            }, 1000)
         }
       }
       // render pdf to canvas
@@ -377,11 +383,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     })
   }
 
-  flagPdfMobile: number = 0;
-  onLoadPdf(e: any) {
-    console.log("e ",e);
-    this.flagPdfMobile++;
-  }
+  // flagPdfMobile: number = 0;
+  // onLoadPdf(e: any) {
+  //   console.log("e ",e);
+  //   this.flagPdfMobile++;
+  // }
 
 
   // Error handling
@@ -823,15 +829,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     console.log("counterKYC ", counteKYC);
 
     if(counteKYC > 0){
-      this.eKYC = true;
-
-      this.eKYCSignOpen();
-
-      // if(!this.mobile)
-      //   this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
-      // else
-      //   this.eKYCSignOpen();
-      return;
+      if(this.confirmSignature == 1) {
+        this.eKYC = true;
+        this.eKYCSignOpen();
+        return;
+      }
     }
     if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng', '', 3000);
@@ -843,9 +845,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 3000);
           return;
         } else {
-          this.imageDialogSignOpen(e, haveSignImage);
+          if(this.confirmSignature == 2) {
+            this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 3000);
+            return;
+          } else {
+             this.imageDialogSignOpen(e, haveSignImage);
+             return;
+          }
 
-          return;
         }
     } else if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
@@ -1022,7 +1029,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     let typeSignDigital = 0;
 
     for (const signUpdate of this.isDataObjectSignature) {
-      if (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
+      console.log("sign update ",signUpdate);
+      if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 2) && [3, 4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
@@ -1087,101 +1095,101 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
 
-            // const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+            const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
 
-            // console.log("data sign mobi ", dataSignMobi);
+            console.log("data sign mobi ", dataSignMobi);
 
-            // if (!dataSignMobi.data.FileDataSigned) {
-            //   console.log("file data signed ");
+            if (!dataSignMobi.data.FileDataSigned) {
+              console.log("file data signed ");
 
-            //   this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-            //   return false;
-            // }
-            // const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
-            // if (!sign.recipient_id) {
-            //   console.log("recipent_id")
-
-            //   this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-            //   return false;
-            // }
-
-            console.log("sign i ", signI);
-
-            var json_req = JSON.stringify({
-              OperationId: 10,
-              SessionId: this.sessionIdUsbToken,
-              checkOCSP: 0,
-              reqDigest: 1,
-              algDigest: "SHA_1",
-              extFile: "pdf",
-              invisible: 0,
-              pageIndex: 0,
-              offsetX: 0,
-              offsetY: 0,
-              sigWidth: 275,
-              sigHeight: 120,
-              logoData: signI,
-              DataToBeSign: signDigital.valueSignBase64,
-            });
-
-            console.log("json_req ",json_req);
-
-            json_req = window.btoa(json_req);
-
-            var httpReq: any = "";
-            var response = "";
-            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-                httpReq = new XMLHttpRequest();
+              this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+              return false;
             }
-            else {// code for IE6, IE5
-                httpReq = new ActiveXObject("Microsoft.XMLHTTP");
+            const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
+            if (!sign.recipient_id) {
+              console.log("recipent_id")
+
+              this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+              return false;
             }
-            httpReq.onreadystatechange =  async () => {
-                if (httpReq.readyState == 4 && httpReq.status == 200) {
 
-                  console.log("htppreq ",httpReq.responseText);
+            // console.log("sign i ", signI);
 
-                    response = window.atob(httpReq.responseText);
+            // var json_req = JSON.stringify({
+            //   OperationId: 10,
+            //   SessionId: this.sessionIdUsbToken,
+            //   checkOCSP: 0,
+            //   reqDigest: 1,
+            //   algDigest: "SHA_1",
+            //   extFile: "pdf",
+            //   invisible: 0,
+            //   pageIndex: 0,
+            //   offsetX: 0,
+            //   offsetY: 0,
+            //   sigWidth: 275,
+            //   sigHeight: 120,
+            //   logoData: signI,
+            //   DataToBeSign: signDigital.valueSignBase64,
+            // });
+
+            // console.log("json_req ",json_req);
+
+            // json_req = window.btoa(json_req);
+
+            // var httpReq: any = "";
+            // var response = "";
+            // if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            //     httpReq = new XMLHttpRequest();
+            // }
+            // else {// code for IE6, IE5
+            //     httpReq = new ActiveXObject("Microsoft.XMLHTTP");
+            // }
+            // httpReq.onreadystatechange =  async () => {
+            //     if (httpReq.readyState == 4 && httpReq.status == 200) {
+
+            //       console.log("htppreq ",httpReq.responseText);
+
+            //         response = window.atob(httpReq.responseText);
                     
-                    var process = false;
-                    try {
-                        var json_res = JSON.parse(response);
+            //         var process = false;
+            //         try {
+            //             var json_res = JSON.parse(response);
 
-                        console.log("json_res ",json_res)
+            //             console.log("json_res ",json_res)
 
-                        if (json_res.ResponseCode == 0) {
-                            alert("Successfully. Result: " + json_res.PathFile);
+            //             if (json_res.ResponseCode == 0) {
+            //                 alert("Successfully. Result: " + json_res.PathFile);
 
-                            alert(json_res.Base64Result);
+            //                 alert(json_res.Base64Result);
 
-                              const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
-                                if (!sign.recipient_id) {
-                                  console.log("recipent_id")
+            //                   const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
+            //                     if (!sign.recipient_id) {
+            //                       console.log("recipent_id")
 
-                                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-                                  return false;
-                                } else {
-                                  return true;
-                                }
-                        } else {
-                          console.log("response ky ", response);
-                          console.log("response ky msg ", json_res);
-                          alert(json_res.ResponseMsg);
-                        }
-                    }
-                    catch (err) {
-                        alert("Error: " + err);
-                    }
-                }
-            }
-            httpReq.open("POST", this.domain + "process", true);
-            httpReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            httpReq.send("request=" + json_req);
+            //                       this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+            //                       return false;
+            //                     } else {
+            //                       return true;
+            //                     }
+            //             } else {
+            //               console.log("response ky ", response);
+            //               console.log("response ky msg ", json_res);
+            //               alert(json_res.ResponseMsg);
+            //             }
+            //         }
+            //         catch (err) {
+            //             alert("Error: " + err);
+            //         }
+            //     }
+            // }
+            // httpReq.open("POST", this.domain + "process", true);
+            // httpReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            // httpReq.send("request=" + json_req);
 
             // return false;
           }
         }
-        return false;
+        return true;
       } else {
         console.log("not sign cert digital ");
         this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
@@ -1250,6 +1258,27 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
  
       }
       
+    } else if(typeSignDigital == 5) {
+      console.log("vao day ky ekyc ");
+      console.log("sign update ", this.isDataObjectSignature);
+
+      const objSign = this.isDataObjectSignature.filter((signUpdate: any) => (signUpdate && (signUpdate.type == 3 || signUpdate.type == 2) && [3, 4].includes(this.datas.roleContractReceived)
+      && signUpdate?.recipient?.email === this.currentUser.email
+      && signUpdate?.recipient?.role === this.datas?.roleContractReceived));
+
+      let fileC = await this.contractService.getFileContractPromise(this.idContract);
+      const pdfC2 = fileC.find((p: any) => p.type == 2);
+      const pdfC1 = fileC.find((p: any) => p.type == 1);
+      if (pdfC2) {
+        fileC = pdfC2.path;
+      } else if (pdfC1) {
+        fileC = pdfC1.path;
+      } else {
+        return;
+      }
+
+      if(fileC && objSign.length)
+        return true;
     }
 
   }
@@ -1259,45 +1288,78 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const signUploadObs$ = [];
     let indexSignUpload: any[] = [];
     let iu = 0;
+
+    let formData = {};
+    let eKYC = 0;
     for (const signUpdate of this.isDataObjectSignature) {
       if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
       ) {
 
-        const formData = {
-          "content": signUpdate.valueSign,
-          organizationId: this.data_contract?.is_data_contract?.organization_id
+        if(signUpdate.valueSign) {
+          this.eKYC = false;
+          eKYC = 0;
+          formData = {
+            "content": signUpdate.valueSign,
+            organizationId: this.data_contract?.is_data_contract?.organization_id
+          }
+        } else {
+          this.eKYC = true;
+          eKYC = 1;
+          const imageRender = <HTMLElement>document.getElementById('export-html-ekyc');
+    
+          console.log("image render ", imageRender);
+    
+          const textSignB =  domtoimage.toPng(imageRender);
+    
+          console.log("textSignB ", textSignB);
+    
+          const valueBase64 = (await textSignB).split(",")[1];
+
+          console.log("value base64 ", valueBase64);
+
+          formData = {
+            "content": "data:image/png;base64,"+valueBase64,
+            "name": "image_" + new Date().getTime() + ".jpg",
+            organizationId: this.data_contract?.is_data_contract?.organization_id
+          }
         }
+     
 
-        console.log("formData ",formData);
-
-        signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
-        indexSignUpload.push(iu);
+      
       }
-      iu++;
     }
+
+    console.log("formData ",formData);
+
+    signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
+    indexSignUpload.push(iu);
+
+    iu++;
 
     forkJoin(signUploadObs$).subscribe(async results => {
       let ir = 0;
       for (const resE of results) {
         this.datas.filePath = resE?.file_object?.file_path;
-        if (this.datas.filePath) {
+        if (this.datas.filePath && eKYC == 0) {
           this.isDataObjectSignature[indexSignUpload[ir]].value = this.datas.filePath;
         }
         ir++;
       }
-      await this.signContract(false);
+
+      if(eKYC == 0)
+        await this.signContract(false);
     }, error => {
       this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
     });
-    if (signUploadObs$.length == 0) {
+
+    if (signUploadObs$.length == 0 || eKYC == 1) {
+      console.log("co the la ky ekyc ");
       await this.signContract(true);
     }
 
   }
-
-  domain: any = `https://127.0.0.1:14424/`;
 
   async signContract(notContainSignImage?: boolean) {
     console.log("sign contract");
@@ -1325,6 +1387,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
       this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
       await of(null).pipe(delay(100)).toPromise();
+
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
 
       let signI:any;
@@ -1332,25 +1395,43 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         const textSignB = await domtoimage.toPng(imageRender);
         signI = textSignB.split(",")[1];
       }
+
+      const imageRenderEkyc = <HTMLElement>document.getElementById('export-html-ekyc');
+      if (imageRenderEkyc) {
+        const textSignB = await domtoimage.toPng(imageRenderEkyc);
+        signI = textSignB.split(",")[1];
+      }
+
       //console.log(signI);
       //console.log(this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'));
+
+      console.log("sign update temp ", signUpdateTemp);
+
       signUpdatePayload = signUpdateTemp.filter(
         (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
         .map((item: any) => {
-          return {
-            otp: this.dataOTP.otp,
-            signInfo: signI,
-            processAt: this.datepipe.transform(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
-            fields:[
-              {
-                id: item.id,
-                name: item.name,
-                value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
-                font: item.font,
-                font_size: item.font_size
-              }]
-          }
+          // console.log("item ", item);
+          console.log("data otp ",this.dataOTP);
+          if(this.dataOTP) {
+            return {
+              otp: this.dataOTP.otp,
+              signInfo: signI,
+              processAt: this.datepipe.transform(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+              fields:[
+                {
+                  id: item.id,
+                  name: item.name,
+                  value: item.value,
+                  font: item.font,
+                  font_size: item.font_size
+                }]
+            }
+          } 
+         
         });
+
+      console.log("sign update payload ", signUpdatePayload);
+
       if(signUpdatePayload){
         signUpdatePayload = signUpdatePayload[0];
       }
@@ -1613,28 +1694,85 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     httpReq.send('request=' + json_req);
   }
 
+  filePath: any = "";
   async signImageC(signUpdatePayload: any, notContainSignImage: any) {
     console.log("notContainSignImage ", notContainSignImage);
     console.log("sigunupdatepayload ",signUpdatePayload);
     let signDigitalStatus = null;
-    let signUpdateTempN = [];
+    let signUpdateTempN: any[] = [];
     if(signUpdatePayload){
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
+
+      console.log("sign update temp ", signUpdateTempN);
+
       if (notContainSignImage) {
         console.log("sign image c not contain sign image ");
         signDigitalStatus = await this.signDigitalDocument();
-        signUpdateTempN = signUpdateTempN.filter(
-          (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
-          .map((item: any) => {
-            console.log("item sign image c ", item);
-            return {
-              id: item.id,
-              name: item.name,
-              value: null,
-              font: item.font,
-              font_size: item.font_size
-            }
-          });
+
+        if(this.eKYC == false) {
+          signUpdateTempN = signUpdateTempN.filter(
+            (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
+            .map((item: any) => {
+              console.log("item sign image c ", item);
+              return {
+                id: item.id,
+                name: item.name,
+                value: null,
+                font: item.font,
+                font_size: item.font_size
+              }
+            });
+        } else {
+            //đẩy chữ ký vào file pdf
+          const imageRender = <HTMLElement>document.getElementById('export-html-ekyc');
+          const textSignB =  domtoimage.toPng(imageRender);
+                    
+          const valueBase64 = (await textSignB).split(",")[1];
+
+          console.log("value base64 ", valueBase64);
+
+          const formData = {
+                "name": "image_" + new Date().getTime() + ".jpg",
+                "content": "data:image/png;base64," + valueBase64,
+                organizationId: this.data_contract?.is_data_contract?.organization_id
+          }
+
+          this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
+            // signUpdateTempN.value = responseBase64.file_object.file_path;
+            signUpdateTempN[0].value = responseBase64.file_object.file_path;
+
+            console.log("sign update temp in api ", signUpdateTempN);
+
+            console.log("ko phai ky anh ");
+
+            console.log(signUpdateTempN);
+      
+            this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
+              async (result) => {
+                if (!notContainSignImage) {
+                  console.log("update info contract consider ");
+                  await this.signDigitalDocument();
+                }
+                setTimeout(() => {
+                  this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+                  this.toastService.showSuccessHTMLWithTimeout(
+                    [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+                    , '', 3000);
+                  this.spinner.hide();
+                }, 1000);
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
+                this.spinner.hide();
+              }
+            )
+
+            return;
+          })
+
+          console.log("sign update temp out api ", signUpdateTempN);
+
+        }
+      
       }
     }
 
@@ -1646,7 +1784,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       return;
     }
 
-    if(notContainSignImage){
+    if(notContainSignImage && this.eKYC == false){
       console.log("ko phai ky anh ");
 
       console.log(signUpdateTempN);
@@ -1670,34 +1808,36 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         }
       )
     }else{
-      this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.recipientId).subscribe(
-        async (result) => {
-          if(result?.success == false){
-            if(result.message == 'Wrong otp'){
-              this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng hoặc quá hạn', '', 3000);
-              this.spinner.hide();
+      if(this.eKYC == false) {
+        this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.recipientId).subscribe(
+          async (result) => {
+            if(result?.success == false){
+              if(result.message == 'Wrong otp'){
+                this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng hoặc quá hạn', '', 3000);
+                this.spinner.hide();
+              }else{
+                this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
+                this.spinner.hide();
+              }
             }else{
-              this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
-              this.spinner.hide();
+              if (!notContainSignImage) {
+                await this.signDigitalDocument();
+              }
+              setTimeout(() => {
+                this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+                this.toastService.showSuccessHTMLWithTimeout(
+                  [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+                  , '', 3000);
+                this.spinner.hide();
+              }, 1000);
             }
-          }else{
-            if (!notContainSignImage) {
-              await this.signDigitalDocument();
-            }
-            setTimeout(() => {
-              this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
-              this.toastService.showSuccessHTMLWithTimeout(
-                [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-                , '', 3000);
-              this.spinner.hide();
-            }, 1000);
+  
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
+            this.spinner.hide();
           }
-
-        }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
-          this.spinner.hide();
-        }
-      )
+        )
+      }
     }
 
   }
@@ -1796,7 +1936,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         const data =    [{
           "font":"Arial",
           "font_size":14,
-          "id":fieldId,
+          "id":this.recipientId,
           "name":fieldName,
           "value":filePath
        }]
@@ -1925,13 +2065,64 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
   }
 
+  cccdFront: any;
+  cardId: any;
   eKYCSignOpen() {
+    const data = {
+      id: 0,
+      title: 'Xác thực CMT/CCCD mặt trước',
+    };
+
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '497px';
-    const dialogRef = this.dialog.open(EkycDialogSignComponent);
+    dialogConfig.data = data;
+    dialogConfig.disableClose = true;
+
+    const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe((result) => {
-      
+      this.cccdFront = result;
+
+      this.contractService.detectCCCD(this.cccdFront).subscribe((response) => {
+        console.log("response ",response);
+
+        this.nameCompany = response.name;
+        this.cardId = response.id;
+
+        console.log("name company ", this.cardId);
+      })
+
+      this.eKYCSignOpenAfter();
+    })
+  }
+
+  eKYCSignOpenAfter() {
+    const data = {
+      id: 1,
+      title: 'Xác thực CMT/CCCD mặt sau',
+    };
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = data;
+    dialogConfig.disableClose = true;
+
+    const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe((result) => {
+
+      const dialogConfig = new MatDialogConfig();
+
+      dialogConfig.data = this.cccdFront;
+      dialogConfig.disableClose = true;
+
+      const final = this.dialog.open(EkycDialogSignComponent,dialogConfig);
+
+      final.afterClosed().subscribe((async (result: any) => {
+
+        if(result == 2) {
+          console.log("Nhận dạng khuôn mặt thành công ");
+          await this.signContractSubmit();
+        }
+      }))
     })
   }
 

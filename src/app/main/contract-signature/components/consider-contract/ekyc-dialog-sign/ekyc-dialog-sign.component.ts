@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { ContractService } from 'src/app/service/contract.service';
@@ -10,8 +12,14 @@ import { ContractService } from 'src/app/service/contract.service';
 })
 export class EkycDialogSignComponent implements OnInit {
 
+  personEkyc: any;
+
   constructor(
     private contractService: ContractService,
+    private spinner: NgxSpinnerService,
+    public dialogRef: MatDialogRef<EkycDialogSignComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialog: MatDialog,
   ) {
 
   }
@@ -35,7 +43,20 @@ export class EkycDialogSignComponent implements OnInit {
   // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
   private nextWebcam: Subject<boolean|string> = new Subject<boolean|string>();
 
+  title: number = -1;
+
+  flagSuccess: boolean = true;
   public ngOnInit(): void {
+
+    console.log("data ", this.data);
+
+    if(this.data.title) {
+      this.title = 0;
+    } else {
+      this.title = 1;
+      this.data.title = 'Nhận dạng khuôn mặt';
+    }
+
     WebcamUtil.getAvailableVideoInputs()
       .then((mediaDevices: MediaDeviceInfo[]) => {
         this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
@@ -47,16 +68,55 @@ export class EkycDialogSignComponent implements OnInit {
 
     console.log(this.webcamImage.imageAsDataUrl);
 
-    //cccd mặt trước
-    this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
-      if(response.id) {
-        if(response.action == 'pass') {
+    this.spinner.show();
 
+    if(this.title == 0) {
+      this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
+        this.spinner.hide();
+        console.log("response ",response);
+        if(response.result_code == 200 && response.action == 'pass') {
+            alert("Xác thực thành công, vui lòng thực hiện bước tiếp theo");
+            this.flagSuccess = true;
+            this.dialogRef.close(this.webcamImage.imageAsDataUrl);
         } else {
-
+          this.flagSuccess = false;
+          if(response.action == 'manualReview') {
+            alert(response.warning_msg[0]);
+          } else {
+            this.flagSuccess = false;
+            console.log("response ",response);
+            if(response.result_message)
+              alert(response.message);
+            else
+              alert("Xác thực thất bại")
+          }
         }
-      }
-    })
+      })
+    } else {
+      this.contractService.detectFace(this.data, this.webcamImage.imageAsDataUrl).subscribe((response) => {
+        this.spinner.hide();
+        if(response.verify_result == 2) {
+          this.flagSuccess = true;
+          alert("Nhận dạng thành công");
+          this.dialogRef.close(response.verify_result);
+        } else {
+          this.flagSuccess = false;
+          if(response.action == 'manualReview') {
+            alert(response.warning_msg[0]);
+          } else {
+            this.flagSuccess = false;
+
+            if(response.message) {
+              alert(response.message.error_message);
+            } else {
+              alert("Nhận dạng thất bại")
+            }
+          }
+        }
+      })
+    }
+
+
   }
 
   public toggleWebcam(): void {

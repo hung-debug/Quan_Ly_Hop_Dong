@@ -52,6 +52,7 @@ import { ConfirmContractBatchComponent } from './batch-contract/confirm-contract
 import { ConfirmCecaContractComponent } from './shared/model/confirm-ceca-contract/confirm-ceca-contract.component';
 import { ConfirmCecaFormComponent } from './form-contract/confirm-ceca-form/confirm-ceca-form.component';
 import { ConfirmCecaBatchComponent } from './batch-contract/confirm-ceca-batch/confirm-ceca-batch.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -126,6 +127,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgxPaginationModule,
     ChipsModule,
     TreeSelectModule,
+    PdfViewerModule
   ],
   entryComponents: [
     ConfirmInforContractComponent,

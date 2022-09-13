@@ -99,15 +99,17 @@ export class ContractService {
 
   signHsmUrl: any = `${environment.apiUrl}/api/v1/sign/hsm/`;
 
-  getFilePdfForMobileUrl: any = `${environment.apiUrl}/api/v1/contracts/review/`
+  getFilePdfForMobileUrl: any = `${environment.apiUrl}/api/v1/contracts/review/`;
+
+  cccdFront: any = `http://ekyc2.mobifone.ai/v2/recognition`;
+
+  detectFaceUrl: any = `http://ekyc2.mobifone.ai/v2/verification`;
 
   token: any;
   customer_id: any;
   organization_id: any;
   errorData: any = {};
   redirectUrl: string = '';
-
-  cccdFront: any = `http://ekyc2.mobifone.ai/v2/recognition`;
 
   private message = new BehaviorSubject('First Message');
   sharedMessage = this.message.asObservable();
@@ -436,6 +438,21 @@ export class ContractService {
     }
 
     return this.http.post<any>(this.cccdFront, body, {headers});
+  }
+
+  detectFace(imageCCCD: any, imageFace: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('api-key',this.api_key);
+
+      const body = {
+        "image_cmt":imageCCCD,
+        "image_live": imageFace,
+      }
+
+    return this.http.post<any>(this.detectFaceUrl, body, {headers})
   }
 
   getContractSample(data_sample_contract: any) {

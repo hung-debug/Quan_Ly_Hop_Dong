@@ -99,7 +99,7 @@
         </div>
       </div>
       <div class="skeleton-sign position-absolute opacity-0">
-        <app-display-digital-signature [nameCompany]="nameCompany"></app-display-digital-signature>
+        <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId"></app-display-digital-signature>
       </div>
       <div class="skeleton-sign position-absolute opacity-0">
         <app-text-signature-image [textSign]="textSign" [height]="heightText" [width]="widthText"></app-text-signature-image>
@@ -115,7 +115,11 @@
 
 <div *ngIf="this.mobile === true">
 
-      <pdf-viewer [src]="pdfSrcMobile"
+  <div class="skeleton-sign position-absolute opacity-0">
+    <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId"></app-display-digital-signature>
+  </div>
+  
+      <pdf-viewer *ngIf="this.recipient.status != 2 && this.recipient.status != 3" [src]="pdfSrcMobile"
       [render-text]="true"
       style="width: 100%; height: calc(100vh)"
       [fit-to-page]="true"
@@ -124,7 +128,7 @@
       <div style="display: none;" *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
         <app-image-sign-contract id="image-sign-contract-mobile" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
       </div>
-      
+   
     <!-- <iframe #frame [src]="trustedUrl" style="width:100%; height: calc(100vh);" frameBorder="0"  (load)="onLoadPdf($event)"></iframe> -->
     <!-- <div style="background-color: #F2F2F2; text-align: center;overflow: hidden;padding: 5px;display: block;height: 1200px; image-resolution: from-image 300dpi">
       <div id="pdf-viewer-step-3">
@@ -162,7 +166,7 @@
         </div>
       </div>
 
-    </div>
+    </div>   
 </div>
 
 <app-footer-signature *ngIf="loaded" [datas]="datas" [view]="[2,3].includes(recipient.status)" [recipientId]="recipientId" (submitChanges)="submitEvents($event)"></app-footer-signature>

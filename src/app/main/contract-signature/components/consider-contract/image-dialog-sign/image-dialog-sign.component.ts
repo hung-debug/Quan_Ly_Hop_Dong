@@ -7,6 +7,7 @@ import {ContractSignatureService} from "../../../../../service/contract-signatur
 import {INgxSelectOption} from "ngx-select-ex/ngx-select/ngx-select.interfaces";
 import Swal from 'sweetalert2'
 import { ToastService } from 'src/app/service/toast.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 @Component({
   selector: 'app-image-dialog-sign',
   templateUrl: './image-dialog-sign.component.html',
@@ -22,6 +23,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   imgSignPCSelect: string;
   imgSignDrawing: string;
   optionsFileSignAccount: any;
+  mobile: boolean = false;
 
   public signaturePadOptions: NgSignaturePadOptions = { // passed through to szimek/signature_pad constructor
     minWidth: 6,
@@ -32,6 +34,7 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {},
     public router: Router,
+    private deviceService: DeviceDetectorService,
     public dialog: MatDialog,
     private contractSignatureService: ContractSignatureService,
     private toastService : ToastService,
@@ -42,10 +45,22 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+
+    this.getDeviceApp();
+
     this.typeImageSignatureRadio = 2;
     this.datas = this.data;
     this.initListSignatureAccountUser();
     this.imgSignAccountSelect = 'data:image/png;base64,' + this.datas.imgSignAcc;
+  }
+  getDeviceApp() {
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
+      console.log("la mobile ");
+      this.mobile = true;
+    } else {
+      console.log("la pc");
+      this.mobile = false;
+    }
   }
 
   addFileAttach() {
@@ -111,7 +126,11 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
     if (ev == 3) {
       setTimeout(() => {
         this.signaturePad.set('border', 'none');
-        this.signaturePad.set('canvasHeight', 500);
+        if(this.mobile)
+          this.signaturePad.set('canvasHeight', 340);
+        else 
+          this.signaturePad.set('canvasHeight', 500);
+
         this.signaturePad.set('canvasWidth', 950);
         this.signaturePad.clear();
       }, 200);

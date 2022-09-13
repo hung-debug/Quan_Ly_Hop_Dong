@@ -414,7 +414,7 @@ export class DetermineSignerComponent implements OnInit {
 
   changeTypeSign(d: any) {
     if(d.login_by == 'phone') {
-      d.phone = d.email;
+      d.email = '';
     }
 
     console.log("d ",d);

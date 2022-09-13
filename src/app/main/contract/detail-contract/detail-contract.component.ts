@@ -251,7 +251,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           this.toastService.showErrorHTMLWithTimeout("Thiếu dữ liệu file hợp đồng!", "", 3000);
         } else {
           this.pdfSrc = fileC;
-          this.pdfSrc = fileC;
           this.pdfSrcMobile = "https://docs.google.com/viewerng/viewer?url="+this.pdfSrc+"&embedded=true";
           this.trustedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfSrcMobile);
         }

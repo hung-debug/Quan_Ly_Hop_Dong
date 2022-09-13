@@ -10,9 +10,11 @@ import domtoimage from 'dom-to-image';
 export class DisplayDigitalSignatureComponent implements OnInit {
   isDateTime: any = new Date();
   // isNameSignature: string = 'Công ty cổ phần phần mềm công nghệ cao Việt Nam';
-  @Input() nameCompany: string | undefined | null;
+  @Input() nameCompany: any | undefined | null;
+  @Input() cardId: any | undefined | null;
 
-  constructor() { }
+  constructor() {
+   }
 
   ngOnInit(): void {
   }
