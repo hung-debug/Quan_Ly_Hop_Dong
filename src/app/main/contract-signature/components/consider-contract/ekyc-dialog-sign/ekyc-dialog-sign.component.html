@@ -8,7 +8,7 @@
     Nhận dạng khuôn mặt
   </div>
 
-  <div *ngIf = "!webcamImage || this.flagSuccess != 1">
+  <div *ngIf = "!webcamImage && !this.flagSuccess">
     <webcam [height]="200" [width]="600" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
             [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
             [videoOptions]="videoOptions"
@@ -17,9 +17,9 @@
             (initError)="handleInitError($event)"
     ></webcam>
     <br/>
-    <button class="actionBtn" (click)="triggerSnapshot();">Chụp ảnh</button>
+    <button class="actionBtn" (click)="triggerSnapshot();">Take A Snapshot</button>
   </div>
-  <div  *ngIf="webcamImage && this.flagSuccess == 1">
+  <div  *ngIf="webcamImage">
     <img [height]="200" [width]="200"  [src]="webcamImage.imageAsDataUrl"/>
   </div>
 </div>

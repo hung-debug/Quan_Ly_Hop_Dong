@@ -1340,7 +1340,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
       indexSignUpload.push(iu);  
     }
-    
+
     iu++;
 
     forkJoin(signUploadObs$).subscribe(async results => {
@@ -2076,6 +2076,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const data = {
       id: 0,
       title: 'Xác thực CMT/CCCD mặt trước',
+      recipientId: this.recipientId
     };
 
     const dialogConfig = new MatDialogConfig();

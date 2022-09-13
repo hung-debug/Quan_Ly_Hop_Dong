@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
@@ -19,7 +19,6 @@ export class EkycDialogSignComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<EkycDialogSignComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialog: MatDialog,
   ) {
 
   }
@@ -45,10 +44,13 @@ export class EkycDialogSignComponent implements OnInit {
 
   title: number = -1;
 
-  flagSuccess: number = 0;
+  flagSuccess: boolean = false;
+
+  initWebcamImage: any;
   public ngOnInit(): void {
 
     console.log("data ", this.data);
+    this.initWebcamImage = this.webcamImage;
 
     if(this.data.title) {
       this.title = 0;
@@ -75,39 +77,49 @@ export class EkycDialogSignComponent implements OnInit {
         this.spinner.hide();
         console.log("response ",response);
         if(response.result_code == 200 && response.action == 'pass') {
-            alert("Xác thực thành công, vui lòng thực hiện bước tiếp theo");
-            this.flagSuccess = 1;
+
+          if(this.data.recipientId) {
+            //Check trùng CCCD
+            this.contractService.getDetermineCoordination(this.data.recipientId).subscribe((responseId) => {
+              if(response.id == responseId.recipients[0].card_id) {
+                this.flagSuccess == true;
+                alert("Xác thực thành công");
+                this.dialogRef.close(this.webcamImage.imageAsDataUrl);
+              } else {
+                this.flagSuccess = false;
+                this.webcamImage = this.initWebcamImage;
+                alert("Mã CMT/CCCD không trùng khớp");
+              }
+            })
+          } else {
+            this.flagSuccess == true;
+            alert("Xác thực thành công");
             this.dialogRef.close(this.webcamImage.imageAsDataUrl);
+          }
         } else {
-          this.flagSuccess = -1;
-          if(response.action == 'manualReview') {
+          this.flagSuccess = false;
+          this.webcamImage = this.initWebcamImage;
+          if(response.action == 'manualReview' && !response.warning_msg[0] && response.warning_msg[0] != 'undefined') {
             alert(response.warning_msg[0]);
           } else {
-            console.log("response ",response);
-            if(response.result_message && response.result_message != 'undefined')
-              alert(response.message);
-            else
-              alert("Xác thực thất bại")
+            alert("Xác thực thất bại");
           }
+
+          console.log("this webcam ", this.webcamImage);
+      
         }
       })
     } else {
       this.contractService.detectFace(this.data, this.webcamImage.imageAsDataUrl).subscribe((response) => {
         this.spinner.hide();
         if(response.verify_result == 2) {
-          this.flagSuccess = 1;
           alert("Nhận dạng thành công");
           this.dialogRef.close(response.verify_result);
         } else {
-          this.flagSuccess = -1;
-          if(response.action == 'manualReview') {
-            alert(response.warning_msg[0]);
+          if(response.message.error_message && response.message.error_message != 'undefined') {
+            alert(response.message.error_message);
           } else {
-            if(response.message && response.result_message != 'undefined') {
-              alert(response.message.error_message);
-            } else {
-              alert("Nhận dạng thất bại")
-            }
+            alert("Nhận dạng thất bại")
           }
         }
       })

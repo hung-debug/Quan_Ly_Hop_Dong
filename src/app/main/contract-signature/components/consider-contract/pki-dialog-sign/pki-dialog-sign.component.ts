@@ -40,9 +40,21 @@ export class PkiDialogSignComponent implements OnInit {
     const pattern = /^[0-9]*$/;
 
     if (!this.phoneNum || (this.phoneNum && this.phoneNum.length < 9 || this.phoneNum.length > 11) || (this.phoneNum && !pattern.test(this.phoneNum))) {
-      this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập đúng định dạng số điện thoại', '', 3000);
+      if(!this.phoneNum) {
+        this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập số điện thoại', '', 3000);
+        return;
+      } else {
+        this.toastService.showErrorHTMLWithTimeout('Vui lòng nhập đúng định dạng số điện thoại', '', 3000);
+        return;
+      }
+    }
+
+    if(!this.networkCode) {
+      console.log("netwwork code ", this.networkCode);
+      this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn nhà mạng', '', 3000);
       return;
     }
+
     const firstChar = this.phoneNum.charAt(0);
     let resPhone = this.phoneNum;
     if(this.phoneNum && firstChar && firstChar == '0') {
