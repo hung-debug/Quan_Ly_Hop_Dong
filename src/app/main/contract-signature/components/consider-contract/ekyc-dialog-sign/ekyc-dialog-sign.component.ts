@@ -65,49 +65,45 @@ export class EkycDialogSignComponent implements OnInit {
       });
   }
 
+  cardId: any;
   public triggerSnapshot(): void {
+
+
     this.trigger.next();
 
     console.log(this.webcamImage.imageAsDataUrl);
 
     this.spinner.show();
 
+    this.contractService.getDetermineCoordination(this.data.recipientId).subscribe((response) => {
+      this.cardId = response.recipients[0].card_id;
+    })
+
     if(this.title == 0) {
       this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
         this.spinner.hide();
         console.log("response ",response);
         if(response.result_code == 200 && response.action == 'pass') {
-
-          if(this.data.recipientId) {
-            //Check trùng CCCD
-            this.contractService.getDetermineCoordination(this.data.recipientId).subscribe((responseId) => {
-              if(response.id == responseId.recipients[0].card_id) {
-                this.flagSuccess == true;
-                alert("Xác thực thành công");
-                this.dialogRef.close(this.webcamImage.imageAsDataUrl);
-              } else {
-                this.flagSuccess = false;
-                this.webcamImage = this.initWebcamImage;
-                alert("Mã CMT/CCCD không trùng khớp");
-              }
-            })
-          } else {
+          if(this.cardId == response.id) {
             this.flagSuccess == true;
             alert("Xác thực thành công");
             this.dialogRef.close(this.webcamImage.imageAsDataUrl);
+          } else {
+            this.flagSuccess == false;
+            this.webcamImage = this.initWebcamImage;
+            alert("Mã CMT/CCCD không trùng khớp")
           }
+           
         } else {
           this.flagSuccess = false;
           this.webcamImage = this.initWebcamImage;
-          if(response.action == 'manualReview' && !response.warning_msg[0] && response.warning_msg[0] != 'undefined') {
+          if(response.action == 'manualReview' && response.warning_msg[0].length > 0) {
             alert(response.warning_msg[0]);
           } else {
             alert("Xác thực thất bại");
-          }
-
-          console.log("this webcam ", this.webcamImage);
-      
+          }      
         }
+       
       })
     } else {
       this.contractService.detectFace(this.data, this.webcamImage.imageAsDataUrl).subscribe((response) => {

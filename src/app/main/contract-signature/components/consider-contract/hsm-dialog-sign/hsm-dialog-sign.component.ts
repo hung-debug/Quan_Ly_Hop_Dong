@@ -135,8 +135,6 @@ export class HsmDialogSignComponent implements OnInit {
       password2: this.myForm.value.pass2
     };
 
-    const recipientId = this.datas.recipientId;
-
     console.log("data ", data);
 
     console.log("tax code ", this.taxCode);

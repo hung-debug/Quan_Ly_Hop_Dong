@@ -17,7 +17,8 @@
             (initError)="handleInitError($event)"
     ></webcam>
     <br/>
-    <button class="actionBtn" (click)="triggerSnapshot();">Take A Snapshot</button>
+    <button class="actionBtn" (click)="triggerSnapshot();">Chụp ảnh</button>&nbsp;&nbsp;
+    <button class="actionBtn" (click)="this.dialogRef.close()">Huỷ</button>
   </div>
   <div  *ngIf="webcamImage">
     <img [height]="200" [width]="200"  [src]="webcamImage.imageAsDataUrl"/>

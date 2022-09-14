@@ -1239,8 +1239,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
       if (fileC && objSign.length) {
         
+        console.log("hsm ", this.dataHsm);
         const checkSign = await this.contractService.signHsm(this.dataHsm, this.recipientId);;
         console.log(checkSign);
+
         if (!checkSign || (checkSign && !checkSign.success)) {
           
           if(!checkSign.message) {
@@ -1252,6 +1254,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           return false;
         } else {
           if(checkSign.success === true) {
+            if (pdfC2) {
+              fileC = pdfC2.path;
+            } else if (pdfC1) {
+              fileC = pdfC1.path;
+            } else {
+              return;
+            }
+            console.log("fileC ",fileC);
             return true;
           } 
         }
@@ -1463,59 +1473,59 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     if (typeSignDigital && typeSignDigital == 2) {
       let checkSetupTool = false;
 
-      // this.contractService.getAllAccountsDigital().then(async (data) => {
+      this.contractService.getAllAccountsDigital().then(async (data) => {
 
-      //   console.log("data all accounts digital ", data);
-      //   if (data.data.Serial) {
+        console.log("data all accounts digital ", data);
+        if (data.data.Serial) {
 
-      //     this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
-      //       if(response.success == true) {
-      //         this.signCertDigital = data.data;
-      //         this.nameCompany = data.data.CN;
-      //         checkSetupTool = true;
-      //         if (!checkSetupTool) {
-      //           this.spinner.hide();
-      //           return;
-      //         } else {
-      //           await this.signImageC(signUpdatePayload, notContainSignImage);
-      //         }
-      //       } else {
-      //         this.spinner.hide();
-      //         Swal.fire({
-      //           title: `Mã số thuế trên chữ ký số không trùng mã số thuế của tổ chức`,
-      //           icon: 'warning',
-      //           confirmButtonColor: '#3085d6',
-      //           cancelButtonColor: '#b0bec5',
-      //           confirmButtonText: 'Xác nhận'
-      //         });
-      //       }
-      //     })
+          this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
+            if(response.success == true) {
+              this.signCertDigital = data.data;
+              this.nameCompany = data.data.CN;
+              checkSetupTool = true;
+              if (!checkSetupTool) {
+                this.spinner.hide();
+                return;
+              } else {
+                await this.signImageC(signUpdatePayload, notContainSignImage);
+              }
+            } else {
+              this.spinner.hide();
+              Swal.fire({
+                title: `Mã số thuế trên chữ ký số không trùng mã số thuế của tổ chức`,
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#b0bec5',
+                confirmButtonText: 'Xác nhận'
+              });
+            }
+          })
 
-      //   } else {
-      //     this.spinner.hide();
-      //     Swal.fire({
-      //       title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
-      //       icon: 'warning',
-      //       confirmButtonColor: '#3085d6',
-      //       cancelButtonColor: '#b0bec5',
-      //       confirmButtonText: 'Xác nhận'
-      //     });
-      //   }
-      // }, err => {
-      //   this.spinner.hide();
-      //   Swal.fire({
-      //     html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>  và cài đặt`,
-      //     icon: 'warning',
-      //     confirmButtonColor: '#3085d6',
-      //     cancelButtonColor: '#b0bec5',
-      //     confirmButtonText: 'Xác nhận'
-      //   });
-      // })
+        } else {
+          this.spinner.hide();
+          Swal.fire({
+            title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#b0bec5',
+            confirmButtonText: 'Xác nhận'
+          });
+        }
+      }, err => {
+        this.spinner.hide();
+        Swal.fire({
+          html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>  và cài đặt`,
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#b0bec5',
+          confirmButtonText: 'Xác nhận'
+        });
+      })
 
       //get session
-      console.log("get session id");
+      // console.log("get session id");
 
-      const sessionId = this.getSessionId(this.taxCodePartnerStep2, signUpdatePayload, notContainSignImage);
+      // const sessionId = this.getSessionId(this.taxCodePartnerStep2, signUpdatePayload, notContainSignImage);
       // console.log("sessionId ", sessionId);
 
       //Lấy thông tin chữ ký số
@@ -2097,7 +2107,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         console.log("name company ", this.cardId);
       })
 
-      this.eKYCSignOpenAfter();
+      if(result)
+        this.eKYCSignOpenAfter();
     })
   }
 
@@ -2120,15 +2131,18 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       dialogConfig.data = this.cccdFront;
       dialogConfig.disableClose = true;
 
-      const final = this.dialog.open(EkycDialogSignComponent,dialogConfig);
+      if(result) {
+        const final = this.dialog.open(EkycDialogSignComponent,dialogConfig);
 
-      final.afterClosed().subscribe((async (result: any) => {
-
-        if(result == 2) {
-          console.log("Nhận dạng khuôn mặt thành công ");
-          await this.signContractSubmit();
-        }
-      }))
+        final.afterClosed().subscribe((async (result: any) => {
+  
+          if(result == 2) {
+            console.log("Nhận dạng khuôn mặt thành công ");
+            await this.signContractSubmit();
+          }
+        }))
+      }
+     
     })
   }
 
