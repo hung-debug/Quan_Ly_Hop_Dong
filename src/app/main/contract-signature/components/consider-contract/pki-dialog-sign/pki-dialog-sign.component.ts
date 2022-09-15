@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import { networkList } from 'src/app/config/variable';
+import { ContractService } from 'src/app/service/contract.service';
 import {ToastService} from "../../../../../service/toast.service";
 
 @Component({
@@ -21,10 +23,11 @@ export class PkiDialogSignComponent implements OnInit {
   networkCompany: any = 0;
   phoneNum: any;
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: {},
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
     public dialogRef: MatDialogRef<PkiDialogSignComponent>,
-    private toastService : ToastService
+    private toastService : ToastService,
+    private contractService: ContractService
   ) {
   }
 
@@ -36,6 +39,15 @@ export class PkiDialogSignComponent implements OnInit {
   }
 
   onSubmit() {
+    this.contractService.getCheckSignatured(this.data.recipientId).subscribe((res: any) => {
+      if (res && res.status == 2) {
+        this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
+        return;
+      } 
+    }, (error: HttpErrorResponse) => {
+      this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
+    })
+
     console.log("pki open ");
     const pattern = /^[0-9]*$/;
 

@@ -2251,7 +2251,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       title: 'CHỮ KÝ PKI',
       type: 3,
       sign: this.signInfoPKIU,
-      data: this.datas
+      data: this.datas,
+      recipientId: this.recipientId
     };
 
     const dialogConfig = new MatDialogConfig();

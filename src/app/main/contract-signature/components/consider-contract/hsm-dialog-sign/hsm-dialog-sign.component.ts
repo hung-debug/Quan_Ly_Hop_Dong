@@ -7,6 +7,7 @@ import { parttern_input } from 'src/app/config/parttern';
 import { ContractService } from 'src/app/service/contract.service';
 import { error } from 'jquery';
 import { ToastService } from 'src/app/service/toast.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-hsm-dialog-sign',
@@ -24,7 +25,7 @@ export class HsmDialogSignComponent implements OnInit {
   taxCode: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: {},
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
     public dialog: MatDialog,
     private fbd: FormBuilder,
@@ -140,6 +141,15 @@ export class HsmDialogSignComponent implements OnInit {
     console.log("tax code ", this.taxCode);
 
     //Check voi nguoi dung trong he thong
+    this.contractService.getCheckSignatured(this.data.recipientId).subscribe((res: any) => {
+      if (res && res.status == 2) {
+        this.toastService.showErrorHTMLWithTimeout('contract_signature_success', "", 3000);
+        return;
+      } 
+    }, (error: HttpErrorResponse) => {
+      this.toastService.showErrorHTMLWithTimeout('error_check_signature', "", 3000);
+    })
+
     if(data.ma_dvcs === this.taxCode) {
         this.dialogRef.close(data);
     } else {
