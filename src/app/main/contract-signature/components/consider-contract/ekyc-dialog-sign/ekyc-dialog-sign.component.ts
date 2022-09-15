@@ -84,14 +84,19 @@ export class EkycDialogSignComponent implements OnInit {
         this.spinner.hide();
         console.log("response ",response);
         if(response.result_code == 200 && response.action == 'pass') {
-          if(this.cardId == response.id) {
-            this.flagSuccess == true;
+          if(this.cardId) {
+            if(this.cardId == response.id) {
+              this.flagSuccess == true;
+              alert("Xác thực thành công");
+              this.dialogRef.close(this.webcamImage.imageAsDataUrl);
+            } else {
+              this.flagSuccess == false;
+              this.webcamImage = this.initWebcamImage;
+              alert("Mã CMT/CCCD không trùng khớp")
+            }
+          } else {
             alert("Xác thực thành công");
             this.dialogRef.close(this.webcamImage.imageAsDataUrl);
-          } else {
-            this.flagSuccess == false;
-            this.webcamImage = this.initWebcamImage;
-            alert("Mã CMT/CCCD không trùng khớp")
           }
            
         } else {
