@@ -133,12 +133,11 @@ export class DashboardComponent implements OnInit {
   }
 
   openLink(link: any) {
-    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-    //   this.router.navigate([link]);
-    // });
-    window.location.href = link;
-    //this.router.navigate([link]);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate([link]);
+    });
   }
+
 
   detailContract(id: any) {
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {

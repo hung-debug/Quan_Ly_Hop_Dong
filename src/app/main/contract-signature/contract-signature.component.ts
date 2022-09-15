@@ -55,7 +55,9 @@ export class ContractSignatureComponent implements OnInit {
   filter_contract_no: any = "";
   filter_from_date: any = "";
   filter_to_date: any = "";
-  filter_status: any = "";
+  filter_status: any = 1;
+
+  typeDisplay: string = "signOne";
 
   constructor(private modalService: NgbModal,
               private appService: AppService,
@@ -116,7 +118,6 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
-  typeDisplay: string = "signOne";
   signMany() {
     console.log("Ký nhiều ");
     this.typeDisplay = "signMany";
@@ -128,6 +129,9 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   getContractList() {
+    if(this.filter_status %10 == 1) 
+      this.filter_status = 1;
+
     //get list contract share
     if(this.filter_status == -1){
       this.contractService.getContractShareList(this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {

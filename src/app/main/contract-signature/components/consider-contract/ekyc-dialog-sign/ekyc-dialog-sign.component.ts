@@ -67,8 +67,6 @@ export class EkycDialogSignComponent implements OnInit {
 
   cardId: any;
   public triggerSnapshot(): void {
-
-
     this.trigger.next();
 
     console.log(this.webcamImage.imageAsDataUrl);
