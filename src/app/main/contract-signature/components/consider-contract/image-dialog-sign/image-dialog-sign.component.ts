@@ -123,6 +123,8 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
   }
 
   t(ev: number) {
+    this.checkIOSAndroid();
+
     if (ev == 3) {
       setTimeout(() => {
         this.signaturePad.set('border', 'none');
@@ -131,12 +133,43 @@ export class ImageDialogSignComponent implements OnInit, AfterViewInit {
         else 
           this.signaturePad.set('canvasHeight', 500);
 
-        this.signaturePad.set('canvasWidth', 950);
+        if(this.mobile) {
+          if(this.iOS) {
+            this.signaturePad.set('canvasWidth',250);
+          } else {
+            this.signaturePad.set('canvasWidth',210);
+          }
+        } else {
+          this.signaturePad.set('canvasWidth', 950);
+        }
+
         this.signaturePad.clear();
       }, 200);
     } else if (ev == 1 && !this.datas.imgSignAcc) {
       this.toastService.showWarningHTMLWithTimeout('notify_have_not_sign_acc', "", 3000);
     }
+
+  }
+
+  iOS: boolean = false;
+  checkIOSAndroid() {
+    var userAgent = navigator.userAgent || navigator.vendor;
+
+    // Windows Phone must come first because its UA also contains "Android"
+    if (/windows phone/i.test(userAgent)) {
+        return "Windows Phone";
+    }
+
+    if (/android/i.test(userAgent)) {
+        return "Android";
+    }
+
+    // iOS detection from: http://stackoverflow.com/a/9039885/177710
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return "iOS";
+    }
+
+    return "unknown";
   }
 
   initListSignatureAccountUser() {
