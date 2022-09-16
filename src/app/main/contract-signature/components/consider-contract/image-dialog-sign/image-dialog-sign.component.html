@@ -34,6 +34,7 @@
           </div>
         </div>
       </div>
+
       <div *ngIf="typeImageSignatureRadio == 2">
         <div class="form-group">
           <div class="select-file-contract" [hidden]="imgSignPCSelect">
@@ -52,10 +53,14 @@
           </div>
         </div>
         <div class="image-sign-acc-2 mt-4" style="max-height: 600px;">
-          <img *ngIf="imgSignPCSelect" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
+          <img *ngIf="imgSignPCSelect && !this.mobile" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
             style="display: block;margin: 0 auto;max-height: 600px;">
+
+          <img *ngIf="imgSignPCSelect && this.mobile" (click)="addFileAttach()" [src]="imgSignPCSelect" alt=""
+            style="display: block;margin: 0 auto;max-height: 600px; max-width: 210px">
         </div>
       </div>
+
       <div *ngIf="typeImageSignatureRadio == 3">
         <signature-pad *ngIf="typeImageSignatureRadio == 3" #signature [options]="signaturePadOptions"
           (drawStart)="drawStart($event)" (drawEnd)="drawComplete($event)"></signature-pad>
