@@ -9,7 +9,7 @@
     </div>
   </div>
 
-  <div *ngIf="this.status == 'wait-processing'">
+  <div *ngIf="filter_status == 1">
     <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
       <button (click)="signMany()" class="btn btn-lg btn-block btn_submit">{{'Ký nhiều'| translate}}</button>
     </div>

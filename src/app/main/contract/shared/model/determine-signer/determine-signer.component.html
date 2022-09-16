@@ -836,7 +836,7 @@
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
-                          <input name="checkPhoneMailPerson_{{index}}" type="radio" [value]="email" [(ngModel)]="d.login_by"/>
+                          <input (change)="changeTypeSign(d)" name="checkPhoneMailPerson_{{index}}" type="radio" [value]="email" [(ngModel)]="d.login_by"/>
                         </div>&nbsp;
                         <div>
                           {{'typeOfSignEmail' | translate}}
@@ -846,7 +846,7 @@
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
-                          <input name="checkPhoneMailPerson_{{index}}" type="radio" [value]="phone" [(ngModel)]="d.login_by" />
+                          <input (change)="changeTypeSign(d)" name="checkPhoneMailPerson_{{index}}" type="radio" [value]="phone" [(ngModel)]="d.login_by" />
                         </div>&nbsp;
                         <div>
                           {{'typeOfSignPhone' | translate}}
@@ -879,7 +879,7 @@
                     <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.email">
                     </div>
                   </div>
 

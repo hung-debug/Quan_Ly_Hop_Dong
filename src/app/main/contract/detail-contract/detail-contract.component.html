@@ -62,8 +62,9 @@
   <div *ngIf="this.mobile">
     <pdf-viewer [src]="pdfSrc"
     [render-text]="true"
-    style="width: 100%; height: calc(100vh)"
+    style="width: 98%; height: calc(100vh)"
     [fit-to-page]="true"
+    [show-borders]="true"
     ></pdf-viewer>
   </div>
 </div>

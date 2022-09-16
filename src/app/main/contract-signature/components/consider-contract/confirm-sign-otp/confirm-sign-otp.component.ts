@@ -121,12 +121,28 @@ export class ConfirmSignOtpComponent implements OnInit {
 
   getStyleReset(){
     if (this.count == 0) {
-      return {
-        'background-color': '#FCAF17'
-      };
-    } else return {
-      'background-color': '#99968f'
+      if(this.mobile) {
+        return {
+          'width':'100px',
+          'background-color': '#FCAF17'
+        };
+      } else
+        return {
+          'background-color': '#FCAF17'
+        };
+    } else {
+      if(this.mobile) {
+        return {
+          'width':'100px',
+          'background-color': '#FCAF17'
+        };
+      } else {
+        return {
+          'background-color': '#99968f'
+        }
+      }
     }
+
   }
 
   async signContractSubmit() {

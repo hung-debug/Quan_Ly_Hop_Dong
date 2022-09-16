@@ -12,9 +12,7 @@ import {
   SecurityContext,
   ViewChild
 } from '@angular/core';
-import { ContractSignatureService } from "../../../../service/contract-signature.service";
 import { ContractService } from "../../../../service/contract.service";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import * as $ from "jquery";
 import {
@@ -33,7 +31,6 @@ import { forkJoin, from, throwError, timer } from "rxjs";
 import { ToastService } from "../../../../service/toast.service";
 import { UploadService } from "../../../../service/upload.service";
 import { NgxSpinnerService } from "ngx-spinner";
-import { DigitalSignatureService } from "../service/digital-sign.service";
 import { encode } from "base64-arraybuffer";
 import { UserService } from "../../../../service/user.service";
 // @ts-ignore
@@ -537,14 +534,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       canvas.width = viewport.width;
 
       var ctx = canvas.getContext('2d');
-      
-      if(this.mobile) {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerWidth/viewport.width * viewport.height;
-
-        // ctx.scale(1,1);
-
-      }
   
       this.prepareInfoSignUsbToken(pageNumber, canvas.height);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
@@ -1564,7 +1553,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             } else {
               this.spinner.hide();
               Swal.fire({
-                title: `Mã số thuế trên chữ ký số không trùng mã số thuế của tổ chức`,
+                title: `Mã số thuế/CMT/CCCD trên chữ ký số không trùng khớp`,
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#b0bec5',
@@ -1842,9 +1831,23 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                 }
                 setTimeout(() => {
                   this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
-                  this.toastService.showSuccessHTMLWithTimeout(
-                    [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-                    , '', 3000);
+                  // this.toastService.showSuccessHTMLWithTimeout(
+                  //   [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+                  //   , '', 3000);
+
+                  if(!this.mobile) {
+                    this.toastService.showSuccessHTMLWithTimeout(
+                      [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
+                      , '', 3000);
+                  } else {
+                    if([3, 4].includes(this.datas.roleContractReceived)) {
+                      alert("Ký hợp đồng thành công");
+                    } else {
+                      alert("Xem xét hợp đồng thành công");
+                    }
+                  }
+      
+
                   this.spinner.hide();
                 }, 1000);
               }, error => {
@@ -1884,9 +1887,22 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           }
           setTimeout(() => {
             this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
-            this.toastService.showSuccessHTMLWithTimeout(
-              [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-              , '', 3000);
+            // this.toastService.showSuccessHTMLWithTimeout(
+            //   [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+            //   , '', 3000);
+
+            if(!this.mobile) {
+              this.toastService.showSuccessHTMLWithTimeout(
+                [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
+                , '', 3000);
+            } else {
+              if([3, 4].includes(this.datas.roleContractReceived)) {
+                alert("Ký hợp đồng thành công");
+              } else {
+                alert("Xem xét hợp đồng thành công");
+              }
+            }
+
             this.spinner.hide();
           }, 1000);
         }, error => {
@@ -1912,9 +1928,22 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               }
               setTimeout(() => {
                 this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
-                this.toastService.showSuccessHTMLWithTimeout(
-                  [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-                  , '', 3000);
+                // this.toastService.showSuccessHTMLWithTimeout(
+                //   [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+                //   , '', 3000);
+
+                if(!this.mobile) {
+                  this.toastService.showSuccessHTMLWithTimeout(
+                    [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
+                    , '', 3000);
+                } else {
+                  if([3, 4].includes(this.datas.roleContractReceived)) {
+                    alert("Ký hợp đồng thành công");
+                  } else {
+                    alert("Xem xét hợp đồng thành công");
+                  }
+                }
+    
                 this.spinner.hide();
               }, 1000);
             }
@@ -2437,6 +2466,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       this.mobile = false;
     }
   }
+
 
 }
 

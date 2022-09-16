@@ -118,40 +118,20 @@
   <div class="skeleton-sign position-absolute opacity-0">
     <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId"></app-display-digital-signature>
   </div>
-  
-      <pdf-viewer *ngIf="this.recipient.status != 2 && this.recipient.status != 3" [src]="pdfSrcMobile"
-      [render-text]="true"
-      style="width: 100%; height: calc(100vh)"
-      [fit-to-page]="true"
-      ></pdf-viewer>
+
+      <div style="margin:auto; width: 100%;padding: 10px">
+        <pdf-viewer *ngIf="this.recipient.status != 2 && this.recipient.status != 3" [src]="pdfSrcMobile"
+        [render-text]="true"
+        style="width: 98%; height: calc(100vh); overflow: hidden;"
+        [fit-to-page]="true"
+        [show-borders]="true"
+        ></pdf-viewer>
+      </div>
 
       <div style="display: none;" *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
         <app-image-sign-contract id="image-sign-contract-mobile" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
       </div>
    
-    <!-- <iframe #frame [src]="trustedUrl" style="width:100%; height: calc(100vh);" frameBorder="0"  (load)="onLoadPdf($event)"></iframe> -->
-    <!-- <div style="background-color: #F2F2F2; text-align: center;overflow: hidden;padding: 5px;display: block;height: 1200px; image-resolution: from-image 300dpi">
-      <div id="pdf-viewer-step-3">
-        <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-          <div class="resize-drag not-out-drop" *ngIf="![2,3].includes(recipient.status)"
-               [id]="d.id"
-               style="z-index: -1;"
-               #itemElement
-               (click)="getSignSelect(d)"
-               [ngClass]="changeColorDrag(null, d, true)"
-               [ngStyle]="changePosition(d)">
-            <div class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
-            <!-- <app-sign-contract [datas]="datas" [sign]="d" ></app-sign-contract> -->
-          <!-- </div>
-        </div>
-        <div class="skeleton-sign position-absolute opacity-0">
-          <app-display-digital-signature [nameCompany]="nameCompany"></app-display-digital-signature>
-        </div>
-        <div class="skeleton-sign position-absolute opacity-0">
-          <app-text-signature-image [textSign]="textSign" [height]="heightText" [width]="widthText"></app-text-signature-image>
-        </div>
-      </div>
-    </div>  -->
     <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 3 || this.datas.roleContractReceived == 4">
       <p class="d-flex justify-content-center mb-4 text-uppercase">XÁC NHẬN KÝ HỢP ĐỒNG</p>
       <p class="d-flex mb-2 text-align-left mx-3">Bạn có đồng ý với nội dung, các điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch không?</p>

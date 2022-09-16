@@ -129,8 +129,9 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   getContractList() {
-    if(this.filter_status %10 == 1) 
+    if(this.filter_status %10 == 1) {
       this.filter_status = 1;
+    }
 
     //get list contract share
     if(this.filter_status == -1){
