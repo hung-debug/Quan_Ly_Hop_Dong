@@ -8,7 +8,7 @@
   "login": "Đăng nhập",
   "login.username": "Tên đăng nhập",
   "login.password": "Mật khẩu",
-  "login.note.user": "Vui lòng đăng nhập bằng tài khoản và mật khẩu đã được cấp trong email của bạn",
+  "login.note.user": "Vui lòng đăng nhập bằng tài khoản và mật khẩu đã được cấp trong email/sđt của bạn",
   "login.forgot_password": "Quên mật khẩu",
   "login.forgot_password.note": "Nhập địa chỉ email bạn đã sử dụng đăng ký trên MobiFone eContract",
   "signup": "Đăng ký",
