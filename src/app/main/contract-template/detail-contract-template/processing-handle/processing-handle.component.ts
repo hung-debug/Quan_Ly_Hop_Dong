@@ -48,6 +48,8 @@ export class ProcessingHandleComponent implements OnInit {
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
     this.data_parnter_organization = this.data.is_data_contract.participants.filter((p: any) => p.type == 2 || p.type == 3);
+
+    console.log("this data partner org ", this.data_parnter_organization);
   }
 
   acceptRequest() {

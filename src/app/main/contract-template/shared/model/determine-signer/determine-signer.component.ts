@@ -1069,15 +1069,25 @@ export class DetermineSignerComponent implements OnInit {
     let data = [...this.contractTemplateService.getDataDetermineInitialization()];
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];
     this.datas.is_determine_clone.push(data_partner_add);
+
+    let number = 0;
     this.datas.is_determine_clone.forEach((res: any, index: number) => {
-      //res.ordering = index + 1;
+
+
       if(res.type != 1){
-        res.name = "Đối tác " + index;
+        // if(index == 0)
+        number++;
+          res.name = "Đối tác " + number;
+        // else
+        //   res.name = "Đối tác " + index;
       }
+
+      console.log("res name ", res.name);
       if(index == this.dataParnterOrganization().length){
         res.ordering = index + 1;
       }
     }) 
+    
     console.log("this.datas.is_determine_clone");
     console.log(this.datas.is_determine_clone);
     console.log(this.data_parnter_organization);

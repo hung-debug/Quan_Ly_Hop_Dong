@@ -1065,6 +1065,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               this.widthText = 150;
               await of(null).pipe(delay(100)).toPromise();
               const imageRender = <HTMLElement>document.getElementById('text-sign');
+
               if (imageRender) {
                 const textSignB = await domtoimage.toPng(imageRender);
                 signI = this.textSignBase64Gen = textSignB.split(",")[1];
@@ -1077,6 +1078,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                 signI = textSignB.split(",")[1];
               }
             }
+
+            console.log("signI ", signI);
 
             const signDigital = JSON.parse(JSON.stringify(signUpdate));
             signDigital.Serial = this.signCertDigital.Serial;
