@@ -49,10 +49,12 @@ export class LoginComponent implements OnInit {
       this.error = true;
       this.errorDetail = "error.password.required";
     } else {
-      if (sessionStorage.getItem('urlLoginType')) {
+      if (sessionStorage.getItem('type')) {
         this.type = 1;
       } else 
         this.type = 0;
+
+      console.log("type ", this.type);
 
       this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
         if(data?.code == '00'){
@@ -154,7 +156,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
 
     
-    if (sessionStorage.getItem('urlLoginType')) {
+    if (sessionStorage.getItem('type')) {
       this.type = 1;
     } else this.type = 0;
 

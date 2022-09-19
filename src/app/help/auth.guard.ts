@@ -26,38 +26,41 @@ export class AuthGuard implements CanActivate {
     //console
     //@ts-ignore
   
-    if (state.url.search('loginType') > 0 && (next._urlSegment.segments.some((p: any) => p.path == 'contract-signature') || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
+    if (state.url.search('type') > 0 && (next._urlSegment.segments.some((p: any) => p.path == 'contract-signature') || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
       //console.log(state.url);
-      console.log(!sessionStorage.getItem('url'), state.url.includes("recipientEmail"));
-      if (!sessionStorage.getItem('url') && state.url.includes("recipientEmail")) {
+      console.log(!sessionStorage.getItem('url'), state.url.includes("mail"));
+      if (!sessionStorage.getItem('url') && state.url.includes("mail")) {
         console.log(2);
-        let isCheckUrl = state.url.split("&recipientEmail=");
+        let isCheckUrl = state.url.split("&mail=");
         
         // sessionStorage.setItem('url', state.url);
         sessionStorage.setItem('url', isCheckUrl[0]);
         console.log(3);
-        sessionStorage.setItem('recipientEmail', isCheckUrl[isCheckUrl.length - 1]);
+        // sessionStorage.setItem('recipientEmail', isCheckUrl[isCheckUrl.length - 1]);
+
+        sessionStorage.setItem('mail', isCheckUrl[isCheckUrl.length - 1]);
+
         console.log(4);
         
         let is_local = sessionStorage.getItem('url');
-        if (is_local?.includes('loginType')) {
-          let dataLoginType = is_local.split("loginType")[is_local.split("loginType").length - 1];
-          if (sessionStorage.getItem('urlLoginType')) {
-            sessionStorage.removeItem('urlLoginType')
+        if (is_local?.includes('type')) {
+          let dataLoginType = is_local.split("type")[is_local.split("type").length - 1];
+          if (sessionStorage.getItem('type')) {
+            sessionStorage.removeItem('type')
           }
           if (dataLoginType == "=1") {
-            sessionStorage.setItem('urlLoginType', JSON.stringify({loginType: true}));
+            sessionStorage.setItem('type', JSON.stringify({loginType: true}));
           }
         }
         const urlC = sessionStorage.getItem('url');
-        const lt = sessionStorage.getItem('urlLoginType');
-        const isEmail = sessionStorage.getItem('recipientEmail');
+        const lt = sessionStorage.getItem('type');
+        const isEmail = sessionStorage.getItem('mail');
         console.log(1);
         sessionStorage.clear();
         sessionStorage.setItem('url', urlC ? urlC : '');
-        sessionStorage.setItem('urlLoginType', lt ? lt : '');
-        sessionStorage.setItem('recipientEmail', isEmail ? isEmail : '');
-        if (next.queryParams.loginType && next.queryParams.loginType == 1) {
+        sessionStorage.setItem('type', lt ? lt : '');
+        sessionStorage.setItem('mail', isEmail ? isEmail : '');
+        if (next.queryParams.type && next.queryParams.type == 1) {
           this.router.navigate(['/login'],
             {
               queryParams: {'loginType': 1}

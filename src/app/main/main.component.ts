@@ -53,7 +53,7 @@ export class MainComponent implements OnInit {
     this.getDeviceApp();
 
     //update title by component
-    this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('urlLoginType')));
+    this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('type')));
     // if (this.router.url.includes('/main/form-contract/add') ||
     //   this.router.url.includes('/coordinates') ||
     //   this.router.url.includes('/consider') ||
