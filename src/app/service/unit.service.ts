@@ -80,6 +80,7 @@ export class UnitService {
       fax: datas.fax,
       status: datas.status,
       parent_id: datas.parent_id,
+      tax_code: datas.tax_code
     });
 
     console.log("body "+body);
@@ -105,7 +106,6 @@ export class UnitService {
       status: datas.status,
       parent_id: datas.parent_id,
       path: datas.path,
-      ceca_push_mode: datas.ceca_push_mode.id
     });
     console.log(headers);
     console.log("body update ",body);

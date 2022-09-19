@@ -243,6 +243,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           }
         })
       }
+
+      console.log("status ",this.data_contract?.is_data_contract?.status);
+
       if (this.data_contract?.is_data_contract?.status == 31 || this.data_contract?.is_data_contract?.status == 30) {
         this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
       }
@@ -349,10 +352,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
         let arr = this.convertToSignConfig();
         
-        if(arr[0].recipient.sign_type[0].id == 5 || arr[0].recipient.sign_type[0].id == 1) {
-          image_base64 = chu_ky_anh;
-        } else {
-          image_base64 = chu_ky_so;
+        if(this.mobile) {
+          if(arr[0].recipient.sign_type[0].id == 5 || arr[0].recipient.sign_type[0].id == 1) {
+            image_base64 = chu_ky_anh;
+          } else {
+            image_base64 = chu_ky_so;
+          }
         }
 
         console.log("image_base64 ",image_base64); 
@@ -364,10 +369,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           
           })
         } else {
-          if(this.mobile)
+          if(this.mobile) {
             setTimeout(() => {
               this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
             }, 1000)
+          }           
+
         }
       }
       // render pdf to canvas

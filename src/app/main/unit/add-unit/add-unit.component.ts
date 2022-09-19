@@ -310,6 +310,7 @@ export class AddUnitComponent implements OnInit {
       status: this.addForm.value.status,
       parent_id: this.addForm.value.parent_id,
       path: this.addForm.value.path,
+      tax_code: this.addForm.value.taxCode
     }
 
 
