@@ -1,3 +1,4 @@
+
 <div class="sample-contract row" *ngIf="loaded && valid && this.mobile === false">
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
@@ -120,22 +121,13 @@
   </div>
 
       <div style="margin:auto; width: 100%;padding: 10px">
-        <!-- <pdf-viewer *ngIf="this.recipient.status != 2 && this.recipient.status != 3" [src]="pdfSrcMobile"
+        <pdf-viewer *ngIf="this.recipient.status != 2 && this.recipient.status != 3" [src]="pdfSrcMobile"
         [render-text]="true"
         style="width: 98%; height: calc(100vh); overflow: hidden;"
         [fit-to-page]="true"
         [show-borders]="true"
-        ></pdf-viewer> -->
-
-        <ngx-doc-viewer
-          [url]="pdfSrcMobile"
-          viewer="google"
-          style="width:100%;height:50vh;"
-        ></ngx-doc-viewer>
+        ></pdf-viewer>
       </div>
-
-      <!-- <ngx-extended-pdf-viewer [src]="pdfSrcMobile" useBrowserLocale="true"></ngx-extended-pdf-viewer> -->
-
 
       <div style="display: none;" *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
         <app-image-sign-contract id="image-sign-contract-mobile" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
@@ -156,6 +148,7 @@
       </div>
 
     </div>
+    
 </div>
 
 <app-footer-signature *ngIf="loaded" [datas]="datas" [view]="[2,3].includes(recipient.status)" [recipientId]="recipientId" (submitChanges)="submitEvents($event)"></app-footer-signature>
