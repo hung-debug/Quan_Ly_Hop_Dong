@@ -51,6 +51,8 @@
     "ng2-pdf-viewer": "^9.1.1",
     "ngx-bootstrap": "^7.1.0",
     "ngx-device-detector": "^3.0.0",
+    "ngx-doc-viewer": "^2.1.4",
+    "ngx-extended-pdf-viewer": "^15.0.3",
     "ngx-input-search": "^3.0.8",
     "ngx-pagination": "^5.1.1",
     "ngx-select-ex": "^6.1.1",
