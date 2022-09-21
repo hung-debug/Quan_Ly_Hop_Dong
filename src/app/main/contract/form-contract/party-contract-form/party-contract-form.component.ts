@@ -389,10 +389,388 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   pattern_input = parttern_input;
   // valid data step 2
   validData() {
+    // let count = 0;
+    // let dataArr = [];
+    // dataArr = this.data_organization.recipients;
+    // dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
+    // for (let i = 0; i < dataArr.length; i++) {
+    //   if (!dataArr[i].name) {
+    //     this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!");
+    //     count++;
+    //     break;
+    //   }
+    //   if (!dataArr[i].email) {
+    //     this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+    //     count++;
+    //     break;
+    //   }
+    //   if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
+    //     this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+    //     count++;
+    //     break;
+    //   } else if (dataArr[i].sign_type.length > 0 && dataArr[i].role != 2) {
+    //     let is_duplicate = [];
+    //     is_duplicate = dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+    //     if (is_duplicate.length > 1) {
+    //       this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+    //       count++;
+    //       break;
+    //     }
+    //     is_duplicate = [];
+
+    //     //check chu ky anh
+    //     is_duplicate = dataArr[i].sign_type.filter((p: any) => p.id == 1 || p.id == 5);
+    //     if (is_duplicate.length > 1) {
+    //       this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký ảnh hoặc eKYC của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+    //       count++;
+    //       break;
+    //     }
+    //     is_duplicate = [];
+    //   }
+
+    //   if (!dataArr[i].phone && dataArr[i].sign_type.filter((p: any) => p.id == 1).length > 0) {
+    //     this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+    //     count++;
+    //     break;
+    //   }
+    //   if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 5).length > 0) {
+    //     this.getNotificationValid("Vui lòng nhập CMT/CCCD của" + this.getNameObject(3) + "tổ chức của tôi!")
+    //     count++;
+    //     break;
+    //   }
+    //   if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email)) {
+    //     this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+    //     count++;
+    //     break;
+    //   }
+    //   if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
+    //     this.getNotificationValid("Số điện thoại của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+    //     count++;
+    //     break;
+    //   }
+    //    // valid cccd number
+    //    if (dataArr[i].card_id && !this.pattern.card_id.test(dataArr[i].card_id)) {
+    //     this.getNotificationValid("CMT/CCCD của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+    //     count++;
+    //     break;
+    //   }
+
+    //   if(!dataArr[i].card_id && (dataArr[i].role == 3 || dataArr[i].role == 4) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0) {
+    //     this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(dataArr[i].role)+"tổ chức của tôi");
+    //     count++;
+    //     break;
+    //   }
+
+    //   if(dataArr[i].card_id && !this.pattern.card_id.test(dataArr[i].card_id) && !this.pattern_input.taxCode_form.test(dataArr[i].card_id) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0) {
+    //     this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!");
+    //     count++;
+    //     break;
+    //   }
+
+    //   if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0) {
+    //     this.getNotificationValid("Vui lòng nhập mã số thuế của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+    //     count++;
+    //     break;
+    //   }
+
+    //   console.log("data")
+
+    //   if(dataArr[i].card_id && dataArr[i].role == 3 && !this.pattern_input.taxCode_form.test(dataArr[i].card_id)) {
+    //     this.getNotificationValid("Mã số thuế của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+    //     count++;
+    //     break;
+    //   }
+    // }
+
+    // if (count == 0) {
+    //   if (this.getCheckDuplicateEmail('only_party_origanzation', dataArr)) {
+    //     this.getNotificationValid("Email tổ chức của tôi không được trùng nhau!");
+    //     return false
+    //   }
+    // }
+
+    // if (count == 0) {
+    //   if (this.getCheckDuplicatePhone('only_party_origanzation', dataArr)) {
+    //     this.getNotificationValid("Số điện thoại tổ chức của tôi không được trùng nhau!");
+    //     return false
+    //   }
+    // }
+
+    // if (count == 0) {
+    //   if (this.getCheckDuplicateCardId('only_party_origanzation', dataArr)) {
+    //     this.getNotificationValid("CMT/CCCD tổ chức của tôi không được trùng nhau!");
+    //     return false
+    //   }
+    // }
+
+    // let dataArrPartner = [];
+    // dataArrPartner = this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+    // if (count == 0) {
+    //   // validate phía đối tác
+    //   for (let j = 0; j < dataArrPartner.length; j++) {
+    //     let isParterSort = (dataArrPartner[j].recipients).sort((beforeItemParter: any, afterItemParter: any) => beforeItemParter.role - afterItemParter.role);
+    //     // if (isParterSort.length == 0) {
+    //     //     count++;
+    //     //     this.getNotificationValid("Không có người ký đối tác. Vui lòng chọn lại!");
+    //     //     break;
+    //     // }
+    //     for (let k = 0; k < isParterSort.length; k++) {
+    //       if (dataArrPartner[j].type != 3) {
+    //         if (!dataArrPartner[j].name) {
+    //           this.getNotificationValid("Vui lòng nhập tên của đối tác tổ chức!")
+    //           count++;
+    //           break;
+    //         }
+
+    //         if (!isParterSort[k].name) {
+    //           this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(isParterSort[k].role) + " của đối tác!")
+    //           count++;
+    //           break;
+    //         }
+    //         if (!isParterSort[k].email) {
+    //           this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(isParterSort[k].role) + " của đối tác!")
+    //           count++;
+    //           break;
+    //         }
+
+    //         if (isParterSort[k].sign_type.length == 0 && [3, 4].includes(isParterSort[k].role)) {
+    //           this.getNotificationValid("Vui lòng chọn loại ký" + this.getNameObject(isParterSort[k].role) + "của đối tác!")
+    //           count++;
+    //           break;
+    //         } else if (isParterSort[k].sign_type.length > 0 && [3, 4].includes(isParterSort[k].role)) {
+    //           let isPartnerOriganzationDuplicate = [];
+    //           isPartnerOriganzationDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+    //           if (isPartnerOriganzationDuplicate.length > 1) {
+    //             this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(isParterSort[k].role) + "của đối tác!")
+    //             count++;
+    //             break;
+    //           }
+    //           isPartnerOriganzationDuplicate = [];
+    //           //check chu ky anh
+    //           isPartnerOriganzationDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 1 || p.id == 5);
+    //           if (isPartnerOriganzationDuplicate.length > 1) {
+    //             this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký ảnh hoặc eKYC" + this.getNameObject(isParterSort[k].role) + "của đối tác!")
+    //             count++;
+    //             break;
+    //           }
+    //           isPartnerOriganzationDuplicate = [];
+    //         }
+
+    //         if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
+    //           this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(isParterSort[k].role) + "của đối tác!")
+    //           count++;
+    //           break;
+    //         }
+
+    //         if (!isParterSort[k].card_id && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
+    //           this.getNotificationValid("Vui lòng CMT/CCCD của" + this.getNameObject(3) + "tổ chức của đối tác!")
+    //           count++;
+    //           break;
+    //         }
+
+    //         if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email)) {
+    //           this.getNotificationValid("Email của" + this.getNameObject(3) + "của đối tác không hợp lệ!")
+    //           count++;
+    //           break;
+    //         }
+
+    //         // valid phone number
+    //         if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone)) {
+    //           this.getNotificationValid("Số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
+    //           count++;
+    //           break;
+    //         }
+
+    //         // valid cccd number
+    //         if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id)) {
+    //           this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác không hợp lệ!")
+    //           count++;
+    //           break;
+    //         }
+
+    //         if(!isParterSort[k].card_id && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+    //           this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(isParterSort[k].role)+"tổ chức của đối tác");
+    //           count++;
+    //           break;
+    //         }
+      
+    //         if(isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id) && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+    //           this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(isParterSort[k].role) + "tổ chức của tôi không hợp lệ!");
+    //           count++;
+    //           break;
+    //         }
+
+    //         if(!isParterSort[k].card_id && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
+    //           this.getNotificationValid("Vui lòng nhập mã số thuế của"+this.getNameObject(isParterSort[k].role)+"tổ chức của đối tác");
+    //           count++;
+    //           break;
+    //         }
+      
+    //         if(isParterSort[k].card_id && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id)) {
+    //           this.getNotificationValid("Mã số thuế của" + this.getNameObject(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
+    //           count++;
+    //           break;
+    //         }
+
+    //       } else if (dataArrPartner[j].type == 3) {
+    //         if(!isParterSort[k].card_id && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+    //           this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(isParterSort[k].role)+"của đối tác cá nhân");
+    //           count++;
+    //           break;
+    //         }
+      
+    //         if(isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id) && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+    //           this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(isParterSort[k].role) + "tổ chức của tôi không hợp lệ!");
+    //           count++;
+    //           break;
+    //         }
+
+    //         if (!isParterSort[k].name && isParterSort[k].role == 3) {
+    //           this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")
+    //           count++;
+    //           break;
+    //         }
+    //         if (!isParterSort[k].email && isParterSort[k].role == 3) {
+    //           this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")
+    //           count++;
+    //           break;
+    //         }
+
+    //         if (isParterSort[k].sign_type.length == 0 && [3, 4].includes(isParterSort[k].role) && isParterSort[k].role == 3) {
+    //           this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân!")
+    //           count++;
+    //           break;
+    //         } else if (isParterSort[k].sign_type.length > 0 && [3, 4].includes(isParterSort[k].role) && isParterSort[k].role == 3) {
+    //           let isPartnerCaNhanDuplicate = [];
+    //           isPartnerCaNhanDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
+    //           if (isPartnerCaNhanDuplicate.length > 1) {
+    //             this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân!")
+    //             count++;
+    //             break;
+    //           }
+    //           isPartnerCaNhanDuplicate = [];
+    //           //check chu ky anh
+    //           isPartnerCaNhanDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 1 || p.id == 5);
+    //           if (isPartnerCaNhanDuplicate.length > 1) {
+    //             this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký ảnh hoặc eKYC" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân!")
+    //             count++;
+    //             break;
+    //           }
+    //           isPartnerCaNhanDuplicate = [];
+    //         }
+
+    //         if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
+    //           this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân!")
+    //           count++;
+    //           break;
+    //         }
+
+    //         if (!isParterSort[k].card_id && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
+    //           this.getNotificationValid("Vui lòng CMT/CCCD của" + this.getNameObject(3) + "tổ chức của đối tác cá nhân!")
+    //           count++;
+    //           break;
+    //         }
+
+    //         if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email) && isParterSort[k].role == 3) {
+    //           this.getNotificationValid("Email" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
+    //           count++;
+    //           break;
+    //         }
+    //         if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone)) {
+    //           this.getNotificationValid("Số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!")
+    //           count++;
+    //           break;
+    //         }
+    //         if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id)) {
+    //           this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
+    //           count++;
+    //           break;
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+
+    // // check trung ten cac doi tac
+    // let isNameObj: any[] = [];
+    // for (const d of this.datasForm.is_determine_clone) {
+    //   if (isNameObj.length > 0 && isNameObj.includes(d.name)) {
+    //     this.getNotificationValid("Trùng tên đối tác. Vui lòng kiểm tra lại.");
+    //     return false;
+    //   }
+    //   isNameObj.push(d.name);
+    // }
+
+    // if (count == 0) {
+    //   // dataArrPartyCheckEmail = this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
+    //   if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
+    //     this.getNotificationValid("Email đối tác không được trùng nhau!");
+    //     return false
+    //   }
+    // }
+
+    // if (count == 0) {
+    //   if (this.getCheckDuplicatePhone('only_party_partner', dataArrPartner)) {
+    //     this.getNotificationValid("Số điện thoại đối tác không được trùng nhau!");
+    //     return false
+    //   }
+    // }
+
+    // if (count == 0) {
+    //   if (this.getCheckDuplicateCardId('only_party_partner', dataArrPartner)) {
+    //     this.getNotificationValid("CMT/CCCD đối tác không được trùng nhau!");
+    //     return false
+    //   }
+    // }
+
+    // if (count == 0) {
+    //   if (this.getCheckDuplicateEmail('allCheckEmail', this.datasForm.is_determine_clone)) {
+    //     this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
+    //     return false
+    //   }
+    // }
+
+    // if (count == 0) {
+    //   //valid ordering cac ben doi tac - to chuc
+    //   let isOrderingPerson_exception = this.datasForm.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
+    //   let isOrdering_not_exception = this.datasForm.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3));
+
+    //   if (isOrderingPerson_exception.length > 0) {
+    //     let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
+    //     if (dataError_ordering) {
+    //       this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+    //       return false;
+    //     }
+    //   }
+
+    //   let isCheckOrdering = [];
+    //   for (const d of isOrderingPerson_exception) {
+    //     isCheckOrdering.push(d.ordering);
+    //   }
+    //   let maxOrderingException = Math.max.apply(Math, isCheckOrdering);
+    //   if (!maxOrderingException) {maxOrderingException = 0;}
+    //   if (isOrdering_not_exception.length > 0) {
+    //     // let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= isOrderingPerson_exception.length);
+
+    //     let dataError_ordering = isOrdering_not_exception.some((val: any) => val.ordering <= maxOrderingException);
+    //     if (dataError_ordering) {
+    //       this.getNotificationValid("Người ký với hình thức ký ảnh OTP hoặc eKYC cần thực hiện ký trước hình thức ký số!");
+    //       return false;
+    //     }
+    //   }
+    // }
+
+    // if (count > 0) {
+    //   return false;
+    // }
+    // return true;
+
     let count = 0;
     let dataArr = [];
-    dataArr = this.data_organization.recipients;
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
+
+    console.log("dataArr ", dataArr);
+
     for (let i = 0; i < dataArr.length; i++) {
       if (!dataArr[i].name) {
         this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!");
@@ -404,12 +782,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         count++;
         break;
       }
+
       if (dataArr[i].sign_type.length == 0 && dataArr[i].role != 2) {
         this.getNotificationValid("Vui lòng chọn loại ký của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
         count++;
         break;
       } else if (dataArr[i].sign_type.length > 0 && dataArr[i].role != 2) {
         let is_duplicate = [];
+        //check chu ky so
         is_duplicate = dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
         if (is_duplicate.length > 1) {
           this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
@@ -417,7 +797,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
           break;
         }
         is_duplicate = [];
-
         //check chu ky anh
         is_duplicate = dataArr[i].sign_type.filter((p: any) => p.id == 1 || p.id == 5);
         if (is_duplicate.length > 1) {
@@ -433,29 +812,57 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         count++;
         break;
       }
+
       if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 5).length > 0) {
         this.getNotificationValid("Vui lòng nhập CMT/CCCD của" + this.getNameObject(3) + "tổ chức của tôi!")
         count++;
         break;
       }
-      if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email)) {
-        this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
-        count++;
-        break;
+
+      if(dataArr[i].login_by == 'email') {
+        if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email)) {
+          this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+          count++;
+          break;
+        }
+      } else if(dataArr[i].login_by == 'phone') {
+        if (dataArr[i].email && !this.pattern.phone.test(dataArr[i].email)) {
+          this.getNotificationValid("SĐT của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+          count++;
+          break;
+        }
       }
+      
+
+      // valid phone number
       if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
         this.getNotificationValid("Số điện thoại của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
       }
-       // valid cccd number
-       if (dataArr[i].card_id && !this.pattern.card_id.test(dataArr[i].card_id)) {
+
+      // valid cccd number
+      if (dataArr[i].card_id && !this.pattern.card_id.test(dataArr[i].card_id) && dataArr[i].sign_type.filter((p: any) => p.id == 5).length > 0) {
         this.getNotificationValid("CMT/CCCD của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
       }
 
-      if(!dataArr[i].uid && (dataArr[i].role == 3 || dataArr[i].role == 4) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0) {
+      if (!dataArr[i].card_id && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0) {
+        console.log("vao day validate ");
+        console.log("data ", dataArr[i].card_id)
+        this.getNotificationValid("Vui lòng nhập mã số thuế của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
+        count++;
+        break;
+      }
+
+      if(dataArr[i].card_id && dataArr[i].role == 3 && !this.pattern_input.taxCode_form.test(dataArr[i].card_id) && dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0) {
+        this.getNotificationValid("Mã số thuế của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+        count++;
+        break;
+      }
+
+      if(!dataArr[i].card_id && (dataArr[i].role == 3 || dataArr[i].role == 4) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0) {
         this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(dataArr[i].role)+"tổ chức của tôi");
         count++;
         break;
@@ -466,39 +873,27 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         count++;
         break;
       }
-
-      if (!dataArr[i].tax_code && dataArr[i].role == 3 && dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0) {
-        this.getNotificationValid("Vui lòng nhập mã số thuế của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi!")
-        count++;
-        break;
-      }
-
-      if(dataArr[i].tax_code && dataArr[i].role == 3 && !this.pattern_input.taxCode_form.test(dataArr[i].tax_code)) {
-        this.getNotificationValid("Mã số thuế của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
-        count++;
-        break;
-      }
     }
 
+    console.log("count my org ",count);
     if (count == 0) {
-      if (this.getCheckDuplicateEmail('only_party_origanzation', dataArr)) {
+      const onlyPartOrg = 'only_party_origanzation';
+
+      if (this.getCheckDuplicateEmail(onlyPartOrg, dataArr)) {
         this.getNotificationValid("Email tổ chức của tôi không được trùng nhau!");
         return false
       }
-    }
 
-    if (count == 0) {
-      if (this.getCheckDuplicatePhone('only_party_origanzation', dataArr)) {
+      if (this.getCheckDuplicatePhone(onlyPartOrg, dataArr)) {
         this.getNotificationValid("Số điện thoại tổ chức của tôi không được trùng nhau!");
         return false
       }
-    }
 
-    if (count == 0) {
-      if (this.getCheckDuplicateCardId('only_party_origanzation', dataArr)) {
-        this.getNotificationValid("CMT/CCCD tổ chức của tôi không được trùng nhau!");
+      if (this.getCheckDuplicateCardId(onlyPartOrg, dataArr)) {
+        this.getNotificationValid("Mã số thuế/CMT/CCCD tổ chức của tôi không được trùng nhau!");
         return false
       }
+
     }
 
     let dataArrPartner = [];
@@ -508,11 +903,12 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       for (let j = 0; j < dataArrPartner.length; j++) {
         let isParterSort = (dataArrPartner[j].recipients).sort((beforeItemParter: any, afterItemParter: any) => beforeItemParter.role - afterItemParter.role);
         // if (isParterSort.length == 0) {
-        //     count++;
-        //     this.getNotificationValid("Không có người ký đối tác. Vui lòng chọn lại!");
-        //     break;
+        //   count++;
+        //   this.getNotificationValid("Vui lòng nhập người ký");
+        //   break;
         // }
         for (let k = 0; k < isParterSort.length; k++) {
+          //Tổ chức
           if (dataArrPartner[j].type != 3) {
             if (!dataArrPartner[j].name) {
               this.getNotificationValid("Vui lòng nhập tên của đối tác tổ chức!")
@@ -537,6 +933,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               break;
             } else if (isParterSort[k].sign_type.length > 0 && [3, 4].includes(isParterSort[k].role)) {
               let isPartnerOriganzationDuplicate = [];
+              //check chu ky so
               isPartnerOriganzationDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
               if (isPartnerOriganzationDuplicate.length > 1) {
                 this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(isParterSort[k].role) + "của đối tác!")
@@ -566,11 +963,20 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               break;
             }
 
-            if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email)) {
-              this.getNotificationValid("Email của" + this.getNameObject(3) + "của đối tác không hợp lệ!")
-              count++;
-              break;
+            if(isParterSort.login_by == 'email') {
+              if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email)) {
+                this.getNotificationValid("Email của" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
+                count++;
+                break;
+              }
+            } else if(isParterSort.login_by == 'phone') {
+              if (isParterSort[k].email && !this.pattern.phone.test(isParterSort[k].email)) {
+                this.getNotificationValid("Email của" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
+                count++;
+                break;
+              }
             }
+          
 
             // valid phone number
             if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone)) {
@@ -580,49 +986,48 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
             }
 
             // valid cccd number
-            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id)) {
+            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác không hợp lệ!")
               count++;
               break;
             }
 
-            if(!isParterSort[k].uid && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+            if(!isParterSort[k].card_id && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
               this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(isParterSort[k].role)+"tổ chức của đối tác");
               count++;
               break;
             }
-      
+
             if(isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id) && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
               this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(isParterSort[k].role) + "tổ chức của tôi không hợp lệ!");
               count++;
               break;
             }
 
-            if(!isParterSort[k].tax_code && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
+            if(!this.pattern.card_id.test(isParterSort[k].card_id)) {
+              console.log("cmt/cccd khong hop le");
+              console.log(isParterSort[k]);
+            }
+
+            if(!this.pattern_input.taxCode_form.test(isParterSort[k].card_id)) {
+              console.log("mst khong hop le");
+              
+            }
+
+            if(!isParterSort[k].card_id && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
               this.getNotificationValid("Vui lòng nhập mã số thuế của"+this.getNameObject(isParterSort[k].role)+"tổ chức của đối tác");
               count++;
               break;
             }
-      
-            if(isParterSort[k].tax_code && !this.pattern_input.taxCode_form.test(isParterSort[k].tax_code)) {
+
+            if(isParterSort[k].card_id && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
               this.getNotificationValid("Mã số thuế của" + this.getNameObject(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
               count++;
               break;
             }
-
-          } else if (dataArrPartner[j].type == 3) {
-            if(!isParterSort[k].uid && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
-              this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(isParterSort[k].role)+"của đối tác cá nhân");
-              count++;
-              break;
-            }
-      
-            if(isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id) && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
-              this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(isParterSort[k].role) + "tổ chức của tôi không hợp lệ!");
-              count++;
-              break;
-            }
-
+          }
+          //Cá nhân
+          else if (dataArrPartner[j].type == 3) {
             if (!isParterSort[k].name && isParterSort[k].role == 3) {
               this.getNotificationValid("Vui lòng nhập tên" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")
               count++;
@@ -640,6 +1045,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               break;
             } else if (isParterSort[k].sign_type.length > 0 && [3, 4].includes(isParterSort[k].role) && isParterSort[k].role == 3) {
               let isPartnerCaNhanDuplicate = [];
+              //check chu ky so
               isPartnerCaNhanDuplicate = isParterSort[k].sign_type.filter((p: any) => p.id == 2 || p.id == 3 || p.id == 4);
               if (isPartnerCaNhanDuplicate.length > 1) {
                 this.getNotificationValid("Vui lòng chỉ chọn 1 loại ký số" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân!")
@@ -655,12 +1061,33 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 break;
               }
               isPartnerCaNhanDuplicate = [];
+
+              if(!isParterSort[k].card_id && (isParterSort[k].role == 3 || isParterSort[k].role == 4) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+                this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(isParterSort[k].role)+"của đối tác cá nhân");
+                count++;
+                break;
+              }
+
+              if(isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id) && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+                this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(isParterSort[k].role) + "tổ chức của tôi không hợp lệ!");
+                count++;
+                break;
+              }
+
+              if(isParterSort[k].card_id && !this.pattern_input.taxCode_form.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
+                this.getNotificationValid("Mã số thuế của" + this.getNameObject(isParterSort[k].role) + "tổ chức của đối tác không hợp lệ!");
+                count++;
+                break;
+              }
+              
             }
 
-            if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
-              this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân!")
-              count++;
-              break;
+            if(isParterSort[k].login_by === 'email') {
+              if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
+                this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân!")
+                count++;
+                break;
+              }
             }
 
             if (!isParterSort[k].card_id && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
@@ -669,18 +1096,30 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               break;
             }
 
-            if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email) && isParterSort[k].role == 3) {
-              this.getNotificationValid("Email" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
-              count++;
-              break;
+            if(isParterSort[k].login_by === 'email') {
+              if (isParterSort[k].email && !this.pattern.email.test(isParterSort[k].email) && isParterSort[k].role == 3) {
+                this.getNotificationValid("Email" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
+                count++;
+                break;
+              }
+            } else if(isParterSort[k].login_by === 'phone') {
+              if (isParterSort[k].email && !this.pattern.phone.test(isParterSort[k].email) && isParterSort[k].role == 3) {
+                this.getNotificationValid("SĐT" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
+                count++;
+                break;
+              }
             }
+
+            // valid phone number
             if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone)) {
               this.getNotificationValid("Số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;
             }
-            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id)) {
-              this.getNotificationValid("CMT/CCCD" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
+
+            // valid cccd number
+            if (isParterSort[k].card_id && !this.pattern.card_id.test(isParterSort[k].card_id) && isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
+              this.getNotificationValid("Mã số thuế" + this.getNameObject(3) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;
             }
@@ -693,46 +1132,72 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     let isNameObj: any[] = [];
     for (const d of this.datasForm.is_determine_clone) {
       if (isNameObj.length > 0 && isNameObj.includes(d.name)) {
-        this.getNotificationValid("Trùng tên đối tác. Vui lòng kiểm tra lại.");
+        this.getNotificationValid("Trùng tên đối tác. Vui lòng kiểm tra lại!");
         return false;
       }
       isNameObj.push(d.name);
     }
 
     if (count == 0) {
-      // dataArrPartyCheckEmail = this.datasForm.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-      if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
-        this.getNotificationValid("Email đối tác không được trùng nhau!");
+      const onlyPartner = 'only_party_partner';
+      const allCheckEmail = 'allCheckEmail';
+
+      if (this.getCheckDuplicateEmail(onlyPartner, dataArrPartner)) {
+        this.getNotificationValid("Tên đăng nhập của đối tác không được trùng nhau!");
         return false
       }
-    }
 
-    if (count == 0) {
-      if (this.getCheckDuplicatePhone('only_party_partner', dataArrPartner)) {
-        this.getNotificationValid("Số điện thoại đối tác không được trùng nhau!");
+      if (this.getCheckDuplicatePhone(onlyPartner, dataArrPartner)) {
+        this.getNotificationValid("Số điện thoại của đối tác không được trùng nhau!");
         return false
       }
-    }
 
-    if (count == 0) {
-      if (this.getCheckDuplicateCardId('only_party_partner', dataArrPartner)) {
-        this.getNotificationValid("CMT/CCCD đối tác không được trùng nhau!");
+      if (this.getCheckDuplicateCardId(onlyPartner, dataArrPartner)) {
+        this.getNotificationValid("Mã số thuế/CMT/CCCD đối tác không được trùng nhau!");
         return false
       }
-    }
 
-    if (count == 0) {
-      if (this.getCheckDuplicateEmail('allCheckEmail', this.datasForm.is_determine_clone)) {
+      // if(this.getCheckDuplicateTaxCodeHsm(onlyPartner, dataArrPartner)) {
+      //   this.getNotificationValid("Mã số thuế của đối tác không được trùng nhau");
+      //   return false;
+      // }
+
+      // if(this.getCheckDuplicateTaxCodeUID(onlyPartner, dataArrPartner)) {
+      //   this.getNotificationValid("Thông tin trong usb token của đối tác không được trùng nhau");
+      //   return false;
+      // }
+
+      if (this.getCheckDuplicateEmail(allCheckEmail, this.datasForm.is_determine_clone)) {
         this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
         return false
       }
+
+      if (this.getCheckDuplicatePhone(allCheckEmail, this.datasForm.is_determine_clone)) {
+        this.getNotificationValid("Số điện thoại không được trùng nhau giữa các bên tham gia!");
+        return false
+      }
+
+      if (this.getCheckDuplicateCardId(allCheckEmail, this.datasForm.is_determine_clone)) {
+        this.getNotificationValid("Mã số thuế/CMT/CCCD không được trùng nhau giữa các bên tham gia!");
+        return false
+      }
+
+      // if(this.getCheckDuplicateTaxCodeHsm(allCheckEmail, this.datas.is_determine_clone)) {
+      //   this.getNotificationValid("Mã số thuế không được trùng nhau giữa các bên tham gia");
+      //   return false;
+      // }
+
+      // if(this.getCheckDuplicateTaxCodeUID(allCheckEmail, this.datas.is_determine_clone)) {
+      //   this.getNotificationValid("Thông tin trong usb token không được trùng nhau giữa các bên tham gia");
+      //   return false;
+      // }
     }
 
     if (count == 0) {
       //valid ordering cac ben doi tac - to chuc
       let isOrderingPerson_exception = this.datasForm.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
       let isOrdering_not_exception = this.datasForm.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3));
-
+      // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
       if (isOrderingPerson_exception.length > 0) {
         let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
         if (dataError_ordering) {

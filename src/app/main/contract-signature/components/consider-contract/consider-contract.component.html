@@ -120,10 +120,10 @@
     <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId"></app-display-digital-signature>
   </div>
 
-      <div style="margin:auto; width: 100%;padding: 10px">
+      <div style="margin:auto;padding: 10px">
         <pdf-viewer *ngIf="this.recipient.status != 2 && this.recipient.status != 3" [src]="pdfSrcMobile"
         [render-text]="true"
-        style="width: 98%; height: calc(100vh); overflow: hidden;"
+        style="width: 95%; height: calc(70vh); border: 1px;"
         [fit-to-page]="true"
         [show-borders]="true"
         ></pdf-viewer>

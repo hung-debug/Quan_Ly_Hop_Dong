@@ -662,6 +662,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         // console.log(this.signCurent)
 
         this.isEnableText = d.sign_unit == 'text';
+
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
         if (this.isEnableText) {
           this.objSignInfo.text_attribute_name = d.text_attribute_name

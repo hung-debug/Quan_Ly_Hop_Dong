@@ -250,6 +250,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             }
             // res.name = res.recipient.name;
             res.recipient.email = data_duplicate ? data_duplicate.recipient.email : res.recipient.email;
+            res.email = res.recipient.email;
             dataPosition.push(res);
           })
         } else {

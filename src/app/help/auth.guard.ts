@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     let role;
     // console.log(next);
-     //console.log(state.url);
+     console.log("type ",state.url.search('loginType'));
     //console
     //@ts-ignore
   

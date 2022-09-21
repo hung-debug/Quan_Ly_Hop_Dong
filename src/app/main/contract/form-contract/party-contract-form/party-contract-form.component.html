@@ -322,7 +322,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.uid" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -332,7 +332,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">Mã số thuế&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập mã số thuế' | translate}}" [(ngModel)]="d.tax_code" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'Nhập mã số thuế' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -580,7 +580,7 @@
                 <div class="participants__name" style="width: 90%">
                   <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div></div>
                   <div class="input-data">
-                    <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.uid" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
               </div>
@@ -1093,7 +1093,7 @@
                     <div class="participants__name" style="width: 90%">
                       <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div></div>
                       <div class="input-data">
-                        <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.uid" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                        <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
                   </div>
@@ -1103,7 +1103,7 @@
                     <div class="participants__name" style="width: 90%">
                       <div class="label_detail text-color">Mã số thuế&nbsp;<span class="required-title">*</span></div>
                       <div class="input-data">
-                        <input type="text" placeholder="{{'Nhập mã số thuế' | translate}}" [(ngModel)]="d.tax_code" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                        <input type="text" placeholder="{{'Nhập mã số thuế' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
                   </div>
@@ -1355,7 +1355,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.uid" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -1595,7 +1595,16 @@
                     <div class="participants__name" style="width: 90%">
                       <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div></div>
                       <div class="input-data">
-                        <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.uid" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                        <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
+                    <div class="participants__name" style="width: 90%">
+                      <div class="label_detail text-color">Mã số thuế&nbsp;<span class="required-title">*</span></div>
+                      <div class="input-data">
+                        <input type="text" placeholder="{{'Nhập mã số thuế' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
                   </div>
