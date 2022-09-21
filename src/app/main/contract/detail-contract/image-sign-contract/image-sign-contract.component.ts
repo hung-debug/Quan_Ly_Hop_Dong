@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 
 
 @Component({
-  selector: 'app-image-sign-contract-detail',
+  selector: '-detail',
   templateUrl: './image-sign-contract.component.html',
   styleUrls: ['./image-sign-contract.component.scss']
 })

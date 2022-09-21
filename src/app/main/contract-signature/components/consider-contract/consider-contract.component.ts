@@ -590,6 +590,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
+
+    console.log("d ",d);
+
     let style: any = {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
@@ -604,7 +607,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       style.height = parseInt(d['height']) + "px";
     }
 
-    return style;
+    if(d.sign_unit != 'so_tai_lieu')
+      return style;
+    else
+      return {
+        "display":"none"
+      }
   }
 
   // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
@@ -2281,7 +2289,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           username: result.username,
           password: result.password,
           password2: result.password2,
-          imageBase64: "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"
+          imageBase64: "null",
         }
 
         await this.signContractSubmit();
