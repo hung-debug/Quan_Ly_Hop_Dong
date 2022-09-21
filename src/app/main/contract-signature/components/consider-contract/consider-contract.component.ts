@@ -607,12 +607,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       style.height = parseInt(d['height']) + "px";
     }
 
-    if(d.sign_unit != 'so_tai_lieu')
+    // if(d.sign_unit != 'so_tai_lieu')
       return style;
-    else
-      return {
-        "display":"none"
-      }
+    // else
+    //   return {
+    //     "display":"none"
+    //   }
   }
 
   // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính

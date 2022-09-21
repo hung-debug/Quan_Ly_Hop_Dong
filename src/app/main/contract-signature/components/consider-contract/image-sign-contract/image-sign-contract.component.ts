@@ -209,6 +209,8 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   getText(sign: any) {
+
+    console.log("sign ",sign);
     console.log("datas ", this.datas);
     if (sign.sign_unit == 'text') {
       return 'Text';
@@ -217,7 +219,10 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
         return this.datas.is_data_contract.code;
       } else if (sign.value) {
         return sign.value;
-      } else return 'Số hợp đồng';
+      } else if(sign.valueSign) {
+        return sign.valueSign;
+      } 
+      return 'Số hợp đồng';
     }
   }
 }
