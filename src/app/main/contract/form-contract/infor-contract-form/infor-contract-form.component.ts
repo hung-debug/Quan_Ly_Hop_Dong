@@ -529,9 +529,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   }
 
   nextForm() {
-    for(let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
-      this.datasForm.is_determine_clone[i].id = null;
-    }
+    // for(let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
+    //   this.datasForm.is_determine_clone[i].id = null;
+    // }
 
     this.datasForm.isChangeForm = false;
     this.stepForm = variable.stepSampleContractForm.step2;

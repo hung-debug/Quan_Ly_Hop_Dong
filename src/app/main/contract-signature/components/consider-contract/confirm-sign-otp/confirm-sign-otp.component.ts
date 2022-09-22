@@ -104,17 +104,27 @@ export class ConfirmSignOtpComponent implements OnInit {
         if(!data.success){
           
           if(data.message == 'You have entered wrong otp 5 times in a row'){
-            this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(data.nextAttempt, "dd/MM/yyyy HH:mm"), "", 3000);
+            if(!this.mobile)
+              this.toastService.showErrorHTMLWithTimeout('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(data.nextAttempt, "dd/MM/yyyy HH:mm"), "", 3000);
+            else
+              alert('Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' + this.datepipe.transform(data.nextAttempt, "dd/MM/yyyy HH:mm"));
             this.dialog.closeAll();
             this.router.navigate(['/main/form-contract/detail/' + contract_id]);
           }else{
-            this.toastService.showErrorHTMLWithTimeout('Lỗi gửi OTP', "", 3000);
+
+            if(!this.mobile)
+              this.toastService.showErrorHTMLWithTimeout('Lỗi gửi OTP', "", 3000);
+            else
+              alert('Lỗi gửi OTP');
           }
         }
         this.count = 120;
         this.countTimeOtp();
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Có lỗi', "", 3000);
+        if(!this.mobile)
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi', "", 3000);
+        else
+          alert('Có lỗi');
       }
     )
   }
@@ -134,7 +144,7 @@ export class ConfirmSignOtpComponent implements OnInit {
       if(this.mobile) {
         return {
           'width':'100px',
-          'background-color': '#FCAF17'
+          'background-color': '#99968f'
         };
       } else {
         return {
@@ -142,7 +152,6 @@ export class ConfirmSignOtpComponent implements OnInit {
         }
       }
     }
-
   }
 
   async signContractSubmit() {

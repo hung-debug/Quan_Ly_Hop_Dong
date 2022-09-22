@@ -85,7 +85,7 @@ export class UnitService {
 
     console.log("body "+body);
 
-    return this.http.post<Unit>(this.addUnitUrl, body, {'headers': headers});
+    return this.http.post<any>(this.addUnitUrl, body, {'headers': headers});
   }
 
   updateUnit(datas: any) {

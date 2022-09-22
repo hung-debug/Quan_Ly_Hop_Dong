@@ -514,9 +514,9 @@ export class AddUnitComponent implements OnInit {
                     } else {
                         //them to chuc
                         this.unitService.addUnit(data).subscribe(
-                          dataUnit => {
+                          dataUnit1 => {
                             //this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
-                            console.log(dataUnit);
+                            console.log(dataUnit1);
                     
 
                             //them vai tro
@@ -531,23 +531,31 @@ export class AddUnitComponent implements OnInit {
                               name: 'Admin',
                               code: 'ADMIN',
                               selectedRole: roleArrConvert,
-                              organization_id: dataUnit.id
+                              organization_id: dataUnit1.id
                             }
                             console.log(dataRoleIn);
                             
-                            this.roleService.addRoleByOrg(dataRoleIn).subscribe(
-                              dataRole => {
-                                this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
-                                this.spinner.hide();
-                                this.dialogRef.close();
-                                this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                                  this.router.navigate(['/main/unit']);
-                                });
-                              }, error => {
-                                this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
+                            if(dataUnit1.id) {
+                              this.roleService.addRoleByOrg(dataRoleIn).subscribe(
+                                dataRole => {
+                                  this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
+                                  this.spinner.hide();
+                                  this.dialogRef.close();
+                                  this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                                    this.router.navigate(['/main/unit']);
+                                  });
+                                }, error => {
+                                  this.toastService.showErrorHTMLWithTimeout('Thêm mới vai trò cho tổ chức thất bại', "", 3000);
+                                  this.spinner.hide();
+                                }
+                              )
+                            } else {
+                              if(dataUnit1.errors[0].code == 1006) {
+                                this.toastService.showErrorHTMLWithTimeout('Mã số thuế đã tồn tại', "", 3000);
                                 this.spinner.hide();
                               }
-                            )
+                            }
+                        
                           }, error => {
                             this.toastService.showErrorHTMLWithTimeout('Thêm mới tổ chức thất bại', "", 3000);
                             this.spinner.hide();
