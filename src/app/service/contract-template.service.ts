@@ -87,6 +87,9 @@ export class ContractTemplateService {
       return this.http.put<any>(this.editInforContractTemplateUrl + id, body, { 'headers': headers }).pipe();
     } else if (actionGet == 'get-form-data') {
       return this.http.get<any>(this.addInforContractTemplateUrl + `/${id}`, { 'headers': headers }).pipe();
+
+            // return this.http.put<any>(this.editInforContractTemplateUrl + id, body, { 'headers': headers }).pipe();
+
     } else {
       return this.http.post<any>(this.addInforContractTemplateUrl, body, { 'headers': headers }).pipe();
     }

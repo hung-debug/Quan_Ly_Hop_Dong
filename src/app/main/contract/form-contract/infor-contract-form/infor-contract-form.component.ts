@@ -476,6 +476,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       // create new contract
       let is_create_error = false;
       let arrFile: any[] = [];
+
+      console.log("datasform contract id ", this.datasForm.contract_id);
+
       // api clone hợp đồng mẫu sang hợp đồng tạo mới => tạo hợp đồng
       await this.contractTemplateService.getFileContractFormClone(this.datasForm.template_contract_id, this.datasForm.contract_id).toPromise().then((res: any) => {
         let dataContractTemplate = res.filter((p: any) => p.type == 2 && p.status == 1)[0];
@@ -526,6 +529,10 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   }
 
   nextForm() {
+    for(let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
+      this.datasForm.is_determine_clone[i].id = null;
+    }
+
     this.datasForm.isChangeForm = false;
     this.stepForm = variable.stepSampleContractForm.step2;
     this.datasForm.stepFormLast = this.stepForm;

@@ -101,6 +101,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       this.datasForm.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
     }
 
+    console.log("init this datasform is determine clone ", this.datasForm.is_determine_clone);
+
     // data Tổ chức của tôi
     this.data_organization = this.datasForm.is_determine_clone.filter((p: any) => p.type == 1)[0];
     this.data_organization.name = this.datasForm.name_origanzation ? this.datasForm.name_origanzation : '';
@@ -187,6 +189,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   async getApiDetermine(is_save?: boolean) {
+    console.log("determine clone before ", this.datasForm.is_determine_clone);
+
     this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
       items.recipients.forEach((element: any) => {
         if (this.action != 'edit') {
@@ -205,8 +209,11 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
       if (items.type == 3)
         this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
+        this.datasForm.is_determine_clone[index].id = null;
     })
     this.spinner.show();
+
+    console.log("determine clone ", this.datasForm.is_determine_clone);
 
     this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
         this.getDataApiDetermine(res, is_save)
