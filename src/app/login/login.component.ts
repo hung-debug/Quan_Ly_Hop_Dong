@@ -22,6 +22,12 @@ export class LoginComponent implements OnInit {
   type: any = 0;
   deviceInfo: any;
 
+  contract_signatures: any = "c";
+  signatures: any = "s9";
+  consider: any = "c9";
+  secretary: any = "s8";
+  coordinates: any = "c8";
+
   constructor(
     private authService: AuthenticationService,
     private router: Router,
@@ -40,6 +46,7 @@ export class LoginComponent implements OnInit {
     username: new FormControl(''),
     password: new FormControl('')
   })
+
 
   loginUser() {
     if (this.loginForm.value.username == '') {
@@ -65,28 +72,29 @@ export class LoginComponent implements OnInit {
                 let url_check = urlLink.split("/")[urlLink.split("/").length - 1];
                 let isContractId = url_check.split("?")[0];
                 let isRecipientId = "";
-                if (url_check.includes("&")) {
-                  let data_contractId = url_check.split("&")[0];
+
+                if (url_check.includes(":")) {
+                  let data_contractId = url_check.split(":")[0];
                   let is_check_contractId = data_contractId.split("?")[url_check.split("?").length - 1];
                   isRecipientId = is_check_contractId.split("=")[is_check_contractId.split("=").length - 1];
                 } else {
                   let is_RecipientId = url_check.split("?")[url_check.split("?").length - 1];
                   isRecipientId = is_RecipientId.split("=")[is_RecipientId.split("=").length - 1];
                 }
-                if (urlLink.includes('coordinates')) {
-                  this.router.navigate(['main/contract-signature/coordinates/' + isContractId]);
-                } else if (urlLink.includes('consider')) {
-                  this.router.navigate(['/main/contract-signature/consider/' + isContractId],
+                if (urlLink.includes(this.coordinates)) {
+                  this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.coordinates+'/' + isContractId]);
+                } else if (urlLink.includes(this.consider)) {
+                  this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.consider+'/' + isContractId],
                     {
                       queryParams: {'recipientId': isRecipientId}
                     });
-                } else if (urlLink.includes('secretary')) {
-                  this.router.navigate(['main/contract-signature/secretary/' + isContractId],
+                } else if (urlLink.includes(this.secretary)) {
+                  this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.secretary+'/' + isContractId],
                     {
                       queryParams: {'recipientId': isRecipientId}
                     });
-                } else if (urlLink.includes('signatures')) {
-                  this.router.navigate(['/main/contract-signature/signatures/' + isContractId],
+                } else if (urlLink.includes(this.signatures)) {
+                  this.router.navigate(['/main/'+this.contract_signatures+'/'+this.signatures+'/' + isContractId],
                     {
                       queryParams: {'recipientId': isRecipientId}
                     });

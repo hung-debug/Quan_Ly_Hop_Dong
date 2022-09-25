@@ -21,6 +21,8 @@ export class AdminAuthenticationService {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
     const body = JSON.stringify({email: username.trim(), password: password});
 
+    console.log("body ", body);
+
     return this.http.post<any>(this.loginUrl, body, {'headers':headers})
       .pipe(
         map((user) => {

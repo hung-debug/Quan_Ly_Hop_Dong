@@ -6,7 +6,13 @@ import {DeviceDetectorService} from "ngx-device-detector";
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class AuthGuard implements CanActivate {
+
+  contract_signatures: any = "c";
+  kyTuCach: any = "&";
+
   constructor(
     private router: Router,
     private deviceService: DeviceDetectorService,
@@ -24,12 +30,12 @@ export class AuthGuard implements CanActivate {
     //console
     //@ts-ignore
   
-    if (state.url.search('type') > 0 && (next._urlSegment.segments.some((p: any) => p.path == 'contract-signature') || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
+    if (state.url.search('type') > 0 && (next._urlSegment.segments.some((p: any) => p.path == this.contract_signatures) || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
       //console.log(state.url);
-      console.log(!sessionStorage.getItem('url'), state.url.includes("mail"));
-      if (!sessionStorage.getItem('url') && state.url.includes("mail")) {
+      console.log(!sessionStorage.getItem('url'), state.url.includes(":mail"));
+      if (!sessionStorage.getItem('url') && state.url.includes(":mail")) {
         console.log(2);
-        let isCheckUrl = state.url.split("&mail=");
+        let isCheckUrl = state.url.split(":mail=");
         
         // sessionStorage.setItem('url', state.url);
         sessionStorage.setItem('url', isCheckUrl[0]);
@@ -58,7 +64,12 @@ export class AuthGuard implements CanActivate {
         sessionStorage.setItem('url', urlC ? urlC : '');
         sessionStorage.setItem('type', lt ? lt : '');
         sessionStorage.setItem('mail', isEmail ? isEmail : '');
-        if (next.queryParams.type && next.queryParams.type == 1) {
+
+        console.log("next.queryParams ", next.queryParams.type);
+        console.log("next query params ", next.queryParams);
+
+        if (next.queryParams.type && next.queryParams.type.includes('type=1')) {
+          console.log("vao day");
           this.router.navigate(['/login'],
             {
               queryParams: {'loginType': 1}

@@ -53,7 +53,7 @@ export class AddUnitComponent implements OnInit {
         fax: this.fbd.control(""),
         status: 1,
         parent_id: this.fbd.control("", [Validators.required]),
-        taxCode: this.fbd.control(""),
+        taxCode: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
       });
     }
 
@@ -84,7 +84,7 @@ export class AddUnitComponent implements OnInit {
             status: this.fbd.control(data.status),
             parent_id: this.fbd.control(data.parent_id),
             path: this.fbd.control(data.path),
-            taxCode: this.fbd.control(data.tax_code),
+            taxCode: this.fbd.control(data.tax_code,Validators.pattern(parttern_input.taxCode_form)),
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
@@ -122,7 +122,7 @@ export class AddUnitComponent implements OnInit {
         fax: this.fbd.control(""),
         status: 1,
         parent_id: this.fbd.control(orgId, [Validators.required]),
-        taxCode: this.fbd.control(""),
+        taxCode: this.fbd.control("",[Validators.pattern(parttern_input.taxCode_form)]),
       });
     }
   }
@@ -147,14 +147,27 @@ export class AddUnitComponent implements OnInit {
   update(data:any){
     this.unitService.updateUnit(data).subscribe(
       data => {
-        console.log("updat data ", data);
+        
+        if(data.id) {
+          console.log("updat data ", data);
 
-        this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
-        this.dialogRef.close();
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-          this.router.navigate(['/main/unit']);
-        });
-        this.spinner.hide();
+          this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
+          this.dialogRef.close();
+
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/unit']);
+          });
+          this.spinner.hide();
+          
+        } else {
+          if(data.errors[0].code == 1006) {
+            this.toastService.showErrorHTMLWithTimeout('Mã số thuế đã tồn tại', "", 3000);
+            this.spinner.hide();
+          }
+        }
+
+       
+     
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         this.spinner.hide();

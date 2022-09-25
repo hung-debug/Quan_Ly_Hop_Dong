@@ -32,13 +32,19 @@ import { AdminUserComponent } from './admin/admin-main/admin-user/admin-user.com
 import { AdminPackComponent } from './admin/admin-main/admin-pack/admin-pack.component';
 import { AdminInfoUserComponent } from './admin/admin-main/admin-user/admin-info-user/admin-info-user.component';
 
+const contract_signatures = "c";
+const signatures = "s9";
+const consider = "c9";
+const secretary = "s8";
+const coordinates = "c8";
+
 const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
   },
   {
-    path: 'contract-signature/signatures/:data',
+    path: contract_signatures+'/'+signatures+'/:data',
     data: {type: 'notAccess'},
     component: LoginComponent,
     canActivate: [AuthGuard]
@@ -101,7 +107,7 @@ const routes: Routes = [
         component: ContractComponent,
       },
       {
-        path: 'contract-signature',
+        path: contract_signatures,
         loadChildren: () => import('./main/contract-signature/contract-signature.module').then(m => m.ContractSignatureModule)
       },
       {
@@ -186,6 +192,7 @@ const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full',
   },
+  
   {path: '**', component: PageNotFoundComponent}
 ];
 

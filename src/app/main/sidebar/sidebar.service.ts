@@ -61,6 +61,9 @@ export class SidebarService {
   _hasBackgroundImage = true;
 
   subMenus: any = [];
+  
+  contract_signatures: any = "c";
+
   constructor(
     private userService: UserService,
     private roleService: RoleService,
@@ -347,17 +350,17 @@ export class SidebarService {
       {
         title: 'contract.status.wait-processing',
         active: false,
-        href: '/main/contract-signature/receive/wait-processing',
+        href: '/main/'+this.contract_signatures+'/receive/wait-processing',
       },
       {
         title: 'contract.status.processed',
         active: false,
-        href: '/main/contract-signature/receive/processed',
+        href: '/main/'+this.contract_signatures+'/receive/processed',
       },
       {
         title: 'contract.status.share',
         active: false,
-        href: '/main/contract-signature/receive/share',
+        href: '/main/'+this.contract_signatures+'/receive/share',
       }
     );
 

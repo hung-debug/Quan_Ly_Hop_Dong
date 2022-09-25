@@ -55,12 +55,17 @@ import { WebcamModule } from 'ngx-webcam';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
+const signatures = "s9";
+const consider = "c9";
+const secretary = "s8";
+const coordinates = "c8";
+
 export const contractSignatureRoutes: Routes = [
-  { path: 'consider/:id', component: ConsiderContractComponent },
-  { path: 'signatures/:id', component: ConsiderContractComponent },
+  { path: consider+'/:id', component: ConsiderContractComponent },
+  { path: signatures+'/:id', component: ConsiderContractComponent },
   // { path: 'receive/wait-processing/coordinates-contract/:id', component: CoordinatesContractComponent },
-  { path: 'coordinates/:id', component: IndexComponent },
-  { path: 'secretary/:id', component: ConsiderContractComponent },
+  { path: coordinates+'/:id', component: IndexComponent },
+  { path: secretary+'/:id', component: ConsiderContractComponent },
   { path: 'receive/:status', component: ContractSignatureComponent }
 ];
 

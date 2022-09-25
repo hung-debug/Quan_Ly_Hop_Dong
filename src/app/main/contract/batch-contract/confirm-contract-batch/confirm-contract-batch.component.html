@@ -103,7 +103,7 @@
              [ngClass]="changeColorDrag(null, d)"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
-          <app-image-sign-contract-detail  [datas]="datasBatch" [sign]="d"></app-image-sign-contract-detail>
+          <app-sign-contract  [datas]="datasBatch" [sign]="d"></app-sign-contract>
         </div>
       </div>
     </div>

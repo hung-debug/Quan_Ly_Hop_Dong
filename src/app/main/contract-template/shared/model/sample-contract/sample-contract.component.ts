@@ -102,6 +102,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
 
     console.log(this.datas.contract_user_sign);
+
+  
+
+    console.log("äfter ",this.datas.contract_user_sign);
+
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
@@ -111,6 +116,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.getDataSignUpdateAction();
       // if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractTemplateService.getDataFormatContractUserSign();
+
 
       // }
       this.setDataSignContract();
@@ -128,8 +134,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
     this.scale = 1;
     if (this.datas.is_determine_clone && this.datas.is_determine_clone.length > 0) {
+      console.log("b3 clone ", this.datas.is_determine_clone);
       let data_user_sign = [...this.datas.is_determine_clone];
       this.getListNameSign(data_user_sign);
+
+      console.log("data user sign ", data_user_sign);
     }
     if (!this.signCurent) {
       this.signCurent = {
@@ -221,8 +230,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     // console.log(this.datas)
 
-  }
+    console.log("final ",this.datas.contract_user_sign);
 
+    this.data_sign = this.datas.contract_user_sign;
+
+  }
+  data_sign: any;
   getDataSignUpdateAction() {
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
@@ -336,6 +349,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     console.log("dataDetermine");
     console.log(dataDetermine);
+
+    
+    // if(this.datas.contract_user_sign) {
+    //   this.datas.contract_user_sign[3].sign_config = this.datas.contract_user_sign[3].sign_config.filter((item: { recipient: { sign_type: { id: number; }[]; }; }) => item.recipient.sign_type[0].id != 5 && item.recipient.sign_type[0].id != 1)
+    //   this.datas.contract_user_sign[2].sign_config = this.datas.contract_user_sign[2].sign_config.filter((item: { recipient: { sign_type: { id: number; }[]; }; }) => item.recipient.sign_type[0].id != 2 && item.recipient.sign_type[0].id != 3 && item.recipient.sign_type[0].id != 4)
+    // }
+
     // lay du lieu vi tri va toa do ky cua buoc 3 da thao tac
     let dataContractUserSign: any[] = [];
     this.datas.contract_user_sign.forEach((res: any, index: number) => {
@@ -473,6 +493,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
+
+    console.log("list sign name ", this.list_sign_name);
     // this.listSignNameClone = JSON.parse(JSON.stringify(this.list_sign_name));
   }
 
@@ -521,6 +543,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
+    console.log("show event info ", this.data_sign);
+    console.log("show event info ", this.list_sign_name);
+
     let canvasElement: HTMLElement | null;
 
     if (event.relatedTarget && event.relatedTarget.id) {
@@ -626,6 +651,25 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
         let name_accept_signature = '';
         let field_data = [];
+
+        console.log("datas sign ", this.datas.contract_user_sign);
+
+        // if(this.router.url.includes("edit")) {
+        //   for(let i = 0; i < this.datas.contract_user_sign.length; i++) {
+        //     if(this.datas.contract_user_sign[i].sign_unit == 'chu_ky_so') {
+        //       for(let j = 0;j < this.datas.contract_user_sign[i].sign_config.length;j++) {
+        //         // if(!this.datas.contract_user_sign[i].sign_config.name) {
+        //         //   this.datas.contract_user_sign[i].sign_config
+  
+        //           // this.datas.contract_user_sign[i].sign_config = this.datas.contract_user_sign[i].sign_config.filter((item: { recipient: any; }) => item.recipient != null)
+  
+        //         // }
+        //       }
+        //     }
+        //   }
+        // }
+       
+
         // lay lai danh sach signer sau khi keo vao hop dong
         this.datas.contract_user_sign.forEach((res: any) => {
           if (res.sign_config.length > 0) {
@@ -716,13 +760,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // p.recipient_id == element.id && p.sign_unit == isSignType)
     console.log("isSignType");
     console.log(isSignType);
-    console.log(listSelect)
+    console.log(listSelect);
+
     this.list_sign_name.forEach((element: any) => {
       console.log(element);
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
-        //console.log("ba");
+        console.log("ba ", this.convertToSignConfig());
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
-        if (data.length > 0)
+
+        console.log("data ", data);
+        
+        if (data.length >= 0)
           element.is_disable = true;
         else element.is_disable = false;
         //element.is_disable = false;
@@ -751,6 +799,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       console.log("isSignType");
       console.log(recipient_id);
       console.log(element);
+      
+
       console.log(isSignType);
       if (recipient_id || listSelect) {
         console.log("element_ok");
@@ -1195,8 +1245,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
           arrSignConfig = arrSignConfig.concat(element.sign_config);
         }
-      } else arrSignConfig = arrSignConfig.concat(element.sign_config);
+      } else {
+        arrSignConfig = arrSignConfig.concat(element.sign_config);
+      } 
     })
+
+    console.log("arrSign config ", arrSignConfig);
     return arrSignConfig;
   }
 
@@ -1381,7 +1435,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       } else if (action == 'next_step') {
         this.step = variable.stepSampleContract.step4;
-        this.datas.stepLast = this.step
+        this.datas.stepLast = this.step;
+
+        
         this.nextOrPreviousStep(this.step);
       }
 

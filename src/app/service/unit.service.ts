@@ -106,10 +106,11 @@ export class UnitService {
       status: datas.status,
       parent_id: datas.parent_id,
       path: datas.path,
+      tax_code: datas.tax_code
     });
     console.log(headers);
     console.log("body update ",body);
-    return this.http.put<Unit>(this.updateUnitUrl + datas.id, body, {'headers': headers});
+    return this.http.put<any>(this.updateUnitUrl + datas.id, body, {'headers': headers});
   }
 
   getUnitById(id: any) {

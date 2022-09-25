@@ -194,6 +194,8 @@ export class ContractTemplateService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify(data_determine);
+
+    console.log("body ", body);
     return this.http.put<any>(this.editDetermineUrl + id, body, { 'headers': headers }).pipe();
   }
 

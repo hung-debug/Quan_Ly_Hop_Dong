@@ -59,6 +59,13 @@ export class ContractSignatureComponent implements OnInit {
 
   typeDisplay: string = "signOne";
 
+  contract_signatures: any = "c";
+  signatures: any = "s9";
+
+  consider: any = "c9";
+  secretary: any = "s8";
+  coordinates: any = "c8";
+
   constructor(private modalService: NgbModal,
               private appService: AppService,
               private contractServiceV1: ContractService,
@@ -305,7 +312,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openConsiderContract(item: any) {
-    this.router.navigate(['main/contract-signature/consider/' + item.contractId],
+    this.router.navigate(['main/c/c9/' + item.contractId],
       {
         queryParams: {'recipientId': item.id}
       }
@@ -318,7 +325,7 @@ export class ContractSignatureComponent implements OnInit {
 
   openConsiderContractViewProcesse(item: any) {
     if (item.status == 2) {
-      this.router.navigate(['main/contract-signature/receive/wait-processing/consider-contract/' + item.contractId],
+      this.router.navigate(['main/c/receive/wait-processing/consider-contract/' + item.contractId],
         {
           queryParams: {'recipientId': item.id}
         }
@@ -340,7 +347,7 @@ export class ContractSignatureComponent implements OnInit {
     this.contractServiceV1.getStatusSignImageOtp(item.id).subscribe(
       data => {
         if(!data.locked){
-          this.router.navigate(['main/contract-signature/signatures/' + item.contractId],
+          this.router.navigate(['main/'+this.contract_signatures+'/'+this.signatures+'/' + item.contractId],
           {
             queryParams: {'recipientId': item.id}
           });
@@ -361,7 +368,7 @@ export class ContractSignatureComponent implements OnInit {
         }
         // let data_coordination = {...this.datas, ...res};
         localStorage.setItem('data_coordinates_contract_id', JSON.stringify({data_coordinates_id: res.id}));
-        this.router.navigate(['main/contract-signature/coordinates/' + item.contractId]);
+        this.router.navigate(['main/c/coordinates/' + item.contractId]);
       }
     }, (res: any) => {
       alert('Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý!')
@@ -369,7 +376,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openSecretaryContract(item: any) {
-    this.router.navigate(['main/contract-signature/secretary/' + item.contractId],
+    this.router.navigate(['main/c/s8/' + item.contractId],
       {
         queryParams: {'recipientId': item.id}
       });
