@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 })
 export class AdminAuthenticationService {
 
-  loginUrl:any = `${environment.apiUrl}/api/v1/auth/admin`;
+  loginUrl:any = `${environment.apiUrl}/api/v1/admin/user/auth`;
   errorData:any = {};
   redirectUrl: string = '';
 

@@ -132,8 +132,13 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let isHaveFieldId: any[] = [];
       let isNotFieldId: any[] = [];
       let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
+
+      console.log("is user sign clone ",isUserSign_clone);
+
       isUserSign_clone.forEach((res: any) => {
         res.sign_config.forEach((element: any) => {
+          console.log("element ", element);
+          console.log("element ", element.id_have_data)
           if (element.id_have_data) {
             isHaveFieldId.push(element)
           } else isNotFieldId.push(element);
@@ -224,6 +229,9 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
       let countIsSignId = 0;
       this.spinner.show();
+
+      console.log("dataSignId ", dataSignId);
+
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
@@ -238,6 +246,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           break;
         }
       }
+
+    
       // this.spinner.hide();
     }
 
@@ -266,6 +276,9 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
           delete item[item_remove]
         })
       })
+
+      console.log("data sign not id ", dataSignNotId);
+
       // Array.prototype.push.apply(this.data_sample_contract, dataSignNotId);
       await this.contractTemplateService.getContractSample(dataSignNotId).toPromise().then((data) => {
         this.spinner.hide();

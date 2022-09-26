@@ -366,6 +366,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
 
+    console.log("before ", dataContractUserSign);
+
     // loc du lieu khong trung nhau
     // lay du lieu trung ten, trung email (doi voi ky so + ky text da gan nguoi xu ly) + trung ten (doi voi ky text chua co nguoi xu ly)
     // (val.recipient_id as any) == (data.id as any) &&
@@ -379,18 +381,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     ));
 
-
     // Get những dữ liệu còn lại khi thay đổi
     let dataDiffirent: any[] = [];
     if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
-      dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) =>
+      dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) => !data.id_have_data &&
         (val.sign_unit == "chu_ky_anh" && data.sign_type.some((p: any) => p.id == 1 || p.id == 5)) || (val.sign_unit == 'text') || (val.sign_unit == 'so_tai_lieu') ||
         (val.sign_unit == "chu_ky_so" && data.sign_type.some((p: any) => (p.id == 2 || p.id == 3 || p.id == 4))) ||
         val.name == data.name || (val.recipient ? val.recipient_id as any : val.email as any) == (val.recipient ? data.id as any : data.email as any)));
     }
 
     // xoa nhung du lieu doi tuong bi thay doi
-    console.log(dataContractUserSign);
+    console.log("after ",dataContractUserSign);
     console.log(dataDetermine);
     console.log(dataDiffirent);
     console.log(this.datas.contract_user_sign);
