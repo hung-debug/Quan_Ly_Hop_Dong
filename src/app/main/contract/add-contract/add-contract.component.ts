@@ -288,8 +288,6 @@ export class AddContractComponent implements OnInit {
   }
 
   getDataContractCreated(data: any) {
-    console.log("get data contract created ", data);
-
     let fileNameAttach = data.i_data_file_contract.filter(
       (p: any) => p.type == 3
     );
