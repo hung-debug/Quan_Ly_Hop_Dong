@@ -1935,10 +1935,17 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           async (result) => {
             if(result?.success == false){
               if(result.message == 'Wrong otp'){
-                this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng hoặc quá hạn', '', 3000);
+                if(!this.mobile)
+                  this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng hoặc quá hạn', '', 3000);
+                else
+                  alert('Mã OTP không đúng hoặc quá hạn');
                 this.spinner.hide();
               }else{
-                this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
+                if(!this.mobile) {
+                  this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
+                } else {
+                  alert('Ký hợp đồng không thành công');
+                }
                 this.spinner.hide();
               }
             }else{

@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
 import {DeviceDetectorService} from "ngx-device-detector";
+import { ContractService } from '../service/contract.service';
+import { isPdfFile } from 'pdfjs-dist';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,7 @@ export class AuthGuard implements CanActivate {
     private router: Router,
     private deviceService: DeviceDetectorService,
     private route: ActivatedRoute,
+    private contractService: ContractService,
   ) {
   }
 
@@ -25,17 +28,47 @@ export class AuthGuard implements CanActivate {
     // @ts-ignore
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     let role;
-    // console.log(next);
-     console.log("type ",state.url.search('loginType'));
+
+    //@ts-ignore
+     if(state.url.includes("handle")) {
+
+      let code = state.url.substring(8);
+
+      this.contractService.changeLink(code).subscribe((response) => {
+        let url = response.original_link;
+
+        // window.location.href = url;
+        let urlChange = "";
+        let count = 0;
+        let index = 0;
+        for(let i = 0; i < url.length; i++) {
+          if(url.charAt(i) == "/") {
+            count++;
+          }
+
+          if(count == 3) {
+            index = i;
+            break;
+          }
+        }
+
+        if(count = 3) {
+          urlChange = url.substring(index);
+        }
+
+        this.router.navigateByUrl(urlChange, { skipLocationChange: true });
+      })
+     } else
+
+
     //console
     //@ts-ignore
-  
     if (state.url.search('type') > 0 && (next._urlSegment.segments.some((p: any) => p.path == this.contract_signatures) || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
       //console.log(state.url);
-      console.log(!sessionStorage.getItem('url'), state.url.includes(":mail"));
-      if (!sessionStorage.getItem('url') && state.url.includes(":mail")) {
+      console.log(!sessionStorage.getItem('url'), state.url.includes(this.kyTuCach+"mail"));
+      if (!sessionStorage.getItem('url') && state.url.includes(this.kyTuCach+"mail")) {
         console.log(2);
-        let isCheckUrl = state.url.split(":mail=");
+        let isCheckUrl = state.url.split(this.kyTuCach+"mail=");
         
         // sessionStorage.setItem('url', state.url);
         sessionStorage.setItem('url', isCheckUrl[0]);
@@ -68,7 +101,7 @@ export class AuthGuard implements CanActivate {
         console.log("next.queryParams ", next.queryParams.type);
         console.log("next query params ", next.queryParams);
 
-        if (next.queryParams.type && next.queryParams.type.includes('type=1')) {
+        if (next.queryParams.type && next.queryParams.type == 1) {
           console.log("vao day");
           this.router.navigate(['/login'],
             {

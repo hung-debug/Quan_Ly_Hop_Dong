@@ -44,6 +44,12 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
+    path: 'handle/:data',
+    data: {type: 'notAccess'},
+    component: LoginComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: contract_signatures+'/'+signatures+'/:data',
     data: {type: 'notAccess'},
     component: LoginComponent,

@@ -56,8 +56,7 @@ export class ContractService {
   rejectContractUrl: any = `${environment.apiUrl}/api/v1/processes/reject/`;
   uploadFileUrl: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
   uploadFileBase64Url: any = `${environment.apiUrl}/api/v1/upload/organizations/`;
-  currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '')
-    .customer.info;
+  // currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   getNotifyOriganzation: any = `${environment.apiUrl}/api/v1/organizations/`;
   isDataDetermine: any = `${environment.apiUrl}/api/v1/participants/byRecipient/`;
   signDigitalMobi: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
@@ -104,6 +103,8 @@ export class ContractService {
   cccdFront: any = `http://ekyc2.mobifone.ai/v2/recognition`;
 
   detectFaceUrl: any = `http://ekyc2.mobifone.ai/v2/verification`;
+
+  changeLinkUrl: any = `${environment.apiUrl}/api/v1/handle/`;
 
   token: any;
   customer_id: any;
@@ -689,6 +690,15 @@ export class ContractService {
     return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
   }
 
+  changeLink(code: any) {
+   
+
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ');
+    return this.http.get<any>(this.changeLinkUrl+code,{ headers }).pipe();
+  }
+
   getContractDetermine(data_determine: any, id: any) {
     console.log('data_determine ', data_determine);
 
@@ -1086,8 +1096,10 @@ export class ContractService {
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
 
+    let currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+
     return this.http.post<File>(
-      this.uploadFileUrl + this.currentUser?.organizationId + `/single`,
+      this.uploadFileUrl + currentUser.organizationId + `/single`,
       formData,
       { headers: headers }
     );

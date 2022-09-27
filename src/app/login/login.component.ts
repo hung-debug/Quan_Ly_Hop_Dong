@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit {
     password: new FormControl('')
   })
 
+  kyTuCach: any = "&";
 
   loginUser() {
     if (this.loginForm.value.username == '') {
@@ -73,8 +74,8 @@ export class LoginComponent implements OnInit {
                 let isContractId = url_check.split("?")[0];
                 let isRecipientId = "";
 
-                if (url_check.includes(":")) {
-                  let data_contractId = url_check.split(":")[0];
+                if (url_check.includes(this.kyTuCach)) {
+                  let data_contractId = url_check.split(this.kyTuCach)[0];
                   let is_check_contractId = data_contractId.split("?")[url_check.split("?").length - 1];
                   isRecipientId = is_check_contractId.split("=")[is_check_contractId.split("=").length - 1];
                 } else {
@@ -162,6 +163,7 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
+    
 
     
     if (sessionStorage.getItem('type')) {

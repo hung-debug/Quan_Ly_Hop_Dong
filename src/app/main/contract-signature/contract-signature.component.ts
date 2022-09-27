@@ -368,7 +368,7 @@ export class ContractSignatureComponent implements OnInit {
         }
         // let data_coordination = {...this.datas, ...res};
         localStorage.setItem('data_coordinates_contract_id', JSON.stringify({data_coordinates_id: res.id}));
-        this.router.navigate(['main/c/coordinates/' + item.contractId]);
+        this.router.navigate(['main/c/'+this.coordinates +'/'+ item.contractId]);
       }
     }, (res: any) => {
       alert('Có lỗi! vui lòng liên hệ với nhà phát triển để xử lý!')
