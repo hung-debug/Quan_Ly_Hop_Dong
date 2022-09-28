@@ -58,13 +58,15 @@ export class AuthGuard implements CanActivate {
 
         this.router.navigateByUrl(urlChange, { skipLocationChange: true });
       })
-     } else
+     }
 
-
+    
     //console
     //@ts-ignore
+    console.log("next", next._urlSegment.segments.some((p: any) => p.path == 'form-contract'));
+    //@ts-ignore
     if (state.url.search('type') > 0 && (next._urlSegment.segments.some((p: any) => p.path == this.contract_signatures) || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
-      //console.log(state.url);
+      console.log("vao day");
       console.log(!sessionStorage.getItem('url'), state.url.includes(this.kyTuCach+"mail"));
       if (!sessionStorage.getItem('url') && state.url.includes(this.kyTuCach+"mail")) {
         console.log(2);
@@ -95,6 +97,8 @@ export class AuthGuard implements CanActivate {
         console.log(1);
         sessionStorage.clear();
         sessionStorage.setItem('url', urlC ? urlC : '');
+
+        console.log("lt ",lt);
         sessionStorage.setItem('type', lt ? lt : '');
         sessionStorage.setItem('mail', isEmail ? isEmail : '');
 

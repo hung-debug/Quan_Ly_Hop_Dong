@@ -150,10 +150,10 @@ export class AddContractComponent implements OnInit {
   isQLHD_11: boolean = true;
 
   ngOnInit() {
-    this.userService.checkServiceStatus().subscribe((response) => {
-      console.log("service response ",response);
+    // this.userService.checkServiceStatus().subscribe((response) => {
+      // console.log("service response ",response);
 
-      if (response.status == 'Using') {
+      // if (response.status == 'Using') {
         //title
         this.sub = this.route.params.subscribe((params) => {
           this.action = params['action'];
@@ -281,10 +281,10 @@ export class AddContractComponent implements OnInit {
             }
           }
         });
-      } else {
-        this.toastService.showErrorHTMLWithTimeout('Tổ chức chưa đăng ký sử dụng gói dịch vụ nào hoặc gói dịch vụ đã hết hạn','',3000);
-      }
-    });
+      // } else {
+      //   this.toastService.showErrorHTMLWithTimeout('Tổ chức chưa đăng ký sử dụng gói dịch vụ nào hoặc gói dịch vụ đã hết hạn','',3000);
+      // }
+    // });
   }
 
   getDataContractCreated(data: any) {
