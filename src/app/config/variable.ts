@@ -149,7 +149,7 @@ export const type_signature_doc_template = [
 export var networkList = [
   { id: 1, name: 'Mobifone' },
   { id: 2, name: 'Viettel' },
-  { id: 3, name: 'Vietnamobile' },
+  // { id: 3, name: 'Vietnamobile' },
 ];
 
 export var statusList = [
