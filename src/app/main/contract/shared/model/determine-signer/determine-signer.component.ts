@@ -179,22 +179,23 @@ export class DetermineSignerComponent implements OnInit {
 
   async getApiDetermine(is_save?: boolean) {
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
+
+      for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
+        this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.trim();
+        this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].phone.trim();
+      }
       
       if (items.type == 3)
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
 
-        // if(!this.datas.is_determine_clone[index].recipients.phone) {
-        //   this.datas.is_determine_clone[index].recipients.phone = this.datas.is_determine_clone[index].recipients.email;
-        // }
-
         for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
+          this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.trim();
+          this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].phone.trim();
           if(this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
             this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email;
           }
         }
 
-
-        // console.log("abc");
     })
     this.spinner.show();
   

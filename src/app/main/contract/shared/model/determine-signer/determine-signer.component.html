@@ -25,71 +25,6 @@
 
       <div class="contract__content--participants">
         <!-- to chuc cua toi - nguoi xem xet -->
-        <!-- <div class="participants-border">
-          <div class="label">{{'user.view' | translate}}</div>
-          <div class="participants--content" *ngFor="let d of getOriganzationReviewer(); let index = index">
-            <input [id]="'ordering-organzation-view-' + index" class="col-md-1 contract-total"
-              (focusout)="onChangeValue($event,'ordering-organzation-view-' + index)" style="width: 25px; height: 25px"
-              type="number" [(ngModel)]="d.ordering"
-              oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-              [disabled]="getOriganzationReviewer().length == 1">
-
-            <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
-
-              <div class="participants--input" style="display: flex">
-                <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img src="assets/img/icon_name.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
-                      (focusin)="onFocusIn($event, index, 'view')" (ngxInputSearch)="doTheSearch($event, index, 'view')"
-                      [(ngModel)]="d.name" (focusout)="onFocusOut($event, d)">
-                  </div>
-                  <div class="search-name"
-                    *ngIf="this.arrSearch[index] && this.arrSearchNameView && arrSearchNameView.length > 0">
-                    <button class="search-name-items" *ngFor="let t of this.arrSearchNameView"
-                      (click)="onSelectName(t, d)">{{t.name}} ({{t.email}})
-                    </button>
-                  </div>
-                </div>
-
-                <div class="participants__name">
-                  <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
-                  </div>
-                </div>
-
-                <div class="participants__name">
-                  <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.email">
-                  </div>
-                </div>
-              </div>
-
-              <!-- <div *ngIf="d.login_by === 'email'" class="participants--input" style="display: flex">
-                <div class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">Số điện thoại&nbsp;-&nbsp;<div style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
-                  <div class="input-data">
-                    <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
-                  </div>
-                </div>
-              </div> -->
-              
-            <!-- </div>
-            <div class="col-md-1 delete-element" (click)="deleteOriganzationReviewer(index)">
-              <img src="assets/img/border_close.svg" alt="close.vn">
-              <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
-            </div>
-          </div>
-          <div class="participants--add">
-            <u class="label text-color" (click)="addOriganzationReviewer()">{{'btn.add.user.view' | translate}}</u>
-          </div>
-        </div>  -->
-
         <div class="participants-border">
           <div class="label">{{'user.view' | translate}}</div>
           <div class="participants--content" *ngFor="let d of getOriganzationReviewer(); let index = index">
@@ -157,7 +92,7 @@
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
               <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại-->
-              <div class="participants--input" style="display: flex">
+              <!-- <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label_detail text-color">
 
@@ -179,7 +114,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
@@ -312,7 +247,7 @@
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
                 <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại-->
-                <div class="participants--input" style="display: flex">
+                <!-- <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
@@ -333,7 +268,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
 
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
@@ -534,60 +469,6 @@
           </div>
 
           <!-- doi tac - nguoi xem xet -->
-          <!-- <div class="participants-border">
-            <div class="label">{{'user.view' | translate}}</div>
-            <div class="participants--content" *ngFor="let d of getPartnerReviewer(item); let index = index">
-              <input [id]="'ordering-view-' + index" class="col-md-1 contract-total"
-                (focusout)="onChangeValue($event,'ordering-view-' + index)" style="width: 25px; height: 25px"
-                type="number" [(ngModel)]="d.ordering" [disabled]="getPartnerReviewer(item).length == 1"
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
-              <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column; margin-bottom: 14px">
-
-                <div class="participants--input">
-                  <div class="participants__name">
-                    <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
-                    <div class="input-data">
-                      <img src="assets/img/icon_name.svg" class="input-img">
-                      <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="d.name">
-                    </div>
-                  </div>
-                  <div *ngIf="d.login_by === 'email'" class="participants__name">
-                    <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
-                    <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
-                    </div>
-                  </div>
-
-                  <div *ngIf="d.login_by === 'phone'" class="participants__name">
-                    <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span></div>
-                    <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.email">
-                    </div>
-                  </div>
-                </div>
-
-                <div *ngIf="d.login_by === 'email'" class="participants--input" style="display: flex">
-                  <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">Số điện thoại&nbsp;-&nbsp;<div style="color: #ffc107;"> ({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
-                    <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-1 delete-element" (click)="deletePartnerReviewer(index, item, id)">
-                <img src="assets/img/border_close.svg" alt="close.vn">
-                <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
-              </div>
-            </div>
-            <div class="participants--add">
-              <u class="label text-color" (click)="addPartnerReviewer(item, id)">{{'btn.add.user.view' | translate}}</u>
-            </div>
-          </div> -->
-
           <div class="participants-border">
             <div class="label">{{'user.view' | translate}}</div>
             <div class="participants--content" *ngFor="let d of getPartnerReviewer(item); let index = index">
@@ -645,7 +526,7 @@
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
                   <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại-->
-                  <div class="participants--input" style="display: flex">
+                  <!-- <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
@@ -666,7 +547,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -791,7 +672,7 @@
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
                   <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại-->
-                  <div class="participants--input" style="display: flex">
+                  <!-- <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
@@ -812,7 +693,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -930,7 +811,7 @@
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column;margin-bottom: 14px">
 
                   <!--Chọn {{'typeOfSignEmail' | translate}} hoặc số điện thoại đối với người ký là cá nhân-->
-                  <div class="participants--input" style="display: flex">
+                  <!-- <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
@@ -951,7 +832,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">

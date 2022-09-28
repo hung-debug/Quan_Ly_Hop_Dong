@@ -193,6 +193,12 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
     this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
       items.recipients.forEach((element: any) => {
+
+        for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
+          this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.trim();
+          this.datasForm.is_determine_clone[index].recipients[i].phone = this.datasForm.is_determine_clone[index].recipients[i].phone.trim();
+        }
+
         if (this.action != 'edit') {
           // tạo mới hđ từ mẫu gán id = null
           if (!element.template_recipient_id) {
