@@ -25,22 +25,25 @@ export class ActionDeviceComponent implements OnInit {
       // let isUrl = sessionStorage.getItem('url');
       const urlQ = sessionStorage.getItem('url');
       const urlEmail = sessionStorage.getItem('recipientEmail');
-      if (urlQ && urlQ.includes('contract-signature/')) {
+      const urlEmail1 = sessionStorage.getItem('mail');
+
+      if (urlQ && (urlQ.includes('contract-signature/') || urlQ.includes('c/'))) {
         let role;
-        const urlQ1 = urlQ.split('contract-signature/')[1];
+        const urlQ1 = urlQ.split('contract-signature/')[1] || urlQ.split('c/')[1];
+
         const urlQ2 = urlQ1.split('/');
         const urlRole = urlQ2[0];
         const matchesNum = urlQ.match(/\d+/g);
 
         console.log("url role ", urlRole);
 
-        if (urlRole.includes('coordinates')) {
+        if (urlRole.includes('coordinates') || urlRole.includes('c8')) {
           role = 1;
-        } else if (urlRole.includes('consider')) {
+        } else if (urlRole.includes('consider') || urlRole.includes('c9')) {
           role = 2;
-        } else if (urlRole.includes('signatures')) {
+        } else if (urlRole.includes('signatures') || urlRole.includes('s9')) {
           role = 3;
-        } else if (urlRole.includes('secretary')) {
+        } else if (urlRole.includes('secretary') || urlRole.includes('s8')) {
           role = 4;
         }
         // if (matchesNum && matchesNum.length == 3) {
@@ -57,7 +60,7 @@ export class ActionDeviceComponent implements OnInit {
           }
           
 
-          if (urlEmail) {
+          if (urlEmail || urlEmail1) {
 
             window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}`;
 
@@ -75,7 +78,7 @@ export class ActionDeviceComponent implements OnInit {
 
         if(matchesNum){
 
-          if (urlEmail) {
+          if (urlEmail || urlEmail1) {
 
             window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}`;
 
@@ -100,7 +103,7 @@ export class ActionDeviceComponent implements OnInit {
 
           }
 
-          if (urlEmail) {
+          if (urlEmail || urlEmail1) {
 
             window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[2]}/${urlEmail}`;
 

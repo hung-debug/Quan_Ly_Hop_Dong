@@ -220,7 +220,7 @@ export class LoginComponent implements OnInit {
 
     console.log("type ", this.type);
 
-    if (this.type == 0 && (this.deviceService.isMobile() || this.deviceService.isTablet())) {
+    if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
 
       console.log(this.deviceService.isMobile(), this.deviceService.deviceType, this.deviceService);
       // @ts-ignore
