@@ -1853,7 +1853,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
                   if(!this.mobile) {
                     this.toastService.showSuccessHTMLWithTimeout(
-                      [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
+                      [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
                       , '', 3000);
                   } else {
                     if([3, 4].includes(this.datas.roleContractReceived)) {
