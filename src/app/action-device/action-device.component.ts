@@ -25,8 +25,18 @@ export class ActionDeviceComponent implements OnInit {
   nextApp() {
     // if (sessionStorage.getItem('url')) {
       // let isUrl = sessionStorage.getItem('url');
-      const urlQ = sessionStorage.getItem('url');
-      const urlEmail = sessionStorage.getItem('recipientEmail');
+
+      let urlQ = sessionStorage.getItem('url');
+
+      if(urlQ != null)
+        urlQ = urlQ.replace('c/','contract-signature/').replace('s9/','signatures/').replace('c9/','consider/').replace('s8/','secretary/').replace('c8','coordinates/')
+        .replace('&type','&loginType').replace('&mail','&recipientEmail');
+
+      console.log("urlQ ",urlQ);
+
+      const urlEmail = sessionStorage.getItem('recipientEmail') || sessionStorage.getItem('mail');
+
+
       if (urlQ && urlQ.includes('contract-signature/')) {
         let role;
         const urlQ1 = urlQ.split('contract-signature/')[1];
@@ -112,8 +122,8 @@ export class ActionDeviceComponent implements OnInit {
 
         }
 
-      }
-      else {
+      } 
+     else  {
         window.location.href = `econtract://app/login`;
       }
 
