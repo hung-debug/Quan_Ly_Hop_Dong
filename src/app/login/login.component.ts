@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
       this.error = true;
       this.errorDetail = "error.password.required";
     } else {
-      if (sessionStorage.getItem('type')) {
+      if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
         this.type = 1;
       } else 
         this.type = 0;
