@@ -27,7 +27,7 @@ export class ActionDeviceComponent implements OnInit {
       let urlQ = sessionStorage.getItem('url');
 
       if(urlQ != null)
-        urlQ = urlQ.replace('c/','contract-signature/').replace('s9/','signatures/').replace('c9/','consider/').replace('s8/','secretary/').replace('c8','coordinates/');
+        urlQ = urlQ.replace('c/','contract-signature/').replace('s9/','signatures/').replace('c9/','consider/').replace('s8/','secretary/').replace('c8/','coordinates/').replace('&mail','&recipientEmail').replace('&type','&loginType');
 
       console.log("urlQ ",urlQ);
 
