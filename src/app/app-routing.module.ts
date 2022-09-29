@@ -56,6 +56,12 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'contract-signature'+'/'+'signatures'+'/:data',
+    data: {type: 'notAccess'},
+    component: LoginComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'contract-template/form/detail/:data',
     data: {type: 'notAccess'},
     component: LoginComponent,
@@ -114,6 +120,10 @@ const routes: Routes = [
       },
       {
         path: contract_signatures,
+        loadChildren: () => import('./main/contract-signature/contract-signature.module').then(m => m.ContractSignatureModule)
+      },
+      {
+        path: 'contract-signature',
         loadChildren: () => import('./main/contract-signature/contract-signature.module').then(m => m.ContractSignatureModule)
       },
       {

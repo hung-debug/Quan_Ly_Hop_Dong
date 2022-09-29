@@ -103,6 +103,23 @@ export class LoginComponent implements OnInit {
                   this.router.navigate(['/main/contract-template/form/detail/' + isContractId]);
                 } else if (urlLink.includes('form-contract')) {
                   this.router.navigate(['/main/form-contract/detail/' + isContractId]);
+                } else   if (urlLink.includes('coordinates')) {
+                  this.router.navigate(['main/contract-signature/coordinates/' + isContractId]);
+                } else if (urlLink.includes('consider')) {
+                  this.router.navigate(['/main/contract-signature/consider/' + isContractId],
+                    {
+                      queryParams: {'recipientId': isRecipientId}
+                    });
+                } else if (urlLink.includes('secretary')) {
+                  this.router.navigate(['main/contract-signature/secretary/' + isContractId],
+                    {
+                      queryParams: {'recipientId': isRecipientId}
+                    });
+                } else if (urlLink.includes('signatures')) {
+                  this.router.navigate(['/main/contract-signature/signatures/' + isContractId],
+                    {
+                      queryParams: {'recipientId': isRecipientId}
+                    });
                 }
               } else {
                 this.error = false;
@@ -166,7 +183,7 @@ export class LoginComponent implements OnInit {
     
 
     
-    if (sessionStorage.getItem('type')) {
+    if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
       this.type = 1;
     } else this.type = 0;
 

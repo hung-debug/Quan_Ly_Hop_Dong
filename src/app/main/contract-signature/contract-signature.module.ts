@@ -69,6 +69,15 @@ export const contractSignatureRoutes: Routes = [
   { path: 'receive/:status', component: ContractSignatureComponent }
 ];
 
+export const contractSignatureRoutes1: Routes = [
+  { path: 'consider'+'/:id', component: ConsiderContractComponent },
+  { path: 'signatures'+'/:id', component: ConsiderContractComponent },
+  // { path: 'receive/wait-processing/coordinates-contract/:id', component: CoordinatesContractComponent },
+  { path: 'coordinates'+'/:id', component: IndexComponent },
+  { path: 'secretary'+'/:id', component: ConsiderContractComponent },
+  { path: 'receive/:status', component: ContractSignatureComponent }
+];
+
 @NgModule({
   declarations: [
     IndexComponent,
@@ -110,6 +119,7 @@ export const contractSignatureRoutes: Routes = [
     NgxPaginationModule,
     MdbTabsModule,
     RouterModule.forChild(contractSignatureRoutes),
+    RouterModule.forChild(contractSignatureRoutes1),
     ReactiveFormsModule,
     NgMultiSelectDropDownModule,
     // routing,
