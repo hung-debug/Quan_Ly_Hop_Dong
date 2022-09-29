@@ -20,6 +20,7 @@ export class ActionDeviceComponent implements OnInit {
 
   }
 
+  //window.location.href = `econtract://app/login`;
   nextApp() {
     // if (sessionStorage.getItem('url')) {
       // let isUrl = sessionStorage.getItem('url');
