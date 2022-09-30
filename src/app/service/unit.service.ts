@@ -165,12 +165,21 @@ export class UnitService {
     return this.http.get<any>(listUrl, {headers}).pipe();
   }
 
+  getNumberContractUseOriganzation(organization_id:any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listUrl = this.getNumberContractBuyOriganzationUrl + organization_id + '/service/total-used-items';
+    return this.http.get<any>(listUrl, {headers}).pipe();
+  }
+
   getNumberContractBuyOriganzation(organization_id:any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    let listUrl = this.getNumberContractBuyOriganzationUrl + organization_id + '/service/number-of-contracts';
+    let listUrl = this.getNumberContractBuyOriganzationUrl + organization_id + '/service/total-purchased-items';
     return this.http.get<any>(listUrl, {headers}).pipe();
   }
 

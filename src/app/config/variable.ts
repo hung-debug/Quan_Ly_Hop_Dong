@@ -32,11 +32,11 @@ export const type_signature = [
     name: "Ký eKYC",
     is_otp: false
   },
-  {
-    id: 4,
-    name: 'Ký số bằng HSM',
-    is_otp: false
-  },
+  // {
+  //   id: 4,
+  //   name: 'Ký số bằng HSM',
+  //   is_otp: false
+  // },
   {
     id: 2,
     name: 'Ký số bằng USB token',

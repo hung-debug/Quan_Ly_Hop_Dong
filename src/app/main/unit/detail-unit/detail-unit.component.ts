@@ -20,8 +20,17 @@ export class DetailUnitComponent implements OnInit {
   fax:any="";
   status:any="";
   parent_id:any="";
+
+  numContractUse: number = 0;
   numContractCreate:number= 0;
   numContractBuy:number= 0;
+
+  eKYCContractUse: number = 0;
+  eKYCContractBuy: number = 0;
+
+  smsContractUse: number = 0;
+  smsContractBuy: number = 0;
+
   taxCode: any = "";
   cEcAPushMode: any = "";
 
@@ -64,11 +73,25 @@ export class DetailUnitComponent implements OnInit {
           )
         }
 
-        //chi lay so luong hop dong mua khi chon to chuc cha to nhat
+        //chi lay so luong hop dong khi chon to chuc cha to nhat
         if(!data.parent_id){
+          //lay so luong hop dong da dung
+          this.unitService.getNumberContractUseOriganzation(this.data.id).toPromise().then(
+            data => {
+              this.numContractUse = data.contract;
+              this.eKYCContractUse = data.ekyc;
+              this.smsContractUse = data.sms;
+            }, error => {
+              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+            }
+          )
+          
+          //lay so luong hop dong da mua
           this.unitService.getNumberContractBuyOriganzation(this.data.id).toPromise().then(
             data => {
-              this.numContractBuy = data.total;
+              this.numContractBuy = data.contract;
+              this.eKYCContractBuy = data.ekyc;
+              this.smsContractBuy = data.sms;
             }, error => {
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
             }
