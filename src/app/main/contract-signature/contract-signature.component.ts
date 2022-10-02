@@ -20,6 +20,7 @@ import { DialogSignManyComponentComponent } from './dialog/dialog-sign-many-comp
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
 import { encode } from 'base64-arraybuffer';
+import domtoimage from 'dom-to-image';
 
 @Component({
   selector: 'app-contract',
@@ -494,7 +495,12 @@ export class ContractSignatureComponent implements OnInit {
             })
           }
 
-          let imageData = "";
+          let signI = "";
+              const imageRender = <HTMLElement>document.getElementById('export-html');
+              if (imageRender) {
+                const textSignB = await domtoimage.toPng(imageRender);
+                signI = textSignB.split(",")[1];
+              }
         
 
           //Lay thong tin cua usb token
@@ -511,7 +517,7 @@ export class ContractSignatureComponent implements OnInit {
 
                       //Gọi api ký usb token nhiều lần
                       for(let i = 0; i < fileC.length; i++) {
-                        let dataSignMobi: any = await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial, base64String[i], imageData, page[i],h[i], w[i],x[i], y[i]);
+                        let dataSignMobi: any = await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial, base64String[i], signI, page[i],h[i], w[i],x[i], y[i]);
 
                         if (!dataSignMobi.data.FileDataSigned) {
                           console.log("file data signed ");
