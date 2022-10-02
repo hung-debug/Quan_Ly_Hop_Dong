@@ -107,6 +107,7 @@ export class ContractService {
   changeLinkUrl: any = `${environment.apiUrl}/api/v1/handle/`;
 
   signManyUsbTokenUrl: any = `${environment.apiUrl}/api/v1/sign/multi/usb-token`;
+  signHsmMultiUrl: any = `${environment.apiUrl}/api/v1/sign/multi/hsm`;
 
   token: any;
   customer_id: any;
@@ -531,7 +532,6 @@ export class ContractService {
       .append('Sec-Fetch-Mode', 'cors')
       .append('Connection', 'keep-alive')
       .append('Sec-Fetch-Site', 'cross-site');
-    // return this.http.get<any>(this.getAccountSignDigital, {'headers': headers});
 
     console.log('get account sign digital ', this.getAccountSignDigital);
     return axios.get(this.getAccountSignDigital, config);
@@ -924,11 +924,28 @@ export class ContractService {
       image_base64: datas.imageBase64,
     });
 
-    console.log('body ', body);
-
     return this.http
       .post<any>(this.signHsmUrl + recipientId, body, { headers: headers })
       .toPromise();
+  }
+
+  signHsmMulti(hsmSignRequest: any, recipients: number[]) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+      const body = JSON.stringify({
+        recipients: recipients,
+        hsmSignRequest: hsmSignRequest
+      });
+
+      console.log("body ", body);
+  
+    return this.http
+        .post<any>(this.signHsmMultiUrl, body, { headers: headers })
+        .toPromise();
   }
 
   addDocumentAttach(datas: any) {
