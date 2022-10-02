@@ -9,7 +9,7 @@
     </div>
   </div>
 
-  <!-- <div *ngIf="filter_status == 1">
+  <div *ngIf="filter_status == 1">
     <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
       <button (click)="signMany()" class="btn btn-lg btn-block btn_submit">{{'Ký nhiều'| translate}}</button>
     </div>
@@ -18,7 +18,7 @@
       <button class="btn_submit" (click)="signManyContract()">{{'Ký'| translate}}</button>
       <button class="btn_submit" (click)="cancelSignMany()">{{'Huỷ'| translate}}</button>
     </div>
-  </div> -->
+  </div>
 
   <div class="row list_header" *ngIf="pageTotal > 0;">
 
@@ -28,6 +28,7 @@
     <div class="col-md-3">{{'action' | translate}}</div>
   </div>
 
+  <!--Danh sách tất cả hợp đồng cần ký-->
   <div *ngIf="this.typeDisplay === 'signOne'">
     <div class="item_contract"  *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
       <div *ngIf="filter_status == 1 || filter_status == 4">
@@ -174,19 +175,21 @@
     </div>
   </div>
 
+  <!--Danh sách tất cả hợp đồng có thể ký nhiều -->
   <div *ngIf="this.typeDisplay === 'signMany'">
-    <div class="item_contract"  *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
+    <div class="item_contract"  *ngFor="let item of contractsSignMany; let index1 = index">
       <div *ngIf="filter_status == 1 || filter_status == 4">
         <div class="row">
           <div class="col-md-5">
             <div class="row">
               <div class="col-md-1 calendar_create">
                 <div>
-                  <input type="checkbox"/>
+                  <input name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked"
+                  />
                 </div>
               </div>
               <div class="col-md-11">
-                  <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.contractName}}</div>
+                  <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
                   
                   <!--Cac ben ky-->
                   <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
@@ -221,7 +224,7 @@
                 <!--Loại ký-->
                 <div class="row">
                   <div *ngIf="this.filter_status === 1" class="col-md-11 item_contract_infor">{{'Loại ký' | translate}}:
-                    <span class="status_blue">{{item.typeOfSign}}</span>
+                    <span class="status_blue">{{item.sign_type[0].name}}</span>
                   </div>
                 </div>
               </div>

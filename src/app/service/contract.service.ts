@@ -106,6 +106,8 @@ export class ContractService {
 
   changeLinkUrl: any = `${environment.apiUrl}/api/v1/handle/`;
 
+  signManyUsbTokenUrl: any = `${environment.apiUrl}/api/v1/sign/multi/usb-token`;
+
   token: any;
   customer_id: any;
   organization_id: any;
@@ -349,6 +351,10 @@ export class ContractService {
       .pipe();
   }
 
+  public getContractMyProcessListSignMany() {
+
+  }
+
   addContractStep1(datas: any, id?: any, type_form?: string) {
     console.log('datas contract step 1 ', datas);
 
@@ -567,6 +573,8 @@ export class ContractService {
     })
   }
 
+  //signDigital = signCertDigital
+  //imgSignGen = imgSignGen
   postSignDigitalMobi(signCertDigital: any, imgSignGen: any) {
     console.log('signCertDigital ', signCertDigital);
 
@@ -610,12 +618,42 @@ export class ContractService {
       //algDigest: "SHA_256"
     };
 
-    console.log('dataPost ', dataPost);
+    return axios.post(this.postSignDigital, dataPost, config);
+    // console.log(datePost);
+    // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
+  }
+
+  postSignDigitalMobiMulti(serial: any, valueSignBase64: any,imageData: any,page: any, height: any, width: any,x: any,y: any) {
+
+    this.getCurrentUser();
+    let config = {
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Sec-Fetch-Mode': 'cors',
+        Connection: 'keep-alive',
+        'Sec-Fetch-Site': 'cross-site',
+      },
+    };
+    let dataPost = {
+      certSerial: serial,
+      fieldName: '',
+      fileData: valueSignBase64,
+      imageData: imageData,
+      page: page.toString(),
+      ph: Math.floor(height).toString(),
+      pw: Math.floor(width).toString(),
+      px: Math.floor(x).toString(),
+      py: Math.floor(y).toString(),
+      signDate: '11-05-2019 09:55:55',
+      typeSign: '4',
+      //algDigest: "SHA_256"
+    };
 
     return axios.post(this.postSignDigital, dataPost, config);
     // console.log(datePost);
     // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
   }
+
 
   getDataFileUrl(url: any) {
     const headers = new HttpHeaders().append(
@@ -681,6 +719,21 @@ export class ContractService {
       .toPromise();
   }
 
+  signManyUsbToken(fieldId: any[], digitalSign: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = {
+      fieldId:fieldId,
+      digitalSign:digitalSign
+    }
+    
+    return this.http.post<any>(this.signManyUsbTokenUrl,body,{ headers: headers }).pipe();
+  }
+
   getDataNotifyOriganzation() {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -691,8 +744,6 @@ export class ContractService {
   }
 
   changeLink(code: any) {
-   
-
     const headers = new HttpHeaders()
     .append('Content-Type', 'application/json')
     .append('Authorization', 'Bearer ');

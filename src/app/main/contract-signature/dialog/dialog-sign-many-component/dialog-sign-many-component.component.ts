@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dialog-sign-many-component',
@@ -7,13 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DialogSignManyComponentComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public dialog: MatDialog,
+    public dialogRef: MatDialogRef<DialogSignManyComponentComponent>,
+  ) { }
 
   ngOnInit(): void {
   }
 
   onSubmit() {
-    console.log("on submit ");
+    this.dialogRef.close(1);
   }
 
 }

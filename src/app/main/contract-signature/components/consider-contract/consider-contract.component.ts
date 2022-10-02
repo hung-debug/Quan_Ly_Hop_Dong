@@ -1906,10 +1906,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           }
           setTimeout(() => {
             this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
-            // this.toastService.showSuccessHTMLWithTimeout(
-            //   [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-            //   , '', 3000);
-
+        
             if(!this.mobile) {
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
