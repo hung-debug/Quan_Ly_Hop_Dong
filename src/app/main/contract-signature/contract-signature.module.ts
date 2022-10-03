@@ -71,6 +71,7 @@ export const contractSignatureRoutes: Routes = [
 
 @NgModule({
   declarations: [
+    DisplayDigitalSignatureComponent,
     IndexComponent,
     AddContractComponent,
     InforContractComponent,

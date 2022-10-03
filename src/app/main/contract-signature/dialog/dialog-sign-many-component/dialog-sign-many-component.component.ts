@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -8,6 +8,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogSignManyComponentComponent implements OnInit {
 
+  nameCompany: any = "Vũ Thị Thuỳ";
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<DialogSignManyComponentComponent>,

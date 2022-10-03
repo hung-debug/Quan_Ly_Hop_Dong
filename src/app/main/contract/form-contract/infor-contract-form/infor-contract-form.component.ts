@@ -304,7 +304,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
 
   validDataForm() {
-    console.log("datasform ", this.datasForm);
 
     if (!this.datasForm.template_contract_id) {
       this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn mẫu hợp đồng!", "", "3000");

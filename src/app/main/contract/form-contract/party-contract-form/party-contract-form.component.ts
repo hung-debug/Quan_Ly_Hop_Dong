@@ -101,8 +101,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       this.datasForm.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
     }
 
-    console.log("init this datasform is determine clone ", this.datasForm.is_determine_clone);
-
     // data Tổ chức của tôi
     this.data_organization = this.datasForm.is_determine_clone.filter((p: any) => p.type == 1)[0];
     this.data_organization.name = this.datasForm.name_origanzation ? this.datasForm.name_origanzation : '';

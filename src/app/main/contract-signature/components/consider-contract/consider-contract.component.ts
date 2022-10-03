@@ -467,9 +467,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngAfterViewInit() {
-
-    
-
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
@@ -528,15 +525,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       if(this.mobile)
         viewport = page.getViewport({scale: window.innerWidth/viewport.width})
 
-      // let viewport = page.getViewport({ scale: window.innerWidth/page.getViewport({scale:1}).width });
-
-      console.log("viewport ",viewport);
-
       let test = document.querySelector('.viewer-pdf');
 
-      // this.canvasWidth = viewport.width;
-
-      var resolution = 1;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
 
@@ -556,7 +546,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       page.render({ 
         canvasContext: ctx, 
         viewport: viewport,
-        transform: [resolution,0,0,resolution,0,0]
       });
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
@@ -590,8 +579,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
-
-    console.log("d ",d);
 
     let style: any = {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
@@ -1096,7 +1083,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
 
-            const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+            // const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+
+            const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
+            signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
 
             console.log("data sign mobi ", dataSignMobi);
 

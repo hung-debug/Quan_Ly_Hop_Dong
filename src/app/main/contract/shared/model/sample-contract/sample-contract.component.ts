@@ -888,21 +888,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
 
-    // var node = <HTMLElement> document.getElementById("element-drag");
-
-    // domtoimage.toPng(node)
-    // .then(function (dataUrl) {
-    //     var img = new Image();
-    //     img.src = dataUrl;
-    //     // document.body.appendChild(img);
-
-    //     console.log("img src ", img.src);
-    // })
-    // .catch(function (error) {
-    //   console.log(error);
-    //     console.error('oops, something went wrong!', error);
-    // });
-    
     //This gives us the page's dimensions at full scale
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
@@ -921,6 +906,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           height: viewport.height,
         });
       }
+
+      console.log("height ", viewport.height);
+
       page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;

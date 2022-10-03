@@ -618,6 +618,8 @@ export class ContractService {
       //algDigest: "SHA_256"
     };
 
+    console.log("body ",dataPost);
+
     return axios.post(this.postSignDigital, dataPost, config);
     // console.log(datePost);
     // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
@@ -639,7 +641,7 @@ export class ContractService {
       fieldName: '',
       fileData: valueSignBase64,
       imageData: imageData,
-      page: page.toString(),
+      page: page,
       ph: Math.floor(height).toString(),
       pw: Math.floor(width).toString(),
       px: Math.floor(x).toString(),
@@ -649,9 +651,10 @@ export class ContractService {
       //algDigest: "SHA_256"
     };
 
+    console.log("data post ", dataPost);
+
     return axios.post(this.postSignDigital, dataPost, config);
-    // console.log(datePost);
-    // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
+   
   }
 
 
@@ -751,7 +754,6 @@ export class ContractService {
   }
 
   getContractDetermine(data_determine: any, id: any) {
-    console.log('data_determine ', data_determine);
 
     this.getCurrentUser();
     const headers = new HttpHeaders()
