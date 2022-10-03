@@ -1517,6 +1517,7 @@ export class ContractService {
         recipients: [
           // Dữ liệu người xem xét
           {
+            login_by: 'email',
             name: '', // tên người tham gia
             email: '', // email người tham gia
             phone: '', // sđt người tham gia
@@ -1583,6 +1584,7 @@ export class ContractService {
           },
           // người xem xét
           {
+            login_by: 'email',
             name: '',
             email: '',
             phone: '',

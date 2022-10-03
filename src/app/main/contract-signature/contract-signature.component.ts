@@ -679,10 +679,12 @@ export class ContractSignatureComponent implements OnInit {
               if(countSuccess == checkSign.length) {
                 this.spinner.hide();
                 this.toastService.showSuccessHTMLWithTimeout("Ký số thành công","",3000);
-                this.router.navigate(
-                  ['main/c/receive/processed']
-                );
-                return;
+                
+                this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                  this.router.navigate(
+                    ['main/c/receive/processed']
+                  );
+                });
               }
         
             }
