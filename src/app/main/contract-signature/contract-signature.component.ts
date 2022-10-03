@@ -22,6 +22,8 @@ import Swal from 'sweetalert2';
 import { encode } from 'base64-arraybuffer';
 import domtoimage from 'dom-to-image';
 import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialog-sign/hsm-dialog-sign.component';
+import { of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contract',
@@ -531,11 +533,10 @@ export class ContractSignatureComponent implements OnInit {
                       console.log("name company ", this.nameCompany);
 
                       let signI = "";
-          
+                      
+                      await of(null).pipe(delay(100)).toPromise();
                       const imageRender = <HTMLElement>document.getElementById('export-html');
-                      console.log("image render ", imageRender);
                       if (imageRender) {
-                        console.log("image render ", imageRender);
                         const textSignB = await domtoimage.toPng(imageRender);
                         signI = textSignB.split(",")[1];
 
@@ -569,10 +570,13 @@ export class ContractSignatureComponent implements OnInit {
                         if(i == fileC.length - 1) {
                           this.spinner.hide();
                           this.toastService.showSuccessHTMLWithTimeout("Ký số thành công","",3000);
-                          this.router.navigate(
-                            ['main/c/receive/processed']
-                          );
-                          return;
+                         
+
+                          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                            this.router.navigate(
+                              ['main/c/receive/processed']
+                            );
+                          });
                         }
 
                       }
