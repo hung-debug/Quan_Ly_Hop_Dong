@@ -353,21 +353,25 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         let arr = this.convertToSignConfig();
         
         if(this.mobile) {
-          if(arr[0].recipient.sign_type[0].id == 5 || arr[0].recipient.sign_type[0].id == 1) {
-            image_base64 = chu_ky_anh;
-          } else {
-            image_base64 = chu_ky_so;
-          }
+          if(arr[0])
+            if(arr[0].recipient.sign_type[0].id == 5 || arr[0].recipient.sign_type[0].id == 1) {
+              image_base64 = chu_ky_anh;
+            } else {
+              image_base64 = chu_ky_so;
+            }
         }
 
         console.log("image_base64 ",image_base64); 
 
         if(this.mobile && this.recipient.status != 2 && this.recipient.status != 3) {
-          this.contractService.getFilePdfForMobile(this.recipientId, image_base64).subscribe((response) => {
+          if(image_base64)
+            this.contractService.getFilePdfForMobile(this.recipientId, image_base64).subscribe((response) => {
+              
+            this.pdfSrcMobile = response.filePath;
             
-          this.pdfSrcMobile = response.filePath;
-          
-          })
+            })
+          else
+            this.pdfSrcMobile = this.pdfSrc;
         } else {
           if(this.mobile) {
             setTimeout(() => {
