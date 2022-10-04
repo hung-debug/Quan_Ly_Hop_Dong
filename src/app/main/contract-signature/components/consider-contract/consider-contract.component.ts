@@ -2406,6 +2406,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   prepareInfoSignUsbToken(page: any, heightPage: any) {
+    console.log("current height 1 ", this.currentHeight);
+
     this.isDataObjectSignature.map((sign: any) => {
       if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
         && sign?.recipient?.email === this.currentUser.email
@@ -2413,7 +2415,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         && sign?.page == page) {
 
         sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
+
         sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
+        console.log("current height get ", this.currentHeight);
+        console.log("y ", sign.coordinate_y);
+        console.log("height page ", heightPage);
+
         sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
         sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
 
@@ -2441,6 +2448,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       }
     });
     this.currentHeight += heightPage;
+    console.log("current height 2 ", this.currentHeight);
   }
 
   mobile: boolean = false;

@@ -23,6 +23,8 @@
     <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
       
       <div class="row">
+
+        <!--Cột 1-->
         <div class="col-md-5">
           <div class="row">
             <div class="col-md-12 item_contract_name" (click)="isQLHD_07?openDetail(item.id):null">{{item.name}}</div>
@@ -36,10 +38,13 @@
             </div>
           </div>
         </div>
+
+        <!--Cột 2: Ngày tạo-->
         <div class="col-md-2 calendar_create">
           <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span></div>
         </div>
 
+        <!--Cột 3: Ngày hết hạn ký-->
         <div class="col-md-2 calendar_deadline">
           <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span></div>
         </div>
