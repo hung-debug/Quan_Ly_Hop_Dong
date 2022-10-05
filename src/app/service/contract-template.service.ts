@@ -336,6 +336,7 @@ export class ContractTemplateService {
         "recipients": [
           // Dữ liệu người xem xét
           {
+            login_by: 'email',
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
@@ -351,6 +352,7 @@ export class ContractTemplateService {
           },
           // Dữ liệu người ký
           {
+            login_by: 'email',
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
@@ -406,6 +408,7 @@ export class ContractTemplateService {
           },
           // người xem xét
           {
+            login_by: 'email',
             "name": "",
             "email": "",
             "phone": "",
@@ -420,6 +423,7 @@ export class ContractTemplateService {
           },
           // người ký
           {
+            login_by: 'email',
             "name": "",
             "email": "",
             "phone": "",
@@ -482,6 +486,7 @@ export class ContractTemplateService {
         status: 1,
         "recipients": [
           {
+            login_by: 'email',
             "name": "",
             "email": "",
             "phone": "",
@@ -502,6 +507,7 @@ export class ContractTemplateService {
         status: 1,
         "recipients": [
           {
+            login_by: 'email',
             "name": "Người ký 1",
             "email": "",
             "phone": "",

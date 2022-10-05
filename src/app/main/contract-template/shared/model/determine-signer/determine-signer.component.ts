@@ -68,6 +68,9 @@ export class DetermineSignerComponent implements OnInit {
   is_change_party: boolean = false;
   isListSignNotPerson: any = [];
 
+  email: string="email";
+  phone: string="phone";
+
   get determineContract() {
     return this.determineDetails.controls;
   }
@@ -118,6 +121,14 @@ export class DetermineSignerComponent implements OnInit {
     };
 
     if (this.datas.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
+  }
+
+  changeTypeSign(d: any) {
+    if(d.login_by == 'phone') {
+      d.email = '';
+    }
+
+    console.log("d ",d);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

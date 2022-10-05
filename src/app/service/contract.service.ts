@@ -613,12 +613,14 @@ export class ContractService {
           ? signCertDigital.signDigitalY
           : signCertDigital.coordinate_y
       ).toString(),
+
+      
       signDate: '11-05-2019 09:55:55',
       typeSign: '4',
       //algDigest: "SHA_256"
     };
 
-    console.log("body ",dataPost);
+    console.log("body sign ",dataPost);
 
     return axios.post(this.postSignDigital, dataPost, config);
     // console.log(datePost);
@@ -1093,7 +1095,7 @@ export class ContractService {
       name: 'contract_' + new Date().getTime() + '.pdf',
       content: 'data:application/pdf,' + base64,
     };
-    console.log(headers);
+    console.log("body update ", body);
     return this.http
       .put<any>(this.signDigitalMobi + id, body, { headers: headers })
       .toPromise();
