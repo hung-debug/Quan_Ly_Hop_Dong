@@ -368,5 +368,9 @@
   "contract_number_already_exist": "contract number already exist!",
   "notify_have_not_sign_acc": "You don't have a signed photo from your account!",
   "contract_processing_flow": "Contract processing flow",
-  "not_search_file_attach": "Attached file not found, please check again!"
+  "not_search_file_attach": "Attached file not found, please check again!",
+  "typeOfSignEmail":"Đăng nhập bằng email",
+  "typeOfSignPhone":"Đăng nhập bằng số điện thoại",
+  "success_sign":"Ký hợp đồng thành công",
+  "success_watch":"Xem xét hợp đồng thành công"
 }
