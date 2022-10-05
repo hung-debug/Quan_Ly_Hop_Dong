@@ -353,21 +353,25 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         let arr = this.convertToSignConfig();
         
         if(this.mobile) {
-          if(arr[0].recipient.sign_type[0].id == 5 || arr[0].recipient.sign_type[0].id == 1) {
-            image_base64 = chu_ky_anh;
-          } else {
-            image_base64 = chu_ky_so;
-          }
+          if(arr[0])
+            if(arr[0].recipient.sign_type[0].id == 5 || arr[0].recipient.sign_type[0].id == 1) {
+              image_base64 = chu_ky_anh;
+            } else {
+              image_base64 = chu_ky_so;
+            }
         }
 
         console.log("image_base64 ",image_base64); 
 
         if(this.mobile && this.recipient.status != 2 && this.recipient.status != 3) {
-          this.contractService.getFilePdfForMobile(this.recipientId, image_base64).subscribe((response) => {
+          if(image_base64)
+            this.contractService.getFilePdfForMobile(this.recipientId, image_base64).subscribe((response) => {
+              
+            this.pdfSrcMobile = response.filePath;
             
-          this.pdfSrcMobile = response.filePath;
-          
-          })
+            })
+          else
+            this.pdfSrcMobile = this.pdfSrc;
         } else {
           if(this.mobile) {
             setTimeout(() => {
@@ -442,6 +446,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
 
+
         // canvas.style.transform = 'scale(2,2)';
 
         // canvas.style.paddingLeft = '15px';
@@ -452,6 +457,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         if (viewer) {
           viewer.appendChild(canvas);
         }
+        // console.log("page ", page);
         this.renderPage(page, canvas);
       }
     }).then(() => {
@@ -467,9 +473,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngAfterViewInit() {
-
-    
-
     setTimeout(() => {
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
@@ -487,6 +490,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     this.eventMouseover();
   }
 
+  page: any;
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
   setPosition() {
     console.log("this convert to sign config ", this.convertToSignConfig())
@@ -520,6 +524,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
+
     //This gives us the page's dimensions at full scale
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
@@ -528,21 +533,17 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       if(this.mobile)
         viewport = page.getViewport({scale: window.innerWidth/viewport.width})
 
-      // let viewport = page.getViewport({ scale: window.innerWidth/page.getViewport({scale:1}).width });
-
-      console.log("viewport ",viewport);
-
       let test = document.querySelector('.viewer-pdf');
 
-      // this.canvasWidth = viewport.width;
-
-      var resolution = 1;
+      this.canvasWidth = viewport.width;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
 
-      var ctx = canvas.getContext('2d');
-  
       this.prepareInfoSignUsbToken(pageNumber, canvas.height);
+
+
+      // var ctx = canvas.getContext('2d');
+      
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
       if (!_objPage) {
         this.objPdfProperties.pages.push({
@@ -552,11 +553,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         });
       }
 
-
       page.render({ 
-        canvasContext: ctx, 
+        canvasContext: canvas.getContext('2d'), 
         viewport: viewport,
-        transform: [resolution,0,0,resolution,0,0]
       });
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
@@ -591,8 +590,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
 
-    console.log("d ",d);
-
     let style: any = {
       "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       "position": "absolute",
@@ -607,12 +604,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       style.height = parseInt(d['height']) + "px";
     }
 
-    // if(d.sign_unit != 'so_tai_lieu')
-      return style;
-    // else
-    //   return {
-    //     "display":"none"
-    //   }
+    return style;
   }
 
   // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính
@@ -834,8 +826,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     console.log("counterKYC ", counteKYC);
 
     if(counteKYC > 0){
-      this.toastService.showWarningHTMLWithTimeout("Vui lòng thực hiện ký eKYC trên ứng dụng điện thoại!", "", 3000);
-      return;
+      if(this.confirmSignature == 1) {
+        this.eKYC = true;
+        this.eKYCSignOpen();
+        return;
+      }
     }
     if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng', '', 3000);
@@ -1053,7 +1048,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     if (typeSignDigital == 2) {
 
       if (this.signCertDigital && this.signCertDigital.Serial) {
-        // this.signCertDigital = resSignDigital.data;
         for (const signUpdate of this.isDataObjectSignature) {
           if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 1 || signUpdate.type == 4) && [3, 4].includes(this.datas.roleContractReceived)
             && signUpdate?.recipient?.email === this.currentUser.email
@@ -1101,6 +1095,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
             const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
 
+            // const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
+            // signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
+
             console.log("data sign mobi ", dataSignMobi);
 
             if (!dataSignMobi.data.FileDataSigned) {
@@ -1109,6 +1106,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
               return false;
             }
+
             const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
             if (!sign.recipient_id) {
               console.log("recipent_id")
@@ -1299,6 +1297,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       }
 
     } else if(typeSignDigital == 4) {
+      //Ký hsm
       const objSign = this.isDataObjectSignature.filter((signUpdate: any) => (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
       && signUpdate?.recipient?.email === this.currentUser.email
       && signUpdate?.recipient?.role === this.datas?.roleContractReceived));
@@ -1316,9 +1315,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
       if (fileC && objSign.length) {
         
-        console.log("hsm ", this.dataHsm);
         const checkSign = await this.contractService.signHsm(this.dataHsm, this.recipientId);;
-        console.log(checkSign);
 
         if (!checkSign || (checkSign && !checkSign.success)) {
           
@@ -1494,16 +1491,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         signI = textSignB.split(",")[1];
       }
 
-      //console.log(signI);
-      //console.log(this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'));
-
       console.log("sign update temp ", signUpdateTemp);
 
       signUpdatePayload = signUpdateTemp.filter(
         (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
         .map((item: any) => {
-          // console.log("item ", item);
-          console.log("data otp ",this.dataOTP);
           if(this.dataOTP) {
             return {
               otp: this.dataOTP.otp,
@@ -1545,9 +1537,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       }
     }
 
-    console.log("type sign digital ", typeSignDigital);
-
     if (typeSignDigital && typeSignDigital == 2) {
+      //Đối với ký usb token
       let checkSetupTool = false;
 
       this.contractService.getAllAccountsDigital().then(async (data) => {
@@ -1795,10 +1786,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     if(signUpdatePayload){
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
 
-      console.log("sign update temp ", signUpdateTempN);
-
       if (notContainSignImage) {
-        console.log("sign image c not contain sign image ");
         signDigitalStatus = await this.signDigitalDocument();
 
         if(this.eKYC == false) {
@@ -1821,7 +1809,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                     
           const valueBase64 = (await textSignB).split(",")[1];
 
-          console.log("value base64 ", valueBase64);
 
           const formData = {
                 "name": "image_" + new Date().getTime() + ".jpg",
@@ -1833,16 +1820,11 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             // signUpdateTempN.value = responseBase64.file_object.file_path;
             signUpdateTempN[0].value = responseBase64.file_object.file_path;
 
-            console.log("sign update temp in api ", signUpdateTempN);
-
-            console.log("ko phai ky anh ");
-
             console.log(signUpdateTempN);
       
             this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
               async (result) => {
                 if (!notContainSignImage) {
-                  console.log("update info contract consider ");
                   await this.signDigitalDocument();
                 }
                 setTimeout(() => {
@@ -1853,7 +1835,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
                   if(!this.mobile) {
                     this.toastService.showSuccessHTMLWithTimeout(
-                      [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+                      [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
                       , '', 3000);
                   } else {
                     if([3, 4].includes(this.datas.roleContractReceived)) {
@@ -1903,10 +1885,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           }
           setTimeout(() => {
             this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
-            // this.toastService.showSuccessHTMLWithTimeout(
-            //   [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-            //   , '', 3000);
-
+        
             if(!this.mobile) {
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
@@ -1947,6 +1926,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               }
             }else{
               if (!notContainSignImage) {
+                //Ký số
                 await this.signDigitalDocument();
               }
               setTimeout(() => {
@@ -2432,60 +2412,78 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     this.signContractSubmit();
   }
 
+  count: number = 0;
   prepareInfoSignUsbToken(page: any, heightPage: any) {
+    this.count++;
+    console.log("page ", this.pageNumber);
     this.isDataObjectSignature.map((sign: any) => {
       if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
         && sign?.recipient?.email === this.currentUser.email
         && sign?.recipient?.role === this.datas?.roleContractReceived
-        && sign?.page == page) {
-
-        sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
-        sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
-        sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
-        sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
-
-        console.log("sign recipient_id ",sign.recipient_id);
-
-        //Lấy thông tin mã số thuế của đối tác ký 
-        this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
-
-          console.log("sign rec ", sign.recipient_id);
-
-          console.log("vao day ");
-          const lengthRes = response.recipients.length;
-          for(let i = 0; i < lengthRes; i++) {
-
-            console.log("vao vong for ");
-
-            const id = response.recipients[i].id;
-
-            if(id == sign.recipient_id) {
-              console.log("vao doan check ");
-
-              console.log("res f ", response.recipients[i].fields[0]);
-              this.taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
-              console.log("tax code ", this.taxCodePartnerStep2);
-
-              break;
-            }
-          }
-        })
-
-        return sign;
-      } else {
-        return sign;
-      }
+        && sign?.page > page) {
+          this.currentHeight += heightPage;
+        }
     });
-    this.currentHeight += heightPage;
+
+    if(this.count == this.pageNumber) {
+      this.isDataObjectSignature.map((sign: any) => {
+        if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
+          && sign?.recipient?.email === this.currentUser.email
+          && sign?.recipient?.role === this.datas?.roleContractReceived) {
+          
+              sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
+              sign.signDigitalY = (sign.coordinate_y - this.currentHeight)+(heightPage/2 - sign.coordinate_y + this.currentHeight)*2 - 0.75*sign.height/* * this.ratioPDF*/;
+      
+              console.log("current height get ", this.currentHeight);
+              console.log("sign coordinate y ", sign.coordinate_y);
+              console.log("height page ", heightPage);
+              console.log("y real ", sign.signDigitalY);
+
+      
+              sign.signDigitalWidth = sign.coordinate_x + sign.width;
+              sign.signDigitalHeight = sign.signDigitalY + sign.height;
+            
+        
+  
+          // sign.signDigitalY = sign.coordinate_y/* * this.ratioPDF*/;
+  
+          // sign.signDigitalWidth = sign.width/* * this.ratioPDF*/;
+          // sign.signDigitalHeight = sign.height/* * this.ratioPDF*/;
+  
+          //Lấy thông tin mã số thuế của đối tác ký 
+          this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
+  
+            const lengthRes = response.recipients.length;
+            for(let i = 0; i < lengthRes; i++) {
+  
+              console.log("vao vong for ");
+  
+              const id = response.recipients[i].id;
+  
+              if(id == sign.recipient_id) {
+                this.taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
+  
+                break;
+              }
+            }
+          })
+  
+  
+          return sign;
+        } else {
+          return sign;
+        }
+      });
+    
+    }
+  
   }
 
   mobile: boolean = false;
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
-      console.log("la mobile ");
       this.mobile = true;
     } else {
-      console.log("la pc");
       this.mobile = false;
     }
   }
@@ -2494,3 +2492,4 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 }
 
 
+1
