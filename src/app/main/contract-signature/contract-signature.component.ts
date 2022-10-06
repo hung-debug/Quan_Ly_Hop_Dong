@@ -174,7 +174,7 @@ export class ContractSignatureComponent implements OnInit {
           this.contracts[v].contractCecaPush = key.participant.contract.ceca_push;
           this.contracts[v].contractCecaStatus = key.participant.contract.ceca_status;
           this.contracts[v].contractReleaseState = key.participant.contract.release_state;
-          this.contracts[v].typeOfSign = key.sign_type[0].name; 
+          // this.contracts[v].typeOfSign = key.sign_type[0].name; 
         });
       });
     }else {
