@@ -52,10 +52,17 @@
     </div>
 
     <div class="row" style="padding-top: 10px">
-      <div class="col-md-6">
+      <!-- <div class="col-md-6">
         <div class="label_item">{{ "unit.fax" | translate }}</div>
         <div>
           <div [innerHTML]="fax" class="input_text"></div>
+        </div>
+      </div> -->
+
+      <div class="col-md-6">
+        <div class="label_item">{{ "Mã số thuế" | translate }}</div>
+        <div>
+          <div [innerHTML]="taxCode" class="input_text"></div>
         </div>
       </div>
 
@@ -69,16 +76,13 @@
       </div>
     </div>
 
-    <div class="row" style="padding-top: 10px">
-      <div class="col-md-6">
-        <div class="label_item">{{ "Mã số thuế" | translate }}</div>
-        <div>
-          <div [innerHTML]="taxCode" class="input_text"></div>
-        </div>
+    <div class="row" style="padding-top: 2px">
+      <div class="header">
+        <h3 class="label-header">{{ "THÔNG TIN GÓI CƯỚC" | translate }}</h3>
       </div>
     </div>
 
-    <div class="row" style="padding-top: 10px">
+    <div class="row">
       <div class="col-md-6">
         <div class="label_item">
           {{ "Số lượng hợp đồng đã sử dụng: " | translate }}
