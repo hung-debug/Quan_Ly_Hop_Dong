@@ -585,11 +585,7 @@ export class ContractService {
       fileData: signCertDigital.valueSignBase64,
       imageData: imgSignGen ? imgSignGen : this.imageMobiBase64,
       page: signCertDigital.page.toString(),
-      ph: Math.floor(
-        signCertDigital.signDigitalHeight
-          ? signCertDigital.signDigitalHeight
-          : signCertDigital.height
-      ).toString(),
+      ph: signCertDigital.signDigitalHeight.toString(),
       pw: Math.floor(
         signCertDigital.signDigitalWidth
           ? signCertDigital.signDigitalWidth
@@ -600,11 +596,7 @@ export class ContractService {
           ? signCertDigital.signDigitalX
           : signCertDigital.coordinate_x
       ).toString(),
-      py: Math.floor(
-        signCertDigital.signDigitalY
-          ? signCertDigital.signDigitalY
-          : signCertDigital.coordinate_y
-      ).toString(),
+      py: signCertDigital.signDigitalY.toString(),
       signDate: '11-05-2019 09:55:55',
       typeSign: '4',
       //algDigest: "SHA_256"

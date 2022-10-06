@@ -530,6 +530,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     this.thePDF.getPage(pageNumber).then((page) => {
       let viewport = page.getViewport({ scale: this.scale });
 
+      console.log("viewport ", viewport);
+
       if(this.mobile)
         viewport = page.getViewport({scale: window.innerWidth/viewport.width})
 
@@ -1835,7 +1837,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
                   if(!this.mobile) {
                     this.toastService.showSuccessHTMLWithTimeout(
-                      [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
+                      [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
                       , '', 3000);
                   } else {
                     if([3, 4].includes(this.datas.roleContractReceived)) {
@@ -1888,7 +1890,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         
             if(!this.mobile) {
               this.toastService.showSuccessHTMLWithTimeout(
-                [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
+                [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
                 , '', 3000);
             } else {
               if([3, 4].includes(this.datas.roleContractReceived)) {
@@ -1937,7 +1939,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
                 if(!this.mobile) {
                   this.toastService.showSuccessHTMLWithTimeout(
-                    [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
+                    [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
                     , '', 3000);
                 } else {
                   if([3, 4].includes(this.datas.roleContractReceived)) {
@@ -2432,17 +2434,24 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           && sign?.recipient?.role === this.datas?.roleContractReceived) {
           
               sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
+              console.log("height page ", heightPage/2);
               sign.signDigitalY = (sign.coordinate_y - this.currentHeight)+(heightPage/2 - sign.coordinate_y + this.currentHeight)*2 - 0.75*sign.height/* * this.ratioPDF*/;
       
-              console.log("current height get ", this.currentHeight);
-              console.log("sign coordinate y ", sign.coordinate_y);
-              console.log("height page ", heightPage);
-              console.log("y real ", sign.signDigitalY);
+              // console.log("current height get ", this.currentHeight);
+              // console.log("sign coordinate y ", sign.coordinate_y);
+              // console.log("height page ", heightPage);
+              // console.log("y real ", sign.signDigitalY);
 
       
               sign.signDigitalWidth = sign.coordinate_x + sign.width;
               sign.signDigitalHeight = sign.signDigitalY + sign.height;
-            
+
+
+              // sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
+              // sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
+              // sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
+              // sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
+      
         
   
           // sign.signDigitalY = sign.coordinate_y/* * this.ratioPDF*/;

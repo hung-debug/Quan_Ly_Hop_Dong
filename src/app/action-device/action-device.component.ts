@@ -21,13 +21,24 @@ export class ActionDeviceComponent implements OnInit {
   }
 
   //window.location.href = `econtract://app/login`;
+
   nextApp() {
     // if (sessionStorage.getItem('url')) {
       // let isUrl = sessionStorage.getItem('url');
+
       let urlQ = sessionStorage.getItem('url');
+      let domain = window.location.origin;
+
+      domain = domain.replace('http://','').replace('https://','');
+
+      console.log("router ", window.location.origin);
+
+      console.log("doamin ", domain);
+
 
       if(urlQ != null)
-        urlQ = urlQ.replace('c/','contract-signature/').replace('s9/','signatures/').replace('c9/','consider/').replace('s8/','secretary/').replace('c8/','coordinates/').replace('&mail','&recipientEmail').replace('&type','&loginType');
+        urlQ = urlQ.replace('c/','contract-signature/').replace('s9/','signatures/').replace('c9/','consider/').replace('s8/','secretary/').replace('c8','coordinates/')
+        .replace('&type','&loginType').replace('&mail','&recipientEmail');
 
       console.log("urlQ ",urlQ);
 
@@ -40,6 +51,7 @@ export class ActionDeviceComponent implements OnInit {
         const urlQ2 = urlQ1.split('/');
         const urlRole = urlQ2[0];
         const matchesNum = urlQ.match(/\d+/g);
+
 
         console.log("url role ", urlRole);
 
@@ -68,11 +80,11 @@ export class ActionDeviceComponent implements OnInit {
 
           if (urlEmail) {
 
-            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}`;
+            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}/${domain}`;
 
           } else
           
-          window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}`;
+            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${domain}`;
           // console.log(`econtract://app/login/${matchesNum[0]}/${matchesNum[1]}/${role}/${matchesNum[2]}/${urlEmail}`);
           
         }
@@ -86,17 +98,17 @@ export class ActionDeviceComponent implements OnInit {
 
           if (urlEmail) {
 
-            window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}`;
+            window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}/${domain}`;
 
           } else
 
-            window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}`;
+            window.location.href = `econtract://app/login/${matchesNum[0]}/_/_/MAU_HD/${urlEmail}/${domain}`;
 
         }
       } else if(urlQ && urlQ.includes('form-contract')){
 
         const matchesNum = urlQ.match(/\d+/g);
-
+        
         let isLogin = 'loginNotdefine';
 
         if(matchesNum){
@@ -111,11 +123,11 @@ export class ActionDeviceComponent implements OnInit {
 
           if (urlEmail) {
 
-            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[2]}/${urlEmail}`;
+            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[2]}/${urlEmail}/${domain}`;
 
           } else
 
-           window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[2]}`;
+           window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[2]}/${domain}`;
 
         }
 
@@ -124,7 +136,7 @@ export class ActionDeviceComponent implements OnInit {
         window.location.href = `econtract://app/login`;
       }
 
-    
+    // }
   }
 
   downloadApp() {
@@ -136,3 +148,4 @@ export class ActionDeviceComponent implements OnInit {
   }
 
 }
+1
