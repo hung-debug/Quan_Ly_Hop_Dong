@@ -108,6 +108,7 @@ export class ContractService {
 
   signManyUsbTokenUrl: any = `${environment.apiUrl}/api/v1/sign/multi/usb-token`;
   signHsmMultiUrl: any = `${environment.apiUrl}/api/v1/sign/multi/hsm`;
+  infoPageUrl: any = `${environment.apiUrl}/api/v1/sign/multi/usb-token/page-info/?documentId=`
 
   token: any;
   customer_id: any;
@@ -1401,6 +1402,15 @@ export class ContractService {
         headers: headers,
       })
       .pipe();
+  }
+
+  getInfoPage(documentId: number) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.get<any>(this.infoPageUrl + documentId,{headers: headers}).pipe();
   }
 
   objDefaultSampleContract() {

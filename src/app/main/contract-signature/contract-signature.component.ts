@@ -148,6 +148,7 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
+  documentId: any = []
   signMany() {
     this.typeDisplay = 'signMany';
 
@@ -187,6 +188,9 @@ export class ContractSignatureComponent implements OnInit {
             key.participant.contract.release_state;
           this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
           this.contractsSignMany[v].checked = false;
+
+          //Gan document id
+          this.contractsSignMany[v].documentId = key.fields[0].documentId;
         });
       });
   }
@@ -408,6 +412,7 @@ export class ContractSignatureComponent implements OnInit {
     let subscribe: any = [];
     let idContract: any = [];
     let fileC: any = [];
+    let documentId: any = [];
 
     //Lấy id đã tick
     //2: usb token
@@ -428,6 +433,7 @@ export class ContractSignatureComponent implements OnInit {
       idContract = contractsSignManyChecked
         .filter((opt) => opt.checked)
         .map((opt) => opt.participant.contract.id);
+      documentId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.fields[0].documentId)
 
       //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
       for (let i = 0; i < recipientId.length; i++) {
@@ -442,6 +448,8 @@ export class ContractSignatureComponent implements OnInit {
             }
           });
       }
+
+      console.log("document id ", documentId);
 
       //Lấy ra url của các hợp đồng cần ký
       for(let i = 0; i < idContract.length; i++) {
@@ -480,13 +488,15 @@ export class ContractSignatureComponent implements OnInit {
           this.spinner.show();          
 
           //ky bang usb token
-
           let base64String: any = [];
           let x: any = [];
           let y: any = [];
           let h: any = [];
           let w: any = [];
           let page: any = [];
+          let currentHeight: any = [];
+          let tempY: any = [];
+          let tempH: any = [];
   
           for(let i = 0; i < fileC.length; i++) {
             //get base64 from url
@@ -497,21 +507,29 @@ export class ContractSignatureComponent implements OnInit {
             this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).subscribe((response) => {
               console.log("sig ", response);
               for(let j = 0; j < response.length; j++) {
-                if(recipientId[i] = response[j].recipient.id) {
+                console.log("recipient id ", recipientId);
+                if(recipientId[i] == response[j].recipient.id) {
                   x.push(response[j].coordinate_x);
                   y.push(response[j].coordinate_y);
                   h.push(response[j].height);
                   w.push(response[j].width);
+
+                  //Lấy ra trang ký của từng file hợp đồng
                   page.push(response[j].page);
                 }
               }
             })
+
+              //Lấy thông tin page của từng hợp đồng
+            this.contractServiceV1.getInfoPage(documentId[i]).subscribe((response) => {
+              if(response.page < page[i]) {
+                currentHeight[i] += response[i].height;
+              }
+            })
           }
 
-          // sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
-          // sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
-          // sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
-          // sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
+          
+          console.log("y ", y[0]);
 
         
 
@@ -539,15 +557,33 @@ export class ContractSignatureComponent implements OnInit {
                       if (imageRender) {
                         const textSignB = await domtoimage.toPng(imageRender);
                         signI = textSignB.split(",")[1];
-
-                        console.log("textSignB ", textSignB);
                       }
+
+                      //Lấy chiều dài của các trang trong các hợp đồng ký
+
                       
 
                       //Gọi api ký usb token nhiều lần
                       for(let i = 0; i < fileC.length; i++) {
 
                         console.log("base64Strin ", base64String[i]);
+                        w[i] = x[i] + w[i];
+
+                        // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
+                        console.log("h i ", h[i]);
+                        tempY[i] = y[i];
+                        y[i] = y[i] - currentHeight[i]+(page[i]/2 - y[i] + currentHeight[i])*2 - 0.75*h[i];
+
+                        tempH[i] = h[i];
+                        h[i] = y[i] + h[i];
+
+                        if(!y[i]) {
+                          y[i] = tempY[i];
+                        } 
+                        if(!h[i]) {
+                          h[i] = tempH[i];
+                        }
+
                         let dataSignMobi: any = await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial, base64String[i], signI, page[i],h[i], w[i],x[i], y[i]);
 
                         console.log("data sign mobi ", dataSignMobi);

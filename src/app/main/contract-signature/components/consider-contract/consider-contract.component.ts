@@ -160,6 +160,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   sessionIdUsbToken: any;
 
   domain: any = `https://127.0.0.1:14424/`;
+  pageText: any = [];
+  countText: number = 0;
 
   constructor(
     private contractService: ContractService,
@@ -222,6 +224,21 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       this.isDataContract = rs[0];
       this.isDataFileContract = rs[1];
       this.isDataObjectSignature = rs[2];
+
+      this.isDataObjectSignature.map((sign: any) => {
+        console.log('text sign ', sign);
+        if (
+          sign.type == 1 &&
+          sign?.recipient?.email === this.currentUser.email
+        ) {
+          this.pageText.push(sign.page);
+          this.countText++;
+          console.log('count text ', this.countText);
+          console.log('page ', this.pageText);
+        }
+      });
+
+
       if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
         this.valid = true;
       }
@@ -1098,6 +1115,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             // const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
             // signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
 
+            console.log("this datas zzzzzz ", this.datas);
+
             console.log("data sign mobi ", dataSignMobi);
 
             if (!dataSignMobi.data.FileDataSigned) {
@@ -1106,6 +1125,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
               return false;
             }
+
+            //Kiểm tra hợp đồng ma recipient id ky có gán ô text hay ô số hợp đồng không
+            //Nếu có gọi thêm api gán ô text, số hợp đồng vào file pdf
+            //Input: base64,x,y,w,h
 
             const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
             if (!sign.recipient_id) {
@@ -2415,9 +2438,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   count: number = 0;
   prepareInfoSignUsbToken(page: any, heightPage: any) {
     this.count++;
-    console.log("page ", this.pageNumber);
+    console.log("page ", this.countText);
     this.isDataObjectSignature.map((sign: any) => {
-      if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
+      if ((sign.type == 3 )
         && sign?.recipient?.email === this.currentUser.email
         && sign?.recipient?.role === this.datas?.roleContractReceived
         && sign?.page > page) {
@@ -2427,7 +2450,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
     if(this.count == this.pageNumber) {
       this.isDataObjectSignature.map((sign: any) => {
-        if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
+        if ((sign.type == 3)
           && sign?.recipient?.email === this.currentUser.email
           && sign?.recipient?.role === this.datas?.roleContractReceived) {
           
