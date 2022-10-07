@@ -2580,12 +2580,13 @@ export class ConsiderContractComponent
         localStorage.getItem('currentUser') || ''
       ).customer.info;
       this.userService.getUserById(this.currentUser.id).subscribe((data) => {
+        console.log("data o day ", data);
         const itemNameNetwork = nl.find((nc: any) => nc.id == data.phone_tel);
         this.signInfoPKIU.phone = data.phone_sign;
         this.signInfoPKIU.phone_tel = data.phone_tel;
         this.signInfoPKIU.networkCode =
-          itemNameNetwork && itemNameNetwork.name
-            ? itemNameNetwork.name.toLowerCase()
+          itemNameNetwork && itemNameNetwork.id
+            ? itemNameNetwork.id.toLowerCase()
             : null;
       });
     }

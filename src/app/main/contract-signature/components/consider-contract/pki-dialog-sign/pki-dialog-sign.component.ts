@@ -74,13 +74,17 @@ export class PkiDialogSignComponent implements OnInit {
     }
     const itemNameNetwork = this.nl.find((nc: any) => nc.id == this.networkCode);
     if (itemNameNetwork) {
-      this.networkCompany = itemNameNetwork.name ? itemNameNetwork.name.toLowerCase() : null;
+      this.networkCompany = itemNameNetwork.id ? itemNameNetwork.id.toLowerCase() : null;
     }
+
     const resDialog = {
       phone: resPhone,
       networkCode: this.networkCompany,
       phone_tel: this.networkCode,
     };
+
+    console.log("res dialog ",resDialog);
+
     this.dialogRef.close(resDialog);
   }
 
