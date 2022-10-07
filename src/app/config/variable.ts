@@ -150,6 +150,7 @@ export var networkList = [
   { id: 1, name: 'Mobifone' },
   { id: 2, name: 'Viettel' },
   // { id: 3, name: 'Vietnamobile' },
+  {id: 'bcy', name: 'bcy'}
 ];
 
 export var statusList = [
