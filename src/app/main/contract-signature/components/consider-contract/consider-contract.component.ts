@@ -160,8 +160,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   sessionIdUsbToken: any;
 
   domain: any = `https://127.0.0.1:14424/`;
-  pageText: any = [];
-  countText: number = 0;
 
   constructor(
     private contractService: ContractService,
@@ -224,21 +222,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       this.isDataContract = rs[0];
       this.isDataFileContract = rs[1];
       this.isDataObjectSignature = rs[2];
-
-      this.isDataObjectSignature.map((sign: any) => {
-        console.log('text sign ', sign);
-        if (
-          sign.type == 1 &&
-          sign?.recipient?.email === this.currentUser.email
-        ) {
-          this.pageText.push(sign.page);
-          this.countText++;
-          console.log('count text ', this.countText);
-          console.log('page ', this.pageText);
-        }
-      });
-
-
       if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
         this.valid = true;
       }
@@ -463,7 +446,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
 
-
         // canvas.style.transform = 'scale(2,2)';
 
         // canvas.style.paddingLeft = '15px';
@@ -474,7 +456,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         if (viewer) {
           viewer.appendChild(canvas);
         }
-        // console.log("page ", page);
+
+        console.log("page before render ", page);
         this.renderPage(page, canvas);
       }
     }).then(() => {
@@ -507,7 +490,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     this.eventMouseover();
   }
 
-  page: any;
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
   setPosition() {
     console.log("this convert to sign config ", this.convertToSignConfig())
@@ -542,25 +524,26 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
 
+    console.log("page render 2 ", pageNumber);
     //This gives us the page's dimensions at full scale
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
-      let viewport = page.getViewport({ scale: this.scale });
+      console.log("page render 3 ", pageNumber);
+
+      let viewport = page.getViewport({ scale: 1 });
 
       if(this.mobile)
         viewport = page.getViewport({scale: window.innerWidth/viewport.width})
 
       let test = document.querySelector('.viewer-pdf');
 
-      this.canvasWidth = viewport.width;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
 
-      this.prepareInfoSignUsbToken(pageNumber, canvas.height);
-
-
-      // var ctx = canvas.getContext('2d');
+      var ctx = canvas.getContext('2d');
       
+      console.log("pageNumber 2 ", pageNumber);
+      this.prepareInfoSignUsbToken(pageNumber, canvas.height);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
       if (!_objPage) {
         this.objPdfProperties.pages.push({
@@ -570,8 +553,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         });
       }
 
+
       page.render({ 
-        canvasContext: canvas.getContext('2d'), 
+        canvasContext: ctx, 
         viewport: viewport,
       });
       if (test) {
@@ -1110,12 +1094,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
 
-            const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+            // const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
 
-            // const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
-            // signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
-
-            console.log("this datas zzzzzz ", this.datas);
+            const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
+            signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
 
             console.log("data sign mobi ", dataSignMobi);
 
@@ -1125,11 +1107,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
               return false;
             }
-
-            //Kiểm tra hợp đồng ma recipient id ky có gán ô text hay ô số hợp đồng không
-            //Nếu có gọi thêm api gán ô text, số hợp đồng vào file pdf
-            //Input: base64,x,y,w,h
-
             const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
             if (!sign.recipient_id) {
               console.log("recipent_id")
@@ -2435,71 +2412,50 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     this.signContractSubmit();
   }
 
-  count: number = 0;
   prepareInfoSignUsbToken(page: any, heightPage: any) {
-    this.count++;
-    console.log("page ", this.countText);
+    console.log("page ", page);
+
     this.isDataObjectSignature.map((sign: any) => {
-      if ((sign.type == 3 )
+      if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
         && sign?.recipient?.email === this.currentUser.email
         && sign?.recipient?.role === this.datas?.roleContractReceived
-        && sign?.page > page) {
-          this.currentHeight += heightPage;
-        }
-    });
+        && sign?.page == page) {
 
-    if(this.count == this.pageNumber) {
-      this.isDataObjectSignature.map((sign: any) => {
-        if ((sign.type == 3)
-          && sign?.recipient?.email === this.currentUser.email
-          && sign?.recipient?.role === this.datas?.roleContractReceived) {
-          
-              sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
-              sign.signDigitalY = (sign.coordinate_y - this.currentHeight)+(heightPage/2 - sign.coordinate_y + this.currentHeight)*2 - 0.75*sign.height/* * this.ratioPDF*/;
-      
-              console.log("current height get ", this.currentHeight);
-              console.log("sign coordinate y ", sign.coordinate_y);
-              console.log("height page ", heightPage);
-              console.log("y real ", sign.signDigitalY);
+        sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
 
-      
-              sign.signDigitalWidth = sign.coordinate_x + sign.width;
-              sign.signDigitalHeight = sign.signDigitalY + sign.height;
-            
-        
-  
-          // sign.signDigitalY = sign.coordinate_y/* * this.ratioPDF*/;
-  
-          // sign.signDigitalWidth = sign.width/* * this.ratioPDF*/;
-          // sign.signDigitalHeight = sign.height/* * this.ratioPDF*/;
-  
-          //Lấy thông tin mã số thuế của đối tác ký 
-          this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
-  
-            const lengthRes = response.recipients.length;
-            for(let i = 0; i < lengthRes; i++) {
-  
-              console.log("vao vong for ");
-  
-              const id = response.recipients[i].id;
-  
-              if(id == sign.recipient_id) {
-                this.taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
-  
-                break;
-              }
+        sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
+        console.log("current height get ", this.currentHeight);
+        console.log("y ", sign.coordinate_y);
+        console.log("height page ", heightPage);
+
+        sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
+        sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
+
+        //Lấy thông tin mã số thuế của đối tác ký 
+        this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
+
+          const lengthRes = response.recipients.length;
+          for(let i = 0; i < lengthRes; i++) {
+
+            console.log("vao vong for ");
+
+            const id = response.recipients[i].id;
+
+            if(id == sign.recipient_id) {
+              this.taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
+
+              break;
             }
-          })
-  
-  
-          return sign;
-        } else {
-          return sign;
-        }
-      });
-    
-    }
-  
+          }
+        })
+
+        return sign;
+      } else {
+        return sign;
+      }
+    });
+    this.currentHeight += heightPage;
+    console.log("current height 2 ", this.currentHeight);
   }
 
   mobile: boolean = false;
@@ -2515,3 +2471,4 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 }
 
 
+1
