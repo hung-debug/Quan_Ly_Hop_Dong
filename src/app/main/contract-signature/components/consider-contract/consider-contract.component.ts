@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -600,7 +599,9 @@ export class ConsiderContractComponent
 
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
-    //This gives us the page's dimensions at full scale
+
+    setTimeout(() => {
+       //This gives us the page's dimensions at full scale
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
       let viewport = page.getViewport({ scale: this.scale });
@@ -645,6 +646,7 @@ export class ConsiderContractComponent
       }
       this.activeScroll();
     });
+    }, 100);
   }
 
   activeScroll() {
@@ -2854,73 +2856,49 @@ export class ConsiderContractComponent
   currentHeightText: number = 0;
   prepareInfoSignUsbToken(page: any, heightPage: any) {
 
-    //Tính lại toạ độ của vùng text
-
-
-    
-    //Tính lại toạ độ của chữ ký usb token
-    this.count++;
-    console.log("page ", this.pageNumber);
     this.isDataObjectSignature.map((sign: any) => {
-      if ((sign.type == 3)
+      if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
         && sign?.recipient?.email === this.currentUser.email
         && sign?.recipient?.role === this.datas?.roleContractReceived
-        && sign?.page > page) {
-          this.currentHeight += heightPage;
-        }
-    });
+        && sign?.page == page) {
 
-    if(this.count == this.pageNumber) {
-      this.isDataObjectSignature.map((sign: any) => {
-        if ((sign.type == 3)
-          && sign?.recipient?.email === this.currentUser.email
-          && sign?.recipient?.role === this.datas?.roleContractReceived) {
-          
-              sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
-              sign.signDigitalY = (sign.coordinate_y - this.currentHeight)+(heightPage/2 - sign.coordinate_y + this.currentHeight)*2 - 0.75*sign.height/* * this.ratioPDF*/;
-      
-              console.log("current height get ", this.currentHeight);
-              console.log("sign coordinate y ", sign.coordinate_y);
-              console.log("height page ", heightPage);
-              console.log("y real ", sign.signDigitalY);
+          console.log("vao prepare ", page);
+        sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
 
-      
-              sign.signDigitalWidth = sign.coordinate_x + sign.width;
-              sign.signDigitalHeight = sign.signDigitalY + sign.height;
-            
-        
-  
-          // sign.signDigitalY = sign.coordinate_y/* * this.ratioPDF*/;
-  
-          // sign.signDigitalWidth = sign.width/* * this.ratioPDF*/;
-          // sign.signDigitalHeight = sign.height/* * this.ratioPDF*/;
-  
-          //Lấy thông tin mã số thuế của đối tác ký 
-          this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
-  
-            const lengthRes = response.recipients.length;
-            for(let i = 0; i < lengthRes; i++) {
-  
-              console.log("vao vong for ");
-  
-              const id = response.recipients[i].id;
-  
-              if(id == sign.recipient_id) {
-                this.taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
-  
-                break;
-              }
+        sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
+        // console.log("current height get ", this.currentHeight);
+        // console.log("y ", sign.coordinate_y);
+        // console.log("height page ", heightPage);
+
+        sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
+        sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
+
+        //Lấy thông tin mã số thuế của đối tác ký 
+        this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
+
+          const lengthRes = response.recipients.length;
+          for(let i = 0; i < lengthRes; i++) {
+
+            console.log("vao vong for ");
+
+            const id = response.recipients[i].id;
+
+            if(id == sign.recipient_id) {
+              this.taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
+
+              break;
             }
-          })
+          }
+        })
+
+        return sign;
+      } else {
+        return sign;
+      }
+    });
   
-  
-          return sign;
-        } else {
-          return sign;
-        }
-      });
-    
-    }
+  this.currentHeight += heightPage;
+
 
   }
 

@@ -63,7 +63,7 @@ export class AuthGuard implements CanActivate {
     
     //console
     //@ts-ignore
-    console.log("next", next._urlSegment.segments.some((p: any) => p.path == 'form-contract'));
+    console.log("next ", next._urlSegment.segments.some((p: any) => p.path == 'form-contract'));
     //@ts-ignore
     if (state.url.search('type') > 0 && (next._urlSegment.segments.some((p: any) => p.path == this.contract_signatures) || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
       console.log("vao day");
