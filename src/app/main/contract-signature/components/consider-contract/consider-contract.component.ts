@@ -533,11 +533,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
        //This gives us the page's dimensions at full scale
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
-
-      console.log("page render 3 ", pageNumber);
-      
-      
-
       // let viewport = page.getViewport(this.scale);
       let viewport = page.getViewport({ scale: this.scale });
       let test = document.querySelector('.viewer-pdf');
@@ -565,8 +560,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       this.activeScroll();
     });
     }, 100)
-
-   
   }
 
   activeScroll() {
@@ -2413,27 +2406,32 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     this.signContractSubmit();
   }
 
-  pageSign: any;
   prepareInfoSignUsbToken(page: any, heightPage: any) {
 
-    // if(this.first < this.pageNumber)
       this.isDataObjectSignature.map((sign: any) => {
         if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
           && sign?.recipient?.email === this.currentUser.email
           && sign?.recipient?.role === this.datas?.roleContractReceived
           && sign?.page == page) {
 
-            console.log("vao prepare ", page);
-            this.pageSign = page;
+            console.log("before ");
+            console.log("x ", sign.coordinate_x);
+            console.log("y ", sign.coordinate_y);
+            console.log("height ", sign.height);
+            console.log("width ", sign.width);
+            console.log("current height ", this.currentHeight);
+            console.log("height page ", heightPage);
+
           sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
-
           sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
-          // console.log("current height get ", this.currentHeight);
-          // console.log("y ", sign.coordinate_y);
-          // console.log("height page ", heightPage);
-
           sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
           sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
+
+          console.log("after ");
+          console.log("x ", sign.signDigitalX);
+          console.log("y ", sign.signDigitalY);
+          console.log("height ", sign.signDigitalHeight);
+          console.log("width ", sign.signDigitalWidth);
 
           //Lấy thông tin mã số thuế của đối tác ký 
           this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
@@ -2460,7 +2458,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       });
     
     this.currentHeight += heightPage;
-    // console.log("current height 2 ", this.currentHeight);
   }
 
   mobile: boolean = false;

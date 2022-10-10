@@ -489,14 +489,31 @@ export class ContractSignatureComponent implements OnInit {
 
           //ky bang usb token
           let base64String: any = [];
+
+          //Toa do x
           let x: any = [];
+
+          //Toa do y
           let y: any = [];
+
+          //Chieu cao chu ky
           let h: any = [];
+
+          //Chieu rong chu ky
           let w: any = [];
+
+          //Page can ky
           let page: any = [];
+
+          //Chieu dai cau page can ky
+          let heightPage: any = [];
+
           let currentHeight: any = [];
-          let tempY: any = [];
-          let tempH: any = [];
+
+          //tao mang currentHeight toan so 0;
+          for(let i = 0; i < fileC.length; i++) {
+            currentHeight[i] = 0;
+          }
   
           for(let i = 0; i < fileC.length; i++) {
             //get base64 from url
@@ -521,17 +538,22 @@ export class ContractSignatureComponent implements OnInit {
             })
 
               //Lấy thông tin page của từng hợp đồng
-            this.contractServiceV1.getInfoPage(documentId[i]).subscribe((response) => {
-              if(response.page < page[i]) {
-                currentHeight[i] += response[i].height;
+            this.contractServiceV1.getInfoPage(documentId[i]).subscribe(response => {
+              console.log("response ", response);
+
+              for(let j = 0; j < response.length; j++) {
+                console.log("vao vong for ");
+                if(response[j].page < page[i]) {
+                  currentHeight[i] += response[j].height;
+                } else if(response[j].page == page[i]) {
+                  console.log("vao day ");
+                  currentHeight[i] += 0;
+                  heightPage[i] = response[j].height;
+                  break;
+                }
               }
             })
           }
-
-          
-          console.log("y ", y[0]);
-
-        
 
           //Lay thong tin cua usb token
           this.contractServiceV1.getAllAccountsDigital().then(
@@ -571,18 +593,13 @@ export class ContractSignatureComponent implements OnInit {
 
                         // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
                         console.log("h i ", h[i]);
-                        tempY[i] = y[i];
-                        y[i] = y[i] - currentHeight[i]+(page[i]/2 - y[i] + currentHeight[i])*2 - 0.75*h[i];
 
-                        tempH[i] = h[i];
+                        console.log("height page ", heightPage[i]);
+                        console.log("y ", y[i]);
+
+                        y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
+
                         h[i] = y[i] + h[i];
-
-                        if(!y[i]) {
-                          y[i] = tempY[i];
-                        } 
-                        if(!h[i]) {
-                          h[i] = tempH[i];
-                        }
 
                         let dataSignMobi: any = await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial, base64String[i], signI, page[i],h[i], w[i],x[i], y[i]);
 
