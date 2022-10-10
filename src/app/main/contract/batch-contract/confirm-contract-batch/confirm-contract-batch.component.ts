@@ -512,18 +512,31 @@ export class ConfirmContractBatchComponent
 
   // hàm set kích thước cho đối tượng khi được kéo thả vào trong hợp đồng
   changePosition(d?: any, e?: any, sizeChange?: any, backgroundColor?: string) {
+    // let style: any = {
+    //   transform:
+    //     'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+    //   position: 'absolute',
+    //   backgroundColor: '#EBF8FF',
+    // };
+    // style.backgroundColor = d.value ? '' : '#EBF8FF';
+    // if (d['width']) {
+    //   style.width = parseInt(d['width']) + 'px';
+    // }
+    // if (d['height']) {
+    //   style.height = parseInt(d['height']) + 'px';
+    // }
+    // return style;
+
     let style: any = {
-      transform:
-        'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
-      position: 'absolute',
-      backgroundColor: '#EBF8FF',
-    };
-    style.backgroundColor = d.value ? '' : '#EBF8FF';
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#EBF8FF'
+    }
     if (d['width']) {
-      style.width = parseInt(d['width']) + 'px';
+      style.width = parseInt(d['width']) + "px";
     }
     if (d['height']) {
-      style.height = parseInt(d['height']) + 'px';
+      style.height = parseInt(d['height']) + "px";
     }
     return style;
   }
