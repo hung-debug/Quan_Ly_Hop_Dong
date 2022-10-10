@@ -287,6 +287,9 @@ export class ConsiderContractComponent
             '/main/form-contract/detail/' + this.idContract,
           ]);
         }
+
+
+        
         this.allFileAttachment = this.datas.i_data_file_contract.filter(
           (f: any) => f.type == 3
         );
