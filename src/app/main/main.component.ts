@@ -195,7 +195,11 @@ export class MainComponent implements OnInit {
   }
 
   openLinkNotification(link:any, id:any) {
-    window.location.href = link.replace('&type=', '').replace('&type=1', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
+    // console.log("link ", link.replace("&type=1",""));
+
+    // return;
+
+    window.location.href = link.replace("&type=1",'').replace('&loginType=1', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8').replace('&loginType=', '');
     this.dashboardService.updateViewNotification(id).subscribe(data => {
       console.log(data);
     });

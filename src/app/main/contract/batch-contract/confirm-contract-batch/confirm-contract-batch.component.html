@@ -98,8 +98,9 @@
         <div class="resize-drag not-out-drop"
              [id]="d.id"
              style="z-index: -1;"
-             #itemElement        
-             [ngClass]="changeColorDrag(null, true)"
+             #itemElement
+             
+             [ngClass]="changeColorDrag(null, d)"
              [ngStyle]="changePosition(d)">
           <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
           <app-sign-contract  [datas]="datasBatch" [sign]="d"></app-sign-contract>

@@ -101,8 +101,6 @@ export class ContractBatchHeaderComponent implements OnInit {
       //   }
       // }
     }
-
-
   }
 
   // valid dữ liệu các bước

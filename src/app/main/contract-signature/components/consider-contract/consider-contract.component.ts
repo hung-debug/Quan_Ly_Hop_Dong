@@ -231,7 +231,17 @@ export class ConsiderContractComponent
   timerId: any;
   countText: number = 0;
   pageText: any = [];
+  statusRecipientId: any;
   getDataContractSignature() {
+
+    // this.contractService.getDetermineCoordination(this.recipientId).subscribe((response) => {
+    //   for(let i = 0; i < response.length; i++) {
+    //     if(response.recipients[i].id == this.recipientId) {
+    //       this.statusRecipientId = response.recipients[i].status;
+    //     }
+    //   }
+    // })
+
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
         console.log(rs);
@@ -286,7 +296,7 @@ export class ConsiderContractComponent
           this.router.navigate([
             '/main/form-contract/detail/' + this.idContract,
           ]);
-        }
+        } 
 
 
         
