@@ -858,6 +858,17 @@ export class ContractService {
     });
   }
 
+  addDocumentEkyc(body: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.post<Contract>(this.documentUrl, body, {
+        headers: headers,
+      });
+  }
+
   updateFileAttach(id: any, body: any, isStatus?: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()

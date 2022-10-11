@@ -98,7 +98,6 @@ import { AdminDeletePackUnitComponent } from './admin/admin-main/admin-unit/admi
 import { AdminInfoUserComponent } from './admin/admin-main/admin-user/admin-info-user/admin-info-user.component';
 
 import {WebcamModule} from 'ngx-webcam';
-import { EkycDialogSignComponent } from './main/contract-signature/components/consider-contract/ekyc-dialog-sign/ekyc-dialog-sign.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 

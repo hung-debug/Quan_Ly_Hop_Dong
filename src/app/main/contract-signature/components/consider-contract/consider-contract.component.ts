@@ -2184,7 +2184,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const data = {
       id: 0,
       title: 'Xác thực CMT/CCCD mặt trước',
-      recipientId: this.recipientId
+      recipientId: this.recipientId,
+      contractId: this.idContract
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -2214,6 +2215,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const data = {
       id: 1,
       title: 'Xác thực CMT/CCCD mặt sau',
+      contractId: this.idContract
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -2226,7 +2228,16 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
       const dialogConfig = new MatDialogConfig();
 
-      dialogConfig.data = this.cccdFront;
+      // var merged = Object.assign(this.cccdFront, {
+      //   contractId: this.idContract
+      // });
+
+      const dataFace = {
+        cccdFront: this.cccdFront,
+        contractId: this.idContract
+      }
+
+      dialogConfig.data = dataFace;
       dialogConfig.disableClose = true;
 
       if(result) {

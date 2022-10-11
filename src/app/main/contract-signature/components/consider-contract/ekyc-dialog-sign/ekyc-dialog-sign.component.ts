@@ -4,6 +4,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
 import { ContractService } from 'src/app/service/contract.service';
+import { ToastService } from 'src/app/service/toast.service';
 
 @Component({
   selector: 'app-ekyc-dialog-sign',
@@ -19,6 +20,7 @@ export class EkycDialogSignComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<EkycDialogSignComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private toastService: ToastService
   ) {
 
   }
@@ -52,6 +54,8 @@ export class EkycDialogSignComponent implements OnInit {
     console.log("data ", this.data);
     this.initWebcamImage = this.webcamImage;
 
+    //title = 0: nhan dang anh can cuoc cong dan
+    //title = 1: nhan dang khuon mat
     if(this.data.title) {
       this.title = 0;
     } else {
@@ -78,6 +82,13 @@ export class EkycDialogSignComponent implements OnInit {
     })
 
     if(this.title == 0) {
+      let formData = {
+        "name": "image_ekyc_web_cardId" + new Date().getTime() + ".jpg",
+        "content":this.webcamImage.imageAsDataUrl
+      }
+
+      this.upFileImageToDb(formData);
+
       this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
         this.spinner.hide();
         console.log("response ",response);
@@ -109,7 +120,16 @@ export class EkycDialogSignComponent implements OnInit {
        
       })
     } else {
-      this.contractService.detectFace(this.data, this.webcamImage.imageAsDataUrl).subscribe((response) => {
+
+      let formData = {
+        "name": "image_ekyc_web_face" + new Date().getTime() + ".jpg",
+        "content":this.webcamImage.imageAsDataUrl
+      }
+
+      //up file anh len db
+      this.upFileImageToDb(formData);
+
+      this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl).subscribe((response) => {
         this.spinner.hide();
         if(response.verify_result == 2) {
           alert("Nhận dạng thành công");
@@ -125,6 +145,36 @@ export class EkycDialogSignComponent implements OnInit {
     }
 
 
+  }
+
+  upFileImageToDb(formData: any) {
+     //up file anh len db
+     this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseImage) => {
+      if(responseImage.success == true) {
+        let body = {
+          "name":responseImage.file_object.file_name,
+          "type": 7,
+          "path":responseImage.file_object.file_path,
+          "file_name":responseImage.file_object.file_name,
+          "bucket": responseImage.file_object.bucket,
+          "internal": 1,
+          "ordering": 1,
+          "status": 1,
+          "contractId": this.data.idContract,
+        }
+
+        this.contractService.addDocumentEkyc(body).subscribe((response) => {
+          if(!response.id) {
+            this.toastService.showErrorHTMLWithTimeout("Đẩy file ảnh không thành công","",3000);
+            return;
+          }
+        })
+
+      } else {
+        this.toastService.showErrorHTMLWithTimeout("Đẩy file ảnh không thành công","",3000);
+        return;
+      }
+    })
   }
 
   public toggleWebcam(): void {
