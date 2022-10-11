@@ -24,8 +24,6 @@ import {count} from 'console';
 import {data} from 'jquery';
 import * as _ from 'lodash';
 
-import domtoimage from 'dom-to-image';
-
 @Component({
   selector: 'app-sample-contract',
   templateUrl: './sample-contract.component.html',
@@ -1212,13 +1210,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async next(action: string) {
+    console.log("vao day ");
     if (action == 'next_step' && !this.validData()) {
+
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+
         this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
 
-      console.log("next sample contract ", this.datas);
       return;
     } else {
       if (action == 'save_draft') {
@@ -1285,6 +1285,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
         }
       } else if (action == 'next_step') {
+
+        // if(this.datas.contract_no) {
+        //   let contractNumber = this.datas.contract_user_sign[0].sign_config;
+        //   for(let i = 0; i < contractNumber.length; i++) {
+        //     if(!contractNumber[i].email) {
+        //       this.datas.contract_user_sign[0].sign_config[i].value = this.datas.contract_no;
+        //     }
+        //   }
+        // }
+
+        // // console.log("next steps ", this.datas);
+
         this.step = variable.stepSampleContract.step4;
         this.datas.stepLast = this.step
         this.nextOrPreviousStep(this.step);
