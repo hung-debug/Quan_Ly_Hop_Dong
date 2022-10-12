@@ -2228,10 +2228,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
       const dialogConfig = new MatDialogConfig();
 
-      // var merged = Object.assign(this.cccdFront, {
-      //   contractId: this.idContract
-      // });
-
       const dataFace = {
         cccdFront: this.cccdFront,
         contractId: this.idContract
