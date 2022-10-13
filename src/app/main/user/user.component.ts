@@ -33,6 +33,8 @@ export class UserComponent implements OnInit {
   isQLND_02:boolean=true;  //sua nguoi dung
   isQLND_03:boolean=true;  //tim kiem nguoi dung
   isQLND_04:boolean=true;  //xem thong tin chi tiet nguoi dung
+  first: number = 0;
+
 
   ngOnInit(): void {
     this.appService.setTitle("user.list");
@@ -148,11 +150,10 @@ export class UserComponent implements OnInit {
   }
 
   searchUser(){
-    console.log(this.organization_id);
+    this.first = 0;
+
     this.userService.getUserList(this.organization_id==null?"":this.organization_id, this.email).subscribe(response => {
-      console.log(response);
       this.list = response.entities;
-      console.log(this.list);
     });
   }
 
