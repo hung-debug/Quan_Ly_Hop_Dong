@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { Paginator } from 'primeng/paginator';
+import { Table } from 'primeng/table';
 import { AppService } from 'src/app/service/app.service';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
@@ -27,6 +28,7 @@ export class UserComponent implements OnInit {
   cols: any[];
   orgList: any[] = [];
   orgListTmp: any[] = [];
+  first: number = 0;
 
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
@@ -34,6 +36,7 @@ export class UserComponent implements OnInit {
   isQLND_03:boolean=true;  //tim kiem nguoi dung
   isQLND_04:boolean=true;  //xem thong tin chi tiet nguoi dung
 
+  
   ngOnInit(): void {
     this.appService.setTitle("user.list");
     //lay id user
@@ -148,11 +151,11 @@ export class UserComponent implements OnInit {
   }
 
   searchUser(){
+    this.first = 0;
     console.log(this.organization_id);
     this.userService.getUserList(this.organization_id==null?"":this.organization_id, this.email).subscribe(response => {
-      console.log(response);
       this.list = response.entities;
-      console.log(this.list);
+      console.log("list ",this.list);
     });
   }
 

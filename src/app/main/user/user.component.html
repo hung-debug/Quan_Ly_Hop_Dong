@@ -26,8 +26,9 @@
       <button *ngIf="isQLND_01" class="btn btn-lg btn-block btn_submit" (click)="addUser()">{{'btn.add' | translate }}</button>
     </div>
   </div>
+
   <div class="row" style="padding-top: 20px;">
-    <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true">
+    <p-table [value]="list" [paginator]="true" [rows]="15" id="table" [autoLayout]="true" [(first)]="first">
       <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of cols" [style]='col.style'>
@@ -56,6 +57,7 @@
       </ng-template> 
     </p-table>
   </div>
+
 </div>
 <div *ngIf="!isQLND_01 && !isQLND_02 && !isQLND_03 && !isQLND_04">
   {{'no.role' | translate}}

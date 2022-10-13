@@ -2421,13 +2421,13 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           && sign?.recipient?.role === this.datas?.roleContractReceived
           && sign?.page == page) {
 
-            console.log("before ");
-            console.log("x ", sign.coordinate_x);
-            console.log("y ", sign.coordinate_y);
-            console.log("height ", sign.height);
-            console.log("width ", sign.width);
-            console.log("current height ", this.currentHeight);
-            console.log("height page ", heightPage);
+            // console.log("before ");
+            // console.log("x ", sign.coordinate_x);
+            // console.log("y ", sign.coordinate_y);
+            // console.log("height ", sign.height);
+            // console.log("width ", sign.width);
+            // console.log("current height ", this.currentHeight);
+            // console.log("height page ", heightPage);
 
           sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
           sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
