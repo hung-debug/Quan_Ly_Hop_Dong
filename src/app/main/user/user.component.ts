@@ -28,13 +28,14 @@ export class UserComponent implements OnInit {
   cols: any[];
   orgList: any[] = [];
   orgListTmp: any[] = [];
-  first: number = 0;
 
   //phan quyen
   isQLND_01:boolean=true;  //them moi nguoi dung
   isQLND_02:boolean=true;  //sua nguoi dung
   isQLND_03:boolean=true;  //tim kiem nguoi dung
   isQLND_04:boolean=true;  //xem thong tin chi tiet nguoi dung
+
+  first: any;
 
   
   ngOnInit(): void {
@@ -152,10 +153,8 @@ export class UserComponent implements OnInit {
 
   searchUser(){
     this.first = 0;
-    console.log(this.organization_id);
     this.userService.getUserList(this.organization_id==null?"":this.organization_id, this.email).subscribe(response => {
       this.list = response.entities;
-      console.log("list ",this.list);
     });
   }
 
