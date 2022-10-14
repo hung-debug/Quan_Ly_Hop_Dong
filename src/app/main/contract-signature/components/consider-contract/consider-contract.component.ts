@@ -1042,85 +1042,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
 
-      if (this.signCertDigital && this.signCertDigital.Serial) {
-        for (const signUpdate of this.isDataObjectSignature) {
-          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 1 || signUpdate.type == 4) && [3, 4].includes(this.datas.roleContractReceived)
-            && signUpdate?.recipient?.email === this.currentUser.email
-            && signUpdate?.recipient?.role === this.datas?.roleContractReceived
-          ) {
-            let fileC = await this.contractService.getFileContractPromise(this.idContract);
-            const pdfC2 = fileC.find((p: any) => p.type == 2);
-            const pdfC1 = fileC.find((p: any) => p.type == 1);
-            if (pdfC2) {
-              fileC = pdfC2.path;
-            } else if (pdfC1) {
-              fileC = pdfC1.path;
-            } else {
-              return;
-            }
-            let signI = null;
-            if (signUpdate.type == 1 || signUpdate.type == 4) {
-              this.textSign = signUpdate.valueSign;
-              /*this.heightText = signUpdate.width;
-              this.widthText = signUpdate.height;*/
-              this.heightText = 150;
-              this.widthText = 150;
-              await of(null).pipe(delay(100)).toPromise();
-              const imageRender = <HTMLElement>document.getElementById('text-sign');
-
-              if (imageRender) {
-                const textSignB = await domtoimage.toPng(imageRender);
-                signI = this.textSignBase64Gen = textSignB.split(",")[1];
-              }
-            } else if (signUpdate.type == 3) {
-              await of(null).pipe(delay(100)).toPromise();
-              const imageRender = <HTMLElement>document.getElementById('export-html');
-              if (imageRender) {
-                const textSignB = await domtoimage.toPng(imageRender);
-                signI = textSignB.split(",")[1];
-              }
-            }
-
-            console.log("signI ", signI);
-
-            const signDigital = JSON.parse(JSON.stringify(signUpdate));
-            signDigital.Serial = this.signCertDigital.Serial;
-            const base64String = await this.contractService.getDataFileUrlPromise(fileC);
-            signDigital.valueSignBase64 = encode(base64String);
-
-            // const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
-
-            const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
-            signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
-
-            console.log("data sign mobi ", dataSignMobi);
-
-            if (!dataSignMobi.data.FileDataSigned) {
-              console.log("file data signed ");
-
-              this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-              return false;
-            }
-            const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
-            if (!sign.recipient_id) {
-              console.log("recipent_id")
-
-              this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-              return false;
-            }
-          }
-        }
-        return true;
-      } else {
-        console.log("not sign cert digital ");
-        this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-        return false;
-      }
-
-
-      // console.log("this sign cert digital ", this.signCertDigital);
-      // if (this.signCertDigital) {
-      //   // this.signCertDigital = resSignDigital.data;
+      // if (this.signCertDigital && this.signCertDigital.Serial) {
       //   for (const signUpdate of this.isDataObjectSignature) {
       //     if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 1 || signUpdate.type == 4) && [3, 4].includes(this.datas.roleContractReceived)
       //       && signUpdate?.recipient?.email === this.currentUser.email
@@ -1136,7 +1058,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       //       } else {
       //         return;
       //       }
-
       //       let signI = null;
       //       if (signUpdate.type == 1 || signUpdate.type == 4) {
       //         this.textSign = signUpdate.valueSign;
@@ -1146,6 +1067,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       //         this.widthText = 150;
       //         await of(null).pipe(delay(100)).toPromise();
       //         const imageRender = <HTMLElement>document.getElementById('text-sign');
+
       //         if (imageRender) {
       //           const textSignB = await domtoimage.toPng(imageRender);
       //           signI = this.textSignBase64Gen = textSignB.split(",")[1];
@@ -1159,12 +1081,17 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       //         }
       //       }
 
+      //       console.log("signI ", signI);
+
       //       const signDigital = JSON.parse(JSON.stringify(signUpdate));
-      //       signDigital.Serial = this.signCertDigital;
+      //       signDigital.Serial = this.signCertDigital.Serial;
       //       const base64String = await this.contractService.getDataFileUrlPromise(fileC);
       //       signDigital.valueSignBase64 = encode(base64String);
 
-      //       const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+      //       // const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+
+      //       const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
+      //       signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
 
       //       console.log("data sign mobi ", dataSignMobi);
 
@@ -1181,81 +1108,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       //         this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
       //         return false;
       //       }
-
-      //       // console.log("sign i ", signI);
-
-      //       // var json_req = JSON.stringify({
-      //       //   OperationId: 10,
-      //       //   SessionId: this.sessionIdUsbToken,
-      //       //   checkOCSP: 0,
-      //       //   reqDigest: 1,
-      //       //   algDigest: "SHA_1",
-      //       //   extFile: "pdf",
-      //       //   invisible: 0,
-      //       //   pageIndex: 0,
-      //       //   offsetX: 0,
-      //       //   offsetY: 0,
-      //       //   sigWidth: 275,
-      //       //   sigHeight: 120,
-      //       //   logoData: signI,
-      //       //   DataToBeSign: signDigital.valueSignBase64,
-      //       // });
-
-      //       // console.log("json_req ",json_req);
-
-      //       // json_req = window.btoa(json_req);
-
-      //       // var httpReq: any = "";
-      //       // var response = "";
-      //       // if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-      //       //     httpReq = new XMLHttpRequest();
-      //       // }
-      //       // else {// code for IE6, IE5
-      //       //     httpReq = new ActiveXObject("Microsoft.XMLHTTP");
-      //       // }
-      //       // httpReq.onreadystatechange =  async () => {
-      //       //     if (httpReq.readyState == 4 && httpReq.status == 200) {
-
-      //       //       console.log("htppreq ",httpReq.responseText);
-
-      //       //         response = window.atob(httpReq.responseText);
-                    
-      //       //         var process = false;
-      //       //         try {
-      //       //             var json_res = JSON.parse(response);
-
-      //       //             console.log("json_res ",json_res)
-
-      //       //             if (json_res.ResponseCode == 0) {
-      //       //                 alert("Successfully. Result: " + json_res.PathFile);
-
-      //       //                 alert(json_res.Base64Result);
-
-      //       //                   const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
-      //       //                     if (!sign.recipient_id) {
-      //       //                       console.log("recipent_id")
-
-      //       //                       this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-      //       //                       return false;
-      //       //                     } else {
-      //       //                       return true;
-      //       //                     }
-      //       //             } else {
-      //       //               console.log("response ky ", response);
-      //       //               console.log("response ky msg ", json_res);
-      //       //               alert(json_res.ResponseMsg);
-      //       //             }
-      //       //         }
-      //       //         catch (err) {
-      //       //             alert("Error: " + err);
-      //       //         }
-      //       //     }
-      //       // }
-      //       // httpReq.open("POST", this.domain + "process", true);
-      //       // httpReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      //       // httpReq.send("request=" + json_req);
-
-      //       // return false;
       //     }
       //   }
       //   return true;
@@ -1264,6 +1116,136 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       //   this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
       //   return false;
       // }
+
+
+      console.log("this sign cert digital ", this.signCertDigital);
+      if (this.signCertDigital) {
+        // this.signCertDigital = resSignDigital.data;
+        for (const signUpdate of this.isDataObjectSignature) {
+          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 1 || signUpdate.type == 4) && [3, 4].includes(this.datas.roleContractReceived)
+            && signUpdate?.recipient?.email === this.currentUser.email
+            && signUpdate?.recipient?.role === this.datas?.roleContractReceived
+          ) {
+            let fileC = await this.contractService.getFileContractPromise(this.idContract);
+            const pdfC2 = fileC.find((p: any) => p.type == 2);
+            const pdfC1 = fileC.find((p: any) => p.type == 1);
+            if (pdfC2) {
+              fileC = pdfC2.path;
+            } else if (pdfC1) {
+              fileC = pdfC1.path;
+            } else {
+              return;
+            }
+
+            let signI = null;
+            if (signUpdate.type == 1 || signUpdate.type == 4) {
+              this.textSign = signUpdate.valueSign;
+              /*this.heightText = signUpdate.width;
+              this.widthText = signUpdate.height;*/
+              this.heightText = 150;
+              this.widthText = 150;
+              await of(null).pipe(delay(100)).toPromise();
+              const imageRender = <HTMLElement>document.getElementById('text-sign');
+              if (imageRender) {
+                const textSignB = await domtoimage.toPng(imageRender);
+                signI = this.textSignBase64Gen = textSignB.split(",")[1];
+              }
+            } else if (signUpdate.type == 3) {
+              await of(null).pipe(delay(100)).toPromise();
+              const imageRender = <HTMLElement>document.getElementById('export-html');
+              if (imageRender) {
+                const textSignB = await domtoimage.toPng(imageRender);
+                signI = textSignB.split(",")[1];
+              }
+            }
+
+            const signDigital = JSON.parse(JSON.stringify(signUpdate));
+            signDigital.Serial = this.signCertDigital;
+            const base64String = await this.contractService.getDataFileUrlPromise(fileC);
+            signDigital.valueSignBase64 = encode(base64String);
+
+            console.log("sign 4 ", signDigital.valueSignBase64);
+
+            var json_req = JSON.stringify({
+              OperationId: 10,
+              SessionId: this.sessionIdUsbToken,
+              checkOCSP: 0,
+              reqDigest: 1,
+              algDigest: "SHA_1",
+              extFile: "pdf",
+              invisible: 0,
+              pageIndex: signDigital.page,
+              offsetX: signDigital.signDigitalX,
+              offsetY: signDigital.signDigitalY,
+              sigWidth: signDigital.signDigitalWidth,
+              sigHeight: signDigital.signDigitalHeight,
+              logoData: "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",
+              DataToBeSign: signDigital.valueSignBase64,
+            });
+
+            console.log("json_req ",json_req);
+
+            json_req = window.btoa(json_req);
+
+            var httpReq: any = "";
+            var response = "";
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                httpReq = new XMLHttpRequest();
+            }
+            else {// code for IE6, IE5
+                httpReq = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            httpReq.onreadystatechange =  async () => {
+                if (httpReq.readyState == 4 && httpReq.status == 200) {
+
+                  console.log("htppreq ",httpReq.responseText);
+
+                    response = window.atob(httpReq.responseText);
+                    
+                    var process = false;
+                    try {
+                        var json_res = JSON.parse(response);
+
+                        console.log("json_res ",json_res)
+
+                        if (json_res.ResponseCode == 0) {
+                            alert("Successfully. Result: " + json_res.PathFile);
+
+                            alert(json_res.Base64Result);
+
+                              const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
+                                if (!sign.recipient_id) {
+                                  console.log("recipent_id")
+
+                                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+                                  return false;
+                                } else {
+                                  return true;
+                                }
+                        } else {
+                          console.log("response ky ", response);
+                          console.log("response ky msg ", json_res);
+                          alert(json_res.ResponseMsg);
+                        }
+                    }
+                    catch (err) {
+                        alert("Error: " + err);
+                    }
+                }
+            }
+            httpReq.open("POST", this.domain + "process", true);
+            httpReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            httpReq.send("request=" + json_req);
+
+            return true;
+          }
+        }
+        return true;
+      } else {
+        console.log("not sign cert digital ");
+        this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+        return false;
+      }
     } else if (typeSignDigital == 3) {
       const objSign = this.isDataObjectSignature.filter((signUpdate: any) => (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
         && signUpdate?.recipient?.email === this.currentUser.email
@@ -1533,65 +1515,62 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
     if (typeSignDigital && typeSignDigital == 2) {
       //Đối với ký usb token
-      let checkSetupTool = false;
+      // let checkSetupTool = false;
 
-      this.contractService.getAllAccountsDigital().then(async (data) => {
+      // this.contractService.getAllAccountsDigital().then(async (data) => {
 
-        console.log("data all accounts digital ", data);
-        if (data.data.Serial) {
+      //   console.log("data all accounts digital ", data);
+      //   if (data.data.Serial) {
          
-          this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
-            if(response.success == true) {
-              this.signCertDigital = data.data;
-              this.nameCompany = data.data.CN;
-              checkSetupTool = true;
-              if (!checkSetupTool) {
-                this.spinner.hide();
-                return;
-              } else {
-                await this.signImageC(signUpdatePayload, notContainSignImage);
-              }
-            } else {
-              this.spinner.hide();
-              Swal.fire({
-                title: `Mã số thuế/CMT/CCCD trên chữ ký số không trùng khớp`,
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#b0bec5',
-                confirmButtonText: 'Xác nhận'
-              });
-            }
-          })
+      //     this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
+      //       if(response.success == true) {
+      //         this.signCertDigital = data.data;
+      //         this.nameCompany = data.data.CN;
+      //         checkSetupTool = true;
+      //         if (!checkSetupTool) {
+      //           this.spinner.hide();
+      //           return;
+      //         } else {
+      //           await this.signImageC(signUpdatePayload, notContainSignImage);
+      //         }
+      //       } else {
+      //         this.spinner.hide();
+      //         Swal.fire({
+      //           title: `Mã số thuế/CMT/CCCD trên chữ ký số không trùng khớp`,
+      //           icon: 'warning',
+      //           confirmButtonColor: '#3085d6',
+      //           cancelButtonColor: '#b0bec5',
+      //           confirmButtonText: 'Xác nhận'
+      //         });
+      //       }
+      //     })
 
-        } else {
-          this.spinner.hide();
-          Swal.fire({
-            title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#b0bec5',
-            confirmButtonText: 'Xác nhận'
-          });
-        }
-      }, err => {
-        this.spinner.hide();
-        Swal.fire({
-          html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>  và cài đặt`,
-          icon: 'warning',
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#b0bec5',
-          confirmButtonText: 'Xác nhận'
-        });
-      })
+      //   } else {
+      //     this.spinner.hide();
+      //     Swal.fire({
+      //       title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
+      //       icon: 'warning',
+      //       confirmButtonColor: '#3085d6',
+      //       cancelButtonColor: '#b0bec5',
+      //       confirmButtonText: 'Xác nhận'
+      //     });
+      //   }
+      // }, err => {
+      //   this.spinner.hide();
+      //   Swal.fire({
+      //     html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>  và cài đặt`,
+      //     icon: 'warning',
+      //     confirmButtonColor: '#3085d6',
+      //     cancelButtonColor: '#b0bec5',
+      //     confirmButtonText: 'Xác nhận'
+      //   });
+      // })
 
       //get session
       // console.log("get session id");
 
-      // const sessionId = this.getSessionId(this.taxCodePartnerStep2, signUpdatePayload, notContainSignImage);
-      // console.log("sessionId ", sessionId);
-
-      //Lấy thông tin chữ ký số
-
+      this.getSessionId(this.taxCodePartnerStep2, signUpdatePayload, notContainSignImage);
+      
     } else {
       console.log("vao day ");
       await this.signImageC(signUpdatePayload, notContainSignImage);
@@ -1702,8 +1681,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   getCertificate(hSession: any, taxCode: any, signUpdatePayload: any, notContainSignImage: any) {
-    console.log('hSesion ', hSession);
-
     var json_req = JSON.stringify({
       OperationId: 2,
       SessionId: hSession,
@@ -1748,7 +1725,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
               this.signImageC(signUpdatePayload, notContainSignImage);
             } else {
-              this.spinner.hide();
               Swal.fire({
                 title: `Mã số thuế trên chữ ký số không trùng mã số thuế của tổ chức`,
                 icon: 'warning',
@@ -2480,4 +2456,3 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 }
 
 
-1
