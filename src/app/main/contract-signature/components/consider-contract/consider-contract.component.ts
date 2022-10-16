@@ -1074,6 +1074,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               }
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(100)).toPromise();
+
+              //lấy ảnh chữ ký usb token
               const imageRender = <HTMLElement>document.getElementById('export-html');
               if (imageRender) {
                 const textSignB = await domtoimage.toPng(imageRender);
@@ -1088,10 +1090,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
 
-            // const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+            const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
 
-            const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
-            signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
+            // const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
+            // signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
 
             console.log("data sign mobi ", dataSignMobi);
 
@@ -2266,15 +2268,30 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(async (result: any) => {
-      console.log("dong hsm ");
-      console.log("result ", result);
+
+      let signI = null;
+
+         //lấy ảnh chữ ký usb token
+         this.cardId = result.ma_dvcs;
+        
+         console.log("card id ", this.cardId);
+
+         await of(null).pipe(delay(100)).toPromise();
+         const imageRender = <HTMLElement>document.getElementById('export-html-hsm');
+         if (imageRender) {
+           const textSignB = await domtoimage.toPng(imageRender);
+           signI = textSignB.split(",")[1];
+         }
+
+         console.log("signI ", signI);
+
       if (result) {
         this.dataHsm = {
           ma_dvcs: result.ma_dvcs,
           username: result.username,
           password: result.password,
           password2: result.password2,
-          imageBase64: "null",
+          imageBase64: signI,
         }
 
         await this.signContractSubmit();
