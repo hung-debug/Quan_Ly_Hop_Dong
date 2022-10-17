@@ -182,26 +182,15 @@ export class DetermineSignerComponent implements OnInit {
       
       if (items.type == 3)
         this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
-
-        // if(!this.datas.is_determine_clone[index].recipients.phone) {
-        //   this.datas.is_determine_clone[index].recipients.phone = this.datas.is_determine_clone[index].recipients.email;
-        // }
-
         for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
           if(this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
             this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email;
           }
         }
-
-
-        // console.log("abc");
     })
     this.spinner.show();
   
     this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
-      console.log("this.datas.is_determine_clone ", this.datas.is_determine_clone);
-      console.log("datas id ", this.datas.id);
-      console.log("res get contract ", res);
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
         if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -227,9 +216,6 @@ export class DetermineSignerComponent implements OnInit {
       this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000)
       void this.router.navigate(['/main/contract/create/draft']);
     } else if (!this.saveDraftStep || is_save) {
-      console.log("next or previous step ");
-
-      console.log("res ",res);
       console.log("data clone 1 ", this.datas.is_determine_clone);
 
       this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;
@@ -405,7 +391,6 @@ export class DetermineSignerComponent implements OnInit {
 
         //Nếu cá nhân chọn loại ký là otp và ký bằng số điện thoại
         if(data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
-          console.log("vao day ");
           data.phone = data.email;
         }
       }
@@ -415,9 +400,8 @@ export class DetermineSignerComponent implements OnInit {
   changeTypeSign(d: any) {
     if(d.login_by == 'phone') {
       d.email = '';
-    }
-
-    console.log("d ",d);
+      d.phone = '';
+    } 
   }
 
   getSetOrderingPersonal(isParnter: any, index: number): void {

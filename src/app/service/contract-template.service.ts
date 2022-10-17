@@ -480,43 +480,43 @@ export class ContractTemplateService {
   getDataDetermineInitialization() {
     return [
       {
-        "name": "",
-        "type": 1,
-        "ordering": 1,
+        name: "",
+        type: 1,
+        ordering: 1,
         status: 1,
-        "recipients": [
+        recipients: [
           {
             login_by: 'email',
-            "name": "",
-            "email": "",
-            "phone": "",
-            "card_id": "",
-            "role": 3,
-            "ordering": 1,
-            "status": 0,
-            "is_otp": 0,
-            "sign_type": [
+            name: "",
+            email: "",
+            phone: "",
+            card_id: "",
+            role: 3,
+            ordering: 1,
+            status: 0,
+            is_otp: 0,
+            sign_type: [
             ]
           }
         ],
       },
       {
-        "name": "Đối tác 1",
-        "type": 2,
-        "ordering": 2,
+        name: "Đối tác 1",
+        type: 2,
+        ordering: 2,
         status: 1,
-        "recipients": [
+        recipients: [
           {
             login_by: 'email',
-            "name": "Người ký 1",
-            "email": "",
-            "phone": "",
-            "card_id": "",
-            "role": 3,
-            "ordering": 1,
-            "status": 0,
-            "is_otp": 0,
-            "sign_type": []
+            name: "Người ký 1",
+            email: "",
+            phone: "",
+            card_id: "",
+            role: 3,
+            ordering: 1,
+            status: 0,
+            is_otp: 0,
+            sign_type: []
           }
         ],
       },

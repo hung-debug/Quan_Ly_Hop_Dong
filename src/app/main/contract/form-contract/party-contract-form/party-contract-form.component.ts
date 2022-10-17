@@ -73,6 +73,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   typeSign: number = 0;
 
+  email: string="email";
+  phone: string="phone";
+
   get determineContract() {
     return this.determineDetails.controls;
   }
@@ -131,6 +134,15 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }, null, () => {
       isRouter.unsubscribe;
     })
+  }
+
+  changeTypeSign(d: any) {
+
+    console.log("d ", d);
+    if(d.login_by == 'phone' || d.typeSign == 1) {
+      d.email = '';
+      d.phone = '';
+    } 
   }
 
 

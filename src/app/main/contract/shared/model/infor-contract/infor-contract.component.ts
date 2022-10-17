@@ -112,7 +112,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;
     this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.contract_no;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
+
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
+    
     this.sign_time = this.datas.sign_time ? moment(this.datas.sign_time).toDate() : moment(new Date()).add(30, 'day').toDate();
 
     this.expire_time = this.datas.contract_expire_time ? moment(this.datas.contract_expire_time).toDate() : null;
@@ -280,17 +282,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if (this.datas.contractFile) {
       this.errorContractFile = '';
     }
-    // if (Math.round((this.sign_time.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24) >= 0) {
-    //   this.errorSignTime = '';
-    // }
   }
 
-
-  // getDataCoordination
-
   async callAPI(action?: string) {
-    console.log("action ",action);
-
     //call API step 1
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
@@ -425,129 +419,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.toastService.showErrorHTMLWithTimeout("no.get.information.organization.error", "", 3000);
         })
       }
-
-      // else {
-      //   this.save_draft_infor.
-      // }
-
     } else {
-      // this.contractService.addContractStep1(this.datas, this.datas.contract_id ? this.datas.contract_id : null).subscribe((data) => {
-      //     this.datas.id = data?.id;
-      //     this.datas.contract_id = data?.id;
-      //     // upload file hop dong lan 1
-      //     this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
-      //         this.datas.filePath = data.file_object.file_path;
-      //         this.datas.fileName = data.file_object.filename;
-      //         this.datas.fileBucket = data.file_object.bucket;
-      //         this.contractService.addDocument(this.datas).subscribe((data) => {
-      //             //upload file hop dong lan 2
-      //             this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
-      //                 this.datas.filePathDone = data.file_object.file_path;
-      //                 this.datas.fileNameDone = data.file_object.filename;
-      //                 this.datas.fileBucketDone = data.file_object.bucket;
-      //                 //
-      //                 this.contractService.addDocumentDone(this.datas).subscribe((data) => {
-      //                     this.datas.document_id = data?.id;
-      //                     //
-      //                     this.contractService.getDataNotifyOriganzation().subscribe((data: any) => {
-      //                       this.datas.name_origanzation = data.name;
-      //                       // file attach upload
-      //                       if (this.datas.attachFileArr != null) {
-      //                         for (var i = 0; i < this.datas.attachFileArr.length; i++) {
-      //                           this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
-      //                               this.datas.filePathAttach = data.file_object.file_path;
-      //                               this.datas.fileNameAttach = data.file_object.filename;
-      //                               this.datas.fileBucketAttach = data.file_object.bucket;
-      //                               this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
-      //                                   this.datas.document_attach_id = data?.id;
-      //                                 },
-      //                                 error => {
-      //                                   this.spinner.hide();
-      //                                   this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.attach.error", "", 3000);
-      //                                   return false;
-      //                                 }
-      //                               );
-      //                             },
-      //                             error => {
-      //                               this.spinner.hide();
-      //                               this.toastService.showErrorHTMLWithTimeout("no.push.file.attach.error", "", 3000);
-      //                               return false;
-      //                             }
-      //                           );
-      //                         }
-      //
-      //                         if (action == "save_draft") {
-      //                           this.router.navigate(['/main/contract/create/draft']);
-      //                           this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-      //                         } else {
-      //                           //next step
-      //                           this.step = variable.stepSampleContract.step2;
-      //                           this.datas.stepLast = this.step;
-      //                           // this.datas.document_id = '1';
-      //                           this.nextOrPreviousStep(this.step);
-      //                           console.log(this.datas);
-      //                           this.spinner.hide();
-      //                         }
-      //
-      //
-      //                       } else {
-      //
-      //                         if (action == "save_draft") {
-      //                           this.router.navigate(['/main/contract/create/draft']);
-      //                           this.toastService.showSuccessHTMLWithTimeout("no.push.contract.draft.success", "", 3000);
-      //                         } else {
-      //                           //next step
-      //                           this.step = variable.stepSampleContract.step2;
-      //                           this.datas.stepLast = this.step;
-      //                           // this.datas.document_id = '1';
-      //                           this.nextOrPreviousStep(this.step);
-      //                           this.spinner.hide();
-      //                         }
-      //
-      //                       }
-      //                     }, error => {
-      //                       this.spinner.hide();
-      //                       this.toastService.showErrorHTMLWithTimeout("no.get.information.organization.error", "", 3000);
-      //                       return false;
-      //                     })
-      //                   },
-      //
-      //                   error => {
-      //                     this.spinner.hide();
-      //                     this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
-      //                     return false;
-      //                   }
-      //                 );
-      //               },
-      //
-      //               error => {
-      //                 this.spinner.hide();
-      //                 this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
-      //                 return false;
-      //               }
-      //             );
-      //           },
-      //           error => {
-      //             this.spinner.hide();
-      //             this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
-      //             return false;
-      //           }
-      //         );
-      //       },
-      //       error => {
-      //         this.spinner.hide();
-      //         this.toastService.showErrorHTMLWithTimeout("no.push.file.contract.error", "", 3000);
-      //         return false;
-      //       }
-      //     );
-      //   },
-      //   error => {
-      //     this.spinner.hide();
-      //     this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 3000);
-      //     return false;
-      //   }
-      // );
-//==============================> edit code
       let error_api = false;
       await this.contractService.addContractStep1(this.datas, this.datas.contract_id ? this.datas.contract_id : null).toPromise().then((data) => {
         this.datas.id = data?.id;

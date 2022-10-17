@@ -43,12 +43,17 @@ export class ContractService {
   addDetermineCoorditionUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
+
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+
   coordinationSuccess: any = `${environment.apiUrl}/api/v1/processes/coordinator/`;
   listContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/organizations/`;
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
+
   addGetDataContract: any = `${environment.apiUrl}/api/v1/contracts/`;
+  
   addGetFileContract: any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
   addGetObjectSignature: any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
   updateInfoContractUrl: any = `${environment.apiUrl}/api/v1/fields/`;
