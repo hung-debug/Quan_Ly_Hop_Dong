@@ -1042,8 +1042,6 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    // console.log('url ', this.isDataDetermine + idCoordination);
-
     return this.http
       .get<any>(this.isDataDetermine + idCoordination, { headers })
       .pipe();

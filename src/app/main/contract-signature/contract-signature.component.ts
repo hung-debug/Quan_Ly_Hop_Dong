@@ -689,13 +689,10 @@ export class ContractSignatureComponent implements OnInit {
             if (resultHsm) {
 
               this.nameCompany = resultHsm.ma_dvcs;
-
-              console.log("name company ", this.nameCompany);
-
+              
+              await of(null).pipe(delay(100)).toPromise();
+              const imageRender = <HTMLElement>document.getElementById('export-html-hsm');
               let signI = "";
-              const imageRender = <HTMLElement>document.getElementById('export-html');
-
-              console.log("imageRender ", imageRender);
 
               if (imageRender) {
                 const textSignB = await domtoimage.toPng(imageRender);

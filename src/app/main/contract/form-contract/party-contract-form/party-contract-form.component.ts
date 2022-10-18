@@ -14,6 +14,8 @@ import {ToastService} from "src/app/service/toast.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
 import * as _ from 'lodash';
+import { UnitService } from "src/app/service/unit.service";
+import { UserService } from "src/app/service/user.service";
 
 
 @Component({
@@ -75,6 +77,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   email: string="email";
   phone: string="phone";
+  orgId: any;
+  numContractUse: any;
+  smsContractUse: any;
+  eKYCContractUse: any;
+  numContractBuy: any;
+  eKYCContractBuy: any;
+  smsContractBuy: any;
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -86,7 +95,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private unitService: UnitService,
+    private userService: UserService,
   ) {
     this.stepForm = variable.stepSampleContract.step2
   }
@@ -194,13 +205,71 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       if (action == 'save-step') {
         is_save = true;
       }
-      this.getApiDetermine(is_save);
+
+      //check so luong sms va ekyc
+      //lay id to chuc nguoi truy cap
+      this.orgId = this.userService.getInforUser().organization_id;
+
+      this.unitService.getUnitById(this.orgId).toPromise().then(
+        data => {
+          //chi lay so luong hop dong khi chon to chuc cha to nhat
+          if(!data.parent_id){
+            //lay so luong hop dong da dung
+            this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
+              data => {
+                this.numContractUse = data.contract;
+                this.eKYCContractUse = data.ekyc;
+                this.smsContractUse = data.sms;
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+              }
+            )
+            
+            //lay so luong hop dong da mua
+            this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
+              data => {
+                this.numContractBuy = data.contract;
+                this.eKYCContractBuy = data.ekyc;
+                this.smsContractBuy = data.sms;
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+              }
+            )
+          }
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
+        }
+      )
+      
+      let countEkyc = 0;
+      let countOtp = 0;
+      this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
+        items.recipients.forEach((element: any) => {
+          if(element.sign_sype[0].id == 5) {
+            //Ký ekyc
+            countEkyc++;
+          } else if(element.sign_type[0].id == 1) {
+            //Ký ảnh otp
+            countOtp++;
+          }
+        });
+      });
+
+      if(is_save === true) {
+        if(Number(this.eKYCContractUse) + Number(countEkyc) < Number(this.eKYCContractBuy)) {
+          this.toastService.showErrorHTMLWithTimeout('Số lượng ekyc sử dụng vượt quá số lượng ekyc đã mua', "", 3000);
+        } else if(Number(this.smsContractUse) + Number(countOtp) < Number(this.smsContractBuy)) {
+          this.toastService.showErrorHTMLWithTimeout('Số lượng SMS sử dụng vượt quá số lượng SMS đã mua', "", 3000);
+        } else {
+          this.getApiDetermine(is_save);
+        }
+      } else {
+        this.getApiDetermine(is_save);
+      }
     }
   }
 
   async getApiDetermine(is_save?: boolean) {
-    console.log("determine clone before ", this.datasForm.is_determine_clone);
-
     this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
       items.recipients.forEach((element: any) => {
         if (this.action != 'edit') {
@@ -222,8 +291,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         this.datasForm.is_determine_clone[index].id = null;
     })
     this.spinner.show();
-
-    console.log("determine clone ", this.datasForm.is_determine_clone);
 
     this.contractService.getContractDetermine(this.datasForm.is_determine_clone, this.datasForm.id).subscribe((res: any) => {
         this.getDataApiDetermine(res, is_save)

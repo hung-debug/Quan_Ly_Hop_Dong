@@ -82,7 +82,7 @@ export class DetailUnitComponent implements OnInit {
               this.eKYCContractUse = data.ekyc;
               this.smsContractUse = data.sms;
             }, error => {
-              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
             }
           )
           
