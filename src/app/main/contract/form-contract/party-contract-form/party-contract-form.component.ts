@@ -205,9 +205,69 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       if (action == 'save-step') {
         is_save = true;
       }
-      this.getApiDetermine(is_save);
-    }
 
+      //check so luong sms va ekyc
+      //lay id to chuc nguoi truy cap
+      this.orgId = this.userService.getInforUser().organization_id;
+
+      this.unitService.getUnitById(this.orgId).toPromise().then(
+        data => {
+          //chi lay so luong hop dong khi chon to chuc cha to nhat
+          if(!data.parent_id){
+            //lay so luong hop dong da dung
+            this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
+              data => {
+
+                this.numContractUse = data.contract;
+                this.eKYCContractUse = data.ekyc;
+                this.smsContractUse = data.sms;
+
+                let countEkyc = 0;
+                let countOtp = 0;
+                this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
+                  items.recipients.forEach((element: any) => {
+                    if(element.sign_type[0].id == 5) {
+                      //Ký ekyc
+                      countEkyc++;
+                    } else if(element.sign_type[0].id == 1) {
+                      //Ký ảnh otp
+                      countOtp++;
+                    }
+                  });
+                });
+
+                        //lay so luong hop dong da mua
+            this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
+              data => {
+                this.numContractBuy = data.contract;
+                this.eKYCContractBuy = data.ekyc;
+                this.smsContractBuy = data.sms;
+
+                if(is_save === true) {
+                  if(Number(this.eKYCContractUse) + Number(countEkyc) > Number(this.eKYCContractBuy)) {
+                    this.toastService.showErrorHTMLWithTimeout('Số lượng ekyc sử dụng vượt quá số lượng ekyc đã mua', "", 3000);
+                  } else if(Number(this.smsContractUse) + Number(countOtp) > Number(this.smsContractBuy)) {
+                    this.toastService.showErrorHTMLWithTimeout('Số lượng SMS sử dụng vượt quá số lượng SMS đã mua', "", 3000);
+                  } else {
+                    this.getApiDetermine(is_save);
+                  }
+                } else {
+                  this.getApiDetermine(is_save);
+                }
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+              }
+            )          
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+              }
+            )
+          }
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
+        }
+      )
+    }
   }
 
   async getApiDetermine(is_save?: boolean) {
