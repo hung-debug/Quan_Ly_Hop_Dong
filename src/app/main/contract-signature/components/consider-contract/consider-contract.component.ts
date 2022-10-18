@@ -821,9 +821,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     console.log("counterKYC ", counteKYC);
 
     if(counteKYC > 0){
-      if(this.confirmSignature == 1) {
+      if(this.confirmSignature == 1 && this.mobile) {
         this.eKYC = true;
         this.eKYCSignOpen();
+        return;
+      } else {
+        this.toastService.showErrorHTMLWithTimeout('Vui lòng ký eKYC trên ứng dụng điện thoại', '', 3000);
         return;
       }
     }

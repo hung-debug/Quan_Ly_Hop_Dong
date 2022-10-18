@@ -163,18 +163,11 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
-    
-
-    
     if (sessionStorage.getItem('type')) {
       this.type = 1;
     } else this.type = 0;
 
-    console.log("mobile first ", this.mobile);
     if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
-
-
-      console.log("mobile is true ");
       this.getDeviceApp();
 
       this.mobile = true;
@@ -202,8 +195,7 @@ export class LoginComponent implements OnInit {
   getDeviceApp() {
 
     console.log("type ", this.type);
-
-    if (this.type == 0 && (this.deviceService.isMobile() || this.deviceService.isTablet())) {
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
 
       console.log(this.deviceService.isMobile(), this.deviceService.deviceType, this.deviceService);
       // @ts-ignore

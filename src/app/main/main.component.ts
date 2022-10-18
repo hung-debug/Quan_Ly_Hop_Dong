@@ -54,14 +54,8 @@ export class MainComponent implements OnInit {
 
     //update title by component
     this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('type')));
-
-    console.log("url login type ",this.urlLoginType);
    
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
-
-    console.log("cu ",localStorage.getItem('currentUser'));
-
-    console.log("cu ",JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id);
 
     this.userService.getUserById(JSON.parse(localStorage.getItem('currentUser') || '').customer.info.id).subscribe(
       data => {
