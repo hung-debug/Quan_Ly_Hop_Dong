@@ -13,6 +13,8 @@ import { AddContractComponent } from '../../add-contract/add-contract.component'
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastService } from 'src/app/service/toast.service';
+import { UserService } from 'src/app/service/user.service';
+import { UnitService } from 'src/app/service/unit.service';
 @Component({
   selector: 'app-infor-contract-batch',
   templateUrl: './infor-contract-batch.component.html',
@@ -60,6 +62,13 @@ export class InforContractBatchComponent implements OnInit {
 
   idContractTemplate: any;
   filePathExample: any = '';
+  orgId: any;
+  numContractUse: any;
+  eKYCContractUse: any;
+  smsContractUse: any;
+  numContractBuy: any;
+  eKYCContractBuy: any;
+  smsContractBuy: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -69,7 +78,9 @@ export class InforContractBatchComponent implements OnInit {
     public datepipe: DatePipe,
     private router: Router,
     private spinner: NgxSpinnerService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private userService: UserService,
+    private unitService: UnitService
   ) {
     this.step = variable.stepSampleContractBatch.step1;
   }
@@ -256,22 +267,63 @@ export class InforContractBatchComponent implements OnInit {
                 }
               }
 
-              // if (responseUpload.success) {
-              //   //next step
-              //   this.step = variable.stepSampleContractBatch.step2;
-              //   this.datasBatch.stepLast = this.step;
-              //   this.nextOrPreviousStep(this.step);
-              //   console.log(this.datasBatch);
-              //   this.spinner.hide();
-              // } else {
-              //   this.errorDetail = response.detail;
-              //   this.toastService.showErrorHTMLWithTimeout(
-              //     'File mẫu không hợp lệ',
-              //     '',
-              //     3000
-              //   );
-              //   this.spinner.hide();
-              // }
+              if(countOtp > 0) {
+                countOtp = countOtp*response.length;
+              } else if(countEkyc > 0) {
+                countEkyc = countEkyc*response.length;
+              }
+
+              this.orgId = this.userService.getInforUser().organization_id;
+
+              this.unitService.getUnitById(this.orgId).toPromise().then(
+                data => {
+                  //chi lay so luong hop dong khi chon to chuc cha to nhat
+                  if(!data.parent_id){
+                    //lay so luong hop dong da dung
+                    this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
+                      data => {
+        
+                        this.numContractUse = data.contract;
+                        this.eKYCContractUse = data.ekyc;
+                        this.smsContractUse = data.sms;
+    
+        
+                                //lay so luong hop dong da mua
+                    this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
+                      data => {
+                        this.numContractBuy = data.contract;
+                        this.eKYCContractBuy = data.ekyc;
+                        this.smsContractBuy = data.sms;
+        
+                        if (responseUpload.success) {
+                //next step
+                this.step = variable.stepSampleContractBatch.step2;
+                this.datasBatch.stepLast = this.step;
+                this.nextOrPreviousStep(this.step);
+                console.log(this.datasBatch);
+                this.spinner.hide();
+              } else {
+                this.errorDetail = response.detail;
+                this.toastService.showErrorHTMLWithTimeout(
+                  'File mẫu không hợp lệ',
+                  '',
+                  3000
+                );
+                this.spinner.hide();
+              }
+                      }, error => {
+                        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+                      }
+                    )          
+                      }, error => {
+                        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+                      }
+                    )
+                  }
+                }, error => {
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
+                }
+              )
             }),
             (error: any) => {
               this.toastService.showErrorHTMLWithTimeout(
