@@ -11,6 +11,10 @@ import { ContractService } from 'src/app/service/contract.service';
 })
 export class ProcessingHandleEcontractComponent implements OnInit {
   is_list_name: any = [];
+  personCreate: string;
+  emailCreate: string;
+  timeCreate: any;
+
   status: any = [
     {
       value: 0,
@@ -34,21 +38,15 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.data.is_data_contract.participants.forEach((item: any) => {
-    //   item.recipients.forEach((element: any) => {
-    //     let data = {
-    //       name: element.name,
-    //       name_company: item.name,
-    //       emailRecipients: element.email,
-    //       status: this.checkStatusUser(element.status, element.role),
-    //       process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").add(7, 'hours').format("YYYY/MM/DD HH:mm:ss") : null
-    //     }
-    //     this.is_list_name.push(data);
-    //   })
-    // })
+    // this.personCreate = "Phạm Tấn Dũng";
+    // this.emailCreate = "dung111999@gmail.com";
+    // this.timeCreate="19/10/2022";
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
-    
-      response.forEach((element: any) => {
+      this.personCreate = response.createdBy.name;
+      this.timeCreate = response.createdAt ? moment(response.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
+      this.emailCreate = response.createdBy.email;
+
+      response.recipients.forEach((element: any) => {
         let data = {
           name: element.name,
           name_company: element.participantName,
