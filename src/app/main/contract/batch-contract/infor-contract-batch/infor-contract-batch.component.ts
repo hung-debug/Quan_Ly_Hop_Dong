@@ -284,7 +284,6 @@ export class InforContractBatchComponent implements OnInit {
                 .then(
                   (data) => {
                     //chi lay so luong hop dong khi chon to chuc cha to nhat
-                    if (!data.parent_id) {
                       //lay so luong hop dong da dung
                       this.unitService
                         .getNumberContractUseOriganzation(this.orgId)
@@ -364,7 +363,6 @@ export class InforContractBatchComponent implements OnInit {
                             );
                           }
                         );
-                    }
                   },
                   (error) => {
                     this.toastService.showErrorHTMLWithTimeout(

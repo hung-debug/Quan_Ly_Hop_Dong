@@ -43,7 +43,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     // this.timeCreate="19/10/2022";
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
-      this.timeCreate = response.createdAt ? moment(response.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
+      this.timeCreate = response.createdAt ? moment(response.createdAt, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
       this.emailCreate = response.createdBy.email;
 
       response.recipients.forEach((element: any) => {

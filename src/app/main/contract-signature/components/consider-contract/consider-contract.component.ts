@@ -2500,4 +2500,3 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 }
 
 
-1

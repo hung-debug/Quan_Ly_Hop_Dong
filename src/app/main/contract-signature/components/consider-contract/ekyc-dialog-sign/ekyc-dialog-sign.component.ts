@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
@@ -20,7 +21,8 @@ export class EkycDialogSignComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public dialogRef: MatDialogRef<EkycDialogSignComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private activeRoute: ActivatedRoute,
   ) {
 
   }
@@ -49,6 +51,8 @@ export class EkycDialogSignComponent implements OnInit {
   flagSuccess: boolean = false;
 
   initWebcamImage: any;
+  contractId: number;
+  organizationId: any;
   public ngOnInit(): void {
 
     console.log("data ", this.data);
@@ -81,69 +85,76 @@ export class EkycDialogSignComponent implements OnInit {
       this.cardId = response.recipients[0].card_id;
     })
 
-    if(this.title == 0) {
-      let formData = {
-        "name": "image_ekyc_web_cardId" + new Date().getTime() + ".jpg",
-        "content":this.webcamImage.imageAsDataUrl
-      }
+    this.contractService.getDataCoordination(this.data.contractId).subscribe(async (response) => {
+      this.organizationId =  response.organization_id;
 
-      this.upFileImageToDb(formData);
-
-      this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
-        this.spinner.hide();
-        console.log("response ",response);
-        if(response.result_code == 200 && response.action == 'pass') {
-          if(this.cardId) {
-            if(this.cardId == response.id) {
-              this.flagSuccess == true;
+      if(this.title == 0) {
+        let formData = {
+          "name": "image_ekyc_web_cardId" + new Date().getTime() + ".jpg",
+          "content":this.webcamImage.imageAsDataUrl,
+          "organizationId": this.organizationId,
+        }
+  
+        this.upFileImageToDb(formData);
+  
+        this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
+          this.spinner.hide();
+          console.log("response ",response);
+          if(response.result_code == 200 && response.action == 'pass') {
+            if(this.cardId) {
+              if(this.cardId == response.id) {
+                this.flagSuccess == true;
+                alert("Xác thực thành công");
+                this.dialogRef.close(this.webcamImage.imageAsDataUrl);
+              } else {
+                this.flagSuccess == false;
+                this.webcamImage = this.initWebcamImage;
+                alert("Mã CMT/CCCD không trùng khớp")
+              }
+            } else {
               alert("Xác thực thành công");
               this.dialogRef.close(this.webcamImage.imageAsDataUrl);
-            } else {
-              this.flagSuccess == false;
-              this.webcamImage = this.initWebcamImage;
-              alert("Mã CMT/CCCD không trùng khớp")
             }
+             
           } else {
-            alert("Xác thực thành công");
-            this.dialogRef.close(this.webcamImage.imageAsDataUrl);
+            this.flagSuccess = false;
+            this.webcamImage = this.initWebcamImage;
+            if(response.action == 'manualReview' && response.warning_msg[0].length > 0) {
+              alert(response.warning_msg[0]);
+            } else {
+              alert("Xác thực thất bại");
+            }      
           }
-           
-        } else {
-          this.flagSuccess = false;
-          this.webcamImage = this.initWebcamImage;
-          if(response.action == 'manualReview' && response.warning_msg[0].length > 0) {
-            alert(response.warning_msg[0]);
-          } else {
-            alert("Xác thực thất bại");
-          }      
+         
+        })
+      } else {
+  
+        let formData = {
+          "name": "image_ekyc_web_face" + new Date().getTime() + ".jpg",
+          "content":this.webcamImage.imageAsDataUrl
         }
-       
-      })
-    } else {
-
-      let formData = {
-        "name": "image_ekyc_web_face" + new Date().getTime() + ".jpg",
-        "content":this.webcamImage.imageAsDataUrl
+  
+        //up file anh len db
+        this.upFileImageToDb(formData);
+  
+        this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl).subscribe((response) => {
+          this.spinner.hide();
+          if(response.verify_result == 2) {
+            alert("Nhận dạng thành công");
+            this.dialogRef.close(response.verify_result);
+          } else {
+            if(response.message.error_message && response.message.error_message != 'undefined') {
+              alert(response.message.error_message);
+            } else {
+              alert("Nhận dạng thất bại")
+            }
+          }
+        })
       }
+  
+    })
 
-      //up file anh len db
-      this.upFileImageToDb(formData);
-
-      this.contractService.detectFace(this.data.cccdFront, this.webcamImage.imageAsDataUrl).subscribe((response) => {
-        this.spinner.hide();
-        if(response.verify_result == 2) {
-          alert("Nhận dạng thành công");
-          this.dialogRef.close(response.verify_result);
-        } else {
-          if(response.message.error_message && response.message.error_message != 'undefined') {
-            alert(response.message.error_message);
-          } else {
-            alert("Nhận dạng thất bại")
-          }
-        }
-      })
-    }
-
+   
 
   }
 
