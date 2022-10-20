@@ -84,6 +84,13 @@ export class DetermineSignerComponent implements OnInit {
 
   email: string="email";
   phone: string="phone";
+  orgId: any;
+  numContractUse: any;
+  eKYCContractUse: any;
+  smsContractUse: any;
+  numContractBuy: any;
+  eKYCContractBuy: any;
+  smsContractBuy: any;
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -94,7 +101,8 @@ export class DetermineSignerComponent implements OnInit {
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private unitService: UnitService,
   ) {
     this.step = variable.stepSampleContract.step2
   }
@@ -168,12 +176,67 @@ export class DetermineSignerComponent implements OnInit {
       }
       return;
     } else {
-      console.log("tiep theo buoc 2 sang buoc 3");
       let is_save = false;
       if (action == 'save-step') {
         is_save = true;
+
+        this.orgId = this.userService.getInforUser().organization_id;
+
+        this.unitService.getUnitById(this.orgId).toPromise().then(
+          data => {
+            //chi lay so luong hop dong khi chon to chuc cha to nhat
+              //lay so luong hop dong da dung
+              this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
+                data => {
+  
+                  this.numContractUse = data.contract;
+                  this.eKYCContractUse = data.ekyc;
+                  this.smsContractUse = data.sms;
+  
+                  let countEkyc = 0;
+                  let countOtp = 0;
+                  this.datas.is_determine_clone.forEach((items: any, index: number) => {
+                    items.recipients.forEach((element: any) => {
+                      if(element.sign_type[0].id == 5) {
+                        //Ký ekyc
+                        countEkyc++;
+                      } else if(element.sign_type[0].id == 1) {
+                        //Ký ảnh otp
+                        countOtp++;
+                      }
+                    });
+                  });
+  
+                          //lay so luong hop dong da mua
+              this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
+                data => {
+                  this.numContractBuy = data.contract;
+                  this.eKYCContractBuy = data.ekyc;
+                  this.smsContractBuy = data.sms;
+  
+                    if(Number(this.eKYCContractUse) + Number(countEkyc) > Number(this.eKYCContractBuy)) {
+                      this.toastService.showErrorHTMLWithTimeout('Số lượng ekyc sử dụng vượt quá số lượng ekyc đã mua', "", 3000);
+                    } else if(Number(this.smsContractUse) + Number(countOtp) > Number(this.smsContractBuy)) {
+                      this.toastService.showErrorHTMLWithTimeout('Số lượng SMS sử dụng vượt quá số lượng SMS đã mua', "", 3000);
+                    } else {
+                      this.getApiDetermine(is_save);
+                    }
+                }, error => {
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+                }
+              )          
+                }, error => {
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+                }
+              )
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
+          }
+        )
+      } else {
+        this.getApiDetermine(is_save);
       }
-      this.getApiDetermine(is_save);
+     
     }
   }
 
