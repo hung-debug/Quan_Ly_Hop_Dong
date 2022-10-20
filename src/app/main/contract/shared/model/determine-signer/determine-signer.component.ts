@@ -1,3 +1,5 @@
+import { map } from 'rxjs/operators';
+import { Unit } from './../../../../../service/unit.service';
 import {ContractService} from 'src/app/service/contract.service';
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges, ElementRef} from '@angular/core';
 import {
@@ -18,6 +20,7 @@ import {NgxInputSearchModule} from "ngx-input-search";
 import {HttpErrorResponse} from '@angular/common/http';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { id } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-determine-signer',
@@ -58,6 +61,8 @@ export class DetermineSignerComponent implements OnInit {
   is_determine_clone: any;
   toppings = new FormControl();
   arrSearch: any = [];
+  totalUseItem: number;
+  totalPurcharItem: number;
 
   //dropdown
   signTypeList: Array<any> = type_signature;
@@ -94,7 +99,8 @@ export class DetermineSignerComponent implements OnInit {
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private UnitService : UnitService
   ) {
     this.step = variable.stepSampleContract.step2
   }
@@ -508,19 +514,47 @@ export class DetermineSignerComponent implements OnInit {
 
   // valid data step 2
   validData() {
-
+    
     let count = 0;
-    let dataArr = [];
+    let dataArr = [];   
+    let userEkyc: any = [];
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
-
     console.log("dataArr ", dataArr);
+    const subscription = this.UnitService.getNumberContractUseOriganzation(this.userService.getInforUser().organization_id).subscribe(res => {
+      this.totalUseItem = res.ekyc;
+      subscription.unsubscribe();
+    })
+    const subscription2 = this.UnitService.getNumberContractBuyOriganzation(this.userService.getInforUser().organization_id).subscribe(res => {
+      this.totalPurcharItem = res.ekyc;
+      subscription2.unsubscribe();
+    })
+    console.log("total Use Item", this.totalUseItem);
+    console.log("total purchar item", this.totalPurcharItem);
+    
+    
+    this.datas.is_determine_clone.forEach((items: any) => {
+      items.recipients.forEach((element: any) => {
+        if(element.sign_type[0].id == 5) {
+          //Ký ekyc
+          userEkyc.push(element.sign_type[0]);
+        }
+      });
+    });
+    console.log("UserEkycaaaaaaa", userEkyc);
+    
+    for (let i = 0; i < dataArr.length; i++) {  
+      if(this.totalUseItem + userEkyc.length > this.totalPurcharItem){
+        this.getNotificationValid("Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ");
+        count++;
+        break;
+      }
 
-    for (let i = 0; i < dataArr.length; i++) {
       if (!dataArr[i].name) {
         this.getNotificationValid("Vui lòng nhập tên" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!");
         count++;
         break;
       }
+
       if (!dataArr[i].email) {
         this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
         count++;
@@ -640,7 +674,7 @@ export class DetermineSignerComponent implements OnInit {
 
     }
 
-    let dataArrPartner = [];
+    let dataArrPartner = [];    
     dataArrPartner = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
     if (count == 0) {
       // validate phía đối tác
