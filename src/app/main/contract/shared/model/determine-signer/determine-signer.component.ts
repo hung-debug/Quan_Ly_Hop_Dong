@@ -101,7 +101,7 @@ export class DetermineSignerComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log("datas clone ", this.datas.is_determine_clone);
+    console.log("datas clone ", this.datas);
 
     this.user = this.userService.getInforUser();
 

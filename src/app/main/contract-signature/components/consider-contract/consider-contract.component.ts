@@ -2196,6 +2196,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = data;
     dialogConfig.disableClose = true;
+    // dialogConfig.width = '100000000000000000000000000000px';
 
     const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
 
@@ -2226,6 +2227,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = data;
     dialogConfig.disableClose = true;
+    // dialogConfig.width = '497px';
 
     const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
 

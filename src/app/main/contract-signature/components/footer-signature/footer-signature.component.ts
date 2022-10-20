@@ -31,6 +31,7 @@ export class FooterSignatureComponent implements OnInit {
   numContractBuy: any;
   eKYCContractBuy: any;
   smsContractBuy: any;
+  contractId: any;
 
   constructor(
     private dialog: MatDialog,
@@ -129,46 +130,53 @@ export class FooterSignatureComponent implements OnInit {
     } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
 
       this.contractService.getDetermineCoordination(this.recipientId).subscribe((response) => {
-        if(response.recipients[0].sign_type[0].id == 1) {
-          this.orgId = this.userService.getInforUser().organization_id;
+        if(response.recipients[0].sign_type[0].id == 5) {
 
-          this.unitService.getUnitById(this.orgId).toPromise().then(
-            data => {
-              //chi lay so luong hop dong khi chon to chuc cha to nhat
-              if(!data.parent_id){
-                //lay so luong hop dong da dung
-                this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
-                  data => {
-    
-                    this.numContractUse = data.contract;
-                    this.eKYCContractUse = data.ekyc;
-                    this.smsContractUse = data.sms;
-    
-                            //lay so luong hop dong da mua
-                this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
-                  data => {
-                    this.numContractBuy = data.contract;
-                    this.eKYCContractBuy = data.ekyc;
-                    this.smsContractBuy = data.sms;
-    
-                      if(Number(this.eKYCContractUse) + Number(1) > Number(this.eKYCContractBuy)) {
-                        this.toastService.showErrorHTMLWithTimeout('Số lượng ekyc sử dụng vượt quá số lượng ekyc đã mua', "", 3000);
-                      } else {
-                        this.submitChanges.emit(1);
-                      }
-                  }, error => {
-                    this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
-                  }
-                )          
-                  }, error => {
-                    this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
-                  }
-                )
+          this.contractId = response.contract_id;
+
+          console.log("contract id ", this.contractId);
+
+          this.contractService.getDataCoordination(this.contractId).subscribe((response => {
+            this.orgId = response.organization_id;
+            this.unitService.getUnitById(this.orgId).toPromise().then(
+              data => {
+                
+                //chi lay so luong hop dong khi chon to chuc cha to nhat
+                  //lay so luong hop dong da dung
+                  this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
+                    data => {
+      
+                      this.numContractUse = data.contract;
+                      this.eKYCContractUse = data.ekyc;
+                      this.smsContractUse = data.sms;
+      
+                              //lay so luong hop dong da mua
+                  this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
+                    data => {
+                      this.numContractBuy = data.contract;
+                      this.eKYCContractBuy = data.ekyc;
+                      this.smsContractBuy = data.sms;
+      
+                        if(Number(this.eKYCContractUse) + Number(1) > Number(this.eKYCContractBuy)) {
+                          this.toastService.showErrorHTMLWithTimeout('Số lượng ekyc sử dụng vượt quá số lượng ekyc đã mua', "", 3000);
+                        } else {
+                          this.submitChanges.emit(1);
+                        }
+                    }, error => {
+                      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+                    }
+                  )          
+                    }, error => {
+                      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+                    }
+                  )
+              }, error => {
+                this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
               }
-            }, error => {
-              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
-            }
-          )
+            )
+          }))
+
+         
         } else {
           this.submitChanges.emit(1);
         }

@@ -33,8 +33,8 @@ export class EkycDialogSignComponent implements OnInit {
   public multipleWebcamsAvailable = false;
   public deviceId: string;
   public videoOptions: MediaTrackConstraints = {
-    // width: {ideal: 1024},
-    // height: {ideal: 576}
+    width: {ideal: 576},
+    height: {ideal: 750}
   };
   public errors: WebcamInitError[] = [];
 
