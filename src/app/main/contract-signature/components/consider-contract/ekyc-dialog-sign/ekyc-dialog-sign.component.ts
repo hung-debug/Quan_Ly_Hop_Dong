@@ -119,11 +119,14 @@ export class EkycDialogSignComponent implements OnInit {
           } else {
             this.flagSuccess = false;
             this.webcamImage = this.initWebcamImage;
-            if(response.action == 'manualReview' && response.warning_msg[0].length > 0) {
-              alert(response.warning_msg[0]);
-            } else {
-              alert("Xác thực thất bại");
-            }      
+            // if(response.action == 'manualReview' && response.warning_msg[0].length > 0) {
+            //   alert(response.warning_msg[0]);
+            // } else {
+            //   alert("Xác thực thất bại");
+            // }      
+
+            alert("Xác thực thất bại");
+
           }
          
         })

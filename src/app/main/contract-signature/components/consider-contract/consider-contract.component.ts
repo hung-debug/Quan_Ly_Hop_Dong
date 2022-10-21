@@ -161,6 +161,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   domain: any = `https://127.0.0.1:14424/`;
 
+  //id tổ chức của người tạo hợp đồng
+  orgId: any;
+
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -230,11 +233,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         i_data_file_contract: rs[1],
         is_data_object_signature: rs[2]
       };
-      /*let data_coordination = localStorage.getItem('data_coordinates_contract');
-      if (data_coordination) {
-        this.datas = JSON.parse(data_coordination).data_coordinates;
-        this.datas = Object.assign(this.datas, this.data_contract);
-      }*/
+
+      this.orgId = this.data_contract.is_data_contract.organization_id;
+ 
       this.datas = this.data_contract;
       if (this.datas?.is_data_contract?.type_id) {
         this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe(data => {
@@ -243,8 +244,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           }
         })
       }
-
-      console.log("status ",this.data_contract?.is_data_contract?.status);
 
       if (this.data_contract?.is_data_contract?.status == 31 || this.data_contract?.is_data_contract?.status == 30) {
         this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
@@ -1823,30 +1822,40 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       
             this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
               async (result) => {
-                if (!notContainSignImage) {
-                  await this.signDigitalDocument();
-                }
-                setTimeout(() => {
-                  this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
-                  // this.toastService.showSuccessHTMLWithTimeout(
-                  //   [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-                  //   , '', 3000);
 
-                  if(!this.mobile) {
-                    this.toastService.showSuccessHTMLWithTimeout(
-                      [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
-                      , '', 3000);
-                  } else {
-                    if([3, 4].includes(this.datas.roleContractReceived)) {
-                      alert("Ký hợp đồng thành công");
+                //Ký ekyc thành công thì call api trừ số lượng ekyc
+                if(result.id) {
+                  this.contractService.decreaseNumberOfEkyc(this.orgId).subscribe((response) => {
+                    if(response.status != 204) {
+                      this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
+                      this.spinner.hide();
                     } else {
-                      alert("Xem xét hợp đồng thành công");
-                    }
-                  }
+                      setTimeout(() => {
+                        this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
+                        // this.toastService.showSuccessHTMLWithTimeout(
+                        //   [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
+                        //   , '', 3000);
       
-
-                  this.spinner.hide();
-                }, 1000);
+                        if(!this.mobile) {
+                          this.toastService.showSuccessHTMLWithTimeout(
+                            [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
+                            , '', 3000);
+                        } else {
+                          if([3, 4].includes(this.datas.roleContractReceived)) {
+                            alert("Ký hợp đồng thành công");
+                          } else {
+                            alert("Xem xét hợp đồng thành công");
+                          }
+                        }
+            
+      
+                        this.spinner.hide();
+                      }, 1000);
+                    }
+                  })
+                }
+                
+               
               }, error => {
                 this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
                 this.spinner.hide();
