@@ -263,10 +263,13 @@ export class InforContractBatchComponent implements OnInit {
                 i++
               ) {
                 let recipients = response[0].participants[0].recipients;
-                if (recipients.sign_type[0].id == 1) {
-                  countOtp++;
-                } else if (recipients.sign_type[0].id == 5) {
-                  countEkyc++;
+
+                for(let j = 0; j < recipients.length; j++) {
+                  if (recipients[j].sign_type[0].id == 1) {
+                    countOtp++;
+                  } else if (recipients[j].sign_type[0].id == 5) {
+                    countEkyc++;
+                  }
                 }
               }
 
