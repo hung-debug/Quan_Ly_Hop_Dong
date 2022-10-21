@@ -221,12 +221,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                   let countOtp = 0;
                   this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
                     items.recipients.forEach((element: any) => {
-                      if(element.sign_type[0].id == 5) {
-                        //Ký ekyc
-                        countEkyc++;
-                      } else if(element.sign_type[0].id == 1) {
-                        //Ký ảnh otp
-                        countOtp++;
+                      if(element.sign_type > 0) {
+                        if(element.sign_type[0].id == 5) {
+                          //Ký ekyc
+                          countEkyc++;
+                        } else if(element.sign_type[0].id == 1) {
+                          //Ký ảnh otp
+                          countOtp++;
+                        }
                       }
                     });
                   });
