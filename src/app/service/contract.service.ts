@@ -43,12 +43,17 @@ export class ContractService {
   addDetermineCoorditionUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
+
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+
   coordinationSuccess: any = `${environment.apiUrl}/api/v1/processes/coordinator/`;
   listContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/organizations/`;
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
+
   addGetDataContract: any = `${environment.apiUrl}/api/v1/contracts/`;
+  
   addGetFileContract: any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
   addGetObjectSignature: any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
   updateInfoContractUrl: any = `${environment.apiUrl}/api/v1/fields/`;
@@ -858,6 +863,17 @@ export class ContractService {
     });
   }
 
+  addDocumentEkyc(body: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    return this.http.post<Contract>(this.documentUrl, body, {
+        headers: headers,
+      });
+  }
+
   updateFileAttach(id: any, body: any, isStatus?: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -1025,8 +1041,6 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-
-    // console.log('url ', this.isDataDetermine + idCoordination);
 
     return this.http
       .get<any>(this.isDataDetermine + idCoordination, { headers })

@@ -151,7 +151,6 @@ export class AddContractComponent implements OnInit {
 
   ngOnInit() {
     this.userService.checkServiceStatus().subscribe((response) => {
-      console.log("service response ",response);
 
       if (response.status == 'Using') {
         //title

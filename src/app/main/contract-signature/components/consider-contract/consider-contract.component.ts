@@ -821,9 +821,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     console.log("counterKYC ", counteKYC);
 
     if(counteKYC > 0){
-      if(this.confirmSignature == 1) {
+      if(this.confirmSignature == 1 && this.mobile) {
         this.eKYC = true;
         this.eKYCSignOpen();
+        return;
+      } else {
+        this.toastService.showErrorHTMLWithTimeout('Vui lòng ký eKYC trên ứng dụng điện thoại', '', 3000);
         return;
       }
     }
@@ -1074,6 +1077,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               }
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(100)).toPromise();
+
+              //lấy ảnh chữ ký usb token
               const imageRender = <HTMLElement>document.getElementById('export-html');
               if (imageRender) {
                 const textSignB = await domtoimage.toPng(imageRender);
@@ -1088,10 +1093,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
 
-            // const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+            const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
 
-            const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
-            signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
+            // const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
+            // signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
 
             console.log("data sign mobi ", dataSignMobi);
 
@@ -2184,12 +2189,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const data = {
       id: 0,
       title: 'Xác thực CMT/CCCD mặt trước',
-      recipientId: this.recipientId
+      recipientId: this.recipientId,
+      contractId: this.idContract
     };
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = data;
     dialogConfig.disableClose = true;
+    // dialogConfig.width = '100000000000000000000000000000px';
 
     const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
 
@@ -2214,11 +2221,13 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const data = {
       id: 1,
       title: 'Xác thực CMT/CCCD mặt sau',
+      contractId: this.idContract
     };
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = data;
     dialogConfig.disableClose = true;
+    // dialogConfig.width = '497px';
 
     const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
 
@@ -2226,7 +2235,12 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
       const dialogConfig = new MatDialogConfig();
 
-      dialogConfig.data = this.cccdFront;
+      const dataFace = {
+        cccdFront: this.cccdFront,
+        contractId: this.idContract
+      }
+
+      dialogConfig.data = dataFace;
       dialogConfig.disableClose = true;
 
       if(result) {
@@ -2259,15 +2273,30 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(async (result: any) => {
-      console.log("dong hsm ");
-      console.log("result ", result);
+
+      let signI = null;
+
+         //lấy ảnh chữ ký usb token
+         this.cardId = result.ma_dvcs;
+        
+         console.log("card id ", this.cardId);
+
+         await of(null).pipe(delay(100)).toPromise();
+         const imageRender = <HTMLElement>document.getElementById('export-html-hsm');
+         if (imageRender) {
+           const textSignB = await domtoimage.toPng(imageRender);
+           signI = textSignB.split(",")[1];
+         }
+
+         console.log("signI ", signI);
+
       if (result) {
         this.dataHsm = {
           ma_dvcs: result.ma_dvcs,
           username: result.username,
           password: result.password,
           password2: result.password2,
-          imageBase64: "null",
+          imageBase64: signI,
         }
 
         await this.signContractSubmit();
@@ -2473,4 +2502,3 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 }
 
 
-1

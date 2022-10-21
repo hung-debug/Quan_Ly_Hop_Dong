@@ -100,12 +100,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-
-    console.log(this.datas.contract_user_sign);
-
-  
-
-    console.log("äfter ",this.datas.contract_user_sign);
+    console.log("datas clone sample ", this.datas.is_determine_clone);
 
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
@@ -1251,7 +1246,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       } 
     })
 
-    console.log("arrSign config ", arrSignConfig);
     return arrSignConfig;
   }
 
