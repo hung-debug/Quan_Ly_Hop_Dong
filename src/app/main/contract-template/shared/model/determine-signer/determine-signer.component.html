@@ -27,7 +27,7 @@
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
                  <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                 <!-- <div class="participants--input" style="display: flex">
+                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
   
@@ -49,7 +49,7 @@
                       </div>
                     </div>
                   </div>
-                </div> -->
+                </div>
 
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
@@ -113,8 +113,8 @@
                    oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [disabled]="getOriganzationSignature().length == 1">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-               <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-               <!-- <div class="participants--input" style="display: flex">
+               <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ký to chuc-->
+               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label_detail text-color">
 
@@ -136,14 +136,14 @@
                     </div>
                   </div>
                 </div>
-              </div> -->
+              </div>
 
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
+                    <input *ngIf="d.login_by === 'email' || !d.login_by" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
                            (focusin)="onFocusIn($event, index, 'signature')"
                            (ngxInputSearch)="doTheSearch($event, index, 'signature')" [(ngModel)]="d.name"
                            (focusout)="onFocusOut($event, d)">
@@ -181,7 +181,7 @@
               </div>
 
               <div class="participants--input" style="display: flex">
-                <div class="participants__name" style="width: 90%">
+                <div *ngIf="d.login_by === 'email' || !d.login_by" class="participants__name" style="width: 90%">
                   <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
@@ -246,12 +246,7 @@
                   </div>
                 </div>
                 <div class="participants__name">
-                  <!-- <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
-                  <div class="input-data">
-                    <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
-                  </div> -->
-
+              
                     <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span class="required-title">*</span>
                     </div>
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
@@ -363,7 +358,7 @@
               <div class="col-md-10 participants--input" style="display: flex; flex-direction: column">
 
                  <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                 <!-- <div class="participants--input" style="display: flex">
+                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
   
@@ -385,7 +380,7 @@
                       </div>
                     </div>
                   </div>
-                </div> -->
+                </div>
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name" style="width: 90%">
@@ -417,7 +412,7 @@
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
                   <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                  <!-- <div class="participants--input" style="display: flex">
+                  <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
     
@@ -439,7 +434,7 @@
                         </div>
                       </div>
                     </div>
-                  </div> -->
+                  </div>
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -506,11 +501,6 @@
                   </div>
                                    
                   <div class="participants__name">
-                    <!-- <div class="label text-color">Email: <span class="required-title">*</span></div>
-                    <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="d.email">
-                    </div> -->
                     <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span
                       class="required-title">*</span></div>
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
@@ -563,7 +553,7 @@
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column;margin-bottom: 14px">
 
                   <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                  <!-- <div class="participants--input" style="display: flex">
+                  <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
     
@@ -585,7 +575,7 @@
                         </div>
                       </div>
                     </div>
-                  </div> -->
+                  </div>
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
