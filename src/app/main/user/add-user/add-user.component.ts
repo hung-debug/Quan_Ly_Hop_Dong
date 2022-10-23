@@ -377,7 +377,7 @@ export class AddUserComponent implements OnInit {
     const data = {
       id: "",
       name: this.addForm.value.name,
-      email: this.addForm.value.email,
+      email: this.addForm.value.email.toLowerCase(),
       birthday: this.addForm.value.birthday,
       phone: this.addForm.value.phone,
       organizationId: this.addForm.value.organizationId,

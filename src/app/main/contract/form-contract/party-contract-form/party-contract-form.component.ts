@@ -266,6 +266,16 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   async getApiDetermine(is_save?: boolean) {
+
+      //Đưa giá trị email về chũ thường
+      this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
+        for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
+          if(this.datasForm.is_determine_clone[index].recipients[i].email) {
+            this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.toLowerCase();
+          }
+        }
+    })
+
     this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
       items.recipients.forEach((element: any) => {
         if (this.action != 'edit') {

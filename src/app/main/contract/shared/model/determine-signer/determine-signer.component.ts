@@ -244,6 +244,16 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   async getApiDetermine(is_save?: boolean) {
+
+    //Đưa giá trị email về chũ thường
+    this.datas.is_determine_clone.forEach((items: any, index: number) => {
+        for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
+          if(this.datas.is_determine_clone[index].recipients[i].email) {
+            this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.toLowerCase();
+          }
+        }
+    })
+
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
       
       if (items.type == 3)

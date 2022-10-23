@@ -1864,31 +1864,23 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
             return;
           })
-
-          console.log("sign update temp out api ", signUpdateTempN);
-
         }
       
       }
     }
 
-    console.log("not contain sign image ",notContainSignImage);
-
     if (notContainSignImage && !signDigitalStatus && this.datas.roleContractReceived != 2) {
-      console.log("vao day ");
       this.spinner.hide();
       return;
     }
 
     if(notContainSignImage && this.eKYC == false){
-      console.log("ko phai ky anh ");
 
       console.log(signUpdateTempN);
 
       this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
         async (result) => {
           if (!notContainSignImage) {
-            console.log("update info contract consider ");
             await this.signDigitalDocument();
           }
           setTimeout(() => {
