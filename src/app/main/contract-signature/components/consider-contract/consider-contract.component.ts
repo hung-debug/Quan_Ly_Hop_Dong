@@ -2267,7 +2267,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
          console.log("card id ", this.cardId);
 
          await of(null).pipe(delay(100)).toPromise();
-         const imageRender = <HTMLElement>document.getElementById('export-html-hsm');
+         const imageRender = <HTMLElement>document.getElementById('export-html-hsm1');
          if (imageRender) {
            const textSignB = await domtoimage.toPng(imageRender);
            signI = textSignB.split(",")[1];
