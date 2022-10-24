@@ -1121,7 +1121,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         return false;
       }
 
-
+      //Bắt đầu cmt phần ký nhiều
       // console.log("this sign cert digital ", this.signCertDigital);
       // if (this.signCertDigital) {
       //   // this.signCertDigital = resSignDigital.data;
@@ -1151,14 +1151,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       //         await of(null).pipe(delay(100)).toPromise();
       //         const imageRender = <HTMLElement>document.getElementById('text-sign');
       //         if (imageRender) {
-      //           const textSignB = await domtoimage.toPng(imageRender);
+      //           const textSignB = await domtoimage.toJpeg(imageRender);
       //           signI = this.textSignBase64Gen = textSignB.split(",")[1];
       //         }
       //       } else if (signUpdate.type == 3) {
       //         await of(null).pipe(delay(100)).toPromise();
       //         const imageRender = <HTMLElement>document.getElementById('export-html');
       //         if (imageRender) {
-      //           const textSignB = await domtoimage.toPng(imageRender);
+      //           const textSignB = await domtoimage.toJpeg(imageRender);
       //           signI = textSignB.split(",")[1];
       //         }
       //       }
@@ -1172,94 +1172,78 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
       //       console.log("data sign mobi ", dataSignMobi);
 
-      //       if (!dataSignMobi.data.FileDataSigned) {
-      //         console.log("file data signed ");
+      //       var json_req = JSON.stringify({
+      //         OperationId: 10,
+      //         SessionId: this.sessionIdUsbToken,
+      //         checkOCSP: 0,
+      //         reqDigest: 1,
+      //         algDigest: "SHA_1",
+      //         extFile: "pdf",
+      //         invisible: 0,
+      //         pageIndex: 0,
+      //         offsetX: 0,
+      //         offsetY: 0,
+      //         sigWidth: 275,
+      //         sigHeight: 120,
+      //         logoData: signI,
+      //         DataToBeSign: signDigital.valueSignBase64,
+      //       });
 
-      //         this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-      //         return false;
+      //       console.log("json_req ",json_req);
+
+      //       json_req = window.btoa(json_req);
+
+      //       var httpReq: any = "";
+      //       var response = "";
+      //       if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+      //           httpReq = new XMLHttpRequest();
       //       }
-      //       const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
-      //       if (!sign.recipient_id) {
-      //         console.log("recipent_id")
-
-      //         this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-      //         return false;
+      //       else {// code for IE6, IE5
+      //           httpReq = new ActiveXObject("Microsoft.XMLHTTP");
       //       }
+      //       httpReq.onreadystatechange =  async () => {
+      //           if (httpReq.readyState == 4 && httpReq.status == 200) {
 
-      //       // console.log("sign i ", signI);
+      //             console.log("htppreq ",httpReq.responseText);
 
-      //       // var json_req = JSON.stringify({
-      //       //   OperationId: 10,
-      //       //   SessionId: this.sessionIdUsbToken,
-      //       //   checkOCSP: 0,
-      //       //   reqDigest: 1,
-      //       //   algDigest: "SHA_1",
-      //       //   extFile: "pdf",
-      //       //   invisible: 0,
-      //       //   pageIndex: 0,
-      //       //   offsetX: 0,
-      //       //   offsetY: 0,
-      //       //   sigWidth: 275,
-      //       //   sigHeight: 120,
-      //       //   logoData: signI,
-      //       //   DataToBeSign: signDigital.valueSignBase64,
-      //       // });
-
-      //       // console.log("json_req ",json_req);
-
-      //       // json_req = window.btoa(json_req);
-
-      //       // var httpReq: any = "";
-      //       // var response = "";
-      //       // if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-      //       //     httpReq = new XMLHttpRequest();
-      //       // }
-      //       // else {// code for IE6, IE5
-      //       //     httpReq = new ActiveXObject("Microsoft.XMLHTTP");
-      //       // }
-      //       // httpReq.onreadystatechange =  async () => {
-      //       //     if (httpReq.readyState == 4 && httpReq.status == 200) {
-
-      //       //       console.log("htppreq ",httpReq.responseText);
-
-      //       //         response = window.atob(httpReq.responseText);
+      //               response = window.atob(httpReq.responseText);
                     
-      //       //         var process = false;
-      //       //         try {
-      //       //             var json_res = JSON.parse(response);
+      //               var process = false;
+      //               try {
+      //                   var json_res = JSON.parse(response);
 
-      //       //             console.log("json_res ",json_res)
+      //                   console.log("json_res ",json_res)
 
-      //       //             if (json_res.ResponseCode == 0) {
-      //       //                 alert("Successfully. Result: " + json_res.PathFile);
+      //                   if (json_res.ResponseCode == 0) {
+      //                       alert("Successfully. Result: " + json_res.PathFile);
 
-      //       //                 alert(json_res.Base64Result);
+      //                       alert(json_res.Base64Result);
 
-      //       //                   const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
-      //       //                     if (!sign.recipient_id) {
-      //       //                       console.log("recipent_id")
+      //                         const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
+      //                           if (!sign.recipient_id) {
+      //                             console.log("recipent_id")
 
-      //       //                       this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-      //       //                       return false;
-      //       //                     } else {
-      //       //                       return true;
-      //       //                     }
-      //       //             } else {
-      //       //               console.log("response ky ", response);
-      //       //               console.log("response ky msg ", json_res);
-      //       //               alert(json_res.ResponseMsg);
-      //       //             }
-      //       //         }
-      //       //         catch (err) {
-      //       //             alert("Error: " + err);
-      //       //         }
-      //       //     }
-      //       // }
-      //       // httpReq.open("POST", this.domain + "process", true);
-      //       // httpReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      //       // httpReq.send("request=" + json_req);
+      //                             this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+      //                             return false;
+      //                           } else {
+      //                             return true;
+      //                           }
+      //                   } else {
+      //                     console.log("response ky ", response);
+      //                     console.log("response ky msg ", json_res);
+      //                     alert(json_res.ResponseMsg);
+      //                   }
+      //               }
+      //               catch (err) {
+      //                   alert("Error: " + err);
+      //               }
+      //           }
+      //       }
+      //       httpReq.open("POST", this.domain + "process", true);
+      //       httpReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      //       httpReq.send("request=" + json_req);
 
-      //       // return false;
+      //       return false;
       //     }
       //   }
       //   return true;

@@ -353,6 +353,32 @@ export class ContractSignatureComponent implements OnInit {
     return 'contract.list.received';
   }
 
+  toggle() {
+    const checkBox = document.getElementById(
+      'all'
+    ) as HTMLInputElement | null;
+
+    if (checkBox != null) {
+
+      console.log("da nhan nut check tat ca");
+      let checkBoxList = document.getElementsByName('item');
+
+      if (checkBox.checked === true) {
+       
+        for(let i = 0; i < checkBoxList.length; i++) {
+            var checkBoxGet: any = checkBoxList[i];
+            checkBoxGet.checked = true;
+        }
+      } else {
+        for(let i = 0; i < checkBoxList.length; i++) {
+          var checkBoxGet: any = checkBoxList[i];
+          checkBoxGet.checked = false;
+      }
+      }
+    }
+
+  }
+
   private convertStatusStr() {
     if (this.status == 'wait-processing') {
       this.filter_status = 1;
@@ -525,15 +551,19 @@ export class ContractSignatureComponent implements OnInit {
               console.log("sig ", response);
               for(let j = 0; j < response.length; j++) {
                 console.log("recipient id ", recipientId);
-                if(recipientId[i] == response[j].recipient.id) {
-                  x.push(response[j].coordinate_x);
-                  y.push(response[j].coordinate_y);
-                  h.push(response[j].height);
-                  w.push(response[j].width);
 
-                  //Lấy ra trang ký của từng file hợp đồng
-                  page.push(response[j].page);
+                if(response[j].recipient) {
+                  if(recipientId[i] == response[j].recipient.id) {
+                    x.push(response[j].coordinate_x);
+                    y.push(response[j].coordinate_y);
+                    h.push(response[j].height);
+                    w.push(response[j].width);
+  
+                    //Lấy ra trang ký của từng file hợp đồng
+                    page.push(response[j].page);
+                  }
                 }
+               
               }
             })
 
@@ -582,13 +612,9 @@ export class ContractSignatureComponent implements OnInit {
                       }
 
                       //Lấy chiều dài của các trang trong các hợp đồng ký
-
-                      
-
                       //Gọi api ký usb token nhiều lần
                       for(let i = 0; i < fileC.length; i++) {
 
-                        console.log("base64Strin ", base64String[i]);
                         w[i] = x[i] + w[i];
 
                         // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
@@ -742,19 +768,6 @@ export class ContractSignatureComponent implements OnInit {
         }
       }
     });
-  }
-
-  testCheckBox(item: any) {
-    console.log('vao day checkbox ');
-    const checkBox = document.getElementById(
-      'check'
-    ) as HTMLInputElement | null;
-
-    if (checkBox != null) {
-      if (checkBox.checked === true) {
-        console.log('item ', item);
-      }
-    }
   }
 
   searchContract() {
