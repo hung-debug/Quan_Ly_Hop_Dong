@@ -266,6 +266,8 @@ export class InforContractBatchComponent implements OnInit {
 
                 for(let j = 0; j < recipients.length; j++) {
                   if (recipients[j].sign_type[0].id == 1) {
+
+                    //Thêm điều kiện đăng nhập bằng email hoặc số điện thoại
                     countOtp++;
                   } else if (recipients[j].sign_type[0].id == 5) {
                     countEkyc++;
@@ -313,7 +315,7 @@ export class InforContractBatchComponent implements OnInit {
                                     Number(this.eKYCContractBuy)
                                   ) {
                                     this.toastService.showErrorHTMLWithTimeout(
-                                      'Số lượng ekyc sử dụng vượt quá số lượng ekyc đã mua',
+                                      'Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ',
                                       '',
                                       3000
                                     );
@@ -323,9 +325,7 @@ export class InforContractBatchComponent implements OnInit {
                                     Number(this.smsContractBuy)
                                   ) {
                                     this.toastService.showErrorHTMLWithTimeout(
-                                      'Số lượng SMS sử dụng vượt quá số lượng SMS đã mua',
-                                      '',
-                                      3000
+                                      'Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000
                                     );
                                   } else {
                                     

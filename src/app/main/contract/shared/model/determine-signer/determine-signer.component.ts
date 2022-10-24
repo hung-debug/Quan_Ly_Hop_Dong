@@ -202,8 +202,12 @@ export class DetermineSignerComponent implements OnInit {
                           //Ký ekyc
                           countEkyc++;
                         } else if(element.sign_type[0].id == 1) {
-                          //Ký ảnh otp
-                          countOtp++;
+
+                          if(element.login_by == 'email')
+                            //Ký ảnh otp
+                            countOtp++;
+                          else
+                            countOtp = countOtp + 2;
                         }
                       }
                     
@@ -217,10 +221,10 @@ export class DetermineSignerComponent implements OnInit {
                   this.eKYCContractBuy = data.ekyc;
                   this.smsContractBuy = data.sms;
   
-                    if(Number(this.eKYCContractUse) + Number(countEkyc) > Number(this.eKYCContractBuy)) {
-                      this.toastService.showErrorHTMLWithTimeout('Số lượng ekyc sử dụng vượt quá số lượng ekyc đã mua', "", 3000);
-                    } else if(Number(this.smsContractUse) + Number(countOtp) > Number(this.smsContractBuy)) {
-                      this.toastService.showErrorHTMLWithTimeout('Số lượng SMS sử dụng vượt quá số lượng SMS đã mua', "", 3000);
+                    if(countEkyc > 0 && Number(this.eKYCContractUse) + Number(countEkyc) > Number(this.eKYCContractBuy)) {
+                      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+                    } else if(countOtp > 0 && Number(this.smsContractUse) + Number(countOtp) > Number(this.smsContractBuy)) {
+                      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
                     } else {
                       this.getApiDetermine(is_save);
                     }
