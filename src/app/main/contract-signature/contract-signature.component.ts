@@ -368,11 +368,13 @@ export class ContractSignatureComponent implements OnInit {
         for(let i = 0; i < checkBoxList.length; i++) {
             var checkBoxGet: any = checkBoxList[i];
             checkBoxGet.checked = true;
+            this.contractsSignMany[i].checked = true;
         }
       } else {
         for(let i = 0; i < checkBoxList.length; i++) {
           var checkBoxGet: any = checkBoxList[i];
           checkBoxGet.checked = false;
+          this.contractsSignMany[i].checked = false;
       }
       }
     }
