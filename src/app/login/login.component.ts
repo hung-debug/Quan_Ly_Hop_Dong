@@ -50,6 +50,9 @@ export class LoginComponent implements OnInit {
   kyTuCach: any = "&";
 
   loginUser() {
+    localStorage.clear();
+    sessionStorage.clear();
+
     if (this.loginForm.value.username == '') {
       this.error = true;
       this.errorDetail = "error.username.required";

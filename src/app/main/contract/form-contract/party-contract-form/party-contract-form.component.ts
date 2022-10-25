@@ -192,6 +192,17 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // next step event
   next(action: string) {
+    this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
+      
+      if (items.type == 3)
+        this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
+        for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
+          if(this.datasForm.is_determine_clone[index].recipients[i].login_by == "phone") {
+            this.datasForm.is_determine_clone[index].recipients[i].phone = this.datasForm.is_determine_clone[index].recipients[i].email;
+          }
+        }
+    })
+
     this.submitted = true;
     if (action == 'save-step' && !this.validData()) {
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
