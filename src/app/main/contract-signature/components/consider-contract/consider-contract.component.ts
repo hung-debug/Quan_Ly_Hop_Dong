@@ -1304,7 +1304,15 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           if(!checkSign.message) {
             this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công','',3000);
           } else if(checkSign.message) {
-            this.toastService.showErrorHTMLWithTimeout(checkSign.message,'',3000);
+              // this.toastService.showErrorHTMLWithTimeout(checkSign.message,'',3000);
+
+              if(checkSign.message == 'Mat khau cap 2 khong dung!') {
+                this.toastService.showErrorHTMLWithTimeout('Mật khẩu cấp 2 không đúng',"",3000);
+              } else if(checkSign.message == 'License ky so HSM het han!') {
+                this.toastService.showErrorHTMLWithTimeout('License ký số HSM hết hạn!',"",3000);
+              } else {
+                this.toastService.showErrorHTMLWithTimeout(checkSign.message,'',3000);
+              }
           }
           
           return false;

@@ -338,7 +338,8 @@ export class InforContractBatchComponent implements OnInit {
                                     console.log(this.datasBatch);
                                     this.spinner.hide();
                                   } else {
-                                    this.errorDetail = response.detail;
+                                    console.log("err detail ", this.errorDetail);
+                                    this.errorDetail = responseUpload.detail;
                                     this.toastService.showErrorHTMLWithTimeout(
                                       'File mẫu không hợp lệ',
                                       '',
