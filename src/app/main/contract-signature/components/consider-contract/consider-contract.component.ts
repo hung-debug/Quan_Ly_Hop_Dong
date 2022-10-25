@@ -1672,6 +1672,13 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     };
   }
 
+  b64DecodeUnicode(str: any) {
+    // Going backwards: from bytestream, to percent-encoding, to original string.
+    return decodeURIComponent(atob(str).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+}
+
   getCertificate(hSession: any, taxCode: any, signUpdatePayload: any, notContainSignImage: any) {
     var json_req = JSON.stringify({
       OperationId: 2,
@@ -1692,9 +1699,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     }
     httpReq.onreadystatechange = () => {
       if (httpReq.readyState == 4 && httpReq.status == 200) {
-        response = window.atob(httpReq.responseText);
+        response = this.b64DecodeUnicode(httpReq.responseText);
 
-        console.log('response  ', response);
+        console.log('response name company ', response);
 
         var process = false;
         try {
