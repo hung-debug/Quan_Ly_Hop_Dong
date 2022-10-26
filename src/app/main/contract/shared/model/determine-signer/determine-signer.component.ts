@@ -690,12 +690,12 @@ export class DetermineSignerComponent implements OnInit {
       const onlyPartOrg = 'only_party_origanzation';
 
       if (this.getCheckDuplicateEmail(onlyPartOrg, dataArr)) {
-        this.getNotificationValid("Email tổ chức của tôi không được trùng nhau!");
+        this.getNotificationValid("Email/Số điện thoại tổ chức của tôi không được trùng nhau!");
         return false
       }
 
       if (this.getCheckDuplicatePhone(onlyPartOrg, dataArr)) {
-        this.getNotificationValid("Số điện thoại tổ chức của tôi không được trùng nhau!");
+        this.getNotificationValid("Email/Số điện thoại tổ chức của tôi không được trùng nhau!");
         return false
       }
 
@@ -968,12 +968,12 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       if (this.getCheckDuplicateEmail(allCheckEmail, this.datas.is_determine_clone)) {
-        this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
+        this.getNotificationValid("Email/Số điện thoại không được trùng nhau giữa các bên tham gia!");
         return false
       }
 
       if (this.getCheckDuplicatePhone(allCheckEmail, this.datas.is_determine_clone)) {
-        this.getNotificationValid("Số điện thoại không được trùng nhau giữa các bên tham gia!");
+        this.getNotificationValid("Email/Số điện thoại không được trùng nhau giữa các bên tham gia!");
         return false
       }
 

@@ -509,8 +509,7 @@ export class ContractSignatureComponent implements OnInit {
     });
     dialogRef
       .afterClosed()
-      .toPromise()
-      .then(async (result: any) => {
+      .subscribe((result: any) => {
         //result = 1 tương ứng với nhấn nút đồng ý và ký
         if (result == 1) {
           //Mã số thuế tại các hợp đồng cần giống nhau
@@ -560,14 +559,13 @@ export class ContractSignatureComponent implements OnInit {
 
             for (let i = 0; i < fileC.length; i++) {
               //get base64 from url
-              base64String[i] =
-                await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
+              base64String[i] = this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
               base64String[i] = encode(base64String[i]);
 
+              console.log("base64String i ", base64String[i]);
+
               //Lấy toạ độ ô ký của từng hợp đồng
-              this.contractServiceV1
-                .getDataObjectSignatureLoadChange(idContract[i])
-                .subscribe((response) => {
+              this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).subscribe((response) => {
                   console.log('sig ', response);
                   for (let j = 0; j < response.length; j++) {
                     console.log('recipient id ', recipientId);
@@ -584,7 +582,9 @@ export class ContractSignatureComponent implements OnInit {
                       }
                     }
                   }
-                });
+                  console.log("h push ", h);
+                }
+              );
 
               //Lấy thông tin page của từng hợp đồng
               this.contractServiceV1
@@ -649,6 +649,8 @@ export class ContractSignatureComponent implements OnInit {
 
                           h[i] = y[i] + h[i];
 
+                          console.log("base64String i 1", base64String[i]);
+                          
                           let dataSignMobi: any =
                             await this.contractServiceV1.postSignDigitalMobiMulti(
                               this.signCertDigital.Serial,
@@ -661,13 +663,9 @@ export class ContractSignatureComponent implements OnInit {
                               y[i]
                             );
 
-                          console.log('data sign mobi ', dataSignMobi);
-
                           if (!dataSignMobi.data.FileDataSigned) {
-                            console.log('file data signed ');
-
                             this.toastService.showErrorHTMLWithTimeout(
-                              'Lỗi ký USB Token',
+                              'Lỗi ký USB Token '+dataSignMobi.data.ErrorDetail,
                               '',
                               3000
                             );
@@ -683,7 +681,7 @@ export class ContractSignatureComponent implements OnInit {
                             console.log('recipent_id');
 
                             this.toastService.showErrorHTMLWithTimeout(
-                              'Lỗi ký USB Token',
+                              'Lỗi ký USB Token ',
                               '',
                               3000
                             );
