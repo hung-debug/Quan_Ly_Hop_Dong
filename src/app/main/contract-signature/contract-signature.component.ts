@@ -456,14 +456,15 @@ export class ContractSignatureComponent implements OnInit {
         subscribe[i] = this.contractServiceV1
           .getDetermineCoordination(recipientId[i])
           .subscribe((response) => {
-            let lengthRes = response.recipients.length;
-
-            for (let i = 0; i < lengthRes; i++) {
-              if(response.recipients[i].fields[0].recipient.id == recipientId[i])
-              taxCode.push(response.recipients[i].fields[0].recipient.cardId);
-            }
+            response.recipients.forEach((item: any) => {
+              if(item.fields[0].recipient.id == recipientId[i]) {
+                  taxCode.push(response.recipients[i].fields[0].recipient.cardId);
+                  console.log("tax code ", taxCode);
+              }
+            })
           });
       }
+
     } else if (signId == 2) {
       idSignMany = contractsSignManyChecked
         .filter((opt) => opt.checked)
@@ -484,12 +485,12 @@ export class ContractSignatureComponent implements OnInit {
         subscribe[i] = this.contractServiceV1
           .getDetermineCoordination(recipientId[i])
           .subscribe((response) => {
-            let lengthRes = response.recipients.length;
-
-            for (let i = 0; i < lengthRes; i++) {
-              if(response.recipients[i].fields[0].recipient.id == recipientId[i])
-                taxCode.push(response.recipients[i].fields[0].recipient.cardId);
-            }
+            response.recipients.forEach((item: any) => {
+              if(item.fields[0].recipient.id == recipientId[i]) {
+                  taxCode.push(response.recipients[i].fields[0].recipient.cardId);
+                  console.log("tax code ", taxCode);
+              }
+            })
           });
       }
       //Lấy ra url của các hợp đồng cần ký
