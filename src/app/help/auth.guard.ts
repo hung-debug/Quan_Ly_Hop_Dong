@@ -29,8 +29,11 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     let role;
 
+    sessionStorage.clear();
+
     //@ts-ignore
      if(state.url.includes("handle")) {
+      sessionStorage.clear();
 
       let code = state.url.substring(8);
 
