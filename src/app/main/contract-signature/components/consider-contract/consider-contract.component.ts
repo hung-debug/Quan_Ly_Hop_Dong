@@ -1,3 +1,4 @@
+import { DetailContractComponent } from './../../../contract/detail-contract/detail-contract.component';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -825,8 +826,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         this.eKYC = true;
         this.eKYCSignOpen();
         return;
-      } else {
-        this.toastService.showErrorHTMLWithTimeout('Vui lòng ký eKYC trên ứng dụng điện thoại', '', 3000);
+      } else if (e && e == 1 && ((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
+      ([3,4].includes(this.datas.roleContractReceived) && this.confirmSignature == 2))){
+        //  this.toastService.showErrorHTMLWithTimeout('Vui lòng ký eKYC trên ứng dụng điện thoại', '', 3000);
+        this.rejectContract();
         return;
       }
     }
