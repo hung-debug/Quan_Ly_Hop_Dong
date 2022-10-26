@@ -459,6 +459,7 @@ export class ContractSignatureComponent implements OnInit {
             let lengthRes = response.recipients.length;
 
             for (let i = 0; i < lengthRes; i++) {
+              if(response.recipients[i].fields[0].recipient.id == recipientId[i])
               taxCode.push(response.recipients[i].fields[0].recipient.cardId);
             }
           });
@@ -486,7 +487,8 @@ export class ContractSignatureComponent implements OnInit {
             let lengthRes = response.recipients.length;
 
             for (let i = 0; i < lengthRes; i++) {
-              taxCode.push(response.recipients[i].fields[0].recipient.cardId);
+              if(response.recipients[i].fields[0].recipient.id == recipientId[i])
+                taxCode.push(response.recipients[i].fields[0].recipient.cardId);
             }
           });
       }
