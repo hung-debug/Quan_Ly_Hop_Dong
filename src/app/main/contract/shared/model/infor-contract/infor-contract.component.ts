@@ -23,6 +23,7 @@ import {ToastService} from 'src/app/service/toast.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import * as moment from "moment";
 import {HttpErrorResponse} from '@angular/common/http';
+import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
 
 export class ContractConnectArr {
   ref_id: number;
@@ -93,13 +94,13 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   public messageForSibling: string;
 
   constructor(
-    private formBuilder: FormBuilder,
     private uploadService: UploadService,
     private contractService: ContractService,
     public datepipe: DatePipe,
     private router: Router,
     private toastService: ToastService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private checkSignDigitalService: CheckSignDigitalService
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -164,27 +165,25 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension && extension.toLowerCase() == 'pdf') {
-          // const fileReader = new FileReader();
-          // fileReader.readAsDataURL(file);
-          // fileReader.onload = (e) => {
-          //   //@ts-ignore
-          //   const base64result = fileReader.result.toString().split(',')[1];
-          //   const fileInput: any = document.getElementById('file-input');
-          //   fileInput.value = '';
-          //   this.datas.file_content = base64result;
-          //   this.datas.file_name = file_name;
-          //   this.datas.contractFile = file;
-          //   // this.datas.documents['file_content_docx'] = null;
-          //   // this.pdfSrc = Helper._getUrlPdf(base64result);
-          // };
-          const fileInput: any = document.getElementById('file-input');
-          fileInput.value = '';
-          this.datas.file_name = file_name;
-          this.datas.contractFile = file;
-          this.contractFileRequired();
-          if (this.datas.is_action_contract_created) {
-            this.uploadFileContractAgain = true;
-          }
+       
+
+          this.checkSignDigitalService.getList(file).subscribe((response) => {
+            if(response.length == 0) {
+              const fileInput: any = document.getElementById('file-input');
+              fileInput.value = '';
+              this.datas.file_name = file_name;
+              this.datas.contractFile = file;
+              this.contractFileRequired();
+              if (this.datas.is_action_contract_created) {
+                this.uploadFileContractAgain = true;
+              }
+            } else if(response.length > 0) {
+              this.toastService.showWarningHTMLWithTimeout("File hợp đồng đã chứa chữ ký số", "", 3000);
+              return;
+            }
+          })
+
+  
 
           // console.log(this.datas);
         } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {
