@@ -125,7 +125,11 @@ export class DetermineSignerComponent implements OnInit {
     // data Tổ chức của tôi
     this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];
 
-    this.data_organization.name = this.datas.name_origanzation ? this.datas.name_origanzation : '';
+    // console.log("this datas ", this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0])
+
+    // this.data_organization.name = this.datas.name_origanzation ? this.datas.name_origanzation : '';
+
+    this.data_organization.name = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0].name ? this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0].name: this.datas.name_origanzation;
 
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
