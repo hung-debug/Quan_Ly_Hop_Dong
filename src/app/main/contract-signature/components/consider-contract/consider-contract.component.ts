@@ -43,6 +43,7 @@ import { DatePipe } from '@angular/common';
 import {DeviceDetectorService} from "ngx-device-detector";
 import { DomSanitizer } from '@angular/platform-browser';
 import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.component';
+import { UnitService } from 'src/app/service/unit.service';
 
 @Component({
   selector: 'app-consider-contract',
@@ -176,8 +177,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     private dialog: MatDialog,
     public datepipe: DatePipe,
     private deviceService: DeviceDetectorService,
-    private sanitizer: DomSanitizer,
-    private http: HttpClient,
+    private unitService: UnitService
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
@@ -803,6 +803,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   eKYC: boolean = false;
+  eKYCContractUse: any;
+  smsContractUse: any;
+  eKYCContractBuy: any;
+  smsContractBuy: any;
   async submitEvents(e: any) {
     let haveSignPKI = false;
     let haveSignImage = false;
@@ -810,13 +814,14 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
     const counteKYC = this.recipient?.sign_type.filter((p: any) => p.id == 5).length;
 
-    console.log("counterKYC ", counteKYC);
-
     if(counteKYC > 0){
       if(this.confirmSignature == 1 && this.mobile) {
-        this.eKYC = true;
-        this.eKYCSignOpen();
-        return;
+
+                     this.eKYC = true;
+                    this.eKYCSignOpen();
+                    return;
+
+        
       } else {
         this.toastService.showErrorHTMLWithTimeout('Vui lòng ký eKYC trên ứng dụng điện thoại', '', 3000);
         return;
@@ -826,7 +831,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng', '', 3000);
       return;
     }
-    if (e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
+    if (e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2 && counteKYC <= 0) ||
       (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) || (this.datas.roleContractReceived == 4 && this.confirmSignature == 2))) {
         if(!this.mobile) {
           this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc', '', 3000);
@@ -1012,6 +1017,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     return new Blob([ia], { type: mimeString })
   }
 
+  //Ký số + ký eKYC
   async signDigitalDocument() {
     let typeSignDigital = 0;
 
@@ -1031,8 +1037,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         break;
       }
     }
-
-    console.log("type sign digital ", typeSignDigital);
 
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
@@ -1114,7 +1118,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         return false;
       }
 
-      //Bắt đầu cmt phần ký nhiều
+      //Bắt đầu cmt phần ký plugin mới
       // console.log("this sign cert digital ", this.signCertDigital);
       // if (this.signCertDigital) {
       //   // this.signCertDigital = resSignDigital.data;
@@ -2172,37 +2176,90 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   cccdFront: any;
   cardId: any;
   eKYCSignOpen() {
+
+    // //Còn số lượng eKYC thì cho ký eKYC
+        this.unitService
+        .getNumberContractUseOriganzation(this.orgId)
+        .toPromise()
+        .then(
+          (data) => {
+            this.eKYCContractUse = data.ekyc;
+
+            //lay so luong hop dong da mua
+            this.unitService
+              .getNumberContractBuyOriganzation(this.orgId)
+              .toPromise()
+              .then(
+                (data) => {
+                  this.eKYCContractBuy = data.ekyc;
+                  if (
+                    Number(this.eKYCContractUse) +
+                      Number(1) >
+                    Number(this.eKYCContractBuy)
+                  ) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ',
+                      '',
+                      3000
+                    );
+                  } else {
+                    this.eKYC = true;
+                    this.eKYCStart();
+                    return;
+                  }
+                },
+                (error) => {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    'Lỗi lấy số lượng hợp đồng đã mua',
+                    '',
+                    3000
+                  );
+                }
+              );
+          },
+          (error) => {
+            this.toastService.showErrorHTMLWithTimeout(
+              'Lỗi lấy số lượng hợp đồng đã dùng',
+              '',
+              3000
+            );
+          }
+        );
+  }
+
+  eKYCStart() {
     const data = {
       id: 0,
       title: 'Xác thực CMT/CCCD mặt trước',
       recipientId: this.recipientId,
       contractId: this.idContract
     };
-
+  
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = data;
     dialogConfig.disableClose = true;
     // dialogConfig.width = '100000000000000000000000000000px';
-
+  
     const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
-
+  
     dialogRef.afterClosed().subscribe((result) => {
       this.cccdFront = result;
-
+  
       this.contractService.detectCCCD(this.cccdFront).subscribe((response) => {
         console.log("response ",response);
-
+  
         this.nameCompany = response.name;
         this.cardId = response.id;
-
+  
         console.log("name company ", this.cardId);
       })
-
+  
       if(result)
         this.eKYCSignOpenAfter();
     })
+  
   }
-
+  
   eKYCSignOpenAfter() {
     const data = {
       id: 1,
@@ -2294,7 +2351,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   imageDialogSignOpen(e : any, haveSignImage: boolean) {
     const data = {
       title: 'KÝ HỢP ĐỒNG ',
-      is_content: 'forward_contract'
+      is_content: 'forward_contract',
+      orgId: this.orgId
     };
 
     const dialogConfig = new MatDialogConfig();
@@ -2404,6 +2462,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       contract_id: this.datas.is_data_contract.id,
       datas: this.datas,
       currentUser: this.currentUser,
+      orgId: this.orgId
     };
 
     const dialogConfig = new MatDialogConfig();

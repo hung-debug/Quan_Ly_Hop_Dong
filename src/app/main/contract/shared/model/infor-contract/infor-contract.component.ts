@@ -156,6 +156,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   fileChanged(e: any) {
+    this.spinner.show();
     const file = e.target.files[0];
     if (file) {
       // giới hạn file upload lên là 5mb
@@ -168,6 +169,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
        
 
           this.checkSignDigitalService.getList(file).subscribe((response) => {
+            this.spinner.hide();
             if(response.length == 0) {
               const fileInput: any = document.getElementById('file-input');
               fileInput.value = '';
