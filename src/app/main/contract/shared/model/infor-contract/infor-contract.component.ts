@@ -166,8 +166,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension && extension.toLowerCase() == 'pdf') {
-       
-
           this.checkSignDigitalService.getList(file).subscribe((response) => {
             this.spinner.hide();
             if(response.length == 0) {
@@ -184,10 +182,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               return;
             }
           })
-
-  
-
-          // console.log(this.datas);
         } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {
           this.toastService.showWarningHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 3000);
         } else {

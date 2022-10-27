@@ -434,6 +434,9 @@ export class ContractSignatureComponent implements OnInit {
 
     let idSignMany: any = [];
 
+ 
+    console.log("signId ", signId);
+
     
 
     //Lấy id đã tick
@@ -453,61 +456,42 @@ export class ContractSignatureComponent implements OnInit {
       //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
       for (let i = 0; i < recipientId.length; i++) {
         console.log('recipient id i ', recipientId[i]);
-        subscribe[i] = this.contractServiceV1
+        this.contractServiceV1
           .getDetermineCoordination(recipientId[i])
           .subscribe((response) => {
             response.recipients.forEach((item: any) => {
-              if(item.fields[0].recipient.id == recipientId[i]) {
-                  taxCode.push(response.recipients[i].fields[0].recipient.cardId);
+              // if(item.fields[0].recipient.id == recipientId[i]) {
+                  taxCode.push(response.recipients[0].fields[0].recipient.cardId);
                   console.log("tax code ", taxCode);
-              }
+              // }
             })
           });
       }
 
     } else if (signId == 2) {
-      // this.spinner.show();
-      // idSignMany = contractsSignManyChecked
-      //   .filter((opt) => opt.checked)
-      //   .map((opt) => opt.fields[0].id);
-      // recipientId = contractsSignManyChecked
-      //   .filter((opt) => opt.checked)
-      //   .map((opt) => opt.id);
-      // idContract = contractsSignManyChecked
-      //   .filter((opt) => opt.checked)
-      //   .map((opt) => opt.participant.contract.id);
-      // documentId = contractsSignManyChecked
-      //   .filter((opt) => opt.checked)
-      //   .map((opt) => opt.fields[0].documentId);
 
-      // //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
-      // for (let i = 0; i < recipientId.length; i++) {
-      //   console.log('recipient id i ', recipientId[i]);
-      //   subscribe[i] = this.contractServiceV1
-      //     .getDetermineCoordination(recipientId[i])
-      //     .subscribe((response) => {
-      //       response.recipients.forEach((item: any) => {
-      //         if(item.fields[0].recipient.id == recipientId[i]) {
-      //             taxCode.push(response.recipients[i].fields[0].recipient.cardId);
-      //             console.log("tax code ", taxCode);
-      //         }
-      //       })
-      //     });
-      // }
+      recipientId = contractsSignManyChecked
+      .filter((opt) => opt.checked)
+      .map((opt) => opt.id);
+  
+      for (let i = 0; i < recipientId.length; i++) {
+        console.log('recipient id i ', recipientId[i]);
+        this.contractServiceV1
+          .getDetermineCoordination(recipientId[i])
+          .subscribe((response) => {
+            console.log("response 1 ", response);
+            response.recipients.forEach((item: any) => {
+              console.log("item ", item);
+              // if(item.fields[0].recipient.id == recipientId[i]) {
+                  taxCode.push(response.recipients[0].fields[0].recipient.cardId);
+                  console.log("tax code abc ", taxCode);
+              // }
+            })
 
-      // for (let i = 0; i < idContract.length; i++) {
-      //   this.contractServiceV1
-      //     .getFileContract(idContract[i])
-      //     .subscribe((response) => {
-      //       console.log('response o day', response[0].path);
-      //       fileC.push(response[0].path);
+            
+          });
+        }
 
-      //       // if(fileC.length == idContract.length) {
-      //       //   this.spinner.hide();
-      //       //   this.openDialogSignManyComponent(fileC, idContract, recipientId, documentId, taxCode, idSignMany, signId);
-      //       // }
-      //     });
-      // }
     }
 
     this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);
@@ -516,6 +500,7 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openDialogSignManyComponent( recipientId: any, taxCode: any, idSignMany: any, signId: any) {
+    console.log("tax code ", taxCode);
     const dialogRef = this.dialog.open(DialogSignManyComponentComponent, {
       width: '580px',
     });
