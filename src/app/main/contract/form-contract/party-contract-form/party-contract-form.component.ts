@@ -1339,6 +1339,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng các đối tượng người ký tổ chức của tôi
   getOriganzationSignature() {
+    console.log("org sig ",this.data_organization.recipients.filter((p: any) => p.role == 3));
     return this.data_organization.recipients.filter((p: any) => p.role == 3);
   }
 
