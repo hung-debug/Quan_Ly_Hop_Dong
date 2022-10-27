@@ -2320,7 +2320,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       let signI = null;
 
          //lấy ảnh chữ ký usb token
-         this.cardId = result.ma_dvcs;
+         this.cardId = result.ma_dvcs.trim();
         
          console.log("card id ", this.cardId);
 
