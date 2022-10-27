@@ -494,9 +494,7 @@ export class ContractSignatureComponent implements OnInit {
 
     }
 
-    this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);
-
-    
+    this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);    
   }
 
   openDialogSignManyComponent( recipientId: any, taxCode: any, idSignMany: any, signId: any) {

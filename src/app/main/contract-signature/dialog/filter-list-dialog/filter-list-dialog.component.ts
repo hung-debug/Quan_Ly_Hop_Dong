@@ -71,7 +71,7 @@ export class FilterListDialogComponent implements OnInit {
     this.dialogRef.close();
     console.log(data);
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      this.router.navigate(['main/contract-signature/receive/' + data.status],
+      this.router.navigate(['main/c/receive/' + data.status],
       {
         queryParams: {
           'filter_name': this.data.filter_name,
