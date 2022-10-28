@@ -1165,6 +1165,18 @@ export class ContractService {
     );
   }
 
+  updateInfoContractConsiderPromise(datas: any, recipient_id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.put<any>(
+      this.updateInfoContractConsiderUrl + recipient_id,
+      datas,
+      { headers: headers }
+    ).toPromise();
+  }
+
   updateInfoContractConsiderImg(datas: any, recipient_id: any) {
     console.log('datas ', datas);
 

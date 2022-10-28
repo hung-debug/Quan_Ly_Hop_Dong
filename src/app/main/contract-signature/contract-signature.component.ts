@@ -853,16 +853,31 @@ export class ContractSignatureComponent implements OnInit {
                       idSignMany[i],
                       dataSignMobi.data.FileDataSigned
                     );
+
+
+
                   if (!sign.recipient_id) {
                     console.log('recipent_id');
-
                     this.toastService.showErrorHTMLWithTimeout(
                       'Lỗi ký USB Token ',
                       '',
                       3000
                     );
                     return false;
+                  } else {
+                    const updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([], sign.recipient_id);
+
+                    if(!updateInfo.id) {
+                      this.toastService.showErrorHTMLWithTimeout(
+                        'Lỗi cập nhật trạng thái hợp đồng ',
+                        '',
+                        3000
+                      );
+                    }
                   }
+
+
+                 
 
                   if (i == fileC.length - 1) {
                     this.spinner.hide();
