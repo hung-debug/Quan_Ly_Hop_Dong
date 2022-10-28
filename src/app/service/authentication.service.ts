@@ -101,22 +101,4 @@ export class AuthenticationService {
     }
     return throwError(this.errorData);
   }
-  loginAuthencationUserOut(username: string, password: string, type: number, isContractId: number | null) {
-    const headers = new HttpHeaders().append('Content-Type', 'application/json');
-    const body = JSON.stringify({email: username.trim().toLowerCase(), password: password, type, contractId: isContractId});
-
-    return this.http.post<User>(this.loginUrl, body, {'headers':headers})
-      .pipe(
-        map((user) => {
-          if (JSON.parse(JSON.stringify(user)) != null) {
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            return user;
-          }else{
-            console.log(JSON.stringify(user));
-            return null;
-          }
-        }),
-        catchError(this.loginError)
-      );
-  }
 }
