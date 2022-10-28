@@ -815,6 +815,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const counteKYC = this.recipient?.sign_type.filter((p: any) => p.id == 5).length;
 
     if(counteKYC > 0){
+      
       if(this.mobile) {
         if(this.confirmSignature == 1) {
           this.eKYC = true;

@@ -1389,7 +1389,7 @@
                 </div>
 
                 <div class="participants--input">
-                <div *ngIf="d.login_by === 'phone' && getDataSignCka(d).length > 0" class="participants__name" style="width: 90%">
+                <div *ngIf="getDataSignCka(d).length > 0" class="participants__name" style="width: 90%">
                   <div class="label_detail text-color">
                     Số điện thoại&nbsp;<span
                       *ngIf="getDataSignCka(d).length > 0"
