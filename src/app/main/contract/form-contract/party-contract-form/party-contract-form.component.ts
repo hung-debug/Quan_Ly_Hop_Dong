@@ -495,6 +495,11 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   pattern_input = parttern_input;
   // valid data step 2
   validData() {
+    if(!this.data_organization.name) {
+      this.getNotificationValid("Vui lòng nhập tên tổ chức của tôi!");
+      return false;
+    }
+
     let count = 0;
     let dataArr = [];
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);

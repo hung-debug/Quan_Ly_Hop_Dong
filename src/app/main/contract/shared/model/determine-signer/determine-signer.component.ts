@@ -108,9 +108,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    console.log("datas clone ", this.datas);
-
     this.user = this.userService.getInforUser();
 
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
@@ -125,10 +122,6 @@ export class DetermineSignerComponent implements OnInit {
     // data Tổ chức của tôi
     this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];
 
-    // console.log("this datas ", this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0])
-
-    // this.data_organization.name = this.datas.name_origanzation ? this.datas.name_origanzation : '';
-
     this.data_organization.name = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0].name ? this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0].name: this.datas.name_origanzation;
 
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
@@ -137,7 +130,6 @@ export class DetermineSignerComponent implements OnInit {
 
     // data đối tác
     this.data_parnter_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-    // this.data_parnter_individual = this.datas.is_determine_clone.filter((p: any) => p.type == 3);
 
     this.dropdownSignTypeSettings = {
       singleSelection: false,
@@ -578,6 +570,11 @@ export class DetermineSignerComponent implements OnInit {
 
   // valid data step 2
   validData() {
+
+    if(!this.data_organization.name) {
+      this.getNotificationValid("Vui lòng nhập tên tổ chức của tôi!");
+      return false;
+    }
 
     let count = 0;
     let dataArr = [];
