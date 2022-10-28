@@ -11,7 +11,7 @@
     <div class="contract--content">
       <div class="contract__content--title">
         <div>{{'organization.me' | translate | uppercase}} -</div>
-        <input type="text" [(ngModel)]="data_organization.name" disabled>
+        <input type="text" [(ngModel)]="data_organization.name">
       </div>
 
 
@@ -27,7 +27,7 @@
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
                  <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                 <div class="participants--input" style="display: flex">
+                 <!-- <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
   
@@ -49,7 +49,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
 
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
@@ -114,12 +114,12 @@
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
                <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ký to chuc-->
-               <div class="participants--input" style="display: flex">
+               <!-- <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label_detail text-color">
 
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgSigner_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
+                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgSigner_{{index}}" [value]="email" [(ngModel)]="email"/>
                     </div>&nbsp;
                     <div>
                       {{'Đăng nhập bằng email' | translate}}
@@ -136,7 +136,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
@@ -358,7 +358,7 @@
               <div class="col-md-10 participants--input" style="display: flex; flex-direction: column">
 
                  <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                 <div class="participants--input" style="display: flex">
+                 <!-- <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
   
@@ -380,7 +380,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name" style="width: 90%">
@@ -411,8 +411,8 @@
                      oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [disabled]="getPartnerSignature(item).length == 1">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-                  <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                  <div class="participants--input" style="display: flex">
+                  <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ky to chuc-->
+                  <!-- <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
     
@@ -434,7 +434,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -519,15 +519,6 @@
                   
                   </div>
                 </div>
-                <!-- <div class="participants--input" style="display: flex">
-                  <div class="participants__name" style="width: 90%">
-                    <div style="height: 40px; display: flex; align-items: center;">
-                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp != 1" (change)="changeIsSmsDocument($event, item, index)">
-                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" [disabled]="getDataSignCka(d).length > 0" checked (change)="changeIsSmsDocument($event, item, index)">
-                      <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
-                    </div>
-                  </div>
-                </div> -->
               </div>
               <div class="col-md-1 delete-element" (click)="deletePartnerDocument(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn">
@@ -553,7 +544,7 @@
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column;margin-bottom: 14px">
 
                   <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                  <div class="participants--input" style="display: flex">
+                  <!-- <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
     
@@ -575,7 +566,7 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -606,15 +597,6 @@
                     </ng-multiselect-dropdown>
                   </div>
                 </div>
-                <!-- <div class="participants--input" style="display: flex">
-                  <div class="participants__name" style="width: 90%">
-                    <div style="height: 40px; display: flex; align-items: center;">
-                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp != 1" (change)="changeIsSmsSignature($event, item, index)">
-                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" [disabled]="getDataSignCka(d).length > 0" checked (change)="changeIsSmsSignature($event, item, index)">
-                      <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
-                    </div>
-                  </div>
-                </div> -->
               </div>
               <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element"
                    (click)="deletePartnerSignature(index, item)">
