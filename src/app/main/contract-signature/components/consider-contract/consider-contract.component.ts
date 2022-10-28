@@ -815,17 +815,25 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const counteKYC = this.recipient?.sign_type.filter((p: any) => p.id == 5).length;
 
     if(counteKYC > 0){
-      if(this.confirmSignature == 1 && this.mobile) {
-
-                     this.eKYC = true;
-                    this.eKYCSignOpen();
-                    return;
-
-        
+      if(this.mobile) {
+        if(this.confirmSignature == 1) {
+          this.eKYC = true;
+          this.eKYCSignOpen();
+          return;
+        } else if(this.confirmSignature == 2) {
+          this.rejectContract();
+          return;
+        }
       } else {
-        this.toastService.showErrorHTMLWithTimeout('Vui lòng ký eKYC trên ứng dụng điện thoại', '', 3000);
-        return;
+        if(this.confirmSignature == 1) {
+          this.toastService.showErrorHTMLWithTimeout('Vui lòng ký eKYC trên ứng dụng điện thoại', '', 3000);
+          return;
+        } else if(this.confirmSignature == 2) {
+          this.rejectContract();
+          return;
+        }
       }
+        
     }
     if (e && e == 1 && !this.confirmConsider && !this.confirmSignature) {
       this.toastService.showErrorHTMLWithTimeout('Vui lòng chọn đồng ý hoặc từ chối hợp đồng', '', 3000);
