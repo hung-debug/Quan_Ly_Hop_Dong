@@ -1541,18 +1541,13 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
         console.log("data all accounts digital ", data);
         if (data.data.Serial) {
+
+          this.signCertDigital = data.data;
+          this.nameCompany = data.data.CN;
          
           this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
             if(response.success == true) {
-              this.signCertDigital = data.data;
-              this.nameCompany = data.data.CN;
-              checkSetupTool = true;
-              if (!checkSetupTool) {
-                this.spinner.hide();
-                return;
-              } else {
                 await this.signImageC(signUpdatePayload, notContainSignImage);
-              }
             } else {
               this.spinner.hide();
               Swal.fire({
