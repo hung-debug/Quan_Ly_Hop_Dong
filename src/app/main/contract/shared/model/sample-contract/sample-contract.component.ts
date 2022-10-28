@@ -1277,9 +1277,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.datas.stepLast = this.step
         this.nextOrPreviousStep(this.step);
       }
-
-
-      // this.spinner.show();
     }
   }
 

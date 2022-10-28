@@ -17,6 +17,7 @@ import { concatMap, delay, map, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { TRISTATECHECKBOX_VALUE_ACCESSOR } from 'primeng/tristatecheckbox';
+import { UnitService } from 'src/app/service/unit.service';
 
 
 @Component({
@@ -37,12 +38,14 @@ export class ConfirmSignOtpComponent implements OnInit {
   phoneOtp:any;
   isDateTime:any;
   userOtp:any;
-
+  smsContractUse: any;
+  smsContractBuy: any;
+  
   @Output() confirmOtpForm = new EventEmitter();
 
   get f() { return this.addForm.controls; }
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: {},
+    @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
     public dialog: MatDialog,
     private fbd: FormBuilder,
@@ -53,19 +56,71 @@ export class ConfirmSignOtpComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public datepipe: DatePipe,
     private deviceService: DeviceDetectorService,
+    private unitService: UnitService
   ) { }
 
 
 
   ngOnInit(): void {
-    this.getDeviceApp();
 
-    this.datasOtp = this.data;
-    this.datas = this.datasOtp.datas;
-    this.addForm = this.fbd.group({
-      otp: this.fbd.control("", [Validators.required]),
-    });
-    this.sendOtp(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone);
+    console.log("data ", this.data);
+
+    
+             //Còn số lượng SMS thì cho ký OTP lần đầu
+             this.unitService
+             .getNumberContractUseOriganzation(this.data.orgId)
+             .toPromise()
+             .then(
+               (data) => {
+                 this.smsContractUse = data.sms;
+     
+                 //lay so luong hop dong da mua
+                 this.unitService
+                   .getNumberContractBuyOriganzation(this.data.orgId)
+                   .toPromise()
+                   .then(
+                     (data) => {
+                       this.smsContractBuy = data.sms;
+                       if (
+                         Number(this.smsContractUse) +
+                           Number(1) >
+                         Number(this.smsContractBuy)
+                       ) {
+                         this.toastService.showErrorHTMLWithTimeout(
+                           'Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ',
+                           '',
+                           3000
+                         );
+                       } else {
+                        this.getDeviceApp();
+
+                        this.datasOtp = this.data;
+                        this.datas = this.datasOtp.datas;
+                        this.addForm = this.fbd.group({
+                          otp: this.fbd.control("", [Validators.required]),
+                        });
+                        this.sendOtp(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone);
+                       }
+                     },
+                     (error) => {
+                       this.toastService.showErrorHTMLWithTimeout(
+                         'Lỗi lấy số lượng hợp đồng đã mua',
+                         '',
+                         3000
+                       );
+                     }
+                   );
+               },
+               (error) => {
+                 this.toastService.showErrorHTMLWithTimeout(
+                   'Lỗi lấy số lượng hợp đồng đã dùng',
+                   '',
+                   3000
+                 );
+               }
+             );
+
+  
   }
 
   async onSubmit() {
@@ -94,6 +149,62 @@ export class ConfirmSignOtpComponent implements OnInit {
     const minutes: number = Math.floor(value / 60);
     return minutes.toString().padStart(2, '0') + ':' + 
         (value - minutes * 60).toString().padStart(2, '0');
+  }
+
+  sendOtpAgain(contract_id:any, recipient_id:any, phone:any) {
+      //Còn số lượng SMS thì cho ký OTP lần đầu
+      this.unitService
+      .getNumberContractUseOriganzation(this.data.orgId)
+      .toPromise()
+      .then(
+        (data) => {
+          this.smsContractUse = data.sms;
+
+          //lay so luong hop dong da mua
+          this.unitService
+            .getNumberContractBuyOriganzation(data.orgId)
+            .toPromise()
+            .then(
+              (data) => {
+                this.smsContractBuy = data.sms;
+                if (
+                  Number(this.smsContractUse) +
+                    Number(1) >
+                  Number(this.smsContractBuy)
+                ) {
+                  this.toastService.showErrorHTMLWithTimeout(
+                    'Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ',
+                    '',
+                    3000
+                  );
+                } else {
+                 this.getDeviceApp();
+
+                 this.datasOtp = this.data;
+                 this.datas = this.datasOtp.datas;
+                 this.addForm = this.fbd.group({
+                   otp: this.fbd.control("", [Validators.required]),
+                 });
+                 this.sendOtp(contract_id, recipient_id, phone);
+                }
+              },
+              (error) => {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Lỗi lấy số lượng hợp đồng đã mua',
+                  '',
+                  3000
+                );
+              }
+            );
+        },
+        (error) => {
+          this.toastService.showErrorHTMLWithTimeout(
+            'Lỗi lấy số lượng hợp đồng đã dùng',
+            '',
+            3000
+          );
+        }
+      );
   }
 
   sendOtp(contract_id:any, recipient_id:any, phone:any){

@@ -73,8 +73,7 @@ export class DetailUnitComponent implements OnInit {
           )
         }
 
-        //chi lay so luong hop dong khi chon to chuc cha to nhat
-        if(!data.parent_id){
+      
           //lay so luong hop dong da dung
           this.unitService.getNumberContractUseOriganzation(this.data.id).toPromise().then(
             data => {
@@ -96,7 +95,6 @@ export class DetailUnitComponent implements OnInit {
               this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
             }
           )
-        }
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
       }

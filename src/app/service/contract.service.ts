@@ -113,7 +113,9 @@ export class ContractService {
 
   signManyUsbTokenUrl: any = `${environment.apiUrl}/api/v1/sign/multi/usb-token`;
   signHsmMultiUrl: any = `${environment.apiUrl}/api/v1/sign/multi/hsm`;
-  infoPageUrl: any = `${environment.apiUrl}/api/v1/sign/multi/usb-token/page-info/?documentId=`
+  infoPageUrl: any = `${environment.apiUrl}/api/v1/sign/multi/usb-token/page-info/?documentId=`;
+
+  decreaseNumberEkycUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
 
   token: any;
   customer_id: any;
@@ -872,6 +874,20 @@ export class ContractService {
     return this.http.post<Contract>(this.documentUrl, body, {
         headers: headers,
       });
+  }
+
+  //api trừ số lượng ekyc
+  decreaseNumberOfEkyc(orgId: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+    
+    return this.http.put<any>(this.decreaseNumberEkycUrl + orgId+"/decrease-number-of-ekyc", {},{
+      headers: headers,
+      observe: 'response'
+    });
   }
 
   updateFileAttach(id: any, body: any, isStatus?: number) {

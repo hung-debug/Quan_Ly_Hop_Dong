@@ -113,9 +113,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    console.log("datas clone ", this.datas);
-
     this.user = this.userService.getInforUser();
 
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
@@ -130,7 +127,7 @@ export class DetermineSignerComponent implements OnInit {
     // data Tổ chức của tôi
     this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];
 
-    this.data_organization.name = this.datas.name_origanzation ? this.datas.name_origanzation : '';
+    this.data_organization.name = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0].name ? this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0].name: this.datas.name_origanzation;
 
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
@@ -138,7 +135,6 @@ export class DetermineSignerComponent implements OnInit {
 
     // data đối tác
     this.data_parnter_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
-    // this.data_parnter_individual = this.datas.is_determine_clone.filter((p: any) => p.type == 3);
 
     this.dropdownSignTypeSettings = {
       singleSelection: false,
@@ -173,6 +169,17 @@ export class DetermineSignerComponent implements OnInit {
 
   // next step event
   next(action: string) {
+    this.datas.is_determine_clone.forEach((items: any, index: number) => {
+      
+      if (items.type == 3)
+        this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
+        for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
+          if(this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
+            this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email;
+          }
+        }
+    })
+
     this.submitted = true;
     if (action == 'save-step' && !this.validData()) {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -202,13 +209,20 @@ export class DetermineSignerComponent implements OnInit {
                   let countOtp = 0;
                   this.datas.is_determine_clone.forEach((items: any, index: number) => {
                     items.recipients.forEach((element: any) => {
-                      if(element.sign_type[0].id == 5) {
-                        //Ký ekyc
-                        countEkyc++;
-                      } else if(element.sign_type[0].id == 1) {
-                        //Ký ảnh otp
-                        countOtp++;
+                      if(element.sign_type > 0) {
+                        if(element.sign_type[0].id == 5) {
+                          //Ký ekyc
+                          countEkyc++;
+                        } else if(element.sign_type[0].id == 1) {
+
+                          if(element.login_by == 'email')
+                            //Ký ảnh otp
+                            countOtp++;
+                          else
+                            countOtp = countOtp + 2;
+                        }
                       }
+                    
                     });
                   });
   
@@ -219,10 +233,10 @@ export class DetermineSignerComponent implements OnInit {
                   this.eKYCContractBuy = data.ekyc;
                   this.smsContractBuy = data.sms;
   
-                    if(Number(this.eKYCContractUse) + Number(countEkyc) > Number(this.eKYCContractBuy)) {
-                      this.toastService.showErrorHTMLWithTimeout('Số lượng ekyc sử dụng vượt quá số lượng ekyc đã mua', "", 3000);
-                    } else if(Number(this.smsContractUse) + Number(countOtp) > Number(this.smsContractBuy)) {
-                      this.toastService.showErrorHTMLWithTimeout('Số lượng SMS sử dụng vượt quá số lượng SMS đã mua', "", 3000);
+                    if(countEkyc > 0 && Number(this.eKYCContractUse) + Number(countEkyc) > Number(this.eKYCContractBuy)) {
+                      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+                    } else if(countOtp > 0 && Number(this.smsContractUse) + Number(countOtp) > Number(this.smsContractBuy)) {
+                      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
                     } else {
                       this.getApiDetermine(is_save);
                     }
@@ -246,16 +260,16 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   async getApiDetermine(is_save?: boolean) {
+
+    //Đưa giá trị email về chũ thường
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
-      
-      if (items.type == 3)
-        this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
         for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
-          if(this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
-            this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email;
+          if(this.datas.is_determine_clone[index].recipients[i].email) {
+            this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.toLowerCase();
           }
         }
     })
+
     this.spinner.show();
   
     this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
@@ -561,7 +575,12 @@ export class DetermineSignerComponent implements OnInit {
 
   // valid data step 2
   validData() {
-    
+
+    if(!this.data_organization.name) {
+      this.getNotificationValid("Vui lòng nhập tên tổ chức của tôi!");
+      return false;
+    }
+
     let count = 0;
     let dataArr = [];   
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
@@ -678,12 +697,12 @@ export class DetermineSignerComponent implements OnInit {
       const onlyPartOrg = 'only_party_origanzation';
 
       if (this.getCheckDuplicateEmail(onlyPartOrg, dataArr)) {
-        this.getNotificationValid("Email tổ chức của tôi không được trùng nhau!");
+        this.getNotificationValid("Email/Số điện thoại tổ chức của tôi không được trùng nhau!");
         return false
       }
 
       if (this.getCheckDuplicatePhone(onlyPartOrg, dataArr)) {
-        this.getNotificationValid("Số điện thoại tổ chức của tôi không được trùng nhau!");
+        this.getNotificationValid("Email/Số điện thoại tổ chức của tôi không được trùng nhau!");
         return false
       }
 
@@ -700,11 +719,6 @@ export class DetermineSignerComponent implements OnInit {
       // validate phía đối tác
       for (let j = 0; j < dataArrPartner.length; j++) {
         let isParterSort = (dataArrPartner[j].recipients).sort((beforeItemParter: any, afterItemParter: any) => beforeItemParter.role - afterItemParter.role);
-        // if (isParterSort.length == 0) {
-        //   count++;
-        //   this.getNotificationValid("Vui lòng nhập người ký");
-        //   break;
-        // }
         for (let k = 0; k < isParterSort.length; k++) {
           //Tổ chức
           if (dataArrPartner[j].type != 3) {
@@ -719,12 +733,7 @@ export class DetermineSignerComponent implements OnInit {
               count++;
               break;
             }
-            if (!isParterSort[k].email) {
-              this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(isParterSort[k].role) + " của đối tác!")
-              count++;
-              break;
-            }
-
+         
             if (isParterSort[k].sign_type.length == 0 && [3, 4].includes(isParterSort[k].role)) {
               this.getNotificationValid("Vui lòng chọn loại ký" + this.getNameObjectValid(isParterSort[k].role) + "của đối tác!")
               count++;
@@ -966,12 +975,12 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       if (this.getCheckDuplicateEmail(allCheckEmail, this.datas.is_determine_clone)) {
-        this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
+        this.getNotificationValid("Email/Số điện thoại không được trùng nhau giữa các bên tham gia!");
         return false
       }
 
       if (this.getCheckDuplicatePhone(allCheckEmail, this.datas.is_determine_clone)) {
-        this.getNotificationValid("Số điện thoại không được trùng nhau giữa các bên tham gia!");
+        this.getNotificationValid("Email/Số điện thoại không được trùng nhau giữa các bên tham gia!");
         return false
       }
 
@@ -979,16 +988,6 @@ export class DetermineSignerComponent implements OnInit {
         this.getNotificationValid("Mã số thuế/CMT/CCCD không được trùng nhau giữa các bên tham gia!");
         return false
       }
-
-      // if(this.getCheckDuplicateTaxCodeHsm(allCheckEmail, this.datas.is_determine_clone)) {
-      //   this.getNotificationValid("Mã số thuế không được trùng nhau giữa các bên tham gia");
-      //   return false;
-      // }
-
-      // if(this.getCheckDuplicateTaxCodeUID(allCheckEmail, this.datas.is_determine_clone)) {
-      //   this.getNotificationValid("Thông tin trong usb token không được trùng nhau giữa các bên tham gia");
-      //   return false;
-      // }
     }
 
     if (count == 0) {
@@ -1212,6 +1211,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   getCheckDuplicatePhone(isParty: string, dataValid?: any) {
+   
     let arrCheckPhone = [];
     // valid phone đối tác và các bên tham gia
     if (isParty != 'only_party_origanzation') {
@@ -1269,6 +1269,8 @@ export class DetermineSignerComponent implements OnInit {
       valueSoFar[value] = true;
     }
     return false;
+
+   
   }
 
   getCheckDuplicateCardId(isParty: string, dataValid?: any) {

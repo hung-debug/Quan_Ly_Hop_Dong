@@ -31,6 +31,7 @@ export class AuthGuard implements CanActivate {
 
     //@ts-ignore
      if(state.url.includes("handle")) {
+      sessionStorage.clear();
 
       let code = state.url.substring(8);
 

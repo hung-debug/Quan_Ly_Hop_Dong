@@ -263,10 +263,15 @@ export class InforContractBatchComponent implements OnInit {
                 i++
               ) {
                 let recipients = response[0].participants[0].recipients;
-                if (recipients.sign_type[0].id == 1) {
-                  countOtp++;
-                } else if (recipients.sign_type[0].id == 5) {
-                  countEkyc++;
+
+                for(let j = 0; j < recipients.length; j++) {
+                  if (recipients[j].sign_type[0].id == 1) {
+
+                    //Thêm điều kiện đăng nhập bằng email hoặc số điện thoại
+                    countOtp++;
+                  } else if (recipients[j].sign_type[0].id == 5) {
+                    countEkyc++;
+                  }
                 }
               }
 
@@ -310,7 +315,7 @@ export class InforContractBatchComponent implements OnInit {
                                     Number(this.eKYCContractBuy)
                                   ) {
                                     this.toastService.showErrorHTMLWithTimeout(
-                                      'Số lượng ekyc sử dụng vượt quá số lượng ekyc đã mua',
+                                      'Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ',
                                       '',
                                       3000
                                     );
@@ -320,9 +325,7 @@ export class InforContractBatchComponent implements OnInit {
                                     Number(this.smsContractBuy)
                                   ) {
                                     this.toastService.showErrorHTMLWithTimeout(
-                                      'Số lượng SMS sử dụng vượt quá số lượng SMS đã mua',
-                                      '',
-                                      3000
+                                      'Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000
                                     );
                                   } else {
                                     
@@ -335,7 +338,8 @@ export class InforContractBatchComponent implements OnInit {
                                     console.log(this.datasBatch);
                                     this.spinner.hide();
                                   } else {
-                                    this.errorDetail = response.detail;
+                                    console.log("err detail ", this.errorDetail);
+                                    this.errorDetail = responseUpload.detail;
                                     this.toastService.showErrorHTMLWithTimeout(
                                       'File mẫu không hợp lệ',
                                       '',

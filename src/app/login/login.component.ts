@@ -196,7 +196,7 @@ export class LoginComponent implements OnInit {
                       // });
                     } else {
                       this.router.navigate([localStorage.getItem('url')]);
-                    } 
+                    }
                   }
                 } else {
                   this.error = false;

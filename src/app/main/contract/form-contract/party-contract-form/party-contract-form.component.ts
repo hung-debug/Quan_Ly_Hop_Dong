@@ -117,7 +117,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
     // data Tổ chức của tôi
     this.data_organization = this.datasForm.is_determine_clone.filter((p: any) => p.type == 1)[0];
-    this.data_organization.name = this.datasForm.name_origanzation ? this.datasForm.name_origanzation : '';
+
+    this.data_organization.name = this.data_organization.name ? this.data_organization.name: this.datasForm.name_origanzation;
+
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
@@ -192,6 +194,17 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // next step event
   next(action: string) {
+    this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
+      
+      if (items.type == 3)
+        this.datasForm.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
+        for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
+          if(this.datasForm.is_determine_clone[index].recipients[i].login_by == "phone") {
+            this.datasForm.is_determine_clone[index].recipients[i].phone = this.datasForm.is_determine_clone[index].recipients[i].email;
+          }
+        }
+    })
+
     this.submitted = true;
     if (action == 'save-step' && !this.validData()) {
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
@@ -221,12 +234,17 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                   let countOtp = 0;
                   this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
                     items.recipients.forEach((element: any) => {
-                      if(element.sign_type[0].id == 5) {
-                        //Ký ekyc
-                        countEkyc++;
-                      } else if(element.sign_type[0].id == 1) {
-                        //Ký ảnh otp
-                        countOtp++;
+                      if(element.sign_type > 0) {
+                        if(element.sign_type[0].id == 5) {
+                          //Ký ekyc
+                          countEkyc++;
+                        } else if(element.sign_type[0].id == 1) {
+                          if(element.login_by == 'email')
+                          //Ký ảnh otp
+                          countOtp++;
+                        else
+                          countOtp = countOtp + 2;
+                        }
                       }
                     });
                   });
@@ -238,10 +256,10 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                   this.eKYCContractBuy = data.ekyc;
                   this.smsContractBuy = data.sms;
   
-                    if(Number(this.eKYCContractUse) + Number(countEkyc) > Number(this.eKYCContractBuy)) {
-                      this.toastService.showErrorHTMLWithTimeout('Số lượng ekyc sử dụng vượt quá số lượng ekyc đã mua', "", 3000);
-                    } else if(Number(this.smsContractUse) + Number(countOtp) > Number(this.smsContractBuy)) {
-                      this.toastService.showErrorHTMLWithTimeout('Số lượng SMS sử dụng vượt quá số lượng SMS đã mua', "", 3000);
+                    if(countEkyc > 0 && Number(this.eKYCContractUse) + Number(countEkyc) > Number(this.eKYCContractBuy)) {
+                      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+                    } else if(countOtp > 0 && Number(this.smsContractUse) + Number(countOtp) > Number(this.smsContractBuy)) {
+                      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
                     } else {
                       this.getApiDetermine(is_save);
                     }
@@ -264,6 +282,16 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   async getApiDetermine(is_save?: boolean) {
+
+      //Đưa giá trị email về chũ thường
+      this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
+        for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
+          if(this.datasForm.is_determine_clone[index].recipients[i].email) {
+            this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.toLowerCase();
+          }
+        }
+    })
+
     this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
       items.recipients.forEach((element: any) => {
         if (this.action != 'edit') {
@@ -467,6 +495,11 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   pattern_input = parttern_input;
   // valid data step 2
   validData() {
+    if(!this.data_organization.name) {
+      this.getNotificationValid("Vui lòng nhập tên tổ chức của tôi!");
+      return false;
+    }
+
     let count = 0;
     let dataArr = [];
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
@@ -1313,6 +1346,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng các đối tượng người ký tổ chức của tôi
   getOriganzationSignature() {
+    console.log("org sig ",this.data_organization.recipients.filter((p: any) => p.role == 3));
     return this.data_organization.recipients.filter((p: any) => p.role == 3);
   }
 

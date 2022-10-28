@@ -119,11 +119,14 @@ export class EkycDialogSignComponent implements OnInit {
           } else {
             this.flagSuccess = false;
             this.webcamImage = this.initWebcamImage;
-            if(response.action == 'manualReview' && response.warning_msg[0].length > 0) {
-              alert(response.warning_msg[0]);
-            } else {
-              alert("Xác thực thất bại");
-            }      
+            // if(response.action == 'manualReview' && response.warning_msg[0].length > 0) {
+            //   alert(response.warning_msg[0]);
+            // } else {
+            //   alert("Xác thực thất bại");
+            // }      
+
+            alert("Xác thực thất bại");
+
           }
          
         })
@@ -131,7 +134,8 @@ export class EkycDialogSignComponent implements OnInit {
   
         let formData = {
           "name": "image_ekyc_web_face" + new Date().getTime() + ".jpg",
-          "content":this.webcamImage.imageAsDataUrl
+          "content":this.webcamImage.imageAsDataUrl,
+          "organizationId": this.organizationId,
         }
   
         //up file anh len db
@@ -159,19 +163,21 @@ export class EkycDialogSignComponent implements OnInit {
   }
 
   upFileImageToDb(formData: any) {
+    console.log("id contract ", this.data.idContract);
+
      //up file anh len db
      this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseImage) => {
       if(responseImage.success == true) {
         let body = {
-          "name":responseImage.file_object.file_name,
+          "name":responseImage.file_object.filename,
           "type": 7,
           "path":responseImage.file_object.file_path,
-          "file_name":responseImage.file_object.file_name,
+          "filename":responseImage.file_object.filename,
           "bucket": responseImage.file_object.bucket,
           "internal": 1,
           "ordering": 1,
           "status": 1,
-          "contractId": this.data.idContract,
+          "contract_id": this.data.contractId,
         }
 
         this.contractService.addDocumentEkyc(body).subscribe((response) => {

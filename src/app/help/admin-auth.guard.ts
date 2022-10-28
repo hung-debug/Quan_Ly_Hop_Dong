@@ -25,8 +25,11 @@ export class AdminAuthGuard implements CanActivate {
      //console.log(state.url);
     //console
     //@ts-ignore
+
   
     if (state.url.search('loginType') > 0 && (next._urlSegment.segments.some((p: any) => p.path == 'contract-signature') || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
+      sessionStorage.clear();
+
       //console.log(state.url);
       console.log(!sessionStorage.getItem('url'), state.url.includes("recipientEmail"));
       if (!sessionStorage.getItem('url') && state.url.includes("recipientEmail")) {

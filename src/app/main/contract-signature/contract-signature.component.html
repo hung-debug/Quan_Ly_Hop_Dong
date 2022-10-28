@@ -24,10 +24,15 @@
     <div class="col-md-5"></div>
     <div class="col-md-2">{{'create-date' | translate}}</div>
     <div class="col-md-2">{{'expiration-date' | translate}}</div>
-    <div class="col-md-3">{{'action' | translate}}</div>
+    <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-3">{{'action' | translate}}</div>
+
+    <div *ngIf="this.typeDisplay === 'signMany'" class="col-md-3">
+      <input id="all" name="all" type="checkbox" (click)="toggle()"/>
+    </div>
+
   </div>
 
-  <!--Danh sách tất cả hợp đồng cần ký-->
+  <!--Danh sách tất cả hợp đồng cần ký trường hợp ký một-->
   <div *ngIf="this.typeDisplay === 'signOne'">
     <div class="item_contract"  *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
       <div *ngIf="filter_status == 1 || filter_status == 4">
@@ -176,20 +181,11 @@
 
   <!--Danh sách tất cả hợp đồng có thể ký nhiều -->
   <div *ngIf="this.typeDisplay === 'signMany'">
-
- 
-
     <div class="item_contract"  *ngFor="let item of contractsSignMany; let index1 = index">
       <div *ngIf="filter_status == 1 || filter_status == 4">
         <div class="row">
           <div class="col-md-5">
             <div class="row">
-              <div class="col-md-1 calendar_create">
-                <div>
-                  <input name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked"
-                  />
-                </div>
-              </div>
               <div class="col-md-11">
                   <div class="item_contract_name" (click)="openDetail(item.contractId)">{{item.participant.contract.name}}</div>
                   
@@ -250,9 +246,14 @@
                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item)">{{'contract.view' | translate}}</button>
               </div>
 
-              <!--Button ký-->
+              <!--Checkbox-->
               <div class="div_icon" *ngIf="item.status == 1 && item.role == 3 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
-                <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSignatureContract(item)">{{'contract.sign' | translate}}</button>
+                <div class="col-md-1 calendar_create">
+                  <div>
+                    <input name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div class="div_icon" *ngIf="item.status == 1 && item.role == 4 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
@@ -368,13 +369,20 @@
     </div>
   </div>
 
-  <div class="signature-container" id="export-html-hsm"
-      style="width: 155px;min-height: 80px; display: flex; font-size: 9px">
+  <!-- <div class="signature-container" id="export-html-hsm"  style="min-height: 80px;display: flex; font-size: 9px">
     <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
     <div class="signature-content"
         style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
-      <div style="z-index: 2;text-align: left;">Mã số thuế: {{nameCompany}}</div>
+      <div style="z-index: 2;text-align: left;">Mã số thuế: {{nameCompany}}</div>  
       <div style="z-index: 2;text-align: left;">Ngày ký: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</div>
+    </div>
+  </div> -->
+
+  <div id="export-html-hsm"  style="min-height: 80px;display: flex; font-size: 9px">
+    <img style="width: 30px"  src="assets/img/tick_signature.svg" alt="duongdt.vn">
+    <div style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
+      <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">Mã số thuế: {{nameCompany}}</span>
+      <span style="text-align: left;white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">Ngày ký: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</span>
     </div>
   </div>
 </div>
