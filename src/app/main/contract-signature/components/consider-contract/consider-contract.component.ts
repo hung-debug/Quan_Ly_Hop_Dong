@@ -1073,7 +1073,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               this.widthText = signUpdate.height;*/
               this.heightText = 150;
               this.widthText = 150;
-              await of(null).pipe(delay(100)).toPromise();
+              await of(null).pipe(delay(120)).toPromise();
               const imageRender = <HTMLElement>document.getElementById('text-sign');
 
               if (imageRender) {
@@ -1081,7 +1081,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                 signI = this.textSignBase64Gen = textSignB.split(",")[1];
               }
             } else if (signUpdate.type == 3) {
-              await of(null).pipe(delay(100)).toPromise();
+              await of(null).pipe(delay(120)).toPromise();
 
               //lấy ảnh chữ ký usb token
               const imageRender = <HTMLElement>document.getElementById('export-html');

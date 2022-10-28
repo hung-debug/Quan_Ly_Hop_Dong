@@ -430,8 +430,6 @@ export class ContractSignatureComponent implements OnInit {
 
     let recipientId: any = [];
     let taxCode: any = [];
-    let subscribe: any = [];
-
     let idSignMany: any = [];
 
  
@@ -460,10 +458,10 @@ export class ContractSignatureComponent implements OnInit {
           .getDetermineCoordination(recipientId[i])
           .subscribe((response) => {
             response.recipients.forEach((item: any) => {
-              // if(item.fields[0].recipient.id == recipientId[i]) {
-                  taxCode.push(response.recipients[0].fields[0].recipient.cardId);
+              if(item.fields[0].recipient.id == recipientId[i]) {
+                  taxCode.push(item.fields[0].recipient.cardId);
                   console.log("tax code ", taxCode);
-              // }
+              }
             })
           });
       }
@@ -482,10 +480,10 @@ export class ContractSignatureComponent implements OnInit {
             console.log("response 1 ", response);
             response.recipients.forEach((item: any) => {
               console.log("item ", item);
-              // if(item.fields[0].recipient.id == recipientId[i]) {
-                  taxCode.push(response.recipients[0].fields[0].recipient.cardId);
+              if(item.fields[0].recipient.id == recipientId[i]) {
+                  taxCode.push(item.fields[0].recipient.cardId);
                   console.log("tax code abc ", taxCode);
-              // }
+              }
             })
 
             
@@ -560,7 +558,7 @@ export class ContractSignatureComponent implements OnInit {
                       .subscribe((response) => {
                         response.recipients.forEach((item: any) => {
                           if(item.fields[0].recipient.id == recipientId[i]) {
-                              taxCode.push(response.recipients[i].fields[0].recipient.cardId);
+                              taxCode.push(item.fields[0].recipient.cardId);
                               console.log("tax code ", taxCode);
                           }
                         })
@@ -700,18 +698,6 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   async signUsbTokenMany(fileC: any, idContract: any, recipientId: any, documentId: any, taxCode: any, idSignMany: any) {
-    // console.log("fileC ",fileC.length);
-
-    // console.log("idContract ", idContract);
-
-    // console.log("recipientId ",recipientId);
-
-    // console.log("documentId ", documentId);
-
-    // console.log("taxCode ", taxCode);
-
-    // console.log("idSignMany ", idSignMany);
-
     //ky bang usb token
     let base64String: any = [];
 
