@@ -1537,7 +1537,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       //Đối với ký usb token
       let checkSetupTool = false;
 
-      this.contractService.getAllAccountsDigital().then(async (data) => {
+      this.contractService.getAllAccountsDigital().then((data) => {
 
         console.log("data all accounts digital ", data);
         if (data.data.Serial) {
