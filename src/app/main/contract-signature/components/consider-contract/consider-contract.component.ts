@@ -1770,8 +1770,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   filePath: any = "";
   async signImageC(signUpdatePayload: any, notContainSignImage: any) {
-    console.log("notContainSignImage ", notContainSignImage);
-    console.log("sigunupdatepayload ",signUpdatePayload);
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
     if(signUpdatePayload){

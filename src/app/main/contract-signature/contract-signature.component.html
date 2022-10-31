@@ -107,7 +107,7 @@
               <div class="div_icon" *ngIf="item.status == 1 && item.role == 4 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item)">{{'contract.document' | translate}}</button>
               </div>
-              <div class="div_icon" *ngIf="item.contractStatus == '30'">
+              <div class="div_icon" *ngIf="item.contractStatus == 30">
                 <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId);" />
               </div>
             </div>
@@ -260,7 +260,7 @@
               <!-- <div class="div_icon" *ngIf="item.status == 1 && item.role == 4 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item)">{{'contract.document' | translate}}</button>
               </div> -->
-              <div class="div_icon" *ngIf="item.contractStatus == '30'">
+              <div class="div_icon" *ngIf="item.contractStatus == 30">
                 <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId);" />
               </div>
             </div>

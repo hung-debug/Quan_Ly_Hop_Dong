@@ -204,6 +204,7 @@ export class ContractSignatureComponent implements OnInit {
 
     //get list contract share
     if (this.filter_status == -1) {
+      console.log("o day 1 ");
       this.contractService
         .getContractShareList(
           this.filter_name,
@@ -305,6 +306,7 @@ export class ContractSignatureComponent implements OnInit {
           });
       }
     } else {
+      console.log("o day 3 ");
       console.log(this.filter_status % 10);
       this.contractService
         .getContractMyProcessDashboard(
@@ -436,7 +438,6 @@ export class ContractSignatureComponent implements OnInit {
     console.log("signId ", signId);
 
     
-
     //Lấy id đã tick
     //2: usb token
     //4: hsm
@@ -625,70 +626,89 @@ export class ContractSignatureComponent implements OnInit {
 
                 this.spinner.show();
 
+                let countUpdate = 0;
+                for(let i = 0; i < idSignMany.length; i++) {
+                  const signUpdate = await this.contractServiceV1.updateInfoContractConsiderPromise([],idSignMany[i]);
+
+                  if(!signUpdate.id) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Lỗi cập nhật trạng thái hợp đồng ',
+                      '',
+                      3000
+                    );
+                  } else {
+                    countUpdate++;
+                  }
+                }
+
                 //Call api ký nhiều hsm
                 const checkSign = await this.contractServiceV1.signHsmMulti(
                   this.dataHsm,
                   idSignMany
                 );
-
+                
                 let countSuccess = 0;
 
-                for (let i = 0; i < checkSign.length; i++) {
-                  if (checkSign[i].result.success == false) {
-                    this.spinner.hide();
-
-                    if (
-                      checkSign[i].result.message == 'Tax code do not match!'
-                    ) {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        'Mã số thuế không trùng khớp',
-                        '',
-                        3000
-                      );
-                    } else if (
-                      checkSign[i].result.message ==
-                      'Mat khau cap 2 khong dung!'
-                    ) {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        'Mật khẩu cấp 2 không đúng',
-                        '',
-                        3000
-                      );
-                    } else if (
-                      checkSign[i].result.message ==
-                      'License ky so HSM het han!'
-                    ) {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        'License ký số HSM hết hạn!',
-                        '',
-                        3000
-                      );
+                  for (let i = 0; i < checkSign.length; i++) {
+                    if (checkSign[i].result.success == false) {
+                      this.spinner.hide();
+  
+                      if (
+                        checkSign[i].result.message == 'Tax code do not match!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'Mã số thuế không trùng khớp',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message ==
+                        'Mat khau cap 2 khong dung!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'Mật khẩu cấp 2 không đúng',
+                          '',
+                          3000
+                        );
+                      } else if (
+                        checkSign[i].result.message ==
+                        'License ky so HSM het han!'
+                      ) {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          'License ký số HSM hết hạn!',
+                          '',
+                          3000
+                        );
+                      } else {
+                        this.toastService.showErrorHTMLWithTimeout(
+                          checkSign[i].result.message,
+                          '',
+                          3000
+                        );
+                      }
+                      return;
                     } else {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        checkSign[i].result.message,
-                        '',
-                        3000
-                      );
+                      countSuccess++;
                     }
-                    return;
-                  } else {
-                    countSuccess++;
                   }
-                }
-
-                if (countSuccess == checkSign.length) {
+                // }
+             
+                console.log("count success ", countSuccess);
+                console.log("count update ", countUpdate);
+                if (countSuccess == checkSign.length && countSuccess == countUpdate) {
                   this.spinner.hide();
                   this.toastService.showSuccessHTMLWithTimeout(
                     'Ký số thành công',
                     '',
                     3000
                   );
-
+                  
                   this.router
                     .navigateByUrl('/', { skipLocationChange: true })
                     .then(() => {
                       this.router.navigate(['main/c/receive/processed']);
-                    });
+                    },                    
+                    );
                 }
               }
             });
@@ -826,6 +846,16 @@ export class ContractSignatureComponent implements OnInit {
                   h[i] = y[i] + h[i];
 
                   console.log("base64String i 1", base64String[i]);
+
+                  const updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([], recipientId[i]);
+
+                  if(!updateInfo.id) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Lỗi cập nhật trạng thái hợp đồng ',
+                      '',
+                      3000
+                    );
+                  }
                   
                   let dataSignMobi: any =
                     await this.contractServiceV1.postSignDigitalMobiMulti(
@@ -864,22 +894,10 @@ export class ContractSignatureComponent implements OnInit {
                       3000
                     );
                     return false;
-                  } else {
-                    const updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([], sign.recipient_id);
-
-                    if(!updateInfo.id) {
-                      this.toastService.showErrorHTMLWithTimeout(
-                        'Lỗi cập nhật trạng thái hợp đồng ',
-                        '',
-                        3000
-                      );
-                    }
                   }
 
-
-                 
-
-                  if (i == fileC.length - 1) {
+              
+                  if (i == fileC.length - 1 ) {
                     this.spinner.hide();
                     this.toastService.showSuccessHTMLWithTimeout(
                       'Ký số thành công',
