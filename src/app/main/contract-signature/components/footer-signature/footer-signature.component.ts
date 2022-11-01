@@ -130,7 +130,7 @@ export class FooterSignatureComponent implements OnInit {
     } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
 
       this.contractService.getDetermineCoordination(this.recipientId).subscribe((response) => {
-        if(response.recipients[0].sign_type[0].id == 5) {
+        if(response.recipients[0].sign_type.length > 0 && response.recipients[0].sign_type[0].id == 5) {
 
           this.contractId = response.contract_id;
 
