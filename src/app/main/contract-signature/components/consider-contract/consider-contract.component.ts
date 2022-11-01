@@ -816,6 +816,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     const counteKYC = this.recipient?.sign_type.filter((p: any) => p.id == 5).length;
 
     if(counteKYC > 0){
+      
       if(this.mobile) {
         if(this.confirmSignature == 1) {
           this.eKYC = true;
@@ -1073,7 +1074,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               this.widthText = signUpdate.height;*/
               this.heightText = 150;
               this.widthText = 150;
-              await of(null).pipe(delay(100)).toPromise();
+              await of(null).pipe(delay(120)).toPromise();
               const imageRender = <HTMLElement>document.getElementById('text-sign');
 
               if (imageRender) {
@@ -1081,7 +1082,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                 signI = this.textSignBase64Gen = textSignB.split(",")[1];
               }
             } else if (signUpdate.type == 3) {
-              await of(null).pipe(delay(100)).toPromise();
+              await of(null).pipe(delay(120)).toPromise();
 
               //lấy ảnh chữ ký usb token
               const imageRender = <HTMLElement>document.getElementById('export-html');
@@ -1537,22 +1538,17 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       //Đối với ký usb token
       let checkSetupTool = false;
 
-      this.contractService.getAllAccountsDigital().then(async (data) => {
+      this.contractService.getAllAccountsDigital().then((data) => {
 
         console.log("data all accounts digital ", data);
         if (data.data.Serial) {
+
+          this.signCertDigital = data.data;
+          this.nameCompany = data.data.CN;
          
           this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
             if(response.success == true) {
-              this.signCertDigital = data.data;
-              this.nameCompany = data.data.CN;
-              checkSetupTool = true;
-              if (!checkSetupTool) {
-                this.spinner.hide();
-                return;
-              } else {
                 await this.signImageC(signUpdatePayload, notContainSignImage);
-              }
             } else {
               this.spinner.hide();
               Swal.fire({
@@ -1775,8 +1771,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   filePath: any = "";
   async signImageC(signUpdatePayload: any, notContainSignImage: any) {
-    console.log("notContainSignImage ", notContainSignImage);
-    console.log("sigunupdatepayload ",signUpdatePayload);
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
     if(signUpdatePayload){

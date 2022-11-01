@@ -107,7 +107,7 @@
               <div class="div_icon" *ngIf="item.status == 1 && item.role == 4 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item)">{{'contract.document' | translate}}</button>
               </div>
-              <div class="div_icon" *ngIf="item.contractStatus == '30'">
+              <div class="div_icon" *ngIf="item.contractStatus == 30">
                 <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId);" />
               </div>
             </div>
@@ -242,12 +242,13 @@
               <div class="div_icon" *ngIf="item.status == 1 && item.role == 1 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openCoordinatorContract(item)">{{'contract.lead' | translate}}</button>
               </div>
-              <div class="div_icon" *ngIf="item.status == 1 && item.role == 2 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
+              <!-- <div class="div_icon" *ngIf="item.status == 1 && item.role == 2 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openConsiderContract(item)">{{'contract.view' | translate}}</button>
-              </div>
+              </div> -->
 
               <!--Checkbox-->
-              <div class="div_icon" *ngIf="item.status == 1 && item.role == 3 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
+              <!--role = 3: ký, role = 4: đóng dấu-->
+              <div class="div_icon" *ngIf="item.status == 1 && (item.role == 3 || item.role == 4) && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                 <div class="col-md-1 calendar_create">
                   <div>
                     <input name="item" type="checkbox" value="{{item.contractId}}" [(ngModel)]="item.checked"
@@ -256,10 +257,10 @@
                 </div>
               </div>
 
-              <div class="div_icon" *ngIf="item.status == 1 && item.role == 4 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
+              <!-- <div class="div_icon" *ngIf="item.status == 1 && item.role == 4 && item.contractStatus == 20 && item.contractReleaseState == 'CON_HIEU_LUC'">
                 <button type="button" class="btn btn-outline-dark btn_submit" (click)="openSecretaryContract(item)">{{'contract.document' | translate}}</button>
-              </div>
-              <div class="div_icon" *ngIf="item.contractStatus == '30'">
+              </div> -->
+              <div class="div_icon" *ngIf="item.contractStatus == 30">
                 <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId);" />
               </div>
             </div>
