@@ -368,6 +368,7 @@ export class ContractTemplateService {
           },
           // dữ liệu văn thư
           {
+            login_by: 'email',
             "name": "", // tên người tham gia
             "email": "", // email người tham gia
             "phone": "", // sđt người tham gia
@@ -394,6 +395,7 @@ export class ContractTemplateService {
         "recipients": [
           // người điều phối
           {
+            login_by: 'email',
             "name": "",
             "email": "",
             "phone": "",
@@ -438,6 +440,7 @@ export class ContractTemplateService {
           },
           // văn thư
           {
+            login_by: 'email',
             "name": "",
             "email": "",
             "phone": "",

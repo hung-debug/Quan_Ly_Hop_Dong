@@ -27,7 +27,7 @@
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
                  <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                 <!-- <div class="participants--input" style="display: flex">
+                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
   
@@ -49,7 +49,7 @@
                       </div>
                     </div>
                   </div>
-                </div> -->
+                </div>
 
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
@@ -114,12 +114,12 @@
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
                <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ký to chuc-->
-               <!-- <div class="participants--input" style="display: flex">
+               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label_detail text-color">
 
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgSigner_{{index}}" [value]="email" [(ngModel)]="email"/>
+                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgSigner_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
                     </div>&nbsp;
                     <div>
                       {{'Đăng nhập bằng email' | translate}}
@@ -136,7 +136,7 @@
                     </div>
                   </div>
                 </div>
-              </div> -->
+              </div>
 
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
@@ -358,12 +358,12 @@
               <div class="col-md-10 participants--input" style="display: flex; flex-direction: column">
 
                  <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                 <!-- <div class="participants--input" style="display: flex">
+                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
   
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
+                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}" [value]="email" [(ngModel)]="d.login_by"/>
                       </div>&nbsp;
                       <div>
                         {{'Đăng nhập bằng email' | translate}}
@@ -373,14 +373,14 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
+                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}" [(ngModel)]="d.login_by" [value]="phone"/>
                       </div>&nbsp;
                       <div>
                         {{'Đăng nhập bằng số điện thoại' | translate}}
                       </div>
                     </div>
                   </div>
-                </div> -->
+                </div>
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name" style="width: 90%">
@@ -412,7 +412,7 @@
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
                   <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ky to chuc-->
-                  <!-- <div class="participants--input" style="display: flex">
+                  <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
     
@@ -434,7 +434,7 @@
                         </div>
                       </div>
                     </div>
-                  </div> -->
+                  </div>
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -544,12 +544,12 @@
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column;margin-bottom: 14px">
 
                   <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
-                  <!-- <div class="participants--input" style="display: flex">
+                  <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
     
                         <div>
-                          <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
+                          <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}" [value]="email" [(ngModel)]="d.login_by"/>
                         </div>&nbsp;
                         <div>
                           {{'Đăng nhập bằng email' | translate}}
@@ -559,14 +559,14 @@
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
-                          <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
+                          <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}" [(ngModel)]="d.login_by" [value]="phone"/>
                         </div>&nbsp;
                         <div>
                           {{'Đăng nhập bằng số điện thoại' | translate}}
                         </div>
                       </div>
                     </div>
-                  </div> -->
+                  </div>
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
