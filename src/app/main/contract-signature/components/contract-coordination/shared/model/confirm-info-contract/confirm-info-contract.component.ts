@@ -136,6 +136,24 @@ export class ConfirmInfoContractComponent implements OnInit {
       }
     }
 
+    // ===============================
+    // if (isSuccess == 0) {
+    let response_determine_contract: any = [];
+      await this.contractService.getContractDetermine(this.datas.determine_contract, this.datas.data_contract_document_id.contract_id).toPromise().then((res: any) => {
+          // console.log('success step confirm 2');
+          if (res && res.length > 0) {
+            response_determine_contract = res.filter((res: any) => res.type != 1 && res.recipients.some((val: any) => val.id == this.datas.recipient_id_coordition))[0];
+          }
+        },
+        (error: any) => {
+          isSuccess++;
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout(error.error, "", 3000);
+        });
+    // }
+// =============================
+
+    console.log(response_determine_contract);
     // mang update cac doi tuong o ky moi (them or bi xoa)
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
@@ -165,6 +183,11 @@ export class ConfirmInfoContractComponent implements OnInit {
           }
         } else {
           item['type'] = 1;
+        }
+
+        if (!item.recipient_id ) {
+          let getIdRecipientObj = response_determine_contract.recipients.filter((idField: any) => idField.email == item.email)[0];
+          item.recipient_id = getIdRecipientObj && getIdRecipientObj.id ? getIdRecipientObj.id : undefined;
         }
 
         this.arrVariableRemove.forEach((item_remove: any) => {
@@ -203,17 +226,6 @@ export class ConfirmInfoContractComponent implements OnInit {
         if (isSuccess > 0)
           break;
       }
-    }
-
-    if (isSuccess == 0) {
-      await this.contractService.getContractDetermine(this.datas.determine_contract, this.datas.data_contract_document_id.contract_id).toPromise().then((res: any) => {
-          // console.log('success step confirm 2');
-        },
-        (error: any) => {
-          isSuccess++;
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout(error.error, "", 3000);
-        });
     }
 
     if (isSuccess == 0) {
