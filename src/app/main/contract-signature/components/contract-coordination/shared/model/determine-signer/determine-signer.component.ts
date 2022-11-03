@@ -150,6 +150,10 @@ export class DetermineSignerComponent implements OnInit {
     })
   }
 
+  getDataSignUSBToken(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 2);
+  }
+
   getApiDetermine() {
     if (!this.validData()) return;
     this.is_determine_clone.forEach((items: any, index: number) => {
