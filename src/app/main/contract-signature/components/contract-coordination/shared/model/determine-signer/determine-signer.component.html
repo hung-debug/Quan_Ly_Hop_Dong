@@ -19,6 +19,7 @@
         <u class="label text-color" (click)="deletePartner(id)"
            style="background-color: #FFFFFF; cursor: pointer">{{(item.type == 2 ? 'xoa_doi_tac_to_chuc' : 'xoa_doi_tac_ca_nhan') | translate}}</u>
       </div>
+
       <div class="contract__content--participants">
         <div *ngIf="item.type == 2">
           <div class="participants-border">
@@ -79,13 +80,18 @@
                     </div>
                   </div>
                 </div>
+
                 <div class="participants--input select-text-input" style="display: flex">
                   <div class="participants__name" style="width: 90%">
                     <div class="label text-color">{{'user.sign-type' | translate}}: <span
                       class="required-title">*</span></div>
 
-                    <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
-                                             [settings]="dropdownSignTypeSettings" [data]="signTypeList">
+                    <ng-multiselect-dropdown 
+                        [(ngModel)]="d.sign_type" 
+                        placeholder="{{'choose' | translate }}"
+                        [settings]="dropdownSignTypeSettings" 
+                        [data]="signTypeList"
+                        >
                       <ng-template #optionsTemplate let-item let-option="option"
                                    let-id="id" let-isSelected="isSelected">
                         <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
@@ -99,7 +105,18 @@
                     <div class="required-title notify">{{'note_chon_loai_ki_so' | translate}}</div>
                   </div>
                 </div>
+
+                 <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là usbtoken-->
+              <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
+                <div class="participants__name" style="width: 90%">
+                  <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div></div>
+                  <div class="input-data">
+                    <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
               </div>
+              </div>
+
               <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element"
                    (click)="deletePartnerSignature(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn">
