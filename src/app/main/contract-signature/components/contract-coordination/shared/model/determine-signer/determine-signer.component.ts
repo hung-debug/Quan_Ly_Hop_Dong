@@ -11,7 +11,7 @@ import { ContractService } from "../../../../../../../service/contract.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "../../../../../../../service/toast.service";
 import { Router } from "@angular/router";
-import { parttern } from "../../../../../../../config/parttern";
+import { parttern, parttern_input } from "../../../../../../../config/parttern";
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -39,6 +39,7 @@ export class DetermineSignerComponent implements OnInit {
   checked: boolean = true;
   checkedChange: any = [];
   pattern = parttern;
+  parttern_input = parttern_input;
 
   is_determine_clone: any;
   toppings = new FormControl();
@@ -242,6 +243,19 @@ export class DetermineSignerComponent implements OnInit {
 
           if (dataArrPartner[j].recipients[k].email && !this.pattern.email.test(dataArrPartner[j].recipients[k].email)) {
             this.getNotificationValid("Email" + this.getNameObject(3) + "của đối tác không hợp lệ!")
+            count++;
+            break;
+          }
+
+          console.log("dataArrPartner ", dataArrPartner[j]);
+          if(!dataArrPartner[j].recipients[k].card_id && (dataArrPartner[j].recipients[k].role == 3 || dataArrPartner[j].recipients[k].role == 4) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+            this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(3)+"của đối tác");
+            count++;
+            break;
+          }
+
+          if(dataArrPartner[j].recipients[k].card_id && !this.pattern.card_id.test(dataArrPartner[j].recipients[k].card_id) && !this.parttern_input.taxCode_form.test(dataArrPartner[j].recipients[k].card_id) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+            this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(3) + "của đối tác không hợp lệ");
             count++;
             break;
           }
