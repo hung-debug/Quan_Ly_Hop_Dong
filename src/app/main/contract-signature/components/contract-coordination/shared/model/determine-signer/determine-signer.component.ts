@@ -99,8 +99,8 @@ export class DetermineSignerComponent implements OnInit {
       // unSelectAllText: "Bỏ chọn tất cả",
       enableCheckAll: false,
       allowSearchFilter: true,
-      itemsShowLimit: 2,
-      limitSelection: 2,
+      itemsShowLimit: 1,
+      limitSelection: 1,
       disabledField: 'item_disable',
     };
     this.emailUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info.email;
