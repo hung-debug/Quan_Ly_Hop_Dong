@@ -189,7 +189,8 @@
                     placeholder="{{'choose' | translate }}"
                     [settings]="dropdownSignTypeSettings" 
                     [data]="isListSignNotPerson" 
-                 
+                    (onSelect)="onItemSelect($event, data_organization.name)"
+                    (onDeSelect)="deSelectOrg($event)"
                     (ngModelChange)="selectWithOtp($event, d, 'organization')"
                   >
                     <ng-template #optionsTemplate let-item let-option="option" let-id="id" let-isSelected="isSelected">
