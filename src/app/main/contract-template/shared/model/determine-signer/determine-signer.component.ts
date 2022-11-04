@@ -124,6 +124,12 @@ export class DetermineSignerComponent implements OnInit {
       d.phone = '';
     }
 
+    // console.log("d.login_by", d.login_by)
+    // if(d.login_by == 'phone'){
+    //   d.email = d.phone;
+    //   d.phone = d.email;
+    // }
+
     console.log("d ",d);
   }
 
@@ -151,11 +157,11 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3) {
           this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
-          for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
-            if(this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
-              this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email;
-            }
-          }
+      }
+      for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
+        if(this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
+          this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email;
+        }
       }
     })
 
@@ -275,6 +281,9 @@ export class DetermineSignerComponent implements OnInit {
 
   selectWithOtp(e: any, data: any) {
     this.changeOtp(data);
+    if(data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
+      data.phone = data.email;
+    }
   }
 
   changeOtp(data: any) {
@@ -1302,6 +1311,7 @@ export class DetermineSignerComponent implements OnInit {
   onSelectName(tData: any, dData: any) {
     dData.name = tData.name;
     dData.email = tData.email;
+    dData.phone = tData.phone;
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
