@@ -265,13 +265,16 @@ export class InforContractBatchComponent implements OnInit {
                 let recipients = response[0].participants[0].recipients;
 
                 for(let j = 0; j < recipients.length; j++) {
-                  if (recipients[j].sign_type[0].id == 1) {
+                  if(recipients[j].sign_type.length > 0) {
+                    if (recipients[j].sign_type[0].id == 1) {
 
-                    //Thêm điều kiện đăng nhập bằng email hoặc số điện thoại
-                    countOtp++;
-                  } else if (recipients[j].sign_type[0].id == 5) {
-                    countEkyc++;
+                      //Thêm điều kiện đăng nhập bằng email hoặc số điện thoại
+                      countOtp++;
+                    } else if (recipients[j].sign_type[0].id == 5) {
+                      countEkyc++;
+                    }
                   }
+                    
                 }
               }
 
