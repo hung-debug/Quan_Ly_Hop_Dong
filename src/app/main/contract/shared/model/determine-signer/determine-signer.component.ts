@@ -189,75 +189,64 @@ export class DetermineSignerComponent implements OnInit {
 
         this.orgId = this.userService.getInforUser().organization_id;
 
-        this.getApiDetermine(is_save);
-
-
-      //   this.unitService.getUnitById(this.orgId).toPromise().then(
-      //     data => {
-      //       //chi lay so luong hop dong khi chon to chuc cha to nhat
-      //         //lay so luong hop dong da dung
-      //         this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
-      //           data => {
+            //chi lay so luong hop dong khi chon to chuc cha to nhat
+              //lay so luong hop dong da dung
+              this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
+                data => {
   
-      //             this.numContractUse = data.contract;
-      //             this.eKYCContractUse = data.ekyc;
-      //             this.smsContractUse = data.sms;
+                  this.numContractUse = data.contract;
+                  this.eKYCContractUse = data.ekyc;
+                  this.smsContractUse = data.sms;
   
-      //             let countEkyc = 0;
-      //             let countOtp = 0;
-      //             this.datas.is_determine_clone.forEach((items: any, index: number) => {
-      //               items.recipients.forEach((element: any) => {
-      //                 if(element.sign_type > 0) {
-      //                   if(element.sign_type[0].id == 5) {
-      //                     //Ký ekyc
-      //                     countEkyc++;
-      //                   } else if(element.sign_type[0].id == 1) {
+                  let countEkyc = 0;
+                  let countOtp = 0;
+                  this.datas.is_determine_clone.forEach((items: any, index: number) => {
+                    items.recipients.forEach((element: any) => {
+                      if(element.sign_type > 0) {
+                        if(element.sign_type[0].id == 5) {
+                          //Ký ekyc
+                          countEkyc++;
+                        } else if(element.sign_type[0].id == 1) {
 
-      //                     if(element.login_by == 'email')
-      //                       //Ký ảnh otp
-      //                       countOtp++;
-      //                     else
-      //                       countOtp = countOtp + 2;
-      //                   }
-      //                 }
+                          if(element.login_by == 'email')
+                            //Ký ảnh otp
+                            countOtp++;
+                          else
+                            countOtp = countOtp + 2;
+                        }
+                      }
                     
-      //               });
-      //             });
-
-      //                                   this.getApiDetermine(is_save);
-
+                    });
+                  });
   
-      //                     //lay so luong hop dong da mua
-      //         this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
-      //           data => {
-      //             this.numContractBuy = data.contract;
-      //             this.eKYCContractBuy = data.ekyc;
-      //             this.smsContractBuy = data.sms;
+                          //lay so luong hop dong da mua
+              this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
+                data => {
+                  this.numContractBuy = data.contract;
+                  this.eKYCContractBuy = data.ekyc;
+                  this.smsContractBuy = data.sms;
   
-      //               if(countEkyc > 0 && Number(this.eKYCContractUse) + Number(countEkyc) > Number(this.eKYCContractBuy)) {
-      //                 this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-      //               } else if(countOtp > 0 && Number(this.smsContractUse) + Number(countOtp) > Number(this.smsContractBuy)) {
-      //                 this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-      //               } else {
-      //                 this.getApiDetermine(is_save);
-      //               }
-      //           }, error => {
-      //             this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
-      //           }
-      //         )          
-      //           }, error => {
-      //             this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
-      //           }
-      //         )
-      //     }, error => {
-      //       this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
-      //     }
-      //   )
-      // } else {
-      //   this.getApiDetermine(is_save);
+                    if(countEkyc > 0 && Number(this.eKYCContractUse) + Number(countEkyc) > Number(this.eKYCContractBuy)) {
+                      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+                    } else if(countOtp > 0 && Number(this.smsContractUse) + Number(countOtp) > Number(this.smsContractBuy)) {
+                      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+                    } else {
+                      this.getApiDetermine(is_save);
+                    }
+                }, error => {
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
+                }
+              )          
+                }, error => {
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
+                }
+              )
+      } else {
+        this.getApiDetermine(is_save);
       }
-     
     }
+     
+    
   }
 
   async getApiDetermine(is_save?: boolean) {

@@ -325,15 +325,29 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     if (count == 0) {
-      if (this.getCheckDuplicateEmail('only_party_partner', dataArrPartner)) {
+      const onlyPartner = 'only_party_partner';
+
+      if (this.getCheckDuplicateEmail(onlyPartner, dataArrPartner)) {
         this.getNotificationValid("Email đối tác đã tồn tại, vui lòng nhập lại!");
+        return false
+      }
+
+      if (this.getCheckDuplicateCardId(onlyPartner, dataArrPartner)) {
+        this.getNotificationValid("Mã số thuế/CMT/CCCD đối tác không được trùng nhau!");
         return false
       }
     }
 
     if (count == 0) {
-      if (this.getCheckDuplicateEmail('allCheckEmail', this.is_determine_clone)) {
+      const allCheckEmail = 'allCheckEmail';
+
+      if (this.getCheckDuplicateEmail(allCheckEmail, this.is_determine_clone)) {
         this.getNotificationValid("Email đã tồn tại trong luồng xử lý, vui lòng nhập lại thông tin email!");
+        return false
+      }
+
+      if (this.getCheckDuplicateCardId(allCheckEmail, this.is_determine_clone)) {
+        this.getNotificationValid("Mã số thuế/CMT/CCCD đã tồn tại trong luồng xử lý, vui lòng nhập lại thông tin");
         return false
       }
     }
@@ -342,6 +356,67 @@ export class DetermineSignerComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  getCheckDuplicateCardId(isParty: string, dataValid?: any) {
+    let arrCheckCardId = [];
+    // valid card_id đối tác và các bên tham gia
+    if (isParty != 'only_party_origanzation') {
+      let arrCardId = [];
+      for (let i = 0; i < dataValid.length; i++) {
+        const element = dataValid[i].recipients;
+        for (let j = 0; j < element.length; j++) {
+          if (element[j].card_id) {
+            let items = {
+              card_id: element[j].card_id,
+              role: element[j].role,
+              type: dataValid[i].type,
+              ordering: dataValid[i].ordering
+            }
+            arrCardId.push(items);
+          }
+        }
+      }
+
+      if (arrCardId.some((p: any) => p.role == 1) && arrCardId.some((p: any) => p.role == 3)) {
+        if (isParty == 'only_party_partner') {
+          arrCardId = arrCardId.filter((p: any) => p.role != 1);
+        } else {
+          let duplicateCardId: any[] = [];
+          let countCheck_duplicate = true;
+          for (const d of arrCardId) {
+            if (duplicateCardId.length > 0 && duplicateCardId.some((p: any) => p.card_id == d.card_id && (p.type != d.type || p.ordering != d.ordering))) { // check duplicate card_id coordination with between party
+              return true;
+            }
+            duplicateCardId.push(d);
+          }
+          if (countCheck_duplicate) return false;
+        }
+      }
+
+      arrCardId.forEach((items: any) => {
+        arrCheckCardId.push(items.card_id)
+      })
+
+    } else {
+      // valid card_id tổ chức của tôi
+      for (let i = 0; i < dataValid.length; i++) {
+        if (dataValid[i].card_id) {
+          arrCheckCardId.push(dataValid[i].card_id);
+        }
+      }
+    }
+
+    var valueSoFar = Object.create(null);
+    for (var k = 0; k < arrCheckCardId.length; ++k) {
+      var value: any = arrCheckCardId[k];
+      if (value in valueSoFar) {
+        return true;
+      }
+      valueSoFar[value] = true;
+    }
+    return false;
+
   }
 
   getCheckDuplicateEmail(isParty: string, dataValid?: any) {
