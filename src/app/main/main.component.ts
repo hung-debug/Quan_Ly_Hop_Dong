@@ -217,4 +217,8 @@ export class MainComponent implements OnInit {
     });
     //this.router.navigate(['/main/notification']);
   }
+
+  viewLink(){
+    window.open("https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3");
+  }
 }

@@ -953,8 +953,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   contractNumberCounter() {
-    if (this.contract_no && this.characterCounter(this.contract_no) > 32) {
-      this.errorContractNumber = "Số hợp đồng không được vượt quá 32 ký tự";
+    if (this.contract_no && this.characterCounter(this.contract_no) > 100) {
+      this.errorContractNumber = "Số hợp đồng không được vượt quá 100 ký tự";
       return false;
     }
     return true;

@@ -1,3 +1,4 @@
+import { DetailContractComponent } from './../../../contract/detail-contract/detail-contract.component';
 import {
   AfterViewInit,
   ChangeDetectorRef,

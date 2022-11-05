@@ -101,5 +101,4 @@ export class AuthenticationService {
     }
     return throwError(this.errorData);
   }
-
 }

@@ -1,3 +1,5 @@
+import { map } from 'rxjs/operators';
+import { Unit } from './../../../../../service/unit.service';
 import {ContractService} from 'src/app/service/contract.service';
 import {Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges, ElementRef} from '@angular/core';
 import {
@@ -18,6 +20,7 @@ import {NgxInputSearchModule} from "ngx-input-search";
 import {HttpErrorResponse} from '@angular/common/http';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { id } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-determine-signer',
@@ -58,6 +61,8 @@ export class DetermineSignerComponent implements OnInit {
   is_determine_clone: any;
   toppings = new FormControl();
   arrSearch: any = [];
+  totalUseItem: number;
+  totalPurcharItem: number;
 
   //dropdown
   signTypeList: Array<any> = type_signature;
@@ -572,17 +577,18 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     let count = 0;
-    let dataArr = [];
+    let dataArr = [];   
     dataArr = (this.data_organization.recipients).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
-
     console.log("dataArr ", dataArr);
+    
+    for (let i = 0; i < dataArr.length; i++) {  
 
-    for (let i = 0; i < dataArr.length; i++) {
       if (!dataArr[i].name) {
         this.getNotificationValid("Vui lòng nhập tên" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!");
         count++;
         break;
       }
+
       if (!dataArr[i].email) {
         this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
         count++;
@@ -702,7 +708,7 @@ export class DetermineSignerComponent implements OnInit {
 
     }
 
-    let dataArrPartner = [];
+    let dataArrPartner = [];    
     dataArrPartner = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
     if (count == 0) {
       // validate phía đối tác
