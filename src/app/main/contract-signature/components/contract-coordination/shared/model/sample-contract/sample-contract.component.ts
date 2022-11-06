@@ -517,10 +517,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (element.recipients.some((q: any) => q.status == 1 && q.email == this.emailUser_sample)) {
         element.recipients.forEach((item: any) => {
           let dataChange = [];
-          dataChange = this.datas.is_data_object_signature.filter((p: any) => p.recipient.id == item.id &&
-            ((p.recipient.email != item.email || p.recipient.name != item.name || (p.type == 2 && !item.sign_type.some((q: any) => q.id == 1) ||
-              (p.type == 3 && !item.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) ||
-              (p.type == 1 && item.role != 4 && !item.sign_type.some((q: any) => q.id == 2))))));
+
+          console.log("datas object ", this.datas.is_data_object_signature);
+          
+
+            dataChange = this.datas.is_data_object_signature.filter((p: any) => p.recipient &&
+                p.recipient.id == item.id &&
+              ((p.recipient.email != item.email || p.recipient.name != item.name || 
+                (p.type == 2 && !item.sign_type.some((q: any) => q.id == 1) ||
+                (p.type == 3 && !item.sign_type.some((q: any) => q.id == 2 || q.id == 3 || q.id == 4)) ||
+                (p.type == 1 && item.role != 4 && !item.sign_type.some((q: any) => q.id == 2) ||
+                (p.type == 4 && !item.role)
+                )))));
 
           if (dataChange.length == 0) {
             if (item.fields && item.fields.length && item.fields.length > 0) {

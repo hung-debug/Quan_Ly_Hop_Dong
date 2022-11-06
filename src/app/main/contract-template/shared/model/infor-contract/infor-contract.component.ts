@@ -16,6 +16,7 @@ import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { parttern } from 'src/app/config/parttern';
 import { parttern_input } from 'src/app/config/parttern';
+import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
 export class ContractConnectArr {
   ref_id: number;
 
@@ -91,7 +92,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   public messageForSibling: string;
 
   constructor(
-    private formBuilder: FormBuilder,
     private uploadService: UploadService,
     private contractTemplateService: ContractTemplateService,
     private contractTypeService: ContractTypeService,
@@ -100,7 +100,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private userService: UserService,
-    private unitService: UnitService
+    private unitService: UnitService,
+    private checkSignDigitalService: CheckSignDigitalService
   ) {
     this.step = variable.stepSampleContract.step1;
   }
@@ -135,10 +136,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.end_time_old = this.end_time;
   }
 
-  // ngOnDestroy(): void {
-  //   this.subscription.unsubscribe(); // onDestroy cancels the subscribe request
-  // }
-
   ngAfterViewInit() {
     setTimeout(() => {
       this.nameContract.nativeElement.focus();
@@ -151,6 +148,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   fileChanged(e: any) {
+    this.spinner.show();
     const file = e.target.files[0];
     if (file) {
       // giới hạn file upload lên là 5mb
@@ -160,28 +158,32 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension && extension.toLowerCase() == 'pdf') {
-          // const fileReader = new FileReader();
-          // fileReader.readAsDataURL(file);
-          // fileReader.onload = (e) => {
-          //   //@ts-ignore
-          //   const base64result = fileReader.result.toString().split(',')[1];
-          //   const fileInput: any = document.getElementById('file-input');
-          //   fileInput.value = '';
-          //   this.datas.file_content = base64result;
-          //   this.datas.file_name = file_name;
-          //   this.datas.contractFile = file;
-          //   // this.datas.documents['file_content_docx'] = null;
-          //   // this.pdfSrc = Helper._getUrlPdf(base64result);
-          // };
-          const fileInput: any = document.getElementById('file-input');
-          fileInput.value = '';
-          this.datas.file_name = file_name;
-          this.datas.contractFile = file;
-          this.contractFileRequired();
-          if (this.datas.is_action_contract_created) {
-            this.uploadFileContractAgain = true;
-          }
-          // console.log(this.datas);
+          // const fileInput: any = document.getElementById('file-input');
+          // fileInput.value = '';
+          // this.datas.file_name = file_name;
+          // this.datas.contractFile = file;
+          // this.contractFileRequired();
+          // if (this.datas.is_action_contract_created) {
+          //   this.uploadFileContractAgain = true;
+          // }
+          // // console.log(this.datas);
+
+          this.checkSignDigitalService.getList(file).subscribe((response) => {
+            this.spinner.hide();
+            if(response.length == 0) {
+              const fileInput: any = document.getElementById('file-input');
+              fileInput.value = '';
+              this.datas.file_name = file_name;
+              this.datas.contractFile = file;
+              this.contractFileRequired();
+              if (this.datas.is_action_contract_created) {
+                this.uploadFileContractAgain = true;
+              }
+            } else if(response.length > 0) {
+              this.toastService.showWarningHTMLWithTimeout("File hợp đồng đã chứa chữ ký số", "", 3000);
+              return;
+            }
+          })
         } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {
           this.toastService.showErrorHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 3000);
         } else {

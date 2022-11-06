@@ -53,9 +53,7 @@ export class MainComponent implements OnInit {
     this.getDeviceApp();
 
     //update title by component
-    this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('type'))) || JSON.parse(JSON.stringify(sessionStorage.getItem('loginType')));
-
-    console.log("this url ", this.urlLoginType);
+    this.urlLoginType = JSON.parse(JSON.stringify(sessionStorage.getItem('type')));
    
     this.appService.getTitle().subscribe(appTitle => this.title = appTitle.toString());
 
@@ -195,11 +193,7 @@ export class MainComponent implements OnInit {
   }
 
   openLinkNotification(link:any, id:any) {
-    // console.log("link ", link.replace("&type=1",""));
-
-    // return;
-
-    window.location.href = link.replace("&type=1",'').replace('&loginType=1', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8').replace('&loginType=', '');
+    window.location.href = link.replace('&type=', '').replace('&type=1', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
     this.dashboardService.updateViewNotification(id).subscribe(data => {
       console.log(data);
     });
@@ -222,5 +216,9 @@ export class MainComponent implements OnInit {
       this.router.navigate(['/main/notification']);
     });
     //this.router.navigate(['/main/notification']);
+  }
+
+  viewLink(){
+    window.open("https://drive.google.com/drive/folders/1NHaCYOMCMsLvrw1uPbX2ezsC-Uo9huW3");
   }
 }

@@ -148,4 +148,3 @@ export class ActionDeviceComponent implements OnInit {
   }
 
 }
-1

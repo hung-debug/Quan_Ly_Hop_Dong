@@ -141,6 +141,18 @@ export class DetermineSignerComponent implements OnInit {
 
   // next step event
   next(action: string) {
+    this.datas.is_determine_clone.forEach((items: any, index: number) => {
+      if (items.type == 3) 
+          this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
+          for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
+            if(this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
+              this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email;
+            }
+          }
+      
+    })
+
+
     this.submitted = true;
     if (action == 'save-step' && !this.validData()) {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -160,14 +172,15 @@ export class DetermineSignerComponent implements OnInit {
 
   async getApiDetermine(is_save?: boolean) {
 
-    console.log("data clone before ", this.datas.is_determine_clone);
-    this.datas.is_determine_clone.forEach((items: any, index: number) => {
-      if (items.type == 3) {
-        console.log("items ", items);
-        this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
-        // this.datas.is_determine_clone[index].recipients
+     //Đưa giá trị email về chũ thường
+     this.datas.is_determine_clone.forEach((items: any, index: number) => {
+      for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
+        if(this.datas.is_determine_clone[index].recipients[i].email) {
+          this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.toLowerCase().trim();
+        }
       }
     })
+
 
     console.log("data clone after ", this.datas.is_determine_clone);
     this.spinner.show();

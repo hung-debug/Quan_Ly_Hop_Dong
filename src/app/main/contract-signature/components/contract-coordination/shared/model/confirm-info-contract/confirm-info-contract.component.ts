@@ -136,12 +136,30 @@ export class ConfirmInfoContractComponent implements OnInit {
       }
     }
 
+    // ===============================
+    // if (isSuccess == 0) {
+    let response_determine_contract: any = [];
+      await this.contractService.getContractDetermine(this.datas.determine_contract, this.datas.data_contract_document_id.contract_id).toPromise().then((res: any) => {
+          // console.log('success step confirm 2');
+          if (res && res.length > 0) {
+            response_determine_contract = res.filter((res: any) => res.type != 1 && res.recipients.some((val: any) => val.id == this.datas.recipient_id_coordition))[0];
+          }
+        },
+        (error: any) => {
+          isSuccess++;
+          this.spinner.hide();
+          this.toastService.showErrorHTMLWithTimeout(error.error, "", 3000);
+        });
+    // }
+// =============================
+
+    console.log(response_determine_contract);
     // mang update cac doi tuong o ky moi (them or bi xoa)
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
       dataSignNotId.forEach((item: any) => {
-        item['font'] = 'Arial';
-        item['font_size'] = 14;
+        item['font'] = 'Times New Roman';
+        item['font_size'] = 11;
         item['contract_id'] = this.datas.data_contract_document_id.contract_id;
         item['document_id'] = this.datas.data_contract_document_id.document_id;
         if (item.text_attribute_name) {
@@ -165,6 +183,11 @@ export class ConfirmInfoContractComponent implements OnInit {
           }
         } else {
           item['type'] = 1;
+        }
+
+        if (!item.recipient_id ) {
+          let getIdRecipientObj = response_determine_contract.recipients.filter((idField: any) => idField.email == item.email)[0];
+          item.recipient_id = getIdRecipientObj && getIdRecipientObj.id ? getIdRecipientObj.id : undefined;
         }
 
         this.arrVariableRemove.forEach((item_remove: any) => {
@@ -206,17 +229,6 @@ export class ConfirmInfoContractComponent implements OnInit {
     }
 
     if (isSuccess == 0) {
-      await this.contractService.getContractDetermine(this.datas.determine_contract, this.datas.data_contract_document_id.contract_id).toPromise().then((res: any) => {
-          // console.log('success step confirm 2');
-        },
-        (error: any) => {
-          isSuccess++;
-          this.spinner.hide();
-          this.toastService.showErrorHTMLWithTimeout(error.error, "", 3000);
-        });
-    }
-
-    if (isSuccess == 0) {
       // api dieu phoi hop dong
       let isCheckFail = false;
       let isUserSign = this.datas.determine_contract.filter((p: any) => p.type != 1);
@@ -241,7 +253,8 @@ export class ConfirmInfoContractComponent implements OnInit {
       }
 
       if (!isCheckFail) {
-        await this.contractService.coordinationContract(participantId, arrCoordination, this.datas.recipient_id_coordition).toPromise().then((data) => {
+        // arrCoordination (data old, request) thay bằng response_determine_contract.recipients (response)
+        await this.contractService.coordinationContract(participantId, response_determine_contract.recipients, this.datas.recipient_id_coordition).toPromise().then((data) => {
             this.toastService.showSuccessHTMLWithTimeout("Điều phối hợp đồng thành công!", "", 3000);
             // save local check khi user f5 reload lại trang sẽ ko còn action điều phối hđ
             // localStorage.setItem('coordination_complete', JSON.stringify(true));

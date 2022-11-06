@@ -50,6 +50,8 @@ export class LoginComponent implements OnInit {
   kyTuCach: any = "&";
 
   loginUser() {
+    localStorage.clear();
+
     if (this.loginForm.value.username == '') {
       this.error = true;
       this.errorDetail = "error.username.required";
@@ -62,114 +64,182 @@ export class LoginComponent implements OnInit {
       } else 
         this.type = 0;
 
-      console.log("type ", this.type);
+        let urlLink = sessionStorage.getItem("url");
+        let isContractId: any = "";
+        let isRecipientId: any = "";
 
-      this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
-        if(data?.code == '00'){
-          if (this.authService.isLoggedInSuccess() == true) {
-            if (sessionStorage.getItem("url")) {
-              let urlLink = sessionStorage.getItem("url");
-              if (urlLink) {
-                let url_check = urlLink.split("/")[urlLink.split("/").length - 1];
-                let isContractId = url_check.split("?")[0];
-                let isRecipientId = "";
+        if (urlLink) {
+          let url_check = urlLink.split("/")[urlLink.split("/").length - 1];
+          isContractId = Number(url_check.split("?")[0]);
 
-                if (url_check.includes(this.kyTuCach)) {
-                  let data_contractId = url_check.split(this.kyTuCach)[0];
-                  let is_check_contractId = data_contractId.split("?")[url_check.split("?").length - 1];
-                  isRecipientId = is_check_contractId.split("=")[is_check_contractId.split("=").length - 1];
+          if (url_check.includes(this.kyTuCach)) {
+            let data_contractId = url_check.split(this.kyTuCach)[0];
+            let is_check_contractId = data_contractId.split("?")[url_check.split("?").length - 1];
+            isRecipientId = is_check_contractId.split("=")[is_check_contractId.split("=").length - 1];
+          } else {
+            let is_RecipientId = url_check.split("?")[url_check.split("?").length - 1];
+            isRecipientId = is_RecipientId.split("=")[is_RecipientId.split("=").length - 1];
+          }
+        }
+
+        if(this.type == 0) {
+          this.authService.loginAuthencation(this.loginForm.value.username, this.loginForm.value.password, this.type).subscribe((data) => {
+            if(data?.code == '00'){
+              if (this.authService.isLoggedInSuccess() == true) {
+                if (sessionStorage.getItem("url")) {
+                  if (urlLink) {
+                    if (urlLink.includes(this.coordinates)) {
+                      this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.coordinates+'/' + isContractId]);
+                    } else if (urlLink.includes(this.consider)) {
+                      this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.consider+'/' + isContractId],
+                        {
+                          queryParams: {'recipientId': isRecipientId}
+                        });
+                    } else if (urlLink.includes(this.secretary)) {
+                      this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.secretary+'/' + isContractId],
+                        {
+                          queryParams: {'recipientId': isRecipientId}
+                        });
+                    } else if (urlLink.includes(this.signatures)) {
+                      this.router.navigate(['/main/'+this.contract_signatures+'/'+this.signatures+'/' + isContractId],
+                        {
+                          queryParams: {'recipientId': isRecipientId}
+                        });
+                    } else if (urlLink.includes('contract-template')) {
+                      this.router.navigate(['/main/contract-template/form/detail/' + isContractId]);
+                    } else if (urlLink.includes('form-contract')) {
+                      this.router.navigate(['/main/form-contract/detail/' + isContractId]);
+                    }
+                  } else {
+                    this.error = false;
+                    if (this.type == 0) {
+                      this.router.navigate(['/main/dashboard']);
+                      // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                      //   this.router.navigate(['/main/dashboard']);
+                      // });
+                    } else {
+                      this.router.navigate([localStorage.getItem('url')]);
+                    }
+                  }
                 } else {
-                  let is_RecipientId = url_check.split("?")[url_check.split("?").length - 1];
-                  isRecipientId = is_RecipientId.split("=")[is_RecipientId.split("=").length - 1];
-                }
-                if (urlLink.includes(this.coordinates)) {
-                  this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.coordinates+'/' + isContractId]);
-                } else if (urlLink.includes(this.consider)) {
-                  this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.consider+'/' + isContractId],
-                    {
-                      queryParams: {'recipientId': isRecipientId}
-                    });
-                } else if (urlLink.includes(this.secretary)) {
-                  this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.secretary+'/' + isContractId],
-                    {
-                      queryParams: {'recipientId': isRecipientId}
-                    });
-                } else if (urlLink.includes(this.signatures)) {
-                  this.router.navigate(['/main/'+this.contract_signatures+'/'+this.signatures+'/' + isContractId],
-                    {
-                      queryParams: {'recipientId': isRecipientId}
-                    });
-                } else if (urlLink.includes('contract-template')) {
-                  this.router.navigate(['/main/contract-template/form/detail/' + isContractId]);
-                } else if (urlLink.includes('form-contract')) {
-                  this.router.navigate(['/main/form-contract/detail/' + isContractId]);
-                } else   if (urlLink.includes('coordinates')) {
-                  this.router.navigate(['main/contract-signature/coordinates/' + isContractId]);
-                } else if (urlLink.includes('consider')) {
-                  this.router.navigate(['/main/contract-signature/consider/' + isContractId],
-                    {
-                      queryParams: {'recipientId': isRecipientId}
-                    });
-                } else if (urlLink.includes('secretary')) {
-                  this.router.navigate(['main/contract-signature/secretary/' + isContractId],
-                    {
-                      queryParams: {'recipientId': isRecipientId}
-                    });
-                } else if (urlLink.includes('signatures')) {
-                  this.router.navigate(['/main/contract-signature/signatures/' + isContractId],
-                    {
-                      queryParams: {'recipientId': isRecipientId}
-                    });
+                  this.error = false;
+                  if (this.type == 0) {
+                    this.router.navigate(['/main/dashboard']);
+                    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                    //   this.router.navigate(['/main/dashboard']);
+                    // });
+                  } else {
+                    this.router.navigate([localStorage.getItem('url')]);
+                  }
                 }
               } else {
-                this.error = false;
-                if (this.type == 0) {
-                  this.router.navigate(['/main/dashboard']);
-                  // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                  //   this.router.navigate(['/main/dashboard']);
-                  // });
-                } else {
-                  this.router.navigate([localStorage.getItem('url')]);
-                }
+                this.error = true;
+                this.errorDetail = "error.username.password";
               }
-            } else {
-              this.error = false;
-              if (this.type == 0) {
-                this.router.navigate(['/main/dashboard']);
-                // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-                //   this.router.navigate(['/main/dashboard']);
-                // });
-              } else {
-                this.router.navigate([localStorage.getItem('url')]);
+            }else if(data?.code == '01'){
+              this.error = true;
+              this.errorDetail = "Tài khoản không hoạt động";
+            }else if(data?.code == '02'){
+              this.error = true;
+              this.errorDetail = "Tổ chức không hoạt động";
+            }else {
+              this.error = true;
+              this.errorDetail = "error.username.password";
+            }
+    
+            },
+            error => {
+              console.log(localStorage.getItem('checkUser'));
+              if(localStorage.getItem('checkUser') == 'error'){
+                this.error = true;
+                this.errorDetail = "error.username.password";
+              }else{
+                this.error = true;
+                this.errorDetail = "error.server";
               }
             }
-          } else {
-            this.error = true;
-            this.errorDetail = "error.username.password";
-          }
-        }else if(data?.code == '01'){
-          this.error = true;
-          this.errorDetail = "Tài khoản không hoạt động";
-        }else if(data?.code == '02'){
-          this.error = true;
-          this.errorDetail = "Tổ chức không hoạt động";
-        }else {
-          this.error = true;
-          this.errorDetail = "error.username.password";
+          );
+        } else if(this.type == 1) {
+          this.authService.loginAuthencationUserOut(this.loginForm.value.username, this.loginForm.value.password, this.type, isContractId).subscribe((data) => {
+            if(data?.code == '00'){
+              if (this.authService.isLoggedInSuccess() == true) {
+                if (sessionStorage.getItem("url")) {
+                  if (urlLink) {
+                    if (urlLink.includes(this.coordinates)) {
+                      this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.coordinates+'/' + isContractId]);
+                    } else if (urlLink.includes(this.consider)) {
+                      this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.consider+'/' + isContractId],
+                        {
+                          queryParams: {'recipientId': isRecipientId}
+                        });
+                    } else if (urlLink.includes(this.secretary)) {
+                      this.router.navigate(['/main/'+this.contract_signatures+'/'+'/'+this.secretary+'/' + isContractId],
+                        {
+                          queryParams: {'recipientId': isRecipientId}
+                        });
+                    } else if (urlLink.includes(this.signatures)) {
+                      this.router.navigate(['/main/'+this.contract_signatures+'/'+this.signatures+'/' + isContractId],
+                        {
+                          queryParams: {'recipientId': isRecipientId}
+                        });
+                    } else if (urlLink.includes('contract-template')) {
+                      this.router.navigate(['/main/contract-template/form/detail/' + isContractId]);
+                    } else if (urlLink.includes('form-contract')) {
+                      this.router.navigate(['/main/form-contract/detail/' + isContractId]);
+                    }
+                  } else {
+                    this.error = false;
+                    if (this.type == 0) {
+                      this.router.navigate(['/main/dashboard']);
+                      // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                      //   this.router.navigate(['/main/dashboard']);
+                      // });
+                    } else {
+                      this.router.navigate([localStorage.getItem('url')]);
+                    }
+                  }
+                } else {
+                  this.error = false;
+                  if (this.type == 0) {
+                    this.router.navigate(['/main/dashboard']);
+                    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                    //   this.router.navigate(['/main/dashboard']);
+                    // });
+                  } else {
+                    this.router.navigate([localStorage.getItem('url')]);
+                  }
+                }
+              } else {
+                this.error = true;
+                this.errorDetail = "error.username.password";
+              }
+            }else if(data?.code == '01'){
+              this.error = true;
+              this.errorDetail = "Tài khoản không hoạt động";
+            }else if(data?.code == '02'){
+              this.error = true;
+              this.errorDetail = "Tổ chức không hoạt động";
+            }else {
+              this.error = true;
+              this.errorDetail = "error.username.password";
+            }
+    
+            },
+            error => {
+              console.log(localStorage.getItem('checkUser'));
+              if(localStorage.getItem('checkUser') == 'error'){
+                this.error = true;
+                this.errorDetail = "error.username.password";
+              }else{
+                this.error = true;
+                this.errorDetail = "error.server";
+              }
+            }
+          );
         }
 
-        },
-        error => {
-          console.log(localStorage.getItem('checkUser'));
-          if(localStorage.getItem('checkUser') == 'error'){
-            this.error = true;
-            this.errorDetail = "error.username.password";
-          }else{
-            this.error = true;
-            this.errorDetail = "error.server";
-          }
-        }
-      );
+
+      
     }
 
   }
@@ -180,33 +250,16 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
-    
-
-    
-    if (sessionStorage.getItem('type') || sessionStorage.getItem('loginType')) {
+    if (sessionStorage.getItem('type')) {
       this.type = 1;
     } else this.type = 0;
 
-    console.log("mobile first ", this.mobile);
     if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
-
-
-      console.log("mobile is true ");
       this.getDeviceApp();
 
       this.mobile = true;
     } else {
-  
-      //neu dang nhap bang user co tai khoan va da dang nhap thanh cong truoc do thi khong phai dang nhap lai nua
-      //comment do chua check token het han
-      // if(this.type == 0 && JSON.parse(localStorage.getItem('currentUser') || '')?.code == '00'){
-      //   this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-      //     this.router.navigate(['/main/dashboard']);
-      //   });
-      // }
-
       this.mobile = false;
-
     }
   }
 
@@ -219,8 +272,7 @@ export class LoginComponent implements OnInit {
   getDeviceApp() {
 
     console.log("type ", this.type);
-
-    if ((this.deviceService.isMobile() || this.deviceService.isTablet())) {
+    if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
 
       console.log(this.deviceService.isMobile(), this.deviceService.deviceType, this.deviceService);
       // @ts-ignore
