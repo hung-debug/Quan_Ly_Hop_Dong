@@ -1208,83 +1208,6 @@ export class ConsiderContractComponent
 
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
-      // if (this.signCertDigital && this.signCertDigital.Serial) {
-      //   for (const signUpdate of this.isDataObjectSignature) {
-      //     if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 1 || signUpdate.type == 4) && [3, 4].includes(this.datas.roleContractReceived)
-      //       && signUpdate?.recipient?.email === this.currentUser.email
-      //       && signUpdate?.recipient?.role === this.datas?.roleContractReceived
-      //     ) {
-      //       let fileC = await this.contractService.getFileContractPromise(this.idContract);
-      //       const pdfC2 = fileC.find((p: any) => p.type == 2);
-      //       const pdfC1 = fileC.find((p: any) => p.type == 1);
-      //       if (pdfC2) {
-      //         fileC = pdfC2.path;
-      //       } else if (pdfC1) {
-      //         fileC = pdfC1.path;
-      //       } else {
-      //         return;
-      //       }
-      //       let signI = null;
-      //       if (signUpdate.type == 1 || signUpdate.type == 4) {
-      //         this.textSign = signUpdate.valueSign;
-      //         /*this.heightText = signUpdate.width;
-      //         this.widthText = signUpdate.height;*/
-      //         this.heightText = 150;
-      //         this.widthText = 150;
-      //         await of(null).pipe(delay(100)).toPromise();
-      //         const imageRender = <HTMLElement>document.getElementById('text-sign');
-
-      //         if (imageRender) {
-      //           const textSignB = await domtoimage.toPng(imageRender);
-      //           signI = this.textSignBase64Gen = textSignB.split(",")[1];
-      //         }
-      //       } else if (signUpdate.type == 3) {
-      //         await of(null).pipe(delay(100)).toPromise();
-      //         const imageRender = <HTMLElement>document.getElementById('export-html');
-      //         if (imageRender) {
-      //           const textSignB = await domtoimage.toPng(imageRender);
-      //           signI = textSignB.split(",")[1];
-      //         }
-      //       }
-
-      //       console.log("signI ", signI);
-
-      //       const signDigital = JSON.parse(JSON.stringify(signUpdate));
-      //       signDigital.Serial = this.signCertDigital.Serial;
-      //       const base64String = await this.contractService.getDataFileUrlPromise(fileC);
-      //       signDigital.valueSignBase64 = encode(base64String);
-
-      //       // const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
-
-      //       const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
-      //       signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
-
-      //       console.log("data sign mobi ", dataSignMobi);
-
-      //       if (!dataSignMobi.data.FileDataSigned) {
-      //         console.log("file data signed ");
-
-      //         this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-      //         return false;
-      //       }
-      //       const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
-      //       if (!sign.recipient_id) {
-      //         console.log("recipent_id")
-
-      //         this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-      //         return false;
-      //       }
-      //     }
-      //   }
-      //   return true;
-      // } else {
-      //   console.log("not sign cert digital ");
-      //   this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-      //   return false;
-      // }
-
-      console.log('this sign cert digital ', this.signCertDigital);
-      let count = 0;
       if (this.signCertDigital) {
         // this.signCertDigital = resSignDigital.data;
         for (const signUpdate of this.isDataObjectSignature) {
@@ -1348,8 +1271,6 @@ export class ConsiderContractComponent
                 await this.contractService.getDataFileUrlPromise(fileC);
               signDigital.valueSignBase64 = encode(base64String);
 
-              console.log('sign 4 ', signDigital.valueSignBase64);
-
               var json_req = JSON.stringify({
                 OperationId: 10,
                 SessionId: this.sessionIdUsbToken,
@@ -1373,33 +1294,29 @@ export class ConsiderContractComponent
 
               json_req = window.btoa(json_req);
 
-              var httpReq: any = '';
-              var response = '';
-              if (window.XMLHttpRequest) {
-                // code for IE7+, Firefox, Chrome, Opera, Safari
-                httpReq = new XMLHttpRequest();
-              } else {
-                // code for IE6, IE5
-                httpReq = new ActiveXObject('Microsoft.XMLHTTP');
+              const dataSignMobi: any = await this.contractService.postSignDigitalMobi1("request="+json_req);
+
+              console.log("dataSignMobi ", JSON.parse(window.atob(dataSignMobi.data)).Base64Result);
+
+              let data = JSON.parse(window.atob(dataSignMobi.data)).Base64Result;
+
+              console.log("dataSignMobi ", dataSignMobi);
+
+              if(!dataSignMobi.data) {
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+                  return false;
               }
-              httpReq.onreadystatechange = async () => {
-                console.log("this 1 ");
-                if (httpReq.readyState == 4 && httpReq.status == 200) {
-                  console.log("this 2 ");
-                  response = window.atob(httpReq.responseText);
 
-                  console.log("response1 ", response);
+              const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, data);
+              if (!sign.recipient_id) {
+                console.log("recipent_id")
 
-                  this.signUsb(signUpdate, response);
-                }
-              };
-              httpReq.open('POST', this.domain + 'process', true);
-              httpReq.setRequestHeader(
-                'Content-type',
-                'application/x-www-form-urlencoded'
-              );
-              httpReq.send('request=' + json_req);
+                this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+                return false;
+              }
             }
+
+            return true;
           }
         }
 

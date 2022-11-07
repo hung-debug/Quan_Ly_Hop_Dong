@@ -628,51 +628,17 @@ export class ContractService {
     // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
   }
 
-  postSignDigitalMobi1(signCertDigital: any, imgSignGen: any) {
-    console.log('signCertDigital ', signCertDigital);
-
+  domain: any = `https://127.0.0.1:14424/process`;
+  postSignDigitalMobi1(json_req: any) {
     this.getCurrentUser();
     let config = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     };
-    let dataPost = {
-      certSerial: signCertDigital.Serial,
-      fieldName: '',
-      fileData: signCertDigital.valueSignBase64,
-      imageData: imgSignGen ? imgSignGen : this.imageMobiBase64,
-      page: signCertDigital.page.toString(),
-      ph: Math.floor(
-        signCertDigital.signDigitalHeight
-          ? signCertDigital.signDigitalHeight
-          : signCertDigital.height
-      ).toString(),
-      pw: Math.floor(
-        signCertDigital.signDigitalWidth
-          ? signCertDigital.signDigitalWidth
-          : signCertDigital.width
-      ).toString(),
-      px: Math.floor(
-        signCertDigital.signDigitalX
-          ? signCertDigital.signDigitalX
-          : signCertDigital.coordinate_x
-      ).toString(),
-      py: Math.floor(
-        signCertDigital.signDigitalY
-          ? signCertDigital.signDigitalY
-          : signCertDigital.coordinate_y
-      ).toString(),
+  
 
-      
-      signDate: '11-05-2019 09:55:55',
-      typeSign: '4',
-      //algDigest: "SHA_256"
-    };
-
-    console.log("body sign ",dataPost);
-
-    return axios.post(this.postSignDigital, dataPost, config);
+    return axios.post(this.domain, json_req, config);
     // console.log(datePost);
     // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
   }
