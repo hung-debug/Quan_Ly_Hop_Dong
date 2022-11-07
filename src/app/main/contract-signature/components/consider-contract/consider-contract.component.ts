@@ -1156,97 +1156,97 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               }
             }
 
-              this.typeUsbToken.push(signUpdate.type);
+            //   this.typeUsbToken.push(signUpdate.type);
 
-            console.log("typeUsbToken ", this.typeUsbToken);
+            // console.log("typeUsbToken ", this.typeUsbToken);
 
             // console.log("signUpdate ",signUpdate);
 
-        //     if(signI != null) {
-        //       const signDigital = JSON.parse(JSON.stringify(signUpdate));
-        //       signDigital.Serial = this.signCertDigital;
-        //       const base64String = await this.contractService.getDataFileUrlPromise(fileC);
-        //       signDigital.valueSignBase64 = encode(base64String);
+            if(signI != null) {
+              const signDigital = JSON.parse(JSON.stringify(signUpdate));
+              signDigital.Serial = this.signCertDigital;
+              const base64String = await this.contractService.getDataFileUrlPromise(fileC);
+              signDigital.valueSignBase64 = encode(base64String);
   
-        //       console.log("sign 4 ", signDigital.valueSignBase64);
+              console.log("sign 4 ", signDigital.valueSignBase64);
   
-        //       var json_req = JSON.stringify({
-        //         OperationId: 10,
-        //         SessionId: this.sessionIdUsbToken,
-        //         checkOCSP: 0,
-        //         reqDigest: 1,
-        //         algDigest: "SHA_1",
-        //         extFile: "pdf",
-        //         invisible: 0,
-        //         pageIndex: signDigital.page,
-        //         offsetX: Math.floor(signDigital.signDigitalX),
-        //         offsetY: Math.floor(signDigital.signDigitalY),
-        //         sigWidth: Math.floor(signDigital.signDigitalWidth),
-        //         sigHeight: Math.floor(signDigital.signDigitalHeight),
-        //         logoData: signI,
-        //         DataToBeSign: signDigital.valueSignBase64,
-        //         showSignerInfo: 0,
-        //         sigId:""
-        //       });
+              var json_req = JSON.stringify({
+                OperationId: 10,
+                SessionId: this.sessionIdUsbToken,
+                checkOCSP: 0,
+                reqDigest: 1,
+                algDigest: "SHA_1",
+                extFile: "pdf",
+                invisible: 0,
+                pageIndex: signDigital.page,
+                offsetX: Math.floor(signDigital.signDigitalX),
+                offsetY: Math.floor(signDigital.signDigitalY),
+                sigWidth: Math.floor(signDigital.signDigitalWidth),
+                sigHeight: Math.floor(signDigital.signDigitalHeight),
+                logoData: signI,
+                DataToBeSign: signDigital.valueSignBase64,
+                showSignerInfo: 0,
+                sigId:""
+              });
   
-        //       console.log("json_req ",json_req);
+              console.log("json_req ",json_req);
   
-        //       json_req = window.btoa(json_req);
+              json_req = window.btoa(json_req);
   
-        //       var httpReq: any = "";
-        //       var response = "";
-        //       if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-        //           httpReq = new XMLHttpRequest();
-        //       }
-        //       else {// code for IE6, IE5
-        //           httpReq = new ActiveXObject("Microsoft.XMLHTTP");
-        //       }
-        //       httpReq.onreadystatechange =  async () => {
-        //           if (httpReq.readyState == 4 && httpReq.status == 200) {
+              var httpReq: any = "";
+              var response = "";
+              if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                  httpReq = new XMLHttpRequest();
+              }
+              else {// code for IE6, IE5
+                  httpReq = new ActiveXObject("Microsoft.XMLHTTP");
+              }
+              httpReq.onreadystatechange =  async () => {
+                  if (httpReq.readyState == 4 && httpReq.status == 200) {
   
-        //             console.log("htppreq ",httpReq.responseText);
+                    console.log("htppreq ",httpReq.responseText);
   
-        //               response = window.atob(httpReq.responseText);
+                      response = window.atob(httpReq.responseText);
 
-        //               signDigital.valueBase64 = JSON.parse(response).Base64Result;
+                      signDigital.valueBase64 = JSON.parse(response).Base64Result;
 
-        //               console.log("result ", signDigital.valueBase64);
+                      console.log("result ", signDigital.valueBase64);
                       
-        //               var process = false;
-        //               try {
-        //                   var json_res = JSON.parse(response);
+                      var process = false;
+                      try {
+                          var json_res = JSON.parse(response);
   
-        //                   console.log("json_res ",json_res)
+                          console.log("json_res ",json_res)
   
-        //                   if (json_res.ResponseCode == 0) {
-        //                       alert("Successfully. Result: " + json_res.PathFile);
+                          if (json_res.ResponseCode == 0) {
+                              alert("Successfully. Result: " + json_res.PathFile);
   
-        //                       alert(json_res.Base64Result);
+                              alert(json_res.Base64Result);
   
-        //                         const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
-        //                           if (!sign.recipient_id) {
-        //                             console.log("recipent_id")
+                                const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
+                                  if (!sign.recipient_id) {
+                                    console.log("recipent_id")
   
-        //                             this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-        //                             return false;
-        //                           } else {
-        //                             return true;
-        //                           }
-        //                   } else {
-        //                     console.log("response ky ", response);
-        //                     console.log("response ky msg ", json_res);
-        //                     alert(json_res.ResponseMsg);
-        //                   }
-        //               }
-        //               catch (err) {
-        //                   alert("Error: " + err);
-        //               }
-        //           }
-        //       }
-        //       httpReq.open("POST", this.domain + "process", true);
-        //       httpReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        //       httpReq.send("request=" + json_req);
-        //     }
+                                    this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+                                    return false;
+                                  } else {
+                                    return true;
+                                  }
+                          } else {
+                            console.log("response ky ", response);
+                            console.log("response ky msg ", json_res);
+                            alert(json_res.ResponseMsg);
+                          }
+                      }
+                      catch (err) {
+                          alert("Error: " + err);
+                      }
+                  }
+              }
+              httpReq.open("POST", this.domain + "process", true);
+              httpReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+              httpReq.send("request=" + json_req);
+            }
           }
         }
 
