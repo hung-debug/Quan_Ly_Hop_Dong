@@ -1209,17 +1209,20 @@ export class ConsiderContractComponent
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
       if (this.signCertDigital) {
+
+        console.log("is data object ", this.isDataObjectSignature);
+
         // this.signCertDigital = resSignDigital.data;
         for (const signUpdate of this.isDataObjectSignature) {
+          console.log("signUpdate ", signUpdate);
+          console.log("role contract ", this.datas?.roleContractReceived);
           if (
-            signUpdate &&
-            (signUpdate.type == 1 ||
-              signUpdate.type == 3 ||
-              signUpdate.type == 4) &&
+            signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4) &&
             [3, 4].includes(this.datas.roleContractReceived) &&
             signUpdate?.recipient?.email === this.currentUser.email &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
+            console.log("chinh là no ");
             let fileC = await this.contractService.getFileContractPromise(
               this.idContract
             );
@@ -1264,7 +1267,6 @@ export class ConsiderContractComponent
 
             console.log("signI ",signI);
 
-            if (signI != null) {
               const signDigital = JSON.parse(JSON.stringify(signUpdate));
               signDigital.Serial = this.signCertDigital;
               const base64String =
@@ -1315,22 +1317,17 @@ export class ConsiderContractComponent
                 return false;
               }
             }
-
-            return true;
           }
-        }
-
-        console.log('type usb token ', this.typeUsbToken);
-        return false;
+          return true;
       } else {
         console.log('not sign cert digital ');
         this.toastService.showErrorHTMLWithTimeout(
           'Lỗi ký USB Token',
-          '',
-          3000
-        );
+         '',
+           3000
+       );
         return false;
-      }
+        }
     } else if (typeSignDigital == 3) {
       const objSign = this.isDataObjectSignature.filter(
         (signUpdate: any) =>
