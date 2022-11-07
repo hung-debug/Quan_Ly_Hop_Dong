@@ -1383,40 +1383,9 @@ export class ConsiderContractComponent
                 httpReq = new ActiveXObject('Microsoft.XMLHTTP');
               }
               httpReq.onreadystatechange = async () => {
-                // console.log("ready state change ");
-                //   if (httpReq.readyState == 4 && httpReq.status == 200) {
-
-                //     // console.log("htppreq ",httpReq.responseText);
-
-                //       console.log("result ", signDigital.valueBase64);
-
-                //       var process = false;
-                //       try {
-                //           var json_res = JSON.parse(response);
-
-                //           console.log("json_res ",json_res)
-
-                //           if (json_res.ResponseCode == 0) {
-                //               alert(json_res.Base64Result);
-
-                //               const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
-                //               if (!sign.recipient_id) {
-                //                   console.log("recipent_id")
-
-                //                   this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-                //                   return false;
-                //               }
-                //           } else {
-                //             console.log("response ky ", response);
-                //             console.log("response ky msg ", json_res);
-                //             alert(json_res.ResponseMsg);
-                //           }
-                //       }
-                //       catch (err) {
-                //           alert("Error: " + err);
-                //       }
-                //   }
+                console.log("this 1 ");
                 if (httpReq.readyState == 4 && httpReq.status == 200) {
+                  console.log("this 2 ");
                   response = window.atob(httpReq.responseText);
 
                   console.log("response1 ", response);
