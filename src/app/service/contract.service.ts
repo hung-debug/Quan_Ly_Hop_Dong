@@ -105,9 +105,9 @@ export class ContractService {
 
   getFilePdfForMobileUrl: any = `${environment.apiUrl}/api/v1/contracts/review/`;
 
-  cccdFront: any = `http://ekyc2.mobifone.ai/v2/recognition`;
+  cccdFront: any = `https://mobifone-econtract.vn/eKYC/recognition`;
 
-  detectFaceUrl: any = `http://ekyc2.mobifone.ai/v2/verification`;
+  detectFaceUrl: any = `https://mobifone-econtract.vn/eKYC/verification`;
 
   changeLinkUrl: any = `${environment.apiUrl}/api/v1/handle/`;
 
