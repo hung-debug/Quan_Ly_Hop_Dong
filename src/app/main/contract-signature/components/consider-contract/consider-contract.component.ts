@@ -1156,12 +1156,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               }
             }
 
-            //   this.typeUsbToken.push(signUpdate.type);
-
-            // console.log("typeUsbToken ", this.typeUsbToken);
-
-            // console.log("signUpdate ",signUpdate);
-
             if(signI != null) {
               const signDigital = JSON.parse(JSON.stringify(signUpdate));
               signDigital.Serial = this.signCertDigital;
@@ -1178,7 +1172,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                 algDigest: "SHA_1",
                 extFile: "pdf",
                 invisible: 0,
-                pageIndex: signDigital.page,
+                pageIndex: Number(signDigital.page - 1),
                 offsetX: Math.floor(signDigital.signDigitalX),
                 offsetY: Math.floor(signDigital.signDigitalY),
                 sigWidth: Math.floor(signDigital.signDigitalWidth),
