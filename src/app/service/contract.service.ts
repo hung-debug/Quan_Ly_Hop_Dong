@@ -538,6 +538,8 @@ export class ContractService {
     return axios.get(this.getAccountSignDigital, config);
   }
 
+
+
   checkTaxCodeExist(taxCode: any, certB64: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -551,8 +553,6 @@ export class ContractService {
       mst: taxCode,
       certB64: certB64,
     });
-
-    console.log('body ', body);
 
     return this.http.post<any>(this.checkTaxCodeExistUrl, body, {
       headers: headers,
@@ -629,19 +629,28 @@ export class ContractService {
   }
 
   domain: any = `https://127.0.0.1:14424/process`;
-  postSignDigitalMobi1(json_req: any) {
-    this.getCurrentUser();
+  signUsbToken(json_req: any) {
     let config = {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     };
   
-
     return axios.post(this.domain, json_req, config);
-    // console.log(datePost);
-    // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
   }
+
+  updateInfoContractConsiderPromise(datas: any, recipient_id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.put<any>(
+      this.updateInfoContractConsiderUrl + recipient_id,
+      datas,
+      { headers: headers }
+    ).toPromise();
+  }
+
 
   postSignDigitalMobiMulti(serial: any, valueSignBase64: any,imageData: any,page: any, height: any, width: any,x: any,y: any) {
 

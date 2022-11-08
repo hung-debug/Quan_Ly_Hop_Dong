@@ -244,11 +244,7 @@ export class ConsiderContractComponent
           i_data_file_contract: rs[1],
           is_data_object_signature: rs[2],
         };
-        /*let data_coordination = localStorage.getItem('data_coordinates_contract');
-      if (data_coordination) {
-        this.datas = JSON.parse(data_coordination).data_coordinates;
-        this.datas = Object.assign(this.datas, this.data_contract);
-      }*/
+     
         this.datas = this.data_contract;
         if (this.datas?.is_data_contract?.type_id) {
           this.contractService
@@ -501,11 +497,6 @@ export class ConsiderContractComponent
           canvas.className = 'dropzone';
           canvas.id = 'canvas-step3-' + page;
 
-          // canvas.style.transform = 'scale(2,2)';
-
-          // canvas.style.paddingLeft = '15px';
-          // canvas.style.border = '9px solid transparent';
-          // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
           let idPdf = 'pdf-viewer-step-3';
           let viewer = document.getElementById(idPdf);
           if (viewer) {
@@ -561,8 +552,6 @@ export class ConsiderContractComponent
             // @ts-ignore
             a.style['z-index'] = '1';
           }
-          // else
-          //   a.style.display = 'none';
           a.setAttribute('data-x', element['coordinate_x']);
           a.setAttribute('data-y', element['coordinate_y']);
         }
@@ -707,7 +696,6 @@ export class ConsiderContractComponent
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
     if (set_id) {
-      // set lại id cho đối tượng ký đã click
       this.objSignInfo.id = set_id.id;
       // this.objSignInfo.offsetWidth = set_id.offsetWidth;
       // this.objSignInfo.offsetHeight = set_id.offsetWidth;
@@ -1296,7 +1284,7 @@ export class ConsiderContractComponent
 
               json_req = window.btoa(json_req);
 
-              const dataSignMobi: any = await this.contractService.postSignDigitalMobi1("request="+json_req);
+              const dataSignMobi: any = await this.contractService.signUsbToken("request="+json_req);
 
               console.log("dataSignMobi ", JSON.parse(window.atob(dataSignMobi.data)).Base64Result);
 
@@ -1808,8 +1796,6 @@ export class ConsiderContractComponent
     });
 
     json_req = window.btoa(json_req);
-
-    console.log('json req ', json_req);
 
     var httpReq: any = '';
 
