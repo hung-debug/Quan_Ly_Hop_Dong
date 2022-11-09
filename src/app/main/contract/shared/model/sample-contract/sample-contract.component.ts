@@ -686,7 +686,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     }
 
-    console.log("show event info 1 ", this.getTrafX());
+    // console.log("show event info 1 ", this.getTrafX());
+
+    if(this.coordinate_x.length > 1 || this.coordinate_y.length > 1) {
+    }
+
+    this.coordinate_x.push(this.getTrafX());
+    this.coordinate_y.push(this.getTrafY());
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
