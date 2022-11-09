@@ -47,7 +47,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
   organization_id:any="";
 
   //filter contract
+  searchObj : any = {
+    filter_name: "",
+    partner: ""
+  }
   filter_name: any = "";
+  partner: any ="";
   filter_type: any = "";
   filter_contract_no: any = "";
   filter_from_date: any = "";
@@ -101,6 +106,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
         this.filter_name = params.filter_name;
       } else {
         this.filter_name = "";
+      }
+      if (typeof params.partner != 'undefined' && params.partner) {
+        this.partner = params.partner;
+      } else {
+        this.partner = "";
       }
       if (typeof params.filter_type != 'undefined' && params.filter_type) {
         this.filter_type = params.filter_type;
@@ -264,6 +274,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
   autoSearch(event: any) {
     this.p = 1;
     this.filter_name = event.target.value;
+    this.partner = event.target.value;
+    console.log(' this.partner', this.partner);
     this.getContractList();
   }
 

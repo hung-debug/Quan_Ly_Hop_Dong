@@ -205,7 +205,7 @@ export class ContractService {
     filter_to_date: any,
     filter_status: any,
     page: any,
-    size: any
+    size: any,
   ): Observable<any> {
     this.getCurrentUser();
 
@@ -224,7 +224,7 @@ export class ContractService {
     }
     if (page != '') {
       page = page - 1;
-    }
+    }    
     let listContractUrl = '';
     if (isOrg == 'off') {
       if (filter_status == '40') {
@@ -269,7 +269,9 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size;
+          size +
+          '&partner=' +
+          filter_name.trim();
       }
     } else {
       if (organization_id == '') {
@@ -321,7 +323,7 @@ export class ContractService {
       }
     }
 
-    console.log(listContractUrl);
+    // console.log(listContractUrl);
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
   }

@@ -41,6 +41,7 @@ export class ContractSignatureComponent implements OnInit {
 
   action: string;
   status: string;
+  contractStatus: String;
   type: string;
   private sub: any;
   searchText: string;
@@ -970,6 +971,7 @@ export class ContractSignatureComponent implements OnInit {
       filter_from_date: this.filter_from_date,
       filter_to_date: this.filter_to_date,
       status: this.status,
+      contractStatus: this.contractStatus,
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(FilterListDialogComponent, {
