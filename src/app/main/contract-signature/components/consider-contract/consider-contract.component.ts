@@ -564,49 +564,41 @@ export class ConsiderContractComponent
 
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
-    console.log('page render 2 ', pageNumber);
-
     setTimeout(() => {
       // this.setPosition();
       // this.eventMouseover();
       // this.loadedPdfView = true;
 
-      //This gives us the page's dimensions at full scale
-      //@ts-ignore
-      this.thePDF.getPage(pageNumber).then((page) => {
-        // let viewport = page.getViewport(this.scale);
-        let viewport = page.getViewport({ scale: this.scale });
-        let test = document.querySelector('.viewer-pdf');
+       //This gives us the page's dimensions at full scale
+    //@ts-ignore
+    this.thePDF.getPage(pageNumber).then((page) => {
+      // let viewport = page.getViewport(this.scale);
+      let viewport = page.getViewport({ scale: this.scale });
+      let test = document.querySelector('.viewer-pdf');
 
-        this.canvasWidth = viewport.width;
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+      this.canvasWidth = viewport.width;
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
 
-        // if(this.first < this.pageNumber)
+      // if(this.first < this.pageNumber)
         this.prepareInfoSignUsbToken(pageNumber, canvas.height);
-        let _objPage = this.objPdfProperties.pages.filter(
-          (p: any) => p.page_number == pageNumber
-        )[0];
-        if (!_objPage) {
-          this.objPdfProperties.pages.push({
-            page_number: pageNumber,
-            width: parseInt(viewport.width),
-            height: viewport.height,
-          });
-        }
-        page.render({
-          canvasContext: canvas.getContext('2d'),
-          viewport: viewport,
+      let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
+      if (!_objPage) {
+        this.objPdfProperties.pages.push({
+          page_number: pageNumber,
+          width: parseInt(viewport.width),
+          height: viewport.height,
         });
-        if (test) {
-          let paddingPdf =
-            (test.getBoundingClientRect().width - viewport.width) / 2;
-          $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
-          $('.viewer-pdf').css('padding-right', paddingPdf + 'px');
-        }
-        this.activeScroll();
-      });
-    }, 100);
+      }
+      page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+      if (test) {
+        let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
+        $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
+        $('.viewer-pdf').css('padding-right', paddingPdf + 'px');
+      }
+      this.activeScroll();
+    });
+    }, 100)
   }
 
   activeScroll() {
@@ -2779,60 +2771,59 @@ export class ConsiderContractComponent
 
   prepareInfoSignUsbToken(page: any, heightPage: any) {
     this.isDataObjectSignature.map((sign: any) => {
-      if (
-        (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
-        sign?.recipient?.email === this.currentUser.email &&
-        sign?.recipient?.role === this.datas?.roleContractReceived &&
-        sign?.page == page
-      ) {
-        sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY =
-          heightPage -
-          (sign.coordinate_y - this.currentHeight) -
-          sign.height /* * this.ratioPDF*/;
-        // sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
-        // sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
+      if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
+        && sign?.recipient?.email === this.currentUser.email
+        && sign?.recipient?.role === this.datas?.roleContractReceived
+        && sign?.page == page) {
 
-        sign.signDigitalWidth = sign.width;
-        sign.signDigitalHeight = sign.height;
+          console.log("before ");
+          console.log("x ", sign.coordinate_x);
+          console.log("y ", sign.coordinate_y);
+          console.log("height ", sign.height);
+          console.log("width ", sign.width);
+          console.log("current height ", this.currentHeight);
+          console.log("height page ", heightPage);
 
-          sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
-          sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
-          sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
-          sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
+        sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
+        sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
 
-          console.log("after ");
-          console.log("x ", sign.signDigitalX);
-          console.log("y ", sign.signDigitalY);
-          console.log("height ", sign.signDigitalHeight);
-          console.log("width ", sign.signDigitalWidth);
+        console.log(" y ", sign.signDigitalY);
+        sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
+        sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
 
-          //Lấy thông tin mã số thuế của đối tác ký 
-          this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
+        console.log("after ");
+        console.log("x ", sign.signDigitalX);
+        console.log("y ", sign.signDigitalY);
+        console.log("height ", sign.signDigitalHeight);
+        console.log("width ", sign.signDigitalWidth);
 
-            console.log("response recipient ", response);
+        //Lấy thông tin mã số thuế của đối tác ký 
+        this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
 
-            const lengthRes = response.recipients.length;
-            for (let i = 0; i < lengthRes; i++) {
-              console.log('vao vong for ');
+          console.log("response recipient ", response);
 
-              const id = response.recipients[i].id;
+          const lengthRes = response.recipients.length;
+          for(let i = 0; i < lengthRes; i++) {
 
-              if(id == sign.recipient_id) {
-                this.taxCodePartnerStep2 = response.recipients[i].card_id;
+            console.log("vao vong for ");
 
-                break;
-              }
+            const id = response.recipients[i].id;
+
+            if(id == sign.recipient_id) {
+              this.taxCodePartnerStep2 = response.recipients[i].card_id;
+
+              break;
             }
-          });
+          }
+        })
 
         return sign;
       } else {
         return sign;
       }
     });
-
-    this.currentHeight += heightPage;
+  
+  this.currentHeight += heightPage;
   }
 
   mobile: boolean = false;
