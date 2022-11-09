@@ -55,12 +55,13 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           name_company: element.participantName,
           emailRecipients: element.email,
           status: this.checkStatusUser(element.status, element.role),
+          typeOfSign: element.signType[0],
           process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null
         }
         this.is_list_name.push(data);
       })
     });
-    // console.log(this.is_list_name)
+     console.log("sssssssssssssssss",this.is_list_name)
   }
 
   getStatus(status: any) {
