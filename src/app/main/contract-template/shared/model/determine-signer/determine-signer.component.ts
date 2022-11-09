@@ -144,12 +144,6 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
       if (items.type == 3) 
           this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
-          for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
-            if(this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
-              this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email;
-            }
-          }
-      
     })
 
 
@@ -1103,12 +1097,15 @@ export class DetermineSignerComponent implements OnInit {
     console.log(this.data_parnter_organization);
   }
 
-  // xóa đối tham gia bên đối tác
+  // xóa đối tác
   deletePartner(index: any, item:any) {
     //xoa doi tuong tham gia
     if(item.id){
       this.contractTemplateService.deleteParticipantContract(item.id).subscribe((res: any) => {
         if(res.success==true){
+
+          //Khi xoá đối tác thì số lượng participant thay đổi
+          this.datas.is_determine_clone = this.datas.is_determine_clone.filter((element: any) => element.id != item.id);
           this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
         }else{
           this.toastService.showErrorHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");
