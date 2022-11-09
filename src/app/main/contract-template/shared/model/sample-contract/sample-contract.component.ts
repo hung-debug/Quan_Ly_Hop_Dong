@@ -100,12 +100,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-
-    console.log(this.datas.contract_user_sign);
-
-  
-
-    console.log("äfter ",this.datas.contract_user_sign);
+    console.log("datas clone sample ", this.datas.is_determine_clone);
 
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
@@ -1251,7 +1246,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       } 
     })
 
-    console.log("arrSign config ", arrSignConfig);
     return arrSignConfig;
   }
 
@@ -1392,8 +1386,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           isContractUserSign_clone.forEach((element: any) => {
             if (element.sign_config.length > 0) {
               element.sign_config.forEach((item: any) => {
-                item['font'] = 'Arial';
-                item['font_size'] = 14;
+                item['font'] = 'Times New Roman';
+                item['font_size'] = 11;
                 item['contract_id'] = this.datas.contract_id;
                 item['document_id'] = this.datas.document_id;
                 if (item.text_attribute_name) {
@@ -1480,7 +1474,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'value'];
       dataSignNotId.forEach((item: any) => {
         item['font'] = 'Arial';
-        item['font_size'] = 14;
+        item['font_size'] = 11;
         item['contract_id'] = this.datas.contract_id;
         item['document_id'] = this.datas.document_id;
         if (item.text_attribute_name) {

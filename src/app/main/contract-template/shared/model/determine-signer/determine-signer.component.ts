@@ -90,21 +90,16 @@ export class DetermineSignerComponent implements OnInit {
   ngOnInit(): void {
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id));
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
-      // this.datas.is_determine_clone = null;
-      // this.datas.is_determine_clone = this.datas.determine_contract;
       this.datas.is_determine_clone = [...this.contractTemplateService.getDataDetermineInitialization()];
     }
 
     // data Tổ chức của tôi
     this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];
-    this.data_organization.name = this.datas.name_origanzation ? this.datas.name_origanzation : '';
+    this.data_organization.name = this.data_organization.name ? this.data_organization.name : this.datas.name_origanzation;
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
 
-    console.log(this.datas);
-    console.log(this.datas.name_origanzation);
-    console.log(this.data_organization.name);
     // data đối tác
     this.data_parnter_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
     // this.data_parnter_individual = this.datas.is_determine_clone.filter((p: any) => p.type == 3);
@@ -124,8 +119,9 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeTypeSign(d: any) {
-    if(d.login_by == 'phone') {
+    if(d.login_by == 'phone' || d.login_by == 'email') {
       d.email = '';
+      d.phone = '';
     }
 
     console.log("d ",d);
@@ -152,6 +148,17 @@ export class DetermineSignerComponent implements OnInit {
 
   // next step event
   next(action: string) {
+    this.datas.is_determine_clone.forEach((items: any, index: number) => {
+      if (items.type == 3) 
+          this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
+          for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
+            if(this.datas.is_determine_clone[index].recipients[i].login_by == "phone") {
+              this.datas.is_determine_clone[index].recipients[i].phone = this.datas.is_determine_clone[index].recipients[i].email;
+            }
+          }
+      
+    })
+
     this.submitted = true;
     if (action == 'save-step' && !this.validData()) {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -171,16 +178,15 @@ export class DetermineSignerComponent implements OnInit {
 
   async getApiDetermine(is_save?: boolean) {
 
-    console.log("data clone before ", this.datas.is_determine_clone);
-    this.datas.is_determine_clone.forEach((items: any, index: number) => {
-      if (items.type == 3) {
-        console.log("items ", items);
-        this.datas.is_determine_clone[index].recipients = items.recipients.filter((p: any) => p.role == 3);
-        // this.datas.is_determine_clone[index].recipients
-      }
+      //Đưa giá trị email về chũ thường
+      this.datas.is_determine_clone.forEach((items: any, index: number) => {
+        for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
+          if(this.datas.is_determine_clone[index].recipients[i].email) {
+            this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.toLowerCase();
+          }
+        }
     })
 
-    console.log("data clone after ", this.datas.is_determine_clone);
     this.spinner.show();
     let isCheckId = this.datas.is_determine_clone.filter((p: any) => p.id);
     if (this.datas.is_action_contract_created && this.router.url.includes("edit") && (isCheckId && isCheckId.length == this.datas.is_determine_clone.length)) {
@@ -223,7 +229,10 @@ export class DetermineSignerComponent implements OnInit {
         
       this.spinner.hide()
     } else {
+      console.log("data clone after ", this.datas.is_determine_clone);
+
       this.contractTemplateService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
+        console.log("res after ", res);
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
         if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -249,6 +258,8 @@ export class DetermineSignerComponent implements OnInit {
       this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000)
       void this.router.navigate(['/main/contract/create/draft']);
     } else if (!this.saveDraftStep || is_save) {
+      console.log("data clone after ", this.datas.is_determine_clone);
+
       this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;
       this.step = variable.stepSampleContract.step3;
       this.datas.stepLast = this.step;
@@ -349,11 +360,21 @@ export class DetermineSignerComponent implements OnInit {
         count++;
         break;
       }
-      if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email)) {
-        this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
-        count++;
-        break;
+
+      if(dataArr.login_by == 'email') {
+        if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email)) {
+          this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+          count++;
+          break;
+        }
+      } else if(dataArr.login_by == 'phone') {
+        if (dataArr[i].email && !this.pattern.phone.test(dataArr[i].email)) {
+          this.getNotificationValid("SĐT của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
+          count++;
+          break;
+        }
       }
+     
       //@ts-ignore
       if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone)) {
         this.getNotificationValid("Số điện thoại của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")

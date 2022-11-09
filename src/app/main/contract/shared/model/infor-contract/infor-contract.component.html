@@ -1,17 +1,5 @@
 <!-- form step 1 -->
 <div>
-  <!-- <div class="row">
-    <div class="radio col-md-4 label_type">
-      <label><input type="radio" name="type" checked (change)="changeAddContract('/main/form-contract/add')"> {{'contract.not-by-template' | translate}}</label>
-    </div>
-    <div class="radio col-md-4 label_type">
-      <label><input type="radio" name="type" (change)="changeAddContract('/main/form-contract-batch/add')"> {{'contract.by-template' | translate}}</label>
-    </div>
-    <div class="radio col-md-4 label_type">
-      <label><input type="radio" name="type" (change)="changeAddContract('/main/form-contract-batch/add')"> {{'contract.by-batch' | translate}}</label>
-    </div>
-  </div> -->
-
   <div class="row">
     <div class="col-md-12">
       <div class="form-group">
@@ -55,7 +43,7 @@
         <div class="label_item">{{'contract.number' | translate}}</div>
         <div class="input-group">
           <!-- oninput="this.value = this.value.replace(/[^a-zA-Z0-9!@#$&()-`.+,_]/g ,'', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" -->
-          <input type="text" [(ngModel)]="contract_no" maxlength="32" class="input_text" />
+          <input type="text" [(ngModel)]="contract_no" maxlength="100" class="input_text" />
         </div>
       </div>
       <div class="form-group">

@@ -41,6 +41,8 @@ export class AdminLoginComponent implements OnInit {
   });
 
   loginUser() {
+    localStorage.clear();
+
     if (this.loginForm.value.username == '') {
       this.error = true;
       this.errorDetail = 'error.username.required';

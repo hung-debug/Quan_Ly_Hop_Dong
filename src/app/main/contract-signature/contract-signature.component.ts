@@ -989,7 +989,7 @@ export class ContractSignatureComponent implements OnInit {
   async getBase64String(fileC: any) {
     return await this.contractServiceV1.getDataFileUrlPromise(fileC);
   }
-
+ 
   searchContract() {
     const data = {
       title: 'TÌM KIẾM HỢP ĐỒNG',

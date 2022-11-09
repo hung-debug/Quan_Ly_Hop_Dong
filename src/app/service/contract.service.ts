@@ -43,12 +43,17 @@ export class ContractService {
   addDetermineCoorditionUrl: any = `${environment.apiUrl}/api/v1/participants/`;
   addSampleCntractUrl: any = `${environment.apiUrl}/api/v1/fields`;
   documentUrl: any = `${environment.apiUrl}/api/v1/documents`;
+
   addConfirmContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+
   changeStatusContractUrl: any = `${environment.apiUrl}/api/v1/contracts/`;
+
   coordinationSuccess: any = `${environment.apiUrl}/api/v1/processes/coordinator/`;
   listContractTypeUrl: any = `${environment.apiUrl}/api/v1/contract-types/organizations/`;
   processAuthorizeContractUrl: any = `${environment.apiUrl}/api/v1/processes/authorize`;
+
   addGetDataContract: any = `${environment.apiUrl}/api/v1/contracts/`;
+  
   addGetFileContract: any = `${environment.apiUrl}/api/v1/documents/by-contract/`;
   addGetObjectSignature: any = `${environment.apiUrl}/api/v1/fields/by-contract/`;
   updateInfoContractUrl: any = `${environment.apiUrl}/api/v1/fields/`;
@@ -100,15 +105,17 @@ export class ContractService {
 
   getFilePdfForMobileUrl: any = `${environment.apiUrl}/api/v1/contracts/review/`;
 
-  cccdFront: any = `http://ekyc2.mobifone.ai/v2/recognition`;
+  cccdFront: any = `https://mobifone-econtract.vn/eKYC/recognition`;
 
-  detectFaceUrl: any = `http://ekyc2.mobifone.ai/v2/verification`;
+  detectFaceUrl: any = `https://mobifone-econtract.vn/eKYC/verification`;
 
   changeLinkUrl: any = `${environment.apiUrl}/api/v1/handle/`;
 
   signManyUsbTokenUrl: any = `${environment.apiUrl}/api/v1/sign/multi/usb-token`;
   signHsmMultiUrl: any = `${environment.apiUrl}/api/v1/sign/multi/hsm`;
-  infoPageUrl: any = `${environment.apiUrl}/api/v1/sign/multi/usb-token/page-info/?documentId=`
+  infoPageUrl: any = `${environment.apiUrl}/api/v1/sign/multi/usb-token/page-info/?documentId=`;
+
+  decreaseNumberEkycUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
 
   token: any;
   customer_id: any;
@@ -893,6 +900,20 @@ export class ContractService {
       });
   }
 
+  //api trừ số lượng ekyc
+  decreaseNumberOfEkyc(orgId: any) {
+    this.getCurrentUser();
+
+    const headers = new HttpHeaders()
+    .append('Content-Type', 'application/json')
+    .append('Authorization', 'Bearer ' + this.token);
+    
+    return this.http.put<any>(this.decreaseNumberEkycUrl + orgId+"/decrease-number-of-ekyc", {},{
+      headers: headers,
+      observe: 'response'
+    });
+  }
+
   updateFileAttach(id: any, body: any, isStatus?: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -1061,8 +1082,6 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    // console.log('url ', this.isDataDetermine + idCoordination);
-
     return this.http
       .get<any>(this.isDataDetermine + idCoordination, { headers })
       .pipe();
@@ -1168,6 +1187,18 @@ export class ContractService {
       datas,
       { headers: headers }
     );
+  }
+
+  updateInfoContractConsiderPromise(datas: any, recipient_id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.put<any>(
+      this.updateInfoContractConsiderUrl + recipient_id,
+      datas,
+      { headers: headers }
+    ).toPromise();
   }
 
   updateInfoContractConsiderImg(datas: any, recipient_id: any) {
