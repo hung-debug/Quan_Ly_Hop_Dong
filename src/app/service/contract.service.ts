@@ -646,19 +646,6 @@ export class ContractService {
     return axios.post(this.domain, json_req, config);
   }
 
-  updateInfoContractConsiderPromise(datas: any, recipient_id: any) {
-    this.getCurrentUser();
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
-    return this.http.put<any>(
-      this.updateInfoContractConsiderUrl + recipient_id,
-      datas,
-      { headers: headers }
-    ).toPromise();
-  }
-
-
   postSignDigitalMobiMulti(serial: any, valueSignBase64: any,imageData: any,page: any, height: any, width: any,x: any,y: any) {
 
     this.getCurrentUser();
