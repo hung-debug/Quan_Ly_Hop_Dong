@@ -915,11 +915,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       // validate phía đối tác
       for (let j = 0; j < dataArrPartner.length; j++) {
         let isParterSort = (dataArrPartner[j].recipients).sort((beforeItemParter: any, afterItemParter: any) => beforeItemParter.role - afterItemParter.role);
-        // if (isParterSort.length == 0) {
-        //   count++;
-        //   this.getNotificationValid("Vui lòng nhập người ký");
-        //   break;
-        // }
         for (let k = 0; k < isParterSort.length; k++) {
           //Tổ chức
           if (dataArrPartner[j].type != 3) {
@@ -1015,16 +1010,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(isParterSort[k].role) + "tổ chức của tôi không hợp lệ!");
               count++;
               break;
-            }
-
-            if(!this.pattern.card_id.test(isParterSort[k].card_id)) {
-              console.log("cmt/cccd khong hop le");
-              console.log(isParterSort[k]);
-            }
-
-            if(!this.pattern_input.taxCode_form.test(isParterSort[k].card_id)) {
-              console.log("mst khong hop le");
-              
             }
 
             if(!isParterSort[k].card_id && isParterSort[k].role == 3 && isParterSort[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
@@ -1123,6 +1108,12 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               }
             }
 
+            if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
+              this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(isParterSort[k].role) + "của đối tác!")
+              count++;
+              break;
+            }
+
             // valid phone number
             if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone)) {
               this.getNotificationValid("Số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!")
@@ -1170,16 +1161,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         return false
       }
 
-      // if(this.getCheckDuplicateTaxCodeHsm(onlyPartner, dataArrPartner)) {
-      //   this.getNotificationValid("Mã số thuế của đối tác không được trùng nhau");
-      //   return false;
-      // }
-
-      // if(this.getCheckDuplicateTaxCodeUID(onlyPartner, dataArrPartner)) {
-      //   this.getNotificationValid("Thông tin trong usb token của đối tác không được trùng nhau");
-      //   return false;
-      // }
-
       if (this.getCheckDuplicateEmail(allCheckEmail, this.datasForm.is_determine_clone)) {
         this.getNotificationValid("Email không được trùng nhau giữa các bên tham gia!");
         return false
@@ -1194,16 +1175,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         this.getNotificationValid("Mã số thuế/CMT/CCCD không được trùng nhau giữa các bên tham gia!");
         return false
       }
-
-      // if(this.getCheckDuplicateTaxCodeHsm(allCheckEmail, this.datas.is_determine_clone)) {
-      //   this.getNotificationValid("Mã số thuế không được trùng nhau giữa các bên tham gia");
-      //   return false;
-      // }
-
-      // if(this.getCheckDuplicateTaxCodeUID(allCheckEmail, this.datas.is_determine_clone)) {
-      //   this.getNotificationValid("Thông tin trong usb token không được trùng nhau giữa các bên tham gia");
-      //   return false;
-      // }
     }
 
     if (count == 0) {
