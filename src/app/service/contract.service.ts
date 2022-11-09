@@ -109,9 +109,9 @@ export class ContractService {
 
   // detectFaceUrl: any = `http://ekyc2.mobifone.ai/v2/verification`;
 
-  cccdFront: any = `https://mobifone-econtract.vn/eKYC/recognition`;
+  cccdFront: any = `https://econtract.mobifone.vn/v2/recognition`;
 
-  detectFaceUrl: any = `https://mobifone-econtract.vn/eKYC/verification`;
+  detectFaceUrl: any = `https://econtract.mobifone.vn/v2/verification`;
 
 
   changeLinkUrl: any = `${environment.apiUrl}/api/v1/handle/`;
