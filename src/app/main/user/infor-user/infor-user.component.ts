@@ -139,7 +139,7 @@ export class InforUserComponent implements OnInit {
 
         this.addKpiForm = this.fbd.group({
           phoneKpi: this.fbd.control(data.phone_sign, [Validators.pattern("[0-9 ]{10}")]),
-          networkKpi: data.phone_tel
+          networkKpi: data.phone_tel == 3 ? 'bcy': data.phone_tel 
         });
 
         this.addHsmForm = this.fbd.group({

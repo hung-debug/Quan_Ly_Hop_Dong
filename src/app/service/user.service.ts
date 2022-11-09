@@ -193,7 +193,7 @@ export class UserService {
       sign_image: datas.sign_image,
 
       phone_sign: datas.phoneKpi,
-      phone_tel: datas.networkKpi,
+      phone_tel: datas.networkKpi ==='bcy' ? 3 : datas.networkKpi,
 
       hsm_name: datas.nameHsm,
       tax_code: datas.taxCodeHsm,
@@ -228,7 +228,7 @@ export class UserService {
       sign_image: datas.sign_image,
 
       phone_sign: datas.phoneKpi,
-      phone_tel: datas.networkKpi,
+      phone_tel: datas.networkKpi ==='bcy' ? 3 : datas.networkKpi,
 
       hsm_name: datas.nameHsm,
       tax_code: datas.taxCodeHsm,
@@ -250,8 +250,6 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-
-    console.log(headers);
     return this.http.get<any>(this.getUserByIdUrl + id, { headers: headers });
   }
 

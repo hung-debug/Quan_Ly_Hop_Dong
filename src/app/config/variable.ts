@@ -148,6 +148,13 @@ export var networkList = [
   {id: 'bcy', name: 'Ban cơ yếu'}
 ];
 
+// export var networkList1 = [
+//   { id: 1, name: 'Mobifone' },
+//   { id: 2, name: 'Viettel' },
+//   // { id: 3, name: 'Vietnamobile' },
+//   {id: '3', name: 'Ban cơ yếu'}
+// ];
+
 export var statusList = [
   { id: 0, name: 'Tất cả' },
   { id: 1, name: 'Hoạt động' },
