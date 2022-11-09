@@ -2184,8 +2184,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   cccdFront: any;
   cardId: any;
   eKYCSignOpen() {
-
-    
+    this.eKYCStart();
   }
 
   eKYCStart() {
