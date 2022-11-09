@@ -315,6 +315,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       // this.datas = this.datas.concat(this.data_contract.contract_information);
 
       this.datas.action_title = 'Xác nhận';
+
       this.datas.roleContractReceived = this.recipient.role;
 
 
