@@ -25,6 +25,7 @@ import {data} from 'jquery';
 import * as _ from 'lodash';
 
 import domtoimage from 'dom-to-image';
+import drag from '@interactjs/actions/drag/plugin';
 
 @Component({
   selector: 'app-sample-contract',
@@ -479,8 +480,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   }
 
+  coordinate_x: any[];
+  coordinate_y: any[];
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
+
+    console.log("show event info ", event);
+
     let canvasElement: HTMLElement | null;
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
@@ -679,6 +685,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
     }
+
+    console.log("show event info 1 ", this.getTrafX());
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
@@ -1184,8 +1192,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   getTrafX() {
     if (Math.round(this.objSignInfo.traf_x) <= 0) {
       return Math.round(this.objSignInfo.traf_x)
-    } else
+    } else {
       return Math.round(this.objSignInfo.traf_x) - 1;
+    }
   }
 
   getTrafY() {
