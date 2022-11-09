@@ -53,6 +53,7 @@
                 <div>
                     <p-dropdown 
                         panelStyleClass="font"
+                        formControlName="contractStatus"
                         appendTo="body"
                         [options]="(this.router.url.includes('processed')) ? contractStatusProcessedList: contractStatusProcessingList" 
                         optionLabel="name"

@@ -41,7 +41,6 @@ export class ContractSignatureComponent implements OnInit {
 
   action: string;
   status: string;
-  contractStatus: String;
   type: string;
   private sub: any;
   searchText: string;
@@ -66,6 +65,7 @@ export class ContractSignatureComponent implements OnInit {
   filter_from_date: any = '';
   filter_to_date: any = '';
   filter_status: any = 1;
+  contractStatus: any = '';
 
   typeDisplay: string = 'signOne';
 
@@ -131,6 +131,14 @@ export class ContractSignatureComponent implements OnInit {
         this.filter_to_date = params.filter_to_date;
       } else {
         this.filter_to_date = '';
+      }
+      if (
+        typeof params.contractStatus != 'undefined' &&
+        params.contractStatus
+      ) {
+        this.contractStatus = params.contractStatus;
+      } else {
+        this.contractStatus = '';
       }
     });
     this.sub = this.route.params.subscribe((params) => {
@@ -215,7 +223,8 @@ export class ContractSignatureComponent implements OnInit {
           this.filter_to_date,
           this.filter_status,
           this.p,
-          this.page
+          this.page,
+          this.contractStatus,
         )
         .subscribe((data) => {
           this.contracts = data.entities;
@@ -239,7 +248,8 @@ export class ContractSignatureComponent implements OnInit {
             this.filter_to_date,
             this.filter_status,
             this.p,
-            this.page
+            this.page,
+            this.contractStatus,
           )
           .subscribe((data) => {
             this.contracts = data.entities;
@@ -971,7 +981,6 @@ export class ContractSignatureComponent implements OnInit {
       filter_from_date: this.filter_from_date,
       filter_to_date: this.filter_to_date,
       status: this.status,
-      contractStatus: this.contractStatus,
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(FilterListDialogComponent, {

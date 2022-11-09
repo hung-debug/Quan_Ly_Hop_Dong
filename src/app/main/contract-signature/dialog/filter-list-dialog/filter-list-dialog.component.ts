@@ -48,7 +48,8 @@ export class FilterListDialogComponent implements OnInit {
         filter_from_date: this.fbd.control(this.data.filter_from_date),
         filter_to_date: this.fbd.control(this.data.filter_to_date),
         status:this.data.status,
-        contractStatus: this.data.contractStatus,
+        contractStatus: this.fbd.control(this.data.contractStatus),    
+        
       });
     }
 
@@ -66,7 +67,7 @@ export class FilterListDialogComponent implements OnInit {
       filter_from_date: this.data.filter_from_date!=""?this.fbd.control(new Date(this.data.filter_from_date)):"",
       filter_to_date: this.data.filter_to_date!=""?this.fbd.control(new Date(this.data.filter_to_date)):"",
       status:this.data.status,
-      contractStatus: this.data.contractStatus,
+      contractStatus: this.fbd.control(this.data.contractStatus),
     });
     console.log("addddd form",this.addForm);    
   }
