@@ -146,7 +146,8 @@ export class DashboardComponent implements OnInit {
   }
 
   openLinkNotification(link: any, id: any) {
-    window.location.href = link.replace('&loginType=', '').replace('&loginType=1', '').replace('&type=', '').replace('&type=1', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
+    window.location.href = link.replace('&type=1', '').replace('&type=', '').replace('?id','?recipientId').replace('contract-signature','c').replace('signatures','s9').replace('consider','c9').replace('secretary','s8').replace('coordinates','c8');
+
     this.dashboardService.updateViewNotification(id).subscribe(data => {
       console.log(data);
     });
