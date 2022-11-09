@@ -134,11 +134,6 @@ export const type_signature_personal_party_template = [
 ];
 
 export const type_signature_doc_template = [
-  // {
-  //   id: 1,
-  //   name: 'Ký ảnh và OTP',
-  //   is_otp: false,
-  // },
   {
     id: 2,
     name: 'Ký số bằng USB token',
@@ -147,8 +142,8 @@ export const type_signature_doc_template = [
 ];
 
 export var networkList = [
-  { id: 'Mobifone', name: 'Mobifone' },
-  { id: 'Viettel', name: 'Viettel' },
+  { id: 1, name: 'Mobifone' },
+  { id: 2, name: 'Viettel' },
   // { id: 3, name: 'Vietnamobile' },
   {id: 'bcy', name: 'Ban cơ yếu'}
 ];
