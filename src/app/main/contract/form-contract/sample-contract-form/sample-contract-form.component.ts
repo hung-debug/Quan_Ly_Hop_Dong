@@ -1577,7 +1577,7 @@ export class SampleContractFormComponent implements OnInit {
               }
             }
             
-            if(!element.coordinate_x) {
+            if(element.coordinate_x) {
               coordinate_x.push(Number(element.coordinate_x));
               coordinate_y.push(Number(element.coordinate_y));
               width.push(Number(element.width));

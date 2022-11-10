@@ -1608,7 +1608,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               else arrSign_partner.push(data_sign);
             }
 
-            if(!element.coordinate_x) {
+            if(element.coordinate_x) {
               coordinate_x[i] = Number(element.coordinate_x);
               coordinate_y[i] = Number(element.coordinate_y);
               width[i] = Number(element.width);

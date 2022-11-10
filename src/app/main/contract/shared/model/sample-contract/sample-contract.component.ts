@@ -1468,10 +1468,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             }
 
-              coordinate_x[i] = Number(element.coordinate_x);
-              coordinate_y[i] = Number(element.coordinate_y);
-              width[i] = Number(element.width);
-              height[i] = Number(element.height);
+            if(element.coordinate_x) {
+              coordinate_x.push(Number(element.coordinate_x));
+              coordinate_y.push(Number(element.coordinate_y));
+              width.push(Number(element.width));
+              height.push(Number(element.height));
+            }
             
           }
           if (count > 0 || count_text > 0) break
