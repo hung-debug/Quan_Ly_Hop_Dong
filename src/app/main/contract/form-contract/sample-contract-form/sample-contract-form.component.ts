@@ -1578,10 +1578,10 @@ export class SampleContractFormComponent implements OnInit {
             }
             
             if(!element.coordinate_x) {
-              coordinate_x[i] = Number(element.coordinate_x);
-              coordinate_y[i] = Number(element.coordinate_y);
-              width[i] = Number(element.width);
-              height[i] = Number(element.height);
+              coordinate_x.push(Number(element.coordinate_x));
+              coordinate_y.push(Number(element.coordinate_y));
+              width.push(Number(element.width));
+              height.push(Number(element.height));
             }
             
           }
@@ -1594,6 +1594,7 @@ export class SampleContractFormComponent implements OnInit {
        //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+h) = góc phải dưới
        for(let i = 0; i < coordinate_x.length; i++) {
         for(let j = i+1; j < coordinate_x.length; j++) {
+          console.log("coordinate x ", coordinate_x);
           if(
             (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
             &&
