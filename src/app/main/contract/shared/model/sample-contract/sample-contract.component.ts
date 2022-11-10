@@ -690,27 +690,27 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     // console.log("show event info 1 ", this.getTrafX());
 
-    if(this.coordinate_x.length > 1 || this.coordinate_y.length > 1) {
+    // if(this.coordinate_x.length > 1 || this.coordinate_y.length > 1) {
 
-      //Trường hợp ô ký 2 thuộc ô ký 1
-      for(let i = 0; i < this.coordinate_x.length; i++) {
-        for(let j = i+1; j < this.coordinate_x.length; j++) {
-          if((this.coordinate_x[i] <= this.coordinate_x[j] <= (this.coordinate_x[i]+this.width[i]))
-            && (this.coordinate_y[i] <= this.coordinate_y[j] <= (this.coordinate_y[i]+this.height[i]))
-          ) {
-            this.toastService.showErrorHTMLWithTimeout("Các ô ký đang có vị trí trùng nhau ","",3000)
-            return;
-          }
-        }
-      }
+    //   //Trường hợp ô ký 2 thuộc ô ký 1
+    //   for(let i = 0; i < this.coordinate_x.length; i++) {
+    //     for(let j = i+1; j < this.coordinate_x.length; j++) {
+    //       if((this.coordinate_x[i] <= this.coordinate_x[j] <= (this.coordinate_x[i]+this.width[i]))
+    //         && (this.coordinate_y[i] <= this.coordinate_y[j] <= (this.coordinate_y[i]+this.height[i]))
+    //       ) {
+    //         this.toastService.showErrorHTMLWithTimeout("Các ô ký đang có vị trí trùng nhau ","",3000)
+    //         return;
+    //       }
+    //     }
+    //   }
 
-      //Trường hợp ô ký 2 và ô ký 1 giao nhau
-    }
+    //   //Trường hợp ô ký 2 và ô ký 1 giao nhau
+    // }
 
-    this.coordinate_x.push(this.getTrafX());
-    this.coordinate_y.push(this.getTrafY());
-    this.width.push(this.objSignInfo.width);
-    this.height.push(this.objSignInfo.height);
+    // this.coordinate_x.push(this.getTrafX());
+    // this.coordinate_y.push(this.getTrafY());
+    // this.width.push(this.objSignInfo.width);
+    // this.height.push(this.objSignInfo.height);
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
@@ -1432,15 +1432,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let arrSign_organization: any[] = [];
       let arrSign_partner: any[] = [];
 
-      console.log("datas ", this.datas);
+      let coordinate_x: number [] = [];
+      let coordinate_y: number [] = [];
+      let width: number [] = [];
+      let height: number [] = []
 
       for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datas.contract_user_sign[i].sign_config[j];
-            console.log("element ",element);
-            console.log("element length ",element.length);
-            console.log("element sign unit ",element.sign_unit);
+          
             if (!element.name && element.sign_unit != 'so_tai_lieu') { // element.sign_unit != 'so_tai_lieu'
               count++;
               break
@@ -1466,15 +1467,36 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               else arrSign_partner.push(data_sign);
 
             }
+
+            coordinate_x[j] = Number(element.coordinate_x);
+            coordinate_y[j] = Number(element.coordinate_y);
+            width[j] = Number(element.width);
+            height[j] = Number(element.height);
           }
           if (count > 0 || count_text > 0) break
         }
       }
 
-      // if (this.onContentTextEvent()) {
-      //   this.toastService.showErrorHTMLWithTimeout("Trùng tên trường ô text. Vui lòng kiểm tra lại!", "", 3000);
-      //   return false;
-      // }
+      //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+w)
+      for(let i = 0; i < coordinate_x.length; i++) {
+        for(let j = i+1; j < coordinate_x.length; j++) {
+          console.log("x i ", coordinate_x[i]);
+          console.log("x j  ", coordinate_x[j]);
+          console.log("x i + w ", (coordinate_x[i]+width[i]));
+          if(
+            (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
+            &&
+            (Number(coordinate_y[i]) <= Number(coordinate_y[j]) && Number(coordinate_y[j] <= (Number(coordinate_y[i]) + Number(height[i]))))
+            // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+          ) {
+            this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+            return false;
+          }
+        }
+      }
+
+
+      
 
       if (count > 0) {
         this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 3000);
@@ -1486,7 +1508,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.toastService.showWarningHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
         return false;
       } else {
-        // valid đối tượng ký của tổ chức
         let data_organization = this.list_sign_name.filter((p: any) => p.type_unit == "organization" && p.role != 2);
         let error_organization = 0;
         let nameSign_organization = {
