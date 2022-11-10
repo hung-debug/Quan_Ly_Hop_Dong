@@ -1316,6 +1316,10 @@ export class ConsiderContractComponent
         return;
       }
 
+      // console.log("phonePKI ", this.phonePKI);
+
+      this.phonePKI = this.dataNetworkPKI.phone;
+
       await of(null).pipe(delay(120)).toPromise();
       const imageRender = <HTMLElement>document.getElementById('export-html-pki');
       let image_base64 = "";
@@ -1324,7 +1328,6 @@ export class ConsiderContractComponent
         image_base64 = this.textSignBase64Gen = textSignB.split(',')[1];
       }
       
-
       if (fileC && objSign.length) {
         const checkSign = await this.contractService.signPkiDigital(
           this.dataNetworkPKI.phone,
@@ -2720,6 +2723,7 @@ export class ConsiderContractComponent
       recipientId: this.recipientId,
     };
 
+
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '497px';
     dialogConfig.height = '330px';
@@ -2728,6 +2732,7 @@ export class ConsiderContractComponent
     const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(async (result: any) => {
       if (result && result.phone && result.networkCode) {
+
         this.loadingText =
           'Yêu cầu ký đã được gửi tới số điện thoại của bạn.\n Vui lòng Xác nhận để thực hiện dịch vụ';
         this.signInfoPKIU.phone = result.phone;
@@ -2738,6 +2743,10 @@ export class ConsiderContractComponent
             networkCode: this.signInfoPKIU.networkCode,
             phone: this.signInfoPKIU.phone,
           };
+
+          // this.phonePKI = this.signInfoPKIU.phone;
+
+          console.log("phone pki ", this.phonePKI);
           await this.signContractSubmit();
         } else {
           this.toastService.showErrorHTMLWithTimeout(

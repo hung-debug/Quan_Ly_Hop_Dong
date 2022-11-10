@@ -100,7 +100,7 @@
         </div>
       </div>
       <div class="skeleton-sign position-absolute opacity-0">
-        <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId"></app-display-digital-signature>
+        <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI"></app-display-digital-signature>
       </div>
       <div class="skeleton-sign position-absolute opacity-0">
         <app-text-signature-image [textSign]="textSign" [height]="heightText" [width]="widthText"></app-text-signature-image>
@@ -112,7 +112,7 @@
 <div *ngIf="this.mobile === true">
 
   <div class="skeleton-sign position-absolute opacity-0">
-    <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId"></app-display-digital-signature>
+    <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI"></app-display-digital-signature>
   </div>
 
       <div style="margin:auto;padding: 10px">
