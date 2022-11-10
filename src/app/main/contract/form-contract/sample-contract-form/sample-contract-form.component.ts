@@ -219,74 +219,6 @@ export class SampleContractFormComponent implements OnInit {
 
   }
 
-  // getDataSignUpdateAction() {
-  //   let dataPosition: any[] = [];
-  //   let dataNotPosition: any[] = [];
-  //   this.datasForm.is_determine_clone.forEach((element: any) => {
-  //     element.recipients.forEach((item: any) => {
-  //       let data_duplicate = this.datasForm.is_data_object_signature.filter((p: any) => p.recipient && p.recipient.email == item.email && p.recipient.name == item.name && p.type)[0];
-  //       // if (item.fields && item.fields.length && item.fields.length > 0) {
-  //       //   item.fields.forEach((res: any) => {
-  //       //     res['id_have_data'] = res.id;
-  //       //     res['is_type_party'] = element.type;
-  //       //     res['role'] = res.recipient.role;
-  //       //     if (res.type == 1) {
-  //       //       res['sign_unit'] = 'text';
-  //       //     }
-  //       //     if (res.type == 2) {
-  //       //       res['sign_unit'] = 'chu_ky_anh'
-  //       //     }
-  //       //     if (res.type == 3) {
-  //       //       res['sign_unit'] = 'chu_ky_so'
-  //       //     }
-  //       //     if (res.type == 4) {
-  //       //       res['sign_unit'] = 'so_tai_lieu'
-  //       //     }
-  //       //     res.name = res.recipient.name;
-  //       //     res.email = res.recipient.email;
-  //       //     dataPosition.push(res);
-  //       //   })
-  //       // }
-
-  //       if (data_duplicate) {
-  //         // defind dữ liệu tọa độ chữ ký
-  //         let dataIsSign: any = {};
-  //         if (data_duplicate.type == 1) {
-  //           dataIsSign['sign_unit'] = 'text';
-  //         }
-  //         if (data_duplicate.type == 2) {
-  //           dataIsSign['sign_unit'] = 'chu_ky_anh'
-  //         }
-  //         if (data_duplicate.type == 3) {
-  //           dataIsSign['sign_unit'] = 'chu_ky_so'
-  //         }
-  //         if (data_duplicate.type == 4) {
-  //           dataIsSign['sign_unit'] = 'so_tai_lieu'
-  //         }
-  //         dataIsSign['name'] = data_duplicate.recipient.name;
-  //         dataIsSign['email'] = data_duplicate.recipient.email;
-  //         // dataIsSign['is_type_party'] = element.type;
-  //         // dataIsSign['role'] = item.role;
-  //         // dataIsSign['id_have_data'] = data_duplicate.id;
-  //         dataPosition.push(dataIsSign);
-
-  //       }
-  //       else {
-  //         // item['is_type_party'] = this.datasForm.is_determine_clone.type;
-  //         // item['role'] = item.role;
-  //         dataNotPosition.push(item)
-  //       }
-  //     })
-  //   })
-
-  //   this.dataSignPosition = [...dataPosition, ...dataNotPosition]; // dữ liệu đối tượng ký get data api
-
-  //   this.dataSignPosition.forEach((res: any) => {
-  //     if (res.sign_unit == 'text') {
-  //       res['text_attribute_name'] = res.name;
-  //     }
-  //   })
-  // }
 
   setDataSignContract() {
     if (!this.datasForm.is_data_object_signature) {
@@ -1571,9 +1503,13 @@ export class SampleContractFormComponent implements OnInit {
     this.stepChangeSampleContractForm.emit(step);
   }
 
+ 
   validData() {
     // console.log(this.datasForm);
     let data_not_drag = this.datasForm.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
+
+    console.log("datas ", this.datasForm.contract_user_sign);
+
     if (!data_not_drag) {
       this.spinner.hide();
       this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn ít nhất 1 đối tượng kéo thả!", "", 3000);
@@ -1586,6 +1522,11 @@ export class SampleContractFormComponent implements OnInit {
 
       let arrSign_organization: any[] = [];
       let arrSign_partner: any[] = [];
+
+      let coordinate_x: number [] = [];
+      let coordinate_y: number [] = [];
+      let width: number [] = [];
+      let height: number [] = [];
 
       for (let i = 0; i < this.datasForm.contract_user_sign.length; i++) {
         if (this.datasForm.contract_user_sign[i].sign_config.length > 0) {
@@ -1635,11 +1576,78 @@ export class SampleContractFormComponent implements OnInit {
                 else arrSign_partner.push(data_sign);
               }
             }
+            
+            if(!element.coordinate_x) {
+              coordinate_x[i] = Number(element.coordinate_x);
+              coordinate_y[i] = Number(element.coordinate_y);
+              width[i] = Number(element.width);
+              height[i] = Number(element.height);
+            }
+            
           }
           if (count > 0 || count_number > 0 || count_text > 0) {
             break;
           }
         }
+      }
+
+       //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+h) = góc phải dưới
+       for(let i = 0; i < coordinate_x.length; i++) {
+        for(let j = i+1; j < coordinate_x.length; j++) {
+          if(
+            (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
+            &&
+            (Number(coordinate_y[i]) <= Number(coordinate_y[j]) && Number(coordinate_y[j] <= (Number(coordinate_y[i]) + Number(height[i]))))
+            // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+          ) {
+            this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+            return false;
+          }
+        }
+      }
+
+      //Trường hợp 2: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
+      for(let i = 0; i < coordinate_x.length; i++) {
+        for(let j = i+1; j < coordinate_x.length; j++) {
+          if(
+            (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
+            &&
+            (Number(coordinate_y[i]) <= (Number(coordinate_y[j]) + Number(height[j])) && (Number(coordinate_y[j] + Number(height[j])) <= (Number(coordinate_y[i]) + Number(height[i]))))
+              // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+            ) {
+              this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+              return false;
+            }
+          }
+      }
+
+      //Trường hợp 3: ô 1 giao ô 2 trong vùng x2+w thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc trái trên
+      for(let i = 0; i < coordinate_x.length; i++) {
+        for(let j = i+1; j < coordinate_x.length; j++) {
+          if(
+            (Number(coordinate_x[j]) <= Number(coordinate_x[i]) && Number(coordinate_x[i]) <= (Number(coordinate_x[j]) + Number(width[j])))
+            &&
+            (Number(coordinate_y[j]) <= Number(coordinate_y[i]) && Number(coordinate_y[i] <= (Number(coordinate_y[j]) + Number(height[j]))))
+          ) {
+            this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+            return false;
+          }
+        }
+      }
+
+       //Trường hợp 4: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
+       for(let i = 0; i < coordinate_x.length; i++) {
+        for(let j = i+1; j < coordinate_x.length; j++) {
+          if(
+            (Number(coordinate_x[j]) <= Number(coordinate_x[i]) && Number(coordinate_x[i]) <= (Number(coordinate_x[j]) + Number(width[j])))
+            &&
+            (Number(coordinate_y[j]) <= (Number(coordinate_y[i]) + Number(height[i])) && (Number(coordinate_y[i] + Number(height[i])) <= (Number(coordinate_y[j]) + Number(height[j]))))
+              // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+            ) {
+              this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+              return false;
+            }
+          }
       }
 
       if (this.onContentTextEvent()) {

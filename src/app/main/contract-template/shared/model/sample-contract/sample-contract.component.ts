@@ -1341,17 +1341,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     return Math.round(this.objSignInfo.traf_y)
   }
 
-  // edit size doi tuong ky
-  // changeSizeSign(e: any, sizeChange: any) {
-  //   let signElement = document.getElementById(this.objSignInfo.id);
-  //   if (signElement) {
-  //     let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-  //     if (isObjSign) {
-  //
-  //     }
-  //   }
-  // }
-
   back(e: any, step?: any) {
     this.nextOrPreviousStep(step);
   }
@@ -1586,6 +1575,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let arrSign_organization: any[] = [];
       let arrSign_partner: any[] = [];
 
+      let coordinate_x: number [] = [];
+      let coordinate_y: number [] = [];
+      let width: number [] = [];
+      let height: number [] = [];
+
       for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
@@ -1613,10 +1607,79 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 arrSign_organization.push(data_sign);
               else arrSign_partner.push(data_sign);
             }
+
+            if(!element.coordinate_x) {
+              coordinate_x[i] = Number(element.coordinate_x);
+              coordinate_y[i] = Number(element.coordinate_y);
+              width[i] = Number(element.width);
+              height[i] = Number(element.height);
+            }
           }
         }
       }
 
+      console.log("length x ", coordinate_x.length);
+
+        //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+h) = góc phải dưới
+        for(let i = 0; i < coordinate_x.length; i++) {
+          for(let j = i+1; j < coordinate_x.length; j++) {
+            console.log("x i ", coordinate_x[i]);
+            console.log("x j ",coordinate_x[j]);
+            if(
+              (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
+              &&
+              (Number(coordinate_y[i]) <= Number(coordinate_y[j]) && Number(coordinate_y[j] <= (Number(coordinate_y[i]) + Number(height[i]))))
+              // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+            ) {
+              this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+              return false;
+            }
+          }
+        }
+  
+        //Trường hợp 2: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
+        for(let i = 0; i < coordinate_x.length; i++) {
+          for(let j = i+1; j < coordinate_x.length; j++) {
+            if(
+              (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
+              &&
+              (Number(coordinate_y[i]) <= (Number(coordinate_y[j]) + Number(height[j])) && (Number(coordinate_y[j] + Number(height[j])) <= (Number(coordinate_y[i]) + Number(height[i]))))
+                // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+              ) {
+                this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+                return false;
+              }
+            }
+        }
+  
+        //Trường hợp 3: ô 1 giao ô 2 trong vùng x2+w thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc trái trên
+        for(let i = 0; i < coordinate_x.length; i++) {
+          for(let j = i+1; j < coordinate_x.length; j++) {
+            if(
+              (Number(coordinate_x[j]) <= Number(coordinate_x[i]) && Number(coordinate_x[i]) <= (Number(coordinate_x[j]) + Number(width[j])))
+              &&
+              (Number(coordinate_y[j]) <= Number(coordinate_y[i]) && Number(coordinate_y[i] <= (Number(coordinate_y[j]) + Number(height[j]))))
+            ) {
+              this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+              return false;
+            }
+          }
+        }
+  
+         //Trường hợp 4: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
+         for(let i = 0; i < coordinate_x.length; i++) {
+          for(let j = i+1; j < coordinate_x.length; j++) {
+            if(
+              (Number(coordinate_x[j]) <= Number(coordinate_x[i]) && Number(coordinate_x[i]) <= (Number(coordinate_x[j]) + Number(width[j])))
+              &&
+              (Number(coordinate_y[j]) <= (Number(coordinate_y[i]) + Number(height[i])) && (Number(coordinate_y[i] + Number(height[i])) <= (Number(coordinate_y[j]) + Number(height[j]))))
+                // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+              ) {
+                this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+                return false;
+              }
+            }
+        }
 
 
       if (count > 0) {

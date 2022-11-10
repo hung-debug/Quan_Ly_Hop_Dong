@@ -1435,7 +1435,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let coordinate_x: number [] = [];
       let coordinate_y: number [] = [];
       let width: number [] = [];
-      let height: number [] = []
+      let height: number [] = [];
 
       for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
@@ -1468,10 +1468,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             }
 
-            coordinate_x[j] = Number(element.coordinate_x);
-            coordinate_y[j] = Number(element.coordinate_y);
-            width[j] = Number(element.width);
-            height[j] = Number(element.height);
+            if(!element.coordinate_x) {
+              coordinate_x[i] = Number(element.coordinate_x);
+              coordinate_y[i] = Number(element.coordinate_y);
+              width[i] = Number(element.width);
+              height[i] = Number(element.height);
+            }
           }
           if (count > 0 || count_text > 0) break
         }
@@ -1519,6 +1521,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             return false;
           }
         }
+      }
+
+       //Trường hợp 4: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
+       for(let i = 0; i < coordinate_x.length; i++) {
+        for(let j = i+1; j < coordinate_x.length; j++) {
+          if(
+            (Number(coordinate_x[j]) <= Number(coordinate_x[i]) && Number(coordinate_x[i]) <= (Number(coordinate_x[j]) + Number(width[j])))
+            &&
+            (Number(coordinate_y[j]) <= (Number(coordinate_y[i]) + Number(height[i])) && (Number(coordinate_y[i] + Number(height[i])) <= (Number(coordinate_y[j]) + Number(height[j]))))
+              // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+            ) {
+              this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+              return false;
+            }
+          }
       }
 
 
