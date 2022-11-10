@@ -939,7 +939,8 @@ export class ContractService {
     phone: any,
     networkCode: any,
     recipientId: any,
-    nameContract: any
+    nameContract: any,
+    image_base64: any
   ) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -951,6 +952,7 @@ export class ContractService {
       network_code: networkCode,
       prompt: `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
       reason: 'reason',
+      image_base64: image_base64
     };
     return this.http
       .post<any>(this.signFilePKI + recipientId, body, { headers: headers })
