@@ -279,11 +279,11 @@ export class AddContractComponent implements OnInit {
               this.stepBatch = variable.stepSampleContractBatch.step1;
             }
           }
-        });
-      } else {
-        this.toastService.showErrorHTMLWithTimeout('Tổ chức chưa đăng ký sử dụng gói dịch vụ nào hoặc gói dịch vụ đã hết hạn','',3000);
-      }
-    });
+         });
+     } else {
+      this.toastService.showErrorHTMLWithTimeout('Tổ chức chưa đăng ký sử dụng gói dịch vụ nào hoặc gói dịch vụ đã hết hạn','',3000);
+    }
+     });
   }
 
   getDataContractCreated(data: any) {

@@ -644,19 +644,19 @@ export class ContractSignatureComponent implements OnInit {
                 this.spinner.show();
 
                 let countUpdate = 0;
-                for(let i = 0; i < idSignMany.length; i++) {
-                  const signUpdate = await this.contractServiceV1.updateInfoContractConsiderPromise([],idSignMany[i]);
+                // for(let i = 0; i < idSignMany.length; i++) {
+                //   const signUpdate = await this.contractServiceV1.updateInfoContractConsiderPromise([],idSignMany[i]);
 
-                  if(!signUpdate.id) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi cập nhật trạng thái hợp đồng ',
-                      '',
-                      3000
-                    );
-                  } else {
-                    countUpdate++;
-                  }
-                }
+                //   if(!signUpdate.id) {
+                //     this.toastService.showErrorHTMLWithTimeout(
+                //       'Lỗi cập nhật trạng thái hợp đồng ',
+                //       '',
+                //       3000
+                //     );
+                //   } else {
+                //     countUpdate++;
+                //   }
+                // }
 
                 //Call api ký nhiều hsm
                 const checkSign = await this.contractServiceV1.signHsmMulti(
@@ -712,7 +712,7 @@ export class ContractSignatureComponent implements OnInit {
              
                 console.log("count success ", countSuccess);
                 console.log("count update ", countUpdate);
-                if (countSuccess == checkSign.length && countSuccess == countUpdate) {
+                if (countSuccess == checkSign.length) {
                   this.spinner.hide();
                   this.toastService.showSuccessHTMLWithTimeout(
                     'Ký số thành công',
@@ -864,15 +864,7 @@ export class ContractSignatureComponent implements OnInit {
 
                   console.log("base64String i 1", base64String[i]);
 
-                  const updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([], recipientId[i]);
-
-                  if(!updateInfo.id) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi cập nhật trạng thái hợp đồng ',
-                      '',
-                      3000
-                    );
-                  }
+                
                   
                   let dataSignMobi: any =
                     await this.contractServiceV1.postSignDigitalMobiMulti(
@@ -913,6 +905,16 @@ export class ContractSignatureComponent implements OnInit {
                     return false;
                   }
 
+                  const updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([], recipientId[i]);
+
+                  if(!updateInfo.id) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Lỗi cập nhật trạng thái hợp đồng ',
+                      '',
+                      3000
+                    );
+                  }
+
               
                   if (i == fileC.length - 1 ) {
                     this.spinner.hide();
@@ -930,6 +932,8 @@ export class ContractSignatureComponent implements OnInit {
                         ]);
                       });
                   }
+
+                  
                 }
               } else {
                 this.spinner.hide();

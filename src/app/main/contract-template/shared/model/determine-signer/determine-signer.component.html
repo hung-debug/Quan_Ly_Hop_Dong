@@ -365,7 +365,7 @@
                     <div class="label_detail text-color">
   
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
+                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}" [value]="email" [(ngModel)]="d.login_by"/>
                       </div>&nbsp;
                       <div>
                         {{'Đăng nhập bằng email' | translate}}
@@ -375,7 +375,7 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
+                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}" [(ngModel)]="d.login_by" [value]="phone"/>
                       </div>&nbsp;
                       <div>
                         {{'Đăng nhập bằng số điện thoại' | translate}}
@@ -551,7 +551,7 @@
                       <div class="label_detail text-color">
     
                         <div>
-                          <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
+                          <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}" [value]="email" [(ngModel)]="d.login_by"/>
                         </div>&nbsp;
                         <div>
                           {{'Đăng nhập bằng email' | translate}}
@@ -561,7 +561,7 @@
                     <div class="participants__name">
                       <div class="label_detail text-color">
                         <div>
-                          <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
+                          <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}_{{id}}" [(ngModel)]="d.login_by" [value]="phone"/>
                         </div>&nbsp;
                         <div>
                           {{'Đăng nhập bằng số điện thoại' | translate}}

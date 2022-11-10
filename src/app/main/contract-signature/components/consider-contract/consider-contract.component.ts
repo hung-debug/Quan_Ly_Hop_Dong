@@ -2513,6 +2513,8 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           //Lấy thông tin mã số thuế của đối tác ký 
           this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
 
+            console.log("response recipient ", response);
+
             const lengthRes = response.recipients.length;
             for(let i = 0; i < lengthRes; i++) {
 
@@ -2521,7 +2523,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
               const id = response.recipients[i].id;
 
               if(id == sign.recipient_id) {
-                this.taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
+                this.taxCodePartnerStep2 = response.recipients[i].card_id;
 
                 break;
               }

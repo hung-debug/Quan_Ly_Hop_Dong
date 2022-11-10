@@ -194,8 +194,6 @@ export class DetermineSignerComponent implements OnInit {
 
         this.orgId = this.userService.getInforUser().organization_id;
 
-        this.unitService.getUnitById(this.orgId).toPromise().then(
-          data => {
             //chi lay so luong hop dong khi chon to chuc cha to nhat
               //lay so luong hop dong da dung
               this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
@@ -248,15 +246,12 @@ export class DetermineSignerComponent implements OnInit {
                   this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
                 }
               )
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin tổ chức', "", 3000);
-          }
-        )
       } else {
         this.getApiDetermine(is_save);
       }
-     
     }
+     
+    
   }
 
   async getApiDetermine(is_save?: boolean) {
