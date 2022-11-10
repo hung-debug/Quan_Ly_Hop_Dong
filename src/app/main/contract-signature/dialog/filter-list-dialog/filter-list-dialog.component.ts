@@ -19,16 +19,16 @@ export class FilterListDialogComponent implements OnInit {
   contractTypeList: Array<any> = [];
   contractStatusProcessedList: { id: number, name: string }[] = [
     { "id": 20, "name": "Đang xử lý" },
-    { "id": 31, "name": "Quá hạn" },
-    { "id": 32, "name": "Từ chối" },
-    { "id": 1, "name": "Hủy bỏ" },
-    { "id": 2, "name": "Hoàn thành" }
+    { "id": 2, "name": "Quá hạn" },
+    { "id": 31, "name": "Từ chối" },
+    { "id": 32, "name": "Hủy bỏ" },
+    { "id": 30, "name": "Hoàn thành" }
   ];
   contractStatusProcessingList: { id: number, name: string }[] = [
     { "id": 20, "name": "Đang xử lý" },
-    { "id": 31, "name": "Quá hạn" },
-    { "id": 32, "name": "Từ chối" },
-    { "id": 1, "name": "Hủy bỏ" }
+    { "id": 2, "name": "Quá hạn" },
+    { "id": 31, "name": "Từ chối" },
+    { "id": 32, "name": "Hủy bỏ" }
   ];
   
   submitted = false;
