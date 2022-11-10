@@ -12,6 +12,7 @@ export class DisplayDigitalSignatureComponent implements OnInit {
   // isNameSignature: string = 'Công ty cổ phần phần mềm công nghệ cao Việt Nam';
   @Input() nameCompany: any | undefined | null;
   @Input() cardId: any | undefined | null;
+  @Input() phonePKI: any | undefined | null;
 
   constructor() {
    }

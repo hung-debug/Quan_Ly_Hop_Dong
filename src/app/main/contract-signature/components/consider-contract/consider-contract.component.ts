@@ -173,6 +173,8 @@ export class ConsiderContractComponent
   //id tổ chức của người tạo hợp đồng
   orgId: any;
 
+  phonePKI: any;
+
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -1313,12 +1315,23 @@ export class ConsiderContractComponent
       } else {
         return;
       }
+
+      await of(null).pipe(delay(120)).toPromise();
+      const imageRender = <HTMLElement>document.getElementById('export-html-pki');
+      let image_base64 = "";
+      if (imageRender) {
+        const textSignB = await domtoimage.toJpeg(imageRender);
+        image_base64 = this.textSignBase64Gen = textSignB.split(',')[1];
+      }
+      
+
       if (fileC && objSign.length) {
         const checkSign = await this.contractService.signPkiDigital(
           this.dataNetworkPKI.phone,
           this.dataNetworkPKI.networkCode,
           this.recipientId,
-          this.datas.is_data_contract.name
+          this.datas.is_data_contract.name,
+          image_base64
         );
         console.log(checkSign);
         // await this.signContractSimKPI();
