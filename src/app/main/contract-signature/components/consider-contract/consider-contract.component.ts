@@ -2788,8 +2788,8 @@ export class ConsiderContractComponent
         sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
 
         console.log(" y ", sign.signDigitalY);
-        sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
-        sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
+        sign.signDigitalWidth = sign.width/* * this.ratioPDF*/;
+        sign.signDigitalHeight = sign.height/* * this.ratioPDF*/;
 
         console.log("after ");
         console.log("x ", sign.signDigitalX);

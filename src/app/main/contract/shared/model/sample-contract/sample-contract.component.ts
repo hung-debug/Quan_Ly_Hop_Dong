@@ -480,8 +480,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   }
 
-  coordinate_x: any[];
-  coordinate_y: any[];
+  coordinate_x: any[] = [];
+  coordinate_y: any[] = [];
+  width: any[] = [];
+  height: any[] = [];
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
 
@@ -689,10 +691,26 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // console.log("show event info 1 ", this.getTrafX());
 
     if(this.coordinate_x.length > 1 || this.coordinate_y.length > 1) {
+
+      //Trường hợp ô ký 2 thuộc ô ký 1
+      for(let i = 0; i < this.coordinate_x.length; i++) {
+        for(let j = i+1; j < this.coordinate_x.length; j++) {
+          if((this.coordinate_x[i] <= this.coordinate_x[j] <= (this.coordinate_x[i]+this.width[i]))
+            && (this.coordinate_y[i] <= this.coordinate_y[j] <= (this.coordinate_y[i]+this.height[i]))
+          ) {
+            this.toastService.showErrorHTMLWithTimeout("Các ô ký đang có vị trí trùng nhau ","",3000)
+            return;
+          }
+        }
+      }
+
+      //Trường hợp ô ký 2 và ô ký 1 giao nhau
     }
 
     this.coordinate_x.push(this.getTrafX());
     this.coordinate_y.push(this.getTrafY());
+    this.width.push(this.objSignInfo.width);
+    this.height.push(this.objSignInfo.height);
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
