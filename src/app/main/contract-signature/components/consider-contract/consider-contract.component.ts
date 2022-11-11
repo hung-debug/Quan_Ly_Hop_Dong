@@ -1274,7 +1274,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         return;
       }
       if (fileC && objSign.length) {
-        const checkSign = await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode, this.recipientId, this.datas.is_data_contract.name);
+        const checkSign = await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode.toLowerCase(), this.recipientId, this.datas.is_data_contract.name);
         console.log(checkSign);
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
