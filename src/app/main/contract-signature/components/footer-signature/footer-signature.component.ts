@@ -9,6 +9,8 @@ import {ContractService} from "../../../../service/contract.service";
 import {DisplayDigitalSignatureComponent} from "../../display-digital-signature/display-digital-signature.component";
 import { ToastService } from 'src/app/service/toast.service';
 import {DeviceDetectorService} from "ngx-device-detector";
+import { UserService } from 'src/app/service/user.service';
+import { UnitService } from 'src/app/service/unit.service';
 
 @Component({
   selector: 'app-footer-signature',
@@ -22,12 +24,22 @@ export class FooterSignatureComponent implements OnInit {
   @Output() submitChanges = new EventEmitter<number>();
   is_show_coordination: boolean = false;
   is_data_coordination: any;
+  orgId: any;
+  numContractUse: any;
+  eKYCContractUse: any;
+  smsContractUse: any;
+  numContractBuy: any;
+  eKYCContractBuy: any;
+  smsContractBuy: any;
+  contractId: any;
 
   constructor(
     private dialog: MatDialog,
     private contractService: ContractService,
     private toastService: ToastService,
     private deviceService: DeviceDetectorService,
+    private userService: UserService,
+    private unitService: UnitService
   ) {
   }
 
@@ -116,9 +128,6 @@ export class FooterSignatureComponent implements OnInit {
         this.datas.step = variable.stepSampleContract.step_confirm_coordination; // set step 2
       }
     } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
-
-      console.log("xac nhan");
-
       this.submitChanges.emit(1);
     }
   }
