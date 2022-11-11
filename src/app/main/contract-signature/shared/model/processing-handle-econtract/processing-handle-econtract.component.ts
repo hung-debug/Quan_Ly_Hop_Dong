@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import * as moment from 'moment';
 import { ContractService } from 'src/app/service/contract.service';
+import { DialogReasonRejectedComponent } from '../dialog-reason-rejected/dialog-reason-rejected.component';
 
 @Component({
   selector: 'app-processing-handle-econtract',
@@ -10,10 +11,12 @@ import { ContractService } from 'src/app/service/contract.service';
   styleUrls: ['./processing-handle-econtract.component.scss']
 })
 export class ProcessingHandleEcontractComponent implements OnInit {
+  datas: any;
   is_list_name: any = [];
   personCreate: string;
   emailCreate: string;
   timeCreate: any;
+  isVisibleReasonReject = false;
 
   status: any = [
     {
@@ -99,6 +102,25 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   acceptRequest() {
     this.dialog.closeAll();
     // this.router.navigate(['/login']);
+  }
+
+  viewReasonRejected(){
+    const data = this.datas;
+    const dialogRef = this.dialog.open(DialogReasonRejectedComponent, {
+
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    }) 
+  }
+
+  toggleModalReasonReject(isVisible: boolean){
+    this.isVisibleReasonReject = isVisible;
+  }
+
+  showModalReasonReject(){
+    this.isVisibleReasonReject = true;
   }
 
 }
