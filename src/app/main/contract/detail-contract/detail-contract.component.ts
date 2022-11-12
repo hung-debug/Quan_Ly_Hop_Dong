@@ -112,6 +112,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   pdfSrcMobile: string;
   trustedUrl: any;
 
+  consider: boolean = false;
+
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -121,7 +123,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     private uploadService : UploadService,
     private dialog: MatDialog,
     private deviceService: DeviceDetectorService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
@@ -134,14 +137,16 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   getDataContractSignature() {
-    console.log("vao detail contract ");
+    //Lấy thông tin id hợp đồng
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
-    this.activeRoute.queryParams
-      .subscribe(params => {
-          this.recipientId = params.recipientId;
-          console.log(this.recipientId);
-        }
-      );
+
+    //Lấy thông tin recipient id
+    this.route.queryParams.subscribe((params) => {
+      this.recipientId = params.recipientId;
+      this.consider = params.consider,
+      console.log("recipient id ", this.recipientId);
+    });
+ 
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
       console.log("rs ",rs);
       this.isDataContract = rs[0];
@@ -163,7 +168,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       this.datas = this.data_contract;
       this.allFileAttachment = this.datas.i_data_file_contract.filter((f: any) => f.type == 3);
       this.checkIsViewContract();
-
       this.datas.is_data_object_signature.forEach((element: any) => {
         // 1: van ban, 2: ky anh, 3: ky so
         // tam thoi de 1: ky anh, 2: ky so
@@ -807,7 +811,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   signContractSubmit() {
 
     for(const signUpdate of this.isDataObjectSignature) {
-      console.log('ki anh', signUpdate);
       if (signUpdate && signUpdate.type == 2 && this.datas.roleContractReceived == 3
         && signUpdate?.recipient?.email === this.currentUser.email
         && signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -932,16 +935,50 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   checkIsViewContract() {
-    if (this.datas?.is_data_contract?.participants?.length) {
-      for (const participant of this.datas.is_data_contract.participants) {
-        for (const recipient of participant.recipients) {
-          if (this.currentUser.email == recipient.email) {
-            this.recipient = recipient;
-            return;
+    if(this.consider) {
+      if (this.datas?.is_data_contract?.participants?.length) {
+        for (const participant of this.datas.is_data_contract.participants) {
+          for (const recipient of participant.recipients) {
+            if (this.recipientId == recipient.id) {
+              this.recipient = recipient;
+              return;
+            }
+          }
+        }
+      }
+    } else {
+      let recipients: any[] = [];
+      if (this.datas?.is_data_contract?.participants?.length) {
+        for (const participant of this.datas.is_data_contract.participants) {
+          for (const recipient of participant.recipients) {
+            if (this.currentUser.email == recipient.email) {
+              recipients.push(recipient);
+            }
+          }
+        }
+      }
+
+      if(recipients.length == 2) {
+        for (const participant of this.datas.is_data_contract.participants) {
+          for (const recipient of participant.recipients) {
+            if (this.currentUser.email == recipient.email && recipient.role != 1) {
+              this.recipient = recipient;
+              return;
+            }
+          }
+        }
+      } else if(recipients.length == 1) {
+        for (const participant of this.datas.is_data_contract.participants) {
+          for (const recipient of participant.recipients) {
+            if (this.currentUser.email == recipient.email) {
+              this.recipient = recipient;
+              return;
+            }
           }
         }
       }
     }
+ 
   }
 
   checkStatusUser(status: any, role: any) {

@@ -189,13 +189,9 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
     
     this.getDeviceApp();
 
-    console.log("vao consider contract ");
-
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
 
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
-
-    // this.getFilePdfForMobile();
 
     this.activeRoute.queryParams.subscribe(params => {
       this.recipientId = params.recipientId;
@@ -516,8 +512,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
-
-    console.log("page render 2 ", pageNumber);
 
     setTimeout(() => {
       // this.setPosition();
@@ -1263,30 +1257,32 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       //   return false;
       // }
     } else if (typeSignDigital == 3) {
-      const objSign = this.isDataObjectSignature.filter((signUpdate: any) => (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
-        && signUpdate?.recipient?.email === this.currentUser.email
-        && signUpdate?.recipient?.role === this.datas?.roleContractReceived));
-      let fileC = await this.contractService.getFileContractPromise(this.idContract);
-      const pdfC2 = fileC.find((p: any) => p.type == 2);
-      const pdfC1 = fileC.find((p: any) => p.type == 1);
-      if (pdfC2) {
-        fileC = pdfC2.path;
-      } else if (pdfC1) {
-        fileC = pdfC1.path;
-      } else {
-        return;
-      }
-      if (fileC && objSign.length) {
-        const checkSign = await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode.toLowerCase(), this.recipientId, this.datas.is_data_contract.name);
-        console.log(checkSign);
-        // await this.signContractSimKPI();
-        if (!checkSign || (checkSign && !checkSign.success)) {
-          this.toastService.showErrorHTMLWithTimeout('Ký số không thành công!', '', 3000);
-          return false;
-        } else {
-          return true;
-        }
-      }
+      // const objSign = this.isDataObjectSignature.filter((signUpdate: any) => (signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived)
+      //   && signUpdate?.recipient?.email === this.currentUser.email
+      //   && signUpdate?.recipient?.role === this.datas?.roleContractReceived));
+      // let fileC = await this.contractService.getFileContractPromise(this.idContract);
+      // const pdfC2 = fileC.find((p: any) => p.type == 2);
+      // const pdfC1 = fileC.find((p: any) => p.type == 1);
+      // if (pdfC2) {
+      //   fileC = pdfC2.path;
+      // } else if (pdfC1) {
+      //   fileC = pdfC1.path;
+      // } else {
+      //   return;
+      // }
+      // if (fileC && objSign.length) {
+      //   const checkSign = await this.contractService.signPkiDigital(this.dataNetworkPKI.phone, this.dataNetworkPKI.networkCode.toLowerCase(), this.recipientId, this.datas.is_data_contract.name);
+      //   console.log(checkSign);
+      //   // await this.signContractSimKPI();
+      //   if (!checkSign || (checkSign && !checkSign.success)) {
+      //     this.toastService.showErrorHTMLWithTimeout('Ký số không thành công!', '', 3000);
+      //     return false;
+      //   } else {
+      //     return true;
+      //   }
+      // }
+
+      return true;
 
     } else if(typeSignDigital == 4) {
       //Ký hsm
@@ -1395,16 +1391,10 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           this.eKYC = true;
           eKYC = 1;
           const imageRender = <HTMLElement>document.getElementById('export-html-ekyc');
-    
-          console.log("image render ", imageRender);
-    
+        
           const textSignB =  domtoimage.toPng(imageRender);
-    
-          console.log("textSignB ", textSignB);
-    
+        
           const valueBase64 = (await textSignB).split(",")[1];
-
-          console.log("value base64 ", valueBase64);
 
           formData = {
             "content": "data:image/png;base64,"+valueBase64,
@@ -1417,8 +1407,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       
       }
     }
-
-    console.log("formData ",formData);
     
     if(otpOrEkyc == true) {
       signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
@@ -1451,8 +1439,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   async signContract(notContainSignImage?: boolean) {
-    console.log("sign contract");
-
     const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
 
     let signUpdatePayload = "";
@@ -1470,10 +1456,7 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             font_size: item.font_size
           }
         });
-
-        console.log("sign update payload ",signUpdatePayload);
     }else{
-
       this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
       await of(null).pipe(delay(100)).toPromise();
 
@@ -1490,8 +1473,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
         const textSignB = await domtoimage.toPng(imageRenderEkyc);
         signI = textSignB.split(",")[1];
       }
-
-      console.log("sign update temp ", signUpdateTemp);
 
       signUpdatePayload = signUpdateTemp.filter(
         (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
@@ -1513,8 +1494,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           } 
          
         });
-
-      console.log("sign update payload ", signUpdatePayload);
 
       if(signUpdatePayload){
         signUpdatePayload = signUpdatePayload[0];
@@ -1594,7 +1573,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
       //Lấy thông tin chữ ký số
 
     } else {
-      console.log("vao day ");
       await this.signImageC(signUpdatePayload, notContainSignImage);
     }
 
@@ -1786,7 +1764,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
           signUpdateTempN = signUpdateTempN.filter(
             (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
             .map((item: any) => {
-              console.log("item sign image c ", item);
               return {
                 id: item.id,
                 name: item.name,
@@ -1813,8 +1790,6 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
             // signUpdateTempN.value = responseBase64.file_object.file_path;
             signUpdateTempN[0].value = responseBase64.file_object.file_path;
 
-            console.log(signUpdateTempN);
-
             this.contractService
                 .updateInfoContractConsider(signUpdateTempN, this.recipientId)
                 .subscribe(
@@ -1822,14 +1797,19 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                     if (!notContainSignImage) {
                       await this.signDigitalDocument();
                     }
-                    setTimeout(() => {
-                      this.router.navigate([
-                        '/main/form-contract/detail/' + this.idContract,
-                      ]);
-                      // this.toastService.showSuccessHTMLWithTimeout(
-                      //   [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-                      //   , '', 3000);
 
+                    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                      this.router.navigate(['/main/form-contract/detail/' + this.idContract],
+                      {
+                        queryParams: {
+                          'recipientId': this.recipientId,
+                          'consider': true
+                        },
+                        skipLocationChange: true
+                      });
+                    });
+
+                    setTimeout(() => {
                       if (!this.mobile) {
                         this.toastService.showSuccessHTMLWithTimeout(
                           [3, 4].includes(this.datas.roleContractReceived)
@@ -1874,16 +1854,24 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
 
     if(notContainSignImage && this.eKYC == false){
 
-      console.log(signUpdateTempN);
-
       this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
         async (result) => {
           if (!notContainSignImage) {
             await this.signDigitalDocument();
           }
+          
+           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+              this.router.navigate(['/main/form-contract/detail/' + this.idContract],
+              {
+                queryParams: {
+                  'recipientId': this.recipientId,
+                  'consider': true
+                },
+                skipLocationChange: true
+              });
+            });
+
           setTimeout(() => {
-            this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
-        
             if(!this.mobile) {
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
@@ -1927,12 +1915,19 @@ export class ConsiderContractComponent implements OnInit, OnDestroy, AfterViewIn
                 //Ký số
                 await this.signDigitalDocument();
               }
-              setTimeout(() => {
-                this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
-                // this.toastService.showSuccessHTMLWithTimeout(
-                //   [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-                //   , '', 3000);
 
+              this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                this.router.navigate(['/main/form-contract/detail/' + this.idContract],
+                {
+                  queryParams: {
+                    'recipientId': this.recipientId,
+                    'consider': true
+                  },
+                  skipLocationChange: true
+                });
+              });
+
+              setTimeout(() => {
                 if(!this.mobile) {
                   this.toastService.showSuccessHTMLWithTimeout(
                     [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
