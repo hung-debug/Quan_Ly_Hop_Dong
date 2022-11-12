@@ -884,23 +884,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   // hàm render các page pdf, file content, set kích thước width & height canvas
-  renderPage(pageNumber: any, canvas: any) {
-
-    // var node = <HTMLElement> document.getElementById("element-drag");
-
-    // domtoimage.toPng(node)
-    // .then(function (dataUrl) {
-    //     var img = new Image();
-    //     img.src = dataUrl;
-    //     // document.body.appendChild(img);
-
-    //     console.log("img src ", img.src);
-    // })
-    // .catch(function (error) {
-    //   console.log(error);
-    //     console.error('oops, something went wrong!', error);
-    // });
-    
+  renderPage(pageNumber: any, canvas: any) {   
     //This gives us the page's dimensions at full scale
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
@@ -1178,14 +1162,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             signElement.setAttribute("email", isObjSign.email);
 
           }
-          // else {
-          //   // tránh trường hợp chọn người ký khác sau khi đã kéo thả sẽ bị mất dữ liệu người ký cũ trước khi thay đổi
-          //   this.toastService.showErrorHTMLWithTimeout("Người ký đã được chỉ định vị trí. Vui lòng kéo thả hình thức ký mới!", "", 3000);
-          //   return false;
-          // }
         }
-        // console.log(this.signCurent)
-        // console.log(this.objSignInfo)
       }
     }
   }
@@ -1204,13 +1181,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 
   back(e: any, step?: any) {
-    console.log("back step 3 ", this.temp);
-
     this.nextOrPreviousStep(step);
   }
 
   async next(action: string) {
-    console.log("vao day ");
     if (action == 'next_step' && !this.validData()) {
 
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -1285,25 +1259,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
         }
       } else if (action == 'next_step') {
-
-        // if(this.datas.contract_no) {
-        //   let contractNumber = this.datas.contract_user_sign[0].sign_config;
-        //   for(let i = 0; i < contractNumber.length; i++) {
-        //     if(!contractNumber[i].email) {
-        //       this.datas.contract_user_sign[0].sign_config[i].value = this.datas.contract_no;
-        //     }
-        //   }
-        // }
-
-        // // console.log("next steps ", this.datas);
-
         this.step = variable.stepSampleContract.step4;
         this.datas.stepLast = this.step
         this.nextOrPreviousStep(this.step);
       }
-
-
-      // this.spinner.show();
     }
   }
 
