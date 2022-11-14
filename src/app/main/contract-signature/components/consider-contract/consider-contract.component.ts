@@ -2473,6 +2473,8 @@ export class ConsiderContractComponent
 
     dialogRef.afterClosed().subscribe(async (result: any) => {
 
+      console.log("result ", result);
+
       let signI = null;
 
          //lấy ảnh chữ ký usb token
