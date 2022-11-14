@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 })
 export class AdminAuthenticationService {
 
-  loginUrl:any = `${environment.apiUrl}/api/v1/admin/user/auth`;
+  loginUrl:any = `${environment.apiUrl}/api/v1/auth/admin`;
   errorData:any = {};
   redirectUrl: string = '';
 
@@ -20,8 +20,6 @@ export class AdminAuthenticationService {
   loginAuthencation(username: string, password: string) {
     const headers = new HttpHeaders().append('Content-Type', 'application/json');
     const body = JSON.stringify({email: username.trim(), password: password});
-
-    console.log("body ", body);
 
     return this.http.post<any>(this.loginUrl, body, {'headers':headers})
       .pipe(

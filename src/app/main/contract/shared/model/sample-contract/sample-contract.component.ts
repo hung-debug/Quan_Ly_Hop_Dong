@@ -24,9 +24,6 @@ import {count} from 'console';
 import {data} from 'jquery';
 import * as _ from 'lodash';
 
-import domtoimage from 'dom-to-image';
-import drag from '@interactjs/actions/drag/plugin';
-
 @Component({
   selector: 'app-sample-contract',
   templateUrl: './sample-contract.component.html',
@@ -1200,14 +1197,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             signElement.setAttribute("email", isObjSign.email);
 
           }
-          // else {
-          //   // tránh trường hợp chọn người ký khác sau khi đã kéo thả sẽ bị mất dữ liệu người ký cũ trước khi thay đổi
-          //   this.toastService.showErrorHTMLWithTimeout("Người ký đã được chỉ định vị trí. Vui lòng kéo thả hình thức ký mới!", "", 3000);
-          //   return false;
-          // }
         }
-        // console.log(this.signCurent)
-        // console.log(this.objSignInfo)
       }
     }
   }
@@ -1227,19 +1217,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 
   back(e: any, step?: any) {
-    console.log("back step 3 ", this.temp);
-
     this.nextOrPreviousStep(step);
   }
 
   async next(action: string) {
     if (action == 'next_step' && !this.validData()) {
+
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
+
         this.save_draft_infor.close_header = false;
         this.save_draft_infor.close_modal.close();
       }
 
-      console.log("next sample contract ", this.datas);
       return;
     } else {
       if (action == 'save_draft') {

@@ -526,6 +526,19 @@ export class ConfirmContractBatchComponent
       style.height = parseInt(d['height']) + 'px';
     }
     return style;
+
+    // let style: any = {
+    //   "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+    //   "position": "absolute",
+    //   "backgroundColor": '#EBF8FF'
+    // }
+    // if (d['width']) {
+    //   style.width = parseInt(d['width']) + "px";
+    // }
+    // if (d['height']) {
+    //   style.height = parseInt(d['height']) + "px";
+    // }
+    // return style;
   }
 
   // Hàm thay đổi kích thước màn hình => scroll thuộc tính hiển thị kích thước và thuộc tính

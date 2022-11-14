@@ -95,7 +95,9 @@ export class DetermineSignerComponent implements OnInit {
 
     // data Tổ chức của tôi
     this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];
-    this.data_organization.name = this.data_organization.name ? this.data_organization.name : this.datas.name_origanzation;
+
+    this.data_organization.name = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0].name ? this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0].name: this.datas.name_origanzation;
+
     this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
     this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
@@ -1122,12 +1124,15 @@ export class DetermineSignerComponent implements OnInit {
     console.log(this.data_parnter_organization);
   }
 
-  // xóa đối tham gia bên đối tác
+  // xóa đối tác
   deletePartner(index: any, item:any) {
     //xoa doi tuong tham gia
     if(item.id){
       this.contractTemplateService.deleteParticipantContract(item.id).subscribe((res: any) => {
         if(res.success==true){
+
+          //Khi xoá đối tác thì số lượng participant thay đổi
+          this.datas.is_determine_clone = this.datas.is_determine_clone.filter((element: any) => element.id != item.id);
           this.toastService.showSuccessHTMLWithTimeout(`Xóa đối tác thành công!`, "", "3000");
         }else{
           this.toastService.showErrorHTMLWithTimeout(`Xóa đối tác thất bại!`, "", "3000");

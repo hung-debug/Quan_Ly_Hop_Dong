@@ -8,7 +8,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class DialogSignManyComponentComponent implements OnInit {
 
-  nameCompany: any = "Vũ Thị Thuỳ";
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<DialogSignManyComponentComponent>,

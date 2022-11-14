@@ -46,9 +46,8 @@ export class FooterSignatureComponent implements OnInit {
   ngOnInit(): void {
     this.getDeviceApp();
 
-    let recipient_data = {
-      recipients: undefined
-    };
+    console.log("recipientId ", this.recipientId);
+  
     let data_coordination = this.datas.is_data_contract.participants;
     let emailCurrent = this.contractService.getAuthCurrentUser().email;
     let isBreak = false;
@@ -69,7 +68,7 @@ export class FooterSignatureComponent implements OnInit {
       for (let i = 0; i < this.is_data_coordination.recipients.length; i++) {
         //@ts-ignore
         let element = this.is_data_coordination.recipients[i];
-        if (element.role == 1 && element.email == emailCurrent) {
+        if (element.role == 1 && element.email == emailCurrent && element.id == this.recipientId) {
           if (element.status != 1) {
             this.is_show_coordination = true;
             this.view = true;
@@ -87,7 +86,6 @@ export class FooterSignatureComponent implements OnInit {
   mobile: boolean = false;
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
-      console.log("la mobile ");
       this.mobile = true;
     } else {
       console.log("la pc");

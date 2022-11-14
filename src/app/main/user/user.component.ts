@@ -34,11 +34,10 @@ export class UserComponent implements OnInit {
   isQLND_02:boolean=true;  //sua nguoi dung
   isQLND_03:boolean=true;  //tim kiem nguoi dung
   isQLND_04:boolean=true;  //xem thong tin chi tiet nguoi dung
+  first: number = 0;
 
-  first: any;
 
-  
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.appService.setTitle("user.list");
     //lay id user
     this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
@@ -72,27 +71,31 @@ export class UserComponent implements OnInit {
 
     
     let userId = this.userService.getAuthCurrentUser().id;
-    this.userService.getUserById(userId).subscribe(
-      data => {
-        //lay id role
-        this.roleService.getRoleById(data.role_id).subscribe(
-          data => {
-            console.log(data);
-            let listRole: any[];
-            listRole = data.permissions;
-            this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
-            this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
-            this.isQLND_03 = listRole.some(element => element.code == 'QLND_03');
-            this.isQLND_04 = listRole.some(element => element.code == 'QLND_04');
-          }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-          }
-        ); 
+    // this.userService.getUserById(userId).subscribe(
+    //   data => {
+    //     //lay id role
+    //     this.roleService.getRoleById(data.role_id).subscribe(
+    //       data => {
+    //         console.log(data);
+    //         let listRole: any[];
+    //         listRole = data.permissions;
+    //         this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
+    //         this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
+    //         this.isQLND_03 = listRole.some(element => element.code == 'QLND_03');
+    //         this.isQLND_04 = listRole.some(element => element.code == 'QLND_04');
+    //       }, error => {
+    //         this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+    //       }
+    //     ); 
       
-      }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-      }
-    )
+    //   }, error => {
+    //     this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+    //   }
+    // )
+
+    let getUserById= await this.userService.getUserById(userId);
+
+    console.log("get user by id ");
   }
 
   array_empty: any = [];

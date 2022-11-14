@@ -199,15 +199,11 @@ export class ConsiderContractComponent
   ngOnInit(): void {
     this.getDeviceApp();
 
-    console.log('vao consider contract ');
-
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
 
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
-    // this.getFilePdfForMobile();
-
-    this.activeRoute.queryParams.subscribe((params) => {
+    this.activeRoute.queryParams.subscribe(params => {
       this.recipientId = params.recipientId;
 
       //kiem tra xem co bi khoa hay khong
@@ -1153,7 +1149,6 @@ export class ConsiderContractComponent
     let typeSignDigital = 0;
 
     for (const signUpdate of this.isDataObjectSignature) {
-      console.log('sign update ', signUpdate);
       if (
         signUpdate &&
         (signUpdate.type == 3 || signUpdate.type == 2) &&
@@ -1213,8 +1208,6 @@ export class ConsiderContractComponent
               this.widthText = 150;
               await of(null).pipe(delay(120)).toPromise();
               const imageRender = <HTMLElement>document.getElementById('text-sign');
-
-              console.log('image render ', imageRender);
 
               if (imageRender) {
                 const textSignB = await domtoimage.toJpeg(imageRender);
@@ -1316,9 +1309,9 @@ export class ConsiderContractComponent
         return;
       }
 
-      // console.log("phonePKI ", this.phonePKI);
-
       this.phonePKI = this.dataNetworkPKI.phone;
+      this.nameCompany = this.recipient.name;
+      
 
       await of(null).pipe(delay(120)).toPromise();
       const imageRender = <HTMLElement>document.getElementById('export-html-pki');
@@ -1331,7 +1324,7 @@ export class ConsiderContractComponent
       if (fileC && objSign.length) {
         const checkSign = await this.contractService.signPkiDigital(
           this.dataNetworkPKI.phone,
-          this.dataNetworkPKI.networkCode,
+          this.dataNetworkPKI.networkCode.toLowerCase(),
           this.recipientId,
           this.datas.is_data_contract.name,
           image_base64
@@ -1440,7 +1433,6 @@ export class ConsiderContractComponent
   }
 
   async signUsb(signUpdate: any, response: any) {
-    console.log("type ", signUpdate.type);
     try {
       var json_res = JSON.parse(response);
 
@@ -1507,15 +1499,9 @@ export class ConsiderContractComponent
             document.getElementById('export-html-ekyc')
           );
 
-          console.log('image render ', imageRender);
-
           const textSignB = domtoimage.toPng(imageRender);
 
-          console.log('textSignB ', textSignB);
-
           const valueBase64 = (await textSignB).split(',')[1];
-
-          console.log('value base64 ', valueBase64);
 
           formData = {
             content: 'data:image/png;base64,' + valueBase64,
@@ -1526,8 +1512,6 @@ export class ConsiderContractComponent
         }
       }
     }
-
-    console.log('formData ', formData);
 
     if (otpOrEkyc == true) {
       signUploadObs$.push(
@@ -1562,22 +1546,16 @@ export class ConsiderContractComponent
     );
 
     if (signUploadObs$.length == 0 || eKYC == 1) {
-      console.log('co the la ky ekyc ');
       await this.signContract(true);
     }
   }
 
   async signContract(notContainSignImage?: boolean) {
-    console.log('sign contract');
-
-    const signUpdateTemp = JSON.parse(
-      JSON.stringify(this.isDataObjectSignature)
-    );
+    const signUpdateTemp = JSON.parse(JSON.stringify(this.isDataObjectSignature));
 
     let signUpdatePayload = '';
     //neu khong chua chu ky anh
     if (notContainSignImage) {
-      console.log('ko chua chu ky anh ');
       signUpdatePayload = signUpdateTemp
         .filter(
           (item: any) =>
@@ -1594,10 +1572,8 @@ export class ConsiderContractComponent
             font_size: item.font_size,
           };
         });
-
-      console.log('sign update payload ', signUpdatePayload);
-    } else {
-      this.isDateTime = this.datepipe.transform(new Date(), 'dd/MM/yyyy HH:mm');
+    }else{
+      this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
       await of(null).pipe(delay(100)).toPromise();
 
       const imageRender = <HTMLElement>(
@@ -1618,14 +1594,8 @@ export class ConsiderContractComponent
         signI = textSignB.split(',')[1];
       }
 
-      console.log('sign update temp ', signUpdateTemp);
-
-      signUpdatePayload = signUpdateTemp
-        .filter(
-          (item: any) =>
-            item?.recipient?.email === this.currentUser.email &&
-            item?.recipient?.role === this.datas?.roleContractReceived
-        )
+      signUpdatePayload = signUpdateTemp.filter(
+        (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
         .map((item: any) => {
           if (this.dataOTP) {
             return {
@@ -1648,9 +1618,7 @@ export class ConsiderContractComponent
           }
         });
 
-      console.log('sign update payload ', signUpdatePayload);
-
-      if (signUpdatePayload) {
+      if(signUpdatePayload){
         signUpdatePayload = signUpdatePayload[0];
       }
     }
@@ -1677,68 +1645,12 @@ export class ConsiderContractComponent
     }
 
     if (typeSignDigital && typeSignDigital == 2) {
-      //Đối với ký usb token
-      // let checkSetupTool = false;
-
-      // this.contractService.getAllAccountsDigital().then(async (data) => {
-
-      //   console.log("data all accounts digital ", data);
-      //   if (data.data.Serial) {
-
-      //     this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
-      //       if(response.success == true) {
-      //         this.signCertDigital = data.data;
-      //         this.nameCompany = data.data.CN;
-      //         checkSetupTool = true;
-      //         if (!checkSetupTool) {
-      //           this.spinner.hide();
-      //           return;
-      //         } else {
-      //           await this.signImageC(signUpdatePayload, notContainSignImage);
-      //         }
-      //       } else {
-      //         this.spinner.hide();
-      //         Swal.fire({
-      //           title: `Mã số thuế/CMT/CCCD trên chữ ký số không trùng khớp`,
-      //           icon: 'warning',
-      //           confirmButtonColor: '#3085d6',
-      //           cancelButtonColor: '#b0bec5',
-      //           confirmButtonText: 'Xác nhận'
-      //         });
-      //       }
-      //     })
-
-      //   } else {
-      //     this.spinner.hide();
-      //     Swal.fire({
-      //       title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
-      //       icon: 'warning',
-      //       confirmButtonColor: '#3085d6',
-      //       cancelButtonColor: '#b0bec5',
-      //       confirmButtonText: 'Xác nhận'
-      //     });
-      //   }
-      // }, err => {
-      //   this.spinner.hide();
-      //   Swal.fire({
-      //     html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1-pGPF6MIs2hILY3-kUQOrrYFA8cRu7HD/view' target='_blank'>Tại đây</a>  và cài đặt`,
-      //     icon: 'warning',
-      //     confirmButtonColor: '#3085d6',
-      //     cancelButtonColor: '#b0bec5',
-      //     confirmButtonText: 'Xác nhận'
-      //   });
-      // })
-
-      //get session
-      // console.log("get session id");
-
       this.getSessionId(
         this.taxCodePartnerStep2,
         signUpdatePayload,
         notContainSignImage
       );
     } else {
-      console.log('vao day ');
       await this.signImageC(signUpdatePayload, notContainSignImage);
     }
   }
@@ -1821,8 +1733,6 @@ export class ConsiderContractComponent
 
             this.sessionIdUsbToken = hSession;
 
-            alert('Comunication with SignPlugin OK');
-
             this.getCertificate(
               hSession,
               taxCode,
@@ -1836,13 +1746,23 @@ export class ConsiderContractComponent
           console.log('err ');
         }
         if (response == '') {
-          alert('Please setup SignPlugin and F5 to try again');
-          // window.location = './' + signplugin_installer;
+          Swal.fire({
+            html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#b0bec5',
+            confirmButtonText: 'Xác nhận'
+          });
           return;
         }
       } else if (httpReq.readyState == 4 && httpReq.status != 200) {
-        alert('Please setup SignPlugin and F5 to try again');
-        // window.location = './' + signplugin_installer;
+        Swal.fire({
+          html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#b0bec5',
+          confirmButtonText: 'Xác nhận'
+        });
         return;
       }
     };
@@ -1893,12 +1813,8 @@ export class ConsiderContractComponent
         try {
           var json_res = JSON.parse(response);
 
-          console.log('json_res ', json_res.certInfo.Base64Encode);
-
           this.signCertDigital = json_res.certInfo.SerialNumber;
           this.nameCompany = json_res.certInfo.CommonName;
-
-          console.log('serial number ', this.signCertDigital);
 
           this.contractService
             .checkTaxCodeExist(taxCode, json_res.certInfo.Base64Encode)
@@ -1932,77 +1848,69 @@ export class ConsiderContractComponent
 
   filePath: any = '';
   async signImageC(signUpdatePayload: any, notContainSignImage: any) {
-    console.log('notContainSignImage ', notContainSignImage);
-    console.log('sigunupdatepayload ', signUpdatePayload);
     let signDigitalStatus = null;
     let signUpdateTempN: any[] = [];
-    if (signUpdatePayload) {
+    if(signUpdatePayload){
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
 
       if (notContainSignImage) {
         signDigitalStatus = await this.signDigitalDocument();
 
-        if (this.eKYC == false) {
-          signUpdateTempN = signUpdateTempN
-            .filter(
-              (item: any) =>
-                item?.recipient?.email === this.currentUser.email &&
-                item?.recipient?.role === this.datas?.roleContractReceived
-            )
+        if(this.eKYC == false) {
+          signUpdateTempN = signUpdateTempN.filter(
+            (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
             .map((item: any) => {
-              console.log('item sign image c ', item);
               return {
                 id: item.id,
                 name: item.name,
                 value: null,
                 font: item.font,
-                font_size: item.font_size,
-              };
+                font_size: item.font_size
+              }
             });
         } else {
-          //đẩy chữ ký vào file pdf
-          const imageRender = <HTMLElement>(
-            document.getElementById('export-html-ekyc')
-          );
-          const textSignB = domtoimage.toPng(imageRender);
+            //đẩy chữ ký vào file pdf
+          const imageRender = <HTMLElement>document.getElementById('export-html-ekyc');
+          const textSignB =  domtoimage.toPng(imageRender);
+                    
+          const valueBase64 = (await textSignB).split(",")[1];
 
-          const valueBase64 = (await textSignB).split(',')[1];
 
           const formData = {
-            name: 'image_' + new Date().getTime() + '.jpg',
-            content: 'data:image/png;base64,' + valueBase64,
-            organizationId:
-              this.data_contract?.is_data_contract?.organization_id,
-          };
+                "name": "image_" + new Date().getTime() + ".jpg",
+                "content": "data:image/png;base64," + valueBase64,
+                organizationId: this.data_contract?.is_data_contract?.organization_id
+          }
 
-          this.contractService
-            .uploadFileImageBase64Signature(formData)
-            .subscribe((responseBase64) => {
-              // signUpdateTempN.value = responseBase64.file_object.file_path;
-              signUpdateTempN[0].value = responseBase64.file_object.file_path;
+          this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
+            // signUpdateTempN.value = responseBase64.file_object.file_path;
+            signUpdateTempN[0].value = responseBase64.file_object.file_path;
 
-              console.log(signUpdateTempN);
-
-              this.contractService
+            this.contractService
                 .updateInfoContractConsider(signUpdateTempN, this.recipientId)
                 .subscribe(
                   async (result) => {
                     if (!notContainSignImage) {
                       await this.signDigitalDocument();
                     }
-                    setTimeout(() => {
-                      this.router.navigate([
-                        '/main/form-contract/detail/' + this.idContract,
-                      ]);
-                      // this.toastService.showSuccessHTMLWithTimeout(
-                      //   [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-                      //   , '', 3000);
 
+                    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                      this.router.navigate(['/main/form-contract/detail/' + this.idContract],
+                      {
+                        queryParams: {
+                          'recipientId': this.recipientId,
+                          'consider': true
+                        },
+                        skipLocationChange: true
+                      });
+                    });
+
+                    setTimeout(() => {
                       if (!this.mobile) {
                         this.toastService.showSuccessHTMLWithTimeout(
                           [3, 4].includes(this.datas.roleContractReceived)
-                            ? 'success_sign'
-                            : 'success_watch',
+                            ? 'Ký hợp đồng thành công'
+                            : 'Xem xét hợp đồng thành công',
                           '',
                           3000
                         );
@@ -2029,36 +1937,37 @@ export class ConsiderContractComponent
 
               return;
             });
-
-          console.log('sign update temp out api ', signUpdateTempN);
+    
         }
+      
       }
     }
 
-    console.log('not contain sign image ', notContainSignImage);
-
-    if (
-      notContainSignImage &&
-      !signDigitalStatus &&
-      this.datas.roleContractReceived != 2
-    ) {
-      console.log('vao day ');
+    if (notContainSignImage && !signDigitalStatus && this.datas.roleContractReceived != 2) {
       this.spinner.hide();
       return;
     }
 
     if(notContainSignImage && this.eKYC == false){
 
-      console.log(signUpdateTempN);
-
       this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
         async (result) => {
           if (!notContainSignImage) {
             await this.signDigitalDocument();
           }
+          
+           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+              this.router.navigate(['/main/form-contract/detail/' + this.idContract],
+              {
+                queryParams: {
+                  'recipientId': this.recipientId,
+                  'consider': true
+                },
+                skipLocationChange: true
+              });
+            });
+
           setTimeout(() => {
-            this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
-        
             if(!this.mobile) {
               this.toastService.showSuccessHTMLWithTimeout(
                 [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
@@ -2071,88 +1980,71 @@ export class ConsiderContractComponent
               }
             }
 
-              this.spinner.hide();
-            }, 1000);
-          },
-          (error) => {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
-              '',
-              3000
-            );
+            this.spinner.hide();
+          }, 1000);
+        }, error => {
+          this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
+          this.spinner.hide();
+        }
+      )
+    }else{
+      if(this.eKYC == false) {
+        this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.recipientId).subscribe(
+          async (result) => {
+            if(result?.success == false){
+              if(result.message == 'Wrong otp'){
+                if(!this.mobile)
+                  this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng hoặc quá hạn', '', 3000);
+                else
+                  alert('Mã OTP không đúng hoặc quá hạn');
+                this.spinner.hide();
+              }else{
+                if(!this.mobile) {
+                  this.toastService.showErrorHTMLWithTimeout('Ký hợp đồng không thành công', '', 3000);
+                } else {
+                  alert('Ký hợp đồng không thành công');
+                }
+                this.spinner.hide();
+              }
+            }else{
+              if (!notContainSignImage) {
+                //Ký số
+                await this.signDigitalDocument();
+              }
+
+              this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                this.router.navigate(['/main/form-contract/detail/' + this.idContract],
+                {
+                  queryParams: {
+                    'recipientId': this.recipientId,
+                    'consider': true
+                  },
+                  skipLocationChange: true
+                });
+              });
+
+              setTimeout(() => {
+                if(!this.mobile) {
+                  this.toastService.showSuccessHTMLWithTimeout(
+                    [3, 4].includes(this.datas.roleContractReceived) ? 'success_sign' : 'success_watch'
+                    , '', 3000);
+                } else {
+                  if([3, 4].includes(this.datas.roleContractReceived)) {
+                    alert("Ký hợp đồng thành công");
+                  } else {
+                    alert("Xem xét hợp đồng thành công");
+                  }
+                }
+    
+                this.spinner.hide();
+              }, 1000);
+            }
+  
+          }, error => {
+            this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
             this.spinner.hide();
           }
-        );
-    } else {
-      if (this.eKYC == false) {
-        this.contractService
-          .updateInfoContractConsiderImg(signUpdateTempN, this.recipientId)
-          .subscribe(
-            async (result) => {
-              if (result?.success == false) {
-                if (result.message == 'Wrong otp') {
-                  if (!this.mobile)
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Mã OTP không đúng hoặc quá hạn',
-                      '',
-                      3000
-                    );
-                  else alert('Mã OTP không đúng hoặc quá hạn');
-                  this.spinner.hide();
-                } else {
-                  if (!this.mobile) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Ký hợp đồng không thành công',
-                      '',
-                      3000
-                    );
-                  } else {
-                    alert('Ký hợp đồng không thành công');
-                  }
-                  this.spinner.hide();
-                }
-              } else {
-                if (!notContainSignImage) {
-                  //Ký số
-                  await this.signDigitalDocument();
-                }
-                setTimeout(() => {
-                  this.router.navigate([
-                    '/main/form-contract/detail/' + this.idContract,
-                  ]);
-                  // this.toastService.showSuccessHTMLWithTimeout(
-                  //   [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-                  //   , '', 3000);
-
-                  if (!this.mobile) {
-                    this.toastService.showSuccessHTMLWithTimeout(
-                      [3, 4].includes(this.datas.roleContractReceived)
-                        ? 'success_sign'
-                        : 'success_watch',
-                      '',
-                      3000
-                    );
-                  } else {
-                    if ([3, 4].includes(this.datas.roleContractReceived)) {
-                      alert('Ký hợp đồng thành công');
-                    } else {
-                      alert('Xem xét hợp đồng thành công');
-                    }
-                  }
-
-                  this.spinner.hide();
-                }, 1000);
-              }
-            },
-            (error) => {
-              this.toastService.showErrorHTMLWithTimeout(
-                'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
-                '',
-                3000
-              );
-              this.spinner.hide();
-            }
-          );
+        )
       }
     }
   }
@@ -2175,8 +2067,6 @@ export class ConsiderContractComponent
             'data:image/png;base64,' + this.contractService.imageMobiBase64,
           organizationId: this.data_contract?.is_data_contract?.organization_id,
         };
-
-        console.log('form data ', formData);
 
         signUploadObs$.push(
           this.contractService
@@ -2249,11 +2139,7 @@ export class ConsiderContractComponent
           document.getElementById('image_keo_tha')
         );
 
-        console.log('image render ', imageRender);
-
         const textSignB = domtoimage.toPng(imageRender);
-
-        console.log('textSignB ', textSignB);
 
         const valueBase64 = (await textSignB).split(',')[1];
 
@@ -2286,7 +2172,6 @@ export class ConsiderContractComponent
                 this.contractService
                   .getDetailContract(this.idContract)
                   .subscribe((responseLink) => {
-                    console.log('response link ', responseLink);
                   });
               });
           });
@@ -2744,9 +2629,6 @@ export class ConsiderContractComponent
             phone: this.signInfoPKIU.phone,
           };
 
-          // this.phonePKI = this.signInfoPKIU.phone;
-
-          console.log("phone pki ", this.phonePKI);
           await this.signContractSubmit();
         } else {
           this.toastService.showErrorHTMLWithTimeout(
@@ -2792,11 +2674,12 @@ export class ConsiderContractComponent
   }
 
   prepareInfoSignUsbToken(page: any, heightPage: any) {
-    this.isDataObjectSignature.map((sign: any) => {
-      if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
-        && sign?.recipient?.email === this.currentUser.email
-        && sign?.recipient?.role === this.datas?.roleContractReceived
-        && sign?.page == page) {
+
+      this.isDataObjectSignature.map((sign: any) => {
+        if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
+          && sign?.recipient?.email === this.currentUser.email
+          && sign?.recipient?.role === this.datas?.roleContractReceived
+          && sign?.page == page) {
 
           console.log("before ");
           console.log("x ", sign.coordinate_x);
@@ -2827,9 +2710,9 @@ export class ConsiderContractComponent
           const lengthRes = response.recipients.length;
           for(let i = 0; i < lengthRes; i++) {
 
-            console.log("vao vong for ");
+              console.log("vao vong for ");
 
-            const id = response.recipients[i].id;
+              const id = response.recipients[i].id;
 
             if(id == sign.recipient_id) {
               this.taxCodePartnerStep2 = response.recipients[i].card_id;
@@ -2857,5 +2740,4 @@ export class ConsiderContractComponent
     }
   }
 }
-
 

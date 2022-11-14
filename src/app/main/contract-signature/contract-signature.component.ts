@@ -858,6 +858,17 @@ export class ContractSignatureComponent implements OnInit {
     const apiSessionId = await this.contractServiceV1.signUsbToken("request="+json_req);
     const sessionId = JSON.parse(window.atob(apiSessionId.data)).SessionId;
 
+    if(!sessionId) {
+      Swal.fire({
+        html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
+        icon: 'warning',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#b0bec5',
+        confirmButtonText: 'Xác nhận'
+      });
+      return;
+    }
+
     //Lay thong tin chung thu so cua usb token
     var json_req_cert = JSON.stringify({
       OperationId: 2,
