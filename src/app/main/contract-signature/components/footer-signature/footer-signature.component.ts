@@ -68,16 +68,30 @@ export class FooterSignatureComponent implements OnInit {
       for (let i = 0; i < this.is_data_coordination.recipients.length; i++) {
         //@ts-ignore
         let element = this.is_data_coordination.recipients[i];
-        if (element.role == 1 && element.email == emailCurrent && element.id == this.recipientId) {
-          if (element.status != 1) {
-            this.is_show_coordination = true;
-            this.view = true;
-            break;
-          } else {
-            this.is_show_coordination = false;
-            break;
+        if(!this.recipientId) {
+          if (element.role == 1 && element.email == emailCurrent) {
+            if (element.status != 1) {
+              this.is_show_coordination = true;
+              this.view = true;
+              break;
+            } else {
+              this.is_show_coordination = false;
+              break;
+            }
+          }
+        } else {
+          if (element.role == 1 && element.email == emailCurrent && element.id == this.recipientId) {
+            if (element.status != 1) {
+              this.is_show_coordination = true;
+              this.view = true;
+              break;
+            } else {
+              this.is_show_coordination = false;
+              break;
+            }
           }
         }
+       
       }
     }
    

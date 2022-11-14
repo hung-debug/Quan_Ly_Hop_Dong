@@ -1733,12 +1733,7 @@ export class ConsiderContractComponent
 
             this.sessionIdUsbToken = hSession;
 
-            this.getCertificate(
-              hSession,
-              taxCode,
-              signUpdatePayload,
-              notContainSignImage
-            );
+           
           } else {
             alert(json_res.ResponseMsg);
           }
@@ -1746,6 +1741,7 @@ export class ConsiderContractComponent
           console.log('err ');
         }
         if (response == '') {
+          this.spinner.hide();
           Swal.fire({
             html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
             icon: 'warning',
@@ -1754,8 +1750,16 @@ export class ConsiderContractComponent
             confirmButtonText: 'Xác nhận'
           });
           return;
+        } else {
+          this.getCertificate(
+            hSession,
+            taxCode,
+            signUpdatePayload,
+            notContainSignImage
+          );
         }
       } else if (httpReq.readyState == 4 && httpReq.status != 200) {
+        this.spinner.hide();
         Swal.fire({
           html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
           icon: 'warning',
@@ -1808,6 +1812,18 @@ export class ConsiderContractComponent
         response = this.b64DecodeUnicode(httpReq.responseText);
 
         console.log('response name company ', response);
+
+        if(!JSON.parse(response).SerialNumber) {
+            this.spinner.hide();
+          Swal.fire({
+            html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#b0bec5',
+            confirmButtonText: 'Xác nhận'
+          });
+          return;
+        }
 
         var process = false;
         try {
