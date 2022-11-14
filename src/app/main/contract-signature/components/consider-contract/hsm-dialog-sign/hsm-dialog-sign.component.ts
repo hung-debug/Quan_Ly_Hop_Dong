@@ -146,7 +146,6 @@ export class HsmDialogSignComponent implements OnInit {
         if(data.ma_dvcs === this.taxCode) {
             this.dialogRef.close(data);
         } else {
-       
           this.toastService.showErrorHTMLWithTimeout('Mã số thuế không trùng khớp thông tin ký hợp đồng','',3000);
         }
     }
