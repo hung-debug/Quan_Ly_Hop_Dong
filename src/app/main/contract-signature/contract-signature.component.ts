@@ -541,8 +541,8 @@ export class ContractSignatureComponent implements OnInit {
 
 
             let idContract: any = [];
-    let fileC: any = [];
-    let documentId: any = [];
+            let fileC: any = [];
+            let documentId: any = [];
                     //Lấy ra url của các hợp đồng cần ký
 
                     idSignMany = contractsSignManyChecked
@@ -634,20 +634,7 @@ export class ContractSignatureComponent implements OnInit {
                 this.spinner.show();
 
                 let countUpdate = 0;
-                // for(let i = 0; i < idSignMany.length; i++) {
-                //   const signUpdate = await this.contractServiceV1.updateInfoContractConsiderPromise([],idSignMany[i]);
-
-                //   if(!signUpdate.id) {
-                //     this.toastService.showErrorHTMLWithTimeout(
-                //       'Lỗi cập nhật trạng thái hợp đồng ',
-                //       '',
-                //       3000
-                //     );
-                //   } else {
-                //     countUpdate++;
-                //   }
-                // }
-
+              
                 //Call api ký nhiều hsm
                 const checkSign = await this.contractServiceV1.signHsmMulti(
                   this.dataHsm,

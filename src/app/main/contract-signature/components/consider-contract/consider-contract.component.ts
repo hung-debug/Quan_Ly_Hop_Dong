@@ -1824,7 +1824,7 @@ export class ConsiderContractComponent
         if(!this.signCertDigital) {
           this.spinner.hide();
           Swal.fire({
-            html: "Vui lòng cắm usb token vào máy",
+            html: "Plugin không đọc được thông tin USB Token, vui lòng kiểm tra lại kết nối USB Token",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#b0bec5',

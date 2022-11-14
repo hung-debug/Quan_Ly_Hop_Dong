@@ -516,10 +516,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.datas.determine_contract.forEach((element: any) => {
       if (element.recipients.some((q: any) => q.status == 1 && q.email == this.emailUser_sample)) {
         element.recipients.forEach((item: any) => {
-          let dataChange = [];
-
-          console.log("datas object ", this.datas.is_data_object_signature);
-          
+          let dataChange = [];          
 
             dataChange = this.datas.is_data_object_signature.filter((p: any) => p.recipient &&
                 p.recipient.id == item.id &&
@@ -569,73 +566,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
   }
-
-  // defindDataContract() {
-  //   let dataDetermine: { id: any; sign_type: any; name: string }[] = [];
-  //   this.datas.determine_contract.forEach((res: any) => {
-  //     res.recipients.forEach((element: any) => {
-  //       let isObj = {
-  //         id: element.id,
-  //         sign_type: element.sign_type,
-  //         name: element.name,
-  //         email: element.email
-  //       }
-  //       dataDetermine.push(isObj);
-  //     })
-  //   })
-  //
-  //   // lay du lieu vi tri va toa do ky cua buoc 3 da thao tac
-  //   let dataContractUserSign: any[] = [];
-  //   this.datas.contract_user_sign.forEach((res: any, index: number) => {
-  //     if (res.sign_config.length !== 0) {
-  //       res.sign_config.forEach((element: any) => {
-  //         dataContractUserSign.push(element)
-  //       })
-  //     }
-  //   })
-  //
-  //   // loc doi tuong o ky ko bi thay doi du lieu
-  //   // dataContractUserSign = dataContractUserSign.filter(val => dataDetermine.some((data: any) => data.sign_type.length > 0 &&
-  //   //   (((val.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1)) || (val.sign_unit == 'text' && data.sign_type.some((p: any) => p.id == 2)) || (val.sign_unit == 'so_tai_lieu' && data.type == 4) ||
-  //   //     (val.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-  //   //     (val.name == data.name) && (val.email == data.email))
-  //   // ));
-  //
-  //   // Get data ky thay doi du lieu
-  //   // let dataDiffirent: any[] = [];
-  //   // if (dataContractUserSign.length > 0 && dataDetermine.length > 0) {
-  //   //   dataDiffirent = dataContractUserSign.filter(val => dataDetermine.some((data: any) => data.sign_type.length > 0 &&
-  //   //     ((val.sign_unit == "chu_ky_anh" && !data.sign_type.some((p: any) => p.id == 1)) || (val.sign_unit == 'text' && !data.sign_type.some((p: any) => p.id == 2)) || (val.sign_unit == 'so_tai_lieu' && data.type != 4) ||
-  //   //     (val.sign_unit == "chu_ky_so" && !data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4)) ||
-  //   //     val.name != data.name || val.email != data.email)));
-  //   // }
-  //
-  //   //
-  //   // xoa nhung du lieu doi tuong bi thay doi
-  //   // if (dataDiffirent.length > 0) {
-  //   this.datas.contract_user_sign.forEach((res: any) => {
-  //     if (res.sign_config.length > 0) {
-  //       /*
-  //       * begin xóa đối tượng ký đã bị thay đổi dữ liệu
-  //       */
-  //       // res.sign_config.forEach((element: any) => {
-  //       //   if (dataDiffirent.some((p: any) => p.id == element.id && p.recipient_id == element.recipient_id && p.id_have_data == element.id_have_data)) {
-  //       //     this.removeDataSignChange(element.id_have_data);
-  //       //   }
-  //       // })
-  //       /*
-  //       end
-  //       */
-  //       // res.sign_config = res.sign_config.filter((val: any) => dataContractUserSign.some((data: any) => (val.name as any) == (data.name as any) && (val.recipient ? val.recipient.email as any : val.email as any) === (data.email as any) && val.sign_unit == data.sign_unit));
-  //       if (res.sign_config.length > 0) {
-  //         res.sign_config.forEach((items: any) => {
-  //           items.id = items.id + '1';
-  //         })
-  //       }
-  //     }
-  //   })
-  //   // }
-  // }
 
   // List danh sách ký
   getListNameSign(data_user_sign: any) {
@@ -1124,6 +1054,23 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let arrSign_organization: any[] = [];
       let arrSign_partner: any[] = [];
 
+      let coordinate_x: number [] = [];
+      let coordinate_y: number [] = [];
+      let width: number [] = [];
+      let height: number [] = [];
+      this.datas.determine_contract.forEach((item: any) => {
+          item.recipients.forEach((itemRecipients: any) => {
+            if(itemRecipients.fields && itemRecipients.fields.length > 0) {
+              itemRecipients.fields.forEach((itemFields: any) => {
+                coordinate_x.push(Number(itemFields.coordinate_x));
+                coordinate_y.push(Number(itemFields.coordinate_y));
+                width.push(Number(itemFields.width));
+                height.push(Number(itemFields.height));
+              })
+            }
+          })
+      })
+
       for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datas.contract_user_sign[i].sign_config.length; j++) {
@@ -1152,10 +1099,76 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 arrSign_organization.push(data_sign);
               else arrSign_partner.push(data_sign);
             }
+
+            if(element.coordinate_x) {
+              coordinate_x.push(Number(element.coordinate_x));
+              coordinate_y.push(Number(element.coordinate_y));
+              width.push(Number(element.width));
+              height.push(Number(element.height));
+            }
           }
           if (count > 0 || count_text > 0) break
         }
       }
+
+        //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+h) = góc phải dưới
+        for(let i = 0; i < coordinate_x.length; i++) {
+          for(let j = i+1; j < coordinate_x.length; j++) {
+            if(
+              (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
+              &&
+              (Number(coordinate_y[i]) <= Number(coordinate_y[j]) && Number(coordinate_y[j] <= (Number(coordinate_y[i]) + Number(height[i]))))
+              // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+            ) {
+              this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+              return false;
+            }
+          }
+        }
+  
+        //Trường hợp 2: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
+        for(let i = 0; i < coordinate_x.length; i++) {
+          for(let j = i+1; j < coordinate_x.length; j++) {
+            if(
+              (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
+              &&
+              (Number(coordinate_y[i]) <= (Number(coordinate_y[j]) + Number(height[j])) && (Number(coordinate_y[j] + Number(height[j])) <= (Number(coordinate_y[i]) + Number(height[i]))))
+                // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+              ) {
+                this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+                return false;
+              }
+            }
+        }
+  
+        //Trường hợp 3: ô 1 giao ô 2 trong vùng x2+w thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc trái trên
+        for(let i = 0; i < coordinate_x.length; i++) {
+          for(let j = i+1; j < coordinate_x.length; j++) {
+            if(
+              (Number(coordinate_x[j]) <= Number(coordinate_x[i]) && Number(coordinate_x[i]) <= (Number(coordinate_x[j]) + Number(width[j])))
+              &&
+              (Number(coordinate_y[j]) <= Number(coordinate_y[i]) && Number(coordinate_y[i] <= (Number(coordinate_y[j]) + Number(height[j]))))
+            ) {
+              this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+              return false;
+            }
+          }
+        }
+  
+         //Trường hợp 4: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2+h thuộc (y1 đến y1+h) = góc phải trên
+         for(let i = 0; i < coordinate_x.length; i++) {
+          for(let j = i+1; j < coordinate_x.length; j++) {
+            if(
+              (Number(coordinate_x[j]) <= Number(coordinate_x[i]) && Number(coordinate_x[i]) <= (Number(coordinate_x[j]) + Number(width[j])))
+              &&
+              (Number(coordinate_y[j]) <= (Number(coordinate_y[i]) + Number(height[i])) && (Number(coordinate_y[i] + Number(height[i])) <= (Number(coordinate_y[j]) + Number(height[j]))))
+                // && coordinate_y[i] <= coordinate_y[j] <= (coordinate_y[i] + height[i])
+              ) {
+                this.toastService.showErrorHTMLWithTimeout("Vị trị các ô ký không được để trùng hoặc giao nhau","",3000);
+                return false;
+              }
+            }
+        }
 
       if (count > 0) {
         this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 3000);
