@@ -118,9 +118,7 @@ export class SidebarService {
             this.isQLHD_04 = listRole.some(
               (element) => element.code == 'QLHD_04'
             );
-            this.isQLHD_05 = listRole.some(
-              (element) => element.code == 'QLHD_05'
-            );
+            this.isQLHD_05 = true;
             this.isQLHD_06 = listRole.some(
               (element) => element.code == 'QLHD_06'
             );

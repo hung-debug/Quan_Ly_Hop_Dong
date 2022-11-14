@@ -340,7 +340,7 @@ export var roleList = [
       //Xem danh sách hợp đồng của tổ chức của tôi
       { label: 'Xem danh sách hợp đồng của tổ chức của tôi', value: 'QLHD_04' },
       //Xem danh sách hợp đồng của tôi
-      { label: 'Xem danh sách hợp đồng của tôi', value: 'QLHD_05' },
+      // { label: 'Xem danh sách hợp đồng của tôi', value: 'QLHD_05' },
       //Tìm kiếm hợp đồng
       { label: 'Tìm kiếm hợp đồng', value: 'QLHD_06' },
       //Xem thông tin chi tiết hợp đồng

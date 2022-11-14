@@ -156,7 +156,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
               this.isQLHD_02 = listRole.some(element => element.code == 'QLHD_02');
               this.isQLHD_03 = listRole.some(element => element.code == 'QLHD_03');
               this.isQLHD_04 = listRole.some(element => element.code == 'QLHD_04');
-              this.isQLHD_05 = listRole.some(element => element.code == 'QLHD_05');
+              this.isQLHD_05 = true;
               this.isQLHD_06 = listRole.some(element => element.code == 'QLHD_06');
               this.isQLHD_07 = listRole.some(element => element.code == 'QLHD_07');
               this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
