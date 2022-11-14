@@ -22,7 +22,7 @@
                 <div class="col-md-6" style="display: flex; flex-direction: column;text-align: center">
                     <div style="display: flex; justify-content: center;">
                         <span [style.color]="d.status != 0 ? '#106DB6' : '#545252'">{{d.status}}</span> &nbsp; &nbsp;
-                        <div class="div_icon" *ngIf="d.status == 'Đã từ chối'">
+                        <div class="div_icon"  *ngIf="d.status == 'Đã từ chối'" >
                             <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="Lý do từ chối hợp đồng" (click)="viewReasonRejected(d.id)" />
                         </div>
                     </div>
@@ -33,9 +33,6 @@
     </div>
 
 </div>
-<!-- <app-view-reason-rejected-dialog [isVisibleReasonReject]="isVisibleReasonReject" (modalState)="toggleModalReasonReject($event)">
-
-</app-view-reason-rejected-dialog> -->
 
 <div class="footer-btn" style="text-align: center; margin-top: 20px">
     <button style="width: 120px; height: 40px; background-color: #8B8B8B; border-radius: 5px; outline: none; color: white; border: 1px solid #8B8B8B" (click)="acceptRequest()">Thoát</button>

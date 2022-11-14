@@ -62,7 +62,8 @@
                         <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12">
                             <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)" />
                         </div>
-                        <!-- <div class="div_icon" *ngIf="status == 'processing' || status == 'expire'">
+                        <!-- 
+                        <div class="div_icon" *ngIf="status == 'processing' || status == 'expire'">
                             <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnect(item.id)"/>
                         </div> -->
                         <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11">
@@ -77,8 +78,8 @@
                         <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13">
                             <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
                         </div>
-                        <div class="div_icon">
-                            <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="Lý do hủy hợp đồng" (click)="ViewReasonCancel(item.id)" />
+                        <div class="div_icon" *ngIf="status == 'cancel'">
+                            <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="Lý do hủy hợp đồng" (click)="ViewReasonCancel(item.id)" />
                         </div>
                     </div>
                 </div>

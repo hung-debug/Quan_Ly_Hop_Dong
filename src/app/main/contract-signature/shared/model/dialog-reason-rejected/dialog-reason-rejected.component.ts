@@ -18,15 +18,15 @@ constructor(
       public router: Router,
       public dialog: MatDialog,
       public dialogRef: MatDialogRef<DialogReasonRejectedComponent>,
-      private contractService : ContractService
+      // private contractService : ContractService
     ) {
       }
 
     ngOnInit(): void {
-      this.contractService.viewFlowContract(this.data.contractId).subscribe(response => {
-        this.reasonReject = response.reasonReject;
-      });
-
+      // this.contractService.viewFlowContract(this.data.contractId).subscribe(response => {
+      //   this.reasonReject = response.reasonReject;
+      // });
+      
     }
 
     handleCancel() {

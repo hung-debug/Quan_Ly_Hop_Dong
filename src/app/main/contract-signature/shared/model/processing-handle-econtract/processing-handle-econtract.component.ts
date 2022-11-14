@@ -16,7 +16,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   personCreate: string;
   emailCreate: string;
   timeCreate: any;
-  // isVisibleReasonReject = false;
 
   status: any = [
     {
@@ -32,7 +31,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
       is_data_contract: any,
-      content: any},
+      content: any
+    },
     public router: Router,
     public dialog: MatDialog,
     private contractService : ContractService
@@ -52,14 +52,18 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       this.timeCreate = response.createdAt ? moment(this.timeCreate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
       this.emailCreate = response.createdBy.email;
 
+      console.log("respinnnnnnnn", response);
+      
       response.recipients.forEach((element: any) => {
         let data = {
+          id: element.id,
           name: element.name,
           name_company: element.participantName,
           emailRecipients: element.email,
           status: this.checkStatusUser(element.status, element.role),
           typeOfSign: element.signType[0],
-          process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null
+          process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
+          reasonReject: element.reasonReject,
         }
         this.is_list_name.push(data);
       })
@@ -104,8 +108,13 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     // this.router.navigate(['/login']);
   }
 // @ts-ignore
-  viewReasonRejected(ContractId: number){
-    const data = {contractId: ContractId}
+  viewReasonRejected(RecipientsId: any){
+   let data: any;
+    for(let i=0; this.is_list_name.length; i++){
+      if(RecipientsId == this.is_list_name.id){
+         data = {reasonReject: this.is_list_name.reasonReject}
+      }
+    }
     const dialogRef = this.dialog.open(DialogReasonRejectedComponent, {
       data
     })
