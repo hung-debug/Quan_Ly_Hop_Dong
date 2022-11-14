@@ -1813,10 +1813,18 @@ export class ConsiderContractComponent
 
         console.log('response name company ', response);
 
-        if(!JSON.parse(response).SerialNumber) {
-            this.spinner.hide();
+
+        var process = false;
+        try {
+          var json_res = JSON.parse(response);
+
+          this.signCertDigital = json_res.certInfo.SerialNumber;
+
+          
+        if(!this.signCertDigital) {
+          this.spinner.hide();
           Swal.fire({
-            html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
+            html: "Vui lòng cắm usb token vào máy",
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#b0bec5',
@@ -1825,11 +1833,6 @@ export class ConsiderContractComponent
           return;
         }
 
-        var process = false;
-        try {
-          var json_res = JSON.parse(response);
-
-          this.signCertDigital = json_res.certInfo.SerialNumber;
           this.nameCompany = json_res.certInfo.CommonName;
 
           this.contractService
