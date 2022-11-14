@@ -1,3 +1,4 @@
+import { data } from 'jquery';
 import { UploadService } from 'src/app/service/upload.service';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,6 +21,7 @@ import { TreeMapModule } from '@swimlane/ngx-charts';
 import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
 import { sideList } from 'src/app/config/variable';
+import { DialogReasonCancelComponent } from '../contract-signature/shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -269,6 +271,17 @@ export class ContractComponent implements OnInit, AfterViewInit {
     if (this.pageTotal < this.pageEnd) {
       this.pageEnd = this.pageTotal;
     }
+  }
+// @ts-ignore
+  ViewReasonCancel(ContractId: number){
+    const data = {contractId: ContractId}
+    const dialogRef = this.dialog.open(DialogReasonCancelComponent, {
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    }) 
   }
 
   autoSearch(event: any) {

@@ -24,6 +24,7 @@ import domtoimage from 'dom-to-image';
 import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialog-sign/hsm-dialog-sign.component';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import { DialogReasonCancelComponent } from '../contract-signature/shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 
 @Component({
   selector: 'app-contract',
@@ -1039,6 +1040,18 @@ export class ContractSignatureComponent implements OnInit {
         );
       }
     );
+  }
+
+  // @ts-ignore
+  ViewReasonCancel(ContractId: number){
+    const data = {contractId: ContractId};
+    const dialogRef = this.dialog.open(DialogReasonCancelComponent, {
+        data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    }) 
   }
 
   openConsiderContract(item: any) {

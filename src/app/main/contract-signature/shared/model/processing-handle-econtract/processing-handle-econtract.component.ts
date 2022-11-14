@@ -16,7 +16,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   personCreate: string;
   emailCreate: string;
   timeCreate: any;
-  isVisibleReasonReject = false;
+  // isVisibleReasonReject = false;
 
   status: any = [
     {
@@ -103,24 +103,16 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     this.dialog.closeAll();
     // this.router.navigate(['/login']);
   }
-
-  viewReasonRejected(){
-    const data = this.datas;
+// @ts-ignore
+  viewReasonRejected(ContractId: number){
+    const data = {contractId: ContractId}
     const dialogRef = this.dialog.open(DialogReasonRejectedComponent, {
-
+      data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
       let is_data = result
     }) 
-  }
-
-  toggleModalReasonReject(isVisible: boolean){
-    this.isVisibleReasonReject = isVisible;
-  }
-
-  showModalReasonReject(){
-    this.isVisibleReasonReject = true;
   }
 
 }

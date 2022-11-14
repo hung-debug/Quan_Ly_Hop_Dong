@@ -1,117 +1,113 @@
 <div class="container-fluid">
 
-  <p-selectButton *ngIf="filter_status!=40" [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()"></p-selectButton>
+    <p-selectButton *ngIf="filter_status!=40" [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()"></p-selectButton>
 
-  <ng-template [ngIf]="!roleMess">
-    <div class="col-md-12" style="padding-top: 20px;">
-      <div class="input-line search">
-        <img src="../../assets/img/icon_search.svg" class="input-img" />
-        <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}"
-        (keyup)="autoSearch($event)" />
-        <img src="../../assets/img/icon_search_group.svg" class="input-img"  (click)="searchContract()"/>
-      </div>
-    </div>
-
-    <div class="row list_header" *ngIf="pageTotal > 0;">
-
-      <div class="col-md-5"></div>
-      <div class="col-md-2">{{'create-date' | translate}}</div>
-      <div class="col-md-2">{{'expiration-date' | translate}}</div>
-      <div class="col-md-3">{{'action' | translate}}</div>
-    </div>
-
-    <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
-      
-      <div class="row">
-
-        <!--Cột 1-->
-        <div class="col-md-5">
-          <div class="row">
-            <div class="col-md-12 item_contract_name" (click)="isQLHD_07?openDetail(item.id):null">{{item.name}}</div>
-          </div>
-          <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
-            <div class="col-md-12 item_contract_infor">Bên {{getNameOrganization(itemPar, index)}}</div>
-          </div>
-          <div class="row">
-            <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
-              <span class="status_blue">{{item.status | pipe | translate}} {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}</span>
+    <ng-template [ngIf]="!roleMess">
+        <div class="col-md-12" style="padding-top: 20px;">
+            <div class="input-line search">
+                <img src="../../assets/img/icon_search.svg" class="input-img" />
+                <input type="text" id="filter_name" [value]="filter_name" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+                <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
             </div>
-          </div>
         </div>
 
-        <!--Cột 2: Ngày tạo-->
-        <div class="col-md-2 calendar_create">
-          <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span></div>
+        <div class="row list_header" *ngIf="pageTotal > 0;">
+
+            <div class="col-md-5"></div>
+            <div class="col-md-2">{{'create-date' | translate}}</div>
+            <div class="col-md-2">{{'expiration-date' | translate}}</div>
+            <div class="col-md-3">{{'action' | translate}}</div>
         </div>
 
-        <!--Cột 3: Ngày hết hạn ký-->
-        <div class="col-md-2 calendar_deadline">
-          <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span></div>
-        </div>
+        <div class="item_contract" *ngFor="let item of contracts | paginate:{itemsPerPage: page, currentPage:p, totalItems: pageTotal}">
 
-        <div class="col-md-3 item_icon">
-          <div *ngIf="isOrg=='off'" style="display: flex; justify-content: center;">
-            <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08">
-              <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
+            <div class="row">
+
+                <!--Cột 1-->
+                <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-12 item_contract_name" (click)="isQLHD_07?openDetail(item.id):null">{{item.name}}</div>
+                    </div>
+                    <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
+                        <div class="col-md-12 item_contract_infor">Bên {{getNameOrganization(itemPar, index)}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
+                            <span class="status_blue">{{item.status | pipe | translate}} {{getNameStatusCeca(item.status, item.ceca_push, item.ceca_status) | translate}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Cột 2: Ngày tạo-->
+                <div class="col-md-2 calendar_create">
+                    <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.created_at | date: 'dd/MM/yyyy HH:mm'}}</span></div>
+                </div>
+
+                <!--Cột 3: Ngày hết hạn ký-->
+                <div class="col-md-2 calendar_deadline">
+                    <div><i class="fa fa-calendar fa_icon"></i><span class="item_date">{{item.sign_time | date: 'dd/MM/yyyy'}}</span></div>
+                </div>
+
+                <div class="col-md-3 item_icon">
+                    <div *ngIf="isOrg=='off'" style="display: flex; justify-content: center;">
+                        <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08">
+                            <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02">
+                            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'draft'">
+                            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteContract(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12">
+                            <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)" />
+                        </div>
+                        <!-- <div class="div_icon" *ngIf="status == 'processing' || status == 'expire'">
+                            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnect(item.id)"/>
+                        </div> -->
+                        <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11">
+                            <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnectNew(item.id)" />
+                        </div>
+                        <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09">
+                            <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'complete'">
+                            <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
+                        </div>
+                        <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13">
+                            <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
+                        </div>
+                        <div class="div_icon">
+                            <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="Lý do hủy hợp đồng" (click)="ViewReasonCancel(item.id)" />
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02">
-              <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
-            </div>
-            <div class="div_icon" *ngIf="status == 'draft'">
-              <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteContract(item.id)" />
-            </div>
-            <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12">
-              <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)"/>
-            </div>
-            <!-- <div class="div_icon" *ngIf="status == 'processing' || status == 'expire'">
-              <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnect(item.id)"/>
-            </div> -->
-            <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11">
-              <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnectNew(item.id)"/>
-            </div>
-            <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09">
-              <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);"/>
-            </div>
-            <div class="div_icon" *ngIf="status == 'complete'">
-              <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
-            </div>
-            <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13">
-              <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);"/>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- <div class="row" *ngIf="status == 'cancel' || status == 'fail'">
+            <!-- <div class="row" *ngIf="status == 'cancel' || status == 'fail'">
         <div class="col-md-12 item_contract_infor">Lý do: {{item.reason_reject}}</div>
       </div> -->
-    </div>
+        </div>
 
-    <div *ngIf="pageTotal == 0" 
-    style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
-      <div style="display: table-cell;vertical-align: middle;"> 
-        <img src="../../../assets/img/empty_data.svg"/>
-        <div style="color: #94A7C6">{{'no.data' | translate}}</div>
-      </div>
-    </div>
+        <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
+            <div style="display: table-cell;vertical-align: middle;">
+                <img src="../../../assets/img/empty_data.svg" />
+                <div style="color: #94A7C6">{{'no.data' | translate}}</div>
+            </div>
+        </div>
 
-    <div class="contract_footer">
-      <div class="footer_title"></div>
-      <div class="footer_pagination">
-        <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
-      </div>
-      <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
-    </div>
-  </ng-template>
+        <div class="contract_footer">
+            <div class="footer_title"></div>
+            <div class="footer_pagination">
+                <pagination-controls *ngIf="pageTotal > 0;" (pageChange)="p=$event; getContractList()" previousLabel="" nextLabel=""></pagination-controls>
+            </div>
+            <div class="footer_page_number">{{'chart.number' | translate}}: {{pageStart}} - {{pageEnd}} / {{pageTotal}}</div>
+        </div>
+    </ng-template>
 
-  <div>{{roleMess | translate}}</div>
+    <div>{{roleMess | translate}}</div>
 </div>
 
 
-<ngx-spinner
-  bdColor="rgba(51,51,51,0.8)"
-  size="medium"
-  color="#fff"
-  type="ball-spin-clockwise"
->
-  <p style="font-size: 18px; color: white">Đang xử lý...</p>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+    <p style="font-size: 18px; color: white">Đang xử lý...</p>
 </ngx-spinner>
