@@ -34,7 +34,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   private sub: any;
   public contracts: any[] = [];
   p: number = 1;
-  page: number = 5;
+  page: number = 10;
   pageStart: number = 0;
   pageEnd: number = 0;
   pageTotal: number = 0;
@@ -196,6 +196,23 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
 
     // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
+  }
+
+  cancelMany() {
+    let contractsSignManyChecked = this.contracts.filter(
+      (opt) => opt.checked
+    );
+    
+    let idMany = contractsSignManyChecked
+        .filter((opt) => opt.checked)
+        .map((opt) => opt.id);
+
+    if(idMany.length == 0) {
+      this.toastService.showErrorHTMLWithTimeout("Bạn chưa chọn hợp đồng nào","",3000);
+      return;
+    }
+
+    this.cancelContract(idMany);
   }
 
   ngAfterViewInit(): void {
@@ -373,7 +390,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result
     })
   }

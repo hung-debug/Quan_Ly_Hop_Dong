@@ -1224,8 +1224,6 @@ export class ConsiderContractComponent
               }
             }
 
-            console.log("signI ",signI);
-
               const signDigital = JSON.parse(JSON.stringify(signUpdate));
               signDigital.Serial = this.signCertDigital;
               const base64String =

@@ -18,6 +18,7 @@
   cursor: pointer;
 }
 
+
 .item_contract_infor{
   color: #666666;
 }
@@ -99,14 +100,7 @@
   border: 1px solid #808183;
   margin: 0 5px;
 }
-.btn_submit{
-  width: 90px;
-  font-size: inherit;
-  background: #106DB6;
-  color: white;
-  border: 1px solid #87CAFF;
-  margin: 0 5px;
-}
+
 .label_item{
   padding: 10px 0px 5px;
   color: #5e5e5e;
@@ -255,4 +249,20 @@
   flex-direction: column;
   justify-content: center;
   text-align: center;
+}
+
+.btn_search{
+  padding-top: 10px;
+  align-self: flex-end;
+}
+
+.btn_submit{
+  border: 0px;
+  border-radius: 5px;
+  height: 33px;
+  box-sizing: border-box;
+  color: white;
+  background-color: #106DB6;
+  font-size: 13px;
+  margin: 0 10px;
 }

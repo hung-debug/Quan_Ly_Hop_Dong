@@ -37,31 +37,49 @@ export class CancelContractDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
     // stop here if form is invalid
     if (this.addForm.invalid) {
       return;
     }
+
     const data = {
       id: this.data.id,
       reason: this.addForm.value.reason,
     }
-    console.log(data);
-    this.contractService.changeStatusContract(data.id, 32, data.reason).subscribe((data) => {
 
-      console.log(JSON.stringify(data));
-      this.dialogRef.close();
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/contract/create/cancel']);
-      });
-      this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thành công!", "", 3000);
-      },
-      error => {
-        this.toastService.showErrorHTMLWithTimeout("Hủy hợp đồng thất bại!", "", 3000);
+    
+    if(this.data.id instanceof Array) {
+      let cancelManyApi = await this.contractService.cancelManyContrcacts(this.data.id);
+
+      if(cancelManyApi.success) {
+        this.dialogRef.close();
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/contract/create/cancel']);
+        });
+        this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thành công!", "", 3000);
+      } else {
+        this.toastService.showErrorHTMLWithTimeout("Huỷ nhiều hợp đồng không thành công","",3000);
         return false;
       }
-    );
+
+    } else {
+      this.contractService.changeStatusContract(data.id, 32, data.reason).subscribe((data) => {
+        this.dialogRef.close();
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/contract/create/cancel']);
+        });
+        this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thành công!", "", 3000);
+        },
+        error => {
+          this.toastService.showErrorHTMLWithTimeout("Hủy hợp đồng thất bại!", "", 3000);
+          return false;
+        }
+      );
+    }
+
+  
   }
 
 }

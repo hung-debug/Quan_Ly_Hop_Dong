@@ -122,6 +122,8 @@ export class ContractService {
 
   decreaseNumberEkycUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
 
+  cancelManyContractsUrl: any = `${environment.apiUrl}/api/v1/contracts/multi-cancel`;
+
   token: any;
   customer_id: any;
   organization_id: any;
@@ -571,6 +573,21 @@ export class ContractService {
     return this.http.post<any>(this.checkTaxCodeExistUrl, body, {
       headers: headers,
     });
+  }
+
+  cancelManyContrcacts(idContract: any[]) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      contract_ids: idContract
+    })
+    
+    return this.http.post<any>(this.cancelManyContractsUrl, body, {
+      headers: headers,
+    }).toPromise();
   }
 
   getFilePdfForMobile(recipientId: any, image_base64: any) {
