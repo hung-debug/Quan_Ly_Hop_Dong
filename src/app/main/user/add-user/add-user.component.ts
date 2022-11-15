@@ -110,7 +110,6 @@ export class AddUserComponent implements OnInit {
 
         //lay danh sach vai tro
         this.roleService.getRoleList('', '').subscribe(data => {
-          console.log(data);
           this.roleList = data.entities;
         });
 
@@ -192,7 +191,7 @@ export class AddUserComponent implements OnInit {
                     this.isEditRole = true;
     
                     //lay danh sach vai tro
-                    this.roleService.getRoleByOrgId(orgId).subscribe(dataRole => {
+                    this.roleService.getRoleList('', '').subscribe(dataRole => {
                       //this.roleList = data.entities;
                       this.roleList = [];
                       let checkDupRolePersent = false;
@@ -207,16 +206,6 @@ export class AddUserComponent implements OnInit {
                           }
                         this.roleList.push(role);
                       });
-                      //this.roleList = [];
-                      //neu vai tro hien tai khong co trong list vai tro => inactive vai tro do
-                      if(!checkDupRolePersent){
-                        var role = {
-                          id:  data.role_id,
-                          name:  dataRoleUser.name,
-                          inactive: true
-                        }
-                        this.roleList.push(role);
-                      }
                     });
                   }
         

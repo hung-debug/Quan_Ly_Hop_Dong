@@ -69,7 +69,9 @@
               <div *ngIf="f.organizationId.errors.required">{{'error.unit.name.required' | translate}}</div>
             </div>
         </div>
+
         <div class="col-md-4">
+
           <div class="label text-color">{{'menu.role.list' | translate}} <span class="required-title">*</span></div>
           <div *ngIf="isEditRole">
             <p-dropdown
@@ -85,6 +87,7 @@
               optionDisabled="inactive"
               ></p-dropdown>
           </div>
+          
           <div *ngIf="!isEditRole" class="input-data hidden-color">
             <div class="hidden-color">{{roleName}}</div>
           </div>
