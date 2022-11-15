@@ -52,7 +52,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       this.timeCreate = response.createdAt ? moment(this.timeCreate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
       this.emailCreate = response.createdBy.email;
 
-      console.log("respinnnnnnnn", response);
+      // console.log("respinnnnnnnn", response);
       
       response.recipients.forEach((element: any) => {
         let data = {
@@ -68,7 +68,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         this.is_list_name.push(data);
       })
     });
-     console.log("sssssssssssssssss",this.is_list_name)
+     console.log("is list name",this.is_list_name)
   }
 
   getStatus(status: any) {
@@ -110,11 +110,14 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 // @ts-ignore
   viewReasonRejected(RecipientsId: any){
    let data: any;
-    for(let i=0; this.is_list_name.length; i++){
-      if(RecipientsId == this.is_list_name.id){
-         data = {reasonReject: this.is_list_name.reasonReject}
-      }
+
+    for(let i=0; i < this.is_list_name.length ; i++){
+
+      if(RecipientsId === this.is_list_name[i].id){
+          data = {reasonReject: this.is_list_name[i].reasonReject}
+       }
     }
+    
     const dialogRef = this.dialog.open(DialogReasonRejectedComponent, {
       data
     })

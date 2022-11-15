@@ -22,8 +22,8 @@
                 <div class="col-md-6" style="display: flex; flex-direction: column;text-align: center">
                     <div style="display: flex; justify-content: center;">
                         <span [style.color]="d.status != 0 ? '#106DB6' : '#545252'">{{d.status}}</span> &nbsp; &nbsp;
-                        <div class="div_icon"  *ngIf="d.status == 'Đã từ chối'" >
-                            <img src="../../assets/img/icon_file.svg" class="img_icon" ngbTooltip="Lý do từ chối hợp đồng" (click)="viewReasonRejected(d.id)" />
+                        <div class="div_icon" style="width: 20px;"  *ngIf="d.status == 'Đã từ chối'" >
+                            <img src="../../../../../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="Lý do từ chối hợp đồng" (click)="viewReasonRejected(d.id)" />
                         </div>
                     </div>
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
