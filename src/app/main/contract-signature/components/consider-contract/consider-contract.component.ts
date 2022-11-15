@@ -1251,19 +1251,13 @@ export class ConsiderContractComponent
                 sigId: '',
               });
 
-              console.log('json_req ', json_req);
-
               json_req = window.btoa(json_req);
 
               const dataSignMobi: any = await this.contractService.signUsbToken("request="+json_req);
 
-              console.log("dataSignMobi ", JSON.parse(window.atob(dataSignMobi.data)).Base64Result);
-
               let data = JSON.parse(window.atob(dataSignMobi.data)).Base64Result;
 
-              console.log("dataSignMobi ", dataSignMobi);
-
-              if(!dataSignMobi.data) {
+              if(!data) {
                   this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
                   return false;
               }
@@ -1279,7 +1273,6 @@ export class ConsiderContractComponent
           }
           return true;
       } else {
-        console.log('not sign cert digital ');
         this.toastService.showErrorHTMLWithTimeout(
           'Lỗi ký USB Token',
          '',
@@ -1843,6 +1836,9 @@ export class ConsiderContractComponent
               if (response.success == true) {
                 this.signImageC(signUpdatePayload, notContainSignImage);
               } else {
+
+                this.spinner.hide();
+
                 Swal.fire({
                   title: `Mã số thuế trên chữ ký số không trùng mã số thuế của tổ chức`,
                   icon: 'warning',

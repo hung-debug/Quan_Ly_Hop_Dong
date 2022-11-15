@@ -25,6 +25,7 @@ import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialo
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { isPdfFile } from 'pdfjs-dist';
+import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 
 @Component({
   selector: 'app-contract',
@@ -66,6 +67,7 @@ export class ContractSignatureComponent implements OnInit {
   filter_from_date: any = '';
   filter_to_date: any = '';
   filter_status: any = 1;
+  contractStatus: any = '';
 
   typeDisplay: string = 'signOne';
 
@@ -131,6 +133,14 @@ export class ContractSignatureComponent implements OnInit {
         this.filter_to_date = params.filter_to_date;
       } else {
         this.filter_to_date = '';
+      }
+      if (
+        typeof params.contractStatus != 'undefined' &&
+        params.contractStatus
+      ) {
+        this.contractStatus = params.contractStatus;
+      } else {
+        this.contractStatus = '';
       }
     });
     this.sub = this.route.params.subscribe((params) => {
@@ -215,7 +225,8 @@ export class ContractSignatureComponent implements OnInit {
           this.filter_to_date,
           this.filter_status,
           this.p,
-          this.page
+          this.page,
+          this.contractStatus,
         )
         .subscribe((data) => {
           this.contracts = data.entities;
@@ -239,7 +250,8 @@ export class ContractSignatureComponent implements OnInit {
             this.filter_to_date,
             this.filter_status,
             this.p,
-            this.page
+            this.page,
+            this.contractStatus,
           )
           .subscribe((data) => {
             this.contracts = data.entities;
@@ -1051,6 +1063,18 @@ export class ContractSignatureComponent implements OnInit {
         );
       }
     );
+  }
+
+  // @ts-ignore
+  ViewReasonCancel(ContractId: number){
+    const data = {contractId: ContractId};
+    const dialogRef = this.dialog.open(DialogReasonCancelComponent, {
+        data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    }) 
   }
 
   openConsiderContract(item: any) {

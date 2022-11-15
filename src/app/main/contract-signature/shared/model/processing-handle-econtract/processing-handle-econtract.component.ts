@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import * as moment from 'moment';
 import { ContractService } from 'src/app/service/contract.service';
+import { DialogReasonRejectedComponent } from '../dialog-reason-rejected/dialog-reason-rejected.component';
 
 @Component({
   selector: 'app-processing-handle-econtract',
@@ -10,6 +11,7 @@ import { ContractService } from 'src/app/service/contract.service';
   styleUrls: ['./processing-handle-econtract.component.scss']
 })
 export class ProcessingHandleEcontractComponent implements OnInit {
+  datas: any;
   is_list_name: any = [];
   personCreate: string;
   emailCreate: string;
@@ -29,7 +31,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
       is_data_contract: any,
-      content: any},
+      content: any
+    },
     public router: Router,
     public dialog: MatDialog,
     private contractService : ContractService
@@ -49,18 +52,23 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       this.timeCreate = response.createdAt ? moment(this.timeCreate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
       this.emailCreate = response.createdBy.email;
 
+      // console.log("respinnnnnnnn", response);
+      
       response.recipients.forEach((element: any) => {
         let data = {
+          id: element.id,
           name: element.name,
           name_company: element.participantName,
           emailRecipients: element.email,
           status: this.checkStatusUser(element.status, element.role),
-          process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null
+          typeOfSign: element.signType[0],
+          process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
+          reasonReject: element.reasonReject,
         }
         this.is_list_name.push(data);
       })
     });
-    // console.log(this.is_list_name)
+     console.log("is list name",this.is_list_name)
   }
 
   getStatus(status: any) {
@@ -98,6 +106,25 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   acceptRequest() {
     this.dialog.closeAll();
     // this.router.navigate(['/login']);
+  }
+// @ts-ignore
+  viewReasonRejected(RecipientsId: any){
+   let data: any;
+
+    for(let i=0; i < this.is_list_name.length ; i++){
+
+      if(RecipientsId === this.is_list_name[i].id){
+          data = {reasonReject: this.is_list_name[i].reasonReject}
+       }
+    }
+    
+    const dialogRef = this.dialog.open(DialogReasonRejectedComponent, {
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+      let is_data = result
+    }) 
   }
 
 }

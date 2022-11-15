@@ -45,6 +45,25 @@
                 </div> 
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="label text-color">Trạng thái hợp đồng</div>
+                <!--Chờ xử lý-->
+                <div>
+                    <p-dropdown 
+                        panelStyleClass="font"
+                        formControlName="contractStatus"
+                        appendTo="body"
+                        [options]="(this.router.url.includes('processed')) ? contractStatusProcessedList: contractStatusProcessingList" 
+                        optionLabel="name"
+                        optionValue="id" 
+                        placeholder="Trạng thái hợp đồng" 
+                        [showClear]="true"  
+                    ></p-dropdown>
+                </div>
+            </div>
+        </div>
     
         <div class="row" style="justify-content: center;padding-top: 10px;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">Hủy</button>

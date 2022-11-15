@@ -126,6 +126,12 @@ export class DetermineSignerComponent implements OnInit {
       d.phone = '';
     }
 
+    // console.log("d.login_by", d.login_by)
+    // if(d.login_by == 'phone'){
+    //   d.email = d.phone;
+    //   d.phone = d.email;
+    // }
+
     console.log("d ",d);
   }
 
@@ -277,6 +283,9 @@ export class DetermineSignerComponent implements OnInit {
 
   selectWithOtp(e: any, data: any) {
     this.changeOtp(data);
+    if(data.typeSign == 1 && this.getDataSignCka(data).length > 0) {
+      data.phone = data.email;
+    }
   }
 
   changeOtp(data: any) {
@@ -1307,6 +1316,7 @@ export class DetermineSignerComponent implements OnInit {
   onSelectName(tData: any, dData: any) {
     dData.name = tData.name;
     dData.email = tData.email;
+    dData.phone = tData.phone;
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];

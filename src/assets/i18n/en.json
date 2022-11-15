@@ -57,7 +57,7 @@
   "contract.organization": "Organizational contract",
   "contract.wait-for-me": "Contract to be handled",
   "contract.share-for-me": "Shared contract",
-  "contract.search.name.placeholder": "Enter search keywords by contract name",
+  "contract.search.name.placeholder": "Enter search keywords by contract name, partner name",
   "contract.search": "Contract search",
   "contract.name": "Contract name",
   "contract.file": "File contract",

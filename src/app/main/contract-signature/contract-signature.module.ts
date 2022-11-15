@@ -54,6 +54,7 @@ import { EkycDialogSignComponent } from './components/consider-contract/ekyc-dia
 import { WebcamModule } from 'ngx-webcam';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { DialogReasonRejectedComponent } from './shared/model/dialog-reason-rejected/dialog-reason-rejected.component';
 
 const signatures = "s9";
 const consider = "c9";
@@ -110,7 +111,8 @@ export const contractSignatureRoutes1: Routes = [
     DisplaySignatureImageComponent,
     NotificationExpireComponent,
     DialogSignManyComponentComponent,
-    EkycDialogSignComponent
+    EkycDialogSignComponent,
+    DialogReasonRejectedComponent,
     // AddContractComponent
   ],
   imports: [

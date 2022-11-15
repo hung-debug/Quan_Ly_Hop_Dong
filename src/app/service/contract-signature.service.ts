@@ -35,7 +35,7 @@ export class ContractSignatureService {
     this.token = JSON.parse(localStorage.getItem('currentUser')||'').access_token;
   }
 
-  public getContractMyProcessList(filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any): Observable<any> {
+  public getContractMyProcessList(filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any, contractStatus: any): Observable<any> {
     this.getCurrentUser();
     if (filter_from_date != "") {
       filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
@@ -46,7 +46,7 @@ export class ContractSignatureService {
     if(page != ""){
       page = page - 1;
     }
-    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size;
+    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus;
     console.log(listContractMyProcessUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
@@ -90,7 +90,7 @@ export class ContractSignatureService {
     return this.http.post<any>(this.shareContractUrl, body, {'headers': headers}).pipe();
   }
 
-  public getContractShareList(filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any): Observable<any> {
+  public getContractShareList(filter_name:any, filter_type: any, filter_contract_no: any, filter_from_date: any, filter_to_date: any, filter_status:any, page:any, size:any, contractStatus: any): Observable<any> {
     this.getCurrentUser();
     if (filter_from_date != "") {
       filter_from_date = this.datepipe.transform(filter_from_date, 'yyyy-MM-dd');
@@ -101,7 +101,7 @@ export class ContractSignatureService {
     if(page != ""){
       page = page - 1;
     }
-    let shareListContractUrl = this.shareListContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&status=' + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size;
+    let shareListContractUrl = this.shareListContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&status=' + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus;
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(shareListContractUrl, {headers}).pipe();
   }

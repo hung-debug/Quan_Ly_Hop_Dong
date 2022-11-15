@@ -17,6 +17,20 @@ export class FilterListDialogComponent implements OnInit {
 
   dropdownOrgSettings: any = {};
   contractTypeList: Array<any> = [];
+  contractStatusProcessedList: { id: number, name: string }[] = [
+    { "id": 20, "name": "Đang xử lý" },
+    { "id": 2, "name": "Quá hạn" },
+    { "id": 31, "name": "Từ chối" },
+    { "id": 32, "name": "Hủy bỏ" },
+    { "id": 30, "name": "Hoàn thành" }
+  ];
+  contractStatusProcessingList: { id: number, name: string }[] = [
+    { "id": 20, "name": "Đang xử lý" },
+    { "id": 2, "name": "Quá hạn" },
+    { "id": 31, "name": "Từ chối" },
+    { "id": 32, "name": "Hủy bỏ" }
+  ];
+  
   submitted = false;
   get f() { return this.addForm.controls; }
 
@@ -34,6 +48,8 @@ export class FilterListDialogComponent implements OnInit {
         filter_from_date: this.fbd.control(this.data.filter_from_date),
         filter_to_date: this.fbd.control(this.data.filter_to_date),
         status:this.data.status,
+        contractStatus: this.fbd.control(this.data.contractStatus),    
+        
       });
     }
 
@@ -44,15 +60,16 @@ export class FilterListDialogComponent implements OnInit {
       this.contractTypeList = data;
     });
 
-    console.log(this.data.filter_type);
+    console.log("this.data.filter_type",this.data.filter_type);
     this.addForm = this.fbd.group({
       filter_type: this.data.filter_type!=""?this.fbd.control(Number(this.data.filter_type)):"",
       filter_contract_no:this.fbd.control(this.data.filter_contract_no),
       filter_from_date: this.data.filter_from_date!=""?this.fbd.control(new Date(this.data.filter_from_date)):"",
       filter_to_date: this.data.filter_to_date!=""?this.fbd.control(new Date(this.data.filter_to_date)):"",
       status:this.data.status,
+      contractStatus: this.fbd.control(this.data.contractStatus),
     });
-    console.log(this.addForm);
+    console.log("addddd form",this.addForm);    
   }
 
   onSubmit() {
@@ -66,10 +83,13 @@ export class FilterListDialogComponent implements OnInit {
       filter_contract_no: this.addForm.value.filter_contract_no,
       filter_from_date: this.addForm.value.filter_from_date,
       filter_to_date: this.addForm.value.filter_to_date,
-      status: this.addForm.value.status
+      status: this.addForm.value.status,
+      contractStatus: this.addForm.value.contractStatus
     }
     this.dialogRef.close();
-    console.log(data);
+    console.log("dataaaaaaaa",data);
+    // console.log("contractStatus",contractStatus);
+    
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
       this.router.navigate(['main/c/receive/' + data.status],
       {
@@ -79,6 +99,7 @@ export class FilterListDialogComponent implements OnInit {
           'filter_contract_no': data.filter_contract_no,
           'filter_from_date': data.filter_from_date,
           'filter_to_date': data.filter_to_date,
+          'contractStatus' : data.contractStatus
         },
         skipLocationChange: true
       });
