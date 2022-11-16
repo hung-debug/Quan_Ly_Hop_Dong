@@ -44,12 +44,13 @@ export class CancelContractDialogComponent implements OnInit {
       return;
     }
 
-    const data = {
-      id: this.data.id,
-      reason: this.addForm.value.reason,
-    }
+  
 
     if(this.data.id instanceof Array) {
+      const data = {
+        contract_ids: this.data.id,
+        reason: this.addForm.value.reason,
+      }
       let cancelManyApi: any = "";
       try {
         cancelManyApi = await this.contractService.cancelManyContrcacts(data);
@@ -75,6 +76,10 @@ export class CancelContractDialogComponent implements OnInit {
         return false;
       }
     } else {
+      const data = {
+        id: this.data.id,
+        reason: this.addForm.value.reason,
+      }
       this.contractService.changeStatusContract(data.id, 32, data.reason).subscribe((data) => {
         this.dialogRef.close();
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {

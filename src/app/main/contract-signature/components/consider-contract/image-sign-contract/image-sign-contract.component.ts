@@ -39,7 +39,6 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       this.currentUser = currentUserC.customer?.info;
     }
     // this.fetchDataUserSimPki();
-    console.log(this.sign);
   }
 
   ngAfterViewInit() {
@@ -87,7 +86,6 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   openPopupSignContract(typeSign: any) {
     if (typeSign == 1) {
-      console.log("typesign ", typeSign);
       this.imageDialogSignOpen();
     } else if (typeSign == 3) {
       this.pkiDialogSignOpen();
@@ -158,30 +156,6 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.checkShowEdit = false;
   }
 
-  /*fetchDataUserSimPki() {
-    if (this.sign?.recipient?.sign_type) {
-      const typeSD = this.sign?.recipient?.sign_type.find((t: any) => t.id != 1);
-      if (typeSD) {
-        this.typeSignDigital = typeSD.id;
-      }
-    }
-    if (this.sign.sign_unit == 'chu_ky_so'
-      && this.sign?.recipient?.email == this.currentUser.email && !this.view
-      && this.typeSignDigital && this.typeSignDigital == 3
-    ) {
-      const nl = networkList;
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      this.userService.getUserById(this.currentUser.id).subscribe(
-        (data) => {
-          const itemNameNetwork = nl.find((nc: any) => nc.id = data.phone_tel);
-          this.sign.phone = data.phone_sign;
-          this.sign.phone_tel = data.phone_tel;
-          this.sign.networkCode = (itemNameNetwork && itemNameNetwork.name) ? itemNameNetwork.name.toLowerCase() : null;
-        }
-      )
-    }
-  }*/
-
   forWardContract() {
     const data = {
       title: 'CHUYỂN TIẾP',
@@ -209,9 +183,6 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   getText(sign: any) {
-
-    // console.log("sign ",sign);
-    // console.log("datas ", this.datas);
     if (sign.sign_unit == 'text') {
       if(sign.valueSign) {
         return sign.valueSign;

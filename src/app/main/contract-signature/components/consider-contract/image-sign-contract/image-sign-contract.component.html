@@ -3,20 +3,19 @@
     <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" alt="mobifone.contract">
     <span style="color: #106DB6;">{{sign.sign_unit == 'chu_ky_anh' ? 'Chữ ký ảnh hoặc eKYC' : 'Chữ ký số'}}</span>
   </div>
+
   <div class="skeleton-sign" (click)="doSign()" *ngIf="checkShowEdit && !sign.valueSign">
     <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" alt="mobifone.contract">
   </div>
+
   <div *ngIf="sign.valueSign" (click)="doSign()">
     <img [src]="sign.valueSign" alt="mobifone.contract"
     [width]="sign.width ? sign.width : '100px'"
     [height]="sign.height ? sign.height : '54px'">
   </div>
-
-
 </div>
 
 <div class="text-sign" *ngIf="sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu'" style="background-color: white;">
-  <!--  <input id="input-text" type="text" [placeholder]="sign.sign_unit == 'text' ? 'Nhập text' : 'Nhập số tài liệu'">-->
   <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit">
     <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>

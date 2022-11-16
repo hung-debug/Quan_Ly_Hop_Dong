@@ -95,7 +95,7 @@
              (click)="getSignSelect(d)"
              [ngClass]="changeColorDrag(null, d, true)"
              [ngStyle]="changePosition(d)">
-          <div class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
+          <div *ngIf="d.sign_unit != 'text'" class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
           <app-image-sign-contract id="image-sign-contract" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
         </div>
       </div>
@@ -127,22 +127,6 @@
       <div style="display: none;" *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
         <app-image-sign-contract id="image-sign-contract-mobile" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
       </div>
-   
-    <!-- <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 3 || this.datas.roleContractReceived == 4">
-      <p class="d-flex justify-content-center mb-4 text-uppercase">XÁC NHẬN KÝ HỢP ĐỒNG</p>
-      <p class="d-flex mb-2 text-align-left mx-3">Bạn có đồng ý với nội dung, các điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch không?</p>
-      <div class="confirm-radio d-flex justify-content-between mx-4">
-        <div class="radio-confirm">
-          <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature'>
-          <label for="radio-confirm-secretary" class="ms-2">Đồng ý</label>
-        </div>
-        <div class="radio-refuse">
-          <input id="radio-refuse-secretary" type="radio" name='confirm-radio-secretary' [value]="2" [(ngModel)]='confirmSignature'>
-          <label for="radio-refuse-secretary" class="ms-2">Không đồng ý</label>
-        </div>
-      </div>
-
-    </div> -->
 
     <div class="flex-column" *ngIf="![2,3].includes(recipient.status)">
       <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2">

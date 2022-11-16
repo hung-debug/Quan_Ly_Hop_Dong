@@ -494,7 +494,6 @@ export class ConsiderContractComponent
             viewer.appendChild(canvas);
           }
 
-          // console.log("page before render ", page);
           this.renderPage(page, canvas);
         }
       })
@@ -563,11 +562,6 @@ export class ConsiderContractComponent
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
     setTimeout(() => {
-      // this.setPosition();
-      // this.eventMouseover();
-      // this.loadedPdfView = true;
-
-       //This gives us the page's dimensions at full scale
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
       // let viewport = page.getViewport(this.scale);
@@ -578,8 +572,7 @@ export class ConsiderContractComponent
       canvas.height = viewport.height;
       canvas.width = viewport.width;
 
-      // if(this.first < this.pageNumber)
-        this.prepareInfoSignUsbToken(pageNumber, canvas.height);
+      this.prepareInfoSignUsbToken(pageNumber, canvas.height);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
       if (!_objPage) {
         this.objPdfProperties.pages.push({
@@ -680,25 +673,18 @@ export class ConsiderContractComponent
     let signElement;
     if (set_id) {
       this.objSignInfo.id = set_id.id;
-      // this.objSignInfo.offsetWidth = set_id.offsetWidth;
-      // this.objSignInfo.offsetHeight = set_id.offsetWidth;
       signElement = document.getElementById(this.objSignInfo.id);
     } else signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter(
         (p: any) => p.id == this.objSignInfo.id
       )[0];
-      // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
       if (isObjSign) {
         this.objSignInfo.traf_x = d.coordinate_x;
         this.objSignInfo.traf_y = d.coordinate_y;
-        // this.signCurent.name = d.name;
 
         this.objSignInfo.offsetWidth = parseInt(d.offsetWidth);
         this.objSignInfo.offsetHeight = parseInt(d.offsetHeight);
-        // this.signCurent.offsetWidth = d.offsetWidth;
-        // this.signCurent.offsetHeight = d.offsetHeight;
-        // console.log(this.signCurent)
 
         this.isEnableText = d.sign_unit == 'text';
 
@@ -709,7 +695,6 @@ export class ConsiderContractComponent
       }
       if (d.name) {
         this.list_sign_name.forEach((item: any) => {
-          // if (item.id == d.id) {
           if (d.sign_unit == 'chu_ky_anh') {
             if (!item.signType.filter((p: any) => p.item_id == 1)[0]) {
               item.is_disable = true;
@@ -1172,9 +1157,6 @@ export class ConsiderContractComponent
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
       if (this.signCertDigital) {
-
-        console.log("is data object ", this.isDataObjectSignature);
-
         // this.signCertDigital = resSignDigital.data;
         for (const signUpdate of this.isDataObjectSignature) {
           console.log("signUpdate ", signUpdate);
@@ -1185,7 +1167,6 @@ export class ConsiderContractComponent
             signUpdate?.recipient?.email === this.currentUser.email &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
-            console.log("chinh là no ");
             let fileC = await this.contractService.getFileContractPromise(
               this.idContract
             );
@@ -1394,9 +1375,6 @@ export class ConsiderContractComponent
         }
       }
     } else if (typeSignDigital == 5) {
-      console.log('vao day ky ekyc ');
-      console.log('sign update ', this.isDataObjectSignature);
-
       const objSign = this.isDataObjectSignature.filter(
         (signUpdate: any) =>
           signUpdate &&
@@ -2502,8 +2480,6 @@ export class ConsiderContractComponent
            signI = textSignB.split(",")[1];
          }
 
-         console.log("signI ", signI);
-
       if (result) {
         this.dataHsm = {
           ma_dvcs: result.ma_dvcs,
@@ -2535,9 +2511,6 @@ export class ConsiderContractComponent
       let is_data = result;
 
       this.datas.is_data_object_signature.valueSign = result;
-
-      console.log('datas ', this.datas.is_data_object_signature.valueSign);
-
       if (result) {
         if (
           e &&
