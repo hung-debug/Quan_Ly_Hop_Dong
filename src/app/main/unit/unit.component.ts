@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { async } from 'rxjs';
 import { AppService } from 'src/app/service/app.service';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
@@ -19,7 +22,10 @@ export class UnitComponent implements OnInit {
     private unitService: UnitService,
     private userService: UserService,
     private roleService: RoleService,
-    private toastService: ToastService) { }
+    private toastService: ToastService,
+    public router: Router,
+    private spinner: NgxSpinnerService
+    ) { }
 
   code:any = "";
   name:any = "";
@@ -109,7 +115,6 @@ export class UnitComponent implements OnInit {
   getData() {
     this.unitService.getUnitList(this.code, this.name).subscribe(response => {
       this.listData = response.entities;
-      console.log(this.listData);
       this.total = this.listData.length;
 
       this.listData = this.listData.sort((a,b) => a.id - b.id || a.parent_id - b.parent_id || a.name.toString().localeCompare(b.name.toString()));
@@ -211,6 +216,51 @@ export class UnitComponent implements OnInit {
       console.log('the close dialog');
       let is_data = result
     })
+  }
+
+  fileChanged(e: any) {
+    const file = e.target.files[0];
+    if (file) {
+      // giới hạn file upload lên là 5mb
+      if (e.target.files[0].size <= 5000000) {
+        const file_name = file.name;
+        const extension = file.name.split('.').pop();
+        // tslint:disable-next-line:triple-equals
+        if (
+          extension.toLowerCase() == 'xls' ||
+          extension.toLowerCase() == 'xlsx'
+        ) {
+          this.callApiImport(file);
+        } else {
+          this.toastService.showErrorHTMLWithTimeout(
+            'Chỉ hỗ trợ file có định dạng XLS, XLSX',
+            '',
+            3000
+          );
+        }
+      } else {
+        this.toastService.showErrorHTMLWithTimeout(
+          'Yêu cầu file nhỏ hơn 5MB',
+          '',
+          3000
+        );
+      }
+    }
+  }
+
+  async callApiImport(file: any) {
+    this.spinner.show();
+    const importUnit = await this.unitService.uploadFileUnit(file);
+
+    if(importUnit.status == 200) {
+      this.spinner.hide();
+      this.toastService.showSuccessHTMLWithTimeout("Import tổ chức thành công","",3000);
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate(['/main/unit']);
+      });
+    } else {
+      console.log("import unit ", importUnit);
+    }
   }
 
   editUnit(id:any) {

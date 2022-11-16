@@ -88,6 +88,25 @@ export class UnitService {
     return this.http.post<any>(this.addUnitUrl, body, {'headers': headers});
   }
 
+  uploadFileUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/import-child-org`;
+  uploadFileUnit(file: any) {
+    this.getCurrentUser();
+    let formData = new FormData();
+    formData.append('file', file);
+
+    const headers = new HttpHeaders()
+      .append('Authorization', 'Bearer ' + this.token);
+    
+      return this.http.post<any>(
+        this.uploadFileUnitUrl,
+        formData,
+        {
+          headers: headers,
+          observe: 'response'
+        }
+      ).toPromise();
+  }
+
   updateUnit(datas: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()

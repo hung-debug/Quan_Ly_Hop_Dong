@@ -121,8 +121,10 @@ export class ContractService {
   infoPageUrl: any = `${environment.apiUrl}/api/v1/sign/multi/usb-token/page-info/?documentId=`;
 
   decreaseNumberEkycUrl: any = `${environment.apiUrl}/api/v1/organizations/`;
-
   cancelManyContractsUrl: any = `${environment.apiUrl}/api/v1/contracts/multi-cancel`;
+
+  uploadFileUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/import-child-org`;
+
 
   token: any;
   customer_id: any;
@@ -1381,7 +1383,6 @@ export class ContractService {
     formData.append('file', file);
 
     const headers = new HttpHeaders()
-      //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.post<any>(
       this.uploadFileContractBatchUrl +
@@ -1391,6 +1392,21 @@ export class ContractService {
       formData,
       { headers: headers }
     );
+  }
+
+  uploadFileUnit(file: any) {
+    this.getCurrentUser();
+    let formData = new FormData();
+    formData.append('file', file);
+
+    const headers = new HttpHeaders()
+      .append('Authorization', 'Bearer ' + this.token);
+    
+      return this.http.post<any>(
+        this.uploadFileUnitUrl,
+        formData,
+        { headers: headers }
+      );
   }
 
   getContractBatchList(file: any, idContractTemplate: any) {

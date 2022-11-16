@@ -15,6 +15,9 @@
     <div class="col-md-6 btn_search">
       <button *ngIf="isQLTC_03" class="btn btn-lg btn-block btn_submit" (click)="searchUnit()">{{'btn.search' | translate }}</button>
       <button *ngIf="isQLTC_01" class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
+      <!-- <button *ngIf="isQLTC_01" class="btn btn-lg btn-block btn_submit" (click)="fileChanged($event)">{{'Import' | translate }}</button> -->
+      <input id="file-input" type="file" accept=".xls,.xlsx"
+      (change)="fileChanged($event)"/>
     </div>
   </div>
 
