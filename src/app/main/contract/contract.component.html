@@ -1,8 +1,7 @@
+<p-selectButton *ngIf="filter_status!=40" [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()"></p-selectButton>
+
 <!--Truong hop dang xu ly va sap het han-->
-<div *ngIf="this.filter_status == 20 || this.filter_status == 33" class="col-md-4" class="container-fluid">
-
-    <p-selectButton *ngIf="filter_status!=40" [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()"></p-selectButton>
-
+<div *ngIf="(this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off'" class="col-md-4" class="container-fluid">
     <ng-template [ngIf]="!roleMess">
         <div class="col-md-12" style="padding-top: 20px;">
             <div class="input-line search">
@@ -128,10 +127,7 @@
 </div>
 
 <!--Truong hop khac-->
-<div *ngIf="this.filter_status != 20 && this.filter_status != 33" class="col-md-4" class="container-fluid">
-
-    <p-selectButton *ngIf="filter_status!=40" [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="changeTab()"></p-selectButton>
-
+<div *ngIf="!((this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off')" class="container-fluid">
     <ng-template [ngIf]="!roleMess">
         <div class="col-md-12" style="padding-top: 20px;">
             <div class="input-line search">

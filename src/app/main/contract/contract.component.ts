@@ -219,10 +219,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.spinner.hide();
   }
 
-  // ngOnDestroy() {
-  //   this.subscription.unsubscribe();
-  // }
-
   getContractList() {
     this.roleMess = "";
     if(this.isOrg == 'off' && !this.isQLHD_05){
@@ -259,6 +255,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
   changeTab(){
     this.p = 1;
     this.getContractList();
+
+    console.log("orrg ", this.isOrg);
   }
 
   private convertStatusStr() {
