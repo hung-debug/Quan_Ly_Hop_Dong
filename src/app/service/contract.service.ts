@@ -231,7 +231,7 @@ export class ContractService {
         filter_status = '30';
         listContractUrl =
           this.listPastContractUrl +
-          '?name=' +
+          '?keyword=' +
           filter_name.trim() +
           '&type=' +
           filter_type +
@@ -252,7 +252,7 @@ export class ContractService {
       } else {
         listContractUrl =
           this.listContractUrl +
-          '?name=' +
+          '?keyword=' +
           filter_name.trim() +
           '&type=' +
           filter_type +
@@ -269,9 +269,7 @@ export class ContractService {
           '&page=' +
           page +
           '&size=' +
-          size +
-          '&partner=' +
-          filter_name.trim();
+          size ;
       }
     } else {
       if (organization_id == '') {
@@ -279,7 +277,7 @@ export class ContractService {
           this.listContractOrgChildrenUrl +
           '?organizationId=' +
           this.organization_id +
-          '&name=' +
+          '&keyword=' +
           filter_name.trim() +
           '&type=' +
           filter_type +
@@ -302,7 +300,7 @@ export class ContractService {
           this.listContractOrgUrl +
           '?organization_id=' +
           organization_id +
-          '&name=' +
+          '&keyword=' +
           filter_name.trim() +
           '&type=' +
           filter_type +
