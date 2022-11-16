@@ -186,7 +186,7 @@ export class ConfirmInfoContractComponent implements OnInit {
         }
 
         if (!item.recipient_id ) {
-          let getIdRecipientObj = response_determine_contract.recipients.filter((idField: any) => idField.email == item.email)[0];
+          let getIdRecipientObj = response_determine_contract.recipients.filter((idField: any) => idField.email == item.email && idField.role != 1)[0];
           item.recipient_id = getIdRecipientObj && getIdRecipientObj.id ? getIdRecipientObj.id : undefined;
         }
 
