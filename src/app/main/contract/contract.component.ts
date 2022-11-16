@@ -276,6 +276,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   ViewReasonCancel(ContractId: number){
     const data = {contractId: ContractId}
     const dialogRef = this.dialog.open(DialogReasonCancelComponent, {
+      width: '500px',
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {

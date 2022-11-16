@@ -1046,7 +1046,8 @@ export class ContractSignatureComponent implements OnInit {
   ViewReasonCancel(ContractId: number){
     const data = {contractId: ContractId};
     const dialogRef = this.dialog.open(DialogReasonCancelComponent, {
-        data
+      width: '500px',
+      data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
