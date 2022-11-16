@@ -49,21 +49,31 @@ export class CancelContractDialogComponent implements OnInit {
       reason: this.addForm.value.reason,
     }
 
-    
     if(this.data.id instanceof Array) {
-      let cancelManyApi = await this.contractService.cancelManyContrcacts(this.data.id);
+      let cancelManyApi: any = "";
+      try {
+        cancelManyApi = await this.contractService.cancelManyContrcacts(data);
 
-      if(cancelManyApi.success) {
-        this.dialogRef.close();
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-          this.router.navigate(['/main/contract/create/cancel']);
-        });
-        this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thành công!", "", 3000);
-      } else {
-        this.toastService.showErrorHTMLWithTimeout("Huỷ nhiều hợp đồng không thành công","",3000);
+        if(cancelManyApi.success) {
+          this.dialogRef.close();
+          this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+            this.router.navigate(['/main/contract/create/cancel']);
+          });
+          this.toastService.showSuccessHTMLWithTimeout("Hủy hợp đồng thành công!", "", 3000);
+        } else {
+            this.toastService.showErrorHTMLWithTimeout("Huỷ nhiều hợp đồng không thành công","",3000);
+            return false;
+        }
+
+      } catch(err) {
+        this.toastService.showErrorHTMLWithTimeout(
+          'Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý',
+          '',
+          3000
+        );
+
         return false;
       }
-
     } else {
       this.contractService.changeStatusContract(data.id, 32, data.reason).subscribe((data) => {
         this.dialogRef.close();

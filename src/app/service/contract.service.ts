@@ -575,17 +575,13 @@ export class ContractService {
     });
   }
 
-  cancelManyContrcacts(idContract: any[]) {
+  cancelManyContrcacts(data: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    const body = JSON.stringify({
-      contract_ids: idContract
-    })
-    
-    return this.http.post<any>(this.cancelManyContractsUrl, body, {
+    return this.http.post<any>(this.cancelManyContractsUrl, data, {
       headers: headers,
     }).toPromise();
   }

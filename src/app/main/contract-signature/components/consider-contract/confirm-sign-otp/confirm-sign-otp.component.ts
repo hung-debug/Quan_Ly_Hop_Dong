@@ -61,11 +61,7 @@ export class ConfirmSignOtpComponent implements OnInit {
 
 
 
-  ngOnInit(): void {
-
-    console.log("data ", this.data);
-
-    
+  ngOnInit(): void {    
              //Còn số lượng SMS thì cho ký OTP lần đầu
              this.unitService
              .getNumberContractUseOriganzation(this.data.orgId)
@@ -278,9 +274,7 @@ export class ConfirmSignOtpComponent implements OnInit {
           && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
-  
-          console.log("sign update ", signUpdate);
-  
+    
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
             "content": signUpdate.valueSign,
@@ -288,24 +282,18 @@ export class ConfirmSignOtpComponent implements OnInit {
           }
   
           signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
-  
-          console.log("signuploadobs ", signUploadObs$);
-  
+    
           indexSignUpload.push(iu);
         }
         iu++;
       }
     } else {
-      console.log("is mobile ");
       for (const signUpdate of this.datas.is_data_object_signature) {
-        console.log('ki anh', signUpdate);
         if (signUpdate && signUpdate.type == 2 && [3, 4].includes(this.datas.roleContractReceived)
           && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
-  
-          console.log("sign update ", signUpdate);
-  
+    
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
             "content": this.datasOtp.datas.is_data_object_signature.valueSign,
@@ -313,9 +301,7 @@ export class ConfirmSignOtpComponent implements OnInit {
           }
   
           signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
-  
-          console.log("signuploadobs ", signUploadObs$);
-  
+    
           indexSignUpload.push(iu);
         }
         iu++;
@@ -345,10 +331,8 @@ export class ConfirmSignOtpComponent implements OnInit {
   mobile: boolean = false;
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
-      console.log("la mobile ");
       this.mobile = true;
     } else {
-      console.log("la pc");
       this.mobile = false;
     }
   }
@@ -370,8 +354,6 @@ export class ConfirmSignOtpComponent implements OnInit {
           }
         });
     }else{
-      console.log("chu ky anh ");
-
       this.userOtp = this.datasOtp.name;
       this.phoneOtp = this.datasOtp.phone;
       this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
@@ -382,14 +364,10 @@ export class ConfirmSignOtpComponent implements OnInit {
       let signI:any;
       if (imageRender) {
         const textSignB = await domtoimage.toPng(imageRender);
-
-        console.log("textSignB ", textSignB);
         signI = textSignB.split(",")[1];
-
-        console.log("signI ",signI);
       }
-      //console.log(signI);
-      //console.log(this.datepipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss'));
+     
+
       signUpdatePayload = signUpdateTemp.filter(
         (item: any) => item?.recipient?.email === this.datasOtp.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
         .map((item: any) => {
@@ -402,12 +380,11 @@ export class ConfirmSignOtpComponent implements OnInit {
                 id: item.id,
                 name: item.name,
                 value: (item.type == 1 || item.type == 4) ? item.valueSign : item.value,
-                font: item.font,
-                font_size: item.font_size
+                font: 'Arial',
+                font_size: 14
               }]
           }
         });
-      console.log("sign update payload ",signUpdatePayload);
       if(signUpdatePayload){
         signUpdatePayload = signUpdatePayload[0];
       }
@@ -437,25 +414,11 @@ export class ConfirmSignOtpComponent implements OnInit {
   }
 
   async signImageC(signUpdatePayload: any, notContainSignImage: any) {
-    console.log(notContainSignImage);
-    console.log(signUpdatePayload);
     let signDigitalStatus = null;
     let signUpdateTempN = [];
     if(signUpdatePayload){
       signUpdateTempN = JSON.parse(JSON.stringify(signUpdatePayload));
       if (notContainSignImage) {
-        // signDigitalStatus = await this.signDigitalDocument();
-        // signUpdateTempN = signUpdateTempN.filter(
-        //   (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived)
-        //   .map((item: any) => {
-        //     return {
-        //       id: item.id,
-        //       name: item.name,
-        //       value: null,
-        //       font: item.font,
-        //       font_size: item.font_size
-        //     }
-        //   });
       }
     }
     
@@ -464,27 +427,8 @@ export class ConfirmSignOtpComponent implements OnInit {
       return;
     }
     if(notContainSignImage){
-      // console.log(signUpdateTempN);
-      // this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
-      //   async (result) => {
-      //     if (!notContainSignImage) {
-      //       await this.signDigitalDocument();
-      //     }
-      //     setTimeout(() => {
-      //       this.router.navigate(['/main/form-contract/detail/' + this.idContract]);
-      //       this.toastService.showSuccessHTMLWithTimeout(
-      //         [3, 4].includes(this.datas.roleContractReceived) ? 'Ký hợp đồng thành công' : 'Xem xét hợp đồng thành công'
-      //         , '', 3000);
-      //       this.spinner.hide();
-      //     }, 1000);
-      //   }, error => {
-      //     this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
-      //     this.spinner.hide();
-      //   }
-      // )
+   
     }else{
-      console.log("signupdatetempn ", signUpdateTempN);
-      console.log("recipient_id ", this.datasOtp.recipient_id);
       this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.datasOtp.recipient_id).subscribe(
         async (result) => {
           console.log("result ",result);
@@ -508,7 +452,6 @@ export class ConfirmSignOtpComponent implements OnInit {
             }
           }else{
             if (!notContainSignImage) {
-              //await this.signDigitalDocument();
             }
             setTimeout(() => {
               console.log("vao day ky hop dong thanh cong ");

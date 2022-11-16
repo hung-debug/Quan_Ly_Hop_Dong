@@ -191,7 +191,7 @@ export class AddUserComponent implements OnInit {
                     this.isEditRole = true;
     
                     //lay danh sach vai tro
-                    this.roleService.getRoleList('', '').subscribe(dataRole => {
+                     this.roleService.getRoleByOrgId(orgId).subscribe(dataRole => {
                       //this.roleList = data.entities;
                       this.roleList = [];
                       let checkDupRolePersent = false;

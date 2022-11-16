@@ -1192,6 +1192,7 @@ export class ContractSignatureComponent implements OnInit {
         } else if (ceca_status == 0) {
           return '[BCT xác thực thành công]';
         } else {
+          console.log("ceca status ",ceca_status);
           return '[Chưa gửi lên CeCA]';
         }
       }
