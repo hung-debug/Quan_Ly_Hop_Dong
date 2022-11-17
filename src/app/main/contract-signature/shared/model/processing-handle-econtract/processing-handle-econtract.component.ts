@@ -36,25 +36,22 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
     private contractService : ContractService
-    // public name: LoginComponent
   ) {
   }
 
   ngOnInit(): void {
-    // this.personCreate = "Phạm Tấn Dũng";
-    // this.emailCreate = "dung111999@gmail.com";
-    // this.timeCreate="19/10/2022";
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
-      // this.timeCreate = response.createdAt ? moment(response.createdAt, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
 
       this.timeCreate = response.createdAt ? moment(response.createdAt).add(420):null;
       this.timeCreate = response.createdAt ? moment(this.timeCreate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
       this.emailCreate = response.createdBy.email;
+  
+      response.recipients.forEach(async (element: any) => {
 
-      // console.log("respinnnnnnnn", response);
-      
-      response.recipients.forEach((element: any) => {
+        //Lấy thông tin của recipientId
+        let recipientInfo = await this.contractService.getDetermineCoordination(element.id).toPromise();
+
         let data = {
           id: element.id,
           name: element.name,
@@ -64,11 +61,11 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           typeOfSign: element.signType[0],
           process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
           reasonReject: element.reasonReject,
+          type: recipientInfo.type
         }
         this.is_list_name.push(data);
       })
     });
-     console.log("is list name",this.is_list_name)
   }
 
   getStatus(status: any) {
@@ -105,8 +102,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   acceptRequest() {
     this.dialog.closeAll();
-    // this.router.navigate(['/login']);
   }
+
 // @ts-ignore
   viewReasonRejected(RecipientsId: any){
    let data: any;
@@ -124,7 +121,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-      let is_data = result
     }) 
   }
 
