@@ -83,8 +83,6 @@ export class UnitService {
       tax_code: datas.tax_code
     });
 
-    console.log("body "+body);
-
     return this.http.post<any>(this.addUnitUrl, body, {'headers': headers});
   }
 
@@ -95,14 +93,17 @@ export class UnitService {
     formData.append('file', file);
 
     const headers = new HttpHeaders()
-      .append('Authorization', 'Bearer ' + this.token);
+      .append('Authorization', 'Bearer ' + this.token)
+      
+      // .append('Content-Type','application/octet-stream');
     
-      return this.http.post<any>(
+      return this.http.post(
         this.uploadFileUnitUrl,
         formData,
         {
           headers: headers,
-          observe: 'response'
+          observe: 'response',
+          responseType: 'blob'
         }
       ).toPromise();
   }

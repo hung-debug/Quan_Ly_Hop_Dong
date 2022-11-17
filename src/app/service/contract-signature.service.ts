@@ -1,3 +1,4 @@
+import { parttern } from 'src/app/config/parttern';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -46,7 +47,7 @@ export class ContractSignatureService {
     if(page != ""){
       page = page - 1;
     }
-    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus;
+    let listContractMyProcessUrl = this.listContractMyProcessUrl + '?keyword=' + filter_name.trim() + '&type=' + filter_type + '&status=' + filter_status + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus;
     console.log(listContractMyProcessUrl);
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<Contract[]>(listContractMyProcessUrl, {headers}).pipe();
@@ -101,7 +102,7 @@ export class ContractSignatureService {
     if(page != ""){
       page = page - 1;
     }
-    let shareListContractUrl = this.shareListContractUrl + '?name=' + filter_name.trim() + '&type=' + filter_type + '&status=' + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus;
+    let shareListContractUrl = this.shareListContractUrl + '?keyword=' + filter_name.trim() + '&type=' + filter_type + '&status=' + '&contract_no=' + filter_contract_no.trim() + "&from_date=" + filter_from_date + "&to_date=" + filter_to_date + "&page=" + page + "&size=" + size + "&contractStatus=" + contractStatus;
     const headers = {'Authorization': 'Bearer ' + this.token}
     return this.http.get<any[]>(shareListContractUrl, {headers}).pipe();
   }

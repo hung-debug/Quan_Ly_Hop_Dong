@@ -252,15 +252,28 @@ export class UnitComponent implements OnInit {
     this.spinner.show();
     const importUnit = await this.unitService.uploadFileUnit(file);
 
-    if(importUnit.status == 200) {
+    if(importUnit.status == 204) {
       this.spinner.hide();
       this.toastService.showSuccessHTMLWithTimeout("Import tổ chức thành công","",3000);
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate(['/main/unit']);
       });
-    } else {
-      console.log("import unit ", importUnit);
+    } else if(importUnit.status == 200) {
+      this.spinner.hide();
+
+      this.toastService.showErrorHTMLWithTimeout("File excel không hợp lệ. Vui lòng xem chi tiết lỗi ở file excel đã download","",3000);
+
+      let body: any = importUnit.body;
+      let blob = new Blob([body], { type: 'application/vnd.openxmlformats-ficedocument.spreadsheetml.sheet'});
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `report_${new Date().getTime()}.xlsx`;
+      link.click();
     }
+  }
+
+  downFileExample() {
+    
   }
 
   editUnit(id:any) {

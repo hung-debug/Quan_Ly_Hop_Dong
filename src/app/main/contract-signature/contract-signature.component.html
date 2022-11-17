@@ -2,7 +2,7 @@
     <div class="col-md-12" style="padding-top: 10px;" *ngIf="filter_status == 1 || filter_status == 4 || filter_status == -1 || filter_status == 11">
         <div class="input-line search">
             <img src="../../assets/img/icon_search.svg" class="input-img" />
-            <input type="text" id="search" class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
+            <input type="text" id="search"  class="input-text" placeholder="{{'contract.search.name.placeholder' | translate}}" (keyup)="autoSearch($event)" />
             <img src="../../assets/img/icon_search_group.svg" class="input-img" (click)="searchContract()" />
         </div>
     </div>
@@ -110,7 +110,7 @@
                                 <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId);" />
                             </div>
                             <div class="div_icon" *ngIf="item.contractStatus == 32">
-                                <img src="../../assets/img/view_reason_icon.svg" class="img_icon" ngbTooltip="Lý do hủy hợp đồng" (click)="ViewReasonCancel(item.contractId)" />
+                                <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="Lý do hủy hợp đồng" (click)="ViewReasonCancel(item.contractId)" />
                             </div>
                         </div>
                     </div>

@@ -119,6 +119,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     }
     
     const dialogRef = this.dialog.open(DialogReasonRejectedComponent, {
+      width: '600px',
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
