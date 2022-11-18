@@ -530,7 +530,6 @@ export class ConsiderContractComponent
 
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
   setPosition() {
-    console.log('this convert to sign config ', this.convertToSignConfig());
     if (this.convertToSignConfig().length > 0) {
       this.convertToSignConfig().forEach((element: any) => {
         let a = document.getElementById(element.id);
@@ -1154,20 +1153,13 @@ export class ConsiderContractComponent
 
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
-      if (this.signCertDigital) {
-        // this.signCertDigital = resSignDigital.data;
+      if (this.signCertDigital && this.signCertDigital.Serial) {
         for (const signUpdate of this.isDataObjectSignature) {
-          console.log("signUpdate ", signUpdate);
-          console.log("role contract ", this.datas?.roleContractReceived);
-          if (
-            signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4) &&
-            [3, 4].includes(this.datas.roleContractReceived) &&
-            signUpdate?.recipient?.email === this.currentUser.email &&
-            signUpdate?.recipient?.role === this.datas?.roleContractReceived
+          if (signUpdate && (signUpdate.type == 3 || signUpdate.type == 1 || signUpdate.type == 4) && [3, 4].includes(this.datas.roleContractReceived)
+            && signUpdate?.recipient?.email === this.currentUser.email
+            && signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
-            let fileC = await this.contractService.getFileContractPromise(
-              this.idContract
-            );
+            let fileC = await this.contractService.getFileContractPromise(this.idContract);
             const pdfC2 = fileC.find((p: any) => p.type == 2);
             const pdfC1 = fileC.find((p: any) => p.type == 1);
             if (pdfC2) {
@@ -1177,7 +1169,6 @@ export class ConsiderContractComponent
             } else {
               return;
             }
-
             let signI = null;
             if (signUpdate.type == 1 || signUpdate.type == 4) {
               this.textSign = signUpdate.valueSign;
@@ -1189,8 +1180,8 @@ export class ConsiderContractComponent
               const imageRender = <HTMLElement>document.getElementById('text-sign');
 
               if (imageRender) {
-                const textSignB = await domtoimage.toJpeg(imageRender);
-                signI = this.textSignBase64Gen = textSignB.split(',')[1];
+                const textSignB = await domtoimage.toPng(imageRender);
+                signI = this.textSignBase64Gen = textSignB.split(",")[1];
               }
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(120)).toPromise();
@@ -1198,65 +1189,46 @@ export class ConsiderContractComponent
               //lấy ảnh chữ ký usb token
               const imageRender = <HTMLElement>document.getElementById('export-html');
               if (imageRender) {
-                const textSignB = await domtoimage.toJpeg(imageRender);
-                signI = textSignB.split(',')[1];
+                const textSignB = await domtoimage.toPng(imageRender);
+                signI = textSignB.split(",")[1];
               }
             }
 
-              const signDigital = JSON.parse(JSON.stringify(signUpdate));
-              signDigital.Serial = this.signCertDigital;
-              const base64String =
-                await this.contractService.getDataFileUrlPromise(fileC);
-              signDigital.valueSignBase64 = encode(base64String);
+            console.log("signI ", signI);
 
-              var json_req = JSON.stringify({
-                OperationId: 10,
-                SessionId: this.sessionIdUsbToken,
-                checkOCSP: 0,
-                reqDigest: 1,
-                algDigest: 'SHA_1',
-                extFile: 'pdf',
-                invisible: 0,
-                pageIndex: Number(signDigital.page - 1),
-                offsetX: Math.floor(signDigital.signDigitalX),
-                offsetY: Math.floor(signDigital.signDigitalY),
-                sigWidth: Math.floor(signDigital.signDigitalWidth),
-                sigHeight: Math.floor(signDigital.signDigitalHeight),
-                logoData: signI,
-                DataToBeSign: signDigital.valueSignBase64,
-                showSignerInfo: 0,
-                sigId: '',
-              });
+            const signDigital = JSON.parse(JSON.stringify(signUpdate));
+            signDigital.Serial = this.signCertDigital.Serial;
+            const base64String = await this.contractService.getDataFileUrlPromise(fileC);
+            signDigital.valueSignBase64 = encode(base64String);
 
-              json_req = window.btoa(json_req);
+            const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
 
-              const dataSignMobi: any = await this.contractService.signUsbToken("request="+json_req);
+            // const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
+            // signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
 
-              let data = JSON.parse(window.atob(dataSignMobi.data)).Base64Result;
+            console.log("data sign mobi ", dataSignMobi);
 
-              if(!data) {
-                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-                  return false;
-              }
+            if (!dataSignMobi.data.FileDataSigned) {
+              console.log("file data signed ");
 
-              const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, data);
-              if (!sign.recipient_id) {
-                console.log("recipent_id")
+              this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+              return false;
+            }
+            const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
+            if (!sign.recipient_id) {
+              console.log("recipent_id")
 
-                this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-                return false;
-              }
+              this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+              return false;
             }
           }
-          return true;
-      } else {
-        this.toastService.showErrorHTMLWithTimeout(
-          'Lỗi ký USB Token',
-         '',
-           3000
-       );
-        return false;
         }
+        return true;
+      } else {
+        console.log("not sign cert digital ");
+        this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+        return false;
+      }
     } else if (typeSignDigital == 3) {
       const objSign = this.isDataObjectSignature.filter(
         (signUpdate: any) =>
