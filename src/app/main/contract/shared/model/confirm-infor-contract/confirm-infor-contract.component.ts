@@ -174,55 +174,55 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   user: any;
   submit(action: string) {
 
-    // this.contractService
-    // .updateContractIsPushCeCA(this.datas.id, 0)
-    // .subscribe(
-    //   (data) => {
-    //     this.SaveContract(action);
-    //   },
-    //   (error) => {
-    //     this.spinner.hide();
-    //     this.toastService.showErrorHTMLWithTimeout(
-    //       'Có lỗi! Vui lòng liên hệ nhà phát triển để xử lý',
-    //       '',
-    //       3000
-    //     );
-    //   }
-    // );
+    this.contractService
+    .updateContractIsPushCeCA(this.datas.id, 0)
+    .subscribe(
+      (data) => {
+        this.SaveContract(action);
+      },
+      (error) => {
+        this.spinner.hide();
+        this.toastService.showErrorHTMLWithTimeout(
+          'Có lỗi! Vui lòng liên hệ nhà phát triển để xử lý',
+          '',
+          3000
+        );
+      }
+    );
 
     // console.log("submit ");
-    const data = {
-      title: 'YÊU CẦU XÁC NHẬN',
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(ConfirmCecaContractComponent, {
-      width: '560px',
-      backdrop: 'static',
-      keyboard: false,
-      data,
-      autoFocus: false,
-    });
-    dialogRef.afterClosed().subscribe((isCeCA: any) => {
-      if (isCeCA == 1 || isCeCA == 0) {
-        this.spinner.show();
-        this.contractService
-          .updateContractIsPushCeCA(this.datas.id, isCeCA)
-          .subscribe(
-            (data) => {
-              this.SaveContract(action);
-            },
-            (error) => {
-              this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout(
-                'Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương',
-                '',
-                3000
-              );
-            }
-          );
-        //this.SaveContract(action);
-      }
-    });
+  //   const data = {
+  //     title: 'YÊU CẦU XÁC NHẬN',
+  //   };
+  //   // @ts-ignore
+  //   const dialogRef = this.dialog.open(ConfirmCecaContractComponent, {
+  //     width: '560px',
+  //     backdrop: 'static',
+  //     keyboard: false,
+  //     data,
+  //     autoFocus: false,
+  //   });
+  //   dialogRef.afterClosed().subscribe((isCeCA: any) => {
+  //     if (isCeCA == 1 || isCeCA == 0) {
+  //       this.spinner.show();
+  //       this.contractService
+  //         .updateContractIsPushCeCA(this.datas.id, isCeCA)
+  //         .subscribe(
+  //           (data) => {
+  //             this.SaveContract(action);
+  //           },
+  //           (error) => {
+  //             this.spinner.hide();
+  //             this.toastService.showErrorHTMLWithTimeout(
+  //               'Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương',
+  //               '',
+  //               3000
+  //             );
+  //           }
+  //         );
+  //       //this.SaveContract(action);
+  //     }
+  //   });
   }
 
   async SaveContract(action: string) {
@@ -303,10 +303,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       });
 
       this.spinner.show();
-
-      console.log("datas contract user sign ",this.datas.contract_user_sign);
-      console.log("is contract user sign clone ",isContractUserSign_clone);
-      console.log("this data sample contract ", this.data_sample_contract);
 
       this.contractService
         .getContractSample(this.data_sample_contract)

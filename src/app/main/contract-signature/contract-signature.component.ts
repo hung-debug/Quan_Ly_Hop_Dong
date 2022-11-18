@@ -420,92 +420,87 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   signManyContract() {
-    //Nếu chọn hợp đồng khác loại ký thì ko cho ký
-    let contractsSignManyChecked = this.contractsSignMany.filter(
-      (opt) => opt.checked
-    );
+   //Nếu chọn hợp đồng khác loại ký thì ko cho ký
+   let contractsSignManyChecked = this.contractsSignMany.filter(
+    (opt) => opt.checked
+  );
 
-    console.log('contracts sign many checked ', contractsSignManyChecked);
-    for (let i = 0; i < contractsSignManyChecked.length; i++) {
-      for (let j = i + 1; j < contractsSignManyChecked.length; j++) {
-        if (
-          contractsSignManyChecked[i].sign_type[0].id !=
-          contractsSignManyChecked[j].sign_type[0].id
-        ) {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Vui lòng chọn những hợp đồng cùng loại ký',
-            '',
-            3000
-          );
-          return;
-        }
+  console.log('contracts sign many checked ', contractsSignManyChecked);
+  for (let i = 0; i < contractsSignManyChecked.length; i++) {
+    for (let j = i + 1; j < contractsSignManyChecked.length; j++) {
+      if (
+        contractsSignManyChecked[i].sign_type[0].id !=
+        contractsSignManyChecked[j].sign_type[0].id
+      ) {
+        this.toastService.showErrorHTMLWithTimeout(
+          'Vui lòng chọn những hợp đồng cùng loại ký',
+          '',
+          3000
+        );
+        return;
       }
     }
+  }
 
-    //Lay hop dong ky nhieu bang hsm hay usb token
-    let signId = contractsSignManyChecked[0].sign_type[0].id;
+  //Lay hop dong ky nhieu bang hsm hay usb token
+  let signId = contractsSignManyChecked[0].sign_type[0].id;
 
-    let recipientId: any = [];
-    let taxCode: any = [];
-    let idSignMany: any = [];
-
- 
-    console.log("signId ", signId);
-
-    
-    //Lấy id đã tick
-    //2: usb token
-    //4: hsm
-    //id truyen len cua hsm la recipient id: idSignMany = recipientId
-    //id truyen len cua usb token la field id
-    if (signId == 4) {
-      idSignMany = contractsSignManyChecked
-        .filter((opt) => opt.checked)
-        .map((opt) => opt.id);
-      
-      recipientId = contractsSignManyChecked
-        .filter((opt) => opt.checked)
-        .map((opt) => opt.id);
-
-      //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
-      for (let i = 0; i < recipientId.length; i++) {
-        console.log('recipient id i ', recipientId[i]);
-        this.contractServiceV1
-          .getDetermineCoordination(recipientId[i])
-          .subscribe((response) => {
-            response.recipients.forEach((item: any) => {
-              if(item.fields[0].recipient.id == recipientId[i]) {
-                  taxCode.push(item.fields[0].recipient.cardId);
-              }
-            })
-          });
-      }
-
-    } else if (signId == 2) {
-
-      recipientId = contractsSignManyChecked
+  let recipientId: any = [];
+  let taxCode: any = [];
+  let idSignMany: any = [];
+  
+  //Lấy id đã tick
+  //2: usb token
+  //4: hsm
+  //id truyen len cua hsm la recipient id: idSignMany = recipientId
+  //id truyen len cua usb token la field id
+  if (signId == 4) {
+    idSignMany = contractsSignManyChecked
       .filter((opt) => opt.checked)
       .map((opt) => opt.id);
-  
-      for (let i = 0; i < recipientId.length; i++) {
-        this.contractServiceV1
-          .getDetermineCoordination(recipientId[i])
-          .subscribe((response) => {
-            console.log("response 1 ", response);
-            response.recipients.forEach((item: any) => {
-              console.log("item ", item);
-              if(item.fields[0].recipient.id == recipientId[i]) {
-                  taxCode.push(item.fields[0].recipient.cardId);
-              }
-            })
+    
+    recipientId = contractsSignManyChecked
+      .filter((opt) => opt.checked)
+      .map((opt) => opt.id);
 
-            
-          });
-        }
-
+    //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
+    for (let i = 0; i < recipientId.length; i++) {
+      console.log('recipient id i ', recipientId[i]);
+      this.contractServiceV1
+        .getDetermineCoordination(recipientId[i])
+        .subscribe((response) => {
+          response.recipients.forEach((item: any) => {
+            if(item.fields[0].recipient.id == recipientId[i]) {
+                taxCode.push(item.fields[0].recipient.cardId);
+            }
+          })
+        });
     }
 
-    this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);    
+  } else if (signId == 2) {
+
+    recipientId = contractsSignManyChecked
+    .filter((opt) => opt.checked)
+    .map((opt) => opt.id);
+
+    for (let i = 0; i < recipientId.length; i++) {
+      this.contractServiceV1
+        .getDetermineCoordination(recipientId[i])
+        .subscribe((response) => {
+          response.recipients.forEach((item: any) => {
+            console.log("item ", item);
+            if(item.fields[0].recipient.id == recipientId[i]) {
+                taxCode.push(item.fields[0].recipient.cardId);
+            }
+          })
+
+          
+        });
+      }
+
+  }
+
+    this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);   
   }
 
   openDialogSignManyComponent( recipientId: any, taxCode: any, idSignMany: any, signId: any) {
@@ -639,7 +634,7 @@ export class ContractSignatureComponent implements OnInit {
                 this.spinner.show();
 
                 let countUpdate = 0;
-              
+
                 //Call api ký nhiều hsm
                 const checkSign = await this.contractServiceV1.signHsmMulti(
                   this.dataHsm,
@@ -692,6 +687,8 @@ export class ContractSignatureComponent implements OnInit {
                   }
                 // }
              
+                console.log("count success ", countSuccess);
+                console.log("count update ", countUpdate);
                 if (countSuccess == checkSign.length) {
                   this.spinner.hide();
                   this.toastService.showSuccessHTMLWithTimeout(
@@ -740,6 +737,7 @@ export class ContractSignatureComponent implements OnInit {
 
     //tao mang currentHeight toan so 0;
     for (let i = 0; i < fileC.length; i++) {
+      console.log("fileC vao day ");
       currentHeight[i] = 0;
     }
 
@@ -751,13 +749,18 @@ export class ContractSignatureComponent implements OnInit {
 
       base64String[i] = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
 
+      console.log("2 " ,base64String[i]);
 
       base64String[i] = encode(base64String[i]);
+
+      console.log("base64String i ", base64String[i]);
 
       //Lấy toạ độ ô ký của từng hợp đồng
       this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).subscribe((response) => {
           console.log('sig ', response);
           for (let j = 0; j < response.length; j++) {
+            console.log('recipient id ', recipientId);
+
             if (response[j].recipient) {
               if (recipientId[i] == response[j].recipient.id) {
                 x.push(response[j].coordinate_x);
@@ -770,6 +773,7 @@ export class ContractSignatureComponent implements OnInit {
               }
             }
           }
+          console.log("h push ", h);
         }
       );
 
@@ -777,8 +781,10 @@ export class ContractSignatureComponent implements OnInit {
       this.contractServiceV1
         .getInfoPage(documentId[i])
         .subscribe((response) => {
+          console.log('response ', response);
 
           for (let j = 0; j < response.length; j++) {
+            console.log('vao vong for ');
             if (response[j].page < page[i]) {
               currentHeight[i] += response[j].height;
             } else if (response[j].page == page[i]) {
@@ -793,6 +799,8 @@ export class ContractSignatureComponent implements OnInit {
     //Lay thong tin cua usb token
     this.contractServiceV1.getAllAccountsDigital().then(
       async (data) => {
+        console.log('dataa ', data);
+
         if (data.data.Serial) {
           //Check trung mst
           this.contractServiceV1
@@ -801,6 +809,8 @@ export class ContractSignatureComponent implements OnInit {
               if (response.success == true) {
                 this.signCertDigital = data.data;
                 this.nameCompany = data.data.CN;
+
+                console.log('name company ', this.nameCompany);
 
                 let signI = '';
 
@@ -818,11 +828,21 @@ export class ContractSignatureComponent implements OnInit {
                 for (let i = 0; i < fileC.length; i++) {
                   w[i] = x[i] + w[i];
 
+                  // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
+                  console.log('h i ', h[i]);
+
+                  console.log('height page ', heightPage[i]);
+                  console.log('y ', y[i]);
+
                   y[i] =
                     heightPage[i] - (y[i] - currentHeight[i]) - h[i];
 
                   h[i] = y[i] + h[i];
 
+                  console.log("base64String i 1", base64String[i]);
+
+                
+                  
                   let dataSignMobi: any =
                     await this.contractServiceV1.postSignDigitalMobiMulti(
                       this.signCertDigital.Serial,
@@ -927,6 +947,7 @@ export class ContractSignatureComponent implements OnInit {
         });
       }
     );
+
   }
 
   async getBase64String(fileC: any) {

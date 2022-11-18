@@ -800,23 +800,23 @@ export class ConfirmContractBatchComponent
   user: any;
   submit() {
 
-    // this.next(0);
-    const data = {
-      title: 'YÊU CẦU XÁC NHẬN',
-    };
-    // @ts-ignore
-    const dialogRef = this.dialog.open(ConfirmCecaFormComponent, {
-      width: '560px',
-      backdrop: 'static',
-      keyboard: false,
-      data,
-      autoFocus: false,
-    });
-    dialogRef.afterClosed().subscribe((isCeCA: any) => {
-      if (isCeCA == 1 || isCeCA == 0) {
-        this.next(isCeCA);
-      }
-    });
+    this.next(0);
+    // const data = {
+    //   title: 'YÊU CẦU XÁC NHẬN',
+    // };
+    // // @ts-ignore
+    // const dialogRef = this.dialog.open(ConfirmCecaFormComponent, {
+    //   width: '560px',
+    //   backdrop: 'static',
+    //   keyboard: false,
+    //   data,
+    //   autoFocus: false,
+    // });
+    // dialogRef.afterClosed().subscribe((isCeCA: any) => {
+    //   if (isCeCA == 1 || isCeCA == 0) {
+    //     this.next(isCeCA);
+    //   }
+    // });
   }
 
   next(isCeCA: any) {
