@@ -232,9 +232,7 @@ export class ConsiderContractComponent
 
   timerId: any;
   getDataContractSignature() {
-
     this.contractService.getDetailContract(this.idContract).subscribe(async rs => {
-      console.log(rs);
       this.isDataContract = rs[0];
       this.isDataFileContract = rs[1];
       this.isDataObjectSignature = rs[2];
@@ -403,8 +401,6 @@ export class ConsiderContractComponent
               }
           }
 
-          console.log('image_base64 ', image_base64);
-
           if (
             this.mobile &&
             this.recipient.status != 2 &&
@@ -436,6 +432,8 @@ export class ConsiderContractComponent
         this.handleError();
       }
     );
+
+    // console.log("datas 1 ", this.datas);
   }
 
   // Error handling
@@ -1865,7 +1863,6 @@ export class ConsiderContractComponent
           const textSignB =  domtoimage.toPng(imageRender);
                     
           const valueBase64 = (await textSignB).split(",")[1];
-
 
           const formData = {
                 "name": "image_" + new Date().getTime() + ".jpg",

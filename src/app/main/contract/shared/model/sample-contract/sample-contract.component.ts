@@ -684,30 +684,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
     }
-
-    // console.log("show event info 1 ", this.getTrafX());
-
-    // if(this.coordinate_x.length > 1 || this.coordinate_y.length > 1) {
-
-    //   //Trường hợp ô ký 2 thuộc ô ký 1
-    //   for(let i = 0; i < this.coordinate_x.length; i++) {
-    //     for(let j = i+1; j < this.coordinate_x.length; j++) {
-    //       if((this.coordinate_x[i] <= this.coordinate_x[j] <= (this.coordinate_x[i]+this.width[i]))
-    //         && (this.coordinate_y[i] <= this.coordinate_y[j] <= (this.coordinate_y[i]+this.height[i]))
-    //       ) {
-    //         this.toastService.showErrorHTMLWithTimeout("Các ô ký đang có vị trí trùng nhau ","",3000)
-    //         return;
-    //       }
-    //     }
-    //   }
-
-    //   //Trường hợp ô ký 2 và ô ký 1 giao nhau
-    // }
-
-    // this.coordinate_x.push(this.getTrafX());
-    // this.coordinate_y.push(this.getTrafY());
-    // this.width.push(this.objSignInfo.width);
-    // this.height.push(this.objSignInfo.height);
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
@@ -936,8 +912,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         });
       }
 
-      console.log("height ", viewport.height);
-
       page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
@@ -949,8 +923,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   activeScroll() {
-    console.log("active scroll ");
-
     document.getElementsByClassName('viewer-pdf')[0].addEventListener('scroll', () => {
       const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
 
@@ -1376,11 +1348,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     if (isSuccess == 0) {
-      // if (action == 'next_step') {
-      //   this.step = variable.stepSampleContract.step4;
-      //   this.datas.stepLast = this.step
-      //   this.nextOrPreviousStep(this.step);
-      // } else
       if (action == 'save_draft') {
         this.datas.save_draft.sample_contract = false;
         this.stepChangeSampleContract.emit('save_draft_sample_contract')
@@ -1469,7 +1436,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
 
-      console.log("coo x ", coordinate_x.length);
       //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+h) = góc phải dưới
       for(let i = 0; i < coordinate_x.length; i++) {
         for(let j = i+1; j < coordinate_x.length; j++) {

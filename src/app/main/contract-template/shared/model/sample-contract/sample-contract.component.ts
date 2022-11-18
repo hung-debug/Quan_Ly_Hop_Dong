@@ -361,8 +361,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     })
 
-    console.log("before ", dataContractUserSign);
-
     // loc du lieu khong trung nhau
     // lay du lieu trung ten, trung email (doi voi ky so + ky text da gan nguoi xu ly) + trung ten (doi voi ky text chua co nguoi xu ly)
     // (val.recipient_id as any) == (data.id as any) &&
@@ -489,9 +487,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         })
       }
     })
-
-    console.log("list sign name ", this.list_sign_name);
-    // this.listSignNameClone = JSON.parse(JSON.stringify(this.list_sign_name));
   }
 
   getListSignName(listSignForm: any = []) {
@@ -539,9 +534,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
-    console.log("show event info ", this.data_sign);
-    console.log("show event info ", this.list_sign_name);
-
     let canvasElement: HTMLElement | null;
 
     if (event.relatedTarget && event.relatedTarget.id) {
@@ -646,25 +638,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.signCurent['top'] = (event.rect.top - canvasInfo.top).toFixed();
         }
         let name_accept_signature = '';
-        let field_data = [];
-
-        console.log("datas sign ", this.datas.contract_user_sign);
-
-        // if(this.router.url.includes("edit")) {
-        //   for(let i = 0; i < this.datas.contract_user_sign.length; i++) {
-        //     if(this.datas.contract_user_sign[i].sign_unit == 'chu_ky_so') {
-        //       for(let j = 0;j < this.datas.contract_user_sign[i].sign_config.length;j++) {
-        //         // if(!this.datas.contract_user_sign[i].sign_config.name) {
-        //         //   this.datas.contract_user_sign[i].sign_config
-  
-        //           // this.datas.contract_user_sign[i].sign_config = this.datas.contract_user_sign[i].sign_config.filter((item: { recipient: any; }) => item.recipient != null)
-  
-        //         // }
-        //       }
-        //     }
-        //   }
-        // }
-       
 
         // lay lai danh sach signer sau khi keo vao hop dong
         this.datas.contract_user_sign.forEach((res: any) => {
@@ -754,9 +727,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   getCheckSignature(isSignType: any, listSelect?: string, recipient_id?:any) {
     // p.recipient_id == element.id && p.sign_unit == isSignType)
-    console.log("isSignType");
-    console.log(isSignType);
-    console.log(listSelect);
 
     this.list_sign_name.forEach((element: any) => {
       console.log(element);
@@ -777,10 +747,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           console.log("a");
           element.is_disable = true;
         } else {
-          console.log("ab");
-          console.log(element);
-          console.log(isSignType);
-          console.log(listSelect);
           if (isSignType == 'chu_ky_anh') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
           } else if (isSignType == 'chu_ky_so') {
@@ -791,16 +757,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           console.log(element.is_disable);
         }
       }
-
-      console.log("isSignType");
-      console.log(recipient_id);
-      console.log(element);
       
 
       console.log(isSignType);
       if (recipient_id || listSelect) {
-        console.log("element_ok");
-        console.log(element);
         element.selected = (recipient_id?element.id==recipient_id:element.name == listSelect);
       }
     })
@@ -867,12 +827,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  // setWidthText(d: any) {
-  //   return {
-  //     // 'width.px': (this.widthDrag / 2)
-  //     'width.px': (this.widthDrag)
-  //   }
-  // }
 
   // view pdf qua canvas
   async getPage() {
@@ -1103,8 +1057,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
-    console.log("d");
-    console.log(d);
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
@@ -1138,17 +1090,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.objSignInfo.text_attribute_name = d.text_attribute_name
         }
 
-        // for để set lại list đối tượng ký
-        // this.list_sign_name.forEach((item: any) => {
-        //   if (d.sign_unit == 'chu_ky_anh') {
-        //     item.is_disable = !(item.sign_type.some((p: any) => p.id == 1) && item.role != 2);
-        //   } else if (d.sign_unit == 'chu_ky_so') {
-        //     item.is_disable = !(item.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && item.role != 2);
-        //   } else if (d.sign_unit == 'text') {
-        //     item.is_disable = !(item.sign_type.some((p: any) => p.id == 2) || item.role == 4);
-        //   } else item.is_disable = item.role != 4;
-        //   item.selected = d.name && item.name == d.name;
-        // })
         this.getCheckSignature(d.sign_unit, d.name, d.recipient_id);
 
         if (!d.name) //@ts-ignore
@@ -1159,20 +1100,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     console.log(this.datas.contract_user_sign);
   }
 
-  // getIdSignClick() {
-  //   let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
-  //   return set_id.id;
-  //   // this.datas.contract_user_sign.forEach((element: any, index: any) => {
-  //   //   if (element.id == id) {
-  //   //     if (element.sign_config.length == 0) {
-  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
-  //   //     } else {
-  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-' + (element.sign_config.length) + '_' + element.id;
-  //   //     }
-  //   //     // element['sign_config'].push(_obj);
-  //   //   }
-  //   // })
-  // }
 
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   async onCancel(e: any, data: any) {
@@ -1327,7 +1254,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // console.log(this.objSignInfo)
       }
     }
-    //console.log(this.datas.contract_user_sign);
   }
 
   getTrafX() {
@@ -1504,11 +1430,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     if (isSuccess == 0) {
-      // if (action == 'next_step') {
-      //   this.step = variable.stepSampleContract.step4;
-      //   this.datas.stepLast = this.step
-      //   this.nextOrPreviousStep(this.step);
-      // } else
       if (action == 'save_draft') {
         this.datas.save_draft.sample_contract = false;
         this.stepChangeSampleContract.emit('save_draft_sample_contract')
@@ -1548,7 +1469,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
     }
-    console.log(arrCheckName);
     var valueSoFar = Object.create(null);
     for (var k = 0; k < arrCheckName.length; ++k) {
       var value:any = arrCheckName[k];
@@ -1609,22 +1529,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             }
 
             if(element.coordinate_x) {
-              coordinate_x[i] = Number(element.coordinate_x);
-              coordinate_y[i] = Number(element.coordinate_y);
-              width[i] = Number(element.width);
-              height[i] = Number(element.height);
+              coordinate_x.push(Number(element.coordinate_x));
+              coordinate_y.push(Number(element.coordinate_y));
+              width.push(Number(element.width));
+              height.push(Number(element.height));
             }
           }
         }
       }
 
-      console.log("length x ", coordinate_x.length);
-
         //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+h) = góc phải dưới
         for(let i = 0; i < coordinate_x.length; i++) {
           for(let j = i+1; j < coordinate_x.length; j++) {
-            console.log("x i ", coordinate_x[i]);
-            console.log("x j ",coordinate_x[j]);
             if(
               (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
               &&
