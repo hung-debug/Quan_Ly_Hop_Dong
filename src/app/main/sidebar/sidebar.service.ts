@@ -255,8 +255,6 @@ export class SidebarService {
 
     this.menus =  this.menus.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
     
-    console.log("menus ", this.menus);
-
     return this.menus;
   }
 

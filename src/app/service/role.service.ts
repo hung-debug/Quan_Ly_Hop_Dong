@@ -40,13 +40,7 @@ export class RoleService {
 
   constructor(private http: HttpClient,) { }
 
-  getRoleById(id: any) {
-    this.getCurrentUser();
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json')
-      .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.getRoleByIdUrl + id, {headers}).pipe();
-  }
+
 
   addRole(data: any) {
     this.getCurrentUser();
@@ -119,8 +113,18 @@ export class RoleService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    let listRoleUrl = this.getRoleByIdUrl + "&size=10000";
-    return this.http.get<any>(this.getRoleByOrgIdUrl + id, {headers}).pipe();
+    let listRoleUrl = this.getRoleByIdUrl + id+ "?size=10000";
+    return this.http.get<any>(listRoleUrl, {headers}).pipe();
+  }
+
+  getRoleById(id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    // return this.http.get<any>(this.getRoleByIdUrl + id, {headers}).pipe();
+    let listRoleUrl = this.getRoleByIdUrl + id+ "?size=10000";
+    return this.http.get<any>(listRoleUrl, {headers}).pipe();
   }
 
   checkCodeRole(code:any){

@@ -47,11 +47,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       this.timeCreate = response.createdAt ? moment(this.timeCreate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
       this.emailCreate = response.createdBy.email;
   
-      response.recipients.forEach(async (element: any) => {
-
-        //Lấy thông tin của recipientId
-        let recipientInfo = await this.contractService.getDetermineCoordination(element.id).toPromise();
-
+      response.recipients.forEach((element: any) => {
         let data = {
           id: element.id,
           name: element.name,
@@ -61,7 +57,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           typeOfSign: element.signType[0],
           process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
           reasonReject: element.reasonReject,
-          type: recipientInfo.type
+          type: element.participantType
         }
         this.is_list_name.push(data);
       })

@@ -259,8 +259,6 @@ export class UnitComponent implements OnInit {
         this.router.navigate(['/main/unit']);
       });
     } else if(importUnit.status == 200) {
-      this.spinner.hide();
-
       this.toastService.showErrorHTMLWithTimeout("File excel không hợp lệ. Vui lòng xem chi tiết lỗi ở file excel đã download","",3000);
 
       let body: any = importUnit.body;
@@ -269,6 +267,8 @@ export class UnitComponent implements OnInit {
       link.href = window.URL.createObjectURL(blob);
       link.download = `report_${new Date().getTime()}.xlsx`;
       link.click();
+
+      this.spinner.hide();
     }
   }
 

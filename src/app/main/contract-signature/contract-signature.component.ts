@@ -24,7 +24,6 @@ import domtoimage from 'dom-to-image';
 import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialog-sign/hsm-dialog-sign.component';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { isPdfFile } from 'pdfjs-dist';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 
 @Component({
@@ -325,8 +324,6 @@ export class ContractSignatureComponent implements OnInit {
           });
       }
     } else {
-      console.log("o day 3 ");
-      console.log(this.filter_status % 10);
       this.contractService
         .getContractMyProcessDashboard(
           this.filter_status % 10,
@@ -376,7 +373,6 @@ export class ContractSignatureComponent implements OnInit {
     const checkBox = document.getElementById('all') as HTMLInputElement | null;
 
     if (checkBox != null) {
-      console.log('da nhan nut check tat ca');
       let checkBoxList = document.getElementsByName('item');
 
       if (checkBox.checked === true) {
@@ -480,7 +476,6 @@ export class ContractSignatureComponent implements OnInit {
             response.recipients.forEach((item: any) => {
               if(item.fields[0].recipient.id == recipientId[i]) {
                   taxCode.push(item.fields[0].recipient.cardId);
-                  console.log("tax code ", taxCode);
               }
             })
           });
@@ -493,7 +488,6 @@ export class ContractSignatureComponent implements OnInit {
       .map((opt) => opt.id);
   
       for (let i = 0; i < recipientId.length; i++) {
-        console.log('recipient id i ', recipientId[i]);
         this.contractServiceV1
           .getDetermineCoordination(recipientId[i])
           .subscribe((response) => {
@@ -502,7 +496,6 @@ export class ContractSignatureComponent implements OnInit {
               console.log("item ", item);
               if(item.fields[0].recipient.id == recipientId[i]) {
                   taxCode.push(item.fields[0].recipient.cardId);
-                  console.log("tax code abc ", taxCode);
               }
             })
 
@@ -699,8 +692,6 @@ export class ContractSignatureComponent implements OnInit {
                   }
                 // }
              
-                console.log("count success ", countSuccess);
-                console.log("count update ", countUpdate);
                 if (countSuccess == checkSign.length) {
                   this.spinner.hide();
                   this.toastService.showSuccessHTMLWithTimeout(
@@ -749,7 +740,6 @@ export class ContractSignatureComponent implements OnInit {
 
     //tao mang currentHeight toan so 0;
     for (let i = 0; i < fileC.length; i++) {
-      console.log("fileC vao day ");
       currentHeight[i] = 0;
     }
 
@@ -765,14 +755,9 @@ export class ContractSignatureComponent implements OnInit {
 
       base64String[i] = encode(base64String[i]);
 
-      console.log("base64String i ", base64String[i]);
-
       //Lấy toạ độ ô ký của từng hợp đồng
       this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).subscribe((response) => {
-          console.log('sig ', response);
           for (let j = 0; j < response.length; j++) {
-            console.log('recipient id ', recipientId);
-
             if (response[j].recipient) {
               if (recipientId[i] == response[j].recipient.id) {
                 x.push(response[j].coordinate_x);
@@ -793,10 +778,7 @@ export class ContractSignatureComponent implements OnInit {
       this.contractServiceV1
         .getInfoPage(documentId[i])
         .subscribe((response) => {
-          console.log('response ', response);
-
           for (let j = 0; j < response.length; j++) {
-            console.log('vao vong for ');
             if (response[j].page < page[i]) {
               currentHeight[i] += response[j].height;
             } else if (response[j].page == page[i]) {
@@ -1030,14 +1012,13 @@ export class ContractSignatureComponent implements OnInit {
         this.uploadService
           .downloadFile(data.path)
           .subscribe((response: any) => {
-            //console.log(response);
-
             let url = window.URL.createObjectURL(response);
             let a = document.createElement('a');
             document.body.appendChild(a);
             a.setAttribute('style', 'display: none');
             a.href = url;
-            a.download = data.name;
+            a.download = data.filename;
+
             a.click();
             window.URL.revokeObjectURL(url);
             a.remove();
@@ -1193,7 +1174,6 @@ export class ContractSignatureComponent implements OnInit {
         } else if (ceca_status == 0) {
           return '[BCT xác thực thành công]';
         } else {
-          console.log("ceca status ",ceca_status);
           return '[Chưa gửi lên CeCA]';
         }
       }

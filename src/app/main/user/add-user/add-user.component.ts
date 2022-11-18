@@ -142,7 +142,6 @@ export class AddUserComponent implements OnInit {
         if(this.isQLND_02){
           this.userService.getUserById(this.id).subscribe(
             data => {
-              console.log("data ",data);
               if(data.role_id != null){
                 //lay vai tro cua user
                 this.roleService.getRoleById(data.role_id).subscribe(dataRoleUser => {
@@ -319,7 +318,6 @@ export class AddUserComponent implements OnInit {
         (sign_image as string[]).push(sign_image_content);
         data.sign_image = sign_image;
       }
-      console.log(data);
       this.userService.updateUser(data).subscribe(
         dataOut => {
           
@@ -381,7 +379,6 @@ export class AddUserComponent implements OnInit {
       sign_image: [],
       organization_change: this.addForm.value.organizationId!= this.orgIdOld?1:this.addForm.value.organization_change
     }
-    console.log(data);
     
     if(this.id !=null){
       //neu thay doi so dien thoai thi can check lai

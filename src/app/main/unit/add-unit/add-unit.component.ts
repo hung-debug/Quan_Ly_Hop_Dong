@@ -72,8 +72,6 @@ export class AddUnitComponent implements OnInit {
       });
       this.unitService.getUnitById(this.data.id).subscribe(
         data => {
-          console.log("data ", data);
-
           this.addForm = this.fbd.group({
             nameOrg: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             short_name: this.fbd.control(data.short_name, [Validators.pattern(parttern_input.input_form)]),
@@ -128,18 +126,14 @@ export class AddUnitComponent implements OnInit {
   }
 
   convertFileCeCa(ceCAPushMode: any): any {
-    console.log("data cecapush mode before ", ceCAPushMode);
 
     if (ceCAPushMode == fileCeCaOptions[0].id) {
       ceCAPushMode = fileCeCaOptions[0];
     } else if (ceCAPushMode ==fileCeCaOptions[1].id) {
-      console.log("vao day ");
       ceCAPushMode = fileCeCaOptions[1];
     } else if (ceCAPushMode == fileCeCaOptions[2].id) {
       ceCAPushMode = fileCeCaOptions[2];
     }
-
-    console.log("ceCAPushMode after ", ceCAPushMode);
 
     return ceCAPushMode;
   }
@@ -149,8 +143,6 @@ export class AddUnitComponent implements OnInit {
       data => {
         
         if(data.id) {
-          console.log("updat data ", data);
-
           this.toastService.showSuccessHTMLWithTimeout('Cập nhật thông tin thành công!', "", 3000);
           this.dialogRef.close();
 
@@ -165,9 +157,6 @@ export class AddUnitComponent implements OnInit {
             this.spinner.hide();
           }
         }
-
-       
-     
       }, error => {
         this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
         this.spinner.hide();
@@ -186,8 +175,6 @@ export class AddUnitComponent implements OnInit {
             dataRoleByOrgId => {
 
               let roleAdmin = dataRoleByOrgId.entities.filter((p:any) => p.code == 'ADMIN');
-
-              console.log("roleAdmin ", roleAdmin);
 
               if(roleAdmin.length > 0){
 
@@ -326,10 +313,6 @@ export class AddUnitComponent implements OnInit {
       tax_code: this.addForm.value.taxCode
     }
 
-
-
-    console.log(data);
-
     this.spinner.show();
     //truong hop sua ban ghi
     if(this.data.id !=null){
@@ -339,7 +322,6 @@ export class AddUnitComponent implements OnInit {
         //kiem tra ten to chuc da ton tai trong he thong hay chua
         this.unitService.checkNameUnique(data, data.name).subscribe(
           dataByName => {
-            console.log(dataByName);
             if(dataByName.code == '00'){
 
               //ham check ma
@@ -363,12 +345,9 @@ export class AddUnitComponent implements OnInit {
 
     //truong hop them moi ban ghi
     }else{
-      console.log("data org child ", data);
-
       //kiem tra ten to chuc da ton tai trong he thong hay chua
       this.unitService.checkNameUnique(data, data.name).subscribe(
         dataByName => {
-          console.log(dataByName);
           if(dataByName.code == '00'){
 
             //kiem tra ma to chuc da ton tai trong he thong hay chua
@@ -392,10 +371,6 @@ export class AddUnitComponent implements OnInit {
                                     //them to chuc
                                     this.unitService.addUnit(data).subscribe(
                                       dataUnit => {
-                                        //this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
-                                        console.log(dataUnit);
-                                
-
                                         //them vai tro
                                         let roleArrConvert: any = [];
                                         roleList.forEach((key: any, v: any) => {
@@ -414,8 +389,6 @@ export class AddUnitComponent implements OnInit {
                                         
                                         this.roleService.addRoleByOrg(dataRoleIn).subscribe(
                                           dataRole => {
-                                            //this.toastService.showSuccessHTMLWithTimeout('Thêm mới vai trò cho tổ chức thành công!', "", 3000);
-                                            console.log(dataRole);
                                             //them nguoi dung
                                             const dataUserIn = {
                                               name: "Admin",
@@ -428,8 +401,6 @@ export class AddUnitComponent implements OnInit {
                                             }
                                             this.userService.addUser(dataUserIn).subscribe(
                                               dataUser => {
-                                                console.log("goi vao ham add user ");
-                                                console.log("dataUser ",dataUser);
                                                 //this.toastService.showSuccessHTMLWithTimeout('Thêm mới người dùng admin thành công!', "", 3000);
                                                 this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
                                                 this.dialogRef.close();
@@ -465,10 +436,6 @@ export class AddUnitComponent implements OnInit {
                                 //them to chuc
                                 this.unitService.addUnit(data).subscribe(
                                   dataUnit => {
-                                    //this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
-                                    console.log(dataUnit);
-                            
-
                                     //them vai tro
                                     let roleArrConvert: any = [];
                                     roleList.forEach((key: any, v: any) => {
@@ -482,9 +449,7 @@ export class AddUnitComponent implements OnInit {
                                       code: 'ADMIN',
                                       selectedRole: roleArrConvert,
                                       organization_id: dataUnit.id
-                                    }
-                                    console.log(dataRoleIn);
-                                    
+                                    }                                    
                                     this.roleService.addRoleByOrg(dataRoleIn).subscribe(
                                       dataRole => {
                                         this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
@@ -528,10 +493,6 @@ export class AddUnitComponent implements OnInit {
                         //them to chuc
                         this.unitService.addUnit(data).subscribe(
                           dataUnit1 => {
-                            //this.toastService.showSuccessHTMLWithTimeout('Thêm mới tổ chức thành công!', "", 3000);
-                            console.log(dataUnit1);
-                    
-
                             //them vai tro
                             let roleArrConvert: any = [];
                             roleList.forEach((key: any, v: any) => {
@@ -546,7 +507,6 @@ export class AddUnitComponent implements OnInit {
                               selectedRole: roleArrConvert,
                               organization_id: dataUnit1.id
                             }
-                            console.log(dataRoleIn);
                             
                             if(dataUnit1.id) {
                               this.roleService.addRoleByOrg(dataRoleIn).subscribe(
