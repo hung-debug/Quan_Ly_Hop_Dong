@@ -1194,8 +1194,6 @@ export class ConsiderContractComponent
               }
             }
 
-            console.log("signI ", signI);
-
             const signDigital = JSON.parse(JSON.stringify(signUpdate));
             signDigital.Serial = this.signCertDigital.Serial;
             const base64String = await this.contractService.getDataFileUrlPromise(fileC);
@@ -1203,14 +1201,7 @@ export class ConsiderContractComponent
 
             const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
 
-            // const dataSignMobi: any = await this.contractService.postSignDigitalMobiMulti( signDigital.Serial ,signDigital.valueSignBase64, signI,signDigital.page.toString(),
-            // signDigital.signDigitalHeight, signDigital.signDigitalWidth, signDigital.signDigitalX, signDigital.signDigitalY);
-
-            console.log("data sign mobi ", dataSignMobi);
-
             if (!dataSignMobi.data.FileDataSigned) {
-              console.log("file data signed ");
-
               this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
               return false;
             }
@@ -1225,7 +1216,6 @@ export class ConsiderContractComponent
         }
         return true;
       } else {
-        console.log("not sign cert digital ");
         this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
         return false;
       }
@@ -1375,8 +1365,6 @@ export class ConsiderContractComponent
     try {
       var json_res = JSON.parse(response);
 
-      console.log('json_res ', json_res);
-
       if (json_res.ResponseCode == 0) {
         alert(json_res.Base64Result);
 
@@ -1385,8 +1373,6 @@ export class ConsiderContractComponent
           json_res.Base64Result
         );
         if (!sign.recipient_id) {
-          console.log('recipent_id');
-
           this.toastService.showErrorHTMLWithTimeout(
             'Lỗi ký USB Token',
             '',
@@ -1395,8 +1381,6 @@ export class ConsiderContractComponent
           return false;
         }
       } else {
-        console.log('response ky ', response);
-        console.log('response ky msg ', json_res);
         alert(json_res.ResponseMsg);
       }
     } catch (err) {
@@ -1584,11 +1568,47 @@ export class ConsiderContractComponent
     }
 
     if (typeSignDigital && typeSignDigital == 2) {
-      this.getSessionId(
-        this.taxCodePartnerStep2,
-        signUpdatePayload,
-        notContainSignImage
-      );
+      this.contractService.getAllAccountsDigital().then((data) => {
+        if (data.data.Serial) {
+
+          this.signCertDigital = data.data;
+          this.nameCompany = data.data.CN;
+         
+          this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
+            if(response.success == true) {
+                await this.signImageC(signUpdatePayload, notContainSignImage);
+            } else {
+              this.spinner.hide();
+              Swal.fire({
+                title: `Mã số thuế/CMT/CCCD trên chữ ký số không trùng khớp`,
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#b0bec5',
+                confirmButtonText: 'Xác nhận'
+              });
+            }
+          })
+
+        } else {
+          this.spinner.hide();
+          Swal.fire({
+            title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#b0bec5',
+            confirmButtonText: 'Xác nhận'
+          });
+        }
+      }, err => {
+        this.spinner.hide();
+        Swal.fire({
+          html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1wayt8YYcYsl0qA8XpSMLhNsF4YbCwqO_/view' target='_blank'>Tại đây</a>  và cài đặt`,
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#b0bec5',
+          confirmButtonText: 'Xác nhận'
+        });
+      })
     } else {
       await this.signImageC(signUpdatePayload, notContainSignImage);
     }
@@ -2631,45 +2651,22 @@ export class ConsiderContractComponent
   }
 
   prepareInfoSignUsbToken(page: any, heightPage: any) {
-
-      this.isDataObjectSignature.map((sign: any) => {
-        if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
-          && sign?.recipient?.email === this.currentUser.email
-          && sign?.recipient?.role === this.datas?.roleContractReceived
-          && sign?.page == page) {
-
-          console.log("before ");
-          console.log("x ", sign.coordinate_x);
-          console.log("y ", sign.coordinate_y);
-          console.log("height ", sign.height);
-          console.log("width ", sign.width);
-          console.log("current height ", this.currentHeight);
-          console.log("height page ", heightPage);
+    this.isDataObjectSignature.map((sign: any) => {
+      if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
+        && sign?.recipient?.email === this.currentUser.email
+        && sign?.recipient?.role === this.datas?.roleContractReceived
+        && sign?.page == page) {
 
         sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
         sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
-
-        console.log(" y ", sign.signDigitalY);
-        sign.signDigitalWidth = sign.width/* * this.ratioPDF*/;
-        sign.signDigitalHeight = sign.height/* * this.ratioPDF*/;
-
-        console.log("after ");
-        console.log("x ", sign.signDigitalX);
-        console.log("y ", sign.signDigitalY);
-        console.log("height ", sign.signDigitalHeight);
-        console.log("width ", sign.signDigitalWidth);
+        sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
+        sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;
 
         //Lấy thông tin mã số thuế của đối tác ký 
         this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
-
-          console.log("response recipient ", response);
-
           const lengthRes = response.recipients.length;
           for(let i = 0; i < lengthRes; i++) {
-
-              console.log("vao vong for ");
-
-              const id = response.recipients[i].id;
+            const id = response.recipients[i].id;
 
             if(id == sign.recipient_id) {
               this.taxCodePartnerStep2 = response.recipients[i].card_id;

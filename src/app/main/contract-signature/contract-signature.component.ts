@@ -751,12 +751,12 @@ export class ContractSignatureComponent implements OnInit {
 
       base64String[i] = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
 
-      console.log("2 " ,base64String[i]);
 
       base64String[i] = encode(base64String[i]);
 
       //Lấy toạ độ ô ký của từng hợp đồng
       this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).subscribe((response) => {
+          console.log('sig ', response);
           for (let j = 0; j < response.length; j++) {
             if (response[j].recipient) {
               if (recipientId[i] == response[j].recipient.id) {
@@ -770,7 +770,6 @@ export class ContractSignatureComponent implements OnInit {
               }
             }
           }
-          console.log("h push ", h);
         }
       );
 
@@ -778,6 +777,7 @@ export class ContractSignatureComponent implements OnInit {
       this.contractServiceV1
         .getInfoPage(documentId[i])
         .subscribe((response) => {
+
           for (let j = 0; j < response.length; j++) {
             if (response[j].page < page[i]) {
               currentHeight[i] += response[j].height;
@@ -791,191 +791,142 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     //Lay thong tin cua usb token
-    var LibList_MACOS = ['nca_v6.dylib'];
-    var LibList_WIN = [
-      'ShuttleCsp11_3003.dll',
-      'eps2003csp11.dll',
-      'nca_v6.dll',
-    ];
+    this.contractServiceV1.getAllAccountsDigital().then(
+      async (data) => {
+        if (data.data.Serial) {
+          //Check trung mst
+          this.contractServiceV1
+            .checkTaxCodeExist(taxCode[0], data.data.Base64)
+            .subscribe(async (response) => {
+              if (response.success == true) {
+                this.signCertDigital = data.data;
+                this.nameCompany = data.data.CN;
 
-    var OSName = 'Unknown';
-    if (window.navigator.userAgent.indexOf('Windows NT 6.2') != -1)
-      OSName = 'Windows 8';
-    if (window.navigator.userAgent.indexOf('Windows NT 6.1') != -1)
-      OSName = 'Windows 7';
-    if (window.navigator.userAgent.indexOf('Windows NT 6.0') != -1)
-      OSName = 'Windows Vista';
-    if (window.navigator.userAgent.indexOf('Windows NT 5.1') != -1)
-      OSName = 'Windows XP';
-    if (window.navigator.userAgent.indexOf('Windows NT 5.0') != -1)
-      OSName = 'Windows 2000';
-    if (window.navigator.userAgent.indexOf('Mac') != -1) OSName = 'Mac/iOS';
-    if (window.navigator.userAgent.indexOf('X11') != -1) OSName = 'UNIX';
-    if (window.navigator.userAgent.indexOf('Linux') != -1) OSName = 'Linux';
-    //=================>>Check OS<<=================
+                let signI = '';
 
-    var OperationId = 1;
-    var pkcs11Lib = [];
-    if (OSName == 'Mac/iOS') {
-      pkcs11Lib = LibList_MACOS;
-    } else if (OSName == 'UNIX' || OSName == 'Linux') {
-      alert('Not Support');
-      return;
-    } else {
-      pkcs11Lib = LibList_WIN;
-      OperationId = OperationId;
-    }
+                await of(null).pipe(delay(100)).toPromise();
+                const imageRender = <HTMLElement>(
+                  document.getElementById('export-html')
+                );
+                if (imageRender) {
+                  const textSignB = await domtoimage.toPng(imageRender);
+                  signI = textSignB.split(',')[1];
+                }
 
-    console.log('pkcs11Lib ', pkcs11Lib);
+                //Lấy chiều dài của các trang trong các hợp đồng ký
+                //Gọi api ký usb token nhiều lần
+                for (let i = 0; i < fileC.length; i++) {
+                  w[i] = x[i] + w[i];
 
-    var json_req = JSON.stringify({
-      pkcs11Lib: pkcs11Lib,
-      OperationId: OperationId,
-    });
+                  y[i] =
+                    heightPage[i] - (y[i] - currentHeight[i]) - h[i];
 
-    json_req = window.btoa(json_req);
+                  h[i] = y[i] + h[i];
 
-    //Lay sessionId cua usb token
-    const apiSessionId = await this.contractServiceV1.signUsbToken("request="+json_req);
-    const sessionId = JSON.parse(window.atob(apiSessionId.data)).SessionId;
+                  let dataSignMobi: any =
+                    await this.contractServiceV1.postSignDigitalMobiMulti(
+                      this.signCertDigital.Serial,
+                      base64String[i],
+                      signI,
+                      page[i],
+                      h[i],
+                      w[i],
+                      x[i],
+                      y[i]
+                    );
 
-    if(!sessionId) {
-      Swal.fire({
-        html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
-        icon: 'warning',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#b0bec5',
-        confirmButtonText: 'Xác nhận'
-      });
-      return;
-    }
+                  if (!dataSignMobi.data.FileDataSigned) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Lỗi ký USB Token '+dataSignMobi.data.ErrorDetail,
+                      '',
+                      3000
+                    );
+                    return false;
+                  }
 
-    //Lay thong tin chung thu so cua usb token
-    var json_req_cert = JSON.stringify({
-      OperationId: 2,
-      SessionId: sessionId,
-      checkOCSP: 0,
-    });
-    json_req_cert = window.btoa(json_req_cert);
+                  const sign =
+                    await this.contractServiceV1.updateDigitalSignatured(
+                      idSignMany[i],
+                      dataSignMobi.data.FileDataSigned
+                    );
 
-    const apiCert = await this.contractServiceV1.signUsbToken("request="+json_req_cert);
-    const cert = JSON.parse(window.atob(apiCert.data));
 
-    let certInfoBase64 = "";
-    if(cert.certInfo) {
-      certInfoBase64 = cert.certInfo.Base64Encode;
-    } else {
-      this.toastService.showErrorHTMLWithTimeout("Lỗi không lấy được thông tin usb token","",3000);
-      return;
-    }
 
-    console.log("cert info ", certInfoBase64);
+                  if (!sign.recipient_id) {
+                    console.log('recipent_id');
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Lỗi ký USB Token ',
+                      '',
+                      3000
+                    );
+                    return false;
+                  }
 
-    //check trùng mã số thuế
-    const checkTaxCode = await this.contractServiceV1.checkTaxCodeExist(taxCode[0], certInfoBase64).toPromise();
+                  const updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([], recipientId[i]);
 
-    if(checkTaxCode.success) {
-      let signI = '';
+                  if(!updateInfo.id) {
+                    this.toastService.showErrorHTMLWithTimeout(
+                      'Lỗi cập nhật trạng thái hợp đồng ',
+                      '',
+                      3000
+                    );
+                  }
 
-      await of(null).pipe(delay(100)).toPromise();
-      const imageRender = <HTMLElement>(
-        document.getElementById('export-html')
-      );
-      if (imageRender) {
-        const textSignB = await domtoimage.toPng(imageRender);
-        signI = textSignB.split(',')[1];
-      }
+              
+                  if (i == fileC.length - 1 ) {
+                    this.spinner.hide();
+                    this.toastService.showSuccessHTMLWithTimeout(
+                      'Ký số thành công',
+                      '',
+                      3000
+                    );
 
-      for (let i = 0; i < fileC.length; i++) {
-        w[i] = x[i] + w[i];
+                    this.router
+                      .navigateByUrl('/', { skipLocationChange: true })
+                      .then(() => {
+                        this.router.navigate([
+                          'main/c/receive/processed',
+                        ]);
+                      });
+                  }
 
-        y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
-
-        h[i] = y[i] + h[i];
-
-        var json_req_result = JSON.stringify({
-          OperationId: 10,
-          SessionId: sessionId,
-          checkOCSP: 0,
-          reqDigest: 1,
-          algDigest: 'SHA_1',
-          extFile: 'pdf',
-          invisible: 0,
-          pageIndex: Number(page[i] - 1),
-          offsetX: Math.floor(x[i]),
-          offsetY: Math.floor(y[i]),
-          sigWidth: Math.floor(w[i]),
-          sigHeight: Math.floor(h[i]),
-          logoData: signI,
-          DataToBeSign: base64String[i],
-          showSignerInfo: 0,
-          sigId: '',
-        });
-        json_req_result = window.btoa(json_req_result);
-
-        let dataSignMobi = await this.contractServiceV1.signUsbToken("request="+json_req_result);
-        let dataSignMobiDecode = JSON.parse(window.atob(dataSignMobi.data));
-
-        console.log("dataSignMobidecode ", dataSignMobiDecode);
-
-        if(dataSignMobiDecode.OperationId == 10 && dataSignMobiDecode.Base64Result) {
-          let filePdfSigned = dataSignMobiDecode.Base64Result;
-
-          const sign = await this.contractServiceV1.updateDigitalSignatured(idSignMany[i],filePdfSigned);
-
-          if (!sign.recipient_id) {
-            console.log('recipent_id');
-            this.toastService.showErrorHTMLWithTimeout(
-              'Lỗi ký usb token không cập nhật được recipient id',
-              '',
-              3000
-            );
-            return false;
-          }
-
-          const updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([], recipientId[i]);
-
-          if(!updateInfo.id) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Lỗi cập nhật trạng thái hợp đồng ',
-              '',
-              3000
-            );
-          }
-
-          if (i == fileC.length - 1 ) {
-            this.spinner.hide();
-            this.toastService.showSuccessHTMLWithTimeout(
-              'Ký số thành công',
-              '',
-              3000
-            );
-
-            this.router
-              .navigateByUrl('/', { skipLocationChange: true })
-              .then(() => {
-                this.router.navigate([
-                  'main/c/receive/processed',
-                ]);
-              });
-          }
+                  
+                }
+              } else {
+                this.spinner.hide();
+                Swal.fire({
+                  title: `Mã số thuế/CMT/CCCD trên chữ ký số không trùng khớp`,
+                  icon: 'warning',
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#b0bec5',
+                  confirmButtonText: 'Xác nhận',
+                });
+              }
+            });
         } else {
-          this.toastService.showErrorHTMLWithTimeout("Lỗi ký usb token gọi api ký không thành công","",3000);
-          return false;
+          this.spinner.hide();
+          Swal.fire({
+            title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#b0bec5',
+            confirmButtonText: 'Xác nhận',
+          });
         }
+      },
+      (err) => {
+        this.spinner.hide();
+        Swal.fire({
+          html:
+            'Vui lòng bật tool ký số hoặc tải ' +
+            `<a href='https://drive.google.com/file/d/1wayt8YYcYsl0qA8XpSMLhNsF4YbCwqO_/view' target='_blank'>Tại đây</a>  và cài đặt`,
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#b0bec5',
+          confirmButtonText: 'Xác nhận',
+        });
       }
-
-    } else {
-      this.spinner.hide();
-      Swal.fire({
-        title: `Mã số thuế/CMT/CCCD trên chữ ký số không trùng mã số thuế/CMT/CCCD của tổ chức`,
-        icon: 'warning',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#b0bec5',
-        confirmButtonText: 'Xác nhận',
-      });
-    }
-
+    );
   }
 
   async getBase64String(fileC: any) {
