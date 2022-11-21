@@ -61,18 +61,25 @@ export class ImportService {
       textService = "Import người dùng thành công";
     }
 
-    const importUnit = await keyService.uploadFile(file);
+    let importResult: any = "";
 
-    if(importUnit.status == 204) {
+    try {
+      importResult = await keyService.uploadFile(file);
+    } catch(err: any) {
+      this.spinner.hide();
+      this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ nhà phát triển để sử lý"+err.message,"",3000);
+    }
+
+    if(importResult.status == 204) {
       this.spinner.hide();
       this.toastService.showSuccessHTMLWithTimeout(textService,"",3000);
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate(['/main/unit']);
       });
-    } else if(importUnit.status == 200) {
+    } else if(importResult.status == 200) {
       this.toastService.showErrorHTMLWithTimeout("File excel không hợp lệ. Vui lòng xem chi tiết lỗi ở file excel đã download","",3000);
 
-      let body: any = importUnit.body;
+      let body: any = importResult.body;
       let blob = new Blob([body], { type: 'application/vnd.openxmlformats-ficedocument.spreadsheetml.sheet'});
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
