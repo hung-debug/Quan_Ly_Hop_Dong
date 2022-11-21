@@ -1614,47 +1614,6 @@ export class ConsiderContractComponent
             confirmButtonText: 'Xác nhận'
         });
       }
-
-      // this.contractService.getAllAccountsDigital().then((data) => {
-      //   if (data.data.Serial) {
-      //     this.signCertDigital = data.data;
-      //     this.nameCompany = data.data.CN;
-         
-      //     this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, data.data.Base64).subscribe(async (response) => {
-      //       if(response.success == true) {
-      //           await this.signImageC(signUpdatePayload, notContainSignImage);
-      //       } else {
-      //         this.spinner.hide();
-      //         Swal.fire({
-      //           title: `Mã số thuế/CMT/CCCD trên chữ ký số không trùng khớp`,
-      //           icon: 'warning',
-      //           confirmButtonColor: '#3085d6',
-      //           cancelButtonColor: '#b0bec5',
-      //           confirmButtonText: 'Xác nhận'
-      //         });
-      //       }
-      //     })
-
-      //   } else {
-      //     this.spinner.hide();
-      //     Swal.fire({
-      //       title: `Vui lòng cắm USB Token hoặc chọn chữ ký số!`,
-      //       icon: 'warning',
-      //       confirmButtonColor: '#3085d6',
-      //       cancelButtonColor: '#b0bec5',
-      //       confirmButtonText: 'Xác nhận'
-      //     });
-      //   }
-      // }, err => {
-      //   this.spinner.hide();
-      //   Swal.fire({
-      //     html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1wayt8YYcYsl0qA8XpSMLhNsF4YbCwqO_/view' target='_blank'>Tại đây</a>  và cài đặt`,
-      //     icon: 'warning',
-      //     confirmButtonColor: '#3085d6',
-      //     cancelButtonColor: '#b0bec5',
-      //     confirmButtonText: 'Xác nhận'
-      //   });
-      // })
     } else {
       await this.signImageC(signUpdatePayload, notContainSignImage);
     }
@@ -2283,7 +2242,7 @@ export class ConsiderContractComponent
             document.body.appendChild(a);
             a.setAttribute('style', 'display: none');
             a.href = url;
-            a.download = data.name;
+            a.download = data.filename;
             a.click();
             window.URL.revokeObjectURL(url);
             a.remove();

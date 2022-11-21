@@ -918,7 +918,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             document.body.appendChild(a);
             a.setAttribute('style', 'display: none');
             a.href = url;
-            a.download = data.name;
+            a.download = data.filename;
             a.click();
             window.URL.revokeObjectURL(url);
             a.remove();

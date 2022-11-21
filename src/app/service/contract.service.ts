@@ -74,7 +74,7 @@ export class ContractService {
 
   postSignDigitalSimPKI: any = `https://econtract.mobifone.vn/SignService/v2/sign-document`;
   getFileSignSimPKI: any = `https://econtract.mobifone.vn/SignService/download-signed-document?signed_doc_id=`;
-  signFilePKI: any = `${environment.apiUrl}/api/v1/sign/sim-pki/`;
+  signFilePKI: any = `${environment.apiUrl}/api/v1/sign/sim-pki-v3/`;
   getAllContractTypesUrl: any = `${environment.apiUrl}/api/v1/contract-types/`;
   imageMobiBase64: any;
   getNameSearch: any = `${environment.apiUrl}/api/v1/customers/search`;
@@ -544,7 +544,6 @@ export class ContractService {
         'Sec-Fetch-Site': 'cross-site',
       },
     };
-
     return axios.get(this.getAccountSignDigital, config);
   }
 
