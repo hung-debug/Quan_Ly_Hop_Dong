@@ -544,26 +544,15 @@ export class ContractService {
         'Sec-Fetch-Site': 'cross-site',
       },
     };
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json; charset=utf-8')
-      .append('Sec-Fetch-Mode', 'cors')
-      .append('Connection', 'keep-alive')
-      .append('Sec-Fetch-Site', 'cross-site');
 
-    console.log('get account sign digital ', this.getAccountSignDigital);
     return axios.get(this.getAccountSignDigital, config);
   }
-
-
 
   checkTaxCodeExist(taxCode: any, certB64: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-
-    console.log('tax code ', taxCode);
-    console.log('certB64 ', certB64);
 
     const body = JSON.stringify({
       mst: taxCode,
