@@ -87,16 +87,14 @@ export class UnitService {
   }
 
   uploadFileUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/import-child-org`;
-  uploadFileUnit(file: any) {
+  uploadFile(file: any) {
     this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', file);
 
     const headers = new HttpHeaders()
       .append('Authorization', 'Bearer ' + this.token)
-      
-      // .append('Content-Type','application/octet-stream');
-    
+          
       return this.http.post(
         this.uploadFileUnitUrl,
         formData,
@@ -114,8 +112,6 @@ export class UnitService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-      console.log("datas update ", datas);
-
     const body = JSON.stringify({
       name: datas.name,
       short_name: datas.short_name,
@@ -128,8 +124,6 @@ export class UnitService {
       path: datas.path,
       tax_code: datas.tax_code
     });
-    console.log(headers);
-    console.log("body update ",body);
     return this.http.put<any>(this.updateUnitUrl + datas.id, body, {'headers': headers});
   }
 

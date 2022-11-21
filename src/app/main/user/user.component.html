@@ -3,15 +3,6 @@
     <div class="col-md-3" *ngIf="isQLND_03">
       <div>{{'unit.name' | translate}}</div>
       <div>
-        <!-- <p-dropdown 
-          panelStyleClass="font"
-          [options]="orgList" 
-          [(ngModel)]="organization_id" 
-          optionLabel="name" 
-          optionValue="id" 
-          [filter]="true" 
-          filterBy="name" 
-          ></p-dropdown> -->
           <p-treeSelect [(ngModel)]="selectedNodeOrganization" [options]="listOrgCombobox" placeholder="Tất cả" [filter]="true" filterBy="name"  [droppable]="true" (onNodeSelect)="changeOrg()"></p-treeSelect>
       </div>
     </div>
@@ -21,9 +12,13 @@
         <input type="text" [(ngModel)]="email" class="input_text"/>
       </div>
     </div>
+
     <div class="col-md-6 btn_search">
       <button *ngIf="isQLND_03" class="btn btn-lg btn-block btn_submit" (click)="searchUser()">{{'btn.search' | translate }}</button>
       <button *ngIf="isQLND_01" class="btn btn-lg btn-block btn_submit" (click)="addUser()">{{'btn.add' | translate }}</button>
+      <input *ngIf="isQLND_01" id="file-input" type="file" accept=".xls,.xlsx" (change)="fileChanged($event)"/>
+
+      Bạn chưa có file mẫu? <a href="/assets/upload/import_nguoi_dung.xlsx" style="color: #106DB6; cursor: pointer;" (click)="downFileExample()">Tải file mẫu</a>
     </div>
   </div>
 
