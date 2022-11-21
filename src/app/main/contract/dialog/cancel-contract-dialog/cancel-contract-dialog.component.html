@@ -9,8 +9,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="label text-color">Lý do hủy hợp đồng <span class="required-title">*</span></div>
-                <div class="input-data">
-                    <input type="text" formControlName="reason">
+                <div>
+                    <textarea formControlName="reason"></textarea>
                 </div>
                 <div *ngIf="submitted && f.reason.errors" class="invalid">
                     <div *ngIf="f.reason.errors.required">Lý do hủy không được để trống</div>
