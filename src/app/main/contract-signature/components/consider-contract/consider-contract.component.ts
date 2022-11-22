@@ -297,7 +297,7 @@ export class ConsiderContractComponent
 
           if (element.recipient) {
             // set name (nguoi dc uy quyen hoac chuyen tiep)
-            element.name = element.recipient.name;
+            element.name = element.name;
           }
         });
 
