@@ -19,6 +19,9 @@ export class ForwardContractComponent implements OnInit {
   isReqPhone:boolean = false;
   isReqCardId:boolean = false;
 
+  isReqCardIdToken: boolean = false;
+  isReqCardIdHsm: boolean = false;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -43,22 +46,36 @@ export class ForwardContractComponent implements OnInit {
       card_id: "",
     });
 
-    //kiem tra user co bat buoc phai nhap phone, card id 
-    //phone: bat buoc nhap khi user ky anh OTP: type = 1
-    //card_id: bat buoc nhap khi user ky eKYC: type = 5
-    
-    
+  
     for (const d of this.datas.dataContract.is_data_contract.participants) {
       for (const q of d.recipients) {
         if (q.email == this.currentUser.customer.info.email && q.status == 1) {
           let data_sign_cka = q.sign_type.filter((p: any) => p.id == 1)[0];
+
+          //Chữ ký eKYC
           let data_sign_ekyc = q.sign_type.filter((p: any) => p.id == 5)[0];
+
+          //Chữ ký HSM
+          let data_sign_cardIdHsm = q.sign_type.filter((p: any) => p.id == 4)[0];
+
+          //Chữ ký usb token
+          let data_sign_cardIdToken = q.sign_type.filter((p: any) => p.id == 2)[0];
+
           if(data_sign_cka){
             this.isReqPhone = true;
           }
           if(data_sign_ekyc){
             this.isReqCardId = true;
           }
+
+          if(data_sign_cardIdHsm) {
+            this.isReqCardIdHsm = true;
+          }
+
+          if(data_sign_cardIdToken) {
+            this.isReqCardIdToken = true;
+          }
+
           break
         }
       }
