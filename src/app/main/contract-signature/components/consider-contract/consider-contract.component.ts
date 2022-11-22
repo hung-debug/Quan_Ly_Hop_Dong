@@ -2724,5 +2724,15 @@ export class ConsiderContractComponent
       this.mobile = false;
     }
   }
+
+  flagFocus: boolean = false;
+  switchesValueChange($event: any) {
+    if($event == 'text') {
+      this.flagFocus = true;
+    } else {
+      this.flagFocus = false;
+    }
+  }
+
 }
 
