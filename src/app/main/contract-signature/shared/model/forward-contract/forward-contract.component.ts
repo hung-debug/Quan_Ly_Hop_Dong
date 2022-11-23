@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { ContractService } from "../../../../../service/contract.service";
 import { ToastService } from "../../../../../service/toast.service";
 import { NgxSpinnerService } from "ngx-spinner";
-import { parttern } from 'src/app/config/parttern';
+import { parttern, parttern_input } from 'src/app/config/parttern';
 
 @Component({
   selector: 'app-forward-contract',
@@ -114,6 +114,23 @@ export class ForwardContractComponent implements OnInit {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng CMT/CCCD', '', 3000);
       return;
     }
+    //Mã số thuế hsm
+     else if(this.isReqCardIdHsm && !String(this.myForm.value.card_id)) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+      return;
+    } else if(this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form)) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế', '', 3000);
+      return;
+    }
+    //Thông tin trong usb token
+    else if(this.isReqCardIdToken && !String(this.myForm.value.card_id)) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập thông tin trong usb token của người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
+      return;
+    } else if(this.myForm.value.card_id && (!String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form) || !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id))) {
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế/CMT/CCCD', '', 3000);
+      return;
+    }
+
     if (!this.checkCanSwitchContract()) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập email ngoài luồng hợp đồng', '', 3000);
       return;
@@ -123,7 +140,7 @@ export class ForwardContractComponent implements OnInit {
       return;
     }
     if (this.myForm.value.card_id && !this.checkCanSwitchContractCardId()) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD ngoài luồng hợp đồng', '', 3000);
+      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế/CMT/CCCD ngoài luồng hợp đồng', '', 3000);
       return;
     }
     if (this.currentUser) {

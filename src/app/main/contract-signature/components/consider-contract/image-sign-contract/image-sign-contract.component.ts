@@ -51,7 +51,6 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doSign() {
-    console.log(this.sign);
     //khong thuc hien ky eKYC tren web
     if (this.sign.sign_unit == 'chu_ky_anh' && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       if(this.sign?.recipient?.sign_type.filter((p: any) => p.id == 5).length == 0){
