@@ -401,6 +401,7 @@ export class ContractSignatureComponent implements OnInit {
       this.filter_status = -1;
       this.typeDisplay = 'signOne';
     } else if (this.status == 'wait-processing-dashboard') {
+      this.contractStatus = 20;
       this.filter_status = 11;
     } else if (this.status == 'wait-processing-prepare-expires-dashboard') {
       this.filter_status = 12;
@@ -425,7 +426,6 @@ export class ContractSignatureComponent implements OnInit {
     (opt) => opt.checked
   );
 
-  console.log('contracts sign many checked ', contractsSignManyChecked);
   for (let i = 0; i < contractsSignManyChecked.length; i++) {
     for (let j = i + 1; j < contractsSignManyChecked.length; j++) {
       if (
@@ -465,7 +465,6 @@ export class ContractSignatureComponent implements OnInit {
 
     //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
     for (let i = 0; i < recipientId.length; i++) {
-      console.log('recipient id i ', recipientId[i]);
       this.contractServiceV1
         .getDetermineCoordination(recipientId[i])
         .subscribe((response) => {
@@ -488,7 +487,6 @@ export class ContractSignatureComponent implements OnInit {
         .getDetermineCoordination(recipientId[i])
         .subscribe((response) => {
           response.recipients.forEach((item: any) => {
-            console.log("item ", item);
             if(item.fields[0].recipient.id == recipientId[i]) {
                 taxCode.push(item.fields[0].recipient.cardId);
             }
@@ -504,7 +502,6 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openDialogSignManyComponent( recipientId: any, taxCode: any, idSignMany: any, signId: any) {
-    console.log("tax code ", taxCode);
     const dialogRef = this.dialog.open(DialogSignManyComponentComponent, {
       width: '580px',
     });
@@ -684,11 +681,8 @@ export class ContractSignatureComponent implements OnInit {
                     } else {
                       countSuccess++;
                     }
-                  }
-                // }
-             
-                console.log("count success ", countSuccess);
-                console.log("count update ", countUpdate);
+                  }             
+
                 if (countSuccess == checkSign.length) {
                   this.spinner.hide();
                   this.toastService.showSuccessHTMLWithTimeout(
