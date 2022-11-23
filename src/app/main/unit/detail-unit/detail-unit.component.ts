@@ -20,6 +20,7 @@ export class DetailUnitComponent implements OnInit {
   fax:any="";
   status:any="";
   parent_id:any="";
+  id: any = "";
 
   numContractUse: number = 0;
   numContractCreate:number= 0;
@@ -60,7 +61,8 @@ export class DetailUnitComponent implements OnInit {
         this.status = data.status,
         this.parent_id = data.parent_id,
         this.taxCode = data.tax_code,
-        this.cEcAPushMode = this.convert(data.ceca_push_mode)
+        this.cEcAPushMode = this.convert(data.ceca_push_mode),
+        this.id = data.id
         
         if(data.parent_id != null){
           this.unitService.getUnitById(data.parent_id).subscribe(

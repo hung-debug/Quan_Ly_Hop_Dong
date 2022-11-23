@@ -372,5 +372,6 @@
   "typeOfSignEmail":"Đăng nhập bằng email",
   "typeOfSignPhone":"Đăng nhập bằng số điện thoại",
   "success_sign":"Ký hợp đồng thành công",
-  "success_watch":"Xem xét hợp đồng thành công"
+  "success_watch":"Xem xét hợp đồng thành công",
+  "unit.id":"ID"
 }

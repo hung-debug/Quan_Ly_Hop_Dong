@@ -158,6 +158,7 @@
   "unit.information": "Thông tin tổ chức",
   "unit.code": "Mã tổ chức",
   "unit.name": "Tên tổ chức",
+  "unit.id":"ID",
   "unit.short-name": "Tên viết tắt",
   "unit.status": "Trạng thái",
   "unit.type": "Loại tổ chức",

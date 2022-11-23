@@ -54,6 +54,7 @@ export class AddUnitComponent implements OnInit {
         status: 1,
         parent_id: this.fbd.control("", [Validators.required]),
         taxCode: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
+        idOrg: this.fbd.control(""),
       });
     }
 
@@ -83,6 +84,7 @@ export class AddUnitComponent implements OnInit {
             parent_id: this.fbd.control(data.parent_id),
             path: this.fbd.control(data.path),
             taxCode: this.fbd.control(data.tax_code,Validators.pattern(parttern_input.taxCode_form)),
+            idOrg: this.fbd.control(data.id),
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
@@ -108,7 +110,6 @@ export class AddUnitComponent implements OnInit {
     }else{
       //lay danh sach to chuc
       this.unitService.getUnitList('', '').subscribe(data => {
-        console.log(data.entities);
         this.orgList = data.entities;
       });
       this.addForm = this.fbd.group({

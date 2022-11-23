@@ -32,7 +32,8 @@
       </ng-template>
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
         <tr>
-          <td><p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler><a (click)="isQLTC_04?detailUnit(rowData.id):null" style="color: #0160AE; cursor: pointer;">{{rowData.name}}</a></td>
+          <td><p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler><a (click)="isQLTC_04?detailUnit(rowData.id):null" style="color: #0160AE; cursor: pointer;">{{rowData.id}}</a></td>
+          <td>{{rowData.name}}</td>
           <td>{{rowData.short_name}}</td>
           <td>{{rowData.code}}</td>
           <td>{{rowData.status==1?'Hoạt động':'Không hoạt động'}}</td>
