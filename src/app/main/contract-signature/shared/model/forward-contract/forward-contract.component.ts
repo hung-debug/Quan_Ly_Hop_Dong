@@ -38,6 +38,9 @@ export class ForwardContractComponent implements OnInit {
 
   ngOnInit(): void {
     this.datas = this.data;
+
+    console.log("datas ", this.datas);
+
     this.getCurrentUser();
     this.myForm = this.fbd.group({
       name: this.fbd.control("", [Validators.required]),
@@ -126,7 +129,7 @@ export class ForwardContractComponent implements OnInit {
     else if(this.isReqCardIdToken && !String(this.myForm.value.card_id)) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập thông tin trong usb token của người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
       return;
-    } else if(this.isReqCardIdToken && this.myForm.value.card_id && (!String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form) || !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id))) {
+    } else if(this.isReqCardIdToken && this.myForm.value.card_id && (!String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id))) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế/CMT/CCCD', '', 3000);
       return;
     }
@@ -234,9 +237,20 @@ export class ForwardContractComponent implements OnInit {
     if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
       for (const participant of this.datas.dataContract.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
-          if (this.myForm.value.card_id == recipient.card_id) {
-            return false;
+          // if (!this.isReqCardId && this.datas.recipientId != recipient.id && this.myForm.value.card_id == recipient.card_id) {
+          //   return false;
+          // }
+
+          if(!this.isReqCardId) {
+            if(this.datas.recipientId != recipient.id && this.myForm.value.card_id == recipient.card_id) {
+              return false;
+            }
+          } else {
+            if(this.myForm.value.card_id == recipient.card_id) {
+              return false;
+            }
           }
+
         }
       }
     }
