@@ -287,7 +287,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
         for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
           if(this.datasForm.is_determine_clone[index].recipients[i].email) {
-            this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.toLowerCase();
+            this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.toLowerCase().trim();
           }
         }
     })
@@ -296,8 +296,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       items.recipients.forEach((element: any) => {
 
         for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
-          this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
-          this.datasForm.is_determine_clone[index].recipients[i].phone = this.datasForm.is_determine_clone[index].recipients[i].phone.trim().toLowerCase();
+          this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.trim().toLowerCase().trim();
+          this.datasForm.is_determine_clone[index].recipients[i].phone = this.datasForm.is_determine_clone[index].recipients[i].phone.trim().toLowerCase().trim();
         }
 
         if (this.action != 'edit') {

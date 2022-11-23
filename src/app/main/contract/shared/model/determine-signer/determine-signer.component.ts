@@ -261,7 +261,7 @@ export class DetermineSignerComponent implements OnInit {
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
         for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
           if(this.datas.is_determine_clone[index].recipients[i].email) {
-            this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.toLowerCase();
+            this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.toLowerCase().trim();
           }
         }
     })
@@ -294,17 +294,11 @@ export class DetermineSignerComponent implements OnInit {
       this.toastService.showSuccessHTMLWithTimeout("Lưu nháp thành công!", "", 3000)
       void this.router.navigate(['/main/contract/create/draft']);
     } else if (!this.saveDraftStep || is_save) {
-      console.log("data clone 1 ", this.datas.is_determine_clone);
-
       this.datas.is_determine_clone = res ? res : this.datas.is_determine_clone;
-
-      console.log("data clone 2 ", this.datas.is_determine_clone);
 
       this.step = variable.stepSampleContract.step3;
 
       this.datas.stepLast = this.step;
-
-      console.log("data clone 3 ", this.datas.is_determine_clone);
 
       this.nextOrPreviousStep(this.step);
     }
@@ -313,8 +307,6 @@ export class DetermineSignerComponent implements OnInit {
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
-
-    console.log("data clone 4 ", this.datas.is_determine_clone);
 
     this.stepChangeDetermineSigner.emit(step);
   }
