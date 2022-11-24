@@ -147,14 +147,10 @@ export class MainComponent implements OnInit {
   mobile: boolean = false;
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
-      console.log("la mobile ");
       this.mobile = true;
     } else {
-      console.log("la pc");
       this.mobile = false;
     }
-
-    console.log("mobile ", this.mobile);
   }
 
   getShowHideSideBar() {

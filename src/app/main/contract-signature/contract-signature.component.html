@@ -9,7 +9,7 @@
 
     <div *ngIf="filter_status == 1">
         <div *ngIf="this.typeDisplay === 'signOne'" class="col-md-1 btn_search">
-            <button (click)="signMany()" class="btn btn-lg btn-block btn_submit">{{'Ký nhiều'| translate}}</button>
+            <button (click)="signMany()" class="btn btn-lg btn-block btn_submit">{{'sign.multi'| translate}}</button>
         </div>
 
         <div *ngIf="this.typeDisplay === 'signMany'" style="padding-top: 10px;">
@@ -43,7 +43,7 @@
 
                                 <!--Cac ben ky-->
                                 <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
-                                    <div class="item_contract_infor">Bên {{getNameOrganization(itemPar, index)}}</div>
+                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
                                 </div>
 
                                 <!--Trang thai hop dong-->
@@ -71,9 +71,9 @@
                                     </div>
                                 </div>
 
-                                <!--Loại ký-->
+                                <!--user.sign-type-->
                                 <div class="row">
-                                    <div *ngIf="this.filter_status === 1" class="col-md-11 item_contract_infor">{{'Loại ký' | translate}}:
+                                    <div *ngIf="this.filter_status === 1" class="col-md-11 item_contract_infor">{{'user.sign-type' | translate}}:
                                         <span class="status_blue">{{item.typeOfSign}}</span>
                                     </div>
                                 </div>
@@ -124,7 +124,7 @@
                             <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
-                            <div class="col-md-12 item_contract_infor">Bên {{getNameOrganization(itemPar, index)}}</div>
+                            <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
@@ -157,7 +157,7 @@
                             <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
-                            <div class="col-md-12 item_contract_infor">Bên {{getNameOrganization(itemPar, index)}}</div>
+                            <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
@@ -181,7 +181,7 @@
         </div>
     </div>
 
-    <!--Danh sách tất cả hợp đồng có thể ký nhiều -->
+    <!--Danh sách tất cả hợp đồng có thể sign.multi -->
     <div *ngIf="this.typeDisplay === 'signMany'">
         <div class="item_contract" *ngFor="let item of contractsSignMany; let index1 = index">
             <div *ngIf="filter_status == 1 || filter_status == 4">
@@ -193,7 +193,7 @@
 
                                 <!--Cac ben ky-->
                                 <div class="row" *ngFor="let itemPar of sortParticipant(item.participant.contract.participants); let index = index">
-                                    <div class="item_contract_infor">Bên {{getNameOrganization(itemPar, index)}}</div>
+                                    <div class="item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
                                 </div>
 
                                 <!--Trang thai hop dong-->
@@ -221,9 +221,9 @@
                                     </div>
                                 </div>
 
-                                <!--Loại ký-->
+                                <!--user.sign-type-->
                                 <div class="row">
-                                    <div *ngIf="this.filter_status === 1" class="col-md-11 item_contract_infor">{{'Loại ký' | translate}}:
+                                    <div *ngIf="this.filter_status === 1" class="col-md-11 item_contract_infor">{{'user.sign-type' | translate}}:
                                         <span class="status_blue">{{item.sign_type[0].name}}</span>
                                     </div>
                                 </div>
@@ -270,7 +270,7 @@
                             <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
-                            <div class="col-md-12 item_contract_infor">Bên {{getNameOrganization(itemPar, index)}}</div>
+                            <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
@@ -303,7 +303,7 @@
                             <div class="col-md-12 item_contract_name" (click)="openDetail(item.id)">{{item.name}}</div>
                         </div>
                         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
-                            <div class="col-md-12 item_contract_infor">Bên {{getNameOrganization(itemPar, index)}}</div>
+                            <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 item_contract_infor">{{'contract.status' | translate}}:
@@ -355,7 +355,7 @@
     <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
     <div class="signature-content"
         style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
-      <div style="z-index: 2;text-align: left;">Loại ký: Ký số bằng usb token</div>
+      <div style="z-index: 2;text-align: left;">user.sign-type: Ký số bằng usb token</div>
       <div style="z-index: 2;text-align: left;">Ký bởi: {{nameCompany}}</div>
       <div style="z-index: 2;text-align: left;">Ngày ký: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</div>
     </div>
@@ -364,7 +364,7 @@
   <div id="export-html-hsm"  style="min-height: 80px;display: flex; font-size: 9px">
     <img style="width: 30px"  src="assets/img/tick_signature.svg" alt="duongdt.vn">
     <div style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
-      <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">Loại ký: Ký số bằng hsm</span>
+      <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">user.sign-type: Ký số bằng hsm</span>
       <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">Mã số thuế: {{nameCompany}}</span>
       <span style="text-align: left;white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">Ngày ký: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</span>
     </div>

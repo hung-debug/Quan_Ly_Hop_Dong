@@ -400,5 +400,7 @@
   "enter.cardId":"Enter card id",
   "cardId":"Card Id",
   "enter.note":"Enter note",
-  "only.match.email.org":"Only match email in the same organization"
+  "only.match.email.org":"Only match email in the same organization",
+  "parent.unit":"Parent unit",
+  "child.unit":"Children unit"
 }

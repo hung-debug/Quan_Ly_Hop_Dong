@@ -1,6 +1,10 @@
 <div *ngIf="loaded">
 <div *ngIf="isQLMHD_01 || isQLMHD_02 || isQLMHD_03 || isQLMHD_04 || isQLMHD_05 || isQLMHD_06 || isQLMHD_07 || isQLMHD_08 || isQLHD_14 || isQLHD_15" class="container-fluid">
-  <p-selectButton [options]="stateOptions" [(ngModel)]="isShare" optionLabel="label" optionValue="value" (click)="searchContract()"></p-selectButton>
+  <p-selectButton [options]="stateOptions" [(ngModel)]="isShare" optionLabel="label" optionValue="value" (click)="searchContract()">
+    <ng-template #options let-item>
+      <span style="margin: auto;width: 50%;">{{item.label | translate}}</span>
+    </ng-template>
+  </p-selectButton>
 
   <div class="row" style="padding-top: 10px;">
     <div class="col-md-3" *ngIf="isQLMHD_06">
@@ -46,7 +50,7 @@
           <div class="col-md-12 item_contract_name" (click)="isQLMHD_08?openDetail(item.id):null">{{item.name}}</div>
         </div>
         <div class="row" *ngFor="let itemPar of sortParticipant(item.participants); let index = index">
-          <div class="col-md-12 item_contract_infor">Bên {{getNameOrganization(itemPar, index)}}</div>
+          <div class="col-md-12 item_contract_infor">{{'side' | translate}} {{getNameOrganization(itemPar, index)}}</div>
         </div>
       </div>
       <div class="col-md-2 calendar_create">

@@ -400,5 +400,7 @@
   "enter.cardId":"Nhập CMT/CCCD",
   "cardId":"CMT/CCCD",
   "enter.note":"Nhập lời nhắn",
-  "only.match.email.org":"Chỉ được trùng với email trong cùng tổ chức"
+  "only.match.email.org":"Chỉ được trùng với email trong cùng tổ chức",
+  "parent.unit":"Tổ chức cha",
+  "child.unit":"Tổ chức con"
 }

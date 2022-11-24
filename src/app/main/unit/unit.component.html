@@ -36,8 +36,12 @@
           <td>{{rowData.name}}</td>
           <td>{{rowData.short_name}}</td>
           <td>{{rowData.code}}</td>
-          <td>{{rowData.status==1?'Hoạt động':'Không hoạt động'}}</td>
-          <td>{{rowData.parent_id==null?'Tổ chức cha':'Tổ chức con'}}</td>
+          <td *ngIf="rowData.status == 1">{{'unit.active' | translate}}</td>
+          <td *ngIf="rowData.status != 1">{{'unit.inactive' | translate}}</td>
+
+          <td *ngIf="rowData.parent_id == null">{{'parent.unit' | translate}}</td>
+          <td *ngIf="rowData.parent_id != null">{{'child.unit' | translate}}</td>
+
           <td style="text-align: center">
             <img *ngIf="rowData.is_edit && isQLTC_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUnit(rowData.id)" style="cursor: pointer;"/>
           </td>

@@ -96,8 +96,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
     ) {
 
       this.stateOptions = [
-        { label: 'Hợp đồng của tôi', value: 'off' },
-        { label: 'Hợp đồng của tổ chức', value: 'on' },
+        { label: 'contract.me', value: 'off' },
+        { label: 'contract.organization', value: 'on' },
       ];
     }
 
