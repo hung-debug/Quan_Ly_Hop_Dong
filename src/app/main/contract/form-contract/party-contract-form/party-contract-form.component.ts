@@ -250,7 +250,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 }
               }
             } else if(element.login_by == 'phone') {
-              if(element.sign_type[0].id == 1) {
+              if(element.sign_type > 0 && element.sign_type[0].id == 1) {
                 countSMS = countSMS + 2;
               } else {
                 countSMS++;
