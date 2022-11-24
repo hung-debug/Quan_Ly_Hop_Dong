@@ -1576,7 +1576,7 @@ export class ConsiderContractComponent
       } catch(error) {
         this.spinner.hide();
         Swal.fire({
-          html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1wayt8YYcYsl0qA8XpSMLhNsF4YbCwqO_/view' target='_blank'>Tại đây</a>  và cài đặt`,
+          html: "Vui lòng bật tool ký số hoặc tải " + `<a href='/assets/upload/mobi_pki_sign_setup.zip' target='_blank'>Tại đây</a>  và cài đặt`,
           icon: 'warning',
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#b0bec5',
@@ -1707,7 +1707,7 @@ export class ConsiderContractComponent
         if (response == '') {
           this.spinner.hide();
           Swal.fire({
-            html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
+            html: "Vui lòng bật tool ký số hoặc tải " + `<a href='/assets/upload/mobi_pki_sign_setup.zip' target='_blank'>Tại đây</a>  và cài đặt`,
             icon: 'warning',
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#b0bec5',
@@ -1725,7 +1725,7 @@ export class ConsiderContractComponent
       } else if (httpReq.readyState == 4 && httpReq.status != 200) {
         this.spinner.hide();
         Swal.fire({
-          html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
+          html: "Vui lòng bật tool ký số hoặc tải " + `<a href='/assets/upload/mobi_pki_sign_setup.zip' target='_blank'>Tại đây</a>  và cài đặt`,
           icon: 'warning',
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#b0bec5',
