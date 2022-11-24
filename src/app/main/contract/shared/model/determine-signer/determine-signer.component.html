@@ -36,7 +36,7 @@
 
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-                <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
+                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}} cho nguoi xem xet to chuc-->
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
@@ -45,7 +45,7 @@
                         <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
                       </div>&nbsp;
                       <div>
-                        {{'Đăng nhập bằng email' | translate}}
+                        {{'typeOfSignEmail' | translate}}
                       </div>
                     </div>
                   </div>
@@ -55,7 +55,7 @@
                         <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
                       </div>&nbsp;
                       <div>
-                        {{'Đăng nhập bằng số điện thoại' | translate}}
+                        {{'typeOfSignPhone' | translate}}
                       </div>
                     </div>
                   </div>
@@ -67,12 +67,12 @@
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
 
-                    <!--Trường hợp đăng nhập bằng email đối với người xem xét-->
+                    <!--Trường hợp typeOfSignEmail đối với người xem xét-->
                     <input *ngIf="d.login_by === 'email'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
                       (focusin)="onFocusIn($event, index, 'view')" (ngxInputSearch)="doTheSearch($event, index, 'view')"
                       [(ngModel)]="d.name" (focusout)="onFocusOut($event, d)">
 
-                    <!--Trường hợp đăng nhập bằng số điện thoại đối với người xem xét-->
+                    <!--Trường hợp typeOfSignPhone đối với người xem xét-->
                       <input *ngIf="d.login_by === 'phone'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
                       (focusin)="onFocusIn($event, index, 'view')"
                       [(ngModel)]="d.name" (focusout)="onFocusOut($event, d)">
@@ -93,10 +93,10 @@
                 </div>
 
                 <div class="participants__name" *ngIf="d.login_by == 'phone'">
-                  <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span></div>
+                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.email">
+                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
                   </div>
                 </div>
               </div>
@@ -126,7 +126,7 @@
               
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-              <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại-->
+              <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label_detail text-color">
@@ -135,7 +135,7 @@
                       <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgSigner_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
                     </div>&nbsp;
                     <div>
-                      {{'Đăng nhập bằng email' | translate}}
+                      {{'typeOfSignEmail' | translate}}
                     </div>
                   </div>
                 </div>
@@ -145,7 +145,7 @@
                       <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgSigner_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
                     </div>&nbsp;
                     <div>
-                      {{'Đăng nhập bằng số điện thoại' | translate}}
+                      {{'typeOfSignPhone' | translate}}
                     </div>
                   </div>
                 </div>
@@ -158,13 +158,13 @@
                   <div class="input-data">
                     <img src="assets/img/icon_name.svg" class="input-img">
 
-                    <!--Trường hợp đăng nhập bằng email-->
+                    <!--Trường hợp typeOfSignEmail-->
                     <input *ngIf="d.login_by === 'email'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
                       (focusin)="onFocusIn($event, index, 'signature')"
                       (ngxInputSearch)="doTheSearch($event, index, 'signature')" [(ngModel)]="d.name"
                       (focusout)="onFocusOut($event, d)">
 
-                      <!--Trường hợp đăng nhập bằng số điện thoại-->
+                      <!--Trường hợp typeOfSignPhone-->
                     <input *ngIf="d.login_by === 'phone'" type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"
                     (focusin)="onFocusIn($event, index, 'signature')"
                     [(ngModel)]="d.name"
@@ -216,10 +216,10 @@
                 </div>
 
                 <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span></div>
+                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.email">
+                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
                   </div>
                 </div>
               </div>
@@ -268,7 +268,7 @@
               oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-                <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại-->
+                <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
                 <!-- <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
@@ -276,7 +276,7 @@
                         <input name="checkPhoneMailOrgDoc_{{index}}" type="radio" [(ngModel)]="d.login_by" [value]="email"/>
                       </div>&nbsp;
                       <div>
-                        {{'Đăng nhập bằng email' | translate}}
+                        {{'typeOfSignEmail' | translate}}
                       </div>
                     </div>
                   </div>
@@ -286,7 +286,7 @@
                         <input name="checkPhoneMailOrgDoc_{{index}}" type="radio" [value]="phone" [(ngModel)]="d.login_by"/>
                       </div>&nbsp;
                       <div>
-                        {{'Đăng nhập bằng số điện thoại' | translate}}
+                        {{'typeOfSignPhone' | translate}}
                       </div>
                     </div>
                   </div>
@@ -344,10 +344,10 @@
                 </div>
 
                 <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width:90%">
-                  <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span></div>
+                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
-                    <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.email">
+                    <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
                   </div>
                 </div>
               </div>
@@ -480,7 +480,7 @@
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column; margin-bottom: 14px">
 
-                   <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet doi tac-->
+                   <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}} cho nguoi xem xet doi tac-->
                    <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
@@ -489,7 +489,7 @@
                           <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailParticipantViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
                         </div>&nbsp;
                         <div>
-                          {{'Đăng nhập bằng email' | translate}}
+                          {{'typeOfSignEmail' | translate}}
                         </div>
                       </div>
                     </div>
@@ -499,7 +499,7 @@
                           <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailParticipantViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
                         </div>&nbsp;
                         <div>
-                          {{'Đăng nhập bằng số điện thoại' | translate}}
+                          {{'typeOfSignPhone' | translate}}
                         </div>
                       </div>
                     </div>
@@ -522,10 +522,10 @@
                   </div>
 
                   <div class="participants__name" *ngIf="d.login_by == 'phone'">
-                    <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span></div>
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
                     </div>
                   </div>
                 </div>
@@ -552,7 +552,7 @@
                 [disabled]="getPartnerSignature(item).length == 1 ">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-                  <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại-->
+                  <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
                   <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
@@ -560,7 +560,7 @@
                           <input (change)="changeTypeSign(d)" name="checkPhoneMailParticipantSigner_{{index}}_{{id}}" type="radio" [value]="email" [(ngModel)]="d.login_by"/>
                         </div>&nbsp;
                         <div>
-                          {{'Đăng nhập bằng email' | translate}}
+                          {{'typeOfSignEmail' | translate}}
                         </div>
                       </div>
                     </div>
@@ -570,7 +570,7 @@
                           <input (change)="changeTypeSign(d)" name="checkPhoneMailParticipantSigner_{{index}}_{{id}}" type="radio" [value]="phone" [(ngModel)]="d.login_by"/>
                         </div>&nbsp;
                         <div>
-                          {{'Đăng nhập bằng số điện thoại' | translate}}
+                          {{'typeOfSignPhone' | translate}}
                         </div>
                       </div>
                     </div>
@@ -625,10 +625,10 @@
                   </div>
 
                   <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span></div>
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
                     </div>
                   </div>
                 </div>
@@ -730,10 +730,10 @@
                   </div>
 
                   <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span></div>
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
                     </div>
                   </div>
                
@@ -782,7 +782,7 @@
                 [(ngModel)]="d.ordering" [disabled]="getPartnerSignature(item).length == 1">
               <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column;margin-bottom: 14px">
 
-                  <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại đối với người ký là cá nhân-->
+                  <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}} đối với người ký là cá nhân-->
                   <div class="participants--input" style="display: flex">
                     <div class="participants__name">
                       <div class="label_detail text-color">
@@ -790,7 +790,7 @@
                           <input (change)="changeTypeSign(d)" name="checkPhoneMailPerson_{{index}}" type="radio" [value]="email" [(ngModel)]="d.login_by"/>
                         </div>&nbsp;
                         <div>
-                          {{'Đăng nhập bằng email' | translate}}
+                          {{'typeOfSignEmail' | translate}}
                         </div>
                       </div>
                     </div>
@@ -800,7 +800,7 @@
                           <input (change)="changeTypeSign(d)" name="checkPhoneMailPerson_{{index}}" type="radio" [value]="phone" [(ngModel)]="d.login_by" />
                         </div>&nbsp;
                         <div>
-                          {{'Đăng nhập bằng số điện thoại' | translate}}
+                          {{'typeOfSignPhone' | translate}}
                         </div>
                       </div>
                     </div>
@@ -850,10 +850,10 @@
                 <div class="participants--input" style="display: flex">
 
                   <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width:90%">
-                    <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span></div>
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.email">
+                      <input type="text" placeholder="nhap_sdt" [(ngModel)]="d.email">
                     </div>
                   </div>
                   
@@ -868,10 +868,10 @@
 
                 <div class="participants--input" style="display: flex">
                   <div *ngIf="d.login_by === 'email' && getDataSignCka(d).length > 0" class="participants__name" style="width:90%">
-                    <div class="label_detail text-color">Số điện thoại&nbsp;<span class="required-title">*</span></div>
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="Nhập số điện thoại" [(ngModel)]="d.phone">
+                      <input type="text" placeholder="nhap_sdt" [(ngModel)]="d.phone">
                     </div>
                   </div>
                 </div>

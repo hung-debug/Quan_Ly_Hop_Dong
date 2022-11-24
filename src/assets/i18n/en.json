@@ -395,6 +395,10 @@
   "choose.expire.date":"Choose expire date",
   "tax_code.cardId":"Tax code/Card Id",
   "info.token":"Information in USB Token",
-  "enter.taxt_code.cardId":"Enter tax code or card id",
-  "enter.tax.code":"Enter tax code"
+  "enter.tax_code.cardId":"Enter tax code or card id",
+  "enter.tax.code":"Enter tax code",
+  "enter.cardId":"Enter card id",
+  "cardId":"Card Id",
+  "enter.note":"Enter note",
+  "only.match.email.org":"Only match email in the same organization"
 }
