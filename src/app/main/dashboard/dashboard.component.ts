@@ -55,8 +55,8 @@ export class DashboardComponent implements OnInit {
     public datepipe: DatePipe,
   ) {
     this.stateOptions = [
-      {label: 'HĐ của tôi', value: 'off'},
-      {label: 'HĐ của tổ chức', value: 'on'},
+      {label: "my.contract", value: 'off'},
+      {label: "org.contract", value: 'on'},
     ];
   }
 

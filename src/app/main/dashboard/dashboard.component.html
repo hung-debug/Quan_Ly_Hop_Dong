@@ -68,23 +68,21 @@
       </div>
       <div class="body">
         <div class="row" style="margin: 0 1%;">
+
           <div class="col-md-6" style="text-align: center;">
-            <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="search()"></p-selectButton>
+
+            <p-selectButton [options]="stateOptions" [(ngModel)]="isOrg" optionLabel="label" optionValue="value" (click)="search()">
+              <ng-template  #options let-item>
+                <span style="vertical-align:middle">{{item.label | translate}}</span>
+             </ng-template>
+            </p-selectButton>
+
           </div>
+
           <div class="col-md-6">
             <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy" (onSelect)="searchCountCreate()"></p-calendar>
           </div>
           <div style="padding-top: 10px;" *ngIf="isOrg=='on'">
-            <!-- <p-dropdown
-              panelStyleClass="font"
-              [options]="orgList"
-              [(ngModel)]="organization_id"
-              optionLabel="name"
-              optionValue="id"
-              [filter]="true"
-              filterBy="name"
-              (onChange)="search()"
-              ></p-dropdown> -->
               <p-treeSelect [(ngModel)]="selectedNodeOrganization" [options]="list" placeholder="Tất cả" [filter]="true" filterBy="name"  [droppable]="true" (onNodeSelect)="search()"></p-treeSelect>
           </div>
         </div>

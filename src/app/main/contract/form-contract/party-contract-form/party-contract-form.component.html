@@ -49,7 +49,7 @@
                       <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
                     </div>&nbsp;
                     <div>
-                      {{'Đăng nhập bằng email' | translate}}
+                      {{'typeOfSignEmail' | translate}}
                     </div>
                   </div>
                 </div>
@@ -59,7 +59,7 @@
                       <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailOrgViewer_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
                     </div>&nbsp;
                     <div>
-                      {{'Đăng nhập bằng số điện thoại' | translate}}
+                      {{'typeOfSignPhone' | translate}}
                     </div>
                   </div>
                 </div>
@@ -115,7 +115,7 @@
                   </div>
 
                   <div *ngIf="d.login_by === 'phone'" class="label_detail text-color">
-                    Số điện thoại&nbsp;<span class="required-title">*</span>
+                    {{'user.phone' | translate}}&nbsp;<span class="required-title">*</span>
                   </div>
 
                   <div *ngIf="d.login_by === 'email'" class="input-data">
@@ -131,7 +131,7 @@
                     <img src="assets/img/login_email.svg" class="input-img" />
                     <input
                       type="text"
-                      placeholder="{{ 'Nhập số điện thoại' | translate }}"
+                      placeholder="{{ 'vui_long_nhap_sdt' | translate }}"
                       [(ngModel)]="d.email"
                     />
                   </div>
@@ -187,7 +187,7 @@
                         <input (change)="changeTypeSign(d)" [(ngModel)]="d.login_by" type="radio" name="checkPhoneMailOrgSign_{{index}}" [value]="email"/>
                       </div>&nbsp;
                       <div>
-                          {{'Đăng nhập bằng email' | translate}}
+                          {{'typeOfSignEmail' | translate}}
                       </div>
                     </div>
                   </div>
@@ -197,11 +197,11 @@
                         <input (change)="changeTypeSign(d)" [(ngModel)]="d.login_by" type="radio" name="checkPhoneMailOrgSign_{{index}}" [value]="phone"/>
                       </div>&nbsp;
                       <div>
-                        {{'Đăng nhập bằng số điện thoại' | translate}}
+                        {{'typeOfSignPhone' | translate}}
                       </div>
                     </div>
                   </div>
-                </div> -->
+                </div>
 
               <div class="participants--input" style="display: flex">
                 <div class="participants__name">
@@ -295,13 +295,13 @@
 
                 <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width: 90%">
                   <div class="label_detail text-color">
-                    Số điện thoại&nbsp;<span class="required-title">*</span>
+                    {{'user.phone' | translate}}&nbsp;<span class="required-title">*</span>
                   </div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img" />
                     <input
                       type="text"
-                      placeholder="{{ 'Nhập số điện thoại' | translate }}"
+                      placeholder="{{ 'vui_long_nhap_sdt| translate }}"
                       [(ngModel)]="d.email"
                     />
                   </div>
@@ -311,9 +311,9 @@
                 <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là usbtoken-->
                 <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
                   <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">Mã số thuế/CMT/CCCD&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'Thông tin trong USB token' | translate}})</div></div>
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'info.token' | translate}})</div></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập mã số thuế/CMT/CCCD' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -321,9 +321,9 @@
                   <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là hsm-->
                 <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
                   <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">Mã số thuế&nbsp;<span class="required-title">*</span></div>
+                    <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập mã số thuế' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -877,7 +877,7 @@
                     </div>
                   </div>
                 </div>
-              </div> -->
+              </div>
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -1287,7 +1287,7 @@
                       </div>
                     </div>
                   </div>
-                </div> -->
+                </div>
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
