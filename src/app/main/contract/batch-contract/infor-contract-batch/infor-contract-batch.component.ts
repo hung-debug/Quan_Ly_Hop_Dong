@@ -241,7 +241,7 @@ export class InforContractBatchComponent implements OnInit {
       this.datasBatch.notes = this.notes;
       this.datasBatch.idContractTemplate = this.idContractTemplate;
 
-      let countOtp = 0;
+      let countSMS = 0;
       let countEkyc = 0;
       this.contractService
         .uploadFileContractBatch(
@@ -255,8 +255,6 @@ export class InforContractBatchComponent implements OnInit {
               this.datasBatch.idContractTemplate
             )
             .subscribe((response: any) => {
-              console.log('response ', response);
-
               for (
                 let i = 0;
                 i < response[0].participants[0].recipients.length;
@@ -267,9 +265,8 @@ export class InforContractBatchComponent implements OnInit {
                 for(let j = 0; j < recipients.length; j++) {
                   if(recipients[j].sign_type.length > 0) {
                     if (recipients[j].sign_type[0].id == 1) {
-
                       //Thêm điều kiện đăng nhập bằng email hoặc số điện thoại
-                      countOtp++;
+                      countSMS++;
                     } else if (recipients[j].sign_type[0].id == 5) {
                       countEkyc++;
                     }
@@ -278,8 +275,8 @@ export class InforContractBatchComponent implements OnInit {
                 }
               }
 
-              if (countOtp > 0) {
-                countOtp = countOtp * response.length;
+              if (countSMS > 0) {
+                countSMS = countSMS * response.length;
               } else if (countEkyc > 0) {
                 countEkyc = countEkyc * response.length;
               }
@@ -324,7 +321,7 @@ export class InforContractBatchComponent implements OnInit {
                                     );
                                   } else if (
                                     Number(this.smsContractUse) +
-                                      Number(countOtp) >
+                                      Number(countSMS) >
                                     Number(this.smsContractBuy)
                                   ) {
                                     this.toastService.showErrorHTMLWithTimeout(

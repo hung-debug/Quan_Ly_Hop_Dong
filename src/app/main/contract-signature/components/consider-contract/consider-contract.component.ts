@@ -1,7 +1,5 @@
-import { DetailContractComponent } from './../../../contract/detail-contract/detail-contract.component';
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -10,7 +8,6 @@ import {
   OnInit,
   Output,
   QueryList,
-  SecurityContext,
   ViewChild,
 } from '@angular/core';
 import { ContractService } from '../../../../service/contract.service';
@@ -432,8 +429,6 @@ export class ConsiderContractComponent
         this.handleError();
       }
     );
-
-    // console.log("datas 1 ", this.datas);
   }
 
   // Error handling
@@ -813,8 +808,6 @@ export class ConsiderContractComponent
             );
           }
         }
-        // console.log(this.signCurent)
-        // console.log(this.objSignInfo)
       }
     }
   }
@@ -830,7 +823,6 @@ export class ConsiderContractComponent
   }
 
   back(e: any, step?: any) {
-    // if (!this.datas.isView) {
     this.nextOrPreviousStep(step);
   }
 
@@ -850,9 +842,7 @@ export class ConsiderContractComponent
 
   eKYC: boolean = false;
   eKYCContractUse: any;
-  smsContractUse: any;
   eKYCContractBuy: any;
-  smsContractBuy: any;
   async submitEvents(e: any) {
     let haveSignPKI = false;
     let haveSignImage = false;
@@ -1329,7 +1319,6 @@ export class ConsiderContractComponent
             } else {
               return;
             }
-            console.log('fileC ', fileC);
             return true;
           }
         }
@@ -1775,9 +1764,6 @@ export class ConsiderContractComponent
       if (httpReq.readyState == 4 && httpReq.status == 200) {
         response = this.b64DecodeUnicode(httpReq.responseText);
 
-        console.log('response name company ', response);
-
-
         var process = false;
         try {
           var json_res = JSON.parse(response);
@@ -1802,8 +1788,6 @@ export class ConsiderContractComponent
           this.contractService
             .checkTaxCodeExist(taxCode, json_res.certInfo.Base64Encode)
             .subscribe((response) => {
-              console.log('response ', response);
-
               if (response.success == true) {
                 this.signImageC(signUpdatePayload, notContainSignImage);
               } else {
@@ -2109,8 +2093,6 @@ export class ConsiderContractComponent
     this.contractService
       .getDetailContract(this.idContract)
       .subscribe(async (response) => {
-        console.log('response organization ', response);
-
         let organization_id = response[0].organization_id;
 
         for (let i = 0; i < response[2].length; i++) {
@@ -2390,12 +2372,8 @@ export class ConsiderContractComponent
       this.cccdFront = result;
   
       this.contractService.detectCCCD(this.cccdFront).subscribe((response) => {
-        console.log("response ",response);
-  
         this.nameCompany = response.name;
         this.cardId = response.id;
-  
-        console.log("name company ", this.cardId);
       })
   
       if(result)
@@ -2458,15 +2436,11 @@ export class ConsiderContractComponent
 
     dialogRef.afterClosed().subscribe(async (result: any) => {
 
-      console.log("result ", result);
-
       let signI = null;
 
          //lấy ảnh chữ ký usb token
          this.cardId = result.ma_dvcs.trim();
         
-         console.log("card id ", this.cardId);
-
          await of(null).pipe(delay(100)).toPromise();
          const imageRender = <HTMLElement>document.getElementById('export-html-hsm1');
          if (imageRender) {
