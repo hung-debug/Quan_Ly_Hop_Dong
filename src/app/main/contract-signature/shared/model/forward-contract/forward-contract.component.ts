@@ -143,7 +143,7 @@ export class ForwardContractComponent implements OnInit {
           card_id: this.myForm.value.card_id,
           role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
           recipient_id: this.datas.recipientId,
-          is_replace: true/*this.datas.is_content != 'forward_contract'*/
+          is_replace: false
         };
 
         await this.contractService.processAuthorizeContract(dataAuthorize).toPromise().then(
@@ -152,11 +152,7 @@ export class ForwardContractComponent implements OnInit {
               , "", 3000);
             this.dialogRef.close();
             this.spinner.hide();
-            // if (this.data.role_coordination == 1) {
             this.router.navigate(['/main/form-contract/detail/' + this.datas?.dataContract?.is_data_contract?.id]);
-            // } else {
-            //   this.router.navigate(['/main/contract-signature/receive/wait-processing']);
-            // }
           }, error => {
             this.spinner.hide();
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
