@@ -222,35 +222,16 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         let countEkyc = 0;
         let countSMS = 0;
 
-        let numberContractUseOrg: any = null;
-        let numberContractBuyOrg: any = null;
-        
-        //So luong hop dong da dung
-        try {
-          numberContractUseOrg = await this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise();
-        } catch(err) {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng đã dùng '+err,'',3000);
-        }
-
-        //So luong hop dong da mua
-        try {
-          numberContractBuyOrg = await this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise();
-        } catch(err) {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng đã mua '+err,'',3000);
-        }
-
         this.datasForm.is_determine_clone.forEach((items: any, index: number) => {
           items.recipients.forEach((element: any) => {
-            if(element.login_by == 'email') {
-              if(element.sign_type > 0) {
-                if(element.sign_type[0].id == 5) {
+            if(element.login_by == "email") {
+              if(element.sign_type.length > 0 && element.sign_type[0].id == 5) {
                   countEkyc++;
-                } else if(element.sign_type[0].id == 1) {
+              }else if(element.sign_type.length > 0 && element.sign_type[0].id == 1) {
                   countSMS++;
-                }
-              }
+              } 
             } else if(element.login_by == 'phone') {
-              if(element.sign_type > 0 && element.sign_type[0].id == 1) {
+              if(element.sign_type.length > 0 && element.sign_type[0].id == 1) {
                 countSMS = countSMS + 2;
               } else {
                 countSMS++;
@@ -259,16 +240,38 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
           })
         })
 
-        if(countEkyc > 0 && Number(numberContractUseOrg.ekyc) + Number(countEkyc) > Number(numberContractBuyOrg.ekyc)) {
-          this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-        } else if(countSMS > 0 && Number(numberContractUseOrg.sms) + Number(countSMS) > Number(numberContractBuyOrg.sms)) {
-          this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-        } else {
-          this.getApiDetermine(is_save);
-        }
+        this.checkNumber(countEkyc, countSMS);
       } else {
         this.getApiDetermine(is_save);
       }
+    }
+  }
+
+  async checkNumber(countEkyc: number, countSMS: number) {
+    let numberContractUseOrg: any = null;
+    let numberContractBuyOrg: any = null;
+
+    //So luong hop dong da dung
+    try {
+      numberContractUseOrg = await this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise();
+    } catch(err) {
+      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng đã dùng '+err,'',3000);
+    }
+
+    //So luong hop dong da mua
+    try {
+      numberContractBuyOrg = await this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise();
+    } catch(err) {
+      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng đã mua '+err,'',3000);
+    }
+
+
+    if(countEkyc > 0 && Number(numberContractUseOrg.ekyc) + Number(countEkyc) > Number(numberContractBuyOrg.ekyc)) {
+      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    } else if(countSMS > 0 && Number(numberContractUseOrg.sms) + Number(countSMS) > Number(numberContractBuyOrg.sms)) {
+      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    } else {
+      this.getApiDetermine(true);
     }
   }
 
