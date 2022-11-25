@@ -194,7 +194,7 @@ export class ContractSignatureComponent implements OnInit {
             key.participant.contract.ceca_status;
           this.contractsSignMany[v].contractReleaseState =
             key.participant.contract.release_state;
-          this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
+          // this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
           this.contractsSignMany[v].checked = false;
 
           //Gan document id
@@ -263,8 +263,6 @@ export class ContractSignatureComponent implements OnInit {
               this.setPage();
             }
             this.contracts.forEach((key: any, v: any) => {
-              console.log("key ", key);
-
               this.contracts[v].contractId = key.participant.contract.id;
               this.contracts[v].contractName = key.participant.contract.name;
               this.contracts[v].contractNumber = key.participant.contract.code;
@@ -280,11 +278,6 @@ export class ContractSignatureComponent implements OnInit {
                 key.participant.contract.ceca_status;
               this.contracts[v].contractReleaseState =
                 key.participant.contract.release_state;
-
-                if(key.sign_type.length > 0)
-                 this.contracts[v].typeOfSign = key.sign_type[0].name;
-                else
-                this.contracts[v].typeOfSign = 'Điều phối';
             });
           });
       else {
