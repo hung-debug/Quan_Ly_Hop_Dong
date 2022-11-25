@@ -17,7 +17,7 @@
       <button *ngIf="isQLTC_01" class="btn btn-lg btn-block btn_submit" (click)="addUnit()">{{'btn.add' | translate }}</button>
       <input *ngIf="isQLTC_01" id="file-input" type="file" accept=".xls,.xlsx" (change)="fileChanged($event)"/>
 
-      Bạn chưa có file mẫu? <a href="/assets/upload/import_to_chuc.xlsx" style="color: #106DB6; cursor: pointer;" (click)="downFileExample()">Tải file mẫu</a>
+      {{'not.have.sample.file' | translate}} <a href="/assets/upload/import_to_chuc.xlsx" style="color: #106DB6; cursor: pointer;" (click)="downFileExample()">{{'download.sample.file' | translate}}</a>
     </div>
   </div>
 
