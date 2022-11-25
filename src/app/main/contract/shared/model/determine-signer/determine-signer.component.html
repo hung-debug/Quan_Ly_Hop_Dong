@@ -833,7 +833,7 @@
                       (onDeSelect)="deSelectPartnerSign($event, item)"
                       (ngModelChange)="selectWithOtp($event, d, item.type)"
                     >
-                      <ng-template #optionsTemplate let-item let-option="option" let-id="id"
+                      <!-- <ng-template #optionsTemplate let-item let-option="option" let-id="id"
                         let-isSelected="isSelected">
                         <div style="padding: 1px 10px; margin-right: 10px; right: 2px; top: -2px;">
                           <label style="color: #333; font-weight: normal;"
@@ -841,6 +841,9 @@
                             {{getContractConnectItems[id].name}}
                           </label>
                         </div>
+                      </ng-template> -->
+                      <ng-template #data let-item>
+                        <span>{{item.id | translate}}</span>
                       </ng-template>
                     </ng-multiselect-dropdown>
                   </div>
@@ -852,7 +855,7 @@
                     <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
                     <div class="input-data">
                       <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="nhap_sdt" [(ngModel)]="d.email">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.email">
                     </div>
                   </div>
                   

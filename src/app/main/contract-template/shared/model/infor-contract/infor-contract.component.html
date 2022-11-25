@@ -61,7 +61,7 @@
             [(ngModel)]="type_id"
             optionLabel="name"
             optionValue="id"
-            placeholder="Chọn loại hợp đồng"
+            placeholder="{{'choose.contract.type' | translate}}"
             [filter]="true"
             filterBy="name"
             [showClear]="true"
@@ -134,5 +134,5 @@
   size="medium"
   color="#fff"
   type="ball-spin-clockwise">
-  <p style="font-size: 18px; color: white">Đang xử lý...</p>
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
 </ngx-spinner>
