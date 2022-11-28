@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-detail-unit',
@@ -34,6 +35,7 @@ export class DetailUnitComponent implements OnInit {
 
   taxCode: any = "";
   cEcAPushMode: any = "";
+  site: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -45,6 +47,13 @@ export class DetailUnitComponent implements OnInit {
     public dialog: MatDialog,) { }
 
   ngOnInit(): void {
+
+    if(environment.flag === 'NB') {
+      this.site = 'NB';
+    } else if(environment.flag === 'KD') {
+      this.site = 'KD';
+    }
+
     this.getData();
   }
 
