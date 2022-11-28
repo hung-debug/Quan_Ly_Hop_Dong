@@ -14,6 +14,7 @@ import { Router } from "@angular/router";
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'src/app/service/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-determine-signer',
@@ -68,6 +69,8 @@ export class DetermineSignerComponent implements OnInit {
   email: string="email";
   phone: string="phone";
 
+  site: string;
+
   get determineContract() {
     return this.determineDetails.controls;
   }
@@ -84,6 +87,13 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    if(environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if(environment.flag == 'KD') {
+      this.site = 'KD';
+    }
+
     if(!this.datas.flagDigitalSign) {
       this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
       this.isListSignPerson = this.signTypeList.filter((p) => ![4].includes(p.id));
