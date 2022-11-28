@@ -24,6 +24,7 @@ import * as moment from "moment";
 import {HttpErrorResponse} from '@angular/common/http';
 import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
 import Swal from 'sweetalert2';
+import { environment } from 'src/environments/environment';
 
 export class ContractConnectArr {
   ref_id: number;

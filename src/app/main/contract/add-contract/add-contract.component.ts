@@ -25,6 +25,7 @@ import { ContractBatchHeaderComponent } from '../batch-contract/contract-batch-h
 import { InforContractBatchComponent } from '../batch-contract/infor-contract-batch/infor-contract-batch.component';
 import { ConfirmContractBatchComponent } from '../batch-contract/confirm-contract-batch/confirm-contract-batch.component';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-contract',
@@ -151,6 +152,9 @@ export class AddContractComponent implements OnInit {
   isQLHD_11: boolean = true;
 
   ngOnInit() {
+
+    console.log("$env ", environment.flag);
+
     this.userService.checkServiceStatus().subscribe((response) => {
 
       if (response.status == 'Using') {

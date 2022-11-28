@@ -19,7 +19,7 @@ import {Router} from "@angular/router";
 import {HttpErrorResponse} from '@angular/common/http';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
-import { id } from '@swimlane/ngx-charts';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-determine-signer',
@@ -95,6 +95,8 @@ export class DetermineSignerComponent implements OnInit {
   eKYCContractBuy: any;
   smsContractBuy: any;
 
+  site: string;
+
   get determineContract() {
     return this.determineDetails.controls;
   }
@@ -111,6 +113,13 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    if(environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if(environment.flag == 'KD') {
+      this.site = 'KD';
+    }
+
     this.user = this.userService.getInforUser();
 
     if(!this.datas.flagDigitalSign) {
