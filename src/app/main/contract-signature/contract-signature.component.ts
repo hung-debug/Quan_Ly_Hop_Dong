@@ -763,7 +763,6 @@ export class ContractSignatureComponent implements OnInit {
               }
             }
           }
-          console.log("h push ", h);
         }
       );
 
@@ -861,8 +860,6 @@ export class ContractSignatureComponent implements OnInit {
       this.toastService.showErrorHTMLWithTimeout("Lỗi không lấy được thông tin usb token","",3000);
       return;
     }
-
-    console.log("cert info ", certInfoBase64);
 
     //check trùng mã số thuế
     const checkTaxCode = await this.contractServiceV1.checkTaxCodeExist(taxCode[0], certInfoBase64).toPromise();

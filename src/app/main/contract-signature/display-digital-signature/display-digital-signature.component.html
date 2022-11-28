@@ -1,9 +1,20 @@
 <div class="signature-container" id="export-html"
+     style="width: 155px;min-height: 80px; display: flex; font-size: 9px;">
+  <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
+  <div class="signature-content"
+       style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
+    <div style="z-index: 2;text-align: left;">Loại ký: Ký số bằng token</div>
+    <div style="z-index: 2;text-align: left;">Ký bởi: {{nameCompany}}</div>
+    <div style="z-index: 2;text-align: left;">Ngày ký: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</div>
+  </div>
+</div>
+
+<div class="signature-container" id="export-html2"
      style="width: 155px;min-height: 80px; display: flex; font-size: 9px; background-color: white;">
   <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
   <div class="signature-content"
        style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
-    <div style="z-index: 2;text-align: left;">Loại ký: Ký số bằng usb token</div>
+    <div style="z-index: 2;text-align: left;">Loại ký: Ký số bằng token</div>
     <div style="z-index: 2;text-align: left;">Ký bởi: {{nameCompany}}</div>
     <div style="z-index: 2;text-align: left;">Ngày ký: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</div>
   </div>
