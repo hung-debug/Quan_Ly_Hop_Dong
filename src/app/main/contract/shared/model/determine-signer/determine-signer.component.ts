@@ -1551,7 +1551,6 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo mảng các đối tượng người ký tổ chức của tôi
   getOriganzationSignature() {
-   
     return this.data_organization.recipients.filter((p: any) => p.role == 3);
   }
 

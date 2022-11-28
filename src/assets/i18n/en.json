@@ -402,5 +402,6 @@
   "enter.note":"Enter note",
   "only.match.email.org":"Only match email in the same organization",
   "parent.unit":"Parent unit",
-  "child.unit":"Children unit"
+  "child.unit":"Children unit",
+  "receive.contract.process":"Receive notify when process contract"
 }
