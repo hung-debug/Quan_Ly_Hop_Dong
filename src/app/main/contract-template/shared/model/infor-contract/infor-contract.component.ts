@@ -17,6 +17,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import { parttern } from 'src/app/config/parttern';
 import { parttern_input } from 'src/app/config/parttern';
 import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
+import Swal from 'sweetalert2';
 export class ContractConnectArr {
   ref_id: number;
 
@@ -108,7 +109,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   ngOnInit(): void {
     this.spinner.hide();
-    console.log(this.datas);
     this.name = this.datas.name ? this.datas.name : null;
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;
     this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.code;
@@ -127,9 +127,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       // console.log(data);
       this.typeList = data
     });
-
-    // this.subscription = this.contractService.sharedMessage.subscribe(msg => this.messageForSibling = msg);
-    // console.log(this.messageForSibling)
 
     this.contract_no_old = this.contract_no;
     this.start_time_old = this.start_time;
@@ -158,16 +155,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension && extension.toLowerCase() == 'pdf') {
-          // const fileInput: any = document.getElementById('file-input');
-          // fileInput.value = '';
-          // this.datas.file_name = file_name;
-          // this.datas.contractFile = file;
-          // this.contractFileRequired();
-          // if (this.datas.is_action_contract_created) {
-          //   this.uploadFileContractAgain = true;
-          // }
-          // // console.log(this.datas);
-
           this.checkSignDigitalService.getList(file).subscribe((response) => {
             this.spinner.hide();
             if(response.length == 0) {
@@ -180,8 +167,23 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                 this.uploadFileContractAgain = true;
               }
             } else if(response.length > 0) {
-              this.toastService.showWarningHTMLWithTimeout("File hợp đồng đã chứa chữ ký số", "", 3000);
-              return;
+              Swal.fire({
+                html: "File hợp đồng đã chứa chữ ký số; chỉ có thể ký bằng hình thức ký số với hợp đồng này",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#b0bec5',
+                confirmButtonText: 'Xác nhận'
+              });
+
+              const fileInput: any = document.getElementById('file-input');
+              fileInput.value = '';
+              this.datas.file_name = file_name;
+              this.datas.contractFile = file;
+              this.contractFileRequired();
+              if (this.datas.is_action_contract_created) {
+                this.uploadFileContractAgain = true;
+              }
+              this.datas.flagDigitalSign = true;
             }
           })
         } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {

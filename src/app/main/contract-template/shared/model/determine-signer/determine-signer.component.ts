@@ -8,16 +8,12 @@ import {
 } from "../../../../../config/variable";
 import { parttern } from "../../../../../config/parttern";
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
-import { Helper } from "../../../../../core/Helper";
-import * as ContractCreateDetermine from '../../contract_data'
-import { elements } from "@interactjs/snappers/all";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "../../../../../service/toast.service";
 import { Router } from "@angular/router";
-import { NgxInputSearchModule } from "ngx-input-search";
+
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'src/app/service/user.service';
-import { isTemplateExpression } from 'typescript';
 
 @Component({
   selector: 'app-determine-signer',
@@ -30,8 +26,7 @@ export class DetermineSignerComponent implements OnInit {
   @Input() saveDraftStep: any;
   @Output() stepChangeDetermineSigner = new EventEmitter<string>();
   @Input() save_draft_infor: any;
-  // @Output('dataStepContract') dataStepContract = new EventEmitter<Array<any>>();
-  // @Output('saveDraft') saveDraft = new EventEmitter<string>();
+
   @ViewChild("abcd") fieldAbcd: any;
   determine_step = false;
   determineDetails!: FormGroup;
@@ -58,6 +53,8 @@ export class DetermineSignerComponent implements OnInit {
   signTypeList_personal_partner: Array<any> = type_signature_personal_party;
   signType_doc: Array<any> = type_signature_doc;
 
+  isListSignPerson: any = [];
+
   dropdownSignTypeSettings: any = {};
   getNameIndividual: string = "";
 
@@ -76,7 +73,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   constructor(
-    private formBuilder: FormBuilder,
     private contractTemplateService: ContractTemplateService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
@@ -88,7 +84,14 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id));
+    if(!this.datas.flagDigitalSign) {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
+      this.isListSignPerson = this.signTypeList.filter((p) => ![4].includes(p.id));
+    } else {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
+      this.isListSignPerson = this.signTypeList.filter((p) => ![1,4,5].includes(p.id));
+    }
+
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       this.datas.is_determine_clone = [...this.contractTemplateService.getDataDetermineInitialization()];
     }
@@ -125,14 +128,6 @@ export class DetermineSignerComponent implements OnInit {
       d.email = '';
       d.phone = '';
     }
-
-    // console.log("d.login_by", d.login_by)
-    // if(d.login_by == 'phone'){
-    //   d.email = d.phone;
-    //   d.phone = d.email;
-    // }
-
-    console.log("d ",d);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

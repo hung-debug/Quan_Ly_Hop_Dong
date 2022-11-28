@@ -93,6 +93,7 @@ export class AddContractComponent implements OnInit {
       sample_contract: false,
       confirm_infor_contract: false,
     },
+    flagDigitalSign: false,
   };
 
   datasForm: any = {

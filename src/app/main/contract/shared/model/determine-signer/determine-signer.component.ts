@@ -16,7 +16,6 @@ import {elements} from "@interactjs/snappers/all";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../../../service/toast.service";
 import {Router} from "@angular/router";
-import {NgxInputSearchModule} from "ngx-input-search";
 import {HttpErrorResponse} from '@angular/common/http';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
@@ -33,8 +32,7 @@ export class DetermineSignerComponent implements OnInit {
   @Input() saveDraftStep: any;
   @Output() stepChangeDetermineSigner = new EventEmitter<string>();
   @Input() save_draft_infor: any;
-  // @Output('dataStepContract') dataStepContract = new EventEmitter<Array<any>>();
-  // @Output('saveDraft') saveDraft = new EventEmitter<string>();
+
   @ViewChild("abcd") fieldAbcd: any;
   determine_step = false;
   determineDetails!: FormGroup;
@@ -115,13 +113,17 @@ export class DetermineSignerComponent implements OnInit {
   ngOnInit(): void {
     this.user = this.userService.getInforUser();
 
-    this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-    this.isListSignPerson = this.signTypeList.filter((p) => ![4].includes(p.id));
+    if(!this.datas.flagDigitalSign) {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
+      this.isListSignPerson = this.signTypeList.filter((p) => ![4].includes(p.id));
+    } else {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
+      this.isListSignPerson = this.signTypeList.filter((p) => ![1,4,5].includes(p.id));
+    }
+ 
 
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       this.datas.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
-
-      console.log("on init ", this.datas.is_determine_clone);
     }
 
     // data Tổ chức của tôi

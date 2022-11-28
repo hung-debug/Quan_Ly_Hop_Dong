@@ -585,7 +585,7 @@
                     <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span class="required-title">*</span></div>
                     <ng-multiselect-dropdown [(ngModel)]="d.sign_type" placeholder="{{'choose' | translate }}"
                                              [settings]="dropdownSignTypeSettings"
-                                             [data]="signTypeList_personal_partner"
+                                             [data]="isListSignPerson"
                                              (ngModelChange)="selectWithOtp($event, d)">
                       <ng-template #optionsTemplate let-item let-option="option"
                                    let-id="id" let-isSelected="isSelected">
