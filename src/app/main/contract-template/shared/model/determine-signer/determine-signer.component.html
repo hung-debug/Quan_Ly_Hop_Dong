@@ -594,7 +594,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div style="height: 40px; display: flex; align-items: center;">
                       <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp != 1" (change)="changeIsSmsSignature($event, item, index)">
-                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" [disabled]="getDataSignCka(d).length > 0" checked (change)="changeIsSmsSignature($event, item, index)">
+                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" checked [disabled]="getDataSignCka(d).length > 0"  (change)="changeIsSmsSignature($event, item, index)">
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
                     </div>
                   </div>
@@ -655,7 +655,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div style="height: 40px; display: flex; align-items: center;">
                       <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp != 1" (change)="changeIsSmsDocument($event, item, index)">
-                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" [disabled]="getDataSignCka(d).length > 0" checked (change)="changeIsSmsDocument($event, item, index)">
+                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" checked [disabled]="getDataSignCka(d).length > 0" checked (change)="changeIsSmsDocument($event, item, index)">
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
                     </div>
                   </div>
@@ -743,7 +743,7 @@
                   <div class="participants__name" style="width: 90%">
                     <div style="height: 40px; display: flex; align-items: center;">
                       <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp != 1" (change)="changeIsSmsSignature($event, item, index)">
-                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" [disabled]="getDataSignCka(d).length > 0" checked (change)="changeIsSmsSignature($event, item, index)">
+                      <input type="checkbox" style="width: 17px; height: 17px;" *ngIf="d.is_otp == 1" checked [disabled]="getDataSignCka(d).length > 0" checked (change)="changeIsSmsSignature($event, item, index)">
                       <div style="padding: 0 20px 0 5px">Nhận SMS thông báo khi xử lý hợp đồng</div>
                     </div>
                   </div>

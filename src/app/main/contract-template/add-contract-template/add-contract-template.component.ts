@@ -163,7 +163,8 @@ export class AddContractTemplateComponent implements OnInit {
   
       this.datas = Object.assign(this.datas, data.is_data_contract);
       this.step = variable.stepSampleContract.step1;
-      // console.log(this.datas);
+
+      console.log("datas 1 ", this.datas.is_determine_clone);
     }
   }
 

@@ -1198,13 +1198,18 @@ export class ConsiderContractComponent
 
               if(this.usbTokenVersion == 1) {
                 imageRender = <HTMLElement>document.getElementById('export-html');
+
+                if (imageRender) {
+                  const textSignB = await domtoimage.toPng(imageRender);
+                  signI = textSignB.split(',')[1];
+                }
               } else if(this.usbTokenVersion == 2) {
                 imageRender = <HTMLElement>document.getElementById('export-html2');
-              }
 
-              if (imageRender) {
-                const textSignB = await domtoimage.toJpeg(imageRender);
-                signI = textSignB.split(',')[1];
+                if (imageRender) {
+                  const textSignB = await domtoimage.toJpeg(imageRender);
+                  signI = textSignB.split(',')[1];
+                }
               }
             }
 

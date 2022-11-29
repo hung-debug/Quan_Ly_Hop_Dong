@@ -88,6 +88,8 @@ export class DetermineSignerComponent implements OnInit {
 
   ngOnInit(): void {
 
+    console.log("datas ", this.datas.is_determine_clone);
+
     if(environment.flag == 'NB') {
       this.site = 'NB';
     } else if(environment.flag == 'KD') {
@@ -303,7 +305,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeIsCoordination(e:any, item: any, id:any) {
-    
     if (e.target.checked) {
       //goi ham them
       this.addPartnerCoordination(item, id);
@@ -857,6 +858,9 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo mảng người ký đối tác tổ chức
   getPartnerSignature(item: any) {
+
+    console.log("d item ", item.recipients.filter((p: any) => p.role == 3));
+
     return item.recipients.filter((p: any) => p.role == 3)
   }
 
@@ -1219,7 +1223,6 @@ export class DetermineSignerComponent implements OnInit {
     }else{
       data.is_otp = 0;
     }
-    console.log(data);
   }
 
   changeIsSmsReviewer(e:any, item:any, index:any){

@@ -108,6 +108,10 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   ngOnInit(): void {
+
+    console.log("datas ", this.datas.is_determine_clone);
+
+
     this.spinner.hide();
     this.name = this.datas.name ? this.datas.name : null;
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;
@@ -282,6 +286,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     //call API step 1
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
+
+      console.log("datas before ", this.datas.is_determine_clone);
+
       // sua hop dong
       // datas.contractConnect
       if (this.datas.contractConnect && this.datas.contractConnect.length && this.datas.contractConnect.length > 0) {
@@ -289,6 +296,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           res['contract_id'] = this.datas.contract_id_action;
         })
       }
+
+      console.log("datas after ", this.datas.is_determine_clone);
+
 
       await this.contractTemplateService.addInforContractTemplate(this.datas, this.datas.contract_id_action).toPromise().then((res: any) => {
         this.datas.id = res?.id;
@@ -501,6 +511,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   // --next step 2
   async next() {
+
+    console.log("datas step 1 ", this.datas.is_determine_clone);
+
     if (!this.validData()) {
       return;
     } else {
@@ -527,19 +540,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             this.datas.uploadFileContractAgain = true;
           };
         }
-
-        // file đính kèm sửa hợp đồng
-        // if (!this.uploadFileAttachAgain && this.datas.attachFile && this.datas.attachFile.length > 0) {
-        //   let dataArr: any[] = [];
-        //   for (let i = 0; i < this.datas.attachFile.length; i++) {
-        //     if (typeof this.datas.attachFile[i] == 'string') {
-        //       await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile[i]).toPromise().then((data: any) => {
-        //         if (data) dataArr.push(data)
-        //       })
-        //     }
-        //   }
-        //   this.datas.attachFile = dataArr;
-        // }
       } else {
         fileReader.readAsDataURL(this.datas.contractFile);
         fileReader.onload = (e) => {
@@ -573,14 +573,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     }
   }
-
-  // async getConvertToFileBinary(res: any, file_type: string) {
-  //   await this.contractService.convertUrltoBinary(res).toPromise().then((res) => {
-  //     this.datas[file_type] = res;
-  //   }, () => {
-  //     this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra!', "", 3000);
-  //   })
-  // }
 
   convertData(datas: any) {
     console.log(this.datas.contractConnect);
