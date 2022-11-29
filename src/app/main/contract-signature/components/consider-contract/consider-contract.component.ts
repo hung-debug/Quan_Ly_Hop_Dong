@@ -1214,43 +1214,58 @@ export class ConsiderContractComponent
                 await this.contractService.getDataFileUrlPromise(fileC);
               signDigital.valueSignBase64 = encode(base64String);
 
-              var json_req = JSON.stringify({
-                OperationId: 10,
-                SessionId: this.sessionIdUsbToken,
-                checkOCSP: 0,
-                reqDigest: 1,
-                algDigest: 'SHA_1',
-                extFile: 'pdf',
-                invisible: 0,
-                pageIndex: Number(signDigital.page - 1),
-                offsetX: Math.floor(signDigital.signDigitalX),
-                offsetY: Math.floor(signDigital.signDigitalY),
-                sigWidth: Math.floor(signDigital.signDigitalWidth),
-                sigHeight: Math.floor(signDigital.signDigitalHeight),
-                logoData: signI,
-                DataToBeSign: signDigital.valueSignBase64,
-                showSignerInfo: 0,
-                sigId: '',
-              });
-
-              json_req = window.btoa(json_req);
-
-              const dataSignMobi: any = await this.contractService.signUsbToken("request="+json_req);
-
-              let data = JSON.parse(window.atob(dataSignMobi.data)).Base64Result;
-
-              if(!data) {
+              if(this.usbTokenVersion == 2) {
+                var json_req = JSON.stringify({
+                  OperationId: 10,
+                  SessionId: this.sessionIdUsbToken,
+                  checkOCSP: 0,
+                  reqDigest: 1,
+                  algDigest: 'SHA_1',
+                  extFile: 'pdf',
+                  invisible: 0,
+                  pageIndex: Number(signDigital.page - 1),
+                  offsetX: Math.floor(signDigital.signDigitalX),
+                  offsetY: Math.floor(signDigital.signDigitalY),
+                  sigWidth: Math.floor(signDigital.signDigitalWidth),
+                  sigHeight: Math.floor(signDigital.signDigitalHeight),
+                  logoData: signI,
+                  DataToBeSign: signDigital.valueSignBase64,
+                  showSignerInfo: 0,
+                  sigId: '',
+                });
+  
+                json_req = window.btoa(json_req);
+  
+                const dataSignMobi: any = await this.contractService.signUsbToken("request="+json_req);
+  
+                let data = JSON.parse(window.atob(dataSignMobi.data)).Base64Result;
+  
+                if(!data) {
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+                    return false;
+                }
+  
+                const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, data);
+                if (!sign.recipient_id) {  
                   this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
                   return false;
+                }
+              } else if(this.usbTokenVersion == 1) {
+                const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital, signI);
+        
+                if (!dataSignMobi.data.FileDataSigned) {
+    
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+                  return false;
+                }
+                const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, dataSignMobi.data.FileDataSigned);
+                if (!sign.recipient_id) {    
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+                  return false;
+                }
+    
               }
-
-              const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, data);
-              if (!sign.recipient_id) {
-                console.log("recipent_id")
-
-                this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-                return false;
-              }
+            
             }
           }
           return true;
