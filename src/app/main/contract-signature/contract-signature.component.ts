@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
 import * as contractModel from './model/contract-model';
+import { variable } from '../../config/variable';
 
 import { ContractSignatureService } from '../../service/contract-signature.service';
 import { ContractService } from '../../service/contract.service';
@@ -771,9 +771,7 @@ export class ContractSignatureComponent implements OnInit {
                if (response.success == true) {
                  this.signCertDigital = data.data;
                  this.nameCompany = data.data.CN;
- 
-                 console.log('name company ', this.nameCompany);
- 
+  
                  let signI = '';
  
                  await of(null).pipe(delay(100)).toPromise();
