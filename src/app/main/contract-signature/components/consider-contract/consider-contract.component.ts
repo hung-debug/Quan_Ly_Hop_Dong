@@ -2655,27 +2655,18 @@ export class ConsiderContractComponent
           && sign?.recipient?.role === this.datas?.roleContractReceived
           && sign?.page == page) {
 
-          console.log("before ");
-          console.log("x ", sign.coordinate_x);
-          console.log("y ", sign.coordinate_y);
-          console.log("height ", sign.height);
-          console.log("width ", sign.width);
-          console.log("current height ", this.currentHeight);
-          console.log("height page ", heightPage);
 
         sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
         sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
-
-        console.log(" y ", sign.signDigitalY);
-        sign.signDigitalWidth = sign.width/* * this.ratioPDF*/;
-        sign.signDigitalHeight = sign.height/* * this.ratioPDF*/;
-
-        console.log("after ");
-        console.log("x ", sign.signDigitalX);
-        console.log("y ", sign.signDigitalY);
-        console.log("height ", sign.signDigitalHeight);
-        console.log("width ", sign.signDigitalWidth);
-
+        
+        if(this.usbTokenVersion == 2) {
+          sign.signDigitalWidth = sign.width/* * this.ratioPDF*/;
+          sign.signDigitalHeight = sign.height/* * this.ratioPDF*/
+        } else if(this.usbTokenVersion == 1) {
+          sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
+          sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;  
+        }
+ 
         //Lấy thông tin mã số thuế của đối tác ký 
         this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
 
