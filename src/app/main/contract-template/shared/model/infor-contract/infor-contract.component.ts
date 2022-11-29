@@ -170,6 +170,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               if (this.datas.is_action_contract_created) {
                 this.uploadFileContractAgain = true;
               }
+
+              this.datas.flagDigitalSign = false;
             } else if(response.length > 0) {
               Swal.fire({
                 html: "File hợp đồng đã chứa chữ ký số; chỉ có thể ký bằng hình thức ký số với hợp đồng này",
