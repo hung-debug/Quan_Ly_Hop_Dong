@@ -296,26 +296,26 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeOtp(data: any) {
-    let data_sign_cka = data.sign_type.filter((p: any) => p.id == 1)[0];
-    if (data_sign_cka) {
-      data.is_otp = 1;
-    } else {
-      data.is_otp = 0;
-    }
+    // let data_sign_cka = data.sign_type.filter((p: any) => p.id == 1)[0];
+    // if (data_sign_cka) {
+    //   data.is_otp = 1;
+    // } else {
+    //   data.is_otp = 0;
+    // }
   }
 
   changeIsCoordination(e:any, item: any, id:any) {
-    if (e.target.checked) {
-      //goi ham them
-      this.addPartnerCoordination(item, id);
-    } else {
-      //goi ham xoa
-      this.deletePartnerCoordination(0, item, id);
-      //kiem tra neu chua co nguoi ky thi them 1 nguoi ky
-      if(this.getPartnerSignature(item).length == 0){
-        this.addPartnerSignature(item, id);
-      }
-    }
+    // if (e.target.checked) {
+    //   //goi ham them
+    //   this.addPartnerCoordination(item, id);
+    // } else {
+    //   //goi ham xoa
+    //   this.deletePartnerCoordination(0, item, id);
+    //   //kiem tra neu chua co nguoi ky thi them 1 nguoi ky
+    //   if(this.getPartnerSignature(item).length == 0){
+    //     this.addPartnerSignature(item, id);
+    //   }
+    // }
   }
 
   getDataSignCka(data:any){
@@ -858,9 +858,6 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo mảng người ký đối tác tổ chức
   getPartnerSignature(item: any) {
-
-    console.log("d item ", item.recipients.filter((p: any) => p.role == 3));
-
     return item.recipients.filter((p: any) => p.role == 3)
   }
 
@@ -1108,6 +1105,9 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   dataParnterOrganization() {
+
+    console.log("clone ", this.datas.is_determine_clone);
+
     return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
@@ -1203,17 +1203,6 @@ export class DetermineSignerComponent implements OnInit {
       })
     }
     this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
-
-    console.log(item);
-    // if (item.type == 3) {
-    //   this.data_organization.ordering = 2;
-    //   item.ordering = 1;
-    //   this.is_change_party = true;
-    // } else {
-    //   this.data_organization.ordering = 1;
-    //   item.ordering = 2;
-    //   this.is_change_party = false;
-    // }
   }
 
   changeIsSmsCoordination(e:any, item:any, index:any){
@@ -1235,12 +1224,12 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeIsSmsSignature(e:any, item:any, index:any){
-    let data = item.recipients.filter((p: any) => p.role == 3)[index];
-    if (e.target.checked) {
-      data.is_otp = 1;
-    }else{
-      data.is_otp = 0;
-    }
+    // let data = item.recipients.filter((p: any) => p.role == 3)[index];
+    // if (e.target.checked) {
+    //   data.is_otp = 1;
+    // }else{
+    //   data.is_otp = 0;
+    // }
   }
 
   changeIsSmsDocument(e:any, item:any, index:any){

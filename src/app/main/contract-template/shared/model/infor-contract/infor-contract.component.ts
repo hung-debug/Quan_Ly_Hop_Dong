@@ -109,7 +109,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   ngOnInit(): void {
 
-    console.log("datas ", this.datas.is_determine_clone);
+    console.log("datas init 1 ", this.datas.is_determine_clone);
 
 
     this.spinner.hide();
@@ -135,6 +135,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.contract_no_old = this.contract_no;
     this.start_time_old = this.start_time;
     this.end_time_old = this.end_time;
+
+    console.log("datas init final ", this.datas.is_determine_clone);
   }
 
   ngAfterViewInit() {
