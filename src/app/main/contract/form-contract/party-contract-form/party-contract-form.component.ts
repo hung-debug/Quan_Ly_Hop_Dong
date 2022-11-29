@@ -16,6 +16,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import * as _ from 'lodash';
 import { UnitService } from "src/app/service/unit.service";
 import { UserService } from "src/app/service/user.service";
+import { environment } from "src/environments/environment";
 
 
 @Component({
@@ -85,12 +86,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   eKYCContractBuy: any;
   smsContractBuy: any;
 
+  site: string;
+
   get determineContract() {
     return this.determineDetails.controls;
   }
 
   constructor(
-    private formBuilder: FormBuilder,
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
@@ -103,6 +105,12 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+
+    if(environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if(environment.flag == 'KD') {
+      this.site = 'KD';
+    }
 
     this.flagUsbToken[0] = true;
     for(let i = 1; i < this.dataParnterOrganization().length; i++) {
@@ -137,8 +145,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       limitSelection: 1,
       disabledField: 'item_disable',
     };
-
-    // if (this.datasForm.is_determine_clone.some((p: any) => p.type == 3)) this.is_change_party = true;
   }
 
   ngAfterViewInit(): void {
@@ -182,7 +188,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   deSelectPartnerSign(e: any, id: number) {
-    console.log("e de ",e);
     if(e.id == 2) {
       this.flagUsbToken[id] = false;
     }

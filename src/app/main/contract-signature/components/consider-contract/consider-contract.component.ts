@@ -2659,24 +2659,21 @@ export class ConsiderContractComponent
         sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
         sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
         
-        if(this.usbTokenVersion == 2) {
-          sign.signDigitalWidth = sign.width/* * this.ratioPDF*/;
-          sign.signDigitalHeight = sign.height/* * this.ratioPDF*/
-        } else if(this.usbTokenVersion == 1) {
-          sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
-          sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;  
-        }
+        // if(this.usbTokenVersion == 2) {
+        //   sign.signDigitalWidth = sign.width/* * this.ratioPDF*/;
+        //   sign.signDigitalHeight = sign.height/* * this.ratioPDF*/
+        // } else if(this.usbTokenVersion == 1) {
+        
+        // }
+
+        sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
+        sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;  
  
         //Lấy thông tin mã số thuế của đối tác ký 
         this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
 
-          console.log("response recipient ", response);
-
           const lengthRes = response.recipients.length;
           for(let i = 0; i < lengthRes; i++) {
-
-              console.log("vao vong for ");
-
               const id = response.recipients[i].id;
 
             if(id == sign.recipient_id) {
