@@ -143,7 +143,7 @@ export class ForwardContractComponent implements OnInit {
           card_id: this.myForm.value.card_id,
           role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
           recipient_id: this.datas.recipientId,
-          is_replace: false
+          is_replace: true //true = replace người uỷ quyền thành ký; false = không replace
         };
 
         await this.contractService.processAuthorizeContract(dataAuthorize).toPromise().then(

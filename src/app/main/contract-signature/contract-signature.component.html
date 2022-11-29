@@ -355,24 +355,26 @@
 </ngx-spinner>
 
 <div class="skeleton-sign position-absolute opacity-0">
-  <div class="signature-container" id="export-html"
-      style="width: 155px;min-height: 80px; display: flex; font-size: 9px">
-    <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
-    <div class="signature-content"
-        style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
-      <div style="z-index: 2;text-align: left;">user.sign-type: Ký số bằng usb token</div>
-      <div style="z-index: 2;text-align: left;">Ký bởi: {{nameCompany}}</div>
-      <div style="z-index: 2;text-align: left;">Ngày ký: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</div>
+    <div class="signature-container" id="export-html"
+        style="width: 155px;min-height: 80px; display: flex; font-size: 9px">
+      <img style="width: 30px" src="assets/img/tick_signature.svg" alt="duongdt.vn">
+      <div class="signature-content"
+          style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
+        <div style="z-index: 2;text-align: left;">Loại ký: Ký số bằng Token</div>
+        <div style="z-index: 2;text-align: left;">Ký bởi: {{nameCompany}}</div>
+        <div style="z-index: 2;text-align: left;">Ngày ký: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</div>
+      </div>
     </div>
-
-
-  <div id="export-html-hsm"  style="min-height: 80px;display: flex; font-size: 9px">
-    <img style="width: 30px"  src="assets/img/tick_signature.svg" alt="duongdt.vn">
-    <div style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
-      <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">user.sign-type: Ký số bằng hsm</span>
-      <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">Mã số thuế: {{nameCompany}}</span>
-      <span style="text-align: left;white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">Ngày ký: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</span>
+  
+    <div id="export-html-hsm"  style="min-height: 80px;display: flex; font-size: 9px">
+      <img style="width: 30px"  src="assets/img/tick_signature.svg" alt="duongdt.vn">
+      <div style="color: #4FC123; background:url('assets/img/chu_e_opacity.png') no-repeat center; background-size: 40px 40px">
+        <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">Loại ký: Ký số bằng HSM</span>
+        <span style="text-align: left; white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">Mã số thuế: {{nameCompany}}</span>
+        <span style="text-align: left;white-space: nowrap;text-overflow: ellipsis;overflow: visible;display: inherit">Ngày ký: {{isDateTime | date: 'dd/MM/YYYY HH:mm'}}</span>
+      </div>
     </div>
 </div>
+
 
 

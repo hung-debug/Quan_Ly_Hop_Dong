@@ -1209,7 +1209,8 @@ export class ConsiderContractComponent
             }
 
               const signDigital = JSON.parse(JSON.stringify(signUpdate));
-              signDigital.Serial = this.signCertDigital;
+              signDigital.Serial = this.signCertDigital.Serial ;
+
               const base64String =
                 await this.contractService.getDataFileUrlPromise(fileC);
               signDigital.valueSignBase64 = encode(base64String);
