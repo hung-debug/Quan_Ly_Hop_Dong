@@ -341,6 +341,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           status: 1,
           contract_id: this.datas.id,
         }
+
         let id_type_1 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
         
         await this.contractService.updateFileAttach(id_type_1, data, 1).toPromise().then((res: any) => {
@@ -468,6 +469,26 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           status: 1,
           contract_id: this.datas.id,
         }
+
+        if(!this.datas.document_id_1.id) {
+          await this.contractService.addDocument(this.datas).toPromise().then((data) => {
+            this.datas.document_id_1 = data;
+          }, () => {
+            error_api = true;
+            this.getErrorFile();
+          })
+        }
+
+        if(!this.datas.document_id_2.id) {
+          await this.contractService.addDocumentDone(this.datas).toPromise().then((data) => {
+            this.datas.document_id_2 = data;
+            this.datas.document_id = data?.id;
+          }, () => {
+            error_api = true;
+            this.getErrorFile();
+          })
+        }
+
         // let id_type_1 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
         await this.contractService.updateFileAttach(this.datas.document_id_1.id, data, 1).toPromise().then((res: any) => {
           this.datas.document_id_1 = res?.id;
