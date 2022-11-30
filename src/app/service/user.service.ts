@@ -383,27 +383,8 @@ export class UserService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
+    console.error(errorMessage);
     return throwError(errorMessage);
-  }
-
-  uploadFileUserUrl: any = `${environment.apiUrl}/api/v1/customers/import`;
-  uploadFile(file: any) {
-    this.getCurrentUser();
-    let formData = new FormData();
-    formData.append('file', file);
-
-    const headers = new HttpHeaders()
-      .append('Authorization', 'Bearer ' + this.token)
-          
-      return this.http.post(
-        this.uploadFileUserUrl,
-        formData,
-        {
-          headers: headers,
-          observe: 'response',
-          responseType: 'blob'
-        }
-      ).toPromise();
   }
 
 

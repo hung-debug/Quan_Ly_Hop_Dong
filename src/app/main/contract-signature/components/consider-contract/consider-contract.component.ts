@@ -2657,7 +2657,7 @@ export class ConsiderContractComponent
     this.signContractSubmit();
   }
 
-  prepareInfoSignUsbToken(page: any, heightPage: any, version: string) {
+  prepareInfoSignUsbToken(page: any, heightPage: any, version: number) {
 
       this.isDataObjectSignature.map((sign: any) => {
         if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
@@ -2669,10 +2669,10 @@ export class ConsiderContractComponent
         sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
         sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
         
-        if(version == '1') {
+        if(version == 1) {
           sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
           sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;  
-        } else if(version == '2') {
+        } else if(version == 2) {
           sign.signDigitalWidth = sign.width;
           sign.signDigitalHeight = sign.height;
         }
