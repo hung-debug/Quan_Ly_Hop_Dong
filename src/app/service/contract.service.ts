@@ -562,9 +562,6 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-    console.log('tax code ', taxCode);
-    console.log('certB64 ', certB64);
-
     const body = JSON.stringify({
       mst: taxCode,
       certB64: certB64,

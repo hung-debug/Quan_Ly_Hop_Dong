@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -9,7 +8,6 @@ import {
   OnInit,
   Output,
   QueryList,
-  SecurityContext,
   ViewChild,
 } from '@angular/core';
 import { ContractService } from '../../../../service/contract.service';
@@ -1258,10 +1256,12 @@ export class ConsiderContractComponent
                 const dataSignMobi: any = await this.contractService.signUsbToken("request="+json_req);
   
                 let data = JSON.parse(window.atob(dataSignMobi.data)).Base64Result;
-  
+                
+                console.log("data ", data);
+
                 if(!data) {
-                    this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
-                    return false;
+                  this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
+                  return false;
                 }
   
                 const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, data);
@@ -1811,13 +1811,16 @@ export class ConsiderContractComponent
 
     let certInfoBase64 = "";
     if(cert.certInfo) {
+      this.signCertDigital = cert.certInfo.SerialNumber;
+      this.nameCompany = cert.certInfo.CommonName;
+
       certInfoBase64 = cert.certInfo.Base64Encode;
     } else {
       this.toastService.showErrorHTMLWithTimeout("Lỗi không lấy được thông tin usb token","",3000);
       return;
     }
 
-    const checkTaxCode = await this.contractService.checkTaxCodeExist(taxCode, cert.certInfo.Base64Encode).toPromise();
+    const checkTaxCode = await this.contractService.checkTaxCodeExist(taxCode, certInfoBase64).toPromise();
 
     if (checkTaxCode.success == true) {
       this.signImageC(signUpdatePayload, notContainSignImage);
