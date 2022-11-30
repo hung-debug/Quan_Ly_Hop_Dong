@@ -1,10 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Paginator } from 'primeng/paginator';
-import { Table } from 'primeng/table';
 import { AppService } from 'src/app/service/app.service';
-import { RoleService } from 'src/app/service/role.service';
-import { ToastService } from 'src/app/service/toast.service';
+import { ImportService } from 'src/app/service/import.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
 @Component({
@@ -18,8 +15,8 @@ export class UserComponent implements OnInit {
     private userService: UserService,
     private unitService: UnitService,
     private router : Router,
-    private roleService: RoleService,
-    private toastService: ToastService) { }
+    private importService: ImportService
+    ) { }
 
   organization_id_user_login:any;
   organization_id:any = "";
@@ -68,34 +65,6 @@ export class UserComponent implements OnInit {
       {header: 'menu.role.list', style:'text-align: left;' },
       {header: 'unit.manage', style:'text-align: center;' },
     ];
-
-    
-    let userId = this.userService.getAuthCurrentUser().id;
-    // this.userService.getUserById(userId).subscribe(
-    //   data => {
-    //     //lay id role
-    //     this.roleService.getRoleById(data.role_id).subscribe(
-    //       data => {
-    //         console.log(data);
-    //         let listRole: any[];
-    //         listRole = data.permissions;
-    //         this.isQLND_01 = listRole.some(element => element.code == 'QLND_01');
-    //         this.isQLND_02 = listRole.some(element => element.code == 'QLND_02');
-    //         this.isQLND_03 = listRole.some(element => element.code == 'QLND_03');
-    //         this.isQLND_04 = listRole.some(element => element.code == 'QLND_04');
-    //       }, error => {
-    //         this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-    //       }
-    //     ); 
-      
-    //   }, error => {
-    //     this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-    //   }
-    // )
-
-    let getUserById= await this.userService.getUserById(userId);
-
-    console.log("get user by id ");
   }
 
   array_empty: any = [];
@@ -149,6 +118,7 @@ export class UserComponent implements OnInit {
     });
   }
 
+  
   changeOrg(){
     console.log(this.selectedNodeOrganization);
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
@@ -171,5 +141,14 @@ export class UserComponent implements OnInit {
 
   detailUser(id:any) {
     this.router.navigate(['/main/user-detail/' + id]);
+  }
+
+  
+  downFileExample() {
+    
+  }
+
+  fileChanged(e: any) {
+    this.importService.importFile(e,'user');
   }
 }

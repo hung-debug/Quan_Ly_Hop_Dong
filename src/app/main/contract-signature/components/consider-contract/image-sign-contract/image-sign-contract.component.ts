@@ -1,17 +1,14 @@
 import {AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
-import {ForwardContractComponent} from "../../../shared/model/forward-contract/forward-contract.component";
 import {ConfirmSignOtpComponent} from "../confirm-sign-otp/confirm-sign-otp.component";
-import {ContractSignatureService} from "../../../../../service/contract-signature.service";
-import {takeUntil} from "rxjs/operators";
-import {Subject} from "rxjs";
-import Swal from "sweetalert2";
+
 import {ImageDialogSignComponent} from "../image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "../hsm-dialog-sign/hsm-dialog-sign.component";
 import {UserService} from "../../../../../service/user.service";
-import {networkList} from "../../../../../config/variable";
 import { ToastService } from 'src/app/service/toast.service';
+import { Output, EventEmitter } from '@angular/core';
+
 
 @Component({
   selector: 'app-image-sign-contract',
@@ -23,13 +20,15 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   @Input() sign: any;
   @Input() view: any;
   @ViewChild('inputEditText') inputEditText: ElementRef;
+
+  @Output('checkedChange') newItemEvent = new EventEmitter<string>();
+
   checkShowEdit = false;
   currentUser: any;
   value: string;
   typeSignDigital: any;
   constructor(
     private dialog: MatDialog,
-    private userService: UserService,
     private toastService: ToastService
   ) { }
 
@@ -177,11 +176,13 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       this.checkShowEdit = !this.checkShowEdit;
       setTimeout(()=>{
         this.inputEditText.nativeElement.focus();
+        this.newItemEvent.emit("text");
       },0);
     }
   }
 
   getText(sign: any) {
+    this.newItemEvent.emit("1");
     if (sign.sign_unit == 'text') {
       if(sign.valueSign) {
         return sign.valueSign;
@@ -198,4 +199,5 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       return 'Số hợp đồng';
     }
   }
+
 }

@@ -57,8 +57,8 @@ export class ContractTemplateComponent implements OnInit {
               private toastService: ToastService) { 
 
     this.stateOptions = [
-      { label: 'Mẫu hợp đồng tạo', value: 'off' },
-      { label: 'Mẫu hợp đồng được chia sẻ', value: 'on' },
+      { label: 'contract-template.create', value: 'off' },
+      { label: 'contract-template.share', value: 'on' },
     ];
   }
 

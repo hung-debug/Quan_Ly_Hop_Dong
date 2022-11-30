@@ -13,7 +13,6 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {FormBuilder} from "@angular/forms";
 import {variable} from "../../../../../config/variable";
 import {Observable, Subscription} from 'rxjs';
 import {AddContractComponent} from "../../../add-contract/add-contract.component";
@@ -24,6 +23,8 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import * as moment from "moment";
 import {HttpErrorResponse} from '@angular/common/http';
 import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
+import Swal from 'sweetalert2';
+import { environment } from 'src/environments/environment';
 
 export class ContractConnectArr {
   ref_id: number;
@@ -106,8 +107,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   ngOnInit(): void {
-    console.log("datas infor contract ", this.datas);
-
     this.spinner.hide();
     this.name = this.datas.name ? this.datas.name : null;
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;
@@ -137,10 +136,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.contractService.getContractList('off', '', '', '', '', '', '', 30, "", "").subscribe(data => {
       this.contractConnectList = data.entities;
     });
-
-    console.log(this.datas);
-
-
   }
 
   ngAfterViewInit() {
@@ -177,9 +172,27 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               if (this.datas.is_action_contract_created) {
                 this.uploadFileContractAgain = true;
               }
+
+              this.datas.flagDigitalSign = false;
             } else if(response.length > 0) {
-              this.toastService.showWarningHTMLWithTimeout("File hợp đồng đã chứa chữ ký số", "", 3000);
-              return;
+              Swal.fire({
+                html: "File hợp đồng đã chứa chữ ký số; chỉ có thể ký bằng hình thức ký số với hợp đồng này",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#b0bec5',
+                confirmButtonText: 'Xác nhận'
+              });
+
+              const fileInput: any = document.getElementById('file-input');
+              fileInput.value = '';
+              this.datas.file_name = file_name;
+              this.datas.contractFile = file;
+              this.contractFileRequired();
+              if (this.datas.is_action_contract_created) {
+                this.uploadFileContractAgain = true;
+              }
+
+              this.datas.flagDigitalSign = true;
             }
           })
         } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {
@@ -328,7 +341,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           status: 1,
           contract_id: this.datas.id,
         }
+
         let id_type_1 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
+        
         await this.contractService.updateFileAttach(id_type_1, data, 1).toPromise().then((res: any) => {
           //this.datas.document_id = res?.id;
         }, (error: HttpErrorResponse) => {
@@ -378,8 +393,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               );
             }
 
-            // this.save_draft_infor.close_header
-
             if (action != "save_draft") {
               this.step = variable.stepSampleContract.step2;
               this.datas.stepLast = this.step;
@@ -402,9 +415,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               //next step
               this.step = variable.stepSampleContract.step2;
               this.datas.stepLast = this.step;
-              // this.datas.document_id = '1';
               this.nextOrPreviousStep(this.step);
-              // console.log(this.datas);
 
             }
             this.spinner.hide();
@@ -458,6 +469,26 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           status: 1,
           contract_id: this.datas.id,
         }
+
+        if(!this.datas.document_id_1.id) {
+          await this.contractService.addDocument(this.datas).toPromise().then((data) => {
+            this.datas.document_id_1 = data;
+          }, () => {
+            error_api = true;
+            this.getErrorFile();
+          })
+        }
+
+        if(!this.datas.document_id_2.id) {
+          await this.contractService.addDocumentDone(this.datas).toPromise().then((data) => {
+            this.datas.document_id_2 = data;
+            this.datas.document_id = data?.id;
+          }, () => {
+            error_api = true;
+            this.getErrorFile();
+          })
+        }
+
         // let id_type_1 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
         await this.contractService.updateFileAttach(this.datas.document_id_1.id, data, 1).toPromise().then((res: any) => {
           this.datas.document_id_1 = res?.id;
@@ -505,36 +536,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           })
         }
       }
-
-      // } else { // thay doi file da upload
-      //   let data = {
-      //     name: this.datas.name,
-      //     type: 1,
-      //     path: this.datas.filePath ? this.datas.filePath : this.datas.pdfUrl,
-      //     filename: this.datas.fileName,
-      //     bucket: this.datas.fileBucket,
-      //     internal: 1,
-      //     ordering: 1,
-      //     status: 1,
-      //     contract_id: this.datas.id,
-      //   }
-      //   let id_type_1 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
-      //   await this.contractService.updateFileAttach(id_type_1, data, 1).toPromise().then((res: any) => {
-      //     this.datas.document_id = res?.id;
-      //   }, (error: HttpErrorResponse) => {
-      //     this.spinner.hide();
-      //     this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000)
-      //   })
-      //   let id_type_2 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 2)[0].id;
-      //   await this.contractService.updateFileAttach(id_type_2, data, 2).toPromise().then((respon: any) => {
-      //     this.datas.document_id = respon?.id;
-      //   }, (error: HttpErrorResponse) => {
-      //     countSuccess++
-      //     this.spinner.hide();
-      //     this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
-      //   })
-      // }
-
 
       if (!error_api) {
         await this.contractService.getDataNotifyOriganzation().toPromise().then((data: any) => {
@@ -610,16 +611,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   nextStep1: boolean = false;
   // --next step 2
   async next() {
-    console.log("exp ", this.expire_time);
-
     this.nextStep1 = true;
 
     if (!this.validData()) {
       return;
     } else {
       this.spinner.show();
-
-      console.log("this datas ", this.datas);
 
       // set value to datas
       this.datas.name = this.name;
@@ -633,10 +630,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       if (this.datas.is_action_contract_created) {
         // file hợp đồng chính không thay đổi => convert url sang dạng blob
         if (!this.uploadFileContractAgain && this.datas.contractFile && (typeof this.datas.contractFile == 'string')) {
-          // await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
-          //   if (res)
-          //     this.datas.contractFile = res;
-          // })
         } else if (this.uploadFileContractAgain && this.datas.contractFile) { // dữ liệu file hợp đồng chính bị thay đổi
           fileReader.readAsDataURL(this.datas.contractFile);
           fileReader.onload = (e) => {
@@ -674,14 +667,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     }
   }
-
-  // async getConvertToFileBinary(res: any, file_type: string) {
-  //   await this.contractService.convertUrltoBinary(res).toPromise().then((res) => {
-  //     this.datas[file_type] = res;
-  //   }, () => {
-  //     this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra!', "", 3000);
-  //   })
-  // }
 
   convertData(datas: any) {
     // console.log(this.datas.contractConnect);
@@ -789,10 +774,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       )
     } else {
       this.callAPI("save_draft");
-      // if (this.datas.is_action_contract_created && this.router.url.includes("edit"))
-      //   this.callAPI("save_draft");
-      // else
-      //   this.callAPI_Draft();
     }
     //
     // }
@@ -824,7 +805,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                           if (this.datas.attachFileArr != null) {
                             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
 
-                              console.log(this.datas.attachFileArr[i])
                               this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
                                   // console.log(JSON.stringify(data));
                                   this.datas.filePathAttach = data.file_object.file_path;
@@ -961,18 +941,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   contractNumberValid() {
-    // this.errorContractNumber = "";
-    // if (this.contract_no) {
-    //   var regex = /^[0-9]\d*$/;
-    //   var matches = this.contract_no.match(regex);
-    //   if (matches) {
-    //     return this.contractNumberCounter();
-    //   } else {
-    //     this.errorContractNumber = "Số hợp đồng chỉ được nhập số";
-    //     return false;
-    //   }
-    // }
-    // return true;
     return this.contractNumberCounter();
   }
 
@@ -1015,8 +983,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.datas.attachFileArr.splice(index_dlt, 1);
       //this.attachFileNameArr = this.attachFileNameArr.filter((p: any) => p.filename !== item.filename);
     }
-
-    // console.log(this.datas.attachFileArr);
   }
 
 }

@@ -190,39 +190,38 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       }
     );
 
-    // console.log("submit ");
-  //   const data = {
-  //     title: 'YÊU CẦU XÁC NHẬN',
-  //   };
-  //   // @ts-ignore
-  //   const dialogRef = this.dialog.open(ConfirmCecaContractComponent, {
-  //     width: '560px',
-  //     backdrop: 'static',
-  //     keyboard: false,
-  //     data,
-  //     autoFocus: false,
-  //   });
-  //   dialogRef.afterClosed().subscribe((isCeCA: any) => {
-  //     if (isCeCA == 1 || isCeCA == 0) {
-  //       this.spinner.show();
-  //       this.contractService
-  //         .updateContractIsPushCeCA(this.datas.id, isCeCA)
-  //         .subscribe(
-  //           (data) => {
-  //             this.SaveContract(action);
-  //           },
-  //           (error) => {
-  //             this.spinner.hide();
-  //             this.toastService.showErrorHTMLWithTimeout(
-  //               'Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương',
-  //               '',
-  //               3000
-  //             );
-  //           }
-  //         );
-  //       //this.SaveContract(action);
-  //     }
-  //   });
+    // const data = {
+    //   title: 'YÊU CẦU XÁC NHẬN',
+    // };
+    // // @ts-ignore
+    // const dialogRef = this.dialog.open(ConfirmCecaContractComponent, {
+    //   width: '560px',
+    //   backdrop: 'static',
+    //   keyboard: false,
+    //   data,
+    //   autoFocus: false,
+    // });
+    // dialogRef.afterClosed().subscribe((isCeCA: any) => {
+    //   if (isCeCA == 1 || isCeCA == 0) {
+    //     this.spinner.show();
+    //     this.contractService
+    //       .updateContractIsPushCeCA(this.datas.id, isCeCA)
+    //       .subscribe(
+    //         (data) => {
+    //           this.SaveContract(action);
+    //         },
+    //         (error) => {
+    //           this.spinner.hide();
+    //           this.toastService.showErrorHTMLWithTimeout(
+    //             'Lỗi lưu thông tin xác nhận đẩy file hợp đồng lên Bộ Công Thương',
+    //             '',
+    //             3000
+    //           );
+    //         }
+    //       );
+    //     //this.SaveContract(action);
+    //   }
+    // });
   }
 
   async SaveContract(action: string) {

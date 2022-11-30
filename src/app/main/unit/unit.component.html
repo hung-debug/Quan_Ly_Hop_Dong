@@ -18,7 +18,22 @@
     </div>
   </div>
 
-  <div class="row" style="padding-top: 20px;">
+  <div class="row" style="padding-top: 5px;">
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-6 btn_search" style="padding-left: 22px">
+      <input *ngIf="isQLTC_01" id="file-input" type="file" accept=".xls,.xlsx" (change)="fileChanged($event)" style="display: none"/>
+      <label for="file-input" class="custom-file-upload">
+        <i class="fa fa-cloud-upload"></i> Import file
+      </label>
+
+      <a style="padding-left: 5px;">
+        {{'not.have.sample.file' | translate}} <a href="/assets/upload/import_to_chuc.xlsx" style="color: #106DB6; cursor: pointer;" (click)="downFileExample()">{{'download.sample.file' | translate}}</a>
+      </a>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top: 15px;">
     <p-treeTable [value]="list" id="table" [autoLayout]="true">
       <ng-template pTemplate="header" let-columns>
       <tr> 
@@ -29,11 +44,16 @@
       </ng-template>
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
         <tr>
-          <td><p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler><a (click)="isQLTC_04?detailUnit(rowData.id):null" style="color: #0160AE; cursor: pointer;">{{rowData.name}}</a></td>
+          <td><p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler><a (click)="isQLTC_04?detailUnit(rowData.id):null" style="color: #0160AE; cursor: pointer;">{{rowData.id}}</a></td>
+          <td>{{rowData.name}}</td>
           <td>{{rowData.short_name}}</td>
           <td>{{rowData.code}}</td>
-          <td>{{rowData.status==1?'Hoạt động':'Không hoạt động'}}</td>
-          <td>{{rowData.parent_id==null?'Tổ chức cha':'Tổ chức con'}}</td>
+          <td *ngIf="rowData.status == 1">{{'unit.active' | translate}}</td>
+          <td *ngIf="rowData.status != 1">{{'unit.inactive' | translate}}</td>
+
+          <td *ngIf="rowData.parent_id == null">{{'parent.unit' | translate}}</td>
+          <td *ngIf="rowData.parent_id != null">{{'child.unit' | translate}}</td>
+
           <td style="text-align: center">
             <img *ngIf="rowData.is_edit && isQLTC_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUnit(rowData.id)" style="cursor: pointer;"/>
           </td>

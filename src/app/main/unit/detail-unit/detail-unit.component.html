@@ -3,11 +3,23 @@
     <h3 class="label-header">{{ this.data.title | translate }}</h3>
   </div>
   <div class="content">
-    <div class="row">
-      <div class="col-md-6">
+
+     <!--Hàng 0-->
+     <div class="row">
+      <div class="col-md-12">
         <div class="label_item">{{ "unit.name" | translate }}</div>
         <div>
           <div [innerHTML]="name" class="input_text"></div>
+        </div>
+      </div>
+    </div>
+
+    <!--Hàng 1-->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="label_item">{{ "unit.id" | translate }}</div>
+        <div>
+          <div [innerHTML]="id" class="input_text"></div>
         </div>
       </div>
 
@@ -19,6 +31,7 @@
       </div>
     </div>
 
+    <!--Hàng 2-->
     <div class="row" style="padding-top: 10px">
       <div class="col-md-6">
         <div class="label_item">{{ "unit.code" | translate }}</div>
@@ -52,13 +65,6 @@
     </div>
 
     <div class="row" style="padding-top: 10px">
-      <!-- <div class="col-md-6">
-        <div class="label_item">{{ "unit.fax" | translate }}</div>
-        <div>
-          <div [innerHTML]="fax" class="input_text"></div>
-        </div>
-      </div> -->
-
       <div class="col-md-6">
         <div class="label_item">{{ "Mã số thuế" | translate }}</div>
         <div>
@@ -76,68 +82,70 @@
       </div>
     </div>
 
-    <div class="row" style="padding-top: 2px">
-      <div class="header">
-        <h3 class="label-header">{{ "THÔNG TIN GÓI CƯỚC" | translate }}</h3>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-6">
-        <div class="label_item">
-          {{ "Số lượng hợp đồng đã sử dụng: " | translate }}
-          <span class="highlight_result">
-            {{ this.numContractUse }}
-          </span>
+    <div *ngIf="this.site === 'KD'">
+      <div class="row" style="padding-top: 2px">
+        <div class="header">
+          <h3 class="label-header">{{ "THÔNG TIN GÓI CƯỚC" | translate }}</h3>
         </div>
       </div>
 
-      <div class="col-md-6">
-        <div class="label_item">
-          {{ "Số lượng hợp đồng đã mua: " | translate }}
-          <span class="highlight_result">
-            {{ this.numContractBuy }}
-          </span>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="label_item">
+            {{ "Số lượng hợp đồng đã sử dụng: " | translate }}
+            <span class="highlight_result">
+              {{ this.numContractUse }}
+            </span>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row" style="padding-top: 10px">
-      <div class="col-md-6">
-        <div class="label_item">
-          {{ "Số lượng eKYC đã sử dụng: " | translate }}
-          <span class="highlight_result">
-            {{ this.eKYCContractUse }}
-          </span>
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="label_item">
-          {{ "Số lượng eKYC đã mua: " | translate }}
-          <span class="highlight_result">
-            {{ this.eKYCContractBuy }}
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <div class="row" style="padding-top: 10px">
-      <div class="col-md-6">
-        <div class="label_item">
-          {{ "Số lượng SMS đã sử dụng: " | translate }}
-          <span class="highlight_result">
-            {{ this.smsContractUse }}
-          </span>
+        <div class="col-md-6">
+          <div class="label_item">
+            {{ "Số lượng hợp đồng đã mua: " | translate }}
+            <span class="highlight_result">
+              {{ this.numContractBuy }}
+            </span>
+          </div>
         </div>
       </div>
 
-      <div class="col-md-6">
-        <div class="label_item">
-          {{ "Số lượng SMS đã mua: " | translate }}
-          <span class="highlight_result">
-            {{ this.smsContractBuy }}
-          </span>
+      <div class="row" style="padding-top: 10px">
+        <div class="col-md-6">
+          <div class="label_item">
+            {{ "Số lượng eKYC đã sử dụng: " | translate }}
+            <span class="highlight_result">
+              {{ this.eKYCContractUse }}
+            </span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="label_item">
+            {{ "Số lượng eKYC đã mua: " | translate }}
+            <span class="highlight_result">
+              {{ this.eKYCContractBuy }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="padding-top: 10px">
+        <div class="col-md-6">
+          <div class="label_item">
+            {{ "Số lượng SMS đã sử dụng: " | translate }}
+            <span class="highlight_result">
+              {{ this.smsContractUse }}
+            </span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="label_item">
+            {{ "Số lượng SMS đã mua: " | translate }}
+            <span class="highlight_result">
+              {{ this.smsContractBuy }}
+            </span>
+          </div>
         </div>
       </div>
     </div>

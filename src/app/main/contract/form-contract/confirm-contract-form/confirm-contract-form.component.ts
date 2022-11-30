@@ -207,7 +207,7 @@ export class ConfirmContractFormComponent implements OnInit {
       }
     );
 
-    // //Lấy thông tin chi tiết tổ chức của tôi
+    //Lấy thông tin chi tiết tổ chức của tôi
     // const data = {
     //   title: 'YÊU CẦU XÁC NHẬN',
     // };

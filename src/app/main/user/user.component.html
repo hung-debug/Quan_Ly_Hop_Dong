@@ -3,15 +3,6 @@
     <div class="col-md-3" *ngIf="isQLND_03">
       <div>{{'unit.name' | translate}}</div>
       <div>
-        <!-- <p-dropdown 
-          panelStyleClass="font"
-          [options]="orgList" 
-          [(ngModel)]="organization_id" 
-          optionLabel="name" 
-          optionValue="id" 
-          [filter]="true" 
-          filterBy="name" 
-          ></p-dropdown> -->
           <p-treeSelect [(ngModel)]="selectedNodeOrganization" [options]="listOrgCombobox" placeholder="Tất cả" [filter]="true" filterBy="name"  [droppable]="true" (onNodeSelect)="changeOrg()"></p-treeSelect>
       </div>
     </div>
@@ -21,9 +12,25 @@
         <input type="text" [(ngModel)]="email" class="input_text"/>
       </div>
     </div>
+
     <div class="col-md-6 btn_search">
       <button *ngIf="isQLND_03" class="btn btn-lg btn-block btn_submit" (click)="searchUser()">{{'btn.search' | translate }}</button>
       <button *ngIf="isQLND_01" class="btn btn-lg btn-block btn_submit" (click)="addUser()">{{'btn.add' | translate }}</button>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top: 5px;">
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-6 btn_search" style="padding-left: 22px">
+      <input *ngIf="isQLND_01" id="file-input" type="file" accept=".xls,.xlsx" (change)="fileChanged($event)" style="display: none"/>
+      <label for="file-input" class="custom-file-upload">
+        <i class="fa fa-cloud-upload"></i> Import file
+      </label>
+
+      <a style="padding-left: 5px;">
+        {{'not.have.sample.file' | translate}} <a href="/assets/upload/import_nguoi_dung.xlsx" style="color: #106DB6; cursor: pointer;" (click)="downFileExample()">{{'download.sample.file' | translate}}</a>
+      </a>
     </div>
   </div>
 
@@ -42,7 +49,11 @@
               <td>{{list.email}}</td>
               <td>{{list.phone}}</td>
               <td>{{list.organization.name}}</td>
-              <td>{{list.status==1?'Hoạt động':'Không hoạt động'}}</td>
+              <!-- <td>{{list.status==1?'Hoạt động':'Không hoạt động'}}</td> -->
+
+              <td *ngIf="list.status == 1">{{'unit.active' | translate}}</td>
+              <td *ngIf="list.status != 1">{{'unit.inactive' | translate}}</td>
+
               <td>{{list.role?.name}}</td>
               <td style="text-align: center">
                 <img *ngIf="isQLND_02" src="../../../assets/img/icon_edit.svg" width="20px" (click)="editUser(list.id)" style="cursor: pointer;"/>

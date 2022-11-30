@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ConfirmInforContractComponent} from "../shared/model/confirm-infor-contract/confirm-infor-contract.component";
 import {ContractHeaderComponent} from "../shared/model/contract-header/contract-header.component";
@@ -9,8 +9,7 @@ import {variable} from "../../../config/variable";
 import {AppService} from 'src/app/service/app.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from "rxjs";
-import {ContractService} from "../../../service/contract.service";
-import {UploadService} from "../../../service/upload.service";
+
 import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../service/toast.service";
 import { UserService } from 'src/app/service/user.service';
@@ -40,7 +39,8 @@ export class AddContractTemplateComponent implements OnInit {
       'determine_signer': false,
       'sample_contract': false,
       'confirm_infor_contract': false
-    }
+    },
+    flagDigitalSign: false
   }
   personalDetails!: FormGroup;
   addressDetails!: FormGroup;
@@ -56,12 +56,10 @@ export class AddContractTemplateComponent implements OnInit {
   subscription: Subscription;
   shareData: object;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
               private appService: AppService,
               private route: ActivatedRoute,
               private contractTemplateService: ContractTemplateService,
-              private router: Router,
-              private uploadService: UploadService,
               private spinner: NgxSpinnerService,
               private toastService : ToastService,
               private userService: UserService,
@@ -87,7 +85,6 @@ export class AddContractTemplateComponent implements OnInit {
         //lay id role
         this.roleService.getRoleById(data.role_id).subscribe(
           data => {
-            console.log(data);
             let listRole: any[];
             listRole = data.permissions;
             this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
@@ -163,23 +160,14 @@ export class AddContractTemplateComponent implements OnInit {
       this.datas.contract_id_action = data.is_data_contract.id;
       this.datas.i_data_file_contract = data.i_data_file_contract;
       this.datas['is_data_object_signature'] = data.is_data_object_signature;
-      // this.datas.determine_contract.forEach((res: any) => {
-      //   delete res.id;
-      //   res.recipients.forEach((element: any) => {
-      //     delete element.id;
-      //   })
-      // })
+  
       this.datas = Object.assign(this.datas, data.is_data_contract);
       this.step = variable.stepSampleContract.step1;
-      // console.log(this.datas);
+
+      console.log("datas 1 ", this.datas.is_determine_clone);
     }
   }
 
-  // ngOnDestroy() {
-  //   if (this.action == 'copy' || this.action == 'edit') {
-  //     this.subscription.unsubscribe();
-  //   }
-  // }
 
   receiveMessage(event: any) {
     console.log(event)
@@ -231,13 +219,6 @@ export class AddContractTemplateComponent implements OnInit {
   }
 
   getStep(e: any) {
-    // if (e.isBackStep_4 && e.step) {
-    //   this.datas['back_step_4'] = e.isBackStep_4;
-    //   this.step = e.step;
-    // } else if (e.isBackStep_2 && e.step) {
-    //   this.datas['back_step_2'] = e.isBackStep_2;
-    //   this.step = e.step;
-    // } else
     this.step = e;
   }
 
@@ -247,6 +228,5 @@ export class AddContractTemplateComponent implements OnInit {
   }
 
   t() {
-    console.log(this);
   }
 }

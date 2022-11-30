@@ -4,16 +4,26 @@
     </div>
     <form [formGroup]="addForm" class="content">
 
-        <!--Hàng 1!-->
+        <!--Hàng 0!-->
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="label text-color">{{'unit.name' | translate }} <span class="required-title">*</span></div>
                 <div class="input-data">
-                    <input type="text" formControlName="nameOrg">
+                    <input  type="text" formControlName="nameOrg">
                 </div>
                 <div *ngIf="submitted && f.nameOrg.errors" class="invalid">
                     <div *ngIf="f.nameOrg.errors.required">{{'error.unit.name.required' | translate}}</div>
                     <div *ngIf="f.nameOrg.errors.pattern">{{'Tên tổ chức không được chứa ký tự đặc biệt' | translate}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!--Hàng 1!-->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="label text-color">{{'unit.id' | translate }}</div>
+                <div class="input-data hidden-color">
+                    <input class="hidden-color" type="text" formControlName="idOrg" readonly>
                 </div>
             </div>
         
@@ -41,17 +51,6 @@
                 </div>
             </div>
         
-            <!-- <div class="col-md-6">
-                <div class="label text-color">{{'unit.email' | translate }} </div>
-                <div class="input-data">
-                    <input type="text" formControlName="email">
-                </div>
-                <div *ngIf="submitted && f.email.errors" class="invalid">
-                    <div *ngIf="f.email.errors.required">{{'error.user.email.required' | translate}}</div>
-                    <div *ngIf="f.email.errors.email">{{'error.user.email.format' | translate}}</div>
-                </div>
-            </div> -->
-
               <!--Mã số thuế-->
               <div class="col-md-6">
                 <div class="label text-color">{{'Mã số thuế' | translate }}</div>
@@ -103,29 +102,6 @@
             </div>
         </div>
 
-        <!-- <div class="row" style="padding-top: 10px;">
-            <div class="col-md-6">
-                <div class="label text-color">{{'unit.fax' | translate }}</div>
-                <div class="input-data">
-                    <input type="text" formControlName="fax">
-                </div>
-                <div *ngIf="submitted && f.fax.errors" class="invalid">
-                    <div *ngIf="f.fax.errors.pattern">{{'Fax không được chứa ký tự đặc biệt' | translate}}</div>
-                </div>
-            </div> -->
-
-            <!--Số điện thoại-->
-            <!-- <div class="col-md-6">
-                <div class="label text-color">{{'unit.phone' | translate }}</div>
-                <div class="input-data">
-                    <input type="text" formControlName="phone">
-                </div>
-                <div *ngIf="submitted && f.phone.errors" class="invalid">
-                    <div *ngIf="f.phone.errors.required">{{'error.user.phone.required' | translate}}</div>
-                    <div *ngIf="f.phone.errors.pattern">{{'error.user.phone.format' | translate}}</div>
-                </div>
-            </div> -->
-        <!-- </div> -->
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6" style="align-self: center;">

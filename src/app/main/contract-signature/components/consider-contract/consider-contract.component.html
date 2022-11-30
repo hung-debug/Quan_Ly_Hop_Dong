@@ -9,30 +9,30 @@
           <span>{{datas?.is_data_contract?.contract_uid}}</span>
         </div> -->
         <div>
-          <span class="title-contract">Loại hợp đồng:</span>
+          <span class="title-contract">{{'menu.contract.type.list' | translate}}:</span>
           <span>{{datas?.is_data_contract?.type_name}}</span>
         </div>
         <div>
-          <span class="title-contract">Tên hợp đồng:</span>
+          <span class="title-contract">{{'contract.name' | translate}}:</span>
           <span>{{datas.is_data_contract.name}}</span>
         </div>
         <div>
-          <span class="title-contract">Số hợp đồng:</span>
-          <span>{{datas.is_data_contract.code}}</span>
+          <span class="title-contract">{{'contract.number' | translate}}:</span>
+          <span>{{datas.is_data_contract.contract_no}}</span>
         </div>
         <div>
-          <span class="title-contract">File đính kèm:</span>
-          <span *ngFor="let d of allFileAttachment">
+          <span class="title-contract">{{'file.attach' | translate}}:</span>
+          <span *ngFor="let d of allFileAttachment;let i = index">
+            <span *ngIf="i != 0">, </span>
             <a style="color: #106DB6" rel="stylesheet" [href]="d.path" target="_blank">{{d.filename}}</a>
           </span>
         </div>
         <div>
-          <span class="title-contract">Hợp đồng liên quan:</span>
-          <span *ngFor="let d of allRelateToContract;let i = index">
-            <a style="color: #106DB6;" [style.margin-left]="i != 0 ? '8px' : ''" rel="stylesheet" *ngIf="currentUser?.id != datas?.is_data_contract?.created_by"
-               [href]="d.path" download target="_blank">{{d.ref_name}}</a>
-            <a style="color: #106DB6;" [style.margin-left]="i != 0 ? '8px' : ''"  *ngIf="currentUser?.id == datas?.is_data_contract?.created_by" target="_blank"
-               rel="stylesheet" [href]="'/main/form-contract/detail/' + d.ref_id">{{d.ref_name}}</a>
+          <span class="title-contract">{{'contract.connect' | translate}}:
+          </span>
+          <span *ngFor="let d of datas?.is_data_contract?.refs;let i = index">
+            <span *ngIf="i != 0">, </span>
+            <a style="color: #106DB6;" rel="stylesheet" [href]="'/main/form-contract/detail/' + d.ref_id" target="_blank">{{d.ref_name}}</a>
           </span>
         </div>
 
@@ -42,7 +42,7 @@
 
     <div class="location-change">
       <div class="sample-contract__information--user-sign" style="line-height: 25px">
-        <div style="text-align: center; font-weight: bold" class="label">CÁC BÊN LIÊN QUAN</div>
+        <div style="text-align: center; font-weight: bold" class="label">{{'relate.party' | translate}}</div>
 
         <div *ngFor="let d of this.datas?.is_data_contract?.participants">
           <div>{{d.name}}</div>
@@ -50,7 +50,7 @@
 
       </div>
       <div>
-        <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">Luồng xử lý hợp đồng</u>
+        <u style="color: #106DB6; padding-right: 3px; cursor: pointer" (click)="processHandleContract()">{{'contract_processing_flow' | translate}}</u>
       </div>
       <hr>
 
@@ -99,8 +99,9 @@
              (click)="getSignSelect(d)"
              [ngClass]="changeColorDrag(null, d, true)"
              [ngStyle]="changePosition(d)">
-          <div *ngIf="d.sign_unit != 'text'" class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
-          <app-image-sign-contract id="image-sign-contract" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
+          <app-image-sign-contract  id="image-sign-contract" (checkedChange)="switchesValueChange($event)" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
+          <div *ngIf="this.flagFocus && d.sign_unit == 'text'" class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
+          <div *ngIf="d.sign_unit != 'text' && !this.flagFocus" class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
         </div>
       </div>
       <div class="skeleton-sign position-absolute opacity-0">

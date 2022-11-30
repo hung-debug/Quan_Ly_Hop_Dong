@@ -76,7 +76,10 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     let res = '';
     if (status == 3) {
       return 'Đã từ chối';
+    } else if(status == 4) {
+      return 'Đã uỷ quyền';
     }
+
     if (status == 0) {
       res += 'Chưa ';
     } else if (status == 1) {
@@ -84,6 +87,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     } else if (status == 2) {
       res += 'Đã ';
     }
+
     if (role == 1) {
       res +=  'điều phối';
     } else if (role == 2) {

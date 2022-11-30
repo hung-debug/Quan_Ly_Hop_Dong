@@ -775,7 +775,7 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     let listContractUrl = this.getNotifyOriganzation + this.organization_id;
-    return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
+    return this.http.get<any>(listContractUrl, { headers }).pipe();
   }
 
   changeLink(code: any) {

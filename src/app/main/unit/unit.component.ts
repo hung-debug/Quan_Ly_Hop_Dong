@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { async } from 'rxjs';
 import { AppService } from 'src/app/service/app.service';
+import { ImportService } from 'src/app/service/import.service';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
@@ -24,7 +23,7 @@ export class UnitComponent implements OnInit {
     private roleService: RoleService,
     private toastService: ToastService,
     public router: Router,
-    private spinner: NgxSpinnerService
+    private importService: ImportService
     ) { }
 
   code:any = "";
@@ -49,6 +48,7 @@ export class UnitComponent implements OnInit {
     this.searchUnit();
 
     this.cols = [
+      { field: 'id', header: 'unit.id', style:'text-align: left;' },
       { field: 'name', header: 'unit.name', style:'text-align: left;' },
       { field: 'short_name', header: 'unit.short-name', style:'text-align: left;' },
       { field: 'code', header: 'unit.code', style:'text-align: left;' },
@@ -219,58 +219,9 @@ export class UnitComponent implements OnInit {
   }
 
   fileChanged(e: any) {
-    const file = e.target.files[0];
-    if (file) {
-      // giới hạn file upload lên là 5mb
-      if (e.target.files[0].size <= 5000000) {
-        const file_name = file.name;
-        const extension = file.name.split('.').pop();
-        // tslint:disable-next-line:triple-equals
-        if (
-          extension.toLowerCase() == 'xls' ||
-          extension.toLowerCase() == 'xlsx'
-        ) {
-          this.callApiImport(file);
-        } else {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Chỉ hỗ trợ file có định dạng XLS, XLSX',
-            '',
-            3000
-          );
-        }
-      } else {
-        this.toastService.showErrorHTMLWithTimeout(
-          'Yêu cầu file nhỏ hơn 5MB',
-          '',
-          3000
-        );
-      }
-    }
+    this.importService.importFile(e,'unit');
   }
 
-  async callApiImport(file: any) {
-    this.spinner.show();
-    const importUnit = await this.unitService.uploadFileUnit(file);
-
-    if(importUnit.status == 204) {
-      this.spinner.hide();
-      this.toastService.showSuccessHTMLWithTimeout("Import tổ chức thành công","",3000);
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/unit']);
-      });
-    } else if(importUnit.status == 200) {
-      this.toastService.showErrorHTMLWithTimeout("File excel không hợp lệ. Vui lòng xem chi tiết lỗi ở file excel đã download","",3000);
-
-      let body: any = importUnit.body;
-      let blob = new Blob([body], { type: 'application/vnd.openxmlformats-ficedocument.spreadsheetml.sheet'});
-      const link = document.createElement("a");
-      link.href = window.URL.createObjectURL(blob);
-      link.download = `report_${new Date().getTime()}.xlsx`;
-      link.click();
-
-      this.spinner.hide();
-    }
-  }
 
   downFileExample() {
     

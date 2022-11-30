@@ -17,6 +17,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import { parttern } from 'src/app/config/parttern';
 import { parttern_input } from 'src/app/config/parttern';
 import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
+import Swal from 'sweetalert2';
 export class ContractConnectArr {
   ref_id: number;
 
@@ -107,8 +108,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   ngOnInit(): void {
+
+    console.log("datas init 1 ", this.datas.is_determine_clone);
+
+
     this.spinner.hide();
-    console.log(this.datas);
     this.name = this.datas.name ? this.datas.name : null;
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;
     this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.code;
@@ -128,12 +132,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.typeList = data
     });
 
-    // this.subscription = this.contractService.sharedMessage.subscribe(msg => this.messageForSibling = msg);
-    // console.log(this.messageForSibling)
-
     this.contract_no_old = this.contract_no;
     this.start_time_old = this.start_time;
     this.end_time_old = this.end_time;
+
+    console.log("datas init final ", this.datas.is_determine_clone);
   }
 
   ngAfterViewInit() {
@@ -158,16 +161,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
         if (extension && extension.toLowerCase() == 'pdf') {
-          // const fileInput: any = document.getElementById('file-input');
-          // fileInput.value = '';
-          // this.datas.file_name = file_name;
-          // this.datas.contractFile = file;
-          // this.contractFileRequired();
-          // if (this.datas.is_action_contract_created) {
-          //   this.uploadFileContractAgain = true;
-          // }
-          // // console.log(this.datas);
-
           this.checkSignDigitalService.getList(file).subscribe((response) => {
             this.spinner.hide();
             if(response.length == 0) {
@@ -179,9 +172,26 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               if (this.datas.is_action_contract_created) {
                 this.uploadFileContractAgain = true;
               }
+
+              this.datas.flagDigitalSign = false;
             } else if(response.length > 0) {
-              this.toastService.showWarningHTMLWithTimeout("File hợp đồng đã chứa chữ ký số", "", 3000);
-              return;
+              Swal.fire({
+                html: "File hợp đồng đã chứa chữ ký số; chỉ có thể ký bằng hình thức ký số với hợp đồng này",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#b0bec5',
+                confirmButtonText: 'Xác nhận'
+              });
+
+              const fileInput: any = document.getElementById('file-input');
+              fileInput.value = '';
+              this.datas.file_name = file_name;
+              this.datas.contractFile = file;
+              this.contractFileRequired();
+              if (this.datas.is_action_contract_created) {
+                this.uploadFileContractAgain = true;
+              }
+              this.datas.flagDigitalSign = true;
             }
           })
         } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {
@@ -280,6 +290,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     //call API step 1
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
+
+      console.log("datas before ", this.datas.is_determine_clone);
+
       // sua hop dong
       // datas.contractConnect
       if (this.datas.contractConnect && this.datas.contractConnect.length && this.datas.contractConnect.length > 0) {
@@ -287,6 +300,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           res['contract_id'] = this.datas.contract_id_action;
         })
       }
+
+      console.log("datas after ", this.datas.is_determine_clone);
+
 
       await this.contractTemplateService.addInforContractTemplate(this.datas, this.datas.contract_id_action).toPromise().then((res: any) => {
         this.datas.id = res?.id;
@@ -499,6 +515,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   // --next step 2
   async next() {
+
+    console.log("datas step 1 ", this.datas.is_determine_clone);
+
     if (!this.validData()) {
       return;
     } else {
@@ -525,19 +544,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             this.datas.uploadFileContractAgain = true;
           };
         }
-
-        // file đính kèm sửa hợp đồng
-        // if (!this.uploadFileAttachAgain && this.datas.attachFile && this.datas.attachFile.length > 0) {
-        //   let dataArr: any[] = [];
-        //   for (let i = 0; i < this.datas.attachFile.length; i++) {
-        //     if (typeof this.datas.attachFile[i] == 'string') {
-        //       await this.contractService.getDataBinaryFileUrlConvert(this.datas.attachFile[i]).toPromise().then((data: any) => {
-        //         if (data) dataArr.push(data)
-        //       })
-        //     }
-        //   }
-        //   this.datas.attachFile = dataArr;
-        // }
       } else {
         fileReader.readAsDataURL(this.datas.contractFile);
         fileReader.onload = (e) => {
@@ -571,14 +577,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     }
   }
-
-  // async getConvertToFileBinary(res: any, file_type: string) {
-  //   await this.contractService.convertUrltoBinary(res).toPromise().then((res) => {
-  //     this.datas[file_type] = res;
-  //   }, () => {
-  //     this.toastService.showErrorHTMLWithTimeout('Có lỗi xảy ra!', "", 3000);
-  //   })
-  // }
 
   convertData(datas: any) {
     console.log(this.datas.contractConnect);

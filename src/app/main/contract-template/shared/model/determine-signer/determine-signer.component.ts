@@ -8,16 +8,13 @@ import {
 } from "../../../../../config/variable";
 import { parttern } from "../../../../../config/parttern";
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
-import { Helper } from "../../../../../core/Helper";
-import * as ContractCreateDetermine from '../../contract_data'
-import { elements } from "@interactjs/snappers/all";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "../../../../../service/toast.service";
 import { Router } from "@angular/router";
-import { NgxInputSearchModule } from "ngx-input-search";
+
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'src/app/service/user.service';
-import { isTemplateExpression } from 'typescript';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-determine-signer',
@@ -30,8 +27,7 @@ export class DetermineSignerComponent implements OnInit {
   @Input() saveDraftStep: any;
   @Output() stepChangeDetermineSigner = new EventEmitter<string>();
   @Input() save_draft_infor: any;
-  // @Output('dataStepContract') dataStepContract = new EventEmitter<Array<any>>();
-  // @Output('saveDraft') saveDraft = new EventEmitter<string>();
+
   @ViewChild("abcd") fieldAbcd: any;
   determine_step = false;
   determineDetails!: FormGroup;
@@ -58,6 +54,8 @@ export class DetermineSignerComponent implements OnInit {
   signTypeList_personal_partner: Array<any> = type_signature_personal_party;
   signType_doc: Array<any> = type_signature_doc;
 
+  isListSignPerson: any = [];
+
   dropdownSignTypeSettings: any = {};
   getNameIndividual: string = "";
 
@@ -71,12 +69,13 @@ export class DetermineSignerComponent implements OnInit {
   email: string="email";
   phone: string="phone";
 
+  site: string;
+
   get determineContract() {
     return this.determineDetails.controls;
   }
 
   constructor(
-    private formBuilder: FormBuilder,
     private contractTemplateService: ContractTemplateService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
@@ -88,7 +87,23 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id));
+
+    console.log("datas ", this.datas.is_determine_clone);
+
+    if(environment.flag == 'NB') {
+      this.site = 'NB';
+    } else if(environment.flag == 'KD') {
+      this.site = 'KD';
+    }
+
+    if(!this.datas.flagDigitalSign) {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
+      this.isListSignPerson = this.signTypeList.filter((p) => ![4].includes(p.id));
+    } else {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
+      this.isListSignPerson = this.signTypeList.filter((p) => ![1,4,5].includes(p.id));
+    }
+
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       this.datas.is_determine_clone = [...this.contractTemplateService.getDataDetermineInitialization()];
     }
@@ -125,14 +140,6 @@ export class DetermineSignerComponent implements OnInit {
       d.email = '';
       d.phone = '';
     }
-
-    // console.log("d.login_by", d.login_by)
-    // if(d.login_by == 'phone'){
-    //   d.email = d.phone;
-    //   d.phone = d.email;
-    // }
-
-    console.log("d ",d);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -289,27 +296,26 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeOtp(data: any) {
-    let data_sign_cka = data.sign_type.filter((p: any) => p.id == 1)[0];
-    if (data_sign_cka) {
-      data.is_otp = 1;
-    } else {
-      data.is_otp = 0;
-    }
+    // let data_sign_cka = data.sign_type.filter((p: any) => p.id == 1)[0];
+    // if (data_sign_cka) {
+    //   data.is_otp = 1;
+    // } else {
+    //   data.is_otp = 0;
+    // }
   }
 
   changeIsCoordination(e:any, item: any, id:any) {
-    
-    if (e.target.checked) {
-      //goi ham them
-      this.addPartnerCoordination(item, id);
-    } else {
-      //goi ham xoa
-      this.deletePartnerCoordination(0, item, id);
-      //kiem tra neu chua co nguoi ky thi them 1 nguoi ky
-      if(this.getPartnerSignature(item).length == 0){
-        this.addPartnerSignature(item, id);
-      }
-    }
+    // if (e.target.checked) {
+    //   //goi ham them
+    //   this.addPartnerCoordination(item, id);
+    // } else {
+    //   //goi ham xoa
+    //   this.deletePartnerCoordination(0, item, id);
+    //   //kiem tra neu chua co nguoi ky thi them 1 nguoi ky
+    //   if(this.getPartnerSignature(item).length == 0){
+    //     this.addPartnerSignature(item, id);
+    //   }
+    // }
   }
 
   getDataSignCka(data:any){
@@ -1099,6 +1105,9 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   dataParnterOrganization() {
+
+    console.log("clone ", this.datas.is_determine_clone);
+
     return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
@@ -1194,17 +1203,6 @@ export class DetermineSignerComponent implements OnInit {
       })
     }
     this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3)[index].recipients = newArr;
-
-    console.log(item);
-    // if (item.type == 3) {
-    //   this.data_organization.ordering = 2;
-    //   item.ordering = 1;
-    //   this.is_change_party = true;
-    // } else {
-    //   this.data_organization.ordering = 1;
-    //   item.ordering = 2;
-    //   this.is_change_party = false;
-    // }
   }
 
   changeIsSmsCoordination(e:any, item:any, index:any){
@@ -1214,7 +1212,6 @@ export class DetermineSignerComponent implements OnInit {
     }else{
       data.is_otp = 0;
     }
-    console.log(data);
   }
 
   changeIsSmsReviewer(e:any, item:any, index:any){
@@ -1227,12 +1224,12 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeIsSmsSignature(e:any, item:any, index:any){
-    let data = item.recipients.filter((p: any) => p.role == 3)[index];
-    if (e.target.checked) {
-      data.is_otp = 1;
-    }else{
-      data.is_otp = 0;
-    }
+    // let data = item.recipients.filter((p: any) => p.role == 3)[index];
+    // if (e.target.checked) {
+    //   data.is_otp = 1;
+    // }else{
+    //   data.is_otp = 0;
+    // }
   }
 
   changeIsSmsDocument(e:any, item:any, index:any){

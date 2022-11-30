@@ -3,7 +3,6 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { variable } from 'src/app/config/variable';
-import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
@@ -80,19 +79,9 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     this.nextOrPreviousStep(step);
   }
 
-  // next step event
-  // next() {
-  //   this.callAPI();
-  // }
-
   // forward data component
   nextOrPreviousStep(step: string) {
     this.datas.stepLast = step;
-    // this.datas['back_step_4'] = true;
-    // let data = {
-    //   step: step,
-    //   isBackStep_4: true
-    // }
     this.stepChangeConfirmInforContract.emit(step);
   }
 
@@ -101,18 +90,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     void this.router.navigate(['/main/contract/create/draft']);
   }
 
-  // callAPI(action: string) {
-  //   this.next(action);
-  // }
-
   callAPIFinish() {
-    //call API step confirm
-    //this.contractService.addConfirmContract(this.datas).subscribe((data) => {
     this.spinner.show();
 
     this.contractTemplateService.changeStatusContract(this.datas.id, 10).subscribe((data) => {
-
-      console.log(data);
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate(['/main/contract-template']);
       });
