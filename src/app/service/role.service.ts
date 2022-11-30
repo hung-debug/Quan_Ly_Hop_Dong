@@ -113,7 +113,7 @@ export class RoleService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    let listRoleUrl = this.getRoleByIdUrl + id+ "?size=10000";
+    let listRoleUrl = this.getRoleByOrgIdUrl + id+ "?size=10000";
     return this.http.get<any>(listRoleUrl, {headers}).pipe();
   }
 

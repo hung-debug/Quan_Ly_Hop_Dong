@@ -1650,9 +1650,9 @@ export class ConsiderContractComponent
     //Check ký usb token
     if (typeSignDigital && typeSignDigital == 2) {
 
-      if(  this.usbTokenVersion = 1) {
+      if( this.usbTokenVersion == 1) {
         this.signTokenVersion1(signUpdatePayload, notContainSignImage);
-      } else if(this.usbTokenVersion = 2) {
+      } else if(this.usbTokenVersion == 2) {
         //version 2
         this.getSessionId(
           this.taxCodePartnerStep2,
