@@ -199,6 +199,9 @@ export class ConsiderContractComponent
   ngOnInit(): void {
     this.getDeviceApp();
 
+
+    this.getVersionUsbToken();
+
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
 
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
@@ -228,6 +231,16 @@ export class ConsiderContractComponent
         }
       );
     });
+  }
+
+  async getVersionUsbToken() {
+    const dataOrg = await this.contractService.getDataNotifyOriganzation().toPromise();
+
+    if(dataOrg.usb_token_version == 1) {
+      this.usbTokenVersion = 1;
+    } else if(dataOrg.usb_token_version == 2) {
+      this.usbTokenVersion = 2;
+    }
   }
 
   timerId: any;
@@ -570,7 +583,7 @@ export class ConsiderContractComponent
       canvas.height = viewport.height;
       canvas.width = viewport.width;
 
-      this.prepareInfoSignUsbToken(pageNumber, canvas.height);
+      this.prepareInfoSignUsbToken(pageNumber, canvas.height, this.usbTokenVersion);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
       if (!_objPage) {
         this.objPdfProperties.pages.push({
@@ -1634,15 +1647,12 @@ export class ConsiderContractComponent
       }
     }
 
+    //Check ký usb token
     if (typeSignDigital && typeSignDigital == 2) {
 
-      const dataOrg = await this.contractService.getDataNotifyOriganzation().toPromise();
-
-      if(dataOrg.usb_token_version == 1) {
-        this.usbTokenVersion = 1;
+      if(  this.usbTokenVersion = 1) {
         this.signTokenVersion1(signUpdatePayload, notContainSignImage);
-      } else if(dataOrg.usb_token_version == 2) {
-        this.usbTokenVersion = 2;
+      } else if(this.usbTokenVersion = 2) {
         //version 2
         this.getSessionId(
           this.taxCodePartnerStep2,
@@ -2647,7 +2657,7 @@ export class ConsiderContractComponent
     this.signContractSubmit();
   }
 
-  prepareInfoSignUsbToken(page: any, heightPage: any) {
+  prepareInfoSignUsbToken(page: any, heightPage: any, version: string) {
 
       this.isDataObjectSignature.map((sign: any) => {
         if ((sign.type == 3 || sign.type == 1 || sign.type == 4)
@@ -2659,16 +2669,14 @@ export class ConsiderContractComponent
         sign.signDigitalX = sign.coordinate_x/* * this.ratioPDF*/;
         sign.signDigitalY = (heightPage - (sign.coordinate_y - this.currentHeight) - sign.height)/* * this.ratioPDF*/;
         
-        // if(this.usbTokenVersion == 2) {
-        //   sign.signDigitalWidth = sign.width/* * this.ratioPDF*/;
-        //   sign.signDigitalHeight = sign.height/* * this.ratioPDF*/
-        // } else if(this.usbTokenVersion == 1) {
-        
-        // }
-
-        sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
-        sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;  
- 
+        if(version == '1') {
+          sign.signDigitalWidth = (sign.coordinate_x + sign.width)/* * this.ratioPDF*/;
+          sign.signDigitalHeight = (heightPage - (sign.coordinate_y - this.currentHeight))/* * this.ratioPDF*/;  
+        } else if(version == '2') {
+          sign.signDigitalWidth = sign.width;
+          sign.signDigitalHeight = sign.height;
+        }
+      
         //Lấy thông tin mã số thuế của đối tác ký 
         this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
 
