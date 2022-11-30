@@ -133,7 +133,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.typeList = data
     });
 
-    this.contractService.getContractList('off', '', '', '', '', '', '', 30, "", "").subscribe(data => {
+    this.contractService.getContractList('off', '', '', '', '', '', '', 30, "", 1000).subscribe(data => {
       this.contractConnectList = data.entities;
     });
   }
@@ -470,16 +470,23 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           contract_id: this.datas.id,
         }
 
-        if(!this.datas.document_id_1.id) {
+        if(!this.datas.document_id_1.id && !this.datas.document_id_2.id) {
           await this.contractService.addDocument(this.datas).toPromise().then((data) => {
             this.datas.document_id_1 = data;
           }, () => {
             error_api = true;
             this.getErrorFile();
           })
-        }
 
-        if(!this.datas.document_id_2.id) {
+          await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data) => {
+            this.datas.filePathDone = data.file_object.file_path;
+            this.datas.fileNameDone = data.file_object.filename;
+            this.datas.fileBucketDone = data.file_object.bucket;
+          }, () => {
+            error_api = true;
+            this.getErrorFile();
+          })
+
           await this.contractService.addDocumentDone(this.datas).toPromise().then((data) => {
             this.datas.document_id_2 = data;
             this.datas.document_id = data?.id;
@@ -487,9 +494,37 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             error_api = true;
             this.getErrorFile();
           })
-        }
 
-        // let id_type_1 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
+          await this.contractService.addContractStep1(this.datas, this.datas.contract_id ? this.datas.contract_id : null).toPromise().then((data) => {
+            this.datas.id = data?.id;
+            this.datas.contract_id = data?.id;
+          }, (error) => {
+            error_api = true;
+            this.spinner.hide();
+            this.toastService.showErrorHTMLWithTimeout("no.push.information.contract.error", "", 3000);
+            return false;
+          })
+    
+          // add file create new
+          let dataFilePath_clone = '';
+          let dataFileName_clone = '';
+          if (this.datas.filePath && this.datas.fileName) {
+            dataFilePath_clone = this.datas.filePath;
+            dataFileName_clone = this.datas.fileName;
+          }
+    
+          if (!error_api) {
+            await this.uploadService.uploadFile(this.datas.contractFile).toPromise().then((data) => {
+              this.datas.filePath = data.file_object.file_path;
+              this.datas.fileName = data.file_object.filename;
+              this.datas.fileBucket = data.file_object.bucket;
+            }, () => {
+              error_api = true;
+              this.getErrorFile();
+            })
+          }
+        } else {
+            // let id_type_1 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
         await this.contractService.updateFileAttach(this.datas.document_id_1.id, data, 1).toPromise().then((res: any) => {
           this.datas.document_id_1 = res?.id;
         }, (error: HttpErrorResponse) => {
@@ -505,6 +540,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           this.spinner.hide();
           this.toastService.showErrorHTMLWithTimeout("no.push.file.connect.contract.error", "", 3000);
         })
+        }
       } else if (!dataFilePath_clone && !dataFileName_clone) {
         if (!error_api) {
          await this.contractService.addDocument(this.datas).toPromise().then((data) => {
@@ -787,12 +823,10 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         this.datas.contract_id = data?.id;
         if (this.datas.contractFile) {
           this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
-              console.log(JSON.stringify(data));
               this.datas.filePath = data.file_object.file_path;
               this.datas.fileName = data.file_object.filename;
               this.datas.fileBucket = data.file_object.bucket;
               this.contractService.addDocument(this.datas).subscribe((data) => {
-                  console.log(JSON.stringify(data));
                   //upload file hop dong lan 2
                   this.uploadService.uploadFile(this.datas.contractFile).subscribe((data) => {
                       this.datas.filePathDone = data.file_object.file_path;
