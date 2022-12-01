@@ -1758,11 +1758,26 @@ export class ConsiderContractComponent
 
     json_req = window.btoa(json_req);
 
-      //Lay sessionId cua usb token
-    const apiSessionId = await this.contractService.signUsbToken("request="+json_req);
+    let apiSessionId: any = "";
+
+    //Lay sessionId cua usb token
+    try {
+      apiSessionId = await this.contractService.signUsbToken("request="+json_req);
+    } catch(error) {
+      this.spinner.hide();
+      Swal.fire({
+        html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
+        icon: 'warning',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#b0bec5',
+        confirmButtonText: 'Xác nhận'
+      });
+      return;
+    }
     const sessionId = JSON.parse(window.atob(apiSessionId.data)).SessionId;
   
     if(!sessionId) {
+      this.spinner.hide();
       Swal.fire({
         html: "Vui lòng bật tool ký số hoặc tải " + `<a href='https://drive.google.com/file/d/1MPnntDPSoTX8AitnSEruZB_ovB9M8gOU/view' target='_blank'>Tại đây</a>  và cài đặt`,
         icon: 'warning',
