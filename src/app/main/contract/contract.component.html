@@ -183,29 +183,29 @@
                     <!--Cột 4: Thao tác-->
                     <div class="col-md-3 item_icon">
                         <div style="display: flex; justify-content: center;">
-                            <div *ngIf="this.isOrg == 'off'">
-                                <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08">
+                            <!-- <div *ngIf="this.isOrg == 'off'"> -->
+                                <div class="div_icon" *ngIf="(status == 'draft' || status == 'processing' || status == 'expire' || status == 'overdue') && isQLHD_08 && this.isOrg == 'off'">
                                     <img src="../../assets/img/icon_copy.svg" class="img_icon" ngbTooltip="{{'contract.copy' | translate}}" (click)="openCopy(item.id)" />
                                 </div>
-                                <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02">
+                                <div class="div_icon" *ngIf="status == 'draft' && isQLHD_02 && this.isOrg == 'off'">
                                     <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'contract.edit' | translate}}" (click)="openEdit(item.id)" />
                                 </div>
-                                <div class="div_icon" *ngIf="status == 'draft'">
+                                <div class="div_icon" *ngIf="status == 'draft' && this.isOrg == 'off'">
                                     <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'contract.delete' | translate}}" (click)="deleteContract(item.id)" />
                                 </div>
-                                <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12">
+                                <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire' || status == 'complete') && isQLHD_12 && this.isOrg == 'off'">
                                     <img src="../../assets/img/icon_view_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.view' | translate}}" (click)="contractConnect(item.id)" />
                                 </div>                 
-                                <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11">
+                                <div class="div_icon" *ngIf="status == 'complete' && isQLHD_11 && this.isOrg == 'off'">
                                     <img src="../../assets/img/icon_add_connect.svg" class="img_icon" ngbTooltip="{{'contract.connect.add' | translate}}" (click)="addContractConnectNew(item.id)" />
                                 </div>
-                                <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09">
+                                <div class="div_icon" *ngIf="(status == 'processing' || status == 'expire') && isQLHD_09 && this.isOrg == 'off'">
                                     <img src="../../assets/img/icon_stop.svg" class="img_icon" ngbTooltip="{{'contract.cancel' | translate}}" (click)="cancelContract(item.id);" />
                                 </div>
-                                <div class="div_icon" *ngIf="status == 'complete'">
+                                <div class="div_icon" *ngIf="status == 'complete' && this.isOrg == 'off'">
                                     <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.id);" />
                                 </div>
-                                <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13">
+                                <div class="div_icon" *ngIf="status == 'complete' && isQLHD_13 && this.isOrg == 'off'">
                                     <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="{{'contract.share' | translate}}" (click)="shareContract(item.id);" />
                                 </div>
                             </div>
@@ -215,7 +215,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                <!-- </div> -->
         </div>
 
         <div *ngIf="pageTotal == 0" style="height: 100px;display: table;top: 0;left: 0;width: 100%;text-align: center;margin-top: 20px;">
