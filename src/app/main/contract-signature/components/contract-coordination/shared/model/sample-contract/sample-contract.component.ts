@@ -346,19 +346,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
 
         let pages = event.relatedTarget.id.split("-");
-        let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
-        // @ts-ignore
-        // if (page > 1) {
-        //   // @ts-ignore
-        //   for (let i = 1; i < page; i++) {
-        //     let canvasElement = document.getElementById("canvas-step3-" + i);
-        //     // @ts-ignore
-        //     let canvasInfo = canvasElement.getBoundingClientRect();
-        //     layerY += canvasInfo.height + 2;
-        //   }
-        //   // @ts-ignore
-        //   layerY += page / 3;
-        // }
+        let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;   
 
         if (page > 1) {
           let countPage = 0;
@@ -1058,6 +1046,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       let coordinate_y: number [] = [];
       let width: number [] = [];
       let height: number [] = [];
+
+      let emailRecipients: any[] = [];
+
+      console.log("datas ", this.datas.determine_contract);
+
       this.datas.determine_contract.forEach((item: any) => {
           item.recipients.forEach((itemRecipients: any) => {
             if(itemRecipients.fields && itemRecipients.fields.length > 0) {
@@ -1068,8 +1061,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 height.push(Number(itemFields.height));
               })
             }
+
+            if(item.type == 2) {
+              emailRecipients.push(itemRecipients);
+            }
           })
       })
+
+      let flagEmail = null;
+      for(let i = 0; i < emailRecipients.length; i++) {
+        for(let j = i+1; j < emailRecipients.length; j++) {
+          if((emailRecipients[i].email == emailRecipients[j].email) && (emailRecipients[i].role == 1 || emailRecipients[j].role == 1)) {
+            flagEmail = emailRecipients[i].email;
+            break;
+          }
+        }
+      }
 
       for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
@@ -1100,7 +1107,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               else arrSign_partner.push(data_sign);
             }
 
-            if(element.coordinate_x) {
+            if(element.coordinate_x && (!flagEmail || (flagEmail && (flagEmail != element.email)))) {
               coordinate_x.push(Number(element.coordinate_x));
               coordinate_y.push(Number(element.coordinate_y));
               width.push(Number(element.width));

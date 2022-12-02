@@ -545,7 +545,6 @@ export class ConsiderContractComponent
 
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
   setPosition() {
-    console.log('this convert to sign config ', this.convertToSignConfig());
     if (this.convertToSignConfig().length > 0) {
       this.convertToSignConfig().forEach((element: any) => {
         let a = document.getElementById(element.id);
@@ -1169,8 +1168,7 @@ export class ConsiderContractComponent
 
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
-      if (this.signCertDigital) {
-        // this.signCertDigital = resSignDigital.data;
+      if (this.signCertDigital && this.signCertDigital.Serial) {
         for (const signUpdate of this.isDataObjectSignature) {
           if (
             signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4) &&
@@ -1178,9 +1176,7 @@ export class ConsiderContractComponent
             signUpdate?.recipient?.email === this.currentUser.email &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
-            let fileC = await this.contractService.getFileContractPromise(
-              this.idContract
-            );
+            let fileC = await this.contractService.getFileContractPromise(this.idContract);
             const pdfC2 = fileC.find((p: any) => p.type == 2);
             const pdfC1 = fileC.find((p: any) => p.type == 1);
             if (pdfC2) {
@@ -1190,7 +1186,6 @@ export class ConsiderContractComponent
             } else {
               return;
             }
-
             let signI = null;
             if (signUpdate.type == 1 || signUpdate.type == 4) {
               this.textSign = signUpdate.valueSign;
@@ -1202,8 +1197,8 @@ export class ConsiderContractComponent
               const imageRender = <HTMLElement>document.getElementById('text-sign');
 
               if (imageRender) {
-                const textSignB = await domtoimage.toJpeg(imageRender);
-                signI = this.textSignBase64Gen = textSignB.split(',')[1];
+                const textSignB = await domtoimage.toPng(imageRender);
+                signI = this.textSignBase64Gen = textSignB.split(",")[1];
               }
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(150)).toPromise();
@@ -1293,13 +1288,9 @@ export class ConsiderContractComponent
           }
           return true;
       } else {
-        this.toastService.showErrorHTMLWithTimeout(
-          'Lỗi ký USB Token',
-         '',
-           3000
-       );
+        this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token', '', 3000);
         return false;
-        }
+      }
     } else if (typeSignDigital == 3) {
       const objSign = this.isDataObjectSignature.filter(
         (signUpdate: any) =>
@@ -1445,8 +1436,6 @@ export class ConsiderContractComponent
     try {
       var json_res = JSON.parse(response);
 
-      console.log('json_res ', json_res);
-
       if (json_res.ResponseCode == 0) {
         alert(json_res.Base64Result);
 
@@ -1455,8 +1444,6 @@ export class ConsiderContractComponent
           json_res.Base64Result
         );
         if (!sign.recipient_id) {
-          console.log('recipent_id');
-
           this.toastService.showErrorHTMLWithTimeout(
             'Lỗi ký USB Token',
             '',
