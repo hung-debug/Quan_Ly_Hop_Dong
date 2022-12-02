@@ -39,8 +39,6 @@ export class ForwardContractComponent implements OnInit {
   ngOnInit(): void {
     this.datas = this.data;
 
-    console.log("datas ", this.datas);
-
     this.getCurrentUser();
     this.myForm = this.fbd.group({
       name: this.fbd.control("", [Validators.required]),
@@ -180,7 +178,7 @@ export class ForwardContractComponent implements OnInit {
           card_id: this.myForm.value.card_id,
           role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
           recipient_id: this.datas.recipientId,
-          is_replace: true/*this.datas.is_content != 'forward_contract'*/
+          is_replace: false/*this.datas.is_content != 'forward_contract'*/
         };
 
         await this.contractService.processAuthorizeContract(dataAuthorize).toPromise().then(
