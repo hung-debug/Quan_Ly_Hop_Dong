@@ -347,7 +347,6 @@ export class ConfirmSignOtpComponent implements OnInit {
     }else{
       this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.datasOtp.recipient_id).subscribe(
         async (result) => {
-          console.log("result ",result);
           if(result?.success == false){
             if(result.message == 'Wrong otp'){
               this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng', '', 3000);
