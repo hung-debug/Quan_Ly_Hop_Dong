@@ -390,6 +390,7 @@ export class ContractSignatureComponent implements OnInit {
       this.filter_status = -1;
       this.typeDisplay = 'signOne';
     } else if (this.status == 'wait-processing-dashboard') {
+      this.contractStatus = 20;
       this.filter_status = 11;
     } else if (this.status == 'wait-processing-prepare-expires-dashboard') {
       this.filter_status = 12;
