@@ -784,6 +784,15 @@ export class ContractService {
     return this.http.get<any>(listContractUrl, { headers }).pipe();
   }
 
+  getDataNotifyOriganzationOrgId(orgId: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listContractUrl = this.getNotifyOriganzation + orgId;
+    return this.http.get<any>(listContractUrl, { headers }).pipe();
+  }
+
   changeLink(code: any) {
     const headers = new HttpHeaders()
     .append('Content-Type', 'application/json')
