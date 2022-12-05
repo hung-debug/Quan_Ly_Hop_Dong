@@ -73,9 +73,15 @@ export class ImportService {
     if(importResult.status == 204) {
       this.spinner.hide();
       this.toastService.showSuccessHTMLWithTimeout(textService,"",3000);
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/unit']);
-      });
+
+      if(key == 'unit')
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/unit']);
+        });
+      else if(key == 'user') 
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate(['/main/user']);
+        });
     } else if(importResult.status == 200) {
       this.toastService.showErrorHTMLWithTimeout("File excel không hợp lệ. Vui lòng xem chi tiết lỗi ở file excel đã download","",3000);
 

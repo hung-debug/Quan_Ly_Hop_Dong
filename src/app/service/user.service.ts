@@ -83,6 +83,27 @@ export class UserService {
     return JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
+  uploadFileUserUrl: any = `${environment.apiUrl}/api/v1/customers/import`;
+  uploadFile(file: any) {
+    this.getCurrentUser();
+    let formData = new FormData();
+    formData.append('file', file);
+
+    const headers = new HttpHeaders()
+      .append('Authorization', 'Bearer ' + this.token)
+          
+      return this.http.post(
+        this.uploadFileUserUrl,
+        formData,
+        {
+          headers: headers,
+          observe: 'response',
+          responseType: 'blob'
+        }
+      ).toPromise();
+  }
+
+
   getInforUser() {
     this.getCurrentUser();
     return {
