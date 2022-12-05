@@ -461,11 +461,12 @@
         />
       </div>
 
-      <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
+      <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
         <u class="label text-color" (click)="deletePartner(id, item)"
           style="background-color: #FFFFFF; cursor: pointer">{{(item.type == 2 ? 'xoa_doi_tac_to_chuc' :
           'xoa_doi_tac_ca_nhan') | translate}}</u>
       </div>
+
       <div class="contract__content--participants">
         <div class="row">
           <div class="radio col-md-6 label_type">
@@ -1038,12 +1039,12 @@
                   </div>
                 </div>
               </div>
-              <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element"
+              <div *ngIf="getPartnerSignature(item).length >= 1" class="col-md-1 delete-element"
                 (click)="deletePartnerSignature(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn">
                 <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
               </div>
-              <div *ngIf="getPartnerSignature(item).length == 1" class="col-md-1 delete-element"></div>
+              <div *ngIf="getPartnerSignature(item).length == 0" class="col-md-1 delete-element"></div>
             </div>
             <div *ngIf="getPartnerSignature(item).length > 1" class="participants--add">
               <u class="label text-color" style="color: #106DB6"

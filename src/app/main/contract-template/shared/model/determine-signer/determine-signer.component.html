@@ -393,12 +393,13 @@
         <div style="width: 72px">{{'doi_tac' | translate | uppercase}} -</div>
         <input type="text" placeholder="{{(item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate}}"
                [(ngModel)]="item.name" disabled>
-        <!--        <input *ngIf="item.type == 3" type="text" [ngModel]="this.getNameIndividual" disabled>-->
       </div>
-      <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
+
+      <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
         <u class="label text-color" (click)="deletePartner(id, item)"
            style="background-color: #FFFFFF; cursor: pointer">{{(item.type == 2 ? 'xoa_doi_tac_to_chuc' : 'xoa_doi_tac_ca_nhan') | translate}}</u>
       </div>
+
       <div class="contract__content--participants">
         <div class="row">
           <div class="radio col-md-6 label_type">
