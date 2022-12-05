@@ -1018,16 +1018,6 @@
                 </div>
               </div>
 
-                <!-- <div class="participants--input" style="display: flex">
-                  <div *ngIf="d.login_by === 'email' && getDataSignCka(d).length > 0" class="participants__name" style="width:90%">
-                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
-                    <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="nhap_sdt" [(ngModel)]="d.phone">
-                    </div>
-                  </div>
-                </div> -->
-
                 <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là eKYC-->
                 <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(d).length > 0">
                   <div class="participants__name" style="width: 90%">

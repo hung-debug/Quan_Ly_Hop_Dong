@@ -173,6 +173,8 @@ export class ConsiderContractComponent
   phonePKI: any;
   usbTokenVersion: number;
 
+  coordinateY: any[] = [];
+
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -229,6 +231,21 @@ export class ConsiderContractComponent
         }
       );
     });
+  }
+
+  indexY: number = 0;
+  test() {
+    let pdffull: any = document.getElementById("pdf-full");
+
+    if(this.confirmSignature == 1)
+      pdffull.scrollTo(0, this.coordinateY[this.indexY]);
+    
+    if(this.indexY <= this.coordinateY.length - 1) {
+      this.indexY++;
+    } else {
+      this.indexY = 0;
+      pdffull.scrollTo(0,0);
+    }
   }
 
   async getVersionUsbToken() {
@@ -399,6 +416,12 @@ export class ConsiderContractComponent
           let image_base64 = '';
 
           let arr = this.convertToSignConfig();
+
+          arr.forEach((items: any) => {
+            this.coordinateY.push(items.coordinate_y);
+          })
+
+          this.coordinateY.sort();
 
           if (this.mobile) {
             if (arr[0])
