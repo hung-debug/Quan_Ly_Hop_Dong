@@ -77,7 +77,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     if (status == 3) {
       return 'Đã từ chối';
     } else if(status == 4) {
-      return 'Đã uỷ quyền';
+      return 'Đã uỷ quyền/chuyển tiếp';
     }
 
     if (status == 0) {
