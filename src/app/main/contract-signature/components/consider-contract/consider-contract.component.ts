@@ -44,6 +44,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { DomSanitizer } from '@angular/platform-browser';
 import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.component';
 import { UnitService } from 'src/app/service/unit.service';
+import { AnyAaaaRecord } from 'dns';
 
 @Component({
   selector: 'app-consider-contract',
@@ -599,6 +600,7 @@ export class ConsiderContractComponent
     setTimeout(() => {
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
+
       // let viewport = page.getViewport(this.scale);
       let viewport = page.getViewport({ scale: this.scale });
       let test = document.querySelector('.viewer-pdf');
@@ -606,6 +608,10 @@ export class ConsiderContractComponent
       this.canvasWidth = viewport.width;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
+
+      
+      canvas.style.height = viewport.height+'px'; //showing size will be smaller size
+      // canvas.style .width = viewport.width+'px';
 
       this.prepareInfoSignUsbToken(pageNumber, canvas.height, this.usbTokenVersion);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
@@ -616,6 +622,7 @@ export class ConsiderContractComponent
           height: viewport.height,
         });
       }
+      
       page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;

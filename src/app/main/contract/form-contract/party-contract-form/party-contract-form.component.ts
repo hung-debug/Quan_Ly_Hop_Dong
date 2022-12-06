@@ -302,7 +302,9 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
         for(let i = 0; i < this.datasForm.is_determine_clone[index].recipients.length; i++) {
           this.datasForm.is_determine_clone[index].recipients[i].email = this.datasForm.is_determine_clone[index].recipients[i].email.trim().toLowerCase();
-          this.datasForm.is_determine_clone[index].recipients[i].phone = this.datasForm.is_determine_clone[index].recipients[i].phone.trim().toLowerCase();
+
+          if(this.datasForm.is_determine_clone[index].recipients[i].phone)
+            this.datasForm.is_determine_clone[index].recipients[i].phone = this.datasForm.is_determine_clone[index].recipients[i].phone.trim().toLowerCase();
         }
 
         if (this.action != 'edit') {
@@ -1328,7 +1330,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng các đối tượng người ký tổ chức của tôi
   getOriganzationSignature() {
-    console.log("org sig ",this.data_organization.recipients.filter((p: any) => p.role == 3));
     return this.data_organization.recipients.filter((p: any) => p.role == 3);
   }
 
