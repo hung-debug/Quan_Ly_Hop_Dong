@@ -36,6 +36,8 @@ export class ContractTemplateService {
   urlGetListFileTemplate: any = `${environment.apiUrl}/api/v1/contracts/template/release/list`;
   deleteParticipantContractUrl: any = `${environment.apiUrl}/api/v1/participants/template/`;
 
+  templateUseUrl: any = `${environment.apiUrl}/api/v1/contracts/template/is-use/`;
+
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
 
@@ -128,6 +130,18 @@ export class ContractTemplateService {
       contract_id: datas.id,
     });
     return this.http.post<any>(this.documentUrl, body, { 'headers': headers });
+  }
+
+   //call api xem mẫu đã được sử dụng hay chưa
+   checkTemplateIsUse(id: number) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders().append('Content-Type', 'application/json').append('Authorization', 'Bearer ' + this.token);
+
+    console.log("token ", this.token);
+
+    return this.http.post<any>(this.templateUseUrl + `${id}`,'', {
+      headers,
+    });
   }
 
   addDocumentAttach(datas: any) {
