@@ -21,6 +21,7 @@ input[type="file"] {
   display: inline-block;
   padding: 6px 12px;
   cursor: pointer;
+  margin-left: 55%;
 }
 
 .input_text {
@@ -119,3 +120,29 @@ input[type="file"] {
   padding: 8px 16px;
   text-align: right;
 } 
+
+@media screen and (min-width: 1224px) and (max-width:1280px){
+  .custom-file-upload {
+    margin-left: 20%;
+  }
+}
+@media screen and (min-width: 1280px) and (max-width:1440px){
+  .custom-file-upload {
+    margin-left: 23%;
+  }
+}
+@media screen and (min-width: 1440px) and (max-width:1600px){
+  .custom-file-upload {
+    margin-left: 37%;
+  }
+}
+@media screen and (min-width: 1600px) and (max-width:1824px){
+  .custom-file-upload {
+    margin-left: 45%;
+  }
+}
+@media screen and (min-width: 1824px){
+  .custom-file-upload {
+    margin-left: 50%;
+  }
+}
