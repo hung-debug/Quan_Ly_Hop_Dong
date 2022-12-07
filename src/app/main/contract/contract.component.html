@@ -132,7 +132,7 @@
 </div>
 
 <!--Truong hop khac-->
-<div *ngIf="!(this.filter_status == 20 || this.filter_status == 33)" class="container-fluid">
+<div *ngIf="!((this.filter_status == 20 || this.filter_status == 33) && this.isOrg == 'off')" class="container-fluid">
     <ng-template [ngIf]="!roleMess">
         <div class="col-md-12" style="padding-top: 20px;">
             <div class="input-line search">

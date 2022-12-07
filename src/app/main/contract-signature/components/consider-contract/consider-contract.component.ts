@@ -539,8 +539,6 @@ export class ConsiderContractComponent
           this.loadedPdfView = true;
         }, 100);
       });
-
-      console.log("viewer ", viewer);
   }
 
   eventMouseover() {}
@@ -608,10 +606,6 @@ export class ConsiderContractComponent
       this.canvasWidth = viewport.width;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
-
-      
-      canvas.style.height = viewport.height+'px'; //showing size will be smaller size
-      // canvas.style .width = viewport.width+'px';
 
       this.prepareInfoSignUsbToken(pageNumber, canvas.height, this.usbTokenVersion);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
