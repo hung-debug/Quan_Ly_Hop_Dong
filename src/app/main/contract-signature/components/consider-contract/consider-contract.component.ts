@@ -599,17 +599,10 @@ export class ConsiderContractComponent
       let viewport = page.getViewport({ scale: this.scale });
       let test = document.querySelector('.viewer-pdf');
 
-      this.canvasWidth = viewport.width;
+      // this.canvasWidth = viewport.width;
       // canvas.height = viewport.height;
       // canvas.width = viewport.width;
 
-      let ctx = canvas.getContext('2d');
-
-      var outputScale = window.devicePixelRatio || 1;
-      canvas.width = Math.floor(viewport.width * outputScale);
-      canvas.height = Math.floor(viewport.height * outputScale);
-      canvas.style.width = Math.floor(viewport.width) + "px";
-      canvas.style.height =  Math.floor(viewport.height) + "px";
 
       this.prepareInfoSignUsbToken(pageNumber, canvas.height, this.usbTokenVersion);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
@@ -620,8 +613,27 @@ export class ConsiderContractComponent
           height: viewport.height,
         });
       }
+
+      // let ctx = canvas.getContext('2d');
+
+      const devicePixelRatio = window.devicePixelRatio || 1;
+
+canvas.style.width = viewport.width;
+canvas.style.height = viewport.height;
+
+canvas.width = viewport.width * devicePixelRatio;
+canvas.height = viewport.height * devicePixelRatio;
+
+// [sx, 0, 0, sy, 0, 0]
+const transform = [ devicePixelRatio, 0 , 0, devicePixelRatio, 0, 0];
+
+const renderContext = {
+  canvasContext: canvas.getContext("2d"),
+  viewport: viewport,
+  transform: transform
+}
       
-      page.render({ canvasContext: ctx, viewport: viewport});
+      page.render(renderContext);
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');

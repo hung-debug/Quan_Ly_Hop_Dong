@@ -58,6 +58,7 @@
       </div>
     </div>
   </div>
+
   <div class="row" style="padding: 20px 0;">
 
     <div class="col-md-6">
@@ -83,9 +84,10 @@
             <p-calendar selectionMode="range" [readonlyInput]="true" [(ngModel)]="date" [showIcon]="true" dateFormat="dd/mm/yy" (onSelect)="searchCountCreate()"></p-calendar>
           </div>
           <div style="padding-top: 10px;" *ngIf="isOrg=='on'">
-              <p-treeSelect [(ngModel)]="selectedNodeOrganization" [options]="list" placeholder="Tất cả" [filter]="true" filterBy="name"  [droppable]="true" (onNodeSelect)="search()"></p-treeSelect>
+              <p-treeSelect [(ngModel)]="selectedNodeOrganization" [options]="list" placeholder="{{'all' | translate}}" [filter]="true" filterBy="name"  [droppable]="true" (onNodeSelect)="search()"></p-treeSelect>
           </div>
         </div>
+        
         <div class="row">
           <div class="col-md-12">
             <div *ngIf="totalCreate == 0"
@@ -101,6 +103,7 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
     <div class="col-md-6">
@@ -153,4 +156,5 @@
       </div>
     </div>
   </div>
+  
 </div>

@@ -50,7 +50,9 @@ export class LoginComponent implements OnInit {
   kyTuCach: any = "&";
 
   loginUser() {
-    localStorage.clear();
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('myTaxCode');
+    localStorage.removeItem('url');
 
     if (this.loginForm.value.username == '') {
       this.error = true;
@@ -266,6 +268,8 @@ export class LoginComponent implements OnInit {
   switchLang(lang: string) {
     this.translate.use(lang);
     this.translate.currentLang = lang;
+
+    console.log("lang ", lang);
     localStorage.setItem('lang', lang);
   }
 
