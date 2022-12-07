@@ -600,10 +600,16 @@ export class ConsiderContractComponent
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
+      // canvas.height = viewport.height;
+      // canvas.width = viewport.width;
 
       let ctx = canvas.getContext('2d');
+
+      var outputScale = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(viewport.width * outputScale);
+      canvas.height = Math.floor(viewport.height * outputScale);
+      canvas.style.width = Math.floor(viewport.width) + "px";
+      canvas.style.height =  Math.floor(viewport.height) + "px";
 
       this.prepareInfoSignUsbToken(pageNumber, canvas.height, this.usbTokenVersion);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
@@ -614,10 +620,8 @@ export class ConsiderContractComponent
           height: viewport.height,
         });
       }
-
-      canvas.style.width = "100%";
       
-      page.render({ canvasContext: ctx, viewport: viewport,  intent: 0});
+      page.render({ canvasContext: ctx, viewport: viewport});
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');

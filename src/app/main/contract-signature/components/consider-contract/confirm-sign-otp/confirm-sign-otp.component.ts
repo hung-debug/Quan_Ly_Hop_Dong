@@ -67,7 +67,8 @@ export class ConfirmSignOtpComponent implements OnInit {
     this.addForm = this.fbd.group({
       otp: this.fbd.control("", [Validators.required]),
     });
-      this.checkSMS(this.datasOtp.contract_id, this.datasOtp.recipient, this.datasOtp.phone);
+    console.log("datas ", this.datasOtp);
+      this.checkSMS(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone);
   }
 
   async checkSMS(contractId: any, recipientId: any, phone: any) {
