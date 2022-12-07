@@ -1038,6 +1038,17 @@
                     </div>
                   </div>
                 </div>
+
+                <!--KD-->
+                <div class="participants--input" style="display: flex" *ngIf="this.site === 'KD' && getDataSignCka(d).length > 0">
+                  <div class="participants__name" style="width: 90%">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
+
               </div>
               <div *ngIf="getPartnerSignature(item).length >= 1" class="col-md-1 delete-element"
                 (click)="deletePartnerSignature(index, item)">

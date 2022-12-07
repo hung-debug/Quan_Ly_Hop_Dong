@@ -503,8 +503,6 @@ export class ConsiderContractComponent
 
   // view pdf qua canvas
   async getPage() {
-    let viewer: any = "";
-
     // @ts-ignore
     const pdfjs = await import('pdfjs-dist/build/pdf');
     // @ts-ignore
@@ -524,7 +522,7 @@ export class ConsiderContractComponent
           canvas.id = 'canvas-step3-' + page;
 
           let idPdf = 'pdf-viewer-step-3';
-          viewer = document.getElementById(idPdf);
+          let viewer = document.getElementById(idPdf);
           if (viewer) {
             viewer.appendChild(canvas);
           }
@@ -598,14 +596,14 @@ export class ConsiderContractComponent
     setTimeout(() => {
     //@ts-ignore
     this.thePDF.getPage(pageNumber).then((page) => {
-
-      // let viewport = page.getViewport(this.scale);
       let viewport = page.getViewport({ scale: this.scale });
       let test = document.querySelector('.viewer-pdf');
 
       this.canvasWidth = viewport.width;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
+
+      let ctx = canvas.getContext('2d');
 
       this.prepareInfoSignUsbToken(pageNumber, canvas.height, this.usbTokenVersion);
       let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
@@ -616,8 +614,10 @@ export class ConsiderContractComponent
           height: viewport.height,
         });
       }
+
+      canvas.style.width = "100%";
       
-      page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+      page.render({ canvasContext: ctx, viewport: viewport,  intent: 0});
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');

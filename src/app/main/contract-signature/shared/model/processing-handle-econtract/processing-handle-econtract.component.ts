@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
+import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { ContractService } from 'src/app/service/contract.service';
 import { DialogReasonRejectedComponent } from '../dialog-reason-rejected/dialog-reason-rejected.component';
@@ -35,8 +36,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     },
     public router: Router,
     public dialog: MatDialog,
-    private contractService : ContractService
+    private contractService : ContractService,
   ) {
+ 
   }
 
   ngOnInit(): void {
