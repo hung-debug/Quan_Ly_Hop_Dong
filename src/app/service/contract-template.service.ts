@@ -470,31 +470,56 @@ export class ContractTemplateService {
         ],
         // "contract_id": 1
       },
-      // {
-      //   "name": "",
-      //   "type": 3, // Đối tác cá nhân
-      //   "ordering": 1,
-      //   "contract_id": 1,
-      //   "recipients": [
-      //     // người ký
-      //     {
-      //       "name": "",
-      //       "email": "",
-      //       "phone": "",
-      //       "role": 3, // người ký
-      //       "ordering": 1,
-      //       "status": 1,
-      //       "username": "",
-      //       "password": "",
-      //       "is_otp": 1,
-      //       "sign_type": []
-      //     }
-      //   ],
-      // }
     ]
   }
 
   getDataDetermineInitialization() {
+    return [
+      {
+        name: "",
+        type: 1,
+        ordering: 1,
+        status: 1,
+        recipients: [
+          {
+            login_by: 'email',
+            name: "",
+            email: "",
+            phone: "",
+            card_id: "",
+            role: 3,
+            ordering: 1,
+            status: 0,
+            is_otp: 0,
+            sign_type: [
+            ]
+          }
+        ],
+      },
+      // {
+      //   name: "Đối tác 1",
+      //   type: 2,
+      //   ordering: 2,
+      //   status: 1,
+      //   recipients: [
+      //     {
+      //       login_by: 'email',
+      //       name: "Người ký 1",
+      //       email: "",
+      //       phone: "",
+      //       card_id: "",
+      //       role: 3,
+      //       ordering: 1,
+      //       status: 0,
+      //       is_otp: 0,
+      //       sign_type: []
+      //     }
+      //   ],
+      // },
+    ]
+  }
+
+  getDataDetermineInitializationWithPartner() {
     return [
       {
         name: "",

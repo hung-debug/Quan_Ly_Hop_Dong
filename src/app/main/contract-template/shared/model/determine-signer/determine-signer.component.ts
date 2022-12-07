@@ -1115,7 +1115,7 @@ export class DetermineSignerComponent implements OnInit {
   addPartner() {
     let data_partner_add = {};
     // let data = [...this.contractService.getDataDetermine()];
-    let data = [...this.contractTemplateService.getDataDetermineInitialization()];
+    let data = [...this.contractTemplateService.getDataDetermineInitializationWithPartner()];
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];
     this.datas.is_determine_clone.push(data_partner_add);
 
@@ -1131,15 +1131,11 @@ export class DetermineSignerComponent implements OnInit {
         //   res.name = "Đối tác " + index;
       }
 
-      console.log("res name ", res.name);
       if(index == this.dataParnterOrganization().length){
         res.ordering = index + 1;
       }
     }) 
     
-    console.log("this.datas.is_determine_clone");
-    console.log(this.datas.is_determine_clone);
-    console.log(this.data_parnter_organization);
   }
 
   // xóa đối tác

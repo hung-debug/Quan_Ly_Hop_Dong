@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
       if(localStorage.getItem('lang') == 'vi')
         this.orgListTmp.push({name: "Tất cả", id: ""});
       else if(localStorage.getItem('lang') == 'en')
-      this.orgListTmp.push({name: "All", id: ""});
+        this.orgListTmp.push({name: "All", id: ""});
 
       //sap xep theo path de cho to chuc cha len tren
       let dataUnit = data.entities.sort((a: any, b: any) => a.path.toString().localeCompare(b.path.toString()));
