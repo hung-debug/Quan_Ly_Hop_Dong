@@ -15,14 +15,27 @@
                         <div *ngIf="d.sign_unit == 'so_tai_lieu' || d.sign_unit == 'text'" [ngStyle]="setWidth(d)"
                             class="content-drag" id="element-drag-text">{{d.sign_unit == 'so_tai_lieu' ? 'Số hợp đồng' :
                             'Text'}}</div>
-
-                        <div *ngIf="d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh'" class="content-drag"
-                            id="element-drag" style="height: 102px; flex-direction: column" [ngStyle]="setWidth(d)">
+                    
+                        <!-- <div *ngIf="d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh'" class="content-drag"
+                            id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
                             <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'"
-                                [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
+                                [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '2px' : ''" alt="ck.mobifone">
                             <span *ngIf="d.sign_unit == 'chu_ky_anh' || d.sign_unit == 'chu_ky_so'">{{d.sign_unit ==
                                 'chu_ky_anh' ? 'Chữ ký ảnh hoặc eKYC' : 'Chữ ký số'}}</span>
+                        </div> -->
+                        <div *ngIf="d.sign_unit == 'chu_ky_so'" class="content-drag1" 
+                            id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
+                            <img [src]="d.sign_unit == 'chu_ky_so' ? 'assets/img/img_sign_number.svg' : ''">
+                            <span *ngIf="d.sign_unit == 'chu_ky_so'">{{d.sign_unit =='chu_ky_so' ? 'Chữ ký số' : ''}}</span>
                         </div>
+
+                        <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag"
+                            id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
+                            <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : ''"
+                                [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
+                            <span *ngIf="d.sign_unit == 'chu_ky_anh'">{{d.sign_unit =='chu_ky_anh' ? 'Chữ ký ảnh hoặc eKYC' : ''}}</span>
+                        </div>
+
                     </div>
                 </div>
             </div>

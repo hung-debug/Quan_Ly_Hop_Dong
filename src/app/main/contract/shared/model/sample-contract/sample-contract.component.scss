@@ -61,8 +61,24 @@
         text-align: center;
         display: flex;
         justify-content: center;
-        align-items: center
+        align-items: center;
+        flex-direction: column;
       }
+      .content-drag1 {
+        //cursor: pointer;
+        width: 100%;
+        height: 30px;
+        background-color: #EBF8FF;
+        border-radius: 5px;
+        border: 1px solid #106DB6;
+        color: #106DB6;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
 
       .show-list-name-class:nth-last-child(4) {
         //float: left;
@@ -123,7 +139,7 @@
     .flex-column {
       .location {
         display: flex;
-        justify-content: space-around
+        justify-content: space-around;
       }
 
       .location-drag {
@@ -270,11 +286,11 @@
   padding-left: 7px;
 }
 
-#element-drag-text,
-#element-drag {
-  //display: inline-block;
-  //width: ;
-}
+// #element-drag-text,
+// #element-drag {
+//   //display: inline-block;
+//   //width: ;
+// }
 
 //style button
 .action-button {
@@ -311,6 +327,155 @@
     color: #0160AE;
     font-size: 13px;
     font-weight: 500;
+  }
+}
+
+@media screen and (min-width:1224px) and (max-width:1280px) {
+  .sample-contract{
+    height: calc(100vh - 260px);
+    .viewer-pdf.isDrag{
+      background-color: #f3f7f9; 
+      position: relative;
+      padding-left: 1px;
+      padding-right: 1px;
+    }
+    &__information{
+        &--drag {
+          .content-drag {
+            //cursor: pointer;
+            width: 100%;
+            height: 30px;
+            background-color: #EBF8FF;
+            border-radius: 5px;
+            border: 1px solid #106DB6;
+            color: #106DB6;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
+          }
+          .content-drag span{
+            width: 50px;
+            margin-left: 5px;
+            }
+            .content-drag1 {
+              //cursor: pointer;
+              width: 100%;
+              height: 30px;
+              background-color: #EBF8FF;
+              border-radius: 5px;
+              border: 1px solid #106DB6;
+              color: #106DB6;
+              text-align: center;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: row;
+            }
+            .content-drag1 span{
+              width: 50px;            
+            }
+          }
+        
+  .flex-column {
+    .location {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .location-drag {
+      //display: flex;
+      float: left;
+      align-items: center;
+
+      div {
+        width: 48px;
+        color: #666666;
+        text-align: center;
+        float: left;
+        padding-right: 15px;
+        padding-top: 0px;
+      }
+
+      input {
+        // outline: none;
+        width: 45px;
+        height: 30px;
+        // border-radius: 5px;
+        // border: 1px solid #87CAFF;
+      }
+    }
+  }
+}
+  }
+}
+@media screen and (min-width:1440px) and (max-width:1600px) {
+  .sample-contract{
+    height: calc(100vh - 260px);
+    &__information{
+      &--drag{
+        .content-drag {
+          //cursor: pointer;
+          width: 100%;
+          height: 30px;
+          background-color: #EBF8FF;
+          border-radius: 5px;
+          border: 1px solid #106DB6;
+          color: #106DB6;
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: row;
+        }
+        .content-drag span{
+          width: 50px;
+          margin-left: 5px;
+        }
+        .content-drag1 {
+          //cursor: pointer;
+          width: 100%;
+          height: 30px;
+          background-color: #EBF8FF;
+          border-radius: 5px;
+          border: 1px solid #106DB6;
+          color: #106DB6;
+          text-align: center;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: row;
+        }
+        .content-drag1 span{
+          width: 50px;            
+        }
+      }
+      .flex-column{
+        .location {
+          display: flex;
+          justify-content: space-around;
+        }
+        .location-drag{
+          float: left;
+          align-items: center;
+
+          div {
+            width: 40px;
+            color: #666666;
+            text-align: center;
+            float: left;
+            padding-right: 15px;
+            padding-top: 10px;
+          }
+    
+          input {
+            width: 80px;
+            height: 40px;
+          }
+        }
+      }
+    }
   }
 }
 
