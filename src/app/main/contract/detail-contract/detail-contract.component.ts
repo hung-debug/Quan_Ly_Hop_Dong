@@ -994,7 +994,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
     if (status == 3) {
       return 'Đã từ chối';
+    } else if(status == 4) {
+      return 'Đã uỷ quyền/chuyển tiếp';
     }
+
     let res = '';
     if (status == 0) {
       res += 'Chưa ';

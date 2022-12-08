@@ -73,12 +73,16 @@
   </div>
 </div>
 <div class="footer-contract">
-<!--  <div class="content_footer">@Copyright 2021 - MobiFone</div>-->
+
   <div class="btn_footer">
     <div class="label">
     </div>
     <div class="label" *ngIf="role || this.status == 30">
-      <button  type="button" name="next" class="next action-button" *ngIf="view && loaded" (click)="downloadContract(idContract)">{{checkStatusUser(status, role)}}</button>
+      <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role)}}</button>
+    </div>
+
+    <div class="label" *ngIf="role || this.status == 30">
+      <button  type="button" name="next" class="next action-button1" *ngIf="view && loaded && status == 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role)}}</button>
     </div>
   </div>
 </div>

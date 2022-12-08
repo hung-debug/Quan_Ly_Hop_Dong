@@ -405,5 +405,6 @@
   "child.unit":"Tổ chức con",
   "receive.contract.process":"Nhận thông báo khi xử lý hợp đồng",
   "relate.party":"CÁC BÊN LIÊN QUAN",
-  "all":"Tất cả"
+  "all":"Tất cả",
+  "reject.question":"Bạn có chắc chắn muốn từ chối hợp đồng này không? Vui lòng nhập lý do từ chối"
 }
