@@ -618,20 +618,20 @@ export class ConsiderContractComponent
 
       const devicePixelRatio = window.devicePixelRatio || 1;
 
-canvas.style.width = viewport.width;
-canvas.style.height = viewport.height;
+        canvas.style.width = viewport.width;
+        canvas.style.height = viewport.height;
 
-canvas.width = viewport.width * devicePixelRatio;
-canvas.height = viewport.height * devicePixelRatio;
+        canvas.width = viewport.width * devicePixelRatio;
+        canvas.height = viewport.height * devicePixelRatio;
 
-// [sx, 0, 0, sy, 0, 0]
-const transform = [ devicePixelRatio, 0 , 0, devicePixelRatio, 0, 0];
+        // [sx, 0, 0, sy, 0, 0]
+        const transform = [ devicePixelRatio, 0 , 0, devicePixelRatio, 0, 0];
 
-const renderContext = {
-  canvasContext: canvas.getContext("2d"),
-  viewport: viewport,
-  transform: transform
-}
+        const renderContext = {
+          canvasContext: canvas.getContext("2d"),
+          viewport: viewport,
+          transform: transform
+        }
       
       page.render(renderContext);
       if (test) {
