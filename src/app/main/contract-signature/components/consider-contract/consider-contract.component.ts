@@ -176,6 +176,8 @@ export class ConsiderContractComponent
 
   coordinateY: any[] = [];
 
+  loginType: any;
+
   constructor(
     private contractService: ContractService,
     private activeRoute: ActivatedRoute,
@@ -193,14 +195,16 @@ export class ConsiderContractComponent
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.info;
+
+    this.loginType = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).customer.type;
   }
 
   pdfSrcMobile: any;
 
   ngOnInit(): void {
     this.getDeviceApp();
-
-    this.getVersionUsbToken();
 
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
 
@@ -248,9 +252,9 @@ export class ConsiderContractComponent
     }
   }
 
-  async getVersionUsbToken() {
+  async getVersionUsbToken(orgId: any) {
     const dataOrg = await this.contractService
-      .getDataNotifyOriganzation()
+      .getDataNotifyOriganzationOrgId(orgId)
       .toPromise();
 
     if (dataOrg.usb_token_version == 1) {
@@ -277,6 +281,8 @@ export class ConsiderContractComponent
         };
 
         this.orgId = this.data_contract.is_data_contract.organization_id;
+
+        this.getVersionUsbToken(this.orgId);
 
         this.datas = this.data_contract;
         if (this.datas?.is_data_contract?.type_id) {
@@ -612,9 +618,9 @@ export class ConsiderContractComponent
         let viewport = page.getViewport({ scale: this.scale });
         let test = document.querySelector('.viewer-pdf');
 
-        // this.canvasWidth = viewport.width;
-        // canvas.height = viewport.height;
-        // canvas.width = viewport.width;
+        this.canvasWidth = viewport.width;
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
 
         this.prepareInfoSignUsbToken(
           pageNumber,
@@ -632,23 +638,9 @@ export class ConsiderContractComponent
           });
         }
 
-        // let ctx = canvas.getContext('2d');
-
-        const devicePixelRatio = window.devicePixelRatio || 1;
-
-        canvas.style.width = viewport.width;
-        canvas.style.height = viewport.height;
-
-        canvas.width = viewport.width * devicePixelRatio;
-        canvas.height = viewport.height * devicePixelRatio;
-
-        // [sx, 0, 0, sy, 0, 0]
-        const transform = [devicePixelRatio, 0, 0, devicePixelRatio, 0, 0];
-
         const renderContext = {
           canvasContext: canvas.getContext('2d'),
           viewport: viewport,
-          transform: transform,
         };
 
         page.render(renderContext);

@@ -58,7 +58,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       this.cancelDate = response.cancelDate ? moment(response.cancelDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
   
       response.recipients.forEach((element: any) => {
-        console.log("el ", element);
         let data = {
           id: element.id,
           name: element.name,
