@@ -1805,6 +1805,8 @@ export class ConsiderContractComponent
       this.signCertDigital = dataDigital.data;
       this.nameCompany = dataDigital.data.CN;
 
+      console.log("name company ", this.nameCompany);
+
       const checkTaxCodeBase64 = await this.contractService
         .checkTaxCodeExist(this.taxCodePartnerStep2, dataDigital.data.Base64)
         .toPromise();

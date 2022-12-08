@@ -36,7 +36,7 @@
                 </div>
             </div>
 
-            <div *ngIf = "this.reasonCancel && d.statusNumber == 2 || d.statusNumber == 3 || d.statusNumber == 4" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
+            <div *ngIf = "this.reasonCancel && (d.statusNumber == 2 || d.statusNumber == 3 || d.statusNumber == 4)" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
 
                 <div class="col-md-7" style="display: flex; flex-direction: column;text-align: left;">
                     <div style="display: flex;">
@@ -61,7 +61,7 @@
             </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
+        <div *ngIf="this.reasonCancel" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
             <div class="col-md-7" style="flex-direction: column;text-align: left;">
                 <span>{{this.personCreate}}</span>&nbsp;
                 <span style="color: #8B8B8B">({{this.emailCreate}})</span>
