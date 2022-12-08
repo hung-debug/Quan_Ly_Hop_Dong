@@ -8,10 +8,26 @@
             <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class" style="display: inline-block; margin-bottom: 15px">
                 <div *ngIf="!d.sign_config.position" class="resize-drag" (click)="showThumbnail()" [id]=getIdSignChuaKeo(d.id)>
                     <div class="signature-sample-drag" style="position: relative">
-                        <div *ngIf="d.sign_unit == 'so_tai_lieu' || d.sign_unit == 'text'" [ngStyle]="setWidth(d)" class="content-drag" id="element-drag-text">{{d.sign_unit == 'so_tai_lieu' ? 'Số hợp đồng' : 'Text'}}</div>
-                        <div *ngIf="d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh'" class="content-drag" id="element-drag" style="height: 102px; flex-direction: column" [ngStyle]="setWidth(d)">
-                            <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
+                        <div *ngIf="d.sign_unit == 'so_tai_lieu' || d.sign_unit == 'text'" [ngStyle]="setWidth(d)" 
+                        class="content-drag" id="element-drag-text">{{d.sign_unit == 'so_tai_lieu' ? 'Số hợp đồng' : 'Text'}}
+                        </div>
+                        <!-- <div *ngIf="d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh'" class="content-drag" id="element-drag" 
+                        style="height: 102px; flex-direction: column" [ngStyle]="setWidth(d)">
+                            <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" 
+                            [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
                             <span *ngIf="d.sign_unit == 'chu_ky_anh' || d.sign_unit == 'chu_ky_so'">{{d.sign_unit == 'chu_ky_anh' ? 'Chữ ký ảnh hoặc eKYC' : 'Chữ ký số'}}</span>
+                        </div> -->
+                        <div *ngIf="d.sign_unit == 'chu_ky_so'" class="content-drag1" 
+                            id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
+                            <img [src]="d.sign_unit == 'chu_ky_so' ? 'assets/img/img_sign_number.svg' : ''">
+                            <span *ngIf="d.sign_unit == 'chu_ky_so'">{{d.sign_unit =='chu_ky_so' ? 'Chữ ký số' : ''}}</span>
+                        </div>
+
+                        <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag"
+                            id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
+                            <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : ''"
+                                [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
+                            <span *ngIf="d.sign_unit == 'chu_ky_anh'">{{d.sign_unit =='chu_ky_anh' ? 'Chữ ký ảnh hoặc eKYC' : ''}}</span>
                         </div>
                     </div>
                 </div>
@@ -71,7 +87,8 @@
     <div class="col-md-9 sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
         <div id="pdf-viewer-step-3">
             <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-                <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
+                <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement 
+                (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
                     <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
                     <div class="sig-img-daky" (click)="onCancel($event, d)">
                         <img src="assets/img/clear.svg" alt="">
