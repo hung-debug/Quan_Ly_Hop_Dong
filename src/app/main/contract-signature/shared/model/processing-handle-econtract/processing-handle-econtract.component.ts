@@ -18,6 +18,11 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   emailCreate: string;
   timeCreate: any;
 
+  reasonCancel: string;
+  cancelDate: any;
+
+  staus: number;
+
   status: any = [
     {
       value: 0,
@@ -48,8 +53,12 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       this.timeCreate = response.createdAt ? moment(response.createdAt).add(420):null;
       this.timeCreate = response.createdAt ? moment(this.timeCreate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
       this.emailCreate = response.createdBy.email;
+      this.reasonCancel = response.reasonCancel;
+
+      this.cancelDate = response.cancelDate ? moment(response.cancelDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
   
       response.recipients.forEach((element: any) => {
+        console.log("el ", element);
         let data = {
           id: element.id,
           name: element.name,
@@ -59,7 +68,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           typeOfSign: element.signType[0],
           process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
           reasonReject: element.reasonReject,
-          type: element.participantType
+          type: element.participantType,
+          statusNumber: element.status
         }
         this.is_list_name.push(data);
       })
@@ -82,23 +92,29 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       return 'Đã uỷ quyền/chuyển tiếp';
     }
 
-    if (status == 0) {
+    if (status == 0 && !this.reasonCancel) {
       res += 'Chưa ';
-    } else if (status == 1) {
+    } else if (status == 1 && !this.reasonCancel) {
       res += 'Đang ';
     } else if (status == 2) {
       res += 'Đã ';
     }
 
-    if (role == 1) {
-      res +=  'điều phối';
-    } else if (role == 2) {
-      res +=  'xem xét';
-    } else if (role == 3) {
-      res +=  'ký';
-    } else if (role == 4) {
-      res =  res + ' đóng dấu';
+    if(!this.reasonCancel) {
+      if (role == 1 ) {
+        res +=  'điều phối';
+      } else if (role == 2) {
+        res +=  'xem xét';
+      } else if (role == 3) {
+        res +=  'ký';
+      } else if (role == 4) {
+        res =  res + ' đóng dấu';
+      }
+    } else {
+      if(!res.includes('Đã'))
+        res = 'Đã huỷ'
     }
+    
     return res;
   }
 
@@ -106,7 +122,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-// @ts-ignore
+  // @ts-ignore
   viewReasonRejected(RecipientsId: any){
    let data: any;
 
