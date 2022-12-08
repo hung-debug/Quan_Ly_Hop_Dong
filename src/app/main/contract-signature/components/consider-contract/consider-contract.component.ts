@@ -235,7 +235,7 @@ export class ConsiderContractComponent
   }
 
   indexY: number = 0;
-  test() {
+  autoScroll() {
     let pdffull: any = document.getElementById("pdf-full");
 
     if(this.confirmSignature == 1)
