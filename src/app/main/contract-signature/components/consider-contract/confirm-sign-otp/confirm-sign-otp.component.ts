@@ -67,8 +67,9 @@ export class ConfirmSignOtpComponent implements OnInit {
     this.addForm = this.fbd.group({
       otp: this.fbd.control("", [Validators.required]),
     });
-    console.log("datas ", this.datasOtp);
       this.checkSMS(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone);
+
+      this.getDeviceApp();
   }
 
   async checkSMS(contractId: any, recipientId: any, phone: any) {
@@ -210,12 +211,15 @@ export class ConfirmSignOtpComponent implements OnInit {
           && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
-    
+
+          console.log("content ", this.datas.is_data_object_signature.valueSign);
+
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
-            "content": this.datasOtp.datas.is_data_object_signature.valueSign,
+            "content": this.datas.is_data_object_signature.valueSign,
             organizationId: this.datas?.is_data_contract?.organization_id
           }
+
   
           signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
     
