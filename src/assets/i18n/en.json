@@ -420,5 +420,8 @@
   "delete.contract.question":"Are you sure you want to delete this contract?",
   "choose.org":"Choose an organization",
   "not.select.contract":"You have not selected any contract yet",
-  "select.signer.obj":"Please select a signer for the drag-and-drop object!"
+  "select.signer.obj":"Please select a signer for the drag-and-drop object!",
+  "miss.digital.sig":"Missing digital signature object",
+  "off.org.please":"của tổ chức, vui lòng chọn đủ người ký!",
+  "sign.ekyc.app":"Please sign eKYC on mobile app"
 }

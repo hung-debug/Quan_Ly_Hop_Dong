@@ -418,5 +418,6 @@
   "choose.org":"Chọn tổ chức",
   "not.select.contract":"Bạn chưa chọn hợp đồng nào",
   "select.signer.obj":"Vui lòng chọn người ký cho đối tượng đã kéo thả!",
-  "contract.sign.confirm":"Xác nhận ký hợp đồng"
+  "contract.sign.confirm":"Xác nhận ký hợp đồng",
+  "miss.digital.sig":"Thiếu đối tượng ký số"
 }
