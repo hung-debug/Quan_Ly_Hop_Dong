@@ -60,15 +60,20 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
+  lang: any;
   ngOnInit(): void {
     this.appService.setTitle("menu.dashboard");
     this.search();
 
     this.user = this.userService.getInforUser();
 
-    this.unitService.getUnitList('', '').subscribe(data => {
-      console.log(data.entities);
+    if(localStorage.getItem('lang') == 'vi') {
+      this.lang = 'vi';
+    } else if(localStorage.getItem('lang') == 'en') {
+      this.lang = 'en';
+    }
 
+    this.unitService.getUnitList('', '').subscribe(data => {
       if(localStorage.getItem('lang') == 'vi')
         this.orgListTmp.push({name: "Tất cả", id: ""});
       else if(localStorage.getItem('lang') == 'en')

@@ -370,10 +370,21 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   cancelContract(id: any) {
-    const data = {
-      title: 'XÁC NHẬN HỦY HỢP ĐỒNG',
-      id: id
-    };
+
+    let data: any = "";
+
+    if(sessionStorage.getItem('lang') == 'vi') {
+      data = {
+        title: 'XÁC NHẬN HỦY HỢP ĐỒNG',
+        id: id
+      };
+    } else {
+      data = {
+        title: 'CONTRACT CANCELLATION CONFIRMATION',
+        id: id
+      };
+    }
+   
     // @ts-ignore
     const dialogRef = this.dialog.open(CancelContractDialogComponent, {
       width: '500px',

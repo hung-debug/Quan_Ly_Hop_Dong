@@ -43,10 +43,15 @@ export class FooterSignatureComponent implements OnInit {
   ) {
   }
 
+  lang: string;
   ngOnInit(): void {
     this.getDeviceApp();
 
-    console.log("recipientId ", this.recipientId);
+    if(sessionStorage.getItem('lang') == 'en') {
+      this.lang = 'en';
+    } else if(sessionStorage.getItem('lang') == 'vi') {
+      this.lang = 'vi';
+    }
   
     let data_coordination = this.datas.is_data_contract.participants;
     let emailCurrent = this.contractService.getAuthCurrentUser().email;

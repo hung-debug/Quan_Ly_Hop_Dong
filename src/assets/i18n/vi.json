@@ -188,6 +188,7 @@
   "role.contract.view.me": "Xem danh sách hợp đồng của tôi",
   "role.contract.filter": "Tìm kiếm hợp đồng",
   "role.contract.view.detail": "Xem thông tin chi tiết hợp đồng",
+  "contract.detail":"THÔNG TIN CHI TIẾT HỢP ĐỒNG",
   "role.contract.copy": "Sao chép hợp đồng",
   "role.contract.cancel": "Huỷ hợp đồng",
   "role.contract.view.history": "Xem lịch sử hợp đồng",
@@ -406,5 +407,8 @@
   "receive.contract.process":"Nhận thông báo khi xử lý hợp đồng",
   "relate.party":"CÁC BÊN LIÊN QUAN",
   "all":"Tất cả",
-  "reject.question":"Bạn có chắc chắn muốn từ chối hợp đồng này không? Vui lòng nhập lý do từ chối"
+  "reject.question":"Bạn có chắc chắn muốn từ chối hợp đồng này không? Vui lòng nhập lý do từ chối",
+  "reasson.cancel.contract":"Lý do huỷ hợp đồng",
+  "cancel.contract.question":"Bạn có chắc chắn muốn nhập mã hợp đồng",
+  "exit":"Thoát"
 }

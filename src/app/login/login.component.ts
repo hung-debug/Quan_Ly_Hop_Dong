@@ -271,11 +271,10 @@ export class LoginComponent implements OnInit {
 
     console.log("lang ", lang);
     localStorage.setItem('lang', lang);
+    sessionStorage.setItem('lang', lang);
   }
 
   getDeviceApp() {
-
-    console.log("type ", this.type);
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
 
       console.log(this.deviceService.isMobile(), this.deviceService.deviceType, this.deviceService);

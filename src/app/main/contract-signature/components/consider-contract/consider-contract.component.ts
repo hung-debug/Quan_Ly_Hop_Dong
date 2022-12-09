@@ -2912,16 +2912,12 @@ export class ConsiderContractComponent
           (sign.coordinate_y - this.currentHeight) -
           sign.height /* * this.ratioPDF*/;
 
-        if (version == 1) {
           sign.signDigitalWidth =
             sign.coordinate_x + sign.width /* * this.ratioPDF*/;
           sign.signDigitalHeight =
             heightPage -
             (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
-        } else if (version == 2) {
-          sign.signDigitalWidth = sign.width;
-          sign.signDigitalHeight = sign.height;
-        }
+        
 
         //Lấy thông tin mã số thuế của đối tác ký
         this.contractService

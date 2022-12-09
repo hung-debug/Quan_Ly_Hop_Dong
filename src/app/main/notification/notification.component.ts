@@ -17,8 +17,18 @@ export class NotificationComponent implements OnInit {
   pageTotal:number = 0;
   constructor(private dashboardService: DashboardService,
     private appService: AppService) { }
-
+  
+  lang: string;
   ngOnInit(): void {
+
+    if(sessionStorage.getItem('lang') == 'vi') {
+      this.lang = 'vi';
+    } else if(sessionStorage.getItem('lang') == 'en') {
+      this.lang = 'en';
+    }
+
+    console.log("lang ", this.lang);
+
     this.appService.setTitle("no.list");
     this.getNotification();
   }

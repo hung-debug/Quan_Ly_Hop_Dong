@@ -404,5 +404,14 @@
   "parent.unit":"Parent unit",
   "child.unit":"Children unit",
   "receive.contract.process":"Receive notify when process contract",
-  "all":"All"
+  "all":"All",
+  "contract.detail":"CONTRACT DETAIL",
+  "reasson.cancel.contract":"Reason for contract cancellation",
+  "cancel.contract.question":"Are you sure you want to cancel this contract?",
+  "exit":"Exit",
+  "relate.party":"Related parties",
+  "authorization":"Authorization",
+  "forward":"Forward",
+  "confirm":"Confirm",
+  "contract.sign.confirm":"Confirm sign contract"
 }

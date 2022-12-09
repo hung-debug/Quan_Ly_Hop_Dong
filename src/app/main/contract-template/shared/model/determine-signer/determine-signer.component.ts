@@ -394,7 +394,7 @@ export class DetermineSignerComponent implements OnInit {
       }
      
       //@ts-ignore
-      if (dataArr[i].phone.trim() && !this.pattern.phone.test(dataArr[i].phone.trim())) {
+      if (dataArr[i].phone && dataArr[i].phone.trim() && !this.pattern.phone.test(dataArr[i].phone.trim())) {
         this.getNotificationValid("Số điện thoại của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;

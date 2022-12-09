@@ -4,7 +4,7 @@
 <div class="sample-contract row" *ngIf="loaded && valid && this.mobile === false">
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
+      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">{{'contract.detail' | translate}}</div>
       <div style="line-height: 25px">
         <!-- <div>
           <span class="title-contract">Mã hợp đồng:</span>
@@ -72,7 +72,7 @@
           </div>
         </div>
         <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 3 || this.datas.roleContractReceived == 4">
-          <p class="d-flex justify-content-center mb-4 text-uppercase">XÁC NHẬN KÝ HỢP ĐỒNG</p>
+          <p class="d-flex justify-content-center mb-4 text-uppercase">{{'contract.sign.confirm' | translate}}</p>
           <p class="d-flex mb-2 text-align-left mx-3">Bạn có đồng ý với nội dung, các điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch không?</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
             <div class="radio-confirm">

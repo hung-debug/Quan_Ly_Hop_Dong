@@ -115,7 +115,7 @@
                                 <img src="../../assets/img/icon_download.svg" class="img_icon" ngbTooltip="{{'contract.download' | translate}}" (click)="downloadContract(item.contractId);" />
                             </div>
                             <div class="div_icon" *ngIf="item.contractStatus == 32">
-                                <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="Lý do hủy hợp đồng" (click)="ViewReasonCancel(item.contractId)" />
+                                <img src="../../assets/img/cancel_notes.svg" class="img_icon" ngbTooltip="{{ 'reasson.cancel.contract' | translate}}" (click)="ViewReasonCancel(item.contractId)" />
                             </div>
                         </div>
                     </div>
