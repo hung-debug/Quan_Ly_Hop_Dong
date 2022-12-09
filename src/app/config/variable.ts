@@ -50,6 +50,35 @@ export const type_signature = [
 
 ];
 
+export const type_signature_en = [
+  {
+    id: 1,
+    name: 'Signed by image and OTP',
+    is_otp: false,
+  },
+  {
+    id: 5,
+    name: "Signed by eKYC",
+    is_otp: false
+  },
+  {
+    id: 4,
+    name: 'Signed by HSM',
+    is_otp: false
+  },
+  {
+    id: 2,
+    name: 'Signed by USB token',
+    is_otp: false,
+  },
+  {
+    id: 3,
+    name: 'Signed by PKI',
+    is_otp: false,
+  },
+
+];
+
 export const type_signature_personal_party = [
   {
     id: 1,

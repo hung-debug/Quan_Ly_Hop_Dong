@@ -3,6 +3,7 @@ import {Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges
 import {
   type_signature,
   type_signature_doc,
+  type_signature_en,
   type_signature_personal_party,
   variable
 } from "../../../../../config/variable";
@@ -116,6 +117,12 @@ export class DetermineSignerComponent implements OnInit {
       this.site = 'NB';
     } else if(environment.flag == 'KD') {
       this.site = 'KD';
+    }
+
+    if(localStorage.getItem('lang') == 'en') {
+      this.signTypeList = type_signature_en;
+    } else if(localStorage.getItem('lang') == 'vi') {
+      this.signTypeList = type_signature;
     }
 
     this.user = this.userService.getInforUser();

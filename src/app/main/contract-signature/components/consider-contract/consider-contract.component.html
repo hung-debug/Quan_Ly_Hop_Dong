@@ -6,10 +6,10 @@
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
       <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
       <div style="line-height: 25px">
-        <div>
+        <!-- <div>
           <span class="title-contract">Mã hợp đồng:</span>
           <span>{{datas?.is_data_contract?.contract_uid}}</span>
-        </div>
+        </div> -->
         <div>
           <span class="title-contract">{{'menu.contract.type.list' | translate}}:</span>
           <span>{{datas?.is_data_contract?.type_name}}</span>
@@ -91,13 +91,13 @@
     </div>
 
       <!--380-->
-      <div *ngIf="this.loginType == 0" style="padding-top: 10px;padding-left: 315px">
+      <!-- <div *ngIf="this.loginType == 0" style="padding-top: 10px;padding-left: 315px">
         <span class="auto-scroll" (click)="autoScroll()">Auto scroll</span>
       </div>
 
       <div *ngIf="this.loginType == 1" style="padding-top: 10px;padding-left: 380px">
         <span class="auto-scroll" (click)="autoScroll()">Auto scroll</span>
-      </div>
+      </div> -->
   </div>
 
   <div id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag"
