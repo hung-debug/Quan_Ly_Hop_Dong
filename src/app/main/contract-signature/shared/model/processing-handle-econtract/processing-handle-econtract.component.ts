@@ -49,11 +49,15 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   lang: string;
   ngOnInit(): void {
 
+    console.log("aaa ", sessionStorage.getItem('lang'));
+
     if(sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if(sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
     }
+
+    console.log("lang ", this.lang);
 
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
