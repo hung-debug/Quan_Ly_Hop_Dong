@@ -410,7 +410,7 @@
   "all":"Tất cả",
   "reject.question":"Bạn có chắc chắn muốn từ chối hợp đồng này không? Vui lòng nhập lý do từ chối",
   "reasson.cancel.contract":"Lý do huỷ hợp đồng",
-  "cancel.contract.question":"Bạn có chắc chắn muốn nhập mã hợp đồng",
+  "cancel.contract.question":"Bạn có chắc chắn muốn huỷ hợp đồng này không?",
   "exit":"Thoát",
   "content.confirm":"Bạn có đồng ý với nội dung, các điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch không?",
   "orginator":"Người khởi tạo",
@@ -419,5 +419,9 @@
   "not.select.contract":"Bạn chưa chọn hợp đồng nào",
   "select.signer.obj":"Vui lòng chọn người ký cho đối tượng đã kéo thả!",
   "contract.sign.confirm":"Xác nhận ký hợp đồng",
-  "miss.digital.sig":"Thiếu đối tượng ký số"
+  "miss.digital.sig":"Thiếu đối tượng ký số",
+  "off.org.please":"của tổ chức, vui lòng chọn đủ người ký!",
+  "sign.ekyc.app":"Vui lòng ký eKYC trên ứng dụng điện thoại",
+  "authorization":"Uỷ quyền",
+  "forward":"Chuyển tiếp"
 }

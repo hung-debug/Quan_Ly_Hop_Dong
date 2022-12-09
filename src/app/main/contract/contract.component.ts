@@ -379,7 +379,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
     let data: any = "";
 
-    if(sessionStorage.getItem('lang') == 'vi') {
+    if(sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
         title: 'XÁC NHẬN HỦY HỢP ĐỒNG',
         id: id

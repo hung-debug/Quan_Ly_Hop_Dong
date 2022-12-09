@@ -53,6 +53,10 @@ export class LoginComponent implements OnInit {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('myTaxCode');
     localStorage.removeItem('url');
+    
+    if(!sessionStorage.getItem('lang')) {
+      sessionStorage.setItem('lang','vi')
+    }
 
     if (this.loginForm.value.username == '') {
       this.error = true;
