@@ -3,7 +3,14 @@
     <div class="col-md-3" *ngIf="isQLND_03">
       <div>{{'unit.name' | translate}}</div>
       <div>
-          <p-treeSelect [(ngModel)]="selectedNodeOrganization" [options]="listOrgCombobox" placeholder="Tất cả" [filter]="true" filterBy="name"  [droppable]="true" (onNodeSelect)="changeOrg()"></p-treeSelect>
+          <p-treeSelect 
+            [(ngModel)]="selectedNodeOrganization" 
+            [options]="listOrgCombobox" 
+            placeholder="{{'all' | translate}}" 
+            [filter]="true" filterBy="name"  
+            [droppable]="true" 
+            (onNodeSelect)="changeOrg()">
+          </p-treeSelect>
       </div>
     </div>
     <div class="col-md-3" *ngIf="isQLND_03">

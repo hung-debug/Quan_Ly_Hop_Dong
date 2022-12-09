@@ -1659,7 +1659,7 @@ export class SampleContractFormComponent implements OnInit {
       if (count > 0) {
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
         this.spinner.hide();
-        this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("select.signer.obj", "", 3000);
         return false;
       } else if (count_number > 1) {
         this.spinner.hide();

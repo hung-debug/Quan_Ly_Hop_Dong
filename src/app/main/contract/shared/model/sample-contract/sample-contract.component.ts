@@ -1499,7 +1499,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       
 
       if (count > 0) {
-        this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("select.signer.obj", "", 3000);
         return false;
       } else if (count_number > 1) {
         this.toastService.showWarningHTMLWithTimeout("Hợp đồng chỉ được phép có 1 số hợp đồng!", "", 3000);

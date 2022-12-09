@@ -1601,7 +1601,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (count > 0) {
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 3000);
+        this.toastService.showErrorHTMLWithTimeout("select.signer.obj", "", 3000);
         return false;
       }  else if (count_number > 1) {
         this.spinner.hide();

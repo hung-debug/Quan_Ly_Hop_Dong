@@ -25,6 +25,7 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   ) { }
 
+  lang: string;
   ngOnInit(): void {
     console.log("image sign contract ");
     console.log(this.sign);
@@ -32,21 +33,12 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     if (currentUserC != null && currentUserC.customer?.info) {
       this.currentUser = currentUserC.customer?.info;
     }
-    /*this.contractSignatureService.getProfileObs()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(imageStr => {
-        const currentUser = localStorage.getItem('currentUser');
-        if (currentUser != null) {
-          const cu = JSON.parse(currentUser);
-          console.log(localStorage.getItem('currentUser'));
-          // const isShowImage = this.datas.userForm.userSigns.some((userE: any) => { return cu.email === this.sign.email});
-          console.log('okok', imageStr);
-          // if (isShowImage) {
-          //   this.imageSignConfirm = imageStr;
-          // }
-          return true;
-        }
-      });*/
+    
+    if(sessionStorage.getItem('lang') == 'vi') {
+      this.lang = 'vi';
+    } else if(sessionStorage.getItem('lang') == 'en') {
+      this.lang = 'en';
+    }
   }
 
   ngAfterViewInit() {

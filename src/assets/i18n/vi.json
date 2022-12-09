@@ -292,6 +292,7 @@
   "btn.close": "Đóng",
   "btn.cancel": "Hủy bỏ",
   "btn.accept": "Đồng ý",
+  "btn.not.accept": "Không đồng ý",
   "btn.share": "Chia sẻ",
   "btn.delete": "Xóa",
   "btn.done": "Hoàn thành",
@@ -410,5 +411,12 @@
   "reject.question":"Bạn có chắc chắn muốn từ chối hợp đồng này không? Vui lòng nhập lý do từ chối",
   "reasson.cancel.contract":"Lý do huỷ hợp đồng",
   "cancel.contract.question":"Bạn có chắc chắn muốn nhập mã hợp đồng",
-  "exit":"Thoát"
+  "exit":"Thoát",
+  "content.confirm":"Bạn có đồng ý với nội dung, các điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch không?",
+  "orginator":"Người khởi tạo",
+  "delete.contract.question":"Bạn có chắc muốn xóa hợp đồng này không?",
+  "choose.org":"Chọn tổ chức",
+  "not.select.contract":"Bạn chưa chọn hợp đồng nào",
+  "select.signer.obj":"Vui lòng chọn người ký cho đối tượng đã kéo thả!",
+  "contract.sign.confirm":"Xác nhận ký hợp đồng"
 }

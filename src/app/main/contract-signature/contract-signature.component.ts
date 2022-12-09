@@ -1171,8 +1171,16 @@ export class ContractSignatureComponent implements OnInit {
   }
  
   searchContract() {
+    let title: any = "";
+
+    if(sessionStorage.getItem('lang') == 'en') {
+      title = "CONTRACT SEARCH"
+    } else if(sessionStorage.getItem('lang') == 'vi') {
+      title = "TÌM KIẾM HỢP ĐỒNG";
+    }
+
     const data = {
-      title: 'TÌM KIẾM HỢP ĐỒNG',
+      title: title,
       filter_name: this.filter_name,
       filter_type: this.filter_type,
       filter_contract_no: this.filter_contract_no,

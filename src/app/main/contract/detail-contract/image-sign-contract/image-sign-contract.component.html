@@ -16,6 +16,7 @@
   <!--  <input id="input-text" type="text" [placeholder]="sign.sign_unit == 'text' ? 'Nhập text' : 'Nhập số tài liệu'">-->
 
   <div class="skeleton-sign">
-    <span id="input-text" [ngbTooltip]="sign.value ? sign.value : ''">{{sign.value ? sign.value : ((sign.sign_unit == 'text') ? 'Text' : 'Số hợp đồng')}}</span>
+    <span *ngIf="this.lang == 'vi'" id="input-text" [ngbTooltip]="sign.value ? sign.value : ''">{{sign.value ? sign.value : ((sign.sign_unit == 'text') ? 'Text' : 'Số hợp đồng')}}</span>
+    <span *ngIf="this.lang == 'en'" id="input-text" [ngbTooltip]="sign.value ? sign.value : ''">{{sign.value ? sign.value : ((sign.sign_unit == 'text') ? 'Text' : 'Contract code')}}</span>
   </div>
 </div>

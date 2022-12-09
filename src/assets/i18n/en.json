@@ -290,6 +290,7 @@
   "btn.close": "Close",
   "btn.cancel": "Cancel",
   "btn.accept": "Accept",
+  "btn.not.accept": "Not accept",
   "btn.share": "Share",
   "btn.delete": "Delete",
   "btn.done": "Done",
@@ -413,5 +414,11 @@
   "authorization":"Authorization",
   "forward":"Forward",
   "confirm":"Confirm",
-  "contract.sign.confirm":"Confirm sign contract"
+  "contract.sign.confirm":"CONFIRM SIGN CONTRACT",
+  "content.confirm":"Do you agree to the content, terms of the contract and the use of electronic methods to make transactions?",
+  "orginator":"Orginator",
+  "delete.contract.question":"Are you sure you want to delete this contract?",
+  "choose.org":"Choose an organization",
+  "not.select.contract":"You have not selected any contract yet",
+  "select.signer.obj":"Please select a signer for the drag-and-drop object!"
 }

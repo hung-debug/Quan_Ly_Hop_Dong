@@ -7,7 +7,7 @@
                 <span style="color: #8B8B8B">({{this.emailCreate}})</span>
             </div>
             <div class="col-md-5" style="display: flex; flex-direction: column;text-align: center">
-                <span style="color: '#106DB6'">Người khởi tạo</span>
+                <span style="color: '#106DB6'">{{'orginator' | translate}}</span>
                 <span style="color: #8B8B8B">({{this.timeCreate}})</span>
             </div>
         </div>
@@ -22,12 +22,16 @@
                     <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
                     </div>
                     <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span>
-                    <span style="color: dimgray" *ngIf="d.typeOfSign">Loại ký: {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>
+                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>
+
+                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name.replace("Ký số bằng","Sign by").replace("và","and").replace("ảnh","OTP"): ''}}</span>
                 </div>
 
                 <div class="col-md-5" style="display: flex; flex-direction: column;text-align: center">
                     <div style="display: flex; justify-content: center;align-items: center;">
+                        
                         <span [style.color]="d.status === 'Đã từ chối' ? '#d11919' : d.status !== 0 ? '#106DB6' : '#545252'">{{d.status}}</span> &nbsp;
+
                         <div class="div_icon " style="width: 90px;display: flex;margin-left:10px"  *ngIf="d.status == 'Đã từ chối'" >
                             <div class="img_icon button" ngbTooltip="Lý do từ chối hợp đồng" (click)="viewReasonRejected(d.id)">Xem lý do</div>
                         </div>
@@ -46,7 +50,10 @@
                     <span style="color: #8B8B8B" *ngIf="d.emailRecipients">({{d.emailRecipients}})</span>
                     </div>
                     <span style="color: #8B8B8B" *ngIf="d.type != 3 && d.name_company">{{d.name_company}}</span>
-                    <span style="color: dimgray" *ngIf="d.typeOfSign">Loại ký: {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>
+
+                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'vi'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name : ''}}</span>
+
+                    <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name.replace("Ký số bằng","Sign by").replace("và","and").replace("ảnh","OTP"): ''}}</span>
                 </div>
 
                 <div class="col-md-5" style="display: flex; flex-direction: column;text-align: center">

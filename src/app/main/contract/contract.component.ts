@@ -187,10 +187,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
         }
       )
     });
-
-
-
-    // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
   }
 
   cancelMany() {
@@ -203,7 +199,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         .map((opt) => opt.id);
 
     if(idMany.length == 0) {
-      this.toastService.showErrorHTMLWithTimeout("Bạn chưa chọn hợp đồng nào","",3000);
+      this.toastService.showErrorHTMLWithTimeout("not.select.contract","",3000);
       return;
     }
 
@@ -345,8 +341,18 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   searchContract() {
+
+    let title: any = "";
+
+    if(sessionStorage.getItem('lang') == 'en') {
+      title = "CONTRACT SEARCH"
+    } else if(sessionStorage.getItem('lang') == 'vi') {
+      title = "TÌM KIẾM HỢP ĐỒNG";
+    }
+
+
     const data = {
-      title: 'TÌM KIẾM HỢP ĐỒNG',
+      title: title,
       filter_type: this.filter_type,
       filter_contract_no: this.filter_contract_no,
       filter_from_date: this.filter_from_date,
@@ -455,10 +461,20 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   deleteContract(id: any) {
-    const data = {
-      title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
-      id: id
-    };
+    let data: any = "";
+
+    if(sessionStorage.getItem('lang') == 'vi') {
+      data = {
+        title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
+        id: id
+      };
+    } else if(sessionStorage.getItem('lang') == 'en') {
+      data = {
+        title: 'CONTRACT DELETE CONFIRMATION',
+        id: id
+      };
+    }
+   
     // @ts-ignore
     const dialogRef = this.dialog.open(DeleteContractDialogComponent, {
       width: '480px',

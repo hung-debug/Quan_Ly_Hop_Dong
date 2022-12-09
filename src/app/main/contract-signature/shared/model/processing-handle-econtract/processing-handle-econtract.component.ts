@@ -46,7 +46,15 @@ export class ProcessingHandleEcontractComponent implements OnInit {
  
   }
 
+  lang: string;
   ngOnInit(): void {
+
+    if(sessionStorage.getItem('lang') == 'vi') {
+      this.lang = 'vi';
+    } else if(sessionStorage.getItem('lang') == 'en') {
+      this.lang = 'en';
+    }
+
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
 
@@ -85,34 +93,69 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   checkStatusUser(status: any, role: any) {
     let res = '';
-    if (status == 3) {
-      return 'Đã từ chối';
-    } else if(status == 4) {
-      return 'Đã uỷ quyền/chuyển tiếp';
-    }
 
-    if (status == 0 && !this.reasonCancel) {
-      res += 'Chưa ';
-    } else if (status == 1 && !this.reasonCancel) {
-      res += 'Đang ';
-    } else if (status == 2) {
-      res += 'Đã ';
-    }
+    console.log("lang ", this.lang);
 
-    if(!this.reasonCancel) {
-      if (role == 1 ) {
-        res +=  'điều phối';
-      } else if (role == 2) {
-        res +=  'xem xét';
-      } else if (role == 3) {
-        res +=  'ký';
-      } else if (role == 4) {
-        res =  res + ' đóng dấu';
+    if(this.lang == 'vi' || !this.lang) {
+      if (status == 3) {
+        return 'Đã từ chối';
+      } else if(status == 4) {
+        return 'Đã uỷ quyền/chuyển tiếp';
       }
-    } else {
-      if(!res.includes('Đã'))
-        res = 'Đã huỷ'
+  
+      if (status == 0 && !this.reasonCancel) {
+        res += 'Chưa ';
+      } else if (status == 1 && !this.reasonCancel) {
+        res += 'Đang ';
+      } else if (status == 2) {
+        res += 'Đã ';
+      }
+  
+      if(!this.reasonCancel) {
+        if (role == 1 ) {
+          res +=  'điều phối';
+        } else if (role == 2) {
+          res +=  'xem xét';
+        } else if (role == 3) {
+          res +=  'ký';
+        } else if (role == 4) {
+          res =  res + ' đóng dấu';
+        }
+      } else {
+        if(!res.includes('Đã'))
+          res = 'Đã huỷ'
+      }
+    } else if(this.lang == 'en') {
+      if (status == 3) {
+        return 'Rejected';
+      } else if(status == 4) {
+        return 'Authorized/Forwarded';
+      }
+  
+      if (status == 0 && !this.reasonCancel) {
+        res += 'Not ';
+      } else if (status == 1 && !this.reasonCancel) {
+        res += 'Doing ';
+      } else if (status == 2) {
+        res += 'Already ';
+      }
+  
+      if(!this.reasonCancel) {
+        if (role == 1 ) {
+          res +=  'coordinator';
+        } else if (role == 2) {
+          res +=  'consider';
+        } else if (role == 3) {
+          res +=  'sign';
+        } else if (role == 4) {
+          res =  res + ' mark';
+        }
+      } else {
+        if(!res.includes('Already'))
+          res = ''
+      }
     }
+  
     
     return res;
   }
