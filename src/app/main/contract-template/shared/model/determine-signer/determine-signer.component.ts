@@ -380,13 +380,13 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       if(dataArr.login_by == 'email') {
-        if (dataArr[i].email.trim() && !this.pattern.email.test(dataArr[i].email.trim())) {
+        if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email.trim())) {
           this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
           count++;
           break;
         }
       } else if(dataArr.login_by == 'phone') {
-        if (dataArr[i].email.trim() && !this.pattern.phone.test(dataArr[i].email.trim())) {
+        if (dataArr[i].email && !this.pattern.phone.test(dataArr[i].email.trim())) {
           this.getNotificationValid("SĐT của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
           count++;
           break;

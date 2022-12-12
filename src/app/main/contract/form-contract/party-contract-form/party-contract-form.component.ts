@@ -582,7 +582,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       
 
       // valid phone number
-      if (dataArr[i].phone.trim() && !this.pattern.phone.test(dataArr[i].phone.trim())) {
+      if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone.trim())) {
         this.getNotificationValid("Số điện thoại của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
@@ -709,7 +709,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 break;
               }
             } else if(isParterSort.login_by == 'phone') {
-              if (isParterSort[k].email.trim() && !this.pattern.phone.test(isParterSort[k].email.trim())) {
+              if (isParterSort[k].email && !this.pattern.phone.test(isParterSort[k].email.trim())) {
                 this.getNotificationValid("Email của" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
                 count++;
                 break;
@@ -718,7 +718,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
           
 
             // valid phone number
-            if (isParterSort[k].phone.trim() && !this.pattern.phone.test(isParterSort[k].phone.trim())) {
+            if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone.trim())) {
               this.getNotificationValid("Số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác không hợp lệ!")
               count++;
               break;
@@ -832,21 +832,21 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
                 break;
               }
             } else if(isParterSort[k].login_by === 'phone') {
-              if (isParterSort[k].email.trim() && !this.pattern.phone.test(isParterSort[k].email.trim()) && isParterSort[k].role == 3) {
+              if (isParterSort[k].email && !this.pattern.phone.test(isParterSort[k].email.trim()) && isParterSort[k].role == 3) {
                 this.getNotificationValid("SĐT" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân không hợp lệ!")
                 count++;
                 break;
               }
             }
 
-            if (!isParterSort[k].phone.trim() && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
+            if (!isParterSort[k].phone && isParterSort[k].sign_type.filter((p: any) => p.id == 1).length > 0) {
               this.getNotificationValid("Vui lòng nhập số điện thoại của" + this.getNameObject(isParterSort[k].role) + "của đối tác!")
               count++;
               break;
             }
 
             // valid phone number
-            if (isParterSort[k].phone.trim() && !this.pattern.phone.test(isParterSort[k].phone.trim())) {
+            if (isParterSort[k].phone && !this.pattern.phone.test(isParterSort[k].phone.trim())) {
               this.getNotificationValid("Số điện thoại" + this.getNameObject(isParterSort[k].role) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;

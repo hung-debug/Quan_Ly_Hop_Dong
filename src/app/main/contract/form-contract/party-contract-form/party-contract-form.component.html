@@ -1511,6 +1511,17 @@
                   </div>
                 </div>
 
+                  <!--KD-->
+                  <div class="participants--input" style="display: flex" *ngIf="this.site === 'KD' && getDataSignCka(d).length > 0 && d.login_by == 'email'">
+                    <div class="participants__name" style="width: 90%">
+                      <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
+                      <div class="input-data">
+                        <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      </div>
+                    </div>
+                  </div>
+  
+
                   <!--Check ký usb token cho cá nhân, nếu có thì render trường mã số thuế/cccd-->
                   <div class="participants--input" style="display: flex" *ngIf="getDataSignUSBToken(d).length > 0">
                     <div class="participants__name" style="width: 90%">
