@@ -104,13 +104,17 @@ export class ContractService {
 
   getFilePdfForMobileUrl: any = `${environment.apiUrl}/api/v1/contracts/review/`;
 
-  // cccdFront: any = `http://ekyc2.mobifone.ai/v2/recognition`;
+  cccdFront: any = `http://ekyc2.mobifone.ai/v2/recognition`;
 
-  // detectFaceUrl: any = `http://ekyc2.mobifone.ai/v2/verification`;
+  detectFaceUrl: any = `http://ekyc2.mobifone.ai/v2/verification`;
 
-  cccdFront: any = `https://econtract.mobifone.vn/v2/recognition`;
+  cccdFrontNB: any = `https://econtract.mobifone.vn/v2/recognition`;
 
-  detectFaceUrl: any = `https://econtract.mobifone.vn/v2/verification`;
+  detectFaceUrlNB: any = `https://econtract.mobifone.vn/v2/verification`;
+
+  cccdFrontKD: any = `https://mobifone-econtract.vn/eKYC/recognition`;
+
+  detectFaceUrlKD: any = `https://mobifone-econtract.vn/eKYC/verification`;
 
 
   changeLinkUrl: any = `${environment.apiUrl}/api/v1/handle/`;
@@ -450,7 +454,13 @@ export class ContractService {
       "image":image,
     }
 
-    return this.http.post<any>(this.cccdFront, body, {headers});
+    if(environment.apiUrl == 'https://econtract.mobifone.vn/service') {
+      return this.http.post<any>(this.cccdFront, body, {headers});
+    } else if(environment.apiUrl == 'https://mobifone-econtract.vn/service') {
+      return this.http.post<any>(this.cccdFrontKD, body, {headers});
+    } else {
+      return this.http.post<any>(this.cccdFrontNB, body, {headers});
+    }
   }
 
   detectFace(imageCCCD: any, imageFace: any) {
@@ -464,8 +474,14 @@ export class ContractService {
         "image_cmt":imageCCCD,
         "image_live": imageFace,
       }
-
-    return this.http.post<any>(this.detectFaceUrl, body, {headers})
+    
+      if(environment.apiUrl == 'https://econtract.mobifone.vn/service') {
+      return this.http.post<any>(this.detectFaceUrlNB, body, {headers});
+    } else if(environment.apiUrl == 'https://mobifone-econtract.vn/service') {
+      return this.http.post<any>(this.detectFaceUrlKD, body, {headers});
+    } else {
+      return this.http.post<any>(this.detectFaceUrl, body, {headers});
+    }
   }
 
   getContractSample(data_sample_contract: any) {
