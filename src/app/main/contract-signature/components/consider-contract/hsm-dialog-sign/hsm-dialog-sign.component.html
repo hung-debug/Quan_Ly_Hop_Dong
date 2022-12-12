@@ -5,32 +5,32 @@
   <form [formGroup]="myForm" class="content">
       <div class="row">
           <div class="col-md-12">
-              <div class="label text-color">{{'Mã số thuế' | translate}} <span class="required-title">*</span></div>
+              <div class="label text-color">{{'tax_code' | translate}} <span class="required-title">*</span></div>
               <div class="input-data">
                   <input type="text" formControlName="taxCode" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" autofocus>
               </div>
               <div *ngIf="submitted && f.taxCode.errors" class="invalid">
-                <div *ngIf="f.taxCode.errors.required">{{'Mã số thuế không được để trống' | translate}}</div>
-                <div *ngIf="f.taxCode.errors.pattern">{{'Mã số thuế không đúng định dạng' | translate}}</div>
+                <div *ngIf="f.taxCode.errors.required">{{'taxcode.blank' | translate}}</div>
+                <div *ngIf="f.taxCode.errors.pattern">{{'taxcode.format' | translate}}</div>
               </div>
           </div>
       </div>
 
       <div class="row" style="padding-top: 10px;">
           <div class="col-md-12">
-              <div class="label text-color">{{'Tên người dùng' | translate}} <span class="required-title">*</span></div>
+              <div class="label text-color">{{'username' | translate}} <span class="required-title">*</span></div>
               <div class="input-data">
                   <input type="text" formControlName="username">
               </div>
               <div *ngIf="submitted && f.username.errors" class="invalid">
-                <div *ngIf="f.username.errors.required">{{'Tên người dùng không được để trống' | translate}}</div>
+                <div *ngIf="f.username.errors.required">{{'user.blank' | translate}}</div>
               </div>
           </div>
       </div>
 
       <div class="row" style="padding-top: 10px;">
         <div class="col-md-12">
-            <div class="label text-color">{{'Mật khẩu cấp 1' | translate}} <span class="required-title">*</span></div>
+            <div class="label text-color">{{'password.level1' | translate}} <span class="required-title">*</span></div>
             <div class="input-line">
               <input class="input-text pw" *ngIf="this.fieldTextType1 === false" type="text" formControlName="pass1" id="pass1">
               <input class="input-text" *ngIf="this.fieldTextType1 === true" type="text" formControlName="pass1" id="pass1"/>
@@ -46,14 +46,14 @@
                 </div>
             </div>
             <div *ngIf="submitted && f.pass1.errors" class="invalid">
-              <div *ngIf="f.pass1.errors.required">{{'Mật khẩu cấp 1 không được để trống' | translate}}</div>
+              <div *ngIf="f.pass1.errors.required">{{'password.level1.blank' | translate}}</div>
             </div>
         </div>
       </div>
 
       <div class="row" style="padding-top: 10px;">
         <div class="col-md-12">
-            <div class="label text-color">{{'Mật khẩu cấp 2' | translate}} <span class="required-title">*</span></div>
+            <div class="label text-color">{{'password.level2' | translate}} <span class="required-title">*</span></div>
             <div class="input-line">
               <input  *ngIf="this.fieldTextType2 === false" class="input-text pw" type="text" formControlName="pass2" id="pass2">
               <input class="input-text" *ngIf="this.fieldTextType2 === true" type="text" formControlName="pass2" id="pass2"/>
@@ -69,14 +69,14 @@
                 </div>
             </div>
             <div *ngIf="submitted && f.pass2.errors" class="invalid">
-              <div *ngIf="f.pass2.errors.required">{{'Mật khẩu cấp 2 không được để trống' | translate}}</div>
+              <div *ngIf="f.pass2.errors.required">{{'password.level2.blank' | translate}}</div>
             </div>
         </div>
       </div>
   
       <div class="row" style="justify-content: center;padding-top: 10px;">
-          <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'Thoát' | translate}}</button>
-          <button class="save-button" (click)="onSubmit()">{{'Xác nhận' | translate}}</button>
+          <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'exit' | translate}}</button>
+          <button class="save-button" (click)="onSubmit()">{{'confirm' | translate}}</button>
       </div>
   </form>
 </div>

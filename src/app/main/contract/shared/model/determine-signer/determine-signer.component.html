@@ -461,11 +461,12 @@
         />
       </div>
 
-      <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
+      <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
         <u class="label text-color" (click)="deletePartner(id, item)"
           style="background-color: #FFFFFF; cursor: pointer">{{(item.type == 2 ? 'xoa_doi_tac_to_chuc' :
           'xoa_doi_tac_ca_nhan') | translate}}</u>
       </div>
+
       <div class="contract__content--participants">
         <div class="row">
           <div class="radio col-md-6 label_type">
@@ -999,7 +1000,7 @@
                 </div>
 
                 <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div></div>
+                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span *ngIf="getDataSignCka(d).length > 0" class="required-title">*</span><div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
@@ -1017,16 +1018,6 @@
                   </div>
                 </div>
               </div>
-
-                <div class="participants--input" style="display: flex">
-                  <div *ngIf="d.login_by === 'email' && getDataSignCka(d).length > 0" class="participants__name" style="width:90%">
-                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
-                    <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img">
-                      <input type="text" placeholder="nhap_sdt" [(ngModel)]="d.phone">
-                    </div>
-                  </div>
-                </div>
 
                 <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là eKYC-->
                 <div class="participants--input" style="display: flex" *ngIf="getDataSignEkyc(d).length > 0">
@@ -1047,13 +1038,24 @@
                     </div>
                   </div>
                 </div>
+
+                <!--KD-->
+                <div class="participants--input" style="display: flex" *ngIf="this.site === 'KD' && getDataSignCka(d).length > 0 && d.login_by == 'email'">
+                  <div class="participants__name" style="width: 90%">
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
+                    <div class="input-data">
+                      <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                    </div>
+                  </div>
+                </div>
+
               </div>
-              <div *ngIf="getPartnerSignature(item).length > 1" class="col-md-1 delete-element"
+              <div *ngIf="getPartnerSignature(item).length >= 1" class="col-md-1 delete-element"
                 (click)="deletePartnerSignature(index, item)">
                 <img src="assets/img/border_close.svg" alt="close.vn">
                 <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn">
               </div>
-              <div *ngIf="getPartnerSignature(item).length == 1" class="col-md-1 delete-element"></div>
+              <div *ngIf="getPartnerSignature(item).length == 0" class="col-md-1 delete-element"></div>
             </div>
             <div *ngIf="getPartnerSignature(item).length > 1" class="participants--add">
               <u class="label text-color" style="color: #106DB6"

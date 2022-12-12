@@ -102,19 +102,18 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private spinner: NgxSpinnerService,
     private userService: UserService,
     private unitService: UnitService,
-    private checkSignDigitalService: CheckSignDigitalService
+    private checkSignDigitalService: CheckSignDigitalService,
   ) {
     this.step = variable.stepSampleContract.step1;
   }
 
   ngOnInit(): void {
-
-    console.log("datas init 1 ", this.datas.is_determine_clone);
-
-
     this.spinner.hide();
+
+    //check mẫu đã được sử dụng hay chưa
+    this.checkTemplateIsUse();
+
     this.name = this.datas.name ? this.datas.name : null;
-    // this.code = this.datas.contract_no ? this.datas.contract_no : null;
     this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.code;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
     this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
@@ -128,15 +127,25 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.convertData(this.datas);
 
     this.contractTypeService.getContractTypeList('', '').subscribe(data => {
-      // console.log(data);
       this.typeList = data
-    });
+    } );
 
     this.contract_no_old = this.contract_no;
     this.start_time_old = this.start_time;
     this.end_time_old = this.end_time;
+  }
 
-    console.log("datas init final ", this.datas.is_determine_clone);
+  templateIsUse: boolean = false;
+  checkTemplateIsUse() {
+    if(this.router.url.includes("edit") && this.datas.id) {
+      this.contractTemplateService.checkTemplateIsUse(this.datas.id).subscribe((response) => {
+        if(!response.success) {
+          this.templateIsUse = false;
+        } else if(response.success) {
+          this.templateIsUse = true;
+        }
+      })
+    }
   }
 
   ngAfterViewInit() {
@@ -240,10 +249,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
             }
             //this.datas.attachFile = e.target.files;
           }
-          // else{
-          //   this.toastService.showErrorHTMLWithTimeout("Trùng file đính kèm", "", 3000);
-          // }
-
         } else {
           this.datas.file_name_attach = '';
           this.datas.attachFile = '';
@@ -579,16 +584,13 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   convertData(datas: any) {
-    console.log(this.datas.contractConnect);
     if (this.datas.contractConnect != null && this.datas.contractConnect != '') {
       const array_empty: any[] = [];
       this.datas.contractConnect.forEach((element: any, index: number) => {
-        console.log(element);
         const data = element.ref_id;
         array_empty.push(data);
       })
       this.contractConnect = array_empty;
-      console.log(array_empty);
     }
   }
 

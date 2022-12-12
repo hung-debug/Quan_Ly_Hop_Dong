@@ -1659,7 +1659,7 @@ export class SampleContractFormComponent implements OnInit {
       if (count > 0) {
         // alert('Vui lòng chọn người ký cho đối tượng đã kéo thả!')
         this.spinner.hide();
-        this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn người ký cho đối tượng đã kéo thả!", "", 3000);
+        this.toastService.showWarningHTMLWithTimeout("select.signer.obj", "", 3000);
         return false;
       } else if (count_number > 1) {
         this.spinner.hide();
@@ -1694,7 +1694,7 @@ export class SampleContractFormComponent implements OnInit {
         }
         if (error_organization > 0) {
           this.spinner.hide();
-          this.toastService.showWarningHTMLWithTimeout(`Thiếu đối tượng ký số ${nameSign_organization.name} của tổ chức, vui lòng chọn đủ người ký!`, "", 3000);
+          this.toastService.showWarningHTMLWithTimeout(`miss.digital.sig` + `${nameSign_organization.name}` + `off.org.please`, "", 3000);
           return false;
         }
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.

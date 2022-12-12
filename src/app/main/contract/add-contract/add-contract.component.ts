@@ -157,7 +157,7 @@ export class AddContractComponent implements OnInit {
 
     this.userService.checkServiceStatus().subscribe((response) => {
 
-      if (response.status == 'Using') {
+      if (response.status == 'Using' || environment.flag == 'NB') {
         //title
         this.sub = this.route.params.subscribe((params) => {
           this.action = params['action'];

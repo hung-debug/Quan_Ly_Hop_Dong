@@ -8,7 +8,6 @@ import { DatePipe } from '@angular/common';
 import { forkJoin, BehaviorSubject, Subject } from 'rxjs';
 import axios from 'axios';
 import { User } from './user.service';
-import { head } from 'lodash';
 
 export interface Contract {
   id: number;
@@ -128,7 +127,6 @@ export class ContractService {
 
   uploadFileUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/import-child-org`;
 
-
   token: any;
   customer_id: any;
   organization_id: any;
@@ -194,7 +192,6 @@ export class ContractService {
   public getContractTypeList(): Observable<any> {
     this.getCurrentUser();
     let listContractTypeUrl = this.listContractTypeUrl + this.organization_id;
-    // console.log(listContractTypeUrl);
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<Contract[]>(listContractTypeUrl, { headers }).pipe();
   }
@@ -377,10 +374,6 @@ export class ContractService {
   }
 
   addContractStep1(datas: any, id?: any, type_form?: string) {
-    console.log('datas contract step 1 ', datas);
-
-    console.log('type form ', type_form);
-
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -406,10 +399,7 @@ export class ContractService {
       ),
     });
 
-    console.log('body add contract step 1', body);
-
     if (id) {
-      console.log('vao day');
 
       return this.http
         .put<Contract>(this.addGetDataContract + id, body, { headers: headers })
@@ -425,8 +415,6 @@ export class ContractService {
           catchError(this.handleError)
         );
     } else {
-      console.log('post contract ');
-
       return this.http
         .post<Contract>(this.addContractUrl, body, { headers: headers })
         .pipe(
@@ -775,6 +763,15 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     let listContractUrl = this.getNotifyOriganzation + this.organization_id;
+    return this.http.get<any>(listContractUrl, { headers }).pipe();
+  }
+
+  getDataNotifyOriganzationOrgId(orgId: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    let listContractUrl = this.getNotifyOriganzation + orgId;
     return this.http.get<any>(listContractUrl, { headers }).pipe();
   }
 
@@ -1740,10 +1737,55 @@ export class ContractService {
           },
         ],
       },
+      // {
+      //   name: '',
+      //   type: 2,
+      //   ordering: 2,
+      //   status: 1,
+      //   recipients: [
+      //     {
+      //       login_by: 'email',
+      //       name: '',
+      //       email: '',
+      //       phone: '',
+      //       card_id: '',
+      //       role: 3,
+      //       ordering: 1,
+      //       status: 0,
+      //       is_otp: 0,
+      //       sign_type: [],
+      //     },
+      //   ],
+      // },
+    ];
+  }
+
+  getDataDetermineInitializationPartner() {
+    return [
+      {
+        name: '',
+        type: 1,
+        ordering: 1,
+        status: 1,
+        recipients: [
+          {
+            login_by: 'email',
+            name: '',
+            email: '',
+            phone: '',
+            card_id: '',
+            role: 3,
+            ordering: 1,
+            status: 0,
+            is_otp: 0,
+            sign_type: [],
+          },
+        ],
+      },
       {
         name: '',
         type: 2,
-        ordering: 2,
+        ordering: 1,
         status: 1,
         recipients: [
           {

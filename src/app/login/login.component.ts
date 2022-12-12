@@ -50,7 +50,13 @@ export class LoginComponent implements OnInit {
   kyTuCach: any = "&";
 
   loginUser() {
-    localStorage.clear();
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('myTaxCode');
+    localStorage.removeItem('url');
+    
+    if(!sessionStorage.getItem('lang')) {
+      sessionStorage.setItem('lang','vi')
+    }
 
     if (this.loginForm.value.username == '') {
       this.error = true;
@@ -266,12 +272,13 @@ export class LoginComponent implements OnInit {
   switchLang(lang: string) {
     this.translate.use(lang);
     this.translate.currentLang = lang;
+
+    console.log("lang ", lang);
     localStorage.setItem('lang', lang);
+    sessionStorage.setItem('lang', lang);
   }
 
   getDeviceApp() {
-
-    console.log("type ", this.type);
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
 
       console.log(this.deviceService.isMobile(), this.deviceService.deviceType, this.deviceService);

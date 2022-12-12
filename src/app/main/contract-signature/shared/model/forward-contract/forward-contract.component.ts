@@ -39,8 +39,6 @@ export class ForwardContractComponent implements OnInit {
   ngOnInit(): void {
     this.datas = this.data;
 
-    console.log("datas ", this.datas);
-
     this.getCurrentUser();
     this.myForm = this.fbd.group({
       name: this.fbd.control("", [Validators.required]),
@@ -173,6 +171,7 @@ export class ForwardContractComponent implements OnInit {
       })
 
       if (coutError == 0) {
+        //is_replace: false = giữ lại uỷ quyền
         const dataAuthorize = {
           email: this.myForm.value.email,
           full_name: this.myForm.value.name,
@@ -180,7 +179,7 @@ export class ForwardContractComponent implements OnInit {
           card_id: this.myForm.value.card_id,
           role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
           recipient_id: this.datas.recipientId,
-          is_replace: true //true = replace người uỷ quyền thành ký; false = không replace
+          is_replace: true /*this.datas.is_content != 'forward_contract'*/
         };
 
         await this.contractService.processAuthorizeContract(dataAuthorize).toPromise().then(
@@ -189,7 +188,11 @@ export class ForwardContractComponent implements OnInit {
               , "", 3000);
             this.dialogRef.close();
             this.spinner.hide();
+            // if (this.data.role_coordination == 1) {
             this.router.navigate(['/main/form-contract/detail/' + this.datas?.dataContract?.is_data_contract?.id]);
+            // } else {
+            //   this.router.navigate(['/main/contract-signature/receive/wait-processing']);
+            // }
           }, error => {
             this.spinner.hide();
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
@@ -207,7 +210,7 @@ export class ForwardContractComponent implements OnInit {
     if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
       for (const participant of this.datas.dataContract.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
-          if (this.myForm.value.email == recipient.email) {
+          if (this.myForm.value.email == recipient.email && recipient.status != 4) {
             return false;
           }
         }
@@ -233,10 +236,6 @@ export class ForwardContractComponent implements OnInit {
     if (this.datas?.dataContract?.is_data_contract?.participants?.length) {
       for (const participant of this.datas.dataContract.is_data_contract.participants) {
         for (const recipient of participant.recipients) {
-          // if (!this.isReqCardId && this.datas.recipientId != recipient.id && this.myForm.value.card_id == recipient.card_id) {
-          //   return false;
-          // }
-
           if(!this.isReqCardId) {
             if(this.datas.recipientId != recipient.id && this.myForm.value.card_id == recipient.card_id) {
               return false;

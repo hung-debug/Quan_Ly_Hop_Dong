@@ -33,8 +33,15 @@ export class UserComponent implements OnInit {
   isQLND_04:boolean=true;  //xem thong tin chi tiet nguoi dung
   first: number = 0;
 
-
+  lang: any;
   async ngOnInit(): Promise<void> {
+
+    if(sessionStorage.getItem('lang') == 'vi') {
+      this.lang = 'vi';
+    } else if(sessionStorage.getItem('lang') == 'en') {
+      this.lang = 'en';
+    }
+
     this.appService.setTitle("user.list");
     //lay id user
     this.organization_id_user_login = this.userService.getAuthCurrentUser().organizationId;
@@ -45,7 +52,12 @@ export class UserComponent implements OnInit {
 
     this.unitService.getUnitList('', '').subscribe(data => {
       console.log(data.entities);
-      this.orgListTmp.push({name: "Tất cả", id:""});
+
+      if(this.lang == 'vi')
+        this.orgListTmp.push({name: "Tất cả", id:""});
+      else if(this.lang == 'en') 
+        this.orgListTmp.push({name: "All", id:""});
+      
       let dataUnit = data.entities.sort((a:any,b:any) => a.path.toString().localeCompare(b.path.toString()));
       for(var i = 0; i < dataUnit.length; i++){
         this.orgListTmp.push(dataUnit[i]);

@@ -113,9 +113,9 @@ export class ActionDeviceComponent implements OnInit {
 
         if(matchesNum){
 
-          if (!matchesNum[2]) {
+          if (!matchesNum[1]) {
 
-            matchesNum[2] = "0";
+            matchesNum[1] = "0";
 
             isLogin = 'login'
 
@@ -123,11 +123,11 @@ export class ActionDeviceComponent implements OnInit {
 
           if (urlEmail) {
 
-            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[2]}/${urlEmail}/${domain}`;
+            window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[1]}/${urlEmail}/${domain}`;
 
           } else
 
-           window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[2]}/${domain}`;
+           window.location.href = `econtract://app/`+isLogin+`/${matchesNum[0]}/-1/-1/${matchesNum[1]}/${domain}`;
 
         }
 

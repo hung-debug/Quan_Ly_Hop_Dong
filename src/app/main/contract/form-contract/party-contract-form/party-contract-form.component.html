@@ -39,6 +39,7 @@
               oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
               [disabled]="getOriganzationReviewer().length == 1"
             />
+            
             <div class="col-md-10 participants--input" style="display: flex; flex-direction: column">
 
               <!-- <div class="participants--input" style="display: flex">
@@ -157,6 +158,7 @@
                 </div>
               </div>
             </div>
+            
             <div
               class="col-md-1 delete-element"
               (click)="deleteOriganzationReviewer(index)"
@@ -1007,36 +1009,6 @@
                   </div>
                 </div>
 
-                <!--Trường nhập loại ký cho người ký của tổ chức-->
-                <!-- <div class="participants--input" style="display: flex">
-                       <div *ngIf="d.login_by === 'email'" class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">
-                      Email&nbsp;<span class="required-title">*</span>
-                    </div>
-                    <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img" />
-                      <input
-                        type="text"
-                        placeholder="{{ 'nhap_email' | translate }}"
-                        [(ngModel)]="d.email"
-                      />
-                    </div>
-                  </div>
-
-                  <div *ngIf="d.login_by === 'phone'" class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">
-                      {{'user.phone' | translate}}&nbsp;<span class="required-title">*</span>
-                    </div>
-                    <div class="input-data">
-                      <img src="assets/img/login_email.svg" class="input-img" />
-                      <input
-                        type="text"
-                        placeholder="{{ 'nhap_sdt' | translate }}"
-                        [(ngModel)]="d.email"
-                      />
-                    </div>
-                  </div>
-                </div> -->
 
                     <!--KD-->
               <div *ngIf="this.site == 'KD'" class="participants--input" style="display: flex">
@@ -1397,7 +1369,7 @@
                       </div>
                     </div>
                   </div>
-                </div>  -->
+                </div> -->
 
                 <div class="participants--input" style="display: flex">
                   <div class="participants__name">
@@ -1499,7 +1471,7 @@
                 </div>
 
                 <div class="participants__name">
-                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div></div>
+                  <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span *ngIf="getDataSignCka(d).length > 0" class="required-title">*</span><div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div></div>
                   <div class="input-data">
                     <img src="assets/img/login_email.svg" class="input-img">
                     <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="d.phone">
@@ -1518,26 +1490,6 @@
                 </div>
               </div>
 
-
-                <div class="participants--input">
-                <div *ngIf="getDataSignCka(d).length > 0" class="participants__name" style="width: 90%">
-                  <div class="label_detail text-color">
-                    {{'user.phone' | translate}}&nbsp;<span
-                      *ngIf="getDataSignCka(d).length > 0"
-                      class="required-title"
-                      >*</span
-                    >-&nbsp;
-                  </div>
-                  <div class="input-data">
-                    <input
-                      type="text"
-                      placeholder="{{ 'nhap_sdt' | translate }}"
-                      [(ngModel)]="d.phone"
-                      oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
-                    />
-                  </div>
-                </div>
-                </div>
 
                 <div
                   class="participants--input"

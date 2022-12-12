@@ -3,7 +3,7 @@
     <!--  information contract-->
     <div class="col-md-3 sample-contract__information" style="background-color: white;">
       <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-        <div style="padding-bottom: 10px; text-align: center" class="label">SỐ HỢP ĐỒNG THEO LÔ</div>
+        <div style="padding-bottom: 10px; text-align: center" class="label">{{'contract.number.lot' | translate}}</div>
         <div style="line-height: 25px; text-align: center;">
           <img *ngIf="!isDisablePrevious" src="/assets/img/icon_previous.svg" style="padding-right: 10px; cursor: pointer;" (click)="previousPage()"/>
           <img *ngIf="isDisablePrevious" src="/assets/img/icon_previous_hidden.svg" style="padding-right: 10px; cursor: pointer;"/>
@@ -22,28 +22,28 @@
       position: relative;">
       <div>
         <div class="sample-contract__information--user-sign" style="line-height: 25px">
-          <div style="text-align: center;" class="label">THÔNG TIN CÁC BÊN KÝ</div>
+          <div style="text-align: center;" class="label">{{'information.signatures' | translate}}</div>
         </div>
         <div>
           <div style="background: #C7D0E9;padding: 8px;">
-            TỔ CHỨC CỦA TÔI
+            {{'to_chuc_cua_toi' | translate}}
           </div>
           <div *ngIf="this.is_origanzation_reviewer.length > 0">
-            <div class="label_item">Người xem xét</div>
+            <div class="label_item">{{'user.view' | translate}}</div>
             <div class="input_text">
               <div *ngFor="let item of this.is_origanzation_reviewer">{{item.name}} - {{item.email}}</div>
             </div>
           </div>
           
           <div *ngIf="this.is_origanzation_signature.length > 0">
-            <div class="label_item">Người ký</div>
+            <div class="label_item">{{'user.sign' | translate}}</div>
             <div class="input_text">
               <div *ngFor="let item of this.is_origanzation_signature">{{item.name}} - {{item.email}}</div>
             </div>
           </div>
 
           <div *ngIf="this.is_origanzation_document.length > 0">
-            <div class="label_item">Văn thư</div>
+            <div class="label_item">{{'user.doc' | translate}}</div>
             <div class="input_text">
               <div *ngFor="let item of this.is_origanzation_document">{{item.name}} - {{item.email}}</div>
             </div>
@@ -56,28 +56,28 @@
             </div>
 
             <div *ngIf="this.getPartnerCoordinationer(record).length > 0">
-              <div class="label_item">Người điều phối</div>
+              <div class="label_item">{{'user.lead' | translate}}</div>
               <div class="input_text">
                 <div *ngFor="let item of getPartnerCoordinationer(record)">{{item.name}} - {{item.email}}</div>
               </div>
             </div>
 
             <div *ngIf="this.getPartnerReviewer(record).length > 0">
-              <div class="label_item">Người xem xét</div>
+              <div class="label_item">{{'user.view' | translate}}</div>
               <div class="input_text">
                 <div *ngFor="let item of getPartnerReviewer(record)">{{item.name}} - {{item.email}}</div>
               </div>
             </div>
 
             <div *ngIf="this.getPartnerSignature(record).length > 0">
-              <div class="label_item">Người ký</div>
+              <div class="label_item">{{'user.sign' | translate}}</div>
               <div class="input_text">
                 <div *ngFor="let item of getPartnerSignature(record)">{{item.name}} - {{item.email}}</div>
               </div>
             </div>
             
             <div *ngIf="this.getPartnerDocument(record).length > 0">
-              <div class="label_item">Văn thư</div>
+              <div class="label_item">{{'user.doc' | translate}}</div>
               <div class="input_text">
                 <div *ngFor="let item of getPartnerDocument(record)">{{item.name}} - {{item.email}}</div>
               </div>
@@ -111,12 +111,12 @@
     </div>
     <div class="footer-sample-contract">
         <button (click)="back($event, 'infor-contract-batch')" type="button" name="next" class="next action-button"
-            style="background-color: #8B8B8B">Quay lại</button>
+            style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
         <div>
-            <button (click)="submit()" type="button" name="next" class="next action-button">Hoàn thành</button>
+            <button (click)="submit()" type="button" name="next" class="next action-button">{{'btn.done' | translate}}</button>
         </div>
     </div>
   
     <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
-      <p style="font-size: 18px; color: white">Đang xử lý...</p>
+      <p style="font-size: 18px; color: white">{{'contract.status.processing' | translate}}...</p>
   </ngx-spinner>

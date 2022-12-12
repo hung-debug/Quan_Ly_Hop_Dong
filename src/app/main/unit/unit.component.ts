@@ -48,8 +48,8 @@ export class UnitComponent implements OnInit {
     this.searchUnit();
 
     this.cols = [
-      { field: 'id', header: 'unit.id', style:'text-align: left;' },
       { field: 'name', header: 'unit.name', style:'text-align: left;' },
+      { field: 'id', header: 'unit.id', style:'text-align: left;' },
       { field: 'short_name', header: 'unit.short-name', style:'text-align: left;' },
       { field: 'code', header: 'unit.code', style:'text-align: left;' },
       { field: 'status', header: 'unit.status', style:'text-align: left;' },

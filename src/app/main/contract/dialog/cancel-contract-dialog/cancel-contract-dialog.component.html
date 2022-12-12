@@ -3,12 +3,12 @@
       <h3 style="color: #106DB6; font-family: inherit;">{{this.data.title}}</h3>
     </div>
     <div style="font-weight: bold">
-        <h3 style="font-family: inherit;">Bạn có chắc chắn muốn hủy hợp đồng này không?</h3>
+        <h3 style="font-family: inherit;">{{'cancel.contract.question' | translate}}</h3>
     </div>
     <form [formGroup]="addForm" class="content">
         <div class="row">
             <div class="col-md-12">
-                <div class="label text-color">Lý do hủy hợp đồng <span class="required-title">*</span></div>
+                <div class="label text-color">{{'reasson.cancel.contract' | translate}} <span class="required-title">*</span></div>
                 <div>
                     <textarea formControlName="reason"></textarea>
                 </div>
@@ -19,8 +19,8 @@
         </div>
     
         <div class="row" style="justify-content: center;padding-top: 10px;">
-            <button class="cancel-button" (click)="dialog.closeAll()" type="button">Thoát</button>
-            <button class="save-button" (click)="onSubmit()">Đồng ý</button>
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'exit' | translate}}</button>
+            <button class="save-button" (click)="onSubmit()">{{'btn.accept' | translate}}</button>
         </div>
     </form>
   </div>

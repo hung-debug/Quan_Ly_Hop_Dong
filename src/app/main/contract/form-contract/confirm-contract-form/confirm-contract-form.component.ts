@@ -32,9 +32,6 @@ export class ConfirmContractFormComponent implements OnInit {
   @Input() save_draft_infor_form: any;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private userService: UserService,
-    private unitService: UnitService,
     public datepipe: DatePipe,
     private contractService: ContractService,
     private router: Router,

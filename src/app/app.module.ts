@@ -2,7 +2,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ChartModule } from 'angular-highcharts';
 import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA, Pipe } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -38,7 +38,6 @@ import {ContractModule} from "./main/contract/contract.module";
 import {AppService} from './service/app.service';
 import {ContractTemplateComponent} from './main/contract-template/contract-template.component';
 import {SignupComponent} from './login/signup/signup.component';
-import {ContractSignatureModule} from "./main/contract-signature/contract-signature.module";
 import {MatDialogModule} from "@angular/material/dialog";
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { NgxSelectModule } from "ngx-select-ex";
@@ -167,6 +166,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
   ],
   imports: [
+    TranslateModule,
     BrowserModule,
     AppRoutingModule,
     NgxChartsModule,

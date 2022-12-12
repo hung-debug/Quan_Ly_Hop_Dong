@@ -32,14 +32,11 @@ export class MainComponent implements OnInit {
   listNotification: any[] = [];
 
   constructor(private router: Router,
-              private modalService: NgbModal,
-              private fb: FormBuilder,
               private appService: AppService,
               public sidebarservice: SidebarService,
               private dashboardService: DashboardService,
               private changeDetectorRef: ChangeDetectorRef,
               public translate: TranslateService,
-              private toastService: ToastService,
               private dialog: MatDialog,
               private userService: UserService,
               private deviceService: DeviceDetectorService,
@@ -49,7 +46,15 @@ export class MainComponent implements OnInit {
     translate.setDefaultLang(localStorage.getItem('lang') || 'vi');
   }
 
+  lang: any;
   ngOnInit(): void {
+
+    if(localStorage.getItem('lang') == 'vi') {
+      this.lang = 'vi';
+    } else if(localStorage.getItem('lang') == 'en') {
+      this.lang = 'en';
+    }
+
     this.getDeviceApp();
 
     //update title by component

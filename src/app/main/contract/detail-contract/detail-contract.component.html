@@ -2,7 +2,7 @@
   <!--  information contract-->
   <div *ngIf="!this.mobile" class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
-      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">THÔNG TIN CHI TIẾT HỢP ĐỒNG</div>
+      <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">{{'contract.detail' | translate}}</div>
       <div style="line-height: 25px">
         <!-- <div>
           <span class="title-contract">Mã hợp đồng:</span>
@@ -73,12 +73,15 @@
   </div>
 </div>
 <div class="footer-contract">
-<!--  <div class="content_footer">@Copyright 2021 - MobiFone</div>-->
+
   <div class="btn_footer">
     <div class="label">
     </div>
     <div class="label" *ngIf="role || this.status == 30">
-      <button  type="button" name="next" class="next action-button" *ngIf="view && loaded" (click)="downloadContract(idContract)">{{checkStatusUser(status, role)}}</button>
+      <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role)}}</button>
+
+      <button  type="button" name="next" class="next action-button1" *ngIf="view && loaded && status == 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role)}}</button>
+
     </div>
   </div>
 </div>

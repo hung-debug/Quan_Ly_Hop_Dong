@@ -1,6 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
+import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { ContractService } from 'src/app/service/contract.service';
 import { DialogReasonRejectedComponent } from '../dialog-reason-rejected/dialog-reason-rejected.component';
@@ -16,6 +17,11 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   personCreate: string;
   emailCreate: string;
   timeCreate: any;
+
+  reasonCancel: string;
+  cancelDate: any;
+
+  staus: number;
 
   status: any = [
     {
@@ -35,17 +41,31 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     },
     public router: Router,
     public dialog: MatDialog,
-    private contractService : ContractService
+    private contractService : ContractService,
   ) {
+ 
   }
 
+  lang: string;
   ngOnInit(): void {
+
+    console.log("aaa ", sessionStorage.getItem('lang'));
+
+    if(sessionStorage.getItem('lang') == 'vi') {
+      this.lang = 'vi';
+    } else if(sessionStorage.getItem('lang') == 'en') {
+      this.lang = 'en';
+    }
+
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
 
       this.timeCreate = response.createdAt ? moment(response.createdAt).add(420):null;
       this.timeCreate = response.createdAt ? moment(this.timeCreate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
       this.emailCreate = response.createdBy.email;
+      this.reasonCancel = response.reasonCancel;
+
+      this.cancelDate = response.cancelDate ? moment(response.cancelDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
   
       response.recipients.forEach((element: any) => {
         let data = {
@@ -57,7 +77,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           typeOfSign: element.signType[0],
           process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
           reasonReject: element.reasonReject,
-          type: element.participantType
+          type: element.participantType,
+          statusNumber: element.status
         }
         this.is_list_name.push(data);
       })
@@ -74,29 +95,70 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   checkStatusUser(status: any, role: any) {
     let res = '';
-    if (status == 3) {
-      return 'Đã từ chối';
-    } else if(status == 4) {
-      return 'Đã uỷ quyền';
-    }
 
-    if (status == 0) {
-      res += 'Chưa ';
-    } else if (status == 1) {
-      res += 'Đang ';
-    } else if (status == 2) {
-      res += 'Đã ';
-    }
+    console.log("lang ", this.lang);
 
-    if (role == 1) {
-      res +=  'điều phối';
-    } else if (role == 2) {
-      res +=  'xem xét';
-    } else if (role == 3) {
-      res +=  'ký';
-    } else if (role == 4) {
-      res =  res + ' đóng dấu';
+    if(this.lang == 'vi' || !this.lang) {
+      if (status == 3) {
+        return 'Đã từ chối';
+      } else if(status == 4) {
+        return 'Đã uỷ quyền/chuyển tiếp';
+      }
+  
+      if (status == 0 && !this.reasonCancel) {
+        res += 'Chưa ';
+      } else if (status == 1 && !this.reasonCancel) {
+        res += 'Đang ';
+      } else if (status == 2) {
+        res += 'Đã ';
+      }
+  
+      if(!this.reasonCancel) {
+        if (role == 1 ) {
+          res +=  'điều phối';
+        } else if (role == 2) {
+          res +=  'xem xét';
+        } else if (role == 3) {
+          res +=  'ký';
+        } else if (role == 4) {
+          res =  res + ' đóng dấu';
+        }
+      } else {
+        if(!res.includes('Đã'))
+          res = 'Đã huỷ'
+      }
+    } else if(this.lang == 'en') {
+      if (status == 3) {
+        return 'Rejected';
+      } else if(status == 4) {
+        return 'Authorized/Forwarded';
+      }
+  
+      if (status == 0 && !this.reasonCancel) {
+        res += 'Not ';
+      } else if (status == 1 && !this.reasonCancel) {
+        res += 'Doing ';
+      } else if (status == 2) {
+        res += 'Already ';
+      }
+  
+      if(!this.reasonCancel) {
+        if (role == 1 ) {
+          res +=  'coordinator';
+        } else if (role == 2) {
+          res +=  'consider';
+        } else if (role == 3) {
+          res +=  'sign';
+        } else if (role == 4) {
+          res =  res + ' mark';
+        }
+      } else {
+        if(!res.includes('Already'))
+          res = ''
+      }
     }
+  
+    
     return res;
   }
 
@@ -104,7 +166,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-// @ts-ignore
+  // @ts-ignore
   viewReasonRejected(RecipientsId: any){
    let data: any;
 

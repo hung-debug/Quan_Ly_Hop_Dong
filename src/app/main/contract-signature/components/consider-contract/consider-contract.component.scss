@@ -307,23 +307,15 @@
   height: 85px !important;
 }
 
-@media screen and (min-width: 1224px) and (max-width:1280px){
-  .sample-contract{
-  .label {
-    font-size: 13px;
-  }
-  .radio-confirm{
-    margin-left: -10px;
-  }
-}
-}
-@media screen and (min-width: 1280px) and (max-width:1400px){
-  .sample-contract{
-  .label {
-    font-size: 13px;
-  }
-  .radio-confirm{
-    margin-left: -10px;
-  }
-}
+.auto-scroll {
+  width: 100px;
+  height: 30px;
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: rgb(46, 108, 246); 
+  color: rgb(255, 255, 255);
 }

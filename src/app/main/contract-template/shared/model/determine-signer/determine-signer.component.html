@@ -26,7 +26,7 @@
                    oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [disabled]="getOriganzationReviewer().length == 1">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-                 <!-- Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc -->
+                 <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi xem xet to chuc-->
                  <!-- <div class="participants--input" style="display: flex">
                   <div class="participants__name">
                     <div class="label_detail text-color">
@@ -142,7 +142,7 @@
                    oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');" [disabled]="getOriganzationSignature().length == 1">
             <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-               <!-- Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ký to chuc -->
+               <!--Chọn {{'Đăng nhập bằng email' | translate}} hoặc số điện thoại cho nguoi ký to chuc-->
                <!-- <div class="participants--input" style="display: flex">
                 <div class="participants__name">
                   <div class="label_detail text-color">
@@ -393,12 +393,13 @@
         <div style="width: 72px">{{'doi_tac' | translate | uppercase}} -</div>
         <input type="text" placeholder="{{(item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate}}"
                [(ngModel)]="item.name" disabled>
-        <!--        <input *ngIf="item.type == 3" type="text" [ngModel]="this.getNameIndividual" disabled>-->
       </div>
-      <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
+
+      <div *ngIf="this.dataParnterOrganization().length >= 1" style="display: flex; justify-content: flex-end">
         <u class="label text-color" (click)="deletePartner(id, item)"
            style="background-color: #FFFFFF; cursor: pointer">{{(item.type == 2 ? 'xoa_doi_tac_to_chuc' : 'xoa_doi_tac_ca_nhan') | translate}}</u>
       </div>
+
       <div class="contract__content--participants">
         <div class="row">
           <div class="radio col-md-6 label_type">

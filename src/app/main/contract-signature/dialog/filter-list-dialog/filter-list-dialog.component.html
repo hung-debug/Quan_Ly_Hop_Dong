@@ -5,7 +5,7 @@
     <form [formGroup]="addForm" class="content">
         <div class="row">
             <div class="col-md-6">
-                <div class="label text-color">Loại hợp đồng</div>
+                <div class="label text-color">{{'menu.contract.type.list' | translate}}</div>
                 <div>
                     <p-dropdown 
                         panelStyleClass="font"
@@ -14,7 +14,7 @@
                         formControlName="filter_type" 
                         optionLabel="name" 
                         optionValue="id" 
-                        placeholder="Chọn loại hợp đồng" 
+                        placeholder="{{'choose.contract.type' | translate}}" 
                         [filter]="true" 
                         filterBy="name" 
                         [showClear]="true"  
@@ -23,7 +23,7 @@
             </div>
         
             <div class="col-md-6">
-                <div class="label text-color">Số hợp đồng</div>
+                <div class="label text-color">{{'contract.number' | translate}}</div>
                 <div class="input-data">
                     <input type="text" formControlName="filter_contract_no">
                 </div>
@@ -32,14 +32,14 @@
 
         <div class="row" style="padding-top: 10px;">
             <div class="col-md-6">
-                <div class="label text-color">Từ ngày (ngày tạo)</div>
+                <div class="label text-color">{{'createdate.start' | translate}}</div>
                 <div>
                     <p-calendar formControlName="filter_from_date" [showIcon]="true" dateFormat="dd/mm/yy" appendTo="body"></p-calendar>
                 </div>
             </div>
         
             <div class="col-md-6">
-                <div class="label text-color">Đến ngày (ngày tạo)</div>
+                <div class="label text-color">{{'createdate.end' | translate}}</div>
                 <div>
                     <p-calendar formControlName="filter_to_date" [showIcon]="true" dateFormat="dd/mm/yy" appendTo="body"></p-calendar>
                 </div> 
@@ -48,7 +48,7 @@
 
         <div class="row">
             <div class="col-md-6">
-                <div class="label text-color">Trạng thái hợp đồng</div>
+                <div class="label text-color">{{'contract.status.v2' | translate}}</div>
                 <!--Chờ xử lý-->
                 <div>
                     <p-dropdown 
@@ -58,7 +58,7 @@
                         [options]="(this.router.url.includes('processed')) ? contractStatusProcessedList: contractStatusProcessingList" 
                         optionLabel="name"
                         optionValue="id" 
-                        placeholder="Trạng thái hợp đồng" 
+                        placeholder="{{'contract.status.v2' | translate}}" 
                         [showClear]="true"  
                     ></p-dropdown>
                 </div>
@@ -66,8 +66,8 @@
         </div>
     
         <div class="row" style="justify-content: center;padding-top: 10px;">
-            <button class="cancel-button" (click)="dialog.closeAll()" type="button">Hủy</button>
-            <button class="save-button" (click)="onSubmit()">Tìm kiếm</button>
+            <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'cancel' | translate}}</button>
+            <button class="save-button" (click)="onSubmit()">{{'btn.search' | translate}}</button>
         </div>
     </form>
   </div>

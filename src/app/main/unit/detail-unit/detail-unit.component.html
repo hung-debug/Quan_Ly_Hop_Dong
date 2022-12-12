@@ -85,14 +85,14 @@
     <div *ngIf="this.site === 'KD'">
       <div class="row" style="padding-top: 2px">
         <div class="header">
-          <h3 class="label-header">{{ "THÔNG TIN GÓI CƯỚC" | translate }}</h3>
+          <h3 class="label-header">{{ "package.information" | translate }}</h3>
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-6">
           <div class="label_item">
-            {{ "Số lượng hợp đồng đã sử dụng: " | translate }}
+            {{ "contract.used" | translate }}
             <span class="highlight_result">
               {{ this.numContractUse }}
             </span>
@@ -101,7 +101,7 @@
 
         <div class="col-md-6">
           <div class="label_item">
-            {{ "Số lượng hợp đồng đã mua: " | translate }}
+            {{ "contract.purchased" | translate }}
             <span class="highlight_result">
               {{ this.numContractBuy }}
             </span>
@@ -112,7 +112,7 @@
       <div class="row" style="padding-top: 10px">
         <div class="col-md-6">
           <div class="label_item">
-            {{ "Số lượng eKYC đã sử dụng: " | translate }}
+            {{ "ekyc.used" | translate }}
             <span class="highlight_result">
               {{ this.eKYCContractUse }}
             </span>
@@ -121,7 +121,7 @@
 
         <div class="col-md-6">
           <div class="label_item">
-            {{ "Số lượng eKYC đã mua: " | translate }}
+            {{ "ekyc.purchased" | translate }}
             <span class="highlight_result">
               {{ this.eKYCContractBuy }}
             </span>
@@ -132,7 +132,7 @@
       <div class="row" style="padding-top: 10px">
         <div class="col-md-6">
           <div class="label_item">
-            {{ "Số lượng SMS đã sử dụng: " | translate }}
+            {{ "sms.used" | translate }}
             <span class="highlight_result">
               {{ this.smsContractUse }}
             </span>
@@ -141,7 +141,7 @@
 
         <div class="col-md-6">
           <div class="label_item">
-            {{ "Số lượng SMS đã mua: " | translate }}
+            {{ "sms.purchased" | translate }}
             <span class="highlight_result">
               {{ this.smsContractBuy }}
             </span>

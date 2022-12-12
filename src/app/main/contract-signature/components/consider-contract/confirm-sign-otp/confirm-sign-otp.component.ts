@@ -62,61 +62,31 @@ export class ConfirmSignOtpComponent implements OnInit {
 
 
   ngOnInit(): void {    
-             //Còn số lượng SMS thì cho ký OTP lần đầu
-             this.unitService
-             .getNumberContractUseOriganzation(this.data.orgId)
-             .toPromise()
-             .then(
-               (data) => {
-                 this.smsContractUse = data.sms;
-     
-                 //lay so luong hop dong da mua
-                 this.unitService
-                   .getNumberContractBuyOriganzation(this.data.orgId)
-                   .toPromise()
-                   .then(
-                     (data) => {
-                       this.smsContractBuy = data.sms;
-                       if (
-                         Number(this.smsContractUse) +
-                           Number(1) >
-                         Number(this.smsContractBuy)
-                       ) {
-                         this.toastService.showErrorHTMLWithTimeout(
-                           'Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ',
-                           '',
-                           3000
-                         );
-                       } else {
-                        this.getDeviceApp();
+    this.datasOtp = this.data;
+    this.datas = this.datasOtp.datas;
+    this.addForm = this.fbd.group({
+      otp: this.fbd.control("", [Validators.required]),
+    });
+      this.checkSMS(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone);
 
-                        this.datasOtp = this.data;
-                        this.datas = this.datasOtp.datas;
-                        this.addForm = this.fbd.group({
-                          otp: this.fbd.control("", [Validators.required]),
-                        });
-                        this.sendOtp(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone);
-                       }
-                     },
-                     (error) => {
-                       this.toastService.showErrorHTMLWithTimeout(
-                         'Lỗi lấy số lượng hợp đồng đã mua',
-                         '',
-                         3000
-                       );
-                     }
-                   );
-               },
-               (error) => {
-                 this.toastService.showErrorHTMLWithTimeout(
-                   'Lỗi lấy số lượng hợp đồng đã dùng',
-                   '',
-                   3000
-                 );
-               }
-             );
+      this.getDeviceApp();
+  }
 
-  
+  async checkSMS(contractId: any, recipientId: any, phone: any) {
+    //Lấy số lượng hợp đồng đã sử dụng
+    const numberContractUseOriganzation = await this.unitService.getNumberContractUseOriganzation(this.data.orgId).toPromise();
+    this.smsContractUse = numberContractUseOriganzation.sms;
+
+    //Lấy số lượng hợp đồng đã mua
+    const getNumberContractBuyOriganzation = await this.unitService.getNumberContractBuyOriganzation(this.data.orgId).toPromise();
+    this.smsContractBuy = getNumberContractBuyOriganzation.sms;
+
+    if(Number(this.smsContractUse) + Number(1) > Number(this.smsContractBuy)) {
+      this.toastService.showErrorHTMLWithTimeout('Số lượng SMS của tổ chức không đủ để nhận thông tin ký hợp đồng. Liên hệ với Admin để tiếp tục sử dụng dịch vụ','',3000);
+      return;
+    } else {
+        this.sendOtp(contractId, recipientId, phone);
+    }
   }
 
   async onSubmit() {
@@ -148,59 +118,7 @@ export class ConfirmSignOtpComponent implements OnInit {
   }
 
   sendOtpAgain(contract_id:any, recipient_id:any, phone:any) {
-      //Còn số lượng SMS thì cho ký OTP lần đầu
-      this.unitService
-      .getNumberContractUseOriganzation(this.data.orgId)
-      .toPromise()
-      .then(
-        (data) => {
-          this.smsContractUse = data.sms;
-
-          //lay so luong hop dong da mua
-          this.unitService
-            .getNumberContractBuyOriganzation(data.orgId)
-            .toPromise()
-            .then(
-              (data) => {
-                this.smsContractBuy = data.sms;
-                if (
-                  Number(this.smsContractUse) +
-                    Number(1) >
-                  Number(this.smsContractBuy)
-                ) {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ',
-                    '',
-                    3000
-                  );
-                } else {
-                 this.getDeviceApp();
-
-                 this.datasOtp = this.data;
-                 this.datas = this.datasOtp.datas;
-                 this.addForm = this.fbd.group({
-                   otp: this.fbd.control("", [Validators.required]),
-                 });
-                 this.sendOtp(contract_id, recipient_id, phone);
-                }
-              },
-              (error) => {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi lấy số lượng hợp đồng đã mua',
-                  '',
-                  3000
-                );
-              }
-            );
-        },
-        (error) => {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Lỗi lấy số lượng hợp đồng đã dùng',
-            '',
-            3000
-          );
-        }
-      );
+     this.checkSMS(contract_id, recipient_id, phone);
   }
 
   sendOtp(contract_id:any, recipient_id:any, phone:any){
@@ -293,12 +211,15 @@ export class ConfirmSignOtpComponent implements OnInit {
           && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
-    
+
+          console.log("content ", this.datas.is_data_object_signature.valueSign);
+
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
-            "content": this.datasOtp.datas.is_data_object_signature.valueSign,
+            "content": this.datas.is_data_object_signature.valueSign,
             organizationId: this.datas?.is_data_contract?.organization_id
           }
+
   
           signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
     
@@ -431,7 +352,6 @@ export class ConfirmSignOtpComponent implements OnInit {
     }else{
       this.contractService.updateInfoContractConsiderImg(signUpdateTempN, this.datasOtp.recipient_id).subscribe(
         async (result) => {
-          console.log("result ",result);
           if(result?.success == false){
             if(result.message == 'Wrong otp'){
               this.toastService.showErrorHTMLWithTimeout('Mã OTP không đúng', '', 3000);

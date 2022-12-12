@@ -36,6 +36,8 @@ export class ContractTemplateService {
   urlGetListFileTemplate: any = `${environment.apiUrl}/api/v1/contracts/template/release/list`;
   deleteParticipantContractUrl: any = `${environment.apiUrl}/api/v1/participants/template/`;
 
+  templateUseUrl: any = `${environment.apiUrl}/api/v1/contracts/template/is-use/`;
+
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
 
@@ -128,6 +130,18 @@ export class ContractTemplateService {
       contract_id: datas.id,
     });
     return this.http.post<any>(this.documentUrl, body, { 'headers': headers });
+  }
+
+   //call api xem mẫu đã được sử dụng hay chưa
+   checkTemplateIsUse(id: number) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders().append('Content-Type', 'application/json').append('Authorization', 'Bearer ' + this.token);
+
+    console.log("token ", this.token);
+
+    return this.http.post<any>(this.templateUseUrl + `${id}`,'', {
+      headers,
+    });
   }
 
   addDocumentAttach(datas: any) {
@@ -456,31 +470,56 @@ export class ContractTemplateService {
         ],
         // "contract_id": 1
       },
-      // {
-      //   "name": "",
-      //   "type": 3, // Đối tác cá nhân
-      //   "ordering": 1,
-      //   "contract_id": 1,
-      //   "recipients": [
-      //     // người ký
-      //     {
-      //       "name": "",
-      //       "email": "",
-      //       "phone": "",
-      //       "role": 3, // người ký
-      //       "ordering": 1,
-      //       "status": 1,
-      //       "username": "",
-      //       "password": "",
-      //       "is_otp": 1,
-      //       "sign_type": []
-      //     }
-      //   ],
-      // }
     ]
   }
 
   getDataDetermineInitialization() {
+    return [
+      {
+        name: "",
+        type: 1,
+        ordering: 1,
+        status: 1,
+        recipients: [
+          {
+            login_by: 'email',
+            name: "",
+            email: "",
+            phone: "",
+            card_id: "",
+            role: 3,
+            ordering: 1,
+            status: 0,
+            is_otp: 0,
+            sign_type: [
+            ]
+          }
+        ],
+      },
+      // {
+      //   name: "Đối tác 1",
+      //   type: 2,
+      //   ordering: 2,
+      //   status: 1,
+      //   recipients: [
+      //     {
+      //       login_by: 'email',
+      //       name: "Người ký 1",
+      //       email: "",
+      //       phone: "",
+      //       card_id: "",
+      //       role: 3,
+      //       ordering: 1,
+      //       status: 0,
+      //       is_otp: 0,
+      //       sign_type: []
+      //     }
+      //   ],
+      // },
+    ]
+  }
+
+  getDataDetermineInitializationWithPartner() {
     return [
       {
         name: "",

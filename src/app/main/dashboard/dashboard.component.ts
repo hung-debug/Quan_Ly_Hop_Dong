@@ -60,15 +60,25 @@ export class DashboardComponent implements OnInit {
     ];
   }
 
+  lang: any;
   ngOnInit(): void {
     this.appService.setTitle("menu.dashboard");
     this.search();
 
     this.user = this.userService.getInforUser();
 
+    if(localStorage.getItem('lang') == 'vi') {
+      this.lang = 'vi';
+    } else if(localStorage.getItem('lang') == 'en') {
+      this.lang = 'en';
+    }
+
     this.unitService.getUnitList('', '').subscribe(data => {
-      console.log(data.entities);
-      this.orgListTmp.push({name: "Tất cả", id: ""});
+      if(localStorage.getItem('lang') == 'vi')
+        this.orgListTmp.push({name: "Tất cả", id: ""});
+      else if(localStorage.getItem('lang') == 'en')
+        this.orgListTmp.push({name: "All", id: ""});
+
       //sap xep theo path de cho to chuc cha len tren
       let dataUnit = data.entities.sort((a: any, b: any) => a.path.toString().localeCompare(b.path.toString()));
       for (var i = 0; i < dataUnit.length; i++) {
@@ -165,113 +175,120 @@ export class DashboardComponent implements OnInit {
     }
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
     this.dashboardService.countContractCreate(this.isOrg, this.organization_id, this.filter_from_date, this.filter_to_date).subscribe(data => {
-      console.log(data);
       data.isOrg = this.isOrg;
       data.organization_id = this.organization_id;
       data.from_date = this.filter_from_date;
       data.to_date = this.filter_to_date;
       this.totalCreate = data.total_process + data.total_signed + data.total_reject + data.total_cancel + data.total_expires;
-      this.chartCreated = new Chart({
-        colors: ['#4B71F0', '#58A55C', '#ED1C24', '#717070', '#FF710B'],
-        chart: {
-          type: 'column',
-          style: {
-            fontFamily: 'inherit',
-          }
+
+      if(localStorage.getItem('lang') == 'vi')
+        this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", data);
+      else if(localStorage.getItem('lang') == 'en')
+        this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", data);     
+    });
+  }
+
+  createChart(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string,so_luong: string, data: any) {
+    this.chartCreated = new Chart({
+      colors: ['#4B71F0', '#58A55C', '#ED1C24', '#717070', '#FF710B'],
+      chart: {
+        type: 'column',
+        style: {
+          fontFamily: 'inherit',
+        }
+      },
+      title: {
+        text: this.chartContractCreated,
+        style: {
+          fontSize: '16px',
+          fontWeight: '500',
         },
+        verticalAlign: 'bottom',
+      },
+      credits: {
+        enabled: false
+      },
+      legend: {
+        enabled: false
+      },
+      xAxis: {
+        categories: [
+          arg0, arg1, arg2, arg3, arg4
+        ],
+        labels: {
+          style: {
+            fontSize: '13px'
+          },
+          formatter: function () {
+            var link = "";
+
+            if (this.value == arg0) {
+              link = "/main/contract/create/processing"
+            } else if (this.value == arg1) {
+              link = "/main/contract/create/complete"
+            } else if (this.value == arg2) {
+              link = "/main/contract/create/fail"
+            } else if (this.value == arg3) {
+              link = "/main/contract/create/cancel"
+            } else if (this.value == arg4) {
+              link = "/main/contract/create/overdue"
+            }
+            link = link + "?isOrg=" + data.isOrg + "&organization_id=" + data.organization_id + "&filter_from_date=" + data.from_date + "&filter_to_date=" + data.to_date;
+            return '<a style="cursor: pointer; color: #106db6; text-decoration: none" href="' + link + '">' + this.value + '</a>';
+          },
+          useHTML: true
+        }
+      },
+      yAxis: [{
         title: {
-          text: this.chartContractCreated,
-          style: {
-            fontSize: '16px',
-            fontWeight: '500',
-          },
-          verticalAlign: 'bottom',
+          text: so_luong
         },
-        credits: {
-          enabled: false
-        },
-        legend: {
-          enabled: false
-        },
-        xAxis: {
-          categories: [
-            'Đang xử lý', 'Hoàn thành', 'Từ chối', 'Hủy bỏ', 'Quá hạn'
-          ],
-          labels: {
-            style: {
-              fontSize: '13px'
-            },
-            formatter: function () {
-              var link = "";
+        allowDecimals: false,
+      }],
 
-              if (this.value == 'Đang xử lý') {
-                link = "/main/contract/create/processing"
-              } else if (this.value == 'Hoàn thành') {
-                link = "/main/contract/create/complete"
-              } else if (this.value == 'Từ chối') {
-                link = "/main/contract/create/fail"
-              } else if (this.value == 'Hủy bỏ') {
-                link = "/main/contract/create/cancel"
-              } else if (this.value == 'Quá hạn') {
-                link = "/main/contract/create/overdue"
-              }
-              link = link + "?isOrg=" + data.isOrg + "&organization_id=" + data.organization_id + "&filter_from_date=" + data.from_date + "&filter_to_date=" + data.to_date;
-              return '<a style="cursor: pointer; color: #106db6; text-decoration: none" href="' + link + '">' + this.value + '</a>';
-            },
-            useHTML: true
-          }
+      plotOptions: {
+        series: {
+          borderWidth: 0,
+          dataLabels: {
+            enabled: true,
+          },
         },
-        yAxis: [{
-          title: {
-            text: 'Số lượng'
-          },
-          allowDecimals: false,
-        }],
-
-        plotOptions: {
-          series: {
-            borderWidth: 0,
-            dataLabels: {
-              enabled: true,
-            },
-          },
-          column: {
-            cursor: 'pointer',
-            point: {
-              events: {
-                click: function () {
-                  var link = "";
-                  if (this.x == 0) {
-                    link = "/main/contract/create/processing"
-                  } else if (this.x == 1) {
-                    link = "/main/contract/create/complete"
-                  } else if (this.x == 2) {
-                    link = "/main/contract/create/fail"
-                  } else if (this.x == 3) {
-                    link = "/main/contract/create/cancel"
-                  } else if (this.x == 4) {
-                    link = "/main/contract/create/overdue"
-                  }
-                  window.location.href = link + "?isOrg=" + data.isOrg + "&organization_id=" + data.organization_id + "&filter_from_date=" + data.from_date + "&filter_to_date=" + data.to_date;
+        column: {
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: function () {
+                var link = "";
+                if (this.x == 0) {
+                  link = "/main/contract/create/processing"
+                } else if (this.x == 1) {
+                  link = "/main/contract/create/complete"
+                } else if (this.x == 2) {
+                  link = "/main/contract/create/fail"
+                } else if (this.x == 3) {
+                  link = "/main/contract/create/cancel"
+                } else if (this.x == 4) {
+                  link = "/main/contract/create/overdue"
                 }
+                window.location.href = link + "?isOrg=" + data.isOrg + "&organization_id=" + data.organization_id + "&filter_from_date=" + data.from_date + "&filter_to_date=" + data.to_date;
               }
-            },
-          }
-        },
-        series: [
-          {
-            type: 'column',
-            colorByPoint: true,
-            name: 'Số hợp đồng',
-            data: [
-              ['Đang xử lý', data.total_process],
-              ['Hoàn thành', data.total_signed],
-              ['Từ chối', data.total_reject],
-              ['Hủy bỏ', data.total_cancel],
-              ['Quá hạn', data.total_expires]
-            ]
-          }]
-      });
+            }
+          },
+        }
+      },
+      series: [
+        {
+          type: 'column',
+          colorByPoint: true,
+          name: 'Số hợp đồng',
+          data: [
+            ['Đang xử lý', data.total_process],
+            ['Hoàn thành', data.total_signed],
+            ['Từ chối', data.total_reject],
+            ['Hủy bỏ', data.total_cancel],
+            ['Quá hạn', data.total_expires]
+          ]
+        }]
     });
   }
 
