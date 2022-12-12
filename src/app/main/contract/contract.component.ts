@@ -346,7 +346,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
     if(sessionStorage.getItem('lang') == 'en') {
       title = "CONTRACT SEARCH"
-    } else if(sessionStorage.getItem('lang') == 'vi') {
+    } else if(sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       title = "TÌM KIẾM HỢP ĐỒNG";
     }
 

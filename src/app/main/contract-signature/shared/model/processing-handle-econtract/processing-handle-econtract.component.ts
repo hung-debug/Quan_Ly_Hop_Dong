@@ -57,8 +57,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       this.lang = 'en';
     }
 
-    console.log("lang ", this.lang);
-
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
 

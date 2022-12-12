@@ -4,16 +4,16 @@
   </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="myForm" class="content">
     <div class="name-item">
-      <div class="label_item">Tên người dùng: <span class="require_star">*</span></div>
+      <div class="label_item">{{'username' | translate}}: <span class="require_star">*</span></div>
       <div class="form-control input-line">
-        <input autocomplete="off" type="text" formControlName="name" class="input-text" placeholder="Nhập tên người dùng" autofocus>
+        <input autocomplete="off" type="text" formControlName="name" class="input-text" placeholder="{{'username.enter' | translate}}" autofocus>
       </div>
     </div>
 
     <div class="name-item">
-      <div class="label_item">Mật khẩu: <span class="require_star">*</span></div>
+      <div class="label_item">{{'login.password' | translate}}: <span class="require_star">*</span></div>
       <div class="form-control input-line">
-        <input autocomplete="off" type="password" formControlName="email" class="input-text" placeholder="Nhập mật khẩu">
+        <input autocomplete="off" type="password" formControlName="email" class="input-text" placeholder="{{'password.enter' | translate}}">
       </div>
     </div>
 
@@ -21,11 +21,11 @@
       <button
         class="dx-button-form dx-button-close dx-button-90"
         (click)="dialog.closeAll()"
-        type="button">Thoát
+        type="button">{{'exit' | translate}}
       </button>
       <button
         class="dx-button-form dx-button-submit dx-button-90"
-        type="default">Xác nhận
+        type="default">{{'confirm' | translate}}
       </button>
     </div>
   </form>

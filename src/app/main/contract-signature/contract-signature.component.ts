@@ -615,7 +615,7 @@ export class ContractSignatureComponent implements OnInit {
                         checkSign[i].result.message == 'Tax code do not match!'
                       ) {
                         this.toastService.showErrorHTMLWithTimeout(
-                          'Mã số thuế không trùng khớp',
+                          'taxcode.not.match',
                           '',
                           3000
                         );
@@ -654,7 +654,7 @@ export class ContractSignatureComponent implements OnInit {
                 if (countSuccess == checkSign.length) {
                   this.spinner.hide();
                   this.toastService.showSuccessHTMLWithTimeout(
-                    'Ký số thành công',
+                    'sign.success',
                     '',
                     3000
                   );
@@ -824,7 +824,6 @@ export class ContractSignatureComponent implements OnInit {
  
  
                    if (!sign.recipient_id) {
-                     console.log('recipent_id');
                      this.toastService.showErrorHTMLWithTimeout(
                        'Lỗi ký USB Token ',
                        '',
@@ -847,7 +846,7 @@ export class ContractSignatureComponent implements OnInit {
                    if (i == fileC.length - 1 ) {
                      this.spinner.hide();
                      this.toastService.showSuccessHTMLWithTimeout(
-                       'Ký số thành công',
+                       'sign.success',
                        '',
                        3000
                      );
@@ -1124,7 +1123,7 @@ export class ContractSignatureComponent implements OnInit {
           if (i == fileC.length - 1 ) {
             this.spinner.hide();
             this.toastService.showSuccessHTMLWithTimeout(
-              'Ký số thành công',
+              'sign.success',
               '',
               3000
             );

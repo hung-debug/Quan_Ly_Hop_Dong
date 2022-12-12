@@ -1,9 +1,8 @@
-<!--<link rel="stylesheet" href="sample-contract.component.scss">-->
 <div class="sample-contract row">
     <!--  information contract-->
     <div class="col-md-3 sample-contract__information" style="background-color: white; z-index: 10">
         <div class="sample-contract__information--drag" id="width-element-info" style="position: relative">
-            <div style="padding-bottom: 10px" class="label">CÁC THÀNH PHẦN (<span style="color: red">KÉO THẢ</span>)
+            <div style="padding-bottom: 10px" class="label">{{'components' | translate}} (<span style="color: red">{{'drag-drop' | translate}}</span>)
             </div>
             <!--      <div>-->
             <div *ngFor="let d of this.datasForm.contract_user_sign" class="show-list-name-class"
@@ -30,9 +29,9 @@
 
         <div class="location-change">
             <div class="sample-contract__information--user-sign">
-                <label class="label">THUỘC TÍNH</label>
+                <label class="label">{{'attribute' | translate}}</label>
                 <div class="name-text" *ngIf="isEnableText">
-                    <label class="label-require">Tên trường: *</label>
+                    <label class="label-require">{{'attribute.name' | translate}}: *</label>
                     <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name"
                         (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                 </div>
@@ -50,7 +49,7 @@
             </div>
             <hr>
             <div class="flex-column">
-                <label class="label-require">Vị trí</label>
+                <label class="label-require">{{'position.coordinate' | translate}}</label>
                 <div class="location">
                     <div class="location-drag">
                         <div class="label" style="text-align: center">X:</div>
@@ -66,15 +65,15 @@
             </div>
             <hr>
             <div class="flex-column">
-                <label class="label-require">Kích thước</label>
+                <label class="label-require">{{'size' | translate}}</label>
                 <div class="location">
                     <div class="location-drag">
-                        <div class="label">Chiều dài</div>
+                        <div class="label">{{'height' | translate}}</div>
                         <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')"
                             [ngModel]="objSignInfo.width" [readOnly]="false">
                     </div>
                     <div class="location-drag">
-                        <div class="label">Chiều rộng</div>
+                        <div class="label">{{'width' | translate}}</div>
                         <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')"
                             [ngModel]="objSignInfo.height" [readOnly]="false">
                     </div>
@@ -104,14 +103,14 @@
 </div>
 <div class="footer-sample-contract">
     <button (click)="back($event, 'party-contract-form')" type="button" name="next" class="next action-button"
-        style="background-color: #8B8B8B">Quay lại</button>
+        style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
     <div>
         <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
-            style="background-color: #FCAF17">Lưu nháp</button>
-        <button (click)="next('next_step')" type="button" name="next" class="next action-button">Tiếp theo</button>
+            style="background-color: #FCAF17">{{'btn.save-draff' | translate}}</button>
+        <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
     </div>
 </div>
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
-    <p style="font-size: 18px; color: white">Đang xử lý...</p>
+    <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
 </ngx-spinner>
