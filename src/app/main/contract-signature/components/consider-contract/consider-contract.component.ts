@@ -397,7 +397,7 @@ export class ConsiderContractComponent
         this.datas.action_title = 'Xác nhận';
         this.datas.roleContractReceived = this.recipient.role;
 
-        this.scale = 1;
+        this.scale = 1.0;
 
         if (!this.signCurent) {
           this.signCurent = {
@@ -638,12 +638,14 @@ export class ConsiderContractComponent
           });
         }
 
-        const renderContext = {
+        var renderContext: any = {
           canvasContext: canvas.getContext('2d'),
           viewport: viewport,
         };
 
         page.render(renderContext);
+
+        
         if (test) {
           let paddingPdf =
             (test.getBoundingClientRect().width - viewport.width) / 2;
