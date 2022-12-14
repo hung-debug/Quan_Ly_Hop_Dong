@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <div class="label_item">Ngày hết hạn ký</div>
+                        <div class="label_item">{{'expiration-date' | translate}}</div>
                         <div>
                             <div [innerHTML]="datas.is_data_contract.sign_time | date: 'dd/MM/yyyy'" class="input_text"></div>
                         </div>
@@ -27,7 +27,7 @@
         <div class="col-md-2"></div>
         <div class="col-md-5">
             <div class="form-group">
-                <div class="label_item">Lời nhắn</div>
+                <div class="label_item">{{'note' | translate}}</div>
                 <div>
                     <div [innerHTML]="datas.is_data_contract.notes" class="input_text"></div>
                 </div>
@@ -36,7 +36,7 @@
     </div>
 </div>
 
-<div class="labelOrg">CÁC BÊN KÝ</div>
+<div class="labelOrg">{{'side.sign' | translate}}</div>
 <div class="determine_contact">
     <div class="user_contact">
         <div class="label">TỔ CHỨC CỦA TÔI</div>
@@ -44,7 +44,7 @@
             <div class="row">
                 <div class="col-md-5">
                     <div class="form-group">
-                        <div class="label_item">Người xem xét</div>
+                        <div class="label_item">{{'user.view' | translate}}</div>
                         <div class="input_text">
                             <div *ngFor="let item of this.is_origanzation_reviewer">
                                 <div>{{item.name}} - {{item.email}}</div>
@@ -55,7 +55,7 @@
                 <div class="col-md-2"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <div class="label_item">Người ký</div>
+                        <div class="label_item">{{'user.sign' | translate}}</div>
                         <div class="input_text">
                             <div *ngFor="let item of this.is_origanzation_signature">
                                 <div>{{item.name}} - {{item.email}}</div>
@@ -97,7 +97,7 @@
                 <div class="col-md-2"></div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <div class="label_item">Người xem xét</div>
+                        <div class="label_item">{{'user.view' | translate}}</div>
                         <div class="input_text">
                             <div *ngFor="let item of getPartnerReviewer(record)">
                                 <div>{{item.name}} - {{item.email}}</div>
@@ -110,7 +110,7 @@
             <div class="row">
                 <div class="col-md-5">
                     <div class="form-group">
-                        <div class="label_item">Người ký</div>
+                        <div class="label_item">{{'user.sign' | translate}}</div>
                         <div class="input_text">
                             <div *ngFor="let item of getPartnerSignature(record)">
                                 <div>{{item.name}} - {{item.email}}</div>
@@ -139,7 +139,7 @@
     </div>
     <div class="content_footer"></div>
     <div>
-        <!-- <button type="button" name="next" class="next draft-button" (click)="SaveContract('saveDraft_contract')">Lưu nháp</button> -->
+        <!-- <button type="button" name="next" class="next draft-button" (click)="SaveContract('saveDraft_contract')">{{'btn.save-draff' | translate}}</button> -->
         <button (click)="next()" style="width: 300px" type="button" name="next" class="next action-button pull-right">Xác nhận và gửi hợp đồng</button>
     </div>
 </div>

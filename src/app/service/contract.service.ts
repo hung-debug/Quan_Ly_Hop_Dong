@@ -126,6 +126,7 @@ export class ContractService {
   cancelManyContractsUrl: any = `${environment.apiUrl}/api/v1/contracts/multi-cancel`;
 
   uploadFileUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/import-child-org`;
+  // resendSmsEmailUrl: any = `${environment.apiUrl}/api/v1/processes/resend-sms-email/`;
 
   token: any;
   customer_id: any;
@@ -543,13 +544,6 @@ export class ContractService {
         'Sec-Fetch-Site': 'cross-site',
       },
     };
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json; charset=utf-8')
-      .append('Sec-Fetch-Mode', 'cors')
-      .append('Connection', 'keep-alive')
-      .append('Sec-Fetch-Site', 'cross-site');
-
-    console.log('get account sign digital ', this.getAccountSignDigital);
     return axios.get(this.getAccountSignDigital, config);
   }
 

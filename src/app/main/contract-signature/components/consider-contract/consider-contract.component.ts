@@ -803,7 +803,7 @@ export class ConsiderContractComponent
     const data = this.datas;
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
-      width: '800px',
+      width: '1000px',
       backdrop: 'static',
       keyboard: true,
       data,
@@ -2919,7 +2919,7 @@ export class ConsiderContractComponent
           sign.signDigitalHeight =
             heightPage -
             (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
-        
+
 
         //Lấy thông tin mã số thuế của đối tác ký
         this.contractService

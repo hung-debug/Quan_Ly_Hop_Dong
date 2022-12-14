@@ -121,6 +121,7 @@ export class IndexComponent implements OnInit {
         if (id_recipient_signature) {
           this.contractService.considerRejectContract(id_recipient_signature, textRefuse).subscribe(
             (result) => {
+              this.spinner.hide();
               this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công!', '', 3000);
               this.router.navigate(['/main/contract-signature/receive/wait-processing']);
             }, error => {

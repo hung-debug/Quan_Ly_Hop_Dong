@@ -493,7 +493,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     const data = this.datas;
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
-      width: '800px',
+      width: '1000px',
       backdrop: 'static',
       keyboard: true,
       data

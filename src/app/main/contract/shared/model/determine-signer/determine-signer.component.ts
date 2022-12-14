@@ -212,58 +212,28 @@ export class DetermineSignerComponent implements OnInit {
 
         this.orgId = this.userService.getInforUser().organization_id;
 
-            //chi lay so luong hop dong khi chon to chuc cha to nhat
-              //lay so luong hop dong da dung
-              this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise().then(
-                data => {
-  
-                  this.numContractUse = data.contract;
-                  this.eKYCContractUse = data.ekyc;
-                  this.smsContractUse = data.sms;
-  
-                  let countEkyc = 0;
-                  let countOtp = 0;
-                  this.datas.is_determine_clone.forEach((items: any, index: number) => {
-                    items.recipients.forEach((element: any) => {
-                      if(element.sign_type > 0) {
-                        if(element.sign_type[0].id == 5) {
-                          //Ký ekyc
-                          countEkyc++;
-                        } else if(element.sign_type[0].id == 1) {
+        let countEkyc = 0;
+        let countSMS = 0;
 
-                          if(element.login_by == 'email')
-                            //Ký ảnh otp
-                            countOtp++;
-                          else
-                            countOtp = countOtp + 2;
-                        }
-                      }
-                    
-                    });
-                  });
-  
-                          //lay so luong hop dong da mua
-              this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise().then(
-                data => {
-                  this.numContractBuy = data.contract;
-                  this.eKYCContractBuy = data.ekyc;
-                  this.smsContractBuy = data.sms;
-  
-                    if(countEkyc > 0 && Number(this.eKYCContractUse) + Number(countEkyc) > Number(this.eKYCContractBuy)) {
-                      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-                    } else if(countOtp > 0 && Number(this.smsContractUse) + Number(countOtp) > Number(this.smsContractBuy)) {
-                      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
-                    } else {
-                      this.getApiDetermine(is_save);
-                    }
-                }, error => {
-                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã mua', "", 3000);
-                }
-              )          
-                }, error => {
-                  this.toastService.showErrorHTMLWithTimeout('Lỗi lấy số lượng hợp đồng đã dùng', "", 3000);
-                }
-              )
+        this.datas.is_determine_clone.forEach((items: any, index: number) => {
+          items.recipients.forEach((element: any) => {
+            if(element.login_by == "email") {
+              if(element.sign_type.length > 0 && element.sign_type[0].id == 5) {
+                  countEkyc++;
+              }else if(element.sign_type.length > 0 && element.sign_type[0].id == 1) {
+                  countSMS++;
+              } 
+            } else if(element.login_by == 'phone') {
+              if(element.sign_type.length > 0 && element.sign_type[0].id == 1) {
+                countSMS = countSMS + 2;
+              } else {
+                countSMS++;
+              }
+            }
+          })
+        })
+
+        this.checkNumber(countEkyc, countSMS);
       } else {
         this.getApiDetermine(is_save);
       }
@@ -272,13 +242,41 @@ export class DetermineSignerComponent implements OnInit {
     
   }
 
+  async checkNumber(countEkyc: number, countSMS: number) {
+    let numberContractUseOrg: any = null;
+    let numberContractBuyOrg: any = null;
+
+    //So luong hop dong da dung
+    try {
+      numberContractUseOrg = await this.unitService.getNumberContractUseOriganzation(this.orgId).toPromise();
+    } catch(err) {
+      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng đã dùng '+err,'',3000);
+    }
+
+    //So luong hop dong da mua
+    try {
+      numberContractBuyOrg = await this.unitService.getNumberContractBuyOriganzation(this.orgId).toPromise();
+    } catch(err) {
+      this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin số lượng hợp đồng đã mua '+err,'',3000);
+    }
+
+
+    if(countEkyc > 0 && Number(numberContractUseOrg.ekyc) + Number(countEkyc) > Number(numberContractBuyOrg.ekyc)) {
+      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng eKYC đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    } else if(countSMS > 0 && Number(numberContractUseOrg.sms) + Number(countSMS) > Number(numberContractBuyOrg.sms)) {
+      this.toastService.showErrorHTMLWithTimeout('Tổ chức đã sử dụng hết số lượng SMS đã mua. Liên hệ với Admin để tiếp tục sử dụng dịch vụ', "", 3000);
+    } else {
+      this.getApiDetermine(true);
+    }
+  }
+
   async getApiDetermine(is_save?: boolean) {
 
     //Đưa giá trị email về chũ thường
     this.datas.is_determine_clone.forEach((items: any, index: number) => {
         for(let i = 0; i < this.datas.is_determine_clone[index].recipients.length; i++) {
           if(this.datas.is_determine_clone[index].recipients[i].email) {
-            this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.toLowerCase();
+            this.datas.is_determine_clone[index].recipients[i].email = this.datas.is_determine_clone[index].recipients[i].email.toLowerCase().trim();
           }
         }
     })
