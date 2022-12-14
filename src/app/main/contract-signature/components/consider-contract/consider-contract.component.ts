@@ -41,10 +41,8 @@ import {
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { DomSanitizer } from '@angular/platform-browser';
 import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.component';
 import { UnitService } from 'src/app/service/unit.service';
-import { AnyAaaaRecord } from 'dns';
 
 @Component({
   selector: 'app-consider-contract',
@@ -125,12 +123,6 @@ export class ConsiderContractComponent
   loadedPdfView: boolean = false;
   allFileAttachment: any[];
   allRelateToContract: any[];
-
-  isPartySignature: any = [
-    { id: 1, name: 'Công ty cổ phần công nghệ tin học EFY Việt Nam' },
-    { id: 2, name: 'Công ty newEZ Việt Nam' },
-    { id: 3, name: 'Tập đoàn Bảo Việt' },
-  ];
 
   optionsSign: any = [
     { item_id: 1, item_text: 'Ký ảnh' },
@@ -686,9 +678,9 @@ export class ConsiderContractComponent
       transform:
         'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
       position: 'absolute',
-      backgroundColor: '#EBF8FF',
+      backgroundColor: backgroundColor,
     };
-    style.backgroundColor = d.valueSign ? '' : '#EBF8FF';
+    style.backgroundColor = d.valueSign ? '' : backgroundColor;
     style.display =
       (this.confirmConsider && this.confirmConsider == 1) ||
       (this.confirmSignature && this.confirmSignature == 1)

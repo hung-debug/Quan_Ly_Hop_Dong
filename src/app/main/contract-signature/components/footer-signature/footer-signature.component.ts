@@ -128,12 +128,23 @@ export class FooterSignatureComponent implements OnInit {
     
   }
 
+  switchesValueChange($event: any) {
+    console.log("abc")
+    console.log("event ", $event);
+  }
+
   indexY: number = 0;
   autoScroll() {
+
+    this.coordinateY.sort();
+
+    this.coordinateY.reverse();
+
     let pdffull: any = document.getElementById('pdf-full');
 
-    if (this.confirmSignature == 1)
+    if (this.confirmSignature == 1) {
       pdffull.scrollTo(0, this.coordinateY[this.indexY]);
+    }
 
     if (this.indexY <= this.coordinateY.length - 1) {
       this.indexY++;
