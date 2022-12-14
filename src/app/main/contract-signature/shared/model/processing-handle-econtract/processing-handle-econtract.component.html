@@ -2,22 +2,22 @@
     <h3 style="text-align: center; color: #106DB6">{{'contract_processing_flow' | translate}}</h3>
     <div style="max-height: 405px; overflow: auto;font-size: 14px">
         <div style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
-            <div class="col-md-7" style="flex-direction: column;text-align: left;">
+            <div class="col-md-6" style="flex-direction: column;text-align: left;">
                 <span>{{this.personCreate}}</span>&nbsp;
                 <span style="color: #8B8B8B">({{this.emailCreate}})</span>
             </div>
-            <div class="col-md-5" style="display: flex; flex-direction: column;text-align: center">
+            <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
                 <span style="color: '#106DB6'">{{'orginator' | translate}}</span>
                 <span style="color: #8B8B8B">({{this.timeCreate}})</span>
             </div>
-            <!-- <div class="col-md-2" style="display: flex; flex-direction: column;text-align: center">
+            <div *ngIf ="!this.reasonCancel" class="col-md-2" style="display: flex; flex-direction: column;text-align: center">
                 <span style="color: '#106DB6'">{{'action' | translate}}</span>
-            </div> -->
+            </div>
         </div>
         <div *ngFor="let d of is_list_name">
             <div *ngIf = "!this.reasonCancel" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
 
-                <div class="col-md-7" style="display: flex; flex-direction: column;text-align: left;">
+                <div class="col-md-6" style="display: flex; flex-direction: column;text-align: left;">
                     <div style="display: flex;">
 
                     <!--Tên người trong luồng hợp đồng-->
@@ -30,7 +30,7 @@
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name.replace("Ký ảnh và OTP"," Sign by OTP").replace("Ký số bằng","Sign by").replace("và","and"): ''}}</span>
                 </div>
 
-                <div class="col-md-5" style="display: flex; flex-direction: column;text-align: center">
+                <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
                     <div style="display: flex; justify-content: center;align-items: center;">
                         
                         <span [style.color]="d.status === 'Đã từ chối' ? '#d11919' : d.status !== 0 ? '#106DB6' : '#545252'">{{d.status}}</span> &nbsp;
@@ -42,14 +42,16 @@
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
                 </div>
 
-                <!-- <div class="col-md-2" style="flex-direction: column;text-align: center"> 
-                    <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="Gửi lại SMS/Email" />
-                </div> -->
+                <div class="col-md-2" style="flex-direction: column;text-align: center">
+                    <div *ngIf = "d.statusNumber != 0">
+                    <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="Gửi lại SMS/Email" (click)="resendSmsEmail(d.id)"/>
+                    </div>
+                </div>
             </div>
 
             <div *ngIf = "this.reasonCancel && (d.statusNumber == 2 || d.statusNumber == 3 || d.statusNumber == 4)" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
 
-                <div class="col-md-7" style="display: flex; flex-direction: column;text-align: left;">
+                <div class="col-md-6" style="display: flex; flex-direction: column;text-align: left;">
                     <div style="display: flex;">
 
                     <!--Tên người trong luồng hợp đồng-->
@@ -63,7 +65,7 @@
                     <span style="color: dimgray" *ngIf="d.typeOfSign && this.lang == 'en'">{{'user.sign-type' | translate}}: {{d.typeOfSign.name ? d.typeOfSign.name.replace("Ký số bằng","Sign by").replace("và","and").replace("ảnh","OTP"): ''}}</span>
                 </div>
 
-                <div class="col-md-5" style="display: flex; flex-direction: column;text-align: center">
+                <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
                     <div style="display: flex; justify-content: center;align-items: center;">
                         <span [style.color]="d.status === 'Đã từ chối' ? '#d11919' : d.status !== 0 ? '#106DB6' : '#545252'">{{d.status}}</span> &nbsp;
                         <div class="div_icon " style="width: 90px;display: flex;margin-left:10px"  *ngIf="d.status == 'Đã từ chối'" >
@@ -72,15 +74,21 @@
                     </div> 
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
                 </div>
+
+                <div class="col-md-2" style="flex-direction: column;text-align: center" *ngIf = "d.statusNumber != 0"> 
+                    <div *ngIf = "d.statusNumber != 0 && isHiddenButton">
+                        <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="Gửi lại SMS/Email" (click)="resendSmsEmail(d)"/>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div *ngIf="this.reasonCancel" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
-            <div class="col-md-7" style="flex-direction: column;text-align: left;">
+            <div class="col-md-6" style="flex-direction: column;text-align: left;">
                 <span>{{this.personCreate}}</span>&nbsp;
                 <span style="color: #8B8B8B">({{this.emailCreate}})</span>
             </div>
-            <div class="col-md-5" style="display: flex; flex-direction: column;text-align: center">
+            <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
                 <span style="color: '#106DB6'">Người huỷ bỏ</span>
                 <span style="color: #8B8B8B">({{this.cancelDate}})</span>
             </div>

@@ -17,6 +17,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   personCreate: string;
   emailCreate: string;
   timeCreate: any;
+  isHiddenButton: any;
+  currentUser: any;
+  recipient:any;
 
   reasonCancel: string;
   cancelDate: any;
@@ -82,6 +85,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         }
         this.is_list_name.push(data);
       })
+      console.log("dataaaaaa",this.is_list_name);
+      
     });
   }
 
@@ -185,5 +190,28 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       console.log('the close dialog');
     }) 
   }
+
+  resendSmsEmail(recipient: any){
+    
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    if(this.currentUser.email == this.recipient.emailRecipients){
+      this.isHiddenButton = true;
+    }else{
+      this.isHiddenButton = false;
+    }
+    let responseSmsEmail: any;
+    this.contractService.resendSmsEmail(recipient.id).subscribe((responseSmsEmail) =>{
+      console.log("data success",responseSmsEmail);
+      
+      if(responseSmsEmail.success == true){
+        alert('Gửi thông báo hợp đồng thành công')
+      }else{
+        alert(responseSmsEmail.message)
+      }
+    })
+
+  }
+
+  
 
 }
