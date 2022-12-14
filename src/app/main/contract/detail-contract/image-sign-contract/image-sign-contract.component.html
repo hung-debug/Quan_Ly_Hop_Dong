@@ -1,8 +1,12 @@
 <div *ngIf="sign.sign_unit == 'chu_ky_so' || sign.sign_unit == 'chu_ky_anh'" class="content">
   <div class="skeleton-sign">
     <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" alt="mobifone.contract">
-    <span style="color: #106DB6;">{{sign.sign_unit == 'chu_ky_anh' ? 'Chữ ký ảnh hoặc eKYC' : 'Chữ ký số'}}</span>
-  </div>
+    <!-- <span style="color: #106DB6;">{{sign.sign_unit == 'chu_ky_anh' ? 'Chữ ký ảnh hoặc eKYC' : 'Chữ ký số'}}</span> -->
+
+    <span style="color: #106DB6;" *ngIf="sign.sign_unit == 'chu_ky_anh'; then content else other_content"></span>
+    <ng-template #content>{{'sign.image.ekyc' |translate}}</ng-template>
+    <ng-template #other_content>{{'sign.digital'|translate}}</ng-template>
+
   <!-- <div class="skeleton-sign">
     <img [src]="sign.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" alt="mobifone.contract">
   </div> -->

@@ -461,5 +461,15 @@
   "attribute.name":"Tên trường",
   "position.coordinate":"Vị trí",
   "size":"Kích thước",
-  "height":"Chiều dài"
+  "height":"Chiều dài",
+  "sign.eKYC":"Xác thực eKYC",
+  "width": "Chiều rộng",
+  "choose.signer": "Chọn người ký",
+  "choose.importer":"Chọn người nhập",
+  "user.import": "Người nhập",
+  "contract.file.name":"Tên file hợp đồng",
+  "sign.by.pki":"Ký số bằng Sim PKI",
+  "sign.image.otp":"Ký ảnh và OTP",
+  "sign.image.ekyc":"Chữ ký ảnh hoặc eKYC",
+  "sign.digital":"Chữ ký số"
 }

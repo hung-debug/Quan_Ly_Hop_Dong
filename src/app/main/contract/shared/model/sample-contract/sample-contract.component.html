@@ -25,14 +25,14 @@
                         <div *ngIf="d.sign_unit == 'chu_ky_so'" class="content-drag1" 
                             id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
                             <img [src]="d.sign_unit == 'chu_ky_so' ? 'assets/img/img_sign_number.svg' : ''">
-                            <span *ngIf="d.sign_unit == 'chu_ky_so'">{{d.sign_unit =='chu_ky_so' ? 'Chữ ký số' : ''}}</span>
+                            <span *ngIf="d.sign_unit == 'chu_ky_so'">{{'sign.digital'|translate}}</span>
                         </div>
 
                         <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag"
                             id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
                             <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : ''"
                                 [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
-                            <span *ngIf="d.sign_unit == 'chu_ky_anh'">{{d.sign_unit =='chu_ky_anh' ? 'Chữ ký ảnh hoặc eKYC' : ''}}</span>
+                            <span *ngIf="d.sign_unit == 'chu_ky_anh'">{{'sign.image.ekyc' |translate}}</span>
                         </div>
 
                     </div>
@@ -43,17 +43,17 @@
 
         <div class="location-change">
             <div class="sample-contract__information--user-sign">
-                <label class="label">THUỘC TÍNH</label>
+                <label class="label">{{'attribute' | translate}}</label>
                 <div class="name-text" *ngIf="isEnableText">
-                    <label class="label-require">Tên trường: *</label>
+                    <label class="label-require">{{'attribute.name' | translate}}: *</label>
                     <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name"
                         (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                 </div>
                 <div class="sign-unit-select">
-                    <label class="label-require">{{isEnableText || isChangeText ? "Người nhập" : "Người ký"}}: *</label>
+                    <label class="label-require">{{isEnableText || isChangeText ? "user.import" : "user.sign" | translate}}: *</label>
                     <select class="form-select" id="select-dropdown" aria-label="Default select example"
                         (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
-                        <option value="" hidden>{{isEnableText || isChangeText ? "Chọn người nhập" : "Chọn người ký"}}
+                        <option value="" hidden>{{isEnableText || isChangeText ? "choose.importer" : "choose.signer" | translate}}
                         </option>
                         <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected"
                             value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
@@ -63,7 +63,7 @@
             </div>
             <hr>
             <div class="flex-column">
-                <label class="label-require">Vị trí</label>
+                <label class="label-require">{{'position.coordinate' | translate}}</label>
                 <div class="location">
                     <div class="location-drag">
                         <div class="label" style="text-align: center">X:</div>
@@ -79,15 +79,15 @@
             </div>
             <hr>
             <div class="flex-column">
-                <label class="label-require">Kích thước</label>
+                <label class="label-require">{{'size' | translate}}</label>
                 <div class="location">
                     <div class="location-drag">
-                        <div class="label" style="font-size: 12px">Chiều dài</div>
+                        <div class="label" style="font-size: 12px">{{'height' | translate}}</div>
                         <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')"
                             [ngModel]="objSignInfo.width" [readOnly]="false">
                     </div>
                     <div class="location-drag">
-                        <div class="label" style="font-size: 12px">Chiều rộng</div>
+                        <div class="label" style="font-size: 12px">{{'width' | translate}}</div>
                         <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')"
                             [ngModel]="objSignInfo.height" [readOnly]="false">
                     </div>
@@ -121,7 +121,7 @@
     <div>
         <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
             style="background-color: #FCAF17">{{'btn.save-draff' | translate}}</button>
-        <button (click)="next('next_step')" type="button" name="next" class="next action-button">Tiếp theo</button>
+        <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
     </div>
 </div>
 

@@ -126,6 +126,7 @@ export class ContractService {
   cancelManyContractsUrl: any = `${environment.apiUrl}/api/v1/contracts/multi-cancel`;
 
   uploadFileUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/import-child-org`;
+  // resendSmsEmailUrl: any = `${environment.apiUrl}/api/v1/processes/resend-sms-email/`;
 
   token: any;
   customer_id: any;

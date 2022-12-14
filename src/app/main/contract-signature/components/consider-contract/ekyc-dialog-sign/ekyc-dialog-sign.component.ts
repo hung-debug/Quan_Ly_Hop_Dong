@@ -74,6 +74,7 @@ export class EkycDialogSignComponent implements OnInit {
   }
 
   cardId: any;
+  name:any;
   public triggerSnapshot(): void {
     this.trigger.next();
 
@@ -99,17 +100,24 @@ export class EkycDialogSignComponent implements OnInit {
   
         this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
           this.spinner.hide();
-          console.log("response ",response);
+          console.log("responseeeeeeeeeee ",response);
           if(response.result_code == 200 && response.action == 'pass') {
             if(this.cardId) {
-              if(this.cardId == response.id) {
+              if(this.cardId == response.id && this.name == response.name) {
                 this.flagSuccess == true;
                 alert("Xác thực thành công");
                 this.dialogRef.close(this.webcamImage.imageAsDataUrl);
-              } else {
+              } else if(this.cardId != response.id){
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
-                alert("Mã CMT/CCCD không trùng khớp")
+                alert("Mã CMT/CCCD không trùng khớp");
+              } else if(this.name != response.name){
+                this.flagSuccess == false;
+                this.webcamImage = this.initWebcamImage;
+                alert("Họ tên trên CMT/CCCD không trùng khớp với tên người ký");
+              }else{
+                this.flagSuccess == false;
+                alert("Thông tin không hợp lệ");
               }
             } else {
               alert("Xác thực thành công");

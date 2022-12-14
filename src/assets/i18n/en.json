@@ -461,5 +461,14 @@
   "position.coordinate":"Position",
   "size":"Size",
   "height":"Height",
-  "width":"Width"
+  "width":"Width",
+  "sign.eKYC":"Sign eKYC",
+  "choose.signer":"Choose signer",
+  "choose.importer":"Choose importer",
+  "user.import": "Importer",
+  "contract.file.name":"Contract file name",
+  "sign.by.pki":"Sign by Sim PKI",
+  "sign.image.otp":"Sign image and OTP",
+  "sign.image.ekyc":"Sign image or eKYC",
+  "sign.digital":"Sign digital"
 }

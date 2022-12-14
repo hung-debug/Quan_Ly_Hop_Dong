@@ -437,7 +437,7 @@ export class ContractSignatureComponent implements OnInit {
     let recipientId: any = [];
     let taxCode: any = [];
     let idSignMany: any = [];
-    
+
     //Lấy id đã tick
     //2: usb token
     //4: hsm
@@ -447,7 +447,7 @@ export class ContractSignatureComponent implements OnInit {
       idSignMany = contractsSignManyChecked
         .filter((opt) => opt.checked)
         .map((opt) => opt.id);
-      
+
       recipientId = contractsSignManyChecked
         .filter((opt) => opt.checked)
         .map((opt) => opt.id);
@@ -489,7 +489,7 @@ export class ContractSignatureComponent implements OnInit {
 
     }
 
-    this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);    
+    this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);
   }
 
   openDialogSignManyComponent( recipientId: any, taxCode: any, idSignMany: any, signId: any) {
@@ -598,7 +598,7 @@ export class ContractSignatureComponent implements OnInit {
                 this.spinner.show();
 
                 let countUpdate = 0;
-              
+
                 //Call api ký nhiều hsm
                 const checkSign = await this.contractServiceV1.signHsmMulti(
                   this.dataHsm,
@@ -650,7 +650,7 @@ export class ContractSignatureComponent implements OnInit {
                     }
                   }
                 // }
-             
+
                 if (countSuccess == checkSign.length) {
                   this.spinner.hide();
                   this.toastService.showSuccessHTMLWithTimeout(
@@ -709,9 +709,9 @@ export class ContractSignatureComponent implements OnInit {
        // base64String[i] = this.getBase64String(fileC[i]);
 
        base64String[i] = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
-  
+
        base64String[i] = encode(base64String[i]);
-  
+
        //Lấy toạ độ ô ký của từng hợp đồng
        this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).subscribe((response) => {
            console.log('sig ', response);
@@ -1120,14 +1120,13 @@ export class ContractSignatureComponent implements OnInit {
             );
           }
 
-              
-                  if (i == fileC.length - 1 ) {
-                    this.spinner.hide();
-                    this.toastService.showSuccessHTMLWithTimeout(
-                      'Ký số thành công',
-                      '',
-                      3000
-                    );
+          if (i == fileC.length - 1 ) {
+            this.spinner.hide();
+            this.toastService.showSuccessHTMLWithTimeout(
+              'sign.success',
+              '',
+              3000
+            );
 
             this.router
               .navigateByUrl('/', { skipLocationChange: true })

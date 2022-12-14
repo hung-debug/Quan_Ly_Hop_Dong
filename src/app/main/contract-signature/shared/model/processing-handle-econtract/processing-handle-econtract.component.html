@@ -10,6 +10,9 @@
                 <span style="color: '#106DB6'">{{'orginator' | translate}}</span>
                 <span style="color: #8B8B8B">({{this.timeCreate}})</span>
             </div>
+            <!-- <div class="col-md-2" style="display: flex; flex-direction: column;text-align: center">
+                <span style="color: '#106DB6'">{{'action' | translate}}</span>
+            </div> -->
         </div>
         <div *ngFor="let d of is_list_name">
             <div *ngIf = "!this.reasonCancel" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
@@ -38,6 +41,10 @@
                     </div> 
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
                 </div>
+
+                <!-- <div class="col-md-2" style="flex-direction: column;text-align: center"> 
+                    <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="Gửi lại SMS/Email" />
+                </div> -->
             </div>
 
             <div *ngIf = "this.reasonCancel && (d.statusNumber == 2 || d.statusNumber == 3 || d.statusNumber == 4)" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">

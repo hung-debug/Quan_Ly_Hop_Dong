@@ -8,7 +8,6 @@ import {
   OnInit,
   Output,
   QueryList,
-  SecurityContext,
   ViewChild,
 } from '@angular/core';
 import { ContractService } from '../../../../service/contract.service';
@@ -487,6 +486,8 @@ export class ConsiderContractComponent
         this.handleError();
       }
     );
+
+    // console.log("datas 1 ", this.datas);
   }
 
   // Error handling
@@ -800,7 +801,7 @@ export class ConsiderContractComponent
     const data = this.datas;
     // @ts-ignore
     const dialogRef = this.dialog.open(ProcessingHandleEcontractComponent, {
-      width: '800px',
+      width: '1000px',
       backdrop: 'static',
       keyboard: true,
       data,
@@ -878,6 +879,8 @@ export class ConsiderContractComponent
             );
           }
         }
+        // console.log(this.signCurent)
+        // console.log(this.objSignInfo)
       }
     }
   }
@@ -893,6 +896,7 @@ export class ConsiderContractComponent
   }
 
   back(e: any, step?: any) {
+    // if (!this.datas.isView) {
     this.nextOrPreviousStep(step);
   }
 
@@ -912,7 +916,9 @@ export class ConsiderContractComponent
 
   eKYC: boolean = false;
   eKYCContractUse: any;
+  smsContractUse: any;
   eKYCContractBuy: any;
+  smsContractBuy: any;
   async submitEvents(e: any) {
     let haveSignPKI = false;
     let haveSignImage = false;
@@ -1288,11 +1294,6 @@ export class ConsiderContractComponent
                 imageRender = <HTMLElement>(
                   document.getElementById('export-html')
                 );
-
-              let imageRender: any = "";
-
-              if(this.usbTokenVersion == 1) {
-                imageRender = <HTMLElement>document.getElementById('export-html');
 
                 if (imageRender) {
                   const textSignB = await domtoimage.toPng(imageRender);
@@ -2320,6 +2321,8 @@ export class ConsiderContractComponent
     this.contractService
       .getDetailContract(this.idContract)
       .subscribe(async (response) => {
+        console.log('response organization ', response);
+
         let organization_id = response[0].organization_id;
 
         for (let i = 0; i < response[2].length; i++) {
@@ -2487,7 +2490,7 @@ export class ConsiderContractComponent
             document.body.appendChild(a);
             a.setAttribute('style', 'display: none');
             a.href = url;
-            a.download = data.filename;
+            a.download = data.name;
             a.click();
             window.URL.revokeObjectURL(url);
             a.remove();
@@ -2914,7 +2917,7 @@ export class ConsiderContractComponent
           sign.signDigitalHeight =
             heightPage -
             (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
-        
+
 
         //Lấy thông tin mã số thuế của đối tác ký
         this.contractService
