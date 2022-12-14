@@ -197,6 +197,8 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   ngOnInit(): void {
+    console.log("ratio ", window.devicePixelRatio);
+
     this.getDeviceApp();
 
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');

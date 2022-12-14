@@ -256,6 +256,9 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    console.log("ratio ", window.devicePixelRatio);
+
     if (sessionStorage.getItem('type')) {
       this.type = 1;
     } else this.type = 0;
