@@ -46,7 +46,7 @@
       <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
         <tr>
           <td><p-treeTableToggler [rowNode]="rowNode" style="color: #106DB6;"></p-treeTableToggler><a (click)="isQLTC_04?detailUnit(rowData.id):null" style="color: #0160AE; cursor: pointer;">{{rowData.name}}</a></td>
-          <td>{{rowData.id}}</td>
+          <td style="padding-right: 100px;">{{rowData.id}}</td>
           <td>{{rowData.short_name}}</td>
           <td>{{rowData.code}}</td>
           <td *ngIf="rowData.status == 1">{{'unit.active' | translate}}</td>
