@@ -19,7 +19,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   timeCreate: any;
   isHiddenButton: any;
   currentUser: any;
-  recipient:any;
+  // recipient:any;
 
   reasonCancel: string;
   cancelDate: any;
@@ -194,7 +194,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   resendSmsEmail(recipient: any){
     
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    if(this.currentUser.email == this.recipient.emailRecipients){
+    console.log("emailRecipients",recipient);
+    
+    if(this.currentUser.email == recipient.emailRecipients && this.currentUser.email== recipient.personCreate){
       this.isHiddenButton = true;
     }else{
       this.isHiddenButton = false;
