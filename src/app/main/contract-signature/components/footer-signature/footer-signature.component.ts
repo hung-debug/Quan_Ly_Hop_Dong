@@ -22,6 +22,8 @@ export class FooterSignatureComponent implements OnInit {
   @Input() view: any;
   @Input() recipientId: any;
   @Output() submitChanges = new EventEmitter<number>();
+  @Input() confirmSignature: any
+  @Input() coordinateY: any
   is_show_coordination: boolean = false;
   is_data_coordination: any;
   orgId: any;
@@ -124,6 +126,21 @@ export class FooterSignatureComponent implements OnInit {
       }
     }
     
+  }
+
+  indexY: number = 0;
+  autoScroll() {
+    let pdffull: any = document.getElementById('pdf-full');
+
+    if (this.confirmSignature == 1)
+      pdffull.scrollTo(0, this.coordinateY[this.indexY]);
+
+    if (this.indexY <= this.coordinateY.length - 1) {
+      this.indexY++;
+    } else {
+      this.indexY = 0;
+      pdffull.scrollTo(0, 0);
+    }
   }
 
   action() {

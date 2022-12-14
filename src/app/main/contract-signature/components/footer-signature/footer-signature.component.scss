@@ -51,3 +51,15 @@
   // transition: left 500ms;
   // padding-top: 15px
 }
+
+.auto-scroll {
+  width: 100px;
+  height: 30px;
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: rgb(46, 108, 246); 
+  color: rgb(255, 255, 255);
+}
