@@ -196,7 +196,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
     console.log("emailRecipients",recipient);
     
-    if(this.currentUser.email == recipient.emailRecipients && this.currentUser.email== recipient.personCreate){
+    if(this.currentUser.email == recipient.emailRecipients){
       this.isHiddenButton = true;
     }else{
       this.isHiddenButton = false;
