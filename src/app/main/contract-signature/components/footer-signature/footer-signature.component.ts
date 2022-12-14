@@ -161,7 +161,7 @@ export class FooterSignatureComponent implements OnInit {
       for(let i = 0; i < this.idElement.length; i++) {
         if(this.idElement[i] != this.idElement[this.indexY]) {
           let elemet: any =  document.getElementById(this.idElement[i]);
-          elemet.style.backgroundColor = 'white';
+          elemet.style.backgroundColor = '#EBF8FF';
         }
       }
     }
