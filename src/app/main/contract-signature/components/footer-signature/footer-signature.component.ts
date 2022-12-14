@@ -137,14 +137,16 @@ export class FooterSignatureComponent implements OnInit {
 
   indexY: number = 0;
   autoScroll() {
+    
+    this.coordinateY = this.coordinateY.sort(function(a: number, b: number) {
+      return a - b;
+    });
 
-    this.coordinateY.sort();
+    this.idElement =  this.idElement.sort(function(a: number, b: number) {
+      return a - b;
+    });
 
-    this.idElement.sort();
-
-    this.coordinateY.reverse();
-
-    this.idElement.reverse();
+    console.log("y ", this.coordinateY);
 
     let pdffull: any = document.getElementById('pdf-full');
 
