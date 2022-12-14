@@ -167,6 +167,7 @@ export class ConsiderContractComponent
   usbTokenVersion: number;
 
   coordinateY: any[] = [];
+  idElement: any[] = [];
 
   loginType: any;
 
@@ -431,6 +432,7 @@ export class ConsiderContractComponent
 
           arr.forEach((items: any) => {
             this.coordinateY.push(items.coordinate_y);
+            this.idElement.push(items.id);
           });
 
           this.coordinateY.sort();

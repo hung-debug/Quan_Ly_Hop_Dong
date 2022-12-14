@@ -22,8 +22,10 @@ export class FooterSignatureComponent implements OnInit {
   @Input() view: any;
   @Input() recipientId: any;
   @Output() submitChanges = new EventEmitter<number>();
-  @Input() confirmSignature: any
-  @Input() coordinateY: any
+  @Input() confirmSignature: any;
+  @Input() coordinateY: any;
+  @Input() idElement: any;
+
   is_show_coordination: boolean = false;
   is_data_coordination: any;
   orgId: any;
@@ -138,12 +140,30 @@ export class FooterSignatureComponent implements OnInit {
 
     this.coordinateY.sort();
 
+    this.idElement.sort();
+
     this.coordinateY.reverse();
+
+    this.idElement.reverse();
 
     let pdffull: any = document.getElementById('pdf-full');
 
     if (this.confirmSignature == 1) {
       pdffull.scrollTo(0, this.coordinateY[this.indexY]);
+
+      console.log("id ", this.idElement[this.indexY]);
+
+      let id: any = document.getElementById(this.idElement[this.indexY]);
+
+      if(id) {
+        id.style.backgroundColor = 'yellow';
+      } 
+      for(let i = 0; i < this.idElement.length; i++) {
+        if(this.idElement[i] != this.idElement[this.indexY]) {
+          let elemet: any =  document.getElementById(this.idElement[i]);
+          elemet.style.backgroundColor = 'white';
+        }
+      }
     }
 
     if (this.indexY <= this.coordinateY.length - 1) {
