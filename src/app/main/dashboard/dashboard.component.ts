@@ -181,9 +181,9 @@ export class DashboardComponent implements OnInit {
       data.to_date = this.filter_to_date;
       this.totalCreate = data.total_process + data.total_signed + data.total_reject + data.total_cancel + data.total_expires;
 
-      if(localStorage.getItem('lang') == 'vi')
+      if(localStorage.getItem('lang') == 'vi' || sessionStorage.getItem('lang') == 'vi')
         this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", data);
-      else if(localStorage.getItem('lang') == 'en')
+      else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')
         this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", data);     
     });
   }
