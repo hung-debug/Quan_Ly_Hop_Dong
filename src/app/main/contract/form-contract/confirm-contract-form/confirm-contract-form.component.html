@@ -139,7 +139,7 @@
     </div>
     <div class="content_footer"></div>
     <div>
-        <button type="button" name="next" class="next draft-button" (click)="SaveContract('saveDraft_contract')">{{'btn.save-draff' | translate}}</button>
+        <button type="button" name="next" class="next draft-button" (click)="SaveContract('saveDraft_contract')">{{'btn.save-draft' | translate}}</button>
         <button (click)="submit('finish_contract')" type="button" name="next" class="next action-button pull-right">Hoàn thành</button>
     </div>
 </div>
@@ -150,5 +150,5 @@
   color="#fff"
   type="ball-spin-clockwise"
 >
-  <p style="font-size: 18px; color: white">Đang xử lý...</p>
+  <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
 </ngx-spinner>

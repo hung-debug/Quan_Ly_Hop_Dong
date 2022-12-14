@@ -126,7 +126,7 @@ export class ContractService {
   cancelManyContractsUrl: any = `${environment.apiUrl}/api/v1/contracts/multi-cancel`;
 
   uploadFileUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/import-child-org`;
-  // resendSmsEmailUrl: any = `${environment.apiUrl}/api/v1/processes/resend-sms-email/`;
+  resendSmsEmailUrl: any = `${environment.apiUrl}/api/v1/processes/resend-sms-email/`;
 
   token: any;
   customer_id: any;
@@ -1137,6 +1137,18 @@ export class ContractService {
     return this.http.put<any>(this.rejectContractUrl + id, body, {
       headers: headers,
     });
+  }
+
+  resendSmsEmail(recipient_id: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.post<any>(
+      this.resendSmsEmailUrl + recipient_id,
+      {recipient_id},
+      { headers: headers }
+    );
   }
 
   updateDigitalSignatured(id: any, base64: string) {
