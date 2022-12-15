@@ -88,8 +88,6 @@ export class DetermineSignerComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log("datas ", this.datas.is_determine_clone);
-
     if(environment.flag == 'NB') {
       this.site = 'NB';
     } else if(environment.flag == 'KD') {
@@ -211,7 +209,8 @@ export class DetermineSignerComponent implements OnInit {
       let isBody: any[] = [];
       let count = 0;
       let is_error = '';
-      // this.datas.contract_id_action
+
+      console.log("clone ", this.datas.is_determine_clone);
       
       for (let i = 0; i < this.datas.is_determine_clone.length; i++) {
         this.datas.is_determine_clone[i].recipients.forEach((element: any) => {
@@ -381,13 +380,13 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
 
-      if(dataArr.login_by == 'email') {
+      if(dataArr[i].login_by == 'email') {
         if (dataArr[i].email && !this.pattern.email.test(dataArr[i].email.trim())) {
           this.getNotificationValid("Email của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
           count++;
           break;
         }
-      } else if(dataArr.login_by == 'phone') {
+      } else if(dataArr[i].login_by == 'phone') {
         if (dataArr[i].email && !this.pattern.phone.test(dataArr[i].email.trim())) {
           this.getNotificationValid("SĐT của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
           count++;
@@ -1056,9 +1055,6 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   dataParnterOrganization() {
-
-    console.log("clone ", this.datas.is_determine_clone);
-
     return this.datas.is_determine_clone.filter((p: any) => p.type == 2 || p.type == 3);
   }
 
