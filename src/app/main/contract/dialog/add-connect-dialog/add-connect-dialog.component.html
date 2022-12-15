@@ -4,21 +4,21 @@
     </div>
         <div class="row">
             <div class="col-md-4">
-                <div class="label text-color">Tên hợp đồng</div>
+                <div class="label text-color">{{'contract.name' | translate}}</div>
                 <div class="input-data">
                     <input type="text" id="name" #name (keyup)="getContractList()">
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="label text-color">Tên đối tác</div>
+                <div class="label text-color">{{'organization.partner.name' | translate}}</div>
                 <div class="input-data">
                     <input type="text" id="sideB" #sideB (keyup)="getContractList()">
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="label text-color">Ngày tạo</div>
+                <div class="label text-color">{{'create-date' | translate}}</div>
                 <div>
                     <p-calendar appendTo="body" id="created_at" [showIcon]="true" dateFormat="dd/mm/yy" #created_at (change)="getContractList()"></p-calendar>
                 </div>

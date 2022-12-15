@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit, Inject } from '@angular
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import { ContractService } from 'src/app/service/contract.service';
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-view-reason-cancel-dialog',

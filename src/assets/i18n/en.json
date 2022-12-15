@@ -474,5 +474,6 @@
   "auto.scroll":"Auto scroll",
   "preview":"Preview",
   "contract": "CONTRACT",
-  "partner": "PARTNER"
+  "partner": "PARTNER",
+  "canceller":"Canceller"
 }
