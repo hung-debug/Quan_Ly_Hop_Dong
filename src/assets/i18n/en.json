@@ -471,5 +471,6 @@
   "sign.image.otp":"Sign image and OTP",
   "sign.image.ekyc":"Sign image or eKYC",
   "sign.digital":"Sign digital",
-  "auto.scroll":"Auto scroll"
+  "auto.scroll":"Auto scroll",
+  "preview":"Preview"
 }

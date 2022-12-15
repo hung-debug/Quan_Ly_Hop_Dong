@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { variable } from "../../../../../config/variable";
 import { Helper } from "../../../../../core/Helper";
-import { environment } from "../../../../../../environments/environment";
 import * as $ from 'jquery';
 
 import interact from 'interactjs'

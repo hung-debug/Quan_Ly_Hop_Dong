@@ -472,5 +472,6 @@
   "sign.image.otp":"Ký ảnh và OTP",
   "sign.image.ekyc":"Chữ ký ảnh hoặc eKYC",
   "sign.digital":"Chữ ký số",
-  "auto.scroll":"Tìm vị trí"
+  "auto.scroll":"Tìm vị trí",
+  "preview":"Xem trước"
 }
