@@ -36,6 +36,7 @@ import {TableModule} from 'primeng/table';
 import { DetailContractTemplateComponent } from './detail-contract-template/detail-contract-template.component';
 import { ImageSignContractComponent } from './detail-contract-template/image-sign-contract/image-sign-contract.component';
 import { ProcessingHandleComponent } from './detail-contract-template/processing-handle/processing-handle.component';
+import { PreviewContractTemplateComponent } from './shared/model/preview-contract-template/preview-contract-template.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -55,7 +56,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AddContractTemplateComponent,
     DetailContractTemplateComponent,
     ImageSignContractComponent,
-    ProcessingHandleComponent
+    ProcessingHandleComponent,
+    PreviewContractTemplateComponent
   ],  
   imports: [  
     CommonModule,  

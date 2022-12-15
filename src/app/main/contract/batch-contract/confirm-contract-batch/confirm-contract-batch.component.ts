@@ -613,11 +613,6 @@ export class ConfirmContractBatchComponent
       this.datasBatch.is_data_object_signature &&
       this.datasBatch.is_data_object_signature.length
     ) {
-      //   let arrSignConfig: any = [];
-      //   arrSignConfig = this.datas.is_data_object_signature;
-      // return this.datas.is_data_object_signature.filter(
-      //   (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived
-      // );
       return this.datasBatch.is_data_object_signature;
     } else {
       return [];

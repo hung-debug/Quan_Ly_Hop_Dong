@@ -8,6 +8,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { Helper } from 'src/app/core/Helper';
+import { MatDialog } from '@angular/material/dialog';
+import { PreviewContractTemplateComponent } from '../preview-contract-template/preview-contract-template.component';
 
 @Component({
   selector: 'app-confirm-infor-contract',
@@ -26,7 +28,9 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     private router: Router,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
-    private contractTypeService: ContractTypeService) {
+    private contractTypeService: ContractTypeService,
+    private dialog: MatDialog,
+    ) {
     this.step = variable.stepSampleContract.step4
   }
 
@@ -38,8 +42,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   is_origanzation_signature: any = [];
   is_origanzation_document: any = [];
   data_parnter_organization: any = [];
-
-  pdfSrc: any;
 
   getPartnerCoordinationer(item: any) {
     return item.recipients.filter((p: any) => p.role == 1)
@@ -309,78 +311,20 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     }
   }
 
+  //@ts-ignore
   preview() {
-    if (this.datas.is_action_contract_created) {
-      if (this.datas.uploadFileContractAgain) {
-        this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
-      } else {
-        let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
-        let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
-        if (fileContract_2) {
-          this.pdfSrc = fileContract_2.path;
-        } else {
-          this.pdfSrc = fileContract_1.path;
-        }
-      }
-    } else {
-      this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
-    }
-    this.getPage();
-  }
-
-  thePDF = null;
-  pageNumber = 1;
-  arrPage: any = [];
-  async getPage() {
-    // @ts-ignore
-    const pdfjs = await import('pdfjs-dist/build/pdf');
-    // @ts-ignore
-    const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
-    pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-    pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
-      this.thePDF = pdf;
-
-      this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)
-      this.arrPage = [];
-      for (let page = 1; page <= this.pageNumber; page++) {
-        let canvas = document.createElement("canvas");
-        this.arrPage.push({page: page});
-        canvas.className = 'dropzone';
-        canvas.id = "canvas-step3-" + page;
-        // canvas.style.paddingLeft = '15px';
-        // canvas.style.border = '9px solid transparent';
-        // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
-        let idPdf = 'pdf-viewer-step-3'
-        let viewer = document.getElementById(idPdf);
-        if (viewer) {
-          viewer.appendChild(canvas);
-        }
-        this.renderPage(page, canvas);
-      }
-    }).then(() => {
-      setTimeout(() => {
-      
-      }, 100)
+    const dialogRef = this.dialog.open(PreviewContractTemplateComponent, {
+      width: '800px',
+      data: this.datas,
     })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      
+    }) 
   }
 
-  renderPage(pageNumber: any, canvas: any) {
-    //This gives us the page's dimensions at full scale
-    //@ts-ignore
-    this.thePDF.getPage(pageNumber).then((page) => {
-      // let viewport = page.getViewport(this.scale);
-      let viewport = page.getViewport({scale: 1});
-      let test = document.querySelector('.viewer-pdf');
-
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-     
-      page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
-      if (test) {
-        let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
-        $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
-        $('.viewer-pdf').css('padding-right', paddingPdf + 'px');
-      }
-    });
+  convertToSignConfig() {
+    
   }
+
+ 
 }
