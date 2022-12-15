@@ -104,7 +104,7 @@ export class EkycDialogSignComponent implements OnInit {
           console.log("responseeeeeeeeeee ",response);
           if(response.result_code == 200 && response.action == 'pass') {
             if(this.cardId) {
-              if(this.cardId == response.id && this.name == response.name) {
+              if(this.cardId == response.id && this.name.toUpperCase() == response.name.toUpperCase()) {
                 this.flagSuccess == true;
                 alert("Xác thực thành công");
                 this.dialogRef.close(this.webcamImage.imageAsDataUrl);
@@ -112,7 +112,7 @@ export class EkycDialogSignComponent implements OnInit {
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
                 alert("Mã CMT/CCCD không trùng khớp");
-              } else if(this.name != response.name){
+              } else if(this.name.toUpperCase() != response.name.toUpperCase()){
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
                 alert("Họ tên trên CMT/CCCD không trùng khớp với tên người ký");
@@ -127,15 +127,8 @@ export class EkycDialogSignComponent implements OnInit {
              
           } else {
             this.flagSuccess = false;
-            this.webcamImage = this.initWebcamImage;
-            // if(response.action == 'manualReview' && response.warning_msg[0].length > 0) {
-            //   alert(response.warning_msg[0]);
-            // } else {
-            //   alert("Xác thực thất bại");
-            // }      
-
+            this.webcamImage = this.initWebcamImage; 
             alert("Xác thực thất bại");
-
           }
          
         })

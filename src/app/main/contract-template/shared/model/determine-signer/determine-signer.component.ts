@@ -106,6 +106,8 @@ export class DetermineSignerComponent implements OnInit {
 
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       this.datas.is_determine_clone = [...this.contractTemplateService.getDataDetermineInitialization()];
+    } else {
+      console.log("clone ", this.datas.is_determine_clone);
     }
 
     // data Tổ chức của tôi
@@ -136,7 +138,7 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeTypeSign(d: any) {
-    if(d.login_by == 'phone' || d.login_by == 'email') {
+    if(d.login_by == 'phone' || d.login_by == 'email' || d.typeSign == 1 || d.typeSign == 0) {
       d.email = '';
       d.phone = '';
     }
