@@ -476,5 +476,12 @@
   "preview":"Xem trước",
   "contract": "HỢP ĐỒNG",
   "partner": "ĐỐI TÁC",
-  "canceller":"Người hủy bỏ"
+  "canceller":"Người hủy bỏ",
+  "download":"Tải xuống",
+  "Đang ký": "Đang ký",
+  "canceled": "Đã hủy bỏ",
+  "refused":"Đã từ chối",
+  "overdued":"Đã quá hạn",
+  "Đang điều phối":"Đang điều phối",
+  "Đang xem xét":"Đang xem xét"
 }

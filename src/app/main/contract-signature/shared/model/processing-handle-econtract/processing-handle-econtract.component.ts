@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { ContractService } from 'src/app/service/contract.service';
 import { DialogReasonRejectedComponent } from '../dialog-reason-rejected/dialog-reason-rejected.component';
-
+import { ToastService } from 'src/app/service/toast.service';
 @Component({
   selector: 'app-processing-handle-econtract',
   templateUrl: './processing-handle-econtract.component.html',
@@ -42,6 +42,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       is_data_contract: any,
       content: any
     },
+    private toastService : ToastService,
     public router: Router,
     public dialog: MatDialog,
     private contractService : ContractService,
@@ -205,28 +206,15 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   resendSmsEmail(recipient: any){
-    
-    
-    console.log("emailRecipients",recipient);
-    console.log("personCreate",this.emailCreate);
-    
-    // this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    // if(this.currentUser.email == recipient.emailCreate){
-    //   this.isHiddenButton = true;
-    // }else{
-    //   this.isHiddenButton = false;
-    // }
-
-    console.log("ishidden",this.isHiddenButton);
-    
     let responseSmsEmail: any;
     this.contractService.resendSmsEmail(recipient.id).subscribe((responseSmsEmail) =>{
       console.log("data success",responseSmsEmail);
       
       if(responseSmsEmail.success == true){
-        alert('Gửi Email/SMS thành công')
+        this.toastService.showSuccessHTMLWithTimeout("Gửi Email/SMS thành công!", "", 3000);
       }else{
-        alert(responseSmsEmail.message)
+        //alert(responseSmsEmail.message)
+        this.toastService.showErrorHTMLWithTimeout(responseSmsEmail.message, "", 3000);
       }
     })
 

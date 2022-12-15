@@ -475,5 +475,13 @@
   "preview":"Preview",
   "contract": "CONTRACT",
   "partner": "PARTNER",
-  "canceller":"Canceller"
+  "canceller":"Canceller",
+
+  "download":"Download",
+  "Đang ký": "Signing",
+  "canceled": "Canceled",
+  "refused":"Refused",
+  "overdued":"Overdued",
+  "Đang điều phối":"Coordinator",
+  "Đang xem xét": "Considering"
 }
