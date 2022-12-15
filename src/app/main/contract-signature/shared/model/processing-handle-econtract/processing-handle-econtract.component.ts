@@ -17,7 +17,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   personCreate: string;
   emailCreate: string;
   timeCreate: any;
-  isHiddenButton: any;
+  isHiddenButton = false;
   currentUser: any;
   // recipient:any;
 
@@ -69,6 +69,18 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       this.reasonCancel = response.reasonCancel;
 
       this.cancelDate = response.cancelDate ? moment(response.cancelDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
+
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+      if(this.currentUser.email == this.emailCreate){
+        this.isHiddenButton = true;
+      }else{
+        this.isHiddenButton = false;
+      }
+      console.log("this.currentUser.email",this.currentUser.email);
+      console.log("emailCreate",this.emailCreate);
+      
+      
+      console.log("ishidden",this.isHiddenButton);
   
       response.recipients.forEach((element: any) => {
         let data = {
@@ -86,8 +98,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         this.is_list_name.push(data);
       })
       console.log("dataaaaaa",this.is_list_name);
-      
+
     });
+
   }
 
   getStatus(status: any) {
@@ -193,20 +206,25 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   resendSmsEmail(recipient: any){
     
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    console.log("emailRecipients",recipient);
     
-    if(this.currentUser.email == recipient.emailRecipients){
-      this.isHiddenButton = true;
-    }else{
-      this.isHiddenButton = false;
-    }
+    console.log("emailRecipients",recipient);
+    console.log("personCreate",this.emailCreate);
+    
+    // this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    // if(this.currentUser.email == recipient.emailCreate){
+    //   this.isHiddenButton = true;
+    // }else{
+    //   this.isHiddenButton = false;
+    // }
+
+    console.log("ishidden",this.isHiddenButton);
+    
     let responseSmsEmail: any;
     this.contractService.resendSmsEmail(recipient.id).subscribe((responseSmsEmail) =>{
       console.log("data success",responseSmsEmail);
       
       if(responseSmsEmail.success == true){
-        alert('Gửi thông báo hợp đồng thành công')
+        alert('Gửi Email/SMS thành công')
       }else{
         alert(responseSmsEmail.message)
       }

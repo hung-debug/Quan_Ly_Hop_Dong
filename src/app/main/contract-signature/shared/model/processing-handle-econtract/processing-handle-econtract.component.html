@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="col-md-2" style="flex-direction: column;text-align: center">
-                    <div *ngIf = "d.statusNumber != 0">
+                    <div *ngIf = "d.statusNumber != 0  && d.statusNumber !=4 && isHiddenButton">
                     <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="Gửi lại SMS/Email" (click)="resendSmsEmail(d)"/>
                     </div>
                 </div>
@@ -75,8 +75,8 @@
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
                 </div>
 
-                <div class="col-md-2" style="flex-direction: column;text-align: center" *ngIf = "d.statusNumber != 0"> 
-                    <div *ngIf = "d.statusNumber != 0 && isHiddenButton">
+                <div class="col-md-2" style="flex-direction: column;text-align: center"> 
+                    <div *ngIf = "d.statusNumber != 0 && isHiddenButton && d.statusNumber !=4">
                         <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="Gửi lại SMS/Email" (click)="resendSmsEmail(d)"/>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                 <span style="color: #8B8B8B">({{this.emailCreate}})</span>
             </div>
             <div class="col-md-4" style="display: flex; flex-direction: column;text-align: center">
-                <span style="color: '#106DB6'">Người huỷ bỏ</span>
+                <span style="color: '#106DB6'">{{'canceller' | translate}}</span>
                 <span style="color: #8B8B8B">({{this.cancelDate}})</span>
             </div>
         </div>

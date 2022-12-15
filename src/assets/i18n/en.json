@@ -408,6 +408,7 @@
     "all": "All",
     "contract.detail": "CONTRACT DETAIL",
     "reasson.cancel.contract": "Reason for contract cancellation",
+    "cancel.contract":"REASON FOR CONTRACT CANCEL",
     "cancel.contract.question": "Are you sure you want to cancel this contract?",
     "exit": "Exit",
     "relate.party": "Related parties",
@@ -472,5 +473,6 @@
     "sign.image.ekyc": "Sign image or eKYC",
     "sign.digital": "Sign digital",
     "contract": "CONTRACT",
-    "partner": "PARTNER"
+    "partner": "PARTNER",
+    "canceller":"Canceller"
 }

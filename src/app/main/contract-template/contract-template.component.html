@@ -64,7 +64,7 @@
       <div class="col-md-3 item_icon">
         <div style="display: flex; justify-content: center;">
           <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_02">
-            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'Sửa mẫu hợp đồng' | translate}}" (click)="openEdit(item.id)" />
+            <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'role.contract-template.edit' | translate}}" (click)="openEdit(item.id)" />
           </div>
           <div class="div_icon" *ngIf="isShare=='off' && item.releaseState=='CON_HIEU_LUC' && (isQLMHD_03 || isQLMHD_04)">
             <img *ngIf="item.status == 10 && isQLMHD_03" src="../../assets/img/icon_stop_release.svg" class="img_icon" ngbTooltip="Ngừng phát hành" (click)="stopContractTemplate(item.id)"/>
@@ -81,7 +81,7 @@
             <img src="../../assets/img/icon_share.svg" class="img_icon" ngbTooltip="Chia sẻ" (click)="shareContractTemplate(item.id)"/>
           </div>
           <div class="div_icon" *ngIf="isShare=='off' && isQLMHD_07">
-            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="Xóa mẫu hợp đồng" (click)="deleteContractTemplate(item.id)" />
+            <img src="../../assets/img/icon_delete.svg" class="img_icon" ngbTooltip="{{'role.contract-template.delete' | translate}}" (click)="deleteContractTemplate(item.id)" />
           </div>
         </div>
       </div>

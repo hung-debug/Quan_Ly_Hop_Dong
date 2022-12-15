@@ -410,6 +410,7 @@
     "all": "Tất cả",
     "reject.question": "Bạn có chắc chắn muốn từ chối hợp đồng này không? Vui lòng nhập lý do từ chối",
     "reasson.cancel.contract": "Lý do huỷ hợp đồng",
+    "cancel.contract":"LÝ DO HỦY BỎ HỢP ĐỒNG",
     "cancel.contract.question": "Bạn có chắc chắn muốn huỷ hợp đồng này không?",
     "exit": "Thoát",
     "content.confirm": "Bạn có đồng ý với nội dung, các điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch không?",
@@ -473,5 +474,6 @@
     "sign.image.ekyc": "Chữ ký ảnh hoặc eKYC",
     "sign.digital": "Chữ ký số",
     "contract": "HỢP ĐỒNG",
-    "partner": "ĐỐI TÁC"
+    "partner": "ĐỐI TÁC",
+    "canceller":"Người hủy bỏ"
 }
