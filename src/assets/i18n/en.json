@@ -410,6 +410,7 @@
     "reasson.cancel.contract": "Reason for contract cancellation",
     "cancel.contract":"REASON FOR CONTRACT CANCEL",
     "reject.contract":"REASON FOR CONTRACT REJECT",
+    "contract.reject":"Reason for contract reject",
     "cancel.contract.question": "Are you sure you want to cancel this contract?",
     "exit": "Exit",
     "relate.party": "Related parties",
@@ -480,7 +481,14 @@
     "Đang ký": "Signing",
     "canceled": "Canceled",
     "refused":"Refused",
+    "rejected":"Rejected",
     "overdued":"Overdued",
     "Đang điều phối":"Coordinator",
-    "Đang xem xét": "Considering"
+    "Đang xem xét": "Considering",
+    "view.reason":"Reason",
+    "resend.sms.email":"Resend Sms & Email",
+    "author.handing":"AUTHORIZATION OF HANDLING",
+    "Chưa ký":"Unsigned",
+    "stop.releasing":"Stop releasing",
+    "choose.template.contract": "Choose template contract"
 }

@@ -4,7 +4,7 @@
   </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="myForm" class="content">
     <div class="name-item">
-      <div class="label_item">Họ tên <span class="require_star">*</span></div>
+      <div class="label_item">{{'user.name' | translate}} <span class="require_star">*</span></div>
       <div class="input-data">
         <img src="assets/img/icon_name.svg" class="input-img">
         <input style="width: 88%" autocomplete="off" type="text" formControlName="name" class="input-text" autofocus>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="name-item">
-      <div class="label_item">Số điện thoại <span *ngIf="isReqPhone" class="require_star">*</span></div>
+      <div class="label_item">{{'user.phone' | translate}} <span *ngIf="isReqPhone" class="require_star">*</span></div>
       <div class="input-data">
         <input style="width: 88%" autocomplete="off" type="text" formControlName="phone" class="input-text">
       </div>

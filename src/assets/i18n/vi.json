@@ -189,6 +189,7 @@
     "role.contract.filter": "Tìm kiếm hợp đồng",
     "role.contract.view.detail": "Xem thông tin chi tiết hợp đồng",
     "contract.detail": "THÔNG TIN CHI TIẾT HỢP ĐỒNG",
+    "author.handing":"ỦY QUYỀN XỬ LÝ",
     "role.contract.copy": "Sao chép hợp đồng",
     "role.contract.cancel": "Huỷ hợp đồng",
     "role.contract.view.history": "Xem lịch sử hợp đồng",
@@ -412,6 +413,7 @@
     "reasson.cancel.contract": "Lý do huỷ hợp đồng",
     "cancel.contract":"LÝ DO HỦY BỎ HỢP ĐỒNG",
     "reject.contract":"LÝ DO TỪ CHỐI HỢP ĐỒNG",
+    "contract.reject":"Lý do từ chối hợp đồng",
     "cancel.contract.question": "Bạn có chắc chắn muốn huỷ hợp đồng này không?",
     "exit": "Thoát",
     "content.confirm": "Bạn có đồng ý với nội dung, các điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch không?",
@@ -481,7 +483,13 @@
     "Đang ký": "Đang ký",
     "canceled": "Đã hủy bỏ",
     "refused":"Đã từ chối",
+    "rejected":"Đã từ chối",
     "overdued":"Đã quá hạn",
     "Đang điều phối":"Đang điều phối",
-    "Đang xem xét":"Đang xem xét"
+    "Đang xem xét":"Đang xem xét",
+    "view.reason":"Xem lý do",
+    "resend.sms.email":"Gửi lại Sms & Email",
+    "Chưa ký":"Chưa ký",
+    "stop.releasing":"Ngừng phát hành",
+    "choose.template.contract":"Chọn mẫu hợp đồng"
 }

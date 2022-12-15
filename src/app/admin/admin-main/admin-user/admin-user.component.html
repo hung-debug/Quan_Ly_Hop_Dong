@@ -1,7 +1,7 @@
 <div *ngIf="this.adminUserRole === true" class="container-fluid">
     <div class="row">
       <div *ngIf="this.searchUserRole === true" class="col-md-3">
-        <div>{{'Họ tên' | translate}}</div>
+        <div>{{'user.name' | translate}}</div>
         <div class="input-line">
           <input type="text" [(ngModel)]="name" class="input_text"/>
         </div>
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div *ngIf="this.searchUserRole === true" class="col-md-3">
-        <div>{{'Số điện thoại' | translate}}</div>
+        <div>{{'user.phone' | translate}}</div>
         <div class="input-line">
           <input type="text" [(ngModel)]="phone" class="input_text"/>
         </div>
