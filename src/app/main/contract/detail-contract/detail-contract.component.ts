@@ -134,7 +134,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getDeviceApp();
 
-    this.appService.setTitle('THÔNG TIN CHI TIẾT HỢP ĐỒNG');
+    this.appService.setTitle(this.translate.instant('contract.detail'));
     this.getDataContractSignature();
   }
 

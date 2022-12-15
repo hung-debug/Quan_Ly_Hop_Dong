@@ -25,7 +25,8 @@
               <div class="row" *ngFor="let s of item.notice_content.split('<br/>')">
                 <div class="col-md-12 item_contract_infor">
                   <img src="../../../assets/img/user_icon.svg" width="12px" />
-                  <span> {{s}}</span>
+                  <span *ngIf="this.lang == 'vi' || !this.lang"> {{s.replace("Bên B: #PARTICIPANT_2#","")}}</span>
+                  <span *ngIf="this.lang == 'en'"> {{s.replace("Bên B: #PARTICIPANT_2#","").replace("Bên","Side")}}</span>
                 </div>
               </div>
               <div class="row item_contract_infor">

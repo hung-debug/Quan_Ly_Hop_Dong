@@ -483,5 +483,18 @@
   "refused":"Refused",
   "overdued":"Overdued",
   "Đang điều phối":"Coordinator",
-  "Đang xem xét": "Considering"
+  "Đang xem xét": "Considering",
+  "view.reason":"Reason",
+  "resend.sms.email":"Resend Sms & Email",
+  "author.handing":"AUTHORIZATION OF HANDLING",
+  "Chưa ký":"Unsigned",
+  "stop.releasing":"Stop releasing",
+  "choose.template.contract": "Choose template contract",
+  "view.reason":"Reason",
+    "resend.sms.email":"Resend Sms & Email",
+    "author.handing":"AUTHORIZATION OF HANDLING",
+    "Chưa ký":"Unsigned",
+    "stop.releasing":"Stop releasing",
+    "choose.template.contract": "Choose template contract"
+
 }

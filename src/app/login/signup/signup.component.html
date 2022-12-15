@@ -147,11 +147,11 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="label text-color">
-                                        {{ "Số điện thoại" | translate }}
+                                        {{'user.phone' | translate}}
                                         <span class="required-title">*</span>
                                     </div>
                                     <div class="input-line">
-                                        <input type="text" placeholder="{{ 'Nhập số điện thoại' | translate }}" formControlName="phone" class="input-text" />
+                                        <input type="text" placeholder="{{ 'nhap_sdt' | translate }}" formControlName="phone" class="input-text" />
                                     </div>
                                     <div *ngIf="submitted && f.phone.errors" class="invalid">
                                         <div *ngIf="f.phone.errors.required">
