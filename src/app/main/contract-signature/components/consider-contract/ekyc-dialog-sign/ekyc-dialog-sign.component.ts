@@ -54,8 +54,6 @@ export class EkycDialogSignComponent implements OnInit {
   contractId: number;
   organizationId: any;
   public ngOnInit(): void {
-
-    console.log("data ", this.data);
     this.initWebcamImage = this.webcamImage;
 
     //title = 0: nhan dang anh can cuoc cong dan
@@ -75,16 +73,19 @@ export class EkycDialogSignComponent implements OnInit {
 
   cardId: any;
   name:any;
-  public triggerSnapshot(): void {
+  public async triggerSnapshot(): Promise<void> {
     this.trigger.next();
 
     console.log(this.webcamImage.imageAsDataUrl);
 
     this.spinner.show();
 
-    this.contractService.getDetermineCoordination(this.data.recipientId).subscribe((response) => {
-      this.cardId = response.recipients[0].card_id;
-    })
+    const determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
+
+    this.cardId = determineCoordination.recipients[0].card_id;
+    this.name = determineCoordination.recipients[0].name;
+
+    console.log("name ", this.name);
 
     this.contractService.getDataCoordination(this.data.contractId).subscribe(async (response) => {
       this.organizationId =  response.organization_id;
