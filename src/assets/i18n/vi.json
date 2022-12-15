@@ -411,6 +411,7 @@
     "reject.question": "Bạn có chắc chắn muốn từ chối hợp đồng này không? Vui lòng nhập lý do từ chối",
     "reasson.cancel.contract": "Lý do huỷ hợp đồng",
     "cancel.contract":"LÝ DO HỦY BỎ HỢP ĐỒNG",
+    "reject.contract":"LÝ DO TỪ CHỐI HỢP ĐỒNG",
     "cancel.contract.question": "Bạn có chắc chắn muốn huỷ hợp đồng này không?",
     "exit": "Thoát",
     "content.confirm": "Bạn có đồng ý với nội dung, các điều khoản trong hợp đồng và sử dụng phương thức điện tử để thực hiện giao dịch không?",
@@ -475,5 +476,12 @@
     "sign.digital": "Chữ ký số",
     "contract": "HỢP ĐỒNG",
     "partner": "ĐỐI TÁC",
-    "canceller":"Người hủy bỏ"
+    "canceller":"Người hủy bỏ",
+    "download":"Tải xuống",
+    "Đang ký": "Đang ký",
+    "canceled": "Đã hủy bỏ",
+    "refused":"Đã từ chối",
+    "overdued":"Đã quá hạn",
+    "Đang điều phối":"Đang điều phối",
+    "Đang xem xét":"Đang xem xét"
 }

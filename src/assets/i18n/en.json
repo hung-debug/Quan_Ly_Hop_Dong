@@ -409,6 +409,7 @@
     "contract.detail": "CONTRACT DETAIL",
     "reasson.cancel.contract": "Reason for contract cancellation",
     "cancel.contract":"REASON FOR CONTRACT CANCEL",
+    "reject.contract":"REASON FOR CONTRACT REJECT",
     "cancel.contract.question": "Are you sure you want to cancel this contract?",
     "exit": "Exit",
     "relate.party": "Related parties",
@@ -474,5 +475,12 @@
     "sign.digital": "Sign digital",
     "contract": "CONTRACT",
     "partner": "PARTNER",
-    "canceller":"Canceller"
+    "canceller":"Canceller",
+    "download":"Download",
+    "Đang ký": "Signing",
+    "canceled": "Canceled",
+    "refused":"Refused",
+    "overdued":"Overdued",
+    "Đang điều phối":"Coordinator",
+    "Đang xem xét": "Considering"
 }

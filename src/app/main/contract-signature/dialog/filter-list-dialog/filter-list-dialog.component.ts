@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Router } from '@angular/router';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ToastService } from 'src/app/service/toast.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-filter-list-dialog',
@@ -18,17 +19,17 @@ export class FilterListDialogComponent implements OnInit {
   dropdownOrgSettings: any = {};
   contractTypeList: Array<any> = [];
   contractStatusProcessedList: { id: number, name: string }[] = [
-    { "id": 20, "name": "Đang xử lý" },
-    { "id": 2, "name": "Quá hạn" },
-    { "id": 31, "name": "Từ chối" },
-    { "id": 32, "name": "Hủy bỏ" },
-    { "id": 30, "name": "Hoàn thành" }
+    { "id": 20, "name": this.translate.instant('sys.processing') },
+    { "id": 2, "name": this.translate.instant('contract.status.overdue') },
+    { "id": 31, "name": this.translate.instant('contract.status.fail') },
+    { "id": 32, "name": this.translate.instant('contract.status.cancel') },
+    { "id": 30, "name": this.translate.instant('contract.status.complete') }
   ];
   contractStatusProcessingList: { id: number, name: string }[] = [
-    { "id": 20, "name": "Đang xử lý" },
-    { "id": 2, "name": "Quá hạn" },
-    { "id": 31, "name": "Từ chối" },
-    { "id": 32, "name": "Hủy bỏ" }
+    { "id": 20, "name": this.translate.instant('sys.processing') },
+    { "id": 2, "name": this.translate.instant('contract.status.overdue') },
+    { "id": 31, "name": this.translate.instant('contract.status.fail') },
+    { "id": 32, "name": this.translate.instant('contract.status.cancel') }
   ];
   
   submitted = false;
@@ -40,6 +41,7 @@ export class FilterListDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<FilterListDialogComponent>,
     public router: Router,
     public dialog: MatDialog,
+    public translate: TranslateService,
     private contractTypeService : ContractTypeService) { 
 
       this.addForm = this.fbd.group({
