@@ -464,13 +464,11 @@ export class ConsiderContractComponent
                 });
             else this.pdfSrcMobile = this.pdfSrc;
           } else {
-            if (this.mobile) {
               setTimeout(() => {
                 this.router.navigate([
                   '/main/form-contract/detail/' + this.idContract,
                 ]);
               }, 1000);
-            }
           }
         }
         // render pdf to canvas
