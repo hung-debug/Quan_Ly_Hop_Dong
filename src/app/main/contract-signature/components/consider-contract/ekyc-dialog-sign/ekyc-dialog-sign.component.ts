@@ -33,8 +33,8 @@ export class EkycDialogSignComponent implements OnInit {
   public multipleWebcamsAvailable = false;
   public deviceId: string;
   public videoOptions: MediaTrackConstraints = {
-    // width: {ideal: 576},
-    // height: {ideal: 750}
+    width: {ideal: 576},
+    height: {ideal: 750}
   };
   public errors: WebcamInitError[] = [];
 
@@ -55,7 +55,6 @@ export class EkycDialogSignComponent implements OnInit {
   organizationId: any;
   public ngOnInit(): void {
 
-    console.log("data ", this.data);
     this.initWebcamImage = this.webcamImage;
 
     //title = 0: nhan dang anh can cuoc cong dan
