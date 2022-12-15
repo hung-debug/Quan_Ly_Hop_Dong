@@ -27,15 +27,15 @@
                     <div class="form-group">
                         <div class="label_item">{{'effective-date' | translate}}</div>
                         <div class="input_text" style="display: flex;">
-                            <div [innerHTML]="this.datas.start_time | date: 'dd/MM/yyyy'" ></div>
+                            <div [innerHTML]="this.datas.start_time | date: 'dd/MM/yyyy'"></div>
                             <div> - </div>
-                            <div [innerHTML]="this.datas.end_time | date: 'dd/MM/yyyy'" ></div>
+                            <div [innerHTML]="this.datas.end_time | date: 'dd/MM/yyyy'"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-2"></div>  
+        <div class="col-md-2"></div>
         <div class="col-md-5">
             <div class="row">
                 <div class="col-md-12">
@@ -64,7 +64,7 @@
 <div class="labelOrg" style="text-transform: uppercase;">{{'side.sign' | translate}}</div>
 <div class="determine_contact">
     <div class="user_contact">
-        <div class="label" style="text-transform: uppercase;">{{'organization.me'  | translate}}</div>
+        <div class="label" style="text-transform: uppercase;">{{'organization.me' | translate}}</div>
         <div class="content_determine">
             <div class="row">
                 <div class="col-md-5">
@@ -136,7 +136,7 @@
                             <div>{{getPartnerSignature(record).length}}</div>
                         </div>
                     </div>
-                </div>   
+                </div>
                 <div class="col-md-2"></div>
                 <div class="col-md-5" *ngIf="record.type == 2">
                     <div class="form-group">
@@ -169,3 +169,4 @@
 
 <div id="pdf-viewer-step-3">  
 </div>
+

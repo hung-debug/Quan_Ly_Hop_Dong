@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="header">
-      <h3 class="label-header">{{this.datas.title | translate}}</h3>
+        <h3 class="label-header">{{this.datas.title | translate}}</h3>
     </div>
     <form [formGroup]="addForm" class="content">
 
@@ -9,7 +9,7 @@
             <div class="col-md-12">
                 <div class="label text-color">{{'unit.name' | translate }} <span class="required-title">*</span></div>
                 <div class="input-data">
-                    <input  type="text" formControlName="nameOrg">
+                    <input type="text" formControlName="nameOrg">
                 </div>
                 <div *ngIf="submitted && f.nameOrg.errors" class="invalid">
                     <div *ngIf="f.nameOrg.errors.required">{{'error.unit.name.required' | translate}}</div>
@@ -26,7 +26,7 @@
                     <input class="hidden-color" type="text" formControlName="idOrg" readonly>
                 </div>
             </div>
-        
+
             <div class="col-md-6">
                 <div class="label text-color">{{'unit.short-name' | translate }}</div>
                 <div class="input-data">
@@ -50,10 +50,10 @@
                     <div *ngIf="f.code.errors.pattern">{{'Mã tổ chức không được chứa ký tự đặc biệt, ký tự có dấu' | translate}}</div>
                 </div>
             </div>
-        
-              <!--Mã số thuế-->
-              <div class="col-md-6">
-                <div class="label text-color">{{'Mã số thuế' | translate }}</div>
+
+            <!--Mã số thuế-->
+            <div class="col-md-6">
+                <div class="label text-color">{{'tax_code' | translate}}</div>
                 <div class="input-data">
                     <input type="text" formControlName="taxCode">
                 </div>
@@ -68,24 +68,11 @@
             <div class="col-md-6">
                 <div class="label text-color">{{'unit.parent' | translate }} <span class="required-title">*</span></div>
                 <div *ngIf="this.data.id==null">
-                    <p-dropdown
-                        panelStyleClass="font"
-                        appendTo="body"
-                        [options]="orgList" 
-                        formControlName="parent_id" 
-                        optionLabel="name" 
-                        optionValue="id" 
-                        placeholder="Chọn tổ chức" 
-                        [filter]="true" 
-                        filterBy="name" 
-                        [showClear]="true"  
-                        [showClear]="true"
-                        dropdownIcon="pi pi-chevron-down" 
-                    ></p-dropdown>
+                    <p-dropdown panelStyleClass="font" appendTo="body" [options]="orgList" formControlName="parent_id" optionLabel="name" optionValue="id" placeholder="Chọn tổ chức" [filter]="true" filterBy="name" [showClear]="true" [showClear]="true" dropdownIcon="pi pi-chevron-down"></p-dropdown>
                 </div>
                 <div *ngIf="this.data.id != null" class="input-data hidden-color">
                     <div class="hidden-color">{{parentName}}</div>
-                  </div>
+                </div>
                 <div *ngIf="this.data.id == null && submitted && f.parent_id.errors" class="invalid">
                     <div *ngIf="f.parent_id.errors.required">{{'error.unit.parent.required' | translate}}</div>
                 </div>
@@ -117,15 +104,14 @@
                 </div>
             </div>
         </div>
-    
+
         <div class="row" style="justify-content: center;padding-top: 10px;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
             <button class="save-button" (click)="onSubmit()">{{'btn.save' | translate}}</button>
         </div>
     </form>
-  </div>
+</div>
 
-  <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-spin-clockwise">
     <p style="font-size: 18px; color: white">{{'sys.processing' | translate}}...</p>
-  </ngx-spinner>
-  
+</ngx-spinner>

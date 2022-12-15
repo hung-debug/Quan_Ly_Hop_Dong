@@ -6,30 +6,22 @@
             <div style="padding-bottom: 10px" class="label">CÁC THÀNH PHẦN (<span style="color: red">KÉO THẢ</span>)
             </div>
             <!--      <div>-->
-            <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class"
-                style="display: inline-block; margin-bottom: 15px">
-                <div *ngIf="!d.sign_config.position" [ngClass]="setClass(d)" (click)="showThumbnail()"
-                    [id]=getIdSignChuaKeo(d.id)>
+            <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class" style="display: inline-block; margin-bottom: 15px">
+                <div *ngIf="!d.sign_config.position" [ngClass]="setClass(d)" (click)="showThumbnail()" [id]=getIdSignChuaKeo(d.id)>
                     <div class="signature-sample-drag" style="position: relative">
-                        <div *ngIf="d.sign_unit == 'so_tai_lieu' || d.sign_unit == 'text'" [ngStyle]="setWidth(d)"
-                            class="content-drag" id="element-drag-text">{{d.sign_unit == 'so_tai_lieu' ? 'Số hợp đồng' :
-                            'Text'}}</div>
-                        <div *ngIf="d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh'" class="content-drag"
-                            id="element-drag" style="height: 102px; flex-direction: column" [ngStyle]="setWidth(d)">
-                            <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'"
-                                [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
+                        <div *ngIf="d.sign_unit == 'so_tai_lieu' || d.sign_unit == 'text'" [ngStyle]="setWidth(d)" class="content-drag" id="element-drag-text">{{d.sign_unit == 'so_tai_lieu' ? 'Số hợp đồng' : 'Text'}}
+                        </div>
+                        <div *ngIf="d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh'" class="content-drag" id="element-drag" style="height: 102px; flex-direction: column" [ngStyle]="setWidth(d)">
+                            <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
                             <!-- <span *ngIf="d.sign_unit == 'chu_ky_anh' || d.sign_unit == 'chu_ky_so'">{{d.sign_unit ==
                                 'chu_ky_anh' ? 'Chữ ký ảnh' : 'Chữ ký số'}}</span> -->
-                            <div *ngIf="d.sign_unit == 'chu_ky_so'" class="content-drag1" 
-                                id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
+                            <div *ngIf="d.sign_unit == 'chu_ky_so'" class="content-drag1" id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
                                 <img [src]="d.sign_unit == 'chu_ky_so' ? 'assets/img/img_sign_number.svg' : ''">
                                 <span *ngIf="d.sign_unit == 'chu_ky_so'">{{'sign.digital'|translate}}</span>
                             </div>
-    
-                            <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag"
-                                id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
-                                <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : ''"
-                                    [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
+
+                            <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag" id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
+                                <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : ''" [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
                                 <span *ngIf="d.sign_unit == 'chu_ky_anh'">{{'sign.image.ekyc' |translate}}</span>
                             </div>
                         </div>
@@ -45,13 +37,11 @@
                 <label class="label">{{'attribute' | translate}}</label>
                 <div class="name-text" *ngIf="isEnableText">
                     <label class="label-require">{{'attribute.name' | translate}}: *</label>
-                    <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name"
-                        (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
+                    <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                 </div>
                 <div class="sign-unit-select">
                     <label class="label-require">{{isEnableText || isChangeText ? "user.import" : "user.sign" | translate}}: *</label>
-                    <select class="form-select" id="select-dropdown" aria-label="Default select example"
-                        (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
+                    <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
                         <option value="" hidden>{{"choose.signer" | translate}}</option>
                         <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected"
                             value="{{d.email}}" [disabled]="d.is_disable">{{getName(d)}}</option>
@@ -65,13 +55,11 @@
                 <div class="location">
                     <div class="location-drag">
                         <div class="label" style="text-align: center">X:</div>
-                        <input type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')"
-                            [ngModel]="getTrafX()" [readOnly]="false">
+                        <input type="number" (ngModelChange)="changePositionSign($event, 'x', 'location')" [ngModel]="getTrafX()" [readOnly]="false">
                     </div>
                     <div class="location-drag">
                         <div class="label" style="text-align: center">Y:</div>
-                        <input type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')"
-                            [ngModel]="getTrafY()" [readOnly]="false">
+                        <input type="number" (ngModelChange)="changePositionSign($event, 'y', 'location')" [ngModel]="getTrafY()" [readOnly]="false">
                     </div>
                 </div>
             </div>
@@ -81,13 +69,11 @@
                 <div class="location">
                     <div class="location-drag">
                         <div class="label" style="font-size: 12px">{{'height' | translate}}</div>
-                        <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')"
-                            [ngModel]="objSignInfo.width" [readOnly]="false">
+                        <input type="number" (ngModelChange)="changePositionSign($event, 'width', 'size')" [ngModel]="objSignInfo.width" [readOnly]="false">
                     </div>
                     <div class="location-drag">
                         <div class="label" style="font-size: 12px">{{'width' | translate}}</div>
-                        <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')"
-                            [ngModel]="objSignInfo.height" [readOnly]="false">
+                        <input type="number" (ngModelChange)="changePositionSign($event, 'height', 'size')" [ngModel]="objSignInfo.height" [readOnly]="false">
                     </div>
                 </div>
             </div>
@@ -97,10 +83,8 @@
     <!--  file content-->
     <div class="col-md-9 sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
         <div id="pdf-viewer-step-3">
-            <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag"
-                [style.width]="this.canvasWidth">
-                <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement
-                    (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
+            <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+                <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
                     <div *ngIf="d.name" class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
                     <div class="sig-img-daky" (click)="onCancel($event, d)">
                         <img src="assets/img/clear.svg" alt="">
@@ -113,8 +97,7 @@
     </div>
 </div>
 <div class="footer-sample-contract">
-    <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button"
-        style="background-color: #8B8B8B">Quay lại</button>
+    <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button" style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
     <div>
         <button (click)="next()" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
     </div>
