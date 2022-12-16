@@ -68,6 +68,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   arrSearchNameView: any = [];
   is_change_party: boolean = false;
   isListSignNotPerson: any = [];
+  isListSignNotPerson1: any = [];
   ordering_person_partner = true;
   checkCount = 1;
   isCountNext = 1;
@@ -118,9 +119,10 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     }
 
     this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
+    this.isListSignNotPerson1 = this.signType_doc.filter((p) => ![1, 5].includes(p.id));
 
     if (!this.datasForm.is_determine_clone || this.datasForm.is_determine_clone.length == 0) {
-      this.datasForm.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
+      this.datasForm.is_determine_clone = [...this.contractService.getDataDetermineInitializationPartner()];
     }
 
     // data Tổ chức của tôi
@@ -600,6 +602,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         count++;
         break;
       }
+
+      if(dataArr[i].card_id.trim() && dataArr[i].role == 4 && !this.pattern_input.taxCode_form.test(dataArr[i].card_id) && dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0) {
+        this.getNotificationValid("Mã số thuế của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+        count++;
+        break;
+      }
+
 
       if(!dataArr[i].card_id.trim() && (dataArr[i].role == 3 || dataArr[i].role == 4) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0) {
         this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObject(dataArr[i].role)+"tổ chức của tôi");
@@ -1467,7 +1476,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   // thêm đối tác
   addPartner() {
     let data_partner_add = {};
-    let data = [...this.contractService.getDataDetermineInitialization()];
+    let data = [...this.contractService.getDataDetermineInitializationPartner()];
     data_partner_add = data.filter((p: any) => (p.type == 2))[0];
     this.datasForm.is_determine_clone.push(data_partner_add);
     // this.datasForm.is_determine_clone.forEach((res: any, index: number) => {
@@ -1479,6 +1488,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     let is_ordering: number = parseInt(this.getMaxNumberOrderingSign()); // set ordering follow data have max ordering
     this.datasForm.is_determine_clone[this.datasForm.is_determine_clone.length - 1].ordering = is_ordering + 1;
   }
+
 
   // xóa đối tham gia bên đối tác
   deletePartner(index: any, item: any) {
