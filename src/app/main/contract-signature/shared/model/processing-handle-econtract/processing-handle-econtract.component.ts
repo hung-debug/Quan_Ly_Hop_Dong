@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { ContractService } from 'src/app/service/contract.service';
 import { DialogReasonRejectedComponent } from '../dialog-reason-rejected/dialog-reason-rejected.component';
-
+import { ToastService } from 'src/app/service/toast.service';
 @Component({
   selector: 'app-processing-handle-econtract',
   templateUrl: './processing-handle-econtract.component.html',
@@ -17,7 +17,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   personCreate: string;
   emailCreate: string;
   timeCreate: any;
-  isHiddenButton: any;
+  isHiddenButton = false;
   currentUser: any;
   // recipient:any;
 
@@ -42,6 +42,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       is_data_contract: any,
       content: any
     },
+    private toastService : ToastService,
     public router: Router,
     public dialog: MatDialog,
     private contractService : ContractService,
@@ -69,6 +70,18 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       this.reasonCancel = response.reasonCancel;
 
       this.cancelDate = response.cancelDate ? moment(response.cancelDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
+
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+      if(this.currentUser.email == this.emailCreate){
+        this.isHiddenButton = true;
+      }else{
+        this.isHiddenButton = false;
+      }
+      console.log("this.currentUser.email",this.currentUser.email);
+      console.log("emailCreate",this.emailCreate);
+      
+      
+      console.log("ishidden",this.isHiddenButton);
   
       response.recipients.forEach((element: any) => {
         let data = {
@@ -86,8 +99,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         this.is_list_name.push(data);
       })
       console.log("dataaaaaa",this.is_list_name);
-      
+
     });
+
   }
 
   getStatus(status: any) {
@@ -192,23 +206,13 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   resendSmsEmail(recipient: any){
-    
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    console.log("emailRecipients",recipient);
-    
-    if(this.currentUser.email == recipient.emailRecipients){
-      this.isHiddenButton = true;
-    }else{
-      this.isHiddenButton = false;
-    }
-    let responseSmsEmail: any;
     this.contractService.resendSmsEmail(recipient.id).subscribe((responseSmsEmail) =>{
-      console.log("data success",responseSmsEmail);
       
       if(responseSmsEmail.success == true){
-        alert('Gửi thông báo hợp đồng thành công')
+        this.toastService.showSuccessHTMLWithTimeout("Gửi Email/SMS thành công!", "", 3000);
       }else{
-        alert(responseSmsEmail.message)
+        //alert(responseSmsEmail.message)
+        this.toastService.showErrorHTMLWithTimeout(responseSmsEmail.message, "", 3000);
       }
     })
 

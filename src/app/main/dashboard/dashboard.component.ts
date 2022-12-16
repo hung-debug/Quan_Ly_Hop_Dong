@@ -49,6 +49,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private appService: AppService,
     private dashboardService: DashboardService,
+    public translate: TranslateService,
     private userService: UserService,
     private unitService: UnitService,
     private router: Router,
@@ -276,17 +277,19 @@ export class DashboardComponent implements OnInit {
           },
         }
       },
+      
+
       series: [
         {
           type: 'column',
           colorByPoint: true,
-          name: 'Số hợp đồng',
+          name: this.translate.instant('contract.number'),
           data: [
-            ['Đang xử lý', data.total_process],
-            ['Hoàn thành', data.total_signed],
-            ['Từ chối', data.total_reject],
-            ['Hủy bỏ', data.total_cancel],
-            ['Quá hạn', data.total_expires]
+            [this.translate.instant('sys.processing'), data.total_process],
+            [this.translate.instant('contract.status.complete'), data.total_signed],
+            [this.translate.instant('contract.status.fail'), data.total_reject],
+            [this.translate.instant('contract.status.cancel'), data.total_cancel],
+            [this.translate.instant('contract.status.overdue'), data.total_expires]
           ]
         }]
     });

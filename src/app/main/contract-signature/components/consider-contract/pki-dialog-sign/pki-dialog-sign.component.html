@@ -6,7 +6,7 @@
     <div class="name-item">
       <div class="label_item">{{'user.phone' | translate}}: <span class="require_star">*</span></div>
       <div class="form-control input-line">
-        <input style="font-size: 14px;" autocomplete="off" type="text" [(ngModel)]="phoneNum" class="input-text" placeholder="Nhập số điện thoại" autofocus>
+        <input style="font-size: 14px;" autocomplete="off" type="text" [(ngModel)]="phoneNum" class="input-text" placeholder="{{ 'nhap_sdt' | translate }}" autofocus>
       </div>
     </div>
 
@@ -21,7 +21,7 @@
         placeholder="{{'choose.network' | translate}}"
         [showClear]="true"
       ></p-dropdown>
-      <!--<ngx-select [items]="optionsNetworkCompany" [placeholder]="'Chọn nhà mạng'" [(ngModel)]="networkCompany" optionValueField="item_id" optionTextField="item_text"></ngx-select>-->
+      <!--<ngx-select [items]="optionsNetworkCompany" [placeholder]="{{'choose.network' | translate}}" [(ngModel)]="networkCompany" optionValueField="item_id" optionTextField="item_text"></ngx-select>-->
     </div>
 
     <div class="select-option">

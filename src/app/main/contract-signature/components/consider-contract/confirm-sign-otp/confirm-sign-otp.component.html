@@ -22,7 +22,7 @@
 
     <div class="select-option">
       <button class="dx-button-form dx-button-close dx-button-90" [ngStyle]="getStyleReset()" (click)="this.count == 0?sendOtpAgain(this.datasOtp.contract_id, this.datasOtp.recipient_id, this.datasOtp.phone):''" type="button">Gửi lại OTP</button>
-      <button class="dx-button-form dx-button-close dx-button-90" (click)="onSubmit()" type="button">Xác nhận</button>
+      <button class="dx-button-form dx-button-close dx-button-90" (click)="onSubmit()" type="button">{{'confirm' | translate}}</button>confirm
     </div>
   </form>
 </div>

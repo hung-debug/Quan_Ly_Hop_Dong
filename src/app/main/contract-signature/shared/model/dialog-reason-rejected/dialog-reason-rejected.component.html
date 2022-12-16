@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <h3 style="text-align: center; color: #106db6;">LÝ DO TỪ CHỐI HỢP ĐỒNG</h3>
+    <h3 style="text-align: center; color: #106db6;">{{"reject.contract" | translate}}</h3>
     <div style="max-height: 405px; overflow: auto; font-size: 14px;">
         <div style="text-align: center; word-break: break-word;">
             <span>{{data.reasonReject}}</span>
@@ -7,6 +7,6 @@
     </div>
 
     <div class="footer-btn" style="text-align: center; margin-top: 20px;">
-        <button (click)="handleCancel()">Thoát</button>
+        <button (click)="handleCancel()">{{"exit" | translate}}</button>
     </div>
 </div>

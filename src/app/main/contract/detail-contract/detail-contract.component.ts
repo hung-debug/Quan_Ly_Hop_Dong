@@ -15,6 +15,7 @@ import * as $ from "jquery";
 import {ProcessingHandleEcontractComponent} from "../../contract-signature/shared/model/processing-handle-econtract/processing-handle-econtract.component"
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { DomSanitizer } from '@angular/platform-browser';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-detail-contract',
@@ -125,6 +126,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     private deviceService: DeviceDetectorService,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
+    public translate: TranslateService,
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
@@ -132,7 +134,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getDeviceApp();
 
-    this.appService.setTitle('THÔNG TIN CHI TIẾT HỢP ĐỒNG');
+    this.appService.setTitle(this.translate.instant('contract.detail'));
     this.getDataContractSignature();
   }
 
@@ -983,13 +985,13 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   checkStatusUser(status: any, role: any) {
     if (this.isDataContract.status == 30) {
-      return 'Tải xuống';
+      return this.translate.instant('download');
     }else if (this.isDataContract.status == 32) {
-      return 'Đã hủy bỏ';
+      return this.translate.instant('canceled');
     }else if (this.isDataContract.status == 31) {
-      return 'Đã từ chối';
+      return this.translate.instant('refused');
     }else if (this.isDataContract.release_state == 'HET_HIEU_LUC') {
-      return 'Đã quá hạn';
+      return this.translate.instant('overdued');
     }
 
     if (status == 3) {

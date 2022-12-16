@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output, OnInit, Inject } from '@angular
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import { ContractService } from 'src/app/service/contract.service';
+import { TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-view-reason-cancel-dialog',
@@ -14,12 +16,14 @@ export class DialogReasonCancelComponent implements OnInit {
     reasonCancel: string;
 constructor(
     @Inject(MAT_DIALOG_DATA) public data: any ,
-      
+      public translate: TranslateService,
       public router: Router,
       public dialog: MatDialog,
       private contractService : ContractService,
       public dialogRef: MatDialogRef<DialogReasonCancelComponent>,
     ) {
+      translate.addLangs(['en', 'vi']);
+    translate.setDefaultLang(localStorage.getItem('lang') || 'vi');
       }
 
     ngOnInit(): void {

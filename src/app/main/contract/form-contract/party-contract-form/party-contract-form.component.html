@@ -683,9 +683,9 @@
 
                 <div *ngIf="this.site == 'NB'" class="participants--input" style="display: flex">
                   <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">Số điện thoại&nbsp;-&nbsp;<div style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
+                    <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;-&nbsp;<div style="color: #ffc107;">({{'Nhận thông báo khi xử lý hợp đồng' | translate}})</div></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'Nhập số điện thoại' | translate}}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{ 'nhap_sdt' | translate }}" [(ngModel)]="d.phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>

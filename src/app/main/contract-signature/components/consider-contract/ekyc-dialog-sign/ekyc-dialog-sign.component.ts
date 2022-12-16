@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { result } from 'lodash';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
@@ -74,16 +75,18 @@ export class EkycDialogSignComponent implements OnInit {
 
   cardId: any;
   name:any;
-  public triggerSnapshot(): void {
+  public async triggerSnapshot(): Promise<void> {
     this.trigger.next();
-
-    console.log(this.webcamImage.imageAsDataUrl);
 
     this.spinner.show();
 
-    this.contractService.getDetermineCoordination(this.data.recipientId).subscribe((response) => {
-      this.cardId = response.recipients[0].card_id;
-    })
+    if(this.data.recipientId) {
+      const determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
+
+      this.cardId = determineCoordination.recipients[0].card_id;
+      this.name = determineCoordination.recipients[0].name;
+    }
+ 
 
     this.contractService.getDataCoordination(this.data.contractId).subscribe(async (response) => {
       this.organizationId =  response.organization_id;
@@ -99,10 +102,9 @@ export class EkycDialogSignComponent implements OnInit {
   
         this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
           this.spinner.hide();
-          console.log("responseeeeeeeeeee ",response);
           if(response.result_code == 200 && response.action == 'pass') {
             if(this.cardId) {
-              if(this.cardId == response.id && this.name == response.name) {
+              if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("") == response.name.toUpperCase().split(" ").join("")) {
                 this.flagSuccess == true;
                 alert("Xác thực thành công");
                 this.dialogRef.close(this.webcamImage.imageAsDataUrl);
@@ -110,7 +112,7 @@ export class EkycDialogSignComponent implements OnInit {
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
                 alert("Mã CMT/CCCD không trùng khớp");
-              } else if(this.name != response.name){
+              } else if(this.name.toUpperCase().split(" ").join("") != response.name.toUpperCase().split(" ").join("")){
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
                 alert("Họ tên trên CMT/CCCD không trùng khớp với tên người ký");
@@ -125,17 +127,12 @@ export class EkycDialogSignComponent implements OnInit {
              
           } else {
             this.flagSuccess = false;
-            this.webcamImage = this.initWebcamImage;
-            // if(response.action == 'manualReview' && response.warning_msg[0].length > 0) {
-            //   alert(response.warning_msg[0]);
-            // } else {
-            //   alert("Xác thực thất bại");
-            // }      
-
-            alert("Xác thực thất bại");
-
+            this.webcamImage = this.initWebcamImage; 
+            alert("Xác thực thất bại "+ response.warning_msg[0]);
           }
          
+        }, (error: any) => {
+          alert("Nhận dạng căn cước công dân mặt sau lỗi");
         })
       } else {
   
@@ -159,19 +156,19 @@ export class EkycDialogSignComponent implements OnInit {
             } else {
               alert("Nhận dạng thất bại")
             }
+
+            this.flagSuccess = false;
+            this.webcamImage = this.initWebcamImage; 
           }
+        }, (error: any) => {
+          alert("Nhận dạng căn cước công dân mặt sau lỗi");
         })
       }
   
     })
-
-   
-
   }
 
   upFileImageToDb(formData: any) {
-    console.log("id contract ", this.data.idContract);
-
      //up file anh len db
      this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseImage) => {
       if(responseImage.success == true) {

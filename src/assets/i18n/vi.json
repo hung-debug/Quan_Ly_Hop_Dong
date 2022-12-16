@@ -475,5 +475,19 @@
   "auto.scroll":"Tìm vị trí",
   "preview":"Xem trước",
   "contract": "HỢP ĐỒNG",
-  "partner": "ĐỐI TÁC"
+  "partner": "ĐỐI TÁC",
+  "canceller":"Người hủy bỏ",
+  "download":"Tải xuống",
+  "Đang ký": "Đang ký",
+  "canceled": "Đã hủy bỏ",
+  "refused":"Đã từ chối",
+  "overdued":"Đã quá hạn",
+  "Đang điều phối":"Đang điều phối",
+  "Đang xem xét":"Đang xem xét",
+  "view.reason":"Xem lý do",
+  "resend.sms.email":"Gửi lại Sms & Email",
+  "Chưa ký":"Chưa ký",
+  "stop.releasing":"Ngừng phát hành",
+  "choose.template.contract":"Chọn mẫu hợp đồng"
+
 }

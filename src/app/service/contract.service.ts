@@ -451,11 +451,11 @@ export class ContractService {
     };
 
     if (environment.apiUrl == 'https://econtract.mobifone.vn/service') {
-      return this.http.post<any>(this.cccdFront, body, { headers });
+      return this.http.post<any>(this.cccdFrontNB, body, { headers });
     } else if (environment.apiUrl == 'https://mobifone-econtract.vn/service') {
       return this.http.post<any>(this.cccdFrontKD, body, { headers });
     } else {
-      return this.http.post<any>(this.cccdFrontNB, body, { headers });
+      return this.http.post<any>(this.cccdFront, body, { headers });
     }
   }
 
