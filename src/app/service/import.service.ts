@@ -90,14 +90,17 @@ export class ImportService {
           this.router.navigate(['/main/user']);
         });
     } else if(importResult.status == 200) {
-      this.toastService.showErrorHTMLWithTimeout("File excel không hợp lệ. Vui lòng xem chi tiết lỗi ở file excel đã download","",3000);
-
-      let body: any = importResult.body;
-      let blob = new Blob([body], { type: 'application/vnd.openxmlformats-ficedocument.spreadsheetml.sheet'});
-      const link = document.createElement("a");
-      link.href = window.URL.createObjectURL(blob);
-      link.download = `report_${new Date().getTime()}.xlsx`;
-      link.click();
+      if(importResult.body.type == 'application/octet-stream') {
+        let body: any = importResult.body;
+        let blob = new Blob([body], { type: 'application/vnd.openxmlformats-ficedocument.spreadsheetml.sheet'});
+        const link = document.createElement("a");
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `report_${new Date().getTime()}.xlsx`;
+        link.click();
+      } else if(importResult.body.type == 'application/json') {
+        this.toastService.showErrorHTMLWithTimeout("File import không đúng định dạng","",3000);
+      }
+   
 
       this.spinner.hide();
     }
