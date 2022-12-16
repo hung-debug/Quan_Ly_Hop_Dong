@@ -150,6 +150,8 @@ export class EkycDialogSignComponent implements OnInit {
               alert("Nhận dạng thất bại")
             }
           }
+        }, (error: any) => {
+          alert("Nhận dạng căn cước công dân mặt sau lỗi");
         })
       }
   
