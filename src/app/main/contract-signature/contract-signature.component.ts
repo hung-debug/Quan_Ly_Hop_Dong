@@ -151,6 +151,8 @@ export class ContractSignatureComponent implements OnInit {
 
       this.getContractList();
     });
+
+    // this.spinner.hide();
   }
 
   documentId: any = [];

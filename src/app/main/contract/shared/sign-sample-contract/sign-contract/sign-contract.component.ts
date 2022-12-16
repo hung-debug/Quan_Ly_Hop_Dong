@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { NgxInputSearchModule } from "ngx-input-search";
+import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'app-sign-contract',
   templateUrl: './sign-contract.component.html',
@@ -12,7 +13,10 @@ export class SignContractComponent implements OnInit, AfterViewInit {
   @Output() onChangeValueText = new EventEmitter<any>();
   isContent: any;
 
-  constructor() {
+  constructor(
+    public translate: TranslateService,
+  ) {
+    
   }
 
   ngOnInit(): void {
@@ -29,7 +33,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
         return this.datas.contract_no
       } else if (sign.value) {
         return sign.value;
-      } else return 'Số hợp đồng';
+      } else return (this.translate.instant('contract.number'));
     }
 
   }

@@ -20,6 +20,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../../../service/toast.service";
 import {Router} from "@angular/router";
 import {HttpErrorResponse} from '@angular/common/http';
+import {TranslateService} from '@ngx-translate/core';
 import {count} from 'console';
 import {data} from 'jquery';
 import * as _ from 'lodash';
@@ -95,6 +96,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     private contractService: ContractService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
+    public translate: TranslateService,
     private router: Router
   ) {
     this.step = variable.stepSampleContract.step3

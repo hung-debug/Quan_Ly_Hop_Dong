@@ -16,6 +16,7 @@ import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { ProcessingHandleComponent } from './processing-handle/processing-handle.component';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { UserService } from 'src/app/service/user.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-detail-contract-template',
@@ -93,11 +94,12 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   ];
 
   optionsSign: any = [
-    {item_id: 1, item_text: 'Ký ảnh'},
-    {item_id: 2, item_text: 'Ký số bằng USB token'},
-    {item_id: 3, item_text: 'Ký số bằng sim PKI'},
-    {item_id: 4, item_text: 'Ký số bằng HSM'}
+    {item_id: 1, item_text: this.translate.instant('sign_by_eKYC')},
+    {item_id: 2, item_text: this.translate.instant('sign_by_token')},
+    {item_id: 3, item_text: this.translate.instant('sign_by_pki')},
+    {item_id: 4, item_text: this.translate.instant('sign_by_hsm')}
   ];
+  //this.translate.instant('sys.processing')
   typeSign: any = 0;
   isOtp: boolean = false;
   recipientId: any;
@@ -122,7 +124,8 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     private toastService : ToastService,
     private uploadService : UploadService,
     private dialog: MatDialog,
-    private userService: UserService
+    private userService: UserService,
+    public translate: TranslateService,
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
