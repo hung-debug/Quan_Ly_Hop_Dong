@@ -76,16 +76,12 @@ export class EkycDialogSignComponent implements OnInit {
   public async triggerSnapshot(): Promise<void> {
     this.trigger.next();
 
-    console.log(this.webcamImage.imageAsDataUrl);
-
     this.spinner.show();
 
     const determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
 
     this.cardId = determineCoordination.recipients[0].card_id;
     this.name = determineCoordination.recipients[0].name;
-
-    console.log("name ", this.name);
 
     this.contractService.getDataCoordination(this.data.contractId).subscribe(async (response) => {
       this.organizationId =  response.organization_id;
@@ -101,10 +97,9 @@ export class EkycDialogSignComponent implements OnInit {
   
         this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
           this.spinner.hide();
-          console.log("responseeeeeeeeeee ",response);
           if(response.result_code == 200 && response.action == 'pass') {
             if(this.cardId) {
-              if(this.cardId == response.id && this.name.toUpperCase() == response.name.toUpperCase()) {
+              if(this.cardId == response.id && this.name.toUpperCase().split(" ").join("") == response.name.toUpperCase().split(" ").join("")) {
                 this.flagSuccess == true;
                 alert("Xác thực thành công");
                 this.dialogRef.close(this.webcamImage.imageAsDataUrl);
@@ -112,7 +107,7 @@ export class EkycDialogSignComponent implements OnInit {
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
                 alert("Mã CMT/CCCD không trùng khớp");
-              } else if(this.name.toUpperCase() != response.name.toUpperCase()){
+              } else if(this.name.toUpperCase().split(" ").join("") != response.name.toUpperCase().split(" ").join("")){
                 this.flagSuccess == false;
                 this.webcamImage = this.initWebcamImage;
                 alert("Họ tên trên CMT/CCCD không trùng khớp với tên người ký");
@@ -159,9 +154,6 @@ export class EkycDialogSignComponent implements OnInit {
       }
   
     })
-
-   
-
   }
 
   upFileImageToDb(formData: any) {

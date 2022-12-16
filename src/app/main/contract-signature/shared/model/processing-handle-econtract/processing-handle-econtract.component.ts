@@ -206,9 +206,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   resendSmsEmail(recipient: any){
-    let responseSmsEmail: any;
     this.contractService.resendSmsEmail(recipient.id).subscribe((responseSmsEmail) =>{
-      console.log("data success",responseSmsEmail);
       
       if(responseSmsEmail.success == true){
         this.toastService.showSuccessHTMLWithTimeout("Gửi Email/SMS thành công!", "", 3000);
