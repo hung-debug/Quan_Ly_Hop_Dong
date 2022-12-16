@@ -126,6 +126,8 @@ export class EkycDialogSignComponent implements OnInit {
             alert("Xác thực thất bại");
           }
          
+        }, (error: any) => {
+          alert("Nhận dạng căn cước công dân mặt sau lỗi");
         })
       } else {
   
@@ -159,8 +161,6 @@ export class EkycDialogSignComponent implements OnInit {
   }
 
   upFileImageToDb(formData: any) {
-    console.log("id contract ", this.data.idContract);
-
      //up file anh len db
      this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseImage) => {
       if(responseImage.success == true) {
