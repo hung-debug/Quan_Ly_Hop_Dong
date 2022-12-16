@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { result } from 'lodash';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
@@ -78,10 +79,13 @@ export class EkycDialogSignComponent implements OnInit {
 
     this.spinner.show();
 
-    const determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
+    if(this.data.recipientId) {
+      const determineCoordination = await this.contractService.getDetermineCoordination(this.data.recipientId).toPromise();
 
-    this.cardId = determineCoordination.recipients[0].card_id;
-    this.name = determineCoordination.recipients[0].name;
+      this.cardId = determineCoordination.recipients[0].card_id;
+      this.name = determineCoordination.recipients[0].name;
+    }
+ 
 
     this.contractService.getDataCoordination(this.data.contractId).subscribe(async (response) => {
       this.organizationId =  response.organization_id;
@@ -123,7 +127,7 @@ export class EkycDialogSignComponent implements OnInit {
           } else {
             this.flagSuccess = false;
             this.webcamImage = this.initWebcamImage; 
-            alert("Xác thực thất bại");
+            alert("Xác thực thất bại "+ response.result_message);
           }
          
         }, (error: any) => {
