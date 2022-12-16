@@ -74,6 +74,7 @@ export class DetermineSignerComponent implements OnInit {
   arrSearchNameView: any = [];
   is_change_party: boolean = false;
   isListSignNotPerson: any = [];
+  isListSignNotPerson1: any = [];
 
   checkCount = 1;
   isCountNext = 1;
@@ -134,6 +135,8 @@ export class DetermineSignerComponent implements OnInit {
       this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
       this.isListSignPerson = this.signTypeList.filter((p) => ![1,4,5].includes(p.id));
     }
+
+    this.isListSignNotPerson1 = this.signType_doc.filter((p) => ![1, 5].includes(p.id));
  
 
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
@@ -448,7 +451,7 @@ export class DetermineSignerComponent implements OnInit {
       }
       //Nếu là văn thư
       else if(data.role == 4) {
-        if(this.getDataSignUSBToken(data).length == 0) {
+        if(this.getDataSignUSBToken(data).length == 0 && this.getDataSignHsm(data).length == 0) {
           data.card_id = "";
         }
       }
@@ -679,13 +682,19 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
 
+      if(dataArr[i].card_id.trim() && dataArr[i].role == 4 && !this.pattern_input.taxCode_form.test(dataArr[i].card_id) && dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0) {
+        this.getNotificationValid("Mã số thuế của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+        count++;
+        break;
+      }
+
       if(!dataArr[i].card_id.trim() && (dataArr[i].role == 3 || dataArr[i].role == 4) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0) {
         this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của"+this.getNameObjectValid(dataArr[i].role)+"tổ chức của tôi");
         count++;
         break;
       }
 
-      if(dataArr[i].card_id.trim() && !this.pattern.card_id.test(dataArr[i].card_id) && !this.pattern_input.taxCode_form.test(dataArr[i].card_id) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0) {
+      if(dataArr[i].card_id.trim() && !this.pattern.card_id.test(dataArr[i].card_id) && !this.pattern_input.taxCode_form.test(dataArr[i].card_id) && dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0 ) {
         this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!");
         count++;
         break;

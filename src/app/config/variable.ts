@@ -113,6 +113,11 @@ export const type_signature_doc = [
     name: 'Ký số bằng USB token',
     is_otp: false,
   },
+  {
+    id: 4,
+    name: 'Ký số bằng HSM',
+    is_otp: false
+  },
 ];
 
 export const type_signature_template = [
