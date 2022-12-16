@@ -46,6 +46,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
     private contractService : ContractService,
+    public translate: TranslateService,
   ) {
  
   }
@@ -211,7 +212,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       console.log("data success",responseSmsEmail);
       
       if(responseSmsEmail.success == true){
-        this.toastService.showSuccessHTMLWithTimeout("Gửi Email/SMS thành công!", "", 3000);
+        this.toastService.showSuccessHTMLWithTimeout((this.translate.instant('send.sms.email')), "", 3000);
       }else{
         //alert(responseSmsEmail.message)
         this.toastService.showErrorHTMLWithTimeout(responseSmsEmail.message, "", 3000);
@@ -219,7 +220,5 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     })
 
   }
-
-  
 
 }
