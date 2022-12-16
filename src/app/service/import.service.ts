@@ -68,10 +68,12 @@ export class ImportService {
     } catch(err: any) {
       this.spinner.hide();
 
+      console.log("err ",err);
+
       if(importResult.status == 400) {
         this.toastService.showErrorHTMLWithTimeout(importResult.message,"",3000);
       } else {
-        this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ nhà phát triển để sử lý"+err.message,"",3000);
+        this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ nhà phát triển để sử lý"+importResult.message,"",3000);
       }
     }
 
