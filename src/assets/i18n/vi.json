@@ -387,7 +387,7 @@
     "sign_by_token": "Ký số bằng Token",
     "sign_by_pki": "Ký số bằng PKI",
     "sign_by_hsm": "Ký số bằng HSM",
-    "sign_by_eKYC": "Ký bằng eKYC",
+    "sign_by_eKYC": "Xác thực eKYC",
     "sign_by_otp": "Ký ảnh vs OTP",
     "sign.multi": "Ký nhiều",
     "not.have.sample.file": "Bạn chưa có file mẫu?",
