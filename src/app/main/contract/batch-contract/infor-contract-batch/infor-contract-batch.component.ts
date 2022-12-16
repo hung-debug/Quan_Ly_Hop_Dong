@@ -15,6 +15,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
+import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'app-infor-contract-batch',
   templateUrl: './infor-contract-batch.component.html',
@@ -80,7 +81,8 @@ export class InforContractBatchComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private userService: UserService,
-    private unitService: UnitService
+    private unitService: UnitService,
+    public translate: TranslateService,
   ) {
     this.step = variable.stepSampleContractBatch.step1;
   }
@@ -206,10 +208,10 @@ export class InforContractBatchComponent implements OnInit {
     this.clearError();
     if (!this.idContractTemplate || !this.datasBatch.contractFile) {
       if (!this.idContractTemplate) {
-        this.errorContractName = 'Tên mẫu hợp đồng không được để trống!';
+        this.errorContractName = (this.translate.instant('contract.template.name.not.blank'));
       }
       if (!this.datasBatch.contractFile) {
-        this.errorContractFile = 'File tài liệu không được để trống!';
+        this.errorContractFile = (this.translate.instant('file.not.empty'));
       }
       return false;
     }

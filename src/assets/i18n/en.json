@@ -490,4 +490,12 @@
   "Chưa ký":"Unsigned",
   "stop.releasing":"Stop releasing",
   "choose.template.contract": "Choose template contract",
+  "old.password.not.blank":"Old password cannot be blank",
+  "new.password.not.blank":"New password cannot be blank",
+  "confirm.new.password.not.blank":"Confirm new password cannot be blank",
+  "no.contract.involved":"No contract involved",
+  "file.not.empty":"The document file cannot be empty!",
+  "contract.template.name.not.blank":"Contract template name cannot be blank!",
+  "send.sms.email":"Send Sms/Email Success!",
+  "change.password":"CHANGE PASSWORD"
 }
