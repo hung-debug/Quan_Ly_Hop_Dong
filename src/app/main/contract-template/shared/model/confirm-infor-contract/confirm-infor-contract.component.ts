@@ -283,11 +283,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
 
     if (isSuccess == 0) {
       if (action != 'saveDraft_contract') {
-        //this.callAPIFinish();
-
-        //khong call api update trang thai nua ma chi thong bao
-        this.spinner.show();
-
+        this.spinner.hide();
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/contract-template']);
         });
