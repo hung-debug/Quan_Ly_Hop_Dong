@@ -67,7 +67,12 @@ export class ImportService {
       importResult = await keyService.uploadFile(file);
     } catch(err: any) {
       this.spinner.hide();
-      this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ nhà phát triển để sử lý"+err.message,"",3000);
+
+      if(importResult.status == 400) {
+        this.toastService.showErrorHTMLWithTimeout(importResult.message,"",3000);
+      } else {
+        this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ nhà phát triển để sử lý"+err.message,"",3000);
+      }
     }
 
     if(importResult.status == 204) {
