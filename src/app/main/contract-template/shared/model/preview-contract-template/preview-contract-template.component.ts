@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Helper } from 'src/app/core/Helper';
+import * as $ from 'jquery';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class PreviewContractTemplateComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<PreviewContractTemplateComponent>,
   ) { }
 
   ngOnInit(): void {
@@ -186,6 +188,10 @@ export class PreviewContractTemplateComponent implements OnInit {
 
   eventMouseover() {
 
+  }
+
+  cancel() {
+    this.dialogRef.close();
   }
 
 }

@@ -7,10 +7,8 @@ import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
-import { Helper } from 'src/app/core/Helper';
 import { MatDialog } from '@angular/material/dialog';
 import { PreviewContractTemplateComponent } from '../preview-contract-template/preview-contract-template.component';
-
 @Component({
   selector: 'app-confirm-infor-contract',
   templateUrl: './confirm-infor-contract.component.html',
@@ -311,11 +309,12 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     }
   }
 
-  //@ts-ignore
   preview() {
+    // @ts-ignore
     const dialogRef = this.dialog.open(PreviewContractTemplateComponent, {
       width: '800px',
       data: this.datas,
+      backdrop: 'static',
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       

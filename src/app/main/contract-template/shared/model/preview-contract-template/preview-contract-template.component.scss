@@ -4,8 +4,8 @@
 //}
 
 .sample-contract {
-  // height: calc(100vh - 287px);
-  height: calc(100vh);
+  height: calc(100vh - 287px);
+  // height: calc(100vh - 200px);
 
   &__file {
     //position: relative;
@@ -19,8 +19,8 @@
   }
 
   .viewer-pdf {
-    // height: calc(100vh - 287px);
-    height: calc(100vh);
+    height: calc(100vh - 287px);
+    // height: calc(100vh - 200px);
     overflow-x: auto;
     text-align: center;
     background-color: rgba(239, 239, 239, 1);
@@ -31,13 +31,13 @@
     padding-top: 15px;
     overflow-y: auto;
     // height: calc(100vh - 122px);
-    height: calc(100vh);
+    height: calc(100vh - 122px);
     overflow-x: hidden;
   }
 
   .viewer-pdf.isDrag{
-    // height: calc(100vh - 287px);
-    height: calc(100vh);
+    height: calc(100vh - 287px);
+    // height: calc(100vh);
     overflow-x: auto;
     text-align: center;
     background-color: rgba(239, 239, 239, 1);
@@ -388,4 +388,43 @@ box-sizing: border-box;
 .ck-da-keo {
 border: 1px solid #106DB6;
 border-radius: 5px;
+}
+
+.footer-contract {
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  height: 46px;
+  //add css 16022022
+  float: right;
+  width: 75%;
+  .content_footer {
+    color:#0160AE;
+    font-size: 13px;
+    font-weight: 500;
+    width: 24.36%;
+    text-align: center;
+  }
+  .btn_footer {
+    display: flex;
+    justify-content: space-between;
+    //width: 75.64%;
+    width: 100%;
+    button {
+      outline: none;
+    }
+  }
+}
+
+.action-button {
+  // width: 114px;
+  // height: 30px;
+  background: #106DB6;
+  //font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 7px;
+  cursor: pointer;
+  margin: 5px 5px;
 }

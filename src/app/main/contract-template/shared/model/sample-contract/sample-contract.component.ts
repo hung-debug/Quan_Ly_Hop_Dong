@@ -99,8 +99,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnInit() {
-    console.log("datas clone sample ", this.datas.is_determine_clone);
-
     this.spinner.hide();
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
@@ -110,15 +108,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.getDataSignUpdateAction();
       // if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractTemplateService.getDataFormatContractUserSign();
-
-
-      // }
       this.setDataSignContract();
     }
-
-    // if (this.datas.back_step_4) {
-    //   this.datas.back_step_4 = false;
-    // }
 
     if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractTemplateService.getDataFormatContractUserSign();
