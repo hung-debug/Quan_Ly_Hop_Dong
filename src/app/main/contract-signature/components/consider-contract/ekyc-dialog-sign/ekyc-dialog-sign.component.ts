@@ -127,7 +127,7 @@ export class EkycDialogSignComponent implements OnInit {
           } else {
             this.flagSuccess = false;
             this.webcamImage = this.initWebcamImage; 
-            alert("Xác thực thất bại "+ response.result_message);
+            alert("Xác thực thất bại "+ response.warning_msg[0]);
           }
          
         }, (error: any) => {
@@ -155,6 +155,9 @@ export class EkycDialogSignComponent implements OnInit {
             } else {
               alert("Nhận dạng thất bại")
             }
+
+            this.flagSuccess = false;
+            this.webcamImage = this.initWebcamImage; 
           }
         }, (error: any) => {
           alert("Nhận dạng căn cước công dân mặt sau lỗi");
