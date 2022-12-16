@@ -488,6 +488,14 @@
   "resend.sms.email":"Gửi lại Sms & Email",
   "Chưa ký":"Chưa ký",
   "stop.releasing":"Ngừng phát hành",
-  "choose.template.contract":"Chọn mẫu hợp đồng"
+  "choose.template.contract":"Chọn mẫu hợp đồng",
+  "old.password.not.blank":"Mật khẩu cũ không được để trống",
+  "new.password.not.blank":"Mật khẩu mới không được để trống",
+  "confirm.new.password.not.blank":"Xác nhận mật khẩu mới không được để trống",
+  "no.contract.involved":"Không có hợp đồng liên quan",
+  "file.not.empty":"File tài liệu không được để trống!",
+  "contract.template.name.not.blank":"Tên mẫu hợp đồng không được để trống!",
+  "send.sms.email":"Gửi Email/SMS thành công!",
+  "change.password":"ĐỔI MẬT KHẨU"
 
 }
