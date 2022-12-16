@@ -2,14 +2,14 @@
   <div class="sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
     <div id="pdf-viewer-step-3">
         <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-            <div class="resize-drag not-out-drop" [id]="d.id" style="z-index: -1" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
+             <div class="resize-drag not-out-drop" [id]="d.id" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
                 <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
                 <div class="sig-img-daky">
                     <img src="assets/img/clear.svg" alt="">
                     <img src="assets/img/border-clear.svg" alt="">
                 </div>
                 <app-sign-contract-template [datas]="datas" [sign]="d"></app-sign-contract-template>
-            </div>
+            </div> 
         </div>
     </div>
   </div>
@@ -18,10 +18,9 @@
 <div class="footer-contract">
   <div class="btn_footer">
     <div class="label">
-
     </div>
     <div class="label">
-      <button (click)="cancel()" type="button" name="next" class="next action-button">Xác nhận</button>
+      <button (click)="cancel()" type="button" name="next" class="next action-button">{{'confirm' | translate}}</button>
     </div>
   </div>
 </div>

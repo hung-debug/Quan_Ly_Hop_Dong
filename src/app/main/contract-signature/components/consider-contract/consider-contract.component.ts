@@ -790,6 +790,11 @@ export class ConsiderContractComponent
       this.isDataObjectSignature &&
       this.isDataObjectSignature.length
     ) {
+      console.log("config ", this.datas.is_data_object_signature.filter(
+        (item: any) =>
+          item?.recipient?.email === this.currentUser.email &&
+          item?.recipient?.role === this.datas?.roleContractReceived
+      ));
       return this.datas.is_data_object_signature.filter(
         (item: any) =>
           item?.recipient?.email === this.currentUser.email &&
