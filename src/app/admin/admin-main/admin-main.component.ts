@@ -114,7 +114,7 @@ export class AdminMainComponent implements OnInit {
 
   resetPassword(){
     const data = {
-      title: 'ĐỔI MẬT KHẨU'
+      // title: 'ĐỔI MẬT KHẨU'
     };
     // @ts-ignore
     const dialogRef = this.dialog.open(ResetPasswordDialogComponent, {

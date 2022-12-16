@@ -497,5 +497,6 @@
     "no.contract.involved":"No contract involved",
     "file.not.empty":"The document file cannot be empty!",
     "contract.template.name.not.blank":"Contract template name cannot be blank!",
-    "send.sms.email":"Send Sms/Email Success!"
+    "send.sms.email":"Send Sms/Email Success!",
+    "change.password":"CHANGE PASSWORD"
 }
