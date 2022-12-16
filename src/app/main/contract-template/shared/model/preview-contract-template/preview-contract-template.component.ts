@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Helper } from 'src/app/core/Helper';
 
 
 @Component({
@@ -9,29 +10,182 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class PreviewContractTemplateComponent implements OnInit {
 
-  datasBatch: any;
+  pdfSrc: any;
+  thePDF: any;
+  pageNumber: number = 1;
+  arrPage: any = [];
+  datas: any;
+  canvasWidth: any;
+  objPdfProperties: any = {
+    pages: [],
+  };
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
 
   ngOnInit(): void {
-    this.datasBatch = this.data;
+    this.datas = this.data;
 
-    console.log("datas batch ", this.datasBatch);
+    if (this.datas.is_action_contract_created) {
+      if (this.datas.uploadFileContractAgain) {
+        this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+      } else {
+        let fileContract_1 = this.datas.i_data_file_contract.filter((p: any) => p.type == 1)[0];
+        let fileContract_2 = this.datas.i_data_file_contract.filter((p: any) => p.type == 2)[0];
+        if (fileContract_2) {
+          this.pdfSrc = fileContract_2.path;
+        } else {
+          this.pdfSrc = fileContract_1.path;
+        }
+      }
+    } else {
+      this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
+    }
+
+    this.getPage();
   }
 
   convertToSignConfig() {
-    if (
-      this.datasBatch &&
-      this.datasBatch.is_data_object_signature &&
-      this.datasBatch.is_data_object_signature.length
-    ) {
-      console.log("th1 ", this.datasBatch.is_data_object_signature);
-      return this.datasBatch.is_data_object_signature;
+    let arrSignConfig: any = [];
+    let cloneUserSign = [...this.datas.contract_user_sign];
+    cloneUserSign.forEach(element => {
+      if (this.datas.is_action_contract_created) {
+        if ((element.recipient && ![2, 3].includes(element.recipient.status)) || (!element.recipient && ![2, 3].includes(element.status))) {
+          arrSignConfig = arrSignConfig.concat(element.sign_config);
+        }
+      } else {
+        arrSignConfig = arrSignConfig.concat(element.sign_config);
+      } 
+    })
+
+    return arrSignConfig;
+  }
+
+  getSignSelect(d: any) {
+
+  }
+
+  changeColorDrag(role: any, isDaKeo?: any) {
+    if (isDaKeo) {
+      return 'ck-da-keo';
     } else {
-      console.log("th2");
-      return [];
+      return 'employer-ck';
     }
+  }
+
+  changePosition(d?: any, e?: any, sizeChange?: any) {
+    let style: any = {
+      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+      "position": "absolute",
+      "backgroundColor": '#EBF8FF'
+    }
+    if (d['width']) {
+      style.width = parseInt(d['width']) + "px";
+    }
+    if (d['height']) {
+      style.height = parseInt(d['height']) + "px";
+    }
+    if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
+      style.padding = '6px';
+    }
+    return style;
+  }
+
+  async getPage() {
+      // @ts-ignore
+      const pdfjs = await import('pdfjs-dist/build/pdf');
+      // @ts-ignore
+      const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
+      pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+      pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
+        this.thePDF = pdf;
+        this.pageNumber = (pdf.numPages || pdf.pdfInfo.numPages)
+        this.removePage();
+        this.arrPage = [];
+        for (let page = 1; page <= this.pageNumber; page++) {
+          let canvas = document.createElement("canvas");
+          this.arrPage.push({ page: page });
+          canvas.className = 'dropzone';
+          canvas.id = "canvas-step3-" + page;
+          // canvas.style.paddingLeft = '15px';
+          // canvas.style.border = '9px solid transparent';
+          // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
+          let idPdf = 'pdf-viewer-step-3'
+          let viewer = document.getElementById(idPdf);
+          if (viewer) {
+            viewer.appendChild(canvas);
+          }
+          this.renderPage(page, canvas);
+        }
+      }).then(() => {
+        setTimeout(() => {
+          this.setPosition();
+          this.eventMouseover();
+        }, 100)
+      })
+  }
+
+  removePage() {
+
+  }
+
+  renderPage(pageNumber: any, canvas: any) {
+     //This gives us the page's dimensions at full scale
+    //@ts-ignore
+    this.thePDF.getPage(pageNumber).then((page) => {
+      // let viewport = page.getViewport(this.scale);
+      let viewport = page.getViewport({ scale: 1.0 });
+      let test = document.querySelector('.viewer-pdf');
+
+      this.canvasWidth = viewport.width;
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      let _objPage = this.objPdfProperties.pages.filter((p: any) => p.page_number == pageNumber)[0];
+      if (!_objPage) {
+        this.objPdfProperties.pages.push({
+          page_number: pageNumber,
+          width: parseInt(viewport.width),
+          height: viewport.height,
+        });
+      }
+      page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+      if (test) {
+        let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
+        $('.viewer-pdf').css('padding-left', paddingPdf + 'px');
+        $('.viewer-pdf').css('padding-right', paddingPdf + 'px');
+      }
+      this.activeScroll();
+    });
+  }
+
+  activeScroll() {
+    document.getElementsByClassName('viewer-pdf')[0].addEventListener('scroll', () => {
+      const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
+      Imgs.forEach((item: any) => {
+        if (item.getBoundingClientRect().top <= (window.innerHeight / 2) &&
+          (item.getBoundingClientRect().bottom >= 0) &&
+          (item.getBoundingClientRect().top >= 0) ||
+          (item.getBoundingClientRect().bottom >= (window.innerHeight / 2)) &&
+          (item.getBoundingClientRect().bottom <= window.innerHeight) &&
+          (item.getBoundingClientRect().top <= 0)) {
+          let page = item.id.split("-")[2];
+          $('.page-canvas').css('border', 'none');
+          let selector = '.page-canvas.page' + page;
+          $(selector).css('border', '2px solid #ADCFF7');
+          // @ts-ignore
+          // document.getElementById('thumbnail-canvas').scrollTop = $(selector).offset().top - 95;
+        }
+      });
+    });
+  }
+
+  setPosition() {
+    
+  }
+
+  eventMouseover() {
+
   }
 
 }

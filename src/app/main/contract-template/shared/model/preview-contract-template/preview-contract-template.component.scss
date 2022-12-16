@@ -1,25 +1,16 @@
-//@font-face {
-//  font-family: 'SF_Dexend_deca';
-//  src: url('assets/scss/font/LexendDeca-VariableFont_wght.ttf') format('ttf');
-//}
-
 .sample-contract {
-  //height: calc(100vh - 104px);
-  height: calc(100vh - 287px);
+  height: 100vh;
 
   &__file {
-    //position: relative;
     .sig-img-daky{
       position: absolute;
       top: -11px;
       right: -8px;
-      //cursor: pointer;
     }
 
   }
 
   .viewer-pdf {
-      height: calc(100vh - 287px);
     overflow-x: auto;
     text-align: center;
     background-color: rgba(239, 239, 239, 1);
@@ -29,13 +20,12 @@
   #pdf-viewer-step-3.view{
     padding-top: 15px;
     overflow-y: auto;
-    height: calc(100vh - 122px);
     overflow-x: hidden;
+    height: 100vh
   }
 
   .viewer-pdf.isDrag{
-    //height: calc(100vh - 104px);
-    height: calc(100vh - 287px);
+    height: 100vh;
     overflow-x: auto;
     text-align: center;
     background-color: rgba(239, 239, 239, 1);
