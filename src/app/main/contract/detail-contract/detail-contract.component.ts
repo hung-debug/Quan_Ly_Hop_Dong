@@ -93,10 +93,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   ];
 
   optionsSign: any = [
-    {item_id: 1, item_text: 'Ký ảnh'},
-    {item_id: 2, item_text: 'Ký số bằng USB token'},
-    {item_id: 3, item_text: 'Ký số bằng sim PKI'},
-    {item_id: 4, item_text: 'Ký số bằng HSM'}
+    {item_id: 1, item_text: this.translate.instant('sign_by_eKYC')},
+    {item_id: 2, item_text: this.translate.instant('sign_by_token')},
+    {item_id: 3, item_text: this.translate.instant('sign_by_pki')},
+    {item_id: 4, item_text: this.translate.instant('sign_by_hsm')}
   ];
   typeSign: any = 0;
   isOtp: boolean = false;
