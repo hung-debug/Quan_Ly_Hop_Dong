@@ -68,8 +68,8 @@ export class PreviewContractTemplateComponent implements OnInit {
 
   }
 
-  changeColorDrag(role: any, isDaKeo?: any) {
-    if (isDaKeo) {
+  changeColorDrag(role: any, valueSign: any) {
+    if (!valueSign.text_attribute_name && valueSign.sign_unit != 'text') {
       return 'ck-da-keo';
     } else {
       return 'employer-ck';
