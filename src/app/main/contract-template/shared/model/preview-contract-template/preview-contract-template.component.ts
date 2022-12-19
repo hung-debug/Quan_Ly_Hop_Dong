@@ -78,10 +78,22 @@ export class PreviewContractTemplateComponent implements OnInit {
 
   changePosition(d?: any, e?: any, sizeChange?: any) {
     let style: any = {
-      "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
-      "position": "absolute",
-      "backgroundColor": '#EBF8FF'
+
+    };
+
+    if(d.sign_unit != 'text') {
+      style = {
+        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+        "position": "absolute",
+        "backgroundColor": '#EBF8FF'
+      }
+    } else {
+      style = {
+        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
+        "position": "absolute",
+      }
     }
+  
     if (d['width']) {
       style.width = parseInt(d['width']) + "px";
     }
