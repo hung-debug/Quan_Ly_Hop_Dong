@@ -23,7 +23,6 @@ import { count } from 'console';
 import { data } from 'jquery';
 import { environment } from "src/environments/environment";
 import { ContractTemplateService } from "src/app/service/contract-template.service";
-import { SignContractComponent } from "src/app/main/contract-signature/components/sign-contract/sign-contract.component";
 import * as _ from 'lodash';
 
 @Component({
@@ -38,7 +37,6 @@ export class SampleContractFormComponent implements OnInit {
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
   @Output() stepChangeSampleContractForm = new EventEmitter<string>();
   @Input() save_draft_infor_form: any;
-  @ViewChild('SignContract') SignContractComponent: SignContractComponent | unknown;
 
   pdfSrc: any;
   thePDF = null;

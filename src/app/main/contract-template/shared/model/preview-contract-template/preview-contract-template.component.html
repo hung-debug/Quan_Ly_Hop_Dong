@@ -1,17 +1,48 @@
-<div class="sample-contract row">
+<!-- <div class="sample-contract row">
   <div class="sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
     <div id="pdf-viewer-step-3">
-        <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
-             <div class="resize-drag not-out-drop" [id]="d.id" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
-                <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
-                <div class="sig-img-daky">
-                    <img src="assets/img/clear.svg" alt="">
-                    <img src="assets/img/border-clear.svg" alt="">
-                </div>
-                <app-sign-contract-template [datas]="datas" [sign]="d"></app-sign-contract-template>
-            </div> 
+        <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">    
+              <div class="resize-drag not-out-drop"
+              [id]="d.id"
+              #itemElement
+              
+              [ngClass]="changeColorDrag(null, d)"
+              [ngStyle]="changePosition(d)">
+              <div class="name-sig-img-daky">{{(d.name && !d.value) ? d.name : ''}}</div>
+              <div class="sig-img-daky">
+                <img src="assets/img/clear.svg" alt="">
+                <img src="assets/img/border-clear.svg" alt="">
+              </div>
+              <app-sign-contract-template  [datas]="datas" [sign]="d"></app-sign-contract-template>
+            </div>
         </div>
     </div>
+  </div>
+</div> -->
+
+<div class="sample-contract row">
+  <!--  information contract-->
+  <!-- <div class="col-md-3 sample-contract__information" style="background-color: white; z-index: 10; display: none;">
+      <div class="sample-contract__information--drag" id="width-element-info" style="position: relative">
+          <div style="padding-bottom: 10px" class="label">{{'components'|translate}} (<span style="color: red">{{'drag-drop'|translate}}</span>)</div>
+      </div>
+      <hr>
+  </div> -->
+
+  <!--  file content-->
+  <div class="sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
+      <div id="pdf-viewer-step-3">
+          <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
+              <div class="resize-drag not-out-drop" [id]="d.id" #itemElement (click)="getSignSelect(d)" [ngClass]="changeColorDrag(null,true)" [ngStyle]="changePosition(d)">
+                  <div class="name-sig-img-daky">{{d.name ? d.name : ''}}</div>
+                  <div class="sig-img-daky">
+                      <img src="assets/img/clear.svg" alt="">
+                      <img src="assets/img/border-clear.svg" alt="">
+                  </div>
+                  <app-sign-contract-template [datas]="datas" [sign]="d"></app-sign-contract-template>
+              </div>
+          </div>
+      </div>
   </div>
 </div>
 

@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { SignContractComponent } from "../sign-contract/sign-contract.component";
 import { AddContractComponent } from "../contract-coordination/add-contract/add-contract.component";
 import { variable } from "../../../../config/variable";
 import { environment } from "../../../../../environments/environment";
@@ -21,7 +20,6 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./index.component.scss']
 })
 export class IndexComponent implements OnInit {
-  @ViewChild('ContractSign') SignContractComponent: SignContractComponent;
   @ViewChild('AddContract') AddContractComponent: AddContractComponent;
   datas: any = {};
   data_contract: any;
