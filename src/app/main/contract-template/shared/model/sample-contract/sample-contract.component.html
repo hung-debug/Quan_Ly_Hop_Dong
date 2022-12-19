@@ -1,15 +1,11 @@
-<!--<link rel="stylesheet" href="sample-contract.component.scss">-->
 <div class="sample-contract row">
-    <!--  information contract-->
     <div class="col-md-3 sample-contract__information" style="background-color: white; z-index: 10">
         <div class="sample-contract__information--drag" id="width-element-info" style="position: relative">
             <div style="padding-bottom: 10px" class="label">{{'components'|translate}} (<span style="color: red">{{'drag-drop'|translate}}</span>)</div>
-            <!--      <div>-->
             <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class" style="display: inline-block; margin-bottom: 15px">
                 <div *ngIf="!d.sign_config.position" class="resize-drag" (click)="showThumbnail()" [id]=getIdSignChuaKeo(d.id)>
                     <div class="signature-sample-drag" style="position: relative">
-                        <!-- <div *ngIf="d.sign_unit == 'so_tai_lieu' || d.sign_unit == 'text'" [ngStyle]="setWidth(d)" class="content-drag" id="element-drag-text">{{d.sign_unit == 'so_tai_lieu' ? 'Số hợp đồng' : 'Text'}}
-                        </div> -->
+         
 
                         <div *ngIf="d.sign_unit == 'so_tai_lieu'" [ngStyle]="setWidth(d)" class="content-drag" id="element-drag-text">
                             <p *ngIf="d.sign_unit == 'so_tai_lieu'" style="margin: 0px;">{{'contract.number'|translate}}</p>
@@ -18,12 +14,7 @@
                         <div *ngIf="d.sign_unit == 'text'" [ngStyle]="setWidth(d)" class="content-drag" id="element-drag-text">
                             <p *ngIf="d.sign_unit == 'text'" style="margin: 0px;">{{'Text'|translate}}</p>
                         </div>
-                        <!-- <div *ngIf="d.sign_unit == 'chu_ky_so' || d.sign_unit == 'chu_ky_anh'" class="content-drag" id="element-drag" 
-                        style="height: 102px; flex-direction: column" [ngStyle]="setWidth(d)">
-                            <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'" 
-                            [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
-                            <span *ngIf="d.sign_unit == 'chu_ky_anh' || d.sign_unit == 'chu_ky_so'">{{d.sign_unit == 'chu_ky_anh' ? 'Chữ ký ảnh hoặc eKYC' : 'Chữ ký số'}}</span>
-                        </div> -->
+
                         <div *ngIf="d.sign_unit == 'chu_ky_so'" class="content-drag1" id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
                             <img [src]="d.sign_unit == 'chu_ky_so' ? 'assets/img/img_sign_number.svg' : ''">
                             <span *ngIf="d.sign_unit == 'chu_ky_so'">{{'sign.digital'|translate}}</span>
@@ -36,7 +27,6 @@
                     </div>
                 </div>
             </div>
-            <!--      </div>-->
         </div>
         <hr>
 
@@ -50,9 +40,24 @@
                 <div class="sign-unit-select">
                     <label class="label-require">{{isEnableText || isChangeText ? "user.import" : "user.sign" | translate}}: *</label>
                     <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
-            <option value="" hidden>{{isEnableText || isChangeText ? ('choose.importer' | translate) : ('choose.signer' | translate)}}</option>
-            <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
-          </select>
+                        <option value="" hidden>{{isEnableText || isChangeText ? ('choose.importer' | translate) : ('choose.signer' | translate)}}</option>
+                        <option *ngFor="let d of this.list_sign_name, let i = index" [selected]="d.selected" value="{{d.id}}" [disabled]="d.is_disable">{{getName(d)}}</option>
+                    </select>
+                </div>
+
+                <!--Option chọn font + size chữ-->
+                <div class="row sign-unit-select">
+                    <div class="col-md-9">
+                        <label class="label-require">Font</label>
+                        <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')">
+                            <option value="" hidden>{{'choose.font' | translate}}</option>
+                            <option *ngFor="let d of this.list_font, let i = index" [selected]="d.selected" value="{{d.font}}">{{d}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="label-require">Size</label>
+                        <input class="form-control"/>
+                    </div>
                 </div>
 
             </div>
