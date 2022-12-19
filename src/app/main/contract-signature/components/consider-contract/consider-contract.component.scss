@@ -319,3 +319,10 @@
   background: rgb(46, 108, 246); 
   color: rgb(255, 255, 255);
 }
+
+canvas{
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translateZ(0);
+}

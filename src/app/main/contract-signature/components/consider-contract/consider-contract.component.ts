@@ -624,6 +624,7 @@ export class ConsiderContractComponent
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
+
         this.prepareInfoSignUsbToken(
           pageNumber,
           canvas.height,
@@ -640,8 +641,21 @@ export class ConsiderContractComponent
           });
         }
 
+        const dpi = window.devicePixelRatio;
+
+canvas.width = viewport.width * dpi;
+canvas.height = viewport.height * dpi;
+
+canvas.style.width = viewport.width/window.devicePixelRatio + "px";
+canvas.style.height = viewport.height/window.devicePixelRatio + "px";
+
+var ctx = canvas.getContext('2d');
+ctx.scale(dpi,dpi);
+ctx.imageSmoothingEnabled = true
+ctx.translate(0.5, 0.5);
+
         var renderContext: any = {
-          canvasContext: canvas.getContext('2d'),
+          canvasContext: ctx,
           viewport: viewport,
         };
 
