@@ -61,8 +61,6 @@ export class PreviewContractTemplateComponent implements OnInit {
       } 
     })
 
-    console.log("arrSignConfig ", arrSignConfig);
-
     return arrSignConfig;
   }
 

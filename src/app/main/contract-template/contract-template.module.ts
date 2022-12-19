@@ -37,6 +37,7 @@ import { DetailContractTemplateComponent } from './detail-contract-template/deta
 import { ImageSignContractComponent } from './detail-contract-template/image-sign-contract/image-sign-contract.component';
 import { ProcessingHandleComponent } from './detail-contract-template/processing-handle/processing-handle.component';
 import { PreviewContractTemplateComponent } from './shared/model/preview-contract-template/preview-contract-template.component';
+import { PreviewSignContractTemplateComponent } from './shared/model/preview-contract-template/preview-sign-contract-template/preview-sign-contract-template.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -57,7 +58,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     DetailContractTemplateComponent,
     ImageSignContractComponent,
     ProcessingHandleComponent,
-    PreviewContractTemplateComponent
+    PreviewContractTemplateComponent,
+    PreviewSignContractTemplateComponent
   ],  
   imports: [  
     CommonModule,  
