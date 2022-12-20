@@ -117,12 +117,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let isNotFieldId: any[] = [];
       let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
 
-      console.log("is user sign clone ",isUserSign_clone);
-
       isUserSign_clone.forEach((res: any) => {
         res.sign_config.forEach((element: any) => {
-          console.log("element ", element);
-          console.log("element ", element.id_have_data)
           if (element.id_have_data) {
             isHaveFieldId.push(element)
           } else isNotFieldId.push(element);
@@ -214,11 +210,10 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let countIsSignId = 0;
       this.spinner.show();
 
-      console.log("dataSignId ", dataSignId);
-
       for (let i = 0; i < dataSignId.length; i++) {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
+        dataSignId[i].font = this.datas.font;
         await this.contractTemplateService.editContractSample(dataSignId[i], id).toPromise().then((data: any) => {
           dataSample_contract.push(data);
         }, (error) => {
@@ -229,17 +224,14 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         if (countIsSignId > 0) {
           break;
         }
-      }
-
-    
-      // this.spinner.hide();
+      }    
     }
 
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
       let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'value'];
       dataSignNotId.forEach((item: any) => {
-        item['font'] = 'Arial';
+        // item['font'] = 'Arial';
         item['font_size'] = 11;
         item['contract_id'] = this.datas.contract_id;
         item['document_id'] = this.datas.document_id;

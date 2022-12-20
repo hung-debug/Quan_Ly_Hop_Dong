@@ -31,8 +31,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   @Input() datas: any;
   @Input() step: any;
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
+  @ViewChild('teams') teams!: ElementRef;
   @Output() stepChangeSampleContract = new EventEmitter<string>();
   @Input() save_draft_infor: any;
+
   pdfSrc: any;
   thePDF = null;
   pageNumber = 1;
@@ -89,6 +91,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   data_sample_contract: any = [];
   list_font: any;
 
+  selectedFont: any;
+
+  data_sign: any;
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractTemplateService: ContractTemplateService,
@@ -123,11 +129,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
     this.scale = 1;
     if (this.datas.is_determine_clone && this.datas.is_determine_clone.length > 0) {
-      console.log("b3 clone ", this.datas.is_determine_clone);
       let data_user_sign = [...this.datas.is_determine_clone];
       this.getListNameSign(data_user_sign);
-
-      console.log("data user sign ", data_user_sign);
     }
     if (!this.signCurent) {
       this.signCurent = {
@@ -184,24 +187,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         interact.modifiers.restrictSize({
           // min: { width: 100, height: 32 }
         })
-        // keep the edges inside the parent (resize kich thuoc duy tri 1 khung hinh goc khi keo tha)
-        // interact.modifiers.aspectRatio({
-        //   // ratio may be the string 'preserve' to maintain the starting aspect ratio,
-        //   // or any number to force a width/height ratio
-        //   ratio: 'preserve',
-        //   // To add other modifiers that respect the aspect ratio,
-        //   // put them in the aspectRatio.modifiers array
-        //   modifiers: [
-        //     interact.modifiers.restrictEdges({
-        //       outer: '.drop-zone'
-        //     }),
-        //
-        //     // minimum size
-        //     interact.modifiers.restrictSize({
-        //       // min: { width: 100, height: 32 }
-        //     })
-        //   ]
-        // })
       ],
       inertia: true,
     })
@@ -217,14 +202,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
     interact.addDocument(document)
 
-    // console.log(this.datas)
-
-    console.log("final ",this.datas.contract_user_sign);
-
     this.data_sign = this.datas.contract_user_sign;
 
   }
-  data_sign: any;
+
+  changeFont() {
+    this.selectedFont = this.teams.nativeElement.value;
+  }
+
   getDataSignUpdateAction() {
     let dataPosition: any[] = [];
     let dataNotPosition: any[] = [];
@@ -725,18 +710,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     this.list_sign_name.forEach((element: any) => {
       console.log(element);
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
-        console.log("ba ", this.convertToSignConfig());
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
-
-        console.log("data ", data);
         
         if (data.length >= 0)
           element.is_disable = true;
         else element.is_disable = false;
         //element.is_disable = false;
       } else {
-        //console.log(this.convertToSignConfig());
-        //console.log(this.list_sign_name);
+
         if (isSignType != 'text' && this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && p.sign_unit == isSignType)) {
           console.log("a");
           element.is_disable = true;
@@ -1266,6 +1247,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async next(action: string) {
+    this.datas.font = this.selectedFont;
     if (action == 'next_step' && !this.validData()) {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
         this.save_draft_infor.close_header = false;
@@ -1351,6 +1333,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async getDefindDataSignEdit(dataSignId: any, dataSignNotId: any, action: any) {
+
+    console.log("id data ", dataSignId);
+
     let dataSample_contract: any[] = [];
     if (dataSignId.length > 0) {
       let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit'];
@@ -1382,7 +1367,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (dataSignNotId.length > 0) {
       let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'value'];
       dataSignNotId.forEach((item: any) => {
-        item['font'] = 'Arial';
+        // item['font'] = 'Arial';
         item['font_size'] = 11;
         item['contract_id'] = this.datas.contract_id;
         item['document_id'] = this.datas.document_id;

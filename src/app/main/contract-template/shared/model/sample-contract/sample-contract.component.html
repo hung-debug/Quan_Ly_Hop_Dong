@@ -49,9 +49,9 @@
                 <div class="row sign-unit-select">
                     <div class="col-md-9">
                         <label class="label-require">Font</label>
-                        <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')">
-                            <option value="" hidden>{{'choose.font' | translate}}</option>
-                            <option *ngFor="let d of this.list_font, let i = index" [selected]="d.selected" value="{{d.font}}">{{d}}</option>
+                        <select class="form-select" id="select-dropdown" aria-label="Default select example" #teams (change)="changeFont()">
+                            <option value="name" hidden>{{'choose.font' | translate}}</option>
+                            <option *ngFor="let d of this.list_font, let i = index" [selected]="d.selected" value="{{d}}">{{d}}</option>
                         </select>
                     </div>
                     <div class="col-md-3">
