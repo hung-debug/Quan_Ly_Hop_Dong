@@ -158,11 +158,16 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   changeTypeSign(d: any) {
-    console.log("d ", d);
     if(d.login_by == 'phone' || d.typeSign == 1 || d.login_by == 'email' || d.typeSign == 0) {
       d.email = '';
       d.phone = '';
     } 
+
+    if(d.login_by == 'phone') {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2,5].includes(p.id));
+    } else {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+    }
   }
 
 

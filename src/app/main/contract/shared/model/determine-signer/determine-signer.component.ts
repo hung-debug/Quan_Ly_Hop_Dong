@@ -134,14 +134,10 @@ export class DetermineSignerComponent implements OnInit {
     } else {
       this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
       this.isListSignPerson = this.signTypeList.filter((p) => ![1,4,5].includes(p.id));
-    }
-
-    this.isListSignNotPerson1 = this.signType_doc.filter((p) => ![1, 5].includes(p.id));
- 
+    } 
 
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       this.datas.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
-
     }
 
     // data Tổ chức của tôi
@@ -482,10 +478,13 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeTypeSign(d: any) {
-    console.log("d ",d);
     if(d.login_by == 'phone' || d.login_by == 'email') {
       d.email = '';
       d.phone = '';
+    }
+
+    if(d.login_by == 'phone') {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2,5].includes(p.id));
     }
   }
 

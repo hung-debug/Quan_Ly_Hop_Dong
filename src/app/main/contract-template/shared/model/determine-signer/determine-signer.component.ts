@@ -140,6 +140,12 @@ export class DetermineSignerComponent implements OnInit {
       d.email = '';
       d.phone = '';
     }
+
+    if(d.login_by == 'phone') {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2,5].includes(p.id));
+    } else {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1,5].includes(p.id));
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
