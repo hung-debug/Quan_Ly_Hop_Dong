@@ -265,8 +265,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       isContractUserSign_clone.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {
-            item['font'] = 'Times New Roman';
-            item['font_size'] = 11;
+            item['font'] = this.datas.font;
+            item['font_size'] = this.datas.size;
             item['contract_id'] = this.datas.contract_id;
             item['document_id'] = this.datas.document_id;
             if (item.text_attribute_name) {
@@ -430,8 +430,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         'value',
       ];
       dataSignNotId.forEach((item: any) => {
-        item['font'] = 'Arial';
-        item['font_size'] = 11;
+        item['font'] = this.datas.font;
+        item['font_size'] = this.datas.size;
         item['contract_id'] = this.datas.contract_id;
         item['document_id'] = this.datas.document_id;
         if (item.text_attribute_name) {

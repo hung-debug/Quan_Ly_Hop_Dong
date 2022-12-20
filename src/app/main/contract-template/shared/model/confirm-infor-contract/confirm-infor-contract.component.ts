@@ -132,8 +132,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       isContractUserSign_clone.forEach((element: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config.forEach((item: any) => {
-            item['font'] = 'Times New Roman';
-            item['font_size'] = 11;
+            item['font'] = this.datas.font;
+            item['font_size'] = this.datas.size;
             item['contract_id'] = this.datas.contract_id;
             item['document_id'] = this.datas.document_id;
             if (item.text_attribute_name) {
@@ -223,6 +223,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
         dataSignId[i].font = this.datas.font;
+        dataSignId[i].font_size = this.datas.size;
         await this.contractTemplateService.editContractSample(dataSignId[i], id).toPromise().then((data: any) => {
           dataSample_contract.push(data);
         }, (error) => {
@@ -240,8 +241,8 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
     if (dataSignNotId.length > 0) {
       let data_remove_arr_request = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', 'value'];
       dataSignNotId.forEach((item: any) => {
-        // item['font'] = 'Arial';
-        item['font_size'] = 11;
+        item['font'] = this.datas.font;
+        item['font_size'] = this.datas.size;
         item['contract_id'] = this.datas.contract_id;
         item['document_id'] = this.datas.document_id;
         if (item.text_attribute_name) {
