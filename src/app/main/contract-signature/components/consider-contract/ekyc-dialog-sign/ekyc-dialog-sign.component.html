@@ -9,7 +9,7 @@
   </div>
 
   <div *ngIf = "!webcamImage && !this.flagSuccess">
-    <webcam [width]="600" [height]="200" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+    <webcam [width]="266" [height]="200" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
             [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
             [videoOptions]="videoOptions" 
             [imageQuality]="1"
