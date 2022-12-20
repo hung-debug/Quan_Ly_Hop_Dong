@@ -9,9 +9,9 @@
   </div>
 
   <div *ngIf = "!webcamImage && !this.flagSuccess">
-    <webcam [width]="266" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+    <webcam [height]="200" [width]="266" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
             [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
-            [videoOptions]="videoOptions"
+            [videoOptions]="{width:{exact: 266}, height: {exact: 200}}" 
             [imageQuality]="1"
             (cameraSwitched)="cameraWasSwitched($event)"
             (initError)="handleInitError($event)"
@@ -24,4 +24,5 @@
     <img [height]="200" [width]="200"  [src]="webcamImage.imageAsDataUrl"/>
   </div>
 </div>
+
 
