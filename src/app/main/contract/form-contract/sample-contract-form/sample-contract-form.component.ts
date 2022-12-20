@@ -197,23 +197,6 @@ export class SampleContractFormComponent implements OnInit {
         interact.modifiers.restrictSize({
           //min: { width: 100, height: 32 }
         })
-        // interact.modifiers.aspectRatio({
-        //   // ratio may be the string 'preserve' to maintain the starting aspect ratio,
-        //   // or any number to force a width/height ratio
-        //   ratio: 'preserve',
-        //   // To add other modifiers that respect the aspect ratio,
-        //   // put them in the aspectRatio.modifiers array
-        //   modifiers: [
-        //     interact.modifiers.restrictEdges({
-        //       outer: '.drop-zone'
-        //     }),
-        //
-        //     // minimum size
-        //     interact.modifiers.restrictSize({
-        //       //min: { width: 100, height: 32 }
-        //     })
-        //   ]
-        // })
       ],
       inertia: true
     })
@@ -227,10 +210,24 @@ export class SampleContractFormComponent implements OnInit {
       autoScroll: true,
       modifiers: []
     })
-    interact.addDocument(document)
+    interact.addDocument(document);
 
-    // console.log(this.datasForm)
+    console.log("form ", this.datasForm);
 
+    if(this.datasForm.is_data_object_signature.length > 0) {
+      const font = this.datasForm.is_data_object_signature[0].font;
+      const font_size = this.datasForm.is_data_object_signature[0].font_size;
+  
+      if(font) {
+        this.datasForm.font = font;
+        this.selectedFont = this.datasForm.font;
+      }
+  
+      if(font_size) {
+        this.datasForm.size = font_size;
+        this.size = this.datasForm.size;
+      }
+    }
   }
 
   changeFont($event: any) {

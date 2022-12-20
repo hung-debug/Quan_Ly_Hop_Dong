@@ -218,7 +218,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       edges: {left: false, right: false, bottom: false, top: false},
     })
 
-    interact.addDocument(document)
+    interact.addDocument(document);
+
+    const font = this.datas.participants[0].recipients[0].fields[0].font;
+    const font_size = this.datas.participants[0].recipients[0].fields[0].font_size;
+
+    if(font) {
+      this.datas.font = font;
+      this.selectedFont = this.datas.font;
+    }
+
+    if(font_size) {
+      this.datas.size = font_size;
+      this.size = this.datas.size;
+    }
   }
 
   changeFont($event: any) {
