@@ -170,6 +170,15 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       })
 
       this.spinner.show();
+
+      // const font = {
+      //   'unit':'text',
+      //   'font':this.datas.font,
+      //   'size':this.datas.size+'px'
+      // }
+
+      // this.data_sample_contract.push(font);
+
       this.contractTemplateService.getContractSample(this.data_sample_contract).subscribe((data) => {
         if (action == 'finish_contract') {
           this.callAPIFinish();
