@@ -24,5 +24,5 @@
   class="text-sign"
   *ngIf="sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu'"
 >
-  <span class="font-style" id="input-text">{{ getText(sign) }}</span>
+  <span [ngStyle]="getStyleText()" class="font-style" id="input-text">{{ getText(sign) }}</span>
 </div>

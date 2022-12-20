@@ -20,14 +20,12 @@ export class PreviewSignContractTemplateComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("datas ", this.datas);
-    console.log("sign ", this.sign);
   }
 
   getText(sign: any) {
-    console.log("sign text ",this.sign);
     if (sign.sign_unit == 'text') {
-      if(sign.name) {
-        return sign.name
+      if(sign.text_attribute_name) {
+        return sign.text_attribute_name
       } else
         return 'Text';
     } else {
@@ -37,6 +35,13 @@ export class PreviewSignContractTemplateComponent implements OnInit {
         return sign.value;
       } else return (this.translate.instant('contract.number'));
     }
+  }
+
+  getStyleText() {
+    return {
+      'font-size': this.datas.size+'px',
+      'font':this.datas.font
+    };
   }
 
   getSpecifiedHandle() {
