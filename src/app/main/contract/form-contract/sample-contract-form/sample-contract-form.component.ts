@@ -95,6 +95,11 @@ export class SampleContractFormComponent implements OnInit {
   isNoEmailObj: boolean = true;
   isChangeNumberContract: number;
 
+  list_font: any;
+
+  selectedFont: any="";
+  size: any;
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -107,6 +112,17 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if(this.datasForm.font) {
+      this.selectedFont = this.datasForm.font;
+    }
+
+    if(this.datasForm.size) {
+      this.size = this.datasForm.size;
+    }
+
+    this.list_font = ["Arial","Calibri","Times","Times New Roman"];
+
     this.isChangeNumberContract = this.datasForm.contract_no; // save contract number check with input contract number object signature when change
     if (!this.datasForm.contract_user_sign) {
       if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
@@ -217,6 +233,10 @@ export class SampleContractFormComponent implements OnInit {
 
   }
 
+  changeFont($event: any) {
+    this.selectedFont = $event;
+    this.datasForm.font = $event;
+  }
 
   setDataSignContract() {
     if (!this.datasForm.is_data_object_signature) {
@@ -1263,6 +1283,8 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   async next(action: string) {
+    this.datasForm.font = this.selectedFont;
+    this.datasForm.size = this.size;
     if (action == 'next_step' && !this.validData()) {
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
         this.save_draft_infor_form.close_header = false;

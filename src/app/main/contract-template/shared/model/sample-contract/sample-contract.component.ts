@@ -1,5 +1,6 @@
 import {
   Component,
+  Renderer2,
   OnInit,
   Input,
   ChangeDetectorRef,
@@ -31,7 +32,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   @Input() datas: any;
   @Input() step: any;
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined
-  @ViewChild('teams') teams!: ElementRef;
   @Output() stepChangeSampleContract = new EventEmitter<string>();
   @Input() save_draft_infor: any;
 
@@ -91,7 +91,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   data_sample_contract: any = [];
   list_font: any;
 
-  selectedFont: any;
+  selectedFont: any="";
+  size: any;
 
   data_sign: any;
 
@@ -100,7 +101,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     private contractTemplateService: ContractTemplateService,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private renderer: Renderer2
   ) {
     this.step = variable.stepSampleContract.step3
   }
@@ -108,13 +110,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     this.spinner.hide();
 
+    if(this.datas.font) {
+      this.selectedFont = this.datas.font;
+    }
+
+    if(this.datas.size) {
+      this.size = this.datas.size;
+    }
+
     this.list_font = ["Arial","Calibri","Times","Times New Roman"];
 
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
-      // ham chuyen doi hinh thuc ky type => sign_unit
-      //this.getAddSignUnit();
-      // ham update du lieu hop dong sua
       this.getDataSignUpdateAction();
       // if (!this.datas.contract_user_sign) {
       this.datas.contract_user_sign = this.contractTemplateService.getDataFormatContractUserSign();
@@ -206,8 +213,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   }
 
-  changeFont() {
-    this.selectedFont = this.teams.nativeElement.value;
+  changeFont($event: any) {
+    this.selectedFont = $event;
+    this.datas.font = $event;
   }
 
   getDataSignUpdateAction() {
@@ -1170,8 +1178,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // edit location doi tuong ky
   changePositionSign(e: any, locationChange: any, property: any) {
-    // console.log(e, this.objSignInfo, this.signCurent);
-    //console.log(this.datas.contract_user_sign);
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
@@ -1211,22 +1217,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             isObjSign.status = data_name.status;
             signElement.setAttribute("status", isObjSign.status);
 
-            //console.log(data_name);
-            // isObjSign.type = data_name.type;
-            // signElement.setAttribute("type", isObjSign.type);
-
             isObjSign.email = data_name.email;
             signElement.setAttribute("email", isObjSign.email);
 
           }
-          // else {
-          //   // tránh trường hợp chọn người ký khác sau khi đã kéo thả sẽ bị mất dữ liệu người ký cũ trước khi thay đổi
-          //   this.toastService.showErrorHTMLWithTimeout("Người ký đã được chỉ định vị trí. Vui lòng kéo thả hình thức ký mới!", "", 3000);
-          //   return false;
-          // }
+
         }
-        // console.log(this.signCurent)
-        // console.log(this.objSignInfo)
       }
     }
   }
@@ -1248,6 +1244,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   async next(action: string) {
     this.datas.font = this.selectedFont;
+    this.datas.size = this.size;
     if (action == 'next_step' && !this.validData()) {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
         this.save_draft_infor.close_header = false;

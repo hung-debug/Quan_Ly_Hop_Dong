@@ -49,14 +49,14 @@
                 <div class="row sign-unit-select">
                     <div class="col-md-9">
                         <label class="label-require">Font</label>
-                        <select class="form-select" id="select-dropdown" aria-label="Default select example" #teams (change)="changeFont()">
-                            <option value="name" hidden>{{'choose.font' | translate}}</option>
+                        <select class="form-select" id="select-dropdown" aria-label="Default select example" [ngModel]="this.selectedFont" (ngModelChange)="changeFont($event)">
+                            <option value="" hidden>{{'choose.font' | translate}}</option>
                             <option *ngFor="let d of this.list_font, let i = index" [selected]="d.selected" value="{{d}}">{{d}}</option>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label class="label-require">Size</label>
-                        <input class="form-control"/>
+                        <input class="form-control" [(ngModel)]="size"/>
                     </div>
                 </div>
 

@@ -91,6 +91,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   listSignNameClone: any = [];
   data_sample_contract: any = [];
 
+  list_font: any;
+
+  selectedFont: any="";
+  size: any;
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -105,9 +110,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   temp: any[];
 
   ngOnInit() {
-    this.temp = this.datas.is_determine_clone;
-
     this.spinner.hide();
+
+    if(this.datas.font) {
+      this.selectedFont = this.datas.font;
+    }
+
+    if(this.datas.size) {
+      this.size = this.datas.size;
+    }
+
+    this.list_font = ["Arial","Calibri","Times","Times New Roman"];
+
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
       // ham chuyen doi hinh thuc ky type => sign_unit
@@ -184,24 +198,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         interact.modifiers.restrictSize({
           // min: { width: 100, height: 32 }
         })
-        // keep the edges inside the parent (resize kich thuoc duy tri 1 khung hinh goc khi keo tha)
-        // interact.modifiers.aspectRatio({
-        //   // ratio may be the string 'preserve' to maintain the starting aspect ratio,
-        //   // or any number to force a width/height ratio
-        //   ratio: 'preserve',
-        //   // To add other modifiers that respect the aspect ratio,
-        //   // put them in the aspectRatio.modifiers array
-        //   modifiers: [
-        //     interact.modifiers.restrictEdges({
-        //       outer: '.drop-zone'
-        //     }),
-        //
-        //     // minimum size
-        //     interact.modifiers.restrictSize({
-        //       // min: { width: 100, height: 32 }
-        //     })
-        //   ]
-        // })
       ],
       inertia: true,
     })
@@ -223,6 +219,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact.addDocument(document)
+  }
+
+  changeFont($event: any) {
+    this.selectedFont = $event;
+    this.datas.font = $event;
   }
 
   getDataSignUpdateAction() {
@@ -1195,6 +1196,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async next(action: string) {
+    this.datas.font = this.selectedFont;
+    this.datas.size = this.size;
     if (action == 'next_step' && !this.validData()) {
 
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {

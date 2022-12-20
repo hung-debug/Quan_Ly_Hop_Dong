@@ -10,9 +10,7 @@
                 <div *ngIf="!d.sign_config.position" [ngClass]="setClass(d)" (click)="showThumbnail()"
                     [id]=getIdSignChuaKeo(d.id)>
                     <div class="signature-sample-drag" style="position: relative">
-                        <!-- <div *ngIf="d.sign_unit == 'so_tai_lieu' || d.sign_unit == 'text'" [ngStyle]="setWidth(d)"
-                            class="content-drag" id="element-drag-text">{{d.sign_unit == 'so_tai_lieu' ? 'Số hợp đồng' :
-                            'Text'}}</div> -->
+
                             <div *ngIf="d.sign_unit == 'so_tai_lieu'" [ngStyle]="setWidth(d)" class="content-drag" id="element-drag-text">
                                 <p *ngIf="d.sign_unit == 'so_tai_lieu'" style="margin: 0px;">{{'contract.number'|translate}}</p>
                             </div>
@@ -47,6 +45,7 @@
                     <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name"
                         (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                 </div>
+
                 <div class="sign-unit-select">
                     <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)}}: *</label>
                     <select class="form-select" id="select-dropdown" aria-label="Default select example"
@@ -57,6 +56,20 @@
                     </select>
                 </div>
                 
+                  <!--Option chọn font + size chữ-->
+                  <div class="row sign-unit-select">
+                    <div class="col-md-9">
+                        <label class="label-require">Font</label>
+                        <select class="form-select" id="select-dropdown" aria-label="Default select example" [ngModel]="this.selectedFont" (ngModelChange)="changeFont($event)">
+                            <option value="" hidden>{{'choose.font' | translate}}</option>
+                            <option *ngFor="let d of this.list_font, let i = index" [selected]="d.selected" value="{{d}}">{{d}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="label-require">Size</label>
+                        <input class="form-control" [(ngModel)]="size"/>
+                    </div>
+                </div>
                 
 
             </div>
