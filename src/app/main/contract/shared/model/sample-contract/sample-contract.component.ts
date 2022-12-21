@@ -1529,7 +1529,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
         if (error_organization > 0) {
           this.spinner.hide();
-          this.toastService.showWarningHTMLWithTimeout(`miss.digital.sig` + `${nameSign_organization.name}` + `off.org.please`, "", 3000);
+          this.toastService.showWarningHTMLWithTimeout((this.translate.instant('miss.digital.sig'))+ " " + `${nameSign_organization.name}`+ " " + (this.translate.instant('off.org.please')), "", 3000);
           return false;
         }
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
