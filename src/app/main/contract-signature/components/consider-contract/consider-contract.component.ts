@@ -644,9 +644,14 @@ export class ConsiderContractComponent
           canvasContext: canvas.getContext('2d'),
           viewport: viewport,
         };
-
-        page.render(renderContext);
-
+  
+        var interval = setInterval(() => {
+          page.render(renderContext);
+        },1000)
+  
+        setTimeout(() => {
+          clearInterval(interval)
+        },2000);
         
         if (test) {
           let paddingPdf =
