@@ -892,7 +892,7 @@
                   <div class="label_detail text-color">
 
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailPartSign_{{index}}" [value]="email" [(ngModel)]="email"/>
+                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}" [value]="email" [(ngModel)]="email"/>
                     </div>&nbsp;
                     <div>
                       {{'typeOfSignEmail' | translate}}
@@ -902,7 +902,7 @@
                 <div class="participants__name">
                   <div class="label_detail text-color">
                     <div>
-                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailPartSign_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
+                      <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailPartSign_{{index}}_{{id}}" [(ngModel)]="d.login_by" [value]="phone"/>
                     </div>&nbsp;
                     <div>
                       {{'typeOfSignPhone' | translate}}
@@ -1332,7 +1332,7 @@
                     <div class="label_detail text-color">
   
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailPerson_{{index}}" [value]="email" [(ngModel)]="d.login_by"/>
+                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}" [value]="email" [(ngModel)]="d.login_by"/>
                       </div>&nbsp;
                       <div>
                         {{'typeOfSignEmail' | translate}}
@@ -1342,7 +1342,7 @@
                   <div class="participants__name">
                     <div class="label_detail text-color">
                       <div>
-                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailPerson_{{index}}" [(ngModel)]="d.login_by" [value]="phone"/>
+                        <input (change)="changeTypeSign(d)" type="radio" name="checkPhoneMailPerson_{{index}}_{{id}}" [(ngModel)]="d.login_by" [value]="phone"/>
                       </div>&nbsp;
                       <div>
                         {{'typeOfSignPhone' | translate}}
