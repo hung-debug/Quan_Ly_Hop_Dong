@@ -117,6 +117,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
     // console.log(this.datas);
     this.getDataContractSignature();
+
+    console.log("datas ", this.datas);
   }
 
 

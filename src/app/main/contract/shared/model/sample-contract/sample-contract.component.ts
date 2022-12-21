@@ -219,17 +219,33 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact.addDocument(document);
+    
+    console.log("datas ", this.datas);
 
-    const font = this.datas.participants[0].recipients[0].fields[0].font;
-    const font_size = this.datas.participants[0].recipients[0].fields[0].font_size;
+    if(this.datas.participants) {
+      const font = this.datas.participants[0].recipients[0].fields[0].font;
+      const font_size = this.datas.participants[0].recipients[0].fields[0].font_size;
+  
+      if(font) {
+        this.datas.font = font;
+        this.selectedFont = this.datas.font;
+      }
+  
+      if(font_size) {
+        this.datas.size = font_size;
+        this.size = this.datas.size;
+      }
+    }
 
-    if(font) {
-      this.datas.font = font;
+    console.log("font ", this.datas.font);
+
+    if(!this.datas.font) {
+      this.datas.font = "Times New Roman";
       this.selectedFont = this.datas.font;
     }
 
-    if(font_size) {
-      this.datas.size = font_size;
+    if(!this.datas.size) {
+      this.datas.size = 11;
       this.size = this.datas.size;
     }
   }
