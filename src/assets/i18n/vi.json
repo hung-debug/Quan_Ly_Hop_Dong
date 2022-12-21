@@ -496,6 +496,6 @@
   "file.not.empty":"File tài liệu không được để trống!",
   "contract.template.name.not.blank":"Tên mẫu hợp đồng không được để trống!",
   "send.sms.email":"Gửi Email/SMS thành công!",
-  "change.password":"ĐỔI MẬT KHẨU",
-  "choose.font":"Chọn font"
+  "change.password":"ĐỔI MẬT KHẨU",,
+  "choose.font":"Chọn font"  "contract.uid":"Mã hợp đồng"
 }
