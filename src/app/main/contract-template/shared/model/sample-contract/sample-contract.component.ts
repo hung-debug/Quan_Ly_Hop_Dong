@@ -966,7 +966,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           height: viewport.height,
         });
       }
-      page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+
+      
+      var renderContext: any = {
+        canvasContext: canvas.getContext('2d'),
+        viewport: viewport,
+      };
+
+      var interval = setInterval(() => {
+        page.render(renderContext);
+      },1000)
+
+      setTimeout(() => {
+        clearInterval(interval)
+      },2000);
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');

@@ -237,8 +237,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       }
     }
 
-    console.log("font ", this.datas.font);
-
     if(!this.datas.font) {
       this.datas.font = "Times New Roman";
       this.selectedFont = this.datas.font;
@@ -515,9 +513,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   height: any[] = [];
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
-
-    console.log("show event info ", event);
-
     let canvasElement: HTMLElement | null;
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
@@ -944,7 +939,19 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         });
       }
 
-      page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
+      var renderContext: any = {
+        canvasContext: canvas.getContext('2d'),
+        viewport: viewport,
+      };
+
+      var interval = setInterval(() => {
+        page.render(renderContext);
+      },1000)
+
+      setTimeout(() => {
+        clearInterval(interval)
+      },2000);
+
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');

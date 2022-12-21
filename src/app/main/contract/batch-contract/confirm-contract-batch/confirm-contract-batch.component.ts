@@ -471,10 +471,19 @@ export class ConfirmContractBatchComponent
           height: viewport.height,
         });
       }
-      page.render({
+      
+      var renderContext: any = {
         canvasContext: canvas.getContext('2d'),
         viewport: viewport,
-      });
+      };
+
+      var interval = setInterval(() => {
+        page.render(renderContext);
+      },1000)
+
+      setTimeout(() => {
+        clearInterval(interval)
+      },2000);
       if (test) {
         let paddingPdf =
           (test.getBoundingClientRect().width - viewport.width) / 2;
