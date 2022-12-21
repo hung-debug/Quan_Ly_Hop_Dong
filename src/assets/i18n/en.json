@@ -498,5 +498,9 @@
     "file.not.empty":"The document file cannot be empty!",
     "contract.template.name.not.blank":"Contract template name cannot be blank!",
     "send.sms.email":"Send Sms/Email Success!",
-    "change.password":"CHANGE PASSWORD"
+    "change.password":"CHANGE PASSWORD",
+    "please.choose.contract.template":"Please choose a contract template!",
+    "please.choose.contract.name":"Please choose a contract name!",
+    "Sign.expiration.date.compare":"Signing expiration date should not be less than current date!",
+    "update.person-process": "Update handler"
 }

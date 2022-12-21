@@ -43,9 +43,12 @@
                 </div>
             
 
-                <div class="col-md-2" style="flex-direction: column;text-align: center">
+                <div class="col-md-2" style="text-align: center;display: flex;justify-content: center">
                     <div *ngIf = "d.statusNumber != 0  && d.statusNumber !=4 && isHiddenButton && d.statusNumber !=3">
                     <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d)"/>
+                    </div>
+                    <div class="div_icon">
+                    <!-- <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)" /> -->
                     </div>
                 </div>
             </div>
@@ -77,9 +80,12 @@
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
                 </div>
 
-                <div class="col-md-2" style="flex-direction: column;text-align: center"> 
+                <div class="col-md-2" style="text-align: center; display: flex;justify-content: center"> 
                     <div *ngIf = "d.statusNumber != 0 && isHiddenButton && d.statusNumber !=4 && d.statusNumber !=3">
                         <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d)"/>
+                    </div>
+                    <div class="div_icon">
+                    <!-- <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)"/> -->
                     </div>
                 </div>
             </div>

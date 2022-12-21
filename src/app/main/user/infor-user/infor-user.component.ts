@@ -132,7 +132,7 @@ export class InforUserComponent implements OnInit {
         }
         if(data.role_id != null){
           //lay danh sach vai tro
-          this.roleService.getRoleById(data.role_id).subscribe(data => {
+          this.roleService.getRoleById(data?.role_id).subscribe(data => {
             this.roleName = data.name;
           });
         }

@@ -66,11 +66,12 @@ export class AdminInfoUserComponent implements OnInit {
         });
       },
       (error) => {
-        this.toastService.showErrorHTMLWithTimeout(
-          'Lỗi lấy thông tin người dùng',
-          '',
-          3000
-        );
+        // this.toastService.showErrorHTMLWithTimeout(
+        //   'Lỗi lấy thông tin người dùng',
+        //   '',
+        //   3000
+        // );
+        this.router.navigate(['/login'])
       }
     );
   }
@@ -166,11 +167,12 @@ export class AdminInfoUserComponent implements OnInit {
                 }
               },
               (error) => {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi lấy thông tin người dùng',
-                  '',
-                  3000
-                );
+                // this.toastService.showErrorHTMLWithTimeout(
+                //   'Lỗi lấy thông tin người dùng',
+                //   '',
+                //   3000
+                // );
+                this.router.navigate(['/login'])
               }
             );
           } else {

@@ -58,19 +58,21 @@ export class DetailUserComponent implements OnInit {
     this.userService.getUserById(userId).subscribe(
       data => {
         //lay id role
-        this.roleService.getRoleById(data.role_id).subscribe(
+        this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
             console.log(data);
             let listRole: any[];
             listRole = data.permissions;
             this.isQLND_04 = listRole.some(element => element.code == 'QLND_04');
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+            // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+            this.router.navigate(['/login'])
           }
         ); 
       
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+        // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+        this.router.navigate(['/login'])
       }
     )
 
@@ -109,7 +111,7 @@ export class DetailUserComponent implements OnInit {
           }
           if(data.role_id != null){
             //lay danh sach vai tro
-            this.roleService.getRoleById(data.role_id).subscribe(data => {
+            this.roleService.getRoleById(data?.role_id).subscribe(data => {
               console.log(data);
               this.role = data.name;
             });

@@ -23,6 +23,7 @@ import { count } from 'console';
 import { data } from 'jquery';
 import { environment } from "src/environments/environment";
 import { ContractTemplateService } from "src/app/service/contract-template.service";
+import {TranslateService} from '@ngx-translate/core';
 import { SignContractComponent } from "src/app/main/contract-signature/components/sign-contract/sign-contract.component";
 import * as _ from 'lodash';
 
@@ -103,6 +104,7 @@ export class SampleContractFormComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private router: Router,
+    public translate: TranslateService,
     private contractTemplateService: ContractTemplateService
   ) {
     this.stepForm = variable.stepSampleContractForm.step3
@@ -1694,7 +1696,7 @@ export class SampleContractFormComponent implements OnInit {
         }
         if (error_organization > 0) {
           this.spinner.hide();
-          this.toastService.showWarningHTMLWithTimeout(`miss.digital.sig` + `${nameSign_organization.name}` + `off.org.please`, "", 3000);
+          this.toastService.showWarningHTMLWithTimeout((this.translate.instant('miss.digital.sig'))+ " " + `${nameSign_organization.name}`+ " " + (this.translate.instant('off.org.please')), "", 3000);
           return false;
         }
         // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.

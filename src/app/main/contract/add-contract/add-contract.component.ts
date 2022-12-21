@@ -167,7 +167,7 @@ export class AddContractComponent implements OnInit {
           this.userService.getUserById(userId).subscribe(
             (data) => {
               //lay id role
-              this.roleService.getRoleById(data.role_id).subscribe(
+              this.roleService.getRoleById(data?.role_id).subscribe(
                 (data) => {
                   console.log(data);
                   let listRole: any[];
@@ -204,20 +204,22 @@ export class AddContractComponent implements OnInit {
                   }
                 },
                 (error) => {
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'Lỗi lấy thông tin phân quyền',
-                    '',
-                    3000
-                  );
+                  // this.toastService.showErrorHTMLWithTimeout(
+                  //   'Lỗi lấy thông tin phân quyền',
+                  //   '',
+                  //   3000
+                  // );
+                  this.router.navigate(['/login'])
                 }
               );
             },
             (error) => {
-              this.toastService.showErrorHTMLWithTimeout(
-                'Lỗi lấy thông tin phân quyền',
-                '',
-                3000
-              );
+              // this.toastService.showErrorHTMLWithTimeout(
+              //   'Lỗi lấy thông tin phân quyền',
+              //   '',
+              //   3000
+              // );
+              this.router.navigate(['/login'])
             }
           );
 

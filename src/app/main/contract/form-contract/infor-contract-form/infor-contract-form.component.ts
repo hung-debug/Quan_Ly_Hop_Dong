@@ -24,6 +24,7 @@ import {UploadService} from 'src/app/service/upload.service';
 import {variable} from 'src/app/config/variable';
 import {AddContractComponent} from '../../add-contract/add-contract.component';
 import {ContractTemplateService} from 'src/app/service/contract-template.service';
+import { TranslateService } from '@ngx-translate/core';
 
 export class ContractConnectArr {
   ref_id: number;
@@ -82,6 +83,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     private spinner: NgxSpinnerService,
     private uploadService: UploadService,
     private router: Router,
+    public translate: TranslateService,
     private route: ActivatedRoute
   ) {
   }
@@ -306,11 +308,11 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   validDataForm() {
 
     if (!this.datasForm.template_contract_id) {
-      this.toastService.showWarningHTMLWithTimeout("Vui lòng chọn mẫu hợp đồng!", "", "3000");
+      this.toastService.showWarningHTMLWithTimeout((this.translate.instant('please.choose.contract.template')), "", "3000");
       return false;
     }
     if (!this.datasForm.name) {
-      this.toastService.showWarningHTMLWithTimeout("Vui lòng nhập tên hợp đồng!", "", "3000");
+      this.toastService.showWarningHTMLWithTimeout((this.translate.instant('please.choose.contract.name')), "", "3000");
       return false;
     }
 
