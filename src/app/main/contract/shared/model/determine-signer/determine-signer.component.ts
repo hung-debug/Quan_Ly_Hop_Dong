@@ -523,23 +523,12 @@ export class DetermineSignerComponent implements OnInit {
   getSetOrderingParnterOrganization(isOrganization: any) {
     for (let i = 0; i < isOrganization.length; i++) {
       // only check signature not eKYC/Image/OTP condition (condition exception)
-      if (isOrganization[i].recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3)) {
+      if (isOrganization[i].recipients[0].sign_type.some(({id}: any) => id == 2 || id == 3 || id == 4)) {
         isOrganization[i].ordering = this.checkCount;
         this.checkCount++;
       } else {
         isOrganization[i].ordering = this.checkCount;
       }
-      // for (let j of isOrganization[i].recipients) {
-      //   // điều kiện chỉ check các dữ liệu không thuộc option đặc biệt
-      //   if (j.sign_type.length > 0) {
-      //     if (j.sign_type.some(({id}: any) => id == 2 || id == 3)) {
-      //       j.ordering = this.checkCount;
-      //       this.checkCount++;
-      //     }
-      //   } else {
-      //     j.ordering = this.checkCount;
-      //   }
-      // }
     }
   }
 
@@ -980,7 +969,7 @@ export class DetermineSignerComponent implements OnInit {
     if (count == 0) {
       //valid ordering cac ben doi tac - to chuc
       let isOrderingPerson_exception = this.datas.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
-      let isOrdering_not_exception = this.datas.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3));
+      let isOrdering_not_exception = this.datas.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4));
       // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
       if (isOrderingPerson_exception.length > 0) {
         let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
