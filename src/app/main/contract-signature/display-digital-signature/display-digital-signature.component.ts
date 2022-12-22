@@ -17,8 +17,12 @@ export class DisplayDigitalSignatureComponent implements OnInit {
   constructor() {
    }
 
-  ngOnInit(): void {
+   async ngOnInit(): Promise<void> {
+    const date = await fetch("https://worldtimeapi.org/api/ip").then(response => response.json());
+
+    this.isDateTime = date.datetime;
   }
+
 
   convertImage() {
     const imageRender = <HTMLElement>document.getElementById('export-html');
