@@ -498,5 +498,7 @@
   "send.sms.email":"Gửi Email/SMS thành công!",
   "change.password":"ĐỔI MẬT KHẨU",
   "choose.font":"Chọn font",
-  "contract.uid":"Mã hợp đồng"
+  "contract.uid":"Mã hợp đồng",
+  "reject.contract":"LÝ DO TỪ CHỐI HỢP ĐỒNG",
+  "contract.reject":"Lý do từ chối hợp đồng"
 }

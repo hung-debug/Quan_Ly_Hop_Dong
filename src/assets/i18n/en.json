@@ -498,5 +498,7 @@
   "contract.template.name.not.blank":"Contract template name cannot be blank!",
   "send.sms.email":"Send Sms/Email Success!",
   "change.password":"CHANGE PASSWORD",
+  "reject.contract":"REASON FOR CONTRACT REJECT",
+  "contract.reject":"Reason for contract reject",
   "contract.uid":"Contract code"
 }
