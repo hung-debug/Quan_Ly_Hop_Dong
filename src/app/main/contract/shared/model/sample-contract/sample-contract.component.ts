@@ -164,46 +164,45 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.pdfSrc = Helper._getUrlPdf(this.datas.file_content);
     }
     this.getPage();
-    // event drag and drop
 
     //Xac dinh vung cho tha vao
-    interact('.dropzone').dropzone({
-      //@ts-ignore
-      accept: null,
-      overlap: 1,
-    })
+    // interact('.dropzone').dropzone({
+    //   //@ts-ignore
+    //   accept: null,
+    //   overlap: 1,
+    // })
 
-    interact('.not-out-drop').on('dragend', this.showEventInfo).draggable({
-      listeners: {move: this.dragMoveListener, onend: this.showEventInfo},
-      inertia: true,
-      modifiers: [
-        interact.modifiers.restrictRect({
-          restriction: '.drop-zone',
-          endOnly: true
-        })
-      ]
-    })
+    // interact('.not-out-drop').on('dragend', this.showEventInfo).draggable({
+    //   listeners: {move: this.dragMoveListener, onend: this.showEventInfo},
+    //   inertia: true,
+    //   modifiers: [
+    //     interact.modifiers.restrictRect({
+    //       restriction: '.drop-zone',
+    //       endOnly: true
+    //     })
+    //   ]
+    // })
 
-    //phong to thu nho o ky
-    interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
-      edges: {left: true, right: true, bottom: true, top: true},
-      listeners: {
-        move: this.resizableListener, onend: this.resizeSignature
-      },
-      modifiers: [
-        interact.modifiers.restrictEdges({
-          outer: '.drop-zone'
-        }),
-        // minimum size
-        interact.modifiers.restrictSize({
-          // min: { width: 100, height: 32 }
-        })
-      ],
-      inertia: true,
-    })
+    // // //phong to thu nho o ky
+    // interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
+    //   edges: {left: true, right: true, bottom: true, top: true},
+    //   listeners: {
+    //     move: this.resizableListener, onend: this.resizeSignature
+    //   },
+    //   modifiers: [
+    //     interact.modifiers.restrictEdges({
+    //       outer: '.drop-zone'
+    //     }),
+    //     // minimum size
+    //     interact.modifiers.restrictSize({
+    //       // min: { width: 100, height: 32 }
+    //     })
+    //   ],
+    //   inertia: true,
+    // })
 
-    // event resize element
-    //keo o ky
+    // // event resize element
+    // //keo o ky
     interact('.resize-drag').on('dragend', this.showEventInfo).draggable({
       listeners: {
         move: this.dragMoveListener,
@@ -214,14 +213,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       modifiers: []
     })
 
-    interact('.resize-drag').resizable({
-      edges: {left: false, right: false, bottom: false, top: false},
-    })
+    // interact('.resize-drag').resizable({
+    //   edges: {left: false, right: false, bottom: false, top: false},
+    // })
 
     interact.addDocument(document);
     
-    console.log("datas ", this.datas);
-
     if(this.datas.participants) {
       const font = this.datas.participants[0].recipients[0].fields[0].font;
       const font_size = this.datas.participants[0].recipients[0].fields[0].font_size;

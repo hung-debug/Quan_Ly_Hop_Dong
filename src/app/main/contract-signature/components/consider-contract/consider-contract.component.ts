@@ -43,6 +43,7 @@ import { DatePipe } from '@angular/common';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.component';
 import { UnitService } from 'src/app/service/unit.service';
+import { Helper } from 'src/app/core/Helper';
 
 @Component({
   selector: 'app-consider-contract',
@@ -197,7 +198,7 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   ngOnInit(): void {
-    console.log("ratio ", window.devicePixelRatio);
+    console.log('ratio ', window.devicePixelRatio);
 
     this.getDeviceApp();
 
@@ -464,13 +465,13 @@ export class ConsiderContractComponent
                 });
             else this.pdfSrcMobile = this.pdfSrc;
           } else {
-            if(this.recipient.status >= 3) {
+            if (this.recipient.status >= 3) {
               setTimeout(() => {
                 this.router.navigate([
                   '/main/form-contract/detail/' + this.idContract,
                 ]);
               }, 1000);
-            } else if(this.recipient.status >= 3) {
+            } else if (this.recipient.status >= 3) {
               setTimeout(() => {
                 this.router.navigate([
                   '/main/form-contract/detail/' + this.idContract,
@@ -524,7 +525,6 @@ export class ConsiderContractComponent
 
   // view pdf qua canvas
   async getPage() {
-    console.log("src ", this.pdfSrc);
     // @ts-ignore
     const pdfjs = await import('pdfjs-dist/build/pdf');
     // @ts-ignore
@@ -648,11 +648,11 @@ export class ConsiderContractComponent
 
         var interval = setInterval(() => {
           page.render(renderContext);
-        },1000)
+        }, 1000);
 
         setTimeout(() => {
-          clearInterval(interval)
-        },2000);
+          clearInterval(interval);
+        }, 2000);
 
         if (test) {
           let paddingPdf =
@@ -796,11 +796,6 @@ export class ConsiderContractComponent
       this.isDataObjectSignature &&
       this.isDataObjectSignature.length
     ) {
-      console.log("config ", this.datas.is_data_object_signature.filter(
-        (item: any) =>
-          item?.recipient?.email === this.currentUser.email &&
-          item?.recipient?.role === this.datas?.roleContractReceived
-      ));
       return this.datas.is_data_object_signature.filter(
         (item: any) =>
           item?.recipient?.email === this.currentUser.email &&
@@ -848,56 +843,310 @@ export class ConsiderContractComponent
     interact.removeDocument(document);
   }
 
-  // edit location doi tuong ky
-  changePositionSign(e: any, locationChange: any, property: any) {
-    // console.log(e, this.objSignInfo, this.signCurent);
-    let signElement = document.getElementById(this.objSignInfo.id);
-    if (signElement) {
-      let isObjSign = this.convertToSignConfig().filter(
-        (p: any) => p.id == this.objSignInfo.id
-      )[0];
-      if (isObjSign) {
-        if (property == 'location') {
-          if (locationChange == 'x') {
-            isObjSign.coordinate_x = parseInt(e);
-            signElement.setAttribute('data-x', isObjSign.coordinate_x);
-          } else {
-            isObjSign.coordinate_y = parseInt(e);
-            signElement.setAttribute('data-y', isObjSign.coordinate_y);
-          }
-        } else if (property == 'size') {
-          if (locationChange == 'width') {
-            isObjSign.width = parseInt(e);
-            signElement.setAttribute('width', isObjSign.width);
-          } else {
-            isObjSign.height = parseInt(e);
-            signElement.setAttribute('height', isObjSign.height);
-          }
-        } else if (property == 'text') {
-          isObjSign.text_attribute_name = e;
-          signElement.setAttribute(
-            'text_attribute_name',
-            isObjSign.text_attribute_name
-          );
-        } else {
-          let data_name = this.list_sign_name.filter(
-            (p: any) => p.id == e.target.value
-          )[0];
-          if (data_name) {
-            isObjSign.name = data_name.name;
-            signElement.setAttribute('name', isObjSign.name);
+  changePositionSign() {
 
-            isObjSign.signature_party = data_name.sign_unit;
-            signElement.setAttribute(
-              'signature_party',
-              isObjSign.signature_party
-            );
-          }
-        }
-        // console.log(this.signCurent)
-        // console.log(this.objSignInfo)
+    interact('.dropzone').dropzone({
+      //@ts-ignore
+      accept: null,
+      overlap: 1,
+    })
+
+    interact('.not-out-drop').on('dragend', this.showEventInfo).draggable({
+      listeners: {move: this.dragMoveListener, onend: this.showEventInfo},
+      inertia: true,
+      modifiers: [
+        interact.modifiers.restrictRect({
+          restriction: '.drop-zone',
+          endOnly: true
+        })
+      ]
+    })
+
+    // //phong to thu nho o ky
+    interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
+      edges: {left: true, right: true, bottom: true, top: true},
+      listeners: {
+        move: this.resizableListener, onend: this.resizeSignature
+      },
+      modifiers: [
+        interact.modifiers.restrictEdges({
+          outer: '.drop-zone'
+        }),
+        // minimum size
+        interact.modifiers.restrictSize({
+          // min: { width: 100, height: 32 }
+        })
+      ],
+      inertia: true,
+    })
+    
+    interact('.resize-drag').on('dragend', this.showEventInfo).draggable({
+      listeners: {
+        move: this.dragMoveListener,
+        onend: this.showEventInfo
+      },
+      inertia: true,
+      autoScroll: true,
+      modifiers: []
+    })
+
+    interact('.resize-drag').resizable({
+      edges: {left: false, right: false, bottom: false, top: false},
+    })
+
+    interact.addDocument(document);
+  }
+
+  
+  resizableListener = (event: any) => {
+    var target = event.target
+
+    // update the element's style
+    target.style.width = event.rect.width + 'px'
+    target.style.height = event.rect.height + 'px'
+
+    console.log("width ", target.style.width);
+    console.log("height ", target.style.height);
+
+  }
+
+  resizeSignature = (event: any) => {
+    let x = (parseFloat(event.target.getAttribute('data-x')) || 0)
+    let y = (parseFloat(event.target.getAttribute('data-y')) || 0)
+    // translate when resizing from top or left edges
+    this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == event.target.id)[0];
+    if (this.signCurent) {
+      if (event.rect.width <= 280) {
+        this.signCurent.coordinate_x = x;
+        this.signCurent.coordinate_y = y;
+        this.objSignInfo.id = event.target.id;
+        this.objSignInfo.traf_x = x;
+        this.objSignInfo.traf_y = y;
+        this.objSignInfo.width = event.rect.width;
+        this.objSignInfo.height = event.rect.height;
+
+        this.signCurent.width = event.rect.width;
+        this.signCurent.height = event.rect.height;
+        let _array = Object.values(this.obj_toa_do);
+        this.signCurent.position = _array.join(",");
       }
     }
+  }
+
+  dragMoveListener = (event: any) => {
+    this.objSignInfo.id = event.currentTarget.id;
+    var target = event.target
+    this.isMove = true;
+    // // keep the dragged position in the data-x/data-y attributes
+    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+    // // translate the element
+    target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+    // // update the posiion attributes
+    target.setAttribute('data-x', x)
+    target.setAttribute('data-y', y);
+
+  }
+
+  // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
+  showEventInfo = (event: any) => {
+    let canvasElement: HTMLElement | null;
+    if (event.relatedTarget && event.relatedTarget.id) {
+      canvasElement = document.getElementById(event.relatedTarget.id);
+      let canvasInfo = canvasElement ? canvasElement.getBoundingClientRect() : '';
+      this.coordinates_signature = event.rect;
+      let id = event.target.id;
+      let signElement = <HTMLElement>document.getElementById(id);
+      let rect_location = signElement.getBoundingClientRect();
+      if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
+        event.target.style.webkitTransform = event.target.style.transform = 'none';// Đẩy chữ ký về vị trí cũ
+        event.target.setAttribute('data-x', 0);
+        event.target.setAttribute('data-y', 0);
+        id = event.target.id.replace("chua-keo-", "");
+        // this.datas.documents.document_user_sign_clone.forEach((element, index) => {
+        this.datas.contract_user_sign.forEach((element: any, index: any) => {
+          if (element.id == id) {
+            let _obj: any = {
+              sign_unit: element.sign_unit,
+              name: element.name,
+              text_attribute_name: element.text_attribute_name,
+              required: 1
+            }
+            if (element.sign_config.length == 0) {
+              _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
+            } else {
+              _obj['id'] = 'signer-' + index + '-index-' + (element.sign_config.length) + '_' + element.id;
+            }
+            element['sign_config'].push(_obj);
+          }
+        })
+        // lay doi tuong vua duoc keo moi vao hop dong
+        this.signCurent = this.convertToSignConfig().filter((p: any) => !p.position && !p.coordinate_x && !p.coordinate_y)[0];
+      } else {
+        // doi tuong da duoc keo tha vao hop dong
+        this.signCurent = this.convertToSignConfig().filter((p: any) => p.id == id)[0];
+      }
+
+      if (this.signCurent) {
+        if (!this.objDrag[this.signCurent['id']]) {
+          this.objDrag[this.signCurent['id']] = {};
+        }
+        // this.isMove = false;
+        let layerX;
+        // @ts-ignore
+        if ("left" in canvasInfo) {
+          // layerX = event.rect.left - canvasInfo.left;
+          layerX = rect_location.left - canvasInfo.left;
+        }
+
+        let layerY = 0;
+        //@ts-ignore
+        if ("top" in canvasInfo) {
+          // layerY = canvasInfo.top <= 0 ? event.rect.top + Math.abs(canvasInfo.top) : event.rect.top - Math.abs(canvasInfo.top);
+          layerY = canvasInfo.top <= 0 ? rect_location.top + Math.abs(canvasInfo.top) : rect_location.top - Math.abs(canvasInfo.top);
+        }
+        let pages = event.relatedTarget.id.split("-");
+        let page = Helper._attemptConvertFloat(pages[pages.length - 1]) as any;
+
+        /* test set location signature
+        Duongdt
+         */
+        if (page > 1) {
+          let countPage = 0;
+          for (let i = 1; i < page; i++) {
+            let canvasElement = document.getElementById("canvas-step3-" + i) as HTMLElement;
+            let canvasInfo = canvasElement.getBoundingClientRect();
+            countPage += canvasInfo.height;
+          }
+          let canvasElement = document.getElementById("canvas-step3-" + page) as HTMLElement;
+          let canvasInfo = canvasElement.getBoundingClientRect();
+          // @ts-ignore
+          layerY = (countPage + canvasInfo.height) - (canvasInfo.height - layerY) + 5 * (page - 1);
+        }
+        //END
+
+        let _array = Object.values(this.obj_toa_do);
+        let _sign = <HTMLElement>document.getElementById(this.signCurent['id']);
+        if (_sign) {
+          _sign.style.transform = "translate(" + layerX + "px," + layerY + "px)";
+          this.signCurent['coordinate_x'] = layerX;
+          this.signCurent['coordinate_y'] = layerY;
+          _sign.setAttribute("data-x", layerX + "px");
+          _sign.setAttribute("data-y", layerY + "px");
+          this.objSignInfo.traf_x = layerX;
+          this.objSignInfo.traf_y = layerY;
+          //
+          this.objSignInfo['id'] = this.signCurent['id'];
+          //
+          this.signCurent.position = _array.join(",");
+          _sign.style.display = '';
+          // @ts-ignore
+          _sign.style["z-index"] = '1';
+          this.isEnableSelect = false;
+
+          // show toa do keo tha chu ky (demo)
+          // this.location_sign_x = this.signCurent['coordinate_x'];
+          // this.location_sign_y  = this.signCurent['coordinate_y'];
+        }
+
+        this.objSignInfo.traf_x = Math.round(this.signCurent['coordinate_x']);
+        this.objSignInfo.traf_y = Math.round(this.signCurent['coordinate_y']);
+
+        this.signCurent['position'] = _array.join(",");
+        this.signCurent['left'] = this.obj_toa_do.x1;
+        //@ts-ignore
+        if ("top" in canvasInfo) {
+          this.signCurent['top'] = (rect_location.top - canvasInfo.top).toFixed();
+        }
+        let name_accept_signature = '';
+        let field_data = [];
+        
+        // lay lai danh sach signer sau khi keo vao hop dong
+        this.datas.contract_user_sign.forEach((res: any) => {
+          if (res.sign_config.length > 0) {
+            let arrSignConfigItem = res.sign_config;
+            arrSignConfigItem.forEach((element: any) => {
+              if (element.id == this.signCurent['id']) {
+                let _arrPage = event.relatedTarget.id.split("-");
+                // gán hình thức kéo thả => disable element trong list sign
+                name_accept_signature = res.sign_unit;
+                // hiển thị ô nhập tên trường khi kéo thả đối tượng Text
+                if (res.sign_unit == 'text') {
+                  this.isEnableText = true;
+                  setTimeout(() => {
+                    //@ts-ignore
+                    document.getElementById('text-input-element').focus();
+                  }, 10)
+                } else this.isEnableText = false;
+
+                if (res.sign_unit == 'so_tai_lieu') {
+                  this.isChangeText = true;
+                } else {
+                  this.isChangeText = false;
+                }
+
+                // element['number'] = _arrPage[_arrPage.length - 1];
+                element['page'] = _arrPage[_arrPage.length - 1];
+                element['position'] = this.signCurent['position'];
+                element['coordinate_x'] = this.signCurent['coordinate_x'];
+                element['coordinate_y'] = this.signCurent['coordinate_y'];
+                if (!this.objDrag[this.signCurent['id']].count) {
+                  // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
+                  if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
+                    if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
+                      element['width'] = rect_location.width;
+                      element['height'] = rect_location.height;
+                    } else {
+                      element['width'] = '135';
+                      element['height'] = '28';
+                    }
+                  } else {
+                    element['width'] = '135';
+                    element['height'] = '85';
+                  }
+
+                  this.objSignInfo.width = element['width'];
+                  this.objSignInfo.height = element['height'];
+                  this.objSignInfo.text_attribute_name = '';
+                  this.list_sign_name.forEach((item: any) => {
+                    item['selected'] = false;
+                  })
+                  // document.getElementById('select-dropdown'). = 0;
+                  // @ts-ignore
+                  // document.getElementById('select-dropdown').value = "";
+                  this.objDrag[this.signCurent['id']].count = 2;
+                } else {
+                  element['width'] = event.target.offsetWidth;
+                  element['height'] = event.target.offsetHeight;
+                }
+              }
+            })
+          }
+        });
+      }
+    } else {
+      if (event.type == 'dragend') {
+        if (!event.dragenter && event.target.id.includes("chua-keo")) {
+          event.target.style.webkitTransform = event.target.style.transform = 'none';
+          event.target.setAttribute('data-x', 0);
+          event.target.setAttribute('data-y', 0);
+
+        } else if (!event.dragenter && !event.target.id.includes("chua-keo")) {
+          let id = event.target.id;
+          let signCurent = this.convertToSignConfig().filter((p: any) => p.id == id)[0];
+          // translate the element
+          if (signCurent) {
+            event.target.style.webkitTransform = event.target.style.transform = 'translate(' + signCurent['coordinate_x'] + 'px, ' + signCurent['coordinate_y'] + 'px)'
+            // update the posiion attributes
+            event.target.setAttribute('data-x', signCurent['coordinate_x'])
+            event.target.setAttribute('data-y', signCurent['coordinate_y'])
+          }
+        }
+      }
+    }
+
+    console.log("ev x ", event.target.getAttribute('data-x'));
+    console.log("ev y ", event.target.getAttribute('data-y'))
   }
 
   getTrafX() {
@@ -1820,7 +2069,7 @@ export class ConsiderContractComponent
       this.signCertDigital = dataDigital.data;
       this.nameCompany = dataDigital.data.CN;
 
-      console.log("name company ", this.nameCompany);
+      console.log('name company ', this.nameCompany);
 
       const checkTaxCodeBase64 = await this.contractService
         .checkTaxCodeExist(this.taxCodePartnerStep2, dataDigital.data.Base64)
@@ -2413,7 +2662,6 @@ export class ConsiderContractComponent
       cancelSuccess = 'Successfully refused contract';
       error = 'Error! Please contact to developers';
       rejectReason = 'You need to enter the reason for refusing the contract';
-
     }
 
     this.rejectContractLang(
@@ -2927,12 +3175,11 @@ export class ConsiderContractComponent
           (sign.coordinate_y - this.currentHeight) -
           sign.height /* * this.ratioPDF*/;
 
-          sign.signDigitalWidth =
-            sign.coordinate_x + sign.width /* * this.ratioPDF*/;
-          sign.signDigitalHeight =
-            heightPage -
-            (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
-
+        sign.signDigitalWidth =
+          sign.coordinate_x + sign.width /* * this.ratioPDF*/;
+        sign.signDigitalHeight =
+          heightPage -
+          (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
 
         //Lấy thông tin mã số thuế của đối tác ký
         this.contractService
