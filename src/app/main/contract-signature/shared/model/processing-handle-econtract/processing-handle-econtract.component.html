@@ -35,7 +35,7 @@
                     <div style="display: flex; justify-content: center;align-items: center;">
                         
                         <span [style.color]="d.status === ('rejected' | translate) ? '#d11919' : d.status !== 0 ? '#106DB6' : '#545252'">{{d.status}}</span> &nbsp;
-                        <div class="div_icon " style="width: 90px;display: flex;margin-left:10px"  *ngIf="d.status === ('rejected' | translate)" >
+                        <div class="div_icon " style="width: 90px;display: flex;margin-left:10px"  *ngIf="d.statusNumber === 3" >
                             <div class="img_icon button" ngbTooltip="{{'contract.reject' | translate}}" (click)="viewReasonRejected(d.id)">{{'view.reason' | translate}}</div>
                         </div>
                     </div> 
@@ -70,7 +70,7 @@
                     <div style="display: flex; justify-content: center;align-items: center;">
                         
                         <span [style.color]="d.status === ('rejected' | translate) ? '#d11919' : d.status !== 0 ? '#106DB6' : '#545252'">{{d.status}}</span> &nbsp;
-                        <div class="div_icon " style="width: 90px;display: flex;margin-left:10px"  *ngIf="d.status === ('rejected' | translate)" >
+                        <div class="div_icon " style="width: 90px;display: flex;margin-left:10px"  *ngIf="d.statusNumber == 3" >
                             <div class="img_icon button" ngbTooltip="{{'contract.reject' | translate}}" (click)="viewReasonRejected(d.id)">{{'view.reason' | translate}}</div>
                         </div>
                     </div> 

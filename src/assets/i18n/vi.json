@@ -497,5 +497,7 @@
   "contract.template.name.not.blank":"Tên mẫu hợp đồng không được để trống!",
   "send.sms.email":"Gửi Email/SMS thành công!",
   "change.password":"ĐỔI MẬT KHẨU",
-  "contract.uid":"Mã hợp đồng"
+  "contract.uid":"Mã hợp đồng",
+  "reject.contract":"LÝ DO TỪ CHỐI HỢP ĐỒNG",
+  "contract.reject":"Lý do từ chối hợp đồng"
 }
