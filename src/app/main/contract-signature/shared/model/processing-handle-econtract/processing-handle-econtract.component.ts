@@ -54,8 +54,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   lang: string;
   ngOnInit(): void {
 
-    console.log("aaa ", sessionStorage.getItem('lang'));
-
     if(sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if(sessionStorage.getItem('lang') == 'en') {
@@ -78,11 +76,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       }else{
         this.isHiddenButton = false;
       }
-      console.log("this.currentUser.email",this.currentUser.email);
-      console.log("emailCreate",this.emailCreate);
-      
-      
-      console.log("ishidden",this.isHiddenButton);
   
       response.recipients.forEach((element: any) => {
         let data = {
@@ -99,8 +92,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         }
         this.is_list_name.push(data);
       })
-      console.log("dataaaaaa",this.is_list_name);
-
     });
 
   }
@@ -115,8 +106,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   checkStatusUser(status: any, role: any) {
     let res = '';
-
-    console.log("lang ", this.lang);
 
     if(this.lang == 'vi' || !this.lang) {
       if (status == 3) {
