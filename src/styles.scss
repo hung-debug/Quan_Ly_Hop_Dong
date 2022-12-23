@@ -55,3 +55,8 @@ body { margin: 0; font-family: font_lexend_deca , Roboto, "Helvetica Neue", sans
 .pki-dialog .p-dropdown-label.p-inputtext.p-placeholder {
   padding-left: 0.8rem;
 }
+
+.custom-dialog-container .mat-dialog-container {
+   padding:12px;
+   margin: 0 auto;
+}

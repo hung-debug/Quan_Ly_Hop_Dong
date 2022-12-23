@@ -8,8 +8,20 @@
     Nhận dạng khuôn mặt
   </div>
 
-  <div *ngIf = "!webcamImage && !this.flagSuccess">
-    <webcam [width]="200" [height]="266" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+  <div *ngIf = "!webcamImage && !this.flagSuccess && this.title!=1">
+    <webcam [width]="200*4/3" [height]="200*16/9" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+            [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
+            [videoOptions]="{ width: {exact: 480}, height: {exact: 640}, facingMode: 'environment'}" 
+            [imageQuality]="1"
+            (cameraSwitched)="cameraWasSwitched($event)"
+            (initError)="handleInitError($event)"
+    ></webcam>
+    <br/>
+    <button class="actionBtn" (click)="triggerSnapshot();">Chụp ảnh</button>&nbsp;&nbsp;
+    <button class="actionBtn" (click)="this.dialogRef.close()">Huỷ</button>
+  </div>
+  <div *ngIf = "!webcamImage && !this.flagSuccess && this.title==1">
+    <webcam [width]="600" [height]="300" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
             [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
             [videoOptions]="videoOptions" 
             [imageQuality]="1"
@@ -20,8 +32,11 @@
     <button class="actionBtn" (click)="triggerSnapshot();">Chụp ảnh</button>&nbsp;&nbsp;
     <button class="actionBtn" (click)="this.dialogRef.close()">Huỷ</button>
   </div>
-  <div  *ngIf="webcamImage">
-    <img [height]="150" [width]="200" [src]="webcamImage.imageAsDataUrl"/>
+  <div  *ngIf="webcamImage && this.title!=1">
+    <img [height]="200" [width]="200*4/3" [src]="webcamImage.imageAsDataUrl"/>
+  </div>
+  <div  *ngIf="webcamImage && this.title==1">
+    <img [height]="300" [width]="225" [src]="webcamImage.imageAsDataUrl"/>
   </div>
 </div>
 

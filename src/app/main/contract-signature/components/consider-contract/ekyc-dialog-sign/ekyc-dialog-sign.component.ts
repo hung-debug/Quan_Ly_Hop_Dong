@@ -33,8 +33,9 @@ export class EkycDialogSignComponent implements OnInit {
   public multipleWebcamsAvailable = false;
   public deviceId: string;
   public videoOptions: MediaTrackConstraints = {
-    width: {exact: 480},
-    height: {exact: 640}
+    // width: {exact: 480},
+    // height: {exact: 640},
+    // facingMode: 'environment'
     
   };
   public errors: WebcamInitError[] = [];
@@ -151,6 +152,8 @@ export class EkycDialogSignComponent implements OnInit {
           } else {
             if(response.message.error_message && response.message.error_message != 'undefined') {
               alert(response.message.error_message);
+              this.flagSuccess == false;
+              this.webcamImage = this.initWebcamImage;
             } else {
               alert("Nhận dạng thất bại")
             }
