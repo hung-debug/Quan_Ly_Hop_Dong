@@ -2897,6 +2897,7 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass= 'custom-dialog-container';
     dialogConfig.data = data;
     dialogConfig.disableClose = true;
     // dialogConfig.width = '100000000000000000000000000000px';
@@ -2927,11 +2928,18 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = data;
-    dialogConfig.disableClose = true;
+    // dialogConfig.data = data;
+    // dialogConfig.disableClose = true;
+    // dialogConfig.maxWidth = '100vw';
     // dialogConfig.width = '497px';
+    
 
-    const dialogRef = this.dialog.open(EkycDialogSignComponent, dialogConfig);
+    const dialogRef = this.dialog.open(EkycDialogSignComponent, {
+      data: data,
+      disableClose: true,
+      panelClass: 'custom-dialog-container'
+
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       const dialogConfig = new MatDialogConfig();
@@ -2965,9 +2973,10 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '497px';
+    // dialogConfig.width = '497px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
+    dialogConfig.panelClass= 'custom-dialog-container';
 
     const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
 
@@ -3012,7 +3021,7 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '1024px';
+    dialogConfig.panelClass= 'custom-dialog-container';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
@@ -3107,8 +3116,9 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '497px';
-    dialogConfig.height = '330px';
+    dialogConfig.panelClass= 'custom-dialog-container';
+    // dialogConfig.width = '497px';
+    // dialogConfig.height = '330px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
@@ -3155,7 +3165,9 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '497px';
+    dialogConfig.panelClass= 'custom-dialog-container';
+    // dialogConfig.maxWidth = '480px';
+    // dialogConfig.width = '497px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
