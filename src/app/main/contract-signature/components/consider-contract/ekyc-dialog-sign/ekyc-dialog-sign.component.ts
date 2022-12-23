@@ -33,7 +33,8 @@ export class EkycDialogSignComponent implements OnInit {
   public multipleWebcamsAvailable = false;
   public deviceId: string;
   public videoOptions: MediaTrackConstraints = {
-    width: {ideal: 1024},
+    width: {exact: 480},
+    height: {exact: 640}
     
   };
   public errors: WebcamInitError[] = [];
@@ -98,6 +99,7 @@ export class EkycDialogSignComponent implements OnInit {
         this.upFileImageToDb(formData);
   
         this.contractService.detectCCCD(this.webcamImage.imageAsDataUrl).subscribe((response) => {
+          console.log("ma" + this.webcamImage.imageAsDataUrl);
           this.spinner.hide();
           console.log("response ",response);
           if(response.result_code == 200 && response.action == 'pass') {

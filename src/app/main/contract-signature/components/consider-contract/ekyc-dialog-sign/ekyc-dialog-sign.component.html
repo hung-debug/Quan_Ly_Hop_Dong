@@ -9,7 +9,7 @@
   </div>
 
   <div *ngIf = "!webcamImage && !this.flagSuccess">
-    <webcam [width]="1000" [height]="266" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+    <webcam [width]="200" [height]="266" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
             [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
             [videoOptions]="videoOptions" 
             [imageQuality]="1"
@@ -21,7 +21,7 @@
     <button class="actionBtn" (click)="this.dialogRef.close()">Huỷ</button>
   </div>
   <div  *ngIf="webcamImage">
-    <img [height]="266" [src]="webcamImage.imageAsDataUrl"/>
+    <img [height]="200" [width]="266" [src]="webcamImage.imageAsDataUrl"/>
   </div>
 </div>
 
