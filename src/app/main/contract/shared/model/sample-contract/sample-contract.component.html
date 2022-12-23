@@ -5,8 +5,7 @@
             <div style="padding-bottom: 10px" class="label">{{'components'|translate}} (<span style="color: red">{{'drag-drop'|translate}}</span>)
             </div>
             <!--      <div>-->
-            <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class"
-                style="display: inline-block; margin-bottom: 15px">
+            <div *ngFor="let d of this.datas.contract_user_sign" class="show-list-name-class">
                 <div *ngIf="!d.sign_config.position" [ngClass]="setClass(d)" (click)="showThumbnail()"
                     [id]=getIdSignChuaKeo(d.id)>
                     <div class="signature-sample-drag" style="position: relative">
@@ -32,13 +31,13 @@
                                 'chu_ky_anh' ? 'Chữ ký ảnh hoặc eKYC' : 'Chữ ký số'}}</span>
                         </div> -->
                         <div *ngIf="d.sign_unit == 'chu_ky_so'" class="content-drag1" 
-                            id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
+                            id="element-drag" [ngStyle]="setWidth(d)">
                             <img [src]="d.sign_unit == 'chu_ky_so' ? 'assets/img/img_sign_number.svg' : ''">
                             <span *ngIf="d.sign_unit == 'chu_ky_so'">{{'sign.digital'|translate}}</span>
                         </div>
 
                         <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag"
-                            id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
+                            id="element-drag" [ngStyle]="setWidth(d)">
                             <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : ''"
                                 [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
                             <span *ngIf="d.sign_unit == 'chu_ky_anh'">{{'sign.image.ekyc' |translate}}</span>

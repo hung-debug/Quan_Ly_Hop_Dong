@@ -126,6 +126,8 @@ export class DetermineSignerComponent implements OnInit {
     }
 
     this.user = this.userService.getInforUser();
+    console.log("datas",this.datas);
+    
 
     if(!this.datas.flagDigitalSign) {
       this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,

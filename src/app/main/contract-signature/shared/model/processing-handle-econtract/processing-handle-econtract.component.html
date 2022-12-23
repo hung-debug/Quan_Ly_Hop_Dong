@@ -44,11 +44,14 @@
             
 
                 <div class="col-md-2" style="text-align: center;display: flex;justify-content: center">
-                    <div *ngIf = "d.statusNumber != 0  && d.statusNumber !=4 && isHiddenButton && d.statusNumber !=3">
-                    <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d)"/>
+                    <div *ngIf = "d.statusNumber != 0  && d.statusNumber !=4 && isHiddenButton && listCheckSmsEmail">
+                    <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
+                    </div>
+                    <div>
+                        
                     </div>
                     <div class="div_icon">
-                    <!-- <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)" /> -->
+                    <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d)" />
                     </div>
                 </div>
             </div>
@@ -81,11 +84,11 @@
                 </div>
 
                 <div class="col-md-2" style="text-align: center; display: flex;justify-content: center"> 
-                    <div *ngIf = "d.statusNumber != 0 && isHiddenButton && d.statusNumber !=4 && d.statusNumber !=3">
-                        <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d)"/>
+                    <div *ngIf = "d.statusNumber != 0 && isHiddenButton && d.statusNumber !=4 && listCheckSmsEmail">
+                        <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
                     </div>
                     <div class="div_icon">
-                    <!-- <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)"/> -->
+                    <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)"/>
                     </div>
                 </div>
             </div>

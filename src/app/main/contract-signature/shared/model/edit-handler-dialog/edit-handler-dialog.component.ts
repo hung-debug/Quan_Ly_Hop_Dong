@@ -245,17 +245,13 @@ constructor(
       this.arrSearchNameDoc = [];
     }
 
-
     getNotificationValid(is_notify: string) {
       this.spinner.hide();
       this.toastService.showWarningHTMLWithTimeout(is_notify, "", 3000);
     }
 
-    getOriganzationSignature() {
-      console.log("dataorrrrrr0", this.data_organization.recipients);
-      
+    getOriganzationSignature() {   
       return this.data_organization.recipients.filter((p: any) => p.role == 3);
-
     }
 
     onChangeValue(e: any, orering_data: string) {

@@ -50,6 +50,9 @@
 
   &__information {
     &--drag {
+       #element-drag{
+        height: 100px;
+      }
       .content-drag {
         //cursor: pointer;
         width: 100%;
@@ -78,7 +81,10 @@
         align-items: center;
         flex-direction: column;
       }
-
+      .show-list-name-class{
+        display: inline-block; 
+        margin-bottom: 15px;
+      }
 
       .show-list-name-class:nth-last-child(4) {
         //float: left;
@@ -612,6 +618,33 @@
             height: 40px;
           }
         }
+      }
+    }
+  }
+}
+
+@media screen and (min-height:630px) and (max-height:780px) {
+  .sample-contract{
+    height: calc(100vh - 260px);
+    &__information{
+      &--drag{
+        #element-drag{
+          height: 80px;
+        }
+        .show-list-name-class{
+          #element-drag{
+            margin-bottom: 1px;
+          }
+        }
+      }
+      &--user-sign {
+        label {
+          padding-bottom: 1px;
+        }
+      }
+      .location-change {
+        height: 150px;
+        overflow: auto;
       }
     }
   }
