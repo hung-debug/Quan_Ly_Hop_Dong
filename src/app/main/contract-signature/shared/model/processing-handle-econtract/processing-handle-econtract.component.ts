@@ -226,10 +226,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       console.log("data success", responseSmsEmail);
 
       if (responseSmsEmail.success == true) {
-  resendSmsEmail(recipient: any){
-    this.contractService.resendSmsEmail(recipient.id).subscribe((responseSmsEmail) =>{
-      
-      if(responseSmsEmail.success == true){
         this.toastService.showSuccessHTMLWithTimeout((this.translate.instant('send.sms.email')), "", 3000);
       } else {
         //alert(responseSmsEmail.message)

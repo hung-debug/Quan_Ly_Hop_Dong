@@ -176,6 +176,7 @@ export class PreviewContractTemplateComponent implements OnInit {
       setTimeout(() => {
         clearInterval(interval);
       }, 2000);
+      
       if (test) {
         let paddingPdf = ((test.getBoundingClientRect().width) - viewport.width) / 2;
         $('.viewer-pdf').css('padding-left', paddingPdf + 'px');

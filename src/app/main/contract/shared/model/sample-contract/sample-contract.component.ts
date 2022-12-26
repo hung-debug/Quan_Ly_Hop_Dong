@@ -120,7 +120,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.size = this.datas.size;
     }
 
-    this.list_font = ["Arial","Calibri","Times","Times New Roman"];
+    this.list_font = ["Arial","Calibri","Times New Roman"];
 
     // xu ly du lieu doi tuong ky voi hop dong sao chep va hop dong sua
     if (this.datas.is_action_contract_created && !this.datas.contract_user_sign && (this.router.url.includes("edit"))) {
