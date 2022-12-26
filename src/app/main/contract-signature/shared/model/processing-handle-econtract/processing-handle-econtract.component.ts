@@ -1,6 +1,6 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
-import {Router} from "@angular/router";
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
+import { Router } from "@angular/router";
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { ContractService } from 'src/app/service/contract.service';
@@ -21,6 +21,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   isHiddenButton = false;
   currentUser: any;
   // recipient:any;
+  listCheckSmsEmail: any;
 
   reasonCancel: string;
   cancelDate: any;
@@ -43,28 +44,30 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       is_data_contract: any,
       content: any
     },
-    private toastService : ToastService,
+    private toastService: ToastService,
     public router: Router,
     public dialog: MatDialog,
-    private contractService : ContractService,
+    private contractService: ContractService,
     public translate: TranslateService,
   ) {
- 
+
   }
 
   lang: string;
   ngOnInit(): void {
 
+    console.log("aaa ", sessionStorage.getItem('lang'));
+
     if(sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
-    } else if(sessionStorage.getItem('lang') == 'en') {
+    } else if (sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
     }
 
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
 
-      this.timeCreate = response.createdAt ? moment(response.createdAt).add(420):null;
+      this.timeCreate = response.createdAt ? moment(response.createdAt).add(420) : null;
       this.timeCreate = response.createdAt ? moment(this.timeCreate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
       this.emailCreate = response.createdBy.email;
       this.reasonCancel = response.reasonCancel;
@@ -72,12 +75,17 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       this.cancelDate = response.cancelDate ? moment(response.cancelDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
 
       this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      if(this.currentUser.email == this.emailCreate){
+      if (this.currentUser.email == this.emailCreate) {
         this.isHiddenButton = true;
-      }else{
+      } else {
         this.isHiddenButton = false;
       }
-  
+      console.log("this.currentUser.email", this.currentUser.email);
+      console.log("emailCreate", this.emailCreate);
+
+
+      console.log("ishidden", this.isHiddenButton);
+
       response.recipients.forEach((element: any) => {
         let data = {
           id: element.id,
@@ -86,13 +94,23 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           emailRecipients: element.email,
           status: this.checkStatusUser(element.status, element.role),
           typeOfSign: element.signType[0],
-          process_at:  element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
+          process_at: element.process_at ? moment(element.process_at, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null,
           reasonReject: element.reasonReject,
           type: element.participantType,
           statusNumber: element.status
         }
         this.is_list_name.push(data);
       })
+      console.log("dataaaaaa", this.is_list_name);
+
+
+      this.listCheckSmsEmail = true
+      this.is_list_name.map((item: any) => {
+        if (item.statusNumber !== 3 && item.statusNumber !== 34) {
+          this.listCheckSmsEmail = false
+        }
+      });
+
     });
 
   }
@@ -108,13 +126,17 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   checkStatusUser(status: any, role: any) {
     let res = '';
 
+    console.log("lang ", this.lang);
+
     if(this.lang == 'vi' || !this.lang) {
       if (status == 3) {
         return 'Đã từ chối';
-      } else if(status == 4) {
+      } else if (status == 4) {
         return 'Đã uỷ quyền/chuyển tiếp';
+      } else if (status == 34) {
+        return 'Quá hạn';
       }
-  
+
       if (status == 0 && !this.reasonCancel) {
         res += 'Chưa ';
       } else if (status == 1 && !this.reasonCancel) {
@@ -122,28 +144,30 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else if (status == 2) {
         res += 'Đã ';
       }
-  
-      if(!this.reasonCancel) {
-        if (role == 1 ) {
-          res +=  'điều phối';
+
+      if (!this.reasonCancel) {
+        if (role == 1) {
+          res += 'điều phối';
         } else if (role == 2) {
-          res +=  'xem xét';
+          res += 'xem xét';
         } else if (role == 3) {
-          res +=  'ký';
+          res += 'ký';
         } else if (role == 4) {
-          res =  res + ' đóng dấu';
+          res = res + ' đóng dấu';
         }
       } else {
-        if(!res.includes('Đã'))
+        if (!res.includes('Đã'))
           res = 'Đã huỷ'
       }
-    } else if(this.lang == 'en') {
+    } else if (this.lang == 'en') {
       if (status == 3) {
         return 'Rejected';
-      } else if(status == 4) {
+      } else if (status == 4) {
         return 'Authorized/Forwarded';
+      } else if (status == 34) {
+        return 'Overdue';
       }
-  
+
       if (status == 0 && !this.reasonCancel) {
         res += 'Not ';
       } else if (status == 1 && !this.reasonCancel) {
@@ -151,24 +175,24 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else if (status == 2) {
         res += 'Already ';
       }
-  
-      if(!this.reasonCancel) {
-        if (role == 1 ) {
-          res +=  'coordinator';
+
+      if (!this.reasonCancel) {
+        if (role == 1) {
+          res += 'coordinator';
         } else if (role == 2) {
-          res +=  'consider';
+          res += 'consider';
         } else if (role == 3) {
-          res +=  'sign';
+          res += 'sign';
         } else if (role == 4) {
-          res =  res + ' mark';
+          res = res + ' mark';
         }
       } else {
-        if(!res.includes('Already'))
+        if (!res.includes('Already'))
           res = ''
       }
     }
-  
-    
+
+
     return res;
   }
 
@@ -177,31 +201,37 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   // @ts-ignore
-  viewReasonRejected(RecipientsId: any){
-   let data: any;
+  viewReasonRejected(RecipientsId: any) {
+    let data: any;
 
-    for(let i=0; i < this.is_list_name.length ; i++){
+    for (let i = 0; i < this.is_list_name.length; i++) {
 
-      if(RecipientsId === this.is_list_name[i].id){
-          data = {reasonReject: this.is_list_name[i].reasonReject}
-       }
+      if (RecipientsId === this.is_list_name[i].id) {
+        data = { reasonReject: this.is_list_name[i].reasonReject }
+      }
     }
-    
+
     const dialogRef = this.dialog.open(DialogReasonRejectedComponent, {
       width: '600px',
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-    }) 
+    })
   }
 
+  resendSmsEmail(recipient: any) {
+    let responseSmsEmail: any;
+    this.contractService.resendSmsEmail(recipient.id).subscribe((responseSmsEmail) => {
+      console.log("data success", responseSmsEmail);
+
+      if (responseSmsEmail.success == true) {
   resendSmsEmail(recipient: any){
     this.contractService.resendSmsEmail(recipient.id).subscribe((responseSmsEmail) =>{
       
       if(responseSmsEmail.success == true){
         this.toastService.showSuccessHTMLWithTimeout((this.translate.instant('send.sms.email')), "", 3000);
-      }else{
+      } else {
         //alert(responseSmsEmail.message)
         this.toastService.showErrorHTMLWithTimeout(responseSmsEmail.message, "", 3000);
       }
@@ -212,20 +242,20 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   openEdit(RecipientsId: any) {
     let data: any;
 
-    for(let i=0; i < this.is_list_name.length ; i++){
+    // for(let i=0; i < this.is_list_name.length ; i++){
 
-      if(RecipientsId === this.is_list_name[i].id){
-          // data = {reasonReject: this.is_list_name[i].reasonReject}
-       }
-    }
-    
+    //   if(RecipientsId === this.is_list_name[i].id){
+    //       // data = {reasonReject: this.is_list_name[i].reasonReject}
+    //    }
+    // }
+
     const dialogRef = this.dialog.open(EditHandlerComponent, {
       width: '900px',
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
-    }) 
+    })
   }
 
   getDataHandler(id: number, action: string) {

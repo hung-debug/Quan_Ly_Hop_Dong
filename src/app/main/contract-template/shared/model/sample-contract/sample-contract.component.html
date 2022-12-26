@@ -20,7 +20,7 @@
                             <span *ngIf="d.sign_unit == 'chu_ky_so'">{{'sign.digital'|translate}}</span>
                         </div>
 
-                        <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag" id="element-drag" style="height: 102px;" [ngStyle]="setWidth(d)">
+                        <div *ngIf="d.sign_unit == 'chu_ky_anh'" class="content-drag" id="element-drag" [ngStyle]="setWidth(d)">
                             <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : ''" [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
                             <span *ngIf="d.sign_unit == 'chu_ky_anh'">{{'sign.image.ekyc' |translate}}</span>
                         </div>
@@ -38,6 +38,7 @@
                     <input id="text-input-element" type="text" [ngModel]="this.objSignInfo.text_attribute_name" (ngModelChange)="changePositionSign($event, 'text_attribute_name', 'text')">
                 </div>
                 <div class="sign-unit-select">
+                    <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)}}: *</label>
                     <label class="label-require">{{isEnableText || isChangeText ? ('user.import' | translate) : ('user.sign' | translate)}}: *</label>
                     <select class="form-select" id="select-dropdown" aria-label="Default select example" (change)="changePositionSign($event, null, 'name-signature')" [disabled]="isEnableSelect">
                         <option value="" hidden>{{isEnableText || isChangeText ? ('choose.importer' | translate) : ('choose.signer' | translate)}}</option>
