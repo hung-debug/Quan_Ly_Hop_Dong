@@ -239,8 +239,19 @@ export class ConsiderContractComponent
       return;
     }
     this.pageNum++;
-    console.log("pageNum ", this.pageNum);
     this.queueRenderPage(this.pageNum);
+  }
+
+  previousPage() {
+    if (this.pageNum <= 1) {
+      return;
+    }
+    this.pageNum--;
+    this.queueRenderPage(this.pageNum);
+  }
+
+  onEnter() {
+    console.log("enter ");
   }
 
   queueRenderPage(num: any) {
@@ -261,8 +272,6 @@ export class ConsiderContractComponent
       let pdffull: any = document.getElementById('pdf-full');
 
       pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top)
-
-      this.renderPage(num,canvas);
     }
   }
 
