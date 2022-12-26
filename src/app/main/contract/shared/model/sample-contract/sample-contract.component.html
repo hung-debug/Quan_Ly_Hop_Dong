@@ -126,14 +126,22 @@
         </div>
     </div>
 </div>
+
 <div class="footer-sample-contract">
-    <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button"
-        style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
-    <!-- <div class="content_footer">@Copyright 2021 - MobiFone</div> -->
-    <div>
-        <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
-            style="background-color: #FCAF17">{{'btn.save-draft' | translate}}</button>
-        <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
+    <div class="col-md-3">
+        <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button"
+            style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
+    </div>
+    <div class="row col-md-9">
+        <div style="flex-direction: column;text-align: center">
+            <button>test</button>
+        </div>
+        <div class="row" style="flex-direction: column;">
+            <!-- <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
+                style="background-color: #FCAF17">{{'btn.save-draft' | translate}}</button>
+            <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button> -->
+            <button>test1</button>
+        </div>
     </div>
 </div>
 

@@ -7,15 +7,35 @@
       <button *ngIf="!this.is_show_coordination && !view && !this.lang" type="button" name="next" class="next action-button" (click)="processingAuthorization()">{{'Uỷ quyền' | translate}}</button>
       <button *ngIf="!this.is_show_coordination && !view && !this.lang" type="button" name="next" class="next action-button" (click)="forWardContract()">{{'Chuyển tiếp' | translate}}</button>
     </div>
-    <div class="label">
+
+    <a style="text-align: center;">
+      <button class="call-page" (click)="firstPage()">
+        <img *ngIf="this.page1" src="assets/img/previousbold.svg">
+        <img *ngIf="!this.page1" src="assets/img/firstpage.svg">
+      </button>
+      <button class="call-page1" (click)="previousPage()">
+        <img *ngIf="this.page1" src="assets/img/firstpagebold.svg">
+        <img *ngIf="!this.page1" src="assets/img/previous.svg">
+      </button>
+
+      <input [(ngModel)]="pageNum" style="box-sizing: border-box;width: 50px;height: 30px;background: #FFFFFF;border: 1px solid #87CAFF;border-radius: 5px; margin-left: 5px" type="text" (keyup.enter)="onEnter($event)" />
+      <a style="font-family: 'Lexend Deca';font-style: normal;font-weight: 400;font-size: 18px;line-height: 22px;align-items: center;text-transform: uppercase;color: #000000;margin-left: 5px">/{{this.pageNumber}}</a>
+      <button class="call-page1" (click)="onNextPage()" id="prev">
+        <img *ngIf="this.pageLast" src="assets/img/next.svg">
+        <img *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
+      </button>
+
+      <button class="call-page1" (click)="lastPage()" id="prev">
+        <img *ngIf="this.pageLast" src="assets/img/lastpage.svg">
+        <img *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
+      </button>
+    </a>
+
+    <div>
       <button *ngIf="!this.is_show_coordination && ![2,3,4].includes(this.datas.roleContractReceived) && !view" type="button" name="next" class="next action-button" (click)="refuseContract()" style="background-color: #8B8B8B">{{'contract.status.fail' | translate}}</button>
-
       <button class="next action-button" (click)="autoScroll()">{{'auto.scroll' | translate}}</button>
-
       <button *ngIf="((!this.is_show_coordination && !view) || this.datas.roleContractReceived) && this.lang == 'vi'  || !this.lang" (click)="action()" type="button" name="next" class="next action-button">{{this.datas.action_title == 'dieu_phoi' ? 'Điều phối' : 'Xác nhận'}}</button>
-
       <button *ngIf="((!this.is_show_coordination && !view) || this.datas.roleContractReceived) && this.lang == 'en'" (click)="action()" type="button" name="next" class="next action-button">{{this.datas.action_title == 'dieu_phoi' ? 'Coordinator' : 'Confirm'}}</button>
-
     </div>
   </div>
 </div>

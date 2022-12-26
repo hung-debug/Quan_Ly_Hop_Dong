@@ -2,14 +2,6 @@
 <meta name='viewport' content='width=device-width' />
 
 <div class="sample-contract row" *ngIf="loaded && valid && this.mobile === false">
-
-  <div>
-    <button (click)="previousPage()" id="prev">Previous</button>
-    <button (click)="onNextPage()" id="next">Next</button>
-    &nbsp; &nbsp;
-    <input />
-  </div>
-
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
       <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">{{'contract.detail' | translate}}</div>
@@ -99,7 +91,7 @@
     </div>
   </div>
 
-  <div id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag"
+  <div (scroll)="scroll($event)" id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag"
        style="background-color: #F2F2F2; position: relative">
     <div id="pdf-viewer-step-3">
       <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
@@ -177,7 +169,11 @@
 </div>
 </div>
 
-<app-footer-signature *ngIf="loaded" [idElement]="idElement" [coordinateY]="coordinateY" [confirmSignature]="confirmSignature" [datas]="datas" [view]="[2,3].includes(recipient.status)" [recipientId]="recipientId" (submitChanges)="submitEvents($event)"></app-footer-signature>
+<app-footer-signature *ngIf="loaded" [pageNum]="pageNum" [pageLast]="pageLast" [page1]="page1" [pageNumber]="pageNumber" [thePDF]="thePDF" [idElement]="idElement" [coordinateY]="coordinateY" 
+[confirmSignature]="confirmSignature" [datas]="datas" [view]="[2,3].includes(recipient.status)" [recipientId]="recipientId" 
+(submitChanges)="submitEvents($event)"
+
+></app-footer-signature>
 <ngx-spinner
   bdColor="rgba(51,51,51,0.8)"
   size="medium"

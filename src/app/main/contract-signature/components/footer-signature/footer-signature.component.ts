@@ -25,6 +25,14 @@ export class FooterSignatureComponent implements OnInit {
   @Input() confirmSignature: any;
   @Input() coordinateY: any;
   @Input() idElement: any;
+  @Input() thePDF: any;
+  @Input() pageNumber: number;
+  @Input() page1: boolean;
+  @Input() pageLast: boolean;
+
+  @Input() pageNum: number;
+
+
 
   is_show_coordination: boolean = false;
   is_data_coordination: any;
@@ -36,6 +44,9 @@ export class FooterSignatureComponent implements OnInit {
   eKYCContractBuy: any;
   smsContractBuy: any;
   contractId: any;
+
+  pageRendering:any;
+  pageNumPending: any = null;
 
   constructor(
     private dialog: MatDialog,
@@ -111,7 +122,6 @@ export class FooterSignatureComponent implements OnInit {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
       this.mobile = true;
     } else {
-      console.log("la pc");
       this.mobile = false;
     }
   }
@@ -146,14 +156,10 @@ export class FooterSignatureComponent implements OnInit {
       return a - b;
     });
 
-    console.log("y ", this.coordinateY);
-
     let pdffull: any = document.getElementById('pdf-full');
 
     if (this.confirmSignature == 1) {
       pdffull.scrollTo(0, this.coordinateY[this.indexY]);
-
-      console.log("id ", this.idElement[this.indexY]);
 
       let id: any = document.getElementById(this.idElement[this.indexY]);
 
@@ -174,6 +180,66 @@ export class FooterSignatureComponent implements OnInit {
       this.indexY = 0;
       pdffull.scrollTo(0, 0);
     }
+  }
+
+  firstPage() {
+    let pdffull: any = document.getElementById('pdf-full');
+
+    pdffull.scrollTo(0, 0);
+
+    this.pageNum = 1;
+  }
+
+  lastPage() {
+    let canvas: any = document.getElementById('canvas-step3-'+this.pageNumber);
+
+    let canvas1: any = document.getElementById('pdf-viewer-step-3');
+
+    let pdffull: any = document.getElementById('pdf-full');
+
+    pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top);
+
+    this.pageNum = this.pageNumber;
+  }
+
+  onNextPage() {
+    if (this.pageNum >= this.thePDF?.numPages) {
+      return;
+    }
+    this.pageNum++;
+    this.queueRenderPage(this.pageNum);
+  }
+
+  previousPage() {
+    if (this.pageNum <= 1) {
+      return;
+    }
+    this.pageNum--;
+    this.queueRenderPage(this.pageNum);
+  }
+
+  queueRenderPage(num: any) {
+    if (this.pageRendering) {
+      this.pageNumPending = num;
+    } else {
+      let canvas: any = document.getElementById('canvas-step3-'+num);
+
+      let canvas1: any = document.getElementById('pdf-viewer-step-3');
+
+      let pdffull: any = document.getElementById('pdf-full');
+
+      pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top)
+    }
+  }
+
+  onEnter(event: any) {
+    let canvas: any = document.getElementById('canvas-step3-'+event.target.value);
+
+    let canvas1: any = document.getElementById('pdf-viewer-step-3');
+
+    let pdffull: any = document.getElementById('pdf-full');
+
+    pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top);
   }
 
   action() {

@@ -75,6 +75,8 @@ export class ConsiderContractComponent
   confirmSignature = null;
 
   taxCodePartnerStep2: any;
+  
+  pageNum: number = 1;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -233,46 +235,28 @@ export class ConsiderContractComponent
     });
   }
 
-  pageNum: number = 1;
-  onNextPage() {
-    if (this.pageNum >= this.thePDF?.numPages) {
-      return;
-    }
-    this.pageNum++;
-    this.queueRenderPage(this.pageNum);
-  }
+  page1: boolean = false;
+  pageLast: boolean = true;
+  scroll(event: any) {
+    //đổi màu cho nút back page
+    let canvas1: any = document.getElementById('canvas-step3-1');
 
-  previousPage() {
-    if (this.pageNum <= 1) {
-      return;
-    }
-    this.pageNum--;
-    this.queueRenderPage(this.pageNum);
-  }
-
-  onEnter() {
-    console.log("enter ");
-  }
-
-  queueRenderPage(num: any) {
-    if (this.pageRendering) {
-      this.pageNumPending = num;
+    if(event.srcElement.scrollTop < canvas1.height/2) {
+      this.page1 = false;
     } else {
-      let canvas: any = document.getElementById('canvas-step3-'+num);
-
-      let canvas1: any = document.getElementById('pdf-viewer-step-3');
-
-      // canvas.className = 'dropzone';
-      // canvas.id = 'canvas-step3-' + num;
-
-      console.log("canvas ", canvas.getBoundingClientRect());
-
-      console.log("canvas1 ", canvas1.getBoundingClientRect());
-
-      let pdffull: any = document.getElementById('pdf-full');
-
-      pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top)
+      this.page1 = true;
     }
+
+    //đổi màu cho nút next page
+    let canvasLast: any = document.getElementById('canvas-step3-'+this.pageNumber);
+    let step3: any = document.getElementById('pdf-viewer-step-3');
+    if(event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)) {
+      this.pageLast = true;
+    } else {
+      this.pageLast = false;
+    }
+
+    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
   }
 
   indexY: number = 0;
