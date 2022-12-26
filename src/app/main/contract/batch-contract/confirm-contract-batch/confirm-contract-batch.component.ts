@@ -44,7 +44,7 @@ export class ConfirmContractBatchComponent
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined;
   @Output() stepChangeConfirmInforContractBatch = new EventEmitter<string>();
   pdfSrc: any;
-  thePDF = null;
+  thePDF: any = null;
   pageNumber = 1;
   canvasWidth = 0;
   arrPage: any = [];
@@ -837,5 +837,93 @@ export class ConfirmContractBatchComponent
           '',
           3000
         );
+  }
+
+  pageNum: number = 1;
+  page1: boolean = false;
+  pageLast: boolean = true;
+  
+  pageRendering:any;
+  pageNumPending: any = null;
+  firstPage() {
+    let pdffull: any = document.getElementById('pdf-full');
+
+    pdffull.scrollTo(0, 0);
+
+    this.pageNum = 1;
+  }
+
+  lastPage() {
+    let canvas: any = document.getElementById('canvas-step3-'+this.pageNumber);
+
+    let canvas1: any = document.getElementById('pdf-viewer-step-3');
+
+    let pdffull: any = document.getElementById('pdf-full');
+
+    pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top);
+
+    this.pageNum = this.pageNumber;
+  }
+
+  onNextPage() {
+    if (this.pageNum >= this.thePDF?.numPages) {
+      return;
+    }
+    this.pageNum++;
+    this.queueRenderPage(this.pageNum);
+  }
+
+  previousPagePdf() {
+    if (this.pageNum <= 1) {
+      return;
+    }
+    this.pageNum--;
+    this.queueRenderPage(this.pageNum);
+  }
+
+  queueRenderPage(num: any) {
+    if (this.pageRendering) {
+      this.pageNumPending = num;
+    } else {
+      let canvas: any = document.getElementById('canvas-step3-'+num);
+
+      let canvas1: any = document.getElementById('pdf-viewer-step-3');
+
+      let pdffull: any = document.getElementById('pdf-full');
+
+      pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top)
+    }
+  }
+
+  onEnter(event: any) {
+    let canvas: any = document.getElementById('canvas-step3-'+event.target.value);
+
+    let canvas1: any = document.getElementById('pdf-viewer-step-3');
+
+    let pdffull: any = document.getElementById('pdf-full');
+
+    pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top);
+  }
+
+  scroll(event: any) {
+    //đổi màu cho nút back page
+    let canvas1: any = document.getElementById('canvas-step3-1');
+
+    if(event.srcElement.scrollTop < canvas1.height/2) {
+      this.page1 = false;
+    } else {
+      this.page1 = true;
+    }
+
+    //đổi màu cho nút next page
+    let canvasLast: any = document.getElementById('canvas-step3-'+this.pageNumber);
+    let step3: any = document.getElementById('pdf-viewer-step-3');
+    if(event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)) {
+      this.pageLast = true;
+    } else {
+      this.pageLast = false;
+    }
+
+    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
   }
 }

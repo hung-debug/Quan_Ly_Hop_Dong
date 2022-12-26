@@ -109,7 +109,7 @@
     </div>
 
     <!--  file content-->
-    <div class="col-md-9 sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
+    <div (scroll)="scroll($event)" id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag" style="background-color: #f3f7f9; position: relative">
         <div id="pdf-viewer-step-3">
             <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag"
                 [style.width]="this.canvasWidth">
@@ -128,12 +128,40 @@
     </div>
 </div>
 <div class="footer-sample-contract">
-    <button (click)="back($event, 'party-contract-form')" type="button" name="next" class="next action-button"
-        style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
-    <div>
-        <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
-            style="background-color: #FCAF17">{{'btn.save-draft' | translate}}</button>
-        <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
+    <div class="col-md-3">
+        <button (click)="back($event, 'determine-contract')" type="button" name="next" class="next action-button"
+            style="background-color: #8B8B8B">{{'btn.previous' | translate}}</button>
+    </div>
+    <div class="col-md-9">
+        <div class="center">
+            <a>
+                <button class="call-page" (click)="firstPage()">
+                  <img *ngIf="this.page1" src="assets/img/previousbold.svg">
+                  <img *ngIf="!this.page1" src="assets/img/firstpage.svg">
+                </button>
+                <button class="call-page1" (click)="previousPage()">
+                  <img *ngIf="this.page1" src="assets/img/firstpagebold.svg">
+                  <img *ngIf="!this.page1" src="assets/img/previous.svg">
+                </button>
+          
+                <input [(ngModel)]="pageNum" style="box-sizing: border-box;width: 50px;height: 30px;background: #FFFFFF;border: 1px solid #87CAFF;border-radius: 5px; margin-left: 5px" type="text" (keyup.enter)="onEnter($event)" />
+                <a style="font-family: 'Lexend Deca';font-style: normal;font-weight: 400;font-size: 18px;line-height: 22px;align-items: center;text-transform: uppercase;color: #000000;margin-left: 5px">/{{this.pageNumber}}</a>
+                <button class="call-page1" (click)="onNextPage()" id="prev">
+                  <img *ngIf="this.pageLast" src="assets/img/next.svg">
+                  <img *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
+                </button>
+          
+                <button class="call-page1" (click)="lastPage()" id="prev">
+                  <img *ngIf="this.pageLast" src="assets/img/lastpage.svg">
+                  <img *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
+                </button>
+              </a>
+            <a style="position: absolute; right: 5px;">
+                <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
+                style="background-color: #FCAF17">{{'btn.save-draft' | translate}}</button>
+                <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
+            </a>
+        </div>
     </div>
 </div>
 

@@ -329,3 +329,33 @@
     }
   }
 }
+
+.center {
+  text-align: center;
+}
+
+.footer-sample-contract {
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .content_footer {
+    color: #0160AE;
+    font-size: 13px;
+    font-weight: 500;
+  }
+}
+
+.call-page {
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.call-page1 {
+  padding: 0;
+  border: none;
+  background: none; 
+  margin-left: 5px
+}
