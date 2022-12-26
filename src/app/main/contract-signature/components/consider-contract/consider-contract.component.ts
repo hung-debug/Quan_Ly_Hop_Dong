@@ -60,7 +60,7 @@ export class ConsiderContractComponent
   @ViewChild('itemElement') itemElement: QueryList<ElementRef> | undefined;
   @Output() stepChangeSampleContract = new EventEmitter<string>();
   pdfSrc: any;
-  thePDF = null;
+  thePDF: any = null;
   pageNumber = 1;
   canvasWidth = 0;
   ratioPDF = 595 / 1240;
@@ -231,6 +231,39 @@ export class ConsiderContractComponent
         }
       );
     });
+  }
+
+  pageNum: number = 1;
+  onNextPage() {
+    if (this.pageNum >= this.thePDF?.numPages) {
+      return;
+    }
+    this.pageNum++;
+    console.log("pageNum ", this.pageNum);
+    this.queueRenderPage(this.pageNum);
+  }
+
+  queueRenderPage(num: any) {
+    if (this.pageRendering) {
+      this.pageNumPending = num;
+    } else {
+      let canvas: any = document.getElementById('canvas-step3-'+num);
+
+      let canvas1: any = document.getElementById('pdf-viewer-step-3');
+
+      // canvas.className = 'dropzone';
+      // canvas.id = 'canvas-step3-' + num;
+
+      console.log("canvas ", canvas.getBoundingClientRect());
+
+      console.log("canvas1 ", canvas1.getBoundingClientRect());
+
+      let pdffull: any = document.getElementById('pdf-full');
+
+      pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top)
+
+      this.renderPage(num,canvas);
+    }
   }
 
   indexY: number = 0;
@@ -613,6 +646,8 @@ export class ConsiderContractComponent
     }
   }
 
+  pageRendering:any;
+  pageNumPending: any = null;
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
     setTimeout(() => {

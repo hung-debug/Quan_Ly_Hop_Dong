@@ -2,6 +2,14 @@
 <meta name='viewport' content='width=device-width' />
 
 <div class="sample-contract row" *ngIf="loaded && valid && this.mobile === false">
+
+  <!-- <div>
+    <button id="prev">Previous</button>
+    <button (click)="onNextPage()" id="next">Next</button>
+    &nbsp; &nbsp;
+    <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+  </div> -->
+
   <div class="col-md-3 sample-contract__information" style="background-color: white;">
     <div class="sample-contract__information--drag" id="width-element-info" style="margin-top: 15px">
       <div style="padding-bottom: 10px; text-align: center; font-weight: bold" class="label" (click)="t()">{{'contract.detail' | translate}}</div>

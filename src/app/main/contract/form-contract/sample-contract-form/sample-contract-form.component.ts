@@ -123,7 +123,7 @@ export class SampleContractFormComponent implements OnInit {
       this.size = this.datasForm.size;
     }
 
-    this.list_font = ["Arial","Calibri","Times","Times New Roman"];
+    this.list_font = ["Arial","Calibri","Times New Roman"];
 
     this.isChangeNumberContract = this.datasForm.contract_no; // save contract number check with input contract number object signature when change
     if (!this.datasForm.contract_user_sign) {
