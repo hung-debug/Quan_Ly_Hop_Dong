@@ -165,7 +165,7 @@ export class ContractSignatureComponent implements OnInit {
       http = "https";
     }
 
-    const date = await fetch("http"+"://worldtimeapi.org/api/ip").then(response => response.json());
+    const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
 
     this.isDateTime = date.datetime;
   }

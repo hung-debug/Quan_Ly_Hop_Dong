@@ -35,7 +35,8 @@ export class AddContractTypeComponent implements OnInit {
     ) {
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)])
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+        ceca_push: 0
       });
     }
 
@@ -48,7 +49,8 @@ export class AddContractTypeComponent implements OnInit {
           console.log(data);
           this.addForm = this.fbd.group({
             name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
-            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)])
+            code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+            ceca_push: this.convertCeCa(data.ceca_push)
           });
           this.nameOld = data.name;
           this.codeOld = data.code;
@@ -59,8 +61,17 @@ export class AddContractTypeComponent implements OnInit {
     }else{
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
-        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)])
+        code: this.fbd.control("", [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
+        ceca_push: 0
       });
+    }
+  }
+
+  convertCeCa(ceca_push: any) {
+    if(ceca_push == 1) {
+      return 1;
+    } else {
+      return 0;
     }
   }
 
@@ -120,6 +131,7 @@ export class AddContractTypeComponent implements OnInit {
       id: this.data.id,
       name: this.addForm.value.name,
       code: this.addForm.value.code,
+      ceca_push: this.addForm.value.ceca_push
     }
     this.spinner.show();
     //ham sua

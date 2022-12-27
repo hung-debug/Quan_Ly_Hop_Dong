@@ -20,6 +20,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="row" style="padding-top: 10px;">
+            <div class="col-md-12">
+                <div class="label_item">{{'contract-type.ceca' | translate}}</div>
+                <div>
+                    <div [innerHTML]="ceca_push" class="input_text"></div>
+                </div>
+            </div>
+        </div>
     
         <div class="row" style="justify-content: center;padding-top: 10px;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.close' | translate}}</button>

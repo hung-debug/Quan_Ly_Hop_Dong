@@ -9,7 +9,8 @@ export interface ContractType {
   code: string,
   ordering: string,
   status: string,
-  organization_id: string
+  organization_id: string,
+  ceca_push: any;
 }
 @Injectable({
   providedIn: 'root'
@@ -43,12 +44,14 @@ export class ContractTypeService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+    console.log("datas ", datas);
     const body = JSON.stringify({
       name: datas.name,
       code: datas.code,
       ordering: 1,
       status: 1,
       organization_id: this.organization_id,
+      ceca_push: datas.ceca_push
     });
     return this.http.post<ContractType>(this.addContractTypeUrl, body, {'headers': headers});
   }
@@ -64,6 +67,7 @@ export class ContractTypeService {
       ordering: 1,
       status: 1,
       organization_id: this.organization_id,
+      ceca_push: datas.ceca_push
     });
     return this.http.put<ContractType>(this.updateContractTypeUrl + datas.id, body, {'headers': headers});
   }
