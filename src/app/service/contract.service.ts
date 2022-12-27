@@ -128,6 +128,8 @@ export class ContractService {
   uploadFileUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/import-child-org`;
   resendSmsEmailUrl: any = `${environment.apiUrl}/api/v1/processes/resend-sms-email/`;
 
+  checkViewContractUrl: any = `${environment.apiUrl}/api/v1/contracts/check-view-contract/`
+
   token: any;
   customer_id: any;
   organization_id: any;
@@ -459,6 +461,7 @@ export class ContractService {
     }
   }
 
+
   detectFace(imageCCCD: any, imageFace: any) {
     this.getCurrentUser();
 
@@ -545,6 +548,22 @@ export class ContractService {
       },
     };
     return axios.get(this.getAccountSignDigital, config);
+  }
+
+  checkViewContract(id: number, data: any) {
+    this.getCurrentUser();
+    
+    let config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer '+ this.token,
+      },
+      data: data
+    };
+
+    console.log("config ", config);
+
+    return axios.get(this.checkViewContractUrl + id, config)
   }
 
   checkTaxCodeExist(taxCode: any, certB64: any) {

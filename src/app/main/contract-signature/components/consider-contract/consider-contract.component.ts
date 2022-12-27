@@ -161,8 +161,6 @@ export class ConsiderContractComponent
 
   sessionIdUsbToken: any;
 
-  domain: any = `https://127.0.0.1:14424/`;
-
   //id tổ chức của người tạo hợp đồng
   orgId: any;
 
@@ -208,7 +206,11 @@ export class ConsiderContractComponent
 
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
-    this.activeRoute.queryParams.subscribe((params) => {
+    this.checkRoleContract();
+  }
+
+  async checkRoleContract() {
+     this.activeRoute.queryParams.subscribe((params) => {
       this.recipientId = params.recipientId;
 
       //kiem tra xem co bi khoa hay khong
@@ -412,9 +414,6 @@ export class ConsiderContractComponent
             );
           }
         });
-        // }
-
-        // this.datas = this.datas.concat(this.data_contract.contract_information);
 
         this.datas.action_title = 'Xác nhận';
         this.datas.roleContractReceived = this.recipient.role;
@@ -515,8 +514,6 @@ export class ConsiderContractComponent
         this.handleError();
       }
     );
-
-    // console.log("datas 1 ", this.datas);
   }
 
   // Error handling
