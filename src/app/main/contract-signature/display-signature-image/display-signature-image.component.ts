@@ -15,7 +15,7 @@ export class DisplaySignatureImageComponent implements OnInit {
   constructor() { }
 
   async ngOnInit(): Promise<void> {
-    const date = await fetch("https://worldtimeapi.org/api/ip").then(response => response.json());
+    const date = await fetch("http://worldtimeapi.org/api/ip").then(response => response.json());
 
     this.isDateTime = date.datetime;
   }
