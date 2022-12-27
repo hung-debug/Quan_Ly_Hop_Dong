@@ -205,6 +205,12 @@ export var loaiGoiDichVuList = [
   { id: 2, name: 'Khuyến mại' },
 ];
 
+
+export var optionsCeCa = [
+  { id: 0, name: 'Không' },
+  { id: 1, name: 'Có' },
+];
+
 export var paidTypeList = [
   {id: 'PRE', name:'Trả trước'},
   {id:'POST', name:'Trả sau'}

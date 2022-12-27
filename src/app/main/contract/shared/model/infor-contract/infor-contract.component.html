@@ -56,11 +56,13 @@
     </div>
 
     <div class="col-md-2"></div>
+
+    <!--Loại hợp đồng-->
     <div class="col-md-5">
       <div class="form-group">
         <div class="label_item">{{'contract.type' | translate}}</div>
         <div>
-          <p-dropdown panelStyleClass="font" [options]="typeList" [(ngModel)]="type_id" optionLabel="name"
+          <p-dropdown (onChange)="changeTypeContract()" panelStyleClass="font" [options]="typeList" [(ngModel)]="type_id" optionLabel="name"
             optionValue="id" placeholder="{{'choose.contract.type' | translate}}" [filter]="true" filterBy="name" [showClear]="true">
           </p-dropdown>
         </div>
@@ -136,6 +138,15 @@
           <p-calendar [(ngModel)]="expire_time" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true"
             dateFormat="dd/mm/yy"></p-calendar>
         </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <div class="label_item">{{'contract-type.ceca' | translate}}</div>
+          <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"
+            optionValue="id" placeholder="{{'choose.contract.type' | translate}}" [showClear]="true">
+          </p-dropdown>
       </div>
     </div>
   </div>

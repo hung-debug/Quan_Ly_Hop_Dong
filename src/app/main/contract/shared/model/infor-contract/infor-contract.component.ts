@@ -13,7 +13,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {variable} from "../../../../../config/variable";
+import {optionsCeCa, variable} from "../../../../../config/variable";
 import {Observable, Subscription} from 'rxjs';
 import {AddContractComponent} from "../../../add-contract/add-contract.component";
 import {DatePipe} from '@angular/common';
@@ -24,7 +24,8 @@ import * as moment from "moment";
 import {HttpErrorResponse} from '@angular/common/http';
 import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
 import Swal from 'sweetalert2';
-import { environment } from 'src/environments/environment';
+import { ContractTypeService } from 'src/app/service/contract-type.service';
+
 
 export class ContractConnectArr {
   ref_id: number;
@@ -80,11 +81,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   attachFileNameArr: any[] = [];
   contract_no: any;
 
+  optionsCeCaValue: any;
+
   //error
   errorContractName: any = '';
   errorContractFile: any = '';
   errorSignTime: any = '';
   errorContractNumber: any = '';
+
+  optionsCeCa: Array<any> = [];;
 
   uploadFileContractAgain: boolean = false;
   uploadFileAttachAgain: boolean = false;
@@ -97,6 +102,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   constructor(
     private uploadService: UploadService,
     private contractService: ContractService,
+    private contractTypeService: ContractTypeService,
     public datepipe: DatePipe,
     private router: Router,
     private toastService: ToastService,
@@ -108,6 +114,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   ngOnInit(): void {
     this.spinner.hide();
+
+    this.optionsCeCa = optionsCeCa;
+    this.optionsCeCaValue = 0;
+    this.datas.ceca_push = this.optionsCeCaValue;
+
     this.name = this.datas.name ? this.datas.name : null;
     // this.code = this.datas.contract_no ? this.datas.contract_no : null;
     this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.contract_no;
@@ -292,6 +303,18 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     }
   }
 
+  async changeTypeContract() {
+    const informationContractType = await this.contractTypeService.getContractTypeById(this.type_id).toPromise();
+
+    if(informationContractType.ceca_push == 1) {
+      this.optionsCeCaValue = 1;
+    } else {
+      this.optionsCeCaValue = 0;
+    }
+
+    this.datas.ceca_push = this.optionsCeCaValue;
+  }
+
   async callAPI(action?: string) {
     //call API step 1
     let countSuccess = 0;
@@ -467,8 +490,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           status: 1,
           contract_id: this.datas.id,
         }
-
-        console.log("datas ", this.datas);
 
         // let id_type_1 = this.datas.i_data_file_contract.filter((p: any) => p.status == 1 && p.type == 1)[0].id;
         await this.contractService.updateFileAttach(this.datas.document_id_1.id, data, 1).toPromise().then((res: any) => {

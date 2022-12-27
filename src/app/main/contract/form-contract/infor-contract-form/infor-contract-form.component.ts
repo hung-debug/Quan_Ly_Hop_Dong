@@ -21,10 +21,11 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import * as moment from "moment";
 import {HttpErrorResponse} from '@angular/common/http';
 import {UploadService} from 'src/app/service/upload.service';
-import {variable} from 'src/app/config/variable';
+import {optionsCeCa, variable} from 'src/app/config/variable';
 import {AddContractComponent} from '../../add-contract/add-contract.component';
 import {ContractTemplateService} from 'src/app/service/contract-template.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ContractTypeService } from 'src/app/service/contract-type.service';
 
 export class ContractConnectArr {
   ref_id: number;
@@ -76,9 +77,13 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
   isArrAttachFile_delete: any = [];
 
+  optionsCeCa: any;
+  optionsCeCaValue: any;
+
   constructor(
     private contractService: ContractService,
     private contractTemplateService: ContractTemplateService,
+    private contractTypeService: ContractTypeService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private uploadService: UploadService,
@@ -89,8 +94,12 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    console.log("datas form ", this.datasForm);
     this.spinner.hide();
+
+    this.optionsCeCa = optionsCeCa;
+    this.optionsCeCaValue = 0;
+    this.datasForm.ceca_push = this.optionsCeCaValue;
+
     let dataRouter = this.route.params.subscribe((params: any) => {
       this.action = params.action;
     }, null, () => {
@@ -117,6 +126,18 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     this.getListTypeContract(); // ham get contract type
     this.getContractList(); // ham lay danh sach hop dong
     this.convertData();
+  }
+
+  async changeTypeContract() {
+    const informationContractType = await this.contractTypeService.getContractTypeById(this.datasForm.type_id).toPromise();
+
+    if(informationContractType.ceca_push == 1) {
+      this.optionsCeCaValue = 1;
+    } else {
+      this.optionsCeCaValue = 0;
+    }
+
+    this.datasForm.ceca_push = this.optionsCeCaValue;
   }
 
   ngAfterViewInit() {
