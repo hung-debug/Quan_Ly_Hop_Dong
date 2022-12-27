@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 //@ts-ignore
 import domtoimage from 'dom-to-image';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-display-signature-image',
   templateUrl: './display-signature-image.component.html',
@@ -15,7 +16,15 @@ export class DisplaySignatureImageComponent implements OnInit {
   constructor() { }
 
   async ngOnInit(): Promise<void> {
-    const date = await fetch("http://worldtimeapi.org/api/ip").then(response => response.json());
+    let http = null;
+
+    if(environment.apiUrl == 'http://14.160.91.174:1387') {
+      http = "http";
+    } else {
+      http = "https";
+    }
+
+    const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
 
     this.isDateTime = date.datetime;
   }

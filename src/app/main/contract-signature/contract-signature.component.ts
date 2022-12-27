@@ -22,6 +22,7 @@ import { HsmDialogSignComponent } from './components/consider-contract/hsm-dialo
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-contract',
@@ -156,7 +157,15 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   async getDateTime() {
-    const date = await fetch("https://worldtimeapi.org/api/ip").then(response => response.json());
+    let http = null;
+
+    if(environment.apiUrl == 'http://14.160.91.174:1387') {
+      http = "http";
+    } else {
+      http = "https";
+    }
+
+    const date = await fetch("http"+"://worldtimeapi.org/api/ip").then(response => response.json());
 
     this.isDateTime = date.datetime;
   }

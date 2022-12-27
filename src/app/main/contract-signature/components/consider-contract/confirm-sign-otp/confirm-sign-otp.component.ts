@@ -18,6 +18,7 @@ import { of } from 'rxjs';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { TRISTATECHECKBOX_VALUE_ACCESSOR } from 'primeng/tristatecheckbox';
 import { UnitService } from 'src/app/service/unit.service';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -274,9 +275,18 @@ export class ConfirmSignOtpComponent implements OnInit {
     }else{
       this.userOtp = this.datasOtp.name;
       this.phoneOtp = this.datasOtp.phone;
-      // this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
+      
+      let http = null;
 
-      const date = await fetch("https://worldtimeapi.org/api/ip").then(response => response.json());
+      if(environment.apiUrl == 'http://14.160.91.174:1387') {
+        http = "http";
+      } else {
+        http = "https";
+      }
+  
+      const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
+  
+      this.isDateTime = date.datetime;
 
       this.isDateTime = this.datepipe.transform(date.datetime, "dd/MM/yyyy HH:mm");
       await of(null).pipe(delay(100)).toPromise();
