@@ -219,7 +219,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     interact.addDocument(document);
     
-    if(this.datas.participants) {
+    if(this.datas.participants && this.datas.participants[0].recipients[0].fields[0].font) {
       const font = this.datas.participants[0].recipients[0].fields[0].font;
       const font_size = this.datas.participants[0].recipients[0].fields[0].font_size;
   

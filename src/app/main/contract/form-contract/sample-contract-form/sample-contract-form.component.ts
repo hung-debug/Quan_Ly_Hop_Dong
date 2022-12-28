@@ -214,7 +214,7 @@ export class SampleContractFormComponent implements OnInit {
     })
     interact.addDocument(document);
 
-    if(this.datasForm.is_data_object_signature.length > 0) {
+    if(this.datasForm.is_data_object_signature.length > 0 && this.datasForm.is_data_object_signature[0].font) {
       const font = this.datasForm.is_data_object_signature[0].font;
       const font_size = this.datasForm.is_data_object_signature[0].font_size;
   
