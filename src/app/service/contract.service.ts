@@ -128,7 +128,9 @@ export class ContractService {
   uploadFileUnitUrl: any = `${environment.apiUrl}/api/v1/organizations/import-child-org`;
   resendSmsEmailUrl: any = `${environment.apiUrl}/api/v1/processes/resend-sms-email/`;
 
-  checkViewContractUrl: any = `${environment.apiUrl}/api/v1/contracts/check-view-contract/`
+  checkViewContractUrl: any = `${environment.apiUrl}/api/v1/contracts/check-view-contract/`;
+
+  emptySignatureUrl: any = `${environment.apiUrl}/api/v1/v1/processes/digital-sign/`
 
   token: any;
   customer_id: any;
@@ -562,6 +564,24 @@ export class ContractService {
     return this.http.post<any>(this.checkViewContractUrl + id, body, {
       headers: headers,
     });
+  }
+
+  //
+  createEmptySignature(recipientId: number, fieldId: number, image: any, cert: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    
+    const body = JSON.stringify({
+      fieldId: fieldId,
+      image: image,
+      cert: cert
+    })
+    
+    return this.http.post<any>(this.emptySignatureUrl + recipientId, body, {
+        headers: headers,
+      });
   }
 
   checkTaxCodeExist(taxCode: any, certB64: any) {

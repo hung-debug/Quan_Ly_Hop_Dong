@@ -211,8 +211,6 @@ export class ConsiderContractComponent
 
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
-    console.log("id ", this.idContract);
-
     const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract);
 
     if(checkViewContract) {
@@ -1673,58 +1671,59 @@ export class ConsiderContractComponent
             signDigital.valueSignBase64 = encode(base64String);
 
             if (this.usbTokenVersion == 2) {
-              var json_req = JSON.stringify({
-                OperationId: 10,
-                SessionId: this.sessionIdUsbToken,
-                checkOCSP: 0,
-                reqDigest: 1,
-                algDigest: 'SHA_1',
-                extFile: 'pdf',
-                invisible: 0,
-                pageIndex: Number(signDigital.page - 1),
-                offsetX: Math.floor(signDigital.signDigitalX),
-                offsetY: Math.floor(signDigital.signDigitalY),
-                sigWidth: Math.floor(signDigital.signDigitalWidth),
-                sigHeight: Math.floor(signDigital.signDigitalHeight),
-                logoData: signI,
-                DataToBeSign: signDigital.valueSignBase64,
-                showSignerInfo: 0,
-                sigId: '',
-              });
+              this.createEmptySignature();
+              // var json_req = JSON.stringify({
+              //   OperationId: 10,
+              //   SessionId: this.sessionIdUsbToken,
+              //   checkOCSP: 0,
+              //   reqDigest: 1,
+              //   algDigest: 'SHA_1',
+              //   extFile: 'pdf',
+              //   invisible: 0,
+              //   pageIndex: Number(signDigital.page - 1),
+              //   offsetX: Math.floor(signDigital.signDigitalX),
+              //   offsetY: Math.floor(signDigital.signDigitalY),
+              //   sigWidth: Math.floor(signDigital.signDigitalWidth),
+              //   sigHeight: Math.floor(signDigital.signDigitalHeight),
+              //   logoData: signI,
+              //   DataToBeSign: signDigital.valueSignBase64,
+              //   showSignerInfo: 0,
+              //   sigId: '',
+              // });
 
-              json_req = window.btoa(json_req);
+              // json_req = window.btoa(json_req);
 
-              const dataSignMobi: any = await this.contractService.signUsbToken(
-                'request=' + json_req
-              );
+              // const dataSignMobi: any = await this.contractService.signUsbToken(
+              //   'request=' + json_req
+              // );
 
-              let data = JSON.parse(
-                window.atob(dataSignMobi.data)
-              ).Base64Result;
+              // let data = JSON.parse(
+              //   window.atob(dataSignMobi.data)
+              // ).Base64Result;
 
-              console.log('data ', data);
+              // console.log('data ', data);
 
-              if (!data) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký USB Token',
-                  '',
-                  3000
-                );
-                return false;
-              }
+              // if (!data) {
+              //   this.toastService.showErrorHTMLWithTimeout(
+              //     'Lỗi ký USB Token',
+              //     '',
+              //     3000
+              //   );
+              //   return false;
+              // }
 
-              const sign = await this.contractService.updateDigitalSignatured(
-                signUpdate.id,
-                data
-              );
-              if (!sign.recipient_id) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký USB Token',
-                  '',
-                  3000
-                );
-                return false;
-              }
+              // const sign = await this.contractService.updateDigitalSignatured(
+              //   signUpdate.id,
+              //   data
+              // );
+              // if (!sign.recipient_id) {
+              //   this.toastService.showErrorHTMLWithTimeout(
+              //     'Lỗi ký USB Token',
+              //     '',
+              //     3000
+              //   );
+              //   return false;
+              // }
             } else if (this.usbTokenVersion == 1) {
               const dataSignMobi: any =
                 await this.contractService.postSignDigitalMobi(
@@ -2327,14 +2326,13 @@ export class ConsiderContractComponent
       return;
     }
 
-    console.log('tax code ', taxCode);
-
     const checkTaxCode = await this.contractService
       .checkTaxCodeExist(taxCode, certInfoBase64)
       .toPromise();
 
     if (checkTaxCode.success == true) {
       this.signImageC(signUpdatePayload, notContainSignImage);
+      // this.createEmptySignature();
     } else {
       this.spinner.hide();
 
@@ -2346,6 +2344,10 @@ export class ConsiderContractComponent
         confirmButtonText: 'Xác nhận',
       });
     }
+  }
+
+  createEmptySignature() {
+    
   }
 
   filePath: any = '';
@@ -2995,7 +2997,6 @@ export class ConsiderContractComponent
         this.nameCompany = response.name;
         this.cardId = response.id;
 
-        console.log('name company ', this.cardId);
       });
 
       if (result) this.eKYCSignOpenAfter();
@@ -3009,18 +3010,10 @@ export class ConsiderContractComponent
       contractId: this.idContract,
     };
 
-    const dialogConfig = new MatDialogConfig();
-    // dialogConfig.data = data;
-    // dialogConfig.disableClose = true;
-    // dialogConfig.maxWidth = '100vw';
-    // dialogConfig.width = '497px';
-    
-
     const dialogRef = this.dialog.open(EkycDialogSignComponent, {
       data: data,
       disableClose: true,
       panelClass: 'custom-dialog-container'
-
     });
 
     dialogRef.afterClosed().subscribe((result) => {

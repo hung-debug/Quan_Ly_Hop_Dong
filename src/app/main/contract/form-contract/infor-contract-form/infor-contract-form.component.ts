@@ -105,7 +105,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
     this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract);
 
-
     if(this.checkView) {
       this.actionSuccess();
     } else {
