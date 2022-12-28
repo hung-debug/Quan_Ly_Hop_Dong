@@ -44,6 +44,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.component';
 import { UnitService } from 'src/app/service/unit.service';
 import { Helper } from 'src/app/core/Helper';
+import { PDFDocumentProxy } from 'ng2-pdf-viewer';
 
 @Component({
   selector: 'app-consider-contract',
@@ -62,6 +63,7 @@ export class ConsiderContractComponent
   pdfSrc: any;
   thePDF: any = null;
   pageNumber = 1;
+  pageMobile = 1;
   canvasWidth = 0;
   ratioPDF = 595 / 1240;
   currentHeight = 0;
@@ -209,6 +211,23 @@ export class ConsiderContractComponent
     this.checkRoleContract();
   }
 
+  // changePageMobile() {
+  //   this.pageMobile = 2;
+  // }
+
+  firstPageMobile() {
+    this.pageMobile = 1;
+  }
+
+  previousPageMobile() {
+    if(this.pageMobile > 1)
+      this.pageMobile--;
+  }
+
+  afterLoadComplete(event: any) {
+    this.pageNumber = event._pdfInfo.numPages;
+  }
+
   async checkRoleContract() {
      this.activeRoute.queryParams.subscribe((params) => {
       this.recipientId = params.recipientId;
@@ -288,6 +307,7 @@ export class ConsiderContractComponent
     }
   }
 
+ 
   timerId: any;
   getDataContractSignature() {
     this.contractService.getDetailContract(this.idContract).subscribe(
