@@ -26,6 +26,7 @@ import {AddContractComponent} from '../../add-contract/add-contract.component';
 import {ContractTemplateService} from 'src/app/service/contract-template.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
+import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 
 export class ContractConnectArr {
   ref_id: number;
@@ -80,6 +81,8 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   optionsCeCa: any;
   optionsCeCaValue: any;
 
+  checkView: boolean = false;
+
   constructor(
     private contractService: ContractService,
     private contractTemplateService: ContractTemplateService,
@@ -89,13 +92,28 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     private uploadService: UploadService,
     private router: Router,
     public translate: TranslateService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private checkViewContractService: CheckViewContractService,
+    private activeRoute: ActivatedRoute,
   ) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.spinner.hide();
 
+    let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
+
+    this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract);
+
+
+    if(this.checkView) {
+      this.actionSuccess();
+    } else {
+      this.router.navigate(['/page-not-found']);
+    }
+  }
+
+  actionSuccess() {
     this.optionsCeCa = optionsCeCa;
     this.optionsCeCaValue = 0;
     this.datasForm.ceca_push = this.optionsCeCaValue;

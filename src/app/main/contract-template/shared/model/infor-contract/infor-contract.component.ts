@@ -6,7 +6,7 @@ import { variable } from "../../../../../config/variable";
 import { Observable, Subscription } from 'rxjs';
 import { AddContractTemplateComponent } from '../../../add-contract-template/add-contract-template.component';
 import { DatePipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastService } from 'src/app/service/toast.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import * as moment from "moment";
@@ -18,6 +18,7 @@ import { parttern } from 'src/app/config/parttern';
 import { parttern_input } from 'src/app/config/parttern';
 import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
 import Swal from 'sweetalert2';
+import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 export class ContractConnectArr {
   ref_id: number;
 
@@ -87,6 +88,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   uploadFileContractAgain: boolean = false;
   uploadFileAttachAgain: boolean = false;
   isFileAttachUploadNewEdit: any;
+  checkView: boolean = false;
+
   public subscription: Subscription;
 
   minDate: Date = moment().toDate();
@@ -103,36 +106,51 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private userService: UserService,
     private unitService: UnitService,
     private checkSignDigitalService: CheckSignDigitalService,
+    private checkViewContractService: CheckViewContractService,
+    private activeRoute: ActivatedRoute,
+
   ) {
     this.step = variable.stepSampleContract.step1;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.spinner.hide();
 
-    //check mẫu đã được sử dụng hay chưa
-    this.checkTemplateIsUse();
+    let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
 
-    this.name = this.datas.name ? this.datas.name : null;
-    this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.code;
-    this.type_id = this.datas.type_id ? this.datas.type_id : null;
-    this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
-    this.start_time = this.datas.start_time ? moment(this.datas.start_time).toDate() : '';
-    this.end_time = this.datas.end_time ? moment(this.datas.end_time).toDate() : '';
+    this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract);
 
-    this.notes = this.datas.notes ? this.datas.notes : null;
-    if (this.datas.file_name_attach) {
-      this.datas.attachFileNameArr = this.datas.file_name_attach;
+    if(this.checkView) {
+      this.actionSuccess();
+    } else {
+      this.router.navigate(['/page-not-found']);
     }
-    this.convertData(this.datas);
+  }
 
-    this.contractTypeService.getContractTypeList('', '').subscribe(data => {
-      this.typeList = data
-    } );
+  actionSuccess() {
+       //check mẫu đã được sử dụng hay chưa
+       this.checkTemplateIsUse();
 
-    this.contract_no_old = this.contract_no;
-    this.start_time_old = this.start_time;
-    this.end_time_old = this.end_time;
+       this.name = this.datas.name ? this.datas.name : null;
+       this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.code;
+       this.type_id = this.datas.type_id ? this.datas.type_id : null;
+       this.contractConnect = this.datas.contractConnect ? this.datas.contractConnect : null;
+       this.start_time = this.datas.start_time ? moment(this.datas.start_time).toDate() : '';
+       this.end_time = this.datas.end_time ? moment(this.datas.end_time).toDate() : '';
+   
+       this.notes = this.datas.notes ? this.datas.notes : null;
+       if (this.datas.file_name_attach) {
+         this.datas.attachFileNameArr = this.datas.file_name_attach;
+       }
+       this.convertData(this.datas);
+   
+       this.contractTypeService.getContractTypeList('', '').subscribe(data => {
+         this.typeList = data
+       } );
+   
+       this.contract_no_old = this.contract_no;
+       this.start_time_old = this.start_time;
+       this.end_time_old = this.end_time;
   }
 
   templateIsUse: boolean = false;

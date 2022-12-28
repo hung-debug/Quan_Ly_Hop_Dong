@@ -45,6 +45,7 @@ import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.com
 import { UnitService } from 'src/app/service/unit.service';
 import { Helper } from 'src/app/core/Helper';
 import { PDFDocumentProxy } from 'ng2-pdf-viewer';
+import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 
 @Component({
   selector: 'app-consider-contract',
@@ -186,7 +187,8 @@ export class ConsiderContractComponent
     private dialog: MatDialog,
     public datepipe: DatePipe,
     private deviceService: DeviceDetectorService,
-    private unitService: UnitService
+    private unitService: UnitService,
+    private checkViewContractService: CheckViewContractService
   ) {
     this.currentUser = JSON.parse(
       localStorage.getItem('currentUser') || ''
@@ -195,11 +197,12 @@ export class ConsiderContractComponent
     this.loginType = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).customer.type;
+
   }
 
   pdfSrcMobile: any;
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     console.log('ratio ', window.devicePixelRatio);
 
     this.getDeviceApp();
@@ -208,7 +211,15 @@ export class ConsiderContractComponent
 
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
-    this.checkRoleContract();
+    console.log("id ", this.idContract);
+
+    const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract);
+
+    if(checkViewContract) {
+      this.actionRoleContract();
+    } else {
+      this.router.navigate(['/page-not-found']);
+    }
   }
 
   firstPageMobile() {
@@ -253,8 +264,9 @@ export class ConsiderContractComponent
     this.pageNumber = event._pdfInfo.numPages;
   }
 
-  async checkRoleContract() {
-     this.activeRoute.queryParams.subscribe((params) => {
+
+  actionRoleContract() {
+    this.activeRoute.queryParams.subscribe((params) => {
       this.recipientId = params.recipientId;
 
       //kiem tra xem co bi khoa hay khong

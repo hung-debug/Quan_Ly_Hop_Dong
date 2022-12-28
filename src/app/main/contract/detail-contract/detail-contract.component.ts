@@ -16,6 +16,7 @@ import {ProcessingHandleEcontractComponent} from "../../contract-signature/share
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { DomSanitizer } from '@angular/platform-browser';
 import {TranslateService} from '@ngx-translate/core';
+import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 
 @Component({
   selector: 'app-detail-contract',
@@ -118,6 +119,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   constructor(
     private contractService: ContractService,
+    private checkViewContractService: CheckViewContractService,
     private activeRoute: ActivatedRoute,
     private router: Router,
     private appService: AppService,
@@ -132,13 +134,21 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.getDeviceApp();
 
     this.appService.setTitle(this.translate.instant('contract.detail'));
-    this.getDataContractSignature();
-  }
 
+    //Lấy thông tin id hợp đồng
+    this.idContract = this.activeRoute.snapshot.paramMap.get('id');
+
+    if(await this.checkViewContractService.callAPIcheckViewContract(this.idContract)) {
+      this.getDataContractSignature();
+    } else {
+      this.router.navigate(['/page-not-found']);
+    }
+  }
+  
   firstPageMobile() {
     this.pageMobile = 1;
     this.page1 = false;
@@ -183,14 +193,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   getDataContractSignature() {
-    //Lấy thông tin id hợp đồng
-    this.idContract = this.activeRoute.snapshot.paramMap.get('id');
-
     //Lấy thông tin recipient id
     this.route.queryParams.subscribe((params) => {
       this.recipientId = params.recipientId;
-      this.consider = params.consider,
-      console.log("recipient id ", this.recipientId);
+      this.consider = params.consider;
     });
  
     this.contractService.getDetailContract(this.idContract).subscribe(rs => {
@@ -1050,8 +1056,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }else if (this.isDataContract.release_state == 'HET_HIEU_LUC') {
       return this.translate.instant('overdued');
     }
-
-    console.log("status ", role);
 
     if (status == 3) {
       return 'Đã từ chối';

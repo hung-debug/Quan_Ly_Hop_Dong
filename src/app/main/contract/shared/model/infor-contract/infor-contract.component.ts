@@ -17,7 +17,7 @@ import {optionsCeCa, variable} from "../../../../../config/variable";
 import {Observable, Subscription} from 'rxjs';
 import {AddContractComponent} from "../../../add-contract/add-contract.component";
 import {DatePipe} from '@angular/common';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ToastService} from 'src/app/service/toast.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import * as moment from "moment";
@@ -25,6 +25,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import { CheckSignDigitalService } from 'src/app/service/check-sign-digital.service';
 import Swal from 'sweetalert2';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
+import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 
 
 export class ContractConnectArr {
@@ -89,7 +90,11 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   errorSignTime: any = '';
   errorContractNumber: any = '';
 
-  optionsCeCa: Array<any> = [];;
+  optionsCeCa: Array<any> = [];
+
+  currentUser: any;
+
+  checkView: boolean = true;
 
   uploadFileContractAgain: boolean = false;
   uploadFileAttachAgain: boolean = false;
@@ -107,14 +112,30 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     private router: Router,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private checkSignDigitalService: CheckSignDigitalService
+    private checkSignDigitalService: CheckSignDigitalService,
+    private checkViewContractService: CheckViewContractService,
+    private activeRoute: ActivatedRoute,
   ) {
     this.step = variable.stepSampleContract.step1;
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.spinner.hide();
 
+    let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
+
+    this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract);
+
+
+    if(this.checkView) {
+      this.actionSuccess();
+    } else {
+      this.router.navigate(['/page-not-found']);
+    }
+  }
+
+  actionSuccess() {
     this.optionsCeCa = optionsCeCa;
     this.optionsCeCaValue = 0;
     this.datas.ceca_push = this.optionsCeCaValue;
@@ -148,6 +169,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.contractConnectList = data.entities;
     });
   }
+
 
   ngAfterViewInit() {
     setTimeout(() => {

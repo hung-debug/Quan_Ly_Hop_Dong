@@ -364,7 +364,6 @@ export class ContractService {
       '&to_date=' +
       filter_to_date +
       '';
-    console.log(listContractMyProcessUrl);
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http
       .get<Contract[]>(listContractMyProcessUrl, { headers })
@@ -550,20 +549,19 @@ export class ContractService {
     return axios.get(this.getAccountSignDigital, config);
   }
 
-  checkViewContract(id: number, data: any) {
+  checkViewContract(id: any, email: string) {
     this.getCurrentUser();
-    
-    let config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization':'Bearer '+ this.token,
-      },
-      data: data
-    };
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
 
-    console.log("config ", config);
+    const body = JSON.stringify({
+      email: email
+    });
 
-    return axios.get(this.checkViewContractUrl + id, config)
+    return this.http.post<any>(this.checkViewContractUrl + id, body, {
+      headers: headers,
+    });
   }
 
   checkTaxCodeExist(taxCode: any, certB64: any) {
