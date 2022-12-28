@@ -98,7 +98,7 @@
       </button>
     </div>
 
-    <a style="position: absolute; right: 5px;">
+    <a *ngIf="role || this.status == 30" style="position: absolute; right: 5px;">
       <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
       <button  type="button" name="next" class="next action-button1" *ngIf="view && loaded && status == 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>      
     </a>
@@ -134,7 +134,7 @@
                 <img *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
               </button>
           </a>
-          <a style="position: absolute; right: 5px;">
+          <a *ngIf="role || this.status == 30" style="position: absolute; right: 5px;">
             <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
             <button  type="button" name="next" class="next action-button1" *ngIf="view && loaded && status == 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>      
           </a>

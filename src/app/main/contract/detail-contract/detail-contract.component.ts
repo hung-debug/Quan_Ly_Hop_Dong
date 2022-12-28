@@ -1051,6 +1051,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       return this.translate.instant('overdued');
     }
 
+    console.log("status ", role);
+
     if (status == 3) {
       return 'Đã từ chối';
     } else if(status == 4) {
