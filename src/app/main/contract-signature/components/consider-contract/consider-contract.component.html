@@ -47,7 +47,8 @@
         <div style="text-align: center; font-weight: bold" class="label">{{'relate.party' | translate}}</div>
 
         <div *ngFor="let d of this.datas?.is_data_contract?.participants">
-          <div>{{d.name}}</div>
+          <div *ngIf="d.type != 3">{{d.name}}</div>
+          <div *ngIf="d.type == 3">{{d.recipients[0].name}}</div>
         </div>
 
       </div>
@@ -138,7 +139,6 @@
       </div>
 
     <div class="flex-column" style="text-align: center">
-    <!-- <a style="text-align: center;"> -->
       <button class="call-page" (click)="firstPageMobile()">
         <img *ngIf="this.page1" src="assets/img/previousbold.svg">
         <img *ngIf="!this.page1" src="assets/img/firstpage.svg">
@@ -159,7 +159,6 @@
         <img *ngIf="this.pageLast" src="assets/img/lastpage.svg">
         <img *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
       </button>
-    <!-- </a> -->
     </div>
 
       <div style="display: none;" *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
