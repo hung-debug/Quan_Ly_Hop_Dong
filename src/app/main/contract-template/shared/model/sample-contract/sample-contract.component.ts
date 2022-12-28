@@ -211,7 +211,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     this.data_sign = this.datas.contract_user_sign;
  
-    if(this.datas.participants && this.datas.participants[0].recipients[0].fields[0].font) {
+    if(this.datas.participants && this.datas.participants[0].recipients[0].fields.length > 0) {
       const font = this.datas.participants[0].recipients[0].fields[0].font;
       const font_size = this.datas.participants[0].recipients[0].fields[0].font_size;
   
