@@ -68,8 +68,43 @@
     style="width: 95%; height: calc(70vh); border: 1px;"
     [fit-to-page]="true"
     [show-borders]="true"
+    [show-all]="true"
+    [(page)]="pageMobile"
+    [stick-to-page]="true"
+    (after-load-complete)="afterLoadComplete($event)"
+    (pagechanging)="pagechanging($event)"
     ></pdf-viewer>
+
+    <div class="flex-column" style="text-align: center">
+      <button class="call-page" (click)="firstPageMobile()">
+        <img *ngIf="this.page1" src="assets/img/previousbold.svg">
+        <img *ngIf="!this.page1" src="assets/img/firstpage.svg">
+      </button>
+      <button class="call-page1" (click)="previousPageMobile()">
+        <img *ngIf="this.page1" src="assets/img/firstpagebold.svg">
+        <img *ngIf="!this.page1" src="assets/img/previous.svg">
+      </button>
+  
+      <input class="input-mobile" [(ngModel)]="pageMobile" type="text" />
+      <a class="page-number-mobile">/{{this.pageNumber}}</a>
+      <button class="call-page1" id="prev" (click)="onNextPageMobile()">
+        <img *ngIf="this.pageLast" src="assets/img/next.svg">
+        <img *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
+      </button>
+  
+      <button class="call-page1" id="prev" (click)="lastPageMobile()">
+        <img *ngIf="this.pageLast" src="assets/img/lastpage.svg">
+        <img *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
+      </button>
+    </div>
+
+    <a style="position: absolute; right: 5px;">
+      <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
+      <button  type="button" name="next" class="next action-button1" *ngIf="view && loaded && status == 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>      
+    </a>
   </div>
+
+
 </div>
 
 <div class="footer-sample-contract">

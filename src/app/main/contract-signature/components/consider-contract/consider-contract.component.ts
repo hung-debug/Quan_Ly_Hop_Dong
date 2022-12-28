@@ -211,17 +211,42 @@ export class ConsiderContractComponent
     this.checkRoleContract();
   }
 
-  // changePageMobile() {
-  //   this.pageMobile = 2;
-  // }
-
   firstPageMobile() {
     this.pageMobile = 1;
+    this.page1 = false;
+    this.pageLast = true;
   }
 
   previousPageMobile() {
-    if(this.pageMobile > 1)
+    if(this.pageMobile > 1) {
       this.pageMobile--;
+    }
+  }
+
+  onNextPageMobile() {
+    if(this.pageMobile < this.pageNumber) {
+      this.pageMobile++;
+      this.page1 = true;
+    }
+  }
+
+  lastPageMobile() {
+    this.pageMobile = this.pageNumber;
+    this.page1 = true;
+    this.pageLast = false;
+  }
+
+  pagechanging(event: any) {
+    if(event.pageNumber > 1 && event.pageNumber < this.pageNumber) {
+      this.page1 = true;
+      this.pageLast = true;
+    } else if(event.pageNumber == 1) {
+      this.page1 = false;
+      this.pageLast = true;
+    } else if(event.pageNumber = this.pageNumber) {
+      this.page1 = true;
+      this.pageLast = false;
+    }
   }
 
   afterLoadComplete(event: any) {

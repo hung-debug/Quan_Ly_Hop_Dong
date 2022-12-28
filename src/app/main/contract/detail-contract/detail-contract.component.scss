@@ -359,3 +359,30 @@
   background: none; 
   margin-left: 5px
 }
+
+.input-mobile {
+  box-sizing: border-box;
+  width: 50px;
+  height: 30px;
+  background: #FFFFFF;
+  border: 1px solid #87CAFF;
+  border-radius: 5px; 
+  margin-left: 5px;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+  font-family: 'Lexend Deca'
+}
+
+.page-number-mobile {
+  font-family: 'Lexend Deca';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  align-items: center;
+  text-transform: uppercase;
+  color: #000000;
+  margin-left: 5px
+}

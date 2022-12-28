@@ -133,6 +133,7 @@
         [(page)]="pageMobile"
         [stick-to-page]="true"
         (after-load-complete)="afterLoadComplete($event)"
+        (pagechanging)="pagechanging($event)"
         ></pdf-viewer>
       </div>
 
@@ -147,14 +148,14 @@
         <img *ngIf="!this.page1" src="assets/img/previous.svg">
       </button>
 
-      <input class="input-mobile" [(ngModel)]="pageNum" type="text" />
+      <input class="input-mobile" [(ngModel)]="pageMobile" type="text" />
       <a class="page-number-mobile">/{{this.pageNumber}}</a>
-      <button class="call-page1" id="prev">
+      <button class="call-page1" id="prev" (click)="onNextPageMobile()">
         <img *ngIf="this.pageLast" src="assets/img/next.svg">
         <img *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
       </button>
 
-      <button class="call-page1" id="prev">
+      <button class="call-page1" id="prev" (click)="lastPageMobile()">
         <img *ngIf="this.pageLast" src="assets/img/lastpage.svg">
         <img *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
       </button>

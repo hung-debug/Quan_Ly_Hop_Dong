@@ -42,6 +42,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   };
   confirmConsider = null;
   confirmSignature = null;
+  pageMobile = 1;
 
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
@@ -136,6 +137,49 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
     this.appService.setTitle(this.translate.instant('contract.detail'));
     this.getDataContractSignature();
+  }
+
+  firstPageMobile() {
+    this.pageMobile = 1;
+    this.page1 = false;
+    this.pageLast = true;
+  }
+
+  previousPageMobile() {
+    if(this.pageMobile > 1) {
+      this.pageMobile--;
+    }
+  }
+
+  onNextPageMobile() {
+    if(this.pageMobile < this.pageNumber) {
+      this.pageMobile++;
+      this.page1 = true;
+    }
+  }
+
+  lastPageMobile() {
+    this.pageMobile = this.pageNumber;
+    this.page1 = true;
+    this.pageLast = false;
+  }
+
+  pagechanging(event: any) {
+    if(event.pageNumber > 1 && event.pageNumber < this.pageNumber) {
+      this.page1 = true;
+      this.pageLast = true;
+    } else if(event.pageNumber == 1) {
+      this.page1 = false;
+      this.pageLast = true;
+    } else if(event.pageNumber = this.pageNumber) {
+      this.page1 = true;
+      this.pageLast = false;
+    }
+  }
+
+  afterLoadComplete(event: any) {
+    console.log("ev ", event);
+    this.pageNumber = event._pdfInfo.numPages;
   }
 
   getDataContractSignature() {
