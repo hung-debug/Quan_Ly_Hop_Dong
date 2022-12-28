@@ -508,5 +508,7 @@
   "update.person-process": "Cập nhật người xử lý",
   "contract-type.ceca":"Đẩy file hợp đồng lên Bộ Công thương",
   "yes":"Có",
-  "no":"Không"
+  "no":"Không",
+  "file.import.valid":"File import không đúng định dạng",
+  "file.import.valid.result":"File import không đúng định dạng, vui lòng xem thông báo lỗi ở file vừa tải về"
 }

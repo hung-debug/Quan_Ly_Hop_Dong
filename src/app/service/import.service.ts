@@ -91,8 +91,9 @@ export class ImportService {
         link.href = window.URL.createObjectURL(blob);
         link.download = `report_${new Date().getTime()}.xlsx`;
         link.click();
+        this.toastService.showErrorHTMLWithTimeout('file.import.valid.result',"",3000);
       } else if(importResult.body.type == 'application/json') {
-        this.toastService.showErrorHTMLWithTimeout("File import không đúng định dạng","",3000);
+        this.toastService.showErrorHTMLWithTimeout('file.import.valid',"",3000);
       }
    
 

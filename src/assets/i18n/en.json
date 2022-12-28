@@ -506,5 +506,7 @@
   "update.person-process": "Update handler",
   "contract-type.ceca":"Push contract file to CeCa",
   "yes":"Yes",
-  "no":"No"
+  "no":"No",
+  "file.import.valid":"File import isn't in the correct format",
+  "file.import.valid.result":"File import isn't in the correct format, please see the error message in the downloaded file"
 }
