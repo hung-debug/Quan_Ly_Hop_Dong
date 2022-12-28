@@ -289,7 +289,7 @@
       padding: 19px 10px 13px 10px;
   
       .participants--content {
-        display: flex;
+        // display: flex;
         background-color: #FFFFFF;
         align-items: center;
         justify-content: space-around;
@@ -543,4 +543,16 @@
   //::ng-deep .mat-form-field-flex {
   //  background-color: white;
   //}
-  
+  .footer-btn button {
+    width: 120px;
+    height: 40px;
+    background-color: #8b8b8b;
+    border-radius: 5px;
+    outline: none;
+    color: white;
+    border: 1px solid #8B8B8B;
+  }
+  .footer-btn{
+    display: flex;
+    justify-content: space-evenly;
+  }

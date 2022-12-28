@@ -22,10 +22,11 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   currentUser: any;
   // recipient:any;
   listCheckSmsEmail: any;
-
+  contractStatus: string;
+  endDate: any;
   reasonCancel: string;
   cancelDate: any;
-
+  isEndDate: boolean;
   staus: number;
 
   status: any = [
@@ -63,6 +64,16 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     } else if (sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
     }
+    this.contractService.getDetailContract(this.data.is_data_contract.id).subscribe(response => {
+      this.endDate = moment(response[0].sign_time, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
+      let timeNow = moment(new Date(), "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
+
+      // console.log("SUABc 1", moment(timeNow, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss"))
+      // console.log("SUABc 2", moment(this.endDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss"))
+      // console.log("SUABc 3", moment(this.endDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") >= moment(timeNow, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss"))
+
+      this.isEndDate = this.endDate >= timeNow ? true : false
+    })
 
     this.contractService.viewFlowContract(this.data.is_data_contract.id).subscribe(response => {
       this.personCreate = response.createdBy.name;
@@ -71,7 +82,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       this.timeCreate = response.createdAt ? moment(this.timeCreate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
       this.emailCreate = response.createdBy.email;
       this.reasonCancel = response.reasonCancel;
-
+      this.contractStatus = response.contractStatus;
       this.cancelDate = response.cancelDate ? moment(response.cancelDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") : null;
 
       this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
@@ -82,6 +93,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       }
       console.log("this.currentUser.email", this.currentUser.email);
       console.log("emailCreate", this.emailCreate);
+      console.log("this.contractStatus", this.contractStatus);
+      console.log("this.cancelDate", this.cancelDate);
+
 
 
       console.log("ishidden", this.isHiddenButton);
@@ -104,12 +118,20 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       console.log("dataaaaaa", this.is_list_name);
 
 
+
       this.listCheckSmsEmail = true
-      this.is_list_name.map((item: any) => {
-        if (item.statusNumber !== 3 && item.statusNumber !== 34) {
-          this.listCheckSmsEmail = false
-        }
-      });
+      // this.is_list_name.map((item: any) => {
+      //   if (item.statusNumber === 3 || item.statusNumber === 34) {
+      //     console.log(" item.statusNumber", item.statusNumber);
+
+      //     this.listCheckSmsEmail = false
+      //   }
+      // });
+
+
+      if (response.contractStatus === 31 || response.contractStatus === 34 || response.contractStatus === 0) {
+        this.listCheckSmsEmail = false
+      }
 
     });
 
