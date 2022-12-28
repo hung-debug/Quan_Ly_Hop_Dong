@@ -140,6 +140,10 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     this.datasForm.ceca_push = this.optionsCeCaValue;
   }
 
+  async changeTemplate() {
+
+  }
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.nameContract.nativeElement.focus();
@@ -174,7 +178,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     })
   }
 
-  OnChangeForm(e: any) {
+  onChangeForm(e: any) {
     this.spinner.show();
     this.contractService.getDetailContractFormInfor(e.value).subscribe((res: any) => {
       this.datasForm['template_contract_id'] = e.value;
@@ -222,6 +226,21 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             this.toastService.showErrorHTMLWithTimeout("error_change_contract_template", "", 3000);
           }
         );
+      }
+
+      if(this.datasForm.type_id) {
+        this.contractTypeService.getContractTypeById(this.datasForm.type_id).subscribe((data) => {
+          if(data.ceca_push == 1) {
+            this.optionsCeCaValue = 1;
+            this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+          } else if(data.ceca_push == 0) {
+            this.optionsCeCaValue = 0;
+            this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
+          } else {
+            this.optionsCeCaValue = 0;
+            this.optionsCeCa = optionsCeCa;
+          }
+        })
       }
 
       setTimeout(() => {

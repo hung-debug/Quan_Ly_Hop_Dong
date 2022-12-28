@@ -5,7 +5,7 @@
       <div [style.background]="action == 'edit' ? '#ddd' : ''">
         <p-dropdown panelStyleClass="font" [options]="typeListForm" [(ngModel)]="this.datasForm.template_contract_id" optionLabel="name"
           optionValue="id" placeholder="{{'choose.contract' | translate}}" [filter]="true" filterBy="name" [showClear]="true" [disabled]="action == 'edit'"
-          (onChange)="OnChangeForm($event)">
+          (onChange)="onChangeForm($event)">
         </p-dropdown>
       </div>
     </div>
@@ -67,6 +67,7 @@
       </div>
     </div>
 
+    <!--Loại hợp đồng-->
     <div class="form-group">
       <div class="label_item">{{'contract.type' | translate}}</div>
       <div>

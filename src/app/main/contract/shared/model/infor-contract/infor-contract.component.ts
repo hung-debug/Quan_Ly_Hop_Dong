@@ -308,8 +308,13 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     if(informationContractType.ceca_push == 1) {
       this.optionsCeCaValue = 1;
+      this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+    } else if(informationContractType.ceca_push == 0) {
+      this.optionsCeCaValue = 0;
+      this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
     } else {
       this.optionsCeCaValue = 0;
+      this.optionsCeCa = optionsCeCa;
     }
 
     this.datas.ceca_push = this.optionsCeCaValue;
