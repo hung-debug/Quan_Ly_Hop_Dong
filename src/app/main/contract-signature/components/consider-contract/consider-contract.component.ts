@@ -211,13 +211,13 @@ export class ConsiderContractComponent
 
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
-    // const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract);
+    const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract);
 
-    // if(checkViewContract) {
+    if(checkViewContract) {
       this.actionRoleContract();
-    // } else {
-    //   this.router.navigate(['/page-not-found']);
-    // }
+    } else {
+      this.router.navigate(['/page-not-found']);
+    }
   }
 
   firstPageMobile() {
