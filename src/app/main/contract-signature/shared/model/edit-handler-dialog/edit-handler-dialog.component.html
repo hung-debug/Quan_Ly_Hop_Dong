@@ -5,7 +5,7 @@
     <!-- <div class="participants--content"  *ngFor="let d of getOriganzationSignature(); let index = index">
         <div class="label">{{'update.person-process' | translate}}</div>
     </div> -->
-    <div class="participants--content">
+    <div class="participants--content" >
 
       <!-- <input [id]="'ordering-sign-'" class="col-md-1 contract-total"
         (focusout)="onChangeValue($event,'ordering-sign-')" style="width: 25px; height: 25px"
@@ -68,7 +68,7 @@
 
             <!--Tổ chức của tôi chọn loại ký-->
             <ng-multiselect-dropdown 
-             
+              
               placeholder="{{'choose' | translate }}"
               [settings]="dropdownSignTypeSettings" 
               [data]="isListSignNotPerson" 
