@@ -1671,7 +1671,7 @@ export class ConsiderContractComponent
             signDigital.valueSignBase64 = encode(base64String);
 
             if (this.usbTokenVersion == 2) {
-              this.createEmptySignature();
+              this.createEmptySignature(signUpdate, signI);
               // var json_req = JSON.stringify({
               //   OperationId: 10,
               //   SessionId: this.sessionIdUsbToken,
@@ -2292,6 +2292,7 @@ export class ConsiderContractComponent
     );
   }
 
+  certInfoBase64: any;
   async getCertificate(
     hSession: any,
     taxCode: any,
@@ -2311,12 +2312,11 @@ export class ConsiderContractComponent
     );
     const cert = JSON.parse(window.atob(apiCert.data));
 
-    let certInfoBase64 = '';
     if (cert.certInfo) {
       this.signCertDigital = cert.certInfo.SerialNumber;
       this.nameCompany = cert.certInfo.CommonName;
 
-      certInfoBase64 = cert.certInfo.Base64Encode;
+      this.certInfoBase64 = cert.certInfo.Base64Encode;
     } else {
       this.toastService.showErrorHTMLWithTimeout(
         'Lỗi không lấy được thông tin usb token',
@@ -2327,7 +2327,7 @@ export class ConsiderContractComponent
     }
 
     const checkTaxCode = await this.contractService
-      .checkTaxCodeExist(taxCode, certInfoBase64)
+      .checkTaxCodeExist(taxCode, this.certInfoBase64)
       .toPromise();
 
     if (checkTaxCode.success == true) {
@@ -2346,8 +2346,22 @@ export class ConsiderContractComponent
     }
   }
 
-  createEmptySignature() {
-    
+  async createEmptySignature(signUpdate: any,image: any) {
+    const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate.id,image, this.certInfoBase64).toPromise();
+
+    const base64TempData = emptySignature.base64TempData;
+
+    this.callDCSigner(base64TempData);
+  }
+
+  async callDCSigner(base64TempData: any) {
+    var json_req = JSON.stringify({
+      OperationId: 5,
+      SessionId: this.sessionIdUsbToken,
+      DataToBeSign: base64TempData,
+    });
+
+    const callServiceDCSigner = await this.contractService.signUsbToken(json_req);
   }
 
   filePath: any = '';
