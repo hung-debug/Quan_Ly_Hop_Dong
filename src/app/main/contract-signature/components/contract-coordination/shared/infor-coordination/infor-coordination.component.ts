@@ -28,6 +28,7 @@ import {AppService} from "../../../../../../service/app.service";
 import {throwError} from "rxjs";
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 
 @Component({
   selector: 'app-infor-coordination',
@@ -102,6 +103,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   loaded: boolean = false;
   confirmCoordition: number = 1;
 
+  checkView: boolean = true;
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -112,15 +115,26 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     private appService: AppService,
     private spinner: NgxSpinnerService,
     private router: Router,
+    private checkViewContractService: CheckViewContractService
   ) {
     this.step = variable.stepSampleContract.step3;
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
     // console.log(this.datas);
-    this.getDataContractSignature();
+
+    this.idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
+
+    this.checkView = await this.checkViewContractService.callAPIcheckViewContract(this.idContract);
+
+    if(!this.idContract || this.checkView) {
+      this.getDataContractSignature();
+    } else {
+      this.router.navigate(['/page-not-found']);
+    }
+
   }
 
   indexY: number = 0;
@@ -161,7 +175,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
 
   getDataContractSignature() {
-    this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
     let arr = this.convertToSignConfig();
 
