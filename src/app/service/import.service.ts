@@ -19,7 +19,7 @@ export class ImportService {
   ) { }
 
   importFile(e: any,key: string) {
-       const file = e.target.files[0];
+    const file = e.target.files[0];
     if (file) {
       // giới hạn file upload lên là 5mb
       if (e.target.files[0].size <= 5000000) {
@@ -46,6 +46,8 @@ export class ImportService {
         );
       }
     }
+
+    e.target.value = null;
   }
 
   async callApiImport(file: any, key: string) {
@@ -92,12 +94,8 @@ export class ImportService {
         link.download = `report_${new Date().getTime()}.xlsx`;
         link.click();
         this.toastService.showErrorHTMLWithTimeout('file.import.valid.result',"",3000);
-
-        return;
       } else if(importResult.body.type == 'application/json') {
         this.toastService.showErrorHTMLWithTimeout('file.import.valid',"",3000);
-
-        return;
       }
    
 
