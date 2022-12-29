@@ -125,10 +125,12 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
 
+    console.log("id contract ", idContract)
+
     this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract);
 
 
-    if(this.checkView) {
+    if(!idContract || this.checkView) {
       this.actionSuccess();
     } else {
       this.router.navigate(['/page-not-found']);

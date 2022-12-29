@@ -120,7 +120,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract);
 
-    if(this.checkView) {
+    if(!idContract || this.checkView) {
       this.actionSuccess();
     } else {
       this.router.navigate(['/page-not-found']);
