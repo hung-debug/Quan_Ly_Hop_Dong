@@ -26,6 +26,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ToastService} from "../../../../../../service/toast.service";
 import {AppService} from "../../../../../../service/app.service";
 import {throwError} from "rxjs";
+import Swal from 'sweetalert2';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-infor-coordination',
@@ -107,7 +109,9 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     private dialog: MatDialog,
     private activeRoute: ActivatedRoute,
     private toastService: ToastService,
-    private appService: AppService
+    private appService: AppService,
+    private spinner: NgxSpinnerService,
+    private router: Router,
   ) {
     this.step = variable.stepSampleContract.step3;
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
@@ -117,13 +121,57 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
     // console.log(this.datas);
     this.getDataContractSignature();
+  }
 
-    console.log("datas ", this.datas);
+  indexY: number = 0;
+  autoScroll() {
+    let pdffull: any = document.getElementById('pdf-full');
+
+    pdffull.scrollTo(0, this.coordinateY[this.indexY]);
+
+    if (this.indexY <= this.coordinateY.length - 1) {
+      this.indexY++;
+    } else {
+      this.indexY = 0;
+      pdffull.scrollTo(0, 0);
+    }
+  }
+
+  scroll(event: any) {
+    //đổi màu cho nút back page
+    let canvas1: any = document.getElementById('canvas-step3-1');
+
+    if(event.srcElement.scrollTop < canvas1.height/2) {
+      this.page1 = false;
+    } else {
+      this.page1 = true;
+    }
+
+    //đổi màu cho nút next page
+    let canvasLast: any = document.getElementById('canvas-step3-'+this.pageNumber);
+    let step3: any = document.getElementById('pdf-viewer-step-3');
+    if(event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)) {
+      this.pageLast = true;
+    } else {
+      this.pageLast = false;
+    }
+
+    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
   }
 
 
   getDataContractSignature() {
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
+
+    let arr = this.convertToSignConfig();
+
+    arr.forEach((items: any) => {
+      this.coordinateY.push(items.coordinate_y);
+      this.idElement.push(items.id);
+    });
+
+    this.coordinateY.sort();
+    
     this.activeRoute.queryParams
       .subscribe(params => {
           this.recipientId = params.recipientId;
@@ -492,18 +540,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     return arrSignConfig;
   }
 
-  // convertToSignConfig() {
-  //   if (this.datas && this.isDataObjectSignature && this.isDataObjectSignature.length) {
-  //     //   let arrSignConfig: any = [];
-  //     //   arrSignConfig = this.datas.is_data_object_signature;
-  //     return this.datas.is_data_object_signature.filter(
-  //       (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived
-  //     );
-  //   } else {
-  //     return [];
-  //   }
-  // }
-
   processHandleContract() {
     const data = this.datas;
     // @ts-ignore
@@ -552,5 +588,65 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     return file_attach;
   }
 
+  pageNum: number = 1;
+  page1: boolean = false;
+  pageLast: boolean = true;
+  idElement: any[] = [];
+  coordinateY: any[] = [];
+
+  async submitEvents(e: any) {
+    if (e == 1) {
+      let inputValue = '';
+      const { value: textRefuse } = await Swal.fire({
+        title: 'Bạn có chắc chắn hủy hợp đồng này không? Vui lòng nhập lý do hủy:',
+        input: 'text',
+        inputValue: inputValue,
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#b0bec5',
+        confirmButtonText: 'Xác nhận',
+        cancelButtonText: 'Hủy',
+        inputValidator: (value) => {
+          if (!value) {
+            return 'Bạn cần nhập lý do hủy hợp đồng!'
+          } else {
+            return null;
+          }
+        }
+      })
+
+      if (textRefuse) {
+        // Kiểm tra ô ký đã ký chưa (status = 2)
+        this.spinner.show();
+        let id_recipient_signature = null;
+        for (const d of this.datas.is_data_contract.participants) {
+          for (const q of d.recipients) {
+            if (q.email == this.currentUser.email && q.status == 1) {
+              id_recipient_signature = q.id;
+              break
+            }
+          }
+          if (id_recipient_signature) break;
+        }
+
+        //neu co id nguoi xu ly thi moi kiem tra
+        
+        if (id_recipient_signature) {
+          this.contractService.considerRejectContract(id_recipient_signature, textRefuse).subscribe(
+            (result) => {
+              this.spinner.hide();
+              this.toastService.showSuccessHTMLWithTimeout('Hủy hợp đồng thành công!', '', 3000);
+              this.router.navigate(['/main/contract-signature/receive/wait-processing']);
+            }, error => {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', '', 3000);
+            }, () => {
+              // this.getLoadChangeDataRefuse();
+            }
+          )
+        }
+      }
+    }
+  }
 
 }

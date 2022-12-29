@@ -158,7 +158,11 @@ export class FooterSignatureComponent implements OnInit {
 
     let pdffull: any = document.getElementById('pdf-full');
 
-    if (this.confirmSignature == 1) {
+    console.log("scroll ", this.confirmSignature);
+
+    console.log("co ", this.coordinateY);
+
+    if (this.confirmSignature == 1 || this.confirmSignature == 3) {
       pdffull.scrollTo(0, this.coordinateY[this.indexY]);
 
       let id: any = document.getElementById(this.idElement[this.indexY]);

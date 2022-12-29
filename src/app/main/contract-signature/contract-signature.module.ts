@@ -136,14 +136,13 @@ export const contractSignatureRoutes1: Routes = [
     AngularSignaturePadModule,
     TranslateModule,
     NgxSpinnerModule,
-    // ContractModule,
     DropdownModule,
     CalendarModule,
     MultiSelectModule,
 
     WebcamModule,
     PdfViewerModule,
-    TranslateModule
+    
   ],
   providers: [
     NoAuthGuard,

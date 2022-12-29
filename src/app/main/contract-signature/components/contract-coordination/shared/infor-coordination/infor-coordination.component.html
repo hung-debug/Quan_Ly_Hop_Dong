@@ -61,7 +61,7 @@
 
     <!--  file content-->
     <!--  width: 74.7%-->
-    <div class="col-md-9 sample-contract__file viewer-pdf isDrag"
+    <div (scroll)="scroll($event)" id="pdf-full" class="col-md-9 sample-contract__file viewer-pdf isDrag"
          style="background-color: #F2F2F2; position: relative;">
       <div id="pdf-viewer-step-3">
         <div *ngFor="let d of this.convertToSignConfig()" class="show-list-name-drag" [style.width]="this.canvasWidth">
@@ -79,4 +79,9 @@
       </div>
     </div>
   </div>
+
+<app-footer-signature [confirmSignature]="3"[pageNum]="pageNum" [pageLast]="pageLast" [page1]="page1" [pageNumber]="pageNumber" [thePDF]="thePDF" [idElement]="idElement" [coordinateY]="coordinateY" [datas]="datas" [recipientId]="recipientId" 
+(submitChanges)="submitEvents($event)"
+
+></app-footer-signature>
 
