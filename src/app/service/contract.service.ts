@@ -8,6 +8,8 @@ import { DatePipe } from '@angular/common';
 import { forkJoin, BehaviorSubject, Subject } from 'rxjs';
 import axios from 'axios';
 import { User } from './user.service';
+import { type_signature_doc_template } from '../config/variable';
+import { Certificate } from 'crypto';
 
 export interface Contract {
   id: number;
@@ -130,7 +132,9 @@ export class ContractService {
 
   checkViewContractUrl: any = `${environment.apiUrl}/api/v1/contracts/check-view-contract/`;
 
-  emptySignatureUrl: any = `${environment.apiUrl}/api/v1/v1/processes/digital-sign/`
+  emptySignatureUrl: any = `${environment.apiUrl}/api/v1/v1/processes/digital-sign/`;
+
+  mergeTimeStampUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`
 
   token: any;
   customer_id: any;
@@ -566,20 +570,44 @@ export class ContractService {
     });
   }
 
-  //
-  createEmptySignature(recipientId: number, fieldId: number, image: any, cert: any) {
+  createEmptySignature(recipientId: number, signUpdate: any,signDigital: any, image: any, cert: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     
     const body = JSON.stringify({
-      fieldId: fieldId,
+      fieldId: signUpdate.id,
       image: image,
-      cert: cert
+      cert: cert,
+      page: signDigital.page,
+      x: signDigital.signDigitalX,
+      y: signDigital.signDigitalY,
+      width: signDigital.signDigitalWidth,
+      height: signDigital.signDigitalHeight
     })
     
     return this.http.post<any>(this.emptySignatureUrl + recipientId, body, {
+        headers: headers,
+      });
+  }
+
+  meregeTimeStamp(recipientId: number, contractId: number, signature: any, fieldName: any, cert: any, hexDigestTempFile: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    
+      const body = JSON.stringify({
+        contractId: contractId,
+        signature: signature,
+        fieldName: fieldName,
+        cert: cert,
+        isTimestamp: false,
+        hexDigestTempFile: hexDigestTempFile
+      })
+    
+      return this.http.post<any>(this.mergeTimeStampUrl + recipientId, body, {
         headers: headers,
       });
   }

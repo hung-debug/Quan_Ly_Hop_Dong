@@ -81,6 +81,8 @@ export class ConsiderContractComponent
   
   pageNum: number = 1;
 
+  dataVersion2: any;
+
   currPage = 1; //Pages are 1-based not 0-based
   numPages = 0;
   x0: any = 'abc';
@@ -1672,7 +1674,7 @@ export class ConsiderContractComponent
             signDigital.valueSignBase64 = encode(base64String);
 
             if (this.usbTokenVersion == 2) {
-              this.createEmptySignature(signUpdate, signI);
+              this.createEmptySignature(signUpdate, signDigital, signI);
               // var json_req = JSON.stringify({
               //   OperationId: 10,
               //   SessionId: this.sessionIdUsbToken,
@@ -1713,18 +1715,18 @@ export class ConsiderContractComponent
               //   return false;
               // }
 
-              // const sign = await this.contractService.updateDigitalSignatured(
-              //   signUpdate.id,
-              //   data
-              // );
-              // if (!sign.recipient_id) {
-              //   this.toastService.showErrorHTMLWithTimeout(
-              //     'Lỗi ký USB Token',
-              //     '',
-              //     3000
-              //   );
-              //   return false;
-              // }
+              const sign = await this.contractService.updateDigitalSignatured(
+                signUpdate.id,
+                this.dataVersion2
+              );
+              if (!sign.recipient_id) {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Lỗi ký USB Token',
+                  '',
+                  3000
+                );
+                return false;
+              }
             } else if (this.usbTokenVersion == 1) {
               const dataSignMobi: any =
                 await this.contractService.postSignDigitalMobi(
@@ -2347,8 +2349,8 @@ export class ConsiderContractComponent
     }
   }
 
-  async createEmptySignature(signUpdate: any,image: any) {
-    const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate.id,image, this.certInfoBase64).toPromise();
+  async createEmptySignature(signUpdate: any,signDigital: any, image: any) {
+    const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate,signDigital,image, this.certInfoBase64).toPromise();
 
     const base64TempData = emptySignature.base64TempData;
 
@@ -2362,7 +2364,20 @@ export class ConsiderContractComponent
       DataToBeSign: base64TempData,
     });
 
-    const callServiceDCSigner = await this.contractService.signUsbToken(json_req);
+    const callServiceDCSigner = await this.contractService.signUsbToken('request=' + json_req);
+
+    const dataSignatureToken = JSON.parse(window.atob(callServiceDCSigner.data));
+
+    const signatureToken = dataSignatureToken.Signature;
+    const fieldName = dataSignatureToken.fieldName;
+    const hexDigestTempFile = dataSignatureToken.hexDigestTempFile;
+    this.dataVersion2 = dataSignatureToken.DataToBeSign;
+
+    this.callMergeTimeStamp(signatureToken, fieldName, hexDigestTempFile);
+  }
+
+  async callMergeTimeStamp(signatureToken: any, fieldName: any, hexDigestTempFile: any) {
+    const callServiceMergeTimeStamp = await this.contractService.meregeTimeStamp(this.recipientId, this.idContract, signatureToken, fieldName, this.certInfoBase64, hexDigestTempFile).toPromise();
   }
 
   filePath: any = '';
