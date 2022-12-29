@@ -603,6 +603,7 @@ export class ConsiderContractComponent
 
   // view pdf qua canvas
   async getPage() {
+    console.log("pdf src ", this.pdfSrc);
     // @ts-ignore
     const pdfjs = await import('pdfjs-dist/build/pdf');
     // @ts-ignore

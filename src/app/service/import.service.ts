@@ -92,8 +92,12 @@ export class ImportService {
         link.download = `report_${new Date().getTime()}.xlsx`;
         link.click();
         this.toastService.showErrorHTMLWithTimeout('file.import.valid.result',"",3000);
+
+        return;
       } else if(importResult.body.type == 'application/json') {
         this.toastService.showErrorHTMLWithTimeout('file.import.valid',"",3000);
+
+        return;
       }
    
 
