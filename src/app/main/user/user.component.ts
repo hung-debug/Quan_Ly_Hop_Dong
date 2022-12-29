@@ -162,7 +162,5 @@ export class UserComponent implements OnInit {
 
   fileChanged(e: any) {
     this.importService.importFile(e,'user');
-
-    e.target.value = null;
   }
 }

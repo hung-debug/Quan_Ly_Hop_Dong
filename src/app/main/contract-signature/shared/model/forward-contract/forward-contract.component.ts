@@ -140,10 +140,10 @@ export class ForwardContractComponent implements OnInit {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập số điện thoại ngoài luồng hợp đồng', '', 3000);
       return;
     }
-    if (this.myForm.value.card_id && !this.checkCanSwitchContractCardId()) {
-      this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế/CMT/CCCD ngoài luồng hợp đồng', '', 3000);
-      return;
-    }
+    // if (this.myForm.value.card_id && !this.checkCanSwitchContractCardId()) {
+    //   this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế/CMT/CCCD ngoài luồng hợp đồng', '', 3000);
+    //   return;
+    // }
     if (this.currentUser) {
       this.spinner.show();
       let coutError = 0;
@@ -184,15 +184,17 @@ export class ForwardContractComponent implements OnInit {
 
         await this.contractService.processAuthorizeContract(dataAuthorize).toPromise().then(
           data => {
-            this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền') + ' thành công!'
+            if(!data.success) {
+              if(data.message == 'Tax code has existed') {
+                this.toastService.showWarningHTMLWithTimeout('taxcode.out', '', 3000);
+              }
+            } else {
+              this.toastService.showSuccessHTMLWithTimeout((this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền') + ' thành công!'
               , "", 3000);
-            this.dialogRef.close();
-            this.spinner.hide();
-            // if (this.data.role_coordination == 1) {
-            this.router.navigate(['/main/form-contract/detail/' + this.datas?.dataContract?.is_data_contract?.id]);
-            // } else {
-            //   this.router.navigate(['/main/contract-signature/receive/wait-processing']);
-            // }
+              this.dialogRef.close();
+              this.spinner.hide();
+              this.router.navigate(['/main/form-contract/detail/' + this.datas?.dataContract?.is_data_contract?.id]);
+            }
           }, error => {
             this.spinner.hide();
             this.toastService.showErrorHTMLWithTimeout('Có lỗi! Vui lòng liên hệ nhà phát triển để được xử lý', "", 3000);
