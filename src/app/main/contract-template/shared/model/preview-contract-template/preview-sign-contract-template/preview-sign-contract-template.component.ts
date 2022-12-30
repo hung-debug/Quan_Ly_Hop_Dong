@@ -29,9 +29,7 @@ export class PreviewSignContractTemplateComponent implements OnInit {
       } else
         return 'Text';
     } else  {
-      if (this.datas.contract_no) {
-        return this.datas.contract_no
-      } else return (this.translate.instant('contract.number'));
+       return (this.translate.instant('contract.number'));
     }
   }
 

@@ -148,7 +148,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   checkStatusUser(status: any, role: any) {
     let res = '';
 
-    console.log("lang ", this.lang);
+    console.log("status ", status);
+
+    console.log("role ", role);
 
     if(this.lang == 'vi' || !this.lang) {
       if (status == 3) {
@@ -167,7 +169,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         res += 'Đã ';
       }
 
-      if (!this.reasonCancel) {
+      // if (!this.reasonCancel) {
         if (role == 1) {
           res += 'điều phối';
         } else if (role == 2) {
@@ -176,11 +178,10 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           res += 'ký';
         } else if (role == 4) {
           res = res + ' đóng dấu';
-        }
-      } else {
+      } else 
         if (!res.includes('Đã'))
           res = 'Đã huỷ'
-      }
+      // }
     } else if (this.lang == 'en') {
       if (status == 3) {
         return 'Rejected';
