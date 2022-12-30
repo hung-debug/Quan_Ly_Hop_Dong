@@ -112,11 +112,11 @@ export class AdminDetailUserComponent implements OnInit {
         this.phoneOld = data.phone;
       },
       (error) => {
-        // this.toastService.showErrorHTMLWithTimeout(
-        //   'Lỗi lấy thông tin người dùng',
-        //   '',
-        //   3000
-        // );
+        this.toastService.showErrorHTMLWithTimeout(
+          'Hết phiên đăng nhập, Vui lòng đăng nhập lại',
+          '',
+          3000
+        );
         this.router.navigate(['/login'])
       }
     );

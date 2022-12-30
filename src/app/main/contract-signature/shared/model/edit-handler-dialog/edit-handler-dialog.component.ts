@@ -6,6 +6,7 @@ import {
   type_signature,
   type_signature_doc,
   type_signature_en,
+  variable
 } from "../../../../../config/variable";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "../../../../../service/toast.service";
@@ -35,6 +36,7 @@ export class EditHandlerComponent implements OnInit {
   phone: string = "phone";
   login_by: any;
   isCheckRadio= true;
+  is_handler: any;
   //dropdown
   signTypeList: Array<any> = type_signature;
   checkCount = 1;
@@ -61,23 +63,28 @@ export class EditHandlerComponent implements OnInit {
     } else if (localStorage.getItem('lang') == 'vi') {
       this.signTypeList = type_signature;
     }
-    console.log("dataflagDigital");
-    console.log("dataflagDigitalsssssssssss", this.datas);
-    console.log("dataflagDigital", this.datas?.flagDigitalSign);
 
 
-    if (!this.datas.flagDigitalSign) {
-      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,   
-    } else {
+
       this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-    }
+      console.log("data_organization",this.datas);
+
+        this.datas.is_handler = [...this.contractService.getDataDetermineInitialization()];
+        console.log("this.datas.is_handler",this.datas.is_handler);
+        
+  
+      
+    
 
     // data Tổ chức của tôi
-    this.data_organization = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0];
-    this.data_organization.name = this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0].name ? this.datas.is_determine_clone.filter((p: any) => p.type == 1)[0].name : this.datas.name_origanzation;
-    this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
-    this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
-    this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
+    this.data_organization = this.datas.is_handler.filter((p: any) => p.type == 1)[0];
+  
+    
+    this.data_organization.name = this.datas.is_handler.filter((p: any) => p.type == 1)[0].name ? this.datas.is_handler.filter((p: any) => p.type == 1)[0].name : this.datas.name_origanzation;
+
+    // this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
+    // this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
+    // this.is_origanzation_document = this.data_organization.recipients.filter((p: any) => p.role == 4);
     this.dropdownSignTypeSettings = {
       singleSelection: false,
       idField: "id",
@@ -90,7 +97,13 @@ export class EditHandlerComponent implements OnInit {
     };
 
   }
-
+  //dropdown contract type
+  get getSignTypeItems() {
+    return this.signTypeList.reduce((acc, curr) => {
+      acc[curr.item_id] = curr;
+      return acc;
+    }, {});
+  }
   handleCancel() {
     this.dialogRef.close();
   }
@@ -136,7 +149,7 @@ export class EditHandlerComponent implements OnInit {
     data_determine_add = [...this.contractService.getDataDetermine()];
     let data_organization = data_determine_add.filter((p: any) => p.type == 1)[0];
     let data = (data_organization.recipients.filter((p: any) => p.role == 3))[0];
-    data.ordering = this.getOriganzationSignature().length + 1;
+    data.ordering = this.getOriganzationSignature1().length + 1;
     this.data_organization.recipients.push(data);
   }
   deSelectOrg(e: any) {
@@ -256,7 +269,7 @@ export class EditHandlerComponent implements OnInit {
     this.toastService.showWarningHTMLWithTimeout(is_notify, "", 3000);
   }
 
-  getOriganzationSignature() {
+  getOriganzationSignature1() {
     return this.data_organization.recipients.filter((p: any) => p.role == 3);
   }
 
