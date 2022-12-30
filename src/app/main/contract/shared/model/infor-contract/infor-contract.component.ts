@@ -127,7 +127,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     console.log("id contract ", idContract)
 
-    this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract);
+    this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract, false);
 
 
     if(!idContract || this.checkView) {

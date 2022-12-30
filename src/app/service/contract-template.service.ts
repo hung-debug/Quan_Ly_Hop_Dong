@@ -38,6 +38,8 @@ export class ContractTemplateService {
 
   templateUseUrl: any = `${environment.apiUrl}/api/v1/contracts/template/is-use/`;
 
+  checkViewTemplateContractUrl: any = `${environment.apiUrl}/api/v1/contracts/template/check-view-contract/`
+
   constructor(private http: HttpClient,
     public datepipe: DatePipe,) { }
 
@@ -68,6 +70,21 @@ export class ContractTemplateService {
     console.log(listContractTemplateUrl);
     const headers = { 'Authorization': 'Bearer ' + this.token }
     return this.http.get<any[]>(listContractTemplateUrl, { headers }).pipe();
+  }
+
+  checkViewTemplateContract(id: any, email: string) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    const body = JSON.stringify({
+      email: email
+    });
+
+    return this.http.post<any>(this.checkViewTemplateContractUrl + id, body, {
+      headers: headers,
+    });
   }
 
   addInforContractTemplate(datas: any, id?: any, actionGet?: string) {

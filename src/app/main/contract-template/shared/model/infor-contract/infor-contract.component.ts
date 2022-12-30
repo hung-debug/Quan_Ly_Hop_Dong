@@ -116,7 +116,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   async ngOnInit(): Promise<void> {
     this.spinner.hide();
 
-    this.actionSuccess();
+    let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
+
+    this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract, true);
+
+    if(!idContract || this.checkView) {
+      this.actionSuccess();
+    } else {
+      this.router.navigate(['/page-not-found']);
+    }
   }
 
   actionSuccess() {
