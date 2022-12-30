@@ -22,7 +22,13 @@
 <!-- && !signTemplate -->
 <div
   class="text-sign"
-  *ngIf="sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu'"
+  *ngIf="sign.sign_unit == 'text'"
 >
   <span [ngStyle]="getStyleText()" class="font-style" id="input-text">{{ getText(sign) }}</span>
+</div>
+<div
+  class="text-sign"
+  *ngIf="sign.sign_unit == 'so_tai_lieu'"
+>
+  <span [ngStyle]="getStyleText()" class="font-style" id="input-text">{{ 'contract.number' | translate }}</span>
 </div>

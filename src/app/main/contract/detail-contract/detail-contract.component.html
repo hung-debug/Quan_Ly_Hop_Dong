@@ -111,29 +111,31 @@
   <div class="col-md-3">
   </div>
   <div class="col-md-9">
-      <div *ngIf="!this.mobile" class="center">
-          <a>
-              <button class="call-page" (click)="firstPage()">
-                <img *ngIf="this.page1" src="assets/img/previousbold.svg">
-                <img *ngIf="!this.page1" src="assets/img/firstpage.svg">
-              </button>
-              <button class="call-page1" (click)="previousPage()">
-                <img *ngIf="this.page1" src="assets/img/firstpagebold.svg">
-                <img *ngIf="!this.page1" src="assets/img/previous.svg">
-              </button>
+      <div *ngIf="!this.mobile" class="center" style="margin-top: 5px;">
         
-              <input [(ngModel)]="pageNum" style="box-sizing: border-box;width: 50px;height: 30px;background: #FFFFFF;border: 1px solid #87CAFF;border-radius: 5px; margin-left: 5px" type="text" (keyup.enter)="onEnter($event)" />
-              <a style="font-family: 'Lexend Deca';font-style: normal;font-weight: 400;font-size: 18px;line-height: 22px;align-items: center;text-transform: uppercase;color: #000000;margin-left: 5px">/{{this.pageNumber}}</a>
-              <button class="call-page1" (click)="onNextPage()" id="prev">
-                <img *ngIf="this.pageLast" src="assets/img/next.svg">
-                <img *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
-              </button>
-        
-              <button class="call-page1" (click)="lastPage()" id="prev">
-                <img *ngIf="this.pageLast" src="assets/img/lastpage.svg">
-                <img *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
-              </button>
-          </a>
+        <a style="text-align: center">
+          <button class="call-page" (click)="firstPage()">
+            <!-- <img width="16px" height="20px" *ngIf="this.page1" src="assets/img/previousbold.svg"> -->
+            <img  width="16px" height="20px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
+            <img  width="16px" height="20px" *ngIf="this.page1" src="assets/img/previousbold.svg">
+          </button>
+          <button style="margin-right: 5px;" class="call-page1" (click)="previousPage()">
+            <img width="12px" height="16px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
+            <img width="12px" height="16px" *ngIf="!this.page1" src="assets/img/previous.svg">
+          </button>
+    
+          <input [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />&nbsp;/ &nbsp;{{this.pageNumber}}
+          <button class="call-page1" (click)="onNextPage()" id="prev">
+            <img width="12px" height="16px" *ngIf="this.pageLast" src="assets/img/next.svg">
+            <img width="12px" height="16px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
+          </button>
+    
+          <button class="call-page1" (click)="lastPage()" id="prev">
+            <img width="16px" height="20px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
+            <img width="16px" height="20px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
+          </button>
+        </a>
+
           <a *ngIf="role || this.status == 30" style="position: absolute; right: 5px;">
             <button  type="button" name="next" class="next action-button" *ngIf="view && loaded && status != 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>
             <button  type="button" name="next" class="next action-button1" *ngIf="view && loaded && status == 4" (click)="downloadContract(idContract)">{{checkStatusUser(status, role) | translate}}</button>      
