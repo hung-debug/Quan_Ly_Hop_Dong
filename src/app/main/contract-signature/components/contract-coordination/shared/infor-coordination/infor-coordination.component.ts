@@ -127,7 +127,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
     this.idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
 
-    this.checkView = await this.checkViewContractService.callAPIcheckViewContract(this.idContract);
+    this.checkView = await this.checkViewContractService.callAPIcheckViewContract(this.idContract, false);
 
     if(!this.idContract || this.checkView) {
       this.getDataContractSignature();
