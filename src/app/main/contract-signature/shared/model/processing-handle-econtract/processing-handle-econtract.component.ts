@@ -22,7 +22,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   currentUser: any;
   // recipient:any;
   listCheckSmsEmail: any;
-  contractStatus: string;
+  contractStatus: number;
   endDate: any;
   reasonCancel: string;
   cancelDate: any;
