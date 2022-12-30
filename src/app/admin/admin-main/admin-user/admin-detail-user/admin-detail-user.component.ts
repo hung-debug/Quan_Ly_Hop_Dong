@@ -113,7 +113,7 @@ export class AdminDetailUserComponent implements OnInit {
       },
       (error) => {
         this.toastService.showErrorHTMLWithTimeout(
-          'Hết phiên đăng nhập, Vui lòng đăng nhập lại',
+          'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
           '',
           3000
         );
