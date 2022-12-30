@@ -69,11 +69,13 @@ export class PreviewContractTemplateComponent implements OnInit {
   }
 
   changeColorDrag(role: any, valueSign: any) {
-    if (!valueSign.text_attribute_name && valueSign.sign_unit != 'text') {
+    if (!valueSign.text_attribute_name && valueSign.sign_unit != 'text' && valueSign.sign_unit != 'so_tai_lieu') {
       return 'ck-da-keo';
     } else {
       return 'employer-ck';
     }
+
+
   }
 
   changePosition(d?: any, e?: any, sizeChange?: any) {
@@ -81,7 +83,7 @@ export class PreviewContractTemplateComponent implements OnInit {
 
     };
 
-    if(d.sign_unit != 'text') {
+    if(d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu') {
       style = {
         "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
         "position": "absolute",

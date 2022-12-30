@@ -28,11 +28,9 @@ export class PreviewSignContractTemplateComponent implements OnInit {
         return sign.text_attribute_name
       } else
         return 'Text';
-    } else {
+    } else  {
       if (this.datas.contract_no) {
         return this.datas.contract_no
-      } else if (sign.value) {
-        return sign.value;
       } else return (this.translate.instant('contract.number'));
     }
   }
