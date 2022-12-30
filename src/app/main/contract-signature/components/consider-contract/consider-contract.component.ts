@@ -213,7 +213,7 @@ export class ConsiderContractComponent
 
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
-    const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract);
+    const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract, false);
 
     if(checkViewContract) {
       this.actionRoleContract();

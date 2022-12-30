@@ -142,7 +142,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     //Lấy thông tin id hợp đồng
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
-    if(await this.checkViewContractService.callAPIcheckViewContract(this.idContract)) {
+    if(await this.checkViewContractService.callAPIcheckViewContract(this.idContract, false)) {
       this.getDataContractSignature();
     } else {
       this.router.navigate(['/page-not-found']);
