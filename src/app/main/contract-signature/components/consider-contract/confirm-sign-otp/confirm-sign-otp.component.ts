@@ -211,9 +211,6 @@ export class ConfirmSignOtpComponent implements OnInit {
           && signUpdate?.recipient?.email === this.datasOtp.currentUser.email
           && signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
-
-          console.log("content ", this.datas.is_data_object_signature.valueSign);
-
           const formData = {
             "name": "image_" + new Date().getTime() + ".jpg",
             "content": this.datas.is_data_object_signature.valueSign,
@@ -277,7 +274,11 @@ export class ConfirmSignOtpComponent implements OnInit {
     }else{
       this.userOtp = this.datasOtp.name;
       this.phoneOtp = this.datasOtp.phone;
-      this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
+      // this.isDateTime = this.datepipe.transform(new Date(), "dd/MM/yyyy HH:mm");
+
+      const date = await fetch("https://worldtimeapi.org/api/ip").then(response => response.json());
+
+      this.isDateTime = this.datepipe.transform(date.datetime, "dd/MM/yyyy HH:mm");
       await of(null).pipe(delay(100)).toPromise();
       
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');

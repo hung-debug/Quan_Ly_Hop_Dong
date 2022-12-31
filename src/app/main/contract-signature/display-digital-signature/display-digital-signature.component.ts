@@ -24,6 +24,7 @@ export class DisplayDigitalSignatureComponent implements OnInit {
     this.isDateTime = date.datetime;
   }
 
+
   convertImage() {
     const imageRender = <HTMLElement>document.getElementById('export-html');
     console.log(imageRender);

@@ -529,7 +529,7 @@ export class DetermineSignerComponent implements OnInit {
     if (count == 0) {
       //valid ordering cac ben doi tac - to chuc
       let isOrderingPerson_exception = this.datas.is_determine_clone.filter((val: any) => val.type == 3 && val.recipients[0].sign_type.some((p: any) => p.id == 1 || p.id == 5));
-      let isOrdering_not_exception = this.datas.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3));
+      let isOrdering_not_exception = this.datas.is_determine_clone.filter((val: any) => val.recipients[0].sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4));
       // valid ordering doi tac ca nhan selected option eKYC/OTP/Image
       if (isOrderingPerson_exception.length > 0) {
         let dataError_ordering = isOrderingPerson_exception.some((val: any) => val.ordering > isOrderingPerson_exception.length);
