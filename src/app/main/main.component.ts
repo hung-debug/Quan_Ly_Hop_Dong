@@ -47,8 +47,7 @@ export class MainComponent implements OnInit {
   }
 
   lang: any;
-  ngOnInit(): void {
-
+  ngOnInit() {
     if(localStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if(localStorage.getItem('lang') == 'en') {

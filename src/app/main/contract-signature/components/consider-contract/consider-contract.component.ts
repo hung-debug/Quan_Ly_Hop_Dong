@@ -844,7 +844,6 @@ export class ConsiderContractComponent
   }
 
   changePositionSign() {
-
     interact('.dropzone').dropzone({
       //@ts-ignore
       accept: null,
@@ -956,6 +955,8 @@ export class ConsiderContractComponent
       let canvasInfo = canvasElement ? canvasElement.getBoundingClientRect() : '';
       this.coordinates_signature = event.rect;
       let id = event.target.id;
+
+      console.log("id ",id);
       let signElement = <HTMLElement>document.getElementById(id);
       let rect_location = signElement.getBoundingClientRect();
       if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config

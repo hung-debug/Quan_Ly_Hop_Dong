@@ -8,6 +8,7 @@ import domtoimage from 'dom-to-image';
   styleUrls: ['./display-digital-signature.component.scss']
 })
 export class DisplayDigitalSignatureComponent implements OnInit {
+
   isDateTime: any = new Date();
   // isNameSignature: string = 'Công ty cổ phần phần mềm công nghệ cao Việt Nam';
   @Input() nameCompany: any | undefined | null;
@@ -17,7 +18,10 @@ export class DisplayDigitalSignatureComponent implements OnInit {
   constructor() {
    }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    const date = await fetch("https://worldtimeapi.org/api/ip").then(response => response.json());
+
+    this.isDateTime = date.datetime;
   }
 
   convertImage() {

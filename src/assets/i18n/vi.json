@@ -500,5 +500,6 @@
   "choose.font":"Chọn font",
   "contract.uid":"Mã hợp đồng",
   "reject.contract":"LÝ DO TỪ CHỐI HỢP ĐỒNG",
-  "contract.reject":"Lý do từ chối hợp đồng"
+  "contract.reject":"Lý do từ chối hợp đồng",
+  "verified.cardid":"Đã xác thực qua chứng minh thư/căn cước công dân"
 }

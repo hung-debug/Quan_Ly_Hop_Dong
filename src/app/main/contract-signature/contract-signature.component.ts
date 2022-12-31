@@ -152,7 +152,13 @@ export class ContractSignatureComponent implements OnInit {
       this.getContractList();
     });
 
-    // this.spinner.hide();
+    this.getDateTime();
+  }
+  
+  async getDateTime() {
+    const date = await fetch("https://worldtimeapi.org/api/ip").then(response => response.json());
+
+    this.isDateTime = date.datetime;
   }
 
   documentId: any = [];
