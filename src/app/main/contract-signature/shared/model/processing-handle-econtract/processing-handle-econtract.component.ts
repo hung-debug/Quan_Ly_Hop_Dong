@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { ContractService } from 'src/app/service/contract.service';
 import { DialogReasonRejectedComponent } from '../dialog-reason-rejected/dialog-reason-rejected.component';
+import { EditHandlerComponent } from '../edit-handler-dialog/edit-handler-dialog.component';
 import { ToastService } from 'src/app/service/toast.service';
 @Component({
   selector: 'app-processing-handle-econtract',
@@ -206,6 +207,31 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       }
     })
 
+  }
+
+  openEdit(RecipientsId: any) {
+    let data: any;
+
+    for(let i=0; i < this.is_list_name.length ; i++){
+
+      if(RecipientsId === this.is_list_name[i].id){
+          // data = {reasonReject: this.is_list_name[i].reasonReject}
+       }
+    }
+    
+    const dialogRef = this.dialog.open(EditHandlerComponent, {
+      width: '900px',
+      data
+    })
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('the close dialog');
+    }) 
+  }
+
+  getDataHandler(id: number, action: string) {
+    setTimeout(() => {
+      // void this.router.navigate(['main/contract-template/form/edit/' + id]);
+    }, 100)
   }
 
 }

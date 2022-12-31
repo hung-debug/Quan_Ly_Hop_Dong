@@ -8,6 +8,7 @@ import { UserService } from 'src/app/service/user.service';
 import { AddRoleComponent } from './add-role/add-role.component';
 import { DeleteRoleComponent } from './delete-role/delete-role.component';
 import {DetailRoleComponent} from './detail-role/detail-role.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-role',
@@ -20,6 +21,7 @@ export class RoleComponent implements OnInit {
     private dialog: MatDialog,
     private roleService: RoleService,
     private userService: UserService,
+    private router: Router,
     private toastService: ToastService) { }
 
   code:any = "";
@@ -52,7 +54,7 @@ export class RoleComponent implements OnInit {
     this.userService.getUserById(userId).subscribe(
       data => {
         //lay id role
-        this.roleService.getRoleById(data.role_id).subscribe(
+        this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
             console.log(data);
             let listRole: any[];
@@ -63,12 +65,14 @@ export class RoleComponent implements OnInit {
             this.isQLVT_04 = listRole.some(element => element.code == 'QLVT_04');
             this.isQLVT_05 = listRole.some(element => element.code == 'QLVT_05');
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+            // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+            this.router.navigate(['/login'])
           }
         ); 
       
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+        // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+        this.router.navigate(['/login'])
       }
     )
   }

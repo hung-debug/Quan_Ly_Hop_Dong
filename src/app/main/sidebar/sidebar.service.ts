@@ -101,7 +101,7 @@ export class SidebarService {
     console.log(currentUserC.customer.info.organizationChange);
     this.userService.getUserById(currentUserC.customer.info.id).subscribe(
       (data) => {
-        this.roleService.getRoleById(data.role_id).subscribe(
+        this.roleService.getRoleById(data?.role_id).subscribe(
           (data) => {
             let listRole: any[];
             listRole = data.permissions;
@@ -236,20 +236,22 @@ export class SidebarService {
             this.buildMenu(currentUserC);
           },
           (error) => {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Lấy thông tin phân quyền',
-              '',
-              3000
-            );
+            // this.toastService.showErrorHTMLWithTimeout(
+            //   'Lấy thông tin phân quyền',
+            //   '',
+            //   3000
+            // );
+            this.router.navigate(['/login'])
           }
         );
       },
       (error) => {
-        this.toastService.showErrorHTMLWithTimeout(
-          'Lỗi lấy thông tin người dùng',
-          '',
-          3000
-        );
+        // this.toastService.showErrorHTMLWithTimeout(
+        //   'Lỗi lấy thông tin người dùng',
+        //   '',
+        //   3000
+        // );
+        this.router.navigate(['/login'])
       }
     );
 

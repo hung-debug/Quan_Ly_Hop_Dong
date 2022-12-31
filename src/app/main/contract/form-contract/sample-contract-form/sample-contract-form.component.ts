@@ -23,6 +23,8 @@ import { count } from 'console';
 import { data } from 'jquery';
 import { environment } from "src/environments/environment";
 import { ContractTemplateService } from "src/app/service/contract-template.service";
+import {TranslateService} from '@ngx-translate/core';
+import { SignContractComponent } from "src/app/main/contract-signature/components/sign-contract/sign-contract.component";
 import * as _ from 'lodash';
 import { TranslateModule, TranslateService } from "@ngx-translate/core";
 

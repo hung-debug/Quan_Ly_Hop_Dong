@@ -1569,7 +1569,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.toastService.showWarningHTMLWithTimeout((this.translate.instant('miss.digital.sig'))+ " " + `${nameSign_organization.name}`+ " " + (this.translate.instant('off.org.please')), "", 3000);
           return false;
         }
-        // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.
+        // valid khi kéo kiểu ký vào ít hơn list danh sách đối tượng ký.off.org.please
         if (arrSign_organization.length < data_organization.length) {
           this.spinner.hide();
           this.toastService.showWarningHTMLWithTimeout("Thiếu đối tượng ký của tổ chức, vui lòng chọn đủ người ký!", "", 3000);

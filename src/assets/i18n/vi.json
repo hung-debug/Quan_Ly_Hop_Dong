@@ -501,5 +501,9 @@
   "contract.uid":"Mã hợp đồng",
   "reject.contract":"LÝ DO TỪ CHỐI HỢP ĐỒNG",
   "contract.reject":"Lý do từ chối hợp đồng",
-  "verified.cardid":"Đã xác thực qua chứng minh thư/căn cước công dân"
+  "please.choose.contract.template":"Vui lòng chọn mẫu hợp đồng!",
+  "please.choose.contract.name":"Vui lòng nhập tên hợp đồng!",
+  "Sign.expiration.date.compare":"Ngày hết hạn ký không được nhỏ hơn ngày hiện tại!",
+  "verified.cardid":"Đã xác thực qua chứng minh thư/căn cước công dân",
+  "update.person-process": "Cập nhật người xử lý"
 }

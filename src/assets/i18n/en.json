@@ -500,5 +500,9 @@
   "change.password":"CHANGE PASSWORD",
   "reject.contract":"REASON FOR CONTRACT REJECT",
   "contract.reject":"Reason for contract reject",
-  "contract.uid":"Contract code"
+  "contract.uid":"Contract code",
+    "please.choose.contract.template":"Please choose a contract template!",
+    "please.choose.contract.name":"Please choose a contract name!",
+    "Sign.expiration.date.compare":"Signing expiration date should not be less than current date!",
+    "update.person-process": "Update handler"
 }

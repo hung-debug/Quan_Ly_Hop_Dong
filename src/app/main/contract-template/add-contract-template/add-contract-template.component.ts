@@ -63,6 +63,7 @@ export class AddContractTemplateComponent implements OnInit {
               private spinner: NgxSpinnerService,
               private toastService : ToastService,
               private userService: UserService,
+              private router: Router,
               private roleService: RoleService,
   ) {
   }
@@ -83,7 +84,7 @@ export class AddContractTemplateComponent implements OnInit {
     this.userService.getUserById(userId).subscribe(
       data => {
         //lay id role
-        this.roleService.getRoleById(data.role_id).subscribe(
+        this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
             let listRole: any[];
             listRole = data.permissions;
@@ -92,12 +93,14 @@ export class AddContractTemplateComponent implements OnInit {
             // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
             this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+            // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+            this.router.navigate(['/login'])
           }
         );
 
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+        // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+        this.router.navigate(['/login'])
       })
 
       //set title

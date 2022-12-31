@@ -62,7 +62,7 @@ export class UnitComponent implements OnInit {
       this.userService.getUserById(userId).subscribe(
         data => {
           //lay id role
-          this.roleService.getRoleById(data.role_id).subscribe(
+          this.roleService.getRoleById(data?.role_id).subscribe(
             data => {
               console.log(data);
               let listRole: any[];
@@ -72,12 +72,14 @@ export class UnitComponent implements OnInit {
               this.isQLTC_03 = listRole.some(element => element.code == 'QLTC_03');
               this.isQLTC_04 = listRole.some(element => element.code == 'QLTC_04');
             }, error => {
-              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+              // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+              this.router.navigate(['/login'])
             }
           ); 
         
         }, error => {
-          this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+          // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+          this.router.navigate(['/login'])
         }
       )
 
@@ -92,7 +94,7 @@ export class UnitComponent implements OnInit {
     this.userService.getUserById(userId).subscribe(
       data => {
         //lay id role
-        this.roleService.getRoleById(data.role_id).subscribe(
+        this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
             //admin cua to chuc thi dc quyen sua thong tin to chuc
             if(data.code.toUpperCase() == 'ADMIN'){
@@ -102,12 +104,14 @@ export class UnitComponent implements OnInit {
             }
             this.getData();
           }, error => {
-            this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+            // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+            this.router.navigate(['/login'])
           }
         ); 
       
       }, error => {
-        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+        // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
+        this.router.navigate(['/login'])
       }
     )
   }

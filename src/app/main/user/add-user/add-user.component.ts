@@ -144,7 +144,7 @@ export class AddUserComponent implements OnInit {
             data => {
               if(data.role_id != null){
                 //lay vai tro cua user
-                this.roleService.getRoleById(data.role_id).subscribe(dataRoleUser => {
+                this.roleService.getRoleById(data?.role_id).subscribe(dataRoleUser => {
                   this.roleName = dataRoleUser.name;
                   console.log(data);
                   this.orgIdOld = data.organization_id;
@@ -213,7 +213,8 @@ export class AddUserComponent implements OnInit {
               }
             }, error => {
               this.spinner.hide();
-              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
+              // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
+              this.router.navigate(['/login'])
             }
           )
         }
@@ -229,7 +230,7 @@ export class AddUserComponent implements OnInit {
     this.userService.getUserById(userId).subscribe(
       data => {
         //lay id role
-        this.roleService.getRoleById(data.role_id).subscribe(
+        this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
             
             let listRole: any[];
@@ -241,13 +242,15 @@ export class AddUserComponent implements OnInit {
             this.getDataOnInit();
           }, error => {
             this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout('Lấy thông tin phân quyền', "", 3000);
+            // this.toastService.showErrorHTMLWithTimeout('Lấy thông tin phân quyền', "", 3000);
+            this.router.navigate(['/login'])
           }
         );
       
       }, error => {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
+        // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người dùng', "", 3000);
+        this.router.navigate(['/login'])
       }
     )
   }
