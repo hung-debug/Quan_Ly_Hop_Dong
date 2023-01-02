@@ -44,7 +44,6 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.component';
 import { UnitService } from 'src/app/service/unit.service';
 import { Helper } from 'src/app/core/Helper';
-import { PDFDocumentProxy } from 'ng2-pdf-viewer';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 
 @Component({
@@ -1600,7 +1599,8 @@ export class ConsiderContractComponent
 
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
-      if (this.signCertDigital && this.signCertDigital.Serial) {
+      console.log("sign ", this.signCertDigital);
+      if (this.signCertDigital) {
         for (const signUpdate of this.isDataObjectSignature) {
           if (
             signUpdate &&
@@ -1674,7 +1674,8 @@ export class ConsiderContractComponent
             signDigital.valueSignBase64 = encode(base64String);
 
             if (this.usbTokenVersion == 2) {
-              this.createEmptySignature(signUpdate, signDigital, signI);
+              console.log("vao day usb ");
+              await this.createEmptySignature(signUpdate, signDigital, signI);
               // var json_req = JSON.stringify({
               //   OperationId: 10,
               //   SessionId: this.sessionIdUsbToken,
@@ -1717,7 +1718,7 @@ export class ConsiderContractComponent
 
               const sign = await this.contractService.updateDigitalSignatured(
                 signUpdate.id,
-                this.dataVersion2
+                signDigital.valueSignBase64
               );
               if (!sign.recipient_id) {
                 this.toastService.showErrorHTMLWithTimeout(
@@ -1728,6 +1729,8 @@ export class ConsiderContractComponent
                 return false;
               }
             } else if (this.usbTokenVersion == 1) {
+              console.log("vao day usb ");
+
               const dataSignMobi: any =
                 await this.contractService.postSignDigitalMobi(
                   signDigital,
@@ -2260,6 +2263,7 @@ export class ConsiderContractComponent
       return;
     }
     const sessionId = JSON.parse(window.atob(apiSessionId.data)).SessionId;
+    this.sessionIdUsbToken = sessionId;
 
     if (!sessionId) {
       this.spinner.hide();
@@ -2353,31 +2357,37 @@ export class ConsiderContractComponent
     const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate,signDigital,image, this.certInfoBase64).toPromise();
 
     const base64TempData = emptySignature.base64TempData;
+    const hexDigestTempFile = emptySignature.hexDigestTempFile;
+    const fieldName = emptySignature.fieldName
 
-    this.callDCSigner(base64TempData);
+    await this.callDCSigner(base64TempData, hexDigestTempFile, fieldName);
   }
 
-  async callDCSigner(base64TempData: any) {
+  async callDCSigner(base64TempData: any, hexDigestTempFile: any, fieldName: any) {
     var json_req = JSON.stringify({
       OperationId: 5,
       SessionId: this.sessionIdUsbToken,
       DataToBeSign: base64TempData,
     });
 
-    const callServiceDCSigner = await this.contractService.signUsbToken('request=' + json_req);
+    json_req = window.btoa(json_req);
 
-    const dataSignatureToken = JSON.parse(window.atob(callServiceDCSigner.data));
+    try {
+      const callServiceDCSigner = await this.contractService.signUsbToken('request=' + json_req);
 
-    const signatureToken = dataSignatureToken.Signature;
-    const fieldName = dataSignatureToken.fieldName;
-    const hexDigestTempFile = dataSignatureToken.hexDigestTempFile;
-    this.dataVersion2 = dataSignatureToken.DataToBeSign;
-
-    this.callMergeTimeStamp(signatureToken, fieldName, hexDigestTempFile);
+      const dataSignatureToken = JSON.parse(window.atob(callServiceDCSigner.data));
+    
+      const signatureToken = dataSignatureToken.Signature;
+  
+      await this.callMergeTimeStamp(signatureToken, fieldName, hexDigestTempFile);
+    } catch(err) {
+      this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token '+err,'',3000);
+      return;
+    }   
   }
 
   async callMergeTimeStamp(signatureToken: any, fieldName: any, hexDigestTempFile: any) {
-    const callServiceMergeTimeStamp = await this.contractService.meregeTimeStamp(this.recipientId, this.idContract, signatureToken, fieldName, this.certInfoBase64, hexDigestTempFile).toPromise();
+    await this.contractService.meregeTimeStamp(this.recipientId, this.idContract, signatureToken, fieldName, this.certInfoBase64, hexDigestTempFile).toPromise();
   }
 
   filePath: any = '';

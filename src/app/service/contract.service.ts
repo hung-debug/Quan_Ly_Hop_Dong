@@ -132,7 +132,7 @@ export class ContractService {
 
   checkViewContractUrl: any = `${environment.apiUrl}/api/v1/contracts/check-view-contract/`;
 
-  emptySignatureUrl: any = `${environment.apiUrl}/api/v1/v1/processes/digital-sign/`;
+  emptySignatureUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
 
   mergeTimeStampUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`
 
@@ -587,7 +587,7 @@ export class ContractService {
       height: signDigital.signDigitalHeight
     })
     
-    return this.http.post<any>(this.emptySignatureUrl + recipientId, body, {
+    return this.http.post<any>(this.emptySignatureUrl + recipientId+'/create-empty-token', body, {
         headers: headers,
       });
   }
@@ -601,13 +601,13 @@ export class ContractService {
       const body = JSON.stringify({
         contractId: contractId,
         signature: signature,
-        fieldName: fieldName,
+        filedName: fieldName,
         cert: cert,
         isTimestamp: false,
         hexDigestTempFile: hexDigestTempFile
       })
     
-      return this.http.post<any>(this.mergeTimeStampUrl + recipientId, body, {
+      return this.http.post<any>(this.mergeTimeStampUrl + recipientId+'/merge-time-stamp', body, {
         headers: headers,
       });
   }
