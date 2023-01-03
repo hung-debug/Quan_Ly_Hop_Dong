@@ -3092,7 +3092,7 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
-    // dialogConfig.width = '497px';
+    dialogConfig.width = '497px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     dialogConfig.panelClass= 'custom-dialog-container';
@@ -3236,8 +3236,8 @@ export class ConsiderContractComponent
 
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass= 'custom-dialog-container';
-    // dialogConfig.width = '497px';
-    // dialogConfig.height = '330px';
+    dialogConfig.width = '497px';
+    dialogConfig.height = '330px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(PkiDialogSignComponent, dialogConfig);
