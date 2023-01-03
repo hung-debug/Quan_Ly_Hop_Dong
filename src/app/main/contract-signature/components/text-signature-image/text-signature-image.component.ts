@@ -15,11 +15,14 @@ export class TextSignatureImageComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log("datas font ", this.datas.is_data_object_signature[0].font);
+
   }
 
   getStyleText() {
-    return null;
+    return {
+      'font': this.datas.is_data_object_signature[0].font,
+      'font-size':this.datas.is_data_object_signature[0].font_size+'px'
+    };
   }
 
 }
