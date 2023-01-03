@@ -243,9 +243,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     })
   }
 
-  resendSmsEmail(recipient: any) {
+  resendSmsEmail(id: any) {
     let responseSmsEmail: any;
-    this.contractService.resendSmsEmail(recipient.id).subscribe((responseSmsEmail) => {
+    this.contractService.resendSmsEmail(id).subscribe((responseSmsEmail) => {
       console.log("data success", responseSmsEmail);
 
       if (responseSmsEmail.success == true) {
