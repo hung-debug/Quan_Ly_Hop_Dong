@@ -110,6 +110,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     this.spinner.hide();
 
+    console.log("font sample ", this.datas.font);
+
     if(this.datas.font) {
       this.selectedFont = this.datas.font;
     }
@@ -211,20 +213,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     this.data_sign = this.datas.contract_user_sign;
  
-    if(this.datas.participants && this.datas.participants[0].recipients[0].fields.length > 0) {
-      const font = this.datas.participants[0].recipients[0].fields[0].font;
-      const font_size = this.datas.participants[0].recipients[0].fields[0].font_size;
+    // if(this.datas.participants && this.datas.participants[0].recipients[0].fields.length > 0) {
+    //   const font = this.datas.participants[0].recipients[0].fields[0].font;
+    //   const font_size = this.datas.participants[0].recipients[0].fields[0].font_size;
   
-      if(font) {
-        this.datas.font = font;
-        this.selectedFont = this.datas.font;
-      }
+    //   if(font) {
+    //     this.datas.font = font;
+    //     this.selectedFont = this.datas.font;
+    //   }
   
-      if(font_size) {
-        this.datas.size = font_size;
-        this.size = this.datas.size;
-      }
-    }
+    //   if(font_size) {
+    //     this.datas.size = font_size;
+    //     this.size = this.datas.size;
+    //   }
+    // }
 
     if(!this.datas.font) {
       this.datas.font = "Times New Roman";
@@ -240,6 +242,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   changeFont($event: any) {
+    console.log("ev ", $event);
     this.selectedFont = $event;
     this.datas.font = $event;
   }
@@ -1282,6 +1285,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   async next(action: string) {
     this.datas.font = this.selectedFont;
+    console.log("font ", this.datas.font);
     this.datas.size = this.size;
     if (action == 'next_step' && !this.validData()) {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {

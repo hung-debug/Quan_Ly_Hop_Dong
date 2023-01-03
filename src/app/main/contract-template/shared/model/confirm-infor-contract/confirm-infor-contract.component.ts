@@ -56,7 +56,7 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    console.log(this.datas);
+    console.log("font ",this.datas.font);
 
     if(this.datas.type_id){
       this.contractTypeService.getContractTypeById(this.datas.type_id).subscribe(data => {
