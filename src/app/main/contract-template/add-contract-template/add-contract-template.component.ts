@@ -93,14 +93,16 @@ export class AddContractTemplateComponent implements OnInit {
             // this.isQLHD_08 = listRole.some(element => element.code == 'QLHD_08');
             this.isQLHD_11 = listRole.some(element => element.code == 'QLHD_11');
           }, error => {
+            setTimeout(() => this.router.navigate(['/login']));
             this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-            setTimeout(() => this.router.navigate(['/login']), 3000);
+            
           }
         );
 
       }, error => {
+        setTimeout(() => this.router.navigate(['/login']));
         this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-        setTimeout(() => this.router.navigate(['/login']), 3000);
+        
       })
 
       //set title
