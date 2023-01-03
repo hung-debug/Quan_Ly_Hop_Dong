@@ -64,14 +64,16 @@ export class ContractTypeComponent implements OnInit {
             this.isQLLHD_04 = listRole.some(element => element.code == 'QLLHD_04');
             this.isQLLHD_05 = listRole.some(element => element.code == 'QLLHD_05');
           }, error => {
+            setTimeout(() => this.router.navigate(['/login']));
             this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-            setTimeout(() => this.router.navigate(['/login']), 3000);
+            
           }
         ); 
       
       }, error => {
+        setTimeout(() => this.router.navigate(['/login']));
         this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-        setTimeout(() => this.router.navigate(['/login']), 3000);
+       
       }
     )
   }
