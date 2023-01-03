@@ -72,14 +72,14 @@ export class UnitComponent implements OnInit {
               this.isQLTC_03 = listRole.some(element => element.code == 'QLTC_03');
               this.isQLTC_04 = listRole.some(element => element.code == 'QLTC_04');
             }, error => {
-              // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-              this.router.navigate(['/login'])
+              this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+              setTimeout(() => this.router.navigate(['/login']), 3000);
             }
           ); 
         
         }, error => {
-          // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-          this.router.navigate(['/login'])
+          this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+          setTimeout(() => this.router.navigate(['/login']), 3000);
         }
       )
 
@@ -104,14 +104,14 @@ export class UnitComponent implements OnInit {
             }
             this.getData();
           }, error => {
-            // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-            this.router.navigate(['/login'])
+            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+            setTimeout(() => this.router.navigate(['/login']), 3000);
           }
         ); 
       
       }, error => {
-        // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-        this.router.navigate(['/login'])
+        this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+        setTimeout(() => this.router.navigate(['/login']), 3000);
       }
     )
   }

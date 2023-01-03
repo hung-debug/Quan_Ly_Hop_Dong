@@ -134,7 +134,8 @@ export class ContractService {
 
   emptySignatureUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
 
-  mergeTimeStampUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`
+  mergeTimeStampUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
+  inforPersonProcess: any = `${environment.apiUrl}/api/v1/recipients/`;
 
   token: any;
   customer_id: any;
@@ -1364,6 +1365,14 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     return this.http.get<any>(this.getCheckSign + id_recipient, { headers });
+  }
+
+  getInforPersonProcess(recipient_id?: number | string){
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+    return this.http.get<any>(this.inforPersonProcess + recipient_id, {headers});
   }
 
   getDetailContract(idContract: any) {

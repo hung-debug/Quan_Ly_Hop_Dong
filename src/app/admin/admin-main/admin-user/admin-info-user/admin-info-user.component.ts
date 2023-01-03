@@ -71,7 +71,7 @@ export class AdminInfoUserComponent implements OnInit {
           '',
           3000
         );
-        this.router.navigate(['/login'])
+        setTimeout(() => this.router.navigate(['/login']), 3000);
       }
     );
   }
@@ -172,7 +172,7 @@ export class AdminInfoUserComponent implements OnInit {
                   '',
                   3000
                 );
-                this.router.navigate(['/login'])
+                setTimeout(() => this.router.navigate(['/login']), 3000);
               }
             );
           } else {

@@ -46,25 +46,25 @@ export class ContractComponent implements OnInit, AfterViewInit {
   notification: any = "";
   isOrg: string = 'off';
   stateOptions: any[];
-  organization_id:any="";
+  organization_id: any = "";
 
   //filter contract
-  searchObj : any = {
+  searchObj: any = {
     filter_name: "",
     partner: ""
   }
   filter_name: any = "";
-  partner: any ="";
+  partner: any = "";
   filter_type: any = "";
   filter_contract_no: any = "";
   filter_from_date: any = "";
   filter_to_date: any = "";
   filter_status: any = "";
   filter_remain_day: any = "";
-  filter_is_org_me_and_children:any = "";
+  filter_is_org_me_and_children: any = "";
   message: any;
   subscription: Subscription;
-  roleMess:any="";
+  roleMess: any = "";
 
   //phan quyen
   isQLHD_01: boolean = true;  //them moi hop dong
@@ -82,24 +82,24 @@ export class ContractComponent implements OnInit, AfterViewInit {
   isQLHD_13: boolean = true;  //chia se hop dong
 
   constructor(private modalService: NgbModal,
-              private appService: AppService,
-              private contractService: ContractService,
-              private route: ActivatedRoute,
-              private router: Router,
-              private toastService : ToastService,
-              private http: HttpClient,
-              private uploadService: UploadService,
-              private dialog: MatDialog,
-              private spinner: NgxSpinnerService,
-              private userService:UserService,
-              private roleService: RoleService,
-    ) {
+    private appService: AppService,
+    private contractService: ContractService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private toastService: ToastService,
+    private http: HttpClient,
+    private uploadService: UploadService,
+    private dialog: MatDialog,
+    private spinner: NgxSpinnerService,
+    private userService: UserService,
+    private roleService: RoleService,
+  ) {
 
-      this.stateOptions = [
-        { label: 'contract.me', value: 'off' },
-        { label: 'contract.organization', value: 'on' },
-      ];
-    }
+    this.stateOptions = [
+      { label: 'contract.me', value: 'off' },
+      { label: 'contract.organization', value: 'on' },
+    ];
+  }
 
 
   ngOnInit(): void {
@@ -178,14 +178,15 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
               this.getContractList();
             }, error => {
-              // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-              this.router.navigate(['/login'])
+              this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+              setTimeout(() => this.router.navigate(['/login']), 3000);
             }
           );
 
         }, error => {
-          // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-          this.router.navigate(['/login'])
+          this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+          setTimeout(() => this.router.navigate(['/login']), 3000);
+
         }
       )
     });
@@ -195,13 +196,13 @@ export class ContractComponent implements OnInit, AfterViewInit {
     let contractsSignManyChecked = this.contracts.filter(
       (opt) => opt.checked
     );
-    
-    let idMany = contractsSignManyChecked
-        .filter((opt) => opt.checked)
-        .map((opt) => opt.id);
 
-    if(idMany.length == 0) {
-      this.toastService.showErrorHTMLWithTimeout("not.select.contract","",3000);
+    let idMany = contractsSignManyChecked
+      .filter((opt) => opt.checked)
+      .map((opt) => opt.id);
+
+    if (idMany.length == 0) {
+      this.toastService.showErrorHTMLWithTimeout("not.select.contract", "", 3000);
       return;
     }
 
@@ -214,13 +215,13 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
   getContractList() {
     this.roleMess = "";
-    if(this.isOrg == 'off' && !this.isQLHD_05){
+    if (this.isOrg == 'off' && !this.isQLHD_05) {
       this.roleMess = "Danh sách hợp đồng của tôi chưa được phân quyền";
 
-    }else if(this.isOrg == 'on' && !this.isQLHD_04){
+    } else if (this.isOrg == 'on' && !this.isQLHD_04) {
       this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
     }
-    if(!this.roleMess){
+    if (!this.roleMess) {
       //get list contract
       this.contractService.getContractList(this.isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
         this.contracts = data.entities;
@@ -237,15 +238,15 @@ export class ContractComponent implements OnInit, AfterViewInit {
     }
   }
 
-  sortParticipant(list:any){
+  sortParticipant(list: any) {
     return list.sort((beforeItem: any, afterItem: any) => beforeItem.type - afterItem.type);
   }
 
-  getNameOrganization(item:any, index:any){
+  getNameOrganization(item: any, index: any) {
     return sideList[index].name + " : " + item.name;
   }
 
-  changeTab(){
+  changeTab() {
     this.p = 1;
     this.getContractList();
 
@@ -256,7 +257,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.p = 1;
     if (this.status == 'draft') {
       this.filter_status = 0;
-    }  else if (this.status == 'processing') {
+    } else if (this.status == 'processing') {
       this.filter_status = 20;
     } else if (this.status == 'expire') {
       this.filter_status = 33;
@@ -280,9 +281,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.pageEnd = this.pageTotal;
     }
   }
-// @ts-ignore
-  ViewReasonCancel(ContractId: number){
-    const data = {contractId: ContractId}
+  // @ts-ignore
+  ViewReasonCancel(ContractId: number) {
+    const data = { contractId: ContractId }
     const dialogRef = this.dialog.open(DialogReasonCancelComponent, {
       width: '500px',
       data
@@ -290,7 +291,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
       let is_data = result
-    }) 
+    })
   }
 
   autoSearch(event: any) {
@@ -346,9 +347,9 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
     let title: any = "";
 
-    if(sessionStorage.getItem('lang') == 'en') {
+    if (sessionStorage.getItem('lang') == 'en') {
       title = "CONTRACT SEARCH"
-    } else if(sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
+    } else if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       title = "TÌM KIẾM HỢP ĐỒNG";
     }
 
@@ -381,7 +382,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
     let data: any = "";
 
-    if(sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
+    if (sessionStorage.getItem('lang') == 'vi' || !sessionStorage.getItem('lang')) {
       data = {
         title: 'XÁC NHẬN HỦY HỢP ĐỒNG',
         id: id
@@ -392,7 +393,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
         id: id
       };
     }
-   
+
     // @ts-ignore
     const dialogRef = this.dialog.open(CancelContractDialogComponent, {
       width: '500px',
@@ -465,18 +466,18 @@ export class ContractComponent implements OnInit, AfterViewInit {
   deleteContract(id: any) {
     let data: any = "";
 
-    if(sessionStorage.getItem('lang') == 'vi') {
+    if (sessionStorage.getItem('lang') == 'vi') {
       data = {
         title: 'XÁC NHẬN XÓA HỢP ĐỒNG',
         id: id
       };
-    } else if(sessionStorage.getItem('lang') == 'en') {
+    } else if (sessionStorage.getItem('lang') == 'en') {
       data = {
         title: 'CONTRACT DELETE CONFIRMATION',
         id: id
       };
     }
-   
+
     // @ts-ignore
     const dialogRef = this.dialog.open(DeleteContractDialogComponent, {
       width: '480px',
@@ -516,18 +517,18 @@ export class ContractComponent implements OnInit, AfterViewInit {
     );
   }
 
-  getNameStatusCeca(status:any, ceca_push:any, ceca_status:any){
-    if(status == 30){
-      if(ceca_push == 0){
+  getNameStatusCeca(status: any, ceca_push: any, ceca_status: any) {
+    if (status == 30) {
+      if (ceca_push == 0) {
         return "";
-      }else if(ceca_push == 1){
-        if(ceca_status == -1){
+      } else if (ceca_push == 1) {
+        if (ceca_status == -1) {
           return "[Gửi lên CeCA thất bại]";
-        }else if(ceca_status == 1){
+        } else if (ceca_status == 1) {
           return "[Chờ BCT xác thực]";
-        }else if(ceca_status == -2){
+        } else if (ceca_status == -2) {
           return "[Xác thực thất bại]";
-        }else if(ceca_status == 0){
+        } else if (ceca_status == 0) {
           return "[BCT xác thực thành công]";
         } else {
           return "[Chưa gửi lên CeCA]";

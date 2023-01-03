@@ -251,7 +251,7 @@ export class SidebarService {
           '',
           3000
         );
-        this.router.navigate(['/login'])
+        setTimeout(() => this.router.navigate(['/login']), 3000);
       }
     );
 

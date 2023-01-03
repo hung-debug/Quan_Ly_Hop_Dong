@@ -88,7 +88,8 @@
           </div>
         </div>
 
-        <div class="participants--input" style="display: flex" >
+        <!-- KD -->
+        <div *ngIf="this.site == 'KD'" class="participants--input" style="display: flex" >
           <div  class="participants__name" style="width: 90%" *ngIf="isCheckRadio">
             <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
             <div class="input-data">
@@ -105,6 +106,25 @@
             </div>
           </div>
         </div>
+
+        <!--NB email-->
+        <!-- <div *ngIf="this.site == 'NB'" class="participants--input" style="display: flex">
+          <div class="participants__name">
+            <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
+            < class="input-data">
+              <img src="assets/img/login_email.svg" class="input-img">
+              <input type="text" placeholder="{{'nhap_email' | translate}}">
+            </div>
+          </div>
+
+          <div class="participants__name">
+            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div></div>
+            <div class="input-data">
+              <img src="assets/img/login_email.svg" class="input-img">
+              <input type="text" placeholder="{{'nhap_sdt' | translate}}">
+            </div>
+          </div>
+        </div> -->
 
         <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là usbtoken-->
         <!-- <div class="participants--input" style="display: flex" >

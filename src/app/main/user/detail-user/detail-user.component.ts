@@ -65,14 +65,14 @@ export class DetailUserComponent implements OnInit {
             listRole = data.permissions;
             this.isQLND_04 = listRole.some(element => element.code == 'QLND_04');
           }, error => {
-            // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-            this.router.navigate(['/login'])
+            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+            setTimeout(() => this.router.navigate(['/login']), 3000);
           }
         ); 
       
       }, error => {
-        // this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin phân quyền', "", 3000);
-        this.router.navigate(['/login'])
+        this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+        setTimeout(() => this.router.navigate(['/login']), 3000);
       }
     )
 

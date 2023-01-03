@@ -214,7 +214,7 @@ export class AddUserComponent implements OnInit {
             }, error => {
               this.spinner.hide();
               this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-              this.router.navigate(['/login'])
+              setTimeout(() => this.router.navigate(['/login']), 3000);
             }
           )
         }
