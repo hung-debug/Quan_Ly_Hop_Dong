@@ -1674,8 +1674,12 @@ export class ConsiderContractComponent
             signDigital.valueSignBase64 = encode(base64String);
 
             if (this.usbTokenVersion == 2) {
-              console.log("vao day usb ");
-              await this.createEmptySignature(signUpdate, signDigital, signI);
+              try {
+                await this.createEmptySignature(signUpdate, signDigital, signI);
+              } catch(err) {
+                this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token '+ err,'',3000);
+                return false;
+              }
               // var json_req = JSON.stringify({
               //   OperationId: 10,
               //   SessionId: this.sessionIdUsbToken,
@@ -1716,18 +1720,18 @@ export class ConsiderContractComponent
               //   return false;
               // }
 
-              const sign = await this.contractService.updateDigitalSignatured(
-                signUpdate.id,
-                signDigital.valueSignBase64
-              );
-              if (!sign.recipient_id) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký USB Token',
-                  '',
-                  3000
-                );
-                return false;
-              }
+              // const sign = await this.contractService.updateDigitalSignatured(
+              //   signUpdate.id,
+              //   signDigital.valueSignBase64
+              // );
+              // if (!sign.recipient_id) {
+              //   this.toastService.showErrorHTMLWithTimeout(
+              //     'Lỗi ký USB Token',
+              //     '',
+              //     3000
+              //   );
+              //   return false;
+              // }
             } else if (this.usbTokenVersion == 1) {
               console.log("vao day usb ");
 
