@@ -1668,6 +1668,8 @@ export class ConsiderContractComponent
               }
             }
 
+            console.log("sign ", signUpdate);
+
             const signDigital = JSON.parse(JSON.stringify(signUpdate));
             signDigital.Serial = this.signCertDigital.Serial;
 
@@ -1722,18 +1724,18 @@ export class ConsiderContractComponent
               //   return false;
               // }
 
-              // const sign = await this.contractService.updateDigitalSignatured(
-              //   signUpdate.id,
-              //   signDigital.valueSignBase64
-              // );
-              // if (!sign.recipient_id) {
-              //   this.toastService.showErrorHTMLWithTimeout(
-              //     'Lỗi ký USB Token',
-              //     '',
-              //     3000
-              //   );
-              //   return false;
-              // }
+              const sign = await this.contractService.updateDigitalSignatured(
+                signUpdate.id,
+                this.base64Data
+              );
+              if (!sign.recipient_id) {
+                this.toastService.showErrorHTMLWithTimeout(
+                  'Lỗi ký USB Token',
+                  '',
+                  3000
+                );
+                return false;
+              }
             } else if (this.usbTokenVersion == 1) {
               console.log("vao day usb ");
 
@@ -2327,7 +2329,15 @@ export class ConsiderContractComponent
 
     if (cert.certInfo) {
       this.signCertDigital = cert.certInfo.SerialNumber;
-      this.nameCompany = cert.certInfo.CommonName;
+
+      const utf8 = require('utf8');
+
+      try {
+        this.nameCompany = utf8.decode(cert.certInfo.CommonName);
+      } catch(err) {
+        this.nameCompany = cert.certInfo.CommonName;
+      }
+
 
       this.certInfoBase64 = cert.certInfo.Base64Encode;
     } else {
@@ -2392,8 +2402,10 @@ export class ConsiderContractComponent
     }   
   }
 
+  base64Data: any;
   async callMergeTimeStamp(signatureToken: any, fieldName: any, hexDigestTempFile: any) {
-    await this.contractService.meregeTimeStamp(this.recipientId, this.idContract, signatureToken, fieldName, this.certInfoBase64, hexDigestTempFile).toPromise();
+    const mergeTimeStamp = await this.contractService.meregeTimeStamp(this.recipientId, this.idContract, signatureToken, fieldName, this.certInfoBase64, hexDigestTempFile).toPromise();
+    this.base64Data = mergeTimeStamp.base64Data;
   }
 
   filePath: any = '';
@@ -3303,6 +3315,7 @@ export class ConsiderContractComponent
   }
 
   prepareInfoSignUsbTokenV1(page: any, heightPage: any) {
+    console.log("v1 ");
     this.isDataObjectSignature.map((sign: any) => {
       if (
         (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
@@ -3348,6 +3361,7 @@ export class ConsiderContractComponent
   }
 
   prepareInfoSignUsbTokenV2(page: any, heightPage: any) {
+    console.log("v2 ");
     this.isDataObjectSignature.map((sign: any) => {
       if (
         (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
@@ -3380,6 +3394,8 @@ export class ConsiderContractComponent
             }
           });
 
+          console.log("width ", sign.signDigitalWidth);
+
         return sign;
       } else {
         return sign;
@@ -3387,6 +3403,7 @@ export class ConsiderContractComponent
     });
 
     this.currentHeight += heightPage;
+
   }
 
   mobile: boolean = false;

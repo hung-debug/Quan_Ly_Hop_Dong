@@ -576,6 +576,8 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+
+    console.log("sign ", signDigital.signDigitalWidth);
     
     const body = JSON.stringify({
       fieldId: signUpdate.id,
