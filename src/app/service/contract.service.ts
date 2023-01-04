@@ -606,7 +606,7 @@ export class ContractService {
         signature: signature,
         filedName: fieldName,
         cert: cert,
-        isTimestamp: false,
+        isTimestamp: true,
         hexDigestTempFile: hexDigestTempFile
       })
     
