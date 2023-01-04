@@ -138,26 +138,26 @@
         ></pdf-viewer>
       </div>
 
-    <div class="flex-column" style="text-align: center">
+    <div class="flex-column" style="text-align: center;margin-top: 2px;">
       <button class="call-page" (click)="firstPageMobile()">
-        <img *ngIf="this.page1" src="assets/img/previousbold.svg">
-        <img *ngIf="!this.page1" src="assets/img/firstpage.svg">
+        <img width="14px" height="18px" *ngIf="this.page1" src="assets/img/previousbold.svg">
+        <img width="14px" height="18px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
       </button>
       <button class="call-page1" (click)="previousPageMobile()">
-        <img *ngIf="this.page1" src="assets/img/firstpagebold.svg">
-        <img *ngIf="!this.page1" src="assets/img/previous.svg">
+        <img width="10px" height="14px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
+        <img width="10px" height="14px" *ngIf="!this.page1" src="assets/img/previous.svg">
       </button>
 
       <input class="input-mobile" [(ngModel)]="pageMobile" type="text" />
       <a class="page-number-mobile">/{{this.pageNumber}}</a>
       <button class="call-page1" id="prev" (click)="onNextPageMobile()">
-        <img *ngIf="this.pageLast" src="assets/img/next.svg">
-        <img *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
+        <img width="10px" height="14px" *ngIf="this.pageLast" src="assets/img/next.svg">
+        <img width="10px" height="14px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
       </button>
 
       <button class="call-page1" id="prev" (click)="lastPageMobile()">
-        <img *ngIf="this.pageLast" src="assets/img/lastpage.svg">
-        <img *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
+        <img width="14px" height="18px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
+        <img width="14px" height="18px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
       </button>
     </div>
 
@@ -165,7 +165,7 @@
         <app-image-sign-contract id="image-sign-contract-mobile" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
       </div>
 
-    <div class="flex-column" *ngIf="![2,3].includes(recipient.status)">
+    <div class="flex-column" *ngIf="![2,3].includes(recipient.status)" style="margin-top: 5px">
       <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2">
         <p class="d-flex justify-content-center mb-4">{{'contract.review' | translate}}</p>
         <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
