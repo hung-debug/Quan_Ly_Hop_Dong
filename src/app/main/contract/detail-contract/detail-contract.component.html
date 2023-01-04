@@ -124,7 +124,7 @@
             <img width="12px" height="16px" *ngIf="!this.page1" src="assets/img/previous.svg">
           </button>
     
-          <input [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />&nbsp;/ &nbsp;{{this.pageNumber}}
+          <input class="input-web" [(ngModel)]="pageNum" type="text" (keyup.enter)="onEnter($event)" />&nbsp;/ &nbsp;{{this.pageNumber}}
           <button class="call-page1" (click)="onNextPage()" id="prev">
             <img width="12px" height="16px" *ngIf="this.pageLast" src="assets/img/next.svg">
             <img width="12px" height="16px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">

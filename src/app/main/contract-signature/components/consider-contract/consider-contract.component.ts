@@ -153,7 +153,7 @@ export class ConsiderContractComponent
   textSign: any;
   textSignBase64Gen: any;
   signInfoPKIU: any = {};
-  heightText: any = 200;
+  // heightText: any = 200;
   widthText: any = 200;
   loadingText: string = 'Đang xử lý...';
   phoneOtp: any;
@@ -1626,10 +1626,15 @@ export class ConsiderContractComponent
             let signI = null;
             if (signUpdate.type == 1 || signUpdate.type == 4) {
               this.textSign = signUpdate.valueSign;
-              /*this.heightText = signUpdate.width;
-              this.widthText = signUpdate.height;*/
-              this.heightText = 150;
-              this.widthText = 150;
+
+              console.log("width ", signUpdate.width);
+
+              // this.heightText = signUpdate.height;
+              this.widthText = signUpdate.width;
+
+              // this.heightText = 150;
+              // this.widthText = 150;
+
               await of(null).pipe(delay(120)).toPromise();
               const imageRender = <HTMLElement>(
                 document.getElementById('text-sign')
