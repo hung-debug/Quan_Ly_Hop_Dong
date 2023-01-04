@@ -363,6 +363,9 @@ export class ConfirmContractFormComponent implements OnInit {
       for (let i = 0; i < datasFormignId.length; i++) {
         let id = datasFormignId[i].id_have_data;
         delete datasFormignId[i].id_have_data;
+
+        datasFormignId[i].font_size = this.datasForm.size;
+        datasFormignId[i].font = this.datasForm.font;
         await this.contractService
           .getContractSampleEdit(datasFormignId[i], id)
           .toPromise()

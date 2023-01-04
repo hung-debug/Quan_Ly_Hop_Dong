@@ -219,30 +219,30 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     interact.addDocument(document);
     
+
     if(this.datas.participants && this.datas.participants[0].recipients[0].fields.length > 0) {
       const font = this.datas.participants[0].recipients[0].fields[0].font;
       const font_size = this.datas.participants[0].recipients[0].fields[0].font_size;
   
-      if(font) {
+      if(font && !this.datas.font) {
         this.datas.font = font;
         this.selectedFont = this.datas.font;
-      }
-  
-      if(font_size) {
+
         this.datas.size = font_size;
         this.size = this.datas.size;
       }
+  
     }
 
     if(!this.datas.font) {
       this.datas.font = "Times New Roman";
       this.selectedFont = this.datas.font;
-    }
 
-    if(!this.datas.size) {
       this.datas.size = 11;
       this.size = this.datas.size;
-    }
+    } 
+
+    
   }
 
   changeFont($event: any) {

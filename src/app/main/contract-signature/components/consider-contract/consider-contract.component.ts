@@ -1639,6 +1639,8 @@ export class ConsiderContractComponent
                 const textSignB = await domtoimage.toPng(imageRender);
                 signI = this.textSignBase64Gen = textSignB.split(',')[1];
               }
+
+              console.log("signI ", signI);
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(150)).toPromise();
 
