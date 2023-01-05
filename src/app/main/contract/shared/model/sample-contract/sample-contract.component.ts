@@ -183,7 +183,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       ]
     })
 
-    // //phong to thu nho o ky
+    //phong to thu nho o ky
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
       edges: {left: true, right: true, bottom: true, top: true},
       listeners: {
