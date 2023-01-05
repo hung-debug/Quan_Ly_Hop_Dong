@@ -584,10 +584,10 @@ export class ContractService {
       image: image,
       cert: cert,
       page: signDigital.page,
-      x: signDigital.signDigitalX,
-      y: signDigital.signDigitalY,
-      width: signDigital.signDigitalWidth,
-      height: signDigital.signDigitalHeight
+      x: Math.floor(signDigital.signDigitalX),
+      y: Math.floor(signDigital.signDigitalY),
+      width: Math.floor(signDigital.signDigitalWidth),
+      height: Math.floor(signDigital.signDigitalHeight)
     })
     
     return this.http.post<any>(this.emptySignatureUrl + recipientId+'/create-empty-token', body, {
