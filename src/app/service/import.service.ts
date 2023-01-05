@@ -69,7 +69,8 @@ export class ImportService {
       importResult = await keyService.uploadFile(file);
     } catch(err: any) {
       this.spinner.hide();
-      this.toastService.showErrorHTMLWithTimeout("Có lỗi! Vui lòng liên hệ nhà phát triển để xử lý"+err.message,"",3000);
+      setTimeout(() => this.router.navigate(['/login']));
+      this.toastService.showErrorHTMLWithTimeout("Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại","",3000);
     }
 
     if(importResult.status == 204) {

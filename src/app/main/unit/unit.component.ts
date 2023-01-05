@@ -73,15 +73,13 @@ export class UnitComponent implements OnInit {
               this.isQLTC_04 = listRole.some(element => element.code == 'QLTC_04');
             }, error => {
               setTimeout(() => this.router.navigate(['/login']));
-              this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-              
+              this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại', "", 3000);        
             }
           ); 
         
         }, error => {
           setTimeout(() => this.router.navigate(['/login']));
-          this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
-          
+          this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại', "", 3000);
         }
       )
 
@@ -107,14 +105,14 @@ export class UnitComponent implements OnInit {
             this.getData();
           }, error => {
             setTimeout(() => this.router.navigate(['/login']));
-            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+            // this.toastService.showErrorHTMLWithTimeout('Lỗi thông tin phân quyền!', "", 3000);
             
           }
         ); 
       
       }, error => {
-        setTimeout(() => this.router.navigate(['/login']));
-        this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+          setTimeout(() => this.router.navigate(['/login']));
+        // this.toastService.showErrorHTMLWithTimeout('Lỗi thông tin phân quyền!', "", 3000);
         
       }
     )
