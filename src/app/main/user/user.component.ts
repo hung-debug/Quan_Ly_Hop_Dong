@@ -4,6 +4,7 @@ import { AppService } from 'src/app/service/app.service';
 import { ImportService } from 'src/app/service/import.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { UserService } from 'src/app/service/user.service';
+import { ToastService } from 'src/app/service/toast.service';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -15,7 +16,8 @@ export class UserComponent implements OnInit {
     private userService: UserService,
     private unitService: UnitService,
     private router : Router,
-    private importService: ImportService
+    private importService: ImportService,
+    private toastService: ToastService,
     ) { }
 
   organization_id_user_login:any;
@@ -66,7 +68,11 @@ export class UserComponent implements OnInit {
       this.orgList = this.orgListTmp;
       this.convertData();
       this.selectedNodeOrganization = this.listOrgCombobox.filter((p: any) => p.data == this.organization_id);
-    });
+    }, error => {
+      setTimeout(() => this.router.navigate(['/login']));
+      this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);
+    }
+    );
 
     this.cols = [
       {header: 'user.name', style:'text-align: left;' },

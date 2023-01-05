@@ -142,7 +142,7 @@ export class AddContractComponent implements OnInit {
     private toastService: ToastService,
     private userService: UserService,
     private roleService: RoleService
-  ) {}
+  ) { }
 
   isQLHD_01: boolean = true;
   isQLHD_14: boolean = true;
@@ -207,7 +207,7 @@ export class AddContractComponent implements OnInit {
                     '',
                     3000
                   );
-                 
+
                 }
               );
             },
@@ -218,7 +218,7 @@ export class AddContractComponent implements OnInit {
                 '',
                 3000
               );
-              
+
             }
           );
 
@@ -260,7 +260,7 @@ export class AddContractComponent implements OnInit {
                   is_data_object_signature: rs[2],
                 };
 
-                console.log("rs ",rs);
+                console.log("rs ", rs);
 
                 this.getDataContractCreated(data_api);
               },
@@ -285,18 +285,33 @@ export class AddContractComponent implements OnInit {
               this.stepBatch = variable.stepSampleContractBatch.step1;
             }
           }
-         });
-     } else {
-      this.toastService.showErrorHTMLWithTimeout('Tổ chức chưa đăng ký sử dụng gói dịch vụ nào hoặc gói dịch vụ đã hết hạn','',3000);
-    }
-     });
+        });
+      } else {
+        this.toastService.showErrorHTMLWithTimeout('Tổ chức chưa đăng ký sử dụng gói dịch vụ nào hoặc gói dịch vụ đã hết hạn', '', 3000);
+      }
+    },(error) => {
+      setTimeout(() => this.router.navigate(['/login']));
+      this.toastService.showErrorHTMLWithTimeout(
+        'Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+        '',
+        3000
+      );
+    });
   }
+  // logOutSession() {
+  //   setTimeout(() => this.router.navigate(['/login']));
+  //   this.toastService.showErrorHTMLWithTimeout(
+  //     '1. Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!',
+  //     '',
+  //     3000
+  //   );
+  // }
 
   getDataContractCreated(data: any) {
     let fileNameAttach = data.i_data_file_contract.filter(
       (p: any) => p.type == 3
     );
-    
+
     if (data) {
       // sua hop dong don le theo mau
       if (data.is_data_contract.is_template) {
@@ -325,7 +340,7 @@ export class AddContractComponent implements OnInit {
         let fileName = data.i_data_file_contract.filter(
           (p: any) => p.type == 2 && p.status == 1
         )[0];
-        
+
         if (fileName) {
           data.is_data_contract['file_name'] = fileName.filename;
           data.is_data_contract['contractFile'] = fileName.path;

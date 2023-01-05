@@ -252,6 +252,9 @@ export class ContractSignatureComponent implements OnInit {
           } else {
             this.setPage();
           }
+        }, error => {
+          setTimeout(() => this.router.navigate(['/login']));
+          this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);        
         });
     } else if (this.filter_status == 1 || this.filter_status == 4) {
       if (this.typeDisplay == 'signOne')
@@ -294,6 +297,9 @@ export class ContractSignatureComponent implements OnInit {
               this.contracts[v].contractReleaseState =
                 key.participant.contract.release_state;
             });
+          }, error => {
+            setTimeout(() => this.router.navigate(['/login']));
+            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);        
           });
       else {
         this.contractService
@@ -329,6 +335,9 @@ export class ContractSignatureComponent implements OnInit {
               this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
               this.contractsSignMany[v].checked = false;
             });
+          }, error => {
+            setTimeout(() => this.router.navigate(['/login']));
+            this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);        
           });
       }
     } else {
@@ -348,6 +357,9 @@ export class ContractSignatureComponent implements OnInit {
           } else {
             this.setPage();
           }
+        }, error => {
+          setTimeout(() => this.router.navigate(['/login']));
+          this.toastService.showErrorHTMLWithTimeout('Phiên đăng nhập của bạn đã hết hạn. Vui lòng đăng nhập lại!', "", 3000);        
         });
     }
   }
