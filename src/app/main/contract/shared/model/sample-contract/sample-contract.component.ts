@@ -675,7 +675,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   this.list_sign_name.forEach((item: any) => {
                     item['selected'] = false;
                   })
-                  // document.getElementById('select-dropdown'). = 0;
                   // @ts-ignore
                   document.getElementById('select-dropdown').value = "";
                   this.objDrag[this.signCurent['id']].count = 2;
@@ -1031,6 +1030,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
+    console.log("d ", d);
+
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
@@ -1057,9 +1058,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
         if (this.isEnableText) {
-          this.objSignInfo.text_attribute_name = d.text_attribute_name
+          this.objSignInfo.text_attribute_name = d.name
         }
-        this.getCheckSignature(d.sign_unit, d.name);
+        this.getCheckSignature(d.sign_unit, d.recipient.name);
 
         if (!d.name) //@ts-ignore
           document.getElementById('select-dropdown').value = "";
