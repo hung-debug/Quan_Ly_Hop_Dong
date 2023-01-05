@@ -2147,7 +2147,7 @@ export class ConsiderContractComponent
       Swal.fire({
         html:
           'Vui lòng bật tool ký số hoặc tải ' +
-          `<a href='/assets/upload/mobi_pki_sign_setup.zip' target='_blank'>Tại đây</a>  và cài đặt`,
+          `<a href='/assets/upload/mobi_token_sign_setup.zip' target='_blank'>Tại đây</a>  và cài đặt`,
         icon: 'warning',
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#b0bec5',
