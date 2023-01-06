@@ -231,7 +231,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.font = "Times New Roman";
       this.selectedFont = this.datas.font;
 
-      this.datas.size = 11;
+      this.datas.size = 13;
       this.size = this.datas.size;
     } 
    

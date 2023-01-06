@@ -185,7 +185,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     //phong to thu nho o ky
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
-      edges: {left: true, right: true, bottom: true, top: true},
+      // edges: {left: true, right: true, bottom: true, top: true},
+      // invert: 'reposition',
+
+      edges: {
+        top: ".top-left, .left-top, .top-right, .right-top",
+        // right: '.top-right, .right-top',
+        right: ".top-right, .right-top, .bottom-right, .right-bottom",
+        left: ".top-left, .left-top, .bottom-left, .left-bottom",
+        bottom: ".bottom-left, .left-bottom, .bottom-right, .right-bottom"
+        // bottom: true,
+      },
+  
       listeners: {
         move: this.resizableListener, onend: this.resizeSignature
       },
@@ -238,7 +249,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.font = "Times New Roman";
       this.selectedFont = this.datas.font;
 
-      this.datas.size = 11;
+      this.datas.size = 13;
       this.size = this.datas.size;
     } 
 

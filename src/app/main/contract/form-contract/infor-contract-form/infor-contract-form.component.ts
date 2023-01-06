@@ -103,7 +103,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
 
-    this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract, false);
+    this.actionSuccess();
+
+    if(this.router.url.includes("edit")) {
+      this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract, false);
+    } else {
+      this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract, true);
+    }
+    
 
     if(!idContract || this.checkView) {
       this.actionSuccess();
