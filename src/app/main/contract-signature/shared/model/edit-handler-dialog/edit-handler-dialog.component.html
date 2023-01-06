@@ -20,7 +20,7 @@
           <div class="participants__name">
             <div class="label_detail text-color" *ngIf="changeTypeSign">
               <div>
-                <input type="radio"  (change)="changeTypeSign(0)" name="checkPhoneMailOrgSigner_" [value]="email" checked/>
+                <input type="radio"  (change)="changeTypeSign(0)" name="checkPhoneMailOrgSigner_" [value]="email"  [(ngModel)]="login_by"/>
               </div>&nbsp;
               <div>
                 {{'typeOfSignEmail' | translate}}
@@ -30,7 +30,7 @@
           <div class="participants__name">
             <div class="label_detail text-color">
               <div>
-                <input type="radio" (change)="changeTypeSign(1)" name="checkPhoneMailOrgSigner_" [value]="phone" />
+                <input type="radio" (change)="changeTypeSign(1)" name="checkPhoneMailOrgSigner_" [value]="phone" [(ngModel)]="login_by"/>
               </div>&nbsp;
               <div>
                 {{'typeOfSignPhone' | translate}}
@@ -47,7 +47,7 @@
               <img src="assets/img/icon_name.svg" class="input-img">
 
               <!--Trường hợp typeOfSignEmail-->
-              <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"  ngModel="name">
+              <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"  [(ngModel)]="name">
 
                 <!--Trường hợp typeOfSignPhone-->
               <!-- <input  type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"/> -->
@@ -93,7 +93,7 @@
             <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
             <div class="input-data">
               <img src="assets/img/login_email.svg" class="input-img">
-              <input type="text" placeholder="{{'nhap_email' | translate}}" ngModel="email">
+              <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="email">
             </div>
           </div>
 
@@ -101,7 +101,7 @@
             <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
             <div class="input-data">
               <img class="input-img">
-              <input type="text" placeholder="{{'nhap_sdt' | translate}}" ngModel="phone">
+              <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="phone">
             </div>
           </div>
         </div>

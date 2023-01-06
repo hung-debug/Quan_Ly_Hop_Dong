@@ -117,6 +117,8 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       })
       console.log("dataaaaaa", this.is_list_name);
 
+      
+
 
 
       this.listCheckSmsEmail = true
@@ -257,15 +259,13 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   }
 
-  openEdit(RecipientsId: any) {
+  openEdit(recipient: any) {
     let data: any;
 
-    // for(let i=0; i < this.is_list_name.length ; i++){
-
-    //   if(RecipientsId === this.is_list_name[i].id){
-    //       // data = {reasonReject: this.is_list_name[i].reasonReject}
-    //    }
-    // }
+    this.contractService.getInforPersonProcess(recipient).subscribe((data) =>{
+      console.log("edit handler",recipient);
+      
+    })
 
     const dialogRef = this.dialog.open(EditHandlerComponent, {
       width: '900px',

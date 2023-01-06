@@ -51,7 +51,7 @@
                         </div>
 
                         <div *ngIf = "d.statusNumber != 0 && d.statusNumber !== 4" class="div_icon">
-                             <!-- <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)"/> -->
+                             <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)"/>
                         </div>
                     
 
@@ -96,7 +96,7 @@
                         <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
                     </div>
                     <div class="div_icon" *ngIf = "d.statusNumber != 0 && d.statusNumber !== 4">
-                        <!-- <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)"/> -->
+                        <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)"/>
                     </div>
                 </div>
             </div>

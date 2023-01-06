@@ -250,7 +250,7 @@ export class AddUserComponent implements OnInit {
       
       }, error => {
         this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout('Hết phiên đăng nhập, Vui lòng đăng nhập lại', "", 3000);
+        // this.toastService.showErrorHTMLWithTimeout('Hết phiên đăng nhập, Vui lòng đăng nhập lại', "", 3000);
         this.router.navigate(['/login'])
       }
     )

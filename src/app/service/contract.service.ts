@@ -1367,13 +1367,17 @@ export class ContractService {
     return this.http.get<any>(this.getCheckSign + id_recipient, { headers });
   }
 
-  getInforPersonProcess(recipient_id?: number | string){
+  getInforPersonProcess(id?: number | string){
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.inforPersonProcess + recipient_id, {headers});
+      console.log("id_recipdddđient",id);
+    return this.http.get<any>(this.inforPersonProcess + id, {headers});
+    
   }
+ 
+  
 
   getDetailContract(idContract: any) {
     this.getCurrentUser();

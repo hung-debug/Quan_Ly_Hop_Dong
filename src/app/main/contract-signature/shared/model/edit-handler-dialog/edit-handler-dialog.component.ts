@@ -32,11 +32,13 @@ export class EditHandlerComponent implements OnInit {
   is_origanzation_signature: any = [];
   is_origanzation_document: any = {};
   site: string;
-  email: string = "email";
-  phone: string = "phone";
+  email: string;
+  phone: string;
   login_by: any;
   isCheckRadio= true;
   is_handler: any;
+  name: string;
+  recipient_id:any;
   //dropdown
   signTypeList: Array<any> = type_signature;
   checkCount = 1;
@@ -64,23 +66,28 @@ export class EditHandlerComponent implements OnInit {
       this.signTypeList = type_signature;
     }
 
+    // this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
+    //   console.log("data_organization",this.datas);
+    // this.datas.is_handler = [...this.contractService.getDataDetermineInitialization()];
+    //   console.log("this.datas.is_handler",this.datas.is_handler);
 
 
-      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id)); // person => sign all,
-      console.log("data_organization",this.datas);
-
-        this.datas.is_handler = [...this.contractService.getDataDetermineInitialization()];
-        console.log("this.datas.is_handler",this.datas.is_handler);
+    // console.log("nameeeeee",this.datas);
+    // this.contractService.getInforPersonProcess(this.recipient_id).subscribe(response =>{
+    //   this.name = response.name;
+    //   console.log("nameeeeee",this.recipient_id);
+      
+    // })  
         
   
       
     
 
     // data Tổ chức của tôi
-    this.data_organization = this.datas.is_handler.filter((p: any) => p.type == 1)[0];
+    // this.data_organization = this.datas.is_handler.filter((p: any) => p.type == 1)[0];
   
     
-    this.data_organization.name = this.datas.is_handler.filter((p: any) => p.type == 1)[0].name ? this.datas.is_handler.filter((p: any) => p.type == 1)[0].name : this.datas.name_origanzation;
+    // this.data_organization.name = this.datas.is_handler.filter((p: any) => p.type == 1)[0].name ? this.datas.is_handler.filter((p: any) => p.type == 1)[0].name : this.datas.name_origanzation;
 
     // this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
     // this.is_origanzation_signature = this.data_organization.recipients.filter((p: any) => p.role == 3);
