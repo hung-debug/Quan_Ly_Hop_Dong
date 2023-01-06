@@ -771,9 +771,16 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
               break;
             }
             if (!isParterSort[k].email && isParterSort[k].role == 3) {
-              this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")
-              count++;
-              break;
+              if(isParterSort[k].login_by == 'email') {
+                this.getNotificationValid("Vui lòng nhập email" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")
+                count++;
+                break;
+              } else if(isParterSort[k].login_by == 'phone') {
+                this.getNotificationValid("Vui lòng nhập số điện thoại" + this.getNameObject(isParterSort[k].role) + " của đối tác cá nhân!")
+                count++;
+                break;
+              }
+             
             }
 
             if (isParterSort[k].sign_type.length == 0 && [3, 4].includes(isParterSort[k].role) && isParterSort[k].role == 3) {
