@@ -271,7 +271,64 @@ export class UserService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-    return this.http.get<any>(this.getUserByIdUrl + id, { headers: headers });
+    return this.http.get<any>(this.getUserByIdUrl + id, { headers: headers},);
+  }
+
+  async getUserById1(id: any) {
+    // this.getCurrentUser();
+    // const headers = new HttpHeaders()
+    //   .append('Content-Type', 'application/json')
+    //   .append('Authorization', 'Bearer ' + this.token)
+    //   .append("Access-Control-Allow-Headers", "Authorization, X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, X-Custom-header")
+    //   .append("Access-Control-Allow-Credentials", "true");;
+
+    //  const headers = new HttpHeaders().
+    //  append("Access-Control-Allow-Origin", "*")
+    // .append("Access-Control-Allow-Credentials", "true")
+    // .append("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT")
+    // .append("Access-Control-Allow-Headers", "*");
+    // return this.http.get<any>(this.getUserByIdUrl + id, { headers: headers, observe: 'response' as 'body'});
+
+    // this.getCurrentUser();
+    // console.log("token ", this.token);
+    // const test = await fetch(
+    //   this.getUserByIdUrl + id,
+    //   {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': 'Bearer '+ this.token,
+    //     },
+    //     method: 'GET',
+    //     mode: 'no-cors'
+    //   }
+    // ).then((res) => {
+    //   res.json()
+    // });
+
+    // this.getCurrentUser();
+    // fetch(this.getUserByIdUrl + id, {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': 'Bearer '+ this.token,
+    //     },
+    //     // mode: 'no-cors',
+    // }).then(response  =>  response.json()).then(function (response) {
+    //   console.log(response, response);
+    //   console.log("a ",response.headers.get('x-auth-token'));
+
+    // }).catch(async function (error) {console.log('error', error);
+
+    this.getCurrentUser();
+    let response = await fetch(this.getUserByIdUrl + id, {
+              headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+ this.token,
+        },
+    });
+
+    console.log("h ",response.headers); // application/json; charset=utf-8
+
+
   }
 
   getUnitById(id: any) {

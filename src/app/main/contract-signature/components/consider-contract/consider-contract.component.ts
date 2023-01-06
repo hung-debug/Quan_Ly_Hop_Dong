@@ -933,56 +933,56 @@ export class ConsiderContractComponent
   }
 
   changePositionSign() {
-    interact('.dropzone').dropzone({
-      //@ts-ignore
-      accept: null,
-      overlap: 1,
-    })
+    // interact('.dropzone').dropzone({
+    //   //@ts-ignore
+    //   accept: null,
+    //   overlap: 1,
+    // })
 
-    interact('.not-out-drop').on('dragend', this.showEventInfo).draggable({
-      listeners: {move: this.dragMoveListener, onend: this.showEventInfo},
-      inertia: true,
-      modifiers: [
-        interact.modifiers.restrictRect({
-          restriction: '.drop-zone',
-          endOnly: true
-        })
-      ]
-    })
+    // interact('.not-out-drop').on('dragend', this.showEventInfo).draggable({
+    //   listeners: {move: this.dragMoveListener, onend: this.showEventInfo},
+    //   inertia: true,
+    //   modifiers: [
+    //     interact.modifiers.restrictRect({
+    //       restriction: '.drop-zone',
+    //       endOnly: true
+    //     })
+    //   ]
+    // })
 
-    // //phong to thu nho o ky
-    interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
-      edges: {left: true, right: true, bottom: true, top: true},
-      listeners: {
-        move: this.resizableListener, onend: this.resizeSignature
-      },
-      modifiers: [
-        interact.modifiers.restrictEdges({
-          outer: '.drop-zone'
-        }),
-        // minimum size
-        interact.modifiers.restrictSize({
-          // min: { width: 100, height: 32 }
-        })
-      ],
-      inertia: true,
-    })
+    // // //phong to thu nho o ky
+    // interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
+    //   edges: {left: true, right: true, bottom: true, top: true},
+    //   listeners: {
+    //     move: this.resizableListener, onend: this.resizeSignature
+    //   },
+    //   modifiers: [
+    //     interact.modifiers.restrictEdges({
+    //       outer: '.drop-zone'
+    //     }),
+    //     // minimum size
+    //     interact.modifiers.restrictSize({
+    //       // min: { width: 100, height: 32 }
+    //     })
+    //   ],
+    //   inertia: true,
+    // })
     
-    interact('.resize-drag').on('dragend', this.showEventInfo).draggable({
-      listeners: {
-        move: this.dragMoveListener,
-        onend: this.showEventInfo
-      },
-      inertia: true,
-      autoScroll: true,
-      modifiers: []
-    })
+    // interact('.resize-drag').on('dragend', this.showEventInfo).draggable({
+    //   listeners: {
+    //     move: this.dragMoveListener,
+    //     onend: this.showEventInfo
+    //   },
+    //   inertia: true,
+    //   autoScroll: true,
+    //   modifiers: []
+    // })
 
-    interact('.resize-drag').resizable({
-      edges: {left: false, right: false, bottom: false, top: false},
-    })
+    // interact('.resize-drag').resizable({
+    //   edges: {left: false, right: false, bottom: false, top: false},
+    // })
 
-    interact.addDocument(document);
+    // interact.addDocument(document);
   }
 
   
