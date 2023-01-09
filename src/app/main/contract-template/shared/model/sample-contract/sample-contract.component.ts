@@ -270,7 +270,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (res.type == 4) {
               res['sign_unit'] = 'so_tai_lieu'
             }
-            res.name = res.recipient.name;
+            // res.name = res.recipient.name;
             res.email = res.recipient.email;
             dataPosition.push(res);
           })
@@ -1099,6 +1099,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
+    console.log("d ",d);
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
