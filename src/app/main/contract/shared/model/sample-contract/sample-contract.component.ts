@@ -1071,7 +1071,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
         if (this.isEnableText) {
-          this.objSignInfo.text_attribute_name = d.name
+            this.objSignInfo.text_attribute_name = d.text_attribute_name;
         }
 
         if(this.router.url.includes("edit")) {
@@ -1740,10 +1740,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
     
-    // let sum = 0;
-    // for(let i = 0; i < this.pageNumber; i++) {
-    //   sum += ;
-    // }
+    let sum: any[] = [];
+    for(let i = 0; i < this.pageNumber; i++) {
+      sum[i] += this.top[i];
+    }
+
+    console.log("sum ", sum);
   }
 
 
