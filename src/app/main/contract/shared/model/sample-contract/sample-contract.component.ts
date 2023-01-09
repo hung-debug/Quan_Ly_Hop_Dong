@@ -1061,7 +1061,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (this.isEnableText) {
           this.objSignInfo.text_attribute_name = d.name
         }
-        this.getCheckSignature(d.sign_unit, d.recipient.name);
+
+        if(this.router.url.includes("edit")) {
+          this.getCheckSignature(d.sign_unit, d.recipient.name);
+        } else {
+          this.getCheckSignature(d.sign_unit, d.name);
+        }
 
         if (!d.name) //@ts-ignore
           document.getElementById('select-dropdown').value = "";
