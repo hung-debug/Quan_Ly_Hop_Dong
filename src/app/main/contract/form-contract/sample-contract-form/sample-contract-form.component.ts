@@ -1870,6 +1870,6 @@ export class SampleContractFormComponent implements OnInit {
       this.pageLast = false;
     }
 
-    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height));
   }
 }

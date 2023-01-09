@@ -112,6 +112,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     this.spinner.hide();
 
+  
+
     if(this.datas.font) {
       this.selectedFont = this.datas.font;
     }
@@ -804,6 +806,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
+  top: any[]= [];
   // view pdf qua canvas
   async getPage() {
     console.log("sample contract ", this.datas);
@@ -837,6 +840,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       setTimeout(() => {
         this.setPosition();
         this.eventMouseover();
+
+        for(let i = 0; i <= this.pageNumber;i++) {
+          this.top[i] = 0;
+          this.sum[i] = 0;
+        }
+
+        for(let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-'+i);
+          this.top[i] = canvas.height;
+        }
       }, 100)
     })
   }
@@ -1063,7 +1076,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
 
         if(this.router.url.includes("edit")) {
-          this.getCheckSignature(d.sign_unit, d.recipient.name);
+          if(d.recipient.name)
+            this.getCheckSignature(d.sign_unit, d.recipient.name);
+          else
+          this.getCheckSignature(d.sign_unit, d.name);
         } else {
           this.getCheckSignature(d.sign_unit, d.name);
         }
@@ -1701,7 +1717,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top);
   }
 
+  sum: number[] = [];
   scroll(event: any) {
+
     //đổi màu cho nút back page
     let canvas1: any = document.getElementById('canvas-step3-1');
 
@@ -1720,7 +1738,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.pageLast = false;
     }
 
-    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+    let scrollTop = Number(event.srcElement.scrollTop);
+
+    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height));
+  
   }
 
 
