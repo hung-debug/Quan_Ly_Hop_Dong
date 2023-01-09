@@ -843,7 +843,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
         for(let i = 0; i <= this.pageNumber;i++) {
           this.top[i] = 0;
-          this.sum[i] = 0;
         }
 
         for(let i = 1; i <= this.pageNumber; i++) {
@@ -1076,10 +1075,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
 
         if(this.router.url.includes("edit")) {
-          if(d.recipient.name)
+          if(d.recipient)
             this.getCheckSignature(d.sign_unit, d.recipient.name);
           else
-          this.getCheckSignature(d.sign_unit, d.name);
+            this.getCheckSignature(d.sign_unit, d.name);
         } else {
           this.getCheckSignature(d.sign_unit, d.name);
         }
@@ -1717,7 +1716,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     pdffull.scrollTo(0, canvas.getBoundingClientRect().top - canvas1.getBoundingClientRect().top);
   }
 
-  sum: number[] = [];
   scroll(event: any) {
 
     //đổi màu cho nút back page
@@ -1740,8 +1738,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     let scrollTop = Number(event.srcElement.scrollTop);
 
-    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height));
-  
+    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+    
+    // let sum = 0;
+    // for(let i = 0; i < this.pageNumber; i++) {
+    //   sum += ;
+    // }
   }
 
 
