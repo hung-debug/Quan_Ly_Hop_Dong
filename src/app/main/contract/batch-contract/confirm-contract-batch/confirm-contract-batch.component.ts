@@ -122,6 +122,9 @@ export class ConfirmContractBatchComponent
   //   {id: 3, name: 'Tập đoàn Bảo Việt'}
   // ]
 
+  sum: number[] = [];
+  top: any[]= [];
+
   constructor(
     private userService: UserService,
     private cdRef: ChangeDetectorRef,
@@ -398,6 +401,24 @@ export class ConfirmContractBatchComponent
         setTimeout(() => {
           this.setPosition();
           this.eventMouseover();
+
+          for(let i = 0; i <= this.pageNumber;i++) {
+            this.top[i] = 0;
+  
+            if(i < this.pageNumber)
+              this.sum[i] = 0;
+          }
+  
+          for(let i = 1; i <= this.pageNumber; i++) {
+            let canvas: any = document.getElementById('canvas-step3-'+i);
+            this.top[i] = canvas.height;
+          }
+          
+  
+          for(let i = 0; i < this.pageNumber; i++) {
+            this.top[i+1] += this.top[i];
+            this.sum[i] = this.top[i+1];
+          }
         }, 100);
       });
   }
@@ -925,5 +946,13 @@ export class ConfirmContractBatchComponent
     }
 
     this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+
+    let scrollTop = Number(event.srcElement.scrollTop);
+
+    for(let i = 0; i < this.sum.length;i++) {
+      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
+        this.pageNum = Number(i+2);
+      }
+    }
   }
 }

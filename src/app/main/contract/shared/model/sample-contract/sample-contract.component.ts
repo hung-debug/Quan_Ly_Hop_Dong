@@ -96,6 +96,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   selectedFont: any="";
   size: any;
 
+  sum: number[] = [];
+  top: any[]= [];
+
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -806,7 +810,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  top: any[]= [];
   // view pdf qua canvas
   async getPage() {
     console.log("sample contract ", this.datas);
@@ -843,12 +846,23 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
         for(let i = 0; i <= this.pageNumber;i++) {
           this.top[i] = 0;
+
+          if(i < this.pageNumber)
+            this.sum[i] = 0;
         }
 
         for(let i = 1; i <= this.pageNumber; i++) {
           let canvas: any = document.getElementById('canvas-step3-'+i);
           this.top[i] = canvas.height;
         }
+        
+
+        for(let i = 0; i < this.pageNumber; i++) {
+          this.top[i+1] += this.top[i];
+          this.sum[i] = this.top[i+1];
+        }
+
+
       }, 100)
     })
   }
@@ -1739,13 +1753,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let scrollTop = Number(event.srcElement.scrollTop);
 
     this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
-    
-    let sum: any[] = [];
-    for(let i = 0; i < this.pageNumber; i++) {
-      sum[i] += this.top[i];
-    }
 
-    console.log("sum ", sum);
+    for(let i = 0; i < this.sum.length;i++) {
+      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
+        this.pageNum = Number(i+2);
+      }
+    }
   }
 
 
