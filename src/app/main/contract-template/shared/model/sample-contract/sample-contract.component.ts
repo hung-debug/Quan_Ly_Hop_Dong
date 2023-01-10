@@ -754,11 +754,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         } else  {
           element.is_disable = false;
         }
-        //element.is_disable = false;
       } else {
-
         if (isSignType != 'text' && this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && p.sign_unit == isSignType)) {
-          console.log("a");
           element.is_disable = false;
         } else {
           if (isSignType == 'chu_ky_anh') {
@@ -778,7 +775,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (recipient_id || listSelect) {
         element.is_disable = false;
         element.selected = (recipient_id ? element.id==recipient_id: element.name == listSelect);
-        return;
+
       }
     })
   }
@@ -1117,9 +1114,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     } else
       signElement = document.getElementById(this.objSignInfo.id);
 
-    // if (this.isEnableSelect) {
-    //   this.isEnableSelect = false;
-    // }
+    if (this.isEnableSelect) {
+      this.isEnableSelect = false;
+    }
 
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
@@ -1147,9 +1144,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.getCheckSignature(d.sign_unit, d.name, d.recipient_id);
 
         console.log("d n ", d.name);
-        if (!d.name) //@ts-ignore
+        if (!d.name) {
+          //@ts-ignore
           document.getElementById('select-dropdown').value = "";
 
+          console.log("1 ");
+        } else {
+          //@ts-ignore
+          document.getElementById('select-dropdown').value = d.recipient_id
+          ;
+
+          console.log("d ", d);
+
+          console.log("id ", d.id);
+
+          console.log("2 ");
+        }
       }
     }
     console.log(this.datas.contract_user_sign);
@@ -1291,6 +1301,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.email = data_name.email;
             signElement.setAttribute("email", isObjSign.email);
+
+            console.log("vao day cc");
 
           }
 
