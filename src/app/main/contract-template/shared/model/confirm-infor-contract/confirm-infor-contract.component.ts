@@ -116,13 +116,27 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let isNotFieldId: any[] = [];
       let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
 
+      console.log("datas ", this.datas.contract_user_sign);
+
       isUserSign_clone.forEach((res: any) => {
         res.sign_config.forEach((element: any) => {
+
+          if(element.sign_unit == 'text') {
+            element.name = element.text_attribute_name;
+          }
+
           if (element.id_have_data) {
             isHaveFieldId.push(element)
           } else isNotFieldId.push(element);
         })
       })
+
+      // isHaveFieldId.forEach((res: any) => {
+      //   if(res.sign_unit == 'text') {
+      //     res.name = res.te
+      //   }
+      // })
+
       this.getDefindDataSignEdit(isHaveFieldId, isNotFieldId, action);
     } else {
       this.data_sample_contract = [];
@@ -169,14 +183,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       })
 
       this.spinner.show();
-
-      // const font = {
-      //   'unit':'text',
-      //   'font':this.datas.font,
-      //   'size':this.datas.size+'px'
-      // }
-
-      // this.data_sample_contract.push(font);
 
       this.contractTemplateService.getContractSample(this.data_sample_contract).subscribe((data) => {
         if (action == 'finish_contract') {
