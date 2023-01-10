@@ -772,10 +772,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
       
+      console.log("name ", this.list_sign_name);
 
       console.log(isSignType);
       if (recipient_id || listSelect) {
+        element.is_disable = false;
         element.selected = (recipient_id ? element.id==recipient_id: element.name == listSelect);
+        return;
       }
     })
   }
@@ -1114,9 +1117,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     } else
       signElement = document.getElementById(this.objSignInfo.id);
 
-    if (this.isEnableSelect) {
-      this.isEnableSelect = false;
-    }
+    // if (this.isEnableSelect) {
+    //   this.isEnableSelect = false;
+    // }
 
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
@@ -1131,6 +1134,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
+
         if (this.isEnableText) {
           this.objSignInfo.text_attribute_name = d.text_attribute_name
         }
@@ -1271,8 +1275,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
-          // if (data_name && !isObjSign.name) {
           if (data_name) {
+
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
 
