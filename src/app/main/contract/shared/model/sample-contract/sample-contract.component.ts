@@ -1097,8 +1097,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.getCheckSignature(d.sign_unit, d.name);
         }
 
-        if (!d.name) //@ts-ignore
+        if (!d.name) {
+          //@ts-ignore
           document.getElementById('select-dropdown').value = "";
+
+          console.log("1 ");
+        } else {
+
+          if(d.recipient_id) {
+                //@ts-ignore
+          document.getElementById('select-dropdown').value = d.recipient_id;
+          } else {
+                    //@ts-ignore
+          document.getElementById('select-dropdown').value = "";
+          }
+        }
+
 
       }
     }

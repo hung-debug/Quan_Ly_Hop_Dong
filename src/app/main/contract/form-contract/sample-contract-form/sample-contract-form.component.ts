@@ -1096,8 +1096,23 @@ export class SampleContractFormComponent implements OnInit {
           this.isEnableSelect = true;
         }
 
-        if (!d.name) //@ts-ignore
+        if (!d.name) {
+          //@ts-ignore
           document.getElementById('select-dropdown').value = "";
+
+          console.log("1 ");
+        } else {
+
+          if(d.recipient_id) {
+                //@ts-ignore
+          document.getElementById('select-dropdown').value = d.recipient_id;
+          } else {
+                    //@ts-ignore
+          document.getElementById('select-dropdown').value = "";
+          }
+        }
+        
+
 
       }
     }

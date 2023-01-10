@@ -773,7 +773,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       console.log(isSignType);
       if (recipient_id || listSelect) {
-        element.is_disable = false;
+        // element.is_disable = false;
         element.selected = (recipient_id ? element.id==recipient_id: element.name == listSelect);
 
       }
@@ -1150,15 +1150,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
           console.log("1 ");
         } else {
-          //@ts-ignore
-          document.getElementById('select-dropdown').value = d.recipient_id
-          ;
 
-          console.log("d ", d);
+          if(d.recipient_id) {
+                //@ts-ignore
+          document.getElementById('select-dropdown').value = d.recipient_id;
+          } else {
+                    //@ts-ignore
+          document.getElementById('select-dropdown').value = "";
+          }
+      
 
-          console.log("id ", d.id);
-
-          console.log("2 ");
         }
       }
     }
