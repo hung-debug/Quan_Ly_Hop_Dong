@@ -749,15 +749,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
         
-        if (data.length >= 0)
+        if (data.length >= 0) {
           element.is_disable = true;
-        else element.is_disable = false;
+        } else  {
+          element.is_disable = false;
+        }
         //element.is_disable = false;
       } else {
 
         if (isSignType != 'text' && this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && p.sign_unit == isSignType)) {
           console.log("a");
-          element.is_disable = true;
+          element.is_disable = false;
         } else {
           if (isSignType == 'chu_ky_anh') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
@@ -773,7 +775,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       console.log(isSignType);
       if (recipient_id || listSelect) {
-        element.selected = (recipient_id?element.id==recipient_id:element.name == listSelect);
+        element.selected = (recipient_id ? element.id==recipient_id: element.name == listSelect);
       }
     })
   }
@@ -1133,8 +1135,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.objSignInfo.text_attribute_name = d.text_attribute_name
         }
 
+        console.log("is ", isObjSign);
+
+        console.log("d ", d);
+
+        // console.log("sd ",document.getElementById('select-dropdown').value);
         this.getCheckSignature(d.sign_unit, d.name, d.recipient_id);
 
+        console.log("d n ", d.name);
         if (!d.name) //@ts-ignore
           document.getElementById('select-dropdown').value = "";
 

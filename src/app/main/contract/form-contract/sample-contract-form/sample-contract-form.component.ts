@@ -1309,6 +1309,7 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   back(e: any, step?: any) {
+    console.log("ds ", this.datasForm);
     this.nextOrPreviousStep(step);
   }
 

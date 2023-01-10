@@ -107,6 +107,7 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
 
+    console.log("b2 ", this.datasForm);
     if(environment.flag == 'NB') {
       this.site = 'NB';
     } else if(environment.flag == 'KD') {
