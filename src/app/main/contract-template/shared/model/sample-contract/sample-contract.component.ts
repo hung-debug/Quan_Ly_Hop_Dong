@@ -756,7 +756,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       } else {
         if (isSignType != 'text' && this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && p.sign_unit == isSignType)) {
-          element.is_disable = false;
+          element.is_disable = true;
         } else {
           if (isSignType == 'chu_ky_anh') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
@@ -1158,8 +1158,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     //@ts-ignore
           document.getElementById('select-dropdown').value = "";
           }
-      
-
         }
       }
     }
