@@ -135,7 +135,8 @@ export class ContractService {
   emptySignatureUrl: any = `${environment.apiUrl}/api/v1/v1/processes/digital-sign/`;
 
   mergeTimeStampUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
-  inforPersonProcess: any = `${environment.apiUrl}/api/v1/recipients/`;
+  inforPersonProcessUrl: any = `${environment.apiUrl}/api/v1/recipients/`;
+  updateInforPersonProcessUrl: any = `${environment.apiUrl}/api/v1/recipients/`;
 
   token: any;
   customer_id: any;
@@ -1367,17 +1368,27 @@ export class ContractService {
     return this.http.get<any>(this.getCheckSign + id_recipient, { headers });
   }
 
-  getInforPersonProcess(id?: number | string){
+  getInforPersonProcess(recipient?: number | string){
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-      console.log("id_recipdddđient",id);
-    return this.http.get<any>(this.inforPersonProcess + id, {headers});
+    return this.http.get<any>(this.inforPersonProcessUrl  + recipient, {headers});
     
   }
  
-  
+  updateInfoPersonProcess(datas: any, recipient: any) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+      
+    return this.http.put<any>(
+      this.updateInforPersonProcessUrl + recipient,
+      datas,
+      { headers: headers }
+    );
+  }
 
   getDetailContract(idContract: any) {
     this.getCurrentUser();

@@ -239,6 +239,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       width: '600px',
       data
     })
+    console.log("ly do tu choi hd",data);
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
     })
@@ -260,20 +261,23 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   openEdit(recipient: any) {
-    let data: any;
-
-    this.contractService.getInforPersonProcess(recipient).subscribe((data) =>{
-      console.log("edit handler",recipient);
+    this.contractService.getInforPersonProcess(recipient).subscribe((response) =>{
+      let data: any;
+      data = response
+      // console.log("response",response);
       
+      const dialogRef = this.dialog.open(EditHandlerComponent, {
+        width: '900px',
+        data,
+      })
+      // console.log("data luongxly hodng",data);
+      
+      dialogRef.afterClosed().subscribe((result: any) => {
+        console.log('the close dialog');
+        let is_data = result
+      })
     })
 
-    const dialogRef = this.dialog.open(EditHandlerComponent, {
-      width: '900px',
-      data
-    })
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
-    })
   }
 
   getDataHandler(id: number, action: string) {
