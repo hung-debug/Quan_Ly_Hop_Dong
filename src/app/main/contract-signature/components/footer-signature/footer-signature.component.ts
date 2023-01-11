@@ -416,7 +416,7 @@ export class FooterSignatureComponent implements OnInit {
     }
     // @ts-ignore
     const dialogRef = this.dialog.open(ForwardContractComponent, {
-      width: '450px',
+      width: '500px',
       backdrop: 'static',
       keyboard: true,
       data
