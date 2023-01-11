@@ -1343,6 +1343,9 @@ export class SampleContractFormComponent implements OnInit {
     this.datasForm.font = this.selectedFont;
     this.datasForm.size = this.size;
     if (action == 'next_step' && !this.validData()) {
+
+      console.log("next ", this.datasForm.contract_user_sign)
+
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
         this.save_draft_infor_form.close_header = false;
         this.save_draft_infor_form.close_modal.close();
@@ -1451,11 +1454,16 @@ export class SampleContractFormComponent implements OnInit {
       } else if (action == 'next_step') {
         // let coutError = false;
         this.spinner.show();
-        // if (!coutError) {
+        this.datasForm.contract_user_sign.forEach((res: any) => {
+          res.sign_config.forEach((element: any) => {
+            if(element.type == 1) {
+              element.name = element.text_attribute_name;
+            }
+          })
+        })
           this.stepForm = variable.stepSampleContractForm.step4;
           this.datasForm.stepLast = this.stepForm
           this.nextOrPreviousStep(this.stepForm);
-        // }
       }
     }
   }
@@ -1613,7 +1621,7 @@ export class SampleContractFormComponent implements OnInit {
         if (this.datasForm.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datasForm.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datasForm.contract_user_sign[i].sign_config[j];
-            if (!element.recipient.name && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') {
+            if (!element.name && !element.recipient && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') {
               console.log("el ", element);
               count++;
               break

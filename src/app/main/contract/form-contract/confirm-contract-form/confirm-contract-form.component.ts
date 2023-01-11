@@ -108,6 +108,33 @@ export class ConfirmContractFormComponent implements OnInit {
     this.data_parnter_organization = this.datasForm.is_determine_clone.filter(
       (p: any) => p.type == 2 || p.type == 3
     );
+
+    console.log("vao day ");
+    console.log("dsf ", this.datasForm);
+    if (!this.datasForm.contract_user_sign) {
+      if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
+        this.datasForm.is_data_object_signature.forEach((res: any) => {
+          console.log("res ", res);
+          res['id_have_data'] = res.id;
+          if (res.type == 1) {
+            res['sign_unit'] = 'text';
+            res['text_attribute_name'] = res.name;
+            res.name = res.text_attribute_name;
+          }
+          if (res.type == 2) {
+            res['sign_unit'] = 'chu_ky_anh';
+            res.name = res.recipient.name;
+          }
+          if (res.type == 3) {
+            res['sign_unit'] = 'chu_ky_so'
+            res.name = res.recipient.name;
+          }
+          if (res.type == 4) {
+            res['sign_unit'] = 'so_tai_lieu'
+          }
+        })
+      }
+    }
   }
 
   getPartnerCoordinationer(item: any) {
@@ -244,8 +271,11 @@ export class ConfirmContractFormComponent implements OnInit {
       let isHaveFieldId: any[] = [];
       let isNotFieldId: any[] = [];
       let isUserSign_clone = _.cloneDeep(this.datasForm.contract_user_sign);
+
       isUserSign_clone.forEach((res: any) => {
+        console.log("res ", res);
         res.sign_config.forEach((element: any) => {
+          console.log("el ", element);
           if (element.id_have_data) {
             isHaveFieldId.push(element);
           } else isNotFieldId.push(element);
@@ -350,8 +380,10 @@ export class ConfirmContractFormComponent implements OnInit {
   ) {
     let datasFormample_contract: any[] = [];
     if (datasFormignId.length > 0) {
+      console.log("dsid ", datasFormignId);
       datasFormignId.forEach((res: any) => {
         this.arrVariableRemove.forEach((itemRemove: any) => {
+          console.log("itt ", itemRemove);
           if (itemRemove !== 'id_have_data') {
             delete res[itemRemove];
           }
