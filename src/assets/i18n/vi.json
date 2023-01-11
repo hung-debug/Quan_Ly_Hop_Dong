@@ -510,6 +510,6 @@
   "yes":"Có",
   "no":"Không",
   "file.import.valid":"File import không đúng định dạng",
-  "file.import.valid.result":"Dữ liệu import không hợp lệ, vui lòng xem thông báo lỗi ở file vừa tải về",
+  "file.import.valid.result":"Dữ liệu import không hợp lệ, vui lòng xem thông báo lỗi tại file hệ thống trả về",
   "taxcode.out":"Vui lòng nhập mã số thuế/CMT/CCCD ngoài luồng hợp đồng"
 }
