@@ -40,7 +40,7 @@ export class ForwardContractComponent implements OnInit {
 
   ngOnInit(): void {
     this.datas = this.data;
-    // this.login = this.email;
+    this.login = "email";
 
     this.getCurrentUser();
     this.myForm = this.fbd.group({
@@ -88,7 +88,7 @@ export class ForwardContractComponent implements OnInit {
   }
 
   changeTypeSign(e: any,) {
-    console.log("e ", e.target.value);
+    this.login = e.target.value;
     console.log("login ", this.login);
   }
 
@@ -187,7 +187,8 @@ export class ForwardContractComponent implements OnInit {
           card_id: this.myForm.value.card_id,
           role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
           recipient_id: this.datas.recipientId,
-          is_replace: false /*this.datas.is_content != 'forward_contract'*/
+          is_replace: false,
+          login_by: this.login
         };
 
         await this.contractService.processAuthorizeContract(dataAuthorize).toPromise().then(

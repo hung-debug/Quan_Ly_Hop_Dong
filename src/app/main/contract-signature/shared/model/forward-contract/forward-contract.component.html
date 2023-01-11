@@ -5,12 +5,12 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="myForm" class="content">
 
 
-    <div class="row">
+    <div *ngIf="!isReqCardIdToken" class="row">
       <div class="col">
-        <input type="radio" (change)="changeTypeSign($event)" value="email" [(ngModel)]="login" name="login"/>{{'typeOfSignEmail' | translate}}
+        <input type="radio" (change)="changeTypeSign($event)" value="email" name="login" [checked]="true"/>{{'typeOfSignEmail' | translate}}
       </div>
       <div class="col">
-        <input type="radio" (change)="changeTypeSign($event)" value="phone" [(ngModel)]="login" name="login"/>{{'typeOfSignPhone' | translate}}
+        <input type="radio" (change)="changeTypeSign($event)" value="phone" name="login"/>{{'typeOfSignPhone' | translate}}
       </div>
     </div>
 
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="name-item">
+    <div *ngIf="this.login === 'email'" class="name-item">
       <div class="label_item">Email <span class="require_star">*</span></div>
       <div class="input-data">
         <img src="assets/img/login_email.svg" class="input-img">
@@ -30,7 +30,14 @@
       </div>
     </div>
 
-    <div class="name-item">
+    <div *ngIf="this.login === 'phone'" class="name-item">
+      <div class="label_item">{{'user.phone' | translate}} <span class="require_star">*</span></div>
+      <div class="input-data">
+        <input style="width: 88%" autocomplete="off" type="text" formControlName="phone" class="input-text">
+      </div>
+    </div>
+
+    <div *ngIf="this.login === 'email'" class="name-item">
       <div class="label_item">{{'user.phone' | translate}} <span *ngIf="isReqPhone" class="require_star">*</span></div>
       <div class="input-data">
         <input style="width: 88%" autocomplete="off" type="text" formControlName="phone" class="input-text">
