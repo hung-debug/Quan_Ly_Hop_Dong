@@ -7,7 +7,7 @@ import { DatePipe } from '@angular/common';
 import { DatepickerOptions } from 'ng2-datepicker';
 import { getYear } from 'date-fns';
 import locale from 'date-fns/locale/en-US';
-import { variable } from '../../../../config/variable';
+import { optionsCeCa, variable } from '../../../../config/variable';
 import { Router } from '@angular/router';
 import { AddContractComponent } from '../../add-contract/add-contract.component';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
@@ -16,6 +16,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
 import {TranslateService} from '@ngx-translate/core';
+import { ContractTypeService } from 'src/app/service/contract-type.service';
 @Component({
   selector: 'app-infor-contract-batch',
   templateUrl: './infor-contract-batch.component.html',
@@ -71,18 +72,20 @@ export class InforContractBatchComponent implements OnInit {
   eKYCContractBuy: any;
   smsContractBuy: any;
 
+  optionsCeCa: any;
+  optionsCeCaValue: any;
+
   constructor(
-    private formBuilder: FormBuilder,
     private uploadService: UploadService,
     private contractService: ContractService,
     private contractTemplateService: ContractTemplateService,
     public datepipe: DatePipe,
-    private router: Router,
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private userService: UserService,
     private unitService: UnitService,
     public translate: TranslateService,
+    private contractTypeService: ContractTypeService,
   ) {
     this.step = variable.stepSampleContractBatch.step1;
   }
@@ -95,27 +98,41 @@ export class InforContractBatchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.optionsCeCa = optionsCeCa;
+    this.optionsCeCaValue = 0;
     this.idContractTemplate = this.datasBatch.idContractTemplate
       ? this.datasBatch.idContractTemplate
       : '';
     this.getContractTemplateForm();
   }
 
-  OnChangeForm(e: any) {
+  async onChangeForm(e: any) {
     this.clearError();
+    console.log("e ", e.value.type_id)
     this.idContractTemplate = e.value;
+
+    if(e.value.type_id) {
+      const informationContractType = await this.contractTypeService.getContractTypeById(e.value.type_id).toPromise();
+
+      if(informationContractType.ceca_push == 1) {
+        this.optionsCeCaValue = 1;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+      } else {
+        this.optionsCeCaValue = 0;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+      }
+    } else {
+      this.optionsCeCaValue = 0;
+      this.optionsCeCa = optionsCeCa;
+    }
   }
+
   downFileExample() {
     this.spinner.show();
     if (this.idContractTemplate) {
-      this.contractService
-        .getFileContractBatch(this.idContractTemplate)
-        .subscribe(
+      this.contractService.getFileContractBatch(this.idContractTemplate.id).subscribe(
           (res: any) => {
-            console.log(res);
-            this.uploadService
-              .downloadFile(res.path)
-              .subscribe((response: any) => {
+            this.uploadService.downloadFile(res.path).subscribe((response: any) => {
                 //console.log(response);
 
                 let url = window.URL.createObjectURL(response);
@@ -206,8 +223,8 @@ export class InforContractBatchComponent implements OnInit {
   //--valid data step 1
   validData() {
     this.clearError();
-    if (!this.idContractTemplate || !this.datasBatch.contractFile) {
-      if (!this.idContractTemplate) {
+    if (!this.idContractTemplate.id || !this.datasBatch.contractFile) {
+      if (!this.idContractTemplate.id) {
         this.errorContractName = (this.translate.instant('contract.template.name.not.blank'));
       }
       if (!this.datasBatch.contractFile) {
@@ -221,7 +238,7 @@ export class InforContractBatchComponent implements OnInit {
 
   errorDetail: any[] = [];
   clearError() {
-    if (this.idContractTemplate) {
+    if (this.idContractTemplate.id) {
       this.errorContractName = '';
     }
     if (this.datasBatch.contractFile) {
@@ -241,22 +258,13 @@ export class InforContractBatchComponent implements OnInit {
       this.datasBatch.contractConnect = this.contractConnect;
       this.datasBatch.sign_time = this.sign_time;
       this.datasBatch.notes = this.notes;
-      this.datasBatch.idContractTemplate = this.idContractTemplate;
+      this.datasBatch.idContractTemplate = this.idContractTemplate.id;
+      this.datasBatch.ceca_push = this.optionsCeCaValue;
 
       let countSMS = 0;
       let countEkyc = 0;
-      this.contractService
-        .uploadFileContractBatch(
-          this.datasBatch.contractFile,
-          this.datasBatch.idContractTemplate
-        )
-        .subscribe((responseUpload: any) => {
-          this.contractService
-            .getContractBatchList(
-              this.datasBatch.contractFile,
-              this.datasBatch.idContractTemplate
-            )
-            .subscribe((response: any) => {
+      this.contractService.uploadFileContractBatch(this.datasBatch.contractFile,this.datasBatch.idContractTemplate).subscribe((responseUpload: any) => {
+          this.contractService.getContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,this.optionsCeCaValue).subscribe((response: any) => {
               for (
                 let i = 0;
                 i < response[0].participants[0].recipients.length;

@@ -6,8 +6,8 @@
           <div class="label_item">{{'contract-template.name' | translate}} <span class="require_star">*</span></div>
           <div>
             <p-dropdown panelStyleClass="font" [options]="typeListForm" [(ngModel)]="idContractTemplate" 
-              optionLabel="name" optionValue="id" placeholder="{{'choose.template.contract' | translate}}" [filter]="true" filterBy="name"
-              (onChange)="OnChangeForm($event)">
+              optionLabel="name" placeholder="{{'choose.template.contract' | translate}}" [filter]="true" filterBy="name"
+              (onChange)="onChangeForm($event)">
             </p-dropdown>
           </div>
         </div>
@@ -18,7 +18,19 @@
         </div>
       </div>
     </div>
-  
+
+    <!--Đẩy file hợp đồng lên BCT-->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <div class="label_item">{{'contract-type.ceca' | translate}}</div>
+            <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"
+              optionValue="id" placeholder="{{'choose.contract.type' | translate}}" [showClear]="true">
+            </p-dropdown>
+        </div>
+      </div>
+    </div>
+    
     <div class="row">
       <div class="col-md-12">
         <div class="form-group">

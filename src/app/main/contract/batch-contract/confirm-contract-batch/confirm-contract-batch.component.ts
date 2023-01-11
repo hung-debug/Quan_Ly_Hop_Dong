@@ -146,7 +146,8 @@ export class ConfirmContractBatchComponent
     this.contractService
       .getContractBatchList(
         this.datasBatch.contractFile,
-        this.datasBatch.idContractTemplate
+        this.datasBatch.idContractTemplate,
+        this.datasBatch.ceca_push
       )
       .subscribe((response: any) => {
         console.log(response);
