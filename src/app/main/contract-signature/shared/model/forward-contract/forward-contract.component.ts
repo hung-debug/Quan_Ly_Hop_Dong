@@ -22,6 +22,8 @@ export class ForwardContractComponent implements OnInit {
   isReqCardIdToken: boolean = false;
   isReqCardIdHsm: boolean = false;
 
+  login: string;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -38,6 +40,7 @@ export class ForwardContractComponent implements OnInit {
 
   ngOnInit(): void {
     this.datas = this.data;
+    // this.login = this.email;
 
     this.getCurrentUser();
     this.myForm = this.fbd.group({
@@ -82,6 +85,11 @@ export class ForwardContractComponent implements OnInit {
       }
       if (this.isReqPhone || this.isReqCardId) break;
     }
+  }
+
+  changeTypeSign(e: any,) {
+    console.log("e ", e.target.value);
+    console.log("login ", this.login);
   }
 
   async onSubmit() {

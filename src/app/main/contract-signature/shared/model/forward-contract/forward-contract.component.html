@@ -3,6 +3,17 @@
     <h3 style="color: #106DB6;font-family: inherit;" (click)="t()">{{this.datas.title}}</h3>
   </div>
   <form (ngSubmit)="onSubmit()" [formGroup]="myForm" class="content">
+
+
+    <div class="row">
+      <div class="col">
+        <input type="radio" (change)="changeTypeSign($event)" value="email" [(ngModel)]="login" name="login"/>{{'typeOfSignEmail' | translate}}
+      </div>
+      <div class="col">
+        <input type="radio" (change)="changeTypeSign($event)" value="phone" [(ngModel)]="login" name="login"/>{{'typeOfSignPhone' | translate}}
+      </div>
+    </div>
+
     <div class="name-item">
       <div class="label_item">{{'user.name' | translate}} <span class="require_star">*</span></div>
       <div class="input-data">

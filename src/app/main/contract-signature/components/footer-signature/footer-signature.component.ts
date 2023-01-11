@@ -48,6 +48,9 @@ export class FooterSignatureComponent implements OnInit {
   pageRendering:any;
   pageNumPending: any = null;
 
+  email: string="email";
+  phone: string="phone";
+
   constructor(
     private dialog: MatDialog,
     private contractService: ContractService,
@@ -388,7 +391,7 @@ export class FooterSignatureComponent implements OnInit {
     }
     // @ts-ignore
     const dialogRef = this.dialog.open(ForwardContractComponent, {
-      width: '450px',
+      width: '500px',
       backdrop: 'static',
       keyboard: true,
       data
