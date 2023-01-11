@@ -384,6 +384,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+    console.log("datasss ", datas);
     const body = JSON.stringify({
       name: datas.name,
       code: datas.contract_no,

@@ -135,12 +135,16 @@ export class SampleContractFormComponent implements OnInit {
           res['id_have_data'] = res.id;
           if (res.type == 1) {
             res['sign_unit'] = 'text';
+            res['text_attribute_name'] = res.name;
+            res.name = res.text_attribute_name;
           }
           if (res.type == 2) {
-            res['sign_unit'] = 'chu_ky_anh'
+            res['sign_unit'] = 'chu_ky_anh';
+            res.name = res.recipient.name;
           }
           if (res.type == 3) {
             res['sign_unit'] = 'chu_ky_so'
+            res.name = res.recipient.name;
           }
           if (res.type == 4) {
             res['sign_unit'] = 'so_tai_lieu'
@@ -267,13 +271,14 @@ export class SampleContractFormComponent implements OnInit {
     let dataDetermine: { id: any; sign_type: any; name: string }[] = [];
     this.datasForm.is_determine_clone.forEach((res: any) => {
       res.recipients.forEach((element: any) => {
+        console.log("el ", element);
         let isObj = {
           id: element.id,
           sign_type: element.sign_type,
           name: element.name,
           email: element.email,
           is_type_party: res.type,
-          role: element.role
+          role: element.role,
         }
         dataDetermine.push(isObj);
       })
@@ -288,6 +293,8 @@ export class SampleContractFormComponent implements OnInit {
         })
       }
     })
+
+    console.log("data ", dataContractUserSign);
 
     // Get data have change 1 in 3 value name, email, type sign
     let dataDiffirent: any[] = [];
@@ -744,6 +751,7 @@ export class SampleContractFormComponent implements OnInit {
 
 
       if (listSelect) {
+        // element.is_disable = false;
         element.selected = listSelect && element.name == listSelect;
       }
     })
@@ -1065,6 +1073,9 @@ export class SampleContractFormComponent implements OnInit {
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
+
+    console.log("d ", d)
+
     if (set_id) {
       // set lại id cho đối tượng ký đã click
       this.objSignInfo.id = set_id.id;
@@ -1074,6 +1085,9 @@ export class SampleContractFormComponent implements OnInit {
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
+
+      console.log("isObj sign ", isObjSign);
+
       if (isObjSign) {
         this.isEnableSelect = false;
         this.objSignInfo.traf_x = d.coordinate_x;
@@ -1096,24 +1110,20 @@ export class SampleContractFormComponent implements OnInit {
           this.isEnableSelect = true;
         }
 
-        if (!d.name) {
+        if (!d.name && !d.recipient.name) {
           //@ts-ignore
           document.getElementById('select-dropdown').value = "";
 
           console.log("1 ");
         } else {
-
           if(d.recipient_id) {
-                //@ts-ignore
-          document.getElementById('select-dropdown').value = d.recipient_id;
+              //@ts-ignore
+              document.getElementById('select-dropdown').value = d.recipient_id;
           } else {
-                    //@ts-ignore
-          document.getElementById('select-dropdown').value = "";
+              //@ts-ignore
+              document.getElementById('select-dropdown').value = "";
           }
         }
-        
-
-
       }
     }
   }
@@ -1202,6 +1212,7 @@ export class SampleContractFormComponent implements OnInit {
         }
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
+
     return arrSignConfig;
   }
 
@@ -1460,6 +1471,9 @@ export class SampleContractFormComponent implements OnInit {
     if (dataSignId.length > 0) {
       let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text"];
       dataSignId.forEach((res: any) => {
+        if(res.type == 1) {
+          res.name = res.text_attribute_name;
+        }
         data_remove_arr_signId.forEach((itemRemove: any) => {
           delete res[itemRemove];
         })
@@ -1468,6 +1482,7 @@ export class SampleContractFormComponent implements OnInit {
       let countIsSignId = 0;
       this.spinner.show();
       for (let i = 0; i < dataSignId.length; i++) {
+        console.log("data sign id ", dataSignId[i]);
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
         await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then((data: any) => {
@@ -1598,7 +1613,8 @@ export class SampleContractFormComponent implements OnInit {
         if (this.datasForm.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datasForm.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datasForm.contract_user_sign[i].sign_config[j];
-            if (!element.name && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') { // element.sign_unit != 'so_tai_lieu'
+            if (!element.recipient.name && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') {
+              console.log("el ", element);
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu') {
@@ -1635,6 +1651,7 @@ export class SampleContractFormComponent implements OnInit {
                   name: element.name,
                   signature_party: element.signature_party,
                   recipient_id: element.recipient_id,
+                  email: element.recipient ? element.recipient.email : element.email,
                   sign_unit: element.sign_unit
                 }
                 if (element.signature_party == "organization" || element.is_type_party == 1)
@@ -1750,7 +1767,9 @@ export class SampleContractFormComponent implements OnInit {
         // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_organization) {
           if (element.sign_type.length > 0) {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && arrSign_organization.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && 
+            arrSign_organization.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
+              console.log("arrSign ", arrSign_organization);
               error_organization++;
               nameSign_organization.name = element.name;
               nameSign_organization.sign_type = 'chu_ky_so';
