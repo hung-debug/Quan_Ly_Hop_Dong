@@ -1382,6 +1382,7 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+
       
     return this.http.put<any>(
       this.updateInforPersonProcessUrl + recipient,

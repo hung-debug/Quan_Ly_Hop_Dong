@@ -59,7 +59,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
     console.log("aaa ", sessionStorage.getItem('lang'));
 
-    if(sessionStorage.getItem('lang') == 'vi') {
+    if (sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if (sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
@@ -117,7 +117,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       })
       console.log("dataaaaaa", this.is_list_name);
 
-      
+
 
 
 
@@ -152,7 +152,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
     console.log("lang ", this.lang);
 
-    if(this.lang == 'vi' || !this.lang) {
+    if (this.lang == 'vi' || !this.lang) {
       if (status == 3) {
         return 'Đã từ chối';
       } else if (status == 4) {
@@ -239,7 +239,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       width: '600px',
       data
     })
-    console.log("ly do tu choi hd",data);
+    console.log("ly do tu choi hd", data);
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
     })
@@ -261,20 +261,31 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   openEdit(recipient: any) {
-    this.contractService.getInforPersonProcess(recipient).subscribe((response) =>{
+    this.contractService.getInforPersonProcess(recipient).subscribe((response) => {
       let data: any;
       data = response
       // console.log("response",response);
-      
+
       const dialogRef = this.dialog.open(EditHandlerComponent, {
         width: '900px',
         data,
       })
       // console.log("data luongxly hodng",data);
-      
+
       dialogRef.afterClosed().subscribe((result: any) => {
-        console.log('the close dialog');
-        let is_data = result
+        console.log('the close dialog', result);
+
+        this.is_list_name = this.is_list_name.map((x: any) => {
+          if (x.id === result.id) {
+            console.log('the close dialog 1.1', x);
+            return {
+              ...x, name: result.name,
+              emailRecipients: result.email,
+            }
+          }
+          return x
+        })
+        console.log('the close   1', this.is_list_name);
       })
     })
 

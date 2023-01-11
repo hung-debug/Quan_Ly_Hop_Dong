@@ -37,15 +37,16 @@ export class EditHandlerComponent implements OnInit {
   email: string;
   phone: string;
   login_by: any;
-  isCheckRadio= true;
+  isCheckRadio = true;
   is_handler: any;
   name: any;
-  recipient_id:any;
-  sign_type:any;
-  id_sign_type:any;
-  id:any;
+  recipient_id: any;
+  sign_type: any;
+  id_sign_type: any;
+  id: any;
   card_id: any;
   key: any;
+
   //dropdown
   signTypeList: Array<any> = type_signature;
   checkCount = 1;
@@ -79,20 +80,22 @@ export class EditHandlerComponent implements OnInit {
     //   console.log("this.datas.is_handler",this.datas.is_handler);
 
 
-   console.log("this.data.update process person",this.data);
-      this.name = this.data.name;
-      this.login_by = this.data.login_by;
-      this.email = this.data.email;
-      this.phone = this.data.phone;
-      this.sign_type = this.data.sign_type[0]?.name
-      this.id_sign_type = this.data.sign_type[0]?.id
-      this.card_id = this.data.card_id;
-      
+    console.log("this.data.update process person", this.data);
+    this.name = this.data.name;
+    this.login_by = this.data.login_by;
+    this.email = this.data.email;
+    this.phone = this.data.phone;
+    this.sign_type = this.data.sign_type[0]?.name
+    this.id_sign_type = this.data.sign_type[0]?.id
+    this.card_id = this.data.card_id;
+    this.id = this.data.id;
+
+
 
     // data Tổ chức của tôi
     // this.data_organization = this.datas.is_handler.filter((p: any) => p.type == 1)[0];
-  
-    
+
+
     // this.data_organization.name = this.datas.is_handler.filter((p: any) => p.type == 1)[0].name ? this.datas.is_handler.filter((p: any) => p.type == 1)[0].name : this.datas.name_origanzation;
 
     // this.is_origanzation_reviewer = this.data_organization.recipients.filter((p: any) => p.role == 2);
@@ -120,37 +123,34 @@ export class EditHandlerComponent implements OnInit {
   handleCancel() {
     this.dialogRef.close();
   }
-  convertData(){
-    var dataUpdate = null;
-    dataUpdate = {
+  UpdateHandler() {
+    this.spinner.show();
+    const dataUpdate = {
+      ...this.data,
       name: this.name,
       email: this.email,
       phone: this.phone,
-      card_id: this.card_id,
       login_by: this.login_by,
+      card_id: this.card_id,
     };
-    return dataUpdate;
-  }
-  UpdateHandler(){
-    // this.spinner.show();
-    // const dataUpdate = {
-    // name: this.name,
-    // email: this.email,
-    // phone: this.phone,
-    // card_id: this.card_id,
-    // };
     // return dataUpdate;
-    // console.log("dataUpdate",dataUpdate);
-    this.contractService.updateInforPersonProcessUrl(this.convertData()).subscribe(
-      // (res) =>{
-      //   if(res.email == null){
-      //     this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
-      //   }else{
-      //     this.toastService.showErrorHTMLWithTimeout('Cập nhật người xử lý thành công', "", 3000);
-      //   }
-        
-      // }
-    )
+    // console.log("dataUpdate", dataUpdate);
+
+    if (this.email !== null) {
+      this.contractService.updateInfoPersonProcess(dataUpdate, this.id).subscribe(
+        (res: any) => {
+          if (res.email == null) {
+            this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
+          } else {
+            this.toastService.showSuccessHTMLWithTimeout('Cập nhật người xử lý thành công', "", 3000);
+            this.dialogRef.close(res);
+            // this.router.navigate(['/main/form-contract/detail/' + this.id]);
+          }
+        }
+      )
+    } else {
+      this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
+    }
   }
 
   onItemSelect(e: any, data: any) {
@@ -223,9 +223,6 @@ export class EditHandlerComponent implements OnInit {
     console.log("d ", d);
 
     d === 1 ? this.isCheckRadio = false : this.isCheckRadio = true
-    if(this.id_sign_type == 5){
-      this.isCheckRadio = false;
-    }
   }
 
   getDataSignHsm(data: any) {
