@@ -24,6 +24,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {count} from 'console';
 import {data} from 'jquery';
 import * as _ from 'lodash';
+import { isPdfFile } from 'pdfjs-dist';
 
 @Component({
   selector: 'app-sample-contract',
@@ -73,7 +74,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     x1: 0,
     y1: 0,
     height: 0,
-    width: 0
+    width: 0,
+    font: 'Times New Roman',
+    size: 13
   }
 
   list_sign_name: any = [];
@@ -118,13 +121,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   
 
-    if(this.datas.font) {
-      this.selectedFont = this.datas.font;
-    }
+    // if(this.datas.font) {
+    //   this.selectedFont = this.datas.font;
+    // }
 
-    if(this.datas.size) {
-      this.size = this.datas.size;
-    }
+    // if(this.datas.size) {
+    //   this.size = this.datas.size;
+    // }
 
     this.list_font = ["Arial","Calibri","Times New Roman"];
 
@@ -248,13 +251,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.datas.size = 13;
       this.size = this.datas.size;
     } 
-
-    
-  }
-
-  changeFont($event: any) {
-    this.selectedFont = $event;
-    this.datas.font = $event;
   }
 
   getDataSignUpdateAction() {
@@ -538,7 +534,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               sign_unit: element.sign_unit,
               name: element.name,
               text_attribute_name: element.text_attribute_name,
-              required: 1
+              required: 1,
+              font: element.font,
+              font_size: element.font_size
             }
             if (element.sign_config.length == 0) {
               _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
@@ -1057,7 +1055,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
-    console.log("d ", d);
+    console.log("d ", this.list_sign_name);
 
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
@@ -1072,15 +1070,22 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-      // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
+
+      console.log("iss ", isObjSign);
+
       if (isObjSign) {
         this.isEnableSelect = false;
         this.objSignInfo.traf_x = d.coordinate_x;
         this.objSignInfo.traf_y = d.coordinate_y;
-        // this.signCurent.name = d.name;
 
         this.objSignInfo.width = parseInt(d.width);
         this.objSignInfo.height = parseInt(d.height);
+
+        if(isObjSign.font) {
+          this.objSignInfo.font = isObjSign.font;
+        } else {
+          this.objSignInfo.font = 'Times New Roman';
+        }
 
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
@@ -1100,20 +1105,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         if (!d.name) {
           //@ts-ignore
           document.getElementById('select-dropdown').value = "";
-
-          console.log("1 ");
         } else {
-
           if(d.recipient_id) {
-                //@ts-ignore
-          document.getElementById('select-dropdown').value = d.recipient_id;
+            //@ts-ignore
+            document.getElementById('select-dropdown').value = d.recipient_id;
           } else {
-                    //@ts-ignore
-          document.getElementById('select-dropdown').value = "";
+            //@ts-ignore
+            document.getElementById('select-dropdown').value = "";
           }
         }
-
-
       }
     }
   }
@@ -1233,6 +1233,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         } else if (property == 'text') {
           isObjSign.text_attribute_name = e;
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
+        } else if (property == 'font') {
+          console.log("e ", e.target.value);
+          isObjSign.font = e.target.value;
+          signElement.setAttribute("font", isObjSign.font);
+        } else if(property == 'size') {
+          isObjSign.font_size = e.target.value;
+          signElement.setAttribute("font_size", isObjSign.font_size);
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
           // if (data_name && !isObjSign.name) {
@@ -1258,6 +1265,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
         }
       }
+    } else {
+      this.objSignInfo.font = "1";
     }
   }
 
