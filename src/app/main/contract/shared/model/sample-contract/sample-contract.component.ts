@@ -76,7 +76,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     height: 0,
     width: 0,
     font: 'Times New Roman',
-    size: 13
+    font_size: 13,
   }
 
   list_sign_name: any = [];
@@ -118,16 +118,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     this.spinner.hide();
-
-  
-
-    // if(this.datas.font) {
-    //   this.selectedFont = this.datas.font;
-    // }
-
-    // if(this.datas.size) {
-    //   this.size = this.datas.size;
-    // }
 
     this.list_font = ["Arial","Calibri","Times New Roman"];
 
@@ -1055,8 +1045,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
-    console.log("d ", this.list_sign_name);
+    
+    if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
+      this.textSign = true;
+    } else {
+      this.textSign = false;
+    }
 
+    console.log("d ", d);
+    
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
@@ -1071,8 +1068,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
 
-      console.log("iss ", isObjSign);
-
       if (isObjSign) {
         this.isEnableSelect = false;
         this.objSignInfo.traf_x = d.coordinate_x;
@@ -1085,6 +1080,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.objSignInfo.font = isObjSign.font;
         } else {
           this.objSignInfo.font = 'Times New Roman';
+        }
+
+        if(isObjSign.font_size) {
+          this.objSignInfo.font_size = isObjSign.font_size;
+        } else {
+          this.objSignInfo.font_size = 13;
         }
 
         this.isEnableText = d.sign_unit == 'text';
@@ -1121,6 +1122,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
+    // this.objSignInfo.font = "";
+    // this.objSignInfo.font_size = "";
     if (data.id_have_data) {
       this.spinner.show();
       await this.contractService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
@@ -1163,14 +1166,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // this.signCurent.width = 0;
         // this.signCurent.height = 0;
       }
+
       this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
           element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
             itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.id;
+            itemSign['sign_unit'] = user_sign_index;
           })
         }
       });
+      
       this.eventMouseover();
       this.cdRef.detectChanges();
     }
@@ -1208,8 +1214,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   // edit location doi tuong ky
+  textSign: boolean = false;
   changePositionSign(e: any, locationChange: any, property: any) {
-    // console.log(e, this.objSignInfo, this.signCurent);
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
@@ -1237,12 +1243,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           console.log("e ", e.target.value);
           isObjSign.font = e.target.value;
           signElement.setAttribute("font", isObjSign.font);
-        } else if(property == 'size') {
+        } else if(property == 'font_size') {
           isObjSign.font_size = e.target.value;
           signElement.setAttribute("font_size", isObjSign.font_size);
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
-          // if (data_name && !isObjSign.name) {
+
           if (data_name) {
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
@@ -1265,9 +1271,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
         }
       }
-    } else {
-      this.objSignInfo.font = "1";
-    }
+    } 
   }
 
 
@@ -1289,8 +1293,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async next(action: string) {
-    this.datas.font = this.selectedFont;
-    this.datas.size = this.size;
     if (action == 'next_step' && !this.validData()) {
 
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
