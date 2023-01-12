@@ -174,11 +174,11 @@ export class ContractSignatureComponent implements OnInit {
 
   documentId: any = [];
   signMany() {
+    this.spinner.show();
     this.typeDisplay = 'signMany';
 
-    this.contractService
-      .getContractMyProcessListSignMany()
-      .subscribe((data) => {
+    this.contractService.getContractMyProcessListSignMany().subscribe((data) => {
+        this.spinner.hide();
         this.contractsSignMany = data;
         if (this.pageTotal == 0) {
           this.p = 0;
