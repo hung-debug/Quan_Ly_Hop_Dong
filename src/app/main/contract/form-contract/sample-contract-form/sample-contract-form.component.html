@@ -56,18 +56,19 @@
                     </select>
                 </div>
                 
-                  <!--Option chọn font + size chữ-->
-                  <div class="row sign-unit-select">
+                   <!--Option chọn font + size chữ-->
+                   <div class="row sign-unit-select">
                     <div class="col-md-9">
                         <label class="label-require">Font</label>
-                        <select class="form-select" id="select-dropdown" aria-label="Default select example" [ngModel]="this.selectedFont" (ngModelChange)="changeFont($event)">
+                        <select (change)="changePositionSign($event, null, 'font')" class="form-select" id="select-dropdown" aria-label="Default select example" [(ngModel)]="this.objSignInfo.font">
                             <option value="" hidden>{{'choose.font' | translate}}</option>
                             <option *ngFor="let d of this.list_font, let i = index" [selected]="d.selected" value="{{d}}">{{d}}</option>
                         </select>
                     </div>
                     <div class="col-md-3">
                         <label class="label-require">Size</label>
-                        <input class="form-control" [(ngModel)]="size"/>
+                        <input *ngIf="this.textSign" class="form-control" [(ngModel)]="this.objSignInfo.font_size" (change)="changePositionSign($event, null, 'font_size')"/>
+                        <input *ngIf="!this.textSign" class="form-control" [(ngModel)]="this.objSignInfo.font_size" (change)="changePositionSign($event, null, 'font_size')" readonly/>
                     </div>
                 </div>
                 

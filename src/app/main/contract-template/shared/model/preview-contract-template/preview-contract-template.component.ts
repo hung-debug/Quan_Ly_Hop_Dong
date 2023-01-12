@@ -135,10 +135,7 @@ export class PreviewContractTemplateComponent implements OnInit {
           this.renderPage(page, canvas);
         }
       }).then(() => {
-        setTimeout(() => {
-          this.setPosition();
-          this.eventMouseover();
-        }, 100)
+      
       })
   }
 
@@ -207,14 +204,6 @@ export class PreviewContractTemplateComponent implements OnInit {
         }
       });
     });
-  }
-
-  setPosition() {
-    
-  }
-
-  eventMouseover() {
-
   }
 
   cancel() {

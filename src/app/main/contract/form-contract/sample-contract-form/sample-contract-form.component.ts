@@ -76,7 +76,9 @@ export class SampleContractFormComponent implements OnInit {
     x1: 0,
     y1: 0,
     height: 0,
-    width: 0
+    width: 0,
+    font: 'Times New Roman',
+    font_size: 13,
   }
 
   list_sign_name: any = [];
@@ -103,6 +105,8 @@ export class SampleContractFormComponent implements OnInit {
 
   sum: number[] = [];
   top: any[]= [];
+
+  textSign: boolean = false;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -1070,11 +1074,19 @@ export class SampleContractFormComponent implements OnInit {
 
   // get select người ký
   getSignSelect(d: any) {
+    if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
+      this.textSign = true;
+      this.list_font = ["Arial","Calibri","Times New Roman"];
+    } else {
+      this.textSign = false;
+      this.objSignInfo.font_size = 13;
+      d.font = 'Times New Roman';
+      this.list_font = [d.font];
+    }
+
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
-
-    console.log("d ", d)
 
     if (set_id) {
       // set lại id cho đối tượng ký đã click
@@ -1099,6 +1111,18 @@ export class SampleContractFormComponent implements OnInit {
 
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
+
+        if(isObjSign.font) {
+          this.objSignInfo.font = isObjSign.font;
+        } else {
+          this.objSignInfo.font = 'Times New Roman';
+        }
+
+        if(isObjSign.font_size) {
+          this.objSignInfo.font_size = isObjSign.font_size;
+        } else {
+          this.objSignInfo.font_size = 13;
+        }
 
         if (this.isEnableText) {
           this.objSignInfo.text_attribute_name = d.text_attribute_name
@@ -1279,6 +1303,13 @@ export class SampleContractFormComponent implements OnInit {
         } else if (property == 'text') {
           isObjSign.text_attribute_name = e;
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
+        } else if (property == 'font') {
+          console.log("e ", e.target.value);
+          isObjSign.font = e.target.value;
+          signElement.setAttribute("font", isObjSign.font);
+        } else if(property == 'font_size') {
+          isObjSign.font_size = e.target.value;
+          signElement.setAttribute("font_size", isObjSign.font_size);
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
           // if (data_name && !isObjSign.name) {

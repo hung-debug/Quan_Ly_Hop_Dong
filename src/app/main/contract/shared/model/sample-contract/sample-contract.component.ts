@@ -102,6 +102,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   sum: number[] = [];
   top: any[]= [];
 
+  textSign: boolean = false;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -1218,7 +1219,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   // edit location doi tuong ky
-  textSign: boolean = false;
+
   changePositionSign(e: any, locationChange: any, property: any) {
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
