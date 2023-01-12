@@ -1048,8 +1048,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     
     if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
       this.textSign = true;
+      this.list_font = ["Arial","Calibri","Times New Roman"];
     } else {
       this.textSign = false;
+      this.objSignInfo.font_size = 13;
+      d.font = 'Times New Roman';
+      this.list_font = [d.font];
     }
 
     console.log("d ", d);
