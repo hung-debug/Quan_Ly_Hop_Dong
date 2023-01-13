@@ -15,6 +15,7 @@ import { Router } from "@angular/router";
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from 'src/app/service/user.service';
 import { environment } from 'src/environments/environment';
+import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
   selector: 'app-determine-signer',
@@ -80,7 +81,7 @@ export class DetermineSignerComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private router: Router,
-    private userService: UserService
+    private contractService: ContractService,
   ) {
     this.step = variable.stepSampleContract.step2
     //this.datas.determineDetails = this.determineDetails;
@@ -1203,10 +1204,11 @@ export class DetermineSignerComponent implements OnInit {
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
+    
     setTimeout(() => {
-      this.userService.getNameOrganization("", stringEmitted).subscribe((res) => {
-        let arr_all = res.entities;
-        let data = arr_all.map((p: any) => ({ name: p.name, email: p.email }));
+      this.contractService.getAllInfoUser(stringEmitted).subscribe((res) => {
+        let arr_all = res;
+        let data = arr_all.map((p: any) => ({name: p.name, email: p.email, phone: p.phone}));
         if (action == 'view') {
           this.arrSearchNameView = data;
         } else if (action == 'signature') {

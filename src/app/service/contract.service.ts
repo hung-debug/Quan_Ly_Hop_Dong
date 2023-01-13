@@ -137,6 +137,8 @@ export class ContractService {
   mergeTimeStampUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
   inforPersonProcess: any = `${environment.apiUrl}/api/v1/recipients/`;
 
+  getAllInfoUserUrl: any = `${environment.apiUrl}/api/v1/customers/suggested-list`;
+
   token: any;
   customer_id: any;
   organization_id: any;
@@ -942,6 +944,17 @@ export class ContractService {
     return this.http.get<User[]>(listUserUrl, { headers }).pipe();
   }
 
+  getAllInfoUser(name: string) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    let listUserUrl =
+      this.getAllInfoUserUrl + '?name='+name;
+    return this.http.get<any>(listUserUrl, {headers});
+  }
+
   getListDataCoordination(id: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
@@ -1091,8 +1104,6 @@ export class ContractService {
       recipients: recipients,
       hsmSignRequest: hsmSignRequest,
     });
-
-    console.log('body ', body);
 
     return this.http
       .post<any>(this.signHsmMultiUrl, body, { headers: headers })
@@ -1351,8 +1362,6 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-
-    console.log('formData ', formData);
 
     return this.http.post<any>(
       this.uploadFileBase64Url + formData?.organizationId + `/base64`,

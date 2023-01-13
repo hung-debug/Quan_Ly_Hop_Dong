@@ -1580,10 +1580,11 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
+    
     setTimeout(() => {
-      this.contractService.getNameOrganization("", stringEmitted).subscribe((res) => {
-        let arr_all = res.entities;
-        let data = arr_all.map((p: any) => ({name: p.name, email: p.email}));
+      this.contractService.getAllInfoUser(stringEmitted).subscribe((res) => {
+        let arr_all = res;
+        let data = arr_all.map((p: any) => ({name: p.name, email: p.email, phone: p.phone}));
         if (action == 'view') {
           this.arrSearchNameView = data;
         } else if (action == 'signature') {
