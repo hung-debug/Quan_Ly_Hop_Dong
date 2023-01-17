@@ -746,8 +746,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getCheckSignature(isSignType: any, listSelect?: string, recipient_id?:any) {
-    // p.recipient_id == element.id && p.sign_unit == isSignType)
-
     this.list_sign_name.forEach((element: any) => {
       console.log(element);
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
@@ -760,7 +758,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       } else {
         if (isSignType != 'text' && this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && p.sign_unit == isSignType)) {
-          element.is_disable = true;
+          if(isSignType == 'so_tai_lieu') {
+            element.is_disable = false;
+          } else {
+            element.is_disable = true
+          }
+
+          console.log("is ", isSignType);
+          // console.log("vao day  ");
         } else {
           if (isSignType == 'chu_ky_anh') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
@@ -769,17 +774,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           } else if (isSignType == 'text') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
           } else element.is_disable = element.role != 4;
-          console.log(element.is_disable);
         }
       }
       
-      console.log("name ", this.list_sign_name);
-
       console.log(isSignType);
       if (recipient_id || listSelect) {
         // element.is_disable = false;
         element.selected = (recipient_id ? element.id==recipient_id: element.name == listSelect);
-
       }
     })
   }
@@ -1165,25 +1166,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // console.log("sd ",document.getElementById('select-dropdown').value);
         this.getCheckSignature(d.sign_unit, d.name, d.recipient_id);
 
-        console.log("d n ", d.name);
         if (!d.name) {
           //@ts-ignore
           document.getElementById('select-dropdown').value = "";
-
-          console.log("1 ");
         } else {
-
           if(d.recipient_id) {
-                //@ts-ignore
-          document.getElementById('select-dropdown').value = d.recipient_id;
+            //@ts-ignore
+            document.getElementById('select-dropdown').value = d.recipient_id;
           } else {
-                    //@ts-ignore
-          document.getElementById('select-dropdown').value = "";
+            //@ts-ignore
+            document.getElementById('select-dropdown').value = "";
           }
         }
       }
     }
-    console.log(this.datas.contract_user_sign);
   }
 
 

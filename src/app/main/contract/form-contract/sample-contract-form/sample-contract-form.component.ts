@@ -275,7 +275,6 @@ export class SampleContractFormComponent implements OnInit {
     let dataDetermine: { id: any; sign_type: any; name: string }[] = [];
     this.datasForm.is_determine_clone.forEach((res: any) => {
       res.recipients.forEach((element: any) => {
-        console.log("el ", element);
         let isObj = {
           id: element.id,
           sign_type: element.sign_type,
@@ -297,8 +296,6 @@ export class SampleContractFormComponent implements OnInit {
         })
       }
     })
-
-    console.log("data ", dataContractUserSign);
 
     // Get data have change 1 in 3 value name, email, type sign
     let dataDiffirent: any[] = [];
@@ -731,15 +728,13 @@ export class SampleContractFormComponent implements OnInit {
       if (isSignType == 'text' && value) {
         element.is_disable = true;
       } else {
-        // if (this.getConditionFiledSign(element, isSignType)) {
-        //   let data = this.convertToSignConfig().filter((isName: any) => element.fields && element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
-        //   if (data.length > 0)
-        //     element.is_disable = true;
-        //   else element.is_disable = false;
-        // } else {
           if (this.convertToSignConfig().some((p: any) => (p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType)) {
             if (isSignType != 'text') {
-              element.is_disable = true;
+              if(isSignType == 'so_tai_lieu') {
+                element.is_disable = (element.role != 4 || (this.datasForm.contract_no && element.role == 4));
+              } else {
+                element.is_disable = true
+              }
             }
           } else {
             if (isSignType == 'chu_ky_anh') {
