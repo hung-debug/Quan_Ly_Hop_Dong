@@ -708,12 +708,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   getCheckSignature(isSignType: any, listSelect?: string) {
     // p.recipient_id == element.id && p.sign_unit == isSignType)
+    console.log("aaaa ");
     this.list_sign_name.forEach((element: any) => {
-     
+      
+      console.log("el ", element);
+      //|| (isSignType == 'so_tai_lieu' && (p.recipient ? p.recipient.email : p.email) && p.sign_unit == 'so_tai_lieu')
       if (this.convertToSignConfig().some((p: any) => ((p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && (p.recipient ? p.recipient.email : p.email) && p.sign_unit == 'so_tai_lieu'))) {
         if (isSignType != 'text') {
-          element.is_disable = true;
-        }
+          if(isSignType == 'so_tai_lieu') {
+            element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
+          } else {
+            element.is_disable = true
+          }
+          // element.is_disable = true
+        } 
       } else {
         if (isSignType == 'chu_ky_anh') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
@@ -894,9 +902,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   setClass(dataDrag: any) {
-    if (this.datas.contract_user_sign.some((p: any) => p.sign_unit == 'so_tai_lieu' && p.sign_config.length > 0) && dataDrag.sign_unit == 'so_tai_lieu') {
-      return 'none-drag';
-    } else return 'resize-drag'
+    // if (this.datas.contract_user_sign.some((p: any) => p.sign_unit == 'so_tai_lieu' && p.sign_config.length > 0) && dataDrag.sign_unit == 'so_tai_lieu') {
+    //   return 'none-drag';
+    // } else return 'resize-drag'
+    return 'resize-drag';
   }
 
   // set lại vị trí đối tượng kéo thả đã lưu trước đó

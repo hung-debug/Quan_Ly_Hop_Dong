@@ -45,6 +45,7 @@ import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.com
 import { UnitService } from 'src/app/service/unit.service';
 import { Helper } from 'src/app/core/Helper';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
+import { event } from 'jquery';
 
 @Component({
   selector: 'app-consider-contract',
@@ -1344,13 +1345,7 @@ export class ConsiderContractComponent
       return;
     }
     if (
-      e &&
-      e == 1 &&
-      !this.validateSignature() &&
-      !(
-        (this.datas.roleContractReceived == 2 &&
-          this.confirmConsider == 2 &&
-          counteKYC <= 0) ||
+      e && e == 1 && !this.validateSignature() && !( (this.datas.roleContractReceived == 2 && this.confirmConsider == 2 && counteKYC <= 0) ||
         (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) ||
         (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
       )
@@ -2909,6 +2904,7 @@ export class ConsiderContractComponent
   }
 
   validateSignature() {
+    console.log("ccc ", this.contractNoValueSign);
     const validSign = this.isDataObjectSignature.filter(
       (item: any) =>
         item?.recipient?.email === this.currentUser.email &&
@@ -2917,6 +2913,9 @@ export class ConsiderContractComponent
         !item.valueSign &&
         item.type != 3
     );
+    
+    console.log("val ", validSign);
+
     return validSign.length == 0;
   }
 
@@ -3456,5 +3455,11 @@ export class ConsiderContractComponent
     } else {
       this.flagFocus = false;
     }
+  }
+
+  contractNoValue: boolean = false;
+  contractNoValueSign: string;
+  contractNoValueChange($event: any) {
+    this.contractNoValueSign = $event;
   }
 }
