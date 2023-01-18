@@ -17,6 +17,8 @@ export class ConfirmInfoContractComponent implements OnInit {
   @Input() step: any;
   @Output() stepChangeConfirmInforContract = new EventEmitter<string>();
 
+  currentUser: any;
+  emailRecipients:any;
   arrVariableRemove = [
     'id',
     'sign_unit',
@@ -92,6 +94,23 @@ export class ConfirmInfoContractComponent implements OnInit {
   }
 
   next() {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    this.emailRecipients =  this.datas.is_data_contract.participants[1].recipients[0].email;
+
+        // response[0].participants[0].recipients[0].email
+        if (this.emailRecipients !== this.currentUser.email) {
+          
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          this.router.navigate(['/main/dashboard']);
+          return
+        };
+        
+        console.log("this.currentUser.email", this.currentUser.email);
+        console.log("this.emailRecipients", this.emailRecipients);
     let isHaveFieldId: any[] = [];
     let isNotFieldId: any[] = [];
     let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));

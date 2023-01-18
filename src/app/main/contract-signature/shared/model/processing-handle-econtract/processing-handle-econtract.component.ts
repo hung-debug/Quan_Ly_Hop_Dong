@@ -267,7 +267,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       // console.log("response",response);
 
       const dialogRef = this.dialog.open(EditHandlerComponent, {
-        width: '900px',
+        width: '1000px',
         data,
       })
       // console.log("data luongxly hodng",data);
