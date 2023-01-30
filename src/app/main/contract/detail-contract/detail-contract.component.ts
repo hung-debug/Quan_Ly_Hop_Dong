@@ -1,10 +1,8 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, QueryList, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { throwError } from 'rxjs';
 import { AppService } from 'src/app/service/app.service';
-import { ContractSignatureService } from 'src/app/service/contract-signature.service';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UploadService } from 'src/app/service/upload.service';
@@ -120,6 +118,16 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   sum: number[] = [];
   top: any[]= [];
 
+  pageBefore: number;
+
+  filter_name: any;
+  filter_type: any;
+  filter_contract_no: any;
+  filter_from_date: any;
+  filter_to_date: any;
+  isOrg: any;
+  organization_id: any;
+
   constructor(
     private contractService: ContractService,
     private checkViewContractService: CheckViewContractService,
@@ -140,6 +148,46 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     this.getDeviceApp();
 
+    this.route.queryParams.subscribe(params => {
+        this.pageBefore = params.page;
+
+        if (typeof params.filter_name != 'undefined' && params.filter_name) {
+          this.filter_name = params.filter_name;
+        } else {
+          this.filter_name = "";
+        }
+        if (typeof params.filter_type != 'undefined' && params.filter_type) {
+          this.filter_type = params.filter_type;
+        } else {
+          this.filter_type = "";
+        }
+        if (typeof params.filter_contract_no != 'undefined' && params.filter_contract_no) {
+          this.filter_contract_no = params.filter_contract_no;
+        } else {
+          this.filter_contract_no = "";
+        }
+        if (typeof params.filter_from_date != 'undefined' && params.filter_from_date) {
+          this.filter_from_date = params.filter_from_date;
+        } else {
+          this.filter_from_date = "";
+        }
+        if (typeof params.filter_to_date != 'undefined' && params.filter_to_date) {
+          this.filter_to_date = params.filter_to_date;
+        } else {
+          this.filter_to_date = "";
+        }
+        if (typeof params.isOrg != 'undefined' && params.isOrg) {
+          this.isOrg = params.isOrg;
+        } else {
+          this.isOrg = "off";
+        }
+        if (typeof params.organization_id != 'undefined' && params.organization_id) {
+          this.organization_id = params.organization_id;
+        } else {
+          this.organization_id = "";
+        }
+    });
+
     this.appService.setTitle(this.translate.instant('contract.detail'));
 
     //Lấy thông tin id hợp đồng
@@ -149,6 +197,30 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       this.getDataContractSignature();
     } else {
       this.router.navigate(['/page-not-found']);
+    }
+  }
+
+  
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event: any) {
+    console.log("page ", this.pageBefore);
+    if(this.pageBefore) {
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate(['/main/contract/create/' + this.status],
+        {
+          queryParams: {
+            'page': this.pageBefore,
+            'filter_type': this.filter_type, 
+            'filter_contract_no': this.filter_contract_no,
+            'filter_from_date': this.filter_from_date,
+            'filter_to_date': this.filter_to_date,
+            'isOrg': this.isOrg,
+            'organization_id': this.organization_id,
+            'status': this.status
+          },
+          skipLocationChange: true
+        });
+      });
     }
   }
   

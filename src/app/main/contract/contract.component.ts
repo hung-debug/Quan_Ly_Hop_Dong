@@ -1,4 +1,3 @@
-import { data } from 'jquery';
 import { UploadService } from 'src/app/service/upload.service';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,11 +16,11 @@ import { ShareContractDialogComponent } from './dialog/share-contract-dialog/sha
 import { DeleteContractDialogComponent } from './dialog/delete-contract-dialog/delete-contract-dialog.component';
 import { NgxSpinnerService } from "ngx-spinner";
 import { Subscription } from "rxjs";
-import { TreeMapModule } from '@swimlane/ngx-charts';
 import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
 import { sideList } from 'src/app/config/variable';
 import { DialogReasonCancelComponent } from '../contract-signature/shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
+
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -103,7 +102,8 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    // this.p = 1;
+    this.route.queryParams.subscribe(async params => {
       if (typeof params.filter_name != 'undefined' && params.filter_name) {
         this.filter_name = params.filter_name;
       } else {
@@ -134,6 +134,17 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.isOrg = "off";
       }
+      if (typeof params.status != 'undefined' && params.status) {
+        this.status = params.status;
+      } else {
+        this.status = "";
+      }
+
+      if (typeof params.page != 'undefined' && params.page) {
+        this.p = params.page;
+        console.log("p111 ", this.p);
+      }
+
       if (typeof params.organization_id != 'undefined' && params.organization_id) {
         this.organization_id = params.organization_id;
       } else {
@@ -224,11 +235,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
     }
     if (!this.roleMess) {
+      console.log("ppp ", this.p);
       //get list contract
       this.contractService.getContractList(this.isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
-        console.log(this.contracts);
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
@@ -249,14 +260,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   changeTab() {
-    this.p = 1;
+    // this.p = 1;
     this.getContractList();
-
-    console.log("orrg ", this.isOrg);
   }
 
   private convertStatusStr() {
-    this.p = 1;
+    // this.p = 1;
     if (this.status == 'draft') {
       this.filter_status = 0;
     } else if (this.status == 'processing') {
@@ -297,18 +306,31 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   autoSearch(event: any) {
-    this.p = 1;
+    // this.p = 1;
     this.filter_name = event.target.value;
     this.getContractList();
   }
 
   openDetail(id: number) {
-    this.router.navigate(['main/form-contract/detail/' + id]);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/form-contract/detail/' + id],
+      {
+        queryParams: {
+          'page': this.p,
+          'filter_type': this.filter_type, 
+          'filter_contract_no': this.filter_contract_no,
+          'filter_from_date': this.filter_from_date,
+          'filter_to_date': this.filter_to_date,
+          'isOrg': this.isOrg,
+          'organization_id': this.organization_id,
+          'status': this.status
+        },
+        skipLocationChange: false
+      });
+    });
   }
 
   openCopy(id: number) {
-    // this.router.navigate(['main/form-contract/copy/' + id]);
-    // console.log(this.contracts, id, this.status);
     if (this.status != 'complete') {
       this.spinner.show();
       this.contractService.getContractCopy(id).subscribe((res: any) => {
@@ -322,16 +344,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
       }, () => {
         this.spinner.hide();
       })
-
-      // this.getDataContract(id, 'copy');
     }
   }
 
   openEdit(id: number) {
     setTimeout(() => {
-      // if (action == 'copy')
-      //   void this.router.navigate(['main/form-contract/copy/' + id]);
-      // else void this.router.navigate(['main/form-contract/edit/' + id]);
       void this.router.navigate(['main/form-contract/edit/' + id]);
     }, 100)
   }
@@ -375,7 +392,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result
     })
   }

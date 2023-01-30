@@ -3,9 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
-import { ToastService } from 'src/app/service/toast.service';
 import { UnitService } from 'src/app/service/unit.service';
-import { UserService } from 'src/app/service/user.service';
 
 @Component({
   selector: 'app-filter-list-dialog',
@@ -38,19 +36,15 @@ export class FilterListDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fbd: FormBuilder,
     private unitService : UnitService,
-    private toastService : ToastService,
     public dialogRef: MatDialogRef<FilterListDialogComponent>,
     public router: Router,
     public dialog: MatDialog,
-    private userService : UserService,
     private contractTypeService : ContractTypeService) { 
     }
 
   ngOnInit(): void {
     this.organization_id = Number(this.data.organization_id);
-    let orgId = this.userService.getInforUser().organization_id;
     //lay danh sach to chuc
     this.contractTypeService.getContractTypeList("", "").subscribe(data => {
       console.log(data);
@@ -87,25 +81,11 @@ export class FilterListDialogComponent implements OnInit {
       };
       this.selectedNodeOrganization = [];
       this.selectedNodeOrganization.push(dataOrg);
-      
-      console.log("test");
-      console.log(this.listOrgCombobox)
-;      console.log(this.selectedNodeOrganization);
-    });
-
-    console.log(this.data.filter_type);
-    
+    });    
     this.isOrg = this.data.isOrg;
-    console.log(this.addForm);
   }
 
   onSubmit() {
-    // this.submitted = true;
-    // // stop here if form is invalid
-    // if (this.addForm.invalid) {
-    //   return;
-    // }
-    console.log(this.filter_contract_no);
     const data = {
       filter_type: this.filter_type,
       filter_contract_no: this.filter_contract_no,
@@ -159,9 +139,7 @@ export class FilterListDialogComponent implements OnInit {
     let dataChildren:any[]=[];
     let arrCon = this.orgList.filter((p: any) => p.parent_id == element.id);
     
-    arrCon.forEach((elementCon: any, indexCOn: number) => {
-      let is_edit = false;
-      
+    arrCon.forEach((elementCon: any, indexCOn: number) => {      
       dataChildren.push(
       {
         label: elementCon.name, 
