@@ -11,6 +11,7 @@ import { ToastService } from 'src/app/service/toast.service';
 import {DeviceDetectorService} from "ngx-device-detector";
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer-signature',
@@ -45,6 +46,9 @@ export class FooterSignatureComponent implements OnInit {
   smsContractBuy: any;
   contractId: any;
 
+  currentUser: any;
+  emailRecipients:any;
+
   pageRendering:any;
   pageNumPending: any = null;
 
@@ -57,7 +61,8 @@ export class FooterSignatureComponent implements OnInit {
     private toastService: ToastService,
     private deviceService: DeviceDetectorService,
     private userService: UserService,
-    private unitService: UnitService
+    private unitService: UnitService,
+    private router: Router,
   ) {
   }
 
@@ -251,6 +256,26 @@ export class FooterSignatureComponent implements OnInit {
 
   action() {
     if (this.datas.action_title == 'dieu_phoi') {
+      console.log("datas",this.datas);
+      
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+      this.emailRecipients =  this.datas.is_data_contract.participants[1].recipients[0].email;
+  
+          // response[0].participants[0].recipients[0].email
+          if (this.emailRecipients !== this.currentUser.email) {
+            
+            this.toastService.showErrorHTMLWithTimeout(
+              'Bạn không có quyền xử lý hợp đồng này!',
+              '',
+              3000
+            );
+            this.router.navigate(['/main/dashboard']);
+            return
+          };
+          
+          console.log("this.currentUser.email", this.currentUser.email);
+          console.log("this.emailRecipients", this.emailRecipients);
+        
       if (this.is_data_coordination) { // chỉ lấy dữ liệu của người điều phối
         if (this.is_data_coordination['recipients']) {
           let dataCoordination = this.is_data_coordination['recipients'].filter((p: any) => p.role == 1)[0]; // get dữ liệu người điều phối

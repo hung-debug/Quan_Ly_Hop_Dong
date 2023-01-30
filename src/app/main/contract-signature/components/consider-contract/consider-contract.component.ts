@@ -53,8 +53,7 @@ import { event } from 'jquery';
   styleUrls: ['./consider-contract.component.scss'],
 })
 export class ConsiderContractComponent
-  implements OnInit, OnDestroy, AfterViewInit
-{
+  implements OnInit, OnDestroy, AfterViewInit {
   datas: any;
   data_contract: any;
   data_coordinates: any;
@@ -78,7 +77,7 @@ export class ConsiderContractComponent
   confirmSignature = null;
 
   taxCodePartnerStep2: any;
-  
+
   pageNum: number = 1;
 
   dataVersion2: any;
@@ -165,7 +164,7 @@ export class ConsiderContractComponent
   idPdfSrcMobile: any;
 
   sessionIdUsbToken: any;
-
+  emailRecipients: any;
   //id tổ chức của người tạo hợp đồng
   orgId: any;
 
@@ -208,6 +207,15 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
+
+    // this.contractService
+    //       .getDetermineCoordination(this.datas.recipient_id)
+    //       .subscribe((response) => {
+    //         this.email = response.email;
+    //         console.log("email",this.email);
+
+    //       });
+
     console.log('ratio ', window.devicePixelRatio);
 
     this.getDeviceApp();
@@ -218,7 +226,7 @@ export class ConsiderContractComponent
 
     const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract, false);
 
-    if(checkViewContract) {
+    if (checkViewContract) {
       this.actionRoleContract();
     } else {
       this.router.navigate(['/page-not-found']);
@@ -232,13 +240,13 @@ export class ConsiderContractComponent
   }
 
   previousPageMobile() {
-    if(this.pageMobile > 1) {
+    if (this.pageMobile > 1) {
       this.pageMobile--;
     }
   }
 
   onNextPageMobile() {
-    if(this.pageMobile < this.pageNumber) {
+    if (this.pageMobile < this.pageNumber) {
       this.pageMobile++;
       this.page1 = true;
     }
@@ -251,13 +259,13 @@ export class ConsiderContractComponent
   }
 
   pagechanging(event: any) {
-    if(event.pageNumber > 1 && event.pageNumber < this.pageNumber) {
+    if (event.pageNumber > 1 && event.pageNumber < this.pageNumber) {
       this.page1 = true;
       this.pageLast = true;
-    } else if(event.pageNumber == 1) {
+    } else if (event.pageNumber == 1) {
       this.page1 = false;
       this.pageLast = true;
-    } else if(event.pageNumber = this.pageNumber) {
+    } else if (event.pageNumber = this.pageNumber) {
       this.page1 = true;
       this.pageLast = false;
     }
@@ -280,7 +288,7 @@ export class ConsiderContractComponent
           } else {
             this.toastService.showErrorHTMLWithTimeout(
               'Bạn đã nhập sai OTP 5 lần liên tiếp.<br>Quay lại sau ' +
-                this.datepipe.transform(data.nextAttempt, 'dd/MM/yyyy HH:mm'),
+              this.datepipe.transform(data.nextAttempt, 'dd/MM/yyyy HH:mm'),
               '',
               3000
             );
@@ -302,16 +310,16 @@ export class ConsiderContractComponent
     //đổi màu cho nút back page
     let canvas1: any = document.getElementById('canvas-step3-1');
 
-    if(event.srcElement.scrollTop < canvas1.height/2) {
+    if (event.srcElement.scrollTop < canvas1.height / 2) {
       this.page1 = false;
     } else {
       this.page1 = true;
     }
 
     //đổi màu cho nút next page
-    let canvasLast: any = document.getElementById('canvas-step3-'+this.pageNumber);
+    let canvasLast: any = document.getElementById('canvas-step3-' + this.pageNumber);
     let step3: any = document.getElementById('pdf-viewer-step-3');
-    if(event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)) {
+    if (event.srcElement.scrollTop < Number(canvasLast.getBoundingClientRect().top - step3.getBoundingClientRect().top)) {
       this.pageLast = true;
     } else {
       this.pageLast = false;
@@ -355,7 +363,7 @@ export class ConsiderContractComponent
     }
   }
 
- 
+
   timerId: any;
   getDataContractSignature() {
     this.contractService.getDetailContract(this.idContract).subscribe(
@@ -671,7 +679,7 @@ export class ConsiderContractComponent
       });
   }
 
-  eventMouseover() {}
+  eventMouseover() { }
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -680,8 +688,8 @@ export class ConsiderContractComponent
       let width_drag_element = document.getElementById('width-element-info');
       this.widthDrag = width_drag_element
         ? width_drag_element.getBoundingClientRect().right -
-          width_drag_element.getBoundingClientRect().left -
-          15
+        width_drag_element.getBoundingClientRect().left -
+        15
         : '';
 
       const imageRender = <HTMLElement>document.getElementById('export-html');
@@ -723,7 +731,7 @@ export class ConsiderContractComponent
     }
   }
 
-  pageRendering:any;
+  pageRendering: any;
   pageNumPending: any = null;
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
@@ -737,18 +745,18 @@ export class ConsiderContractComponent
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        if(this.usbTokenVersion == 1 || !this.usbTokenVersion) {
+        if (this.usbTokenVersion == 1 || !this.usbTokenVersion) {
           this.prepareInfoSignUsbTokenV1(
             pageNumber,
             canvas.height,
           );
-        } else if(this.usbTokenVersion == 2) {
+        } else if (this.usbTokenVersion == 2) {
           this.prepareInfoSignUsbTokenV2(
             pageNumber,
             canvas.height,
           );
         }
-       
+
         let _objPage = this.objPdfProperties.pages.filter(
           (p: any) => p.page_number == pageNumber
         )[0];
@@ -818,7 +826,7 @@ export class ConsiderContractComponent
     style.backgroundColor = d.valueSign ? '' : backgroundColor;
     style.display =
       (this.confirmConsider && this.confirmConsider == 1) ||
-      (this.confirmSignature && this.confirmSignature == 1)
+        (this.confirmSignature && this.confirmSignature == 1)
         ? ''
         : 'none';
     if (d['width']) {
@@ -935,6 +943,8 @@ export class ConsiderContractComponent
       keyboard: true,
       data,
     });
+    console.log("data email luong xly", data);
+
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
       let is_data = result;
@@ -1015,7 +1025,7 @@ export class ConsiderContractComponent
     // interact.addDocument(document);
   }
 
-  
+
   resizableListener = (event: any) => {
     var target = event.target
 
@@ -1075,7 +1085,7 @@ export class ConsiderContractComponent
       this.coordinates_signature = event.rect;
       let id = event.target.id;
 
-      console.log("id ",id);
+      console.log("id ", id);
       let signElement = <HTMLElement>document.getElementById(id);
       let rect_location = signElement.getBoundingClientRect();
       if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
@@ -1180,7 +1190,7 @@ export class ConsiderContractComponent
         }
         let name_accept_signature = '';
         let field_data = [];
-        
+
         // lay lai danh sach signer sau khi keo vao hop dong
         this.datas.contract_user_sign.forEach((res: any) => {
           if (res.sign_config.length > 0) {
@@ -1312,6 +1322,24 @@ export class ConsiderContractComponent
       (p: any) => p.id == 5
     ).length;
 
+    // console.log("emailRecipients", this.datas.is_data_contract.participants[0].recipients[0].email);
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
+
+        // response[0].participants[0].recipients[0].email
+        if (this.emailRecipients !== this.currentUser.email) {
+          
+          this.toastService.showErrorHTMLWithTimeout(
+            'Bạn không có quyền xử lý hợp đồng này!',
+            '',
+            3000
+          );
+          this.router.navigate(['/main/dashboard']);
+          return
+        };
+
+    console.log("this.currentUser.email", this.currentUser.email);
+        
     if (counteKYC > 0) {
       if (this.mobile) {
         if (this.confirmSignature == 1) {
@@ -1551,7 +1579,7 @@ export class ConsiderContractComponent
     }
   }
 
-  getTextAlertConfirm() {
+  getTextAlertConfirm() {   
     if (this.datas.roleContractReceived == 2) {
       if (this.confirmConsider == 1) {
         return 'Bạn có chắc chắn xác nhận hợp đồng này?';
@@ -1578,7 +1606,7 @@ export class ConsiderContractComponent
       let i = 0;
       i < this.datas.contract_information.file_related_contract;
       i++
-    ) {}
+    ) { }
   }
 
   dataURIToBlob(dataURI: string) {
@@ -2398,8 +2426,8 @@ export class ConsiderContractComponent
     }
   }
 
-  async createEmptySignature(signUpdate: any,signDigital: any, image: any) {
-    const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate,signDigital,image, this.certInfoBase64).toPromise();
+  async createEmptySignature(signUpdate: any, signDigital: any, image: any) {
+    const emptySignature = await this.contractService.createEmptySignature(this.recipientId, signUpdate, signDigital, image, this.certInfoBase64).toPromise();
 
     const base64TempData = emptySignature.base64TempData;
     const hexDigestTempFile = emptySignature.hexDigestTempFile;
@@ -2811,7 +2839,7 @@ export class ConsiderContractComponent
               .subscribe((responseEnd) => {
                 this.contractService
                   .getDetailContract(this.idContract)
-                  .subscribe((responseLink) => {});
+                  .subscribe((responseLink) => { });
               });
           });
       });
@@ -3072,7 +3100,7 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass= 'custom-dialog-container';
+    dialogConfig.panelClass = 'custom-dialog-container';
     dialogConfig.data = data;
     dialogConfig.disableClose = true;
     // dialogConfig.width = '100000000000000000000000000000px';
@@ -3142,7 +3170,7 @@ export class ConsiderContractComponent
     dialogConfig.width = '497px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
-    dialogConfig.panelClass= 'custom-dialog-container';
+    dialogConfig.panelClass = 'custom-dialog-container';
 
     const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
 
@@ -3187,7 +3215,7 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass= 'custom-dialog-container';
+    dialogConfig.panelClass = 'custom-dialog-container';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
     const dialogRef = this.dialog.open(ImageDialogSignComponent, dialogConfig);
@@ -3331,7 +3359,7 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass= 'custom-dialog-container';
+    dialogConfig.panelClass = 'custom-dialog-container';
     // dialogConfig.maxWidth = '480px';
     // dialogConfig.width = '497px';
     dialogConfig.hasBackdrop = true;

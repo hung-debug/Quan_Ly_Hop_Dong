@@ -18,6 +18,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
 import { environment } from 'src/environments/environment';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-determine-signer',
@@ -106,6 +107,7 @@ export class DetermineSignerComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private router: Router,
+    public translate: TranslateService,
     private unitService: UnitService,
   ) {
     this.step = variable.stepSampleContract.step2
@@ -240,6 +242,14 @@ export class DetermineSignerComponent implements OnInit {
      
     
   }
+  // switchLang(lang: string) {
+  //   this.translate.use(lang);
+  //   this.translate.currentLang = lang;
+
+  //   console.log("lang ", lang);
+  //   localStorage.setItem('lang', lang);
+  //   sessionStorage.setItem('lang', lang);
+  // }
 
   async checkNumber(countEkyc: number, countSMS: number) {
     let numberContractUseOrg: any = null;
