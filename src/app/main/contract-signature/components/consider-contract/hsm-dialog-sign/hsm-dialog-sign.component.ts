@@ -1,14 +1,12 @@
-import {Component, ElementRef, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { UserService } from 'src/app/service/user.service';
-import { parttern_input } from 'src/app/config/parttern';
+import { parttern_input, parttern } from 'src/app/config/parttern';
 import { ContractService } from 'src/app/service/contract.service';
-import { error } from 'jquery';
 import { ToastService } from 'src/app/service/toast.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-hsm-dialog-sign',
@@ -30,15 +28,16 @@ export class HsmDialogSignComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
     private fbd: FormBuilder,
-    private el: ElementRef,
     private userService: UserService,
     private contractService: ContractService,
     private toastService: ToastService,
     public dialogRef: MatDialogRef<HsmDialogSignComponent>,
-    private spinner: NgxSpinnerService
   ) {
      this.myForm = this.fbd.group({
-      taxCode: this.fbd.control("", [Validators.required,Validators.pattern(parttern_input.taxCode_form)]),
+      taxCode: this.fbd.control("", [Validators.required,
+          Validators.pattern(parttern_input.taxCode_form),
+          Validators.pattern(parttern.card_id)
+        ]),
       username: this.fbd.control("", [Validators.required]),
       pass1: this.fbd.control("", [Validators.required]),
       pass2: this.fbd.control("", [Validators.required])
@@ -57,7 +56,10 @@ export class HsmDialogSignComponent implements OnInit {
     if(this.user.organization_id != 0) {
       this.userService.getUserById(this.id).subscribe((response) => {
         this.myForm = this.fbd.group({
-          taxCode: this.fbd.control(response.tax_code, [Validators.required, Validators.pattern(parttern_input.taxCode_form)]),
+          taxCode: this.fbd.control(response.tax_code, [Validators.required, Validators.pattern(parttern_input.taxCode_form),
+            Validators.pattern(parttern.card_id)
+          ],
+          ),
           username: this.fbd.control(response.hsm_name, [Validators.required]),
           pass1: this.fbd.control(response.hsm_pass, [Validators.required]),
           pass2: this.fbd.control("",[Validators.required])
@@ -75,7 +77,10 @@ export class HsmDialogSignComponent implements OnInit {
             let taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
 
             this.myForm = this.fbd.group({
-              taxCode: this.fbd.control(taxCodePartnerStep2, [Validators.required, Validators.pattern(parttern_input.taxCode_form)]),
+              taxCode: this.fbd.control(taxCodePartnerStep2, [Validators.required, 
+                Validators.pattern(parttern_input.taxCode_form),
+                Validators.pattern(parttern.card_id)
+              ]),
               username: this.fbd.control(taxCodePartnerStep2, [Validators.required]),
               pass1: this.fbd.control("", [Validators.required]),
               pass2: this.fbd.control("",[Validators.required])
