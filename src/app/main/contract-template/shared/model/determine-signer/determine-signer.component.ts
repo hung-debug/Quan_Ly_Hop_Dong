@@ -407,7 +407,9 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
       // valid cccd number
-      if (dataArr[i].card_id.trim() && !this.pattern.card_id.test(dataArr[i].card_id.trim())) {
+      if (dataArr[i].card_id.trim() && !this.pattern.card_id9.test(dataArr[i].card_id.trim()) && 
+      !this.pattern.card_id12.test(dataArr[i].card_id.trim())
+      ) {
         this.getNotificationValid("CMT/CCCD của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
