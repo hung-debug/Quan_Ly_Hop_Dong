@@ -140,7 +140,7 @@
                     <!--Mã số thuế hsm-->
                     <div class="row">
                         <div class="col-md-12">
-                            <div>{{'tax_code' | translate}}</div>
+                            <div>{{'tax_code.cardId' | translate}}</div>
                             <div class="input-data">
                                 <input type="text" formControlName="taxCodeHsm">
                             </div>
@@ -172,8 +172,8 @@
                                 <input class="input-text" *ngIf="this.fieldTextType === true" type="text" formControlName="password1Hsm" id="password1Hsm" />
                                 <div class="icon-password">
                                     <i class="fa" [ngClass]="{
-                          'fa-eye-slash': !fieldTextType,
-                          'fa-eye': fieldTextType
+                                            'fa-eye-slash': !fieldTextType,
+                                            'fa-eye': fieldTextType
                         }" (click)="toggleFieldTextType()" style="color: #106DB6;"></i>
                                 </div>
                             </div>
