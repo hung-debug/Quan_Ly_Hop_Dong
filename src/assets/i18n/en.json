@@ -510,5 +510,6 @@
   "no":"No",
   "file.import.valid":"File import isn't in the correct format",
   "file.import.valid.result":"File import isn't in the correct format, please see the error message in the downloaded file",
-  "taxcode.out":"Please enter tax code/cardId outside the contract flow"
+  "taxcode.out":"Please enter tax code/cardId outside the contract flow",
+  "end":"End"
 }

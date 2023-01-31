@@ -79,6 +79,8 @@ export class ContractSignatureComponent implements OnInit {
   dataHsm: any;
   isDateTime: any = new Date();
 
+  organization_id: any = "";
+
   constructor(
     private appService: AppService,
     private contractServiceV1: ContractService,
@@ -138,6 +140,16 @@ export class ContractSignatureComponent implements OnInit {
         this.contractStatus = params.contractStatus;
       } else {
         this.contractStatus = '';
+      }
+
+      if (typeof params.page != 'undefined' && params.page) {
+        this.p = params.page;
+      }
+
+      if (typeof params.organization_id != 'undefined' && params.organization_id) {
+        this.organization_id = params.organization_id;
+      } else {
+        this.organization_id = "";
       }
     });
     this.sub = this.route.params.subscribe((params) => {
@@ -379,13 +391,13 @@ export class ContractSignatureComponent implements OnInit {
 
   //auto search
   autoSearch(event: any) {
-    this.p = 1;
+    // this.p = 1;
     this.filter_name = event.target.value;
     this.getContractList();
   }
 
   private convertActionStr(): string {
-    this.p = 1;
+    // this.p = 1;
     return 'contract.list.received';
   }
 
@@ -644,8 +656,6 @@ export class ContractSignatureComponent implements OnInit {
 
               this.spinner.show();
 
-              let countUpdate = 0;
-
               //Call api ký nhiều hsm
               const checkSign = await this.contractServiceV1.signHsmMulti(
                 this.dataHsm,
@@ -659,8 +669,7 @@ export class ContractSignatureComponent implements OnInit {
                   this.spinner.hide();
 
                   if (checkSign[i].result.message == 'Tax code do not match!') {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'taxcode.not.match',
+                    this.toastService.showErrorHTMLWithTimeout('taxcode.not.match',
                       '',
                       3000
                     );
@@ -769,8 +778,6 @@ export class ContractSignatureComponent implements OnInit {
         .subscribe((response) => {
           console.log('sig ', response);
           for (let j = 0; j < response.length; j++) {
-            console.log('recipient id ', recipientId);
-
             if (response[j].recipient) {
               if (recipientId[i] == response[j].recipient.id) {
                 x.push(response[j].coordinate_x);
@@ -840,8 +847,6 @@ export class ContractSignatureComponent implements OnInit {
                   y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
 
                   h[i] = y[i] + h[i];
-
-                  console.log('base64String i 1', base64String[i]);
 
                   let dataSignMobi: any =
                     await this.contractServiceV1.postSignDigitalMobiMulti(
@@ -1232,82 +1237,6 @@ export class ContractSignatureComponent implements OnInit {
           return;
         }
       }
-
-      // for (let i = 0; i < fileC.length; i++) {
-      //   w[i] = x[i] + w[i];
-
-      //   y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
-
-      //   h[i] = y[i] + h[i];
-
-      //   var json_req_result = JSON.stringify({
-      //     OperationId: 10,
-      //     SessionId: sessionId,
-      //     checkOCSP: 0,
-      //     reqDigest: 1,
-      //     algDigest: 'SHA_1',
-      //     extFile: 'pdf',
-      //     invisible: 0,
-      //     pageIndex: Number(page[i] - 1),
-      //     offsetX: Math.floor(x[i]),
-      //     offsetY: Math.floor(y[i]),
-      //     sigWidth: Math.floor(w[i]),
-      //     sigHeight: Math.floor(h[i]),
-      //     logoData: signI,
-      //     DataToBeSign: base64String[i],
-      //     showSignerInfo: 0,
-      //     sigId: '',
-      //   });
-      //   json_req_result = window.btoa(json_req_result);
-
-      //   let dataSignMobi = await this.contractServiceV1.signUsbToken("request="+json_req_result);
-      //   let dataSignMobiDecode = JSON.parse(window.atob(dataSignMobi.data));
-
-      //   if(dataSignMobiDecode.OperationId == 10 && dataSignMobiDecode.Base64Result) {
-      //     let filePdfSigned = dataSignMobiDecode.Base64Result;
-
-      //     const sign = await this.contractServiceV1.updateDigitalSignatured(idSignMany[i],filePdfSigned);
-
-      //     if (!sign.recipient_id) {
-      //       this.toastService.showErrorHTMLWithTimeout(
-      //         'Lỗi ký usb token không cập nhật được recipient id',
-      //         '',
-      //         3000
-      //       );
-      //       return false;
-      //     }
-
-      //     const updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([], recipientId[i]);
-
-      //     if(!updateInfo.id) {
-      //       this.toastService.showErrorHTMLWithTimeout(
-      //         'Lỗi cập nhật trạng thái hợp đồng ',
-      //         '',
-      //         3000
-      //       );
-      //     }
-
-      //     if (i == fileC.length - 1 ) {
-      //       this.spinner.hide();
-      //       this.toastService.showSuccessHTMLWithTimeout(
-      //         'sign.success',
-      //         '',
-      //         3000
-      //       );
-
-      //       this.router
-      //         .navigateByUrl('/', { skipLocationChange: true })
-      //         .then(() => {
-      //           this.router.navigate([
-      //             'main/c/receive/processed',
-      //           ]);
-      //         });
-      //     }
-      //   } else {
-      //     this.toastService.showErrorHTMLWithTimeout("Lỗi ký usb token gọi api ký không thành công","",3000);
-      //     return false;
-      //   }
-      // }
     } else {
       this.spinner.hide();
       Swal.fire({
@@ -1449,7 +1378,22 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openDetail(id: number) {
-    this.router.navigate(['main/form-contract/detail/' + id]);
+    console.log("status ", this.status);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/form-contract/detail/' + id],
+      {
+        queryParams: {
+          'page': this.p,
+          'filter_type': this.filter_type, 
+          'filter_contract_no': this.filter_contract_no,
+          'filter_from_date': this.filter_from_date,
+          'filter_to_date': this.filter_to_date,
+          'organization_id': this.organization_id,
+          'status': this.status
+        },
+        skipLocationChange: false
+      });
+    });
   }
 
   openConsiderContractViewProcesse(item: any) {

@@ -44,6 +44,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   id: any = "";
   notification: any = "";
   isOrg: string = 'off';
+  
   stateOptions: any[];
   organization_id: any = "";
 
@@ -86,7 +87,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService,
-    private http: HttpClient,
     private uploadService: UploadService,
     private dialog: MatDialog,
     private spinner: NgxSpinnerService,
@@ -102,7 +102,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    // this.p = 1;
     this.route.queryParams.subscribe(async params => {
       if (typeof params.filter_name != 'undefined' && params.filter_name) {
         this.filter_name = params.filter_name;
@@ -142,7 +141,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
       if (typeof params.page != 'undefined' && params.page) {
         this.p = params.page;
-        console.log("p111 ", this.p);
       }
 
       if (typeof params.organization_id != 'undefined' && params.organization_id) {

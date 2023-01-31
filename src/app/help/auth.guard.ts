@@ -67,20 +67,12 @@ export class AuthGuard implements CanActivate {
     console.log("next", next._urlSegment.segments.some((p: any) => p.path == 'form-contract'));
     //@ts-ignore
     if (state.url.search('type') > 0 && (next._urlSegment.segments.some((p: any) => p.path == this.contract_signatures) || next._urlSegment.segments.some((p: any) => p.path == 'contract-template') || next._urlSegment.segments.some((p: any) => p.path == 'form-contract'))) {
-      console.log("vao day");
-      console.log(!sessionStorage.getItem('url'), state.url.includes(this.kyTuCach+"mail"));
       if (!sessionStorage.getItem('url') && state.url.includes(this.kyTuCach+"mail")) {
-        console.log(2);
         let isCheckUrl = state.url.split(this.kyTuCach+"mail=");
         
-        // sessionStorage.setItem('url', state.url);
         sessionStorage.setItem('url', isCheckUrl[0]);
-        console.log(3);
-        // sessionStorage.setItem('recipientEmail', isCheckUrl[isCheckUrl.length - 1]);
 
         sessionStorage.setItem('mail', isCheckUrl[isCheckUrl.length - 1]);
-
-        console.log(4);
         
         let is_local = sessionStorage.getItem('url');
         if (is_local?.includes('type')) {

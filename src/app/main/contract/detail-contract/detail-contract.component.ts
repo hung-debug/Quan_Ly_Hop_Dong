@@ -179,7 +179,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
         if (typeof params.isOrg != 'undefined' && params.isOrg) {
           this.isOrg = params.isOrg;
         } else {
-          this.isOrg = "off";
+          this.isOrg = "";
         }
         if (typeof params.organization_id != 'undefined' && params.organization_id) {
           this.organization_id = params.organization_id;
@@ -203,25 +203,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   
   @HostListener('window:popstate', ['$event'])
   onPopState(event: any) {
-    console.log("page ", this.pageBefore);
-    if(this.pageBefore) {
-      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/contract/create/' + this.status],
-        {
-          queryParams: {
-            'page': this.pageBefore,
-            'filter_type': this.filter_type, 
-            'filter_contract_no': this.filter_contract_no,
-            'filter_from_date': this.filter_from_date,
-            'filter_to_date': this.filter_to_date,
-            'isOrg': this.isOrg,
-            'organization_id': this.organization_id,
-            'status': this.status
-          },
-          skipLocationChange: true
-        });
-      });
-    }
+    this.actionBack();
   }
   
   firstPageMobile() {
@@ -840,6 +822,48 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
     if (e && e == 2) {
       this.downloadContract(this.idContract);
+    }
+  }
+
+  endContract() {
+    this.actionBack();
+  }
+
+  actionBack() {
+    if(this.pageBefore && this.isOrg) {
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate(['/main/contract/create/' + this.status],
+        {
+          queryParams: {
+            'page': this.pageBefore,
+            'filter_type': this.filter_type, 
+            'filter_contract_no': this.filter_contract_no,
+            'filter_from_date': this.filter_from_date,
+            'filter_to_date': this.filter_to_date,
+            'isOrg': this.isOrg,
+            'organization_id': this.organization_id,
+            'status': this.status
+          },
+          skipLocationChange: true
+        });
+      });
+    } else if(this.pageBefore) {
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate(['/main/c/receive/' + this.status],
+        {
+          queryParams: {
+            'page': this.pageBefore,
+            'filter_type': this.filter_type, 
+            'filter_contract_no': this.filter_contract_no,
+            'filter_from_date': this.filter_from_date,
+            'filter_to_date': this.filter_to_date,
+            'isOrg': this.isOrg,
+            'organization_id': this.organization_id,
+            'status': this.status
+          },
+          skipLocationChange: true
+        });
+      });
     }
   }
 
