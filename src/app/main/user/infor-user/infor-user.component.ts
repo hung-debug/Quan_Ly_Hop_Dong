@@ -82,9 +82,7 @@ export class InforUserComponent implements OnInit {
       this.addHsmForm = this.fbd.group({
         nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
         taxCodeHsm: this.fbd.control("",[
-            Validators.pattern(parttern.card_id9),
-            Validators.pattern(parttern.card_id12),
-            Validators.pattern(parttern_input.taxCode_form)
+            Validators.pattern(parttern.cardid),
             ]
           ),
         password1Hsm: null
@@ -147,9 +145,7 @@ export class InforUserComponent implements OnInit {
         this.addHsmForm = this.fbd.group({
           nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form)),
           taxCodeHsm: this.fbd.control(data.tax_code, [
-              Validators.pattern(parttern.card_id9),
-              Validators.pattern(parttern.card_id12),
-              Validators.pattern(parttern_input.taxCode_form)
+              Validators.pattern(parttern.cardid),
             ]
             ),
           password1Hsm: this.fbd.control(data.hsm_pass)
@@ -174,9 +170,7 @@ export class InforUserComponent implements OnInit {
         this.addHsmFormOld = this.fbd.group({
           nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form)),
           taxCodeHsm: this.fbd.control(data.tax_code, [
-            Validators.pattern(parttern.card_id9),
-            Validators.pattern(parttern.card_id12),
-            Validators.pattern(parttern_input.taxCode_form)
+            Validators.pattern(parttern.cardid),
           ]),
           password1Hsm: this.fbd.control(data.hsm_pass)
         });

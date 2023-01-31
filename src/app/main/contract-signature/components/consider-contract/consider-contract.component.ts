@@ -3175,14 +3175,11 @@ export class ConsiderContractComponent
     const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(async (result: any) => {
-      console.log('result ', result);
 
       let signI = null;
 
       //lấy ảnh chữ ký usb token
       this.cardId = result.ma_dvcs.trim();
-
-      console.log('card id ', this.cardId);
 
       await of(null).pipe(delay(100)).toPromise();
       const imageRender = <HTMLElement>(
