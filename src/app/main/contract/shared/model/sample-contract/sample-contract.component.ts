@@ -640,6 +640,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
+                  if(this.soHopDong) {
+                    element.name = this.soHopDong.name;
+                  }
                   this.isChangeText = true;
                 } else {
                   this.isChangeText = false;
@@ -707,12 +710,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
-    // p.recipient_id == element.id && p.sign_unit == isSignType)
-    console.log("aaaa ");
+
     this.list_sign_name.forEach((element: any) => {
       
-      console.log("el ", element);
-      //|| (isSignType == 'so_tai_lieu' && (p.recipient ? p.recipient.email : p.email) && p.sign_unit == 'so_tai_lieu')
       if (this.convertToSignConfig().some((p: any) => ((p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && (p.recipient ? p.recipient.email : p.email) && p.sign_unit == 'so_tai_lieu'))) {
         if (isSignType != 'text') {
           if(isSignType == 'so_tai_lieu') {
@@ -720,7 +720,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           } else {
             element.is_disable = true
           }
-          // element.is_disable = true
         } 
       } else {
         if (isSignType == 'chu_ky_anh') {
@@ -826,9 +825,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.arrPage.push({page: page});
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
-        // canvas.style.paddingLeft = '15px';
-        // canvas.style.border = '9px solid transparent';
-        // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
+
         let idPdf = 'pdf-viewer-step-3'
         let viewer = document.getElementById(idPdf);
         if (viewer) {
@@ -893,7 +890,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngAfterViewInit() {
     setTimeout(() => {
       // @ts-ignore
-      // document.getElementById('input-location-x').focus();
       let width_drag_element = document.getElementById('width-element-info');
       this.widthDrag = width_drag_element ? ((width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left) - 15) : '';
     }, 100)
@@ -902,9 +898,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   setClass(dataDrag: any) {
-    // if (this.datas.contract_user_sign.some((p: any) => p.sign_unit == 'so_tai_lieu' && p.sign_config.length > 0) && dataDrag.sign_unit == 'so_tai_lieu') {
-    //   return 'none-drag';
-    // } else return 'resize-drag'
+
     return 'resize-drag';
   }
 
@@ -914,14 +908,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.convertToSignConfig().forEach((element: any) => {
         let a = document.getElementById(element.id);
         if (a) {
-          // if (element['position']) { // @ts-ignore
-          //   a.style["z-index"] = '1';
-          // }
+      
           if (element['coordinate_x'] && element['coordinate_y']) { // @ts-ignore
             a.style["z-index"] = '1';
           }
-          // else
-          //   a.style.display = 'none';
+
           a.setAttribute("data-x", element['coordinate_x']);
           a.setAttribute("data-y", element['coordinate_y']);
         }
@@ -1229,6 +1220,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // edit location doi tuong ky
 
+  soHopDong: any;
   changePositionSign(e: any, locationChange: any, property: any) {
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
@@ -1254,7 +1246,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           isObjSign.text_attribute_name = e;
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
         } else if (property == 'font') {
-          console.log("e ", e.target.value);
           isObjSign.font = e.target.value;
           signElement.setAttribute("font", isObjSign.font);
         } else if(property == 'font_size') {
@@ -1283,6 +1274,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             signElement.setAttribute("email", isObjSign.email);
 
           }
+
+          this.soHopDong = data_name;
         }
       }
     } 

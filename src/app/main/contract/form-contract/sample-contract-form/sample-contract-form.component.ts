@@ -653,6 +653,9 @@ export class SampleContractFormComponent implements OnInit {
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
+                  if(this.soHopDong) {
+                    element.name = this.soHopDong.name;
+                  }
                   this.isChangeText = true;
                 } else {
                   this.isChangeText = false;
@@ -1093,8 +1096,6 @@ export class SampleContractFormComponent implements OnInit {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
 
-      console.log("isObj sign ", isObjSign);
-
       if (isObjSign) {
         this.isEnableSelect = false;
         this.objSignInfo.traf_x = d.coordinate_x;
@@ -1132,8 +1133,6 @@ export class SampleContractFormComponent implements OnInit {
         if (!d.name && !d.recipient.name) {
           //@ts-ignore
           document.getElementById('select-dropdown').value = "";
-
-          console.log("1 ");
         } else {
           if(d.recipient_id) {
               //@ts-ignore
@@ -1274,6 +1273,7 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   // edit location doi tuong ky
+  soHopDong: any;
   changePositionSign(e: any, locationChange: any, property: any) {
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
@@ -1299,7 +1299,6 @@ export class SampleContractFormComponent implements OnInit {
           isObjSign.text_attribute_name = e;
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
         } else if (property == 'font') {
-          console.log("e ", e.target.value);
           isObjSign.font = e.target.value;
           signElement.setAttribute("font", isObjSign.font);
         } else if(property == 'font_size') {
@@ -1336,6 +1335,8 @@ export class SampleContractFormComponent implements OnInit {
               isObjSign.width = 135;
               signElement.setAttribute("height", isObjSign.width);
             }
+
+            this.soHopDong = data_name;
           }
         }
       }
