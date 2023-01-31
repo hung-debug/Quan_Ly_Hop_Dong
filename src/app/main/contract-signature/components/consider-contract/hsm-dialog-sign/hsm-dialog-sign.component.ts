@@ -35,9 +35,10 @@ export class HsmDialogSignComponent implements OnInit {
   ) {
      this.myForm = this.fbd.group({
       taxCode: this.fbd.control("", [Validators.required,
-          Validators.pattern(parttern_input.taxCode_form),
-          Validators.pattern(parttern.card_id9),
-          Validators.pattern(parttern.card_id12)
+        Validators.pattern(parttern.cardid)
+          // Validators.pattern(parttern_input.taxCode_form) ||
+          // Validators.pattern(parttern.card_id9) ||
+          // Validators.pattern(parttern.card_id12)
         ]),
       username: this.fbd.control("", [Validators.required]),
       pass1: this.fbd.control("", [Validators.required]),
@@ -57,9 +58,12 @@ export class HsmDialogSignComponent implements OnInit {
     if(this.user.organization_id != 0) {
       this.userService.getUserById(this.id).subscribe((response) => {
         this.myForm = this.fbd.group({
-          taxCode: this.fbd.control(response.tax_code, [Validators.required, Validators.pattern(parttern_input.taxCode_form),
-            Validators.pattern(parttern.card_id9),
-            Validators.pattern(parttern.card_id12),
+          taxCode: this.fbd.control(response.tax_code, [
+            Validators.required, 
+            Validators.pattern(parttern.cardid)
+            // Validators.pattern(parttern_input.taxCode_form) ||
+            // Validators.pattern(parttern.card_id9) ||
+            // Validators.pattern(parttern.card_id12)
           ],
           ),
           username: this.fbd.control(response.hsm_name, [Validators.required]),
@@ -79,10 +83,12 @@ export class HsmDialogSignComponent implements OnInit {
             let taxCodePartnerStep2 = response.recipients[i].fields[0].recipient.cardId;
 
             this.myForm = this.fbd.group({
-              taxCode: this.fbd.control(taxCodePartnerStep2, [Validators.required, 
-                Validators.pattern(parttern_input.taxCode_form),
-                Validators.pattern(parttern.card_id9),
-                Validators.pattern(parttern.card_id12)
+              taxCode: this.fbd.control(taxCodePartnerStep2, 
+                [Validators.required, 
+                  Validators.pattern(parttern.cardid)
+                // Validators.pattern(parttern_input.taxCode_form) ||
+                // Validators.pattern(parttern.card_id9) ||
+                // Validators.pattern(parttern.card_id12)
               ]),
               username: this.fbd.control(taxCodePartnerStep2, [Validators.required]),
               pass1: this.fbd.control("", [Validators.required]),
@@ -154,7 +160,7 @@ export class HsmDialogSignComponent implements OnInit {
         if(data.ma_dvcs === this.taxCode) {
             this.dialogRef.close(data);
         } else {
-          this.toastService.showErrorHTMLWithTimeout('Mã số thuế không trùng khớp thông tin ký hợp đồng','',3000);
+          this.toastService.showErrorHTMLWithTimeout('Mã số thuế/CMT/CCCD không trùng khớp thông tin ký hợp đồng','',3000);
         }
     }
    
