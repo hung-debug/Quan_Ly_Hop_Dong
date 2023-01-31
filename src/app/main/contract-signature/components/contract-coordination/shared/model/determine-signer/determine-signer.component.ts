@@ -258,7 +258,9 @@ export class DetermineSignerComponent implements OnInit {
             break;
           }
 
-          if(dataArrPartner[j].recipients[k].card_id && !this.pattern.card_id.test(dataArrPartner[j].recipients[k].card_id) && !this.parttern_input.taxCode_form.test(dataArrPartner[j].recipients[k].card_id) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+          if(dataArrPartner[j].recipients[k].card_id && !this.pattern.card_id9.test(dataArrPartner[j].recipients[k].card_id) && 
+            !this.pattern.card_id12.test(dataArrPartner[j].recipients[k].card_id) &&
+            !this.parttern_input.taxCode_form.test(dataArrPartner[j].recipients[k].card_id) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
             this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(3) + "của đối tác không hợp lệ");
             count++;
             break;

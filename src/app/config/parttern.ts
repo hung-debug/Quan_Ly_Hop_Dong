@@ -2,8 +2,12 @@ export const parttern = {
   email: /^(([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)(\s*;\s*|\s*$))*$/,
   
   phone: /^[+]*[0-9]{10,11}$/,
- 
-  card_id: /^[+]*[0-9]{9,12}$/,
+  
+  //cmt-can cuoc cong dan
+  card_id9: /^[0-9]{9}$/,
+
+  card_id12: /^[0-9]{12}$/,
+
   
   password: /^.{6,}$/,
   name: /^[^0-9]+$/,
@@ -21,5 +25,7 @@ export const parttern = {
 export const parttern_input = {
   input_form: /^[^!“#$%&‘()*;<=>?@[\]^_`{|}~\\]*$/,
   number_form: /^([0-9]+)|([0-9.])$/,
+
+  //ma so thue
   taxCode_form: /^([0-9]{10})(|)(-[0-9]{3}|)$/,
 }
