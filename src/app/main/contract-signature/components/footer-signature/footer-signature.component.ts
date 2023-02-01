@@ -34,8 +34,6 @@ export class FooterSignatureComponent implements OnInit {
 
   @Input() status: any;
 
-
-
   is_show_coordination: boolean = false;
   is_data_coordination: any;
   orgId: any;
@@ -63,6 +61,7 @@ export class FooterSignatureComponent implements OnInit {
     private deviceService: DeviceDetectorService,
     private unitService: UnitService,
     private router: Router,
+    private _location: Location
   ) {
   }
 
@@ -130,18 +129,18 @@ export class FooterSignatureComponent implements OnInit {
   }
 
   actionBack() {
-    console.log("pB ", this.pageBefore);
-    // this._location.back();
-
-    // this.router.navigate(
-    //   ['main/c/receive/' + item.contractId,],
-    //   {
-    //     // queryParams: { 
-    //     //   recipientId: item.id,
-    //     //   'page': this.p,
-    //     // },
-    //   }
-    // );
+    if(this.pageBefore) {
+      this.router.navigate(
+        ['main/c/receive/' + this.status,],
+        {
+          queryParams: { 
+            'page': this.pageBefore,
+          },
+        }
+      );
+    } else {
+      this._location.back();
+    }
   }
 
   endContract() {

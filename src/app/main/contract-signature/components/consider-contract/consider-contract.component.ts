@@ -936,7 +936,6 @@ export class ConsiderContractComponent
       keyboard: true,
       data,
     });
-    console.log("data email luong xly", data);
 
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
@@ -1206,9 +1205,6 @@ export class ConsiderContractComponent
         }
       }
     }
-
-    console.log("ev x ", event.target.getAttribute('data-x'));
-    console.log("ev y ", event.target.getAttribute('data-y'))
   }
 
   getTrafX() {
@@ -1581,7 +1577,6 @@ export class ConsiderContractComponent
 
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
-      console.log("sign ", this.signCertDigital);
       if (this.signCertDigital) {
         for (const signUpdate of this.isDataObjectSignature) {
           if (
@@ -1609,13 +1604,7 @@ export class ConsiderContractComponent
             if (signUpdate.type == 1 || signUpdate.type == 4) {
               this.textSign = signUpdate.valueSign;
 
-              console.log("width ", signUpdate.width);
-
-              // this.heightText = signUpdate.height;
               this.widthText = signUpdate.width;
-
-              // this.heightText = 150;
-              // this.widthText = 150;
 
               await of(null).pipe(delay(120)).toPromise();
               const imageRender = <HTMLElement>(
@@ -1626,8 +1615,6 @@ export class ConsiderContractComponent
                 const textSignB = await domtoimage.toPng(imageRender);
                 signI = this.textSignBase64Gen = textSignB.split(',')[1];
               }
-
-              console.log("signI ", signI);
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(150)).toPromise();
 
@@ -1683,8 +1670,6 @@ export class ConsiderContractComponent
                 return false;
               }
             } else if (this.usbTokenVersion == 1) {
-              console.log("vao day usb ");
-
               const dataSignMobi: any =
                 await this.contractService.postSignDigitalMobi(
                   signDigital,
@@ -2118,8 +2103,6 @@ export class ConsiderContractComponent
       this.signCertDigital = dataDigital.data;
       this.nameCompany = dataDigital.data.CN;
 
-      console.log('name company ', this.nameCompany);
-
       const checkTaxCodeBase64 = await this.contractService
         .checkTaxCodeExist(this.taxCodePartnerStep2, dataDigital.data.Base64)
         .toPromise();
@@ -2301,7 +2284,6 @@ export class ConsiderContractComponent
 
     if (checkTaxCode.success == true) {
       this.signImageC(signUpdatePayload, notContainSignImage);
-      // this.createEmptySignature();
     } else {
       this.spinner.hide();
 

@@ -80,8 +80,19 @@
     </div>
   </div>
 
-<app-footer-signature [confirmSignature]="3"[pageNum]="pageNum" [pageLast]="pageLast" [page1]="page1" [pageNumber]="pageNumber" [thePDF]="thePDF" [idElement]="idElement" [coordinateY]="coordinateY" [datas]="datas" [recipientId]="recipientId" 
-(submitChanges)="submitEvents($event)"
-
+<app-footer-signature 
+  [confirmSignature]="3"
+  [pageNum]="pageNum" 
+  [pageLast]="pageLast" 
+  [page1]="page1" 
+  [pageNumber]="pageNumber" 
+  [thePDF]="thePDF" 
+  [idElement]="idElement" 
+  [coordinateY]="coordinateY" 
+  [datas]="datas" 
+  [recipientId]="recipientId" 
+  (submitChanges)="submitEvents($event)"
+  [pageBefore]="pageBefore"
+  [status]="status"
 ></app-footer-signature>
 

@@ -1410,7 +1410,7 @@ export class ContractSignatureComponent implements OnInit {
 
   openSignatureContract(item: any) {
 
-    console.log("status ", this.status);
+    console.log("sig ", this.status);
 
     //kiem tra xem co bi khoa hay khong
     this.contractServiceV1.getStatusSignImageOtp(item.id).subscribe(
@@ -1452,9 +1452,19 @@ export class ContractSignatureComponent implements OnInit {
             'data_coordinates_contract_id',
             JSON.stringify({ data_coordinates_id: res.id })
           );
-          this.router.navigate([
-            'main/c/' + this.coordinates + '/' + item.contractId,
-          ]);
+          // this.router.navigate([
+          //   'main/c/' + this.coordinates + '/' + item.contractId,
+          // ]);
+
+          this.router.navigate(
+            ['main/c/' + this.coordinates + '/' + item.contractId,],
+            {
+              queryParams: { 
+                'page': this.p,
+                'status': this.status
+              },
+            }
+          );
         }
       },
       (res: any) => {
@@ -1464,8 +1474,13 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openSecretaryContract(item: any) {
+    console.log("status secre ", this.status);
     this.router.navigate(['main/c/s8/' + item.contractId], {
-      queryParams: { recipientId: item.id },
+      queryParams: { 
+        recipientId: item.id,
+        "page": this.p,
+        'status': this.status
+      },
     });
   }
 

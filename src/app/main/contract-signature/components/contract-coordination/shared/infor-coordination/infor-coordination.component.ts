@@ -109,9 +109,7 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
   top: any[]= [];
 
   constructor(
-    private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
-    private modalService: NgbModal,
     private dialog: MatDialog,
     private activeRoute: ActivatedRoute,
     private toastService: ToastService,
@@ -184,7 +182,8 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     }
   }
 
-
+  pageBefore: number;
+  status: any;
   getDataContractSignature() {
 
     let arr = this.convertToSignConfig();
@@ -200,13 +199,11 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       .subscribe(params => {
           this.recipientId = params.recipientId;
           this.view = params.view;
+          this.pageBefore = params.page;
+          this.status = params.status;
         }
       );
-    // this.contractService.getDetailContract(this.idContract).subscribe(rs => {
-    //   console.log(rs);
-    // this.isDataContract = rs[0];
-    // this.isDataFileContract = rs[1];
-    // this.isDataObjectSignature = rs[2];
+
     if (this.datas.is_data_contract &&
       this.datas.i_data_file_contract[1] &&
       this.datas.i_data_file_contract[1].length &&
@@ -290,10 +287,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     // render pdf to canvas
     this.getPage();
     this.loaded = true;
-    // }, (res: any) => {
-    //   // @ts-ignore
-    //   this.handleError();
-    // })
   }
 
   handleError(error: any) {
@@ -535,9 +528,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
         this.objSignInfo.offsetWidth = parseInt(d.width);
         this.objSignInfo.offsetHeight = parseInt(d.height);
-        // this.signCurent.offsetWidth = d.offsetWidth;
-        // this.signCurent.offsetHeight = d.offsetHeight;
-        // console.log(this.signCurent)
 
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
