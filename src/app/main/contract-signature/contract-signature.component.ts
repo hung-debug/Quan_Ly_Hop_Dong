@@ -805,8 +805,6 @@ export class ContractSignatureComponent implements OnInit {
     //Lay thong tin cua usb token
     this.contractServiceV1.getAllAccountsDigital().then(
       async (data) => {
-        console.log('dataa ', data);
-
         if (data.data.Serial) {
           //Check trung mst
           this.contractServiceV1
@@ -833,11 +831,6 @@ export class ContractSignatureComponent implements OnInit {
                   w[i] = x[i] + w[i];
 
                   // //Tính lại h, y theo chiều dài của các trang trong hợp đồng ký
-                  console.log('h i ', h[i]);
-
-                  console.log('height page ', heightPage[i]);
-                  console.log('y ', y[i]);
-
                   y[i] = heightPage[i] - (y[i] - currentHeight[i]) - h[i];
 
                   h[i] = y[i] + h[i];
@@ -1416,21 +1409,21 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   openSignatureContract(item: any) {
+
+    console.log("status ", this.status);
+
     //kiem tra xem co bi khoa hay khong
     this.contractServiceV1.getStatusSignImageOtp(item.id).subscribe(
       (data) => {
         if (!data.locked) {
           this.router.navigate(
-            [
-              'main/' +
-                this.contract_signatures +
-                '/' +
-                this.signatures +
-                '/' +
-                item.contractId,
-            ],
+            ['main/' + this.contract_signatures +'/' + this.signatures + '/' + item.contractId,],
             {
-              queryParams: { recipientId: item.id },
+              queryParams: { 
+                recipientId: item.id,
+                'page': this.p,
+                'status': this.status
+              },
             }
           );
         } else {

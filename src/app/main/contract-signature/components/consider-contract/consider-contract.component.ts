@@ -207,17 +207,6 @@ export class ConsiderContractComponent
   pdfSrcMobile: any;
 
   async ngOnInit(): Promise<void> {
-
-    // this.contractService
-    //       .getDetermineCoordination(this.datas.recipient_id)
-    //       .subscribe((response) => {
-    //         this.email = response.email;
-    //         console.log("email",this.email);
-
-    //       });
-
-    console.log('ratio ', window.devicePixelRatio);
-
     this.getDeviceApp();
 
     this.appService.setTitle('THÔNG TIN HỢP ĐỒNG');
@@ -276,9 +265,13 @@ export class ConsiderContractComponent
   }
 
 
+  pageBefore: number;
+  status: any;
   actionRoleContract() {
     this.activeRoute.queryParams.subscribe((params) => {
       this.recipientId = params.recipientId;
+      this.pageBefore = params.page;
+      this.status = params.status;
 
       //kiem tra xem co bi khoa hay khong
       this.contractService.getStatusSignImageOtp(this.recipientId).subscribe(
@@ -972,59 +965,6 @@ export class ConsiderContractComponent
     interact.removeDocument(document);
   }
 
-  changePositionSign() {
-    // interact('.dropzone').dropzone({
-    //   //@ts-ignore
-    //   accept: null,
-    //   overlap: 1,
-    // })
-
-    // interact('.not-out-drop').on('dragend', this.showEventInfo).draggable({
-    //   listeners: {move: this.dragMoveListener, onend: this.showEventInfo},
-    //   inertia: true,
-    //   modifiers: [
-    //     interact.modifiers.restrictRect({
-    //       restriction: '.drop-zone',
-    //       endOnly: true
-    //     })
-    //   ]
-    // })
-
-    // // //phong to thu nho o ky
-    // interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
-    //   edges: {left: true, right: true, bottom: true, top: true},
-    //   listeners: {
-    //     move: this.resizableListener, onend: this.resizeSignature
-    //   },
-    //   modifiers: [
-    //     interact.modifiers.restrictEdges({
-    //       outer: '.drop-zone'
-    //     }),
-    //     // minimum size
-    //     interact.modifiers.restrictSize({
-    //       // min: { width: 100, height: 32 }
-    //     })
-    //   ],
-    //   inertia: true,
-    // })
-    
-    // interact('.resize-drag').on('dragend', this.showEventInfo).draggable({
-    //   listeners: {
-    //     move: this.dragMoveListener,
-    //     onend: this.showEventInfo
-    //   },
-    //   inertia: true,
-    //   autoScroll: true,
-    //   modifiers: []
-    // })
-
-    // interact('.resize-drag').resizable({
-    //   edges: {left: false, right: false, bottom: false, top: false},
-    // })
-
-    // interact.addDocument(document);
-  }
-
 
   resizableListener = (event: any) => {
     var target = event.target
@@ -1032,10 +972,6 @@ export class ConsiderContractComponent
     // update the element's style
     target.style.width = event.rect.width + 'px'
     target.style.height = event.rect.height + 'px'
-
-    console.log("width ", target.style.width);
-    console.log("height ", target.style.height);
-
   }
 
   resizeSignature = (event: any) => {
@@ -1173,10 +1109,6 @@ export class ConsiderContractComponent
           // @ts-ignore
           _sign.style["z-index"] = '1';
           this.isEnableSelect = false;
-
-          // show toa do keo tha chu ky (demo)
-          // this.location_sign_x = this.signCurent['coordinate_x'];
-          // this.location_sign_y  = this.signCurent['coordinate_y'];
         }
 
         this.objSignInfo.traf_x = Math.round(this.signCurent['coordinate_x']);
@@ -1571,9 +1503,7 @@ export class ConsiderContractComponent
 
   openPopupSignContract(typeSign: any) {
     if (typeSign == 1) {
-      // this.imageDialogSignOpen();
     } else if (typeSign == 3) {
-      // this.pkiDialogSignOpen();
     } else if (typeSign == 4) {
       this.hsmDialogSignOpen(this.recipientId);
     }
@@ -1725,8 +1655,6 @@ export class ConsiderContractComponent
               }
             }
 
-            console.log("sign ", signUpdate);
-
             const signDigital = JSON.parse(JSON.stringify(signUpdate));
             signDigital.Serial = this.signCertDigital.Serial;
 
@@ -1741,45 +1669,6 @@ export class ConsiderContractComponent
                 this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token '+ err,'',3000);
                 return false;
               }
-              // var json_req = JSON.stringify({
-              //   OperationId: 10,
-              //   SessionId: this.sessionIdUsbToken,
-              //   checkOCSP: 0,
-              //   reqDigest: 1,
-              //   algDigest: 'SHA_1',
-              //   extFile: 'pdf',
-              //   invisible: 0,
-              //   pageIndex: Number(signDigital.page - 1),
-              //   offsetX: Math.floor(signDigital.signDigitalX),
-              //   offsetY: Math.floor(signDigital.signDigitalY),
-              //   sigWidth: Math.floor(signDigital.signDigitalWidth),
-              //   sigHeight: Math.floor(signDigital.signDigitalHeight),
-              //   logoData: signI,
-              //   DataToBeSign: signDigital.valueSignBase64,
-              //   showSignerInfo: 0,
-              //   sigId: '',
-              // });
-
-              // json_req = window.btoa(json_req);
-
-              // const dataSignMobi: any = await this.contractService.signUsbToken(
-              //   'request=' + json_req
-              // );
-
-              // let data = JSON.parse(
-              //   window.atob(dataSignMobi.data)
-              // ).Base64Result;
-
-              // console.log('data ', data);
-
-              // if (!data) {
-              //   this.toastService.showErrorHTMLWithTimeout(
-              //     'Lỗi ký USB Token',
-              //     '',
-              //     3000
-              //   );
-              //   return false;
-              // }
 
               const sign = await this.contractService.updateDigitalSignatured(
                 signUpdate.id,
@@ -2932,7 +2821,6 @@ export class ConsiderContractComponent
   }
 
   validateSignature() {
-    console.log("ccc ", this.contractNoValueSign);
     const validSign = this.isDataObjectSignature.filter(
       (item: any) =>
         item?.recipient?.email === this.currentUser.email &&
@@ -2942,8 +2830,6 @@ export class ConsiderContractComponent
         item.type != 3
     );
     
-    console.log("val ", validSign);
-
     return validSign.length == 0;
   }
 
@@ -3373,7 +3259,6 @@ export class ConsiderContractComponent
   }
 
   prepareInfoSignUsbTokenV1(page: any, heightPage: any) {
-    console.log("v1 ");
     this.isDataObjectSignature.map((sign: any) => {
       if (
         (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
@@ -3419,7 +3304,6 @@ export class ConsiderContractComponent
   }
 
   prepareInfoSignUsbTokenV2(page: any, heightPage: any) {
-    console.log("v2 ");
     this.isDataObjectSignature.map((sign: any) => {
       if (
         (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
@@ -3451,8 +3335,6 @@ export class ConsiderContractComponent
               }
             }
           });
-
-          console.log("width ", sign.signDigitalWidth);
 
         return sign;
       } else {
