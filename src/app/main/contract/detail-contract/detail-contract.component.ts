@@ -16,6 +16,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 import {TranslateService} from '@ngx-translate/core';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
 
+import { Location } from '@angular/common';
+
+
 @Component({
   selector: 'app-detail-contract',
   templateUrl: './detail-contract.component.html',
@@ -128,6 +131,8 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   isOrg: any;
   organization_id: any;
 
+  statusLink: any;
+
   constructor(
     private contractService: ContractService,
     private checkViewContractService: CheckViewContractService,
@@ -141,6 +146,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
     public translate: TranslateService,
+    private _location: Location
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
@@ -185,6 +191,12 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           this.organization_id = params.organization_id;
         } else {
           this.organization_id = "";
+        }
+
+        if (typeof params.status != 'undefined' && params.status) {
+          this.statusLink = params.status;
+        } else {
+          this.statusLink = "";
         }
     });
 
@@ -830,9 +842,10 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   actionBack() {
+    console.log("p ", this.pageBefore);
     if(this.pageBefore && this.isOrg) {
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/contract/create/' + this.status],
+        this.router.navigate(['/main/contract/create/' + this.statusLink],
         {
           queryParams: {
             'page': this.pageBefore,
@@ -842,14 +855,14 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             'filter_to_date': this.filter_to_date,
             'isOrg': this.isOrg,
             'organization_id': this.organization_id,
-            'status': this.status
+            'status': this.statusLink
           },
           skipLocationChange: true
         });
       });
     } else if(this.pageBefore) {
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate(['/main/c/receive/' + this.status],
+        this.router.navigate(['/main/c/receive/' + this.statusLink],
         {
           queryParams: {
             'page': this.pageBefore,
@@ -859,21 +872,22 @@ export class DetailContractComponent implements OnInit, OnDestroy {
             'filter_to_date': this.filter_to_date,
             'isOrg': this.isOrg,
             'organization_id': this.organization_id,
-            'status': this.status
+            'status': this.statusLink
           },
           skipLocationChange: true
         });
       });
+    } else {
+      console.log("go back ");
+      this._location.back();
     }
   }
 
   mobile: boolean = false;
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
-      console.log("la mobile ");
       this.mobile = true;
     } else {
-      console.log("la pc");
       this.mobile = false;
     }
   }
@@ -888,10 +902,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     dialogConfig.width = '497px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
-    // const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
-    // dialogRef.afterClosed().subscribe((result: any) => {
-    //   this.openPopupSignContract(this.typeSign);
-    // })
   }
 
   openPopupSignContract(typeSign: any) {

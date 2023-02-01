@@ -701,7 +701,6 @@ export class ContractSignatureComponent implements OnInit {
                   countSuccess++;
                 }
               }
-              // }
 
               if (countSuccess == checkSign.length) {
                 this.spinner.hide();
@@ -761,11 +760,6 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     for (let i = 0; i < fileC.length; i++) {
-      console.log('1');
-
-      //get base64 from url
-      // base64String[i] = this.getBase64String(fileC[i]);
-
       base64String[i] = await this.contractServiceV1.getDataFileUrlPromise(
         fileC[i]
       );
@@ -1461,7 +1455,6 @@ export class ContractSignatureComponent implements OnInit {
           if (localStorage.getItem('data_coordinates_contract_id')) {
             localStorage.removeItem('data_coordinates_contract_id');
           }
-          // let data_coordination = {...this.datas, ...res};
           localStorage.setItem(
             'data_coordinates_contract_id',
             JSON.stringify({ data_coordinates_id: res.id })
