@@ -122,6 +122,8 @@ export class SampleContractFormComponent implements OnInit {
 
   ngOnInit() {
 
+    console.log("1 ", this.datasForm.is_determine_clone);
+
     if(this.datasForm.font) {
       this.selectedFont = this.datasForm.font;
     }
@@ -239,6 +241,8 @@ export class SampleContractFormComponent implements OnInit {
         this.size = this.datasForm.size;
       }
     }
+
+    console.log("2 ", this.datasForm.is_determine_clone);
   }
 
   changeFont($event: any) {
@@ -1362,7 +1366,6 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   back(e: any, step?: any) {
-    console.log("ds ", this.datasForm);
     this.nextOrPreviousStep(step);
   }
 
@@ -1370,8 +1373,6 @@ export class SampleContractFormComponent implements OnInit {
     this.datasForm.font = this.selectedFont;
     this.datasForm.size = this.size;
     if (action == 'next_step' && !this.validData()) {
-
-      console.log("next ", this.datasForm.contract_user_sign)
 
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
         this.save_draft_infor_form.close_header = false;
@@ -1396,8 +1397,7 @@ export class SampleContractFormComponent implements OnInit {
 
           if (!coutError) {
             await this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id, 'template_form').toPromise().then((data) => {
-              // this.datasForm.id = data?.id;
-              // this.datasForm.contract_id = data?.id;
+        
             }, (error) => {
               coutError = true;
             })
