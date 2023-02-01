@@ -625,10 +625,8 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         break;
       }
 
-      if(dataArr[i].card_id.trim() && !this.pattern.card_id9.test(dataArr[i].card_id.trim()) && 
-        !this.pattern.card_id12.test(dataArr[i].card_id.trim()) &&
-        !this.pattern_input.taxCode_form.test(dataArr[i].card_id.trim()) && 
-        (dataArr[i].sign_type.filter((p: any) => p.id == 2).length > 0 || dataArr[i].sign_type.filter((p: any) => p.id == 4).length > 0)) {
+      if(dataArr[i].card_id.trim() && !this.pattern.cardid.test(dataArr[i].card_id.trim()) &&
+        dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 4).length > 0) {
         this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(dataArr[i].role) + "tổ chức của tôi không hợp lệ!");
         count++;
         break;
