@@ -6,14 +6,14 @@
 export const environment = {
   production: false,
   
-  apiUrl: 'http://14.160.91.174:1387',
+  // apiUrl: 'http://14.160.91.174:1387',
   //apiUrl: 'http://192.168.1.14:8762',
-  flag: 'NB',
+  // flag: 'NB',
   // flag: 'KD',
 
   //NB
-  // apiUrl: 'https://econtract.mobifone.vn/service',
-  // flag: 'NB',
+  apiUrl: 'https://econtract.mobifone.vn/service',
+  flag: 'NB',
 
   //KD
   // apiUrl: 'https://mobifone-econtract.vn/service',
