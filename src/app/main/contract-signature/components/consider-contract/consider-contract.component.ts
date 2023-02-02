@@ -1252,6 +1252,7 @@ export class ConsiderContractComponent
 
     // console.log("emailRecipients", this.datas.is_data_contract.participants[0].recipients[0].email);
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+
     this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
 
         // response[0].participants[0].recipients[0].email

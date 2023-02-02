@@ -117,8 +117,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngOnInit() {
     this.spinner.hide();
 
-    console.log("font sample ", this.datas.font);
-
     if(this.datas.font) {
       this.selectedFont = this.datas.font;
     }
@@ -246,7 +244,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   changeFont($event: any) {
-    console.log("ev ", $event);
     this.selectedFont = $event;
     this.datas.font = $event;
   }
@@ -315,9 +312,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
     // let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
     this.dataSignPosition = [...dataPosition, ...dataNotPosition, ...dataNotAssign];
-    console.log("this.dataSignPosition");
-    console.log(this.dataSignPosition);
-
 
     this.dataSignPosition.forEach((res: any) => {
       if (res.sign_unit == 'text') {
@@ -343,9 +337,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
       }
     })
-    console.log(data_sign_config_text);
-    console.log("console.log(this.datas.contract_user_sign);");
-    console.log(this.datas.contract_user_sign);
   }
 
   defindDataContract() {

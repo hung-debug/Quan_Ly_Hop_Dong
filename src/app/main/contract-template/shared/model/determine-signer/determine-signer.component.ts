@@ -7,13 +7,12 @@ import {
   variable
 } from "../../../../../config/variable";
 import { parttern } from "../../../../../config/parttern";
-import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
+import { FormGroup, FormControl } from "@angular/forms";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "../../../../../service/toast.service";
 import { Router } from "@angular/router";
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { UserService } from 'src/app/service/user.service';
 import { environment } from 'src/environments/environment';
 import { ContractService } from 'src/app/service/contract.service';
 
@@ -216,8 +215,6 @@ export class DetermineSignerComponent implements OnInit {
       let isBody: any[] = [];
       let count = 0;
       let is_error = '';
-
-      console.log("clone ", this.datas.is_determine_clone);
       
       for (let i = 0; i < this.datas.is_determine_clone.length; i++) {
         this.datas.is_determine_clone[i].recipients.forEach((element: any) => {
@@ -253,10 +250,7 @@ export class DetermineSignerComponent implements OnInit {
         
       this.spinner.hide()
     } else {
-      console.log("data clone after ", this.datas.is_determine_clone);
-
       this.contractTemplateService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
-        console.log("res after ", res);
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
         if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -305,12 +299,12 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeOtp(data: any) {
-    // let data_sign_cka = data.sign_type.filter((p: any) => p.id == 1)[0];
-    // if (data_sign_cka) {
-    //   data.is_otp = 1;
-    // } else {
-    //   data.is_otp = 0;
-    // }
+    let data_sign_cka = data.sign_type.filter((p: any) => p.id == 1)[0];
+    if (data_sign_cka) {
+      data.is_otp = 1;
+    } else {
+      data.is_otp = 0;
+    }
   }
 
   changeIsCoordination(e:any, item: any, id:any) {
@@ -795,8 +789,7 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo đối tượng người điều phối đối tác
   getPartnerCoordination(item: any) {
-    console.log("itemsss ", item.recipients.filter((p: any) => p.role == 2));
-    return item.recipients.filter((p: any) => p.role == 2)
+    return item.recipients.filter((p: any) => p.role == 1)
   }
 
   // tạo đối tượng đ
@@ -1135,7 +1128,6 @@ export class DetermineSignerComponent implements OnInit {
         newArr.push(item.recipients[i]);
       }
     }
-    console.log(newArr);
     if (newArr.length) {
       newArr.forEach((item: any) => {
         if (item.role == 3) {
