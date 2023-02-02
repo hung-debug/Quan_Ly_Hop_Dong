@@ -314,17 +314,17 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeIsCoordination(e:any, item: any, id:any) {
-    // if (e.target.checked) {
-    //   //goi ham them
-    //   this.addPartnerCoordination(item, id);
-    // } else {
-    //   //goi ham xoa
-    //   this.deletePartnerCoordination(0, item, id);
-    //   //kiem tra neu chua co nguoi ky thi them 1 nguoi ky
-    //   if(this.getPartnerSignature(item).length == 0){
-    //     this.addPartnerSignature(item, id);
-    //   }
-    // }
+    if (e.target.checked) {
+      //goi ham them
+      this.addPartnerCoordination(item, id);
+    } else {
+      //goi ham xoa
+      this.deletePartnerCoordination(0, item, id);
+      //kiem tra neu chua co nguoi ky thi them 1 nguoi ky
+      if(this.getPartnerSignature(item).length == 0){
+        this.addPartnerSignature(item, id);
+      }
+    }
   }
 
   getDataSignCka(data:any){
@@ -795,8 +795,8 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo đối tượng người điều phối đối tác
   getPartnerCoordination(item: any) {
-    
-    return item.recipients.filter((p: any) => p.role == 1)
+    console.log("itemsss ", item.recipients.filter((p: any) => p.role == 2));
+    return item.recipients.filter((p: any) => p.role == 2)
   }
 
   // tạo đối tượng đ
@@ -1173,12 +1173,12 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeIsSmsSignature(e:any, item:any, index:any){
-    // let data = item.recipients.filter((p: any) => p.role == 3)[index];
-    // if (e.target.checked) {
-    //   data.is_otp = 1;
-    // }else{
-    //   data.is_otp = 0;
-    // }
+    let data = item.recipients.filter((p: any) => p.role == 3)[index];
+    if (e.target.checked) {
+      data.is_otp = 1;
+    }else{
+      data.is_otp = 0;
+    }
   }
 
   changeIsSmsDocument(e:any, item:any, index:any){
