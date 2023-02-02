@@ -92,13 +92,17 @@ export class ContractTemplateService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-      let body = {};
+    
+    let body = {};
+
+    console.log("st ", typeof this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"));
+
     if (!actionGet) {
       body = JSON.stringify({
         name: datas.name,
         code: datas.contract_no,
-        start_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
-        end_time: this.datepipe.transform(datas.end_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+        start_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'HH:mm:ss"),
+        end_time: this.datepipe.transform(datas.end_time, "yyyy-MM-dd'T'HH:mm:ss"),
         type_id: datas.type_id
       });
     }
@@ -153,8 +157,6 @@ export class ContractTemplateService {
    checkTemplateIsUse(id: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders().append('Content-Type', 'application/json').append('Authorization', 'Bearer ' + this.token);
-
-    console.log("token ", this.token);
 
     return this.http.post<any>(this.templateUseUrl + `${id}`,'', {
       headers,

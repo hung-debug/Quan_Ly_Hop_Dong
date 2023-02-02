@@ -144,6 +144,7 @@ export class AddContractTemplateComponent implements OnInit {
   }
 
   getDataContractCreated(data: any) {
+    console.log("data ", data);
     // this.subscription = this.contractService.currentMessage.subscribe(message => this.message = message);
     if (data) {
       let fileName = data.i_data_file_contract.filter((p: any) => p.type == 1 && p.status == 1)[0];
@@ -165,11 +166,15 @@ export class AddContractTemplateComponent implements OnInit {
       this.datas.contract_id_action = data.is_data_contract.id;
       this.datas.i_data_file_contract = data.i_data_file_contract;
       this.datas['is_data_object_signature'] = data.is_data_object_signature;
+
+      this.datas.start_time = data.is_data_contract.start_time;
+      this.datas.end_time = data.is_data_contract.end_time;
+
+      console.log("add ", data.is_data_contract.start_time);
+      console.log("add1 ", this.datas.end_time);
   
       this.datas = Object.assign(this.datas, data.is_data_contract);
       this.step = variable.stepSampleContract.step1;
-
-      console.log("datas 1 ", this.datas.is_determine_clone);
     }
   }
 
