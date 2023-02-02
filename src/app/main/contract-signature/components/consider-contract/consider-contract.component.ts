@@ -349,6 +349,8 @@ export class ConsiderContractComponent
       .getDataNotifyOriganzationOrgId(orgId)
       .toPromise();
 
+    console.log("data ", dataOrg);
+
     if (dataOrg.usb_token_version == 1) {
       this.usbTokenVersion = 1;
     } else if (dataOrg.usb_token_version == 2) {
@@ -617,7 +619,6 @@ export class ConsiderContractComponent
 
   // view pdf qua canvas
   async getPage() {
-    console.log("pdf src ", this.pdfSrc);
     // @ts-ignore
     const pdfjs = await import('pdfjs-dist/build/pdf');
     // @ts-ignore
@@ -728,6 +729,7 @@ export class ConsiderContractComponent
   pageNumPending: any = null;
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
+    console.log("usb token version ", this.usbTokenVersion);
     setTimeout(() => {
       //@ts-ignore
       this.thePDF.getPage(pageNumber).then((page) => {

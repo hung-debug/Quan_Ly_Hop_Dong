@@ -669,8 +669,6 @@ export class ContractService {
   //signDigital = signCertDigital
   //imgSignGen = imgSignGen
   postSignDigitalMobi(signCertDigital: any, imgSignGen: any) {
-    console.log('signCertDigital ', signCertDigital);
-
     this.getCurrentUser();
     let config = {
       headers: {
@@ -711,8 +709,6 @@ export class ContractService {
       typeSign: '4',
       //algDigest: "SHA_256"
     };
-
-    console.log('body sign ', dataPost);
 
     return axios.post(this.postSignDigital, dataPost, config);
     // console.log(datePost);
@@ -763,8 +759,6 @@ export class ContractService {
       typeSign: '4',
       //algDigest: "SHA_256"
     };
-
-    console.log('data post ', dataPost);
 
     return axios.post(this.postSignDigital, dataPost, config);
   }
@@ -864,6 +858,11 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+
+    if(this.organization_id) {
+      orgId = this.organization_id;
+    }
+
     let listContractUrl = this.getNotifyOriganzation + orgId;
     return this.http.get<any>(listContractUrl, { headers }).pipe();
   }
@@ -1127,8 +1126,7 @@ export class ContractService {
       status: 1,
       contract_id: datas.id,
     });
-    // console.log(headers);
-    // console.log(body);
+
     return this.http.post<Contract>(this.documentUrl, body, {
       headers: headers,
     });
