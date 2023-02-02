@@ -143,7 +143,7 @@
     <div class="col-md-2"></div>
 
     <!--Đẩy lên ceca-->
-    <div class="col-md-5">
+    <div *ngIf="this.ceca" class="col-md-5">
       <div class="form-group">
         <div class="label_item">{{'contract-type.ceca' | translate}}</div>
           <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"

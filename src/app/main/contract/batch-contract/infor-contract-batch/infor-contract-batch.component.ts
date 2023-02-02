@@ -1,14 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FormBuilder } from '@angular/forms';
 import { UploadService } from 'src/app/service/upload.service';
 import { ContractService } from 'src/app/service/contract.service';
 import { DatePipe } from '@angular/common';
-import { DatepickerOptions } from 'ng2-datepicker';
-import { getYear } from 'date-fns';
-import locale from 'date-fns/locale/en-US';
 import { optionsCeCa, variable } from '../../../../config/variable';
-import { Router } from '@angular/router';
 import { AddContractComponent } from '../../add-contract/add-contract.component';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -75,6 +70,8 @@ export class InforContractBatchComponent implements OnInit {
   optionsCeCa: any;
   optionsCeCaValue: any;
 
+  ceca: boolean;
+
   constructor(
     private uploadService: UploadService,
     private contractService: ContractService,
@@ -104,6 +101,14 @@ export class InforContractBatchComponent implements OnInit {
       ? this.datasBatch.idContractTemplate
       : '';
     this.getContractTemplateForm();
+
+    this.contractService.getDataNotifyOriganzation().subscribe((response) => {
+      if(response.ceca_push_mode == 'NONE') {
+        this.ceca = false;
+      } else if(response.ceca_push_mode == 'SELECTION') {
+        this.ceca = true
+      }
+    })
   }
 
   async onChangeForm(e: any) {

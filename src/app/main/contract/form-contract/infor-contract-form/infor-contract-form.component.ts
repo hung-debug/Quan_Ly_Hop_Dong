@@ -83,6 +83,8 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
   checkView: boolean = false;
 
+  ceca: any;
+
   constructor(
     private contractService: ContractService,
     private contractTemplateService: ContractTemplateService,
@@ -150,6 +152,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     this.getListTypeContract(); // ham get contract type
     this.getContractList(); // ham lay danh sach hop dong
     this.convertData();
+
+    this.contractService.getDataNotifyOriganzation().subscribe((response) => {
+      if(response.ceca_push_mode == 'NONE') {
+        this.ceca = false;
+      } else if(response.ceca_push_mode == 'SELECTION') {
+        this.ceca = true
+      }
+    })
   }
 
   async changeTypeContract() {

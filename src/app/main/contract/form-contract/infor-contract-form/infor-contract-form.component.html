@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <div class="form-group">
+    <div *ngIf="this.ceca" class="form-group">
       <div class="label_item">{{'contract-type.ceca' | translate}}</div>
         <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"
           optionValue="id" placeholder="{{'choose.contract.type' | translate}}" [showClear]="true">

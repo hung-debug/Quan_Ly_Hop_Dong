@@ -96,6 +96,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   checkView: boolean = true;
 
+  ceca: boolean;
+
   uploadFileContractAgain: boolean = false;
   uploadFileAttachAgain: boolean = false;
   isFileAttachUploadNewEdit: any;
@@ -125,10 +127,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
 
-    console.log("id contract ", idContract)
-
     this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract, false);
-
 
     if(!idContract || this.checkView) {
       this.actionSuccess();
@@ -143,7 +142,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.datas.ceca_push = this.optionsCeCaValue;
 
     this.name = this.datas.name ? this.datas.name : null;
-    // this.code = this.datas.contract_no ? this.datas.contract_no : null;
     this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.contract_no;
     this.type_id = this.datas.type_id ? this.datas.type_id : null;
 
@@ -170,6 +168,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.contractService.getContractList('off', '', '', '', '', '', '', 30, "", 10000).subscribe(data => {
       this.contractConnectList = data.entities;
     });
+
+    this.contractService.getDataNotifyOriganzation().subscribe((response) => {
+      if(response.ceca_push_mode == 'NONE') {
+        this.ceca = false;
+      } else if(response.ceca_push_mode == 'SELECTION') {
+        this.ceca = true
+      }
+    })
+
   }
 
 
@@ -331,13 +338,15 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     const informationContractType = await this.contractTypeService.getContractTypeById(this.type_id).toPromise();
 
     if(informationContractType.ceca_push == 1) {
+      this.optionsCeCa = optionsCeCa;
       this.optionsCeCaValue = 1;
       this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
     } else if(informationContractType.ceca_push == 0) {
+      this.optionsCeCa = optionsCeCa;
       this.optionsCeCaValue = 0;
       this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
     } else {
-      this.optionsCeCaValue = 0;
+      this.optionsCeCaValue = null;
       this.optionsCeCa = optionsCeCa;
     }
 
