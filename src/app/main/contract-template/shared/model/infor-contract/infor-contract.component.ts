@@ -327,11 +327,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         })
       }
 
-      // this.datas.start_time = this.start_time;
-      // this.datas.end_time = this.end_time;
-
-      console.log("start time ", this.start_time);
-
       await this.contractTemplateService.addInforContractTemplate(this.datas, this.datas.contract_id_action).toPromise().then((res: any) => {
         this.datas.id = res?.id;
         this.datas.contract_id = res?.id;
@@ -582,8 +577,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   defineData(datas: any) {
     this.datas.name = this.name;
-    // this.datas.start_time = this.start_time;
-    // this.datas.end_time = this.end_time;
+    this.datas.start_time = this.start_time;
+    this.datas.end_time = this.end_time;
     if (this.datas.contract_no == '') {
       this.datas.contract_no = null;
     }
