@@ -23,6 +23,7 @@ import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 import { environment } from 'src/environments/environment';
+import { numberFormat } from 'highcharts';
 
 @Component({
   selector: 'app-contract',
@@ -1109,8 +1110,16 @@ export class ContractSignatureComponent implements OnInit {
       .toPromise();
 
     if (checkTaxCode.success) {
-      let signUpdate: any = '';
-      let signDigital: any = '';
+      let signUpdate = {
+        id: Number
+      };
+      let signDigital = {
+        signDigitalX: Number,
+        signDigitalY: Number,
+        signDigitalWidth: Number,
+        signDigitalHeight: Number,
+        page: Number
+      };
 
       let signI = '';
 
@@ -1120,12 +1129,16 @@ export class ContractSignatureComponent implements OnInit {
         const textSignB = await domtoimage.toPng(imageRender);
         signI = textSignB.split(',')[1];
       }
+
+      console.log("sign update ", signUpdate);
+
       for (let i = 0; i < fileC.length; i++) {
         signUpdate.id = idSignMany[i];
         signDigital.signDigitalX = x[i];
         signDigital.signDigitalY = y[i];
         signDigital.signDigitalWidth = w[i];
         signDigital.signDigitalHeight = h[i];
+        signDigital.page = page[i];
         const emptySignature = await this.contractServiceV1
           .createEmptySignature(
             recipientId[i],
@@ -1144,6 +1157,8 @@ export class ContractSignatureComponent implements OnInit {
           SessionId: sessionId,
           DataToBeSign: base64TempData,
         });
+
+        json_req = window.btoa(json_req);
 
         try {
           const callServiceDCSigner = await this.contractServiceV1.signUsbToken(
