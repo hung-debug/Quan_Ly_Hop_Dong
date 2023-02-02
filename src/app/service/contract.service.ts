@@ -712,8 +712,6 @@ export class ContractService {
     };
 
     return axios.post(this.postSignDigital, dataPost, config);
-    // console.log(datePost);
-    // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
   }
 
   domain: any = `https://127.0.0.1:14424/process`;
@@ -758,7 +756,6 @@ export class ContractService {
       py: Math.floor(y).toString(),
       signDate: '11-05-2019 09:55:55',
       typeSign: '4',
-      //algDigest: "SHA_256"
     };
 
     return axios.post(this.postSignDigital, dataPost, config);
@@ -1043,8 +1040,7 @@ export class ContractService {
       status: 1,
       contract_id: datas.id,
     });
-    // console.log(headers);
-    // console.log(body);
+
     return this.http.post<Contract>(this.documentUrl, body, {
       headers: headers,
     });
@@ -1236,7 +1232,6 @@ export class ContractService {
     const body = {
       reason: reason,
     };
-    console.log(headers);
     return this.http.put<any>(this.rejectContractUrl + id, body, {
       headers: headers,
     });
@@ -1275,7 +1270,6 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = '';
-    console.log(headers);
     return this.http.put<any>(this.updateInfoContractUrl + datas.id, datas, {
       headers: headers,
     });
@@ -1315,8 +1309,6 @@ export class ContractService {
   }
 
   updateInfoContractConsiderImg(datas: any, recipient_id: any) {
-    console.log('datas ', datas);
-
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')

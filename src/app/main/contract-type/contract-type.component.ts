@@ -7,7 +7,6 @@ import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { RoleService } from 'src/app/service/role.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
-import { DetailContractComponent } from '../contract/detail-contract/detail-contract.component';
 import {AddContractTypeComponent} from './add-contract-type/add-contract-type.component'
 import { DeleteContractTypeComponent } from './delete-contract-type/delete-contract-type.component';
 import { DetailContractTypeComponent } from './detail-contract-type/detail-contract-type.component';
@@ -24,7 +23,8 @@ export class ContractTypeComponent implements OnInit {
     private userService:UserService,
     private roleService:RoleService,
     private router: Router,
-    private toastService:ToastService) { }
+    private toastService:ToastService,
+    ) { }
 
   code:any = "";
   name:any = "";
@@ -37,6 +37,8 @@ export class ContractTypeComponent implements OnInit {
   isQLLHD_03:boolean=true;  //xoa loai hop dong
   isQLLHD_04:boolean=true;  //tim kiem loai hop dong
   isQLLHD_05:boolean=true;  //xem thong tin chi tiet loai hop dong
+  
+  ceca: boolean = false;
 
   ngOnInit(): void {
     this.appService.setTitle("contract-type.list");
@@ -55,7 +57,6 @@ export class ContractTypeComponent implements OnInit {
         //lay id role
         this.roleService.getRoleById(data?.role_id).subscribe(
           data => {
-            console.log(data);
             let listRole: any[];
             listRole = data.permissions;
             this.isQLLHD_01 = listRole.some(element => element.code == 'QLLHD_01');
@@ -76,13 +77,13 @@ export class ContractTypeComponent implements OnInit {
        
       }
     )
+
+
   }
 
   searchContractType(){
     this.contractTypeService.getContractTypeList(this.code, this.name).subscribe(response => {
-      console.log(response);
       this.list = response;
-      console.log(this.list);
     });
   }
 
