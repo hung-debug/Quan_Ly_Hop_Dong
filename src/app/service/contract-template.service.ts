@@ -95,24 +95,20 @@ export class ContractTemplateService {
     
     let body = {};
 
-    console.log("st ", typeof this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"));
-
     if (!actionGet) {
       body = JSON.stringify({
         name: datas.name,
         code: datas.contract_no,
-        start_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'HH:mm:ss"),
-        end_time: this.datepipe.transform(datas.end_time, "yyyy-MM-dd'T'HH:mm:ss"),
+        start_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'HH:mm:ss'Z'")?.slice(0,11).concat("00:00:00Z"),
+        end_time: this.datepipe.transform(datas.end_time, "yyyy-MM-dd'T'HH:mm:ss'Z'")?.slice(0,11).concat("00:00:00Z"),
         type_id: datas.type_id
       });
     }
     if (id && body && !actionGet) {
+      console.log("vao day ");
       return this.http.put<any>(this.editInforContractTemplateUrl + id, body, { 'headers': headers }).pipe();
     } else if (actionGet == 'get-form-data') {
       return this.http.get<any>(this.addInforContractTemplateUrl + `/${id}`, { 'headers': headers }).pipe();
-
-            // return this.http.put<any>(this.editInforContractTemplateUrl + id, body, { 'headers': headers }).pipe();
-
     } else {
       return this.http.post<any>(this.addInforContractTemplateUrl, body, { 'headers': headers }).pipe();
     }

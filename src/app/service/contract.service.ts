@@ -383,8 +383,6 @@ export class ContractService {
   public getContractMyProcessListSignMany() {}
 
   addContractStep1(datas: any, id?: any, type_form?: string) {
-    console.log("datas ", datas);
-
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
