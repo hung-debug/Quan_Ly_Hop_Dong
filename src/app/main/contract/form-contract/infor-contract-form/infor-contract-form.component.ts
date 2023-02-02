@@ -395,6 +395,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   // Next step two create form contract
   async next(action: string) {
     this.spinner.show();
+
+    this.datasForm.ceca_push = this.optionsCeCaValue;
+
     let coutError = false;
     if (this.datasForm.contract_no && action != 'luu_nhap') {
       //check trung so hop dong
@@ -541,8 +544,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       // create new contract
       let is_create_error = false;
       let arrFile: any[] = [];
-
-      console.log("datasform contract id ", this.datasForm.contract_id);
 
       // api clone hợp đồng mẫu sang hợp đồng tạo mới => tạo hợp đồng
       await this.contractTemplateService.getFileContractFormClone(this.datasForm.template_contract_id, this.datasForm.contract_id).toPromise().then((res: any) => {

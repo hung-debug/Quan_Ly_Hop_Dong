@@ -349,8 +349,6 @@ export class ConsiderContractComponent
       .getDataNotifyOriganzationOrgId(orgId)
       .toPromise();
 
-    console.log("data ", dataOrg);
-
     if (dataOrg.usb_token_version == 1) {
       this.usbTokenVersion = 1;
     } else if (dataOrg.usb_token_version == 2) {
@@ -376,8 +374,8 @@ export class ConsiderContractComponent
         };
 
         this.orgId = this.data_contract.is_data_contract.organization_id;
-
-        this.getVersionUsbToken(this.orgId);
+        
+        await this.getVersionUsbToken(this.orgId);
 
         this.datas = this.data_contract;
         if (this.datas?.is_data_contract?.type_id) {

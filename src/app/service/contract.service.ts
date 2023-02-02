@@ -383,6 +383,8 @@ export class ContractService {
   public getContractMyProcessListSignMany() {}
 
   addContractStep1(datas: any, id?: any, type_form?: string) {
+    console.log("datas ", datas);
+
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -406,6 +408,7 @@ export class ContractService {
         datas.expire_time,
         "yyyy-MM-dd'T'HH:mm:ss'Z'"
       ),
+      ceca_push: datas.ceca_push
     });
 
     if (id) {

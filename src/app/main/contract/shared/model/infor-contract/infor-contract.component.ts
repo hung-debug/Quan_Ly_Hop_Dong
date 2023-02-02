@@ -345,6 +345,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   async callAPI(action?: string) {
+
+    this.datas.ceca_push = this.optionsCeCaValue;
+
     //call API step 1
     let countSuccess = 0;
     if (this.datas.is_action_contract_created && this.router.url.includes("edit")) {
@@ -355,7 +358,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
           res['contract_id'] = this.datas.contract_id_action;
         })
       }
-
+      
       await this.contractService.addContractStep1(this.datas, this.datas.contract_id_action).toPromise().then((res: any) => {
         this.datas.id = res?.id;
         this.datas.contract_id = res?.id;
