@@ -121,9 +121,6 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    console.log("1 ", this.datasForm.is_determine_clone);
-
     if(this.datasForm.font) {
       this.selectedFont = this.datasForm.font;
     }
@@ -1343,6 +1340,17 @@ export class SampleContractFormComponent implements OnInit {
 
             if(data_name.role == 4 && this.isChangeText) {
               this.soHopDong = data_name;
+
+              this.datasForm.contract_user_sign.forEach((res: any) => {
+                if (res.sign_config.length > 0) {
+                  let arrSignConfigItem = res.sign_config;
+                  
+                  arrSignConfigItem.forEach((element: any) => {
+                    // console.log("el ", element);
+                    element.name = this.soHopDong.name;
+                  })
+                }
+              });
             } 
           }
         }

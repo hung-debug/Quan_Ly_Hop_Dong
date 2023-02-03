@@ -709,8 +709,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
     }
-
-    console.log("event ", event);
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
@@ -1060,8 +1058,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       d.font = 'Times New Roman';
       this.list_font = [d.font];
     }
-
-    console.log("d ", d);
     
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
@@ -1277,8 +1273,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           }
 
           if(data_name.role == 4 && this.isChangeText) {
-            console.log("vao day ", data_name);
             this.soHopDong = data_name;
+
+            //Gán lại tất cả số hợp đồng cho một người ký
+            this.datas.contract_user_sign.forEach((res: any) => {
+              if (res.sign_config.length > 0) {
+                let arrSignConfigItem = res.sign_config;
+                
+                arrSignConfigItem.forEach((element: any) => {
+                  // console.log("el ", element);
+                  element.name = this.soHopDong.name;
+                })
+
+              }
+            });
           } 
         }
       } 

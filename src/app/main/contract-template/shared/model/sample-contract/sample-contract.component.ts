@@ -543,6 +543,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   }
 
+  soHopDong: any;
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
     let canvasElement: HTMLElement | null;
@@ -632,10 +633,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           // @ts-ignore
           _sign.style["z-index"] = '1';
           this.isEnableSelect = false;
-
-          // show toa do keo tha chu ky (demo)
-          // this.location_sign_x = this.signCurent['coordinate_x'];
-          // this.location_sign_y  = this.signCurent['coordinate_y'];
         }
 
         this.objSignInfo.traf_x = Math.round(this.signCurent['coordinate_x']);
@@ -669,6 +666,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
+                  if(this.soHopDong) {
+                    element.name = this.soHopDong.name;
+                  }
                   this.isChangeText = true;
                 } else {
                   this.isChangeText = false;
@@ -1317,7 +1317,20 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             isObjSign.email = data_name.email;
             signElement.setAttribute("email", isObjSign.email);
 
-            console.log("vao day cc");
+            if(data_name.role == 4 && this.isChangeText) {
+              this.soHopDong = data_name;
+
+              this.datas.contract_user_sign.forEach((res: any) => {
+                if (res.sign_config.length > 0) {
+                  let arrSignConfigItem = res.sign_config;
+                  
+                  arrSignConfigItem.forEach((element: any) => {
+                    // console.log("el ", element);
+                    element.name = this.soHopDong.name;
+                  })
+                }
+              });
+            } 
 
           }
 
