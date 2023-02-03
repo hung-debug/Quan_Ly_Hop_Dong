@@ -247,6 +247,7 @@
   "error.confirm-password-new.required": "Xác nhận mật khẩu mới không được để trống",
   "error.confirm-password-new.incorrect": "Xác nhận mật khẩu mới không khớp",
   "error.contract.name.required": "Tên hợp đồng không được để trống",
+  "error.ceca.required":"Đẩy file hợp đồng lên Bộ Công thương không được để trống",
   "error.contract.file.required": "File hợp đồng không được để trống",
   "error.user.name.required": "Họ tên không được để trống",
   "error.user.email.required": "Email không được để trống",

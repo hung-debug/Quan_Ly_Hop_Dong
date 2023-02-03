@@ -89,6 +89,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   errorContractFile: any = '';
   errorSignTime: any = '';
   errorContractNumber: any = '';
+  errorCeCa: any = '';
 
   optionsCeCa: Array<any> = [];
 
@@ -138,7 +139,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   actionSuccess() {
     this.optionsCeCa = optionsCeCa;
-    this.optionsCeCaValue = 0;
+    this.optionsCeCaValue = null;
     this.datas.ceca_push = this.optionsCeCaValue;
 
     this.name = this.datas.name ? this.datas.name : null;
@@ -309,7 +310,9 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.clearError();
     this.contractNameRequired();
     this.contractFileRequired();
-    if (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid()) {
+    this.contractCeCaValid();
+    if (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid()) {
+      console.log("abc ");
       // this.spinner.hide();
       return false;
     }
@@ -747,7 +750,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         array_empty.push(data);
       })
       this.datas.contractConnect = array_empty;
-      console.log(array_empty);
     } else {
       this.datas.contractConnect = null;
     }
@@ -772,7 +774,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.defineData(this.datas);
     const fileReader = new FileReader();
     if (this.datas.is_action_contract_created) {
-      console.log(typeof this.datas.contractFile)
       // file hợp đồng chính không thay đổi => convert url sang dạng blob
       if (!this.uploadFileContractAgain && this.datas.contractFile && (typeof this.datas.contractFile == 'string')) {
         await this.contractService.getDataBinaryFileUrlConvert(this.datas.contractFile).toPromise().then((res: any) => {
@@ -819,8 +820,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     } else {
       this.callAPI("save_draft");
     }
-    //
-    // }
+
   }
 
   callAPI_Draft() {
@@ -848,7 +848,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                             for (var i = 0; i < this.datas.attachFileArr.length; i++) {
 
                               this.uploadService.uploadFile(this.datas.attachFileArr[i]).subscribe((data) => {
-                                  // console.log(JSON.stringify(data));
                                   this.datas.filePathAttach = data.file_object.file_path;
                                   this.datas.fileNameAttach = data.file_object.filename;
                                   this.datas.fileBucketAttach = data.file_object.bucket;
@@ -984,6 +983,17 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   contractNumberValid() {
     return this.contractNumberCounter();
+  }
+
+  contractCeCaValid() {
+    console.log("vao day ");
+    if(!this.optionsCeCaValue) {
+      console.log("vao day ");
+      this.errorCeCa = "error.ceca.required";
+      return false;
+    }
+
+    return true;
   }
 
   contractNameRequired() {

@@ -123,7 +123,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
   actionSuccess() {
     this.optionsCeCa = optionsCeCa;
-    this.optionsCeCaValue = 0;
+    this.optionsCeCaValue = null;
     this.datasForm.ceca_push = this.optionsCeCaValue;
 
     let dataRouter = this.route.params.subscribe((params: any) => {
@@ -271,7 +271,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             this.optionsCeCaValue = 0;
             this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
           } else {
-            this.optionsCeCaValue = 0;
+            this.optionsCeCaValue = null;
             this.optionsCeCa = optionsCeCa;
           }
         })
@@ -380,13 +380,18 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
 
   validDataForm() {
-
     if (!this.datasForm.template_contract_id) {
       this.toastService.showWarningHTMLWithTimeout((this.translate.instant('please.choose.contract.template')), "", "3000");
       return false;
     }
     if (!this.datasForm.name) {
       this.toastService.showWarningHTMLWithTimeout((this.translate.instant('please.choose.contract.name')), "", "3000");
+      return false;
+    }
+
+    
+    if(!this.datasForm.ceca_push) {
+      this.toastService.showWarningHTMLWithTimeout((this.translate.instant('error.ceca.required')), "", "3000");
       return false;
     }
 

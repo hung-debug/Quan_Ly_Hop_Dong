@@ -101,7 +101,7 @@ export class ContractTemplateService {
     if (id && body && !actionGet) {
       start_time = this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'HH:mm:ss'Z'")?.slice(0,11).concat("00:00:00Z");
       end_time = this.datepipe.transform(datas.end_time, "yyyy-MM-dd'T'HH:mm:ss'Z'")?.slice(0,11).concat("00:00:00Z");
-    } else {
+    } else if(!actionGet) {
       start_time = this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'HH:mm:ss'Z'");
       end_time = this.datepipe.transform(datas.end_time, "yyyy-MM-dd'T'HH:mm:ss'Z'");
     }
