@@ -1,12 +1,11 @@
 import { UploadService } from 'src/app/service/upload.service';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
 import { ContractService } from 'src/app/service/contract.service';
 
 import { ToastService } from 'src/app/service/toast.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {  HttpErrorResponse } from '@angular/common/http';
 import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
@@ -81,8 +80,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   isQLHD_12: boolean = true;  //xem hop dong lien quan
   isQLHD_13: boolean = true;  //chia se hop dong
 
-  constructor(private modalService: NgbModal,
-    private appService: AppService,
+  constructor(private appService: AppService,
     private contractService: ContractService,
     private route: ActivatedRoute,
     private router: Router,
@@ -165,7 +163,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
           //lay id role
           this.roleService.getRoleById(data?.role_id).subscribe(
             data => {
-              console.log(data);
               let listRole: any[];
               listRole = data.permissions;
               this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
@@ -233,9 +230,15 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
     }
     if (!this.roleMess) {
-      console.log("ppp ", this.p);
+      
+      let isOrg = this.isOrg;
+
+      if(!this.isQLHD_03) {
+        isOrg ='off';
+      }
+
       //get list contract
-      this.contractService.getContractList(this.isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+      this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
         if (this.pageTotal == 0) {
@@ -512,8 +515,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.contractService.getFileZipContract(id).subscribe((data) => {
       //console.log(data);
       this.uploadService.downloadFile(data.path).subscribe((response: any) => {
-        //console.log(response);
-
         let url = window.URL.createObjectURL(response);
         let a = document.createElement('a');
         document.body.appendChild(a);
