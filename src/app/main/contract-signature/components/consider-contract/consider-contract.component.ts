@@ -1250,24 +1250,24 @@ export class ConsiderContractComponent
       (p: any) => p.id == 5
     ).length;
 
-    // console.log("emailRecipients", this.datas.is_data_contract.participants[0].recipients[0].email);
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    // // console.log("emailRecipients", this.datas.is_data_contract.participants[0].recipients[0].email);
+    // this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
 
-    this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
+    // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
 
-        // response[0].participants[0].recipients[0].email
-        if (this.emailRecipients !== this.currentUser.email) {
+    //     // response[0].participants[0].recipients[0].email
+    //     if (this.emailRecipients !== this.currentUser.email) {
           
-          this.toastService.showErrorHTMLWithTimeout(
-            'Bạn không có quyền xử lý hợp đồng này!',
-            '',
-            3000
-          );
-          this.router.navigate(['/main/dashboard']);
-          return
-        };
+    //       this.toastService.showErrorHTMLWithTimeout(
+    //         'Bạn không có quyền xử lý hợp đồng này!',
+    //         '',
+    //         3000
+    //       );
+    //       this.router.navigate(['/main/dashboard']);
+    //       return
+    //     };
 
-    console.log("this.currentUser.email", this.currentUser.email);
+    // console.log("this.currentUser.email", this.currentUser.email);
         
     if (counteKYC > 0) {
       if (this.mobile) {

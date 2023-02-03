@@ -503,6 +503,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   width: any[] = [];
   height: any[] = [];
 
+  // elementSoHopDong: boolean = false;
+
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
     let canvasElement: HTMLElement | null;
@@ -619,7 +621,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.signCurent['top'] = (rect_location.top - canvasInfo.top).toFixed();
         }
         let name_accept_signature = '';
-        let field_data = [];
         
         // lay lai danh sach signer sau khi keo vao hop dong
         this.datas.contract_user_sign.forEach((res: any) => {
@@ -640,9 +641,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
-                  if(this.soHopDong) {
+                  if(this.soHopDong && this.soHopDong.role == 4) {
                     element.name = this.soHopDong.name;
                   }
+
                   this.isChangeText = true;
                 } else {
                   this.isChangeText = false;
@@ -707,6 +709,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         }
       }
     }
+
+    console.log("event ", event);
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
@@ -1127,8 +1131,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
-    // this.objSignInfo.font = "";
-    // this.objSignInfo.font_size = "";
+    this.isChangeText = false;
     if (data.id_have_data) {
       this.spinner.show();
       await this.contractService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
@@ -1171,20 +1174,18 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         // this.signCurent.width = 0;
         // this.signCurent.height = 0;
       }
-
       this.datas.contract_user_sign.forEach((element: any, user_sign_index: any) => {
         if (element.sign_config.length > 0) {
           element.sign_config = element.sign_config.filter((item: any) => item.id != data.id)
           element.sign_config.forEach((itemSign: any, sign_config_index: any) => {
             itemSign['id'] = 'signer-' + user_sign_index + '-index-' + sign_config_index + '_' + element.id;
-            itemSign['sign_unit'] = user_sign_index;
           })
         }
       });
-      
       this.eventMouseover();
       this.cdRef.detectChanges();
     }
+
   }
 
   // Hàm tạo các đối tượng kéo thả
@@ -1275,9 +1276,12 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
           }
 
-          this.soHopDong = data_name;
+          if(data_name.role == 4 && this.isChangeText) {
+            console.log("vao day ", data_name);
+            this.soHopDong = data_name;
+          } 
         }
-      }
+      } 
     } 
   }
 

@@ -1168,6 +1168,7 @@ export class SampleContractFormComponent implements OnInit {
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
+    this.isChangeText = false;
     if (data.id_have_data && this.router.url.includes("edit")) {
       this.spinner.show();
       await this.contractService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
@@ -1340,7 +1341,9 @@ export class SampleContractFormComponent implements OnInit {
               signElement.setAttribute("height", isObjSign.width);
             }
 
-            this.soHopDong = data_name;
+            if(data_name.role == 4 && this.isChangeText) {
+              this.soHopDong = data_name;
+            } 
           }
         }
       }
