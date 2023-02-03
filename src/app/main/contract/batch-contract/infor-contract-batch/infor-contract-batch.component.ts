@@ -113,23 +113,22 @@ export class InforContractBatchComponent implements OnInit {
 
   async onChangeForm(e: any) {
     this.clearError();
-    console.log("e ", e.value.type_id)
     this.idContractTemplate = e.value;
 
-    if(e.value.type_id) {
-      const informationContractType = await this.contractTypeService.getContractTypeById(e.value.type_id).toPromise();
+    // if(e.value.type_id) {
+    //   const informationContractType = await this.contractTypeService.getContractTypeById(e.value.type_id).toPromise();
 
-      if(informationContractType.ceca_push == 1) {
-        this.optionsCeCaValue = 1;
-        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
-      } else {
-        this.optionsCeCaValue = 0;
-        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
-      }
-    } else {
-      this.optionsCeCaValue = 0;
-      this.optionsCeCa = optionsCeCa;
-    }
+    //   if(informationContractType.ceca_push == 1) {
+    //     this.optionsCeCaValue = 1;
+    //     this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+    //   } else {
+    //     this.optionsCeCaValue = 0;
+    //     this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+    //   }
+    // } else {
+    //   this.optionsCeCaValue = 0;
+    //   this.optionsCeCa = optionsCeCa;
+    // }
   }
 
   downFileExample() {

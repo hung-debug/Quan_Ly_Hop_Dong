@@ -1,23 +1,24 @@
 <!-- form step 1 -->
 <div>
-    <div class="row">
-      <div class="col-md-12">
-        <div class="form-group">
-          <div class="label_item">{{'contract-template.name' | translate}} <span class="require_star">*</span></div>
-          <div>
-            <p-dropdown panelStyleClass="font" [options]="typeListForm" [(ngModel)]="idContractTemplate" 
-              optionLabel="name" placeholder="{{'choose.template.contract' | translate}}" [filter]="true" filterBy="name"
-              (onChange)="onChangeForm($event)">
-            </p-dropdown>
-          </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="label_item">{{'contract-template.name' | translate}} <span class="require_star">*</span></div>
+        <div>
+          <p-dropdown panelStyleClass="font" [options]="typeListForm" [(ngModel)]="idContractTemplate" 
+            optionLabel="name" optionValue="id" placeholder="{{'choose.template.contract' | translate}}" [filter]="true" filterBy="name"
+            (onChange)="onChangeForm($event)">
+          </p-dropdown>
         </div>
-        <div class="form-group">
-          <div class="invalid" *ngIf="errorContractName">
-            {{errorContractName | translate}}
-          </div>
+      </div>
+      <div class="form-group">
+        <div class="invalid" *ngIf="errorContractName">
+          {{errorContractName | translate}}
         </div>
       </div>
     </div>
+  </div>
+
 
     <!--Đẩy file hợp đồng lên BCT-->
     <div *ngIf="this.ceca" class="row">

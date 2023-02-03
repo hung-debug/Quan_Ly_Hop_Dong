@@ -1284,7 +1284,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   // console.log("el ", element);
                   element.name = this.soHopDong.name;
                 })
-
               }
             });
           } 
