@@ -135,7 +135,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.router.navigate(['/page-not-found']);
     }
 
-    this.changeTypeContract();
+    if(this.type_id)
+      this.changeTypeContract();
   }
 
   actionSuccess() {
