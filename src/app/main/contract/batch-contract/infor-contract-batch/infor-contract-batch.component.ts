@@ -134,7 +134,7 @@ export class InforContractBatchComponent implements OnInit {
   downFileExample() {
     this.spinner.show();
     if (this.idContractTemplate) {
-      this.contractService.getFileContractBatch(this.idContractTemplate.id).subscribe(
+      this.contractService.getFileContractBatch(this.idContractTemplate).subscribe(
           (res: any) => {
             this.uploadService.downloadFile(res.path).subscribe((response: any) => {
                 //console.log(response);
@@ -227,8 +227,8 @@ export class InforContractBatchComponent implements OnInit {
   //--valid data step 1
   validData() {
     this.clearError();
-    if (!this.idContractTemplate.id || !this.datasBatch.contractFile) {
-      if (!this.idContractTemplate.id) {
+    if (!this.idContractTemplate || !this.datasBatch.contractFile) {
+      if (!this.idContractTemplate) {
         this.errorContractName = (this.translate.instant('contract.template.name.not.blank'));
       }
       if (!this.datasBatch.contractFile) {
@@ -264,6 +264,8 @@ export class InforContractBatchComponent implements OnInit {
       this.datasBatch.notes = this.notes;
       this.datasBatch.idContractTemplate = this.idContractTemplate.id;
       this.datasBatch.ceca_push = this.optionsCeCaValue;
+
+      this.datasBatch.idContractTemplate = this.idContractTemplate;
 
       let countSMS = 0;
       let countEkyc = 0;

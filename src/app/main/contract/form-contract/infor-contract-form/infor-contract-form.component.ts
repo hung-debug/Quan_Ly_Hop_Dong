@@ -390,7 +390,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
 
     
-    if(!this.datasForm.ceca_push) {
+    if(this.datasForm.ceca_push == null) {
       this.toastService.showWarningHTMLWithTimeout((this.translate.instant('error.ceca.required')), "", "3000");
       return false;
     }
@@ -610,10 +610,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   }
 
   nextForm() {
-    // for(let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
-    //   this.datasForm.is_determine_clone[i].id = null;
-    // }
-
     this.datasForm.isChangeForm = false;
     this.stepForm = variable.stepSampleContractForm.step2;
     this.datasForm.stepFormLast = this.stepForm;
