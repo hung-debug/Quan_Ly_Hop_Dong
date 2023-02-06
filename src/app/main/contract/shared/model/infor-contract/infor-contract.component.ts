@@ -81,7 +81,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   attachFileNameArr: any[] = [];
   contract_no: any;
 
-  optionsCeCaValue: any;
+  optionsCeCaValue: any = null;
 
   //error
   errorContractName: any = '';
@@ -141,8 +141,13 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   actionSuccess() {
     this.optionsCeCa = optionsCeCa;
-    this.optionsCeCaValue = null;
-    this.datas.ceca_push = this.optionsCeCaValue;
+
+    console.log("b1 ", this.datas.ceca_push);
+
+    if(this.datas.ceca_push != 0  && this.datas.ceca_push != 1)
+      this.datas.ceca_push = this.optionsCeCaValue;
+    else
+      this.optionsCeCaValue = this.datas.ceca_push;
 
     this.name = this.datas.name ? this.datas.name : null;
     this.contract_no = this.datas.contract_no ? this.datas.contract_no : this.datas.contract_no;
@@ -359,6 +364,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   async callAPI(action?: string) {
 
     this.datas.ceca_push = this.optionsCeCaValue;
+
+    console.log("op ", this.optionsCeCaValue);
 
     //call API step 1
     let countSuccess = 0;

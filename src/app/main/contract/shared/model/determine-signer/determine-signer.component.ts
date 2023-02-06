@@ -115,6 +115,8 @@ export class DetermineSignerComponent implements OnInit {
   clonex: any;
   ngOnInit(): void {
 
+    console.log("this datas ", this.datas);
+
     if(environment.flag == 'NB') {
       this.site = 'NB';
     } else if(environment.flag == 'KD') {

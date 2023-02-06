@@ -38,8 +38,6 @@ export class ContractFormHeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.stepForm);
-
   }
 
   saveContract(modal: any): void {
