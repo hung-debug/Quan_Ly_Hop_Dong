@@ -312,7 +312,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.contractFileRequired();
     this.contractCeCaValid();
     if (!this.contractNameRequired() || !this.contractNameCounter() || !this.contractFileRequired() || !this.contractNumberValid() || !this.contractCeCaValid()) {
-      console.log("abc ");
       // this.spinner.hide();
       return false;
     }
@@ -986,9 +985,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   contractCeCaValid() {
-    console.log("vao day ");
-    if(!this.optionsCeCaValue) {
-      console.log("vao day ");
+    if(this.optionsCeCaValue == 0 && this.optionsCeCaValue == null) {
       this.errorCeCa = "error.ceca.required";
       return false;
     }
