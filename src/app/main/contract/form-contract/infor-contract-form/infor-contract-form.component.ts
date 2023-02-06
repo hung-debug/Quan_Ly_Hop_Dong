@@ -12,17 +12,12 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {FormBuilder} from "@angular/forms";
-import {Observable, Subscription} from 'rxjs';
-import {DatePipe} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastService} from 'src/app/service/toast.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import * as moment from "moment";
-import {HttpErrorResponse} from '@angular/common/http';
 import {UploadService} from 'src/app/service/upload.service';
 import {optionsCeCa, variable} from 'src/app/config/variable';
-import {AddContractComponent} from '../../add-contract/add-contract.component';
 import {ContractTemplateService} from 'src/app/service/contract-template.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ContractTypeService } from 'src/app/service/contract-type.service';

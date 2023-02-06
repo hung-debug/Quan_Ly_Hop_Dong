@@ -985,7 +985,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   contractCeCaValid() {
-    if(this.optionsCeCaValue == 0 && this.optionsCeCaValue == null) {
+    if(this.optionsCeCaValue == null) {
+      console.log("abc ");
       this.errorCeCa = "error.ceca.required";
       return false;
     }
