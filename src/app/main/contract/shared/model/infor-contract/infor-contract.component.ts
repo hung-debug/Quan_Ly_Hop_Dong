@@ -7,7 +7,6 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
@@ -135,6 +134,8 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     } else {
       this.router.navigate(['/page-not-found']);
     }
+
+    this.changeTypeContract();
   }
 
   actionSuccess() {
@@ -199,7 +200,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if (file) {
       // giới hạn file upload lên là 5mb
       if (e.target.files[0].size <= 5000000) {
-        console.log(e.target.files[0].size);
         const file_name = file.name;
         const extension = file.name.split('.').pop();
         // tslint:disable-next-line:triple-equals
@@ -480,7 +480,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               this.step = variable.stepSampleContract.step2;
               this.datas.stepLast = this.step;
               this.nextOrPreviousStep(this.step);
-
             }
             this.spinner.hide();
           }
@@ -620,7 +619,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
               this.datas.stepLast = this.step;
               // this.datas.document_id = '1';
               this.nextOrPreviousStep(this.step);
-              console.log(this.datas);
               this.spinner.hide();
             }
           } else {
@@ -719,12 +717,10 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     if (this.datas.contractConnect != null && this.datas.contractConnect != '') {
       const array_empty: any[] = [];
       this.datas.contractConnect.forEach((element: any, index: number) => {
-        console.log(element);
         const data = element.ref_id;
         array_empty.push(data);
       })
       this.contractConnect = array_empty;
-      console.log(array_empty);
     }
   }
 
@@ -741,7 +737,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     }
     this.datas.type_id = this.type_id;
 
-    console.log(this.contractConnect);
     if (this.contractConnect && this.contractConnect.length && this.contractConnect.length > 0) {
       const array_empty: ContractConnectArr[] = [];
       this.contractConnect.forEach((element: any, index: number) => {
@@ -851,9 +846,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                                   this.datas.fileNameAttach = data.file_object.filename;
                                   this.datas.fileBucketAttach = data.file_object.bucket;
                                   this.contractService.addDocumentAttach(this.datas).subscribe((data) => {
-                                      console.log(JSON.stringify(data));
                                       this.datas.document_attach_id = data?.id;
-
                                     },
                                     error => {
                                       this.spinner.hide();
@@ -986,7 +979,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
 
   contractCeCaValid() {
     if(this.optionsCeCaValue == null) {
-      console.log("abc ");
       this.errorCeCa = "error.ceca.required";
       return false;
     }

@@ -8,8 +8,6 @@ import { DatePipe } from '@angular/common';
 import { forkJoin, BehaviorSubject, Subject } from 'rxjs';
 import axios from 'axios';
 import { User } from './user.service';
-import { type_signature_doc_template } from '../config/variable';
-import { Certificate } from 'crypto';
 
 export interface Contract {
   id: number;
@@ -394,7 +392,7 @@ export class ContractService {
       sign_time: this.datepipe.transform(
         datas.sign_time ? datas.sign_time : datas.end_time,
         "yyyy-MM-dd'T'HH:mm:ss'Z'"
-      ),
+      )?.slice(0,11).concat("00:00:00Z"),
       notes: datas.notes,
       role_id: datas.role_id,
       alias_url: '',
@@ -405,7 +403,7 @@ export class ContractService {
       contract_expire_time: this.datepipe.transform(
         datas.expire_time,
         "yyyy-MM-dd'T'HH:mm:ss'Z'"
-      ),
+      )?.slice(0,11).concat("00:00:00Z"),
       ceca_push: datas.ceca_push
     });
 
@@ -429,7 +427,6 @@ export class ContractService {
         .pipe(
           map((contract) => {
             if (JSON.parse(JSON.stringify(contract)).id != 0) {
-              console.log('contract ', contract);
               return contract;
             } else {
               return null;
@@ -580,8 +577,6 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-
-    console.log("sign ", signDigital.signDigitalWidth);
     
     const body = JSON.stringify({
       fieldId: signUpdate.id,
@@ -708,7 +703,6 @@ export class ContractService {
 
       signDate: '11-05-2019 09:55:55',
       typeSign: '4',
-      //algDigest: "SHA_256"
     };
 
     return axios.post(this.postSignDigital, dataPost, config);
@@ -1258,7 +1252,6 @@ export class ContractService {
       name: 'contract_' + new Date().getTime() + '.pdf',
       content: 'data:application/pdf,' + base64,
     };
-    console.log('body update ', body);
     return this.http
       .put<any>(this.signDigitalMobi + id, body, { headers: headers })
       .toPromise();
