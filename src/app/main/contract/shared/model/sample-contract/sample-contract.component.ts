@@ -24,7 +24,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {count} from 'console';
 import {data} from 'jquery';
 import * as _ from 'lodash';
-import { isPdfFile } from 'pdfjs-dist';
 
 @Component({
   selector: 'app-sample-contract',
@@ -173,8 +172,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('dragend', this.showEventInfo).draggable({
+
+      
+      // @ts-ignore
+      styleCursor: true,
+
       listeners: {move: this.dragMoveListener, onend: this.showEventInfo},
       inertia: true,
+
       modifiers: [
         interact.modifiers.restrictRect({
           restriction: '.drop-zone',
@@ -183,7 +188,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       ]
     })
 
-    //phong to thu nho o ky
+    // //phong to thu nho o ky
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
       edges: {left: true, right: true, bottom: true, top: true},
   
@@ -202,8 +207,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       inertia: true,
     })
 
-    // // event resize element
-    // //keo o ky
+    // // // event resize element
+    // // //keo o ky
     interact('.resize-drag').on('dragend', this.showEventInfo).draggable({
       listeners: {
         move: this.dragMoveListener,

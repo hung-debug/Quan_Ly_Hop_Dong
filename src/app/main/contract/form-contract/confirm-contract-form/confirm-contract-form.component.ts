@@ -215,21 +215,23 @@ export class ConfirmContractFormComponent implements OnInit {
   user: any;
   submit(action: string) {
 
-    this.contractService
-    .updateContractIsPushCeCA(this.datasForm.id, 0)
-    .subscribe(
-      (data) => {
-        this.SaveContract(action);
-      },
-      (error) => {
-        this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout(
-          'Có lỗi! Vui lòng liên hệ nhà phát triển để xử lý',
-          '',
-          3000
-        );
-      }
-    );
+    this.SaveContract(action);
+
+    // this.contractService
+    // .updateContractIsPushCeCA(this.datasForm.id, 0)
+    // .subscribe(
+    //   (data) => {
+    //     this.SaveContract(action);
+    //   },
+    //   (error) => {
+    //     this.spinner.hide();
+    //     this.toastService.showErrorHTMLWithTimeout(
+    //       'Có lỗi! Vui lòng liên hệ nhà phát triển để xử lý',
+    //       '',
+    //       3000
+    //     );
+    //   }
+    // );
 
     //Lấy thông tin chi tiết tổ chức của tôi
     // const data = {
