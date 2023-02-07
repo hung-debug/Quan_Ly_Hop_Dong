@@ -1181,24 +1181,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       let emailRecipients: any[] = [];
 
-      console.log("datas ", this.datas.determine_contract);
+      // console.log("datas ", this.datas.determine_contract);
 
-      this.datas.determine_contract.forEach((item: any) => {
-          item.recipients.forEach((itemRecipients: any) => {
-            if(itemRecipients.fields && itemRecipients.fields.length > 0) {
-              itemRecipients.fields.forEach((itemFields: any) => {
-                coordinate_x.push(Number(itemFields.coordinate_x));
-                coordinate_y.push(Number(itemFields.coordinate_y));
-                width.push(Number(itemFields.width));
-                height.push(Number(itemFields.height));
-              })
-            }
+      // this.datas.determine_contract.forEach((item: any) => {
+      //     item.recipients.forEach((itemRecipients: any) => {
+      //       if(itemRecipients.fields && itemRecipients.fields.length > 0) {
+      //         itemRecipients.fields.forEach((itemFields: any) => {
+      //           coordinate_x.push(Number(itemFields.coordinate_x));
+      //           coordinate_y.push(Number(itemFields.coordinate_y));
+      //           width.push(Number(itemFields.width));
+      //           height.push(Number(itemFields.height));
+      //         })
+      //       }
 
-            if(item.type == 2) {
-              emailRecipients.push(itemRecipients);
-            }
-          })
-      })
+      //       if(item.type == 2) {
+      //         emailRecipients.push(itemRecipients);
+      //       }
+      //     })
+      // })
 
       let flagEmail = null;
       for(let i = 0; i < emailRecipients.length; i++) {
