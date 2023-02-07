@@ -11,7 +11,7 @@ import {
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "../../../../../service/toast.service";
 import { environment } from 'src/environments/environment';
-
+import {parttern} from "../../../../../config/parttern";
 
 @Component({
   selector: 'app-edit-handler-dialog',
@@ -46,6 +46,7 @@ export class EditHandlerComponent implements OnInit {
   id: any;
   card_id: any;
   key: any;
+  pattern = parttern;
 
   //dropdown
   signTypeList: Array<any> = type_signature;
@@ -123,6 +124,10 @@ export class EditHandlerComponent implements OnInit {
   handleCancel() {
     this.dialogRef.close();
   }
+keyDownHandler(event: any) {
+    if (event.keyCode === 32)
+        event.preventDefault();
+}
   UpdateHandler() {
     this.spinner.show();
     const dataUpdate = {
@@ -133,8 +138,18 @@ export class EditHandlerComponent implements OnInit {
       login_by: this.login_by,
       card_id: this.card_id,
     };
-    // return dataUpdate;
-    // console.log("dataUpdate", dataUpdate);
+    // let dataArr = [];
+    // dataArr.push(this.phone);
+    // console.log("dataarray",dataArr);
+    
+    // let count = 0;
+    // for (let i = 0; i < dataArr.length; i++) {  
+    //   if (!this.pattern.phone.test(dataArr[i].email)) {
+    //     this.getNotificationValid("SĐT của bạn không hợp lệ!")
+    //     count++;
+    //     break;
+    //   }
+    // }
 
     if (this.email !== null) {
       this.contractService.updateInfoPersonProcess(dataUpdate, this.id).subscribe(
@@ -151,6 +166,8 @@ export class EditHandlerComponent implements OnInit {
     } else {
       this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
     }
+
+  
   }
 
   onItemSelect(e: any, data: any) {

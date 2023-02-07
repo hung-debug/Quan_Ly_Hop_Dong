@@ -1293,12 +1293,15 @@ export class ConsiderContractComponent
       (p: any) => p.id == 5
     ).length;
 
-    // console.log("emailRecipients", this.datas.is_data_contract.participants[0].recipients[0].email);
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-    this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
 
-        // response[0].participants[0].recipients[0].email
-        if (this.emailRecipients !== this.currentUser.email) {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
+    // console.log("this.emailRecipientssssssssss",this.emailRecipients);
+    const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
+    const ArrRecipientsNew = ArrRecipients.map((item: any)=> item.email);
+    console.log("ArrRecipientsNew",ArrRecipientsNew);
+
+        if (!ArrRecipientsNew.includes(this.currentUser.email)) {
           
           this.toastService.showErrorHTMLWithTimeout(
             'Bạn không có quyền xử lý hợp đồng này!',
@@ -1308,7 +1311,6 @@ export class ConsiderContractComponent
           this.router.navigate(['/main/dashboard']);
           return
         };
-
     console.log("this.currentUser.email", this.currentUser.email);
         
     if (counteKYC > 0) {

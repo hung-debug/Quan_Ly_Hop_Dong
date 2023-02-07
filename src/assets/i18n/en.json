@@ -396,6 +396,7 @@
   "choose.expire.date": "Choose expire date",
   "tax_code.cardId": "Tax code/Card Id",
   "info.token": "Information in USB Token",
+  "info.hsm":"Information in HSM",
   "enter.tax_code.cardId": "Enter tax code or card id",
   "enter.tax.code": "Enter tax code",
   "enter.cardId": "Enter card id",

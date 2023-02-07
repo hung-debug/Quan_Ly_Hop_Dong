@@ -326,7 +326,7 @@ input[type=number] {
         justify-content: space-around;
 
         .participants__name {
-          width: 40%;
+          width: 41%;
 
           .input-data {
             border: 1px solid #106DB6;
@@ -565,6 +565,20 @@ input[type=number] {
   right: 10px;
   left: unset !important;
 }
+.language{
+  margin-left: 20px;
+}
+.switch-language{
+  padding: 5px;
+}
 //::ng-deep .mat-form-field-flex {
 //  background-color: white;
 //}
+.dropdown-toggle:empty::after {
+  margin-left: 22px;
+  margin-bottom: 8px;
+  width: 9px;
+}
+.btn-outline-primary:hover{
+  color: grey;
+}
