@@ -815,8 +815,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // view pdf qua canvas
   async getPage() {
-    console.log("sample contract ", this.datas);
-
     // @ts-ignore
     const pdfjs = await import('pdfjs-dist/build/pdf');
     // @ts-ignore
@@ -1283,12 +1281,23 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             //Gán lại tất cả số hợp đồng cho một người ký
             this.datas.contract_user_sign.forEach((res: any) => {
               if (res.sign_config.length > 0) {
-                let arrSignConfigItem = res.sign_config;
+                let arrSignConfigItem: any = "";
+
+                if(res.sign_unit == 'so_tai_lieu') {
+                  arrSignConfigItem = res.sign_config;
+
+                  arrSignConfigItem.forEach((element: any) => {
+                    console.log("el ", element);
+                    element.name = this.soHopDong.name;
+                    element.signature_party = data_name.type_unit;
+                    element.recipient_id = data_name.id;
+                    element.status = data_name.status;
+                    element.type = data_name.type;
+                    element.email = data_name.email;
+                  })
+                }
                 
-                arrSignConfigItem.forEach((element: any) => {
-                  // console.log("el ", element);
-                  element.name = this.soHopDong.name;
-                })
+              
               }
             });
           } 
