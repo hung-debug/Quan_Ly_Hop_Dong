@@ -45,7 +45,6 @@ import { EkycDialogSignComponent } from './ekyc-dialog-sign/ekyc-dialog-sign.com
 import { UnitService } from 'src/app/service/unit.service';
 import { Helper } from 'src/app/core/Helper';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
-import { event } from 'jquery';
 
 @Component({
   selector: 'app-consider-contract',
@@ -358,12 +357,14 @@ export class ConsiderContractComponent
 
 
   timerId: any;
+  typeSignDigital: any;
   getDataContractSignature() {
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
+
         if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
           this.valid = true;
         }
@@ -486,6 +487,27 @@ export class ConsiderContractComponent
 
         this.datas.action_title = 'Xác nhận';
         this.datas.roleContractReceived = this.recipient.role;
+
+        for (const signUpdate of this.isDataObjectSignature) {
+          if (
+            signUpdate &&
+            (signUpdate.type == 3 || signUpdate.type == 2) &&
+            [3, 4].includes(this.datas.roleContractReceived) &&
+            signUpdate?.recipient?.email === this.currentUser.email &&
+            signUpdate?.recipient?.role === this.datas?.roleContractReceived
+          ) {
+            if (signUpdate.recipient?.sign_type) {
+              const typeSD = signUpdate.recipient?.sign_type.find(
+                (t: any) => t.id != 1
+              );
+              if (typeSD) {
+                this.typeSignDigital = typeSD.id;
+              }
+            }
+    
+            break;
+          }
+        }
 
         this.scale = 1.0;
 
@@ -727,7 +749,6 @@ export class ConsiderContractComponent
   pageNumPending: any = null;
   // hàm render các page pdf, file content, set kích thước width & height canvas
   renderPage(pageNumber: any, canvas: any) {
-    console.log("usb token version ", this.usbTokenVersion);
     setTimeout(() => {
       //@ts-ignore
       this.thePDF.getPage(pageNumber).then((page) => {
@@ -738,12 +759,12 @@ export class ConsiderContractComponent
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        if (this.usbTokenVersion == 1 || !this.usbTokenVersion) {
+        if (this.typeSignDigital == 2 && this.usbTokenVersion == 1 || !this.usbTokenVersion) {
           this.prepareInfoSignUsbTokenV1(
             pageNumber,
             canvas.height,
           );
-        } else if (this.usbTokenVersion == 2) {
+        } else if ((this.typeSignDigital == 2 && this.usbTokenVersion == 2) || this.typeSignDigital == 4) {
           this.prepareInfoSignUsbTokenV2(
             pageNumber,
             canvas.height,
@@ -1553,28 +1574,28 @@ export class ConsiderContractComponent
 
   //Ký số + ký eKYC
   async signDigitalDocument() {
-    let typeSignDigital = 0;
+    let typeSignDigital = this.typeSignDigital;
 
-    for (const signUpdate of this.isDataObjectSignature) {
-      if (
-        signUpdate &&
-        (signUpdate.type == 3 || signUpdate.type == 2) &&
-        [3, 4].includes(this.datas.roleContractReceived) &&
-        signUpdate?.recipient?.email === this.currentUser.email &&
-        signUpdate?.recipient?.role === this.datas?.roleContractReceived
-      ) {
-        if (signUpdate.recipient?.sign_type) {
-          const typeSD = signUpdate.recipient?.sign_type.find(
-            (t: any) => t.id != 1
-          );
-          if (typeSD) {
-            typeSignDigital = typeSD.id;
-          }
-        }
+    // for (const signUpdate of this.isDataObjectSignature) {
+    //   if (
+    //     signUpdate &&
+    //     (signUpdate.type == 3 || signUpdate.type == 2) &&
+    //     [3, 4].includes(this.datas.roleContractReceived) &&
+    //     signUpdate?.recipient?.email === this.currentUser.email &&
+    //     signUpdate?.recipient?.role === this.datas?.roleContractReceived
+    //   ) {
+    //     if (signUpdate.recipient?.sign_type) {
+    //       const typeSD = signUpdate.recipient?.sign_type.find(
+    //         (t: any) => t.id != 1
+    //       );
+    //       if (typeSD) {
+    //         typeSignDigital = typeSD.id;
+    //       }
+    //     }
 
-        break;
-      }
-    }
+    //     break;
+    //   }
+    // }
 
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
@@ -1767,7 +1788,19 @@ export class ConsiderContractComponent
       }
     } else if (typeSignDigital == 4) {
       //Ký hsm
-      const objSign = this.isDataObjectSignature.filter(
+
+      for (const signUpdate of this.isDataObjectSignature) {
+        if (
+          signUpdate &&
+          (signUpdate.type == 1 ||
+            signUpdate.type == 3 ||
+            signUpdate.type == 4) &&
+          [3, 4].includes(this.datas.roleContractReceived) &&
+          signUpdate?.recipient?.email === this.currentUser.email &&
+          signUpdate?.recipient?.role === this.datas?.roleContractReceived
+        ) {
+
+           const objSign = this.isDataObjectSignature.filter(
         (signUpdate: any) =>
           signUpdate &&
           signUpdate.type == 3 &&
@@ -1776,20 +1809,55 @@ export class ConsiderContractComponent
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
       );
 
-      let fileC = await this.contractService.getFileContractPromise(
-        this.idContract
-      );
-      const pdfC2 = fileC.find((p: any) => p.type == 2);
-      const pdfC1 = fileC.find((p: any) => p.type == 1);
-      if (pdfC2) {
-        fileC = pdfC2.path;
-      } else if (pdfC1) {
-        fileC = pdfC1.path;
-      } else {
-        return;
-      }
+          let fileC = await this.contractService.getFileContractPromise(
+            this.idContract
+          );
+          const pdfC2 = fileC.find((p: any) => p.type == 2);
+          const pdfC1 = fileC.find((p: any) => p.type == 1);
+          if (pdfC2) {
+            fileC = pdfC2.path;
+          } else if (pdfC1) {
+            fileC = pdfC1.path;
+          } else {
+            return;
+          }
+          let signI = null;
+          if (signUpdate.type == 1 || signUpdate.type == 4) {
+            this.textSign = signUpdate.valueSign;
 
-      if (fileC && objSign.length) {
+            this.widthText = signUpdate.width;
+
+            await of(null).pipe(delay(120)).toPromise();
+            const imageRender = <HTMLElement>(
+              document.getElementById('text-sign')
+            );
+
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(imageRender);
+              signI = this.textSignBase64Gen = textSignB.split(',')[1];
+            }
+          } else if (signUpdate.type == 3) {
+            await of(null).pipe(delay(150)).toPromise();
+
+            const imageRender = <HTMLElement>(
+              document.getElementById('export-html-hsm1')
+            );
+            if (imageRender) {
+              const textSignB = await domtoimage.toPng(imageRender);
+              signI = textSignB.split(',')[1];
+            }
+            
+          }
+
+          this.dataHsm = {
+               ma_dvcs: this.dataHsm.ma_dvcs,
+              username: this.dataHsm.username,
+              password: this.dataHsm.password,
+              password2: this.dataHsm.password2,
+              imageBase64: signI,
+          };
+
+            if (fileC && objSign.length) {
         const checkSign = await this.contractService.signHsm(
           this.dataHsm,
           this.recipientId
@@ -1823,7 +1891,10 @@ export class ConsiderContractComponent
             return true;
           }
         }
+        }
       }
+      return true;
+    }
     } else if (typeSignDigital == 5) {
       const objSign = this.isDataObjectSignature.filter(
         (signUpdate: any) =>
@@ -3050,7 +3121,7 @@ export class ConsiderContractComponent
       //lấy ảnh chữ ký usb token
       this.cardId = result.ma_dvcs.trim();
 
-      await of(null).pipe(delay(100)).toPromise();
+      // await of(null).pipe(delay(100)).toPromise();
       const imageRender = <HTMLElement>(
         document.getElementById('export-html-hsm1')
       );
@@ -3060,13 +3131,18 @@ export class ConsiderContractComponent
       }
 
       if (result) {
-        this.dataHsm = {
-          ma_dvcs: result.ma_dvcs,
-          username: result.username,
-          password: result.password,
-          password2: result.password2,
-          imageBase64: signI,
-        };
+        // this.dataHsm = {
+        //   ma_dvcs: result.ma_dvcs,
+        //   username: result.username,
+        //   password: result.password,
+        //   password2: result.password2,
+        //   imageBase64: signI,
+        // };
+
+        this.dataHsm.ma_dvcs = result.ma_dvcs;
+        this.dataHsm.username = result.username;
+        this.dataHsm.password = result.password;
+        this.dataHsm.password2 = result.password2;
 
         await this.signContractSubmit();
       }
