@@ -174,21 +174,24 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
   user: any;
   submit(action: string) {
 
-    this.contractService
-    .updateContractIsPushCeCA(this.datas.id, 0)
-    .subscribe(
-      (data) => {
-        this.SaveContract(action);
-      },
-      (error) => {
-        this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout(
-          'Có lỗi! Vui lòng liên hệ nhà phát triển để xử lý',
-          '',
-          3000
-        );
-      }
-    );
+    this.SaveContract(action);
+
+    
+    // this.contractService
+    // .updateContractIsPushCeCA(this.datas.id, 0)
+    // .subscribe(
+    //   (data) => {
+    //     this.SaveContract(action);
+    //   },
+    //   (error) => {
+    //     this.spinner.hide();
+    //     this.toastService.showErrorHTMLWithTimeout(
+    //       'Có lỗi! Vui lòng liên hệ nhà phát triển để xử lý',
+    //       '',
+    //       3000
+    //     );
+    //   }
+    // );
 
     // const data = {
     //   title: 'YÊU CẦU XÁC NHẬN',
