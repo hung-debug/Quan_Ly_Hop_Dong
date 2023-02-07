@@ -126,7 +126,7 @@ export class ForwardContractComponent implements OnInit {
      else if(this.isReqCardIdHsm && !String(this.myForm.value.card_id)) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
       return;
-    } else if(this.isReqCardIdHsm && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form)) {
+    } else if(this.isReqCardIdHsm && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.cardid)) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế', '', 3000);
       return;
     }
