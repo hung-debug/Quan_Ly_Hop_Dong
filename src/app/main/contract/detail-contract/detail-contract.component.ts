@@ -688,11 +688,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     if (this.datas && this.isDataObjectSignature && this.isDataObjectSignature.length) {
-    //   let arrSignConfig: any = [];
-    //   arrSignConfig = this.datas.is_data_object_signature;
-      // return this.datas.is_data_object_signature.filter(
-      //   (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived
-      // );
       return this.datas.is_data_object_signature;
     } else {
       return [];
@@ -877,8 +872,13 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           skipLocationChange: true
         });
       });
+    } else if(this.router.url.includes("forward")) {
+      this.router.navigate(['/main/c/receive/wait-processing']);
+      // console.log("go back ", this.statusLink);
+
+      // console.log("go back ", this._location);
+      // this._location.back();
     } else {
-      console.log("go back ");
       this._location.back();
     }
   }

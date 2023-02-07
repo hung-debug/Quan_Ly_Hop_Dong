@@ -89,7 +89,6 @@ export class ForwardContractComponent implements OnInit {
 
   changeTypeSign(e: any,) {
     this.login = e.target.value;
-    console.log("login ", this.login);
   }
 
   async onSubmit() {
@@ -202,7 +201,17 @@ export class ForwardContractComponent implements OnInit {
               , "", 3000);
               this.dialogRef.close();
               this.spinner.hide();
-              this.router.navigate(['/main/form-contract/detail/' + this.datas?.dataContract?.is_data_contract?.id]);
+              this.router.navigate(['/main/form-contract/detail/forward/' + this.datas?.dataContract?.is_data_contract?.id]);
+
+              // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                // this.router.navigate(['/main/form-contract/detail/' + this.datas?.dataContract?.is_data_contract?.id],
+                // {
+                //   queryParams: {
+                //     'filter_code': data.filter_code, 
+                //   },
+                //   skipLocationChange: true
+                // });
+              // });
             }
           }, error => {
             this.spinner.hide();

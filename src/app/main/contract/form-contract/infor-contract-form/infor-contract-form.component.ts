@@ -369,8 +369,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     if (this.listFileAttach.some((p: any) => p.filename != item.filename)) {
       this.listFileAttach = this.listFileAttach.filter((p: any) => p.filename != item.filename);
     }
-
-    console.log(this.isArrAttachFile_delete);
   }
 
 

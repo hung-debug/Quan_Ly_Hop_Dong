@@ -131,6 +131,14 @@ const routes: Routes = [
         component: DetailContractComponent,
       },
       {
+        path: 'form-contract/detail/forward/:id',
+        component: DetailContractComponent,
+      },
+      {
+        path: 'form-contract/detail/verify/:id',
+        component: DetailContractComponent,
+      },
+      {
         path: 'form-contract/:action',
         component: AddContractComponent,
       },

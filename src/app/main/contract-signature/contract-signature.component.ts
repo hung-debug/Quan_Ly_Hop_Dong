@@ -23,7 +23,6 @@ import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { DialogReasonCancelComponent } from './shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
 import { environment } from 'src/environments/environment';
-import { numberFormat } from 'highcharts';
 
 @Component({
   selector: 'app-contract',
@@ -99,60 +98,60 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      if (typeof params.filter_name != 'undefined' && params.filter_name) {
-        this.filter_name = params.filter_name;
-      } else {
-        this.filter_name = '';
-      }
-      if (typeof params.filter_type != 'undefined' && params.filter_type) {
-        this.filter_type = params.filter_type;
-      } else {
-        this.filter_type = '';
-      }
-      if (
-        typeof params.filter_contract_no != 'undefined' &&
-        params.filter_contract_no
-      ) {
-        this.filter_contract_no = params.filter_contract_no;
-      } else {
-        this.filter_contract_no = '';
-      }
-      if (
-        typeof params.filter_from_date != 'undefined' &&
-        params.filter_from_date
-      ) {
-        this.filter_from_date = params.filter_from_date;
-      } else {
-        this.filter_from_date = '';
-      }
-      if (
-        typeof params.filter_to_date != 'undefined' &&
-        params.filter_to_date
-      ) {
-        this.filter_to_date = params.filter_to_date;
-      } else {
-        this.filter_to_date = '';
-      }
-      if (
-        typeof params.contractStatus != 'undefined' &&
-        params.contractStatus
-      ) {
-        this.contractStatus = params.contractStatus;
-      } else {
-        this.contractStatus = '';
-      }
+    // this.route.queryParams.subscribe((params) => {
+    //   if (typeof params.filter_name != 'undefined' && params.filter_name) {
+    //     this.filter_name = params.filter_name;
+    //   } else {
+    //     this.filter_name = '';
+    //   }
+    //   if (typeof params.filter_type != 'undefined' && params.filter_type) {
+    //     this.filter_type = params.filter_type;
+    //   } else {
+    //     this.filter_type = '';
+    //   }
+    //   if (
+    //     typeof params.filter_contract_no != 'undefined' &&
+    //     params.filter_contract_no
+    //   ) {
+    //     this.filter_contract_no = params.filter_contract_no;
+    //   } else {
+    //     this.filter_contract_no = '';
+    //   }
+    //   if (
+    //     typeof params.filter_from_date != 'undefined' &&
+    //     params.filter_from_date
+    //   ) {
+    //     this.filter_from_date = params.filter_from_date;
+    //   } else {
+    //     this.filter_from_date = '';
+    //   }
+    //   if (
+    //     typeof params.filter_to_date != 'undefined' &&
+    //     params.filter_to_date
+    //   ) {
+    //     this.filter_to_date = params.filter_to_date;
+    //   } else {
+    //     this.filter_to_date = '';
+    //   }
+    //   if (
+    //     typeof params.contractStatus != 'undefined' &&
+    //     params.contractStatus
+    //   ) {
+    //     this.contractStatus = params.contractStatus;
+    //   } else {
+    //     this.contractStatus = '';
+    //   }
 
-      if (typeof params.page != 'undefined' && params.page) {
-        this.p = params.page;
-      }
+    //   if (typeof params.page != 'undefined' && params.page) {
+    //     this.p = params.page;
+    //   }
 
-      if (typeof params.organization_id != 'undefined' && params.organization_id) {
-        this.organization_id = params.organization_id;
-      } else {
-        this.organization_id = "";
-      }
-    });
+    //   if (typeof params.organization_id != 'undefined' && params.organization_id) {
+    //     this.organization_id = params.organization_id;
+    //   } else {
+    //     this.organization_id = "";
+    //   }
+    // });
     this.sub = this.route.params.subscribe((params) => {
       // this.action = params['action'];
       this.status = params['status'];
@@ -166,7 +165,7 @@ export class ContractSignatureComponent implements OnInit {
       this.getContractList();
     });
 
-    this.getDateTime();
+    // this.getDateTime();
   }
 
   async getDateTime() {

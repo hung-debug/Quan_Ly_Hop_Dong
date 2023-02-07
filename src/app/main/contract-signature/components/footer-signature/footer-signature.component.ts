@@ -123,30 +123,6 @@ export class FooterSignatureComponent implements OnInit {
     }
   }
 
-  @HostListener('window:popstate', ['$event'])
-  onPopState(event: any) {
-    this.actionBack();
-  }
-
-  actionBack() {
-    if(this.pageBefore) {
-      this.router.navigate(
-        ['main/c/receive/' + this.status,],
-        {
-          queryParams: { 
-            'page': this.pageBefore,
-          },
-        }
-      );
-    } else {
-      this._location.back();
-    }
-  }
-
-  endContract() {
-    this.actionBack();
-  }
-
   mobile: boolean = false;
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {

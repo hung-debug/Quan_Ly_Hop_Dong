@@ -175,7 +175,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       
       // @ts-ignore
-      styleCursor: true,
+      // styleCursor: true,
 
       listeners: {move: this.dragMoveListener, onend: this.showEventInfo},
       inertia: true,
