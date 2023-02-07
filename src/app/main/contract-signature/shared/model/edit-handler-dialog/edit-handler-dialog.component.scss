@@ -551,8 +551,11 @@
     outline: none;
     color: white;
     border: 1px solid #8B8B8B;
+    margin: 0 10px 0;
   }
   .footer-btn{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+    text-align: center; 
+    margin: 15px;
   }
