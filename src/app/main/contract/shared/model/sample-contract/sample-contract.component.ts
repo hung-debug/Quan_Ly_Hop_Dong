@@ -1260,8 +1260,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   element.font = isObjSign.font;
                 })
               }
-              
-            
             }
           });
         } else if(property == 'font_size') {
@@ -1279,8 +1277,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   element.font_size = isObjSign.font_size;
                 })
               }
-              
-            
             }
           });
         } else {
@@ -1327,8 +1323,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     element.email = data_name.email;
                   })
                 }
-                
-              
+          
               }
             });
           } 

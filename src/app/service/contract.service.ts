@@ -1064,7 +1064,7 @@ export class ContractService {
       .toPromise();
   }
 
-  signHsm(datas: any, recipientId: number) {
+  signHsm(datas: any, idContract: number) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1077,10 +1077,11 @@ export class ContractService {
       password: datas.password,
       password2: datas.password2,
       image_base64: datas.imageBase64,
+      fieldId: datas.fieldId
     });
 
     return this.http
-      .post<any>(this.signHsmUrl + recipientId, body, { headers: headers })
+      .post<any>(this.signHsmUrl + idContract, body, { headers: headers })
       .toPromise();
   }
 

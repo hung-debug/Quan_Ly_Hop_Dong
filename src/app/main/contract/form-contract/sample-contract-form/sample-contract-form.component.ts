@@ -1359,7 +1359,6 @@ export class SampleContractFormComponent implements OnInit {
                       element.email = data_name.email;
                     })
                   }
-            
                 }
               });
             } 
