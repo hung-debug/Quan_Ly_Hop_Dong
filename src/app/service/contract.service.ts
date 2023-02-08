@@ -1511,10 +1511,11 @@ export class ContractService {
     });
   }
 
-  getContractBatchList(file: any, idContractTemplate: any) {
+  getContractBatchList(file: any, idContractTemplate: any,ceca_push: any) {
     this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', file);
+    formData.append('ceca_push', ceca_push);
 
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
@@ -1525,6 +1526,7 @@ export class ContractService {
       { headers: headers }
     );
   }
+
 
   confirmContractBatchList(file: any, idContractTemplate: any, isCeCA: any) {
     this.getCurrentUser();
