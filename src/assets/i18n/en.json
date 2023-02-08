@@ -245,6 +245,7 @@
   "error.confirm-password-new.required": "Confirm password new is required",
   "error.confirm-password-new.incorrect": "Confirm password new is incorrect",
   "error.contract.name.required": "Contract name is required",
+  "error.ceca.required":"Do not leave the contract file push to the Ministry of Industry and Trade empty",
   "error.contract.file.required": "Contract file is required",
   "error.user.name.required": "Name is required",
   "error.user.email.required": "Email is required",
@@ -398,6 +399,7 @@
   "info.token": "Information in USB Token",
   "info.hsm":"Information in HSM",
   "enter.tax_code.cardId": "Enter tax code or card id",
+  "info.hsm":"Information in HSM",
   "enter.tax.code": "Enter tax code",
   "enter.cardId": "Enter card id",
   "cardId": "Card Id",
@@ -510,5 +512,6 @@
   "no":"No",
   "file.import.valid":"File import isn't in the correct format",
   "file.import.valid.result":"File import isn't in the correct format, please see the error message in the downloaded file",
-  "taxcode.out":"Please enter tax code/cardId outside the contract flow"
+  "taxcode.out":"Please enter tax code/cardId outside the contract flow",
+  "end":"End"
 }

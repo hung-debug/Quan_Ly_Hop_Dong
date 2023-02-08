@@ -65,6 +65,7 @@ export class MainComponent implements OnInit {
       data => {
         this.nameCurrentUser = data?.name;
       });
+
     this.dashboardService.getNotification(0, '', '', 5, '').subscribe(data => {
       this.numberNotification = data.total_elements;
     });

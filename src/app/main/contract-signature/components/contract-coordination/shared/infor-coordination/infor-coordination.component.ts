@@ -105,10 +105,11 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
   checkView: boolean = true;
 
+  sum: number[] = [];
+  top: any[]= [];
+
   constructor(
-    private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
-    private modalService: NgbModal,
     private dialog: MatDialog,
     private activeRoute: ActivatedRoute,
     private toastService: ToastService,
@@ -171,9 +172,18 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     }
 
     this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+
+    let scrollTop = Number(event.srcElement.scrollTop);
+
+    for(let i = 0; i < this.sum.length;i++) {
+      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
+        this.pageNum = Number(i+2);
+      }
+    }
   }
 
-
+  pageBefore: number;
+  status: any;
   getDataContractSignature() {
 
     let arr = this.convertToSignConfig();
@@ -189,13 +199,11 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       .subscribe(params => {
           this.recipientId = params.recipientId;
           this.view = params.view;
+          this.pageBefore = params.page;
+          this.status = params.status;
         }
       );
-    // this.contractService.getDetailContract(this.idContract).subscribe(rs => {
-    //   console.log(rs);
-    // this.isDataContract = rs[0];
-    // this.isDataFileContract = rs[1];
-    // this.isDataObjectSignature = rs[2];
+
     if (this.datas.is_data_contract &&
       this.datas.i_data_file_contract[1] &&
       this.datas.i_data_file_contract[1].length &&
@@ -279,10 +287,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
     // render pdf to canvas
     this.getPage();
     this.loaded = true;
-    // }, (res: any) => {
-    //   // @ts-ignore
-    //   this.handleError();
-    // })
   }
 
   handleError(error: any) {
@@ -333,6 +337,24 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
       setTimeout(() => {
         this.setPosition();
         this.eventMouseover();
+
+        for(let i = 0; i <= this.pageNumber;i++) {
+          this.top[i] = 0;
+
+          if(i < this.pageNumber)
+            this.sum[i] = 0;
+        }
+
+        for(let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-'+i);
+          this.top[i] = canvas.height;
+        }
+        
+
+        for(let i = 0; i < this.pageNumber; i++) {
+          this.top[i+1] += this.top[i];
+          this.sum[i] = this.top[i+1];
+        }
       }, 100)
     })
   }
@@ -506,9 +528,6 @@ export class InforCoordinationComponent implements OnInit, OnDestroy, AfterViewI
 
         this.objSignInfo.offsetWidth = parseInt(d.width);
         this.objSignInfo.offsetHeight = parseInt(d.height);
-        // this.signCurent.offsetWidth = d.offsetWidth;
-        // this.signCurent.offsetHeight = d.offsetHeight;
-        // console.log(this.signCurent)
 
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';

@@ -19,14 +19,23 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   @Input() datas: any;
   @Input() sign: any;
   @Input() view: any;
+  @Input() contractNoValue: boolean;
+  @Input() contractNoValueSign: string;
+
   @ViewChild('inputEditText') inputEditText: ElementRef;
+  @ViewChild('inputEditContractNo') inputEditContractNo: ElementRef;
+
 
   @Output('checkedChange') newItemEvent = new EventEmitter<string>();
+  @Output('contractNoValue') contractNoValueEvent = new EventEmitter<string>();
 
   checkShowEdit = false;
   currentUser: any;
   value: string;
   typeSignDigital: any;
+
+  contractNo: boolean = false;
+
   constructor(
     private dialog: MatDialog,
     private toastService: ToastService
@@ -154,6 +163,13 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     this.checkShowEdit = false;
   }
 
+  doneEditContractNoSign(sign: any) {
+    this.contractNoValue = false;
+    this.count++;
+    sign.valueSign = this.contractNoValueSign;
+    this.contractNoValueEvent.emit(this.contractNoValueSign);
+  }
+
   forWardContract() {
     const data = {
       title: 'CHUYỂN TIẾP',
@@ -171,16 +187,31 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     })
   }
 
+  onKey(event: any) {
+    // this.checkShowEdit = true;
+
+    // this.inputEditText.nativeElement.value = event.target.value;
+    // this.contractNo = event.target.value;
+
+    // console.log("this ", this.inputEditText.nativeElement.value);
+  }
+
   doEditText() {
     if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.checkShowEdit = !this.checkShowEdit;
+
       setTimeout(()=>{
         this.inputEditText.nativeElement.focus();
         this.newItemEvent.emit("text");
-      },0);
+      },100);
     }
   }
 
+  doEditContractNo() {
+    this.contractNoValue = !this.contractNoValue;
+  }
+
+  count: number = 0;
   getText(sign: any) {
     this.newItemEvent.emit("1");
     if (sign.sign_unit == 'text') {
@@ -195,7 +226,13 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
         return sign.value;
       } else if(sign.valueSign) {
         return sign.valueSign;
-      } 
+      } else if(this.contractNoValueSign) {
+        console.log("1 ",sign);
+        this.count++;
+        sign.valueSign = this.contractNoValueSign;
+        return sign.valueSign;
+
+      }
       return 'Số hợp đồng';
     }
   }

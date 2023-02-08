@@ -73,7 +73,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     x1: 0,
     y1: 0,
     height: 0,
-    width: 0
+    width: 0,
+    font: 'Times New Roman',
+    font_size: 13,
   }
 
   list_sign_name: any = [];
@@ -96,6 +98,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   selectedFont: any="";
   size: any;
 
+  sum: number[] = [];
+  top: any[]= [];
+
+  textSign: boolean = false;
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -111,14 +118,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnInit() {
     this.spinner.hide();
-
-    if(this.datas.font) {
-      this.selectedFont = this.datas.font;
-    }
-
-    if(this.datas.size) {
-      this.size = this.datas.size;
-    }
 
     this.list_font = ["Arial","Calibri","Times New Roman"];
 
@@ -173,8 +172,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     interact('.not-out-drop').on('dragend', this.showEventInfo).draggable({
+
+      
+      // @ts-ignore
+      // styleCursor: true,
+
       listeners: {move: this.dragMoveListener, onend: this.showEventInfo},
       inertia: true,
+
       modifiers: [
         interact.modifiers.restrictRect({
           restriction: '.drop-zone',
@@ -186,6 +191,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // //phong to thu nho o ky
     interact('.not-out-drop').on('resizeend', this.resizeSignature).resizable({
       edges: {left: true, right: true, bottom: true, top: true},
+  
       listeners: {
         move: this.resizableListener, onend: this.resizeSignature
       },
@@ -201,8 +207,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       inertia: true,
     })
 
-    // // event resize element
-    // //keo o ky
+    // // // event resize element
+    // // //keo o ky
     interact('.resize-drag').on('dragend', this.showEventInfo).draggable({
       listeners: {
         move: this.dragMoveListener,
@@ -219,35 +225,28 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
     interact.addDocument(document);
     
+
     if(this.datas.participants && this.datas.participants[0].recipients[0].fields.length > 0) {
       const font = this.datas.participants[0].recipients[0].fields[0].font;
       const font_size = this.datas.participants[0].recipients[0].fields[0].font_size;
   
-      if(font) {
+      if(font && !this.datas.font) {
         this.datas.font = font;
         this.selectedFont = this.datas.font;
-      }
-  
-      if(font_size) {
+
         this.datas.size = font_size;
         this.size = this.datas.size;
       }
+  
     }
 
     if(!this.datas.font) {
       this.datas.font = "Times New Roman";
       this.selectedFont = this.datas.font;
-    }
 
-    if(!this.datas.size) {
-      this.datas.size = 11;
+      this.datas.size = 13;
       this.size = this.datas.size;
-    }
-  }
-
-  changeFont($event: any) {
-    this.selectedFont = $event;
-    this.datas.font = $event;
+    } 
   }
 
   getDataSignUpdateAction() {
@@ -509,6 +508,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   width: any[] = [];
   height: any[] = [];
 
+  // elementSoHopDong: boolean = false;
+
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
     let canvasElement: HTMLElement | null;
@@ -531,7 +532,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               sign_unit: element.sign_unit,
               name: element.name,
               text_attribute_name: element.text_attribute_name,
-              required: 1
+              required: 1,
+              font: element.font,
+              font_size: element.font_size
             }
             if (element.sign_config.length == 0) {
               _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
@@ -623,7 +626,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           this.signCurent['top'] = (rect_location.top - canvasInfo.top).toFixed();
         }
         let name_accept_signature = '';
-        let field_data = [];
         
         // lay lai danh sach signer sau khi keo vao hop dong
         this.datas.contract_user_sign.forEach((res: any) => {
@@ -644,6 +646,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
+                  if(this.soHopDong && this.soHopDong.role == 4) {
+                    element.name = this.soHopDong.name;
+                  }
+
                   this.isChangeText = true;
                 } else {
                   this.isChangeText = false;
@@ -675,7 +681,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   this.list_sign_name.forEach((item: any) => {
                     item['selected'] = false;
                   })
-                  // document.getElementById('select-dropdown'). = 0;
                   // @ts-ignore
                   document.getElementById('select-dropdown').value = "";
                   this.objDrag[this.signCurent['id']].count = 2;
@@ -712,13 +717,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getCheckSignature(isSignType: any, listSelect?: string) {
-    // p.recipient_id == element.id && p.sign_unit == isSignType)
+
     this.list_sign_name.forEach((element: any) => {
-     
+      
       if (this.convertToSignConfig().some((p: any) => ((p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && (p.recipient ? p.recipient.email : p.email) && p.sign_unit == 'so_tai_lieu'))) {
         if (isSignType != 'text') {
-          element.is_disable = true;
-        }
+          if(isSignType == 'so_tai_lieu') {
+            element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
+          } else {
+            element.is_disable = true
+          }
+        } 
       } else {
         if (isSignType == 'chu_ky_anh') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
@@ -806,8 +815,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // view pdf qua canvas
   async getPage() {
-    console.log("sample contract ", this.datas);
-
     // @ts-ignore
     const pdfjs = await import('pdfjs-dist/build/pdf');
     // @ts-ignore
@@ -823,9 +830,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.arrPage.push({page: page});
         canvas.className = 'dropzone';
         canvas.id = "canvas-step3-" + page;
-        // canvas.style.paddingLeft = '15px';
-        // canvas.style.border = '9px solid transparent';
-        // canvas.style.borderImage = 'url(assets/img/shadow.png) 9 9 repeat';
+
         let idPdf = 'pdf-viewer-step-3'
         let viewer = document.getElementById(idPdf);
         if (viewer) {
@@ -837,6 +842,26 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       setTimeout(() => {
         this.setPosition();
         this.eventMouseover();
+
+        for(let i = 0; i <= this.pageNumber;i++) {
+          this.top[i] = 0;
+
+          if(i < this.pageNumber)
+            this.sum[i] = 0;
+        }
+
+        for(let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-'+i);
+          this.top[i] = canvas.height;
+        }
+        
+
+        for(let i = 0; i < this.pageNumber; i++) {
+          this.top[i+1] += this.top[i];
+          this.sum[i] = this.top[i+1];
+        }
+
+
       }, 100)
     })
   }
@@ -870,7 +895,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   ngAfterViewInit() {
     setTimeout(() => {
       // @ts-ignore
-      // document.getElementById('input-location-x').focus();
       let width_drag_element = document.getElementById('width-element-info');
       this.widthDrag = width_drag_element ? ((width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left) - 15) : '';
     }, 100)
@@ -879,9 +903,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   setClass(dataDrag: any) {
-    if (this.datas.contract_user_sign.some((p: any) => p.sign_unit == 'so_tai_lieu' && p.sign_config.length > 0) && dataDrag.sign_unit == 'so_tai_lieu') {
-      return 'none-drag';
-    } else return 'resize-drag'
+
+    return 'resize-drag';
   }
 
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
@@ -890,14 +913,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.convertToSignConfig().forEach((element: any) => {
         let a = document.getElementById(element.id);
         if (a) {
-          // if (element['position']) { // @ts-ignore
-          //   a.style["z-index"] = '1';
-          // }
+      
           if (element['coordinate_x'] && element['coordinate_y']) { // @ts-ignore
             a.style["z-index"] = '1';
           }
-          // else
-          //   a.style.display = 'none';
+
           a.setAttribute("data-x", element['coordinate_x']);
           a.setAttribute("data-y", element['coordinate_y']);
         }
@@ -1031,6 +1051,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
+    
+    if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
+      this.textSign = true;
+      this.list_font = ["Arial","Calibri","Times New Roman"];
+    } else {
+      this.textSign = false;
+      this.objSignInfo.font_size = 13;
+      d.font = 'Times New Roman';
+      this.list_font = [d.font];
+    }
+    
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
@@ -1044,26 +1075,54 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
-      // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
+
       if (isObjSign) {
         this.isEnableSelect = false;
         this.objSignInfo.traf_x = d.coordinate_x;
         this.objSignInfo.traf_y = d.coordinate_y;
-        // this.signCurent.name = d.name;
 
         this.objSignInfo.width = parseInt(d.width);
         this.objSignInfo.height = parseInt(d.height);
 
+        if(isObjSign.font) {
+          this.objSignInfo.font = isObjSign.font;
+        } else {
+          this.objSignInfo.font = 'Times New Roman';
+        }
+
+        if(isObjSign.font_size) {
+          this.objSignInfo.font_size = isObjSign.font_size;
+        } else {
+          this.objSignInfo.font_size = 13;
+        }
+
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
         if (this.isEnableText) {
-          this.objSignInfo.text_attribute_name = d.text_attribute_name
+            this.objSignInfo.text_attribute_name = d.text_attribute_name;
         }
-        this.getCheckSignature(d.sign_unit, d.name);
 
-        if (!d.name) //@ts-ignore
+        if(this.router.url.includes("edit")) {
+          if(d.recipient)
+            this.getCheckSignature(d.sign_unit, d.recipient.name);
+          else
+            this.getCheckSignature(d.sign_unit, d.name);
+        } else {
+          this.getCheckSignature(d.sign_unit, d.name);
+        }
+
+        if (!d.name) {
+          //@ts-ignore
           document.getElementById('select-dropdown').value = "";
-
+        } else {
+          if(d.recipient_id) {
+            //@ts-ignore
+            document.getElementById('select-dropdown').value = d.recipient_id;
+          } else {
+            //@ts-ignore
+            document.getElementById('select-dropdown').value = "";
+          }
+        }
       }
     }
   }
@@ -1071,6 +1130,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
+    this.isChangeText = false;
     if (data.id_have_data) {
       this.spinner.show();
       await this.contractService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
@@ -1124,6 +1184,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.eventMouseover();
       this.cdRef.detectChanges();
     }
+
   }
 
   // Hàm tạo các đối tượng kéo thả
@@ -1158,8 +1219,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   // edit location doi tuong ky
+
+  soHopDong: any;
   changePositionSign(e: any, locationChange: any, property: any) {
-    // console.log(e, this.objSignInfo, this.signCurent);
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
@@ -1183,9 +1245,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         } else if (property == 'text') {
           isObjSign.text_attribute_name = e;
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
+        } else if (property == 'font') {
+          isObjSign.font = e.target.value;
+          signElement.setAttribute("font", isObjSign.font);
+        } else if(property == 'font_size') {
+          isObjSign.font_size = e.target.value;
+          signElement.setAttribute("font_size", isObjSign.font_size);
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
-          // if (data_name && !isObjSign.name) {
+
           if (data_name) {
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
@@ -1206,9 +1274,36 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             signElement.setAttribute("email", isObjSign.email);
 
           }
+
+          if(data_name.role == 4 && this.isChangeText) {
+            this.soHopDong = data_name;
+
+            //Gán lại tất cả số hợp đồng cho một người ký
+            this.datas.contract_user_sign.forEach((res: any) => {
+              if (res.sign_config.length > 0) {
+                let arrSignConfigItem: any = "";
+
+                if(res.sign_unit == 'so_tai_lieu') {
+                  arrSignConfigItem = res.sign_config;
+
+                  arrSignConfigItem.forEach((element: any) => {
+                    console.log("el ", element);
+                    element.name = this.soHopDong.name;
+                    element.signature_party = data_name.type_unit;
+                    element.recipient_id = data_name.id;
+                    element.status = data_name.status;
+                    element.type = data_name.type;
+                    element.email = data_name.email;
+                  })
+                }
+                
+              
+              }
+            });
+          } 
         }
-      }
-    }
+      } 
+    } 
   }
 
 
@@ -1230,8 +1325,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async next(action: string) {
-    this.datas.font = this.selectedFont;
-    this.datas.size = this.size;
     if (action == 'next_step' && !this.validData()) {
 
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -1695,6 +1788,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   scroll(event: any) {
+
     //đổi màu cho nút back page
     let canvas1: any = document.getElementById('canvas-step3-1');
 
@@ -1713,7 +1807,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       this.pageLast = false;
     }
 
+    let scrollTop = Number(event.srcElement.scrollTop);
+
     this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+
+    for(let i = 0; i < this.sum.length;i++) {
+      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
+        this.pageNum = Number(i+2);
+      }
+    }
   }
 
 

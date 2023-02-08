@@ -28,19 +28,16 @@ export class PreviewSignContractTemplateComponent implements OnInit {
         return sign.text_attribute_name
       } else
         return 'Text';
-    } else {
-      if (this.datas.contract_no) {
-        return this.datas.contract_no
-      } else if (sign.value) {
-        return sign.value;
-      } else return (this.translate.instant('contract.number'));
+    } else  {
+       return (this.translate.instant('contract.number'));
     }
   }
 
-  getStyleText() {
+  getStyleText(sign: any) {
+    console.log("sign ", sign);
     return {
-      'font-size': this.datas.size+'px',
-      'font':this.datas.font
+      'font-size': sign.font_size+'px',
+      'font':sign.font
     };
   }
 

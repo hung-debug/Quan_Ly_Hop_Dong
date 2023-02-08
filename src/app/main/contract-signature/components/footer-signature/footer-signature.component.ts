@@ -1,17 +1,14 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, HostListener} from '@angular/core';
 import {variable} from "../../../../config/variable";
-import {
-  ProcessingHandleEcontractComponent
-} from "../../shared/model/processing-handle-econtract/processing-handle-econtract.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ForwardContractComponent} from "../../shared/model/forward-contract/forward-contract.component";
 import {ContractService} from "../../../../service/contract.service";
 import {DisplayDigitalSignatureComponent} from "../../display-digital-signature/display-digital-signature.component";
 import { ToastService } from 'src/app/service/toast.service';
 import {DeviceDetectorService} from "ngx-device-detector";
-import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import {  Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-footer-signature',
@@ -33,7 +30,9 @@ export class FooterSignatureComponent implements OnInit {
 
   @Input() pageNum: number;
 
+  @Input() pageBefore: number;
 
+  @Input() status: any;
 
   is_show_coordination: boolean = false;
   is_data_coordination: any;
@@ -52,14 +51,17 @@ export class FooterSignatureComponent implements OnInit {
   pageRendering:any;
   pageNumPending: any = null;
 
+  email: string="email";
+  phone: string="phone";
+
   constructor(
     private dialog: MatDialog,
     private contractService: ContractService,
     private toastService: ToastService,
     private deviceService: DeviceDetectorService,
-    private userService: UserService,
     private unitService: UnitService,
     private router: Router,
+    private _location: Location
   ) {
   }
 
@@ -119,7 +121,6 @@ export class FooterSignatureComponent implements OnInit {
        
       }
     }
-   
   }
 
   mobile: boolean = false;
@@ -162,10 +163,6 @@ export class FooterSignatureComponent implements OnInit {
     });
 
     let pdffull: any = document.getElementById('pdf-full');
-
-    console.log("scroll ", this.confirmSignature);
-
-    console.log("co ", this.coordinateY);
 
     if (this.confirmSignature == 1 || this.confirmSignature == 3) {
       pdffull.scrollTo(0, this.coordinateY[this.indexY]);
@@ -269,10 +266,7 @@ export class FooterSignatureComponent implements OnInit {
             this.router.navigate(['/main/dashboard']);
             return
           };
-          
-          console.log("this.currentUser.email", this.currentUser.email);
-          console.log("this.emailRecipients", this.emailRecipients);
-        
+       
       if (this.is_data_coordination) { // chỉ lấy dữ liệu của người điều phối
         if (this.is_data_coordination['recipients']) {
           let dataCoordination = this.is_data_coordination['recipients'].filter((p: any) => p.role == 1)[0]; // get dữ liệu người điều phối
@@ -413,7 +407,7 @@ export class FooterSignatureComponent implements OnInit {
     }
     // @ts-ignore
     const dialogRef = this.dialog.open(ForwardContractComponent, {
-      width: '450px',
+      width: '500px',
       backdrop: 'static',
       keyboard: true,
       data
@@ -438,7 +432,7 @@ export class FooterSignatureComponent implements OnInit {
     }
     // @ts-ignore
     const dialogRef = this.dialog.open(ForwardContractComponent, {
-      width: '450px',
+      width: '500px',
       backdrop: 'static',
       keyboard: true,
       data

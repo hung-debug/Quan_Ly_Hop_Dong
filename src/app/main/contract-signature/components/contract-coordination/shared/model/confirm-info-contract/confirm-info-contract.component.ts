@@ -177,8 +177,8 @@ export class ConfirmInfoContractComponent implements OnInit {
     let isErrorNotId = false;
     if (dataSignNotId.length > 0) {
       dataSignNotId.forEach((item: any) => {
-        item['font'] = this.datas.font;
-        item['font_size'] = this.datas.size;
+        item['font'] = 'Times New Roman';
+        item['font_size'] = 13;
         item['contract_id'] = this.datas.data_contract_document_id.contract_id;
         item['document_id'] = this.datas.data_contract_document_id.document_id;
         if (item.text_attribute_name) {

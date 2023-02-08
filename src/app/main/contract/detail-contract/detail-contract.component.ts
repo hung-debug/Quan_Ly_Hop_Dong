@@ -1,10 +1,8 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, QueryList, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { throwError } from 'rxjs';
 import { AppService } from 'src/app/service/app.service';
-import { ContractSignatureService } from 'src/app/service/contract-signature.service';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UploadService } from 'src/app/service/upload.service';
@@ -17,6 +15,9 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { DomSanitizer } from '@angular/platform-browser';
 import {TranslateService} from '@ngx-translate/core';
 import { CheckViewContractService } from 'src/app/service/check-view-contract.service';
+
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-detail-contract',
@@ -117,6 +118,21 @@ export class DetailContractComponent implements OnInit, OnDestroy {
 
   consider: boolean = false;
 
+  sum: number[] = [];
+  top: any[]= [];
+
+  pageBefore: number;
+
+  filter_name: any;
+  filter_type: any;
+  filter_contract_no: any;
+  filter_from_date: any;
+  filter_to_date: any;
+  isOrg: any;
+  organization_id: any;
+
+  statusLink: any;
+
   constructor(
     private contractService: ContractService,
     private checkViewContractService: CheckViewContractService,
@@ -130,12 +146,59 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
     public translate: TranslateService,
+    private _location: Location
   ) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
   async ngOnInit(): Promise<void> {
     this.getDeviceApp();
+
+    this.route.queryParams.subscribe(params => {
+        this.pageBefore = params.page;
+
+        if (typeof params.filter_name != 'undefined' && params.filter_name) {
+          this.filter_name = params.filter_name;
+        } else {
+          this.filter_name = "";
+        }
+        if (typeof params.filter_type != 'undefined' && params.filter_type) {
+          this.filter_type = params.filter_type;
+        } else {
+          this.filter_type = "";
+        }
+        if (typeof params.filter_contract_no != 'undefined' && params.filter_contract_no) {
+          this.filter_contract_no = params.filter_contract_no;
+        } else {
+          this.filter_contract_no = "";
+        }
+        if (typeof params.filter_from_date != 'undefined' && params.filter_from_date) {
+          this.filter_from_date = params.filter_from_date;
+        } else {
+          this.filter_from_date = "";
+        }
+        if (typeof params.filter_to_date != 'undefined' && params.filter_to_date) {
+          this.filter_to_date = params.filter_to_date;
+        } else {
+          this.filter_to_date = "";
+        }
+        if (typeof params.isOrg != 'undefined' && params.isOrg) {
+          this.isOrg = params.isOrg;
+        } else {
+          this.isOrg = "";
+        }
+        if (typeof params.organization_id != 'undefined' && params.organization_id) {
+          this.organization_id = params.organization_id;
+        } else {
+          this.organization_id = "";
+        }
+
+        if (typeof params.status != 'undefined' && params.status) {
+          this.statusLink = params.status;
+        } else {
+          this.statusLink = "";
+        }
+    });
 
     this.appService.setTitle(this.translate.instant('contract.detail'));
 
@@ -147,6 +210,12 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/page-not-found']);
     }
+  }
+
+  
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event: any) {
+    this.actionBack();
   }
   
   firstPageMobile() {
@@ -389,6 +458,24 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.setPosition();
         this.eventMouseover();
+
+        for(let i = 0; i <= this.pageNumber;i++) {
+          this.top[i] = 0;
+
+          if(i < this.pageNumber)
+            this.sum[i] = 0;
+        }
+
+        for(let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-'+i);
+          this.top[i] = canvas.height;
+        }
+        
+
+        for(let i = 0; i < this.pageNumber; i++) {
+          this.top[i+1] += this.top[i];
+          this.sum[i] = this.top[i+1];
+        }
       }, 100)
     })
   }
@@ -601,11 +688,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
     if (this.datas && this.isDataObjectSignature && this.isDataObjectSignature.length) {
-    //   let arrSignConfig: any = [];
-    //   arrSignConfig = this.datas.is_data_object_signature;
-      // return this.datas.is_data_object_signature.filter(
-      //   (item: any) => item?.recipient?.email === this.currentUser.email && item?.recipient?.role === this.datas?.roleContractReceived
-      // );
       return this.datas.is_data_object_signature;
     } else {
       return [];
@@ -750,13 +832,62 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
   }
 
+  endContract() {
+    this.actionBack();
+  }
+
+  actionBack() {
+    console.log("p ", this.pageBefore);
+    if(this.pageBefore && this.isOrg) {
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate(['/main/contract/create/' + this.statusLink],
+        {
+          queryParams: {
+            'page': this.pageBefore,
+            'filter_type': this.filter_type, 
+            'filter_contract_no': this.filter_contract_no,
+            'filter_from_date': this.filter_from_date,
+            'filter_to_date': this.filter_to_date,
+            'isOrg': this.isOrg,
+            'organization_id': this.organization_id,
+            'status': this.statusLink
+          },
+          skipLocationChange: true
+        });
+      });
+    } else if(this.pageBefore) {
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate(['/main/c/receive/' + this.statusLink],
+        {
+          queryParams: {
+            'page': this.pageBefore,
+            'filter_type': this.filter_type, 
+            'filter_contract_no': this.filter_contract_no,
+            'filter_from_date': this.filter_from_date,
+            'filter_to_date': this.filter_to_date,
+            'isOrg': this.isOrg,
+            'organization_id': this.organization_id,
+            'status': this.statusLink
+          },
+          skipLocationChange: true
+        });
+      });
+    } else if(this.router.url.includes("forward")) {
+      this.router.navigate(['/main/c/receive/wait-processing']);
+      // console.log("go back ", this.statusLink);
+
+      // console.log("go back ", this._location);
+      // this._location.back();
+    } else {
+      this._location.back();
+    }
+  }
+
   mobile: boolean = false;
   getDeviceApp() {
     if (this.deviceService.isMobile() || this.deviceService.isTablet()) {
-      console.log("la mobile ");
       this.mobile = true;
     } else {
-      console.log("la pc");
       this.mobile = false;
     }
   }
@@ -771,10 +902,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     dialogConfig.width = '497px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
-    // const dialogRef = this.dialog.open(ConfirmSignOtpComponent, dialogConfig);
-    // dialogRef.afterClosed().subscribe((result: any) => {
-    //   this.openPopupSignContract(this.typeSign);
-    // })
   }
 
   openPopupSignContract(typeSign: any) {
@@ -1169,6 +1296,14 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     }
 
     this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+
+    let scrollTop = Number(event.srcElement.scrollTop);
+
+    for(let i = 0; i < this.sum.length;i++) {
+      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
+        this.pageNum = Number(i+2);
+      }
+    }
   }
 
 }

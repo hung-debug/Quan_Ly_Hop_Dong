@@ -346,6 +346,60 @@
   border-radius: 5px; 
 }
 
+.handle {
+  position: absolute;
+  background-color: orange;
+}
+.top-left {
+  width: 10px;
+  height: 5px;
+  top: 0;
+}
+.left-top {
+  width: 5px;
+  height: 10px;
+  top: 0;
+  background-color: red;
+}
+.top-right {
+  width: 10px;
+  height: 5px;
+  top: 0;
+  right: 0;
+}
+.right-top {
+  width: 5px;
+  height: 10px;
+  top: 0;
+  right: 0;
+  background-color: red;
+}
+
+.bottom-left {
+  width: 10px;
+  height: 5px;
+  bottom: 0;
+}
+.left-bottom {
+  width: 5px;
+  height: 10px;
+  bottom: 0;
+  background-color: red;
+}
+.bottom-right {
+  width: 10px;
+  height: 5px;
+  bottom: 0;
+  right: 0;
+}
+.right-bottom {
+  width: 5px;
+  height: 10px;
+  bottom: 0;
+  right: 0;
+  background-color: red;
+}
+
 @media screen and (min-width:1224px) and (max-width:1280px){
     .sample-contract{
         height: calc(100vh - 260px);

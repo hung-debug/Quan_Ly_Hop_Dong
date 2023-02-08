@@ -176,22 +176,18 @@ export class DashboardComponent implements OnInit {
     }
     this.organization_id = this.selectedNodeOrganization?this.selectedNodeOrganization.data:"";
     this.dashboardService.countContractCreate(this.isOrg, this.organization_id, this.filter_from_date, this.filter_to_date).subscribe(data => {
-      console.log("daaaaaaaaa", data);
       let newData = Object.assign( {}, data)
-      console.log("isorgggg", this.isOrg);
       newData.isOrg = this.isOrg;
       newData.organization_id = this.organization_id;
       newData.from_date = this.filter_from_date;
       newData.to_date = this.filter_to_date;
-      console.log('newData',newData);
       
       this.totalCreate = newData.total_process + newData.total_signed + newData.total_reject + newData.total_cancel + newData.total_expires;
-      console.log('this.totalCreate',this.totalCreate);
 
       if(localStorage.getItem('lang') == 'vi' || sessionStorage.getItem('lang') == 'vi')
-        this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", data);
+        this.createChart("Đang xử lý","Hoàn thành","Từ chối","Huỷ bỏ", "Quá hạn", "Số lượng", newData);
       else if(localStorage.getItem('lang') == 'en' || sessionStorage.getItem('lang') == 'en')
-        this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", data);     
+        this.createChart("Processing","Complete","Reject","Cancel","Out of date", "Number", newData);     
     });
   }
 

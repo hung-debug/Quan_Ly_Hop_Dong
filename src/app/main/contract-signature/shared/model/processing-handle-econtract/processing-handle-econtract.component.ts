@@ -22,7 +22,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   currentUser: any;
   // recipient:any;
   listCheckSmsEmail: any;
-  contractStatus: string;
+  contractStatus: number;
   endDate: any;
   reasonCancel: string;
   cancelDate: any;
@@ -56,9 +56,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
   lang: string;
   ngOnInit(): void {
-
-    console.log("aaa ", sessionStorage.getItem('lang'));
-
     if (sessionStorage.getItem('lang') == 'vi') {
       this.lang = 'vi';
     } else if (sessionStorage.getItem('lang') == 'en') {
@@ -67,10 +64,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     this.contractService.getDetailContract(this.data.is_data_contract.id).subscribe(response => {
       this.endDate = moment(response[0].sign_time, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
       let timeNow = moment(new Date(), "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
-
-      // console.log("SUABc 1", moment(timeNow, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss"))
-      // console.log("SUABc 2", moment(this.endDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss"))
-      // console.log("SUABc 3", moment(this.endDate, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss") >= moment(timeNow, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss"))
 
       this.isEndDate = this.endDate >= timeNow ? true : false
     })
@@ -91,14 +84,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else {
         this.isHiddenButton = false;
       }
-      console.log("this.currentUser.email", this.currentUser.email);
-      console.log("emailCreate", this.emailCreate);
-      console.log("this.contractStatus", this.contractStatus);
-      console.log("this.cancelDate", this.cancelDate);
-
-
-
-      console.log("ishidden", this.isHiddenButton);
 
       response.recipients.forEach((element: any) => {
         let data = {
@@ -115,21 +100,9 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         }
         this.is_list_name.push(data);
       })
-      console.log("dataaaaaa", this.is_list_name);
-
-
-
 
 
       this.listCheckSmsEmail = true
-      // this.is_list_name.map((item: any) => {
-      //   if (item.statusNumber === 3 || item.statusNumber === 34) {
-      //     console.log(" item.statusNumber", item.statusNumber);
-
-      //     this.listCheckSmsEmail = false
-      //   }
-      // });
-
 
       if (response.contractStatus === 31 || response.contractStatus === 34 || response.contractStatus === 0) {
         this.listCheckSmsEmail = false
@@ -150,8 +123,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   checkStatusUser(status: any, role: any) {
     let res = '';
 
-    console.log("lang ", this.lang);
-
     if (this.lang == 'vi' || !this.lang) {
       if (status == 3) {
         return 'Đã từ chối';
@@ -169,7 +140,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
         res += 'Đã ';
       }
 
-      if (!this.reasonCancel) {
+      // if (!this.reasonCancel) {
         if (role == 1) {
           res += 'điều phối';
         } else if (role == 2) {
@@ -178,11 +149,10 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           res += 'ký';
         } else if (role == 4) {
           res = res + ' đóng dấu';
-        }
-      } else {
+      } else 
         if (!res.includes('Đã'))
           res = 'Đã huỷ'
-      }
+      // }
     } else if (this.lang == 'en') {
       if (status == 3) {
         return 'Rejected';
@@ -239,16 +209,14 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       width: '600px',
       data
     })
-    console.log("ly do tu choi hd", data);
     dialogRef.afterClosed().subscribe((result: any) => {
       console.log('the close dialog');
     })
   }
 
-  resendSmsEmail(recipient: any) {
+  resendSmsEmail(id: any) {
     let responseSmsEmail: any;
-    this.contractService.resendSmsEmail(recipient).subscribe((responseSmsEmail) => {
-      console.log("data success", responseSmsEmail);
+    this.contractService.resendSmsEmail(id).subscribe((responseSmsEmail) => {
 
       if (responseSmsEmail.success == true) {
         this.toastService.showSuccessHTMLWithTimeout((this.translate.instant('send.sms.email')), "", 3000);
@@ -264,7 +232,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     this.contractService.getInforPersonProcess(recipient).subscribe((response) => {
       let data: any;
       data = response
-      // console.log("response",response);
 
       const dialogRef = this.dialog.open(EditHandlerComponent, {
         width: '1000px',
@@ -277,7 +244,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
         this.is_list_name = this.is_list_name.map((x: any) => {
           if (x.id === result.id) {
-            console.log('the close dialog 1.1', x);
             return {
               ...x, name: result.name,
               emailRecipients: result.email,
@@ -285,7 +251,6 @@ export class ProcessingHandleEcontractComponent implements OnInit {
           }
           return x
         })
-        console.log('the close   1', this.is_list_name);
       })
     })
 

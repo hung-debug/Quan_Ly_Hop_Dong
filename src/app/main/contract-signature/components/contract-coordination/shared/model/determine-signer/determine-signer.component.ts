@@ -155,6 +155,10 @@ export class DetermineSignerComponent implements OnInit {
     return data.sign_type.filter((p: any) => p.id == 2);
   }
 
+  getDataSignHsm(data: any) {
+    return data.sign_type.filter((p: any) => p.id == 4);
+  }
+
   getApiDetermine() {
     if (!this.validData()) return;
     this.is_determine_clone.forEach((items: any, index: number) => {
@@ -254,8 +258,22 @@ export class DetermineSignerComponent implements OnInit {
             break;
           }
 
-          if(dataArrPartner[j].recipients[k].card_id && !this.pattern.card_id.test(dataArrPartner[j].recipients[k].card_id) && !this.parttern_input.taxCode_form.test(dataArrPartner[j].recipients[k].card_id) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
+          if(dataArrPartner[j].recipients[k].card_id && !this.pattern.card_id9.test(dataArrPartner[j].recipients[k].card_id) && 
+            !this.pattern.card_id12.test(dataArrPartner[j].recipients[k].card_id) &&
+            !this.parttern_input.taxCode_form.test(dataArrPartner[j].recipients[k].card_id) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 2).length > 0) {
             this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObject(3) + "của đối tác không hợp lệ");
+            count++;
+            break;
+          }
+
+          if(!dataArrPartner[j].recipients[k].card_id && (dataArrPartner[j].recipients[k].role == 3) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
+            this.getNotificationValid("Vui lòng nhập MST của"+this.getNameObject(3)+"của đối tác");
+            count++;
+            break;
+          }
+
+          if(dataArrPartner[j].recipients[k].card_id && !this.parttern_input.taxCode_form.test(dataArrPartner[j].recipients[k].card_id) && dataArrPartner[j].recipients[k].sign_type.filter((p: any) => p.id == 4).length > 0) {
+            this.getNotificationValid("Mã số thuế" + this.getNameObject(3) + "của đối tác không hợp lệ");
             count++;
             break;
           }

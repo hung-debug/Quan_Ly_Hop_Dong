@@ -72,7 +72,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     x1: 0,
     y1: 0,
     height: 0,
-    width: 0
+    width: 0,
+    font: 'Times New Roman',
+    font_size: 13,
   }
 
   list_sign_name: any = [];
@@ -95,6 +97,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   size: any;
 
   data_sign: any;
+
+  sum: number[] = [];
+  top: any[]= [];
+
+  textSign: boolean = false;
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -215,26 +222,23 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       const font = this.datas.participants[0].recipients[0].fields[0].font;
       const font_size = this.datas.participants[0].recipients[0].fields[0].font_size;
   
-      if(font) {
+      if(font && !this.datas.font) {
         this.datas.font = font;
         this.selectedFont = this.datas.font;
-      }
-  
-      if(font_size) {
+
         this.datas.size = font_size;
         this.size = this.datas.size;
       }
+  
     }
 
     if(!this.datas.font) {
       this.datas.font = "Times New Roman";
       this.selectedFont = this.datas.font;
-    }
 
-    if(!this.datas.size) {
-      this.datas.size = 11;
+      this.datas.size = 13;
       this.size = this.datas.size;
-    }
+    } 
    
 
   }
@@ -267,7 +271,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             if (res.type == 4) {
               res['sign_unit'] = 'so_tai_lieu'
             }
-            res.name = res.recipient.name;
+            // res.name = res.recipient.name;
             res.email = res.recipient.email;
             dataPosition.push(res);
           })
@@ -308,9 +312,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     // let data_sign_position = dataPosition.filter((p: any) => p.role != 1);
     // let dataNotSignPosition = dataNotPosition.filter((p: any) => p.role != 1);
     this.dataSignPosition = [...dataPosition, ...dataNotPosition, ...dataNotAssign];
-    console.log("this.dataSignPosition");
-    console.log(this.dataSignPosition);
-
 
     this.dataSignPosition.forEach((res: any) => {
       if (res.sign_unit == 'text') {
@@ -336,9 +337,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         Array.prototype.push.apply(element.sign_config, data_sign_config_cka);
       }
     })
-    console.log(data_sign_config_text);
-    console.log("console.log(this.datas.contract_user_sign);");
-    console.log(this.datas.contract_user_sign);
   }
 
   defindDataContract() {
@@ -545,6 +543,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   }
 
+  soHopDong: any;
   // Hàm showEventInfo là event khi thả (nhả click chuột) đối tượng ký vào canvas, sẽ chạy vào hàm.
   showEventInfo = (event: any) => {
     let canvasElement: HTMLElement | null;
@@ -634,10 +633,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           // @ts-ignore
           _sign.style["z-index"] = '1';
           this.isEnableSelect = false;
-
-          // show toa do keo tha chu ky (demo)
-          // this.location_sign_x = this.signCurent['coordinate_x'];
-          // this.location_sign_y  = this.signCurent['coordinate_y'];
         }
 
         this.objSignInfo.traf_x = Math.round(this.signCurent['coordinate_x']);
@@ -671,6 +666,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
+                  if(this.soHopDong) {
+                    element.name = this.soHopDong.name;
+                  }
                   this.isChangeText = true;
                 } else {
                   this.isChangeText = false;
@@ -739,22 +737,26 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   getCheckSignature(isSignType: any, listSelect?: string, recipient_id?:any) {
-    // p.recipient_id == element.id && p.sign_unit == isSignType)
-
     this.list_sign_name.forEach((element: any) => {
       console.log(element);
       if (isSignType != 'text' && (element.fields && element.fields.length && element.fields.length > 0) && element.fields.some((field: any) => field.sign_unit == isSignType)) {
         let data = this.convertToSignConfig().filter((isName: any) => element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
         
-        if (data.length >= 0)
+        if (data.length >= 0) {
           element.is_disable = true;
-        else element.is_disable = false;
-        //element.is_disable = false;
+        } else  {
+          element.is_disable = false;
+        }
       } else {
-
         if (isSignType != 'text' && this.convertToSignConfig().some((p: any) => ((element.email && p.email == element.email) || (element.id && p.recipient_id == element.id)) && p.sign_unit == isSignType)) {
-          console.log("a");
-          element.is_disable = true;
+          if(isSignType == 'so_tai_lieu') {
+            element.is_disable = false;
+          } else {
+            element.is_disable = true
+          }
+
+          console.log("is ", isSignType);
+          // console.log("vao day  ");
         } else {
           if (isSignType == 'chu_ky_anh') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 1 || p.id == 5) && element.role != 2);
@@ -763,14 +765,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           } else if (isSignType == 'text') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
           } else element.is_disable = element.role != 4;
-          console.log(element.is_disable);
         }
       }
       
-
       console.log(isSignType);
       if (recipient_id || listSelect) {
-        element.selected = (recipient_id?element.id==recipient_id:element.name == listSelect);
+        // element.is_disable = false;
+        element.selected = (recipient_id ? element.id==recipient_id: element.name == listSelect);
       }
     })
   }
@@ -868,6 +869,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       setTimeout(() => {
         this.setPosition();
         this.eventMouseover();
+
+        for(let i = 0; i <= this.pageNumber;i++) {
+          this.top[i] = 0;
+
+          if(i < this.pageNumber)
+            this.sum[i] = 0;
+        }
+
+        for(let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-'+i);
+          this.top[i] = canvas.height;
+        }
+        
+
+        for(let i = 0; i < this.pageNumber; i++) {
+          this.top[i+1] += this.top[i];
+          this.sum[i] = this.top[i+1];
+        }
       }, 100)
     })
   }
@@ -1078,6 +1097,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   // get select người ký
   getSignSelect(d: any) {
+
+    if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
+      this.textSign = true;
+      this.list_font = ["Arial","Calibri","Times New Roman"];
+    } else {
+      this.textSign = false;
+      this.objSignInfo.font_size = 13;
+      d.font = 'Times New Roman';
+      this.list_font = [d.font];
+    }
+
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
@@ -1107,18 +1137,40 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
+
         if (this.isEnableText) {
           this.objSignInfo.text_attribute_name = d.text_attribute_name
         }
 
+        if(isObjSign.font) {
+          this.objSignInfo.font = isObjSign.font;
+        } else {
+          this.objSignInfo.font = 'Times New Roman';
+        }
+
+        if(isObjSign.font_size) {
+          this.objSignInfo.font_size = isObjSign.font_size;
+        } else {
+          this.objSignInfo.font_size = 13;
+        }
+
+        // console.log("sd ",document.getElementById('select-dropdown').value);
         this.getCheckSignature(d.sign_unit, d.name, d.recipient_id);
 
-        if (!d.name) //@ts-ignore
+        if (!d.name) {
+          //@ts-ignore
           document.getElementById('select-dropdown').value = "";
-
+        } else {
+          if(d.recipient_id) {
+            //@ts-ignore
+            document.getElementById('select-dropdown').value = d.recipient_id;
+          } else {
+            //@ts-ignore
+            document.getElementById('select-dropdown').value = "";
+          }
+        }
       }
     }
-    console.log(this.datas.contract_user_sign);
   }
 
 
@@ -1239,10 +1291,17 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         } else if (property == 'text') {
           isObjSign.text_attribute_name = e;
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
+        } else if (property == 'font') {
+          console.log("e ", e.target.value);
+          isObjSign.font = e.target.value;
+          signElement.setAttribute("font", isObjSign.font);
+        } else if(property == 'font_size') {
+          isObjSign.font_size = e.target.value;
+          signElement.setAttribute("font_size", isObjSign.font_size); 
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
-          // if (data_name && !isObjSign.name) {
           if (data_name) {
+
             isObjSign.name = data_name.name;
             signElement.setAttribute("name", isObjSign.name);
 
@@ -1257,6 +1316,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             isObjSign.email = data_name.email;
             signElement.setAttribute("email", isObjSign.email);
+
+            if(data_name.role == 4 && this.isChangeText) {
+              this.soHopDong = data_name;
+
+              this.datas.contract_user_sign.forEach((res: any) => {
+                if (res.sign_config.length > 0) {
+                  let arrSignConfigItem = res.sign_config;
+                  
+                  arrSignConfigItem.forEach((element: any) => {
+                    // console.log("el ", element);
+                    element.name = this.soHopDong.name;
+                  })
+                }
+              });
+            } 
 
           }
 
@@ -1282,6 +1356,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   async next(action: string) {
     this.datas.font = this.selectedFont;
+    console.log("font ", this.datas.font);
     this.datas.size = this.size;
     if (action == 'next_step' && !this.validData()) {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -1806,6 +1881,14 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     }
 
     this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+
+    let scrollTop = Number(event.srcElement.scrollTop);
+
+    for(let i = 0; i < this.sum.length;i++) {
+      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
+        this.pageNum = Number(i+2);
+      }
+    }
   }
 
 }

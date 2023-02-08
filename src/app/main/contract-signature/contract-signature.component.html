@@ -73,7 +73,7 @@
 
                                 <!--user.sign-type-->
                                 <div class="row">
-                                    <div *ngIf="this.filter_status === 1" class="col-md-11 item_contract_infor">{{'user.sign-type' | translate}}:
+                                    <div *ngIf="this.filter_status === 1 && item.role != 2" class="col-md-11 item_contract_infor">{{'user.sign-type' | translate}}:
                                         <span *ngIf="item.sign_type.length > 0 && item.sign_type[0].id == 1" class="status_blue">{{'sign_by_otp' | translate}}</span>
                                         <span *ngIf="item.sign_type.length > 0 && item.sign_type[0].id == 2" class="status_blue">{{'sign_by_token' | translate}}</span>
                                         <span *ngIf="item.sign_type.length > 0 && item.sign_type[0].id == 3" class="status_blue">{{'sign_by_pki' | translate}}</span>

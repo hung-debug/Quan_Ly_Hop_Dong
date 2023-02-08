@@ -8,8 +8,6 @@ import { DatePipe } from '@angular/common';
 import { forkJoin, BehaviorSubject, Subject } from 'rxjs';
 import axios from 'axios';
 import { User } from './user.service';
-import { type_signature_doc_template } from '../config/variable';
-import { Certificate } from 'crypto';
 
 export interface Contract {
   id: number;
@@ -132,11 +130,13 @@ export class ContractService {
 
   checkViewContractUrl: any = `${environment.apiUrl}/api/v1/contracts/check-view-contract/`;
 
-  emptySignatureUrl: any = `${environment.apiUrl}/api/v1/v1/processes/digital-sign/`;
+  emptySignatureUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
 
   mergeTimeStampUrl: any = `${environment.apiUrl}/api/v1/processes/digital-sign/`;
   inforPersonProcessUrl: any = `${environment.apiUrl}/api/v1/recipients/`;
   updateInforPersonProcessUrl: any = `${environment.apiUrl}/api/v1/recipients/`;
+
+  getAllInfoUserUrl: any = `${environment.apiUrl}/api/v1/customers/suggested-list`;
 
   token: any;
   customer_id: any;
@@ -392,7 +392,7 @@ export class ContractService {
       sign_time: this.datepipe.transform(
         datas.sign_time ? datas.sign_time : datas.end_time,
         "yyyy-MM-dd'T'HH:mm:ss'Z'"
-      ),
+      )?.slice(0,11).concat("00:00:00Z"),
       notes: datas.notes,
       role_id: datas.role_id,
       alias_url: '',
@@ -403,7 +403,8 @@ export class ContractService {
       contract_expire_time: this.datepipe.transform(
         datas.expire_time,
         "yyyy-MM-dd'T'HH:mm:ss'Z'"
-      ),
+      )?.slice(0,11).concat("00:00:00Z"),
+      ceca_push: datas.ceca_push
     });
 
     if (id) {
@@ -426,7 +427,6 @@ export class ContractService {
         .pipe(
           map((contract) => {
             if (JSON.parse(JSON.stringify(contract)).id != 0) {
-              console.log('contract ', contract);
               return contract;
             } else {
               return null;
@@ -583,13 +583,13 @@ export class ContractService {
       image: image,
       cert: cert,
       page: signDigital.page,
-      x: signDigital.signDigitalX,
-      y: signDigital.signDigitalY,
-      width: signDigital.signDigitalWidth,
-      height: signDigital.signDigitalHeight
+      x: Math.floor(signDigital.signDigitalX),
+      y: Math.floor(signDigital.signDigitalY),
+      width: Math.floor(signDigital.signDigitalWidth),
+      height: Math.floor(signDigital.signDigitalHeight)
     })
     
-    return this.http.post<any>(this.emptySignatureUrl + recipientId, body, {
+    return this.http.post<any>(this.emptySignatureUrl + recipientId+'/create-empty-token', body, {
         headers: headers,
       });
   }
@@ -603,13 +603,13 @@ export class ContractService {
       const body = JSON.stringify({
         contractId: contractId,
         signature: signature,
-        fieldName: fieldName,
+        filedName: fieldName,
         cert: cert,
-        isTimestamp: false,
+        isTimestamp: true,
         hexDigestTempFile: hexDigestTempFile
       })
     
-      return this.http.post<any>(this.mergeTimeStampUrl + recipientId, body, {
+      return this.http.post<any>(this.mergeTimeStampUrl + recipientId+'/merge-time-stamp', body, {
         headers: headers,
       });
   }
@@ -665,8 +665,6 @@ export class ContractService {
   //signDigital = signCertDigital
   //imgSignGen = imgSignGen
   postSignDigitalMobi(signCertDigital: any, imgSignGen: any) {
-    console.log('signCertDigital ', signCertDigital);
-
     this.getCurrentUser();
     let config = {
       headers: {
@@ -705,14 +703,9 @@ export class ContractService {
 
       signDate: '11-05-2019 09:55:55',
       typeSign: '4',
-      //algDigest: "SHA_256"
     };
 
-    console.log('body sign ', dataPost);
-
     return axios.post(this.postSignDigital, dataPost, config);
-    // console.log(datePost);
-    // return this.http.post<any>(this.postSignDigital, datePost,{'headers': headers});
   }
 
   domain: any = `https://127.0.0.1:14424/process`;
@@ -757,10 +750,7 @@ export class ContractService {
       py: Math.floor(y).toString(),
       signDate: '11-05-2019 09:55:55',
       typeSign: '4',
-      //algDigest: "SHA_256"
     };
-
-    console.log('data post ', dataPost);
 
     return axios.post(this.postSignDigital, dataPost, config);
   }
@@ -860,6 +850,11 @@ export class ContractService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
+
+    if(this.organization_id) {
+      orgId = this.organization_id;
+    }
+
     let listContractUrl = this.getNotifyOriganzation + orgId;
     return this.http.get<any>(listContractUrl, { headers }).pipe();
   }
@@ -939,6 +934,17 @@ export class ContractService {
       this.getNameSearch + '?name=' + filter_name + '&size=10000';
     const headers = { Authorization: 'Bearer ' + this.token };
     return this.http.get<User[]>(listUserUrl, { headers }).pipe();
+  }
+
+  getAllInfoUser(name: string) {
+    this.getCurrentUser();
+    const headers = new HttpHeaders()
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + this.token);
+
+    let listUserUrl =
+      this.getAllInfoUserUrl + '?name='+name;
+    return this.http.get<any>(listUserUrl, {headers});
   }
 
   getListDataCoordination(id: any) {
@@ -1028,8 +1034,7 @@ export class ContractService {
       status: 1,
       contract_id: datas.id,
     });
-    // console.log(headers);
-    // console.log(body);
+
     return this.http.post<Contract>(this.documentUrl, body, {
       headers: headers,
     });
@@ -1091,8 +1096,6 @@ export class ContractService {
       hsmSignRequest: hsmSignRequest,
     });
 
-    console.log('body ', body);
-
     return this.http
       .post<any>(this.signHsmMultiUrl, body, { headers: headers })
       .toPromise();
@@ -1114,8 +1117,7 @@ export class ContractService {
       status: 1,
       contract_id: datas.id,
     });
-    // console.log(headers);
-    // console.log(body);
+
     return this.http.post<Contract>(this.documentUrl, body, {
       headers: headers,
     });
@@ -1224,7 +1226,6 @@ export class ContractService {
     const body = {
       reason: reason,
     };
-    console.log(headers);
     return this.http.put<any>(this.rejectContractUrl + id, body, {
       headers: headers,
     });
@@ -1251,7 +1252,6 @@ export class ContractService {
       name: 'contract_' + new Date().getTime() + '.pdf',
       content: 'data:application/pdf,' + base64,
     };
-    console.log('body update ', body);
     return this.http
       .put<any>(this.signDigitalMobi + id, body, { headers: headers })
       .toPromise();
@@ -1263,7 +1263,6 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = '';
-    console.log(headers);
     return this.http.put<any>(this.updateInfoContractUrl + datas.id, datas, {
       headers: headers,
     });
@@ -1303,8 +1302,6 @@ export class ContractService {
   }
 
   updateInfoContractConsiderImg(datas: any, recipient_id: any) {
-    console.log('datas ', datas);
-
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1350,8 +1347,6 @@ export class ContractService {
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')
       .append('Authorization', 'Bearer ' + this.token);
-
-    console.log('formData ', formData);
 
     return this.http.post<any>(
       this.uploadFileBase64Url + formData?.organizationId + `/base64`,
@@ -1525,10 +1520,11 @@ export class ContractService {
     });
   }
 
-  getContractBatchList(file: any, idContractTemplate: any) {
+  getContractBatchList(file: any, idContractTemplate: any,ceca_push: any) {
     this.getCurrentUser();
     let formData = new FormData();
     formData.append('file', file);
+    formData.append('ceca_push', ceca_push);
 
     const headers = new HttpHeaders()
       //.append('Content-Type', 'multipart/form-data')

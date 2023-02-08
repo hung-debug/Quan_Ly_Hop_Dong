@@ -77,7 +77,7 @@
           <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
           <div class="confirm-radio d-flex justify-content-between mx-4">
             <div class="radio-confirm">
-              <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature' (ngModelChange)="changePositionSign()">
+              <input id="radio-confirm-secretary" type="radio" name="confirm-radio-secretary" [value]="1" [(ngModel)]='confirmSignature'>
               <label for="radio-confirm-secretary" class="ms-2">{{'btn.accept' | translate}}</label>
             </div>
             <div class="radio-refuse">
@@ -103,7 +103,15 @@
              (click)="getSignSelect(d)"
              [ngClass]="changeColorDrag(null, d, true)"
              [ngStyle]="changePosition(d,null,null,'#EBF8FF')">
-          <app-image-sign-contract  id="image-sign-contract" (checkedChange)="switchesValueChange($event)" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
+          <app-image-sign-contract  id="image-sign-contract" 
+            (contractNoValue)="contractNoValueChange($event)"
+            [contractNoValue]="contractNoValue"
+            [contractNoValueSign]="contractNoValueSign"
+            (checkedChange)="switchesValueChange($event)" 
+            *ngIf="![2,3].includes(recipient.status)" 
+            [datas]="datas" [view]="[2,3].includes(recipient.status)" 
+            [sign]="d">
+          </app-image-sign-contract>
           <div *ngIf="this.flagFocus && d.sign_unit == 'text'" class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
           <div *ngIf="d.sign_unit != 'text' && !this.flagFocus" class="name-sig-img-daky">{{(d.name && !d.valueSign) ? d.name : ''}}</div>
         </div>
@@ -112,7 +120,7 @@
         <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI"></app-display-digital-signature>
       </div>
       <div class="skeleton-sign position-absolute opacity-0">
-        <app-text-signature-image [textSign]="textSign" [height]="heightText" [width]="widthText"></app-text-signature-image>
+        <app-text-signature-image [datas]="datas" [textSign]="textSign" [width]="widthText"></app-text-signature-image>
       </div>
     </div>
   </div>
@@ -138,26 +146,26 @@
         ></pdf-viewer>
       </div>
 
-    <div class="flex-column" style="text-align: center">
+    <div class="flex-column" style="text-align: center;margin-top: 2px;">
       <button class="call-page" (click)="firstPageMobile()">
-        <img *ngIf="this.page1" src="assets/img/previousbold.svg">
-        <img *ngIf="!this.page1" src="assets/img/firstpage.svg">
+        <img width="14px" height="18px" *ngIf="this.page1" src="assets/img/previousbold.svg">
+        <img width="14px" height="18px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
       </button>
       <button class="call-page1" (click)="previousPageMobile()">
-        <img *ngIf="this.page1" src="assets/img/firstpagebold.svg">
-        <img *ngIf="!this.page1" src="assets/img/previous.svg">
+        <img width="10px" height="14px" *ngIf="this.page1" src="assets/img/firstpagebold.svg">
+        <img width="10px" height="14px" *ngIf="!this.page1" src="assets/img/previous.svg">
       </button>
 
-      <input class="input-mobile" [(ngModel)]="pageMobile" type="text" />
-      <a class="page-number-mobile">/{{this.pageNumber}}</a>
+      <input class="input-mobile" [(ngModel)]="pageMobile" type="text"/>&nbsp;/ &nbsp;{{this.pageNumber}}
+
       <button class="call-page1" id="prev" (click)="onNextPageMobile()">
-        <img *ngIf="this.pageLast" src="assets/img/next.svg">
-        <img *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
+        <img width="10px" height="14px" *ngIf="this.pageLast" src="assets/img/next.svg">
+        <img width="10px" height="14px" *ngIf="!this.pageLast" src="assets/img/nextblur.svg">
       </button>
 
       <button class="call-page1" id="prev" (click)="lastPageMobile()">
-        <img *ngIf="this.pageLast" src="assets/img/lastpage.svg">
-        <img *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
+        <img width="14px" height="18px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
+        <img width="14px" height="18px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
       </button>
     </div>
 
@@ -165,7 +173,7 @@
         <app-image-sign-contract id="image-sign-contract-mobile" *ngIf="![2,3].includes(recipient.status)" [datas]="datas" [view]="[2,3].includes(recipient.status)" [sign]="d"></app-image-sign-contract>
       </div>
 
-    <div class="flex-column" *ngIf="![2,3].includes(recipient.status)">
+    <div class="flex-column" *ngIf="![2,3].includes(recipient.status)" style="margin-top: 5px">
       <div class="label" style="text-align: center; font-weight: bold;" *ngIf="this.datas.roleContractReceived == 2">
         <p class="d-flex justify-content-center mb-4">{{'contract.review' | translate}}</p>
         <p class="d-flex mb-2 text-align-left mx-3">{{'content.confirm' | translate}}</p>
@@ -198,10 +206,21 @@
 </div>
 </div>
 
-<app-footer-signature *ngIf="loaded" [pageNum]="pageNum" [pageLast]="pageLast" [page1]="page1" [pageNumber]="pageNumber" [thePDF]="thePDF" [idElement]="idElement" [coordinateY]="coordinateY" 
-[confirmSignature]="confirmSignature" [datas]="datas" [view]="[2,3].includes(recipient.status)" [recipientId]="recipientId" 
-(submitChanges)="submitEvents($event)"
-
+<app-footer-signature *ngIf="loaded" 
+  [pageNum]="pageNum" 
+  [pageLast]="pageLast" 
+  [page1]="page1" 
+  [pageNumber]="pageNumber" 
+  [thePDF]="thePDF" 
+  [idElement]="idElement" 
+  [coordinateY]="coordinateY" 
+  [confirmSignature]="confirmSignature" 
+  [datas]="datas" 
+  [view]="[2,3].includes(recipient.status)" 
+  [recipientId]="recipientId" 
+  [pageBefore]="pageBefore"
+  [status]="status"
+  (submitChanges)="submitEvents($event)"
 ></app-footer-signature>
 <ngx-spinner
   bdColor="rgba(51,51,51,0.8)"

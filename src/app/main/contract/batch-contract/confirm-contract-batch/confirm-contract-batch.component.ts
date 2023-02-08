@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -12,24 +11,19 @@ import {
   QueryList,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { variable } from 'src/app/config/variable';
-import { Helper } from 'src/app/core/Helper';
 import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
-import { environment } from 'src/environments/environment';
 import { throwError } from 'rxjs';
 import interact from 'interactjs';
 import * as $ from 'jquery';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { Router } from '@angular/router';
-import { ConfirmCecaBatchComponent } from '../confirm-ceca-batch/confirm-ceca-batch.component';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
-import { ConfirmCecaFormComponent } from '../../form-contract/confirm-ceca-form/confirm-ceca-form.component';
 @Component({
   selector: 'app-confirm-contract-batch',
   templateUrl: './confirm-contract-batch.component.html',
@@ -122,6 +116,9 @@ export class ConfirmContractBatchComponent
   //   {id: 3, name: 'Tập đoàn Bảo Việt'}
   // ]
 
+  sum: number[] = [];
+  top: any[]= [];
+
   constructor(
     private userService: UserService,
     private cdRef: ChangeDetectorRef,
@@ -143,10 +140,10 @@ export class ConfirmContractBatchComponent
     this.contractService
       .getContractBatchList(
         this.datasBatch.contractFile,
-        this.datasBatch.idContractTemplate
+        this.datasBatch.idContractTemplate,
+        this.datasBatch.ceca_push
       )
       .subscribe((response: any) => {
-        console.log(response);
         this.contractList = response;
 
         this.pageNumberTotal = this.contractList.length;
@@ -398,6 +395,24 @@ export class ConfirmContractBatchComponent
         setTimeout(() => {
           this.setPosition();
           this.eventMouseover();
+
+          for(let i = 0; i <= this.pageNumber;i++) {
+            this.top[i] = 0;
+  
+            if(i < this.pageNumber)
+              this.sum[i] = 0;
+          }
+  
+          for(let i = 1; i <= this.pageNumber; i++) {
+            let canvas: any = document.getElementById('canvas-step3-'+i);
+            this.top[i] = canvas.height;
+          }
+          
+  
+          for(let i = 0; i < this.pageNumber; i++) {
+            this.top[i+1] += this.top[i];
+            this.sum[i] = this.top[i+1];
+          }
         }, 100);
       });
   }
@@ -925,5 +940,13 @@ export class ConfirmContractBatchComponent
     }
 
     this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+
+    let scrollTop = Number(event.srcElement.scrollTop);
+
+    for(let i = 0; i < this.sum.length;i++) {
+      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
+        this.pageNum = Number(i+2);
+      }
+    }
   }
 }

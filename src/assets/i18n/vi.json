@@ -247,6 +247,7 @@
   "error.confirm-password-new.required": "Xác nhận mật khẩu mới không được để trống",
   "error.confirm-password-new.incorrect": "Xác nhận mật khẩu mới không khớp",
   "error.contract.name.required": "Tên hợp đồng không được để trống",
+  "error.ceca.required":"Đẩy file hợp đồng lên Bộ Công thương không được để trống",
   "error.contract.file.required": "File hợp đồng không được để trống",
   "error.user.name.required": "Họ tên không được để trống",
   "error.user.email.required": "Email không được để trống",
@@ -278,7 +279,7 @@
   "organization.partner.name": "Tên đối tác",
   "scale": "Quy mô",
   "address": "Địa chỉ",
-  "tax_code": "Mã số thuế",
+  "tax_code": "Mã số thuế/CMT/CCCD",
   "representative": "Người đại diện",
   "position": "Chức vụ",
   "btn.sendRequest": "Gửi yêu cầu",
@@ -436,8 +437,8 @@
   "password.level2.blank":"Mật khẩu cấp 2 không được để trống",
   "user.blank":"Tên người dùng không dược để trống",
   "username":"Tên người dùng",
-  "taxcode.blank":"Mã số thuế không được để trống",
-  "taxcode.format":"Mã số thuế không đúng định dạng",
+  "taxcode.blank":"Mã số thuế/CMT/CCCD không được để trống",
+  "taxcode.format":"Mã số thuế/CMT/CCCD không đúng định dạng",
   "package.information":"THÔNG TIN GÓI CƯỚC",
   "contract.used":"Số lượng hợp đồng đã sử dụng:",
   "ekyc.used":"Số lượng eKYC đã sử dụng:",
@@ -511,6 +512,7 @@
   "yes":"Có",
   "no":"Không",
   "file.import.valid":"File import không đúng định dạng",
-  "file.import.valid.result":"File import không đúng định dạng, vui lòng xem thông báo lỗi ở file vừa tải về",
-  "taxcode.out":"Vui lòng nhập mã số thuế/CMT/CCCD ngoài luồng hợp đồng"
+  "file.import.valid.result":"Dữ liệu import không hợp lệ, vui lòng xem thông báo lỗi tại file hệ thống trả về",
+  "taxcode.out":"Vui lòng nhập mã số thuế/CMT/CCCD ngoài luồng hợp đồng",
+  "end":"Kết thúc"
 }

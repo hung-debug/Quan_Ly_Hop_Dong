@@ -61,14 +61,15 @@
                     <div class="row sign-unit-select">
                         <div class="col-md-9">
                             <label class="label-require">Font</label>
-                            <select class="form-select" id="select-dropdown" aria-label="Default select example" [ngModel]="this.selectedFont" (ngModelChange)="changeFont($event)">
+                            <select (change)="changePositionSign($event, null, 'font')" class="form-select" id="select-dropdown" aria-label="Default select example" [(ngModel)]="this.objSignInfo.font">
                                 <option value="" hidden>{{'choose.font' | translate}}</option>
                                 <option *ngFor="let d of this.list_font, let i = index" [selected]="d.selected" value="{{d}}">{{d}}</option>
                             </select>
                         </div>
                         <div class="col-md-3">
                             <label class="label-require">Size</label>
-                            <input class="form-control" [(ngModel)]="size"/>
+                            <input *ngIf="this.textSign" class="form-control" [(ngModel)]="this.objSignInfo.font_size" (change)="changePositionSign($event, null, 'font_size')"/>
+                            <input *ngIf="!this.textSign" class="form-control" [(ngModel)]="this.objSignInfo.font_size" (change)="changePositionSign($event, null, 'font_size')" readonly/>
                         </div>
                     </div>
 
@@ -120,7 +121,8 @@
                         <img src="assets/img/clear.svg" alt="">
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>
-                    <app-sign-contract [datas]="datas" [signTemplate]="false" [sign]="d" ></app-sign-contract>
+                    <app-sign-contract [datas]="datas" [signTemplate]="false" [sign]="d" >        
+                    </app-sign-contract>
                 </div>
             </div>
         </div>
@@ -134,10 +136,8 @@
     </div>
     <div class="col-md-9">
         <div class="center">
-            
             <a style="text-align: center">
                 <button class="call-page" (click)="firstPage()">
-                  <!-- <img width="16px" height="20px" *ngIf="this.page1" src="assets/img/previousbold.svg"> -->
                   <img  width="16px" height="20px" *ngIf="!this.page1" src="assets/img/firstpage.svg">
                   <img  width="16px" height="20px" *ngIf="this.page1" src="assets/img/previousbold.svg">
                 </button>
@@ -156,13 +156,20 @@
                   <img width="16px" height="20px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
                   <img width="16px" height="20px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
                 </button>
-              </a>
-            <a style="position: absolute; right: 5px;">
-                <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
-                style="background-color: #FCAF17">{{'btn.save-draft' | translate}}</button>
-                <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
+
+                <div style="position: absolute;right: 5px;margin-top: -35px;">
+                    <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
+                    style="background-color: #FCAF17">{{'btn.save-draft' | translate}}</button>
+                    <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
+                </div>
             </a>
+               
         </div>
+        <!-- <a style="position: absolute;right: 5px;">
+            <button (click)="next('save_draft')" type="button" name="saveDocument" class="next action-button"
+            style="background-color: #FCAF17">{{'btn.save-draft' | translate}}</button>
+            <button (click)="next('next_step')" type="button" name="next" class="next action-button">{{'btn.next' | translate}}</button>
+        </a> -->
     </div>
 </div>
 

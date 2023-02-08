@@ -108,6 +108,33 @@ export class ConfirmContractFormComponent implements OnInit {
     this.data_parnter_organization = this.datasForm.is_determine_clone.filter(
       (p: any) => p.type == 2 || p.type == 3
     );
+
+    console.log("vao day ");
+    console.log("dsf ", this.datasForm);
+    if (!this.datasForm.contract_user_sign) {
+      if (this.datasForm.is_data_object_signature && this.datasForm.is_data_object_signature.length && this.datasForm.is_data_object_signature.length > 0) {
+        this.datasForm.is_data_object_signature.forEach((res: any) => {
+          console.log("res ", res);
+          res['id_have_data'] = res.id;
+          if (res.type == 1) {
+            res['sign_unit'] = 'text';
+            res['text_attribute_name'] = res.name;
+            res.name = res.text_attribute_name;
+          }
+          if (res.type == 2) {
+            res['sign_unit'] = 'chu_ky_anh';
+            res.name = res.recipient.name;
+          }
+          if (res.type == 3) {
+            res['sign_unit'] = 'chu_ky_so'
+            res.name = res.recipient.name;
+          }
+          if (res.type == 4) {
+            res['sign_unit'] = 'so_tai_lieu'
+          }
+        })
+      }
+    }
   }
 
   getPartnerCoordinationer(item: any) {
@@ -188,21 +215,7 @@ export class ConfirmContractFormComponent implements OnInit {
   user: any;
   submit(action: string) {
 
-    this.contractService
-    .updateContractIsPushCeCA(this.datasForm.id, 0)
-    .subscribe(
-      (data) => {
-        this.SaveContract(action);
-      },
-      (error) => {
-        this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout(
-          'Có lỗi! Vui lòng liên hệ nhà phát triển để xử lý',
-          '',
-          3000
-        );
-      }
-    );
+    this.SaveContract(action);
 
     //Lấy thông tin chi tiết tổ chức của tôi
     // const data = {
@@ -244,8 +257,11 @@ export class ConfirmContractFormComponent implements OnInit {
       let isHaveFieldId: any[] = [];
       let isNotFieldId: any[] = [];
       let isUserSign_clone = _.cloneDeep(this.datasForm.contract_user_sign);
+
       isUserSign_clone.forEach((res: any) => {
+        console.log("res ", res);
         res.sign_config.forEach((element: any) => {
+          console.log("el ", element);
           if (element.id_have_data) {
             isHaveFieldId.push(element);
           } else isNotFieldId.push(element);
@@ -350,8 +366,10 @@ export class ConfirmContractFormComponent implements OnInit {
   ) {
     let datasFormample_contract: any[] = [];
     if (datasFormignId.length > 0) {
+      console.log("dsid ", datasFormignId);
       datasFormignId.forEach((res: any) => {
         this.arrVariableRemove.forEach((itemRemove: any) => {
+          console.log("itt ", itemRemove);
           if (itemRemove !== 'id_have_data') {
             delete res[itemRemove];
           }
@@ -363,6 +381,9 @@ export class ConfirmContractFormComponent implements OnInit {
       for (let i = 0; i < datasFormignId.length; i++) {
         let id = datasFormignId[i].id_have_data;
         delete datasFormignId[i].id_have_data;
+
+        datasFormignId[i].font_size = this.datasForm.size;
+        datasFormignId[i].font = this.datasForm.font;
         await this.contractService
           .getContractSampleEdit(datasFormignId[i], id)
           .toPromise()

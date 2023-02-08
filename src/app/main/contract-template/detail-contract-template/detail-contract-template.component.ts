@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, QueryList, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -9,8 +9,6 @@ import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import { UploadService } from 'src/app/service/upload.service';
 import interact from "interactjs";
-import {variable} from "../../../config/variable";
-import Swal from 'sweetalert2';
 import * as $ from "jquery";
 import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { ProcessingHandleComponent } from './processing-handle/processing-handle.component';
@@ -113,16 +111,20 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
   role:any;
   status:any;
 
+  sum: number[] = [];
+  top: any[]= [];
+
+  roleAccess:boolean=false;
+  roleMess:any="";
+
+  pageBefore: number;
+
   constructor(
     private contractTemplateService: ContractTemplateService,
-    private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
-    private modalService: NgbModal,
     private activeRoute: ActivatedRoute,
     private router: Router,
     private appService: AppService,
-    private toastService : ToastService,
-    private uploadService : UploadService,
     private dialog: MatDialog,
     private userService: UserService,
     public translate: TranslateService,
@@ -135,15 +137,34 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     this.getDataContractSignature();
   }
 
-  roleAccess:boolean=false;
-  roleMess:any="";
+  endContract() {
+    this.actionBack();
+  }
+
+  @HostListener('window:popstate', ['$event'])
+  onPopState(event: any) {
+    this.actionBack();
+  }
+
+  actionBack() {
+    console.log("pB ", this.pageBefore);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/contract-template/'],
+      {
+        queryParams: {
+          'page': this.pageBefore,
+        },
+        skipLocationChange: true
+      });
+    });
+  }
 
   getDataContractSignature() {
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
     this.activeRoute.queryParams
       .subscribe(params => {
           this.recipientId = params.recipientId;
-          console.log(this.recipientId);
+          this.pageBefore = params.page;
         }
       );
 
@@ -152,8 +173,6 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     let userLogin = this.userService.getAuthCurrentUser();    
     this.contractTemplateService.getEmailShareList(this.idContract, userLogin.organizationId).subscribe(listShared => {
       let isShare = listShared.filter((p:any) => p.email === userLogin.email);
-      console.log(isShare);
-      console.log(isShare);
       if(isShare.length > 0){
         this.roleAccess = true;
       }
@@ -192,7 +211,6 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
         if(!this.datas?.is_data_contract){
           this.roleMess = "Mẫu hợp đồng không còn tồn tại trên hệ thống";
         }
-        console.log(this.roleAccess);
   
         this.datas.is_data_object_signature.forEach((element: any) => {
           // 1: van ban, 2: ky anh, 3: ky so
@@ -335,6 +353,24 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.setPosition();
         this.eventMouseover();
+
+        for(let i = 0; i <= this.pageNumber;i++) {
+          this.top[i] = 0;
+
+          if(i < this.pageNumber)
+            this.sum[i] = 0;
+        }
+
+        for(let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-'+i);
+          this.top[i] = canvas.height;
+        }
+        
+
+        for(let i = 0; i < this.pageNumber; i++) {
+          this.top[i+1] += this.top[i];
+          this.sum[i] = this.top[i+1];
+        }
       }, 100)
     })
   }
@@ -766,5 +802,13 @@ export class DetailContractTemplateComponent implements OnInit, OnDestroy {
     }
 
     this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+
+    let scrollTop = Number(event.srcElement.scrollTop);
+
+    for(let i = 0; i < this.sum.length;i++) {
+      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
+        this.pageNum = Number(i+2);
+      }
+    }
   }
 }

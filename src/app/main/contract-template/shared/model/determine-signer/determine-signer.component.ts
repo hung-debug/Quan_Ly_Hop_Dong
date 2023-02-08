@@ -7,14 +7,14 @@ import {
   variable
 } from "../../../../../config/variable";
 import { parttern } from "../../../../../config/parttern";
-import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
+import { FormGroup, FormControl } from "@angular/forms";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "../../../../../service/toast.service";
 import { Router } from "@angular/router";
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { UserService } from 'src/app/service/user.service';
 import { environment } from 'src/environments/environment';
+import { ContractService } from 'src/app/service/contract.service';
 
 @Component({
   selector: 'app-determine-signer',
@@ -80,7 +80,7 @@ export class DetermineSignerComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private router: Router,
-    private userService: UserService
+    private contractService: ContractService,
   ) {
     this.step = variable.stepSampleContract.step2
     //this.datas.determineDetails = this.determineDetails;
@@ -215,8 +215,6 @@ export class DetermineSignerComponent implements OnInit {
       let isBody: any[] = [];
       let count = 0;
       let is_error = '';
-
-      console.log("clone ", this.datas.is_determine_clone);
       
       for (let i = 0; i < this.datas.is_determine_clone.length; i++) {
         this.datas.is_determine_clone[i].recipients.forEach((element: any) => {
@@ -252,10 +250,7 @@ export class DetermineSignerComponent implements OnInit {
         
       this.spinner.hide()
     } else {
-      console.log("data clone after ", this.datas.is_determine_clone);
-
       this.contractTemplateService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
-        console.log("res after ", res);
         this.getDataApiDetermine(res, is_save)
       }, (error: HttpErrorResponse) => {
         if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
@@ -304,26 +299,26 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeOtp(data: any) {
-    // let data_sign_cka = data.sign_type.filter((p: any) => p.id == 1)[0];
-    // if (data_sign_cka) {
-    //   data.is_otp = 1;
-    // } else {
-    //   data.is_otp = 0;
-    // }
+    let data_sign_cka = data.sign_type.filter((p: any) => p.id == 1)[0];
+    if (data_sign_cka) {
+      data.is_otp = 1;
+    } else {
+      data.is_otp = 0;
+    }
   }
 
   changeIsCoordination(e:any, item: any, id:any) {
-    // if (e.target.checked) {
-    //   //goi ham them
-    //   this.addPartnerCoordination(item, id);
-    // } else {
-    //   //goi ham xoa
-    //   this.deletePartnerCoordination(0, item, id);
-    //   //kiem tra neu chua co nguoi ky thi them 1 nguoi ky
-    //   if(this.getPartnerSignature(item).length == 0){
-    //     this.addPartnerSignature(item, id);
-    //   }
-    // }
+    if (e.target.checked) {
+      //goi ham them
+      this.addPartnerCoordination(item, id);
+    } else {
+      //goi ham xoa
+      this.deletePartnerCoordination(0, item, id);
+      //kiem tra neu chua co nguoi ky thi them 1 nguoi ky
+      if(this.getPartnerSignature(item).length == 0){
+        this.addPartnerSignature(item, id);
+      }
+    }
   }
 
   getDataSignCka(data:any){
@@ -407,7 +402,9 @@ export class DetermineSignerComponent implements OnInit {
         break;
       }
       // valid cccd number
-      if (dataArr[i].card_id.trim() && !this.pattern.card_id.test(dataArr[i].card_id.trim())) {
+      if (dataArr[i].card_id.trim() && !this.pattern.card_id9.test(dataArr[i].card_id.trim()) && 
+      !this.pattern.card_id12.test(dataArr[i].card_id.trim())
+      ) {
         this.getNotificationValid("CMT/CCCD của" + this.getNameObject(3) + "tổ chức của tôi không hợp lệ!")
         count++;
         break;
@@ -792,7 +789,6 @@ export class DetermineSignerComponent implements OnInit {
 
   // tạo đối tượng người điều phối đối tác
   getPartnerCoordination(item: any) {
-    
     return item.recipients.filter((p: any) => p.role == 1)
   }
 
@@ -1132,7 +1128,6 @@ export class DetermineSignerComponent implements OnInit {
         newArr.push(item.recipients[i]);
       }
     }
-    console.log(newArr);
     if (newArr.length) {
       newArr.forEach((item: any) => {
         if (item.role == 3) {
@@ -1170,12 +1165,12 @@ export class DetermineSignerComponent implements OnInit {
   }
 
   changeIsSmsSignature(e:any, item:any, index:any){
-    // let data = item.recipients.filter((p: any) => p.role == 3)[index];
-    // if (e.target.checked) {
-    //   data.is_otp = 1;
-    // }else{
-    //   data.is_otp = 0;
-    // }
+    let data = item.recipients.filter((p: any) => p.role == 3)[index];
+    if (e.target.checked) {
+      data.is_otp = 1;
+    }else{
+      data.is_otp = 0;
+    }
   }
 
   changeIsSmsDocument(e:any, item:any, index:any){
@@ -1203,10 +1198,11 @@ export class DetermineSignerComponent implements OnInit {
     this.arrSearchNameView = [];
     this.arrSearchNameSignature = [];
     this.arrSearchNameDoc = [];
+    
     setTimeout(() => {
-      this.userService.getNameOrganization("", stringEmitted).subscribe((res) => {
-        let arr_all = res.entities;
-        let data = arr_all.map((p: any) => ({ name: p.name, email: p.email }));
+      this.contractService.getAllInfoUser(stringEmitted).subscribe((res) => {
+        let arr_all = res;
+        let data = arr_all.map((p: any) => ({name: p.name, email: p.email, phone: p.phone}));
         if (action == 'view') {
           this.arrSearchNameView = data;
         } else if (action == 'signature') {

@@ -3,7 +3,26 @@
       <h3 class="label-header">{{this.datas.title | translate}}</h3>
     </div>
     <form (ngSubmit)="onSubmit()" [formGroup]="addForm" class="content">
-        <div class="row">
+        
+        <div *ngIf="this.ceca" class="row">
+            <div class="col-md-12">
+                <div class="label text-color">{{'contract-type.ceca' | translate}}</div>
+                    <p-dropdown 
+                        [style]="{'width':'100%',' border':'1px solid #106DB6','border-radius': '5px'}" 
+                        panelStyleClass="font" 
+                        optionLabel="name"
+                        optionValue="id" 
+                        placeholder="{{'choose' | translate}}" 
+                        [showClear]="true"
+                        [options]="optionsCeCa" 
+                        [(ngModel)]="optionsCeCaValue"
+                        formControlName="ceca_push"
+                        >
+                    </p-dropdown>
+            </div>
+        </div>
+       
+        <div class="row" style="padding-top: 10px;">
             <div class="col-md-12">
                 <div class="label text-color">{{'contract-type.code' | translate}} <span class="required-title">*</span></div>
                 <div class="input-data">
@@ -29,23 +48,6 @@
             </div>
         </div>
 
-        <div class="row" style="padding-top: 10px;">
-            <div class="col-md-12">
-                <div class="label text-color">{{'contract-type.ceca' | translate}} <span class="required-title">*</span></div>
-
-                <div class="row" style="justify-content: center;padding-top: 10px;">
-                    <div class="col-md-3" style="text-align: center;">
-                        <input type="radio" name="confirm-radio-consider" [value]="1" formControlName="ceca_push" name="ceca_push">
-                        <span> {{'yes' | translate}}</span>
-                    </div>
-                    <div class="col-md-3" style="text-align: center;">
-                        <input type="radio" name='confirm-radio-consider' [value]="0" formControlName="ceca_push" name="ceca_push">
-                        <span> {{'no' | translate}}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
         <div class="row" style="justify-content: center;padding-top: 10px;">
             <button class="cancel-button" (click)="dialog.closeAll()" type="button">{{'btn.cancel' | translate}}</button>
             <button class="save-button">{{'btn.save' | translate}}</button>

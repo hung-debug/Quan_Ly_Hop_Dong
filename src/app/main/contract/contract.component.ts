@@ -1,13 +1,11 @@
-import { data } from 'jquery';
 import { UploadService } from 'src/app/service/upload.service';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
 import { ContractService } from 'src/app/service/contract.service';
 
 import { ToastService } from 'src/app/service/toast.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {  HttpErrorResponse } from '@angular/common/http';
 import { CancelContractDialogComponent } from './dialog/cancel-contract-dialog/cancel-contract-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterListDialogComponent } from './dialog/filter-list-dialog/filter-list-dialog.component';
@@ -17,11 +15,11 @@ import { ShareContractDialogComponent } from './dialog/share-contract-dialog/sha
 import { DeleteContractDialogComponent } from './dialog/delete-contract-dialog/delete-contract-dialog.component';
 import { NgxSpinnerService } from "ngx-spinner";
 import { Subscription } from "rxjs";
-import { TreeMapModule } from '@swimlane/ngx-charts';
 import { UserService } from 'src/app/service/user.service';
 import { RoleService } from 'src/app/service/role.service';
 import { sideList } from 'src/app/config/variable';
 import { DialogReasonCancelComponent } from '../contract-signature/shared/model/dialog-reason-cancel/dialog-reason-cancel.component';
+
 @Component({
   selector: 'app-contract',
   templateUrl: './contract.component.html',
@@ -45,6 +43,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
   id: any = "";
   notification: any = "";
   isOrg: string = 'off';
+  
   stateOptions: any[];
   organization_id: any = "";
 
@@ -81,13 +80,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
   isQLHD_12: boolean = true;  //xem hop dong lien quan
   isQLHD_13: boolean = true;  //chia se hop dong
 
-  constructor(private modalService: NgbModal,
-    private appService: AppService,
+  constructor(private appService: AppService,
     private contractService: ContractService,
     private route: ActivatedRoute,
     private router: Router,
     private toastService: ToastService,
-    private http: HttpClient,
     private uploadService: UploadService,
     private dialog: MatDialog,
     private spinner: NgxSpinnerService,
@@ -103,7 +100,7 @@ export class ContractComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(async params => {
       if (typeof params.filter_name != 'undefined' && params.filter_name) {
         this.filter_name = params.filter_name;
       } else {
@@ -134,6 +131,16 @@ export class ContractComponent implements OnInit, AfterViewInit {
       } else {
         this.isOrg = "off";
       }
+      if (typeof params.status != 'undefined' && params.status) {
+        this.status = params.status;
+      } else {
+        this.status = "";
+      }
+
+      if (typeof params.page != 'undefined' && params.page) {
+        this.p = params.page;
+      }
+
       if (typeof params.organization_id != 'undefined' && params.organization_id) {
         this.organization_id = params.organization_id;
       } else {
@@ -156,7 +163,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
           //lay id role
           this.roleService.getRoleById(data?.role_id).subscribe(
             data => {
-              console.log(data);
               let listRole: any[];
               listRole = data.permissions;
               this.isQLHD_01 = listRole.some(element => element.code == 'QLHD_01');
@@ -224,11 +230,17 @@ export class ContractComponent implements OnInit, AfterViewInit {
       this.roleMess = "Danh sách hợp đồng tổ chức của tôi chưa được phân quyền";
     }
     if (!this.roleMess) {
+      
+      let isOrg = this.isOrg;
+
+      if(!this.isQLHD_03) {
+        isOrg ='off';
+      }
+
       //get list contract
-      this.contractService.getContractList(this.isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
+      this.contractService.getContractList(isOrg, this.organization_id, this.filter_name, this.filter_type, this.filter_contract_no, this.filter_from_date, this.filter_to_date, this.filter_status, this.p, this.page).subscribe(data => {
         this.contracts = data.entities;
         this.pageTotal = data.total_elements;
-        console.log(this.contracts);
         if (this.pageTotal == 0) {
           this.p = 0;
           this.pageStart = 0;
@@ -249,14 +261,12 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   changeTab() {
-    this.p = 1;
+    // this.p = 1;
     this.getContractList();
-
-    console.log("orrg ", this.isOrg);
   }
 
   private convertStatusStr() {
-    this.p = 1;
+    // this.p = 1;
     if (this.status == 'draft') {
       this.filter_status = 0;
     } else if (this.status == 'processing') {
@@ -297,18 +307,31 @@ export class ContractComponent implements OnInit, AfterViewInit {
   }
 
   autoSearch(event: any) {
-    this.p = 1;
+    // this.p = 1;
     this.filter_name = event.target.value;
     this.getContractList();
   }
 
   openDetail(id: number) {
-    this.router.navigate(['main/form-contract/detail/' + id]);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/form-contract/detail/' + id],
+      {
+        queryParams: {
+          'page': this.p,
+          'filter_type': this.filter_type, 
+          'filter_contract_no': this.filter_contract_no,
+          'filter_from_date': this.filter_from_date,
+          'filter_to_date': this.filter_to_date,
+          'isOrg': this.isOrg,
+          'organization_id': this.organization_id,
+          'status': this.status
+        },
+        skipLocationChange: false
+      });
+    });
   }
 
   openCopy(id: number) {
-    // this.router.navigate(['main/form-contract/copy/' + id]);
-    // console.log(this.contracts, id, this.status);
     if (this.status != 'complete') {
       this.spinner.show();
       this.contractService.getContractCopy(id).subscribe((res: any) => {
@@ -322,16 +345,11 @@ export class ContractComponent implements OnInit, AfterViewInit {
       }, () => {
         this.spinner.hide();
       })
-
-      // this.getDataContract(id, 'copy');
     }
   }
 
   openEdit(id: number) {
     setTimeout(() => {
-      // if (action == 'copy')
-      //   void this.router.navigate(['main/form-contract/copy/' + id]);
-      // else void this.router.navigate(['main/form-contract/edit/' + id]);
       void this.router.navigate(['main/form-contract/edit/' + id]);
     }, 100)
   }
@@ -375,7 +393,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
       data
     })
     dialogRef.afterClosed().subscribe((result: any) => {
-      console.log('the close dialog');
       let is_data = result
     })
   }
@@ -498,8 +515,6 @@ export class ContractComponent implements OnInit, AfterViewInit {
     this.contractService.getFileZipContract(id).subscribe((data) => {
       //console.log(data);
       this.uploadService.downloadFile(data.path).subscribe((response: any) => {
-        //console.log(response);
-
         let url = window.URL.createObjectURL(response);
         let a = document.createElement('a');
         document.body.appendChild(a);

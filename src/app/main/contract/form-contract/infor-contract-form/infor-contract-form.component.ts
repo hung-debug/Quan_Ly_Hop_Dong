@@ -12,17 +12,12 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {FormBuilder} from "@angular/forms";
-import {Observable, Subscription} from 'rxjs';
-import {DatePipe} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastService} from 'src/app/service/toast.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import * as moment from "moment";
-import {HttpErrorResponse} from '@angular/common/http';
 import {UploadService} from 'src/app/service/upload.service';
 import {optionsCeCa, variable} from 'src/app/config/variable';
-import {AddContractComponent} from '../../add-contract/add-contract.component';
 import {ContractTemplateService} from 'src/app/service/contract-template.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
@@ -83,6 +78,8 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
   checkView: boolean = false;
 
+  ceca: any;
+
   constructor(
     private contractService: ContractService,
     private contractTemplateService: ContractTemplateService,
@@ -103,7 +100,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
     let idContract = Number(this.activeRoute.snapshot.paramMap.get('id'));
 
-    this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract, false);
+    this.actionSuccess();
+
+    if(this.router.url.includes("edit")) {
+      this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract, false);
+    } else {
+      this.checkView = await this.checkViewContractService.callAPIcheckViewContract(idContract, true);
+    }
+    
 
     if(!idContract || this.checkView) {
       this.actionSuccess();
@@ -114,7 +118,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
 
   actionSuccess() {
     this.optionsCeCa = optionsCeCa;
-    this.optionsCeCaValue = 0;
+    this.optionsCeCaValue = null;
     this.datasForm.ceca_push = this.optionsCeCaValue;
 
     let dataRouter = this.route.params.subscribe((params: any) => {
@@ -143,6 +147,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     this.getListTypeContract(); // ham get contract type
     this.getContractList(); // ham lay danh sach hop dong
     this.convertData();
+
+    this.contractService.getDataNotifyOriganzation().subscribe((response) => {
+      if(response.ceca_push_mode == 'NONE') {
+        this.ceca = false;
+      } else if(response.ceca_push_mode == 'SELECTION') {
+        this.ceca = true
+      }
+    })
   }
 
   async changeTypeContract() {
@@ -254,7 +266,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
             this.optionsCeCaValue = 0;
             this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
           } else {
-            this.optionsCeCaValue = 0;
+            this.optionsCeCaValue = null;
             this.optionsCeCa = optionsCeCa;
           }
         })
@@ -357,19 +369,22 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     if (this.listFileAttach.some((p: any) => p.filename != item.filename)) {
       this.listFileAttach = this.listFileAttach.filter((p: any) => p.filename != item.filename);
     }
-
-    console.log(this.isArrAttachFile_delete);
   }
 
 
   validDataForm() {
-
     if (!this.datasForm.template_contract_id) {
       this.toastService.showWarningHTMLWithTimeout((this.translate.instant('please.choose.contract.template')), "", "3000");
       return false;
     }
     if (!this.datasForm.name) {
       this.toastService.showWarningHTMLWithTimeout((this.translate.instant('please.choose.contract.name')), "", "3000");
+      return false;
+    }
+
+    
+    if(this.datasForm.ceca_push == null) {
+      this.toastService.showWarningHTMLWithTimeout((this.translate.instant('error.ceca.required')), "", "3000");
       return false;
     }
 
@@ -388,6 +403,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   // Next step two create form contract
   async next(action: string) {
     this.spinner.show();
+
+    this.datasForm.ceca_push = this.optionsCeCaValue;
+
     let coutError = false;
     if (this.datasForm.contract_no && action != 'luu_nhap') {
       //check trung so hop dong
@@ -535,8 +553,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       let is_create_error = false;
       let arrFile: any[] = [];
 
-      console.log("datasform contract id ", this.datasForm.contract_id);
-
       // api clone hợp đồng mẫu sang hợp đồng tạo mới => tạo hợp đồng
       await this.contractTemplateService.getFileContractFormClone(this.datasForm.template_contract_id, this.datasForm.contract_id).toPromise().then((res: any) => {
         let dataContractTemplate = res.filter((p: any) => p.type == 2 && p.status == 1)[0];
@@ -587,10 +603,6 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   }
 
   nextForm() {
-    // for(let i = 0; i < this.datasForm.is_determine_clone.length; i++) {
-    //   this.datasForm.is_determine_clone[i].id = null;
-    // }
-
     this.datasForm.isChangeForm = false;
     this.stepForm = variable.stepSampleContractForm.step2;
     this.datasForm.stepFormLast = this.stepForm;

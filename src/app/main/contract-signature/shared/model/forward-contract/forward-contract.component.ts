@@ -22,6 +22,8 @@ export class ForwardContractComponent implements OnInit {
   isReqCardIdToken: boolean = false;
   isReqCardIdHsm: boolean = false;
 
+  login: string;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public router: Router,
@@ -38,6 +40,7 @@ export class ForwardContractComponent implements OnInit {
 
   ngOnInit(): void {
     this.datas = this.data;
+    this.login = "email";
 
     this.getCurrentUser();
     this.myForm = this.fbd.group({
@@ -84,6 +87,10 @@ export class ForwardContractComponent implements OnInit {
     }
   }
 
+  changeTypeSign(e: any,) {
+    this.login = e.target.value;
+  }
+
   async onSubmit() {
     if (!String(this.myForm.value.name)) {
       // this.datas.is_content == 'forward_contract' ? 'Chuyển tiếp' : 'Ủy quyền'
@@ -111,7 +118,7 @@ export class ForwardContractComponent implements OnInit {
     if (this.isReqCardId && !String(this.myForm.value.card_id)) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập CMT/CCCD người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
       return;
-    } else if (this.isReqCardId && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id)) {
+    } else if (this.isReqCardId && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng CMT/CCCD', '', 3000);
       return;
     }
@@ -119,7 +126,7 @@ export class ForwardContractComponent implements OnInit {
      else if(this.isReqCardIdHsm && !String(this.myForm.value.card_id)) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập mã số thuế người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
       return;
-    } else if(this.isReqCardIdHsm && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form)) {
+    } else if(this.isReqCardIdHsm && this.myForm.value.card_id && !String(this.myForm.value.card_id).toLowerCase().match(parttern.cardid)) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế', '', 3000);
       return;
     }
@@ -127,7 +134,7 @@ export class ForwardContractComponent implements OnInit {
     else if(this.isReqCardIdToken && !String(this.myForm.value.card_id)) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập thông tin trong usb token của người ' + (this.datas.is_content == 'forward_contract' ? 'chuyển tiếp' : 'ủy quyền'), '', 3000);
       return;
-    } else if(this.isReqCardIdToken && this.myForm.value.card_id && (!String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id))) {
+    } else if(this.isReqCardIdToken && this.myForm.value.card_id && (!String(this.myForm.value.card_id).toLowerCase().match(parttern_input.taxCode_form) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id9)) && !String(this.myForm.value.card_id).toLowerCase().match(parttern.card_id12)) {
       this.toastService.showWarningHTMLWithTimeout('Vui lòng nhập đúng định dạng mã số thuế/CMT/CCCD', '', 3000);
       return;
     }
@@ -179,7 +186,8 @@ export class ForwardContractComponent implements OnInit {
           card_id: this.myForm.value.card_id,
           role: this.data.role_coordination ? this.data.role_coordination : this.datas.dataContract.roleContractReceived,
           recipient_id: this.datas.recipientId,
-          is_replace: false /*this.datas.is_content != 'forward_contract'*/
+          is_replace: false,
+          login_by: this.login
         };
 
         await this.contractService.processAuthorizeContract(dataAuthorize).toPromise().then(
@@ -193,7 +201,17 @@ export class ForwardContractComponent implements OnInit {
               , "", 3000);
               this.dialogRef.close();
               this.spinner.hide();
-              this.router.navigate(['/main/form-contract/detail/' + this.datas?.dataContract?.is_data_contract?.id]);
+              this.router.navigate(['/main/form-contract/detail/forward/' + this.datas?.dataContract?.is_data_contract?.id]);
+
+              // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+                // this.router.navigate(['/main/form-contract/detail/' + this.datas?.dataContract?.is_data_contract?.id],
+                // {
+                //   queryParams: {
+                //     'filter_code': data.filter_code, 
+                //   },
+                //   skipLocationChange: true
+                // });
+              // });
             }
           }, error => {
             this.spinner.hide();

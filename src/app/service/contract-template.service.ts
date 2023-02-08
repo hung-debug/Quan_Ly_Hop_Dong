@@ -92,13 +92,26 @@ export class ContractTemplateService {
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
-      let body = {};
+    
+    let body = {};
+
+    let start_time = null;
+    let end_time = null;
+
+    if (id && body && !actionGet) {
+      start_time = this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'HH:mm:ss'Z'")?.slice(0,11).concat("00:00:00Z");
+      end_time = this.datepipe.transform(datas.end_time, "yyyy-MM-dd'T'HH:mm:ss'Z'")?.slice(0,11).concat("00:00:00Z");
+    } else if(!actionGet) {
+      start_time = this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'HH:mm:ss'Z'");
+      end_time = this.datepipe.transform(datas.end_time, "yyyy-MM-dd'T'HH:mm:ss'Z'");
+    }
+
     if (!actionGet) {
       body = JSON.stringify({
         name: datas.name,
         code: datas.contract_no,
-        start_time: this.datepipe.transform(datas.start_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
-        end_time: this.datepipe.transform(datas.end_time, "yyyy-MM-dd'T'HH:mm:ss'Z'"),
+        start_time: start_time,
+        end_time: end_time,
         type_id: datas.type_id
       });
     }
@@ -106,9 +119,6 @@ export class ContractTemplateService {
       return this.http.put<any>(this.editInforContractTemplateUrl + id, body, { 'headers': headers }).pipe();
     } else if (actionGet == 'get-form-data') {
       return this.http.get<any>(this.addInforContractTemplateUrl + `/${id}`, { 'headers': headers }).pipe();
-
-            // return this.http.put<any>(this.editInforContractTemplateUrl + id, body, { 'headers': headers }).pipe();
-
     } else {
       return this.http.post<any>(this.addInforContractTemplateUrl, body, { 'headers': headers }).pipe();
     }
@@ -153,8 +163,6 @@ export class ContractTemplateService {
    checkTemplateIsUse(id: number) {
     this.getCurrentUser();
     const headers = new HttpHeaders().append('Content-Type', 'application/json').append('Authorization', 'Bearer ' + this.token);
-
-    console.log("token ", this.token);
 
     return this.http.post<any>(this.templateUseUrl + `${id}`,'', {
       headers,

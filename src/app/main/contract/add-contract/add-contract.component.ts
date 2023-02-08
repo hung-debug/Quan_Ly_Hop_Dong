@@ -152,9 +152,6 @@ export class AddContractComponent implements OnInit {
   isQLHD_11: boolean = true;
 
   ngOnInit() {
-
-    console.log("$env ", environment.flag);
-
     this.userService.checkServiceStatus().subscribe((response) => {
 
       if (response.status == 'Using' || environment.flag == 'NB') {

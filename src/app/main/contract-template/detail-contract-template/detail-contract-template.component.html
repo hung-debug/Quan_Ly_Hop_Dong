@@ -92,7 +92,11 @@
               <img width="16px" height="20px" *ngIf="this.pageLast" src="assets/img/lastpage.svg">
               <img width="16px" height="20px" *ngIf="!this.pageLast" src="assets/img/lastpageblur.svg">
             </button>
-        </a>
+          </a>
+
+          <a style="position: absolute; right: 5px;">
+            <button  type="button" name="next" class="next action-button" (click)="endContract()">{{'end' | translate}}</button>
+          </a>
         </div>
     </div>
   </div>

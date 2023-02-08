@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppService } from 'src/app/service/app.service';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
@@ -54,7 +54,9 @@ export class ContractTemplateComponent implements OnInit {
               private contractTypeService: ContractTypeService,
               private userService: UserService,
               private roleService: RoleService,
-              private toastService: ToastService) { 
+              private toastService: ToastService,
+              private route: ActivatedRoute,
+              ) { 
 
     this.stateOptions = [
       { label: 'contract-template.create', value: 'off' },
@@ -71,7 +73,6 @@ export class ContractTemplateComponent implements OnInit {
         //lay id role
         this.roleService.getRoleById(data?.role_id).subscribe(
           async data => {
-            console.log(data);
             let listRole: any[];
             listRole = data.permissions;
             this.isQLMHD_01 = listRole.some(element => element.code == 'QLMHD_01');
@@ -104,6 +105,12 @@ export class ContractTemplateComponent implements OnInit {
         
       }
     )
+
+    this.route.queryParams.subscribe(async params => {
+      if (typeof params.page != 'undefined' && params.page) {
+        this.p = params.page;
+      }
+    });
     
   }
   async getContractType(){
@@ -165,7 +172,7 @@ export class ContractTemplateComponent implements OnInit {
 
 
   searchContract(){
-    this.p = 1;
+    // this.p = 1;
     this.getContractTemplateList();
   }
 
@@ -192,7 +199,15 @@ export class ContractTemplateComponent implements OnInit {
   }
 
   openDetail(id:number){
-    this.router.navigate(['main/contract-template/form/detail/' + id]);
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/main/contract-template/form/detail/' + id],
+      {
+        queryParams: {
+          'page': this.p,
+        },
+        skipLocationChange: false
+      });
+    });
   }
 
   deleteContractTemplate(id:any){

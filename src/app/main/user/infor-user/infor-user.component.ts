@@ -8,7 +8,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import { UploadService } from 'src/app/service/upload.service';
 import { UserService } from 'src/app/service/user.service';
 import { networkList } from "../../../config/variable";
-import {parttern_input} from "../../../config/parttern"
+import {parttern_input, parttern} from "../../../config/parttern"
 import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
@@ -81,7 +81,10 @@ export class InforUserComponent implements OnInit {
    
       this.addHsmForm = this.fbd.group({
         nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
-        taxCodeHsm: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
+        taxCodeHsm: this.fbd.control("",[
+            Validators.pattern(parttern.cardid),
+            ]
+          ),
         password1Hsm: null
       });
 
@@ -90,13 +93,11 @@ export class InforUserComponent implements OnInit {
   ngOnInit(): void {
     //lay danh sach to chuc
     this.unitService.getUnitList('', '').subscribe(data => {
-      console.log(data.entities);
       this.orgList = data.entities;
     });
 
     //lay danh sach vai tro
     this.roleService.getRoleList('', '').subscribe(data => {
-      console.log(data);
       this.roleList = data.entities;
     });
 
@@ -121,7 +122,6 @@ export class InforUserComponent implements OnInit {
 
         //set name
         if(data.organization_id != null){
-          console.log("data org ", data.organization_id);
           this.unitService.getUnitById(data.organization_id).subscribe(
             data => {
               this.organizationName = data.name;
@@ -144,10 +144,12 @@ export class InforUserComponent implements OnInit {
 
         this.addHsmForm = this.fbd.group({
           nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form)),
-          taxCodeHsm: this.fbd.control(data.tax_code, Validators.pattern(parttern_input.taxCode_form)),
+          taxCodeHsm: this.fbd.control(data.tax_code, [
+              Validators.pattern(parttern.cardid),
+            ]
+            ),
           password1Hsm: this.fbd.control(data.hsm_pass)
         });
-        console.log(data);
         this.imgSignPCSelect = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].presigned_url:null;
         this.imgSignBucket = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].bucket:null;
         this.imgSignPath = data.sign_image != null && data.sign_image.length>0?data.sign_image[0].path:null;
@@ -167,7 +169,9 @@ export class InforUserComponent implements OnInit {
         });
         this.addHsmFormOld = this.fbd.group({
           nameHsm: this.fbd.control(data.hsm_name, Validators.pattern(parttern_input.input_form)),
-          taxCodeHsm: this.fbd.control(data.tax_code, Validators.pattern(parttern_input.taxCode_form)),
+          taxCodeHsm: this.fbd.control(data.tax_code, [
+            Validators.pattern(parttern.cardid),
+          ]),
           password1Hsm: this.fbd.control(data.hsm_pass)
         });
       }, error => {
@@ -192,7 +196,6 @@ export class InforUserComponent implements OnInit {
     }
     this.userService.updateUser(data).subscribe(
       data => {
-        console.log(data);
         this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
           this.router.navigate(['/main/user-infor']);
@@ -209,12 +212,10 @@ export class InforUserComponent implements OnInit {
     //neu co up anh moi => day lai anh, update lai thong tin
     if(data.fileImage != null){
       this.uploadService.uploadFile(data.fileImage).subscribe((dataFile) => {
-        console.log(JSON.stringify(dataFile));
         const sign_image_content:any = {bucket: dataFile.file_object.bucket, path: dataFile.file_object.file_path};
         const sign_image:never[]=[];
         (sign_image as string[]).push(sign_image_content);
         data.sign_image = sign_image;
-        console.log(data);
 
         this.userService.updateUser(data).subscribe(
           data => {
@@ -244,7 +245,6 @@ export class InforUserComponent implements OnInit {
       }
       this.userService.updateUser(data).subscribe(
         data => {
-          console.log(data);
           this.toastService.showSuccessHTMLWithTimeout("no.update.information.success", "", 3000);
           this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
             this.router.navigate(['/main/user-infor']);
@@ -285,7 +285,6 @@ export class InforUserComponent implements OnInit {
 
       organization_change: this.addInforForm.value.organization_change
     }
-    console.log(data);
     //neu thay doi so dien thoai thi can check lai
     if(data.phone != this.phoneOld){
       this.userService.checkPhoneUser(data.phone).subscribe(
@@ -373,14 +372,11 @@ export class InforUserComponent implements OnInit {
 
     }
 
-    console.log("data update sign user ", data);
-
     //ham update
     this.updateSign(data);
   }
 
   fileChangedAttach(e: any) {
-    console.log(e.target.files)
     let files = e.target.files;
     for(let i = 0; i < files.length; i++){
 
@@ -393,7 +389,6 @@ export class InforUserComponent implements OnInit {
           if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'jpge') {
             this.handleUpload(e);
             this.attachFile = file;
-            console.log(this.attachFile);
           }else{
             this.toastService.showErrorHTMLWithTimeout("File hợp đồng yêu cầu định dạng JPG, PNG, JPGE", "", 3000);
           }

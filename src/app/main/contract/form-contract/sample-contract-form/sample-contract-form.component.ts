@@ -76,7 +76,9 @@ export class SampleContractFormComponent implements OnInit {
     x1: 0,
     y1: 0,
     height: 0,
-    width: 0
+    width: 0,
+    font: 'Times New Roman',
+    font_size: 13,
   }
 
   list_sign_name: any = [];
@@ -101,6 +103,11 @@ export class SampleContractFormComponent implements OnInit {
   selectedFont: any="";
   size: any;
 
+  sum: number[] = [];
+  top: any[]= [];
+
+  textSign: boolean = false;
+
   constructor(
     private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
@@ -114,7 +121,6 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   ngOnInit() {
-
     if(this.datasForm.font) {
       this.selectedFont = this.datasForm.font;
     }
@@ -132,12 +138,16 @@ export class SampleContractFormComponent implements OnInit {
           res['id_have_data'] = res.id;
           if (res.type == 1) {
             res['sign_unit'] = 'text';
+            res['text_attribute_name'] = res.name;
+            res.name = res.text_attribute_name;
           }
           if (res.type == 2) {
-            res['sign_unit'] = 'chu_ky_anh'
+            res['sign_unit'] = 'chu_ky_anh';
+            res.name = res.recipient.name;
           }
           if (res.type == 3) {
             res['sign_unit'] = 'chu_ky_so'
+            res.name = res.recipient.name;
           }
           if (res.type == 4) {
             res['sign_unit'] = 'so_tai_lieu'
@@ -228,6 +238,8 @@ export class SampleContractFormComponent implements OnInit {
         this.size = this.datasForm.size;
       }
     }
+
+    console.log("2 ", this.datasForm.is_determine_clone);
   }
 
   changeFont($event: any) {
@@ -270,7 +282,7 @@ export class SampleContractFormComponent implements OnInit {
           name: element.name,
           email: element.email,
           is_type_party: res.type,
-          role: element.role
+          role: element.role,
         }
         dataDetermine.push(isObj);
       })
@@ -642,6 +654,9 @@ export class SampleContractFormComponent implements OnInit {
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
+                  if(this.soHopDong) {
+                    element.name = this.soHopDong.name;
+                  }
                   this.isChangeText = true;
                 } else {
                   this.isChangeText = false;
@@ -717,15 +732,13 @@ export class SampleContractFormComponent implements OnInit {
       if (isSignType == 'text' && value) {
         element.is_disable = true;
       } else {
-        // if (this.getConditionFiledSign(element, isSignType)) {
-        //   let data = this.convertToSignConfig().filter((isName: any) => element.fields && element.fields.some((q: any) => isName.id_have_data == q.id_have_data && q.sign_unit == isSignType));
-        //   if (data.length > 0)
-        //     element.is_disable = true;
-        //   else element.is_disable = false;
-        // } else {
           if (this.convertToSignConfig().some((p: any) => (p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType)) {
             if (isSignType != 'text') {
-              element.is_disable = true;
+              if(isSignType == 'so_tai_lieu') {
+                element.is_disable = (element.role != 4 || (this.datasForm.contract_no && element.role == 4));
+              } else {
+                element.is_disable = true
+              }
             }
           } else {
             if (isSignType == 'chu_ky_anh') {
@@ -741,6 +754,7 @@ export class SampleContractFormComponent implements OnInit {
 
 
       if (listSelect) {
+        // element.is_disable = false;
         element.selected = listSelect && element.name == listSelect;
       }
     })
@@ -852,6 +866,24 @@ export class SampleContractFormComponent implements OnInit {
       setTimeout(() => {
         this.setPosition();
         this.eventMouseover();
+
+        for(let i = 0; i <= this.pageNumber;i++) {
+          this.top[i] = 0;
+
+          if(i < this.pageNumber)
+            this.sum[i] = 0;
+        }
+
+        for(let i = 1; i <= this.pageNumber; i++) {
+          let canvas: any = document.getElementById('canvas-step3-'+i);
+          this.top[i] = canvas.height;
+        }
+        
+
+        for(let i = 0; i < this.pageNumber; i++) {
+          this.top[i+1] += this.top[i];
+          this.sum[i] = this.top[i+1];
+        }
       }, 100)
     })
   }
@@ -1041,9 +1073,20 @@ export class SampleContractFormComponent implements OnInit {
 
   // get select người ký
   getSignSelect(d: any) {
+    if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
+      this.textSign = true;
+      this.list_font = ["Arial","Calibri","Times New Roman"];
+    } else {
+      this.textSign = false;
+      this.objSignInfo.font_size = 13;
+      d.font = 'Times New Roman';
+      this.list_font = [d.font];
+    }
+
     // lấy lại id của đối tượng ký khi click
     let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
     let signElement;
+
     if (set_id) {
       // set lại id cho đối tượng ký đã click
       this.objSignInfo.id = set_id.id;
@@ -1053,6 +1096,7 @@ export class SampleContractFormComponent implements OnInit {
     if (signElement) {
       let isObjSign = this.convertToSignConfig().filter((p: any) => p.id == this.objSignInfo.id)[0];
       // let is_name_signature = this.list_sign_name.filter((item: any) => item.name == this.objSignInfo.name)[0];
+
       if (isObjSign) {
         this.isEnableSelect = false;
         this.objSignInfo.traf_x = d.coordinate_x;
@@ -1065,6 +1109,18 @@ export class SampleContractFormComponent implements OnInit {
         this.isEnableText = d.sign_unit == 'text';
         this.isChangeText = d.sign_unit == 'so_tai_lieu';
 
+        if(isObjSign.font) {
+          this.objSignInfo.font = isObjSign.font;
+        } else {
+          this.objSignInfo.font = 'Times New Roman';
+        }
+
+        if(isObjSign.font_size) {
+          this.objSignInfo.font_size = isObjSign.font_size;
+        } else {
+          this.objSignInfo.font_size = 13;
+        }
+
         if (this.isEnableText) {
           this.objSignInfo.text_attribute_name = d.text_attribute_name
         }
@@ -1075,9 +1131,18 @@ export class SampleContractFormComponent implements OnInit {
           this.isEnableSelect = true;
         }
 
-        if (!d.name) //@ts-ignore
+        if (!d.name && !d.recipient.name) {
+          //@ts-ignore
           document.getElementById('select-dropdown').value = "";
-
+        } else {
+          if(d.recipient_id) {
+              //@ts-ignore
+              document.getElementById('select-dropdown').value = d.recipient_id;
+          } else {
+              //@ts-ignore
+              document.getElementById('select-dropdown').value = "";
+          }
+        }
       }
     }
   }
@@ -1100,6 +1165,7 @@ export class SampleContractFormComponent implements OnInit {
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
+    this.isChangeText = false;
     if (data.id_have_data && this.router.url.includes("edit")) {
       this.spinner.show();
       await this.contractService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
@@ -1166,6 +1232,7 @@ export class SampleContractFormComponent implements OnInit {
         }
       } else arrSignConfig = arrSignConfig.concat(element.sign_config);
     })
+
     return arrSignConfig;
   }
 
@@ -1208,6 +1275,7 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   // edit location doi tuong ky
+  soHopDong: any;
   changePositionSign(e: any, locationChange: any, property: any) {
     let signElement = document.getElementById(this.objSignInfo.id);
     if (signElement) {
@@ -1232,6 +1300,12 @@ export class SampleContractFormComponent implements OnInit {
         } else if (property == 'text') {
           isObjSign.text_attribute_name = e;
           signElement.setAttribute("text_attribute_name", isObjSign.text_attribute_name);
+        } else if (property == 'font') {
+          isObjSign.font = e.target.value;
+          signElement.setAttribute("font", isObjSign.font);
+        } else if(property == 'font_size') {
+          isObjSign.font_size = e.target.value;
+          signElement.setAttribute("font_size", isObjSign.font_size);
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
           // if (data_name && !isObjSign.name) {
@@ -1263,6 +1337,21 @@ export class SampleContractFormComponent implements OnInit {
               isObjSign.width = 135;
               signElement.setAttribute("height", isObjSign.width);
             }
+
+            if(data_name.role == 4 && this.isChangeText) {
+              this.soHopDong = data_name;
+
+              this.datasForm.contract_user_sign.forEach((res: any) => {
+                if (res.sign_config.length > 0) {
+                  let arrSignConfigItem = res.sign_config;
+                  
+                  arrSignConfigItem.forEach((element: any) => {
+                    // console.log("el ", element);
+                    element.name = this.soHopDong.name;
+                  })
+                }
+              });
+            } 
           }
         }
       }
@@ -1295,6 +1384,7 @@ export class SampleContractFormComponent implements OnInit {
     this.datasForm.font = this.selectedFont;
     this.datasForm.size = this.size;
     if (action == 'next_step' && !this.validData()) {
+
       if (this.save_draft_infor_form && this.save_draft_infor_form.close_header && this.save_draft_infor_form.close_modal) {
         this.save_draft_infor_form.close_header = false;
         this.save_draft_infor_form.close_modal.close();
@@ -1318,8 +1408,7 @@ export class SampleContractFormComponent implements OnInit {
 
           if (!coutError) {
             await this.contractService.addContractStep1(this.datasForm, this.datasForm.contract_id, 'template_form').toPromise().then((data) => {
-              // this.datasForm.id = data?.id;
-              // this.datasForm.contract_id = data?.id;
+        
             }, (error) => {
               coutError = true;
             })
@@ -1403,11 +1492,16 @@ export class SampleContractFormComponent implements OnInit {
       } else if (action == 'next_step') {
         // let coutError = false;
         this.spinner.show();
-        // if (!coutError) {
+        this.datasForm.contract_user_sign.forEach((res: any) => {
+          res.sign_config.forEach((element: any) => {
+            if(element.type == 1) {
+              element.name = element.text_attribute_name;
+            }
+          })
+        })
           this.stepForm = variable.stepSampleContractForm.step4;
           this.datasForm.stepLast = this.stepForm
           this.nextOrPreviousStep(this.stepForm);
-        // }
       }
     }
   }
@@ -1423,6 +1517,9 @@ export class SampleContractFormComponent implements OnInit {
     if (dataSignId.length > 0) {
       let data_remove_arr_signId = ['id', 'sign_unit', 'position', 'left', 'top', 'text_attribute_name', 'sign_type', 'signature_party', 'is_type_party', 'role', 'recipient', 'email', 'is_disable', 'selected', 'type_unit', "is_have_text"];
       dataSignId.forEach((res: any) => {
+        if(res.type == 1) {
+          res.name = res.text_attribute_name;
+        }
         data_remove_arr_signId.forEach((itemRemove: any) => {
           delete res[itemRemove];
         })
@@ -1431,6 +1528,7 @@ export class SampleContractFormComponent implements OnInit {
       let countIsSignId = 0;
       this.spinner.show();
       for (let i = 0; i < dataSignId.length; i++) {
+        console.log("data sign id ", dataSignId[i]);
         let id = dataSignId[i].id_have_data;
         delete dataSignId[i].id_have_data;
         await this.contractService.getContractSampleEdit(dataSignId[i], id).toPromise().then((data: any) => {
@@ -1561,7 +1659,8 @@ export class SampleContractFormComponent implements OnInit {
         if (this.datasForm.contract_user_sign[i].sign_config.length > 0) {
           for (let j = 0; j < this.datasForm.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datasForm.contract_user_sign[i].sign_config[j];
-            if (!element.name && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') { // element.sign_unit != 'so_tai_lieu'
+            if (!element.name && !element.recipient && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') {
+              console.log("el ", element);
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu') {
@@ -1598,6 +1697,7 @@ export class SampleContractFormComponent implements OnInit {
                   name: element.name,
                   signature_party: element.signature_party,
                   recipient_id: element.recipient_id,
+                  email: element.recipient ? element.recipient.email : element.email,
                   sign_unit: element.sign_unit
                 }
                 if (element.signature_party == "organization" || element.is_type_party == 1)
@@ -1713,7 +1813,9 @@ export class SampleContractFormComponent implements OnInit {
         // valid ký kéo thiếu ô ký cho từng loại ký
         for (const element of data_organization) {
           if (element.sign_type.length > 0) {
-            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && arrSign_organization.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
+            if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && 
+            arrSign_organization.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
+              console.log("arrSign ", arrSign_organization);
               error_organization++;
               nameSign_organization.name = element.name;
               nameSign_organization.sign_type = 'chu_ky_so';
@@ -1871,5 +1973,13 @@ export class SampleContractFormComponent implements OnInit {
     }
 
     this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+
+    let scrollTop = Number(event.srcElement.scrollTop);
+
+    for(let i = 0; i < this.sum.length;i++) {
+      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
+        this.pageNum = Number(i+2);
+      }
+    }
   }
 }

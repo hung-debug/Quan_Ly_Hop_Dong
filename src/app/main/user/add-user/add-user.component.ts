@@ -8,7 +8,7 @@ import { UnitService } from 'src/app/service/unit.service';
 import { RoleService } from 'src/app/service/role.service';
 import { networkList } from "../../../config/variable";
 import { UploadService } from 'src/app/service/upload.service';
-import {parttern_input} from "../../../config/parttern";
+import {parttern_input, parttern} from "../../../config/parttern";
 import * as moment from "moment";
 import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
@@ -128,7 +128,7 @@ export class AddUserComponent implements OnInit {
             networkKpi: null,
 
             nameHsm: this.fbd.control("", Validators.pattern(parttern_input.input_form)),
-            taxCodeHsm: this.fbd.control("",Validators.pattern(parttern_input.taxCode_form)),
+            taxCodeHsm: this.fbd.control("",Validators.pattern(parttern.cardid)),
             password1Hsm: this.fbd.control(""),
 
             fileImage:null
@@ -161,7 +161,7 @@ export class AddUserComponent implements OnInit {
                     networkKpi: data.phone_tel,
 
                     nameHsm: this.fbd.control(data.hsm_name , Validators.pattern(parttern_input.input_form)),
-                    taxCodeHsm: this.fbd.control(data.tax_code,Validators.pattern(parttern_input.taxCode_form)),
+                    taxCodeHsm: this.fbd.control(data.tax_code,Validators.pattern(parttern.cardid)),
                     password1Hsm: this.fbd.control(data.hsm_pass),
 
                     fileImage:null,

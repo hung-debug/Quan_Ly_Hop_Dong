@@ -319,9 +319,9 @@
                   <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là hsm-->
                 <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
                   <div class="participants__name" style="width: 90%">
-                    <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;<span class="required-title">*</span></div>
+                    <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'info.hsm' | translate}})</div></div>
                     <div class="input-data">
-                      <input type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                      <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                     </div>
                   </div>
                 </div>
@@ -1061,9 +1061,9 @@
                   <!--trường hiển thị khi người ký của đối tác chọn loại ký là hsm-->
                   <div class="participants--input" style="display: flex" *ngIf="getDataSignHsm(d).length > 0">
                     <div class="participants__name" style="width: 90%">
-                      <div class="label_detail text-color">{{'tax_code' | translate}}&nbsp;<span class="required-title">*</span></div>
+                      <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'info.hsm' | translate}})</div></div>
                       <div class="input-data">
-                        <input type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+                        <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="d.card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
                       </div>
                     </div>
                   </div>

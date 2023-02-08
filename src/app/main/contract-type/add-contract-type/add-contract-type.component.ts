@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { optionsCeCa } from 'src/app/config/variable';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
+import { ContractService } from 'src/app/service/contract.service';
 import { ToastService } from 'src/app/service/toast.service';
 import {parttern_input} from "../../../config/parttern";
 import { parttern } from '../../../config/parttern';
@@ -21,6 +23,12 @@ export class AddContractTypeComponent implements OnInit {
   codeOld:any;
 
   submitted = false;
+
+  optionsCeCa: Array<any> = [];
+
+  optionsCeCaValue: any;
+
+  ceca: boolean;
   get f() { return this.addForm.controls; }
 
   constructor(
@@ -31,7 +39,8 @@ export class AddContractTypeComponent implements OnInit {
     public dialogRef: MatDialogRef<AddContractTypeComponent>,
     public router: Router,
     public dialog: MatDialog,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private contractService: ContractService
     ) {
       this.addForm = this.fbd.group({
         name: this.fbd.control("", [Validators.required, Validators.pattern(parttern_input.input_form)]),
@@ -42,11 +51,13 @@ export class AddContractTypeComponent implements OnInit {
 
   ngOnInit(): void {
     this.datas = this.data;
+
+    this.optionsCeCa = optionsCeCa;
+
     //lay du lieu form cap nhat
     if( this.data.id != null){
       this.contractTypeService.getContractTypeById(this.data.id).subscribe(
         data => {
-          console.log(data);
           this.addForm = this.fbd.group({
             name: this.fbd.control(data.name, [Validators.required, Validators.pattern(parttern_input.input_form)]),
             code: this.fbd.control(data.code, [Validators.required, Validators.pattern(parttern.name_and_number), Validators.pattern(parttern_input.input_form)]),
@@ -65,13 +76,24 @@ export class AddContractTypeComponent implements OnInit {
         ceca_push: 0
       });
     }
+
+    
+    this.contractService.getDataNotifyOriganzation().subscribe((response) => {
+      if(response.ceca_push_mode == 'NONE') {
+        this.ceca = false;
+      } else if(response.ceca_push_mode == 'SELECTION') {
+        this.ceca = true
+      }
+    })
   }
 
   convertCeCa(ceca_push: any) {
     if(ceca_push == 1) {
       return 1;
-    } else {
+    } else if(ceca_push == 0) {
       return 0;
+    } else {
+      return null;
     }
   }
 
