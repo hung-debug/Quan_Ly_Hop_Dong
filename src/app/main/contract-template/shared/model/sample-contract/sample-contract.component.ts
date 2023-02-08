@@ -666,9 +666,11 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
-                  if(this.soHopDong) {
+                  
+                  if(this.soHopDong && this.soHopDong.role == 4) {
                     element.name = this.soHopDong.name;
                   }
+
                   this.isChangeText = true;
                 } else {
                   this.isChangeText = false;
@@ -1295,9 +1297,39 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           console.log("e ", e.target.value);
           isObjSign.font = e.target.value;
           signElement.setAttribute("font", isObjSign.font);
+
+          this.datas.contract_user_sign.forEach((res: any) => {
+            if (res.sign_config.length > 0) {
+              let arrSignConfigItem: any = "";
+
+              if(res.sign_unit == 'so_tai_lieu') {
+                arrSignConfigItem = res.sign_config;
+
+                arrSignConfigItem.forEach((element: any) => {
+                  element.font = isObjSign.font;
+                })
+              }
+            }
+          });
+
         } else if(property == 'font_size') {
           isObjSign.font_size = e.target.value;
           signElement.setAttribute("font_size", isObjSign.font_size); 
+
+          this.datas.contract_user_sign.forEach((res: any) => {
+            if (res.sign_config.length > 0) {
+              let arrSignConfigItem: any = "";
+
+              if(res.sign_unit == 'so_tai_lieu') {
+                arrSignConfigItem = res.sign_config;
+
+                arrSignConfigItem.forEach((element: any) => {
+                  element.font_size = isObjSign.font_size;
+                })
+              }
+            }
+          });
+
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
           if (data_name) {
@@ -1319,15 +1351,24 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
             if(data_name.role == 4 && this.isChangeText) {
               this.soHopDong = data_name;
-
+  
+              //Gán lại tất cả số hợp đồng cho một người ký
               this.datas.contract_user_sign.forEach((res: any) => {
                 if (res.sign_config.length > 0) {
-                  let arrSignConfigItem = res.sign_config;
-                  
-                  arrSignConfigItem.forEach((element: any) => {
-                    // console.log("el ", element);
-                    element.name = this.soHopDong.name;
-                  })
+                  let arrSignConfigItem: any = "";
+  
+                  if(res.sign_unit == 'so_tai_lieu') {
+                    arrSignConfigItem = res.sign_config;
+  
+                    arrSignConfigItem.forEach((element: any) => {
+                      element.name = this.soHopDong.name;
+                      element.signature_party = data_name.type_unit;
+                      element.recipient_id = data_name.id;
+                      element.status = data_name.status;
+                      element.type = data_name.type;
+                      element.email = data_name.email;
+                    })
+                  }
                 }
               });
             } 
@@ -1443,8 +1484,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   async getDefindDataSignEdit(dataSignId: any, dataSignNotId: any, action: any) {
-
-    console.log("id data ", dataSignId);
 
     let dataSample_contract: any[] = [];
     if (dataSignId.length > 0) {

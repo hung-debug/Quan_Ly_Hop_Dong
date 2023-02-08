@@ -654,7 +654,7 @@ export class SampleContractFormComponent implements OnInit {
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
-                  if(this.soHopDong) {
+                  if(this.soHopDong && this.soHopDong.role == 4) {
                     element.name = this.soHopDong.name;
                   }
                   this.isChangeText = true;
@@ -828,13 +828,6 @@ export class SampleContractFormComponent implements OnInit {
     }
   }
 
-  // setWidthText(d: any) {
-  //   return {
-  //     // 'width.px': (this.widthDrag / 2)
-  //     'width.px': (this.widthDrag)
-  //   }
-  // }
-
   // view pdf qua canvas
   async getPage() {
     // @ts-ignore
@@ -923,12 +916,6 @@ export class SampleContractFormComponent implements OnInit {
     }, 100)
     this.setPosition();
     this.eventMouseover();
-  }
-
-  getRemoveCopyRight() {
-    // let is_var_copyRight = sessionStorage.getItem('copy_right_show');
-    // if (is_var_copyRight)
-    //   sessionStorage.removeItem('copy_right_show')
   }
 
   // set lại vị trí đối tượng kéo thả đã lưu trước đó
@@ -1147,21 +1134,6 @@ export class SampleContractFormComponent implements OnInit {
     }
   }
 
-  // getIdSignClick() {
-  //   let set_id = this.convertToSignConfig().filter((p: any) => p.id == d.id)[0];
-  //   return set_id.id;
-  //   // this.datasForm.contract_user_sign.forEach((element: any, index: any) => {
-  //   //   if (element.id == id) {
-  //   //     if (element.sign_config.length == 0) {
-  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
-  //   //     } else {
-  //   //       this.objSignInfo['id'] = 'signer-' + index + '-index-' + (element.sign_config.length) + '_' + element.id;
-  //   //     }
-  //   //     // element['sign_config'].push(_obj);
-  //   //   }
-  //   // })
-  // }
-
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
@@ -1303,9 +1275,38 @@ export class SampleContractFormComponent implements OnInit {
         } else if (property == 'font') {
           isObjSign.font = e.target.value;
           signElement.setAttribute("font", isObjSign.font);
+
+          this.datasForm.contract_user_sign.forEach((res: any) => {
+            if (res.sign_config.length > 0) {
+              let arrSignConfigItem: any = "";
+
+              if(res.sign_unit == 'so_tai_lieu') {
+                arrSignConfigItem = res.sign_config;
+
+                arrSignConfigItem.forEach((element: any) => {
+                  element.font = isObjSign.font;
+                })
+              }
+            }
+          });
+
         } else if(property == 'font_size') {
           isObjSign.font_size = e.target.value;
           signElement.setAttribute("font_size", isObjSign.font_size);
+
+          this.datasForm.contract_user_sign.forEach((res: any) => {
+            if (res.sign_config.length > 0) {
+              let arrSignConfigItem: any = "";
+
+              if(res.sign_unit == 'so_tai_lieu') {
+                arrSignConfigItem = res.sign_config;
+
+                arrSignConfigItem.forEach((element: any) => {
+                  element.font_size = isObjSign.font_size;
+                })
+              }
+            }
+          });
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
           // if (data_name && !isObjSign.name) {
@@ -1340,15 +1341,25 @@ export class SampleContractFormComponent implements OnInit {
 
             if(data_name.role == 4 && this.isChangeText) {
               this.soHopDong = data_name;
-
+  
+              //Gán lại tất cả số hợp đồng cho một người ký
               this.datasForm.contract_user_sign.forEach((res: any) => {
                 if (res.sign_config.length > 0) {
-                  let arrSignConfigItem = res.sign_config;
-                  
-                  arrSignConfigItem.forEach((element: any) => {
-                    // console.log("el ", element);
-                    element.name = this.soHopDong.name;
-                  })
+                  let arrSignConfigItem: any = "";
+  
+                  if(res.sign_unit == 'so_tai_lieu') {
+                    arrSignConfigItem = res.sign_config;
+  
+                    arrSignConfigItem.forEach((element: any) => {
+                      element.name = this.soHopDong.name;
+                      element.signature_party = data_name.type_unit;
+                      element.recipient_id = data_name.id;
+                      element.status = data_name.status;
+                      element.type = data_name.type;
+                      element.email = data_name.email;
+                    })
+                  }
+            
                 }
               });
             } 
