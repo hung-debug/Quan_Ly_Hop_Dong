@@ -118,9 +118,6 @@ export class DetermineSignerComponent implements OnInit {
 
   clonex: any;
   ngOnInit(): void {
-
-    console.log("this datas ", this.datas);
-
     if(environment.flag == 'NB') {
       this.site = 'NB';
     } else if (environment.flag == 'KD') {
@@ -513,6 +510,8 @@ export class DetermineSignerComponent implements OnInit {
 
     if (d.login_by == 'phone') {
       this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 2, 5].includes(p.id));
+    } else {
+      this.isListSignNotPerson = this.signTypeList.filter((p) => ![1, 5].includes(p.id));
     }
   }
 
