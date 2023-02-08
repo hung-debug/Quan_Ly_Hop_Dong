@@ -1181,24 +1181,26 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
       let emailRecipients: any[] = [];
 
-      // this.datas.determine_contract.forEach((item: any) => {
-      //     item.recipients.forEach((itemRecipients: any) => {
-      //       if(itemRecipients.fields && itemRecipients.fields.length > 0) {
-      //         itemRecipients.fields.forEach((itemFields: any) => {
-      //           coordinate_x.push(Number(itemFields.coordinate_x));
-      //           coordinate_y.push(Number(itemFields.coordinate_y));
-      //           width.push(Number(itemFields.width));
-      //           height.push(Number(itemFields.height));
-      //         })
-      //       }
+      console.log("datas ", this.datas.determine_contract);
 
-      //       if(item.type == 2) {
-      //         emailRecipients.push(itemRecipients);
-      //       }
-      //     })
-      // })
+      this.datas.determine_contract.forEach((item: any) => {
+          item.recipients.forEach((itemRecipients: any) => {
+            if(itemRecipients.fields && itemRecipients.fields.length > 0) {
+              itemRecipients.fields.forEach((itemFields: any) => {
+                coordinate_x.push(Number(itemFields.coordinate_x));
+                coordinate_y.push(Number(itemFields.coordinate_y));
+                width.push(Number(itemFields.width));
+                height.push(Number(itemFields.height));
+              })
+            }
 
-      let flagEmail = [];
+            if(item.type == 2) {
+              emailRecipients.push(itemRecipients);
+            }
+          })
+      })
+
+      let flagEmail = null;
       for(let i = 0; i < emailRecipients.length; i++) {
         for(let j = i+1; j < emailRecipients.length; j++) {
           if((emailRecipients[i].email == emailRecipients[j].email) && (emailRecipients[i].role == 1 || emailRecipients[j].role == 1)) {
@@ -1237,7 +1239,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               else arrSign_partner.push(data_sign);
             }
 
-            if(element.coordinate_x) {
+            if(element.coordinate_x && (!flagEmail || (flagEmail && (flagEmail != element.email)))) {
               coordinate_x.push(Number(element.coordinate_x));
               coordinate_y.push(Number(element.coordinate_y));
               width.push(Number(element.width));
