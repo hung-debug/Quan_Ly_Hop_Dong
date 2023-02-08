@@ -1039,7 +1039,6 @@ export class ConsiderContractComponent
       this.coordinates_signature = event.rect;
       let id = event.target.id;
 
-      console.log("id ", id);
       let signElement = <HTMLElement>document.getElementById(id);
       let rect_location = signElement.getBoundingClientRect();
       if (id.includes('chua-keo')) {  //Khi kéo vào trong hợp đồng thì sẽ thêm 1 object vào trong mảng sign_config
@@ -1139,7 +1138,6 @@ export class ConsiderContractComponent
           this.signCurent['top'] = (rect_location.top - canvasInfo.top).toFixed();
         }
         let name_accept_signature = '';
-        let field_data = [];
 
         // lay lai danh sach signer sau khi keo vao hop dong
         this.datas.contract_user_sign.forEach((res: any) => {
@@ -2402,7 +2400,14 @@ export class ConsiderContractComponent
 
   base64Data: any;
   async callMergeTimeStamp(signatureToken: any, fieldName: any, hexDigestTempFile: any) {
-    const mergeTimeStamp = await this.contractService.meregeTimeStamp(this.recipientId, this.idContract, signatureToken, fieldName, this.certInfoBase64, hexDigestTempFile).toPromise();
+
+    let isTimestamp = false;
+
+    if(this.isDataContract.ceca_push == 1) {
+      isTimestamp = true;
+    }
+
+    const mergeTimeStamp = await this.contractService.meregeTimeStamp(this.recipientId, this.idContract, signatureToken, fieldName, this.certInfoBase64, hexDigestTempFile, isTimestamp).toPromise();
     this.base64Data = mergeTimeStamp.base64Data;
   }
 

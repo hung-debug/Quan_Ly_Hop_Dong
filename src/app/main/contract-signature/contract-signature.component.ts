@@ -98,60 +98,60 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.route.queryParams.subscribe((params) => {
-    //   if (typeof params.filter_name != 'undefined' && params.filter_name) {
-    //     this.filter_name = params.filter_name;
-    //   } else {
-    //     this.filter_name = '';
-    //   }
-    //   if (typeof params.filter_type != 'undefined' && params.filter_type) {
-    //     this.filter_type = params.filter_type;
-    //   } else {
-    //     this.filter_type = '';
-    //   }
-    //   if (
-    //     typeof params.filter_contract_no != 'undefined' &&
-    //     params.filter_contract_no
-    //   ) {
-    //     this.filter_contract_no = params.filter_contract_no;
-    //   } else {
-    //     this.filter_contract_no = '';
-    //   }
-    //   if (
-    //     typeof params.filter_from_date != 'undefined' &&
-    //     params.filter_from_date
-    //   ) {
-    //     this.filter_from_date = params.filter_from_date;
-    //   } else {
-    //     this.filter_from_date = '';
-    //   }
-    //   if (
-    //     typeof params.filter_to_date != 'undefined' &&
-    //     params.filter_to_date
-    //   ) {
-    //     this.filter_to_date = params.filter_to_date;
-    //   } else {
-    //     this.filter_to_date = '';
-    //   }
-    //   if (
-    //     typeof params.contractStatus != 'undefined' &&
-    //     params.contractStatus
-    //   ) {
-    //     this.contractStatus = params.contractStatus;
-    //   } else {
-    //     this.contractStatus = '';
-    //   }
+    this.route.queryParams.subscribe((params) => {
+      if (typeof params.filter_name != 'undefined' && params.filter_name) {
+        this.filter_name = params.filter_name;
+      } else {
+        this.filter_name = '';
+      }
+      if (typeof params.filter_type != 'undefined' && params.filter_type) {
+        this.filter_type = params.filter_type;
+      } else {
+        this.filter_type = '';
+      }
+      if (
+        typeof params.filter_contract_no != 'undefined' &&
+        params.filter_contract_no
+      ) {
+        this.filter_contract_no = params.filter_contract_no;
+      } else {
+        this.filter_contract_no = '';
+      }
+      if (
+        typeof params.filter_from_date != 'undefined' &&
+        params.filter_from_date
+      ) {
+        this.filter_from_date = params.filter_from_date;
+      } else {
+        this.filter_from_date = '';
+      }
+      if (
+        typeof params.filter_to_date != 'undefined' &&
+        params.filter_to_date
+      ) {
+        this.filter_to_date = params.filter_to_date;
+      } else {
+        this.filter_to_date = '';
+      }
+      if (
+        typeof params.contractStatus != 'undefined' &&
+        params.contractStatus
+      ) {
+        this.contractStatus = params.contractStatus;
+      } else {
+        this.contractStatus = '';
+      }
 
-    //   if (typeof params.page != 'undefined' && params.page) {
-    //     this.p = params.page;
-    //   }
+      if (typeof params.page != 'undefined' && params.page) {
+        this.p = params.page;
+      }
 
-    //   if (typeof params.organization_id != 'undefined' && params.organization_id) {
-    //     this.organization_id = params.organization_id;
-    //   } else {
-    //     this.organization_id = "";
-    //   }
-    // });
+      if (typeof params.organization_id != 'undefined' && params.organization_id) {
+        this.organization_id = params.organization_id;
+      } else {
+        this.organization_id = "";
+      }
+    });
     this.sub = this.route.params.subscribe((params) => {
       // this.action = params['action'];
       this.status = params['status'];
@@ -165,7 +165,6 @@ export class ContractSignatureComponent implements OnInit {
       this.getContractList();
     });
 
-    // this.getDateTime();
   }
 
   async getDateTime() {
@@ -937,14 +936,7 @@ export class ContractSignatureComponent implements OnInit {
     );
   }
 
-  async signTokenVersion2(
-    fileC: any,
-    idContract: any,
-    recipientId: any,
-    documentId: any,
-    taxCode: any,
-    idSignMany: any
-  ) {
+  async signTokenVersion2(fileC: any,idContract: any,recipientId: any,documentId: any,taxCode: any,idSignMany: any) {
     //ky bang usb token
     let base64String: any = [];
 
@@ -966,6 +958,8 @@ export class ContractSignatureComponent implements OnInit {
     //Chieu dai cau page can ky
     let heightPage: any = [];
 
+    let ceca_push: any = [];
+
     let currentHeight: any = [];
 
     //tao mang currentHeight toan so 0;
@@ -974,16 +968,12 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     for (let i = 0; i < fileC.length; i++) {
-      base64String[i] = await this.contractServiceV1.getDataFileUrlPromise(
-        fileC[i]
-      );
+      base64String[i] = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
 
       base64String[i] = encode(base64String[i]);
 
       //Lấy toạ độ ô ký của từng hợp đồng
-      this.contractServiceV1
-        .getDataObjectSignatureLoadChange(idContract[i])
-        .subscribe((response) => {
+      this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).subscribe((response) => {
           for (let j = 0; j < response.length; j++) {
             if (response[j].recipient) {
               if (recipientId[i] == response[j].recipient.id) {
@@ -1000,9 +990,7 @@ export class ContractSignatureComponent implements OnInit {
         });
 
       //Lấy thông tin page của từng hợp đồng
-      this.contractServiceV1
-        .getInfoPage(documentId[i])
-        .subscribe((response) => {
+      this.contractServiceV1.getInfoPage(documentId[i]).subscribe((response) => {
           for (let j = 0; j < response.length; j++) {
             if (response[j].page < page[i]) {
               currentHeight[i] += response[j].height;
@@ -1013,6 +1001,15 @@ export class ContractSignatureComponent implements OnInit {
             }
           }
         });
+
+      this.contractServiceV1.getListDataCoordination(idContract[i]).subscribe((respoonse) => {
+        if(respoonse.ceca_push == 1) {
+          ceca_push.push(true);
+        } else {
+          ceca_push.push(false);
+        }
+      });
+
     }
 
     //Lay thong tin cua usb token
@@ -1129,8 +1126,6 @@ export class ContractSignatureComponent implements OnInit {
         signI = textSignB.split(',')[1];
       }
 
-      console.log("sign update ", signUpdate);
-
       for (let i = 0; i < fileC.length; i++) {
         signUpdate.id = idSignMany[i];
         signDigital.signDigitalX = x[i];
@@ -1177,7 +1172,8 @@ export class ContractSignatureComponent implements OnInit {
               signatureToken,
               fieldName,
               certInfoBase64,
-              hexDigestTempFile
+              hexDigestTempFile,
+              true
             )
             .toPromise();
           const filePdfSigned = mergeTimeStamp.base64Data;
@@ -1466,10 +1462,7 @@ export class ContractSignatureComponent implements OnInit {
             'data_coordinates_contract_id',
             JSON.stringify({ data_coordinates_id: res.id })
           );
-          // this.router.navigate([
-          //   'main/c/' + this.coordinates + '/' + item.contractId,
-          // ]);
-
+   
           this.router.navigate(
             ['main/c/' + this.coordinates + '/' + item.contractId,],
             {

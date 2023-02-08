@@ -594,7 +594,7 @@ export class ContractService {
       });
   }
 
-  meregeTimeStamp(recipientId: number, contractId: number, signature: any, fieldName: any, cert: any, hexDigestTempFile: any) {
+  meregeTimeStamp(recipientId: number, contractId: number, signature: any, fieldName: any, cert: any, hexDigestTempFile: any, isTimestamp: boolean) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -605,7 +605,7 @@ export class ContractService {
         signature: signature,
         filedName: fieldName,
         cert: cert,
-        isTimestamp: true,
+        isTimestamp: isTimestamp,
         hexDigestTempFile: hexDigestTempFile
       })
     
@@ -954,7 +954,7 @@ export class ContractService {
       .append('Authorization', 'Bearer ' + this.token);
     const body = JSON.stringify({ type: id });
     let listContractUrl = this.addConfirmContractUrl + id;
-    return this.http.get<Contract[]>(listContractUrl, { headers }).pipe();
+    return this.http.get<any>(listContractUrl, { headers }).pipe();
   }
 
   addDocument(datas: any, is_type?: number, is_status?: number) {
