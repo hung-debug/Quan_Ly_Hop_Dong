@@ -519,9 +519,7 @@ export class ConsiderContractComponent
         }
         this.fetchDataUserSimPki();
 
-        this.userService
-          .getSignatureUserById(this.currentUser.id)
-          .subscribe((res) => {
+        this.userService.getSignatureUserById(this.currentUser.id).subscribe((res) => {
             if (res) {
               this.datas.imgSignAcc = res;
             }

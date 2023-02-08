@@ -1248,9 +1248,41 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         } else if (property == 'font') {
           isObjSign.font = e.target.value;
           signElement.setAttribute("font", isObjSign.font);
+
+          this.datas.contract_user_sign.forEach((res: any) => {
+            if (res.sign_config.length > 0) {
+              let arrSignConfigItem: any = "";
+
+              if(res.sign_unit == 'so_tai_lieu') {
+                arrSignConfigItem = res.sign_config;
+
+                arrSignConfigItem.forEach((element: any) => {
+                  element.font = isObjSign.font;
+                })
+              }
+              
+            
+            }
+          });
         } else if(property == 'font_size') {
           isObjSign.font_size = e.target.value;
           signElement.setAttribute("font_size", isObjSign.font_size);
+
+          this.datas.contract_user_sign.forEach((res: any) => {
+            if (res.sign_config.length > 0) {
+              let arrSignConfigItem: any = "";
+
+              if(res.sign_unit == 'so_tai_lieu') {
+                arrSignConfigItem = res.sign_config;
+
+                arrSignConfigItem.forEach((element: any) => {
+                  element.font_size = isObjSign.font_size;
+                })
+              }
+              
+            
+            }
+          });
         } else {
           let data_name = this.list_sign_name.filter((p: any) => p.id == e.target.value)[0];
 
@@ -1287,7 +1319,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   arrSignConfigItem = res.sign_config;
 
                   arrSignConfigItem.forEach((element: any) => {
-                    console.log("el ", element);
                     element.name = this.soHopDong.name;
                     element.signature_party = data_name.type_unit;
                     element.recipient_id = data_name.id;
@@ -1626,9 +1657,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             }
           }
       }
-
-
-      
 
       if (count > 0) {
         this.toastService.showWarningHTMLWithTimeout("select.signer.obj", "", 3000);
