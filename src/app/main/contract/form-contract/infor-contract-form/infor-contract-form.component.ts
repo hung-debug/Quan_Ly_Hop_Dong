@@ -161,16 +161,19 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     const informationContractType = await this.contractTypeService.getContractTypeById(this.datasForm.type_id).toPromise();
 
     if(informationContractType.ceca_push == 1) {
+      this.optionsCeCa = optionsCeCa;
       this.optionsCeCaValue = 1;
-    } else {
+      this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+    } else if(!informationContractType.ceca_push) {
+      this.optionsCeCa = optionsCeCa;
       this.optionsCeCaValue = 0;
+      this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
+    } else {
+      this.optionsCeCaValue = null;
+      this.optionsCeCa = optionsCeCa;
     }
 
     this.datasForm.ceca_push = this.optionsCeCaValue;
-  }
-
-  async changeTemplate() {
-
   }
 
   ngAfterViewInit() {

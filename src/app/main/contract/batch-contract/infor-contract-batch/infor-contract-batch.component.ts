@@ -115,20 +115,28 @@ export class InforContractBatchComponent implements OnInit {
     this.clearError();
     this.idContractTemplate = e.value;
 
-    // if(e.value.type_id) {
-    //   const informationContractType = await this.contractTypeService.getContractTypeById(e.value.type_id).toPromise();
+    let type_id = null;
 
-    //   if(informationContractType.ceca_push == 1) {
-    //     this.optionsCeCaValue = 1;
-    //     this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
-    //   } else {
-    //     this.optionsCeCaValue = 0;
-    //     this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
-    //   }
-    // } else {
-    //   this.optionsCeCaValue = 0;
-    //   this.optionsCeCa = optionsCeCa;
-    // }
+    const inforContractTemplate = await this.contractTemplateService.getInfoContractTemplate(this.idContractTemplate).toPromise();
+
+    type_id = inforContractTemplate.type_id;
+
+    if(type_id) {
+      const informationContractType = await this.contractTypeService.getContractTypeById(type_id).toPromise();
+
+      if(informationContractType.ceca_push == 1) {
+        this.optionsCeCa = optionsCeCa;
+        this.optionsCeCaValue = 1;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+      } else {
+        this.optionsCeCa = optionsCeCa;
+        this.optionsCeCaValue = 0;
+        this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+      }
+    } else {
+      this.optionsCeCaValue = 0;
+      this.optionsCeCa = optionsCeCa;
+    }
   }
 
   downFileExample() {

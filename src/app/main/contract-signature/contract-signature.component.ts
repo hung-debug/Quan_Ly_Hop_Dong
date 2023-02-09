@@ -200,28 +200,25 @@ export class ContractSignatureComponent implements OnInit {
         }
         this.contractsSignMany.forEach((key: any, v: any) => {
           this.contractsSignMany[v].contractId = key.participant.contract.id;
-          this.contractsSignMany[v].contractName =
-            key.participant.contract.name;
-          this.contractsSignMany[v].contractNumber =
-            key.participant.contract.code;
+
+          this.contractsSignMany[v].contractName = key.participant.contract.name;
+
+          this.contractsSignMany[v].contractNumber = key.participant.contract.code;
 
           //Ngay het han hop dong
-          this.contractsSignMany[v].contractSignTime =
-            key.participant.contract.sign_time;
+          this.contractsSignMany[v].contractSignTime = key.participant.contract.sign_time;
 
           //Ngay tao hop dong
-          this.contractsSignMany[v].contractCreateTime =
-            key.participant.contract.created_time;
+          this.contractsSignMany[v].contractCreateTime = key.participant.contract.created_time;
 
-          this.contractsSignMany[v].contractStatus =
-            key.participant.contract.status;
-          this.contractsSignMany[v].contractCecaPush =
-            key.participant.contract.ceca_push;
-          this.contractsSignMany[v].contractCecaStatus =
-            key.participant.contract.ceca_status;
-          this.contractsSignMany[v].contractReleaseState =
-            key.participant.contract.release_state;
-          // this.contractsSignMany[v].typeOfSign = key.sign_type[0].name;
+          this.contractsSignMany[v].contractStatus = key.participant.contract.status;
+
+          this.contractsSignMany[v].contractCecaPush = key.participant.contract.ceca_push;
+
+          this.contractsSignMany[v].contractCecaStatus = key.participant.contract.ceca_status;
+
+          this.contractsSignMany[v].contractReleaseState = key.participant.contract.release_state;
+
           this.contractsSignMany[v].checked = false;
 
           //Gan document id
@@ -486,17 +483,12 @@ export class ContractSignatureComponent implements OnInit {
     //id truyen len cua hsm la recipient id: idSignMany = recipientId
     //id truyen len cua usb token la field id
     if (signId == 4) {
-      idSignMany = contractsSignManyChecked
-        .filter((opt) => opt.checked)
-        .map((opt) => opt.id);
+      idSignMany = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.id);
 
-      recipientId = contractsSignManyChecked
-        .filter((opt) => opt.checked)
-        .map((opt) => opt.id);
+      recipientId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.id);
 
       //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
       for (let i = 0; i < recipientId.length; i++) {
-        console.log('recipient id i ', recipientId[i]);
         this.contractServiceV1
           .getDetermineCoordination(recipientId[i])
           .subscribe((response) => {
@@ -557,9 +549,7 @@ export class ContractSignatureComponent implements OnInit {
         if (signId == 2) {
           this.spinner.show();
 
-          let contractsSignManyChecked = this.contractsSignMany.filter(
-            (opt) => opt.checked
-          );
+          let contractsSignManyChecked = this.contractsSignMany.filter((opt) => opt.checked);
 
           let idSignMany: any = [];
           let subscribe: any = [];
@@ -567,24 +557,17 @@ export class ContractSignatureComponent implements OnInit {
           let fileC: any = [];
           let documentId: any = [];
 
-          idSignMany = contractsSignManyChecked
-            .filter((opt) => opt.checked)
-            .map((opt) => opt.fields[0].id);
-          recipientId = contractsSignManyChecked
-            .filter((opt) => opt.checked)
-            .map((opt) => opt.id);
-          idContract = contractsSignManyChecked
-            .filter((opt) => opt.checked)
-            .map((opt) => opt.participant.contract.id);
-          documentId = contractsSignManyChecked
-            .filter((opt) => opt.checked)
-            .map((opt) => opt.fields[0].documentId);
+          idSignMany = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.fields[0].id);
+
+          recipientId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.id);
+
+          idContract = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.participant.contract.id);
+
+          documentId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.fields[0].documentId);
 
           //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
           for (let i = 0; i < recipientId.length; i++) {
-            subscribe[i] = this.contractServiceV1
-              .getDetermineCoordination(recipientId[i])
-              .subscribe((response) => {
+            subscribe[i] = this.contractServiceV1.getDetermineCoordination(recipientId[i]).subscribe((response) => {
                 response.recipients.forEach((item: any) => {
                   if (item.fields[0].recipient.id == recipientId[i]) {
                     taxCode.push(item.fields[0].recipient.cardId);
@@ -594,20 +577,11 @@ export class ContractSignatureComponent implements OnInit {
           }
 
           for (let i = 0; i < idContract.length; i++) {
-            this.contractServiceV1
-              .getFileContract(idContract[i])
-              .subscribe((response) => {
+            this.contractServiceV1.getFileContract(idContract[i]).subscribe((response) => {
                 fileC.push(response[0].path);
 
                 if (fileC.length == idContract.length) {
-                  this.signUsbTokenMany(
-                    fileC,
-                    idContract,
-                    recipientId,
-                    documentId,
-                    taxCode,
-                    idSignMany
-                  );
+                  this.signUsbTokenMany(fileC,idContract,recipientId,documentId,taxCode,idSignMany);
                 }
               });
           }
@@ -1101,9 +1075,7 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     //check trùng mã số thuế
-    const checkTaxCode = await this.contractServiceV1
-      .checkTaxCodeExist(taxCode[0], certInfoBase64)
-      .toPromise();
+    const checkTaxCode = await this.contractServiceV1.checkTaxCodeExist(taxCode[0], certInfoBase64).toPromise();
 
     if (checkTaxCode.success) {
       let signUpdate = {
@@ -1165,17 +1137,7 @@ export class ContractSignatureComponent implements OnInit {
 
           const signatureToken = dataSignatureToken.Signature;
 
-          const mergeTimeStamp = await this.contractServiceV1
-            .meregeTimeStamp(
-              recipientId[i],
-              idContract[i],
-              signatureToken,
-              fieldName,
-              certInfoBase64,
-              hexDigestTempFile,
-              true
-            )
-            .toPromise();
+          const mergeTimeStamp = await this.contractServiceV1.meregeTimeStamp(recipientId[i],idContract[i],signatureToken,fieldName,certInfoBase64,hexDigestTempFile,ceca_push[i]).toPromise();
           const filePdfSigned = mergeTimeStamp.base64Data;
 
           const sign = await this.contractServiceV1.updateDigitalSignatured(
@@ -1246,17 +1208,8 @@ export class ContractSignatureComponent implements OnInit {
     }
   }
 
-  async signUsbTokenMany(
-    fileC: any,
-    idContract: any,
-    recipientId: any,
-    documentId: any,
-    taxCode: any,
-    idSignMany: any
-  ) {
-    const dataOrg = await this.contractServiceV1
-      .getDataNotifyOriganzation()
-      .toPromise();
+  async signUsbTokenMany(fileC: any,idContract: any,recipientId: any,documentId: any, taxCode: any, idSignMany: any) {
+    const dataOrg = await this.contractServiceV1.getDataNotifyOriganzation().toPromise();
 
     if (dataOrg.usb_token_version == 1) {
       this.signTokenVersion1(

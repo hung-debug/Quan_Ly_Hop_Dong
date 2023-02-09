@@ -1070,8 +1070,6 @@ export class DetermineSignerComponent implements OnInit {
 
     let number = 0;
     this.datas.is_determine_clone.forEach((res: any, index: number) => {
-
-
       if(res.type != 1){
         number++;
         res.name = "Đối tác " + number;

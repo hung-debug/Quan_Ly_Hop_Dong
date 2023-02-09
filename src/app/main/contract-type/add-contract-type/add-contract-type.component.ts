@@ -90,11 +90,9 @@ export class AddContractTypeComponent implements OnInit {
   convertCeCa(ceca_push: any) {
     if(ceca_push == 1) {
       return 1;
-    } else if(ceca_push == 0) {
-      return 0;
     } else {
-      return null;
-    }
+      return 0;
+    } 
   }
 
   checkName(data:any){

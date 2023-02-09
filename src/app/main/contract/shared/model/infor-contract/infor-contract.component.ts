@@ -142,8 +142,6 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   actionSuccess() {
     this.optionsCeCa = optionsCeCa;
 
-    console.log("b1 ", this.datas.ceca_push);
-
     if(this.datas.ceca_push != 0  && this.datas.ceca_push != 1)
       this.datas.ceca_push = this.optionsCeCaValue;
     else
@@ -349,7 +347,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
       this.optionsCeCa = optionsCeCa;
       this.optionsCeCaValue = 1;
       this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
-    } else if(informationContractType.ceca_push == 0) {
+    } else if(!informationContractType.ceca_push) {
       this.optionsCeCa = optionsCeCa;
       this.optionsCeCaValue = 0;
       this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
