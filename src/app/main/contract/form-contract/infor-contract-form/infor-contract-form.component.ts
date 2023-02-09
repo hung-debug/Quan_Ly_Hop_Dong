@@ -162,23 +162,29 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     })
   }
 
-  async changeTypeContract() {
-    const informationContractType = await this.contractTypeService.getContractTypeById(this.datasForm.type_id).toPromise();
+  async changeTypeContract(e: any) {
 
-    if(informationContractType.ceca_push == 1) {
-      this.optionsCeCa = optionsCeCa;
-      this.optionsCeCaValue = 1;
-      this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
-    } else if(!informationContractType.ceca_push) {
-      this.optionsCeCa = optionsCeCa;
-      this.optionsCeCaValue = 0;
-      this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
-    } else {
-      this.optionsCeCaValue = null;
-      this.optionsCeCa = optionsCeCa;
-    }
 
-    this.datasForm.ceca_push = this.optionsCeCaValue;
+        this.datasForm.type_id = e.value;
+
+        const informationContractType = await this.contractTypeService.getContractTypeById(this.datasForm.type_id).toPromise();
+
+        if(informationContractType.ceca_push == 1) {
+          this.optionsCeCa = optionsCeCa;
+          this.optionsCeCaValue = 1;
+          this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
+        } else if(!informationContractType.ceca_push) {
+          this.optionsCeCa = optionsCeCa;
+          this.optionsCeCaValue = 0;
+          this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
+        } else {
+          this.optionsCeCaValue = null;
+          this.optionsCeCa = optionsCeCa;
+        }
+    
+        this.datasForm.ceca_push = this.optionsCeCaValue;
+    
+
   }
 
   ngAfterViewInit() {
@@ -268,15 +274,14 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       if(this.datasForm.type_id) {
         this.contractTypeService.getContractTypeById(this.datasForm.type_id).subscribe((data) => {
           if(data.ceca_push == 1) {
+            this.optionsCeCa = optionsCeCa;
             this.optionsCeCaValue = 1;
             this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 1);
-          } else if(data.ceca_push == 0) {
+          } else {
+            this.optionsCeCa = optionsCeCa;
             this.optionsCeCaValue = 0;
             this.optionsCeCa = this.optionsCeCa.filter((res: any) => res.id == 0);
-          } else {
-            this.optionsCeCaValue = null;
-            this.optionsCeCa = optionsCeCa;
-          }
+          } 
         })
       }
 

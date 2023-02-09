@@ -1122,7 +1122,6 @@ export class ContractService {
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
     const body = '';
-    console.log(headers);
     return this.http.put<Contract>(
       this.addConfirmContractUrl + datas.id + '/start-bpm',
       body,
