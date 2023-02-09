@@ -121,6 +121,11 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     this.optionsCeCaValue = null;
     this.datasForm.ceca_push = this.optionsCeCaValue;
 
+    if(this.datasForm.ceca_push != 0  && this.datasForm.ceca_push != 1)
+      this.datasForm.ceca_push = this.optionsCeCaValue;
+    else
+      this.optionsCeCaValue = this.datasForm.ceca_push;
+
     let dataRouter = this.route.params.subscribe((params: any) => {
       this.action = params.action;
     }, null, () => {

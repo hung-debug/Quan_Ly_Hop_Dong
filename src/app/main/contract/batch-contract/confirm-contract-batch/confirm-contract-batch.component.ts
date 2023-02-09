@@ -194,13 +194,6 @@ export class ConfirmContractBatchComponent
             // res['font_size'] = res.font_size;
             // res['height'] = res.height;
             res['name'] = element.name;
-            // res['page'] = res.page;
-            // res['recipient_id'] = res.recipient_id;
-            // res['required'] = res.required;
-            // res['status'] = res.status;
-            // res['type'] = res.type;
-            // res['value'] = res.value;
-            // res['width'] = res.width;
 
             res['id'] = i++;
             if (res.type == 1) {
@@ -706,8 +699,6 @@ export class ConfirmContractBatchComponent
             );
           }
         }
-        // console.log(this.signCurent)
-        // console.log(this.objSignInfo)
       }
     }
   }
@@ -806,7 +797,10 @@ export class ConfirmContractBatchComponent
   user: any;
   submit() {
 
-    this.next(0);
+    if(!this.datasBatch.ceca_push) 
+      this.datasBatch.ceca_push = 0;
+
+    this.next(this.datasBatch.ceca_push);
     // const data = {
     //   title: 'YÊU CẦU XÁC NHẬN',
     // };
