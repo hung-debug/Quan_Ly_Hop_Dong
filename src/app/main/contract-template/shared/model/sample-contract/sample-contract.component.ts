@@ -1179,6 +1179,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   // Hàm remove đối tượng đã được kéo thả vào trong file hợp đồng canvas
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
+    this.isChangeText = false;
+    this.soHopDong = null;
+
     if (data.id_have_data) {
       this.spinner.show();
       await this.contractTemplateService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
@@ -1732,9 +1735,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.toastService.showErrorHTMLWithTimeout("select.signer.obj", "", 3000);
         return false;
       }  else if (count_number > 1) {
-        this.spinner.hide();
-        this.toastService.showErrorHTMLWithTimeout("Chỉ được kéo một ô số hợp đồng!", "", 3000);
-        return false;
+        // this.spinner.hide();
+        // this.toastService.showErrorHTMLWithTimeout("Chỉ được kéo một ô số hợp đồng!", "", 3000);
+        // return false;
       } else if (count_text > 0) {
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);

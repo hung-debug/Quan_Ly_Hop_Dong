@@ -1131,6 +1131,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
     this.isChangeText = false;
+    this.soHopDong = null;
     if (data.id_have_data) {
       this.spinner.show();
       await this.contractService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
