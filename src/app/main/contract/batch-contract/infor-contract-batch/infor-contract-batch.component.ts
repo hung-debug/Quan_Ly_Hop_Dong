@@ -95,6 +95,7 @@ export class InforContractBatchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.optionsCeCa = optionsCeCa;
     this.optionsCeCaValue = 0;
     this.idContractTemplate = this.datasBatch.idContractTemplate
@@ -109,11 +110,18 @@ export class InforContractBatchComponent implements OnInit {
         this.ceca = true
       }
     })
+
+    if(this.datasBatch.idContractTemplate)
+      this.onChangeForm(this.datasBatch.idContractTemplate, false);
   }
 
-  async onChangeForm(e: any) {
+  async onChangeForm(e: any, isBoolean: boolean) {
     this.clearError();
-    this.idContractTemplate = e.value;
+
+    if(isBoolean)
+      this.idContractTemplate = e.value;
+    else
+      this.idContractTemplate = e;
 
     let type_id = null;
 
