@@ -21,8 +21,6 @@ import {ToastService} from "../../../../../service/toast.service";
 import {Router} from "@angular/router";
 import {HttpErrorResponse} from '@angular/common/http';
 import {TranslateService} from '@ngx-translate/core';
-import {count} from 'console';
-import {data} from 'jquery';
 import * as _ from 'lodash';
 
 @Component({
@@ -350,13 +348,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     })
 
     let isContractSign: any[] = [];
+
     for (const d of dataContractUserSign) {
       for (const data of dataDetermine) {
         if (((d.sign_unit == 'chu_ky_anh' && data.sign_type.some((q: any) => q.id == 1 || q.id == 5)) ||
             (d.sign_unit == 'text' && (data.sign_type.some((p: any) => p.id == 2) || data.role == 4)) ||
             (d.sign_unit == 'so_tai_lieu' && data.role == 4) ||
             (d.sign_unit == 'chu_ky_so' && data.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4))) &&
-          ((d.name === data.name) && ((d.email ? d.email : d.recipient.email) === data.email)) || (!d.email && this.datas.contract_no && d.sign_unit == 'so_tai_lieu')) {
+          ((d.name === data.name) && ((d.email ? d.email : d.recipient.email) === data.email)) || 
+          (!d.email && this.datas.contract_no && d.sign_unit == 'so_tai_lieu')) {
+
           isContractSign.push(d); // mảng get dữ liệu không bị thay đổi
         }
       }
@@ -413,6 +414,21 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             }
           })
           res.sign_config = [];
+        }
+      })
+    }
+
+    if(this.datas.contract_no) {
+      this.datas.contract_user_sign.forEach((res: any) => {
+        if (res.sign_config.length > 0) {
+          if(res.sign_unit == 'so_tai_lieu') {
+            res.sign_config.forEach((element: any) => {
+              element.name = null;
+              element.email = null;
+
+              console.log("el  ", element);
+            })
+          }
         }
       })
     }
@@ -1312,7 +1328,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               if (res.sign_config.length > 0) {
                 let arrSignConfigItem: any = "";
 
-                if(res.sign_unit == 'so_tai_lieu') {
+                if(res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
                   arrSignConfigItem = res.sign_config;
 
                   arrSignConfigItem.forEach((element: any) => {
