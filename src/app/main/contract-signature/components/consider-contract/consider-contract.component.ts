@@ -1632,36 +1632,11 @@ export class ConsiderContractComponent
   async signDigitalDocument() {
     let typeSignDigital = this.typeSignDigital;
 
-    // for (const signUpdate of this.isDataObjectSignature) {
-    //   if (
-    //     signUpdate &&
-    //     (signUpdate.type == 3 || signUpdate.type == 2) &&
-    //     [3, 4].includes(this.datas.roleContractReceived) &&
-    //     signUpdate?.recipient?.email === this.currentUser.email &&
-    //     signUpdate?.recipient?.role === this.datas?.roleContractReceived
-    //   ) {
-    //     if (signUpdate.recipient?.sign_type) {
-    //       const typeSD = signUpdate.recipient?.sign_type.find(
-    //         (t: any) => t.id != 1
-    //       );
-    //       if (typeSD) {
-    //         typeSignDigital = typeSD.id;
-    //       }
-    //     }
-
-    //     break;
-    //   }
-    // }
-
     //= 2 => Ky usb token
     if (typeSignDigital == 2) {
       if (this.signCertDigital) {
         for (const signUpdate of this.isDataObjectSignature) {
-          if (
-            signUpdate &&
-            (signUpdate.type == 1 ||
-              signUpdate.type == 3 ||
-              signUpdate.type == 4) &&
+          if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 || signUpdate.type == 4) &&
             [3, 4].includes(this.datas.roleContractReceived) &&
             signUpdate?.recipient?.email === this.currentUser.email &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
@@ -2187,11 +2162,7 @@ export class ConsiderContractComponent
         this.signTokenVersion1(signUpdatePayload, notContainSignImage);
       } else if (this.usbTokenVersion == 2) {
         //version 2
-        this.getSessionId(
-          this.taxCodePartnerStep2,
-          signUpdatePayload,
-          notContainSignImage
-        );
+        this.getSessionId(this.taxCodePartnerStep2,signUpdatePayload,notContainSignImage);
       }
     } else {
       await this.signImageC(signUpdatePayload, notContainSignImage);
@@ -2251,10 +2222,7 @@ export class ConsiderContractComponent
   }
 
   //get sessionid for usb token
-  async getSessionId(
-    taxCode: any,
-    signUpdatePayload: any,
-    notContainSignImage: any
+  async getSessionId(taxCode: any,signUpdatePayload: any,notContainSignImage: any
   ) {
     var LibList_MACOS = ['nca_v6.dylib'];
     var LibList_WIN = [
@@ -2302,9 +2270,7 @@ export class ConsiderContractComponent
 
     //Lay sessionId cua usb token
     try {
-      apiSessionId = await this.contractService.signUsbToken(
-        'request=' + json_req
-      );
+      apiSessionId = await this.contractService.signUsbToken('request=' + json_req);
     } catch (error) {
       this.spinner.hide();
       Swal.fire({
@@ -2334,12 +2300,7 @@ export class ConsiderContractComponent
       });
       return;
     } else {
-      this.getCertificate(
-        sessionId,
-        taxCode,
-        signUpdatePayload,
-        notContainSignImage
-      );
+      this.getCertificate(sessionId,taxCode,signUpdatePayload,notContainSignImage);
     }
   }
 
@@ -2356,12 +2317,7 @@ export class ConsiderContractComponent
   }
 
   certInfoBase64: any;
-  async getCertificate(
-    hSession: any,
-    taxCode: any,
-    signUpdatePayload: any,
-    notContainSignImage: any
-  ) {
+  async getCertificate(hSession: any,taxCode: any,signUpdatePayload: any,notContainSignImage: any) {
     var json_req = JSON.stringify({
       OperationId: 2,
       SessionId: hSession,
@@ -2396,9 +2352,7 @@ export class ConsiderContractComponent
       return;
     }
 
-    const checkTaxCode = await this.contractService
-      .checkTaxCodeExist(taxCode, this.certInfoBase64)
-      .toPromise();
+    const checkTaxCode = await this.contractService.checkTaxCodeExist(taxCode, this.certInfoBase64).toPromise();
 
     if (checkTaxCode.success == true) {
       this.signImageC(signUpdatePayload, notContainSignImage);
@@ -2442,6 +2396,9 @@ export class ConsiderContractComponent
       OperationId: 5,
       SessionId: this.sessionIdUsbToken,
       DataToBeSign: base64TempData,
+      checkOCSP: 0,
+      reqDigest: 0,
+      algDigest: "SHA_256"
     });
 
     json_req = window.btoa(json_req);
@@ -2473,28 +2430,14 @@ export class ConsiderContractComponent
   }
 
   base64Data: any;
-  async callMergeTimeStamp(
-    signatureToken: any,
-    fieldName: any,
-    hexDigestTempFile: any
-  ) {
+  async callMergeTimeStamp(signatureToken: any,fieldName: any,hexDigestTempFile: any) {
     let isTimestamp = false;
 
     if (this.isDataContract.ceca_push == 1) {
       isTimestamp = true;
     }
 
-    const mergeTimeStamp = await this.contractService
-      .meregeTimeStamp(
-        this.recipientId,
-        this.idContract,
-        signatureToken,
-        fieldName,
-        this.certInfoBase64,
-        hexDigestTempFile,
-        isTimestamp
-      )
-      .toPromise();
+    const mergeTimeStamp = await this.contractService.meregeTimeStamp(this.recipientId,this.idContract,signatureToken,fieldName,this.certInfoBase64,hexDigestTempFile,isTimestamp).toPromise();
     this.base64Data = mergeTimeStamp.base64Data;
   }
 
@@ -2509,12 +2452,7 @@ export class ConsiderContractComponent
         signDigitalStatus = await this.signDigitalDocument();
 
         if (this.eKYC == false) {
-          signUpdateTempN = signUpdateTempN
-            .filter(
-              (item: any) =>
-                item?.recipient?.email === this.currentUser.email &&
-                item?.recipient?.role === this.datas?.roleContractReceived
-            )
+          signUpdateTempN = signUpdateTempN.filter((item: any) =>item?.recipient?.email === this.currentUser.email &&item?.recipient?.role === this.datas?.roleContractReceived)
             .map((item: any) => {
               return {
                 id: item.id,
@@ -2540,15 +2478,11 @@ export class ConsiderContractComponent
               this.data_contract?.is_data_contract?.organization_id,
           };
 
-          this.contractService
-            .uploadFileImageBase64Signature(formData)
-            .subscribe((responseBase64) => {
+          this.contractService.uploadFileImageBase64Signature(formData).subscribe((responseBase64) => {
               // signUpdateTempN.value = responseBase64.file_object.file_path;
               signUpdateTempN[0].value = responseBase64.file_object.file_path;
 
-              this.contractService
-                .updateInfoContractConsider(signUpdateTempN, this.recipientId)
-                .subscribe(
+              this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
                   async (result) => {
                     if (!notContainSignImage) {
                       await this.signDigitalDocument();
@@ -2605,19 +2539,13 @@ export class ConsiderContractComponent
       }
     }
 
-    if (
-      notContainSignImage &&
-      !signDigitalStatus &&
-      this.datas.roleContractReceived != 2
-    ) {
+    if (notContainSignImage && !signDigitalStatus &&this.datas.roleContractReceived != 2) {
       this.spinner.hide();
       return;
     }
 
     if (notContainSignImage && this.eKYC == false) {
-      this.contractService
-        .updateInfoContractConsider(signUpdateTempN, this.recipientId)
-        .subscribe(
+      this.contractService.updateInfoContractConsider(signUpdateTempN, this.recipientId).subscribe(
           async (result) => {
             if (!notContainSignImage) {
               await this.signDigitalDocument();

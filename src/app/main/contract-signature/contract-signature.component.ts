@@ -1122,6 +1122,9 @@ export class ContractSignatureComponent implements OnInit {
           OperationId: 5,
           SessionId: sessionId,
           DataToBeSign: base64TempData,
+          checkOCSP: 0,
+          reqDigest: 0,
+          algDigest: "SHA_256"
         });
 
         json_req = window.btoa(json_req);

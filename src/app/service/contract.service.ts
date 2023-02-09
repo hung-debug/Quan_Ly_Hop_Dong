@@ -214,15 +214,7 @@ export class ContractService {
       .pipe();
   }
 
-  public getContractList(
-    isOrg: any,
-    organization_id: any,
-    filter_name: any,
-    filter_type: any,
-    filter_contract_no: any,
-    filter_from_date: any,
-    filter_to_date: any,
-    filter_status: any,
+  public getContractList(isOrg: any,organization_id: any,filter_name: any,filter_type: any,filter_contract_no: any,filter_from_date: any,filter_to_date: any,filter_status: any,
     page: any,
     size: any
   ): Observable<any> {
