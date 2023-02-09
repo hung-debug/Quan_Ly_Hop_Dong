@@ -1908,7 +1908,7 @@ export class ConsiderContractComponent
           };
 
           if (fileC && objSign.length) {
-            const checkSign = await this.contractService.signHsm(this.dataHsm,this.idContract);
+            const checkSign = await this.contractService.signHsm(this.dataHsm,this.recipientId);
 
             if (!checkSign || (checkSign && !checkSign.success)) {
               if (!checkSign.message) {
