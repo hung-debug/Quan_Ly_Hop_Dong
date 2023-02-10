@@ -669,7 +669,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                     element.status = this.soHopDong.status;
                     element.type = this.soHopDong.type;
                     element.email = this.soHopDong.email;
-                  } else {
+                  } else if(res.sign_config.length > 0) {
+                    this.soHopDong = {
+                      
+                    };
 
                     for(let i = 0; i < res.sign_config.length; i++) {
                       let element1 = res.sign_config[i];
@@ -685,13 +688,16 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                       }
                     }
 
-                    element.name = this.soHopDong.name;
+                    if(this.soHopDong && this.soHopDong.name) {
+                      element.name = this.soHopDong.name;
 
-                    element.signature_party = this.soHopDong.type_unit;
-                    element.recipient_id = this.soHopDong.id;
-                    element.status = this.soHopDong.status;
-                    element.type = this.soHopDong.type;
-                    element.email = this.soHopDong.email;
+                      element.signature_party = this.soHopDong.type_unit;
+                      element.recipient_id = this.soHopDong.id;
+                      element.status = this.soHopDong.status;
+                      element.type = this.soHopDong.type;
+                      element.email = this.soHopDong.email;
+                    }
+                   
                   }
 
                   this.isChangeText = true;
