@@ -74,7 +74,7 @@
       <div class="label_item">{{'contract.type' | translate}}</div>
       <div>
         <p-dropdown (onChange)="changeTypeContract($event)" panelStyleClass="font" [options]="typeList" [(ngModel)]="datasForm.type_id" optionLabel="name"
-          optionValue="id" placeholder="{{'choose.contract.type' | translate}}" [filter]="true" filterBy="name" [showClear]="true"
+          optionValue="id" placeholder="{{'choose' | translate}}" [filter]="true" filterBy="name" [showClear]="true"
           ></p-dropdown>
       </div>
     </div>

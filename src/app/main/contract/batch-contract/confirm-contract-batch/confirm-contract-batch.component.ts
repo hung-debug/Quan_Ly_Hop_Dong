@@ -630,6 +630,7 @@ export class ConfirmContractBatchComponent
       this.datasBatch.is_data_object_signature &&
       this.datasBatch.is_data_object_signature.length
     ) {
+      console.log("aaa ", this.datasBatch.is_data_object_signature)
       return this.datasBatch.is_data_object_signature;
     } else {
       return [];
