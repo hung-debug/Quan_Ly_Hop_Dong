@@ -659,7 +659,32 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
+                  let flag = false;
+
                   if(this.soHopDong && this.soHopDong.role == 4) {
+                    element.name = this.soHopDong.name;
+
+                    element.signature_party = this.soHopDong.type_unit;
+                    element.recipient_id = this.soHopDong.id;
+                    element.status = this.soHopDong.status;
+                    element.type = this.soHopDong.type;
+                    element.email = this.soHopDong.email;
+                  } else {
+
+                    for(let i = 0; i < res.sign_config.length; i++) {
+                      let element1 = res.sign_config[i];
+
+                      if(element1.name) {
+                        this.soHopDong.name = element1.name;
+                        this.soHopDong.type_unit = element1.signature_party;
+                        this.soHopDong.id = element1.recipient_id;
+                        this.soHopDong.status = element1.status;
+                        this.soHopDong.type = element1.type;
+                        this.soHopDong.email = element1.email;
+                        break;
+                      }
+                    }
+
                     element.name = this.soHopDong.name;
 
                     element.signature_party = this.soHopDong.type_unit;
@@ -1002,8 +1027,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     document.getElementsByClassName('viewer-pdf')[0].addEventListener('scroll', () => {
       const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
 
-      // console.log("imgs ", Imgs);
-
       Imgs.forEach((item: any) => {
         if (item.getBoundingClientRect().top <= (window.innerHeight / 2) &&
           (item.getBoundingClientRect().bottom >= 0) &&
@@ -1150,7 +1173,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   async onCancel(e: any, data: any) {
     let dataHaveId = true;
     this.isChangeText = false;
-    this.soHopDong = null;
+    this.soHopDong = {
+    };
+
     if (data.id_have_data) {
       this.spinner.show();
       await this.contractService.deleteInfoContractSignature(data.id_have_data).toPromise().then((res: any) => {
@@ -1323,8 +1348,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
           }
 
-          console.log("data_name ", data_name);
-
           if(data_name.role == 4 && this.isChangeText) {
             this.soHopDong = data_name;
 
@@ -1337,7 +1360,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   arrSignConfigItem = res.sign_config;
 
                   arrSignConfigItem.forEach((element: any) => {
-                    console.log("ell ", element);
                     element.name = this.soHopDong.name;
                     element.signature_party = data_name.type_unit;
                     element.recipient_id = data_name.id;
