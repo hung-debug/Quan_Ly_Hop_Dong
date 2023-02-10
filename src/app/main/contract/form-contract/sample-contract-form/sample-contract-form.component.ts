@@ -656,6 +656,12 @@ export class SampleContractFormComponent implements OnInit {
                 if (res.sign_unit == 'so_tai_lieu') {
                   if(this.soHopDong && this.soHopDong.role == 4) {
                     element.name = this.soHopDong.name;
+
+                    element.signature_party = this.soHopDong.type_unit;
+                    element.recipient_id = this.soHopDong.id;
+                    element.status = this.soHopDong.status;
+                    element.type = this.soHopDong.type;
+                    element.email = this.soHopDong.email;
                   }
                   this.isChangeText = true;
                 } else {

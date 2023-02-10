@@ -1044,7 +1044,7 @@ export class ContractService {
       prompt: `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
       reason: 'reason',
       image_base64: image_base64,
-      isTimestamp: isTimestamp
+      // isTimestamp: isTimestamp
     };
     return this.http
       .post<any>(this.signFilePKI + recipientId, body, { headers: headers })
@@ -1064,7 +1064,7 @@ export class ContractService {
       password: datas.password,
       password2: datas.password2,
       image_base64: datas.imageBase64,
-      isTimestamp: isTimestamp
+      // isTimestamp: isTimestamp
       // fieldId: datas.fieldId
     });
 
