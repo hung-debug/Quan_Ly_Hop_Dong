@@ -250,22 +250,22 @@ export class FooterSignatureComponent implements OnInit {
 
   action() {
     if (this.datas.action_title == 'dieu_phoi') {
-      console.log("datas",this.datas);
+      // console.log("datas",this.datas);
       
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
-      this.emailRecipients =  this.datas.is_data_contract.participants[1].recipients[0].email;
+      // this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+      // this.emailRecipients =  this.datas.is_data_contract.participants[1].recipients[0].email;
   
-          // response[0].participants[0].recipients[0].email
-          if (this.emailRecipients !== this.currentUser.email) {
+      //     // response[0].participants[0].recipients[0].email
+      //     if (this.emailRecipients !== this.currentUser.email) {
             
-            this.toastService.showErrorHTMLWithTimeout(
-              'Bạn không có quyền xử lý hợp đồng này!',
-              '',
-              3000
-            );
-            this.router.navigate(['/main/dashboard']);
-            return
-          };
+      //       this.toastService.showErrorHTMLWithTimeout(
+      //         'Bạn không có quyền xử lý hợp đồng này!',
+      //         '',
+      //         3000
+      //       );
+      //       this.router.navigate(['/main/dashboard']);
+      //       return
+      //     };
        
       if (this.is_data_coordination) { // chỉ lấy dữ liệu của người điều phối
         if (this.is_data_coordination['recipients']) {

@@ -1167,8 +1167,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   next() {
     if (!this.validData()) return;
-    console.log(this.datas);
-
     this.step = variable.stepSampleContract.step4;
     this.datas.stepLast = this.step
     this.nextOrPreviousStep(this.step);
@@ -1224,15 +1222,15 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           })
       })
 
-      let flagEmail = null;
-      for(let i = 0; i < emailRecipients.length; i++) {
-        for(let j = i+1; j < emailRecipients.length; j++) {
-          if((emailRecipients[i].email == emailRecipients[j].email) && (emailRecipients[i].role == 1 || emailRecipients[j].role == 1)) {
-            flagEmail = emailRecipients[i].email;
-            break;
-          }
-        }
-      }
+      // let flagEmail = null;
+      // for(let i = 0; i < emailRecipients.length; i++) {
+      //   for(let j = i+1; j < emailRecipients.length; j++) {
+      //     if((emailRecipients[i].email == emailRecipients[j].email) && (emailRecipients[i].role == 1 || emailRecipients[j].role == 1) || (emailRecipients[i].role == 2 || emailRecipients[j].role == 2)) {
+      //       flagEmail = emailRecipients[i].email;
+      //       break;
+      //     }
+      //   }
+      // }
 
       for (let i = 0; i < this.datas.contract_user_sign.length; i++) {
         if (this.datas.contract_user_sign[i].sign_config.length > 0) {
@@ -1263,7 +1261,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               else arrSign_partner.push(data_sign);
             }
 
-            if(element.coordinate_x && (!flagEmail || (flagEmail && (flagEmail != element.email)))) {
+            if(element.coordinate_x) {
               coordinate_x.push(Number(element.coordinate_x));
               coordinate_y.push(Number(element.coordinate_y));
               width.push(Number(element.width));
