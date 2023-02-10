@@ -1032,13 +1032,7 @@ export class ContractService {
     });
   }
 
-  signPkiDigital(
-    phone: any,
-    networkCode: any,
-    recipientId: any,
-    nameContract: any,
-    image_base64: any
-  ) {
+  signPkiDigital(phone: any,networkCode: any,recipientId: any,nameContract: any,image_base64: any, isTimestamp: boolean) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1050,13 +1044,14 @@ export class ContractService {
       prompt: `Bạn có yêu cầu ký số hợp đồng ${nameContract}. Vui lòng nhập mã pin để thực hiện ký.`,
       reason: 'reason',
       image_base64: image_base64,
+      isTimestamp: isTimestamp
     };
     return this.http
       .post<any>(this.signFilePKI + recipientId, body, { headers: headers })
       .toPromise();
   }
 
-  signHsm(datas: any, idContract: number) {
+  signHsm(datas: any, idContract: number, isTimestamp: boolean) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
@@ -1069,6 +1064,7 @@ export class ContractService {
       password: datas.password,
       password2: datas.password2,
       image_base64: datas.imageBase64,
+      isTimestamp: isTimestamp
       // fieldId: datas.fieldId
     });
 

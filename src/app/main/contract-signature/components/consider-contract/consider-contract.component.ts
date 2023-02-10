@@ -370,12 +370,19 @@ export class ConsiderContractComponent
 
   timerId: any;
   typeSignDigital: any;
+  isTimestamp: boolean = false;
   getDataContractSignature() {
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
         this.isDataContract = rs[0];
         this.isDataFileContract = rs[1];
         this.isDataObjectSignature = rs[2];
+
+        if(this.isDataContract.ceca_push = 1) {
+          this.isTimestamp = true
+        } else {
+          this.isTimestamp = false;
+        }
 
         if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
           this.valid = true;
@@ -1727,8 +1734,7 @@ export class ConsiderContractComponent
                 return false;
               }
             } else if (this.usbTokenVersion == 1) {
-              const dataSignMobi: any =
-                await this.contractService.postSignDigitalMobi(signDigital,signI);
+              const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital,signI);
 
               if (!dataSignMobi.data.FileDataSigned) {
                 this.toastService.showErrorHTMLWithTimeout(
@@ -1800,9 +1806,9 @@ export class ConsiderContractComponent
           this.dataNetworkPKI.networkCode.toLowerCase(),
           this.recipientId,
           this.datas.is_data_contract.name,
-          image_base64
+          image_base64,
+          this.isTimestamp
         );
-        console.log(checkSign);
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
           this.toastService.showErrorHTMLWithTimeout(
@@ -1883,7 +1889,7 @@ export class ConsiderContractComponent
           };
 
           if (fileC && objSign.length) {
-            const checkSign = await this.contractService.signHsm(this.dataHsm,this.recipientId);
+            const checkSign = await this.contractService.signHsm(this.dataHsm,this.recipientId, this.isTimestamp);
 
             if (!checkSign || (checkSign && !checkSign.success)) {
               if (!checkSign.message) {
@@ -2431,13 +2437,7 @@ export class ConsiderContractComponent
 
   base64Data: any;
   async callMergeTimeStamp(signatureToken: any,fieldName: any,hexDigestTempFile: any) {
-    let isTimestamp = false;
-
-    if (this.isDataContract.ceca_push == 1) {
-      isTimestamp = true;
-    }
-
-    const mergeTimeStamp = await this.contractService.meregeTimeStamp(this.recipientId,this.idContract,signatureToken,fieldName,this.certInfoBase64,hexDigestTempFile,isTimestamp).toPromise();
+    const mergeTimeStamp = await this.contractService.meregeTimeStamp(this.recipientId,this.idContract,signatureToken,fieldName,this.certInfoBase64,hexDigestTempFile,this.isTimestamp).toPromise();
     this.base64Data = mergeTimeStamp.base64Data;
   }
 
