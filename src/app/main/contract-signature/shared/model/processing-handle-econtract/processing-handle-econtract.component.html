@@ -43,15 +43,24 @@
                 </div>
             
 
-                <div class="col-md-2" style="text-align: center;display: flex;justify-content: center" *ngIf = " isHiddenButton && listCheckSmsEmail && isEndDate ">
+                <div class="col-md-2" style="text-align: center;display: flex;justify-content: center"
+                *ngIf = " isHiddenButton && listCheckSmsEmail && isEndDate ">
+                    
                         <div *ngIf = "d.statusNumber != 0 && d.statusNumber !== 4">
                             <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
                         </div>
 
-                        <div *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4" class="div_icon">
-                             <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)"/>
+                        <div *ngIf = "d.statusNumber != 0 && d.statusNumber !== 4" class="div_icon">
+                             <!-- <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)"/> -->
                         </div>
+                    
+
+                    <!-- <div *ngIf = "!isHiddenButton || listCheckSmsEmail || !isEndDate">
+                    </div> -->
                 </div>
+
+                <!-- <div class="col-md-2" *ngIf="!isHiddenButton || !listCheckSmsEmail || isEndDate">
+                </div> -->
             </div>
 
             <div *ngIf = "this.reasonCancel && (d.statusNumber == 2 || d.statusNumber == 3 || d.statusNumber == 4)" style="display: flex; justify-content: space-between; text-align: left; margin-bottom: 10px">
@@ -80,16 +89,6 @@
                     </div> 
                     <span style="color: #8B8B8B" *ngIf="d.process_at">({{d.process_at}})</span>
                 </div>
-
-                <div class="col-md-2" style="text-align: center; display: flex;justify-content: center"
-                *ngIf = " isHiddenButton && listCheckSmsEmail && isEndDate "> 
-                    <div *ngIf = "d.statusNumber !== 0 && d.statusNumber !== 4">
-                        <img src="../../assets/img/icon_sms_email2.svg" class="button_icon" ngbTooltip="{{'resend.sms.email' | translate}}" (click)="resendSmsEmail(d.id)"/>
-                    </div>
-                    <div class="div_icon" *ngIf = "d.statusNumber !== 2 && d.statusNumber !== 4">
-                        <img src="../../assets/img/icon_edit.svg" class="img_icon" ngbTooltip="{{'update.person-process' | translate}}" (click)="openEdit(d.id)"/>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -110,3 +109,4 @@
 <div class="footer-btn" style="text-align: center; margin-top: 20px">
     <button style="width: 120px; height: 40px; background-color: #8B8B8B; border-radius: 5px; outline: none; color: white; border: 1px solid #8B8B8B" (click)="acceptRequest()">{{"exit" | translate}}</button>
 </div>
+1
