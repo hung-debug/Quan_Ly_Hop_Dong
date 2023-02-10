@@ -586,20 +586,21 @@
           [disabled]="item.type == 3"
         />
       </div>
+
+      <!--Xoá đối tác tổ chức/cá nhân-->
       <div
-        *ngIf="this.dataParnterOrganization().length > 1"
+        *ngIf="this.dataParnterOrganization().length >= 1"
         style="display: flex; justify-content: flex-end"
       >
-        <u
-          class="label text-color"
-          (click)="deletePartner(id, item)"
-          style="background-color: #ffffff; cursor: pointer"
+        <u class="label text-color" (click)="deletePartner(id, item)" style="background-color: #ffffff; cursor: pointer"
           >{{
             (item.type == 2 ? "xoa_doi_tac_to_chuc" : "xoa_doi_tac_ca_nhan")
               | translate
-          }}</u
+          }}
+        </u
         >
       </div>
+      
       <div class="contract__content--participants">
         <div class="row">
           <div class="radio col-md-6 label_type">
@@ -633,10 +634,7 @@
           <!-- điều phối hđ -->
           <div class="participants-border">
             <div class="label">{{ "user.lead" | translate }}</div>
-            <div
-              class="participants--content"
-              *ngFor="let d of getPartnerCoordination(item); let index = index"
-            >
+            <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
               <input
                 [id]="'ordering-lead-' + index"
                 class="col-md-1 contract-total"
@@ -1534,10 +1532,8 @@
                   alt="close.vn"
                 />
               </div>
-              <div
-                *ngIf="getPartnerSignature(item).length == 1"
-                class="col-md-1 delete-element"
-              ></div>
+
+              <div *ngIf="getPartnerSignature(item).length == 1" class="col-md-1 delete-element"></div>
             </div>
             <div
               *ngIf="getPartnerSignature(item).length > 1"
