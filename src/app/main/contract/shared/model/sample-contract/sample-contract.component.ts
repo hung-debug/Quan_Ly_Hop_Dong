@@ -1331,6 +1331,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   arrSignConfigItem = res.sign_config;
 
                   arrSignConfigItem.forEach((element: any) => {
+                    console.log("ell ", element);
                     element.name = this.soHopDong.name;
                     element.signature_party = data_name.type_unit;
                     element.recipient_id = data_name.id;

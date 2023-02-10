@@ -178,10 +178,19 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   }
 
   async changeTypeContract(e: any) {
+
     if(!e.value) {
       this.optionsCeCa = optionsCeCa;
       this.datasForm.ceca_push = 0;
       this.optionsCeCaValue = 0;
+
+      const e = {
+        value: this.datasForm.template_contract_id
+      }
+
+      this.onChangeForm(e);
+
+      // console.log("id temp ", this.datasForm.template_contract_id)
     } else {
       
     this.datasForm.type_id = e.value;
