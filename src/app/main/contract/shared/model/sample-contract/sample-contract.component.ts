@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import {variable} from "../../../../../config/variable";
 import {Helper} from "../../../../../core/Helper";
-import {environment} from "../../../../../../environments/environment";
 import * as $ from 'jquery';
 
 import interact from 'interactjs'
@@ -425,8 +424,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
             res.sign_config.forEach((element: any) => {
               element.name = null;
               element.email = null;
-
-              console.log("el  ", element);
             })
           }
         }
@@ -1320,6 +1317,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
           }
 
+          console.log("data_name ", data_name);
+
           if(data_name.role == 4 && this.isChangeText) {
             this.soHopDong = data_name;
 
@@ -1328,7 +1327,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               if (res.sign_config.length > 0) {
                 let arrSignConfigItem: any = "";
 
-                if(res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
+                if(res.sign_unit == 'so_tai_lieu' || this.datas.contract_no) {
                   arrSignConfigItem = res.sign_config;
 
                   arrSignConfigItem.forEach((element: any) => {
