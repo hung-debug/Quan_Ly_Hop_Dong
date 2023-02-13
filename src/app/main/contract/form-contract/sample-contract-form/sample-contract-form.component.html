@@ -23,8 +23,6 @@
                             id="element-drag" style="height: 102px; flex-direction: column" [ngStyle]="setWidth(d)">
                             <img [src]="d.sign_unit == 'chu_ky_anh' ? 'assets/img/img_drag.svg' : 'assets/img/img_sign_number.svg'"
                                 [style.paddingBottom]="d.sign_unit == 'chu_ky_anh' ? '3px' : ''" alt="ck.mobifone">
-                            <!-- <span *ngIf="d.sign_unit == 'chu_ky_anh' || d.sign_unit == 'chu_ky_so'">{{d.sign_unit ==
-                                'chu_ky_anh' ? 'Chữ ký ảnh hoặc eKYC' : 'Chữ ký số'}}</span> -->
 
                                 <span *ngIf="d.sign_unit == 'chu_ky_anh' ">{{'sign.image.ekyc' |translate}}</span>
                                 <span *ngIf="d.sign_unit == 'chu_ky_so' ">{{'sign.digital'|translate}}</span>
@@ -33,7 +31,6 @@
                     </div>
                 </div>
             </div>
-            <!--      </div>-->
         </div>
         <hr>
 
@@ -121,8 +118,9 @@
                         <img src="assets/img/clear.svg" alt="">
                         <img src="assets/img/border-clear.svg" alt="">
                     </div>
-                    <!-- (onChangeValueText)="getValueText($event, d) [signTemplate]="true"" -->
-                    <app-sign-contract [datas]="datasForm" (onChangeValueText)="getValueText($event, d)" [signTemplate]="true" [sign]="d"></app-sign-contract>
+                    <app-sign-contract [datas]="datasForm" (onChangeValueText)="getValueText($event, d)" [signTemplate]="true" [sign]="d"
+                    [contractNo]="contractNo"
+                    ></app-sign-contract>
                 </div>
             </div>
         </div>

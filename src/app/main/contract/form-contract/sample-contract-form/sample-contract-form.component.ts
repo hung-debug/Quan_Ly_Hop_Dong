@@ -1403,10 +1403,12 @@ export class SampleContractFormComponent implements OnInit {
     }
   }
 
+  contractNo: any;
   getValueText(e: any, d: any) {
     d.value = e;
     if (d.sign_unit == 'so_tai_lieu') {
       this.datasForm.contract_no = e;
+      this.contractNo = e;
     }
   }
 
@@ -1422,6 +1424,7 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   back(e: any, step?: any) {
+    this.contractNo = this.datasForm.contract_no;
     this.nextOrPreviousStep(step);
   }
 
@@ -1552,9 +1555,7 @@ export class SampleContractFormComponent implements OnInit {
   }
 
   setClass(dataDrag: any) {
-    if (this.datasForm.contract_user_sign.some((p: any) => p.sign_unit == 'so_tai_lieu' && p.sign_config.length > 0) && dataDrag.sign_unit == 'so_tai_lieu') {
-      return 'none-drag';
-    } else return 'resize-drag'
+    return 'resize-drag';
   }
 
   async getDefindDataSignEdit(dataSignId: any, dataSignNotId: any, action: any) {
