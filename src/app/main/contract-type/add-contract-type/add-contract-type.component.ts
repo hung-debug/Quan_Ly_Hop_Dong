@@ -89,8 +89,10 @@ export class AddContractTypeComponent implements OnInit {
 
   convertCeCa(ceca_push: any) {
     if(ceca_push == 1) {
+      this.optionsCeCaValue = 1;
       return 1;
     } else {
+      this.optionsCeCaValue = 0;
       return 0;
     } 
   }
