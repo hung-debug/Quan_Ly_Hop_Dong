@@ -25,7 +25,7 @@
     (focusout)="focusOutFunction()" [(ngModel)]="this.contractNo" placeholder="Nhập số hợp đồng.." type="text"
     (ngxInputSearch)="doTheSearch($event,'contractNo')">
 
-    <input *ngIf="getNotSpecifiedYetHandle() && !this.contractNo" id="input-number-value"
+    <input *ngIf="getNotSpecifiedYetHandle()" id="input-number-value"
     (focusout)="focusOutFunction()" [(ngModel)]="sign.value" placeholder="Nhập số hợp đồng.." type="text"
     (ngxInputSearch)="doTheSearch($event,'contractNo')">
 </div>
