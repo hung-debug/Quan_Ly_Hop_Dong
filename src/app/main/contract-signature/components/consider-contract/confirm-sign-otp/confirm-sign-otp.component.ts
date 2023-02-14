@@ -199,7 +199,8 @@ export class ConfirmSignOtpComponent implements OnInit {
             "content": signUpdate.valueSign,
             organizationId: this.datas?.is_data_contract?.organization_id
           }
-  
+          
+          console.log("form ", formData);
           signUploadObs$.push(this.contractService.uploadFileImageBase64Signature(formData));
     
           indexSignUpload.push(iu);
@@ -283,12 +284,16 @@ export class ConfirmSignOtpComponent implements OnInit {
       } else {
         http = "https";
       }
-  
-      const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
-  
-      this.isDateTime = date.datetime;
+      
+      try {
+        const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
+        this.isDateTime = date.datetime;
+      } catch(err) {
+        this.isDateTime = new Date();
+      }
+     
 
-      this.isDateTime = this.datepipe.transform(date.datetime, "dd/MM/yyyy HH:mm");
+      this.isDateTime = this.datepipe.transform(this.isDateTime, "dd/MM/yyyy HH:mm");
       await of(null).pipe(delay(100)).toPromise();
       
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
