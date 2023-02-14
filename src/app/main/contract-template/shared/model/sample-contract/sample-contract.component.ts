@@ -353,15 +353,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       })
     })
 
-    console.log("dataDetermine");
-    console.log(dataDetermine);
-
-    
-    // if(this.datas.contract_user_sign) {
-    //   this.datas.contract_user_sign[3].sign_config = this.datas.contract_user_sign[3].sign_config.filter((item: { recipient: { sign_type: { id: number; }[]; }; }) => item.recipient.sign_type[0].id != 5 && item.recipient.sign_type[0].id != 1)
-    //   this.datas.contract_user_sign[2].sign_config = this.datas.contract_user_sign[2].sign_config.filter((item: { recipient: { sign_type: { id: number; }[]; }; }) => item.recipient.sign_type[0].id != 2 && item.recipient.sign_type[0].id != 3 && item.recipient.sign_type[0].id != 4)
-    // }
-
     // lay du lieu vi tri va toa do ky cua buoc 3 da thao tac
     let dataContractUserSign: any[] = [];
     this.datas.contract_user_sign.forEach((res: any, index: number) => {
@@ -1646,7 +1637,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   validData() {
-    // console.log(this.datas);
     let data_not_drag = this.datas.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
     if (!data_not_drag) {
       this.spinner.hide();
@@ -1673,10 +1663,10 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu') {
-              count_number++;
-              if(count_number > 1){
-                break
-              }
+              // count_number++;
+              // if(count_number > 1){
+              //   break
+              // }
             } else if (element.sign_unit == 'text' && !element.text_attribute_name) {
               count_text++;
               break
@@ -1769,10 +1759,13 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         this.toastService.showErrorHTMLWithTimeout("select.signer.obj", "", 3000);
         return false;
       }  else if (count_number > 1) {
+        console.log("vao day ");
         // this.spinner.hide();
         // this.toastService.showErrorHTMLWithTimeout("Chỉ được kéo một ô số hợp đồng!", "", 3000);
         // return false;
       } else if (count_text > 0) {
+        console.log("cc ", count_text);
+
         this.spinner.hide();
         this.toastService.showErrorHTMLWithTimeout("Thiếu tên trường cho đối tượng nhập Text!", "", 3000);
         return false;

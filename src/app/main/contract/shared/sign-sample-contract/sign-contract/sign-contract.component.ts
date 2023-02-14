@@ -53,7 +53,7 @@ export class SignContractComponent implements OnInit, AfterViewInit {
 
   doTheSearch($event: Event, key: string): void {
     const stringEmitted = ($event.target as HTMLInputElement).value;
-    this.isContent = stringEmitted;
+    this.isContent = stringEmitted; 
     this.onChangeValueText.emit(stringEmitted);
   }
 

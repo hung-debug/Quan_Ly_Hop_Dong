@@ -1678,10 +1678,7 @@ export class SampleContractFormComponent implements OnInit {
 
  
   validData() {
-    // console.log(this.datasForm);
     let data_not_drag = this.datasForm.contract_user_sign.filter((p: any) => p.sign_config.length > 0)[0];
-
-    console.log("datas ", this.datasForm.contract_user_sign);
 
     if (!data_not_drag) {
       this.spinner.hide();
@@ -1706,7 +1703,6 @@ export class SampleContractFormComponent implements OnInit {
           for (let j = 0; j < this.datasForm.contract_user_sign[i].sign_config.length; j++) {
             let element = this.datasForm.contract_user_sign[i].sign_config[j];
             if (!element.name && !element.recipient && element.sign_unit != 'so_tai_lieu' && element.sign_unit != 'text') {
-              console.log("el ", element);
               count++;
               break
             } else if (element.sign_unit == 'so_tai_lieu') {
@@ -1717,7 +1713,8 @@ export class SampleContractFormComponent implements OnInit {
                 count_text_number++;
                 break
               }
-            } else if (element.sign_unit == 'text') { //!element.is_have_text
+            } else if (element.sign_unit == 'text') { 
+
               if (!element.text_attribute_name && !element.is_have_text) {
                 count_text++;
                 break
@@ -1769,7 +1766,6 @@ export class SampleContractFormComponent implements OnInit {
        //Trường hợp 1: ô 1 giao ô 2 trong vùng x2 thuộc (x1 đến x1+w); y2 thuộc (y1 đến y1+h) = góc phải dưới
        for(let i = 0; i < coordinate_x.length; i++) {
         for(let j = i+1; j < coordinate_x.length; j++) {
-          console.log("coordinate x ", coordinate_x);
           if(
             (Number(coordinate_x[i]) <= Number(coordinate_x[j]) && Number(coordinate_x[j]) <= (Number(coordinate_x[i]) + Number(width[i])))
             &&
@@ -1861,7 +1857,6 @@ export class SampleContractFormComponent implements OnInit {
           if (element.sign_type.length > 0) {
             if (element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && 
             arrSign_organization.filter((item: any) => item.email == element.email && item.sign_unit == 'chu_ky_so').length == 0) {
-              console.log("arrSign ", arrSign_organization);
               error_organization++;
               nameSign_organization.name = element.name;
               nameSign_organization.sign_type = 'chu_ky_so';
