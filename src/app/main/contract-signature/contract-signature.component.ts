@@ -489,11 +489,10 @@ export class ContractSignatureComponent implements OnInit {
 
       //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
       for (let i = 0; i < recipientId.length; i++) {
-        this.contractServiceV1
-          .getDetermineCoordination(recipientId[i])
-          .subscribe((response) => {
+        this.contractServiceV1.getDetermineCoordination(recipientId[i]).subscribe((response) => {
+            // console.log("response ", response);
             response.recipients.forEach((item: any) => {
-              if (item.fields[0].recipient.id == recipientId[i]) {
+              if (item.id == recipientId[i]) {
                 taxCode.push(item.fields[0].recipient.cardId);
               }
             });
@@ -505,11 +504,12 @@ export class ContractSignatureComponent implements OnInit {
         .map((opt) => opt.id);
 
       for (let i = 0; i < recipientId.length; i++) {
-        this.contractServiceV1
-          .getDetermineCoordination(recipientId[i])
-          .subscribe((response) => {
+        this.contractServiceV1.getDetermineCoordination(recipientId[i]).subscribe((response) => {
+            console.log("response ", response);
             response.recipients.forEach((item: any) => {
-              if (item.fields[0].recipient.id == recipientId[i]) {
+              // console.log("item ", item);
+              if (item.id == recipientId[i]) {
+                console.log("item ", item.id);
                 taxCode.push(item.fields[0].recipient.cardId);
               }
             });
@@ -569,7 +569,7 @@ export class ContractSignatureComponent implements OnInit {
           for (let i = 0; i < recipientId.length; i++) {
             subscribe[i] = this.contractServiceV1.getDetermineCoordination(recipientId[i]).subscribe((response) => {
                 response.recipients.forEach((item: any) => {
-                  if (item.fields[0].recipient.id == recipientId[i]) {
+                  if (item.id == recipientId[i]) {
                     taxCode.push(item.fields[0].recipient.cardId);
                   }
                 });
