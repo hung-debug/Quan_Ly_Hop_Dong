@@ -132,6 +132,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   organization_id: any;
 
   statusLink: any;
+  signBefore: boolean = false;
 
   constructor(
     private contractService: ContractService,
@@ -151,11 +152,16 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
   }
 
+
   async ngOnInit(): Promise<void> {
     this.getDeviceApp();
 
     this.route.queryParams.subscribe(params => {
         this.pageBefore = params.page;
+
+        if(params.action == 'sign') {
+          this.signBefore = true;
+        }
 
         if (typeof params.filter_name != 'undefined' && params.filter_name) {
           this.filter_name = params.filter_name;
@@ -872,7 +878,7 @@ export class DetailContractComponent implements OnInit, OnDestroy {
           skipLocationChange: true
         });
       });
-    } else if(this.router.url.includes("forward")) {
+    } else if(this.router.url.includes("forward") || this.signBefore) {
       this.router.navigate(['/main/c/receive/wait-processing']);
       // console.log("go back ", this.statusLink);
 

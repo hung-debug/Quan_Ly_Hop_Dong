@@ -312,9 +312,7 @@ export class ConsiderContractComponent
     }
 
     //đổi màu cho nút next page
-    let canvasLast: any = document.getElementById(
-      'canvas-step3-' + this.pageNumber
-    );
+    let canvasLast: any = document.getElementById('canvas-step3-' + this.pageNumber);
     let step3: any = document.getElementById('pdf-viewer-step-3');
     if (
       event.srcElement.scrollTop <
@@ -357,9 +355,7 @@ export class ConsiderContractComponent
   }
 
   async getVersionUsbToken(orgId: any) {
-    const dataOrg = await this.contractService
-      .getDataNotifyOriganzationOrgId(orgId)
-      .toPromise();
+    const dataOrg = await this.contractService.getDataNotifyOriganzationOrgId(orgId).toPromise();
 
     if (dataOrg.usb_token_version == 1) {
       this.usbTokenVersion = 1;
@@ -399,9 +395,7 @@ export class ConsiderContractComponent
 
         this.datas = this.data_contract;
         if (this.datas?.is_data_contract?.type_id) {
-          this.contractService
-            .getContractTypes(this.datas?.is_data_contract?.type_id)
-            .subscribe((data) => {
+          this.contractService.getContractTypes(this.datas?.is_data_contract?.type_id).subscribe((data) => {
               if (this.datas?.is_data_contract) {
                 this.datas.is_data_contract.type_name = data;
               }
@@ -412,9 +406,7 @@ export class ConsiderContractComponent
           this.data_contract?.is_data_contract?.status == 31 ||
           this.data_contract?.is_data_contract?.status == 30
         ) {
-          this.router.navigate([
-            '/main/form-contract/detail/' + this.idContract,
-          ]);
+          this.router.navigate(['/main/form-contract/detail/' + this.idContract,]);
         }
         this.allFileAttachment = this.datas.i_data_file_contract.filter(
           (f: any) => f.type == 3
@@ -587,11 +579,7 @@ export class ConsiderContractComponent
               }
           }
 
-          if (
-            this.mobile &&
-            this.recipient.status != 2 &&
-            this.recipient.status != 3
-          ) {
+          if (this.mobile && this.recipient.status != 2 && this.recipient.status != 3) {
             if (image_base64)
               this.contractService
                 .getFilePdfForMobile(this.recipientId, image_base64)
@@ -602,15 +590,11 @@ export class ConsiderContractComponent
           } else {
             if (this.recipient.status >= 3) {
               setTimeout(() => {
-                this.router.navigate([
-                  '/main/form-contract/detail/' + this.idContract,
-                ]);
+                this.router.navigate(['/main/form-contract/detail/' + this.idContract,]);
               }, 1000);
             } else if (this.recipient.status >= 3) {
               setTimeout(() => {
-                this.router.navigate([
-                  '/main/form-contract/detail/' + this.idContract,
-                ]);
+                this.router.navigate(['/main/form-contract/detail/' + this.idContract,]);
               }, 1000);
             }
           }
@@ -663,9 +647,8 @@ export class ConsiderContractComponent
     // @ts-ignore
     const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-    pdfjs
-      .getDocument(this.pdfSrc)
-      .promise.then((pdf: any) => {
+    
+    pdfjs.getDocument(this.pdfSrc).promise.then((pdf: any) => {
         this.thePDF = pdf;
         this.pageNumber = pdf.numPages || pdf.pdfInfo.numPages;
         this.removePage();
@@ -717,11 +700,7 @@ export class ConsiderContractComponent
       // @ts-ignore
       // document.getElementById('input-location-x').focus();
       let width_drag_element = document.getElementById('width-element-info');
-      this.widthDrag = width_drag_element
-        ? width_drag_element.getBoundingClientRect().right -
-          width_drag_element.getBoundingClientRect().left -
-          15
-        : '';
+      this.widthDrag = width_drag_element ? width_drag_element.getBoundingClientRect().right - width_drag_element.getBoundingClientRect().left - 15 : '';
 
       const imageRender = <HTMLElement>document.getElementById('export-html');
       if (imageRender) {
@@ -740,7 +719,6 @@ export class ConsiderContractComponent
       this.convertToSignConfig().forEach((element: any) => {
         let a = document.getElementById(element.id);
         if (a) {
-          // if (element['position']) { // @ts-ignore
           if (element['coordinate_x'] && element['coordinate_y']) {
             // @ts-ignore
             a.style['z-index'] = '1';
@@ -824,9 +802,7 @@ export class ConsiderContractComponent
   }
 
   activeScroll() {
-    document
-      .getElementsByClassName('viewer-pdf')[0]
-      .addEventListener('scroll', () => {
+    document.getElementsByClassName('viewer-pdf')[0].addEventListener('scroll', () => {
         const Imgs = [].slice.call(document.querySelectorAll('.dropzone'));
         Imgs.forEach((item: any) => {
           if (
@@ -949,11 +925,7 @@ export class ConsiderContractComponent
 
   // Hàm tạo các đối tượng kéo thả
   convertToSignConfig() {
-    if (
-      this.datas &&
-      this.isDataObjectSignature &&
-      this.isDataObjectSignature.length
-    ) {
+    if (this.datas && this.isDataObjectSignature && this.isDataObjectSignature.length) {
       return this.datas.is_data_object_signature.filter(
         (item: any) =>
           item?.recipient?.email === this.currentUser.email &&
@@ -1055,9 +1027,8 @@ export class ConsiderContractComponent
     let canvasElement: HTMLElement | null;
     if (event.relatedTarget && event.relatedTarget.id) {
       canvasElement = document.getElementById(event.relatedTarget.id);
-      let canvasInfo = canvasElement
-        ? canvasElement.getBoundingClientRect()
-        : '';
+      let canvasInfo = canvasElement ? canvasElement.getBoundingClientRect() : '';
+
       this.coordinates_signature = event.rect;
       let id = event.target.id;
 
@@ -1082,13 +1053,7 @@ export class ConsiderContractComponent
             if (element.sign_config.length == 0) {
               _obj['id'] = 'signer-' + index + '-index-0_' + element.id; // Thêm id cho chữ ký trong hợp đồng
             } else {
-              _obj['id'] =
-                'signer-' +
-                index +
-                '-index-' +
-                element.sign_config.length +
-                '_' +
-                element.id;
+              _obj['id'] = 'signer-' + index + '-index-' + element.sign_config.length + '_' + element.id;
             }
             element['sign_config'].push(_obj);
           }
@@ -1384,9 +1349,7 @@ export class ConsiderContractComponent
       e == 1 &&
       !this.validateSignature() &&
       !(
-        (this.datas.roleContractReceived == 2 &&
-          this.confirmConsider == 2 &&
-          counteKYC <= 0) ||
+        (this.datas.roleContractReceived == 2 && this.confirmConsider == 2 && counteKYC <= 0) ||
         (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) ||
         (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
       )
@@ -1400,11 +1363,7 @@ export class ConsiderContractComponent
         return;
       } else {
         if (this.confirmSignature == 2) {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc',
-            '',
-            3000
-          );
+          this.toastService.showErrorHTMLWithTimeout('Vui lòng thao tác vào ô ký hoặc ô text đã bắt buộc','',3000);
           return;
         } else {
           this.imageDialogSignOpen(e, haveSignImage);
@@ -1424,9 +1383,7 @@ export class ConsiderContractComponent
       let typeSignImage = null;
       if (this.recipient?.sign_type) {
         const typeSD = this.recipient?.sign_type.find((t: any) => t.id != 1);
-        const typeSImage = this.recipient?.sign_type.find(
-          (t: any) => t.id == 1
-        );
+        const typeSImage = this.recipient?.sign_type.find((t: any) => t.id == 1);
         if (typeSD) {
           typeSignDigital = typeSD.id;
         }
@@ -1461,11 +1418,7 @@ export class ConsiderContractComponent
         haveSignImage = true;
       }
     }
-    if (
-      e &&
-      e == 1 &&
-      !(
-        (this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
+    if (e && e == 1 && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2) ||
         (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) ||
         (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
       )
@@ -1499,9 +1452,7 @@ export class ConsiderContractComponent
 
           //neu co id nguoi xu ly thi moi kiem tra
           if (id_recipient_signature) {
-            this.contractService
-              .getCheckSignatured(id_recipient_signature)
-              .subscribe(
+            this.contractService.getCheckSignatured(id_recipient_signature).subscribe(
                 (res: any) => {
                   if (res && res.status == 2) {
                     this.spinner.hide();
@@ -1524,7 +1475,6 @@ export class ConsiderContractComponent
                       [2, 3, 4].includes(this.datas.roleContractReceived) &&
                       haveSignPKI
                     ) {
-                      console.log('pki ');
                       this.pkiDialogSignOpen();
                       this.spinner.hide();
                     } else if (
@@ -1612,20 +1562,12 @@ export class ConsiderContractComponent
   }
 
   getNameCoordination() {
-    let nameFile = [];
-    for (
-      let i = 0;
-      i < this.datas.contract_information.file_related_contract;
-      i++
-    ) {}
+   
   }
 
   dataURIToBlob(dataURI: string) {
     const splitDataURI = dataURI.split(',');
-    const byteString =
-      splitDataURI[0].indexOf('base64') >= 0
-        ? atob(splitDataURI[1])
-        : decodeURI(splitDataURI[1]);
+    const byteString = splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1]);
     const mimeString = splitDataURI[0].split(':')[1].split(';')[0];
 
     const ia = new Uint8Array(byteString.length);
@@ -1648,9 +1590,7 @@ export class ConsiderContractComponent
             signUpdate?.recipient?.email === this.currentUser.email &&
             signUpdate?.recipient?.role === this.datas?.roleContractReceived
           ) {
-            let fileC = await this.contractService.getFileContractPromise(
-              this.idContract
-            );
+            let fileC = await this.contractService.getFileContractPromise(this.idContract);
             const pdfC2 = fileC.find((p: any) => p.type == 2);
             const pdfC1 = fileC.find((p: any) => p.type == 1);
             if (pdfC2) {
@@ -2488,15 +2428,14 @@ export class ConsiderContractComponent
                       await this.signDigitalDocument();
                     }
 
-                    this.router
-                      .navigateByUrl('/', { skipLocationChange: true })
-                      .then(() => {
+                    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
                         this.router.navigate(
                           ['/main/form-contract/detail/' + this.idContract],
                           {
                             queryParams: {
                               recipientId: this.recipientId,
                               consider: true,
+                              action: "sign"
                             },
                             skipLocationChange: true,
                           }
@@ -2560,6 +2499,7 @@ export class ConsiderContractComponent
                     queryParams: {
                       recipientId: this.recipientId,
                       consider: true,
+                      action:"sign"
                     },
                     skipLocationChange: true,
                   }
@@ -2638,6 +2578,7 @@ export class ConsiderContractComponent
                         queryParams: {
                           recipientId: this.recipientId,
                           consider: true,
+                          action:"sign"
                         },
                         skipLocationChange: true,
                       }
@@ -2870,9 +2811,7 @@ export class ConsiderContractComponent
     });
 
     if (textRefuse) {
-      this.contractService
-        .considerRejectContract(this.recipientId, textRefuse)
-        .subscribe(
+      this.contractService.considerRejectContract(this.recipientId, textRefuse).subscribe(
           (result) => {
             this.toastService.showSuccessHTMLWithTimeout(
               cancelSuccess,
