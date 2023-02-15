@@ -666,6 +666,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
     this.nextStep1 = true;
 
     if (!this.validData()) {
+      console.log("valid data ");
       return;
     } else {
       this.spinner.show();
@@ -986,7 +987,7 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
   }
 
   contractCeCaValid() {
-    if(this.optionsCeCaValue == null) {
+    if(this.ceca && this.optionsCeCaValue == null) {
       this.errorCeCa = "error.ceca.required";
       return false;
     }
