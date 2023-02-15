@@ -1483,20 +1483,14 @@ export class ConsiderContractComponent
                     ) {
                       this.hsmDialogSignOpen(this.recipientId);
                       this.spinner.hide();
-                    } else if (
-                      [2, 3, 4].includes(this.datas.roleContractReceived)
-                    ) {
+                    } else if ([2, 3, 4].includes(this.datas.roleContractReceived)) {
                       this.signContractSubmit();
                     }
                   }
                 },
                 (error: HttpErrorResponse) => {
                   this.spinner.hide();
-                  this.toastService.showErrorHTMLWithTimeout(
-                    'error_check_signature',
-                    '',
-                    3000
-                  );
+                  this.toastService.showErrorHTMLWithTimeout('error_check_signature','',3000);
                 }
               );
           } else {
