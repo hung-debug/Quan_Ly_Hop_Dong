@@ -383,7 +383,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
     }
 
     
-    if(this.datasForm.ceca_push == null) {
+    if(this.ceca && this.datasForm.ceca_push == null) {
       this.toastService.showWarningHTMLWithTimeout((this.translate.instant('error.ceca.required')), "", "3000");
       return false;
     }
