@@ -1488,7 +1488,6 @@ export class ConsiderContractComponent
                       [2, 3, 4].includes(this.datas.roleContractReceived) &&
                       haveSignPKI
                     ) {
-                      console.log('pki ');
                       this.pkiDialogSignOpen();
                       this.spinner.hide();
                     } else if (
@@ -2206,11 +2205,7 @@ export class ConsiderContractComponent
       this.signCertDigital = dataDigital.data;
       this.nameCompany = dataDigital.data.CN;
 
-      console.log('name company ', this.nameCompany);
-
-      const checkTaxCodeBase64 = await this.contractService
-        .checkTaxCodeExist(this.taxCodePartnerStep2, dataDigital.data.Base64)
-        .toPromise();
+      const checkTaxCodeBase64 = await this.contractService.checkTaxCodeExist(this.taxCodePartnerStep2, dataDigital.data.Base64).toPromise();
 
       if (checkTaxCodeBase64.success) {
         await this.signImageC(signUpdatePayload, notContainSignImage);

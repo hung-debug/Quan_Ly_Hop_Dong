@@ -283,12 +283,16 @@ export class ConfirmSignOtpComponent implements OnInit {
       } else {
         http = "https";
       }
+      
+      try {
+        const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
+        this.isDateTime = date.datetime;
+      } catch(err) {
+        this.isDateTime = new Date();
+      }
   
-      const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
-  
-      this.isDateTime = date.datetime;
 
-      this.isDateTime = this.datepipe.transform(date.datetime, "dd/MM/yyyy HH:mm");
+      this.isDateTime = this.datepipe.transform(this.isDateTime, "dd/MM/yyyy HH:mm");
       await of(null).pipe(delay(100)).toPromise();
       
       const imageRender = <HTMLElement>document.getElementById('export-signature-image-html');
