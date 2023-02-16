@@ -124,6 +124,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   actionSuccess() {
     this.optionsCeCa = optionsCeCa;
     this.optionsCeCaValue = null;
+    this.optionsCeCaValue = null;
     this.datasForm.ceca_push = this.optionsCeCaValue;
 
     if (this.datasForm.ceca_push != 0 && this.datasForm.ceca_push != 1)
@@ -493,7 +494,7 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
       return false;
     }
 
-    if (this.datasForm.ceca_push == null) {
+    if (this.ceca && this.datasForm.ceca_push == null) {
       this.toastService.showWarningHTMLWithTimeout(
         this.translate.instant('error.ceca.required'),
         '',
@@ -522,6 +523,9 @@ export class InforContractFormComponent implements OnInit, AfterViewInit {
   // Next step two create form contract
   async next(action: string) {
     this.spinner.show();
+
+    this.datasForm.ceca_push = this.optionsCeCaValue;
+
 
     this.datasForm.ceca_push = this.optionsCeCaValue;
 

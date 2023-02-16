@@ -509,7 +509,6 @@ export class ContractSignatureComponent implements OnInit {
             response.recipients.forEach((item: any) => {
               // console.log("item ", item);
               if (item.id == recipientId[i]) {
-                console.log("item ", item.id);
                 taxCode.push(item.fields[0].recipient.cardId);
               }
             });
@@ -976,13 +975,13 @@ export class ContractSignatureComponent implements OnInit {
           }
         });
 
-      this.contractServiceV1.getListDataCoordination(idContract[i]).subscribe((respoonse) => {
-        if(respoonse.ceca_push == 1) {
-          ceca_push.push(true);
-        } else {
-          ceca_push.push(false);
-        }
-      });
+      // this.contractServiceV1.getListDataCoordination(idContract[i]).subscribe((respoonse) => {
+      //   if(respoonse.ceca_push == 1) {
+      //     ceca_push.push(true);
+      //   } else {
+      //     ceca_push.push(false);
+      //   }
+      // });
 
     }
 
@@ -1140,7 +1139,7 @@ export class ContractSignatureComponent implements OnInit {
 
           const signatureToken = dataSignatureToken.Signature;
 
-          const mergeTimeStamp = await this.contractServiceV1.meregeTimeStamp(recipientId[i],idContract[i],signatureToken,fieldName,certInfoBase64,hexDigestTempFile,ceca_push[i]).toPromise();
+          const mergeTimeStamp = await this.contractServiceV1.meregeTimeStamp(recipientId[i],idContract[i],signatureToken,fieldName,certInfoBase64,hexDigestTempFile).toPromise();
           const filePdfSigned = mergeTimeStamp.base64Data;
 
           const sign = await this.contractServiceV1.updateDigitalSignatured(

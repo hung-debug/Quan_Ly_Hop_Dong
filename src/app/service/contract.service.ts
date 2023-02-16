@@ -1524,6 +1524,7 @@ export class ContractService {
     );
   }
 
+
   confirmContractBatchList(file: any, idContractTemplate: any, isCeCA: any) {
     this.getCurrentUser();
     let formData = new FormData();
