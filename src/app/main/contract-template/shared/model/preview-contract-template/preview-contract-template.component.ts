@@ -102,9 +102,9 @@ export class PreviewContractTemplateComponent implements OnInit {
     if (d['height'] && (d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu')) {
       style.height = parseInt(d['height']) + "px";
     }
-    if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
-      style.padding = '6px';
-    }
+    // if (this.datas.contract_no && d.sign_unit == 'so_tai_lieu') {
+    //   style.padding = '6px';
+    // }
     return style;
   }
 
