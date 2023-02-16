@@ -4,7 +4,6 @@ import { UploadService } from 'src/app/service/upload.service';
 import { ContractService } from 'src/app/service/contract.service';
 import { DatePipe } from '@angular/common';
 import { optionsCeCa, variable } from '../../../../config/variable';
-import { optionsCeCa, variable } from '../../../../config/variable';
 import { AddContractComponent } from '../../add-contract/add-contract.component';
 import { ContractTemplateService } from 'src/app/service/contract-template.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -12,7 +11,6 @@ import { ToastService } from 'src/app/service/toast.service';
 import { UserService } from 'src/app/service/user.service';
 import { UnitService } from 'src/app/service/unit.service';
 import {TranslateService} from '@ngx-translate/core';
-import { ContractTypeService } from 'src/app/service/contract-type.service';
 import { ContractTypeService } from 'src/app/service/contract-type.service';
 @Component({
   selector: 'app-infor-contract-batch',
@@ -74,11 +72,6 @@ export class InforContractBatchComponent implements OnInit {
 
   ceca: boolean;
 
-  optionsCeCa: any;
-  optionsCeCaValue: any;
-
-  ceca: boolean;
-
   constructor(
     private uploadService: UploadService,
     private contractService: ContractService,
@@ -89,7 +82,6 @@ export class InforContractBatchComponent implements OnInit {
     private userService: UserService,
     private unitService: UnitService,
     public translate: TranslateService,
-    private contractTypeService: ContractTypeService,
     private contractTypeService: ContractTypeService,
   ) {
     this.step = variable.stepSampleContractBatch.step1;
@@ -103,7 +95,6 @@ export class InforContractBatchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.optionsCeCa = optionsCeCa;
     this.optionsCeCaValue = 0;
     this.idContractTemplate = this.datasBatch.idContractTemplate
@@ -155,14 +146,11 @@ export class InforContractBatchComponent implements OnInit {
     }
   }
 
-
   downFileExample() {
     this.spinner.show();
     if (this.idContractTemplate) {
       this.contractService.getFileContractBatch(this.idContractTemplate).subscribe(
-      this.contractService.getFileContractBatch(this.idContractTemplate).subscribe(
           (res: any) => {
-            this.uploadService.downloadFile(res.path).subscribe((response: any) => {
             this.uploadService.downloadFile(res.path).subscribe((response: any) => {
                 //console.log(response);
 
@@ -270,7 +258,6 @@ export class InforContractBatchComponent implements OnInit {
   errorDetail: any[] = [];
   clearError() {
     if (this.idContractTemplate.id) {
-    if (this.idContractTemplate.id) {
       this.errorContractName = '';
     }
     if (this.datasBatch.contractFile) {
@@ -293,15 +280,10 @@ export class InforContractBatchComponent implements OnInit {
       this.datasBatch.idContractTemplate = this.idContractTemplate.id;
       this.datasBatch.ceca_push = this.optionsCeCaValue;
 
-      this.datasBatch.idContractTemplate = this.idContractTemplate.id;
-      this.datasBatch.ceca_push = this.optionsCeCaValue;
-
       this.datasBatch.idContractTemplate = this.idContractTemplate;
 
       let countSMS = 0;
       let countEkyc = 0;
-      this.contractService.uploadFileContractBatch(this.datasBatch.contractFile,this.datasBatch.idContractTemplate).subscribe((responseUpload: any) => {
-          this.contractService.getContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,this.optionsCeCaValue).subscribe((response: any) => {
       this.contractService.uploadFileContractBatch(this.datasBatch.contractFile,this.datasBatch.idContractTemplate).subscribe((responseUpload: any) => {
           this.contractService.getContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,this.optionsCeCaValue).subscribe((response: any) => {
               for (

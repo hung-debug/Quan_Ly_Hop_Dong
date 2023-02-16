@@ -144,20 +144,12 @@
 
     <!--Đẩy lên ceca-->
     <div *ngIf="this.ceca" class="col-md-5">
-    <div *ngIf="this.ceca" class="col-md-5">
       <div class="form-group">
-        <div class="label_item">{{'contract-type.ceca' | translate}}<span class="require_star">*</span></div>
         <div class="label_item">{{'contract-type.ceca' | translate}}<span class="require_star">*</span></div>
           <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"
             optionValue="id" [showClear]="true">
           </p-dropdown>
       </div>
-      <div class="form-group">
-        <div class="invalid" *ngIf="this.optionsCeCaValue != 0 && this.optionsCeCaValue != 1 && this.errorCeCa != ''">
-          {{ this.errorCeCa | translate}}
-        </div>
-      </div>
-    </div>
       <div class="form-group">
         <div class="invalid" *ngIf="this.optionsCeCaValue != 0 && this.optionsCeCaValue != 1 && this.errorCeCa != ''">
           {{ this.errorCeCa | translate}}

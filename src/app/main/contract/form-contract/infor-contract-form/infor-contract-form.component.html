@@ -1,7 +1,5 @@
 <div class="row col-md-12">
   <div class="col-md-5" style="display: flex; flex-direction: column">
-
-    <!--Mẫu hợp đồng-->
     <div class="form-group">
       <div class="label_item">{{'menu.contract.template.list' | translate}} <span class="require_star">*</span></div>
       <div [style.background]="action == 'edit' ? '#ddd' : ''">
@@ -53,12 +51,9 @@
 
     <div *ngIf="this.ceca" class="form-group">
       <div class="label_item">{{'contract-type.ceca' | translate}}<span class="require_star">*</span></div>
-    <div *ngIf="this.ceca" class="form-group">
-      <div class="label_item">{{'contract-type.ceca' | translate}}<span class="require_star">*</span></div>
         <p-dropdown panelStyleClass="font" [options]="optionsCeCa" [(ngModel)]="optionsCeCaValue" optionLabel="name"
           optionValue="id" [showClear]="true">
         </p-dropdown>
-    </div>
     </div>
   </div>
 
@@ -77,7 +72,7 @@
       <div class="label_item">{{'contract.type' | translate}}</div>
       <div>
         <p-dropdown (onChange)="changeTypeContract($event)" panelStyleClass="font" [options]="typeList" [(ngModel)]="datasForm.type_id" optionLabel="name"
-          optionValue="id" placeholder="{{'choose' | translate}}" [filter]="true" filterBy="name" [showClear]="true"
+          optionValue="id" placeholder="{{'choose.contract.type' | translate}}" [filter]="true" filterBy="name" [showClear]="true"
           ></p-dropdown>
       </div>
     </div>
