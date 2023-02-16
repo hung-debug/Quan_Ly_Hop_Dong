@@ -1064,7 +1064,7 @@ export class ContractService {
       password: datas.password,
       password2: datas.password2,
       image_base64: datas.imageBase64,
-      isTimestamp: isTimestamp
+      // isTimestamp: isTimestamp
       // fieldId: datas.fieldId
     });
 
