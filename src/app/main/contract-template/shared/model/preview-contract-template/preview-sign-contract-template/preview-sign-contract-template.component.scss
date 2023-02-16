@@ -12,11 +12,14 @@
     height: 25px;
     outline: none;
     color: #106DB6;
+
+    left: 0;
+    top: 0;
+
+    // align-items: left;
+    // justify-content: left;
   }
   
-  // .font-style {
-  //   font-size: 11px !important;
-  // }
   
   #input-text-value, #input-number-value {
     width: 100%;
