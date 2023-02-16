@@ -659,7 +659,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                 } else this.isEnableText = false;
 
                 if (res.sign_unit == 'so_tai_lieu') {
-                  let flag = false;
+                  // let flag = false;
 
                   if(this.soHopDong && this.soHopDong.role == 4) {
                     element.name = this.soHopDong.name;
