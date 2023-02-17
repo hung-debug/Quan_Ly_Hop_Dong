@@ -87,14 +87,16 @@ export class PreviewContractTemplateComponent implements OnInit {
     };
 
     if(d.sign_unit != 'text' && d.sign_unit != 'so_tai_lieu') {
+      console.log("xx ");
       style = {
         "transform": 'translate(' + d['coordinate_x'] + 'px, ' + d['coordinate_y'] + 'px)',
         "position": "absolute",
         "backgroundColor": '#EBF8FF'
       }
     } else {
+      console.log("yy ");
       style = {
-        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(d['coordinate_y']+d['height']-d.font_size*2) + 'px)',
+        "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(d['coordinate_y']+d['height']-d.font_size*1.3) + 'px)',
         "position": "absolute",
       }
     }
