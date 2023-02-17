@@ -109,7 +109,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     private spinner: NgxSpinnerService,
     private toastService: ToastService,
     private router: Router,
-    private renderer: Renderer2
   ) {
     this.step = variable.stepSampleContract.step3
   }
@@ -1425,7 +1424,6 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
 
   async next(action: string) {
     this.datas.font = this.selectedFont;
-    console.log("font ", this.datas.font);
     this.datas.size = this.size;
     if (action == 'next_step' && !this.validData()) {
       if (this.save_draft_infor && this.save_draft_infor.close_header && this.save_draft_infor.close_modal) {
