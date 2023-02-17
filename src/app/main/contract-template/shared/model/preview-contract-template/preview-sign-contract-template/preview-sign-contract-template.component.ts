@@ -34,7 +34,6 @@ export class PreviewSignContractTemplateComponent implements OnInit {
   }
 
   getStyleText(sign: any) {
-    console.log("sign ", sign);
     return {
       'font-size': sign.font_size+'px',
       'font':sign.font

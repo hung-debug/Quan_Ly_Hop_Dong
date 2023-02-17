@@ -828,11 +828,7 @@ export class ContractSignatureComponent implements OnInit {
                     return false;
                   }
 
-                  const sign =
-                    await this.contractServiceV1.updateDigitalSignatured(
-                      idSignMany[i],
-                      dataSignMobi.data.FileDataSigned
-                    );
+                  const sign = await this.contractServiceV1.updateDigitalSignatured(idSignMany[i],dataSignMobi.data.FileDataSigned);
 
                   if (!sign.recipient_id) {
                     this.toastService.showErrorHTMLWithTimeout(
@@ -843,11 +839,7 @@ export class ContractSignatureComponent implements OnInit {
                     return false;
                   }
 
-                  const updateInfo =
-                    await this.contractServiceV1.updateInfoContractConsiderPromise(
-                      [],
-                      recipientId[i]
-                    );
+                  const updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([],recipientId[i]);
 
                   if (!updateInfo.id) {
                     this.toastService.showErrorHTMLWithTimeout(
