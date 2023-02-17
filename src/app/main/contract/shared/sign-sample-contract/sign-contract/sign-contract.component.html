@@ -8,7 +8,7 @@
 </div>
 
 <!-- && !signTemplate -->
-<div class="text-sign" *ngIf="(sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu') && !signTemplate">
+<div class="text-sign-not-template" *ngIf="(sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu') && !signTemplate">
   <span class="font-style" id="input-text">{{getText(sign)}}</span>
 </div>
 

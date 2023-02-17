@@ -3265,21 +3265,22 @@ export class ConsiderContractComponent
         sign?.page == page
       ) {
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;
-        sign.signDigitalY =
-          heightPage -
-          (sign.coordinate_y - this.currentHeight) -
-          sign.height /* * this.ratioPDF*/;
+        sign.signDigitalY = heightPage - (sign.coordinate_y - this.currentHeight) - sign.height /* * this.ratioPDF*/;
 
-        sign.signDigitalWidth =
-          sign.coordinate_x + sign.width /* * this.ratioPDF*/;
-        sign.signDigitalHeight =
-          heightPage -
-          (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
+        sign.signDigitalHeight = heightPage - (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
+        sign.signDigitalWidth = sign.coordinate_x + sign.width
+
+        // if(sign.type == 1 || sign.type == 4) {
+        //   sign.signDigitalWidth = 0;
+        // } else {
+        //   sign.signDigitalWidth = sign.coordinate_x + sign.width /* * this.ratioPDF*/;
+
+        //   sign.signDigitalHeight = sign.signDigitalHeight + sign.height - 13*1.5;
+        // }
+
 
         //Lấy thông tin mã số thuế của đối tác ký
-        this.contractService
-          .getDetermineCoordination(sign.recipient_id)
-          .subscribe((response) => {
+        this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
             const lengthRes = response.recipients.length;
             for (let i = 0; i < lengthRes; i++) {
               const id = response.recipients[i].id;

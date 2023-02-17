@@ -120,16 +120,11 @@ export class ConfirmContractBatchComponent
   top: any[]= [];
 
   constructor(
-    private userService: UserService,
-    private cdRef: ChangeDetectorRef,
     private contractService: ContractService,
-    private modalService: NgbModal,
-    private dialog: MatDialog,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private contractTemplateService: ContractTemplateService,
     private router: Router,
-    private unitService: UnitService
   ) {
     this.step = variable.stepSampleContractBatch.step2;
   }
@@ -137,13 +132,7 @@ export class ConfirmContractBatchComponent
   ngOnInit() {
     // console.log(this.datasBatch);
     this.spinner.show();
-    this.contractService
-      .getContractBatchList(
-        this.datasBatch.contractFile,
-        this.datasBatch.idContractTemplate,
-        this.datasBatch.ceca_push
-      )
-      .subscribe((response: any) => {
+    this.contractService.getContractBatchList(this.datasBatch.contractFile,this.datasBatch.idContractTemplate,this.datasBatch.ceca_push).subscribe((response: any) => {
         this.contractList = response;
 
         this.pageNumberTotal = this.contractList.length;
@@ -172,7 +161,6 @@ export class ConfirmContractBatchComponent
 
   data: any;
   getDataContractSignature(page: any) {
-    console.log(page);
     this.spinner.show();
 
     this.checkDisableIcon();
@@ -188,11 +176,6 @@ export class ConfirmContractBatchComponent
           element.fields.length > 0
         ) {
           element.fields.forEach((res: any) => {
-            // res['coordinate_x'] = res.coordinate_x;
-            // res['coordinate_y'] = res.coordinate_y;
-            // res['font'] = res.font;
-            // res['font_size'] = res.font_size;
-            // res['height'] = res.height;
             res['name'] = element.name;
 
             res['id'] = i++;
