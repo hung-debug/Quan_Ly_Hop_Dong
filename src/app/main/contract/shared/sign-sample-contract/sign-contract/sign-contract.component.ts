@@ -40,6 +40,13 @@ export class SignContractComponent implements OnInit, AfterViewInit {
 
   }
 
+  getStyleText(sign: any) {
+    return {
+      'font-size': sign.font_size+'px',
+      'font':sign.font
+    };
+  }
+
   ngAfterViewInit() {
     if (this.sign.sign_unit == 'so_tai_lieu' || this.sign.sign_unit == 'text') {
       setTimeout(() => {

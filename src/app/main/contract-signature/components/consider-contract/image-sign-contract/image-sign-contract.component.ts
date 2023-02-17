@@ -187,15 +187,6 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
     })
   }
 
-  onKey(event: any) {
-    // this.checkShowEdit = true;
-
-    // this.inputEditText.nativeElement.value = event.target.value;
-    // this.contractNo = event.target.value;
-
-    // console.log("this ", this.inputEditText.nativeElement.value);
-  }
-
   doEditText() {
     if ([2,3,4].includes(this.datas.roleContractReceived) && this.sign?.recipient?.email == this.currentUser.email && !this.view) {
       this.checkShowEdit = !this.checkShowEdit;
