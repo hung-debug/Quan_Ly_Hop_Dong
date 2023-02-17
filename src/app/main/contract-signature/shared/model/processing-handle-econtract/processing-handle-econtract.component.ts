@@ -1,3 +1,4 @@
+import { data } from 'jquery';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import { Router } from "@angular/router";
@@ -7,6 +8,7 @@ import { ContractService } from 'src/app/service/contract.service';
 import { DialogReasonRejectedComponent } from '../dialog-reason-rejected/dialog-reason-rejected.component';
 import { EditHandlerComponent } from '../edit-handler-dialog/edit-handler-dialog.component';
 import { ToastService } from 'src/app/service/toast.service';
+import { log } from 'console';
 @Component({
   selector: 'app-processing-handle-econtract',
   templateUrl: './processing-handle-econtract.component.html',
@@ -61,6 +63,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
     } else if (sessionStorage.getItem('lang') == 'en') {
       this.lang = 'en';
     }
+    console.log("data", this.data)
     this.contractService.getDetailContract(this.data.is_data_contract.id).subscribe(response => {
       this.endDate = moment(response[0].sign_time, "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
       let timeNow = moment(new Date(), "YYYY/MM/DD HH:mm:ss").format("YYYY/MM/DD HH:mm:ss")
@@ -84,7 +87,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else {
         this.isHiddenButton = false;
       }
-
+      console.log("contractid", this.data.is_data_contract.id);
       response.recipients.forEach((element: any) => {
         let data = {
           id: element.id,
@@ -141,15 +144,15 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       }
 
       // if (!this.reasonCancel) {
-        if (role == 1) {
-          res += 'điều phối';
-        } else if (role == 2) {
-          res += 'xem xét';
-        } else if (role == 3) {
-          res += 'ký';
-        } else if (role == 4) {
-          res = res + ' đóng dấu';
-      } else 
+      if (role == 1) {
+        res += 'điều phối';
+      } else if (role == 2) {
+        res += 'xem xét';
+      } else if (role == 3) {
+        res += 'ký';
+      } else if (role == 4) {
+        res = res + ' đóng dấu';
+      } else
         if (!res.includes('Đã'))
           res = 'Đã huỷ'
       // }
@@ -229,15 +232,31 @@ export class ProcessingHandleEcontractComponent implements OnInit {
   }
 
   openEdit(recipient: any) {
+
     this.contractService.getInforPersonProcess(recipient).subscribe((response) => {
+
+      let recipientsData = {
+        contractId: this.data.is_data_contract.id,
+        name: response.name,
+        login_by: response.login_by,
+        email : response.email,
+        phone : response.phone,
+        sign_type : response.sign_type[0]?.name,
+        id_sign_type: response.sign_type[0]?.id,
+        card_id : response.card_id,
+        id : response.id,
+        role : response.role
+      }
+      // contractId = response
+      console.log("data luongxly hodng", recipientsData);
       let data: any;
-      data = response
+      data = response;
 
       const dialogRef = this.dialog.open(EditHandlerComponent, {
         width: '1000px',
         data,
       })
-      // console.log("data luongxly hodng",data);
+
 
       dialogRef.afterClosed().subscribe((result: any) => {
         console.log('the close dialog', result);

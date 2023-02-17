@@ -1372,15 +1372,15 @@ export class ContractService {
     
   }
  
-  updateInfoPersonProcess(datas: any, recipient: any) {
+  updateInfoPersonProcess(datas: any, recipient: any, idContract: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
       .append('Authorization', 'Bearer ' + this.token);
 
-      
+      console.log("contractid",idContract);
     return this.http.put<any>(
-      this.updateInforPersonProcessUrl + recipient,
+      this.updateInforPersonProcessUrl + idContract + '/' + recipient,
       datas,
       { headers: headers }
     );
@@ -1746,6 +1746,7 @@ export class ContractService {
             sign_type: [
               // hình thức ký
             ],
+            locale:'vi',
           },
           // Dữ liệu người ký
           {
@@ -1761,6 +1762,7 @@ export class ContractService {
             sign_type: [
               // hình thức ký
             ],
+            locale:'vi',
           },
           // dữ liệu văn thư
           {
@@ -1776,6 +1778,7 @@ export class ContractService {
             sign_type: [
               // hình thức ký
             ],
+            locale:'vi',
           },
         ],
       },
@@ -1798,6 +1801,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
           // người xem xét
           {
@@ -1811,6 +1815,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
           // người ký
           {
@@ -1824,6 +1829,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
           // văn thư
           {
@@ -1837,6 +1843,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
         ],
       },
@@ -1862,6 +1869,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
         ],
       },
@@ -1907,6 +1915,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
         ],
       },
@@ -1927,6 +1936,7 @@ export class ContractService {
             status: 0,
             is_otp: 0,
             sign_type: [],
+            locale:'vi',
           },
         ],
       },

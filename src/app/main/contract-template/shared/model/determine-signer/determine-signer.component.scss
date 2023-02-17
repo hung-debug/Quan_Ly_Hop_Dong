@@ -296,7 +296,7 @@ input[type="checkbox"] {
         justify-content: space-around;
 
         .participants__name {
-          width: 40%;
+          width: 41%;
 
           .input-data {
             border: 1px solid #106DB6;
@@ -450,3 +450,41 @@ input[type="checkbox"] {
 //::ng-deep .mat-form-field-flex {
 //  background-color: white;
 //}
+.db_icon_english {
+  height: 20px;
+  width: 30px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(../../../../../../assets/img/icon_english.svg);
+}
+.db_icon_vietnam {
+  height: 20px;
+  width: 30px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(../../../../../../assets/img/icon_vietnam.svg);
+}
+.drop_menu{
+  border-color: #C2E4FF;
+  padding: 0;
+  font-size: inherit;
+  right: 10px;
+  left: unset !important;
+}
+.language{
+  margin-left: 20px;
+}
+.switch-language{
+  padding: 5px;
+}
+//::ng-deep .mat-form-field-flex {
+//  background-color: white;
+//}
+.dropdown-toggle:empty::after {
+  margin-left: 22px;
+  margin-bottom: 8px;
+  width: 9px;
+}
+.btn-outline-primary:hover{
+  color: grey;
+}

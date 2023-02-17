@@ -321,10 +321,12 @@
         }
   
         .participants--input {
+          background-color: "red";
           display: flex;
           justify-content: space-around;
   
           .participants__name {
+            // background-color: blue;
             width: 42%;
   
             .input-data {

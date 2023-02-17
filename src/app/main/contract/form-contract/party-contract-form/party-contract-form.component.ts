@@ -201,6 +201,12 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
       this.flagUsbToken[id] = false;
     }
   }
+  
+  dropdownButtonText = '';
+
+  changeButtonText(text: string) {
+    this.dropdownButtonText = text;
+  }
 
   back(e: any, step?: any) {
     this.nextOrPreviousStep(step);
@@ -1189,12 +1195,23 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   }
 
   getOriganzationDocument() {
-    return this.data_organization.recipients.filter((p: any) => p.role == 4)
+    return this.data_organization.recipients.filter((p: any) => p.role == 4).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   // tạo đối tượng người điều phối đối tác
   getPartnerCoordination(item: any) {
-    return item.recipients.filter((p: any) => p.role == 1)
+    // return item.recipients.filter((p: any) => p.role == 1)
+    return item.recipients.filter((p: any) => p.role == 1).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   // tạo đối tượng đ
@@ -1204,7 +1221,13 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng người xem xét đối tác
   getPartnerReviewer(item: any) {
-    return item.recipients.filter((p: any) => p.role == 2)
+    // return item.recipients.filter((p: any) => p.role == 2)
+    return item.recipients.filter((p: any) => p.role == 2).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   getName(e: any, item: any) {
@@ -1216,12 +1239,24 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
   // tạo mảng người ký đối tác tổ chức
   getPartnerSignature(item: any) {
     
-    return item.recipients.filter((p: any) => p.role == 3)
+    // return item.recipients.filter((p: any) => p.role == 3)
+    return item.recipients.filter((p: any) => p.role == 3).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   // tạo mảng đối tượng văn thư tổ chức của tôi
   getPartnerDocument(item: any) {
-    return item.recipients.filter((p: any) => p.role == 4);
+    // return item.recipients.filter((p: any) => p.role == 4);
+    return item.recipients.filter((p: any) => p.role == 4).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   // thêm đối tượng người xem xét tổ chức của tôi
@@ -1311,7 +1346,12 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng đối tượng người xem xét tổ chức của tôi
   getOriganzationReviewer() {
-    return this.data_organization.recipients.filter((p: any) => p.role == 2);
+    return this.data_organization.recipients.filter((p: any) => p.role == 2).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   // xóa đối tượng người xem xét tổ chức của tôi (done)
@@ -1337,7 +1377,14 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
 
   // tạo mảng các đối tượng người ký tổ chức của tôi
   getOriganzationSignature() {
-    return this.data_organization.recipients.filter((p: any) => p.role == 3);
+    // console.log("this.data_organization.recipients SUUUUUUUUUUUU", this.data_organization.recipients);
+
+    return this.data_organization.recipients.filter((p: any) => p.role == 3).map((x: any) => {
+      if (!x.locale) {
+        x.locale = "vi"
+      }
+      return x
+    });
   }
 
   // xóa đối tượng người ký tổ chức của tôi (done)
