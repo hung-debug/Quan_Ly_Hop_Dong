@@ -556,12 +556,16 @@ export class ContractSignatureComponent implements OnInit {
           let fileC: any = [];
           let documentId: any = [];
 
+          //lấy field id được tích vào
           idSignMany = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.fields[0].id);
 
+          //lấy recipientId
           recipientId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.id);
 
+          //Lấy id hợp đồng được tích vào
           idContract = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.participant.contract.id);
 
+          //Lấy id file được tích vào
           documentId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.fields[0].documentId);
 
           //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
@@ -695,14 +699,8 @@ export class ContractSignatureComponent implements OnInit {
     });
   }
 
-  async signTokenVersion1(
-    fileC: any,
-    idContract: any,
-    recipientId: any,
-    documentId: any,
-    taxCode: any,
-    idSignMany: any
-  ) {
+  //Ký usb token v1
+  async signTokenVersion1(fileC: any,idContract: any,recipientId: any,documentId: any,taxCode: any,idSignMany: any) {
     //ky bang usb token
     let base64String: any = [];
 
@@ -732,17 +730,12 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     for (let i = 0; i < fileC.length; i++) {
-      base64String[i] = await this.contractServiceV1.getDataFileUrlPromise(
-        fileC[i]
-      );
+      base64String[i] = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
 
       base64String[i] = encode(base64String[i]);
 
       //Lấy toạ độ ô ký của từng hợp đồng
-      this.contractServiceV1
-        .getDataObjectSignatureLoadChange(idContract[i])
-        .subscribe((response) => {
-          console.log('sig ', response);
+      this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).subscribe((response) => {
           for (let j = 0; j < response.length; j++) {
             if (response[j].recipient) {
               if (recipientId[i] == response[j].recipient.id) {
@@ -759,9 +752,7 @@ export class ContractSignatureComponent implements OnInit {
         });
 
       //Lấy thông tin page của từng hợp đồng
-      this.contractServiceV1
-        .getInfoPage(documentId[i])
-        .subscribe((response) => {
+      this.contractServiceV1.getInfoPage(documentId[i]).subscribe((response) => {
           for (let j = 0; j < response.length; j++) {
             if (response[j].page < page[i]) {
               currentHeight[i] += response[j].height;
@@ -775,13 +766,10 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     //Lay thong tin cua usb token
-    this.contractServiceV1.getAllAccountsDigital().then(
-      async (data) => {
+    this.contractServiceV1.getAllAccountsDigital().then(async (data) => {
         if (data.data.Serial) {
           //Check trung mst
-          this.contractServiceV1
-            .checkTaxCodeExist(taxCode[0], data.data.Base64)
-            .subscribe(async (response) => {
+          this.contractServiceV1.checkTaxCodeExist(taxCode[0], data.data.Base64).subscribe(async (response) => {
               if (response.success == true) {
                 this.signCertDigital = data.data;
                 this.nameCompany = data.data.CN;
@@ -807,59 +795,31 @@ export class ContractSignatureComponent implements OnInit {
 
                   h[i] = y[i] + h[i];
 
-                  let dataSignMobi: any =
-                    await this.contractServiceV1.postSignDigitalMobiMulti(
-                      this.signCertDigital.Serial,
-                      base64String[i],
-                      signI,
-                      page[i],
-                      h[i],
-                      w[i],
-                      x[i],
-                      y[i]
-                    );
+                  let dataSignMobi: any = await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial,base64String[i],signI,page[i],h[i],w[i],x[i],y[i]);
 
                   if (!dataSignMobi.data.FileDataSigned) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi ký USB Token ' + dataSignMobi.data.ErrorDetail,
-                      '',
-                      3000
-                    );
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token ' + dataSignMobi.data.ErrorDetail,'',3000);
                     return false;
                   }
 
                   const sign = await this.contractServiceV1.updateDigitalSignatured(idSignMany[i],dataSignMobi.data.FileDataSigned);
 
                   if (!sign.recipient_id) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi ký USB Token ',
-                      '',
-                      3000
-                    );
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token ','',3000);
                     return false;
                   }
 
                   const updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([],recipientId[i]);
 
                   if (!updateInfo.id) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Lỗi cập nhật trạng thái hợp đồng ',
-                      '',
-                      3000
-                    );
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi cập nhật trạng thái hợp đồng ','',3000);
                   }
 
                   if (i == fileC.length - 1) {
                     this.spinner.hide();
-                    this.toastService.showSuccessHTMLWithTimeout(
-                      'sign.success',
-                      '',
-                      3000
-                    );
+                    this.toastService.showSuccessHTMLWithTimeout('sign.success','',3000);
 
-                    this.router
-                      .navigateByUrl('/', { skipLocationChange: true })
-                      .then(() => {
+                    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
                         this.router.navigate(['main/c/receive/processed']);
                       });
                   }
@@ -1206,14 +1166,7 @@ export class ContractSignatureComponent implements OnInit {
     const dataOrg = await this.contractServiceV1.getDataNotifyOriganzation().toPromise();
 
     if (dataOrg.usb_token_version == 1) {
-      this.signTokenVersion1(
-        fileC,
-        idContract,
-        recipientId,
-        documentId,
-        taxCode,
-        idSignMany
-      );
+      this.signTokenVersion1(fileC,idContract,recipientId,documentId,taxCode,idSignMany);
     } else if (dataOrg.usb_token_version == 2) {
       this.signTokenVersion2(
         fileC,
