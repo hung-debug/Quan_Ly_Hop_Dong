@@ -19,7 +19,10 @@
 </div>
 
 <div class="text-sign" *ngIf="sign.sign_unit == 'text'">
-  <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit">
+  <div class="skeleton-sign" (click)="doEditText()" *ngIf="!checkShowEdit && !sign.valueSign">
+    <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
+  </div>
+  <div class="skeleton-sign-value" (click)="doEditText()" *ngIf="!checkShowEdit && sign.valueSign">
     <span id="input-text" [ngbTooltip]="sign.valueSign ? sign.valueSign : ''">{{getText(sign)}}</span>
   </div>
   <div class="skeleton-sign" *ngIf="checkShowEdit">

@@ -227,7 +227,6 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
       } else if(sign.valueSign) {
         return sign.valueSign;
       } else if(this.contractNoValueSign) {
-        console.log("1 ",sign);
         this.count++;
         sign.valueSign = this.contractNoValueSign;
         return sign.valueSign;
