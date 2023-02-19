@@ -11,6 +11,7 @@ export class TextSignatureImageComponent implements OnInit {
   @Input() width: any;
   @Input() height: any;
   @Input() datas: any;
+  // @Input() widthText: any;
 
   constructor() { }
 
@@ -23,7 +24,7 @@ export class TextSignatureImageComponent implements OnInit {
       'font': this.datas.is_data_object_signature[0].font,
       'font-size':this.datas.is_data_object_signature[0].font_size+'px',
       'width':this.width + 'px',
-      'height': this.height + 'px'
+      'height': this.height + 'px',
     };
   }
 

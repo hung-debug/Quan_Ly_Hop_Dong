@@ -154,7 +154,7 @@ export class ConsiderContractComponent
   textSignBase64Gen: any;
   signInfoPKIU: any = {};
   // heightText: any = 200;
-  widthText: any = 200;
+  widthText: any = "";
   loadingText: string = 'Đang xử lý...';
   phoneOtp: any;
   isDateTime: any;
@@ -1571,6 +1571,7 @@ export class ConsiderContractComponent
     return new Blob([ia], { type: mimeString });
   }
 
+  width: any;
   //Ký số + ký eKYC
   async signDigitalDocument() {
     let typeSignDigital = this.typeSignDigital;
@@ -1587,6 +1588,7 @@ export class ConsiderContractComponent
             let fileC = await this.contractService.getFileContractPromise(this.idContract);
             const pdfC2 = fileC.find((p: any) => p.type == 2);
             const pdfC1 = fileC.find((p: any) => p.type == 1);
+
             if (pdfC2) {
               fileC = pdfC2.path;
             } else if (pdfC1) {
@@ -1598,17 +1600,26 @@ export class ConsiderContractComponent
             if (signUpdate.type == 1 || signUpdate.type == 4) {
               this.textSign = signUpdate.valueSign;
 
-              this.widthText = signUpdate.width;
+              this.width = signUpdate.width;
+
 
               await of(null).pipe(delay(120)).toPromise();
-              const imageRender = <HTMLElement>(
-                document.getElementById('text-sign')
-              );
+              const imageRender = <HTMLElement>(document.getElementById('text-sign'));
+              this.widthText = imageRender.clientWidth;
 
+              
               if (imageRender) {
                 const textSignB = await domtoimage.toPng(imageRender);
                 signI = this.textSignBase64Gen = textSignB.split(',')[1];
               }
+
+              console.log("width text ", this.widthText);
+
+              let x = signUpdate.signDigitalX;
+
+              signUpdate.signDigitalX = x - 0.5*signUpdate.width + 30;
+              signUpdate.signDigitalWidth = x + 0.5*signUpdate.width + 30;
+
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(150)).toPromise();
 
@@ -1616,18 +1627,14 @@ export class ConsiderContractComponent
               let imageRender: any = '';
 
               if (this.usbTokenVersion == 1) {
-                imageRender = <HTMLElement>(
-                  document.getElementById('export-html')
-                );
+                imageRender = <HTMLElement>(document.getElementById('export-html'));
 
                 if (imageRender) {
                   const textSignB = await domtoimage.toPng(imageRender);
                   signI = textSignB.split(',')[1];
                 }
               } else if (this.usbTokenVersion == 2) {
-                imageRender = <HTMLElement>(
-                  document.getElementById('export-html2')
-                );
+                imageRender = <HTMLElement>(document.getElementById('export-html2'));
 
                 if (imageRender) {
                   const textSignB = await domtoimage.toJpeg(imageRender);
@@ -1647,11 +1654,7 @@ export class ConsiderContractComponent
               try {
                 await this.createEmptySignature(signUpdate, signDigital, signI);
               } catch (err) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký usb token ' + err,
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token ' + err,'',3000);
                 return false;
               }
 
@@ -1660,14 +1663,12 @@ export class ConsiderContractComponent
                 this.base64Data
               );
               if (!sign.recipient_id) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký USB Token',
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
                 return false;
               }
             } else if (this.usbTokenVersion == 1) {
+              console.log("sign digital ", signDigital);
+              console.log("sign i ", signI);
               const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital,signI);
 
               if (!dataSignMobi.data.FileDataSigned) {
@@ -3270,15 +3271,6 @@ export class ConsiderContractComponent
         sign.signDigitalHeight = heightPage - (sign.coordinate_y - this.currentHeight) /* * this.ratioPDF*/;
         sign.signDigitalWidth = sign.coordinate_x + sign.width
 
-        // if(sign.type == 1 || sign.type == 4) {
-        //   sign.signDigitalWidth = 0;
-        // } else {
-        //   sign.signDigitalWidth = sign.coordinate_x + sign.width /* * this.ratioPDF*/;
-
-        //   sign.signDigitalHeight = sign.signDigitalHeight + sign.height - 13*1.5;
-        // }
-
-
         //Lấy thông tin mã số thuế của đối tác ký
         this.contractService.getDetermineCoordination(sign.recipient_id).subscribe((response) => {
             const lengthRes = response.recipients.length;
@@ -3304,10 +3296,7 @@ export class ConsiderContractComponent
 
   prepareInfoSignUsbTokenV2(page: any, heightPage: any) {
     this.isDataObjectSignature.map((sign: any) => {
-      if (
-        (sign.type == 3 || sign.type == 1 || sign.type == 4) &&
-        sign?.recipient?.email === this.currentUser.email &&
-        sign?.recipient?.role === this.datas?.roleContractReceived &&
+      if ((sign.type == 3 || sign.type == 1 || sign.type == 4) && sign?.recipient?.email === this.currentUser.email && sign?.recipient?.role === this.datas?.roleContractReceived &&
         sign?.page == page
       ) {
         sign.signDigitalX = sign.coordinate_x /* * this.ratioPDF*/;

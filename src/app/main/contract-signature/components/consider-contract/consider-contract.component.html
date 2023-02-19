@@ -103,9 +103,7 @@
              (click)="getSignSelect(d)"
              [ngClass]="changeColorDrag(null, d, true)"
              [ngStyle]="changePosition(d,null,null,'#EBF8FF')">
-          <app-image-sign-contract  id="image-sign-contract" 
-            (contractNoValue)="contractNoValueChange($event)"
-            [contractNoValue]="contractNoValue"
+          <app-image-sign-contract  id="image-sign-contract" (contractNoValue)="contractNoValueChange($event)" [contractNoValue]="contractNoValue"
             [contractNoValueSign]="contractNoValueSign"
             (checkedChange)="switchesValueChange($event)" 
             *ngIf="![2,3].includes(recipient.status)" 
@@ -120,7 +118,7 @@
         <app-display-digital-signature [nameCompany]="nameCompany" [cardId]="cardId" [phonePKI]="phonePKI"></app-display-digital-signature>
       </div>
       <div class="skeleton-sign position-absolute opacity-0">
-        <app-text-signature-image [datas]="datas" [textSign]="textSign" [width]="widthText"></app-text-signature-image>
+        <app-text-signature-image [datas]="datas" [textSign]="textSign" [width]="width"></app-text-signature-image>
       </div>
     </div>
   </div>
