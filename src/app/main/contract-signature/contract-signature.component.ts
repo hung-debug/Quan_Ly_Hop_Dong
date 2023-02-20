@@ -519,16 +519,12 @@ export class ContractSignatureComponent implements OnInit {
     this.openDialogSignManyComponent(recipientId, taxCode, idSignMany, signId);
   }
 
-  openDialogSignManyComponent(
-    recipientId: any,
-    taxCode: any,
-    idSignMany: any,
-    signId: any
-  ) {
+  async openDialogSignManyComponent(recipientId: any, taxCode: any, idSignMany: any, signId: any) {
     const dialogRef = this.dialog.open(DialogSignManyComponentComponent, {
       width: '580px',
     });
-    dialogRef.afterClosed().subscribe((result: any) => {
+    
+    dialogRef.afterClosed().subscribe(async (result: any) => {
       //result = 1 tương ứng với nhấn nút đồng ý và ký
       if (result == 1) {
         //Mã số thuế tại các hợp đồng cần giống nhau
@@ -551,7 +547,6 @@ export class ContractSignatureComponent implements OnInit {
           let contractsSignManyChecked = this.contractsSignMany.filter((opt) => opt.checked);
 
           let idSignMany: any = [];
-          let subscribe: any = [];
           let idContract: any = [];
           let fileC: any = [];
           let documentId: any = [];
@@ -570,24 +565,50 @@ export class ContractSignatureComponent implements OnInit {
 
           //Lay ra mang chua tat ca ma so thue cua cac hop dong ky bang usb token
           for (let i = 0; i < recipientId.length; i++) {
-            subscribe[i] = this.contractServiceV1.getDetermineCoordination(recipientId[i]).subscribe((response) => {
-                response.recipients.forEach((item: any) => {
-                  if (item.id == recipientId[i]) {
-                    taxCode.push(item.fields[0].recipient.cardId);
-                  }
-                });
-              });
+            // subscribe[i] = this.contractServiceV1.getDetermineCoordination(recipientId[i]).subscribe((response) => {
+            //     response.recipients.forEach((item: any) => {
+            //       if (item.id == recipientId[i]) {
+            //         taxCode.push(item.fields[0].recipient.cardId);
+            //       }
+            //     });
+            //   });
+
+            try {
+              const determineCoordination = await this.contractServiceV1.getDetermineCoordination(recipientId[i]).toPromise();
+              determineCoordination.recipients.forEach((item: any) => {
+                if(item.id == recipientId[i]) {
+                  taxCode.push(item.fields[0].recipient.cardId)
+                }
+              })
+            } catch(err) {
+              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy thông tin người tham gia hợp đồng','',3000);
+              return false;
+            }
+        
+
           }
 
           for (let i = 0; i < idContract.length; i++) {
-            this.contractServiceV1.getFileContract(idContract[i]).subscribe((response) => {
-                fileC.push(response[0].path);
+            try {
+              const fileContract = await this.contractServiceV1.getFileContract(idContract[i]).toPromise();
+              fileC.push(fileContract[0].path)
+            } catch(err) {
+              this.toastService.showErrorHTMLWithTimeout('Lỗi lấy file cần ký','',3000);
+              return false;
+            }
+     
+            // this.contractServiceV1.getFileContract(idContract[i]).subscribe((response) => {
+            //     fileC.push(response[0].path);
 
-                if (fileC.length == idContract.length) {
-                  this.signUsbTokenMany(fileC,idContract,recipientId,documentId,taxCode,idSignMany);
-                }
-              });
+            //     if (fileC.length == idContract.length) {
+            //       this.signUsbTokenMany(fileC,idContract,recipientId,documentId,taxCode,idSignMany);
+            //     }
+            //   });
           }
+
+          console.log("file c ", fileC);
+          this.signUsbTokenMany(fileC,idContract,recipientId,documentId,taxCode,idSignMany);
+
         } else if (signId == 4) {
           //Ký nhiều hsm
           //Mở popup ký hsm
@@ -730,39 +751,39 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     for (let i = 0; i < fileC.length; i++) {
-      base64String[i] = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
+      const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
 
-      base64String[i] = encode(base64String[i]);
+      base64String.push(encode(base64StringPdf));
 
-      //Lấy toạ độ ô ký của từng hợp đồng
-      this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).subscribe((response) => {
-          for (let j = 0; j < response.length; j++) {
-            if (response[j].recipient) {
-              if (recipientId[i] == response[j].recipient.id) {
-                x.push(response[j].coordinate_x);
-                y.push(response[j].coordinate_y);
-                h.push(response[j].height);
-                w.push(response[j].width);
+        //Lấy toạ độ ô ký của từng hợp đồng
+        const dataObjectSignature = await this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).toPromise();
 
-                //Lấy ra trang ký của từng file hợp đồng
-                page.push(response[j].page);
-              }
+        for(let j = 0; j < dataObjectSignature.length; j++) {
+           if(dataObjectSignature[j].recipient) {
+            if(recipientId[i] == dataObjectSignature[j].recipient.id) {
+                  x.push(dataObjectSignature[j].coordinate_x);
+                  y.push(dataObjectSignature[j].coordinate_y);
+                  h.push(dataObjectSignature[j].height);
+                  w.push(dataObjectSignature[j].width);
+  
+                  //Lấy ra trang ký của từng file hợp đồng
+                  page.push(dataObjectSignature[j].page);
             }
-          }
-        });
-
-      //Lấy thông tin page của từng hợp đồng
-      this.contractServiceV1.getInfoPage(documentId[i]).subscribe((response) => {
-          for (let j = 0; j < response.length; j++) {
-            if (response[j].page < page[i]) {
-              currentHeight[i] += response[j].height;
-            } else if (response[j].page == page[i]) {
+           }
+        }
+  
+        //Lấy thông tin page của hợp đồng
+        const infoPage = await this.contractServiceV1.getInfoPage(documentId[i]).toPromise();
+  
+        for (let j = 0; j < infoPage.length; j++) {
+          if (infoPage[j].page < page[i]) {
+              currentHeight[i] += infoPage[j].height;
+          } else if (infoPage[j].page == page[i]) {
               currentHeight[i] += 0;
-              heightPage[i] = response[j].height;
+              heightPage[i] = infoPage[j].height;
               break;
-            }
           }
-        });
+        }
     }
 
     //Lay thong tin cua usb token
@@ -795,24 +816,46 @@ export class ContractSignatureComponent implements OnInit {
 
                   h[i] = y[i] + h[i];
 
-                  let dataSignMobi: any = await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial,base64String[i],signI,page[i],h[i],w[i],x[i],y[i]);
+              
+                  let dataSignMobi: any = null;
+                  try {
+                    dataSignMobi = await this.contractServiceV1.postSignDigitalMobiMulti(this.signCertDigital.Serial,base64String[i],signI,page[i],h[i],w[i],x[i],y[i]);
+                    console.log("dataSignMobi.data.FileDataSigned ", dataSignMobi.data.FileDataSigned);
+                  } catch(err) {
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi call api ký USB Token ','',3000);
+                    return false;
+                  }
 
-                  if (!dataSignMobi.data.FileDataSigned) {
+                  if (!dataSignMobi.data.FileDataSigned || !dataSignMobi) {
                     this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token ' + dataSignMobi.data.ErrorDetail,'',3000);
                     return false;
                   }
 
-                  const sign = await this.contractServiceV1.updateDigitalSignatured(idSignMany[i],dataSignMobi.data.FileDataSigned);
-
-                  if (!sign.recipient_id) {
-                    this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token ','',3000);
+                  let sign: any = null;
+                  try {
+                    sign = await this.contractServiceV1.updateDigitalSignatured(idSignMany[i],dataSignMobi.data.FileDataSigned);
+                    console.log("sign ", sign);
+                  } catch(err) {
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi  đẩy file sau khi ký USB Token ','',3000);
                     return false;
                   }
 
-                  const updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([],recipientId[i]);
+                  if (!sign.recipient_id || !sign) {
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi đẩy file sau khi ký USB Token ','',3000);
+                    return false;
+                  }
 
-                  if (!updateInfo.id) {
+                  let updateInfo: any = null;
+                  try {
+                    updateInfo = await this.contractServiceV1.updateInfoContractConsiderPromise([],recipientId[i]);
+                  } catch(err) {
                     this.toastService.showErrorHTMLWithTimeout('Lỗi cập nhật trạng thái hợp đồng ','',3000);
+                    return false;
+                  }
+
+                  if (!updateInfo.id || !updateInfo) {
+                    this.toastService.showErrorHTMLWithTimeout('Lỗi cập nhật trạng thái hợp đồng ','',3000);
+                    return false;
                   }
 
                   if (i == fileC.length - 1) {
@@ -893,47 +936,85 @@ export class ContractSignatureComponent implements OnInit {
     }
 
     for (let i = 0; i < fileC.length; i++) {
-      base64String[i] = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
+      const base64StringPdf = await this.contractServiceV1.getDataFileUrlPromise(fileC[i]);
 
-      base64String[i] = encode(base64String[i]);
+      base64String.push(encode(base64StringPdf));
 
       //Lấy toạ độ ô ký của từng hợp đồng
-      this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).subscribe((response) => {
-          for (let j = 0; j < response.length; j++) {
-            if (response[j].recipient) {
-              if (recipientId[i] == response[j].recipient.id) {
-                x.push(response[j].coordinate_x);
-                y.push(response[j].coordinate_y);
-                h.push(response[j].height);
-                w.push(response[j].width);
+      const dataObjectSignature = await this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).toPromise();
+
+      for(let j = 0; j < dataObjectSignature.length; j++) {
+         if(dataObjectSignature[j].recipient) {
+          if(recipientId[i] == dataObjectSignature[j].recipient.id) {
+                x.push(dataObjectSignature[j].coordinate_x);
+                y.push(dataObjectSignature[j].coordinate_y);
+                h.push(dataObjectSignature[j].height);
+                w.push(dataObjectSignature[j].width);
 
                 //Lấy ra trang ký của từng file hợp đồng
-                page.push(response[j].page);
-              }
-            }
+                page.push(dataObjectSignature[j].page);
           }
-        });
+         }
+      }
+
+      //Lấy thông tin page của hợp đồng
+      const infoPage = await this.contractServiceV1.getInfoPage(documentId[i]).toPromise();
+
+      for (let j = 0; j < infoPage.length; j++) {
+        if (infoPage[j].page < page[i]) {
+            currentHeight[i] += infoPage[j].height;
+        } else if (infoPage[j].page == page[i]) {
+            currentHeight[i] += 0;
+            heightPage[i] = infoPage[j].height;
+            break;
+        }
+      }
+
+      //Lấy trạng thái ceca của từng hợp đồng
+      const cecaContract = await this.contractServiceV1.getListDataCoordination(idContract[i]).toPromise();
+
+      if(cecaContract[i].ceca_push == 1) {
+        ceca_push.push(true)
+      } else {
+        ceca_push.push(false);
+      }
+
+      // this.contractServiceV1.getDataObjectSignatureLoadChange(idContract[i]).subscribe((response) => {
+      //     for (let j = 0; j < response.length; j++) {
+      //       if (response[j].recipient) {
+      //         if (recipientId[i] == response[j].recipient.id) {
+      //           x.push(response[j].coordinate_x);
+      //           y.push(response[j].coordinate_y);
+      //           h.push(response[j].height);
+      //           w.push(response[j].width);
+
+      //           //Lấy ra trang ký của từng file hợp đồng
+      //           page.push(response[j].page);
+      //         }
+      //       }
+      //     }
+      //   });
 
       //Lấy thông tin page của từng hợp đồng
-      this.contractServiceV1.getInfoPage(documentId[i]).subscribe((response) => {
-          for (let j = 0; j < response.length; j++) {
-            if (response[j].page < page[i]) {
-              currentHeight[i] += response[j].height;
-            } else if (response[j].page == page[i]) {
-              currentHeight[i] += 0;
-              heightPage[i] = response[j].height;
-              break;
-            }
-          }
-        });
+      // this.contractServiceV1.getInfoPage(documentId[i]).subscribe((response) => {
+      //     for (let j = 0; j < response.length; j++) {
+      //       if (response[j].page < page[i]) {
+      //         currentHeight[i] += response[j].height;
+      //       } else if (response[j].page == page[i]) {
+      //         currentHeight[i] += 0;
+      //         heightPage[i] = response[j].height;
+      //         break;
+      //       }
+      //     }
+      //   });
 
-      this.contractServiceV1.getListDataCoordination(idContract[i]).subscribe((respoonse) => {
-        if(respoonse.ceca_push == 1) {
-          ceca_push.push(true);
-        } else {
-          ceca_push.push(false);
-        }
-      });
+      // this.contractServiceV1.getListDataCoordination(idContract[i]).subscribe((respoonse) => {
+      //   if(respoonse.ceca_push == 1) {
+      //     ceca_push.push(true);
+      //   } else {
+      //     ceca_push.push(false);
+      //   }
+      // });
 
     }
 
@@ -1098,15 +1179,6 @@ export class ContractSignatureComponent implements OnInit {
             idSignMany[i],
             filePdfSigned
           );
-
-          if (!sign.recipient_id) {
-            this.toastService.showErrorHTMLWithTimeout(
-              'Lỗi ký usb token không cập nhật được recipient id',
-              '',
-              3000
-            );
-            return false;
-          }
 
           if (!sign.recipient_id) {
             this.toastService.showErrorHTMLWithTimeout(

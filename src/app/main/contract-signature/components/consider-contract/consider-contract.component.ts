@@ -1617,8 +1617,8 @@ export class ConsiderContractComponent
 
               let x = signUpdate.signDigitalX;
 
-              signUpdate.signDigitalX = x - 0.5*signUpdate.width + 30;
-              signUpdate.signDigitalWidth = x + 0.5*signUpdate.width + 30;
+              signUpdate.signDigitalX = x - 0.5*signUpdate.width + 0.25*signUpdate.width;
+              signUpdate.signDigitalWidth = x + 0.5*signUpdate.width + 0.25*signUpdate.width;
 
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(150)).toPromise();
@@ -1672,20 +1672,12 @@ export class ConsiderContractComponent
               const dataSignMobi: any = await this.contractService.postSignDigitalMobi(signDigital,signI);
 
               if (!dataSignMobi.data.FileDataSigned) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký USB Token',
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
                 return false;
               }
               const sign = await this.contractService.updateDigitalSignatured(signUpdate.id,dataSignMobi.data.FileDataSigned);
               if (!sign.recipient_id) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Lỗi ký USB Token',
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout('Lỗi đẩy file sau khi ký usb token','',3000);
                 return false;
               }
             }
