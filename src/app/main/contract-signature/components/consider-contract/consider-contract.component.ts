@@ -1599,27 +1599,27 @@ export class ConsiderContractComponent
             let signI = null;
             if (signUpdate.type == 1 || signUpdate.type == 4) {
               this.textSign = signUpdate.valueSign;
-
               this.width = signUpdate.width;
 
+              this.widthText = this.calculatorWidthText(this.textSign, signUpdate.font);
+
+              console.log("text ", this.widthText);
 
               await of(null).pipe(delay(120)).toPromise();
               const imageRender = <HTMLElement>(document.getElementById('text-sign'));
-              this.widthText = imageRender.clientWidth;
-
               
               if (imageRender) {
                 const textSignB = await domtoimage.toPng(imageRender);
                 signI = this.textSignBase64Gen = textSignB.split(',')[1];
               }
 
-              console.log("width text ", this.widthText);
+              // console.log("width text ", this.widthText);
 
               let x = signUpdate.signDigitalX;
-              let y = signUpdate.signDigitalY;
+              // // // let y = signUpdate.signDigitalY;
 
-              signUpdate.signDigitalX = x - 0.5*signUpdate.width + 0.3*signUpdate.width;
-              signUpdate.signDigitalWidth = signUpdate.signDigitalX + signUpdate.width;
+              signUpdate.signDigitalX = 0.5*(x + signUpdate.width + this.widthText) + 0.5*this.widthText;
+              signUpdate.signDigitalWidth = signUpdate.signDigitalX + signUpdate.width + 0.5*this.widthText;
 
               // signUpdate.signDigitalY = y - 0.01*signUpdate.height;
               // signUpdate.signDigitalHeight = signUpdate.signDigitalHeight - 0.05*signUpdate.height;
@@ -1853,6 +1853,19 @@ export class ConsiderContractComponent
 
       if (fileC && objSign.length) return true;
     }
+  }
+
+  calculatorWidthText(text: any, font: any) {
+    console.log("font ", font);
+
+    const canvas: any = document.createElement("canvas");
+
+    const context = canvas.getContext("2d");
+    context.font = font;
+
+    const metrics = context.measureText(text);
+
+    return metrics.width;
   }
 
   async signUsb(signUpdate: any, response: any) {
