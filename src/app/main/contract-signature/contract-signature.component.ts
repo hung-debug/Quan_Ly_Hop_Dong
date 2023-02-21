@@ -450,9 +450,7 @@ export class ContractSignatureComponent implements OnInit {
 
   signManyContract() {
     //Nếu chọn hợp đồng khác loại ký thì ko cho ký
-    let contractsSignManyChecked = this.contractsSignMany.filter(
-      (opt) => opt.checked
-    );
+    let contractsSignManyChecked = this.contractsSignMany.filter((opt) => opt.checked);
 
     for (let i = 0; i < contractsSignManyChecked.length; i++) {
       for (let j = i + 1; j < contractsSignManyChecked.length; j++) {
@@ -654,10 +652,7 @@ export class ContractSignatureComponent implements OnInit {
               this.spinner.show();
 
               //Call api ký nhiều hsm
-              const checkSign = await this.contractServiceV1.signHsmMulti(
-                this.dataHsm,
-                idSignMany
-              );
+              const checkSign = await this.contractServiceV1.signHsmMulti(this.dataHsm,idSignMany);
 
               let countSuccess = 0;
 

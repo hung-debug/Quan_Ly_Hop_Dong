@@ -1616,9 +1616,13 @@ export class ConsiderContractComponent
               console.log("width text ", this.widthText);
 
               let x = signUpdate.signDigitalX;
+              let y = signUpdate.signDigitalY;
 
-              signUpdate.signDigitalX = x - 0.5*signUpdate.width + 0.25*signUpdate.width;
-              signUpdate.signDigitalWidth = x + 0.5*signUpdate.width + 0.25*signUpdate.width;
+              signUpdate.signDigitalX = x - 0.5*signUpdate.width + 0.4*signUpdate.width;
+              signUpdate.signDigitalWidth = x + 0.5*signUpdate.width + 0.4*signUpdate.width;
+
+              signUpdate.signDigitalY = y - 0.1*signUpdate.height;
+              signUpdate.signDigitalHeight = signUpdate.signDigitalHeight - 0.1*signUpdate.height;
 
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(150)).toPromise();
@@ -1646,8 +1650,7 @@ export class ConsiderContractComponent
             const signDigital = JSON.parse(JSON.stringify(signUpdate));
             signDigital.Serial = this.signCertDigital.Serial;
 
-            const base64String =
-              await this.contractService.getDataFileUrlPromise(fileC);
+            const base64String = await this.contractService.getDataFileUrlPromise(fileC);
             signDigital.valueSignBase64 = encode(base64String);
 
             if (this.usbTokenVersion == 2) {
@@ -1658,10 +1661,7 @@ export class ConsiderContractComponent
                 return false;
               }
 
-              const sign = await this.contractService.updateDigitalSignatured(
-                signUpdate.id,
-                this.base64Data
-              );
+              const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, this.base64Data);
               if (!sign.recipient_id) {
                 this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
                 return false;
