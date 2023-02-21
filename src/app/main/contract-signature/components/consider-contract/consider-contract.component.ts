@@ -1718,9 +1718,7 @@ export class ConsiderContractComponent
       this.nameCompany = this.recipient.name;
 
       await of(null).pipe(delay(120)).toPromise();
-      const imageRender = <HTMLElement>(
-        document.getElementById('export-html-pki')
-      );
+      const imageRender = <HTMLElement>(document.getElementById('export-html-pki'));
       let image_base64 = '';
       if (imageRender) {
         const textSignB = await domtoimage.toJpeg(imageRender);
@@ -1738,11 +1736,7 @@ export class ConsiderContractComponent
         );
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Ký số không thành công!',
-            '',
-            3000
-          );
+          this.toastService.showErrorHTMLWithTimeout('Ký số không thành công!','',3000);
           return false;
         } else {
           return true;
@@ -1752,24 +1746,17 @@ export class ConsiderContractComponent
       //Ký hsm
 
       for (const signUpdate of this.isDataObjectSignature) {
-        if (
-          signUpdate &&
-          (signUpdate.type == 1 ||
-            signUpdate.type == 3 ||
-            signUpdate.type == 4) &&
-          [3, 4].includes(this.datas.roleContractReceived) &&
+        if (signUpdate && (signUpdate.type == 1 || signUpdate.type == 3 ||signUpdate.type == 4) && [3, 4].includes(this.datas.roleContractReceived) &&
           signUpdate?.recipient?.email === this.currentUser.email &&
           signUpdate?.recipient?.role === this.datas?.roleContractReceived
         ) {
-          const objSign = this.isDataObjectSignature.filter((signUpdate: any) => signUpdate && signUpdate.type == 3 &&
-              [3, 4].includes(this.datas.roleContractReceived) &&
+          const objSign = this.isDataObjectSignature.filter((signUpdate: any) => signUpdate && signUpdate.type == 3 && [3, 4].includes(this.datas.roleContractReceived) &&
               signUpdate?.recipient?.email === this.currentUser.email &&
               signUpdate?.recipient?.role === this.datas?.roleContractReceived
           );
 
-          let fileC = await this.contractService.getFileContractPromise(
-            this.idContract
-          );
+          let fileC = await this.contractService.getFileContractPromise(this.idContract);
+
           const pdfC2 = fileC.find((p: any) => p.type == 2);
           const pdfC1 = fileC.find((p: any) => p.type == 1);
           if (pdfC2) {
@@ -1779,6 +1766,7 @@ export class ConsiderContractComponent
           } else {
             return;
           }
+
           let signI = null;
           if (signUpdate.type == 1 || signUpdate.type == 4) {
             this.textSign = signUpdate.valueSign;
@@ -1786,9 +1774,7 @@ export class ConsiderContractComponent
             this.widthText = signUpdate.width;
 
             await of(null).pipe(delay(120)).toPromise();
-            const imageRender = <HTMLElement>(
-              document.getElementById('text-sign')
-            );
+            const imageRender = <HTMLElement>(document.getElementById('text-sign'));
 
             if (imageRender) {
               const textSignB = await domtoimage.toPng(imageRender);
@@ -1820,17 +1806,9 @@ export class ConsiderContractComponent
 
             if (!checkSign || (checkSign && !checkSign.success)) {
               if (!checkSign.message) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  'Đăng nhập không thành công',
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout('Đăng nhập không thành công','',3000);
               } else if (checkSign.message) {
-                this.toastService.showErrorHTMLWithTimeout(
-                  checkSign.message,
-                  '',
-                  3000
-                );
+                this.toastService.showErrorHTMLWithTimeout(checkSign.message,'',3000);
               }
 
               return false;
@@ -1848,7 +1826,7 @@ export class ConsiderContractComponent
             }
           }
         }
-        return true;
+        // return true;
       }
     } else if (typeSignDigital == 5) {
       const objSign = this.isDataObjectSignature.filter(
