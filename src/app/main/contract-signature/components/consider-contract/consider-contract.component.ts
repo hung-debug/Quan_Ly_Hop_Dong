@@ -1618,11 +1618,11 @@ export class ConsiderContractComponent
               let x = signUpdate.signDigitalX;
               let y = signUpdate.signDigitalY;
 
-              signUpdate.signDigitalX = x - 0.5*signUpdate.width + 0.4*signUpdate.width;
-              signUpdate.signDigitalWidth = x + 0.5*signUpdate.width + 0.4*signUpdate.width;
+              signUpdate.signDigitalX = x - 0.5*signUpdate.width + 0.3*signUpdate.width;
+              signUpdate.signDigitalWidth = signUpdate.signDigitalX + signUpdate.width;
 
-              signUpdate.signDigitalY = y - 0.1*signUpdate.height;
-              signUpdate.signDigitalHeight = signUpdate.signDigitalHeight - 0.1*signUpdate.height;
+              // signUpdate.signDigitalY = y - 0.01*signUpdate.height;
+              // signUpdate.signDigitalHeight = signUpdate.signDigitalHeight - 0.05*signUpdate.height;
 
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(150)).toPromise();
