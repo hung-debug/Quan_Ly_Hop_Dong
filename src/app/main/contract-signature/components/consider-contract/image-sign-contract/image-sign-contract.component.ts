@@ -1,11 +1,10 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ConfirmSignOtpComponent} from "../confirm-sign-otp/confirm-sign-otp.component";
 
 import {ImageDialogSignComponent} from "../image-dialog-sign/image-dialog-sign.component";
 import {PkiDialogSignComponent} from "../pki-dialog-sign/pki-dialog-sign.component";
 import {HsmDialogSignComponent} from "../hsm-dialog-sign/hsm-dialog-sign.component";
-import {UserService} from "../../../../../service/user.service";
 import { ToastService } from 'src/app/service/toast.service';
 import { Output, EventEmitter } from '@angular/core';
 
@@ -164,6 +163,9 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
   }
 
   doneEditContractNoSign(sign: any) {
+    // this.checkShowEdit = false;
+
+
     this.contractNoValue = false;
     this.count++;
     sign.valueSign = this.contractNoValueSign;
@@ -200,6 +202,11 @@ export class ImageSignContractComponent implements OnInit, AfterViewInit {
 
   doEditContractNo() {
     this.contractNoValue = !this.contractNoValue;
+
+    setTimeout(()=>{
+      this.inputEditContractNo.nativeElement.focus();
+    },100);
+
   }
 
   count: number = 0;

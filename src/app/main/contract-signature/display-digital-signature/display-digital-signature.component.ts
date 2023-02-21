@@ -27,8 +27,6 @@ export class DisplayDigitalSignatureComponent implements OnInit {
       http = "https";
     }
 
-    console.log("http ", http);
-
     const date = await fetch(http+"://worldtimeapi.org/api/ip").then(response => response.json());
 
     this.isDateTime = date.datetime;
