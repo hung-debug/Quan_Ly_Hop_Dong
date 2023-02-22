@@ -18,14 +18,11 @@
 </div>
 
 <div class="text-sign" *ngIf="(sign.sign_unit == 'text' || sign.sign_unit == 'so_tai_lieu') && signTemplate">
-  <!-- drag & drop new contract -->
   <span *ngIf="getSpecifiedHandle()" class="font-style" id="input-text">{{getText(sign)}}</span>
 
-  <!-- drag & drop text contract templace -->
   <input *ngIf="sign.sign_unit == 'text' && sign.is_have_text" id="input-text-value" placeholder="Nhập nội dung Text.."
     [(ngModel)]="sign.value" type="text" (ngxInputSearch)="doTheSearch($event,'text')">
 
-  <!-- drag & drop contract number templace -->
   <input *ngIf="getNotSpecifiedYetHandle() && this.contractNo" id="input-number-value"
     (focusout)="focusOutFunction()" [(ngModel)]="this.contractNo" placeholder="Nhập số hợp đồng.." type="text"
     (ngxInputSearch)="doTheSearch($event,'contractNo')">
