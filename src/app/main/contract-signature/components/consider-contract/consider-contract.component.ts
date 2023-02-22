@@ -178,6 +178,7 @@ export class ConsiderContractComponent
 
   sum: number[] = [];
   top: any[] = [];
+  top: any[] = [];
 
   constructor(
     private contractService: ContractService,
@@ -221,7 +222,9 @@ export class ConsiderContractComponent
     if (checkViewContract) {
       this.actionRoleContract();
     } else {
-      this.router.navigate(['/page-not-found']);
+      // this.router.navigate(['/page-not-found']);
+      setTimeout(() => this.router.navigate(['/login']));
+      this.toastService.showErrorHTMLWithTimeout('Bạn không có quyền xử lý hợp đồng này!', "", 3000);
     }
   }
 
@@ -335,6 +338,9 @@ export class ConsiderContractComponent
     for (let i = 0; i < this.sum.length; i++) {
       if (this.sum[i] < scrollTop && scrollTop < this.sum[i + 1]) {
         this.pageNum = Number(i + 2);
+    for (let i = 0; i < this.sum.length; i++) {
+      if (this.sum[i] < scrollTop && scrollTop < this.sum[i + 1]) {
+        this.pageNum = Number(i + 2);
       }
     }
   }
@@ -390,6 +396,7 @@ export class ConsiderContractComponent
         };
 
         this.orgId = this.data_contract.is_data_contract.organization_id;
+
 
         await this.getVersionUsbToken(this.orgId);
 
@@ -675,10 +682,14 @@ export class ConsiderContractComponent
           this.loadedPdfView = true;
 
           for (let i = 0; i <= this.pageNumber; i++) {
+          for (let i = 0; i <= this.pageNumber; i++) {
             this.top[i] = 0;
 
             if (i < this.pageNumber) this.sum[i] = 0;
           }
+
+          for (let i = 1; i <= this.pageNumber; i++) {
+            let canvas: any = document.getElementById('canvas-step3-' + i);
 
           for (let i = 1; i <= this.pageNumber; i++) {
             let canvas: any = document.getElementById('canvas-step3-' + i);
@@ -1535,6 +1546,7 @@ export class ConsiderContractComponent
   }
 
   getTextAlertConfirm() {
+  getTextAlertConfirm() {
     if (this.datas.roleContractReceived == 2) {
       if (this.confirmConsider == 1) {
         return 'Bạn có chắc chắn xác nhận hợp đồng này?';
@@ -2262,6 +2274,7 @@ export class ConsiderContractComponent
       try {
         this.nameCompany = utf8.decode(cert.certInfo.CommonName);
       } catch (err) {
+      } catch (err) {
         this.nameCompany = cert.certInfo.CommonName;
       }
 
@@ -2349,6 +2362,7 @@ export class ConsiderContractComponent
         3000
       );
       return;
+    }
     }
   }
 
@@ -2768,24 +2782,41 @@ export class ConsiderContractComponent
     error1: string,
     rejectReason: string
   ) {
-    let inputValue = '';
-    const { value: textRefuse } = await Swal.fire({
-      title: rejectQuestion,
-      input: 'textarea',
-      inputValue: inputValue,
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#b0bec5',
-      confirmButtonText: confirm,
-      cancelButtonText: cancel,
-      inputValidator: (value) => {
-        if (!value) {
-          return rejectReason;
-        } else {
-          return null;
-        }
-      },
-    });
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
+    // console.log("this.emailRecipientssssssssss",this.emailRecipients);
+    const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
+    const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
+    console.log("ArrRecipientsNew", ArrRecipientsNew);
+
+    if (!ArrRecipientsNew.includes(this.currentUser.email)) {
+      this.spinner.hide();
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      this.router.navigate(['/main/dashboard']);
+      // return
+    } else {
+      let inputValue = '';
+      const { value: textRefuse } = await Swal.fire({
+        title: rejectQuestion,
+        input: 'textarea',
+        inputValue: inputValue,
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#b0bec5',
+        confirmButtonText: confirm,
+        cancelButtonText: cancel,
+        inputValidator: (value) => {
+          if (!value) {
+            return rejectReason;
+          } else {
+            return null;
+          }
+        },
+      });
 
     if (textRefuse) {
       this.contractService.considerRejectContract(this.recipientId, textRefuse).subscribe(
@@ -2817,6 +2848,7 @@ export class ConsiderContractComponent
         !item.valueSign &&
         item.type != 3
     );
+
 
     return validSign.length == 0;
   }
@@ -3175,6 +3207,7 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass = 'custom-dialog-container';
     dialogConfig.panelClass = 'custom-dialog-container';
     dialogConfig.width = '497px';
     dialogConfig.height = '330px';

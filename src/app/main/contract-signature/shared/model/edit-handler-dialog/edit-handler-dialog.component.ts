@@ -11,8 +11,8 @@ import {
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastService } from "../../../../../service/toast.service";
 import { environment } from 'src/environments/environment';
-import {parttern} from "../../../../../config/parttern";
-
+import { parttern, parttern_input } from "../../../../../config/parttern";
+import * as moment from 'moment';
 @Component({
   selector: 'app-edit-handler-dialog',
   templateUrl: './edit-handler-dialog.component.html',
@@ -47,6 +47,9 @@ export class EditHandlerComponent implements OnInit {
   card_id: any;
   key: any;
   pattern = parttern;
+  pattern_input = parttern_input;
+  role: any;
+  contractId: any;
 
   //dropdown
   signTypeList: Array<any> = type_signature;
@@ -81,7 +84,9 @@ export class EditHandlerComponent implements OnInit {
     //   console.log("this.datas.is_handler",this.datas.is_handler);
 
 
-    console.log("this.data.update process person", this.data);
+    console.log("this.data.update process person", this.data.contract_id);
+    console.log("dâtsss", this.datas);
+    console.log("abc", this.contractId)
     this.name = this.data.name;
     this.login_by = this.data.login_by;
     this.email = this.data.email;
@@ -90,6 +95,8 @@ export class EditHandlerComponent implements OnInit {
     this.id_sign_type = this.data.sign_type[0]?.id
     this.card_id = this.data.card_id;
     this.id = this.data.id;
+    this.role = this.data.role;
+    // this.contractid = this.data.is_data_contract.id;
 
 
 
@@ -124,10 +131,30 @@ export class EditHandlerComponent implements OnInit {
   handleCancel() {
     this.dialogRef.close();
   }
-keyDownHandler(event: any) {
+  keyDownHandler(event: any) {
     if (event.keyCode === 32)
-        event.preventDefault();
-}
+      event.preventDefault();
+  }
+
+  getNameObjectValid(role_numer: number) {
+    switch (role_numer) {
+      case 1:
+        return ' người điều phối ';
+        break;
+      case 2:
+        return ' người xem xét ';
+        break;
+      case 3:
+        return ' người ký ';
+        break;
+      case 4:
+        return ' văn thư ';
+        break;
+      default:
+        return '';
+        break;
+    }
+  }
   UpdateHandler() {
     this.spinner.show();
     const dataUpdate = {
@@ -139,26 +166,71 @@ keyDownHandler(event: any) {
       card_id: this.card_id,
     };
     // let dataArr = [];
-    // dataArr.push(this.phone);
+    // dataArr = (this.data).sort((beforeItemRole: any, afterItemRole: any) => beforeItemRole.role - afterItemRole.role);
     // console.log("dataarray",dataArr);
-    
+
     // let count = 0;
-    // for (let i = 0; i < dataArr.length; i++) {  
-    //   if (!this.pattern.phone.test(dataArr[i].email)) {
-    //     this.getNotificationValid("SĐT của bạn không hợp lệ!")
+    // for (let i = 0; i < dataArr.length; i++) {
+    //   if (!dataArr[i].name) {
+    //     this.getNotificationValid("Vui lòng nhập tên" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!");
+    //     count++;
+    //     break;
+    //   }
+    //   if (!dataArr[i].email) {
+    //     this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
+    //     count++;
+    //     break;
+    //   }
+    //   if (!dataArr[i].phone) {
+    //     this.getNotificationValid("Vui lòng nhập email" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi!")
+    //     count++;
+    //     break;
+    //   }
+    //   if (dataArr[i].phone && !this.pattern.phone.test(dataArr[i].phone.trim())) {
+    //     this.getNotificationValid("Số điện thoại của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!")
+    //     count++;
+    //     break;
+    //   }
+    //   // valid cccd number
+    //   if (dataArr[i].card_id.trim() && !this.pattern.card_id9.test(dataArr[i].card_id.trim()) &&
+    //     !this.pattern.card_id12.test(dataArr[i].card_id.trim()) &&
+    //     dataArr[i].sign_type.filter((p: any) => p.id == 5).length > 0) {
+    //     this.getNotificationValid("CMT/CCCD của" + this.getNameObjectValid(3) + "tổ chức của tôi không hợp lệ!")
+    //     count++;
+    //     break;
+    //   }
+
+    //   if (!dataArr[i].card_id.trim() &&
+    //     (dataArr[i].role == 3 || dataArr[i].role == 4) &&
+    //     dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 4).length > 0) {
+    //     this.getNotificationValid("Vui lòng nhập MST/CMT/CCCD của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi");
+    //     count++;
+    //     break;
+    //   }
+
+    //   if (dataArr[i].card_id.trim() &&
+    //     !this.pattern_input.taxCode_form.test(dataArr[i].card_id) &&
+    //     !this.pattern.card_id9.test(dataArr[i].card_id) &&
+    //     !this.pattern.card_id12.test(dataArr[i].card_id) &&
+    //     dataArr[i].sign_type.filter((p: any) => p.id == 2 || p.id == 4).length > 0) {
+    //     this.getNotificationValid("Mã số thuế/CMT/CCCD của" + this.getNameObjectValid(dataArr[i].role) + "tổ chức của tôi không hợp lệ!");
     //     count++;
     //     break;
     //   }
     // }
 
-    if (this.email !== null) {
-      this.contractService.updateInfoPersonProcess(dataUpdate, this.id).subscribe(
+    if (this.email !== "") {
+
+      console.log("dataUpdate",this.email);
+      console.log("this.data.id",this.data);
+      console.log("this.data.contract_id",this.data.contract_id);
+      this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
         (res: any) => {
-          if (res.email == null) {
+          if (!res.success) {
             this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
           } else {
             this.toastService.showSuccessHTMLWithTimeout('Cập nhật người xử lý thành công', "", 3000);
-            this.dialogRef.close(res);
+            this.dialogRef.close(dataUpdate);
             // this.router.navigate(['/main/form-contract/detail/' + this.id]);
           }
         }
@@ -166,8 +238,6 @@ keyDownHandler(event: any) {
     } else {
       this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
     }
-
-  
   }
 
   onItemSelect(e: any, data: any) {

@@ -1,6 +1,5 @@
-import { map } from 'rxjs/operators';
 // import { locale } from 'date-fns/locale/en-US';
-
+// import { map } from 'rxjs/operators';
 import { ContractService } from 'src/app/service/contract.service';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, SimpleChanges, ElementRef } from '@angular/core';
 import {
@@ -98,7 +97,6 @@ export class DetermineSignerComponent implements OnInit {
   eKYCContractBuy: any;
   smsContractBuy: any;
   site: string;
-  checkDropDownLanguage: string = "vi";
 
   get determineContract() {
     return this.determineDetails.controls;
@@ -142,6 +140,8 @@ export class DetermineSignerComponent implements OnInit {
 
     if (!this.datas.is_determine_clone || this.datas.is_determine_clone.length == 0) {
       this.datas.is_determine_clone = [...this.contractService.getDataDetermineInitialization()];
+    }else {
+      console.log("clone ", this.datas.is_determine_clone);
     }
 
     // data Tổ chức của tôi
@@ -251,15 +251,9 @@ export class DetermineSignerComponent implements OnInit {
 
 
   }
-  switchLang(locale: string) {
-    // this.contractService.getContractDetermine(this.datas.is_determine_clone, this.datas.id).subscribe((res: any) => {
-    //   console.log("this.datas.is_determine_clone", this.datas.is_determine_clone);
-    //   console.log("this.datass.id", this.datas.id);
-    //   this.locale = res.locale;
-    //   console.log("this.locale", this.locale);
-    // },
-    // )
-    this.checkDropDownLanguage = locale;
+  switchLang(locale: string, d: any) {
+    // this.data_organization.recipients.filter((p: any) => p.role == 2);
+    // console.log("SU", this.data_organization)
   }
 
   async checkNumber(countEkyc: number, countSMS: number) {
@@ -674,7 +668,7 @@ export class DetermineSignerComponent implements OnInit {
       }
 
       // valid cccd number
-      if (dataArr[i].card_id.trim() && !this.pattern.card_id9.test(dataArr[i].card_id.trim()) && 
+      if (dataArr[i].card_id.trim() && !this.pattern.card_id9.test(dataArr[i].card_id.trim()) &&
         !this.pattern.card_id12.test(dataArr[i].card_id.trim()) &&
         dataArr[i].sign_type.filter((p: any) => p.id == 5).length > 0) {
         this.getNotificationValid("CMT/CCCD của" + this.getNameObjectValid(3) + "tổ chức của tôi không hợp lệ!")
@@ -801,7 +795,7 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             // valid cccd number
-            if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) && 
+            if (isParterSort[k].card_id.trim() && !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
               !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
               isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObjectValid(3) + "của đối tác không hợp lệ!")
@@ -929,10 +923,10 @@ export class DetermineSignerComponent implements OnInit {
             }
 
             // valid cccd number
-            if (isParterSort[k].card_id.trim() && 
-            !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) && 
-            !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
-            isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
+            if (isParterSort[k].card_id.trim() &&
+              !this.pattern.card_id9.test(isParterSort[k].card_id.trim()) &&
+              !this.pattern.card_id12.test(isParterSort[k].card_id.trim()) &&
+              isParterSort[k].sign_type.filter((p: any) => p.id == 5).length > 0) {
               this.getNotificationValid("CMT/CCCD" + this.getNameObjectValid(3) + "của đối tác cá nhân không hợp lệ!")
               count++;
               break;

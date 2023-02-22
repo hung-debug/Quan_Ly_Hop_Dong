@@ -396,7 +396,8 @@ export class ContractTemplateService {
             // "password": "", // pw click từ link email
             "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
-            ]
+            ],
+            locale:"vi",
           },
           // Dữ liệu người ký
           {
@@ -412,7 +413,8 @@ export class ContractTemplateService {
             // "password": "ad", // pw click từ link email
             "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
-            ]
+            ],
+            locale:"vi",
           },
           // dữ liệu văn thư
           {
@@ -428,7 +430,8 @@ export class ContractTemplateService {
             // "password": "", // pw click từ link email
             "is_otp": 0, // select otp
             "sign_type": [ // hình thức ký
-            ]
+            ],
+            locale:"vi",
           },
         ],
         // "contract_id": 1
@@ -454,7 +457,8 @@ export class ContractTemplateService {
             // "username": "",
             // "password": "",
             "is_otp": 0,
-            "sign_type": []
+            "sign_type": [],
+            "locale":"vi",
           },
           // người xem xét
           {
@@ -469,7 +473,8 @@ export class ContractTemplateService {
             // "username": "",
             // "password": "",
             "is_otp": 0,
-            "sign_type": []
+            "sign_type": [],
+            "locale":"vi",
           },
           // người ký
           {
@@ -484,7 +489,8 @@ export class ContractTemplateService {
             // "username": "",
             // "password": "",
             "is_otp": 0,
-            "sign_type": []
+            "sign_type": [],
+            "locale":"vi",
           },
           // văn thư
           {
@@ -526,7 +532,8 @@ export class ContractTemplateService {
             status: 0,
             is_otp: 0,
             sign_type: [
-            ]
+            ],
+            locale:'vi',
           }
         ],
       },
@@ -572,7 +579,8 @@ export class ContractTemplateService {
             status: 0,
             is_otp: 0,
             sign_type: [
-            ]
+            ],
+            locale:'vi',
           }
         ],
       },
@@ -592,7 +600,8 @@ export class ContractTemplateService {
             ordering: 1,
             status: 0,
             is_otp: 0,
-            sign_type: []
+            sign_type: [],
+            locale:'vi',
           }
         ],
       },

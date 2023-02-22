@@ -1,83 +1,83 @@
 <div class="contract-determine">
-<div class="contract__content--participants">
-<div class="participants-border">
-    <div class="label">{{'update.person-process' | translate}}</div>
-    <!-- <div class="participants--content"  *ngFor="let d of getOriganzationSignature(); let index = index">
+  <div class="contract__content--participants">
+    <div class="participants-border">
+      <div class="label">{{'update.person-process' | translate}}</div>
+      <!-- <div class="participants--content"  *ngFor="let d of getOriganzationSignature(); let index = index">
         <div class="label">{{'update.person-process' | translate}}</div>
     </div> -->
-    <div class="participants--content" >
+      <div class="participants--content">
 
-      <!-- <input [id]="'ordering-sign-'" class="col-md-1 contract-total"
+        <!-- <input [id]="'ordering-sign-'" class="col-md-1 contract-total"
         (focusout)="onChangeValue($event,'ordering-sign-')" style="width: 25px; height: 25px"
         type="number"
         oninput="this.value = this.value.replace(/[^0-9.]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');"
         [disabled]="getOriganzationSignature().length == 1"> -->
-        
-      <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
 
-        <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
-        <div class="participants--input" style="display: flex">
-          <div class="participants__name">
-            <div class="label_detail text-color" *ngIf="changeTypeSign">
-              <div>
-                <input type="radio"  (change)="changeTypeSign(0)" name="checkPhoneMailOrgSigner_" value="{{this.login_by}}" checked/>
-              </div>&nbsp;
-              <div>
-                {{'typeOfSignEmail' | translate}}
+        <div class="col-md-10 participants__content--input" style="display: flex; flex-direction: column">
+
+          <!--Chọn {{'typeOfSignEmail' | translate}} hoặc {{'user.phone' | translate}}-->
+          <div class="participants--input" style="display: flex">
+            <div class="participants__name">
+              <div class="label_detail text-color" *ngIf="changeTypeSign">
+                <div>
+                  <input type="radio" (change)="changeTypeSign(0)" name="checkPhoneMailOrgSigner_"
+                    value="{{this.login_by}}" checked />
+                </div>&nbsp;
+                <div>
+                  {{'typeOfSignEmail' | translate}}
+                </div>
+              </div>
+            </div>
+            <div class="participants__name">
+              <div class="label_detail text-color">
+                <div>
+                  <input type="radio" (change)="changeTypeSign(1)" name="checkPhoneMailOrgSigner_"
+                    value="{{this.login_by}}" />
+                </div>&nbsp;
+                <div>
+                  {{'typeOfSignPhone' | translate}}
+                </div>
               </div>
             </div>
           </div>
-          <div class="participants__name">
-            <div class="label_detail text-color">
-              <div>
-                <input type="radio" (change)="changeTypeSign(1)" name="checkPhoneMailOrgSigner_" value="{{this.login_by}}"/>
-              </div>&nbsp;
-              <div>
-                {{'typeOfSignPhone' | translate}}
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="participants--input" style="display: flex">
-          <div class="participants__name">
-            <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span class="required-title">*</span></div>
-            <!--Trường nhập họ và tên cho người ký tổ chức của tôi-->
-            <div class="input-data">
-              <img src="assets/img/icon_name.svg" class="input-img">
-
-              <!--Trường hợp typeOfSignEmail-->
-              <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"  [(ngModel)]="name">
-
-                <!--Trường hợp typeOfSignPhone-->
-              <!-- <input  type="text" placeholder="{{'nhap_ho_va_ten' | translate}}"value="{{this.name}}"/> -->
-              
-            </div>
-          </div>
-
-          <div class="participants__name">
-            <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span class="required-title">*</span></div>
-            
+          <div class="participants--input" [ngStyle]="{'display':'flex', 'justify-content': (role === 2) ? 'left' : 'space-around' }">
+            <div class="participants__name" [ngStyle]="{'margin-left': (role === 2) ? '4%' : null }">
+              <div class="label_detail text-color">{{'user.name' | translate}}&nbsp;<span
+                  class="required-title">*</span></div>
+              <!--Trường nhập họ và tên cho người ký tổ chức của tôi-->
               <div class="input-data">
-                <input type="text"  value="{{sign_type}}" readonly style="background-color: #EFF2F5;">
+                <img src="assets/img/icon_name.svg" class="input-img">
+                <input type="text" placeholder="{{'nhap_ho_va_ten' | translate}}" [(ngModel)]="name">
               </div>
-              
+            </div>
+
+            <div class="participants__name" *ngIf="role !== 2">
+              <div class="label_detail text-color">{{'user.sign-type' | translate}}&nbsp;<span
+                  class="required-title">*</span></div>
+
+              <div class="input-data" style="background-color: #EFF2F5;">
+                <input type="text" value="{{sign_type}}" disabled>
+              </div>
+
             </div>
           </div>
         </div>
 
         <!-- KD -->
-        <div *ngIf="this.site == 'KD'" class="participants--input" style="display: flex" >
-          <div  class="participants__name" style="width: 93%" *ngIf="isCheckRadio">
+        <div *ngIf="this.site == 'KD'" class="participants--input" style="display: flex">
+          <div class="participants__name" style="width: 93%" *ngIf="isCheckRadio">
             <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
             <div class="input-data">
               <img src="assets/img/login_email.svg" class="input-img">
-              <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="email" (keydown)="keyDownHandler($event)"/>
+              <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="email"
+                (keydown)="keyDownHandler($event)" />
             </div>
           </div>
 
           <div class="participants__name" style="width: 93%" *ngIf="!isCheckRadio">
-            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
+            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span>
+            </div>
             <div class="input-data">
               <img class="input-img">
               <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="phone" />
@@ -87,15 +87,16 @@
 
         <!--NB email-->
         <div *ngIf="this.site == 'NB' && isCheckRadio" class="participants--input" style="display: flex; width: 84%;">
-          <div class="participants__name" >
+          <div class="participants__name">
             <div class="label_detail text-color">Email&nbsp;<span class="required-title">*</span></div>
             <div class="input-data">
               <img src="assets/img/login_email.svg" class="input-img">
-              <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="email" value="{{this.email}}" (keydown)="keyDownHandler($event)">
+              <input type="text" placeholder="{{'nhap_email' | translate}}" [(ngModel)]="email" value="{{this.email}}"
+                (keydown)="keyDownHandler($event)">
             </div>
           </div>
 
-          <div class="participants__name" >
+          <div class="participants__name">
             <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;
               <div style="color: #ffc107;">({{'receive.contract.process' | translate}})</div>
             </div>
@@ -105,10 +106,11 @@
             </div>
           </div>
         </div>
-        
+
         <div *ngIf="this.site == 'NB' && !isCheckRadio" class="participants--input" style="display: flex">
           <div class="participants__name" style="width:93%">
-            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
+            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span>
+            </div>
             <div class="input-data">
               <img src="assets/img/login_email.svg" class="input-img">
               <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="phone">
@@ -119,9 +121,13 @@
         <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là usbtoken-->
         <div class="participants--input" style="display: flex" *ngIf="id_sign_type == 2">
           <div class="participants__name" style="width: 93%">
-            <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span class="required-title">*</span><div style="color: #ffc107;">({{'info.token' | translate}})</div></div>
+            <div class="label_detail text-color">{{'tax_code.cardId' | translate}}&nbsp;<span
+                class="required-title">*</span>
+              <div style="color: #ffc107;">({{'info.token' | translate}})</div>
+            </div>
             <div class="input-data">
-              <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+              <input type="text" placeholder="{{'enter.tax_code.cardId' | translate}}" [(ngModel)]="card_id"
+                oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
             </div>
           </div>
         </div>
@@ -134,17 +140,21 @@
               <div style="color: #ffc107;">({{'info.hsm' | translate}})</div>
             </div>
             <div class="input-data">
-              <input type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+              <input type="text" placeholder="{{'enter.tax.code' | translate}}" [(ngModel)]="card_id"
+                oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
             </div>
           </div>
         </div>
 
-         <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là ảnh và otp-->
-        <div class="participants--input" style="display: flex" *ngIf="this.site == 'KD' && id_sign_type == 1 && isCheckRadio">
+        <!--trường hiển thị khi người ký tổ chức của tôi chọn loại ký là ảnh và otp-->
+        <div class="participants--input" style="display: flex"
+          *ngIf="this.site == 'KD' && id_sign_type == 1 && isCheckRadio">
           <div class="participants__name" style="width: 93%">
-            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span></div>
+            <div class="label_detail text-color">{{'user.phone' | translate}}&nbsp;<span class="required-title">*</span>
+            </div>
             <div class="input-data">
-              <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="phone" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+              <input type="text" placeholder="{{'nhap_sdt' | translate}}" [(ngModel)]="phone"
+                oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
             </div>
           </div>
         </div>
@@ -152,18 +162,20 @@
         <!--trường hiển thị khi đối tác là cá nhân chọn loại ký là eKYC-->
         <div class="participants--input" style="display: flex" *ngIf=" id_sign_type == 5">
           <div class="participants__name" style="width: 93%">
-            <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span class="required-title">*</span></div>
+            <div class="label_detail text-color">{{'cardId' | translate}}&nbsp;<span class="required-title">*</span>
+            </div>
             <div class="input-data">
-              <input type="text" placeholder="{{'enter.cardId' | translate}}" [(ngModel)]="card_id" oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
+              <input type="text" placeholder="{{'enter.cardId' | translate}}" [(ngModel)]="card_id"
+                oninput="this.value = this.value.replace(/[\s]/g, '', /[^\d*[.]?\d*$]/g).replace(/(\..*?)\..*/g, '$1');">
             </div>
           </div>
         </div>
-    </div>
-    <div class="footer-btn">
-      <button (click)="handleCancel()">{{"exit" | translate}}</button>
-      <button (click)="UpdateHandler()">{{"btn.update" | translate}}</button>
-    </div>
+      </div>
+      <div class="footer-btn">
+        <button (click)="handleCancel()">{{"exit" | translate}}</button>
+        <button (click)="UpdateHandler()">{{"btn.update" | translate}}</button>
+      </div>
 
+    </div>
   </div>
-</div>
 </div>
