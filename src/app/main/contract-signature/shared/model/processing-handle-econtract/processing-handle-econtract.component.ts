@@ -87,7 +87,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
       } else {
         this.isHiddenButton = false;
       }
-      console.log("contractid", this.data.is_data_contract.id);
+
       response.recipients.forEach((element: any) => {
         let data = {
           id: element.id,
@@ -235,23 +235,25 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
     this.contractService.getInforPersonProcess(recipient).subscribe((response) => {
 
-      let recipientsData = {
-        contractId: this.data.is_data_contract.id,
-        name: response.name,
-        login_by: response.login_by,
-        email : response.email,
-        phone : response.phone,
-        sign_type : response.sign_type[0]?.name,
-        id_sign_type: response.sign_type[0]?.id,
-        card_id : response.card_id,
-        id : response.id,
-        role : response.role
-      }
+      // let recipientsData = {
+      //   contractId: this.data.is_data_contract.id,
+      //   name: response.name,
+      //   login_by: response.login_by,
+      //   email : response.email,
+      //   phone : response.phone,
+      //   sign_type : response.sign_type[0]?.name,
+      //   id_sign_type: response.sign_type[0]?.id,
+      //   card_id : response.card_id,
+      //   id : response.id,
+      //   role : response.role
+      // }
       // contractId = response
-      console.log("data luongxly hodng", recipientsData);
+
       let data: any;
       data = response;
-
+      data["contract_id"] = this.data.is_data_contract.id
+      console.log("data luongxly hodng", data);
+      console.log("contractid", this.data.is_data_contract.id);
       const dialogRef = this.dialog.open(EditHandlerComponent, {
         width: '1000px',
         data,
@@ -260,6 +262,7 @@ export class ProcessingHandleEcontractComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe((result: any) => {
         console.log('the close dialog', result);
+        console.log('the close dialog 1', this.is_list_name );
 
         this.is_list_name = this.is_list_name.map((x: any) => {
           if (x.id === result.id) {

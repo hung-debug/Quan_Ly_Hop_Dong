@@ -177,7 +177,7 @@ export class ConsiderContractComponent
   loginType: any;
 
   sum: number[] = [];
-  top: any[]= [];
+  top: any[] = [];
 
   constructor(
     private contractService: ContractService,
@@ -214,11 +214,13 @@ export class ConsiderContractComponent
     this.idContract = this.activeRoute.snapshot.paramMap.get('id');
 
     const checkViewContract = await this.checkViewContractService.callAPIcheckViewContract(this.idContract, false);
-
+ 
     if (checkViewContract) {
       this.actionRoleContract();
     } else {
-      this.router.navigate(['/page-not-found']);
+      // this.router.navigate(['/page-not-found']);
+      setTimeout(() => this.router.navigate(['/login']));
+      this.toastService.showErrorHTMLWithTimeout('Bạn không có quyền xử lý hợp đồng này!', "", 3000);
     }
   }
 
@@ -318,13 +320,13 @@ export class ConsiderContractComponent
       this.pageLast = false;
     }
 
-    this.pageNum = Number(Math.floor(event.srcElement.scrollTop/canvas1.height) + 1);
+    this.pageNum = Number(Math.floor(event.srcElement.scrollTop / canvas1.height) + 1);
 
     let scrollTop = Number(event.srcElement.scrollTop);
 
-    for(let i = 0; i < this.sum.length;i++) {
-      if(this.sum[i] < scrollTop && scrollTop < this.sum[i+1]) {
-        this.pageNum = Number(i+2);
+    for (let i = 0; i < this.sum.length; i++) {
+      if (this.sum[i] < scrollTop && scrollTop < this.sum[i + 1]) {
+        this.pageNum = Number(i + 2);
       }
     }
   }
@@ -374,7 +376,7 @@ export class ConsiderContractComponent
         };
 
         this.orgId = this.data_contract.is_data_contract.organization_id;
-        
+
         await this.getVersionUsbToken(this.orgId);
 
         this.datas = this.data_contract;
@@ -650,22 +652,22 @@ export class ConsiderContractComponent
           this.eventMouseover();
           this.loadedPdfView = true;
 
-          for(let i = 0; i <= this.pageNumber;i++) {
+          for (let i = 0; i <= this.pageNumber; i++) {
             this.top[i] = 0;
-  
-            if(i < this.pageNumber)
+
+            if (i < this.pageNumber)
               this.sum[i] = 0;
           }
-  
-          for(let i = 1; i <= this.pageNumber; i++) {
-            let canvas: any = document.getElementById('canvas-step3-'+i);
+
+          for (let i = 1; i <= this.pageNumber; i++) {
+            let canvas: any = document.getElementById('canvas-step3-' + i);
             this.top[i] = canvas.height;
           }
-          
-  
-          for(let i = 0; i < this.pageNumber; i++) {
-            this.top[i+1] += this.top[i];
-            this.sum[i] = this.top[i+1];
+
+
+          for (let i = 0; i < this.pageNumber; i++) {
+            this.top[i + 1] += this.top[i];
+            this.sum[i] = this.top[i + 1];
           }
         }, 100);
       });
@@ -1255,21 +1257,21 @@ export class ConsiderContractComponent
     // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
     // console.log("this.emailRecipientssssssssss",this.emailRecipients);
     const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
-    const ArrRecipientsNew = ArrRecipients.map((item: any)=> item.email);
-    console.log("ArrRecipientsNew",ArrRecipientsNew);
+    const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
+    console.log("ArrRecipientsNew", ArrRecipientsNew);
 
-        if (!ArrRecipientsNew.includes(this.currentUser.email)) {
-          
-          this.toastService.showErrorHTMLWithTimeout(
-            'Bạn không có quyền xử lý hợp đồng này!',
-            '',
-            3000
-          );
-          this.router.navigate(['/main/dashboard']);
-          return
-        };
+    if (!ArrRecipientsNew.includes(this.currentUser.email)) {
+
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      this.router.navigate(['/main/dashboard']);
+      return
+    };
     console.log("this.currentUser.email", this.currentUser.email);
-        
+
     if (counteKYC > 0) {
       if (this.mobile) {
         if (this.confirmSignature == 1) {
@@ -1303,7 +1305,7 @@ export class ConsiderContractComponent
       return;
     }
     if (
-      e && e == 1 && !this.validateSignature() && !( (this.datas.roleContractReceived == 2 && this.confirmConsider == 2 && counteKYC <= 0) ||
+      e && e == 1 && !this.validateSignature() && !((this.datas.roleContractReceived == 2 && this.confirmConsider == 2 && counteKYC <= 0) ||
         (this.datas.roleContractReceived == 3 && this.confirmSignature == 2) ||
         (this.datas.roleContractReceived == 4 && this.confirmSignature == 2)
       )
@@ -1507,7 +1509,7 @@ export class ConsiderContractComponent
     }
   }
 
-  getTextAlertConfirm() {   
+  getTextAlertConfirm() {
     if (this.datas.roleContractReceived == 2) {
       if (this.confirmConsider == 1) {
         return 'Bạn có chắc chắn xác nhận hợp đồng này?';
@@ -1654,8 +1656,8 @@ export class ConsiderContractComponent
             if (this.usbTokenVersion == 2) {
               try {
                 await this.createEmptySignature(signUpdate, signDigital, signI);
-              } catch(err) {
-                this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token '+ err,'',3000);
+              } catch (err) {
+                this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token ' + err, '', 3000);
                 return false;
               }
 
@@ -1753,7 +1755,7 @@ export class ConsiderContractComponent
           this.datas.is_data_contract.name,
           image_base64
         );
-        console.log(checkSign);
+        console.log("checkSign",checkSign);
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {
           this.toastService.showErrorHTMLWithTimeout(
@@ -2265,7 +2267,7 @@ export class ConsiderContractComponent
 
       try {
         this.nameCompany = utf8.decode(cert.certInfo.CommonName);
-      } catch(err) {
+      } catch (err) {
         this.nameCompany = cert.certInfo.CommonName;
       }
 
@@ -2322,14 +2324,14 @@ export class ConsiderContractComponent
       const callServiceDCSigner = await this.contractService.signUsbToken('request=' + json_req);
 
       const dataSignatureToken = JSON.parse(window.atob(callServiceDCSigner.data));
-    
+
       const signatureToken = dataSignatureToken.Signature;
-  
+
       await this.callMergeTimeStamp(signatureToken, fieldName, hexDigestTempFile);
-    } catch(err) {
-      this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token '+err,'',3000);
+    } catch (err) {
+      this.toastService.showErrorHTMLWithTimeout('Lỗi ký usb token ' + err, '', 3000);
       return;
-    }   
+    }
   }
 
   base64Data: any;
@@ -2762,46 +2764,65 @@ export class ConsiderContractComponent
     error1: string,
     rejectReason: string
   ) {
-    let inputValue = '';
-    const { value: textRefuse } = await Swal.fire({
-      title: rejectQuestion,
-      input: 'textarea',
-      inputValue: inputValue,
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#b0bec5',
-      confirmButtonText: confirm,
-      cancelButtonText: cancel,
-      inputValidator: (value) => {
-        if (!value) {
-          return rejectReason;
-        } else {
-          return null;
-        }
-      },
-    });
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+    // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
+    // console.log("this.emailRecipientssssssssss",this.emailRecipients);
+    const ArrRecipients = this.datas.is_data_contract.participants[0].recipients;
+    const ArrRecipientsNew = ArrRecipients.map((item: any) => item.email);
+    console.log("ArrRecipientsNew", ArrRecipientsNew);
 
-    if (textRefuse) {
-      this.contractService
-        .considerRejectContract(this.recipientId, textRefuse)
-        .subscribe(
-          (result) => {
-            this.toastService.showSuccessHTMLWithTimeout(
-              cancelSuccess,
-              '',
-              3000
-            );
-            this.spinner.hide();
-            this.router.navigate([
-              '/main/form-contract/detail/' + this.idContract,
-            ]);
-          },
-          (error) => {
-            this.spinner.hide();
-            this.toastService.showErrorHTMLWithTimeout(error1, '', 3000);
+    if (!ArrRecipientsNew.includes(this.currentUser.email)) {
+      this.spinner.hide();
+      this.toastService.showErrorHTMLWithTimeout(
+        'Bạn không có quyền xử lý hợp đồng này!',
+        '',
+        3000
+      );
+      this.router.navigate(['/main/dashboard']);
+      // return
+    } else {
+      let inputValue = '';
+      const { value: textRefuse } = await Swal.fire({
+        title: rejectQuestion,
+        input: 'textarea',
+        inputValue: inputValue,
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#b0bec5',
+        confirmButtonText: confirm,
+        cancelButtonText: cancel,
+        inputValidator: (value) => {
+          if (!value) {
+            return rejectReason;
+          } else {
+            return null;
           }
-        );
+        },
+      });
+
+      if (textRefuse) {
+        this.contractService
+          .considerRejectContract(this.recipientId, textRefuse)
+          .subscribe(
+            (result) => {
+              this.toastService.showSuccessHTMLWithTimeout(
+                cancelSuccess,
+                '',
+                3000
+              );
+              this.spinner.hide();
+              this.router.navigate([
+                '/main/form-contract/detail/' + this.idContract,
+              ]);
+            },
+            (error) => {
+              this.spinner.hide();
+              this.toastService.showErrorHTMLWithTimeout(error1, '', 3000);
+            }
+          );
+      }
     }
+    console.log("this.currentUser.email", this.currentUser.email);
   }
 
   validateSignature() {
@@ -2813,7 +2834,7 @@ export class ConsiderContractComponent
         !item.valueSign &&
         item.type != 3
     );
-    
+
     return validSign.length == 0;
   }
 
@@ -3177,7 +3198,7 @@ export class ConsiderContractComponent
     };
 
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.panelClass= 'custom-dialog-container';
+    dialogConfig.panelClass = 'custom-dialog-container';
     dialogConfig.width = '497px';
     dialogConfig.height = '330px';
     dialogConfig.hasBackdrop = true;

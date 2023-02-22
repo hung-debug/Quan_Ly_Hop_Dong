@@ -359,6 +359,26 @@ export class FooterSignatureComponent implements OnInit {
 
   refuseContract() {
     if (this.datas.action_title == 'dieu_phoi') {
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser') || '').customer.info;
+      // this.emailRecipients =  this.datas.is_data_contract.participants[0].recipients[0].email;
+      // console.log("this.emailRecipientssssssssss",this.emailRecipients);
+      const ArrRecipients = this.datas.is_data_contract.participants[1].recipients;
+      const ArrRecipientsNew = ArrRecipients.map((item: any)=> item.email);
+      console.log("ArrRecipientsNew",ArrRecipientsNew);
+  
+          if (!ArrRecipientsNew.includes(this.currentUser.email)) {
+            
+            this.toastService.showErrorHTMLWithTimeout(
+              'Bạn không có quyền xử lý hợp đồng này!',
+              '',
+              3000
+            );
+            this.router.navigate(['/main/dashboard']);
+            return
+          };
+      console.log("this.currentUser.email", this.currentUser.email);
+      console.log("ArrRecipientsNew",ArrRecipientsNew);
+      
       this.submitChanges.emit(1);
     }
   }
