@@ -773,7 +773,9 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
       if (this.convertToSignConfig().some((p: any) => ((p.recipient ? p.recipient.email : p.email) == element.email && p.sign_unit == isSignType) || (isSignType == 'so_tai_lieu' && (p.recipient ? p.recipient.email : p.email) && p.sign_unit == 'so_tai_lieu'))) {
         if (isSignType != 'text') {
           if(isSignType == 'so_tai_lieu') {
-            element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
+            // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4));
+
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
           } else {
             element.is_disable = true
           }
@@ -786,7 +788,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         } else if (isSignType == 'text') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
         } else 
-        element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4)); // đã có số tài liệu thì ko được chỉ định người ký vào ô số tài liệu
+          // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4)); 
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
       }
       // }
 

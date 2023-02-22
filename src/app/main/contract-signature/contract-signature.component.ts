@@ -659,32 +659,13 @@ export class ContractSignatureComponent implements OnInit {
                   this.spinner.hide();
 
                   if (checkSign[i].result.message == 'Tax code do not match!') {
-                    this.toastService.showErrorHTMLWithTimeout('taxcode.not.match',
-                      '',
-                      3000
-                    );
-                  } else if (
-                    checkSign[i].result.message == 'Mat khau cap 2 khong dung!'
-                  ) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'Mật khẩu cấp 2 không đúng',
-                      '',
-                      3000
-                    );
-                  } else if (
-                    checkSign[i].result.message == 'License ky so HSM het han!'
-                  ) {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      'License ký số HSM hết hạn!',
-                      '',
-                      3000
-                    );
+                    this.toastService.showErrorHTMLWithTimeout('taxcode.not.match','',3000);
+                  } else if (checkSign[i].result.message == 'Mat khau cap 2 khong dung!') {
+                    this.toastService.showErrorHTMLWithTimeout('Mật khẩu cấp 2 không đúng','',3000);
+                  } else if (checkSign[i].result.message == 'License ky so HSM het han!') {
+                    this.toastService.showErrorHTMLWithTimeout('License ký số HSM hết hạn!','', 3000);
                   } else {
-                    this.toastService.showErrorHTMLWithTimeout(
-                      checkSign[i].result.message,
-                      '',
-                      3000
-                    );
+                    this.toastService.showErrorHTMLWithTimeout(checkSign[i].result.message,'',3000);
                   }
                   return;
                 } else {
