@@ -96,17 +96,19 @@ export class PreviewContractTemplateComponent implements OnInit {
     } else {
       const font_size = d.font_size ? d.font_size : 13;
       
-      if(d.sign_unit == 'text') {
+      if(d.sign_unit == 'text' || d.sign_unit == 'so_tai_lieu') {
         style = {
           "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(d['coordinate_y']+Number(d['height'])-Number(font_size)*1.3) + 'px)',
           "position": "absolute",
         }
-      } else if(d.sign_unit == 'so_tai_lieu') {
-        style = {
-          "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(Number(d['coordinate_y']) + 5) + 'px)',
-          "position": "absolute",
-        }
-      }
+      } 
+      
+      // else if(d.sign_unit == 'so_tai_lieu') {
+      //   style = {
+      //     "transform": 'translate(' + d['coordinate_x'] + 'px, ' + Number(Number(d['coordinate_y']) + 5) + 'px)',
+      //     "position": "absolute",
+      //   }
+      // }
        
     }
   

@@ -709,8 +709,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
                   // element['width'] = this.datas.configs.e_document.format_signature_image.signature_width;
                   if (res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
                     if (res.sign_unit == 'so_tai_lieu' && this.datas.contract_no) {
-                      element['width'] = '';
-                      element['height'] = '';
+                      element['width'] = '135';
+                      element['height'] = '28';
                     } else {
                       element['width'] = '135';
                       element['height'] = '28';
