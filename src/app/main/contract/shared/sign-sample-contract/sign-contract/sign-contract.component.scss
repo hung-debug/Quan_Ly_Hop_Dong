@@ -28,9 +28,17 @@
   left: 0px;
 }
 
-.text-sign-not-template {
+.text-sign-not-template-text {
   position: absolute;
   bottom: -3px;
+  left: 0px;
+  outline: none;
+  color: #106DB6;
+}
+
+.text-sign-not-template-contract-code {
+  position: absolute;
+  top: 6px;
   left: 0px;
   outline: none;
   color: #106DB6;

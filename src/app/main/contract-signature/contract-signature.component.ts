@@ -497,9 +497,7 @@ export class ContractSignatureComponent implements OnInit {
           });
       }
     } else if (signId == 2) {
-      recipientId = contractsSignManyChecked
-        .filter((opt) => opt.checked)
-        .map((opt) => opt.id);
+      recipientId = contractsSignManyChecked.filter((opt) => opt.checked).map((opt) => opt.id);
 
       for (let i = 0; i < recipientId.length; i++) {
         this.contractServiceV1.getDetermineCoordination(recipientId[i]).subscribe((response) => {

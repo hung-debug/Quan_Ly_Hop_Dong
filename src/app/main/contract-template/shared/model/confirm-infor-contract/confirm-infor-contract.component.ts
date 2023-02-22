@@ -116,8 +116,6 @@ export class ConfirmInforContractComponent implements OnInit, OnChanges {
       let isNotFieldId: any[] = [];
       let isUserSign_clone = JSON.parse(JSON.stringify(this.datas.contract_user_sign));
 
-      console.log("datas ", this.datas.contract_user_sign);
-
       isUserSign_clone.forEach((res: any) => {
         res.sign_config.forEach((element: any) => {
 
