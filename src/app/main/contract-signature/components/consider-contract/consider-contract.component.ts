@@ -1618,8 +1618,8 @@ export class ConsiderContractComponent
               let x = signUpdate.signDigitalX;
               // // // let y = signUpdate.signDigitalY;
 
-              signUpdate.signDigitalX = 0.5*(x + signUpdate.width + this.widthText) + 0.5*this.widthText;
-              signUpdate.signDigitalWidth = signUpdate.signDigitalX + signUpdate.width + 0.5*this.widthText;
+              signUpdate.signDigitalX = 0.5*(2*x - signUpdate.width + this.widthText) + 7;
+              signUpdate.signDigitalWidth = signUpdate.signDigitalX + signUpdate.width;
 
               // signUpdate.signDigitalY = y - 0.01*signUpdate.height;
               // signUpdate.signDigitalHeight = signUpdate.signDigitalHeight - 0.05*signUpdate.height;
