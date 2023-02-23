@@ -209,8 +209,21 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
         // tslint:disable-next-line:triple-equals
         if (extension && extension.toLowerCase() == 'pdf') {
 
-          this.spinner.hide();
-          const fileInput: any = document.getElementById('file-input');
+          // this.spinner.hide();
+          // const fileInput: any = document.getElementById('file-input');
+          //     fileInput.value = '';
+          //     this.datas.file_name = file_name;
+          //     this.datas.contractFile = file;
+          //     this.contractFileRequired();
+          //     if (this.datas.is_action_contract_created) {
+          //       this.uploadFileContractAgain = true;
+          //     }
+
+          //Check file hợp đồng đã có chữ ký số hay chưa
+          this.checkSignDigitalService.getList(file).subscribe((response) => {
+            this.spinner.hide();
+            if(response.length == 0) {
+              const fileInput: any = document.getElementById('file-input');
               fileInput.value = '';
               this.datas.file_name = file_name;
               this.datas.contractFile = file;
@@ -219,41 +232,28 @@ export class InforContractComponent implements OnInit, AfterViewInit, OnChanges 
                 this.uploadFileContractAgain = true;
               }
 
-          //Check file hợp đồng đã có chữ ký số hay chưa
-          // this.checkSignDigitalService.getList(file).subscribe((response) => {
-          //   this.spinner.hide();
-          //   if(response.length == 0) {
-          //     const fileInput: any = document.getElementById('file-input');
-          //     fileInput.value = '';
-          //     this.datas.file_name = file_name;
-          //     this.datas.contractFile = file;
-          //     this.contractFileRequired();
-          //     if (this.datas.is_action_contract_created) {
-          //       this.uploadFileContractAgain = true;
-          //     }
+              this.datas.flagDigitalSign = false;
+            } else if(response.length > 0) {
+              Swal.fire({
+                html: "File hợp đồng đã chứa chữ ký số; chỉ có thể ký bằng hình thức ký số với hợp đồng này",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#b0bec5',
+                confirmButtonText: 'Xác nhận'
+              });
 
-          //     this.datas.flagDigitalSign = false;
-          //   } else if(response.length > 0) {
-          //     Swal.fire({
-          //       html: "File hợp đồng đã chứa chữ ký số; chỉ có thể ký bằng hình thức ký số với hợp đồng này",
-          //       icon: 'warning',
-          //       confirmButtonColor: '#3085d6',
-          //       cancelButtonColor: '#b0bec5',
-          //       confirmButtonText: 'Xác nhận'
-          //     });
+              const fileInput: any = document.getElementById('file-input');
+              fileInput.value = '';
+              this.datas.file_name = file_name;
+              this.datas.contractFile = file;
+              this.contractFileRequired();
+              if (this.datas.is_action_contract_created) {
+                this.uploadFileContractAgain = true;
+              }
 
-          //     const fileInput: any = document.getElementById('file-input');
-          //     fileInput.value = '';
-          //     this.datas.file_name = file_name;
-          //     this.datas.contractFile = file;
-          //     this.contractFileRequired();
-          //     if (this.datas.is_action_contract_created) {
-          //       this.uploadFileContractAgain = true;
-          //     }
-
-          //     this.datas.flagDigitalSign = true;
-          //   }
-          // })
+              this.datas.flagDigitalSign = true;
+            }
+          })
         } else if (extension && (extension.toLowerCase() == 'doc' || extension.toLowerCase() == 'docx')) {
           this.toastService.showWarningHTMLWithTimeout("File hợp đồng chưa hỗ trợ định dạng DOC, DOCX", "", 3000);
         } else {
