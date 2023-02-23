@@ -356,10 +356,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataContractUserSign: any[] = [];
     this.datas.contract_user_sign.forEach((res: any, index: number) => {
       if(res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-        res.sign_config = res.sign_config.filter((element: any) => element.recipient.sign_type[0].id == 2);
+        res.sign_config = res.sign_config.filter((element: any) => element.recipient.sign_type ? element.recipient.sign_type[0].id == 2 : '');
       }
-
-      console.log("abc ",  this.datas.contract_user_sign);
 
       if (res.sign_config.length !== 0) {
         res.sign_config.forEach((element: any) => {
@@ -795,8 +793,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
           } else if (isSignType == 'chu_ky_so') {
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
           } else if (isSignType == 'text') {
-            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
-          } else element.is_disable = element.role != 4;
+            element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
+          } else element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4);
         }
       }
       

@@ -1562,9 +1562,6 @@ export class PartyContractFormComponent implements OnInit, AfterViewInit {
         this.spinner.hide();
         this.onItemSelect(null);
       })
-    } else {
-      this.datasForm.is_determine_clone = this.datasForm.is_determine_clone.filter((p: any) => p.ordering != item.ordering);
-      this.onItemSelect(null);
     }
     // this.datasForm.is_determine_clone.forEach((res: any, index: number) => {
     //   res.ordering = index + 1;

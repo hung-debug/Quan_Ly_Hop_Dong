@@ -66,6 +66,7 @@ export class EditHandlerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     if (environment.flag == 'NB') {
       this.site = 'NB';
     } else if (environment.flag == 'KD') {
@@ -226,6 +227,7 @@ export class EditHandlerComponent implements OnInit {
       console.log("this.data.contract_id",this.data.contract_id);
       this.contractService.updateInfoPersonProcess(dataUpdate, this.data.id, this.data.contract_id).subscribe(
         (res: any) => {
+          this.spinner.hide();
           if (!res.success) {
             this.toastService.showErrorHTMLWithTimeout("Có lỗi cập nhật người xử lý", "", 3000);
           } else {

@@ -771,7 +771,7 @@ export class SampleContractFormComponent implements OnInit {
             if (isSignType != 'text') {
               if(isSignType == 'so_tai_lieu') {
                 // element.is_disable = (element.role != 4 || (this.datasForm.contract_no && element.role == 4));
-
+                console.log("vao day ");
                 element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
 
               } else {
@@ -784,10 +784,10 @@ export class SampleContractFormComponent implements OnInit {
             } else if (isSignType == 'chu_ky_so') {
               element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
             } else if (isSignType == 'text') {
-              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
+              element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
             } else 
             // element.is_disable = (element.role != 4 || (this.datasForm.contract_no && element.role == 4)); 
-
+            console.log("vao day ");
             element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)
 
           }

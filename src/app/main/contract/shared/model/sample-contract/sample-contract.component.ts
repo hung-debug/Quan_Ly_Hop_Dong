@@ -786,7 +786,7 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
         } else if (isSignType == 'chu_ky_so') {
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 3 || p.id == 4) && element.role != 2);
         } else if (isSignType == 'text') {
-          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2) || element.role == 4); // ô text chỉ có ký usb token mới được chỉ định hoặc là văn thư
+          element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4); // ô text chỉ có ký usb token/hsm mới được chỉ định hoặc là văn thư
         } else 
           // element.is_disable = (element.role != 4 || (this.datas.contract_no && element.role == 4)); 
           element.is_disable = !(element.sign_type.some((p: any) => p.id == 2 || p.id == 4) || element.role == 4)

@@ -711,21 +711,13 @@
             (item.type == 2 ? 'nhap_ten_doi_tac_to_chuc' : '') | translate
           }}" [(ngModel)]="item.name" [disabled]="item.type == 3" />
       </div>
-
-      <!--Xoá đối tác tổ chức/cá nhân-->
-      <div
-        *ngIf="this.dataParnterOrganization().length >= 1"
-        style="display: flex; justify-content: flex-end"
-      >
-        <u class="label text-color" (click)="deletePartner(id, item)" style="background-color: #ffffff; cursor: pointer"
-          >{{
-            (item.type == 2 ? "xoa_doi_tac_to_chuc" : "xoa_doi_tac_ca_nhan")
-              | translate
-          }}
-        </u
-        >
+      <div *ngIf="this.dataParnterOrganization().length > 1" style="display: flex; justify-content: flex-end">
+        <u class="label text-color" (click)="deletePartner(id, item)"
+          style="background-color: #ffffff; cursor: pointer">{{
+          (item.type == 2 ? "xoa_doi_tac_to_chuc" : "xoa_doi_tac_ca_nhan")
+          | translate
+          }}</u>
       </div>
-      
       <div class="contract__content--participants">
         <div class="row">
           <div class="radio col-md-6 label_type">
@@ -746,17 +738,9 @@
           <div class="participants-border">
             <div class="label">{{ "user.lead" | translate }}</div>
             <div class="participants--content" *ngFor="let d of getPartnerCoordination(item); let index = index">
-              <input
-                [id]="'ordering-lead-' + index"
-                class="col-md-1 contract-total"
-                style="width: 25px; height: 25px"
-                type="number"
-                [ngModel]="1"
-                disabled
-              />
-              <div
-                class="col-md-10 participants__content--input"
-                style="
+              <input [id]="'ordering-lead-' + index" class="col-md-1 contract-total" style="width: 25px; height: 25px"
+                type="number" [ngModel]="1" disabled />
+              <div class="col-md-10 participants__content--input" style="
                   display: flex;
                   flex-direction: column;
                   margin-bottom: 14px;
@@ -1821,7 +1805,6 @@
                 <img src="assets/img/border_close.svg" alt="close.vn" />
                 <img class="close-btn" src="assets/img/x_close.svg" alt="close.vn" />
               </div>
-
               <div *ngIf="getPartnerSignature(item).length == 1" class="col-md-1 delete-element"></div>
             </div>
             <div *ngIf="getPartnerSignature(item).length > 1" class="participants--add">
