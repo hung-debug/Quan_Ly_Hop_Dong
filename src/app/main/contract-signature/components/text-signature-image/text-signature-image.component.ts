@@ -23,8 +23,8 @@ export class TextSignatureImageComponent implements OnInit {
     return {
       'font': this.datas.is_data_object_signature[0].font,
       'font-size':this.datas.is_data_object_signature[0].font_size+'px',
-      'width':this.width + 'px',
-      'height': this.height + 'px',
+      // 'width':this.width + 'px',
+      // 'height': this.height + 'px',
     };
   }
 

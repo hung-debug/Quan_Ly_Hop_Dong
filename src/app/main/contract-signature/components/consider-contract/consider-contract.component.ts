@@ -1615,14 +1615,13 @@ export class ConsiderContractComponent
 
               // console.log("width text ", this.widthText);
 
-              let x = signUpdate.signDigitalX;
+              // let x = signUpdate.signDigitalX;
               // // // let y = signUpdate.signDigitalY;
 
-              signUpdate.signDigitalX = 0.5*(2*x - signUpdate.width + this.widthText) + 7;
-              signUpdate.signDigitalWidth = signUpdate.signDigitalX + signUpdate.width;
+              // signUpdate.signDigitalX = signUpdate.signDigitalX - 0.5*signUpdate.width + 1.5*this.widthText;
+              signUpdate.signDigitalWidth = signUpdate.signDigitalX + this.widthText + 10;
 
               // signUpdate.signDigitalY = y - 0.01*signUpdate.height;
-              // signUpdate.signDigitalHeight = signUpdate.signDigitalHeight - 0.05*signUpdate.height;
 
             } else if (signUpdate.type == 3) {
               await of(null).pipe(delay(150)).toPromise();
@@ -1875,16 +1874,9 @@ export class ConsiderContractComponent
       if (json_res.ResponseCode == 0) {
         alert(json_res.Base64Result);
 
-        const sign = await this.contractService.updateDigitalSignatured(
-          signUpdate.id,
-          json_res.Base64Result
-        );
+        const sign = await this.contractService.updateDigitalSignatured(signUpdate.id, json_res.Base64Result);
         if (!sign.recipient_id) {
-          this.toastService.showErrorHTMLWithTimeout(
-            'Lỗi ký USB Token',
-            '',
-            3000
-          );
+          this.toastService.showErrorHTMLWithTimeout('Lỗi ký USB Token','',3000);
           return false;
         }
       } else {
