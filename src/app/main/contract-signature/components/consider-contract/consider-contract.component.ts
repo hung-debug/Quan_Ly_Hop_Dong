@@ -366,7 +366,7 @@ export class ConsiderContractComponent
 
   timerId: any;
   typeSignDigital: any;
-  isTimestamp: boolean = false;
+  isTimestamp: string = "false";
   getDataContractSignature() {
     this.contractService.getDetailContract(this.idContract).subscribe(
       async (rs) => {
@@ -375,9 +375,9 @@ export class ConsiderContractComponent
         this.isDataObjectSignature = rs[2];
 
         if(this.isDataContract.ceca_push = 1) {
-          this.isTimestamp = true
+          this.isTimestamp = "true"
         } else {
-          this.isTimestamp = false;
+          this.isTimestamp = "false";
         }
 
         if (rs[0] && rs[1] && rs[1].length && rs[2] && rs[2].length) {
@@ -1732,6 +1732,7 @@ export class ConsiderContractComponent
           this.datas.is_data_contract.name,
           image_base64,
           this.isTimestamp
+          // "false"
         );
         // await this.signContractSimKPI();
         if (!checkSign || (checkSign && !checkSign.success)) {

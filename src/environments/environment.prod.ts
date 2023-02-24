@@ -2,7 +2,6 @@ export const environment = {
   production: true,
 
   apiUrl: 'http://14.160.91.174:1387',
-  apiUrl: 'http://14.160.91.174:1387',
   // apiUrl: 'http://192.168.1.14:8762',
   flag: 'NB',
   // flag: 'KD',
