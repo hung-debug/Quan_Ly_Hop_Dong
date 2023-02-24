@@ -356,7 +356,8 @@ export class SampleContractComponent implements OnInit, OnDestroy, AfterViewInit
     let dataContractUserSign: any[] = [];
     this.datas.contract_user_sign.forEach((res: any, index: number) => {
       if(res.sign_unit == 'text' || res.sign_unit == 'so_tai_lieu') {
-        res.sign_config = res.sign_config.filter((element: any) => element.recipient.sign_type[0].id == 2);
+        console.log("res ", res);
+        res.sign_config = res.sign_config.filter((element: any) =>  element.recipient ? element.recipient.sign_type[0].id == 2 : !element.recipient)
       }
 
       console.log("abc ",  this.datas.contract_user_sign);
