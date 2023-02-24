@@ -586,7 +586,7 @@ export class ContractService {
       });
   }
 
-  meregeTimeStamp(recipientId: number, contractId: number, signature: any, fieldName: any, cert: any, hexDigestTempFile: any, isTimestamp: boolean) {
+  meregeTimeStamp(recipientId: number, contractId: number, signature: any, fieldName: any, cert: any, hexDigestTempFile: any, isTimestamp: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1032,7 +1032,7 @@ export class ContractService {
     });
   }
 
-  signPkiDigital(phone: any,networkCode: any,recipientId: any,nameContract: any,image_base64: any, isTimestamp: boolean) {
+  signPkiDigital(phone: any,networkCode: any,recipientId: any,nameContract: any,image_base64: any, isTimestamp: any) {
     this.getCurrentUser();
     const headers = new HttpHeaders()
       .append('Content-Type', 'application/json')
@@ -1051,7 +1051,7 @@ export class ContractService {
       .toPromise();
   }
 
-  signHsm(datas: any, idContract: number, isTimestamp: boolean) {
+  signHsm(datas: any, idContract: number, isTimestamp: any) {
     this.getCurrentUser();
 
     const headers = new HttpHeaders()
