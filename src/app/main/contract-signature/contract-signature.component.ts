@@ -239,17 +239,8 @@ export class ContractSignatureComponent implements OnInit {
     //get list contract share
     if (this.filter_status == -1) {
       this.contractService
-        .getContractShareList(
-          this.filter_name,
-          this.filter_type,
-          this.filter_contract_no,
-          this.filter_from_date,
-          this.filter_to_date,
-          this.filter_status,
-          this.p,
-          this.page,
-          this.contractStatus
-        )
+        .getContractShareList(this.filter_name,this.filter_type,this.filter_contract_no,this.filter_from_date,this.filter_to_date,this.filter_status,this.p,
+          this.page,this.contractStatus)
         .subscribe((data) => {
           this.contracts = data.entities;
           this.pageTotal = data.total_elements;
@@ -393,8 +384,39 @@ export class ContractSignatureComponent implements OnInit {
   }
 
   private convertActionStr(): string {
-    // this.p = 1;
     return 'contract.list.received';
+  }
+
+  dataChecked: any[] = [];
+  toggleOne(item: any, index1: any) {
+    let data = {
+      id: index1,
+      sign_type: item.sign_type[0].id,
+      card_id: item.cardId,
+      checked: item.checked
+    }
+
+    if(item.checked === true) {
+      this.dataChecked.push(data);
+
+      let lengthItem = this.dataChecked.length;
+      if(lengthItem >= 2) {
+        if(this.dataChecked[lengthItem - 1].sign_type != this.dataChecked[lengthItem - 2].sign_type) {
+          this.toastService.showErrorHTMLWithTimeout("Các hợp đồng đang chọn có loại ký khác nhau ","",3000);
+          return;
+        } 
+
+        console.log("data ", this.dataChecked);
+
+        if(this.dataChecked[lengthItem - 1].card_id != this.dataChecked[lengthItem - 2].card_id) {
+          this.toastService.showErrorHTMLWithTimeout("Hợp đồng vừa chọn có mã số thuế khác hợp đồng đầu tiên ","",3000);
+          return;
+        }
+      }
+
+    } else {
+      this.dataChecked = this.dataChecked.filter((item) => item.id != index1);
+    }
   }
 
   toggle() {
