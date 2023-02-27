@@ -843,7 +843,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
   }
 
   actionBack() {
-    console.log("p ", this.pageBefore);
     if(this.pageBefore && this.isOrg) {
       this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate(['/main/contract/create/' + this.statusLink],
@@ -880,12 +879,12 @@ export class DetailContractComponent implements OnInit, OnDestroy {
       });
     } else if(this.router.url.includes("forward") || this.signBefore) {
       this.router.navigate(['/main/c/receive/wait-processing']);
-      // console.log("go back ", this.statusLink);
-
-      // console.log("go back ", this._location);
-      // this._location.back();
     } else {
-      this._location.back();
+      if(this.router.url.includes("reject")) {
+        this.router.navigate(['/main/c/receive/wait-processing']);
+      } else {
+        this._location.back();
+      }
     }
   }
 
@@ -964,11 +963,6 @@ export class DetailContractComponent implements OnInit, OnDestroy {
     dialogConfig.width = '497px';
     dialogConfig.hasBackdrop = true;
     dialogConfig.data = data;
-    // const dialogRef = this.dialog.open(HsmDialogSignComponent, dialogConfig);
-    // dialogRef.afterClosed().subscribe((result: any) => {
-    //   console.log('the close dialog');
-    //   let is_data = result
-    // })
   }
 
   getTextAlertConfirm() {

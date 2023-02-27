@@ -1818,10 +1818,7 @@ export class ConsiderContractComponent
                   fileC = pdfC2.path;
                 } else if (pdfC1) {
                   fileC = pdfC1.path;
-                } else {
-                  // return;
-                }
-                // return true;
+                } 
               }
             }
           }
@@ -2753,14 +2750,7 @@ export class ConsiderContractComponent
     );
   }
 
-  async rejectContractLang(
-    rejectQuestion: string,
-    confirm: string,
-    cancel: string,
-    cancelSuccess: string,
-    error1: string,
-    rejectReason: string
-  ) {
+  async rejectContractLang(rejectQuestion: string, confirm: string, cancel: string, cancelSuccess: string, error1: string, rejectReason: string) {
     let inputValue = '';
     const { value: textRefuse } = await Swal.fire({
       title: rejectQuestion,
@@ -2789,9 +2779,7 @@ export class ConsiderContractComponent
               3000
             );
             this.spinner.hide();
-            this.router.navigate([
-              '/main/form-contract/detail/' + this.idContract,
-            ]);
+            this.router.navigate(['/main/form-contract/detail/reject/' + this.idContract]);
           },
           (error) => {
             this.spinner.hide();
